@@ -8,8 +8,9 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <T> Tensor type.
  * @param <U> Dense Tensor type.
  * @param <V> Complex Tensor type.
+ * @param <X> Tensor element type.
  */
-interface Operations<T, U, V> {
+interface Operations<T, U, V, X> {
 
 
     /**
@@ -94,4 +95,11 @@ interface Operations<T, U, V> {
      * @throws ArithmeticException If divisor is zero.
      */
     public V scalDiv(CNumber divisor);
+
+
+    /**
+     * Sums together all entries in the tensor.
+     * @return The sum of all entries in this matrix.
+     */
+    public X sum();
 }

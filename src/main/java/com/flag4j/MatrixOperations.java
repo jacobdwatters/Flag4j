@@ -11,7 +11,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <W> Complex Matrix type.
  * @param <X> Matrix entry type.
  */
-interface MatrixOperations<T, U, V, W, X> extends Operations<T, U, W> {
+interface MatrixOperations<T, U, V, W, X> extends Operations<T, U, W, X> {
 
 
     /**
@@ -248,4 +248,92 @@ interface MatrixOperations<T, U, V, W, X> extends Operations<T, U, W> {
      * @return The result of inverse direct summing this matrix with B.
      */
     public SparseCMatrix invDirectSum(SparseCMatrix B);
+
+
+    /**
+     * Sums together the columns of a matrix as if each column was a column vector.
+     * @return The result of summing together all columns of the matrix as column vectors. If this matrix is an m-by-n matrix, then the result will be
+     * an m-by-1 matrix.
+     */
+    public T sumCols();
+
+
+    /**
+     * Sums together the rows of a matrix as if each row was a row vector.
+     * @return The result of summing together all rows of the matrix as row vectors. If this matrix is an m-by-n matrix, then the result will be
+     * an 1-by-n matrix.
+     */
+    public T sumRows();
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    public U addToEachCol(Vector b);
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    public T addToEachCol(SparseVector b);
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    public CMatrix addToEachCol(CVector b);
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    public SparseCMatrix addToEachCol(SparseCVector b);
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    public U addToEachRow(Vector b);
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    public U addToEachRow(SparseVector b);
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    public CMatrix addToEachRow(CVector b);
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    public SparseCMatrix addToEachRow(SparseCVector b);
 }

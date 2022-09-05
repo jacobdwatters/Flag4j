@@ -13,7 +13,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <Y> Matrix type equivalent.
  * @param <Z> Dense Matrix type equivalent.
  */
-public interface VectorOperations<T, U, V, W, X, Y, Z> extends Operations<T, U, W> {
+public interface VectorOperations<T, U, V, W, X, Y, Z> extends Operations<T, U, W, X> {
 
 
     /**
