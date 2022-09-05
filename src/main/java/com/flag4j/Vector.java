@@ -1,6 +1,5 @@
 package com.flag4j;
 
-
 /**
  * Real Dense Vector.
  */
