@@ -5,9 +5,9 @@ import com.flag4j.complex_numbers.CNumber;
 
 /**
  * This interface specifies operations which should be implemented by any matrix or vector.
- * @param <T> Matrix type.
- * @param <U> Dense Matrix type.
- * @param <V> Complex Matrix type.
+ * @param <T> Tensor type.
+ * @param <U> Dense Tensor type.
+ * @param <V> Complex Tensor type.
  */
 interface Operations<T, U, V> {
 

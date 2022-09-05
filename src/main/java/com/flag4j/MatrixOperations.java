@@ -1,6 +1,8 @@
 package com.flag4j;
 
 
+import com.flag4j.complex_numbers.CNumber;
+
 /**
  * This interface specifies operations which should be implemented by any matrix (rank 2 tensor).
  * @param <T> Matrix type.
@@ -146,4 +148,104 @@ interface MatrixOperations<T, U, V, W, X> extends Operations<T, U, W> {
      * @throws IllegalArgumentException If this matrix is not square.
      */
     public X det();
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    public X fib(Matrix B);
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    public X fib(SparseMatrix B);
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    public CNumber fib(CMatrix B);
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    public CNumber fib(SparseCMatrix B);
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    public T directSum(Matrix B);
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    public V directSum(SparseMatrix B);
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    public W directSum(CMatrix B);
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    public SparseCMatrix directSum(SparseCMatrix B);
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    public T invDirectSum(Matrix B);
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    public V invDirectSum(SparseMatrix B);
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    public W invDirectSum(CMatrix B);
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    public SparseCMatrix invDirectSum(SparseCMatrix B);
 }

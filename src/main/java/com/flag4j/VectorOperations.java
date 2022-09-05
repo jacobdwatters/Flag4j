@@ -7,10 +7,13 @@ import com.flag4j.complex_numbers.CNumber;
  * This interface specifies operations which should be implemented by any matrix (rank 2 tensor).
  * @param <T> Vector type.
  * @param <U> Dense Vector type.
- * @param <V> Complex Vector type.
- * @param <W> Vector entry type.
+ * @param <V> Sparse Vector type.
+ * @param <W> Complex Vector type.
+ * @param <X> Vector entry type.
+ * @param <Y> Matrix type equivalent.
+ * @param <Z> Dense Matrix type equivalent.
  */
-public interface VectorOperations<T, U, V, W> extends Operations<T, U, V> {
+public interface VectorOperations<T, U, V, W, X, Y, Z> extends Operations<T, U, W> {
 
 
     /**
@@ -19,7 +22,7 @@ public interface VectorOperations<T, U, V, W> extends Operations<T, U, V> {
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    public W innerProduct(Vector b);
+    public X innerProduct(Vector b);
 
 
     /**
@@ -28,7 +31,7 @@ public interface VectorOperations<T, U, V, W> extends Operations<T, U, V> {
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    public W innerProduct(SparseVector b);
+    public X innerProduct(SparseVector b);
 
 
     /**
@@ -99,7 +102,7 @@ public interface VectorOperations<T, U, V, W> extends Operations<T, U, V> {
      * @return The result of element-wise multiplication of this vector with the vector b.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    public V elemMult(SparseVector b);
+    public W elemMult(SparseVector b);
 
 
     /**
@@ -108,7 +111,7 @@ public interface VectorOperations<T, U, V, W> extends Operations<T, U, V> {
      * @return The result of element-wise multiplication of this vector with the vector b.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    public W elemMult(CVector b);
+    public X elemMult(CVector b);
 
 
     /**
@@ -137,5 +140,5 @@ public interface VectorOperations<T, U, V, W> extends Operations<T, U, V> {
      * @throws IllegalArgumentException If this vector and B have different shapes.
      * @throws ArithmeticException If B contains any zero entries.
      */
-    public V elemDiv(CVector b);
+    public W elemDiv(CVector b);
 }
