@@ -340,7 +340,7 @@ interface MatrixOperations<T, U, V, W, Y, X> extends Operations<T, U, V, W, Y, X
 
 
     /**
-     * Stacks matrices along rows. <br>
+     * Stacks matrices along columns. <br>
      * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
      *
      * @param B Matrix to stack to this matrix.
@@ -351,7 +351,7 @@ interface MatrixOperations<T, U, V, W, Y, X> extends Operations<T, U, V, W, Y, X
 
 
     /**
-     * Stacks matrices along rows. <br>
+     * Stacks matrices along columns. <br>
      * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
      *
      * @param B Matrix to stack to this matrix.
@@ -363,7 +363,7 @@ interface MatrixOperations<T, U, V, W, Y, X> extends Operations<T, U, V, W, Y, X
 
 
     /**
-     * Stacks matrices along rows. <br>
+     * Stacks matrices along columns. <br>
      * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
      *
      * @param B Matrix to stack to this matrix.
@@ -375,7 +375,7 @@ interface MatrixOperations<T, U, V, W, Y, X> extends Operations<T, U, V, W, Y, X
 
 
     /**
-     * Stacks matrices along rows. <br>
+     * Stacks matrices along columns. <br>
      * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
      *
      * @param B Matrix to stack to this matrix.
@@ -391,8 +391,8 @@ interface MatrixOperations<T, U, V, W, Y, X> extends Operations<T, U, V, W, Y, X
      *
      * @param B Matrix to stack to this matrix.
      * @param axis Axis along which to stack. <br>
-     *             - If axis=0, then stacks along rows and is equivalent to {@link #stack(Matrix)}.
-     *             - If axis=1, then stacks along columns and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
      * @return The result of stacking this matrix and B along the specified axis.
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
@@ -406,8 +406,8 @@ interface MatrixOperations<T, U, V, W, Y, X> extends Operations<T, U, V, W, Y, X
      *
      * @param B Matrix to stack to this matrix.
      * @param axis Axis along which to stack. <br>
-     *             - If axis=0, then stacks along rows and is equivalent to {@link #stack(Matrix)}.
-     *             - If axis=1, then stacks along columns and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
      * @return The result of stacking this matrix and B along the specified axis.
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
@@ -421,8 +421,8 @@ interface MatrixOperations<T, U, V, W, Y, X> extends Operations<T, U, V, W, Y, X
      *
      * @param B Matrix to stack to this matrix.
      * @param axis Axis along which to stack. <br>
-     *             - If axis=0, then stacks along rows and is equivalent to {@link #stack(Matrix)}.
-     *             - If axis=1, then stacks along columns and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
      * @return The result of stacking this matrix and B along the specified axis.
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
@@ -436,8 +436,8 @@ interface MatrixOperations<T, U, V, W, Y, X> extends Operations<T, U, V, W, Y, X
      *
      * @param B Matrix to stack to this matrix.
      * @param axis Axis along which to stack. <br>
-     *             - If axis=0, then stacks along rows and is equivalent to {@link #stack(Matrix)}.
-     *             - If axis=1, then stacks along columns and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
      * @return The result of stacking this matrix and B along the specified axis.
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
@@ -446,7 +446,7 @@ interface MatrixOperations<T, U, V, W, Y, X> extends Operations<T, U, V, W, Y, X
 
 
     /**
-     * Stacks matrices along columns. <br>
+     * Stacks matrices along rows. <br>
      * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
      *
      * @param B Matrix to stack to this matrix.
@@ -454,9 +454,39 @@ interface MatrixOperations<T, U, V, W, Y, X> extends Operations<T, U, V, W, Y, X
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     public U augment(Matrix B);
+
+
+    /**
+     * Stacks matrices along rows. <br>
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
     public T augment(SparseMatrix B);
+
+
+    /**
+     * Stacks matrices along rows. <br>
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
     public CMatrix augment(CMatrix B);
+
+
+
+    /**
+     * Stacks matrices along rows. <br>
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
     public W augment(SparseCMatrix B);
-    // TODO: Swap row and column in javadoc comments for stacking methods. Augment should say, "stacks matrices along rows".
     //TODO: Do above stacking methods in VectorOperations interface.
 }

@@ -11,10 +11,14 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <W> Complex Vector type.
  * @param <Y> Real Vector type.
  * @param <X> Vector entry type.
- * @param <AA> Matrix type equivalent.
- * @param <BB> Dense Matrix type equivalent.
+ * @param <TT> Matrix type equivalent.
+ * @param <UU> Dense Matrix type equivalent.
+ * @param <VV> Sparse Matrix type equivalent.
+ * @param <WW> Complex Matrix type equivalent.
+ * @param <YY> Real Matrix type equivalent.
  */
-public interface VectorOperations<T, U, V, W, Y, X, AA, BB> extends Operations<T, U, V, W, Y, X> {
+public interface VectorOperations<T, U, V, W, Y, X, TT, UU, VV, WW, YY>
+        extends Operations<T, U, V, W, Y, X> {
 
 
     /**
@@ -87,59 +91,4 @@ public interface VectorOperations<T, U, V, W, Y, X, AA, BB> extends Operations<T
      * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
      */
     public CVector cross(SparseCVector b);
-
-    /**
-     * Computes the element-wise multiplication (Hadamard product) between two Vectors.
-     * @param b Second vector in the element-wise multiplication.
-     * @return The result of element-wise multiplication of this vector with the vector b.
-     * @throws IllegalArgumentException If this matrix and B have different shapes.
-     */
-    public T elemMult(Vector b);
-
-
-    /**
-     * Computes the element-wise multiplication (Hadamard product) between two Vectors.
-     * @param b Second vector in the element-wise multiplication.
-     * @return The result of element-wise multiplication of this vector with the vector b.
-     * @throws IllegalArgumentException If this matrix and B have different shapes.
-     */
-    public W elemMult(SparseVector b);
-
-
-    /**
-     * Computes the element-wise multiplication (Hadamard product) between two Vectors.
-     * @param b Second vector in the element-wise multiplication.
-     * @return The result of element-wise multiplication of this vector with the vector b.
-     * @throws IllegalArgumentException If this matrix and B have different shapes.
-     */
-    public X elemMult(CVector b);
-
-
-    /**
-     * Computes the element-wise multiplication (Hadamard product) between two Vectors.
-     * @param b Second vector in the element-wise multiplication.
-     * @return The result of element-wise multiplication of this vector with the vector b.
-     * @throws IllegalArgumentException If this matrix and B have different shapes.
-     */
-    public SparseCVector elemMult(SparseCVector b);
-
-
-    /**
-     * Computes the element-wise division between two vectors.
-     * @param b Second vector in the element-wise division.
-     * @return The result of element-wise division of this vector with the vector b.
-     * @throws IllegalArgumentException If this vector and B have different shapes.
-     * @throws ArithmeticException If B contains any zero entries.
-     */
-    public T elemDiv(Vector b);
-
-
-    /**
-     * Computes the element-wise division between two vectors.
-     * @param b Second vector in the element-wise division.
-     * @return The result of element-wise division of this vector with the vector b.
-     * @throws IllegalArgumentException If this vector and B have different shapes.
-     * @throws ArithmeticException If B contains any zero entries.
-     */
-    public W elemDiv(CVector b);
 }
