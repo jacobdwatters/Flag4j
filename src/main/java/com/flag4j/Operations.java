@@ -7,10 +7,12 @@ import com.flag4j.complex_numbers.CNumber;
  * This interface specifies operations which should be implemented by any matrix or vector.
  * @param <T> Tensor type.
  * @param <U> Dense Tensor type.
- * @param <V> Complex Tensor type.
+ * @param <V> Sparse Tensor type.
+ * @param <W> Complex Tensor type.
+ * @param <Y> Real Tensor type
  * @param <X> Tensor element type.
  */
-interface Operations<T, U, V, X> {
+interface Operations<T, U, V, W, Y, X> {
 
 
     /**
@@ -76,7 +78,7 @@ interface Operations<T, U, V, X> {
      * @param factor Scalar value to multiply with tensor.
      * @return The result of multiplying this tensor by the specified scalar.
      */
-    public V scalMult(CNumber factor);
+    public W scalMult(CNumber factor);
 
 
     /**
@@ -94,7 +96,7 @@ interface Operations<T, U, V, X> {
      * @return The result of dividing this tensor by the specified scalar.
      * @throws ArithmeticException If divisor is zero.
      */
-    public V scalDiv(CNumber divisor);
+    public W scalDiv(CNumber divisor);
 
 
     /**
@@ -102,4 +104,65 @@ interface Operations<T, U, V, X> {
      * @return The sum of all entries in this matrix.
      */
     public X sum();
+
+
+    /**
+     * Computes the element-wise square root of a tensor.
+     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
+     * the principle square root i.e. the square root with positive real part.
+     */
+    public W sqrt();
+
+
+    /**
+     * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
+     * be computed.
+     * @return The result of applying an element-wise absolute value/magnitude to this tensor.
+     */
+    public Y abs();
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #T()}.
+     * @return The transpose of this tensor.
+     */
+    public T transpose();
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #transpose()}.
+     * @return The transpose of this tensor.
+     */
+    public T T();
+
+
+    /**
+     * Computes the complex conjugate of a tensor.
+     * @return The complex conjugate of this tensor.
+     */
+    public T conj();
+
+
+    /**
+     * Computes the complex conjugate transpose of a tensor.
+     * Same as {@link #hermTranspose()} and {@link #hermTranspose()}.
+     * @return The complex conjugate transpose of this tensor.
+     */
+    public T conjT();
+
+
+    /**
+     * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
+     * Same as {@link #conjT()} and {@link #H()}.
+     * @returnT he complex conjugate transpose (Hermitian transpose) of this tensor.
+     */
+    public T hermTranspose();
+
+
+    /**
+     * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
+     * Same as {@link #conjT()} and {@link #hermTranspose()}.
+     * @returnT he complex conjugate transpose (Hermitian transpose) of this tensor.
+     */
+    public T H();
 }

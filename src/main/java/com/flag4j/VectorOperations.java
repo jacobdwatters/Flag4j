@@ -9,11 +9,12 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <U> Dense Vector type.
  * @param <V> Sparse Vector type.
  * @param <W> Complex Vector type.
+ * @param <Y> Real Vector type.
  * @param <X> Vector entry type.
- * @param <Y> Matrix type equivalent.
- * @param <Z> Dense Matrix type equivalent.
+ * @param <AA> Matrix type equivalent.
+ * @param <BB> Dense Matrix type equivalent.
  */
-public interface VectorOperations<T, U, V, W, X, Y, Z> extends Operations<T, U, W, X> {
+public interface VectorOperations<T, U, V, W, Y, X, AA, BB> extends Operations<T, U, V, W, Y, X> {
 
 
     /**
