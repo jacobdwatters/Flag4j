@@ -4,7 +4,7 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 
 /**
- * This interface specifies operations which should be implemented by any matrix (rank 2 tensor).
+ * This interface specifies operations which should be implemented by any vector.
  * @param <T> Vector type.
  * @param <U> Dense Vector type.
  * @param <V> Sparse Vector type.
@@ -13,12 +13,8 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <X> Vector entry type.
  * @param <TT> Matrix type equivalent.
  * @param <UU> Dense Matrix type equivalent.
- * @param <VV> Sparse Matrix type equivalent.
- * @param <WW> Complex Matrix type equivalent.
- * @param <YY> Real Matrix type equivalent.
  */
-public interface VectorOperations<T, U, V, W, Y, X, TT, UU, VV, WW, YY>
-        extends Operations<T, U, V, W, Y, X> {
+public interface VectorOperationsMixin<T, U, V, W, Y, X, TT, UU> {
 
 
     /**
@@ -91,4 +87,11 @@ public interface VectorOperations<T, U, V, W, Y, X, TT, UU, VV, WW, YY>
      * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
      */
     public CVector cross(SparseCVector b);
+
+
+    /**
+     * Converts a vector to an equivalent matrix.
+     * @return
+     */
+    public UU toMatrix();
 }

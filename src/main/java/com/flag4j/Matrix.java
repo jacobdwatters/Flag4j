@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class Matrix {
     double[][] entries;
     int m, n;
+    String shape;
 
     /**
      * Creates a real dense matrix whose entries are specified by a double array.

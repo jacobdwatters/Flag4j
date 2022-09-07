@@ -10,9 +10,8 @@ public class Configurations {
      */
     static int NUM_THREADS = 1;
 
-
+    // Hide constructor from public access.
     private Configurations() {throw new IllegalStateException("Utility class cannot be instantiated.");}
-
 
     /**
      * Sets the number of threads for use in concurrent operations as the number of processors available to the Java
