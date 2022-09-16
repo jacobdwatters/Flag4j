@@ -48,7 +48,23 @@ public class PrintOptions {
      * Precision of the printed matrix values. i.e. the number of decimal places printed.
      * If negative, max precision is used.
      * <br><br>
-     * Default Value: 20.
+     * Default Value: 8.
      */
-    public static int PRECISION = 20;
+    public static int PRECISION = 8;
+
+
+    /**
+     * A flag for displaying values in scientific notation.
+     * <br><br>
+     * Default value: false.
+     */
+    public static boolean USE_SCIENTIFIC = false;
+
+
+    /**
+     * A flag which indicates if each value should be centered within its column.
+     * <br><br>
+     * Default value: true.
+     */
+    public static boolean CENTER = true;
 }

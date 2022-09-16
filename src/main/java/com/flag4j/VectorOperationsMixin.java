@@ -1,6 +1,5 @@
 package com.flag4j;
 
-
 import com.flag4j.complex_numbers.CNumber;
 
 /**
@@ -13,8 +12,81 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <X> Vector entry type.
  * @param <TT> Matrix type equivalent.
  * @param <UU> Dense Matrix type equivalent.
+ * @param <VV> Sparse Matrix type equivalent.
+ * @param <WW> Complex Matrix type equivalent.
  */
-public interface VectorOperationsMixin<T, U, V, W, Y, X, TT, UU> {
+interface VectorOperationsMixin<T, U, V, W, Y, X, TT, UU, VV, WW> extends TensorOperationsMixin<T, U, V, W, Y, X> {
+
+    /**
+     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(Matrix) stack} method for
+     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     *
+     * @param b Vector to stack to the bottom of this vector.
+     * @return The result of stacking this vector and vector b.<br>
+     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
+     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @throws IllegalArgumentException <br>
+     * - If the number of entries in this vector is different from the number of entries in
+     * the vector b.<br>
+     * - If the vectors are not both row vectors or both column vectors.
+     */
+    TT stack(Vector b);
+
+
+    /**
+     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(SparseMatrix) stack} method for
+     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     *
+     * @param b Vector to stack to the bottom of this vector.
+     * @return The result of stacking this vector and vector b.<br>
+     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
+     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @throws IllegalArgumentException <br>
+     * - If the number of entries in this vector is different from the number of entries in
+     * the vector b.<br>
+     * - If the vectors are not both row vectors or both column vectors.
+     */
+    VV stack(SparseVector b);
+
+
+    /**
+     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(CMatrix) stack} method for
+     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     *
+     * @param b Vector to stack to the bottom of this vector.
+     * @return The result of stacking this vector and vector b.<br>
+     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
+     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @throws IllegalArgumentException <br>
+     * - If the number of entries in this vector is different from the number of entries in
+     * the vector b.<br>
+     * - If the vectors are not both row vectors or both column vectors.
+     */
+    WW stack(CVector b);
+
+
+    /**
+     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(SparseCMatrix) stack} method for
+     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     *
+     * @param b Vector to stack to the bottom of this vector.
+     * @return The result of stacking this vector and vector b.<br>
+     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
+     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @throws IllegalArgumentException <br>
+     * - If the number of entries in this vector is different from the number of entries in
+     * the vector b.<br>
+     * - If the vectors are not both row vectors or both column vectors.
+     */
+    WW stack(SparseCVector b);
+
+    /**
+     * Computes the inner product between two vectors.
+     * @param b Second vector in the inner product.
+     * @return The inner product between this vector and the vector b.
+     * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
+     */
+    X innerProduct(Vector b);
 
 
     /**
@@ -23,7 +95,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X, TT, UU> {
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    public X innerProduct(Vector b);
+    X innerProduct(SparseVector b);
 
 
     /**
@@ -32,7 +104,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X, TT, UU> {
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    public X innerProduct(SparseVector b);
+    CNumber innerProduct(CVector b);
 
 
     /**
@@ -41,16 +113,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X, TT, UU> {
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    public CNumber innerProduct(CVector b);
-
-
-    /**
-     * Computes the inner product between two vectors.
-     * @param b Second vector in the inner product.
-     * @return The inner product between this vector and the vector b.
-     * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
-     */
-    public CNumber innerProduct(SparseCVector b);
+    CNumber innerProduct(SparseCVector b);
 
 
     /**
@@ -59,7 +122,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X, TT, UU> {
      * @return The result of the vector cross product between this vector and b.
      * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
      */
-    public U cross(Vector b);
+    U cross(Vector b);
 
 
     /**
@@ -68,7 +131,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X, TT, UU> {
      * @return The result of the vector cross product between this vector and b.
      * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
      */
-    public U cross(SparseVector b);
+    U cross(SparseVector b);
 
 
     /**
@@ -77,7 +140,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X, TT, UU> {
      * @return The result of the vector cross product between this vector and b.
      * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
      */
-    public CVector cross(CVector b);
+    CVector cross(CVector b);
 
 
     /**
@@ -86,12 +149,50 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X, TT, UU> {
      * @return The result of the vector cross product between this vector and b.
      * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
      */
-    public CVector cross(SparseCVector b);
+    CVector cross(SparseCVector b);
+
+
+    /**
+     * Computes the outer product of two vectors.
+     * @param b Second vector in the outer product.
+     * @return The result of the vector outer product between this vector and b.
+     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     */
+    UU outerProduct(Vector b);
+
+
+    /**
+     * Computes the outer product of two vectors.
+     * @param b Second vector in the outer product.
+     * @return The result of the vector outer product between this vector and b.
+     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     */
+    UU outerProduct(SparseVector b);
+
+
+    /**
+     * Computes the outer product of two vectors.
+     * @param b Second vector in the outer product.
+     * @return The result of the vector outer product between this vector and b.
+     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     */
+    CMatrix outerProduct(CVector b);
+
+
+    /**
+     * Computes the outer product of two vectors.
+     * @param b Second vector in the outer product.
+     * @return The result of the vector outer product between this vector and b.
+     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     */
+    CMatrix outerProduct(SparseCVector b);
 
 
     /**
      * Converts a vector to an equivalent matrix.
-     * @return
+     * @return A matrix equivalent to this vector. This method will respect the orientation of the vector. That is, if
+     * this vector is a row vector, then the resulting matrix will have a single row. If this vector is a column vector, then the
+     * resulting matrix will have a single column.
      */
-    public UU toMatrix();
+    UU toMatrix();
 }

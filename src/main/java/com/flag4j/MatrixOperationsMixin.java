@@ -3,6 +3,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 
+
 /**
  * This interface specifies operations which should be implemented by any matrix (rank 2 tensor).
  * @param <T> Matrix type.
@@ -12,114 +13,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <Y> Real Matrix type.
  * @param <X> Matrix entry type.
  */
-interface MatrixOperationsMixin<T, U, V, W, Y, X> {
-
-    /**
-     * Computes the element-wise addition between two tensors of the same rank.
-     * @param B Second tensor in the addition.
-     * @return The result of adding the tensor B to this tensor element-wise.
-     * @throws IllegalArgumentException If this matrix and B have different shapes.
-     */
-    public T add(T B);
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    public U add(double a);
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    public CMatrix add(CNumber a);
-
-
-    /**
-     * Computes the element-wise subtraction between two tensors of the same rank.
-     * @param B Second tensor in element-wise subtraction.
-     * @return The result of subtracting the tensor B from this tensor element-wise.
-     * @throws IllegalArgumentException If this matrix and B have different shapes.
-     */
-    public T sub(T B);
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    public U sub(double a);
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor.
-     * @param a Value to subtract from all entries of this tensor.
-     * @return The result of subtracting the specified value from each entry of this tensor.
-     */
-    public CMatrix sub(CNumber a);
-
-
-    /**
-     * Computes scalar multiplication of a tensor.
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    public T scalMult(double factor);
-
-
-    /**
-     * Computes scalar multiplication of a tensor.
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    public W scalMult(CNumber factor);
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     * @param divisor The scaler value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    public T scalDiv(double divisor);
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     * @param divisor The scaler value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    public W scalDiv(CNumber divisor);
-
-
-    /**
-     * Sums together all entries in the tensor.
-     * @return The sum of all entries in this matrix.
-     */
-    public X sum();
-
-
-    /**
-     * Computes the element-wise square root of a tensor.
-     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
-     * the principle square root i.e. the square root with positive real part.
-     */
-    public W sqrt();
-
-
-    /**
-     * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
-     * be computed.
-     * @return The result of applying an element-wise absolute value/magnitude to this tensor.
-     */
-    public Y abs();
-
+interface MatrixOperationsMixin<T, U, V, W, Y, X> extends TensorOperationsMixin<T, U, V, W, Y, X> {
 
     /**
      * Computes the element-wise addition between two matrices.
@@ -127,7 +21,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of adding the matrix B to this matrix element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    public U add(Matrix B);
+    U add(Matrix B);
 
 
     /**
@@ -136,7 +30,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    public T add(SparseMatrix B);
+    T add(SparseMatrix B);
 
 
     /**
@@ -145,7 +39,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    public U add(CMatrix B);
+    U add(CMatrix B);
 
 
     /**
@@ -154,7 +48,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    public T add(SparseCMatrix B);
+    T add(SparseCMatrix B);
 
 
     /**
@@ -163,7 +57,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of matrix multiplying this matrix with matrix B.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
-    public U mult(Matrix B);
+    U mult(Matrix B);
 
 
     /**
@@ -172,7 +66,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of matrix multiplying this matrix with matrix B.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
-    public U mult(SparseMatrix B);
+    U mult(SparseMatrix B);
 
 
     /**
@@ -181,7 +75,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of matrix multiplying this matrix with matrix B.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
-    public CMatrix mult(CMatrix B);
+    CMatrix mult(CMatrix B);
 
 
     /**
@@ -190,7 +84,53 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of matrix multiplying this matrix with matrix B.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
-    public W mult(SparseCMatrix B);
+    CMatrix mult(SparseCMatrix B);
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     * @param b Vector in the matrix-vector multiplication.
+     * @return The result of matrix multiplying this matrix with vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
+     */
+    U mult(Vector b);
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     * @param b Vector in the matrix-vector multiplication.
+     * @return The result of matrix multiplying this matrix with vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
+     */
+    U mult(SparseVector b);
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     * @param b Vector in the matrix-vector multiplication.
+     * @return The result of matrix multiplying this matrix with vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
+     */
+    CMatrix mult(CVector b);
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     * @param b Vector in the matrix-vector multiplication.
+     * @return The result of matrix multiplying this matrix with vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
+     */
+    CMatrix mult(SparseCVector b);
+
+
+    /**
+     * Computes the matrix power with a given exponent. This is equivalent to multiplying a matrix to itself 'exponent'
+     * times. Note, this method is preferred over repeated multiplication of a matrix as this method will be significantly
+     * faster.
+     * @param exponent The exponent in the matrix power.
+     * @return The result of multiplying this matrix with itself 'exponent' times.
+     */
+    U pow(int exponent);
 
 
     /**
@@ -199,7 +139,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of element-wise multiplication of this matrix with the matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    public T elemMult(Matrix B);
+    T elemMult(Matrix B);
 
 
     /**
@@ -208,7 +148,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of element-wise multiplication of this matrix with the matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    public V elemMult(SparseMatrix B);
+    V elemMult(SparseMatrix B);
 
 
     /**
@@ -217,7 +157,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of element-wise multiplication of this matrix with the matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    public W elemMult(CMatrix B);
+    W elemMult(CMatrix B);
 
 
     /**
@@ -226,7 +166,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of element-wise multiplication of this matrix with the matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    public SparseCMatrix elemMult(SparseCMatrix B);
+    SparseCMatrix elemMult(SparseCMatrix B);
 
 
     /**
@@ -236,7 +176,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      * @throws ArithmeticException If B contains any zero entries.
      */
-    public T elemDiv(Matrix B);
+    T elemDiv(Matrix B);
 
 
     /**
@@ -246,7 +186,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      * @throws ArithmeticException If B contains any zero entries.
      */
-    public V elemDiv(CMatrix B);
+    V elemDiv(CMatrix B);
 
 
     /**
@@ -254,7 +194,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The determinant of this matrix.
      * @throws IllegalArgumentException If this matrix is not square.
      */
-    public X det();
+    X det();
 
 
     /**
@@ -263,7 +203,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The Frobenius inner product of this matrix and matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    public X fib(Matrix B);
+    X fib(Matrix B);
 
 
     /**
@@ -272,7 +212,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The Frobenius inner product of this matrix and matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    public X fib(SparseMatrix B);
+    X fib(SparseMatrix B);
 
 
     /**
@@ -281,7 +221,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The Frobenius inner product of this matrix and matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    public CNumber fib(CMatrix B);
+    CNumber fib(CMatrix B);
 
 
     /**
@@ -290,7 +230,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The Frobenius inner product of this matrix and matrix B.
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
-    public CNumber fib(SparseCMatrix B);
+    CNumber fib(SparseCMatrix B);
 
 
     /**
@@ -298,7 +238,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    public T directSum(Matrix B);
+    T directSum(Matrix B);
 
 
     /**
@@ -306,7 +246,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    public V directSum(SparseMatrix B);
+    V directSum(SparseMatrix B);
 
 
     /**
@@ -314,7 +254,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    public W directSum(CMatrix B);
+    W directSum(CMatrix B);
 
 
     /**
@@ -322,7 +262,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    public SparseCMatrix directSum(SparseCMatrix B);
+    SparseCMatrix directSum(SparseCMatrix B);
 
 
     /**
@@ -330,7 +270,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    public T invDirectSum(Matrix B);
+    T invDirectSum(Matrix B);
 
 
     /**
@@ -338,7 +278,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    public V invDirectSum(SparseMatrix B);
+    V invDirectSum(SparseMatrix B);
 
 
     /**
@@ -346,7 +286,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    public W invDirectSum(CMatrix B);
+    W invDirectSum(CMatrix B);
 
 
     /**
@@ -354,7 +294,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    public SparseCMatrix invDirectSum(SparseCMatrix B);
+    SparseCMatrix invDirectSum(SparseCMatrix B);
 
 
     /**
@@ -362,7 +302,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of summing together all columns of the matrix as column vectors. If this matrix is an m-by-n matrix, then the result will be
      * an m-by-1 matrix.
      */
-    public T sumCols();
+    T sumCols();
 
 
     /**
@@ -370,7 +310,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of summing together all rows of the matrix as row vectors. If this matrix is an m-by-n matrix, then the result will be
      * an 1-by-n matrix.
      */
-    public T sumRows();
+    T sumRows();
 
 
     /**
@@ -379,7 +319,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param b Vector to add to each column of this matrix.
      * @return The result of adding the vector b to each column of this matrix.
      */
-    public U addToEachCol(Vector b);
+    U addToEachCol(Vector b);
 
 
     /**
@@ -388,7 +328,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param b Vector to add to each column of this matrix.
      * @return The result of adding the vector b to each column of this matrix.
      */
-    public T addToEachCol(SparseVector b);
+    T addToEachCol(SparseVector b);
 
 
     /**
@@ -397,7 +337,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param b Vector to add to each column of this matrix.
      * @return The result of adding the vector b to each column of this matrix.
      */
-    public CMatrix addToEachCol(CVector b);
+    CMatrix addToEachCol(CVector b);
 
 
     /**
@@ -406,7 +346,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param b Vector to add to each column of this matrix.
      * @return The result of adding the vector b to each column of this matrix.
      */
-    public W addToEachCol(SparseCVector b);
+    W addToEachCol(SparseCVector b);
 
 
     /**
@@ -415,7 +355,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param b Vector to add to each row of this matrix.
      * @return The result of adding the vector b to each row of this matrix.
      */
-    public U addToEachRow(Vector b);
+    U addToEachRow(Vector b);
 
 
     /**
@@ -424,7 +364,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param b Vector to add to each row of this matrix.
      * @return The result of adding the vector b to each row of this matrix.
      */
-    public T addToEachRow(SparseVector b);
+    T addToEachRow(SparseVector b);
 
 
     /**
@@ -433,7 +373,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param b Vector to add to each row of this matrix.
      * @return The result of adding the vector b to each row of this matrix.
      */
-    public CMatrix addToEachRow(CVector b);
+    CMatrix addToEachRow(CVector b);
 
 
     /**
@@ -442,7 +382,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @param b Vector to add to each row of this matrix.
      * @return The result of adding the vector b to each row of this matrix.
      */
-    public W addToEachRow(SparseCVector b);
+    W addToEachRow(SparseCVector b);
 
 
     /**
@@ -453,7 +393,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of stacking this matrix on top of the matrix B.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
-    public U stack(Matrix B);
+    U stack(Matrix B);
 
 
     /**
@@ -464,20 +404,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of stacking this matrix on top of the matrix B.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
-    public T stack(SparseMatrix B);
-
-
-
-    /**
-     * Stacks matrices along columns. <br>
-     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
-     *
-     * @param B Matrix to stack to this matrix.
-     * @return The result of stacking this matrix on top of the matrix B.
-     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
-     */
-    public CMatrix stack(CMatrix B);
-
+    T stack(SparseMatrix B);
 
 
     /**
@@ -488,7 +415,18 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of stacking this matrix on top of the matrix B.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
-    public W stack(SparseCMatrix B);
+    CMatrix stack(CMatrix B);
+
+
+    /**
+     * Stacks matrices along columns. <br>
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    W stack(SparseCMatrix B);
 
 
     /**
@@ -503,7 +441,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    public U stack(Matrix B, int axis);
+    U stack(Matrix B, int axis);
 
 
     /**
@@ -518,7 +456,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    public T stack(SparseMatrix B, int axis);
+    T stack(SparseMatrix B, int axis);
 
 
     /**
@@ -533,7 +471,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    public CMatrix stack(CMatrix B, int axis);
+    CMatrix stack(CMatrix B, int axis);
 
 
     /**
@@ -548,7 +486,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    public W stack(SparseCMatrix B, int axis);
+    W stack(SparseCMatrix B, int axis);
 
 
     /**
@@ -559,7 +497,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of stacking B to the right of this matrix.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
-    public U augment(Matrix B);
+    U augment(Matrix B);
 
 
     /**
@@ -570,7 +508,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of stacking B to the right of this matrix.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
-    public T augment(SparseMatrix B);
+    T augment(SparseMatrix B);
 
 
     /**
@@ -581,8 +519,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of stacking B to the right of this matrix.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
-    public CMatrix augment(CMatrix B);
-
+    CMatrix augment(CMatrix B);
 
 
     /**
@@ -593,58 +530,177 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> {
      * @return The result of stacking B to the right of this matrix.
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
-    public W augment(SparseCMatrix B);
+    W augment(SparseCMatrix B);
 
 
     /**
-     * Computes the transpose of a tensor. Same as {@link #T()}.
-     * @return The transpose of this tensor.
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.<br>
+     * Also see {@link #stack(Vector, int)} and {@link #augment(Vector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     * the vector b.
      */
-    public T transpose();
+    T stack(Vector b);
 
 
     /**
-     * Computes the transpose of a tensor. Same as {@link #transpose()}.
-     * @return The transpose of this tensor.
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.<br>
+     * Also see {@link #stack(SparseVector, int)} and {@link #augment(SparseVector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     * the vector b.
      */
-    public T T();
+    V stack(SparseVector b);
 
 
     /**
-     * Computes the complex conjugate of a tensor.
-     * @return The complex conjugate of this tensor.
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.<br>
+     * Also see {@link #stack(CVector, int)} and {@link #augment(CVector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     * the vector b.
      */
-    public T conj();
+    W stack(CVector b);
 
 
     /**
-     * Computes the complex conjugate transpose of a tensor.
-     * Same as {@link #hermTranspose()} and {@link #hermTranspose()}.
-     * @return The complex conjugate transpose of this tensor.
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.<br>
+     * Also see {@link #stack(SparseCVector, int)} and {@link #augment(SparseCVector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     * the vector b.
      */
-    public T conjT();
+    W stack(SparseCVector b);
 
 
     /**
-     * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
-     * Same as {@link #conjT()} and {@link #H()}.
-     * @returnT he complex conjugate transpose (Hermitian transpose) of this tensor.
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.<br>
+     *
+     * @param b Vector to stack to this matrix.
+     * @param axis Axis along which to stack. <br>
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Vector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. <br>
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Vector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    public T hermTranspose();
+    T stack(Vector b, int axis);
 
 
     /**
-     * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
-     * Same as {@link #conjT()} and {@link #hermTranspose()}.
-     * @returnT he complex conjugate transpose (Hermitian transpose) of this tensor.
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.<br>
+     *
+     * @param b Vector to stack to this matrix.
+     * @param axis Axis along which to stack. <br>
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseVector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. <br>
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseVector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    public T H();
+    V stack(SparseVector b, int axis);
 
 
     /**
-     * Computes the reciprocals, element-wise, of a matrix.
-     * @return A matrix containing the reciprocal elements of this matrix.
-     * @throws ArithmeticException If this matrix contains any zeros.
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.<br>
+     *
+     * @param b Vector to stack to this matrix.
+     * @param axis Axis along which to stack. <br>
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(CVector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. <br>
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(CVector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    public T recep();
+    W stack(CVector b, int axis);
+
+
+    /**
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.<br>
+     *
+     * @param b Vector to stack to this matrix.
+     * @param axis Axis along which to stack. <br>
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseCVector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. <br>
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseCVector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    W stack(SparseCVector b, int axis);
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.<br>
+     * Also see {@link #stack(Vector)} and {@link #stack(Vector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    T augment(Vector b);
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.<br>
+     * Also see {@link #stack(SparseVector)} and {@link #stack(SparseVector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    V augment(SparseVector b);
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.<br>
+     * Also see {@link #stack(CVector)} and {@link #stack(CVector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    W augment(CVector b);
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.<br>
+     * Also see {@link #stack(SparseCVector)} and {@link #stack(SparseCVector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    W augment(SparseCVector b);
 }
