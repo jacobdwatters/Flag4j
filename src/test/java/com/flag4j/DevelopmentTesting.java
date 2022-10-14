@@ -102,6 +102,12 @@ class Multiply {
         return new VectorFlat(product);
     }
 
+
+    public static Matrix matMultStandard(Matrix A, Matrix B) {
+        return null;
+    }
+
+
     private static void dimCheck(Matrix mat, Vector vec) {
         if(mat.n!=vec.m) {
             throw new IllegalArgumentException("Illegal dimensions for matrix-vector multiplication");
@@ -122,9 +128,9 @@ public class DevelopmentTesting {
     final static double MAX = 256;
     final static double MIN = -256;
     final static Random RAND = new Random(SEED);
-    final static int NUM_ROWS = 20000;
-    final static int NUM_COLS = 20000;
-    final static int NUM_RUNS  = 100;
+    final static int NUM_ROWS = 20;
+    final static int NUM_COLS = 20;
+    final static int NUM_RUNS  = 1;
 
     public static double[] genRandArr(int size) {
         double[] randomArr = new double[size];
@@ -147,7 +153,7 @@ public class DevelopmentTesting {
         return randomArr;
     }
 
-    public static void timeMVM(double[][] mat_vals, double[] vec_vals) {
+    public static void timeMVM(double[][] mat_vals,double[] vec_vals) {
         Matrix A = new Matrix(mat_vals);
 
         final long startTimeCreate = System.currentTimeMillis();
@@ -167,6 +173,7 @@ public class DevelopmentTesting {
         System.out.println("Time to Multiply: " + timeMult + " ms.");
         System.out.println("Total Execution time: " + (timeCreate+timeMult) + " ms.");
     }
+
     public static void timeMVMFlat(double[][] mat_vals, double[] vec_vals) {
         Matrix A = new Matrix(mat_vals);
 
@@ -188,12 +195,51 @@ public class DevelopmentTesting {
         System.out.println("Total Execution time: " + (timeCreate+timeMult) + " ms.");
     }
 
+    public static void timeFillLoop(double fillValue, int size) {
+        double[][] arr = new double[size][size];
+
+        final long startTimeMult = System.currentTimeMillis();
+        for(int i=0; i<size; i++) {
+            for(int j=0; j<size; j++) {
+                arr[i][j] = fillValue;
+            }
+        }
+        final long endTimeMult = System.currentTimeMillis();
+        final long timeTot = endTimeMult - startTimeMult;
+
+        System.out.println("Fill with loop:\n--------------------------------");
+        System.out.println("Time to fill: " + timeTot + " ms.");
+    }
+    public static void timeFill(double fillValue, int size) {
+        double[][] arr = new double[size][size];
+        double[] row = new double[size];
+
+        final long startTimeMult = System.currentTimeMillis();
+        Arrays.fill(row, fillValue);
+        Arrays.fill(arr, row);
+        final long endTimeMult = System.currentTimeMillis();
+        final long timeTot = endTimeMult - startTimeMult;
+
+        System.out.println("Fill:\n--------------------------------");
+        System.out.println("Time to fill: " + timeTot + " ms.");
+    }
+
     public static void main(String[] args) {
         double[][] a_vals = genRandArr2D(NUM_ROWS, NUM_COLS);
         double[] b_vals = genRandArr(NUM_ROWS);
 
-        timeMVM(a_vals, b_vals);
+        double[][] aa = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        double[][] bb = {{4, 5}, {1, 9}, {6, 7}};
+
+
+//        timeMVM(a_vals, b_vals);
+//        System.out.println("\n\n");
+//        timeMVMFlat(a_vals, b_vals);
+
+        double fillValue = 10;
+        int size = 30000;
+        timeFillLoop(fillValue, size);
         System.out.println("\n\n");
-        timeMVMFlat(a_vals, b_vals);
+        timeFill(fillValue, size);
     }
 }

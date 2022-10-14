@@ -15,7 +15,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <VV> Sparse Matrix type equivalent.
  * @param <WW> Complex Matrix type equivalent.
  */
-interface VectorOperationsMixin<T, U, V, W, Y, X, TT, UU, VV, WW> extends TensorOperationsMixin<T, U, V, W, Y, X> {
+interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW> extends TensorOperationsMixin<T, U, V, W, Y, X> {
 
     /**
      * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(Matrix) stack} method for

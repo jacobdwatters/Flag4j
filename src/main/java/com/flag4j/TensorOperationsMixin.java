@@ -13,7 +13,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <Y> Real Tensor type.
  * @param <X> Tensor entry type.
  */
-interface TensorOperationsMixin<T, U, V, W, Y, X> {
+interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
 
 
     /**
@@ -155,7 +155,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X> {
     /**
      * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
      * Same as {@link #conjT()} and {@link #H()}.
-     * @returnT he complex conjugate transpose (Hermitian transpose) of this tensor.
+     * @return he complex conjugate transpose (Hermitian transpose) of this tensor.
      */
     T hermTranspose();
 
@@ -163,7 +163,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X> {
     /**
      * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
      * Same as {@link #conjT()} and {@link #hermTranspose()}.
-     * @returnT he complex conjugate transpose (Hermitian transpose) of this tensor.
+     * @return he complex conjugate transpose (Hermitian transpose) of this tensor.
      */
     T H();
 

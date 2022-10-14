@@ -13,7 +13,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <Y> Real Matrix type.
  * @param <X> Matrix entry type.
  */
-interface MatrixOperationsMixin<T, U, V, W, Y, X> extends TensorOperationsMixin<T, U, V, W, Y, X> {
+interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends TensorOperationsMixin<T, U, V, W, Y, X> {
 
     /**
      * Computes the element-wise addition between two matrices.
@@ -703,4 +703,79 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X> extends TensorOperationsMixin<
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     W augment(SparseCVector b);
+
+
+    /**
+     * Computes the eigenvalues and associated eigenvectors for a square matrix.
+     * <br><br>
+     * Also see<br>
+     * - {@link #eigVecs() eigVecs()} to compute just the eigenvectors. <br>
+     * - {@link #eigVals() eigVals()} to compute just the eigenvalues. This is recommended if the eigenvectors are not needed as it will be faster.
+     *
+     * @return Returns an array of two matrices. The first matrix is a column vector which contains the eigenvalues of A (not necessarily ordered but grouped by equality), repeated per there multiplicity.
+     *  The columns of the second matrix are the eigenvectors of A associated with each eigenvalue in the first matrix. For repeated eigenvalues, each associated eigenvector in the second matrix is
+     *  an associated eigenvector.
+     * @throws IllegalArgumentException If matrix is not square.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    W[] eig();
+
+
+    /**
+     * Computes the right eigenvectors of a matrix. This is done by first computing the Schur decomposition.
+     * <br><br>
+     * Also see<br>
+     * - {@link #eig() eig()} to compute both eigenvalues and eigenvectors.<br>
+     * - {@link #eigVals() eigVals()} to compute just the eigenvalues.
+     *
+     * @return Returns a matrix containing the eigenvectors of this matrix as its column vectors.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    W eigVecs();
+
+
+    /**
+     * Computes the left eigenvectors of a matrix. This is done by first computing the Schur decomposition.
+     * <br><br>
+     * Also see<br>
+     * - {@link #eig() eig()} to compute both eigenvalues and eigenvectors.<br>
+     * - {@link #eigVals() eigVals()} to compute just the eigenvalues.
+     *
+     * @return Returns a matrix containing the left eigenvectors of this matrix as its column vectors.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    W leftEigVecs();
+
+
+    /**
+     * Computes the eigenvalues of a matrix. This is done by first computing the Schur decomposition.
+     * <br><br>
+     * Also see<br>
+     * - {@link #eig() eig()} to compute both eigenvalues and eigenvectors.<br>
+     * - {@link #eigVecs() eigVecs()} to compute just the eigenvectors.
+     *
+     * @return Returns a column vector containing the eigenvalues of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    W eigVals();
+
+
+    /**
+     * Converts a square matrix to a similar matrix in upper Hessenberg form. A matrix is in upper Hessenberg form if all entries below the first sub-diagonal are
+     * zero. Two n-by-n matrices A and B are similar if there exists an invertible n-by-n matrix P, such that B=P<sup>-1</sup>AP. Similar matrices share many
+     * properties including having the same eigenvalues.
+     * @return A matrix in upper Hessenberg form which is similar to this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    T hessu();
+
+
+    /**
+     * Converts a square matrix to a similar matrix in upper Hessenberg form. A matrix is in upper Hessenberg form if all entries below the first sub-diagonal are
+     * zero. Two n-by-n matrices A and B are similar if there exists an invertible n-by-n matrix P, such that B=P<sup>-1</sup>AP. Similar matrices share many
+     * properties including having the same eigenvalues.
+     * @return An array of length two containing in order, a matrix similar to this matrix in upper Hessenberg form (H) and the householder reflector matrix (V). That is [H, V]
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    T[] hessuV();
 }
