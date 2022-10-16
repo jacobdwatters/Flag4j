@@ -1,4 +1,5 @@
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\CMatrix.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\complex_numbers\CNumberToken.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\Shape.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\VectorComparisonsMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\VectorTypes.java
@@ -7,6 +8,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\TensorPropertiesMixi
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\complex_numbers\CNumber.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\TypedMatrix.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\Matrix.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\io\TensorReader.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\TensorComparisonsMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\MatrixManipulationsMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\TensorManipulationsMixin.java
@@ -26,13 +28,17 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\SparseCMatrix.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\TypedVector.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\ErrorMessages.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\RealTensorMixin.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\io\TensorWriter.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\ComplexMatrixMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\RowEchelon.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\CVector.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\CreateMatrix.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\MatrixPropertiesMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\SparseVector.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\complex_numbers\CNumberLexer.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\concurrency\Configurations.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\MatrixComparisonsMixin.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\SparseMatrixFormats.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\Random.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\complex_numbers\CNumberParser.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\PrintOptions.java

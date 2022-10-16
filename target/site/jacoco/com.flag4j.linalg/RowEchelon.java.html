@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RowEchelon.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.linalg</a> &gt; <span class="el_source">RowEchelon.java</span></div><h1>RowEchelon.java</h1><pre class="source lang-java linenums">package com.flag4j.linalg;
+
+import com.flag4j.CMatrix;
+import com.flag4j.Matrix;
+import com.flag4j.SparseCMatrix;
+import com.flag4j.SparseMatrix;
+
+
+/**
+ * This class contains several methods for computing row echelon, reduced row echelon, and extended reduced row echelon
+ * forms of a matrix.
+ */
+<span class="nc" id="L13">public class RowEchelon {</span>
+
+    /**
+     * Computes row echelon form of a Matrix.
+     * @param A The matrix for which to compute the row echelon form.
+     * @return A matrix in row echelon form which is row-equivalent to this matrix.
+     */
+    public static Matrix ref(Matrix A) {
+        // TODO:
+<span class="nc" id="L22">        return null;</span>
+    }
+
+
+    /**
+     * Computes row echelon form of a Matrix.
+     * @param A The matrix for which to compute the row echelon form.
+     * @return A matrix in row echelon form which is row-equivalent to this matrix.
+     */
+    public static SparseMatrix ref(SparseMatrix A) {
+        /*TODO*/
+<span class="nc" id="L33">        return null;</span>
+    }
+
+
+    /**
+     * Computes row echelon form of a Matrix.
+     * @param A The matrix for which to compute the row echelon form.
+     * @return A matrix in row echelon form which is row-equivalent to this matrix.
+     */
+    public static CMatrix ref(CMatrix A) {
+        // TODO:
+<span class="nc" id="L44">        return null;</span>
+    }
+
+
+    /**
+     * Computes row echelon form of a Matrix.
+     * @param A The matrix for which to compute the row echelon form.
+     * @return A matrix in row echelon form which is row-equivalent to this matrix.
+     */
+    public static SparseCMatrix ref(SparseCMatrix A) {
+        // TODO:
+<span class="nc" id="L55">        return null;</span>
+    }
+
+
+    /**
+     * Computes the reduced row echelon form of a matrix. By default, this method uses partial pivoting.
+     * To use full or no pivoting see {@link #rref(Matrix, int)}.
+     * @param A The matrix for which to compute the reduced row echelon form.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
+     */
+<span class="nc" id="L65">    public static Matrix rref(Matrix A) {/*TODO*/return null;}</span>
+
+
+    /**
+     * Computes the reduced row echelon form of a matrix. By default, this method uses partial pivoting.
+     * To use full or no pivoting see {@link #rref(Matrix, int)}.
+     * @param A The matrix for which to compute the reduced row echelon form.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
+     */
+<span class="nc" id="L74">    public static SparseMatrix rref(SparseMatrix A) {/*TODO*/return null;}</span>
+
+
+    /**
+     * Computes the reduced row echelon form of a matrix. By default, this method uses partial pivoting.
+     * To use full or no pivoting see {@link #rref(CMatrix, int)}.
+     * @param A The matrix for which to compute the reduced row echelon form.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
+     */
+<span class="nc" id="L83">    public static CMatrix rref(CMatrix A) {/*TODO*/return null;}</span>
+
+
+    /**
+     * Computes the reduced row echelon form of a matrix. By default, this method uses partial pivoting.
+     * To use full or no pivoting see {@link #rref(SparseCMatrix, int)}.
+     * @param A The matrix for which to compute the reduced row echelon form.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
+     */
+<span class="nc" id="L92">    public static SparseCMatrix rref(SparseCMatrix A) {/*TODO*/return null;}</span>
+
+
+    /**
+     * Computes the reduced row echelon form of a matrix possibly with partial or full pivoting.
+     * Also see {@link #rref(Matrix, int)} for partial pivoting.
+     * @param A The matrix for which to compute the reduced row echelon form.
+     * @param pivoting Indicates what pivoting method to use. &lt;br&gt;
+     *        - If pivoting=0, no pivoting is used.&lt;br&gt;
+     *        - If pivoting=1, partial pivoting is used.&lt;br&gt;
+     *        - If pivoting=2, full pivoting is used.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
+     * @throws IllegalArgumentException if pivoting is not 0, 1, or 2.
+     */
+<span class="nc" id="L106">    public static Matrix rref(Matrix A, int pivoting) {/*TODO*/return null;}</span>
+
+
+    /**
+     * Computes the reduced row echelon form of a matrix possibly with partial or full pivoting.
+     * Also see {@link #rref(SparseMatrix, int)} for partial pivoting.
+     * @param A The matrix for which to compute the reduced row echelon form.
+     * @param pivoting Indicates what pivoting method to use. &lt;br&gt;
+     *        - If pivoting=0, no pivoting is used.&lt;br&gt;
+     *        - If pivoting=1, partial pivoting is used.&lt;br&gt;
+     *        - If pivoting=2, full pivoting is used.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
+     * @throws IllegalArgumentException if pivoting is not 0, 1, or 2.
+     */
+<span class="nc" id="L120">    public static SparseMatrix rref(SparseMatrix A, int pivoting) {/*TODO*/return null;}</span>
+
+
+    /**
+     * Computes the reduced row echelon form of a matrix possibly with partial or full pivoting.
+     * Also see {@link #rref(CMatrix, int)} for partial pivoting.
+     * @param A The matrix for which to compute the reduced row echelon form.
+     * @param pivoting Indicates what pivoting method to use. &lt;br&gt;
+     *        - If pivoting=0, no pivoting is used.&lt;br&gt;
+     *        - If pivoting=1, partial pivoting is used.&lt;br&gt;
+     *        - If pivoting=2, full pivoting is used.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
+     * @throws IllegalArgumentException if pivoting is not 0, 1, or 2.
+     */
+<span class="nc" id="L134">    public static CMatrix rref(CMatrix A, int pivoting) {/*TODO*/return null;}</span>
+
+
+    /**
+     * Computes the reduced row echelon form of a matrix possibly with partial or full pivoting.
+     * Also see {@link #rref(SparseCMatrix, int)} for partial pivoting.
+     * @param A The matrix for which to compute the reduced row echelon form.
+     * @param pivoting Indicates what pivoting method to use. &lt;br&gt;
+     *        - If pivoting=0, no pivoting is used.&lt;br&gt;
+     *        - If pivoting=1, partial pivoting is used.&lt;br&gt;
+     *        - If pivoting=2, full pivoting is used.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
+     * @throws IllegalArgumentException if pivoting is not 0, 1, or 2.
+     */
+<span class="nc" id="L148">    public static SparseCMatrix rref(SparseCMatrix A, int pivoting) {/*TODO*/return null;}</span>
+
+
+    /**
+     * Computes the extended reduced row echelon form of a matrix. This is equivalent to &lt;code&gt;{@link #rref(Matrix) rref(A.augment(Matrix.I(A.numRows())))}&lt;/code&gt;
+     * @param A Matrix for which to compute extended reduced row echelon form of.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
+     * appropriately sized identity matrix.
+     */
+<span class="nc" id="L157">    public static Matrix erref(Matrix A) {/*TODO*/return null;}</span>
+
+
+    /**
+     * Computes the extended reduced row echelon form of a matrix. This is equivalent to &lt;code&gt;{@link #rref(SparseMatrix) rref(A.augment(Matrix.I(A.numRows())))}&lt;/code&gt;
+     * @param A Matrix for which to compute extended reduced row echelon form of.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
+     * appropriately sized identity matrix.
+     */
+<span class="nc" id="L166">    public static SparseMatrix erref(SparseMatrix A) {/*TODO*/return null;}</span>
+
+
+    /**
+     * Computes the extended reduced row echelon form of a matrix. This is equivalent to &lt;code&gt;{@link #rref(CMatrix) rref(A.augment(Matrix.I(A.numRows())))}&lt;/code&gt;
+     * @param A Matrix for which to compute extended reduced row echelon form of.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
+     * appropriately sized identity matrix.
+     */
+<span class="nc" id="L175">    public static CMatrix erref(CMatrix A) {/*TODO*/return null;}</span>
+
+
+    /**
+     * Computes the extended reduced row echelon form of a matrix. This is equivalent to &lt;code&gt;{@link #rref(SparseCMatrix) rref(A.augment(Matrix.I(A.numRows())))}&lt;/code&gt;
+     * @param A Matrix for which to compute extended reduced row echelon form of.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
+     * appropriately sized identity matrix.
+     */
+<span class="nc" id="L184">    public static SparseCMatrix erref(SparseCMatrix A) {/*TODO*/return null;}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

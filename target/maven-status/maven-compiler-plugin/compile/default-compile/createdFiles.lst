@@ -1,0 +1,6 @@
+com\flag4j\SparseMatrixFormats.class
+com\flag4j\complex_numbers\CNumberToken.class
+com\flag4j\complex_numbers\CNumberParser.class
+com\flag4j\io\TensorReader.class
+com\flag4j\io\TensorWriter.class
+com\flag4j\complex_numbers\CNumberLexer.class
