@@ -28,11 +28,27 @@ abstract class TypedMatrix&lt;T&gt; {
      * @param type The type of this matrix.
      * @param m The number of rows in this matrix.
      * @param n The number of columns in this matrix.
+     * @throws IllegalArgumentException if either m or n is negative.
      */
-<span class="nc" id="L32">    protected TypedMatrix(MatrixTypes type, int m, int n) {</span>
-<span class="nc" id="L33">        this.m = m;</span>
-<span class="nc" id="L34">        this.n = n;</span>
-<span class="nc" id="L35">        this.type = type;</span>
-<span class="nc" id="L36">    }</span>
+<span class="fc" id="L33">    protected TypedMatrix(MatrixTypes type, int m, int n) {</span>
+<span class="pc bpc" id="L34" title="1 of 4 branches missed.">        if(m&lt;0 || n&lt;0) {</span>
+<span class="fc" id="L35">            throw new IllegalArgumentException(</span>
+<span class="fc" id="L36">                    ErrorMessages.negativeDimErrMsg(this.getShape())</span>
+            );
+        }
+
+<span class="fc" id="L40">        this.m = m;</span>
+<span class="fc" id="L41">        this.n = n;</span>
+<span class="fc" id="L42">        this.type = type;</span>
+<span class="fc" id="L43">    }</span>
+
+
+    /**
+     * Gets the shape of this tensor.
+     * @return A shape object describing the
+     */
+    public Shape getShape() {
+<span class="fc" id="L51">        return new Shape(m, n);</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

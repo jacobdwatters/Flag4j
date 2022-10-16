@@ -23,9 +23,9 @@ public class Shape {
      * Constructs a shape object from specified dimension measurements.
      * @param dims A list of the dimension measurements for this shape object.
      */
-<span class="nc" id="L26">    public Shape(int... dims) {</span>
-<span class="nc" id="L27">        this.shape = dims.clone();</span>
-<span class="nc" id="L28">    }</span>
+<span class="fc" id="L26">    public Shape(int... dims) {</span>
+<span class="fc" id="L27">        this.shape = dims.clone();</span>
+<span class="fc" id="L28">    }</span>
 
 
     /**
@@ -51,14 +51,14 @@ public class Shape {
      * @return The string representation for this Shape object.
      */
     public String toString() {
-<span class="nc" id="L54">        StringBuilder result = new StringBuilder(&quot;&quot;);</span>
+<span class="fc" id="L54">        StringBuilder result = new StringBuilder(&quot;&quot;);</span>
 
-<span class="nc bnc" id="L56" title="All 2 branches missed.">        for(int d : shape) {</span>
-<span class="nc" id="L57">            result.append(d + &quot;x&quot;);</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        for(int d : shape) {</span>
+<span class="fc" id="L57">            result.append(d + &quot;x&quot;);</span>
         }
-<span class="nc" id="L59">        result.deleteCharAt(result.length()-1); // Remove excess 'x' character.</span>
+<span class="fc" id="L59">        result.deleteCharAt(result.length()-1); // Remove excess 'x' character.</span>
 
-<span class="nc" id="L61">        return result.toString();</span>
+<span class="fc" id="L61">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

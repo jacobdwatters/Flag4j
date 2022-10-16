@@ -23,6 +23,10 @@
      * Error message for vector which was expected to be a column vector.
      */
     private final static String VEC_COL_ORIENTATION_ERR = &quot;Expecting vector to be a column vector but got a row vector with shape %s.&quot;;
+    /**
+     * Error message for the attempted construction of a tensor with a negative dimension value.
+     */
+    private final static String NEG_DIM_ERR = &quot;Shape dimensions must be non-negative but got shape %s.&quot;;
 
 
     /**
@@ -32,7 +36,7 @@
      * @return An error message for tensors with mismatching shapes.
      */
     static String equalShapeErrMsg(Shape shape1, Shape shape2) {
-<span class="nc" id="L35">        return String.format(EQ_SHAPE_MISMATCH_ERR, shape1, shape2);</span>
+<span class="nc" id="L39">        return String.format(EQ_SHAPE_MISMATCH_ERR, shape1, shape2);</span>
     }
 
 
@@ -43,7 +47,7 @@
      * @return An error message for matrices with shapes not conducive with matrix multiplication.
      */
     static String matMultShapeErrMsg(Shape shape1, Shape shape2) {
-<span class="nc" id="L46">        return String.format(MAT_MULT_DIM_MISMATCH_ERR, shape1, shape2);</span>
+<span class="nc" id="L50">        return String.format(MAT_MULT_DIM_MISMATCH_ERR, shape1, shape2);</span>
     }
 
 
@@ -53,7 +57,7 @@
      * @return An error message for a vector which is not a row vector.
      */
     static String vecRowOrientErrMsg(Shape shape) {
-<span class="nc" id="L56">        return String.format(VEC_ROW_ORIENTATION_ERR, shape);</span>
+<span class="nc" id="L60">        return String.format(VEC_ROW_ORIENTATION_ERR, shape);</span>
     }
 
 
@@ -63,7 +67,17 @@
      * @return An error message for a vector which is not a row vector.
      */
     static String vecColOrientErrMsg(Shape shape) {
-<span class="nc" id="L66">        return String.format(VEC_COL_ORIENTATION_ERR, shape);</span>
+<span class="nc" id="L70">        return String.format(VEC_COL_ORIENTATION_ERR, shape);</span>
+    }
+
+
+    /**
+     * Gets an error message for an attempted construction of a tensor with a negative dimension.
+     * @param shape Shape of the tensor.
+     * @return
+     */
+    static String negativeDimErrMsg(Shape shape) {
+<span class="fc" id="L80">        return String.format(NEG_DIM_ERR, shape);</span>
     }
 }
 
