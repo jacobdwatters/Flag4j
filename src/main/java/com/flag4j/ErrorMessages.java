@@ -23,6 +23,10 @@ abstract class ErrorMessages {
      * Error message for vector which was expected to be a column vector.
      */
     private final static String VEC_COL_ORIENTATION_ERR = "Expecting vector to be a column vector but got a row vector with shape %s.";
+    /**
+     * Error message for the attempted construction of a tensor with a negative dimension value.
+     */
+    private final static String NEG_DIM_ERR = "Shape dimensions must be non-negative but got shape %s.";
 
 
     /**
@@ -64,6 +68,16 @@ abstract class ErrorMessages {
      */
     static String vecColOrientErrMsg(Shape shape) {
         return String.format(VEC_COL_ORIENTATION_ERR, shape);
+    }
+
+
+    /**
+     * Gets an error message for an attempted construction of a tensor with a negative dimension.
+     * @param shape Shape of the tensor.
+     * @return
+     */
+    static String negativeDimErrMsg(Shape shape) {
+        return String.format(NEG_DIM_ERR, shape);
     }
 }
 

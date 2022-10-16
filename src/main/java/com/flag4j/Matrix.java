@@ -19,6 +19,7 @@ public class Matrix extends TypedMatrix<double[][]> {
     /**
      * Constructs a square real dense matrix of a specified size. The entries of the matrix will default to zero.
      * @param size Size of the square matrix.
+     * @throws IllegalArgumentException if size negative.
      */
     public Matrix(int size) {
         super(MatrixTypes.Matrix, size, size);
@@ -30,6 +31,7 @@ public class Matrix extends TypedMatrix<double[][]> {
      * Creates a square real dense matrix with a specified fill value.
      * @param size Size of the square matrix.
      * @param value Value to fill this matrix with.
+     * @throws IllegalArgumentException if size negative.
      */
     public Matrix(int size, double value) {
         super(MatrixTypes.Matrix, size, size);
@@ -45,6 +47,7 @@ public class Matrix extends TypedMatrix<double[][]> {
      * Creates a real dense matrix of a specified shape filled with zeros.
      * @param m The number of rows in the matrix.
      * @param n The number of columns in the matrix.
+     * @throws IllegalArgumentException if either m or n is negative.
      */
     public Matrix(int m, int n) {
         super(MatrixTypes.Matrix, m, n);
@@ -57,6 +60,7 @@ public class Matrix extends TypedMatrix<double[][]> {
      * @param m Number of rows in the matrix.
      * @param n Number of columns in the matrix.
      * @param value Value to fill this matrix with.
+     * @throws IllegalArgumentException if either m or n is negative.
      */
     public Matrix(int m, int n, double value) {
         super(MatrixTypes.Matrix, m, n);
