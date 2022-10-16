@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrintOptions.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">PrintOptions.java</span></div><h1>PrintOptions.java</h1><pre class="source lang-java linenums">package com.flag4j;
+
+
+/**
+ * Print options for matrices and vectors
+ */
+<span class="nc" id="L7">public abstract class PrintOptions {</span>
+
+    /**
+     * Padding between each element of matrix.
+     * If negative, zero padding will be used.
+     * &lt;br&gt;&lt;br&gt;
+     *
+     * Default Value: 2
+     */
+<span class="nc" id="L16">    public static int PADDING = 2;</span>
+
+
+    /**
+     * Maximum number of rows to print from a matrix.
+     * If a matrix has more rows than this value, rows with
+     * indices larger than this value, except for the last row,
+     * will not be printed. If zero or negative all rows will be printed.
+     * The last row is always printed&lt;br&gt;&lt;br&gt;
+     *
+     * Default Value: 10
+     */
+<span class="nc" id="L28">    public static int MAX_ROWS = 10;</span>
+
+
+    /**
+     * Maximum number of columns to print from a matrix/vector.
+     * If a matrix has more columns than this value, columns with
+     * indices equal to or larger than this value, except for the last column,
+     * will &lt;b&gt;not&lt;/b&gt; be printed. If zero or negative all columns will be printed.
+     * The last column is always printed.&lt;br&gt;&lt;br&gt;
+     *
+     * Default Value: 10
+     */
+<span class="nc" id="L40">    public static int MAX_COLUMNS = 10;</span>
+
+
+    /**
+     * Precision of the printed matrix values. i.e. the number of decimal places printed.
+     * If negative, max precision is used.
+     * &lt;br&gt;&lt;br&gt;
+     * Default Value: 8.
+     */
+<span class="nc" id="L49">    public static int PRECISION = 8;</span>
+
+
+    /**
+     * A flag for displaying values in scientific notation.
+     * &lt;br&gt;&lt;br&gt;
+     * Default value: false.
+     */
+<span class="nc" id="L57">    public static boolean USE_SCIENTIFIC = false;</span>
+
+
+    /**
+     * A flag which indicates if each value should be centered within its column.
+     * &lt;br&gt;&lt;br&gt;
+     * Default value: true.
+     */
+<span class="nc" id="L65">    public static boolean CENTER = true;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

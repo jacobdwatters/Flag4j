@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Matrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">Matrix.java</span></div><h1>Matrix.java</h1><pre class="source lang-java linenums">package com.flag4j;
+
+import java.util.Arrays;
+
+/**
+ * Real Dense Matrix.
+ */
+public class Matrix extends TypedMatrix&lt;double[][]&gt; {
+
+    /**
+     * Creates an empty real dense matrix.
+     */
+    public Matrix() {
+<span class="fc" id="L14">        super(MatrixTypes.Matrix, 0, 0);</span>
+<span class="fc" id="L15">        entries = new double[this.m][this.n];</span>
+<span class="fc" id="L16">    }</span>
+
+
+    /**
+     * Constructs a square real dense matrix of a specified size. The entries of the matrix will default to zero.
+     * @param size Size of the square matrix.
+     * @throws IllegalArgumentException if size negative.
+     */
+    public Matrix(int size) {
+<span class="fc" id="L25">        super(MatrixTypes.Matrix, size, size);</span>
+<span class="fc" id="L26">        this.entries = new double[this.m][this.n];</span>
+<span class="fc" id="L27">    }</span>
+
+
+    /**
+     * Creates a square real dense matrix with a specified fill value.
+     * @param size Size of the square matrix.
+     * @param value Value to fill this matrix with.
+     * @throws IllegalArgumentException if size negative.
+     */
+    public Matrix(int size, double value) {
+<span class="nc" id="L37">        super(MatrixTypes.Matrix, size, size);</span>
+<span class="nc" id="L38">        this.entries = new double[this.m][this.n];</span>
+<span class="nc" id="L39">        double[] row = new double[this.n];</span>
+
+<span class="nc" id="L41">        Arrays.fill(row, value);</span>
+<span class="nc" id="L42">        Arrays.fill(this.entries, row);</span>
+<span class="nc" id="L43">    }</span>
+
+
+    /**
+     * Creates a real dense matrix of a specified shape filled with zeros.
+     * @param m The number of rows in the matrix.
+     * @param n The number of columns in the matrix.
+     * @throws IllegalArgumentException if either m or n is negative.
+     */
+    public Matrix(int m, int n) {
+<span class="nc" id="L53">        super(MatrixTypes.Matrix, m, n);</span>
+<span class="nc" id="L54">        this.entries = new double[this.m][this.n];</span>
+<span class="nc" id="L55">    }</span>
+
+
+    /**
+     * Creates a real dense matrix with a specified shape and fills the matrix with the specified value.
+     * @param m Number of rows in the matrix.
+     * @param n Number of columns in the matrix.
+     * @param value Value to fill this matrix with.
+     * @throws IllegalArgumentException if either m or n is negative.
+     */
+    public Matrix(int m, int n, double value) {
+<span class="nc" id="L66">        super(MatrixTypes.Matrix, m, n);</span>
+<span class="nc" id="L67">        this.entries = new double[this.m][this.n];</span>
+<span class="nc" id="L68">        double[] row = new double[this.n];</span>
+
+<span class="nc" id="L70">        Arrays.fill(row, value);</span>
+<span class="nc" id="L71">        Arrays.fill(this.entries, row);</span>
+<span class="nc" id="L72">    }</span>
+
+
+    /**
+     * Creates a real dense matrix whose entries are specified by a double array.
+     * @param entries Entries of the real dense matrix.
+     */
+    public Matrix(double[][] entries) {
+<span class="nc" id="L80">        super(MatrixTypes.Matrix, entries.length, entries[0].length);</span>
+<span class="nc" id="L81">        this.entries = Arrays.stream(entries)</span>
+<span class="nc" id="L82">                .map(double[]::clone)</span>
+<span class="nc" id="L83">                .toArray(double[][]::new);</span>
+<span class="nc" id="L84">    }</span>
+
+
+    /**
+     * Creates a real dense matrix whose entries are specified by a double array.
+     * @param entries Entries of the real dense matrix.
+     */
+    public Matrix(int[][] entries) {
+<span class="nc" id="L92">        super(MatrixTypes.Matrix, entries.length, entries[0].length);</span>
+<span class="nc" id="L93">        this.entries = new double[m][n];</span>
+
+<span class="nc bnc" id="L95" title="All 2 branches missed.">        for(int i=0; i&lt;m; i++) {</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">            for(int j=0; j&lt;n; j++) {</span>
+<span class="nc" id="L97">                this.entries[i][j] = entries[i][j];</span>
+            }
+        }
+<span class="nc" id="L100">    }</span>
+
+
+    /**
+     * Creates a real dense matrix which is a copy of a specified matrix.
+     * @param A The matrix defining the entries for this matrix.
+     */
+    public Matrix(Matrix A) {
+<span class="nc" id="L108">        super(MatrixTypes.Matrix, A.entries.length, A.entries[0].length);</span>
+<span class="nc" id="L109">        this.entries = Arrays.stream(A.entries)</span>
+<span class="nc" id="L110">                .map(double[]::clone)</span>
+<span class="nc" id="L111">                .toArray(double[][]::new);</span>
+<span class="nc" id="L112">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

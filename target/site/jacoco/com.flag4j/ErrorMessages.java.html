@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ErrorMessages.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">ErrorMessages.java</span></div><h1>ErrorMessages.java</h1><pre class="source lang-java linenums">package com.flag4j;
+
+
+/**
+ * Contains error messages for common errors which may occur.
+ */
+<span class="nc" id="L7">abstract class ErrorMessages {</span>
+
+    /**
+     * Error message for matrices which do not have equal shape.
+     */
+    private final static String EQ_SHAPE_MISMATCH_ERR = &quot;Expecting matrices to have the same shape but got shapes %s and %s.&quot;;
+    /**
+     * Error message for matrices which do not have valid dimensions for matrix multiplication.
+     */
+    private final static String MAT_MULT_DIM_MISMATCH_ERR = &quot;Expecting the number of columns in the first matrix to&quot; +
+            &quot; match the number rows in the second matrix but got shapes %s and %s.&quot;;
+    /**
+     * Error message for vector which was expected to be row vector.
+     */
+    private final static String VEC_ROW_ORIENTATION_ERR = &quot;Expecting vector to be a row vector but got a vector with shape %s.&quot;;
+    /**
+     * Error message for vector which was expected to be a column vector.
+     */
+    private final static String VEC_COL_ORIENTATION_ERR = &quot;Expecting vector to be a column vector but got a row vector with shape %s.&quot;;
+    /**
+     * Error message for the attempted construction of a tensor with a negative dimension value.
+     */
+    private final static String NEG_DIM_ERR = &quot;Shape dimensions must be non-negative but got shape %s.&quot;;
+
+
+    /**
+     * Gets an error message for two tensors with mismatching shapes.
+     * @param shape1 The shape of the first tensor.
+     * @param shape2 The shape of the second tensor.
+     * @return An error message for tensors with mismatching shapes.
+     */
+    static String equalShapeErrMsg(Shape shape1, Shape shape2) {
+<span class="nc" id="L39">        return String.format(EQ_SHAPE_MISMATCH_ERR, shape1, shape2);</span>
+    }
+
+
+    /**
+     * Gets an error message for two matrices with shapes not conducive with matrix multiplication.
+     * @param shape1 The shape of the first matrix.
+     * @param shape2 The shape of the second matrix.
+     * @return An error message for matrices with shapes not conducive with matrix multiplication.
+     */
+    static String matMultShapeErrMsg(Shape shape1, Shape shape2) {
+<span class="nc" id="L50">        return String.format(MAT_MULT_DIM_MISMATCH_ERR, shape1, shape2);</span>
+    }
+
+
+    /**
+     * Gets an error message for a vector which was expected to be a row vector but was a column vector.
+     * @param shape Shape of the vector.
+     * @return An error message for a vector which is not a row vector.
+     */
+    static String vecRowOrientErrMsg(Shape shape) {
+<span class="nc" id="L60">        return String.format(VEC_ROW_ORIENTATION_ERR, shape);</span>
+    }
+
+
+    /**
+     * Gets an error message for a vector which was expected to be a column vector but was a row vector.
+     * @param shape Shape of the vector.
+     * @return An error message for a vector which is not a row vector.
+     */
+    static String vecColOrientErrMsg(Shape shape) {
+<span class="nc" id="L70">        return String.format(VEC_COL_ORIENTATION_ERR, shape);</span>
+    }
+
+
+    /**
+     * Gets an error message for an attempted construction of a tensor with a negative dimension.
+     * @param shape Shape of the tensor.
+     * @return
+     */
+    static String negativeDimErrMsg(Shape shape) {
+<span class="fc" id="L80">        return String.format(NEG_DIM_ERR, shape);</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
