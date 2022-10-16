@@ -4,11 +4,7 @@ package com.flag4j;
 /**
  * Print options for matrices and vectors
  */
-public class PrintOptions {
-    private PrintOptions() {
-        throw new IllegalStateException("This utility class can not be instantiated.");
-    }
-
+public abstract class PrintOptions {
 
     /**
      * Padding between each element of matrix.

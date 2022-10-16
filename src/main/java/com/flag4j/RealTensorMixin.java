@@ -6,7 +6,7 @@ package com.flag4j;
  * @param <T> Matrix type.
  * @param <W> Complex matrix type.
  */
-interface RealTensorMixin<T, W> {
+public interface RealTensorMixin<T, W> {
 
     /**
      * Computes the real square roots of this tensor (element-wise). This method only supports tensors which do not contain

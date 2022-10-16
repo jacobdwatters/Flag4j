@@ -5,20 +5,13 @@ import java.util.Arrays;
 /**
  * Real Dense Matrix.
  */
-public class Matrix {
-    /**
-     * The values of this matrix.
-     */
-    double[][] entries;
-    protected int m;
-    protected int n;
-
+public class Matrix extends TypedMatrix<double[][]> {
 
     /**
      * Creates an empty real dense matrix.
      */
     public Matrix() {
-        this.m = this.n = 0;
+        super(MatrixTypes.Matrix, 0, 0);
         entries = new double[this.m][this.n];
     }
 
@@ -28,7 +21,7 @@ public class Matrix {
      * @param size Size of the square matrix.
      */
     public Matrix(int size) {
-        this.m = this.n = size;
+        super(MatrixTypes.Matrix, size, size);
         this.entries = new double[this.m][this.n];
     }
 
@@ -39,7 +32,7 @@ public class Matrix {
      * @param value Value to fill this matrix with.
      */
     public Matrix(int size, double value) {
-        this.m = this.n = size;
+        super(MatrixTypes.Matrix, size, size);
         this.entries = new double[this.m][this.n];
         double[] row = new double[this.n];
 
@@ -54,8 +47,7 @@ public class Matrix {
      * @param n The number of columns in the matrix.
      */
     public Matrix(int m, int n) {
-        this.m = m;
-        this.n = n;
+        super(MatrixTypes.Matrix, m, n);
         this.entries = new double[this.m][this.n];
     }
 
@@ -67,8 +59,7 @@ public class Matrix {
      * @param value Value to fill this matrix with.
      */
     public Matrix(int m, int n, double value) {
-        this.m = m;
-        this.n = n;
+        super(MatrixTypes.Matrix, m, n);
         this.entries = new double[this.m][this.n];
         double[] row = new double[this.n];
 
@@ -82,6 +73,7 @@ public class Matrix {
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(double[][] entries) {
+        super(MatrixTypes.Matrix, entries.length, entries[0].length);
         this.entries = Arrays.stream(entries)
                 .map(double[]::clone)
                 .toArray(double[][]::new);
@@ -93,8 +85,7 @@ public class Matrix {
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(int[][] entries) {
-        this.m = entries.length;
-        this.n = entries[0].length;
+        super(MatrixTypes.Matrix, entries.length, entries[0].length);
         this.entries = new double[m][n];
 
         for(int i=0; i<m; i++) {
@@ -102,5 +93,17 @@ public class Matrix {
                 this.entries[i][j] = entries[i][j];
             }
         }
+    }
+
+
+    /**
+     * Creates a real dense matrix which is a copy of a specified matrix.
+     * @param A The matrix defining the entries for this matrix.
+     */
+    public Matrix(Matrix A) {
+        super(MatrixTypes.Matrix, A.entries.length, A.entries[0].length);
+        this.entries = Arrays.stream(A.entries)
+                .map(double[]::clone)
+                .toArray(double[][]::new);
     }
 }

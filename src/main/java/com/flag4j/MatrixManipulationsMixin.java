@@ -348,8 +348,9 @@ interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> extends Tens
     /**
      * Rounds this matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
      * be rounded independently.
+     * @return A copy of this matrix with each entry rounded to the nearest whole number.
      */
-    void round();
+    T round();
 
 
     /**
@@ -359,21 +360,26 @@ interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> extends Tens
      * @return A copy of this matrix with rounded values.
      * @throws IllegalArgumentException If <code>precision</code> is negative.
      */
-    void round(int precision);
+    T round(int precision);
 
 
     /**
      * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
      * independently. By default, the values must be within 1.0*E^-12 of zero. To specify a threshold value see
      * {@link #roundToZero(double)}.
+     *
+     * @return A copy of this matrix with rounded values.
      */
-    void roundToZero();
+    T roundToZero();
 
 
     /**
      * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
-     * independently. By default, the values must be within 1.0*E^-12 of zero. To specify a threshold value see
-     * {@link #roundToZero(double)}.
+     * independently.
+     * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
+     *                  will be rounded to zero. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If threshold is negative.
      */
-    void roundToZero(double threshold);
+    T roundToZero(double threshold);
 }

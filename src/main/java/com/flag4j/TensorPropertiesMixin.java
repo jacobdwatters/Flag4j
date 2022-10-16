@@ -21,8 +21,8 @@ interface TensorPropertiesMixin<T, U, V, W, Y, X extends Number> {
 
 
     /**
-     * Checks if this tensor is empty. That is, if this tensor contains no elements. This is equivalent to <code>(numRows==0 &&
-     * numCols==0)</code>.
+     * Checks if this tensor is empty. That is, if this tensor contains no elements. This is equivalent to <code>numRows==0 and
+     * numCols==0</code>.
      * @return True if this tensor is empty (i.e. contains no elements). Otherwise, returns false.
      */
     boolean isEmpty();

@@ -7,7 +7,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <T> Matrix type.
  * @param <Y> Real matrix type.
  */
-public interface ComplexTensorMixin<T, Y> {
+interface ComplexTensorMixin<T, Y> {
 
     /**
      * Checks if this tensor has only real valued entries.

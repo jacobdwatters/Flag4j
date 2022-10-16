@@ -8,7 +8,6 @@ import com.flag4j.complex_numbers.CNumber;
  */
 public class CreateMatrix {
 
-
     /**
      * Constructs a diagonal matrix whose non-zero components, i.e. the components of the principle diagonal are specified.
      * The length of the specified values will determine the size of the resultant matrix.

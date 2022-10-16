@@ -4,14 +4,12 @@ package com.flag4j.concurrency;
 /**
  * Configurations for concurrent operations.
  */
-public class Configurations {
+public abstract class Configurations {
     /**
      * Number of threads to use in concurrent operations.
      */
     static int NUM_THREADS = 1;
 
-    // Hide constructor from public access.
-    private Configurations() {throw new IllegalStateException("Utility class cannot be instantiated.");}
 
     /**
      * Sets the number of threads for use in concurrent operations as the number of processors available to the Java

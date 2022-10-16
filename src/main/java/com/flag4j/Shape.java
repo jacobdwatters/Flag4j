@@ -4,6 +4,9 @@ package com.flag4j;
  * An object to store the shape of a tensor. Note that the array holding the shape of the tensor is mutable.
  */
 public class Shape {
+    /**
+     * An array containing the size of each dimension of this tensor.
+     */
     public int[] shape;
 
 
@@ -31,6 +34,15 @@ public class Shape {
      */
     public int getRank() {
         return shape.length;
+    }
+
+
+    /**
+     * Gets the shape of a tensor as an array.
+     * @return Shape of a tensor as an integer array.
+     */
+    public int[] getShape() {
+        return this.shape;
     }
 
 
