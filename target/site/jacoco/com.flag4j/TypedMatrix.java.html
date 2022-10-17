@@ -31,7 +31,7 @@ abstract class TypedMatrix&lt;T&gt; {
      * @throws IllegalArgumentException if either m or n is negative.
      */
 <span class="fc" id="L33">    protected TypedMatrix(MatrixTypes type, int m, int n) {</span>
-<span class="pc bpc" id="L34" title="1 of 4 branches missed.">        if(m&lt;0 || n&lt;0) {</span>
+<span class="fc bfc" id="L34" title="All 4 branches covered.">        if(m&lt;0 || n&lt;0) {</span>
 <span class="fc" id="L35">            throw new IllegalArgumentException(</span>
 <span class="fc" id="L36">                    ErrorMessages.negativeDimErrMsg(this.getShape())</span>
             );
