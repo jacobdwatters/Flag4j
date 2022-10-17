@@ -21,7 +21,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 2
      */
-    public static int padding = 2;
+    private static int padding = 2;
 
 
     /**
@@ -33,7 +33,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 10
      */
-    public static int maxRows = 10;
+    private static int maxRows = 10;
 
 
     /**
@@ -45,7 +45,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 10
      */
-    public static int maxColumns = 10;
+    private static int maxColumns = 10;
 
 
     /**
@@ -54,7 +54,7 @@ public abstract class PrintOptions {
      * <br><br>
      * Default Value: 8.
      */
-    public static int precision = 8;
+    private static int precision = 8;
 
 
     /**
@@ -62,7 +62,7 @@ public abstract class PrintOptions {
      * <br><br>
      * Default value: false.
      */
-    public static boolean useScientific = false;
+    private static boolean useScientific = false;
 
 
     /**
@@ -70,5 +70,113 @@ public abstract class PrintOptions {
      * <br><br>
      * Default value: true.
      */
-    public static boolean center = true;
+    private static boolean center = true;
+
+
+    /**
+     * Sets the centering flag.
+     * @param center Flag for centering values within its column.
+     */
+    public static void setCenter(boolean center) {
+        PrintOptions.center = center;
+    }
+
+
+    /**
+     * Gets the centering flag.
+     * @return The current value of the center flag.
+     */
+    public static boolean getCenter() {
+        return center;
+    }
+
+
+    /**
+     * Sets the printing precision for which values in a matrix/vector
+     * @param precision The precision to use.
+     */
+    public static void setPrecision(int precision) {
+        PrintOptions.precision = precision;
+    }
+
+
+    /**
+     * Gets the current printing precision.
+     * @return The current printing precision.
+     */
+    public static int getPrecision() {
+        return precision;
+    }
+
+
+    /**
+     * Sets the flag for printing in scientific notation.
+     * @param useScientific Flag to use for printing scientific notation.
+     */
+    public static void setUseScientific(boolean useScientific) {
+        PrintOptions.useScientific = useScientific;
+    }
+
+
+    /**
+     * Gets the current flag for printing in scientific notation.
+     * @return The current flag for weather to print values in scientific notation or not.
+     */
+    public static boolean getUseScientific() {
+        return useScientific;
+    }
+
+
+    /**
+     * Gets the current maximum number of columns to print.
+     * @return The current maximum number of columns to print.
+     */
+    public static int getMaxColumns() {
+        return maxColumns;
+    }
+
+
+    /**
+     * Sets the maximum number of columns to print.
+     * @param maxColumns
+     */
+    public static void setMaxColumns(int maxColumns) {
+        PrintOptions.maxColumns = maxColumns;
+    }
+
+
+    /**
+     * Gets the maximum number of rows to print.
+     * @return The maximum number of rows to print.
+     */
+    public static int getMaxRows() {
+        return maxRows;
+    }
+
+
+    /**
+     * Set the maximum number of rows to print.
+     * @param maxRows The new maximum number of rows to print.
+     */
+    public static void setMaxRows(int maxRows) {
+        PrintOptions.maxRows = maxRows;
+    }
+
+
+    /**
+     * Gets the current padding amount for columns.
+     * @return The current padding amount for columns.
+     */
+    public static int getPadding() {
+        return padding;
+    }
+
+
+    /**
+     * Sets the padding amount for the columns.
+     * @param padding New padding amount for the columns.
+     */
+    public static void setPadding(int padding) {
+        PrintOptions.padding = padding;
+    }
 }
