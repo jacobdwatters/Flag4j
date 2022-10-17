@@ -1,0 +1,454 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MatrixManipulationsMixin</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j</a>
+</div>
+
+<h1>Coverage Summary for Class: MatrixManipulationsMixin (com.flag4j)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">MatrixManipulationsMixin</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.flag4j;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;
+<i class="no-highlight">4</i>&nbsp;/**
+<i class="no-highlight">5</i>&nbsp; * This interface specifies manipulations which all matrices should implement.
+<i class="no-highlight">6</i>&nbsp; *
+<i class="no-highlight">7</i>&nbsp; * @param &lt;T&gt; Matrix type.
+<i class="no-highlight">8</i>&nbsp; * @param &lt;U&gt; Dense matrix type.
+<i class="no-highlight">9</i>&nbsp; * @param &lt;V&gt; Sparse matrix type.
+<i class="no-highlight">10</i>&nbsp; * @param &lt;W&gt; Complex matrix type.
+<i class="no-highlight">11</i>&nbsp; * @param &lt;Y&gt; Real matrix type.
+<i class="no-highlight">12</i>&nbsp; * @param &lt;X&gt; Matrix entry type.
+<i class="no-highlight">13</i>&nbsp; */
+<i class="no-highlight">14</i>&nbsp;interface MatrixManipulationsMixin&lt;T, U, V, W, Y, X extends Number&gt; extends TensorManipulationsMixin&lt;T, U, V, W, Y, X&gt; {
+<i class="no-highlight">15</i>&nbsp;
+<i class="no-highlight">16</i>&nbsp;    /**
+<i class="no-highlight">17</i>&nbsp;     * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
+<i class="no-highlight">18</i>&nbsp;     * in the reshaped matrix.
+<i class="no-highlight">19</i>&nbsp;     * @param shape An array of length 2 containing, in order, the number of rows and the number of columns for the
+<i class="no-highlight">20</i>&nbsp;     *              reshaped matrix.
+<i class="no-highlight">21</i>&nbsp;     * @return A matrix which is equivalent to this matrix but with the specified dimensions.
+<i class="no-highlight">22</i>&nbsp;     * @throws IllegalArgumentException If either,&lt;br&gt;
+<i class="no-highlight">23</i>&nbsp;     * - The shape array contains negative indices.&lt;br&gt;
+<i class="no-highlight">24</i>&nbsp;     * - This matrix cannot be reshaped to the specified dimensions.
+<i class="no-highlight">25</i>&nbsp;     */
+<i class="no-highlight">26</i>&nbsp;    T reshape(int[] shape);
+<i class="no-highlight">27</i>&nbsp;
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;    /**
+<i class="no-highlight">30</i>&nbsp;     * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
+<i class="no-highlight">31</i>&nbsp;     *      * in the reshaped matrix.
+<i class="no-highlight">32</i>&nbsp;     * @param numRows The number of rows in the reshaped matrix.
+<i class="no-highlight">33</i>&nbsp;     * @param numCols The number of columns in the reshaped matrix.
+<i class="no-highlight">34</i>&nbsp;     * @return A matrix which is equivalent to this matrix but with the specified dimensions.
+<i class="no-highlight">35</i>&nbsp;     */
+<i class="no-highlight">36</i>&nbsp;    T reshape(int numRows, int numCols);
+<i class="no-highlight">37</i>&nbsp;
+<i class="no-highlight">38</i>&nbsp;
+<i class="no-highlight">39</i>&nbsp;    /**
+<i class="no-highlight">40</i>&nbsp;     * Flattens a matrix to have a single row. To flatten matrix to a single column, see {@link #flatten(int)}.
+<i class="no-highlight">41</i>&nbsp;     * @return The flat version of this matrix.
+<i class="no-highlight">42</i>&nbsp;     */
+<i class="no-highlight">43</i>&nbsp;    T flatten();
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;
+<i class="no-highlight">46</i>&nbsp;    /**
+<i class="no-highlight">47</i>&nbsp;     * Flattens a matrix along a specified axis. Also see {@link #flatten()}.
+<i class="no-highlight">48</i>&nbsp;     * @param axis - If axis=0, flattens to a row vector.&lt;br&gt;
+<i class="no-highlight">49</i>&nbsp;     *             - If axis=1, flattens to a column vector.
+<i class="no-highlight">50</i>&nbsp;     * @return The flat version of this matrix.
+<i class="no-highlight">51</i>&nbsp;     */
+<i class="no-highlight">52</i>&nbsp;    T flatten(int axis);
+<i class="no-highlight">53</i>&nbsp;
+<i class="no-highlight">54</i>&nbsp;
+<i class="no-highlight">55</i>&nbsp;    /**
+<i class="no-highlight">56</i>&nbsp;     * Sets the value of this matrix using a 2D array.
+<i class="no-highlight">57</i>&nbsp;     * @param values New values of the matrix.
+<i class="no-highlight">58</i>&nbsp;     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+<i class="no-highlight">59</i>&nbsp;     */
+<i class="no-highlight">60</i>&nbsp;    void setValues(double[][] values);
+<i class="no-highlight">61</i>&nbsp;
+<i class="no-highlight">62</i>&nbsp;
+<i class="no-highlight">63</i>&nbsp;    /**
+<i class="no-highlight">64</i>&nbsp;     * Sets the value of this matrix using a 2D array.
+<i class="no-highlight">65</i>&nbsp;     * @param values New values of the matrix.
+<i class="no-highlight">66</i>&nbsp;     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+<i class="no-highlight">67</i>&nbsp;     */
+<i class="no-highlight">68</i>&nbsp;    void setValues(int[][] values);
+<i class="no-highlight">69</i>&nbsp;
+<i class="no-highlight">70</i>&nbsp;
+<i class="no-highlight">71</i>&nbsp;    /**
+<i class="no-highlight">72</i>&nbsp;     * Sets a column of this matrix at the given index to the specified values.
+<i class="no-highlight">73</i>&nbsp;     * @param values New values for the column.
+<i class="no-highlight">74</i>&nbsp;     * @param colIndex The index of the column which is to be set.
+<i class="no-highlight">75</i>&nbsp;     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+<i class="no-highlight">76</i>&nbsp;     */
+<i class="no-highlight">77</i>&nbsp;    void setCol(double[] values, int colIndex);
+<i class="no-highlight">78</i>&nbsp;
+<i class="no-highlight">79</i>&nbsp;
+<i class="no-highlight">80</i>&nbsp;    /**
+<i class="no-highlight">81</i>&nbsp;     * Sets a column of this matrix at the given index to the specified values.
+<i class="no-highlight">82</i>&nbsp;     * @param values New values for the column.
+<i class="no-highlight">83</i>&nbsp;     * @param colIndex The index of the column which is to be set.
+<i class="no-highlight">84</i>&nbsp;     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+<i class="no-highlight">85</i>&nbsp;     */
+<i class="no-highlight">86</i>&nbsp;    void setCol(int[] values, int colIndex);
+<i class="no-highlight">87</i>&nbsp;
+<i class="no-highlight">88</i>&nbsp;
+<i class="no-highlight">89</i>&nbsp;    /**
+<i class="no-highlight">90</i>&nbsp;     * Sets a row of this matrix at the given index to the specified values.
+<i class="no-highlight">91</i>&nbsp;     * @param values New values for the row.
+<i class="no-highlight">92</i>&nbsp;     * @param rowIndex The index of the column which is to be set.
+<i class="no-highlight">93</i>&nbsp;     * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+<i class="no-highlight">94</i>&nbsp;     */
+<i class="no-highlight">95</i>&nbsp;    void setRow(double[] values, int rowIndex);
+<i class="no-highlight">96</i>&nbsp;
+<i class="no-highlight">97</i>&nbsp;
+<i class="no-highlight">98</i>&nbsp;    /**
+<i class="no-highlight">99</i>&nbsp;     * Sets a row of this matrix at the given index to the specified values.
+<i class="no-highlight">100</i>&nbsp;     * @param values New values for the row.
+<i class="no-highlight">101</i>&nbsp;     * @param rowIndex The index of the column which is to be set.
+<i class="no-highlight">102</i>&nbsp;     * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+<i class="no-highlight">103</i>&nbsp;     */
+<i class="no-highlight">104</i>&nbsp;    void setRow(int[] values, int rowIndex);
+<i class="no-highlight">105</i>&nbsp;
+<i class="no-highlight">106</i>&nbsp;
+<i class="no-highlight">107</i>&nbsp;    /**
+<i class="no-highlight">108</i>&nbsp;     * Sets a column of this matrix at the given index to the specified values. Note that the orientation of the values
+<i class="no-highlight">109</i>&nbsp;     * vector is &lt;b&gt;NOT&lt;/b&gt; taken into account.
+<i class="no-highlight">110</i>&nbsp;     * @param values New values for the column.
+<i class="no-highlight">111</i>&nbsp;     * @param colIndex The index of the column which is to be set.
+<i class="no-highlight">112</i>&nbsp;     * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+<i class="no-highlight">113</i>&nbsp;     */
+<i class="no-highlight">114</i>&nbsp;    void setCol(Vector values, int colIndex);
+<i class="no-highlight">115</i>&nbsp;
+<i class="no-highlight">116</i>&nbsp;
+<i class="no-highlight">117</i>&nbsp;    /**
+<i class="no-highlight">118</i>&nbsp;     * Sets a column of this matrix at the given index to the specified values. Note that the orientation of the values
+<i class="no-highlight">119</i>&nbsp;     * vector is &lt;b&gt;NOT&lt;/b&gt; taken into account.
+<i class="no-highlight">120</i>&nbsp;     * @param values New values for the column.
+<i class="no-highlight">121</i>&nbsp;     * @param colIndex The index of the column which is to be set.
+<i class="no-highlight">122</i>&nbsp;     * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+<i class="no-highlight">123</i>&nbsp;     */
+<i class="no-highlight">124</i>&nbsp;    void setCol(SparseVector values, int colIndex);
+<i class="no-highlight">125</i>&nbsp;
+<i class="no-highlight">126</i>&nbsp;
+<i class="no-highlight">127</i>&nbsp;    /**
+<i class="no-highlight">128</i>&nbsp;     * Sets a row of this matrix at the given index to the specified values. Note that the orientation of the values
+<i class="no-highlight">129</i>&nbsp;     * vector is &lt;b&gt;NOT&lt;/b&gt; taken into account.
+<i class="no-highlight">130</i>&nbsp;     * @param values New values for the row.
+<i class="no-highlight">131</i>&nbsp;     * @param rowIndex The index of the row which is to be set.
+<i class="no-highlight">132</i>&nbsp;     * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
+<i class="no-highlight">133</i>&nbsp;     */
+<i class="no-highlight">134</i>&nbsp;    void setRows(Vector values, int rowIndex);
+<i class="no-highlight">135</i>&nbsp;
+<i class="no-highlight">136</i>&nbsp;
+<i class="no-highlight">137</i>&nbsp;    /**
+<i class="no-highlight">138</i>&nbsp;     * Sets a row of this matrix at the given index to the specified values. Note that the orientation of the values
+<i class="no-highlight">139</i>&nbsp;     * vector is &lt;b&gt;NOT&lt;/b&gt; taken into account.
+<i class="no-highlight">140</i>&nbsp;     * @param values New values for the row.
+<i class="no-highlight">141</i>&nbsp;     * @param rowIndex The index of the row which is to be set.
+<i class="no-highlight">142</i>&nbsp;     * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
+<i class="no-highlight">143</i>&nbsp;     */
+<i class="no-highlight">144</i>&nbsp;    void setRows(SparseVector values, int rowIndex);
+<i class="no-highlight">145</i>&nbsp;
+<i class="no-highlight">146</i>&nbsp;
+<i class="no-highlight">147</i>&nbsp;    /**
+<i class="no-highlight">148</i>&nbsp;     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+<i class="no-highlight">149</i>&nbsp;     * left index location of the slice to set.
+<i class="no-highlight">150</i>&nbsp;     * @param values New values for the specified slice.
+<i class="no-highlight">151</i>&nbsp;     * @param rowStart Starting row index for the slice (inclusive).
+<i class="no-highlight">152</i>&nbsp;     * @param colStart Starting column index for the slice (inclusive).
+<i class="no-highlight">153</i>&nbsp;     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+<i class="no-highlight">154</i>&nbsp;     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+<i class="no-highlight">155</i>&nbsp;     * fit completely within this matrix.
+<i class="no-highlight">156</i>&nbsp;     */
+<i class="no-highlight">157</i>&nbsp;    void setSlice(double[][] values, int rowStart, int colStart);
+<i class="no-highlight">158</i>&nbsp;
+<i class="no-highlight">159</i>&nbsp;
+<i class="no-highlight">160</i>&nbsp;    /**
+<i class="no-highlight">161</i>&nbsp;     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+<i class="no-highlight">162</i>&nbsp;     * left index location of the slice to set.
+<i class="no-highlight">163</i>&nbsp;     * @param values New values for the specified slice.
+<i class="no-highlight">164</i>&nbsp;     * @param rowStart Starting row index for the slice (inclusive).
+<i class="no-highlight">165</i>&nbsp;     * @param colStart Starting column index for the slice (inclusive).
+<i class="no-highlight">166</i>&nbsp;     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+<i class="no-highlight">167</i>&nbsp;     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+<i class="no-highlight">168</i>&nbsp;     * fit completely within this matrix.
+<i class="no-highlight">169</i>&nbsp;     */
+<i class="no-highlight">170</i>&nbsp;    void setSlice(int[][] values, int rowStart, int colStart);
+<i class="no-highlight">171</i>&nbsp;
+<i class="no-highlight">172</i>&nbsp;
+<i class="no-highlight">173</i>&nbsp;    /**
+<i class="no-highlight">174</i>&nbsp;     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+<i class="no-highlight">175</i>&nbsp;     * left index location of the slice to set.
+<i class="no-highlight">176</i>&nbsp;     * @param values New values for the specified slice.
+<i class="no-highlight">177</i>&nbsp;     * @param rowStart Starting row index for the slice (inclusive).
+<i class="no-highlight">178</i>&nbsp;     * @param colStart Starting column index for the slice (inclusive).
+<i class="no-highlight">179</i>&nbsp;     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+<i class="no-highlight">180</i>&nbsp;     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+<i class="no-highlight">181</i>&nbsp;     * fit completely within this matrix.
+<i class="no-highlight">182</i>&nbsp;     */
+<i class="no-highlight">183</i>&nbsp;    void setSlice(Matrix values, int rowStart, int colStart);
+<i class="no-highlight">184</i>&nbsp;
+<i class="no-highlight">185</i>&nbsp;
+<i class="no-highlight">186</i>&nbsp;    /**
+<i class="no-highlight">187</i>&nbsp;     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+<i class="no-highlight">188</i>&nbsp;     * left index location of the slice to set.
+<i class="no-highlight">189</i>&nbsp;     * @param values New values for the specified slice.
+<i class="no-highlight">190</i>&nbsp;     * @param rowStart Starting row index for the slice (inclusive).
+<i class="no-highlight">191</i>&nbsp;     * @param colStart Starting column index for the slice (inclusive).
+<i class="no-highlight">192</i>&nbsp;     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+<i class="no-highlight">193</i>&nbsp;     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+<i class="no-highlight">194</i>&nbsp;     * fit completely within this matrix.
+<i class="no-highlight">195</i>&nbsp;     */
+<i class="no-highlight">196</i>&nbsp;    void setSlice(SparseMatrix values, int rowStart, int colStart);
+<i class="no-highlight">197</i>&nbsp;
+<i class="no-highlight">198</i>&nbsp;
+<i class="no-highlight">199</i>&nbsp;    /**
+<i class="no-highlight">200</i>&nbsp;     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+<i class="no-highlight">201</i>&nbsp;     * left index location of the slice to set.
+<i class="no-highlight">202</i>&nbsp;     * @param values New values for the specified slice.
+<i class="no-highlight">203</i>&nbsp;     * @param rowStart Starting row index for the slice (inclusive).
+<i class="no-highlight">204</i>&nbsp;     * @param colStart Starting column index for the slice (inclusive).
+<i class="no-highlight">205</i>&nbsp;     * @return A copy of this matrix with the given slice set to the specified values.
+<i class="no-highlight">206</i>&nbsp;     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+<i class="no-highlight">207</i>&nbsp;     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+<i class="no-highlight">208</i>&nbsp;     * fit completely within this matrix.
+<i class="no-highlight">209</i>&nbsp;     */
+<i class="no-highlight">210</i>&nbsp;    U setSliceCopy(Matrix values, int rowStart, int colStart);
+<i class="no-highlight">211</i>&nbsp;
+<i class="no-highlight">212</i>&nbsp;
+<i class="no-highlight">213</i>&nbsp;    /**
+<i class="no-highlight">214</i>&nbsp;     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+<i class="no-highlight">215</i>&nbsp;     * left index location of the slice to set.
+<i class="no-highlight">216</i>&nbsp;     * @param values New values for the specified slice.
+<i class="no-highlight">217</i>&nbsp;     * @param rowStart Starting row index for the slice (inclusive).
+<i class="no-highlight">218</i>&nbsp;     * @param colStart Starting column index for the slice (inclusive).
+<i class="no-highlight">219</i>&nbsp;     * @return A copy of this matrix with the given slice set to the specified values.
+<i class="no-highlight">220</i>&nbsp;     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+<i class="no-highlight">221</i>&nbsp;     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+<i class="no-highlight">222</i>&nbsp;     * fit completely within this matrix.
+<i class="no-highlight">223</i>&nbsp;     */
+<i class="no-highlight">224</i>&nbsp;    T setSliceCopy(SparseMatrix values, int rowStart, int colStart);
+<i class="no-highlight">225</i>&nbsp;
+<i class="no-highlight">226</i>&nbsp;
+<i class="no-highlight">227</i>&nbsp;    /**
+<i class="no-highlight">228</i>&nbsp;     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+<i class="no-highlight">229</i>&nbsp;     * left index location of the slice to set.
+<i class="no-highlight">230</i>&nbsp;     * @param values New values for the specified slice.
+<i class="no-highlight">231</i>&nbsp;     * @param rowStart Starting row index for the slice (inclusive).
+<i class="no-highlight">232</i>&nbsp;     * @param colStart Starting column index for the slice (inclusive).
+<i class="no-highlight">233</i>&nbsp;     * @return A copy of this matrix with the given slice set to the specified values.
+<i class="no-highlight">234</i>&nbsp;     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+<i class="no-highlight">235</i>&nbsp;     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+<i class="no-highlight">236</i>&nbsp;     * fit completely within this matrix.
+<i class="no-highlight">237</i>&nbsp;     */
+<i class="no-highlight">238</i>&nbsp;    CMatrix setSliceCopy(CMatrix values, int rowStart, int colStart);
+<i class="no-highlight">239</i>&nbsp;
+<i class="no-highlight">240</i>&nbsp;
+<i class="no-highlight">241</i>&nbsp;    /**
+<i class="no-highlight">242</i>&nbsp;     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+<i class="no-highlight">243</i>&nbsp;     * left index location of the slice to set.
+<i class="no-highlight">244</i>&nbsp;     * @param values New values for the specified slice.
+<i class="no-highlight">245</i>&nbsp;     * @param rowStart Starting row index for the slice (inclusive).
+<i class="no-highlight">246</i>&nbsp;     * @param colStart Starting column index for the slice (inclusive).
+<i class="no-highlight">247</i>&nbsp;     * @return A copy of this matrix with the given slice set to the specified values.
+<i class="no-highlight">248</i>&nbsp;     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+<i class="no-highlight">249</i>&nbsp;     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+<i class="no-highlight">250</i>&nbsp;     * fit completely within this matrix.
+<i class="no-highlight">251</i>&nbsp;     */
+<i class="no-highlight">252</i>&nbsp;    SparseCMatrix setSliceCopy(SparseCMatrix values, int rowStart, int colStart);
+<i class="no-highlight">253</i>&nbsp;
+<i class="no-highlight">254</i>&nbsp;
+<i class="no-highlight">255</i>&nbsp;    /**
+<i class="no-highlight">256</i>&nbsp;     * Removes a specified row from this matrix.
+<i class="no-highlight">257</i>&nbsp;     * @param rowIndex Index of the row to remove from this matrix.
+<i class="no-highlight">258</i>&nbsp;     */
+<i class="no-highlight">259</i>&nbsp;    void removeRow(int rowIndex);
+<i class="no-highlight">260</i>&nbsp;
+<i class="no-highlight">261</i>&nbsp;
+<i class="no-highlight">262</i>&nbsp;    /**
+<i class="no-highlight">263</i>&nbsp;     * Removes a specified set of rows from this matrix.
+<i class="no-highlight">264</i>&nbsp;     * @param rowIndices The indices of the rows to remove from this matrix.
+<i class="no-highlight">265</i>&nbsp;     */
+<i class="no-highlight">266</i>&nbsp;    void removeRows(int... rowIndices);
+<i class="no-highlight">267</i>&nbsp;
+<i class="no-highlight">268</i>&nbsp;
+<i class="no-highlight">269</i>&nbsp;    /**
+<i class="no-highlight">270</i>&nbsp;     * Removes a specified column from this matrix.
+<i class="no-highlight">271</i>&nbsp;     * @param colIndex Index of the column to remove from this matrix.
+<i class="no-highlight">272</i>&nbsp;     */
+<i class="no-highlight">273</i>&nbsp;    void removeCol(int colIndex);
+<i class="no-highlight">274</i>&nbsp;
+<i class="no-highlight">275</i>&nbsp;
+<i class="no-highlight">276</i>&nbsp;    /**
+<i class="no-highlight">277</i>&nbsp;     * Removes a specified set of columns from this matrix.
+<i class="no-highlight">278</i>&nbsp;     * @param colIndices Indices of the columns to remove from this matrix.
+<i class="no-highlight">279</i>&nbsp;     */
+<i class="no-highlight">280</i>&nbsp;    void removeCols(int... colIndices);
+<i class="no-highlight">281</i>&nbsp;
+<i class="no-highlight">282</i>&nbsp;
+<i class="no-highlight">283</i>&nbsp;    /**
+<i class="no-highlight">284</i>&nbsp;     * Generates a lower triangular matrix from this matrix. That is, copies all values of this matrix from the principle
+<i class="no-highlight">285</i>&nbsp;     * diagonal and below. The rest of the values in the resultant matrix will be zero.
+<i class="no-highlight">286</i>&nbsp;     * @return A lower triangular matrix whose non-zero values are specified by the values in this matrix at the same indices.
+<i class="no-highlight">287</i>&nbsp;     */
+<i class="no-highlight">288</i>&nbsp;    T tril();
+<i class="no-highlight">289</i>&nbsp;
+<i class="no-highlight">290</i>&nbsp;
+<i class="no-highlight">291</i>&nbsp;    /**
+<i class="no-highlight">292</i>&nbsp;     * Generates a pseudo-lower triangular matrix from this matrix. That is, copies all values of this matrix from the
+<i class="no-highlight">293</i>&nbsp;     * kth diagonal and below. The rest of the values in the resultant matrix will be zero.
+<i class="no-highlight">294</i>&nbsp;     * @param k The diagonal for which to copy values at and below relative to the principle diagonal.&lt;br&gt;
+<i class="no-highlight">295</i>&nbsp;     *          - If k=0, then all values in and below the principle diagonal will be copied.&lt;br&gt;
+<i class="no-highlight">296</i>&nbsp;     *          - If k=-a, then all values at and below the diagonal which is &#39;a&#39; diagonals to the left will be copied. &lt;br&gt;
+<i class="no-highlight">297</i>&nbsp;     *          - If k=a, then all values at and below the diagonal which is &#39;a&#39; diagonals to the right will be copied.
+<i class="no-highlight">298</i>&nbsp;     * @return A lower triangular matrix whose non-zero values are specified by the values in this matrix at the same indices.
+<i class="no-highlight">299</i>&nbsp;     * @throws IllegalArgumentException If k is out of the range of this matrix. That is, if k specifies a diagonal which
+<i class="no-highlight">300</i>&nbsp;     * does not exist in this matrix.
+<i class="no-highlight">301</i>&nbsp;     */
+<i class="no-highlight">302</i>&nbsp;    T tril(int k);
+<i class="no-highlight">303</i>&nbsp;
+<i class="no-highlight">304</i>&nbsp;
+<i class="no-highlight">305</i>&nbsp;    /**
+<i class="no-highlight">306</i>&nbsp;     * Generates an upper triangular matrix from this matrix. That is, copies all values of this matrix from the principle
+<i class="no-highlight">307</i>&nbsp;     * diagonal and above. The rest of the values in the resultant matrix will be zero.
+<i class="no-highlight">308</i>&nbsp;     * @return An upper triangular matrix whose non-zero values are specified by the values in this matrix at the same indices.
+<i class="no-highlight">309</i>&nbsp;     */
+<i class="no-highlight">310</i>&nbsp;    T triu();
+<i class="no-highlight">311</i>&nbsp;
+<i class="no-highlight">312</i>&nbsp;
+<i class="no-highlight">313</i>&nbsp;    /**
+<i class="no-highlight">314</i>&nbsp;     * Generates a pseudo-upper triangular matrix from this matrix. That is, copies all values of this matrix from the
+<i class="no-highlight">315</i>&nbsp;     * kth diagonal and above. The rest of the values in the resultant matrix will be zero.
+<i class="no-highlight">316</i>&nbsp;     * @param k The diagonal for which to copy values at and below relative to the principle diagonal.&lt;br&gt;
+<i class="no-highlight">317</i>&nbsp;     *          - If k=0, then all values in and above the principle diagonal will be copied.&lt;br&gt;
+<i class="no-highlight">318</i>&nbsp;     *          - If k=-a, then all values at and above the diagonal which is &#39;a&#39; diagonals to the left will be copied. &lt;br&gt;
+<i class="no-highlight">319</i>&nbsp;     *          - If k=a, then all values at and above the diagonal which is &#39;a&#39; diagonals to the right will be copied.
+<i class="no-highlight">320</i>&nbsp;     * @return An upper triangular matrix whose non-zero values are specified by the values in this matrix at the same indices.
+<i class="no-highlight">321</i>&nbsp;     * @throws IllegalArgumentException If k is out of the range of this matrix. That is, if k specifies a diagonal which
+<i class="no-highlight">322</i>&nbsp;     * does not exist in this matrix.
+<i class="no-highlight">323</i>&nbsp;     */
+<i class="no-highlight">324</i>&nbsp;    T triu(int k);
+<i class="no-highlight">325</i>&nbsp;
+<i class="no-highlight">326</i>&nbsp;
+<i class="no-highlight">327</i>&nbsp;    /**
+<i class="no-highlight">328</i>&nbsp;     * Generates a diagonal matrix from this matrix. This is, copies all values of this matrix from the principle diagonal. The
+<i class="no-highlight">329</i>&nbsp;     * rest of the values in the resultant matrix will be zero.
+<i class="no-highlight">330</i>&nbsp;     * @return A diagonal matrix whose non-zero entries are specified by the values in this matrix.
+<i class="no-highlight">331</i>&nbsp;     */
+<i class="no-highlight">332</i>&nbsp;    T diag();
+<i class="no-highlight">333</i>&nbsp;
+<i class="no-highlight">334</i>&nbsp;
+<i class="no-highlight">335</i>&nbsp;    /**
+<i class="no-highlight">336</i>&nbsp;     * Generates a diagonal matrix from this matrix. This is, copies all values of this matrix from the principle diagonal
+<i class="no-highlight">337</i>&nbsp;     * and the k diagonals to the left and k diagonals to the right.
+<i class="no-highlight">338</i>&nbsp;     * The
+<i class="no-highlight">339</i>&nbsp;     * rest of the values in the resultant matrix will be zero.
+<i class="no-highlight">340</i>&nbsp;     * @param k The number of diagonals in each direction (left or right) to include in the resultant matrix.
+<i class="no-highlight">341</i>&nbsp;     * @return A diagonal matrix whose non-zero entries are specified by the values in this matrix.
+<i class="no-highlight">342</i>&nbsp;     * @throws IllegalArgumentException - If k is negative.&lt;br&gt;
+<i class="no-highlight">343</i>&nbsp;     * - If k is out of range of this matrix.
+<i class="no-highlight">344</i>&nbsp;     */
+<i class="no-highlight">345</i>&nbsp;    T diag(int k);
+<i class="no-highlight">346</i>&nbsp;
+<i class="no-highlight">347</i>&nbsp;
+<i class="no-highlight">348</i>&nbsp;    /**
+<i class="no-highlight">349</i>&nbsp;     * Rounds this matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
+<i class="no-highlight">350</i>&nbsp;     * be rounded independently.
+<i class="no-highlight">351</i>&nbsp;     * @return A copy of this matrix with each entry rounded to the nearest whole number.
+<i class="no-highlight">352</i>&nbsp;     */
+<i class="no-highlight">353</i>&nbsp;    T round();
+<i class="no-highlight">354</i>&nbsp;
+<i class="no-highlight">355</i>&nbsp;
+<i class="no-highlight">356</i>&nbsp;    /**
+<i class="no-highlight">357</i>&nbsp;     * Rounds a matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
+<i class="no-highlight">358</i>&nbsp;     * be rounded independently.
+<i class="no-highlight">359</i>&nbsp;     * @param precision The number of decimal places to round to. This value must be non-negative.
+<i class="no-highlight">360</i>&nbsp;     * @return A copy of this matrix with rounded values.
+<i class="no-highlight">361</i>&nbsp;     * @throws IllegalArgumentException If &lt;code&gt;precision&lt;/code&gt; is negative.
+<i class="no-highlight">362</i>&nbsp;     */
+<i class="no-highlight">363</i>&nbsp;    T round(int precision);
+<i class="no-highlight">364</i>&nbsp;
+<i class="no-highlight">365</i>&nbsp;
+<i class="no-highlight">366</i>&nbsp;    /**
+<i class="no-highlight">367</i>&nbsp;     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
+<i class="no-highlight">368</i>&nbsp;     * independently. By default, the values must be within 1.0*E^-12 of zero. To specify a threshold value see
+<i class="no-highlight">369</i>&nbsp;     * {@link #roundToZero(double)}.
+<i class="no-highlight">370</i>&nbsp;     *
+<i class="no-highlight">371</i>&nbsp;     * @return A copy of this matrix with rounded values.
+<i class="no-highlight">372</i>&nbsp;     */
+<i class="no-highlight">373</i>&nbsp;    T roundToZero();
+<i class="no-highlight">374</i>&nbsp;
+<i class="no-highlight">375</i>&nbsp;
+<i class="no-highlight">376</i>&nbsp;    /**
+<i class="no-highlight">377</i>&nbsp;     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
+<i class="no-highlight">378</i>&nbsp;     * independently.
+<i class="no-highlight">379</i>&nbsp;     * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
+<i class="no-highlight">380</i>&nbsp;     *                  will be rounded to zero. This value must be non-negative.
+<i class="no-highlight">381</i>&nbsp;     * @return A copy of this matrix with rounded values.
+<i class="no-highlight">382</i>&nbsp;     * @throws IllegalArgumentException If threshold is negative.
+<i class="no-highlight">383</i>&nbsp;     */
+<i class="no-highlight">384</i>&nbsp;    T roundToZero(double threshold);
+<i class="no-highlight">385</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-10-16 23:22</div>
+</div>
+</body>
+</html>

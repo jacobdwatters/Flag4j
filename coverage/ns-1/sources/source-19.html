@@ -1,0 +1,89 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > VectorPropertiesMixin</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j</a>
+</div>
+
+<h1>Coverage Summary for Class: VectorPropertiesMixin (com.flag4j)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">VectorPropertiesMixin</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.flag4j;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;/**
+<i class="no-highlight">4</i>&nbsp; * This interface specifies methods which provide properties of a vector. All vectors should implement this interface.
+<i class="no-highlight">5</i>&nbsp; *
+<i class="no-highlight">6</i>&nbsp; * @param &lt;T&gt; Vector type.
+<i class="no-highlight">7</i>&nbsp; * @param &lt;U&gt; Dense Vector type.
+<i class="no-highlight">8</i>&nbsp; * @param &lt;V&gt; Sparse Vector type.
+<i class="no-highlight">9</i>&nbsp; * @param &lt;W&gt; Complex Vector type.
+<i class="no-highlight">10</i>&nbsp; * @param &lt;Y&gt; Real Vector type.
+<i class="no-highlight">11</i>&nbsp; * @param &lt;X&gt; Vector entry type.
+<i class="no-highlight">12</i>&nbsp; */
+<i class="no-highlight">13</i>&nbsp;interface VectorPropertiesMixin&lt;T, U, V, W, Y, X extends Number&gt; extends TensorPropertiesMixin&lt;T, U, V, W, Y, X&gt; {
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;    /**
+<i class="no-highlight">16</i>&nbsp;     * Gets the length of a vector.
+<i class="no-highlight">17</i>&nbsp;     * @return The length, i.e. the number of entries, in this vector.
+<i class="no-highlight">18</i>&nbsp;     */
+<i class="no-highlight">19</i>&nbsp;    int length();
+<i class="no-highlight">20</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-10-16 23:22</div>
+</div>
+</body>
+</html>
