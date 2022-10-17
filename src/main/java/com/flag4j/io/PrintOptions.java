@@ -21,7 +21,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 2
      */
-    public static int PADDING = 2;
+    public static int padding = 2;
 
 
     /**
@@ -33,7 +33,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 10
      */
-    public static int MAX_ROWS = 10;
+    public static int maxRows = 10;
 
 
     /**
@@ -45,7 +45,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 10
      */
-    public static int MAX_COLUMNS = 10;
+    public static int maxColumns = 10;
 
 
     /**
@@ -54,7 +54,7 @@ public abstract class PrintOptions {
      * <br><br>
      * Default Value: 8.
      */
-    public static int PRECISION = 8;
+    public static int precision = 8;
 
 
     /**
@@ -62,7 +62,7 @@ public abstract class PrintOptions {
      * <br><br>
      * Default value: false.
      */
-    public static boolean USE_SCIENTIFIC = false;
+    public static boolean useScientific = false;
 
 
     /**
@@ -70,5 +70,5 @@ public abstract class PrintOptions {
      * <br><br>
      * Default value: true.
      */
-    public static boolean CENTER = true;
+    public static boolean center = true;
 }
