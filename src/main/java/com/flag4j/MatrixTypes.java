@@ -7,17 +7,17 @@ public enum MatrixTypes {
     /**
      * Real dense matrix
      */
-    Matrix,
+    MATRIX,
     /**
      * Complex dense matrix
      */
-    CMatrix,
+    C_MATRIX,
     /**
      * Real sparse matrix
      */
-    SparseMatrix,
+    SPARSE_MATRIX,
     /**
      * Complex sparse matrix
      */
-    SparseCMatrix
+    SPARSE_C_MATRIX
 }

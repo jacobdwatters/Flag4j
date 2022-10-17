@@ -16,5 +16,5 @@ public enum SparseMatrixFormats {
     /**
      * Coordinate format.
      */
-    Coordinate
+    COORDINATE
 }

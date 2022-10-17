@@ -7,17 +7,17 @@ public enum VectorTypes {
     /**
      * Real dense vector
      */
-    Vector,
+    VECTOR,
     /**
      * Complex dense vector
      */
-    CVector,
+    C_VECTOR,
     /**
      * Real sparse vector
      */
-    SparseVector,
+    SPARSE_VECTOR,
     /**
      * Complex sparse vector
      */
-    SparseCVector
+    SPARSE_C_VECTOR
 }

@@ -4,29 +4,37 @@ package com.flag4j;
 /**
  * Contains error messages for common errors which may occur.
  */
-abstract class ErrorMessages {
+public abstract class ErrorMessages {
+
+    /**
+     * Hide default constructor.
+     */
+    private ErrorMessages() {
+        throw new IllegalStateException(UTILITY_CLASS_ERR);
+    }
 
     /**
      * Error message for matrices which do not have equal shape.
      */
-    private final static String EQ_SHAPE_MISMATCH_ERR = "Expecting matrices to have the same shape but got shapes %s and %s.";
+    private static final String EQ_SHAPE_MISMATCH_ERR = "Expecting matrices to have the same shape but got shapes %s and %s.";
     /**
      * Error message for matrices which do not have valid dimensions for matrix multiplication.
      */
-    private final static String MAT_MULT_DIM_MISMATCH_ERR = "Expecting the number of columns in the first matrix to" +
+    private static final String MAT_MULT_DIM_MISMATCH_ERR = "Expecting the number of columns in the first matrix to" +
             " match the number rows in the second matrix but got shapes %s and %s.";
     /**
      * Error message for vector which was expected to be row vector.
      */
-    private final static String VEC_ROW_ORIENTATION_ERR = "Expecting vector to be a row vector but got a vector with shape %s.";
+    private static final String VEC_ROW_ORIENTATION_ERR = "Expecting vector to be a row vector but got a vector with shape %s.";
     /**
      * Error message for vector which was expected to be a column vector.
      */
-    private final static String VEC_COL_ORIENTATION_ERR = "Expecting vector to be a column vector but got a row vector with shape %s.";
+    private static final String VEC_COL_ORIENTATION_ERR = "Expecting vector to be a column vector but got a row vector with shape %s.";
     /**
      * Error message for the attempted construction of a tensor with a negative dimension value.
      */
-    private final static String NEG_DIM_ERR = "Shape dimensions must be non-negative but got shape %s.";
+    private static final String NEG_DIM_ERR = "Shape dimensions must be non-negative but got shape %s.";
+    private static final String UTILITY_CLASS_ERR = "Utility class cannot be instantiated";
 
 
     /**
@@ -79,5 +87,7 @@ abstract class ErrorMessages {
     static String negativeDimErrMsg(Shape shape) {
         return String.format(NEG_DIM_ERR, shape);
     }
+
+    public static String utilityClassErrMsg() {return UTILITY_CLASS_ERR;}
 }
 

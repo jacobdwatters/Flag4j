@@ -1,10 +1,18 @@
-package com.flag4j;
+package com.flag4j.io;
 
+import com.flag4j.ErrorMessages;
 
 /**
  * Print options for matrices and vectors
  */
 public abstract class PrintOptions {
+
+    /**
+     * Hide default constructor.
+     */
+    private PrintOptions() {
+        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+    }
 
     /**
      * Padding between each element of matrix.

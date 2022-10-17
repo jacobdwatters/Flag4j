@@ -11,7 +11,7 @@ public class Matrix extends TypedMatrix<double[][]> {
      * Creates an empty real dense matrix.
      */
     public Matrix() {
-        super(MatrixTypes.Matrix, 0, 0);
+        super(MatrixTypes.MATRIX, 0, 0);
         entries = new double[this.m][this.n];
     }
 
@@ -22,7 +22,7 @@ public class Matrix extends TypedMatrix<double[][]> {
      * @throws IllegalArgumentException if size negative.
      */
     public Matrix(int size) {
-        super(MatrixTypes.Matrix, size, size);
+        super(MatrixTypes.MATRIX, size, size);
         this.entries = new double[this.m][this.n];
     }
 
@@ -34,7 +34,7 @@ public class Matrix extends TypedMatrix<double[][]> {
      * @throws IllegalArgumentException if size negative.
      */
     public Matrix(int size, double value) {
-        super(MatrixTypes.Matrix, size, size);
+        super(MatrixTypes.MATRIX, size, size);
         this.entries = new double[this.m][this.n];
         double[] row = new double[this.n];
 
@@ -50,7 +50,7 @@ public class Matrix extends TypedMatrix<double[][]> {
      * @throws IllegalArgumentException if either m or n is negative.
      */
     public Matrix(int m, int n) {
-        super(MatrixTypes.Matrix, m, n);
+        super(MatrixTypes.MATRIX, m, n);
         this.entries = new double[this.m][this.n];
     }
 
@@ -63,7 +63,7 @@ public class Matrix extends TypedMatrix<double[][]> {
      * @throws IllegalArgumentException if either m or n is negative.
      */
     public Matrix(int m, int n, double value) {
-        super(MatrixTypes.Matrix, m, n);
+        super(MatrixTypes.MATRIX, m, n);
         this.entries = new double[this.m][this.n];
         double[] row = new double[this.n];
 
@@ -77,7 +77,7 @@ public class Matrix extends TypedMatrix<double[][]> {
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(double[][] entries) {
-        super(MatrixTypes.Matrix, entries.length, entries[0].length);
+        super(MatrixTypes.MATRIX, entries.length, entries[0].length);
         this.entries = Arrays.stream(entries)
                 .map(double[]::clone)
                 .toArray(double[][]::new);
@@ -89,7 +89,7 @@ public class Matrix extends TypedMatrix<double[][]> {
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(int[][] entries) {
-        super(MatrixTypes.Matrix, entries.length, entries[0].length);
+        super(MatrixTypes.MATRIX, entries.length, entries[0].length);
         this.entries = new double[m][n];
 
         for(int i=0; i<m; i++) {
@@ -105,7 +105,7 @@ public class Matrix extends TypedMatrix<double[][]> {
      * @param A The matrix defining the entries for this matrix.
      */
     public Matrix(Matrix A) {
-        super(MatrixTypes.Matrix, A.entries.length, A.entries[0].length);
+        super(MatrixTypes.MATRIX, A.entries.length, A.entries[0].length);
         this.entries = Arrays.stream(A.entries)
                 .map(double[]::clone)
                 .toArray(double[][]::new);

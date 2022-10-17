@@ -7,7 +7,7 @@ public class Shape {
     /**
      * An array containing the size of each dimension of this tensor.
      */
-    public int[] shape;
+    public int[] dims;
 
 
     /**
@@ -15,7 +15,7 @@ public class Shape {
      * @param rank Rank of the tensor which this shape object describes.
      */
     public Shape(int rank) {
-        shape = new int[rank];
+        dims = new int[rank];
     }
 
 
@@ -24,7 +24,7 @@ public class Shape {
      * @param dims A list of the dimension measurements for this shape object.
      */
     public Shape(int... dims) {
-        this.shape = dims.clone();
+        this.dims = dims.clone();
     }
 
 
@@ -33,7 +33,7 @@ public class Shape {
      * @return The rank for a tensor with this shape.
      */
     public int getRank() {
-        return shape.length;
+        return dims.length;
     }
 
 
@@ -41,8 +41,8 @@ public class Shape {
      * Gets the shape of a tensor as an array.
      * @return Shape of a tensor as an integer array.
      */
-    public int[] getShape() {
-        return this.shape;
+    public int[] getDims() {
+        return this.dims;
     }
 
 
@@ -53,7 +53,7 @@ public class Shape {
     public String toString() {
         StringBuilder result = new StringBuilder("");
 
-        for(int d : shape) {
+        for(int d : dims) {
             result.append(d + "x");
         }
         result.deleteCharAt(result.length()-1); // Remove excess 'x' character.
