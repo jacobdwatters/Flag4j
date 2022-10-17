@@ -1,0 +1,235 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MatrixPropertiesMixin</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j</a>
+</div>
+
+<h1>Coverage Summary for Class: MatrixPropertiesMixin (com.flag4j)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">MatrixPropertiesMixin</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.flag4j;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;/**
+<i class="no-highlight">4</i>&nbsp; * This interface specifies methods which provide properties of a matrix. All matrices should implement this interface.
+<i class="no-highlight">5</i>&nbsp; *
+<i class="no-highlight">6</i>&nbsp; * @param &lt;T&gt; Matrix type.
+<i class="no-highlight">7</i>&nbsp; * @param &lt;U&gt; Dense Matrix type.
+<i class="no-highlight">8</i>&nbsp; * @param &lt;V&gt; Sparse Matrix type.
+<i class="no-highlight">9</i>&nbsp; * @param &lt;W&gt; Complex Matrix type.
+<i class="no-highlight">10</i>&nbsp; * @param &lt;Y&gt; Real Matrix type.
+<i class="no-highlight">11</i>&nbsp; * @param &lt;X&gt; Matrix entry type.
+<i class="no-highlight">12</i>&nbsp; */
+<i class="no-highlight">13</i>&nbsp;interface MatrixPropertiesMixin&lt;T, U, V, W, Y, X extends Number&gt; extends TensorPropertiesMixin&lt;T, U, V, W, Y, X&gt; {
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;    /**
+<i class="no-highlight">16</i>&nbsp;     * Gets the number of rows in a matrix.
+<i class="no-highlight">17</i>&nbsp;     * @return The number of rows in this matrix.
+<i class="no-highlight">18</i>&nbsp;     */
+<i class="no-highlight">19</i>&nbsp;    int numRows();
+<i class="no-highlight">20</i>&nbsp;
+<i class="no-highlight">21</i>&nbsp;
+<i class="no-highlight">22</i>&nbsp;    /**
+<i class="no-highlight">23</i>&nbsp;     * Gets the number of columns in a matrix.
+<i class="no-highlight">24</i>&nbsp;     * @return The number of columns in this matrix.
+<i class="no-highlight">25</i>&nbsp;     */
+<i class="no-highlight">26</i>&nbsp;    int numCols();
+<i class="no-highlight">27</i>&nbsp;
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;    /**
+<i class="no-highlight">30</i>&nbsp;     * Checks if this matrix is square.
+<i class="no-highlight">31</i>&nbsp;     * @return True if the matrix is square (i.e. the number of rows equals the number of columns). Otherwise, returns false.
+<i class="no-highlight">32</i>&nbsp;     */
+<i class="no-highlight">33</i>&nbsp;    boolean isSquare();
+<i class="no-highlight">34</i>&nbsp;
+<i class="no-highlight">35</i>&nbsp;
+<i class="no-highlight">36</i>&nbsp;    /**
+<i class="no-highlight">37</i>&nbsp;     * Checks if a matrix can be represented as a vector. That is, if a matrix has only one row or one column.
+<i class="no-highlight">38</i>&nbsp;     * @return True if this matrix can be represented as either a row or column vector.
+<i class="no-highlight">39</i>&nbsp;     */
+<i class="no-highlight">40</i>&nbsp;    boolean isVector();
+<i class="no-highlight">41</i>&nbsp;
+<i class="no-highlight">42</i>&nbsp;
+<i class="no-highlight">43</i>&nbsp;    /**
+<i class="no-highlight">44</i>&nbsp;     * Checks what type of vector this matrix is. i.e. not a vector, a 1x1 matrix, a row vector, or a column vector.
+<i class="no-highlight">45</i>&nbsp;     * @return - If this matrix can not be represented as a vector, then returns -1. &lt;br&gt;
+<i class="no-highlight">46</i>&nbsp;     * - If this matrix is a 1x1 matrix, then returns 0. &lt;br&gt;
+<i class="no-highlight">47</i>&nbsp;     * - If this matrix is a row vector, then returns 1. &lt;br&gt;
+<i class="no-highlight">48</i>&nbsp;     * - If this matrix is a column vector, then returns 2.
+<i class="no-highlight">49</i>&nbsp;     */
+<i class="no-highlight">50</i>&nbsp;    int vectorType();
+<i class="no-highlight">51</i>&nbsp;
+<i class="no-highlight">52</i>&nbsp;
+<i class="no-highlight">53</i>&nbsp;    /**
+<i class="no-highlight">54</i>&nbsp;     * Checks if this matrix is triangular (i.e. upper triangular, diagonal, lower triangular).
+<i class="no-highlight">55</i>&nbsp;     * @return True is this matrix is triangular. Otherwise, returns false.
+<i class="no-highlight">56</i>&nbsp;     */
+<i class="no-highlight">57</i>&nbsp;    boolean isTri();
+<i class="no-highlight">58</i>&nbsp;
+<i class="no-highlight">59</i>&nbsp;
+<i class="no-highlight">60</i>&nbsp;    /**
+<i class="no-highlight">61</i>&nbsp;     * Checks if this matrix is lower triangular.
+<i class="no-highlight">62</i>&nbsp;     * @return True is this matrix is lower triangular. Otherwise, returns false.
+<i class="no-highlight">63</i>&nbsp;     */
+<i class="no-highlight">64</i>&nbsp;    boolean isTriL();
+<i class="no-highlight">65</i>&nbsp;
+<i class="no-highlight">66</i>&nbsp;
+<i class="no-highlight">67</i>&nbsp;    /**
+<i class="no-highlight">68</i>&nbsp;     * Checks if this matrix is upper triangular.
+<i class="no-highlight">69</i>&nbsp;     * @return True is this matrix is upper triangular. Otherwise, returns false.
+<i class="no-highlight">70</i>&nbsp;     */
+<i class="no-highlight">71</i>&nbsp;    boolean isTriU();
+<i class="no-highlight">72</i>&nbsp;
+<i class="no-highlight">73</i>&nbsp;
+<i class="no-highlight">74</i>&nbsp;    /**
+<i class="no-highlight">75</i>&nbsp;     * Checks if this matrix is diagonal.
+<i class="no-highlight">76</i>&nbsp;     * @return True is this matrix is diagonal. Otherwise, returns false.
+<i class="no-highlight">77</i>&nbsp;     */
+<i class="no-highlight">78</i>&nbsp;    boolean isDiag();
+<i class="no-highlight">79</i>&nbsp;
+<i class="no-highlight">80</i>&nbsp;
+<i class="no-highlight">81</i>&nbsp;    /**
+<i class="no-highlight">82</i>&nbsp;     * Checks if a matrix has full rank. That is, if a matrices rank is equal to the number of rows in the matrix.
+<i class="no-highlight">83</i>&nbsp;     * @return True if this matrix has full rank. Otherwise, returns false.
+<i class="no-highlight">84</i>&nbsp;     */
+<i class="no-highlight">85</i>&nbsp;    boolean isFullRank();
+<i class="no-highlight">86</i>&nbsp;
+<i class="no-highlight">87</i>&nbsp;
+<i class="no-highlight">88</i>&nbsp;    /**
+<i class="no-highlight">89</i>&nbsp;     * Checks if a matrix is singular. That is, if the matrix is &lt;b&gt;NOT&lt;/b&gt; invertible.&lt;br&gt;
+<i class="no-highlight">90</i>&nbsp;     * Also see {@link #isInvertible()}.
+<i class="no-highlight">91</i>&nbsp;     * @return True if this matrix is singular. Otherwise, returns false.
+<i class="no-highlight">92</i>&nbsp;     */
+<i class="no-highlight">93</i>&nbsp;    boolean isSingular();
+<i class="no-highlight">94</i>&nbsp;
+<i class="no-highlight">95</i>&nbsp;
+<i class="no-highlight">96</i>&nbsp;    /**
+<i class="no-highlight">97</i>&nbsp;     * Checks if a matrix is invertible.&lt;br&gt;
+<i class="no-highlight">98</i>&nbsp;     * Also see {@link #isSingular()}.
+<i class="no-highlight">99</i>&nbsp;     * @return True if this matrix is invertible.
+<i class="no-highlight">100</i>&nbsp;     */
+<i class="no-highlight">101</i>&nbsp;    boolean isInvertible();
+<i class="no-highlight">102</i>&nbsp;
+<i class="no-highlight">103</i>&nbsp;
+<i class="no-highlight">104</i>&nbsp;    /**
+<i class="no-highlight">105</i>&nbsp;     * Computes the L&lt;sub&gt;p, q&lt;/sub&gt; norm of this matrix.
+<i class="no-highlight">106</i>&nbsp;     * @param p P value in the L&lt;sub&gt;p, q&lt;/sub&gt; norm.
+<i class="no-highlight">107</i>&nbsp;     * @param q Q value in the L&lt;sub&gt;p, q&lt;/sub&gt; norm.
+<i class="no-highlight">108</i>&nbsp;     * @return The L&lt;sub&gt;p, q&lt;/sub&gt; norm of this matrix.
+<i class="no-highlight">109</i>&nbsp;     */
+<i class="no-highlight">110</i>&nbsp;    boolean norm(double p, double q);
+<i class="no-highlight">111</i>&nbsp;
+<i class="no-highlight">112</i>&nbsp;
+<i class="no-highlight">113</i>&nbsp;    /**
+<i class="no-highlight">114</i>&nbsp;     * Computes an orthonormal basis of the row space of this matrix. That is, a set of orthonormal vectors which span
+<i class="no-highlight">115</i>&nbsp;     * the row space of this matrix.
+<i class="no-highlight">116</i>&nbsp;     * @return An orthonormal basis of the row space of this matrix. The vectors are stored as the columns of the returned matrix.
+<i class="no-highlight">117</i>&nbsp;     */
+<i class="no-highlight">118</i>&nbsp;    T rowSpace();
+<i class="no-highlight">119</i>&nbsp;
+<i class="no-highlight">120</i>&nbsp;
+<i class="no-highlight">121</i>&nbsp;    /**
+<i class="no-highlight">122</i>&nbsp;     * Computes an orthonormal basis of the column space of this matrix. That is, a set of orthonormal vectors which span
+<i class="no-highlight">123</i>&nbsp;     * the column space of this matrix.
+<i class="no-highlight">124</i>&nbsp;     * @return An orthonormal basis of the column space of this matrix. The vectors are stored as the columns of the returned matrix.
+<i class="no-highlight">125</i>&nbsp;     */
+<i class="no-highlight">126</i>&nbsp;    T colSpace();
+<i class="no-highlight">127</i>&nbsp;
+<i class="no-highlight">128</i>&nbsp;
+<i class="no-highlight">129</i>&nbsp;    /**
+<i class="no-highlight">130</i>&nbsp;     * Computes an orthonormal basis of the null space of this matrix. That is, a set of orthonormal vectors which satisfy
+<i class="no-highlight">131</i>&nbsp;     * Ax=0 where A is this matrix.
+<i class="no-highlight">132</i>&nbsp;     * @return An orthonormal basis of the null space of this matrix. The vectors are stored as the columns of the returned matrix.
+<i class="no-highlight">133</i>&nbsp;     */
+<i class="no-highlight">134</i>&nbsp;    T nullSpace();
+<i class="no-highlight">135</i>&nbsp;
+<i class="no-highlight">136</i>&nbsp;
+<i class="no-highlight">137</i>&nbsp;    /**
+<i class="no-highlight">138</i>&nbsp;     * Computes an orthonormal basis of the left null space of this matrix. That is, a set of orthonormal vectors which satisfy
+<i class="no-highlight">139</i>&nbsp;     * A&lt;sup&gt;T&lt;/sup&gt;x=0 where A is this matrix.
+<i class="no-highlight">140</i>&nbsp;     * @return An orthonormal basis of the left null space of this matrix. The vectors are stored as the columns of the returned matrix.
+<i class="no-highlight">141</i>&nbsp;     */
+<i class="no-highlight">142</i>&nbsp;    T leftNullSpace();
+<i class="no-highlight">143</i>&nbsp;
+<i class="no-highlight">144</i>&nbsp;
+<i class="no-highlight">145</i>&nbsp;    /**
+<i class="no-highlight">146</i>&nbsp;     * Checks if the matrix is positive definite.
+<i class="no-highlight">147</i>&nbsp;     * @return True if the matrix is positive definite. Otherwise, returns false.
+<i class="no-highlight">148</i>&nbsp;     */
+<i class="no-highlight">149</i>&nbsp;    boolean isPosDef();
+<i class="no-highlight">150</i>&nbsp;
+<i class="no-highlight">151</i>&nbsp;
+<i class="no-highlight">152</i>&nbsp;    /**
+<i class="no-highlight">153</i>&nbsp;     * Checks if the matrix is positive semi-definite.
+<i class="no-highlight">154</i>&nbsp;     * @return True if the matrix is positive semi-definite. Otherwise returns false.
+<i class="no-highlight">155</i>&nbsp;     */
+<i class="no-highlight">156</i>&nbsp;    boolean isPosSemiDef();
+<i class="no-highlight">157</i>&nbsp;
+<i class="no-highlight">158</i>&nbsp;
+<i class="no-highlight">159</i>&nbsp;    /**
+<i class="no-highlight">160</i>&nbsp;    * Checks if a matrix is diagonalizable. A matrix is diagonalizable if and only if
+<i class="no-highlight">161</i>&nbsp;    * the multiplicity for each eigenvalue is equivalent to the eigenspace for that eigenvalue.
+<i class="no-highlight">162</i>&nbsp;    *
+<i class="no-highlight">163</i>&nbsp;    * @return True if the matrix is diagonalizable. Otherwise, returns false.
+<i class="no-highlight">164</i>&nbsp;    */
+<i class="no-highlight">165</i>&nbsp;    boolean isDiagonalizable();
+<i class="no-highlight">166</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-10-16 23:22</div>
+</div>
+</body>
+</html>

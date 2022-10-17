@@ -8,7 +8,7 @@ Flag4j,com.flag4j,VectorTypes,27,0,0,0,5,0,1,0,1,0
 Flag4j,com.flag4j,Shape,14,45,0,2,5,8,3,3,3,2
 Flag4j,com.flag4j,MatrixTypes,0,27,0,0,0,5,0,1,0,1
 Flag4j,com.flag4j,SparseMatrixFormats,21,0,0,0,4,0,1,0,1,0
-Flag4j,com.flag4j,Matrix,167,26,4,0,31,6,12,2,10,2
+Flag4j,com.flag4j,Matrix,142,51,4,0,25,12,11,3,9,3
 Flag4j,com.flag4j,TypedMatrix,0,39,1,3,0,9,1,3,0,2
 Flag4j,com.flag4j,Random,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j,SparseCMatrix,3,0,0,0,1,0,1,0,1,0

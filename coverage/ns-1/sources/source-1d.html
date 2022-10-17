@@ -1,0 +1,91 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > TensorManipulationsMixin</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j</a>
+</div>
+
+<h1>Coverage Summary for Class: TensorManipulationsMixin (com.flag4j)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">TensorManipulationsMixin</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.flag4j;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;
+<i class="no-highlight">4</i>&nbsp;/**
+<i class="no-highlight">5</i>&nbsp; * This interface specifies manipulations which all tensors (i.e. matrices and vectors) should implement.
+<i class="no-highlight">6</i>&nbsp; *
+<i class="no-highlight">7</i>&nbsp; * @param &lt;T&gt; Tensor type.
+<i class="no-highlight">8</i>&nbsp; * @param &lt;U&gt; Dense Tensor type.
+<i class="no-highlight">9</i>&nbsp; * @param &lt;V&gt; Sparse Tensor type.
+<i class="no-highlight">10</i>&nbsp; * @param &lt;W&gt; Complex Tensor type.
+<i class="no-highlight">11</i>&nbsp; * @param &lt;Y&gt; Real Tensor type.
+<i class="no-highlight">12</i>&nbsp; * @param &lt;X&gt; Tensor entry type.
+<i class="no-highlight">13</i>&nbsp; */
+<i class="no-highlight">14</i>&nbsp;interface TensorManipulationsMixin&lt;T, U, V, W, Y, X extends Number&gt; {
+<i class="no-highlight">15</i>&nbsp;
+<i class="no-highlight">16</i>&nbsp;    /**
+<i class="no-highlight">17</i>&nbsp;     * Sets an index of this tensor to a specified value.
+<i class="no-highlight">18</i>&nbsp;     * @param value Value to set.
+<i class="no-highlight">19</i>&nbsp;     * @param indices The indices of this tensor for which to set the value.
+<i class="no-highlight">20</i>&nbsp;     */
+<i class="no-highlight">21</i>&nbsp;    void set(double value, int... indices);
+<i class="no-highlight">22</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-10-16 23:22</div>
+</div>
+</body>
+</html>
