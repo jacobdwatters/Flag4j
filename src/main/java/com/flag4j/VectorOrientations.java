@@ -7,9 +7,9 @@ public enum VectorOrientations {
     /**
      * Row vector
      */
-    RowVector,
+    ROW_VECTOR,
     /**
      * Column Vector
      */
-    ColumnVector
+    COLUMN_VECTOR
 }

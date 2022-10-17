@@ -7,7 +7,7 @@ public class Shape {
     /**
      * An array containing the size of each dimension of this tensor.
      */
-    public int[] shape;
+    public int[] dims;
 
 
     /**
@@ -15,7 +15,7 @@ public class Shape {
      * @param rank Rank of the tensor which this shape object describes.
      */
 <span class="nc" id="L17">    public Shape(int rank) {</span>
-<span class="nc" id="L18">        shape = new int[rank];</span>
+<span class="nc" id="L18">        dims = new int[rank];</span>
 <span class="nc" id="L19">    }</span>
 
 
@@ -24,7 +24,7 @@ public class Shape {
      * @param dims A list of the dimension measurements for this shape object.
      */
 <span class="fc" id="L26">    public Shape(int... dims) {</span>
-<span class="fc" id="L27">        this.shape = dims.clone();</span>
+<span class="fc" id="L27">        this.dims = dims.clone();</span>
 <span class="fc" id="L28">    }</span>
 
 
@@ -33,7 +33,7 @@ public class Shape {
      * @return The rank for a tensor with this shape.
      */
     public int getRank() {
-<span class="nc" id="L36">        return shape.length;</span>
+<span class="nc" id="L36">        return dims.length;</span>
     }
 
 
@@ -41,8 +41,8 @@ public class Shape {
      * Gets the shape of a tensor as an array.
      * @return Shape of a tensor as an integer array.
      */
-    public int[] getShape() {
-<span class="nc" id="L45">        return this.shape;</span>
+    public int[] getDims() {
+<span class="nc" id="L45">        return this.dims;</span>
     }
 
 
@@ -53,7 +53,7 @@ public class Shape {
     public String toString() {
 <span class="fc" id="L54">        StringBuilder result = new StringBuilder(&quot;&quot;);</span>
 
-<span class="fc bfc" id="L56" title="All 2 branches covered.">        for(int d : shape) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        for(int d : dims) {</span>
 <span class="fc" id="L57">            result.append(d + &quot;x&quot;);</span>
         }
 <span class="fc" id="L59">        result.deleteCharAt(result.length()-1); // Remove excess 'x' character.</span>

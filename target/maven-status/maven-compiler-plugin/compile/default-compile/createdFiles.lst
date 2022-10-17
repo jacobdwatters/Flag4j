@@ -4,7 +4,6 @@ com\flag4j\VectorManipulationsMixin.class
 com\flag4j\SparseMatrixFormats.class
 com\flag4j\MatrixTypes.class
 com\flag4j\Vector.class
-com\flag4j\PrintOptions.class
 com\flag4j\TensorManipulationsMixin.class
 com\flag4j\ComplexMatrixMixin.class
 com\flag4j\MatrixOperationsMixin.class
@@ -34,6 +33,7 @@ com\flag4j\io\TensorWriter.class
 com\flag4j\TypedMatrix.class
 com\flag4j\RealTensorMixin.class
 com\flag4j\TensorComparisonsMixin.class
+com\flag4j\io\PrintOptions.class
 com\flag4j\SparseVector.class
 com\flag4j\VectorComparisonsMixin.class
 com\flag4j\ErrorMessages.class

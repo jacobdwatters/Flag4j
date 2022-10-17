@@ -11,7 +11,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; {
      * Creates an empty real dense matrix.
      */
     public Matrix() {
-<span class="fc" id="L14">        super(MatrixTypes.Matrix, 0, 0);</span>
+<span class="fc" id="L14">        super(MatrixTypes.MATRIX, 0, 0);</span>
 <span class="fc" id="L15">        entries = new double[this.m][this.n];</span>
 <span class="fc" id="L16">    }</span>
 
@@ -22,7 +22,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; {
      * @throws IllegalArgumentException if size negative.
      */
     public Matrix(int size) {
-<span class="fc" id="L25">        super(MatrixTypes.Matrix, size, size);</span>
+<span class="fc" id="L25">        super(MatrixTypes.MATRIX, size, size);</span>
 <span class="fc" id="L26">        this.entries = new double[this.m][this.n];</span>
 <span class="fc" id="L27">    }</span>
 
@@ -34,7 +34,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; {
      * @throws IllegalArgumentException if size negative.
      */
     public Matrix(int size, double value) {
-<span class="fc" id="L37">        super(MatrixTypes.Matrix, size, size);</span>
+<span class="fc" id="L37">        super(MatrixTypes.MATRIX, size, size);</span>
 <span class="fc" id="L38">        this.entries = new double[this.m][this.n];</span>
 <span class="fc" id="L39">        double[] row = new double[this.n];</span>
 
@@ -50,9 +50,9 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; {
      * @throws IllegalArgumentException if either m or n is negative.
      */
     public Matrix(int m, int n) {
-<span class="nc" id="L53">        super(MatrixTypes.Matrix, m, n);</span>
-<span class="nc" id="L54">        this.entries = new double[this.m][this.n];</span>
-<span class="nc" id="L55">    }</span>
+<span class="fc" id="L53">        super(MatrixTypes.MATRIX, m, n);</span>
+<span class="fc" id="L54">        this.entries = new double[this.m][this.n];</span>
+<span class="fc" id="L55">    }</span>
 
 
     /**
@@ -63,13 +63,13 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; {
      * @throws IllegalArgumentException if either m or n is negative.
      */
     public Matrix(int m, int n, double value) {
-<span class="nc" id="L66">        super(MatrixTypes.Matrix, m, n);</span>
-<span class="nc" id="L67">        this.entries = new double[this.m][this.n];</span>
-<span class="nc" id="L68">        double[] row = new double[this.n];</span>
+<span class="fc" id="L66">        super(MatrixTypes.MATRIX, m, n);</span>
+<span class="fc" id="L67">        this.entries = new double[this.m][this.n];</span>
+<span class="fc" id="L68">        double[] row = new double[this.n];</span>
 
-<span class="nc" id="L70">        Arrays.fill(row, value);</span>
-<span class="nc" id="L71">        Arrays.fill(this.entries, row);</span>
-<span class="nc" id="L72">    }</span>
+<span class="fc" id="L70">        Arrays.fill(row, value);</span>
+<span class="fc" id="L71">        Arrays.fill(this.entries, row);</span>
+<span class="fc" id="L72">    }</span>
 
 
     /**
@@ -77,11 +77,11 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; {
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(double[][] entries) {
-<span class="nc" id="L80">        super(MatrixTypes.Matrix, entries.length, entries[0].length);</span>
-<span class="nc" id="L81">        this.entries = Arrays.stream(entries)</span>
-<span class="nc" id="L82">                .map(double[]::clone)</span>
-<span class="nc" id="L83">                .toArray(double[][]::new);</span>
-<span class="nc" id="L84">    }</span>
+<span class="fc" id="L80">        super(MatrixTypes.MATRIX, entries.length, entries[0].length);</span>
+<span class="fc" id="L81">        this.entries = Arrays.stream(entries)</span>
+<span class="fc" id="L82">                .map(double[]::clone)</span>
+<span class="fc" id="L83">                .toArray(double[][]::new);</span>
+<span class="fc" id="L84">    }</span>
 
 
     /**
@@ -89,15 +89,15 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; {
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(int[][] entries) {
-<span class="nc" id="L92">        super(MatrixTypes.Matrix, entries.length, entries[0].length);</span>
-<span class="nc" id="L93">        this.entries = new double[m][n];</span>
+<span class="fc" id="L92">        super(MatrixTypes.MATRIX, entries.length, entries[0].length);</span>
+<span class="fc" id="L93">        this.entries = new double[m][n];</span>
 
-<span class="nc bnc" id="L95" title="All 2 branches missed.">        for(int i=0; i&lt;m; i++) {</span>
-<span class="nc bnc" id="L96" title="All 2 branches missed.">            for(int j=0; j&lt;n; j++) {</span>
-<span class="nc" id="L97">                this.entries[i][j] = entries[i][j];</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        for(int i=0; i&lt;m; i++) {</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">            for(int j=0; j&lt;n; j++) {</span>
+<span class="fc" id="L97">                this.entries[i][j] = entries[i][j];</span>
             }
         }
-<span class="nc" id="L100">    }</span>
+<span class="fc" id="L100">    }</span>
 
 
     /**
@@ -105,10 +105,10 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; {
      * @param A The matrix defining the entries for this matrix.
      */
     public Matrix(Matrix A) {
-<span class="nc" id="L108">        super(MatrixTypes.Matrix, A.entries.length, A.entries[0].length);</span>
-<span class="nc" id="L109">        this.entries = Arrays.stream(A.entries)</span>
-<span class="nc" id="L110">                .map(double[]::clone)</span>
-<span class="nc" id="L111">                .toArray(double[][]::new);</span>
-<span class="nc" id="L112">    }</span>
+<span class="fc" id="L108">        super(MatrixTypes.MATRIX, A.entries.length, A.entries[0].length);</span>
+<span class="fc" id="L109">        this.entries = Arrays.stream(A.entries)</span>
+<span class="fc" id="L110">                .map(double[]::clone)</span>
+<span class="fc" id="L111">                .toArray(double[][]::new);</span>
+<span class="fc" id="L112">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
