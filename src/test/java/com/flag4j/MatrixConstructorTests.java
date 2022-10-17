@@ -123,7 +123,6 @@ public class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.m);
         assertEquals(expNumColsA, A.n);
 
-
         // ------------ Sub-case 4 ------------
         size = 13;
         fillValue = -1231.012;
