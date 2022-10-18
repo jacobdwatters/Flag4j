@@ -100,7 +100,7 @@ public class CNumber extends Number {
 
     /**
      * Creates a new complex number which is the copy of the specified complex number.
-     * @param a The complex number to copy.
+     * @param num The complex number to copy.
      */
     public CNumber(CNumber num) {
         this.re = num.re;
@@ -161,6 +161,15 @@ public class CNumber extends Number {
         return result;
     }
 
+
+    /**
+     * Generates the hashcode for this CNumber.
+     * @return
+     */
+    @Override
+    public int hashCode() {
+        return Double.hashCode(re) + Double.hashCode(im);
+    }
 
     /**
      * Gets the value of the specified number as an {@code int}. This will be calculated only with the real component of
