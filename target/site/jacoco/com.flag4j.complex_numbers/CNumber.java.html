@@ -100,7 +100,7 @@ public class CNumber extends Number {
 
     /**
      * Creates a new complex number which is the copy of the specified complex number.
-     * @param a The complex number to copy.
+     * @param num The complex number to copy.
      */
 <span class="fc" id="L105">    public CNumber(CNumber num) {</span>
 <span class="fc" id="L106">        this.re = num.re;</span>
@@ -163,6 +163,19 @@ public class CNumber extends Number {
 
 
     /**
+     * Generates the hashcode for this CNumber.
+     * @return An integer hash for this CNumber.
+     */
+    @Override
+    public int hashCode() {
+<span class="nc" id="L171">        int hash = 7;</span>
+<span class="nc" id="L172">        hash = 31*hash + Double.hashCode(this.re);</span>
+<span class="nc" id="L173">        hash = 31*hash + Double.hashCode(this.im);</span>
+<span class="nc" id="L174">        return hash;</span>
+    }
+
+
+    /**
      * Gets the value of the specified number as an {@code int}. This will be calculated only with the real component of
      * this {@link CNumber}.
      *
@@ -171,7 +184,7 @@ public class CNumber extends Number {
      */
     @Override
     public int intValue() {
-<span class="nc" id="L174">        return (int) re;</span>
+<span class="nc" id="L187">        return (int) re;</span>
     }
 
 
@@ -184,7 +197,7 @@ public class CNumber extends Number {
      */
     @Override
     public long longValue() {
-<span class="nc" id="L187">        return (long) re;</span>
+<span class="nc" id="L200">        return (long) re;</span>
     }
 
 
@@ -197,7 +210,7 @@ public class CNumber extends Number {
      */
     @Override
     public float floatValue() {
-<span class="nc" id="L200">        return (float) re;</span>
+<span class="nc" id="L213">        return (float) re;</span>
     }
 
 
@@ -210,7 +223,7 @@ public class CNumber extends Number {
      */
     @Override
     public double doubleValue() {
-<span class="nc" id="L213">        return re;</span>
+<span class="nc" id="L226">        return re;</span>
     }
 
 
@@ -218,7 +231,7 @@ public class CNumber extends Number {
      * @return imaginary part of given Number as double
      */
     public double doubleImaginaryValue() {
-<span class="nc" id="L221">        return im;</span>
+<span class="nc" id="L234">        return im;</span>
     }
 
 
@@ -228,7 +241,7 @@ public class CNumber extends Number {
      * @return imaginary part of given Number as float
      */
     public float floatImaginaryValue() {
-<span class="nc" id="L231">        return (float) im;</span>
+<span class="nc" id="L244">        return (float) im;</span>
     }
 
     /**
@@ -237,7 +250,7 @@ public class CNumber extends Number {
      * @return imaginary part of given Number as int
      */
     public int intImaginaryValue() {
-<span class="nc" id="L240">        return (int) im;</span>
+<span class="nc" id="L253">        return (int) im;</span>
     }
 
 
@@ -247,7 +260,7 @@ public class CNumber extends Number {
      * @return imaginary part of given Number as long
      */
     public long longImaginaryValue() {
-<span class="nc" id="L250">        return (long) im;</span>
+<span class="nc" id="L263">        return (long) im;</span>
     }
 
 }
