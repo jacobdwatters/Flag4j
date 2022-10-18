@@ -96,6 +96,10 @@ public abstract class PrintOptions {
      * @param precision The precision to use.
      */
     public static void setPrecision(int precision) {
+        if(precision < 0) {
+            throw new IllegalArgumentException(ErrorMessages.negValueErr(precision));
+        }
+
         PrintOptions.precision = precision;
     }
 
@@ -141,6 +145,10 @@ public abstract class PrintOptions {
      * @param maxColumns
      */
     public static void setMaxColumns(int maxColumns) {
+        if(maxColumns < 0) {
+            throw new IllegalArgumentException(ErrorMessages.negValueErr(maxColumns));
+        }
+
         PrintOptions.maxColumns = maxColumns;
     }
 
@@ -159,6 +167,10 @@ public abstract class PrintOptions {
      * @param maxRows The new maximum number of rows to print.
      */
     public static void setMaxRows(int maxRows) {
+        if(maxRows < 0) {
+            throw new IllegalArgumentException(ErrorMessages.negValueErr(maxRows));
+        }
+
         PrintOptions.maxRows = maxRows;
     }
 
@@ -177,6 +189,10 @@ public abstract class PrintOptions {
      * @param padding New padding amount for the columns.
      */
     public static void setPadding(int padding) {
+        if(padding < 0) {
+            throw new IllegalArgumentException(ErrorMessages.negValueErr(padding));
+        }
+
         PrintOptions.padding = padding;
     }
 }

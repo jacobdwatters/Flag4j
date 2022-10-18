@@ -78,6 +78,16 @@ public class CNumber extends Number {
 
 
     /**
+     * Constructs a complex number with specified real component and zero imaginary component.
+     * @param re Real component of complex number.
+     */
+    public CNumber(double re) {
+        this.re = re;
+        this.im = 0;
+    }
+
+
+    /**
      * Constructs a complex number with specified complex and real components.
      * @param re Real component of complex number.
      * @param im Imaginary component of complex number.
@@ -89,22 +99,24 @@ public class CNumber extends Number {
 
 
     /**
-     * Constructs a complex number with specified real component and zero imaginary component.
-     * @param re Real component of complex number.
+     * Creates a new complex number which is the copy of the specified complex number.
+     * @param a The complex number to copy.
      */
-    public CNumber(double re) {
-        this.re = re;
-        this.im = 0;
+    public CNumber(CNumber num) {
+        this.re = num.re;
+        this.im = num.im;
     }
 
 
     /**
-     * Creates a new complex number which is the copy of the specified complex number.
-     * @param a The complex number to copy.
+     * Constructs a complex number from a string of the form "a +/- bi" where and b are real values and either may be
+     * omitted. i.e. "a", "bi", "a +/- i", and "i" are all also valid.
+     * @param num The string representation of a complex number.
      */
-    public CNumber(CNumber a) {
-        this.re = a.re;
-        this.im = a.im;
+    public CNumber(String num) {
+        CNumber complexNum = CNumberParser.parseNumber(num);
+        this.re = complexNum.re;
+        this.im = complexNum.im;
     }
 
 
