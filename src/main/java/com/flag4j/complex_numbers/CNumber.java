@@ -164,12 +164,16 @@ public class CNumber extends Number {
 
     /**
      * Generates the hashcode for this CNumber.
-     * @return
+     * @return An integer hash for this CNumber.
      */
     @Override
     public int hashCode() {
-        return Double.hashCode(re) + Double.hashCode(im);
+        int hash = 7;
+        hash = 31*hash + Double.hashCode(this.re);
+        hash = 31*hash + Double.hashCode(this.im);
+        return hash;
     }
+
 
     /**
      * Gets the value of the specified number as an {@code int}. This will be calculated only with the real component of
