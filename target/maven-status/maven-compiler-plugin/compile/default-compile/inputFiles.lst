@@ -19,6 +19,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\MatrixOperationsMixi
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\TensorOperationsMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\MatrixTypes.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\Vector.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\util\ErrorMessages.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\ComplexTensorMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\SparseMatrix.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\Decompose.java
@@ -26,7 +27,6 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\VectorOrientations.j
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\VectorPropertiesMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\SparseCMatrix.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\TypedVector.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\ErrorMessages.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\RealTensorMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\io\TensorWriter.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\ComplexMatrixMixin.java
