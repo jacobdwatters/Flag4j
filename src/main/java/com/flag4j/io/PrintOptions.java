@@ -1,6 +1,6 @@
 package com.flag4j.io;
 
-import com.flag4j.ErrorMessages;
+import com.flag4j.util.ErrorMessages;
 
 /**
  * Print options for matrices and vectors

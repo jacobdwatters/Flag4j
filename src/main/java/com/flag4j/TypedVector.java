@@ -1,5 +1,7 @@
 package com.flag4j;
 
+import com.flag4j.util.ErrorMessages;
+
 /**
  * Stores the type and shape of matrix object.
  */
@@ -30,6 +32,13 @@ abstract class TypedVector<T> {
      * @param orientation The orientation of the resulting vector.
      */
     protected TypedVector(VectorTypes type, int m, VectorOrientations orientation) {
+        if(m<0){
+            // A vector cannot have negative size.
+            throw new IllegalArgumentException(
+                    ErrorMessages.negativeDimErrMsg(new Shape(new int[]{m}))
+            );
+        }
+
         this.type = type;
         this.m = m;
         this.orientation = orientation;

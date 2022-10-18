@@ -1,5 +1,7 @@
-package com.flag4j;
+package com.flag4j.util;
 
+
+import com.flag4j.Shape;
 
 /**
  * Contains error messages for common errors which may occur.
@@ -43,7 +45,7 @@ public abstract class ErrorMessages {
      * @param shape2 The shape of the second tensor.
      * @return An error message for tensors with mismatching shapes.
      */
-    static String equalShapeErrMsg(Shape shape1, Shape shape2) {
+    public static String equalShapeErrMsg(Shape shape1, Shape shape2) {
         return String.format(EQ_SHAPE_MISMATCH_ERR, shape1, shape2);
     }
 
@@ -54,7 +56,7 @@ public abstract class ErrorMessages {
      * @param shape2 The shape of the second matrix.
      * @return An error message for matrices with shapes not conducive with matrix multiplication.
      */
-    static String matMultShapeErrMsg(Shape shape1, Shape shape2) {
+    public static String matMultShapeErrMsg(Shape shape1, Shape shape2) {
         return String.format(MAT_MULT_DIM_MISMATCH_ERR, shape1, shape2);
     }
 
@@ -64,7 +66,7 @@ public abstract class ErrorMessages {
      * @param shape Shape of the vector.
      * @return An error message for a vector which is not a row vector.
      */
-    static String vecRowOrientErrMsg(Shape shape) {
+    public static String vecRowOrientErrMsg(Shape shape) {
         return String.format(VEC_ROW_ORIENTATION_ERR, shape);
     }
 
@@ -74,7 +76,7 @@ public abstract class ErrorMessages {
      * @param shape Shape of the vector.
      * @return An error message for a vector which is not a row vector.
      */
-    static String vecColOrientErrMsg(Shape shape) {
+    public static String vecColOrientErrMsg(Shape shape) {
         return String.format(VEC_COL_ORIENTATION_ERR, shape);
     }
 
@@ -84,10 +86,15 @@ public abstract class ErrorMessages {
      * @param shape Shape of the tensor.
      * @return
      */
-    static String negativeDimErrMsg(Shape shape) {
+    public static String negativeDimErrMsg(Shape shape) {
         return String.format(NEG_DIM_ERR, shape);
     }
 
+
+    /**
+     * Gets an error message for an attempted instantiation of a utility class.
+     * @return
+     */
     public static String utilityClassErrMsg() {return UTILITY_CLASS_ERR;}
 }
 
