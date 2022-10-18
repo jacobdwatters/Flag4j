@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.flag4j.complex_numbers.CNumberConstructorTest" time="0.049" tests="5" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.flag4j.io.PrintOptionsTests" time="0.005" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="16"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -57,9 +57,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="60.0"/>
   </properties>
-  <testcase name="copyConstructorTestCase" classname="com.flag4j.complex_numbers.CNumberConstructorTest" time="0.026"/>
-  <testcase name="defaultConstructorTestCase" classname="com.flag4j.complex_numbers.CNumberConstructorTest" time="0.001"/>
-  <testcase name="reImConstructorTestCase" classname="com.flag4j.complex_numbers.CNumberConstructorTest" time="0"/>
-  <testcase name="stringConstructorTestCase" classname="com.flag4j.complex_numbers.CNumberConstructorTest" time="0.013"/>
-  <testcase name="reConstructorTestCase" classname="com.flag4j.complex_numbers.CNumberConstructorTest" time="0"/>
+  <testcase name="printOptionTestCase" classname="com.flag4j.io.PrintOptionsTests" time="0.005"/>
 </testsuite>
