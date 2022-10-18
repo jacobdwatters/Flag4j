@@ -4,14 +4,59 @@
  * Complex Number.
  */
 public class CNumber extends Number {
+    // Several constants are provided for convenience.
     /**
      * The complex number with zero imaginary and real parts.
      */
-<span class="nc" id="L10">    final static CNumber ZERO = new CNumber();</span>
+<span class="nc" id="L11">    public final static CNumber ZERO = new CNumber();</span>
     /**
      * The complex number with zero imaginary part and one real part.
      */
-<span class="nc" id="L14">    final static CNumber ONE = new CNumber(1);</span>
+<span class="nc" id="L15">    public final static CNumber ONE = new CNumber(1);</span>
+    /**
+     * The complex number with zero imaginary part and negative one real part.
+     */
+<span class="nc" id="L19">    public final static CNumber NEGATIVE_ONE = new CNumber(1);</span>
+    /**
+     * The real double value closer to pi than any other.
+     */
+<span class="nc" id="L23">    public final static CNumber PI = new CNumber(Math.PI);</span>
+    /**
+     * The real double value closer to the mathematical constant e than any other.
+     */
+<span class="nc" id="L27">    public final static CNumber E = new CNumber(Math.E);</span>
+    /**
+     * The imaginary unit i.
+     */
+<span class="nc" id="L31">    public final static CNumber IMAGINARY_UNIT = new CNumber(0, 1);</span>
+    /**
+     * The additive inverse of the imaginary unit, -i.
+     */
+<span class="nc" id="L35">    public final static CNumber INV_IMAGINARY_UNIT = new CNumber(0, -1);</span>
+    /**
+     * The maximum real double value 1.7976931348623157e308.
+     */
+<span class="nc" id="L39">    public final static CNumber MAX_REAL = new CNumber(Double.MAX_VALUE);</span>
+    /**
+     * The minimum real double value 4.9E-324
+     */
+<span class="nc" id="L43">    public final static CNumber MIN_REAL = new CNumber(Double.MIN_VALUE);</span>
+    /**
+     * The smallest possible real normal double 2.2250738585072014E-308.
+     */
+<span class="nc" id="L47">    public final static CNumber MIN_REAL_NORMAL = new CNumber(Double.MIN_NORMAL);</span>
+    /**
+     * Complex number with real part equal to {@link Double#POSITIVE_INFINITY}.
+     */
+<span class="nc" id="L51">    public final static CNumber POSITIVE_INFINITY = new CNumber(Double.POSITIVE_INFINITY);</span>
+    /**
+     * Complex number with real part equal to {@link Double#NEGATIVE_INFINITY}.
+     */
+<span class="nc" id="L55">    public final static CNumber NEGATIVE_INFINITY = new CNumber(Double.NEGATIVE_INFINITY);</span>
+    /**
+     * Complex number with real part equal to {@link Double#NaN}.
+     */
+<span class="nc" id="L59">    public final static CNumber NaN = new CNumber(Double.NaN);</span>
 
     /**
      * Real component of the complex number.
@@ -26,10 +71,10 @@ public class CNumber extends Number {
     /**
      * Constructs a complex number with value and magnitude 0.
      */
-<span class="nc" id="L29">    public CNumber() {</span>
-<span class="nc" id="L30">        re = 0;</span>
-<span class="nc" id="L31">        im = 0;</span>
-<span class="nc" id="L32">    }</span>
+<span class="nc" id="L74">    public CNumber() {</span>
+<span class="nc" id="L75">        re = 0;</span>
+<span class="nc" id="L76">        im = 0;</span>
+<span class="nc" id="L77">    }</span>
 
 
     /**
@@ -37,30 +82,30 @@ public class CNumber extends Number {
      * @param re Real component of complex number.
      * @param im Imaginary component of complex number.
      */
-<span class="nc" id="L40">    public CNumber(double re, double im) {</span>
-<span class="nc" id="L41">        this.re = re;</span>
-<span class="nc" id="L42">        this.im = im;</span>
-<span class="nc" id="L43">    }</span>
+<span class="nc" id="L85">    public CNumber(double re, double im) {</span>
+<span class="nc" id="L86">        this.re = re;</span>
+<span class="nc" id="L87">        this.im = im;</span>
+<span class="nc" id="L88">    }</span>
 
 
     /**
      * Constructs a complex number with specified real component and zero imaginary component.
      * @param re Real component of complex number.
      */
-<span class="nc" id="L50">    public CNumber(double re) {</span>
-<span class="nc" id="L51">        this.re = re;</span>
-<span class="nc" id="L52">        this.im = 0;</span>
-<span class="nc" id="L53">    }</span>
+<span class="nc" id="L95">    public CNumber(double re) {</span>
+<span class="nc" id="L96">        this.re = re;</span>
+<span class="nc" id="L97">        this.im = 0;</span>
+<span class="nc" id="L98">    }</span>
 
 
     /**
      * Creates a new complex number which is the copy of the specified complex number.
      * @param a The complex number to copy.
      */
-<span class="nc" id="L60">    public CNumber(CNumber a) {</span>
-<span class="nc" id="L61">        this.re = a.re;</span>
-<span class="nc" id="L62">        this.im = a.im;</span>
-<span class="nc" id="L63">    }</span>
+<span class="nc" id="L105">    public CNumber(CNumber a) {</span>
+<span class="nc" id="L106">        this.re = a.re;</span>
+<span class="nc" id="L107">        this.im = a.im;</span>
+<span class="nc" id="L108">    }</span>
 
 
     /**
@@ -69,7 +114,7 @@ public class CNumber extends Number {
      * @return The result of adding this complex number with b.
      */
     public CNumber add(CNumber b) {
-<span class="nc" id="L72">        return new CNumber(this.re + b.re, this.im + b.im);</span>
+<span class="nc" id="L117">        return new CNumber(this.re + b.re, this.im + b.im);</span>
     }
 
 
@@ -79,7 +124,29 @@ public class CNumber extends Number {
      * @return The result of subtracting b from this complex number.
      */
     public CNumber sub(CNumber b) {
-<span class="nc" id="L82">        return new CNumber(this.re - b.re, this.im - b.im);</span>
+<span class="nc" id="L127">        return new CNumber(this.re - b.re, this.im - b.im);</span>
+    }
+
+
+    /**
+     * Checks if two complex numbers are equal. That is, if both numbers have equivalent real and complex parts.
+     * @param b The object to compare.
+     * @return True if b is a complex number and is equivalent to this complex number in both the real and
+     * imaginary components. False, otherwise.
+     */
+    @Override
+    public boolean equals(Object b) {
+<span class="nc" id="L139">        boolean result = false;</span>
+
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        if(b instanceof CNumber) {</span>
+<span class="nc" id="L142">            CNumber bCopy = (CNumber) b;</span>
+
+<span class="nc bnc" id="L144" title="All 4 branches missed.">            if(this.re==bCopy.re &amp;&amp; this.im==bCopy.im) {</span>
+<span class="nc" id="L145">                result = true;</span>
+            }
+        }
+
+<span class="nc" id="L149">        return result;</span>
     }
 
 
@@ -92,7 +159,7 @@ public class CNumber extends Number {
      */
     @Override
     public int intValue() {
-<span class="nc" id="L95">        return (int) re;</span>
+<span class="nc" id="L162">        return (int) re;</span>
     }
 
 
@@ -105,7 +172,7 @@ public class CNumber extends Number {
      */
     @Override
     public long longValue() {
-<span class="nc" id="L108">        return (long) re;</span>
+<span class="nc" id="L175">        return (long) re;</span>
     }
 
 
@@ -118,7 +185,7 @@ public class CNumber extends Number {
      */
     @Override
     public float floatValue() {
-<span class="nc" id="L121">        return (float) re;</span>
+<span class="nc" id="L188">        return (float) re;</span>
     }
 
 
@@ -131,7 +198,45 @@ public class CNumber extends Number {
      */
     @Override
     public double doubleValue() {
-<span class="nc" id="L134">        return re;</span>
+<span class="nc" id="L201">        return re;</span>
     }
+
+
+    /**
+     * @return imaginary part of given Number as double
+     */
+    public double doubleImaginaryValue() {
+<span class="nc" id="L209">        return im;</span>
+    }
+
+
+    /**
+     * Note: This method may result in loss of accuracy
+     *
+     * @return imaginary part of given Number as float
+     */
+    public float floatImaginaryValue() {
+<span class="nc" id="L219">        return (float) im;</span>
+    }
+
+    /**
+     * Note: This method may result in loss of accuracy
+     *
+     * @return imaginary part of given Number as int
+     */
+    public int intImaginaryValue() {
+<span class="nc" id="L228">        return (int) im;</span>
+    }
+
+
+    /**
+     * Note: This method may result in loss of accuracy
+     *
+     * @return imaginary part of given Number as long
+     */
+    public long longImaginaryValue() {
+<span class="nc" id="L238">        return (long) im;</span>
+    }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

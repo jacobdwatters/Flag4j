@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrintOptions.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.io</a> &gt; <span class="el_source">PrintOptions.java</span></div><h1>PrintOptions.java</h1><pre class="source lang-java linenums">package com.flag4j.io;
 
-import com.flag4j.ErrorMessages;
+import com.flag4j.util.ErrorMessages;
 
 /**
  * Print options for matrices and vectors
@@ -21,7 +21,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 2
      */
-<span class="nc" id="L24">    public static int padding = 2;</span>
+<span class="nc" id="L24">    private static int padding = 2;</span>
 
 
     /**
@@ -33,7 +33,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 10
      */
-<span class="nc" id="L36">    public static int maxRows = 10;</span>
+<span class="nc" id="L36">    private static int maxRows = 10;</span>
 
 
     /**
@@ -45,7 +45,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 10
      */
-<span class="nc" id="L48">    public static int maxColumns = 10;</span>
+<span class="nc" id="L48">    private static int maxColumns = 10;</span>
 
 
     /**
@@ -54,7 +54,7 @@ public abstract class PrintOptions {
      * &lt;br&gt;&lt;br&gt;
      * Default Value: 8.
      */
-<span class="nc" id="L57">    public static int precision = 8;</span>
+<span class="nc" id="L57">    private static int precision = 8;</span>
 
 
     /**
@@ -62,7 +62,7 @@ public abstract class PrintOptions {
      * &lt;br&gt;&lt;br&gt;
      * Default value: false.
      */
-<span class="nc" id="L65">    public static boolean useScientific = false;</span>
+<span class="nc" id="L65">    private static boolean useScientific = false;</span>
 
 
     /**
@@ -70,6 +70,114 @@ public abstract class PrintOptions {
      * &lt;br&gt;&lt;br&gt;
      * Default value: true.
      */
-<span class="nc" id="L73">    public static boolean center = true;</span>
+<span class="nc" id="L73">    private static boolean center = true;</span>
+
+
+    /**
+     * Sets the centering flag.
+     * @param center Flag for centering values within its column.
+     */
+    public static void setCenter(boolean center) {
+<span class="nc" id="L81">        PrintOptions.center = center;</span>
+<span class="nc" id="L82">    }</span>
+
+
+    /**
+     * Gets the centering flag.
+     * @return The current value of the center flag.
+     */
+    public static boolean getCenter() {
+<span class="nc" id="L90">        return center;</span>
+    }
+
+
+    /**
+     * Sets the printing precision for which values in a matrix/vector
+     * @param precision The precision to use.
+     */
+    public static void setPrecision(int precision) {
+<span class="nc" id="L99">        PrintOptions.precision = precision;</span>
+<span class="nc" id="L100">    }</span>
+
+
+    /**
+     * Gets the current printing precision.
+     * @return The current printing precision.
+     */
+    public static int getPrecision() {
+<span class="nc" id="L108">        return precision;</span>
+    }
+
+
+    /**
+     * Sets the flag for printing in scientific notation.
+     * @param useScientific Flag to use for printing scientific notation.
+     */
+    public static void setUseScientific(boolean useScientific) {
+<span class="nc" id="L117">        PrintOptions.useScientific = useScientific;</span>
+<span class="nc" id="L118">    }</span>
+
+
+    /**
+     * Gets the current flag for printing in scientific notation.
+     * @return The current flag for weather to print values in scientific notation or not.
+     */
+    public static boolean getUseScientific() {
+<span class="nc" id="L126">        return useScientific;</span>
+    }
+
+
+    /**
+     * Gets the current maximum number of columns to print.
+     * @return The current maximum number of columns to print.
+     */
+    public static int getMaxColumns() {
+<span class="nc" id="L135">        return maxColumns;</span>
+    }
+
+
+    /**
+     * Sets the maximum number of columns to print.
+     * @param maxColumns
+     */
+    public static void setMaxColumns(int maxColumns) {
+<span class="nc" id="L144">        PrintOptions.maxColumns = maxColumns;</span>
+<span class="nc" id="L145">    }</span>
+
+
+    /**
+     * Gets the maximum number of rows to print.
+     * @return The maximum number of rows to print.
+     */
+    public static int getMaxRows() {
+<span class="nc" id="L153">        return maxRows;</span>
+    }
+
+
+    /**
+     * Set the maximum number of rows to print.
+     * @param maxRows The new maximum number of rows to print.
+     */
+    public static void setMaxRows(int maxRows) {
+<span class="nc" id="L162">        PrintOptions.maxRows = maxRows;</span>
+<span class="nc" id="L163">    }</span>
+
+
+    /**
+     * Gets the current padding amount for columns.
+     * @return The current padding amount for columns.
+     */
+    public static int getPadding() {
+<span class="nc" id="L171">        return padding;</span>
+    }
+
+
+    /**
+     * Sets the padding amount for the columns.
+     * @param padding New padding amount for the columns.
+     */
+    public static void setPadding(int padding) {
+<span class="nc" id="L180">        PrintOptions.padding = padding;</span>
+<span class="nc" id="L181">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

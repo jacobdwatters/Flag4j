@@ -1,6 +1,6 @@
 package com.flag4j.concurrency;
 
-import com.flag4j.ErrorMessages;
+import com.flag4j.util.ErrorMessages;
 
 /**
  * Configurations for concurrent operations.

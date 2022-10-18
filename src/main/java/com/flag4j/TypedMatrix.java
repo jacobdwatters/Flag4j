@@ -1,5 +1,7 @@
 package com.flag4j;
 
+import com.flag4j.util.ErrorMessages;
+
 /**
  * Stores the type and shape of matrix object.
  */
