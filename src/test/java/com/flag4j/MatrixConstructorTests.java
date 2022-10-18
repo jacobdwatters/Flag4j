@@ -3,8 +3,8 @@ package com.flag4j;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
+
 class MatrixConstructorTests {
     double[][] expEntriesA;
     int[][] expEntriesAint;

@@ -36,7 +36,11 @@ public abstract class ErrorMessages {
      * Error message for the attempted construction of a tensor with a negative dimension value.
      */
     private static final String NEG_DIM_ERR = "Shape dimensions must be non-negative but got shape %s.";
+    /**
+     * Error message for attempted instantiation of a utility class.
+     */
     private static final String UTILITY_CLASS_ERR = "Utility class cannot be instantiated";
+    private static final String NEG_VALUE_ERR = "Expecting value to be non-negative but got %s";
 
 
     /**
@@ -96,5 +100,10 @@ public abstract class ErrorMessages {
      * @return
      */
     public static String utilityClassErrMsg() {return UTILITY_CLASS_ERR;}
+
+
+    public static String negValueErr(double value) {
+        return String.format(NEG_VALUE_ERR, value);
+    }
 }
 

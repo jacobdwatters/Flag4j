@@ -1,5 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CNumberParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.complex_numbers</a> &gt; <span class="el_source">CNumberParser.java</span></div><h1>CNumberParser.java</h1><pre class="source lang-java linenums">package com.flag4j.complex_numbers;
 
-<span class="nc" id="L3">public class CNumberParser {</span>
+/**
+ * A parser for complex numbers represented as a string.
+ */
+<span class="nc" id="L6">public class CNumberParser {</span>
+
+    /**
+     * Parses a complex number in the form of a string into its real and imaginary parts.
+     * For example, the string &lt;code&gt;&quot;2+3i&quot;&lt;/code&gt; would be parsed into real and imaginary parts
+     * &lt;code&gt;2&lt;/code&gt; and &lt;code&gt;3&lt;/code&gt; respectivly
+     *
+     * @param num - complex number in one of three forms: &lt;code&gt;a + bi, a,&lt;/code&gt; or &lt;code&gt;bi&lt;/code&gt; where a and b are
+     * 				real numbers and i is the imaginary unit sqrt(-1)
+     * @return The complex number represented by the string num.
+     */
+    public static CNumber parseNumber(String num) {
+<span class="fc" id="L18">        double[] result = new double[2];</span>
+
+<span class="fc" id="L20">        CNumberLexer lex = new CNumberLexer(num);</span>
+
+        CNumberToken token;
+        CNumberToken operator;
+        CNumberToken real;
+        CNumberToken imaginary;
+
+<span class="fc" id="L27">        token = lex.getNextToken();</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        if(token.matches(&quot;im&quot;, &quot;i&quot;)) { // then we have the imaginary unit</span>
+<span class="nc" id="L29">            result[0] = 0;</span>
+<span class="nc" id="L30">            result[1] = 1;</span>
+        }
+        else {
+<span class="fc" id="L33">            real = token;</span>
+<span class="fc" id="L34">            token = lex.getNextToken();</span>
+
+<span class="fc bfc" id="L36" title="All 2 branches covered.">            if(token.matches(&quot;eof&quot;, &quot;&quot;)) { // Then we have a real number (a)</span>
+<span class="fc" id="L37">                result[0] = Double.parseDouble(real.getDetails());</span>
+<span class="fc" id="L38">                result[1] = 0;</span>
+            }
+<span class="fc bfc" id="L40" title="All 2 branches covered.">            else if(token.matches(&quot;im&quot;, &quot;i&quot;)) { // Then we have a pure imaginary number (bi)</span>
+<span class="fc" id="L41">                imaginary = real;</span>
+<span class="fc" id="L42">                result[0] = 0;</span>
+
+<span class="fc" id="L44">                token = lex.getNextToken();</span>
+<span class="fc" id="L45">                token.errorCheck(&quot;eof&quot;, &quot;&quot;);</span>
+
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">                if(imaginary.getDetails().matches(&quot;-&quot;)) {</span>
+<span class="nc" id="L48">                    result[1] = -1;</span>
+                }
+                else {
+<span class="fc" id="L51">                    result[1] = Double.parseDouble(imaginary.getDetails());</span>
+                }
+            }
+            else { // Then we have a complex number with nonzero real and imaginary parts (a + bi)
+<span class="fc" id="L55">                operator = token;</span>
+
+<span class="pc bpc" id="L57" title="1 of 4 branches missed.">                if(!operator.isKind(&quot;opp&quot;) &amp;&amp; operator.isKind(&quot;num&quot;)) {</span>
+<span class="fc" id="L58">                    imaginary = operator;</span>
+                }
+                else {
+<span class="fc" id="L61">                    imaginary = lex.getNextToken();</span>
+                }
+
+<span class="fc bfc" id="L64" title="All 2 branches covered.">                if(imaginary.matches(&quot;im&quot;, &quot;i&quot;)) { // Then we have the unit imaginary number</span>
+<span class="fc" id="L65">                    token = lex.getNextToken();</span>
+<span class="fc" id="L66">                    token.errorCheck(&quot;eof&quot;, &quot;&quot;);</span>
+
+<span class="fc" id="L68">                    result[0] = Double.parseDouble(real.getDetails());</span>
+<span class="fc" id="L69">                    result[1] = 1;</span>
+
+<span class="fc bfc" id="L71" title="All 2 branches covered.">                    if(operator.getDetails().equals(&quot;-&quot;)) { // The operator is negative</span>
+<span class="fc" id="L72">                        result[1] = -result[1];</span>
+                    }
+                }
+                else { // Then we have a multiple of the unit imaginary number
+<span class="fc" id="L76">                    imaginary.errorCheck(&quot;num&quot;);</span>
+
+<span class="fc" id="L78">                    token = lex.getNextToken();</span>
+<span class="fc" id="L79">                    token.errorCheck(&quot;im&quot;, &quot;i&quot;);</span>
+
+<span class="fc" id="L81">                    token = lex.getNextToken();</span>
+<span class="fc" id="L82">                    token.errorCheck(&quot;eof&quot;, &quot;&quot;);</span>
+
+<span class="fc" id="L84">                    result[0] = Double.parseDouble(real.getDetails());</span>
+<span class="fc" id="L85">                    result[1] = Double.parseDouble(imaginary.getDetails());</span>
+
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">                    if(operator.getDetails().equals(&quot;-&quot;)) { // The operator is negative</span>
+<span class="fc" id="L88">                        result[1] = -result[1];</span>
+                    }
+                }
+            }
+        }
+
+<span class="fc" id="L94">        return new CNumber(result[0], result[1]);</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

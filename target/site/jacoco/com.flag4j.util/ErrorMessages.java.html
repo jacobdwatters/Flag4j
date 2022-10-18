@@ -36,7 +36,11 @@ public abstract class ErrorMessages {
      * Error message for the attempted construction of a tensor with a negative dimension value.
      */
     private static final String NEG_DIM_ERR = &quot;Shape dimensions must be non-negative but got shape %s.&quot;;
+    /**
+     * Error message for attempted instantiation of a utility class.
+     */
     private static final String UTILITY_CLASS_ERR = &quot;Utility class cannot be instantiated&quot;;
+    private static final String NEG_VALUE_ERR = &quot;Expecting value to be non-negative but got %s&quot;;
 
 
     /**
@@ -46,7 +50,7 @@ public abstract class ErrorMessages {
      * @return An error message for tensors with mismatching shapes.
      */
     public static String equalShapeErrMsg(Shape shape1, Shape shape2) {
-<span class="nc" id="L49">        return String.format(EQ_SHAPE_MISMATCH_ERR, shape1, shape2);</span>
+<span class="fc" id="L53">        return String.format(EQ_SHAPE_MISMATCH_ERR, shape1, shape2);</span>
     }
 
 
@@ -57,7 +61,7 @@ public abstract class ErrorMessages {
      * @return An error message for matrices with shapes not conducive with matrix multiplication.
      */
     public static String matMultShapeErrMsg(Shape shape1, Shape shape2) {
-<span class="nc" id="L60">        return String.format(MAT_MULT_DIM_MISMATCH_ERR, shape1, shape2);</span>
+<span class="fc" id="L64">        return String.format(MAT_MULT_DIM_MISMATCH_ERR, shape1, shape2);</span>
     }
 
 
@@ -67,7 +71,7 @@ public abstract class ErrorMessages {
      * @return An error message for a vector which is not a row vector.
      */
     public static String vecRowOrientErrMsg(Shape shape) {
-<span class="nc" id="L70">        return String.format(VEC_ROW_ORIENTATION_ERR, shape);</span>
+<span class="fc" id="L74">        return String.format(VEC_ROW_ORIENTATION_ERR, shape);</span>
     }
 
 
@@ -77,7 +81,7 @@ public abstract class ErrorMessages {
      * @return An error message for a vector which is not a row vector.
      */
     public static String vecColOrientErrMsg(Shape shape) {
-<span class="nc" id="L80">        return String.format(VEC_COL_ORIENTATION_ERR, shape);</span>
+<span class="fc" id="L84">        return String.format(VEC_COL_ORIENTATION_ERR, shape);</span>
     }
 
 
@@ -87,7 +91,7 @@ public abstract class ErrorMessages {
      * @return
      */
     public static String negativeDimErrMsg(Shape shape) {
-<span class="fc" id="L90">        return String.format(NEG_DIM_ERR, shape);</span>
+<span class="fc" id="L94">        return String.format(NEG_DIM_ERR, shape);</span>
     }
 
 
@@ -95,7 +99,12 @@ public abstract class ErrorMessages {
      * Gets an error message for an attempted instantiation of a utility class.
      * @return
      */
-<span class="nc" id="L98">    public static String utilityClassErrMsg() {return UTILITY_CLASS_ERR;}</span>
+<span class="fc" id="L102">    public static String utilityClassErrMsg() {return UTILITY_CLASS_ERR;}</span>
+
+
+    public static String negValueErr(double value) {
+<span class="fc" id="L106">        return String.format(NEG_VALUE_ERR, value);</span>
+    }
 }
 
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
