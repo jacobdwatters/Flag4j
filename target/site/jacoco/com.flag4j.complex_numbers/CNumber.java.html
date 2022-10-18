@@ -128,19 +128,25 @@ public class CNumber extends Number {
     }
 
 
+    /**
+     * Checks if two complex numbers are equal. That is, if both numbers have equivalent real and complex parts.
+     * @param b The object to compare.
+     * @return True if b is a complex number and is equivalent to this complex number in both the real and
+     * imaginary components. False, otherwise.
+     */
     @Override
     public boolean equals(Object b) {
-<span class="nc" id="L133">        boolean result = false;</span>
+<span class="nc" id="L139">        boolean result = false;</span>
 
-<span class="nc bnc" id="L135" title="All 2 branches missed.">        if(b instanceof CNumber) {</span>
-<span class="nc" id="L136">            CNumber bCopy = (CNumber) b;</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        if(b instanceof CNumber) {</span>
+<span class="nc" id="L142">            CNumber bCopy = (CNumber) b;</span>
 
-<span class="nc bnc" id="L138" title="All 4 branches missed.">            if(this.re==bCopy.re &amp;&amp; this.im==bCopy.im) {</span>
-<span class="nc" id="L139">                result = true;</span>
+<span class="nc bnc" id="L144" title="All 4 branches missed.">            if(this.re==bCopy.re &amp;&amp; this.im==bCopy.im) {</span>
+<span class="nc" id="L145">                result = true;</span>
             }
         }
 
-<span class="nc" id="L143">        return result;</span>
+<span class="nc" id="L149">        return result;</span>
     }
 
 
@@ -153,7 +159,7 @@ public class CNumber extends Number {
      */
     @Override
     public int intValue() {
-<span class="nc" id="L156">        return (int) re;</span>
+<span class="nc" id="L162">        return (int) re;</span>
     }
 
 
@@ -166,7 +172,7 @@ public class CNumber extends Number {
      */
     @Override
     public long longValue() {
-<span class="nc" id="L169">        return (long) re;</span>
+<span class="nc" id="L175">        return (long) re;</span>
     }
 
 
@@ -179,7 +185,7 @@ public class CNumber extends Number {
      */
     @Override
     public float floatValue() {
-<span class="nc" id="L182">        return (float) re;</span>
+<span class="nc" id="L188">        return (float) re;</span>
     }
 
 
@@ -192,15 +198,45 @@ public class CNumber extends Number {
      */
     @Override
     public double doubleValue() {
-<span class="nc" id="L195">        return re;</span>
+<span class="nc" id="L201">        return re;</span>
     }
 
 
-    public static void main(String[] args) {
-<span class="nc" id="L200">        CNumber a = new CNumber(0, 1);</span>
-<span class="nc" id="L201">        CNumber b = new CNumber(1, 1);</span>
+    /**
+     * @return imaginary part of given Number as double
+     */
+    public double doubleImaginaryValue() {
+<span class="nc" id="L209">        return im;</span>
+    }
 
-<span class="nc" id="L203">        System.out.println(&quot;\n\n&quot; + a.equals(b) + &quot;\n\n&quot;);</span>
-<span class="nc" id="L204">    }</span>
+
+    /**
+     * Note: This method may result in loss of accuracy
+     *
+     * @return imaginary part of given Number as float
+     */
+    public float floatImaginaryValue() {
+<span class="nc" id="L219">        return (float) im;</span>
+    }
+
+    /**
+     * Note: This method may result in loss of accuracy
+     *
+     * @return imaginary part of given Number as int
+     */
+    public int intImaginaryValue() {
+<span class="nc" id="L228">        return (int) im;</span>
+    }
+
+
+    /**
+     * Note: This method may result in loss of accuracy
+     *
+     * @return imaginary part of given Number as long
+     */
+    public long longImaginaryValue() {
+<span class="nc" id="L238">        return (long) im;</span>
+    }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

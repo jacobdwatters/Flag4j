@@ -200,4 +200,42 @@ public class CNumber extends Number {
     public double doubleValue() {
         return re;
     }
+
+
+    /**
+     * @return imaginary part of given Number as double
+     */
+    public double doubleImaginaryValue() {
+        return im;
+    }
+
+
+    /**
+     * Note: This method may result in loss of accuracy
+     *
+     * @return imaginary part of given Number as float
+     */
+    public float floatImaginaryValue() {
+        return (float) im;
+    }
+
+    /**
+     * Note: This method may result in loss of accuracy
+     *
+     * @return imaginary part of given Number as int
+     */
+    public int intImaginaryValue() {
+        return (int) im;
+    }
+
+
+    /**
+     * Note: This method may result in loss of accuracy
+     *
+     * @return imaginary part of given Number as long
+     */
+    public long longImaginaryValue() {
+        return (long) im;
+    }
+
 }

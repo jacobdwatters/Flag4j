@@ -24,6 +24,6 @@ Flag4j,com.flag4j.io,PrintOptions,50,0,0,0,26,0,14,0,14,0
 Flag4j,com.flag4j.io,TensorWriter,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.concurrency,Configurations,15,0,0,0,5,0,3,0,3,0
 Flag4j,com.flag4j.complex_numbers,CNumberLexer,3,0,0,0,1,0,1,0,1,0
-Flag4j,com.flag4j.complex_numbers,CNumber,191,0,6,0,45,0,16,0,13,0
+Flag4j,com.flag4j.complex_numbers,CNumber,187,0,6,0,45,0,19,0,16,0
 Flag4j,com.flag4j.complex_numbers,CNumberToken,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.complex_numbers,CNumberParser,3,0,0,0,1,0,1,0,1,0
