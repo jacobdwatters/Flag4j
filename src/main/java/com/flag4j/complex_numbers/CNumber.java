@@ -49,7 +49,7 @@ public class CNumber extends Number {
      */
     public final static CNumber INV_IMAGINARY_UNIT = new CNumber(0, -1);
     /**
-     * The maximum real double value 1.7976931348623157e308.
+     * The maximum real double value 1.7976931348623157E308.
      */
     public final static CNumber MAX_REAL = new CNumber(Double.MAX_VALUE);
     /**
@@ -250,6 +250,7 @@ public class CNumber extends Number {
 
 
     /**
+     * Gets the double value of the imaginary component of this complex number.
      * @return imaginary part of given Number as double
      */
     public double doubleImaginaryValue() {

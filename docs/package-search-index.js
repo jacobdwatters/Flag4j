@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.flag4j"},{"l":"com.flag4j.complex_numbers"},{"l":"com.flag4j.concurrency"},{"l":"com.flag4j.io"},{"l":"com.flag4j.linalg"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.flag4j"},{"l":"com.flag4j.complex_numbers"},{"l":"com.flag4j.concurrency"},{"l":"com.flag4j.io"},{"l":"com.flag4j.linalg"},{"l":"com.flag4j.util"}];updateSearchResults();
