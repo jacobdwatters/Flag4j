@@ -17,11 +17,12 @@ com\flag4j\complex_numbers\CNumberToken.class
 com\flag4j\VectorPropertiesMixin.class
 com\flag4j\linalg\Decompose.class
 com\flag4j\Shape.class
+com\flag4j\util\RandomTensor.class
 com\flag4j\MatrixManipulationsMixin.class
-com\flag4j\Random.class
 com\flag4j\util\ErrorMessages.class
 com\flag4j\MatrixPropertiesMixin.class
 com\flag4j\ComplexTensorMixin.class
+com\flag4j\util\RandomCNumber.class
 com\flag4j\SparseCVector.class
 com\flag4j\Matrix.class
 com\flag4j\complex_numbers\CNumberParser.class
