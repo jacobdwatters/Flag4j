@@ -5,7 +5,7 @@ Flag4j,com.flag4j.util,ErrorMessages,7,65,0,0,2,7,1,7,1,7
 Flag4j,com.flag4j,CVector,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j,VectorOrientations,0,15,0,0,0,3,0,1,0,1
 Flag4j,com.flag4j,SparseVector,3,0,0,0,1,0,1,0,1,0
-Flag4j,com.flag4j,Shape,14,45,0,2,5,8,3,3,3,2
+Flag4j,com.flag4j,Shape,19,45,0,2,6,8,4,3,4,2
 Flag4j,com.flag4j,MatrixTypes,0,27,0,0,0,5,0,1,0,1
 Flag4j,com.flag4j,SparseMatrixFormats,21,0,0,0,4,0,1,0,1,0
 Flag4j,com.flag4j,Matrix,0,193,0,4,0,37,0,14,0,12
@@ -25,10 +25,10 @@ Flag4j,com.flag4j.linalg,CreateMatrix,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.io,TensorWriter,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.io,TensorReader,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.io,PrintOptions,7,79,0,8,2,32,1,17,1,13
-Flag4j,com.flag4j.concurrency,BuiltInOperations,49,0,0,0,10,0,6,0,6,0
+Flag4j,com.flag4j.concurrency,BuiltInOperations,100,0,0,0,17,0,11,0,11,0
 Flag4j,com.flag4j.concurrency,ConcurrentOperation,11,0,0,0,4,0,3,0,3,0
 Flag4j,com.flag4j.concurrency,Configurations,15,0,0,0,5,0,3,0,3,0
 Flag4j,com.flag4j.complex_numbers,CNumberToken,7,60,1,7,3,13,2,10,1,7
 Flag4j,com.flag4j.complex_numbers,CNumberLexer,38,292,11,57,7,75,12,29,1,6
-Flag4j,com.flag4j.complex_numbers,CNumber,1394,137,140,0,261,37,158,6,88,6
+Flag4j,com.flag4j.complex_numbers,CNumber,812,715,80,60,159,138,105,59,60,34
 Flag4j,com.flag4j.complex_numbers,CNumberParser,17,169,4,14,4,37,5,6,1,1

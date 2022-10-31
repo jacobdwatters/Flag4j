@@ -47,18 +47,28 @@ public class Shape {
 
 
     /**
+     * Get the size of the shape object in the specified dimension.
+     * @param i Dimension to get the size of.
+     * @return The size of this shape object in the specified dimension.
+     */
+    public int get(int i) {
+<span class="nc" id="L55">        return this.dims[i];</span>
+    }
+
+
+    /**
      * Converts this Shape object to a string format.
      * @return The string representation for this Shape object.
      */
     public String toString() {
-<span class="fc" id="L54">        StringBuilder result = new StringBuilder(&quot;&quot;);</span>
+<span class="fc" id="L64">        StringBuilder result = new StringBuilder(&quot;&quot;);</span>
 
-<span class="fc bfc" id="L56" title="All 2 branches covered.">        for(int d : dims) {</span>
-<span class="fc" id="L57">            result.append(d + &quot;x&quot;);</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        for(int d : dims) {</span>
+<span class="fc" id="L67">            result.append(d + &quot;x&quot;);</span>
         }
-<span class="fc" id="L59">        result.deleteCharAt(result.length()-1); // Remove excess 'x' character.</span>
+<span class="fc" id="L69">        result.deleteCharAt(result.length()-1); // Remove excess 'x' character.</span>
 
-<span class="fc" id="L61">        return result.toString();</span>
+<span class="fc" id="L71">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

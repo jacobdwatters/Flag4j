@@ -27,6 +27,7 @@ com\flag4j\concurrency\BinaryOperation.class
 com\flag4j\TensorPropertiesMixin.class
 com\flag4j\MatrixComparisonsMixin.class
 com\flag4j\VectorManipulationsMixin.class
+com\flag4j\concurrency\ZeroOperation.class
 com\flag4j\SparseMatrixFormats.class
 com\flag4j\MatrixTypes.class
 com\flag4j\Vector.class

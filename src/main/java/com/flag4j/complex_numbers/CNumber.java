@@ -144,7 +144,6 @@ public class CNumber extends Number {
     @Override
     public boolean equals(Object b) {
         boolean result = false;
-        boolean validObject = false;
 
         if(b instanceof CNumber) {
             CNumber bCopy = (CNumber) b;
@@ -189,10 +188,11 @@ public class CNumber extends Number {
      */
     @Override
     public int hashCode() {
-        final int hashPrime = 31;
-        int hash = 7;
-        hash = hashPrime*hash + Double.hashCode(this.re);
-        hash = hashPrime*hash + Double.hashCode(this.im);
+        final int hashPrime1 = 7;
+        final int hashPrime2 = 31;
+
+        int hash = hashPrime2*hashPrime1 + Double.hashCode(this.re);
+        hash = hashPrime2*hash + Double.hashCode(this.im);
         return hash;
     }
 
@@ -366,7 +366,7 @@ public class CNumber extends Number {
      * @return Product of this complex number with b.
      */
     public CNumber mult(double b) {
-        return new CNumber(this.re*b, this.re*b);
+        return new CNumber(this.re*b, this.im*b);
     }
 
 
