@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConcurrentOperation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.concurrency</a> &gt; <span class="el_source">ConcurrentOperation.java</span></div><h1>ConcurrentOperation.java</h1><pre class="source lang-java linenums">package com.flag4j.concurrency;
+
+
+import com.flag4j.TypedMatrix;
+import com.flag4j.util.ErrorMessages;
+
+
+/**
+ * A class for applying concurrent operations to matrices.
+ * @param &lt;T&gt; Type of the entries of the matrix.
+ * @param &lt;U&gt; Type of the matrix.
+ */
+public final class ConcurrentOperation&lt;T extends Number, U extends TypedMatrix&lt;T&gt;&gt; {
+
+    /**
+     * Private constructor to hide from other files.
+     */
+<span class="nc" id="L18">    private ConcurrentOperation() {</span>
+        // Hides constructor
+<span class="nc" id="L20">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Applies a closed element-wise binary operation to two matrices concurrently.
+     * @param operation Operation to apply element-wise.
+     * @param A First matrix in binary operation.
+     * @param B Second matrix in binary operation.
+     * @return The result of the element-wise binary operation
+     */
+    public U applyElementWiseConcurrent(BinaryOperation&lt;T&gt; operation, U A, U B) {
+        // TODO: Implementation
+<span class="nc" id="L33">        return null;</span>
+    }
+
+
+    /**
+     * Applies a closed element-wise unary operation to a matrix concurrently.
+     * @param operation Operation to apply element-wise.
+     * @param A Matrix in operation.
+     * @return The result of the element-wise unary operation.
+     */
+    public U applyElementWiseConcurrent(UnaryOperation&lt;T&gt; operation, U A) {
+        // TODO: Implementation
+<span class="nc" id="L45">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
