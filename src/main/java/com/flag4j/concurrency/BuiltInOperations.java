@@ -5,6 +5,10 @@ import com.flag4j.util.ErrorMessages;
 
 import java.util.Random;
 
+
+/**
+ * This class contains several built in operations for use in the {@link ConcurrentOperation}.
+ */
 public final class BuiltInOperations {
 
     private BuiltInOperations() {

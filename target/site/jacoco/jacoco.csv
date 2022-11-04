@@ -30,5 +30,5 @@ Flag4j,com.flag4j.concurrency,ConcurrentOperation,11,0,0,0,4,0,3,0,3,0
 Flag4j,com.flag4j.concurrency,Configurations,15,0,0,0,5,0,3,0,3,0
 Flag4j,com.flag4j.complex_numbers,CNumberToken,7,60,1,7,3,13,2,10,1,7
 Flag4j,com.flag4j.complex_numbers,CNumberLexer,38,292,11,57,7,75,12,29,1,6
-Flag4j,com.flag4j.complex_numbers,CNumber,812,715,80,60,159,138,105,59,60,34
+Flag4j,com.flag4j.complex_numbers,CNumber,482,1078,12,134,91,211,50,118,40,55
 Flag4j,com.flag4j.complex_numbers,CNumberParser,17,169,4,14,4,37,5,6,1,1

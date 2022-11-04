@@ -136,6 +136,15 @@ public class CNumber extends Number {
 
 
     /**
+     * Creates a copy of this complex number.
+     * @return A complex number with real and complex components equivalent to this complex number.
+     */
+    public CNumber copy() {
+        return new CNumber(this);
+    }
+
+
+    /**
      * Checks if two complex numbers are equal. That is, if both numbers have equivalent real and complex parts.
      * @param b The object to compare.
      * @return True if b is a complex number and is equivalent to this complex number in both the real and
@@ -473,6 +482,7 @@ public class CNumber extends Number {
         return new CNumber(this.re, -this.im);
     }
 
+
     /**
      * Compute a raised to the power of b. This method wraps {@link Math#pow(double, double)}
      * and returns a {@link CNumber}.
@@ -633,11 +643,22 @@ public class CNumber extends Number {
      * @return If the number is zero then this function returns zero. Otherwise, returns the number divided by its magnitude.
      */
     public static CNumber sgn(CNumber value) {
+        CNumber result;
+
         if(value.equals(CNumber.ZERO)) {
             return CNumber.ZERO;
+
+        } else if(value.im == 0) {
+            if(value.re > 0) {
+                result = new CNumber(1);
+            } else {
+                result = new CNumber(-1);
+            }
+        } else {
+            result = value.div(value.magAsDouble());
         }
 
-        return value.div(value.mag());
+        return result;
     }
 
 
@@ -685,7 +706,7 @@ public class CNumber extends Number {
 
     /**
      * Computes the complex argument function for a complex number.
-     * is computed. This method wraps is equivalent to {@link CNumber#atan2(CNumber)}. <br>
+     * is computed. This method is equivalent to {@link CNumber#atan2(CNumber)}. <br>
      * To get the result as an {@link CNumber} see {@link CNumber#argAsCNumber(CNumber)}.
      * @param num The input to the atan2 function.
      * @return The output of the atan2 function given the specified input. If the complex number is zero, then {@link Double#NaN}
@@ -1028,7 +1049,7 @@ public class CNumber extends Number {
      * - If the magnitude of this number is greater than that of <code>b</code>, then this method will return a positive number.
      */
     public int compareTo(CNumber b) {
-        if(this.mag() == b.mag()) {return 0;}
+        if(this.magAsDouble() == b.magAsDouble()) {return 0;}
         else if(this.magAsDouble() < b.magAsDouble()) {return -1;}
         else {return 1;}
     }
@@ -1049,7 +1070,8 @@ public class CNumber extends Number {
 
 
     /**
-     * Compares the real value of two numbers.
+     * Compares the real value of two numbers. This method wraps {@link Double#compareTo(Double)} which is computed
+     * with the real component of this complex number.
      *
      * @param b Number to compare to this number.
      * @return
@@ -1058,9 +1080,7 @@ public class CNumber extends Number {
      * - If the real value of this number is greater than that of <code>b</code>, then this method will return a positive number.
      */
     public int compareToReal(double b) {
-        if(this.re == b) {return 0;}
-        else if(this.re < b) {return -1;}
-        else {return 1;}
+        return Double.valueOf(this.re).compareTo(b);
     }
 
 
@@ -1271,7 +1291,8 @@ public class CNumber extends Number {
      * @return True if the real component of this number is an integer and the complex component is zero. Otherwise, returns false.
      */
     public boolean isInt() {
-        return Math.rint(re)==re && im==0;
+        boolean result = !(isInfinite() || isNaN());
+        return Math.rint(re)==re && im==0 && result;
     }
 
 
