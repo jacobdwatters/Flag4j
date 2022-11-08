@@ -1,5 +1,7 @@
 package com.flag4j.complex_numbers;
 
+import com.flag4j.util.ErrorMessages;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -491,8 +493,7 @@ public class CNumber extends Number {
      * @return a raised to the power of b.
      */
     public static CNumber pow(double a, double b) {
-        double re = Math.pow(a, b);
-        return new CNumber(re);
+        return new CNumber(Math.pow(a, b));
     }
 
 
@@ -504,11 +505,18 @@ public class CNumber extends Number {
      * @return a to the power of b.
      */
     public static CNumber pow(double a, CNumber b) {
-        // Apply a change of base
-        double logA = Math.log(a);
-        CNumber power = new CNumber(logA*b.re, logA*b.im);
+        CNumber result;
 
-        return exp(power);
+        if(b.isReal()) {
+            result = CNumber.pow(a, b.re);
+        } else {
+            // Apply a change of base
+            double logA = Math.log(a);
+            CNumber power = new CNumber(logA * b.re, logA * b.im);
+            result = exp(power);
+        }
+
+        return result;
     }
 
 
@@ -520,8 +528,19 @@ public class CNumber extends Number {
      * @return a to the power of b.
      */
     public static CNumber pow(CNumber a, CNumber b) {
-        CNumber lnB = ln(b);
-        return exp(a.mult(lnB));
+        CNumber result;
+
+        if(a.isReal()) {
+            if(b.isReal()) {
+                result = CNumber.pow(a.re, b.re);
+            } else {
+                result = CNumber.pow(a.re, b);
+            }
+        } else {
+            result = exp(b.mult(ln(a)));
+        }
+
+        return result;
     }
 
 
@@ -552,16 +571,55 @@ public class CNumber extends Number {
 
 
     /**
+     * Computes the natural logarithm of a double. For non-negative values this function is equivalent to {@link Math#log}.
+     * If the number is negative, then it is passed on as a complex value to {@link CNumber#ln(CNumber)}.
+     * @param num Input to the complex natural logarithm function.
+     * @return The principle value of the complex natural logarithm for the given input.
+     */
+    public static CNumber ln(double num) {
+        CNumber result;
+
+        if(num<0) {
+            result = CNumber.ln(new CNumber(num));
+        } else {
+            result = new CNumber(Math.log(num));
+        }
+
+        return result;
+    }
+
+
+    /**
      * Computes the complex natural logarithm of a complex number. This function is the analytic continuation of
      * the natural logarithm, that is the log base {@link Math#E e}.
      * @param num Input to the complex natural logarithm function.
      * @return The principle value of the complex natural logarithm for the given input.
      */
     public static CNumber ln(CNumber num) {
-        double re = Math.log(num.re);
+        double re = Math.log(Math.sqrt(num.re*num.re + num.im*num.im));
         double im = Math.atan2(num.im, num.re);
 
         return new CNumber(re, im);
+    }
+
+
+    /**
+     * Computes the complex logarithm base 10 of a complex number. Please note, this is <b>NOT</b> the natural logarithm.
+     * If the complex natural logarithm is desired see {@link #ln(double)}. To specify a base, see {@link #log(double, CNumber)}
+     * or {@link #log(CNumber, CNumber)}. If the argument is non-negative, then this function is equivalent to {@link Math#log(double)}.
+     * @param num Input to the complex logarithm base 10 function.
+     * @return The principle value of the complex logarithm base 10 for the given input.
+     */
+    public static CNumber log(double num) {
+        CNumber result;
+
+        if(num <= 0) {
+            result = CNumber.log(new CNumber(num));
+        } else {
+            result = new CNumber(Math.log10(num));
+        }
+
+        return result;
     }
 
 
@@ -573,11 +631,29 @@ public class CNumber extends Number {
      * @return The principle value of the complex logarithm base 10 for the given input.
      */
     public static CNumber log(CNumber num) {
-        // Using the change of base formula
-        CNumber numerator = ln(num);
-        CNumber denominator = new CNumber(Math.log(10));
+        CNumber result;
 
-        return numerator.div(denominator);
+        if(num.isReal() && num.re >=0) {
+            result = new CNumber(Math.log10(num.re));
+        } else {
+            // Using the change of base formula
+            CNumber numerator = ln(num);
+            CNumber denominator = new CNumber(Math.log(10));
+
+            result = numerator.div(denominator);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Computes the complex logarithm, with specified base, of a complex number.
+     * @param num Input to the complex logarithm function with specified base.
+     * @return The principle value of the complex logarithm, with specified base, for the given input.
+     */
+    public static CNumber log(double base, double num) {
+        return CNumber.log(new CNumber(base), new CNumber(num));
     }
 
 
@@ -587,11 +663,7 @@ public class CNumber extends Number {
      * @return The principle value of the complex logarithm, with specified base, for the given input.
      */
     public static CNumber log(double base, CNumber num) {
-        // Using the change of base formula
-        CNumber numerator = ln(num);
-        CNumber denominator = new CNumber(Math.log(10));
-
-        return numerator.div(denominator);
+        return CNumber.log(new CNumber(base), num);
     }
 
 
@@ -625,13 +697,22 @@ public class CNumber extends Number {
      * @return The principle square root of a. That is, the square root of a with positive real part.
      */
     public static CNumber sqrt(CNumber num) {
-        double mag = num.magAsDouble();
-        double factor = num.im / Math.abs(num.im);
+        CNumber result;
 
-        double re = Math.sqrt((mag + num.re)/2);
-        double im = factor*Math.sqrt((mag - num.re)/2);
+        if(num.isReal() && num.re>=0) {
+            result = new CNumber(Math.sqrt(num.re));
 
-        return new CNumber(re, im);
+        } else {
+            double mag = num.magAsDouble();
+            double factor = num.im / Math.abs(num.im);
+
+            double re = Math.sqrt((mag + num.re)/2);
+            double im = factor*Math.sqrt((mag - num.re)/2);
+
+            result = new CNumber(re, im);
+        }
+
+        return result;
     }
 
 
@@ -995,6 +1076,8 @@ public class CNumber extends Number {
      * @param n The complex number to round.
      * @return A complex number with integer real and imaginary components closest to the real and imaginary
      * components of the parameter n
+     * @throws NumberFormatException If n is {@link Double#NaN}, {@link Double#POSITIVE_INFINITY} or
+     * {@link Double#NEGATIVE_INFINITY}
      */
     public static CNumber round(CNumber n) {
         return round(n, 0);
@@ -1010,12 +1093,12 @@ public class CNumber extends Number {
      * @return The number <code>n</code> rounded to the specified
      * 		number of decimals.
      * @throws IllegalArgumentException If decimals is less than zero.
+     * @throws NumberFormatException If n is {@link Double#NaN}, {@link Double#POSITIVE_INFINITY} or
+     * {@link Double#NEGATIVE_INFINITY}
      */
     public static CNumber round(CNumber n, int decimals) {
-
         if (decimals < 0) {
-            throw new IllegalArgumentException("Number of decimals must be non-negative but got " +
-                    decimals);
+            throw new IllegalArgumentException(ErrorMessages.negValueErr(decimals));
         }
 
         double real = BigDecimal.valueOf(n.re).setScale(decimals, RoundingMode.HALF_UP).doubleValue();
@@ -1032,10 +1115,14 @@ public class CNumber extends Number {
      * 		considered "near".
      * @return Returns true if magnitude of number is less than or equal to
      * 		<code>tol</code>. Otherwise, returns false.
-     *
+     * @throws IllegalArgumentException If tol is less than 0.
      */
-    public boolean nearZero(double tol) {
-        return this.magAsDouble() <= tol;
+    public static boolean nearZero(CNumber n, double tol) {
+        if (tol < 0) {
+            throw new IllegalArgumentException(ErrorMessages.negValueErr(tol));
+        }
+
+        return n.magAsDouble() <= tol;
     }
 
 
