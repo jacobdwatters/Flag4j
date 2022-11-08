@@ -358,6 +358,6 @@ class CNumberExponentialTest {
 
     @Test
     void logBaseDoubleTest() {
-
+        // TODO:
     }
 }
