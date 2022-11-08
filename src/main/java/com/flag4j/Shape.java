@@ -47,6 +47,16 @@ public class Shape {
 
 
     /**
+     * Get the size of the shape object in the specified dimension.
+     * @param i Dimension to get the size of.
+     * @return The size of this shape object in the specified dimension.
+     */
+    public int get(int i) {
+        return this.dims[i];
+    }
+
+
+    /**
      * Converts this Shape object to a string format.
      * @return The string representation for this Shape object.
      */

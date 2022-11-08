@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Main.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">Main.java</span></div><h1>Main.java</h1><pre class="source lang-java linenums">package com.flag4j;
+
+import java.util.Random;
+
+
+/**
+ * Interface for specifying a lambda expression for an elementwiseOperation
+ */
+interface ElementWise {
+    double execute(double a, double b);
+}
+
+<span class="nc" id="L13">class operations {</span>
+    static double addOpp(double a, double b) {
+<span class="nc" id="L15">        return a+b;</span>
+    }
+}
+
+<span class="nc" id="L19">public class Main {</span>
+<span class="nc" id="L20">    static Random rng = new Random();</span>
+
+    public static Matrix applyElementWise(Matrix A, Matrix B, ElementWise opp) {
+<span class="nc" id="L23">        double[][] sum = new double[A.m][A.n];</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="nc bnc" id="L25" title="All 2 branches missed.">            for(int j=0; j&lt;sum[0].length; j++) {</span>
+<span class="nc" id="L26">                sum[i][j] = opp.execute(A.entries[i][j], B.entries[i][j]);</span>
+            }
+        }
+<span class="nc" id="L29">        return new Matrix(sum);</span>
+    }
+
+    public static Matrix add(Matrix A, Matrix B) {
+<span class="nc" id="L33">        double[][] sum = new double[A.m][A.n];</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">            for(int j=0; j&lt;sum[0].length; j++) {</span>
+<span class="nc" id="L36">                sum[i][j] = A.entries[i][j] + B.entries[i][j];</span>
+//                sum[i][j] = Double.sum(A.entries[i][j], B.entries[i][j]);
+            }
+        }
+<span class="nc" id="L40">        return new Matrix(sum);</span>
+    }
+
+    public static Matrix getRandom(int m, int n) {
+<span class="nc" id="L44">        double[][] rand = new double[m][n];</span>
+
+<span class="nc bnc" id="L46" title="All 2 branches missed.">        for(int i=0; i&lt;m; i++) {</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">            for(int j=0; j&lt;n; j++) {</span>
+<span class="nc" id="L48">                rand[i][j] = rng.nextDouble()*1000;</span>
+            }
+        }
+
+<span class="nc" id="L52">        return new Matrix(rand);</span>
+    }
+
+    static void printMat(Matrix A) {
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        for(int i=0; i&lt;A.m; i++) {</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">            for(int j=0; j&lt;A.n; j++) {</span>
+<span class="nc" id="L58">                System.out.print(A.entries[i][j]);</span>
+
+<span class="nc bnc" id="L60" title="All 2 branches missed.">                if(j != A.n-1) {</span>
+<span class="nc" id="L61">                    System.out.print(&quot;, &quot;);</span>
+                }
+            }
+
+<span class="nc" id="L65">            System.out.println();</span>
+        }
+<span class="nc" id="L67">    }</span>
+
+    static void checkEq(Matrix A, Matrix B) {
+<span class="nc" id="L70">        boolean eq = true;</span>
+
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        for(int i=0; i&lt;A.m; i++) {</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">            for(int j=0; j&lt;A.n; j++) {</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">                if(A.entries[i][j] != B.entries[i][j]) {</span>
+<span class="nc" id="L75">                    eq = false;</span>
+                }
+            }
+        }
+
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if(eq) {</span>
+<span class="nc" id="L81">            System.out.println(&quot;Results Match!&quot;);</span>
+        } else {
+<span class="nc" id="L83">            System.err.println(&quot;ERROR: Results do not match.&quot;);</span>
+        }
+<span class="nc" id="L85">    }</span>
+
+    public static void main(String[] args) {
+<span class="nc" id="L88">        ElementWise add = (double a, double b) -&gt; a+b;</span>
+<span class="nc" id="L89">        final int numRows = 14000;</span>
+<span class="nc" id="L90">        final int numCols = 14000;</span>
+
+//        Matrix A = new Matrix(new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
+//        Matrix B = new Matrix(new double[][]{{9, 8, 7}, {6, 5, 4}, {3, 2, 1}});
+<span class="nc" id="L94">        Matrix A = getRandom(numRows, numCols);</span>
+<span class="nc" id="L95">        Matrix B = getRandom(numRows, numCols);</span>
+
+
+<span class="nc" id="L98">        final long startTime1 = System.currentTimeMillis();</span>
+<span class="nc" id="L99">        Matrix C1 = applyElementWise(A, B, add);</span>
+<span class="nc" id="L100">        final long endTime1 = System.currentTimeMillis();</span>
+<span class="nc" id="L101">        final long eps1 = endTime1-startTime1;</span>
+
+<span class="nc" id="L103">        final long startTime2 = System.currentTimeMillis();</span>
+<span class="nc" id="L104">        Matrix C2 = add(A, B);</span>
+<span class="nc" id="L105">        final long endTime2 = System.currentTimeMillis();</span>
+<span class="nc" id="L106">        final long eps2 = endTime2-startTime2;</span>
+
+<span class="nc" id="L108">        checkEq(C1, C2);</span>
+<span class="nc" id="L109">        System.out.println(String.format(&quot;Lambda Time: %d ms&quot;, eps1));</span>
+<span class="nc" id="L110">        System.out.println(String.format(&quot;Standard Time: %d ms&quot;, eps2));</span>
+
+
+//        System.out.println(&quot;C1:\n&quot;);
+//        printMat(C1);
+//        System.out.println(&quot;\n&quot;);
+//
+//        System.out.println(&quot;C2:\n&quot;);
+//        printMat(C2);
+//        System.out.println(&quot;\n&quot;);
+<span class="nc" id="L120">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

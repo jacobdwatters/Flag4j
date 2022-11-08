@@ -4,8 +4,9 @@ import com.flag4j.util.ErrorMessages;
 
 /**
  * Stores the type and shape of matrix object.
+ * @param <T> The type of the entry of this matrix.
  */
-abstract class TypedMatrix<T> {
+public abstract class TypedMatrix<T> {
 
     /**
      * The type of this matrix.

@@ -4,8 +4,9 @@ import com.flag4j.util.ErrorMessages;
 
 /**
  * Stores the type and shape of matrix object.
+ * @param &lt;T&gt; The type of the entry of this matrix.
  */
-abstract class TypedMatrix&lt;T&gt; {
+public abstract class TypedMatrix&lt;T&gt; {
 
     /**
      * The type of this matrix.
@@ -32,17 +33,17 @@ abstract class TypedMatrix&lt;T&gt; {
      * @param n The number of columns in this matrix.
      * @throws IllegalArgumentException if either m or n is negative.
      */
-<span class="fc" id="L35">    protected TypedMatrix(MatrixTypes type, int m, int n) {</span>
-<span class="fc bfc" id="L36" title="All 4 branches covered.">        if(m&lt;0 || n&lt;0) {</span>
-<span class="fc" id="L37">            throw new IllegalArgumentException(</span>
-<span class="fc" id="L38">                    ErrorMessages.negativeDimErrMsg(this.getShape())</span>
+<span class="fc" id="L36">    protected TypedMatrix(MatrixTypes type, int m, int n) {</span>
+<span class="fc bfc" id="L37" title="All 4 branches covered.">        if(m&lt;0 || n&lt;0) {</span>
+<span class="fc" id="L38">            throw new IllegalArgumentException(</span>
+<span class="fc" id="L39">                    ErrorMessages.negativeDimErrMsg(this.getShape())</span>
             );
         }
 
-<span class="fc" id="L42">        this.m = m;</span>
-<span class="fc" id="L43">        this.n = n;</span>
-<span class="fc" id="L44">        this.type = type;</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L43">        this.m = m;</span>
+<span class="fc" id="L44">        this.n = n;</span>
+<span class="fc" id="L45">        this.type = type;</span>
+<span class="fc" id="L46">    }</span>
 
 
     /**
@@ -50,7 +51,7 @@ abstract class TypedMatrix&lt;T&gt; {
      * @return A shape object describing the
      */
     public Shape getShape() {
-<span class="fc" id="L53">        return new Shape(m, n);</span>
+<span class="fc" id="L54">        return new Shape(m, n);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
