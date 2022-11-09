@@ -393,6 +393,9 @@ public class CNumber extends Number {
         if (this.equals(ZERO) && !b.equals(ZERO)) {
             quotient = new CNumber();
         }
+        else if(b.isReal() && !b.equals(ZERO)) {
+            quotient = new CNumber(this.re/b.re, this.im/b.re);
+        }
         else {
             double divisor = b.re*b.re + b.im*b.im;
 
@@ -596,10 +599,19 @@ public class CNumber extends Number {
      * @return The principle value of the complex natural logarithm for the given input.
      */
     public static CNumber ln(CNumber num) {
-        double re = Math.log(Math.sqrt(num.re*num.re + num.im*num.im));
-        double im = Math.atan2(num.im, num.re);
+        CNumber result;
 
-        return new CNumber(re, im);
+        if(num.isReal() && num.re >=0) {
+            result = new CNumber(Math.log(num.re));
+
+        } else {
+            double re = Math.log(Math.sqrt(num.re*num.re + num.im*num.im));
+            double im = Math.atan2(num.im, num.re);
+
+            result = new CNumber(re, im);
+        }
+
+        return result;
     }
 
 
@@ -687,7 +699,15 @@ public class CNumber extends Number {
      * @return The principle square root of a.
      */
     public static CNumber sqrt(double num) {
-        return new CNumber(Math.sqrt(num));
+        CNumber result;
+
+        if(num >=0) {
+            result = new CNumber(Math.sqrt(num));
+        } else {
+            result = new CNumber(0, Math.sqrt(-num));
+        }
+
+        return result;
     }
 
 
@@ -701,6 +721,9 @@ public class CNumber extends Number {
 
         if(num.isReal() && num.re>=0) {
             result = new CNumber(Math.sqrt(num.re));
+
+        } else if(num.isReal() && num.re<0) {
+            result = new CNumber(0, Math.sqrt(-num.re));
 
         } else {
             double mag = num.magAsDouble();
