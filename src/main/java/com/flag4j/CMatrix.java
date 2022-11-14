@@ -125,6 +125,23 @@ public class CMatrix extends TypedMatrix<CNumber[][]> {
      * Creates a real dense matrix which is a copy of a specified matrix.
      * @param A The matrix defining the entries for this matrix.
      */
+    public CMatrix(Matrix A) {
+        super(MatrixTypes.MATRIX, A.entries.length, A.entries[0].length);
+
+        this.entries = new CNumber[m][n];
+
+        for(int i=0; i<m; i++) {
+            for(int j=0; j<n; j++) {
+                this.entries[i][j] = new CNumber(A.entries[i][j]);
+            }
+        }
+    }
+
+
+    /**
+     * Creates a real dense matrix which is a copy of a specified matrix.
+     * @param A The matrix defining the entries for this matrix.
+     */
     public CMatrix(CMatrix A) {
         super(MatrixTypes.MATRIX, A.entries.length, A.entries[0].length);
 
