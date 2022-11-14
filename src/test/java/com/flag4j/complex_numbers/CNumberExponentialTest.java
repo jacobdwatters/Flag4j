@@ -97,6 +97,13 @@ class CNumberExponentialTest {
         actResult = CNumber.pow(a, bComplex);
         Assertions.assertTrue(Double.isNaN(actResult.re));
         Assertions.assertTrue(Double.isNaN(actResult.im));
+
+        // ------------ Sub-case 4 ---------------
+        a = 4.545;
+        bComplex = new CNumber(2.34);
+        expResult = new CNumber(Math.pow(a, 2.34));
+        actResult = CNumber.pow(a, bComplex);
+        Assertions.assertEquals(expResult, actResult);
     }
 
 

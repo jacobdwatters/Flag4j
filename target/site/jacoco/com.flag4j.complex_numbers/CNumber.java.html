@@ -510,8 +510,8 @@ public class CNumber extends Number {
     public static CNumber pow(double a, CNumber b) {
         CNumber result;
 
-<span class="pc bpc" id="L513" title="1 of 2 branches missed.">        if(b.isReal()) {</span>
-<span class="nc" id="L514">            result = CNumber.pow(a, b.re);</span>
+<span class="fc bfc" id="L513" title="All 2 branches covered.">        if(b.isReal()) {</span>
+<span class="fc" id="L514">            result = CNumber.pow(a, b.re);</span>
         } else {
             // Apply a change of base
 <span class="fc" id="L517">            double logA = Math.log(a);</span>
@@ -854,7 +854,7 @@ public class CNumber extends Number {
      * @return The trigonometric sine function evaluated at the specified value.
      */
     public static CNumber sin(double num) {
-<span class="nc" id="L857">        return new CNumber(Math.sin(num));</span>
+<span class="fc" id="L857">        return new CNumber(Math.sin(num));</span>
     }
 
 
@@ -864,10 +864,10 @@ public class CNumber extends Number {
      * @return The trigonometric sine function evaluated at the specified value.
      */
     public static CNumber sin(CNumber num) {
-<span class="nc" id="L867">        double re = Math.sin(num.re)*Math.cosh(num.im);</span>
-<span class="nc" id="L868">        double im = Math.cos(num.re)*Math.sinh(num.im);</span>
+<span class="fc" id="L867">        double re = Math.sin(num.re)*Math.cosh(num.im);</span>
+<span class="fc" id="L868">        double im = Math.cos(num.re)*Math.sinh(num.im);</span>
 
-<span class="nc" id="L870">        return new CNumber(re, im);</span>
+<span class="fc" id="L870">        return new CNumber(re, im);</span>
     }
 
 
@@ -926,7 +926,7 @@ public class CNumber extends Number {
      * @return The trigonometric cosine function evaluated at the specified value.
      */
     public static CNumber cos(double num) {
-<span class="nc" id="L929">        return new CNumber(Math.cos(num));</span>
+<span class="fc" id="L929">        return new CNumber(Math.cos(num));</span>
     }
 
 
@@ -936,10 +936,10 @@ public class CNumber extends Number {
      * @return The trigonometric cosine function evaluated at the specified value.
      */
     public static CNumber cos(CNumber num) {
-<span class="nc" id="L939">        double re = Math.cos(num.re)*Math.cosh(num.im);</span>
-<span class="nc" id="L940">        double im = Math.sin(num.re)*Math.sinh(num.im);</span>
+<span class="fc" id="L939">        double re = Math.cos(num.re)*Math.cosh(num.im);</span>
+<span class="fc" id="L940">        double im = Math.sin(num.re)*Math.sinh(num.im);</span>
 
-<span class="nc" id="L942">        return new CNumber(re, im);</span>
+<span class="fc" id="L942">        return new CNumber(re, im);</span>
     }
 
 
@@ -997,7 +997,7 @@ public class CNumber extends Number {
      * @return The trigonometric tangent function evaluated at the specified value.
      */
     public static CNumber tan(double num) {
-<span class="nc" id="L1000">        return new CNumber(Math.tan(num));</span>
+<span class="fc" id="L1000">        return new CNumber(Math.tan(num));</span>
     }
 
 
@@ -1007,12 +1007,12 @@ public class CNumber extends Number {
      * @return The trigonometric tangent function evaluated at the specified value.
      */
     public static CNumber tan(CNumber num) {
-<span class="nc" id="L1010">        CNumber numerator = new CNumber(Math.tan(num.re),</span>
-<span class="nc" id="L1011">                Math.tanh(num.im));</span>
-<span class="nc" id="L1012">        CNumber denominator = new CNumber(1,</span>
-<span class="nc" id="L1013">                -Math.tan(num.re)*Math.tanh(num.im));</span>
+<span class="fc" id="L1010">        CNumber numerator = new CNumber(Math.tan(num.re),</span>
+<span class="fc" id="L1011">                Math.tanh(num.im));</span>
+<span class="fc" id="L1012">        CNumber denominator = new CNumber(1,</span>
+<span class="fc" id="L1013">                -Math.tan(num.re)*Math.tanh(num.im));</span>
 
-<span class="nc" id="L1015">        return numerator.div(denominator);</span>
+<span class="fc" id="L1015">        return numerator.div(denominator);</span>
     }
 
 
