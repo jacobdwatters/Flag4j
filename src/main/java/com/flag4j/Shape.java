@@ -60,6 +60,11 @@ public class Shape {
     }
 
 
+    public int length() {
+        return dims.length;
+    }
+
+
     /**
      * Checks if an object is equal to this shape.
      * @param b Object to compare with this shape.

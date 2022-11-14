@@ -23,4 +23,31 @@ public final class ShapeChecks {
             );
         }
     }
+
+
+    /**
+     * Checks if two {@link Shape} objects satisfy the requirements of matrix multiplication.
+     * @param shape1 First shape.
+     * @param shape2 Second shape.
+     * @throws IllegalArgumentException If shapes do not satisfy the requirements of matrix multiplication.
+     */
+    public static void matMultShapeCheck(Shape shape1, Shape shape2) {
+        boolean pass = true;
+
+        if(shape1.length()==2 && shape2.length()==2) {
+            // Ensure the number of columns in matrix one is equal to the number of rows in matrix 2.
+            if(shape1.dims[1] != shape2.dims[0]) {
+                pass = false;
+            }
+
+        } else {
+            pass = false;
+        }
+
+        if(!pass) { // Check if the shapes pass the test.
+            throw new IllegalArgumentException(
+                    ErrorMessages.matMultShapeErrMsg(shape1, shape2)
+            );
+        }
+    }
 }
