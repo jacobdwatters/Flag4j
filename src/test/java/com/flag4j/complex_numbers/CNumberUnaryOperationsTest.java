@@ -228,7 +228,7 @@ class CNumberUnaryOperationsTest {
 
         // ---------- Sub-case 2 ------------
         a = new CNumber(-2.445);
-        expValue = new CNumber(-0.408997955010225);
+        expValue = new CNumber(-0.40899795501022496);
         value = a.multInv();
         Assertions.assertEquals(expValue, value);
 

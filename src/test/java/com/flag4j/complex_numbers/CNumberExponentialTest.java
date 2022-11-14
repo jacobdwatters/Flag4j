@@ -97,6 +97,13 @@ class CNumberExponentialTest {
         actResult = CNumber.pow(a, bComplex);
         Assertions.assertTrue(Double.isNaN(actResult.re));
         Assertions.assertTrue(Double.isNaN(actResult.im));
+
+        // ------------ Sub-case 4 ---------------
+        a = 4.545;
+        bComplex = new CNumber(2.34);
+        expResult = new CNumber(Math.pow(a, 2.34));
+        actResult = CNumber.pow(a, bComplex);
+        Assertions.assertEquals(expResult, actResult);
     }
 
 
@@ -284,7 +291,7 @@ class CNumberExponentialTest {
 
         // ------------ Sub-case 6 ---------------
         aComplex = new CNumber(-8.5464, -9.72352);
-        expResult = new CNumber(1.1121211923316041, -0.9953395541661018);
+        expResult = new CNumber(1.1121211923316043, -0.9953395541661019);
         actResult = CNumber.log(aComplex);
         Assertions.assertEquals(expResult, actResult);
     }
@@ -318,7 +325,7 @@ class CNumberExponentialTest {
 
         // ------------ Sub-case 5 ---------------
         a = -984.593465;
-        expResult = new CNumber( 2.993256948922154, 1.3643763538418412);
+        expResult = new CNumber( 2.9932569489221543, 1.3643763538418412);
         actResult = CNumber.log(a);
         Assertions.assertEquals(expResult, actResult);
     }
@@ -329,7 +336,7 @@ class CNumberExponentialTest {
         // ------------ Sub-case 1 ------------
         a = 10;
         b = 12.23423;
-        expResult = new CNumber(1.0875766408496943);
+        expResult = new CNumber(1.0875766408496945);
         actResult = CNumber.log(a, b);
         Assertions.assertEquals(expResult, actResult);
 
@@ -358,6 +365,43 @@ class CNumberExponentialTest {
 
     @Test
     void logBaseDoubleTest() {
-        // TODO:
+        // ------------ Sub-case 1 ------------
+        a = 2;
+        bComplex = new CNumber(14.32, 785.234981);
+        expResult = new CNumber(9.617220494534935,2.2398731644571033);
+        actResult = CNumber.log(a, bComplex);
+        Assertions.assertEquals(expResult, actResult);
+
+        // ------------ Sub-case 2 ------------
+        a = -42;
+        bComplex = new CNumber(0.23423, -18.343);
+        expResult = new CNumber(0.25081712428118125,-0.6276618980737457);
+        actResult = CNumber.log(a, bComplex);
+        Assertions.assertEquals(expResult, actResult);
+
+        // ------------ Sub-case 3 ------------
+        a = -23.123;
+        bComplex = new CNumber(-123.34, 895);
+        expResult = new CNumber(1.3551072366805246,-0.8117131305115636);
+        actResult = CNumber.log(a, bComplex);
+        Assertions.assertEquals(expResult, actResult);
+    }
+
+
+    @Test
+    void logBaseTest() {
+        // ------------ Sub-case 1 ------------
+        aComplex = new CNumber(93.23487, -6.32465);
+        bComplex = new CNumber(-345.2, 14.556);
+        expResult = new CNumber(1.277698990918928, 0.7021597301463025);
+        actResult = CNumber.log(aComplex, bComplex);
+        Assertions.assertEquals(expResult, actResult);
+
+        // ------------ Sub-case 2 ------------
+        aComplex = new CNumber(12.1843);
+        bComplex = new CNumber(0);
+        expResult = new CNumber(Double.NEGATIVE_INFINITY);
+        actResult = CNumber.log(aComplex, bComplex);
+        Assertions.assertEquals(expResult, actResult);
     }
 }

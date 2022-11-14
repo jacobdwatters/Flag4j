@@ -8,6 +8,14 @@
     <artifactId>Flag4j</artifactId>
     <version>v0.0.1-beta</version>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub jacobdwatters Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/jacobdwatters/Flag4j</url>
+        </repository>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.junit.platform</groupId>
