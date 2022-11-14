@@ -1,5 +1,9 @@
 package com.flag4j;
 
+import com.flag4j.complex_numbers.CNumber;
+
+import java.util.Arrays;
+
 /**
  * An object to store the shape of a tensor. Note that the array holding the shape of the tensor is mutable.
  */
@@ -53,6 +57,48 @@ public class Shape {
      */
     public int get(int i) {
         return this.dims[i];
+    }
+
+
+    /**
+     * Checks if an object is equal to this shape.
+     * @param b Object to compare with this shape.
+     * @return True if d is a Shape object and equal to this shape.
+     */
+    @Override
+    public boolean equals(Object b) {
+        boolean result = true;
+
+        if(b instanceof Shape) {
+            Shape bCopy = (Shape) b;
+
+            if(this.dims.length == bCopy.dims.length) {
+                for(int i=0; i<dims.length; i++) {
+                    if(dims[i] != bCopy.dims[i]) {
+                        result = false;
+                        break;
+                    }
+                }
+            } else {
+                result = false;
+            }
+
+        } else {
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Generates the hashcode for this shape object. This is computed by passing the dims array of this shape object to
+     * {@link java.util.Arrays#hashCode(int[])}.
+     * @return The hashcode for this array object.
+     */
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(this.dims);
     }
 
 

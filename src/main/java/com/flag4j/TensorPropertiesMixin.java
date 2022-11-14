@@ -17,7 +17,7 @@ interface TensorPropertiesMixin<T, U, V, W, Y, X extends Number> {
      * @return The shape, contained in an array, of this matrix. The length of the array will be equal to the rank of the
      * tensor.
      */
-    int[] shape();
+    Shape shape();
 
 
     /**
