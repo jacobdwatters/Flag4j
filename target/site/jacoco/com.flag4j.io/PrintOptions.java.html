@@ -7,11 +7,17 @@ import com.flag4j.util.ErrorMessages;
  */
 public abstract class PrintOptions {
 
+    public static final int DEFAULT_PADDING = 2;
+    public static final int DEFAULT_MAX_ROWS = 10;
+    public static final int DEFAULT_MAX_COLS = 10;
+    public static final int DEFAULT_PRECISION = 8;
+    public static final boolean DEFAULT_CENTER = true;
+
     /**
      * Hide default constructor.
      */
-<span class="nc" id="L13">    private PrintOptions() {</span>
-<span class="nc" id="L14">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+<span class="nc" id="L19">    private PrintOptions() {</span>
+<span class="nc" id="L20">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
     }
 
     /**
@@ -21,7 +27,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 2
      */
-<span class="fc" id="L24">    private static int padding = 2;</span>
+<span class="fc" id="L30">    private static int padding = DEFAULT_PADDING;</span>
 
 
     /**
@@ -33,7 +39,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 10
      */
-<span class="fc" id="L36">    private static int maxRows = 10;</span>
+<span class="fc" id="L42">    private static int maxRows = DEFAULT_MAX_ROWS;</span>
 
 
     /**
@@ -45,7 +51,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 10
      */
-<span class="fc" id="L48">    private static int maxColumns = 10;</span>
+<span class="fc" id="L54">    private static int maxColumns = DEFAULT_MAX_COLS;</span>
 
 
     /**
@@ -54,15 +60,7 @@ public abstract class PrintOptions {
      * &lt;br&gt;&lt;br&gt;
      * Default Value: 8.
      */
-<span class="fc" id="L57">    private static int precision = 8;</span>
-
-
-    /**
-     * A flag for displaying values in scientific notation.
-     * &lt;br&gt;&lt;br&gt;
-     * Default value: false.
-     */
-<span class="fc" id="L65">    private static boolean useScientific = false;</span>
+<span class="fc" id="L63">    private static int precision = DEFAULT_PRECISION;</span>
 
 
     /**
@@ -70,7 +68,7 @@ public abstract class PrintOptions {
      * &lt;br&gt;&lt;br&gt;
      * Default value: true.
      */
-<span class="fc" id="L73">    private static boolean center = true;</span>
+<span class="fc" id="L71">    private static boolean center = DEFAULT_CENTER;</span>
 
 
     /**
@@ -78,8 +76,8 @@ public abstract class PrintOptions {
      * @param center Flag for centering values within its column.
      */
     public static void setCenter(boolean center) {
-<span class="fc" id="L81">        PrintOptions.center = center;</span>
-<span class="fc" id="L82">    }</span>
+<span class="fc" id="L79">        PrintOptions.center = center;</span>
+<span class="fc" id="L80">    }</span>
 
 
     /**
@@ -87,7 +85,7 @@ public abstract class PrintOptions {
      * @return The current value of the center flag.
      */
     public static boolean getCenter() {
-<span class="fc" id="L90">        return center;</span>
+<span class="fc" id="L88">        return center;</span>
     }
 
 
@@ -96,12 +94,12 @@ public abstract class PrintOptions {
      * @param precision The precision to use.
      */
     public static void setPrecision(int precision) {
-<span class="fc bfc" id="L99" title="All 2 branches covered.">        if(precision &lt; 0) {</span>
-<span class="fc" id="L100">            throw new IllegalArgumentException(ErrorMessages.negValueErr(precision));</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if(precision &lt; 0) {</span>
+<span class="fc" id="L98">            throw new IllegalArgumentException(ErrorMessages.negValueErr(precision));</span>
         }
 
-<span class="fc" id="L103">        PrintOptions.precision = precision;</span>
-<span class="fc" id="L104">    }</span>
+<span class="fc" id="L101">        PrintOptions.precision = precision;</span>
+<span class="fc" id="L102">    }</span>
 
 
     /**
@@ -109,25 +107,7 @@ public abstract class PrintOptions {
      * @return The current printing precision.
      */
     public static int getPrecision() {
-<span class="fc" id="L112">        return precision;</span>
-    }
-
-
-    /**
-     * Sets the flag for printing in scientific notation.
-     * @param useScientific Flag to use for printing scientific notation.
-     */
-    public static void setUseScientific(boolean useScientific) {
-<span class="fc" id="L121">        PrintOptions.useScientific = useScientific;</span>
-<span class="fc" id="L122">    }</span>
-
-
-    /**
-     * Gets the current flag for printing in scientific notation.
-     * @return The current flag for weather to print values in scientific notation or not.
-     */
-    public static boolean getUseScientific() {
-<span class="fc" id="L130">        return useScientific;</span>
+<span class="fc" id="L110">        return precision;</span>
     }
 
 
@@ -136,7 +116,7 @@ public abstract class PrintOptions {
      * @return The current maximum number of columns to print.
      */
     public static int getMaxColumns() {
-<span class="fc" id="L139">        return maxColumns;</span>
+<span class="fc" id="L119">        return maxColumns;</span>
     }
 
 
@@ -145,12 +125,12 @@ public abstract class PrintOptions {
      * @param maxColumns
      */
     public static void setMaxColumns(int maxColumns) {
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        if(maxColumns &lt; 0) {</span>
-<span class="fc" id="L149">            throw new IllegalArgumentException(ErrorMessages.negValueErr(maxColumns));</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if(maxColumns &lt; 0) {</span>
+<span class="fc" id="L129">            throw new IllegalArgumentException(ErrorMessages.negValueErr(maxColumns));</span>
         }
 
-<span class="fc" id="L152">        PrintOptions.maxColumns = maxColumns;</span>
-<span class="fc" id="L153">    }</span>
+<span class="fc" id="L132">        PrintOptions.maxColumns = maxColumns;</span>
+<span class="fc" id="L133">    }</span>
 
 
     /**
@@ -158,7 +138,7 @@ public abstract class PrintOptions {
      * @return The maximum number of rows to print.
      */
     public static int getMaxRows() {
-<span class="fc" id="L161">        return maxRows;</span>
+<span class="fc" id="L141">        return maxRows;</span>
     }
 
 
@@ -167,12 +147,12 @@ public abstract class PrintOptions {
      * @param maxRows The new maximum number of rows to print.
      */
     public static void setMaxRows(int maxRows) {
-<span class="fc bfc" id="L170" title="All 2 branches covered.">        if(maxRows &lt; 0) {</span>
-<span class="fc" id="L171">            throw new IllegalArgumentException(ErrorMessages.negValueErr(maxRows));</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        if(maxRows &lt; 0) {</span>
+<span class="fc" id="L151">            throw new IllegalArgumentException(ErrorMessages.negValueErr(maxRows));</span>
         }
 
-<span class="fc" id="L174">        PrintOptions.maxRows = maxRows;</span>
-<span class="fc" id="L175">    }</span>
+<span class="fc" id="L154">        PrintOptions.maxRows = maxRows;</span>
+<span class="fc" id="L155">    }</span>
 
 
     /**
@@ -180,7 +160,7 @@ public abstract class PrintOptions {
      * @return The current padding amount for columns.
      */
     public static int getPadding() {
-<span class="fc" id="L183">        return padding;</span>
+<span class="fc" id="L163">        return padding;</span>
     }
 
 
@@ -189,11 +169,23 @@ public abstract class PrintOptions {
      * @param padding New padding amount for the columns.
      */
     public static void setPadding(int padding) {
-<span class="fc bfc" id="L192" title="All 2 branches covered.">        if(padding &lt; 0) {</span>
-<span class="fc" id="L193">            throw new IllegalArgumentException(ErrorMessages.negValueErr(padding));</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if(padding &lt; 0) {</span>
+<span class="fc" id="L173">            throw new IllegalArgumentException(ErrorMessages.negValueErr(padding));</span>
         }
 
-<span class="fc" id="L196">        PrintOptions.padding = padding;</span>
-<span class="fc" id="L197">    }</span>
+<span class="fc" id="L176">        PrintOptions.padding = padding;</span>
+<span class="fc" id="L177">    }</span>
+
+
+    /**
+     * Resets all print options to their default values.
+     */
+    public static void resetAll() {
+<span class="nc" id="L184">        padding = DEFAULT_PADDING;</span>
+<span class="nc" id="L185">        maxColumns = DEFAULT_MAX_COLS;</span>
+<span class="nc" id="L186">        maxRows = DEFAULT_MAX_ROWS;</span>
+<span class="nc" id="L187">        precision = DEFAULT_PRECISION;</span>
+<span class="nc" id="L188">        center = DEFAULT_CENTER;</span>
+<span class="nc" id="L189">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

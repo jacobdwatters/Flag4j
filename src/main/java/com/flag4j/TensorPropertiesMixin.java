@@ -12,21 +12,6 @@ package com.flag4j;
  */
 interface TensorPropertiesMixin<T, U, V, W, Y, X extends Number> {
 
-    /**
-     * Gets the shape of a tensor.
-     * @return The shape, contained in an array, of this matrix. The length of the array will be equal to the rank of the
-     * tensor.
-     */
-    Shape shape();
-
-
-    /**
-     * Checks if this tensor is empty. That is, if this tensor contains no elements. This is equivalent to <code>numRows==0 and
-     * numCols==0</code>.
-     * @return True if this tensor is empty (i.e. contains no elements). Otherwise, returns false.
-     */
-    boolean isEmpty();
-
 
     /**
      * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.

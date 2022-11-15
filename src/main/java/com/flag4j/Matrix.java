@@ -1,9 +1,14 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.io.PrintOptions;
 import com.flag4j.util.ShapeChecks;
+import com.flag4j.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Real Dense Matrix.
@@ -125,7 +130,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
     @Override
     public Matrix add(Matrix B) {
         // Ensure shapes are correct for this operation.
-        ShapeChecks.equalShapeCheck(this.shape(), B.shape());
+        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());
         double[][] sum = new double[this.m][this.n];
 
         for(int i=0; i<this.m; i++) {
@@ -181,7 +186,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
     @Override
     public Matrix sub(Matrix B) {
         // Ensure shapes are correct for this operation.
-        ShapeChecks.equalShapeCheck(this.shape(), B.shape());
+        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());
         double[][] difference = new double[this.m][this.n];
 
         for(int i=0; i<this.m; i++) {
@@ -1318,97 +1323,26 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
 
     /**
-     * Computes the eigenvalues and associated eigenvectors for a square matrix.
-     * <br><br>
-     * Also see<br>
-     * - {@link #eigVecs() eigVecs()} to compute just the eigenvectors. <br>
-     * - {@link #eigVals() eigVals()} to compute just the eigenvalues. This is recommended if the eigenvectors are not needed as it will be faster.
+     * Get the row of this matrix at the specified index.
      *
-     * @return Returns an array of two matrices. The first matrix is a column vector which contains the eigenvalues of A (not necessarily ordered but grouped by equality), repeated per there multiplicity.
-     * The columns of the second matrix are the eigenvectors of A associated with each eigenvalue in the first matrix. For repeated eigenvalues, each associated eigenvector in the second matrix is
-     * an associated eigenvector.
-     * @throws IllegalArgumentException If matrix is not square.
-     * @throws IllegalArgumentException If this matrix is not square.
+     * @param i Index of row to get.
+     * @return The specified row of this matrix.
      */
     @Override
-    public CMatrix[] eig() {
-        return new CMatrix[0];
+    public Double[] getRow(int i) {
+        return new Double[0];
     }
 
 
     /**
-     * Computes the right eigenvectors of a matrix. This is done by first computing the Schur decomposition.
-     * <br><br>
-     * Also see<br>
-     * - {@link #eig() eig()} to compute both eigenvalues and eigenvectors.<br>
-     * - {@link #eigVals() eigVals()} to compute just the eigenvalues.
+     * Get the column of this matrix at the specified index.
      *
-     * @return Returns a matrix containing the eigenvectors of this matrix as its column vectors.
-     * @throws IllegalArgumentException If this matrix is not square.
+     * @param j Index of column to get.
+     * @return The specified column of this matrix.
      */
     @Override
-    public CMatrix eigVecs() {
-        return null;
-    }
-
-
-    /**
-     * Computes the left eigenvectors of a matrix. This is done by first computing the Schur decomposition.
-     * <br><br>
-     * Also see<br>
-     * - {@link #eig() eig()} to compute both eigenvalues and eigenvectors.<br>
-     * - {@link #eigVals() eigVals()} to compute just the eigenvalues.
-     *
-     * @return Returns a matrix containing the left eigenvectors of this matrix as its column vectors.
-     * @throws IllegalArgumentException If this matrix is not square.
-     */
-    @Override
-    public CMatrix leftEigVecs() {
-        return null;
-    }
-
-
-    /**
-     * Computes the eigenvalues of a matrix. This is done by first computing the Schur decomposition.
-     * <br><br>
-     * Also see<br>
-     * - {@link #eig() eig()} to compute both eigenvalues and eigenvectors.<br>
-     * - {@link #eigVecs() eigVecs()} to compute just the eigenvectors.
-     *
-     * @return Returns a column vector containing the eigenvalues of this matrix.
-     * @throws IllegalArgumentException If this matrix is not square.
-     */
-    @Override
-    public CMatrix eigVals() {
-        return null;
-    }
-
-
-    /**
-     * Converts a square matrix to a similar matrix in upper Hessenberg form. A matrix is in upper Hessenberg form if all entries below the first sub-diagonal are
-     * zero. Two n-by-n matrices A and B are similar if there exists an invertible n-by-n matrix P, such that B=P<sup>-1</sup>AP. Similar matrices share many
-     * properties including having the same eigenvalues.
-     *
-     * @return A matrix in upper Hessenberg form which is similar to this matrix.
-     * @throws IllegalArgumentException If this matrix is not square.
-     */
-    @Override
-    public Matrix hessu() {
-        return null;
-    }
-
-
-    /**
-     * Converts a square matrix to a similar matrix in upper Hessenberg form. A matrix is in upper Hessenberg form if all entries below the first sub-diagonal are
-     * zero. Two n-by-n matrices A and B are similar if there exists an invertible n-by-n matrix P, such that B=P<sup>-1</sup>AP. Similar matrices share many
-     * properties including having the same eigenvalues.
-     *
-     * @return An array of length two containing in order, a matrix similar to this matrix in upper Hessenberg form (H) and the householder reflector matrix (V). That is [H, V]
-     * @throws IllegalArgumentException If this matrix is not square.
-     */
-    @Override
-    public Matrix[] hessuV() {
-        return new Matrix[0];
+    public Double[] getCol(int j) {
+        return new Double[0];
     }
 
 
@@ -1727,30 +1661,6 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
 
     /**
-     * Gets the shape of a tensor.
-     *
-     * @return The shape, contained in an array, of this matrix. The length of the array will be equal to the rank of the
-     * tensor.
-     */
-    @Override
-    public Shape shape() {
-        return new Shape(this.m, this.n);
-    }
-
-
-    /**
-     * Checks if this tensor is empty. That is, if this tensor contains no elements. This is equivalent to <code>numRows==0 and
-     * numCols==0</code>.
-     *
-     * @return True if this tensor is empty (i.e. contains no elements). Otherwise, returns false.
-     */
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-
-    /**
      * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
      *
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
@@ -1853,5 +1763,699 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
     @Override
     public Double infNorm() {
         return null;
+    }
+
+
+    /**
+     * Checks if this matrix is the identity matrix.
+     *
+     * @return True if this matrix is the identity matrix. Otherwise, returns false.
+     */
+    @Override
+    public boolean isI() {
+        return false;
+    }
+
+
+    /**
+     * Checks if two matrices are equal (element-wise.)
+     *
+     * @param B Second matrix in the equality.
+     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
+     */
+    @Override
+    public boolean equals(Matrix B) {
+        return false;
+    }
+
+
+    /**
+     * Checks if two matrices are equal (element-wise.)
+     *
+     * @param B Second matrix in the equality.
+     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
+     */
+    @Override
+    public boolean equals(SparseMatrix B) {
+        return false;
+    }
+
+
+    /**
+     * Checks if two matrices are equal (element-wise.)
+     *
+     * @param B Second matrix in the equality.
+     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
+     */
+    @Override
+    public boolean equals(CMatrix B) {
+        return false;
+    }
+
+
+    /**
+     * Checks if two matrices are equal (element-wise.)
+     *
+     * @param B Second matrix in the equality.
+     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
+     */
+    @Override
+    public boolean equals(SparseCMatrix B) {
+        return false;
+    }
+
+
+    /**
+     * Checks if matrices are inverses of each other.
+     *
+     * @param B Second matrix.
+     * @return True if matrix B is an inverse of this matrix. Otherwise, returns false. Otherwise, returns false.
+     */
+    @Override
+    public boolean isInv(Matrix B) {
+        return false;
+    }
+
+
+    /**
+     * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
+     * in the reshaped matrix.
+     *
+     * @param shape An array of length 2 containing, in order, the number of rows and the number of columns for the
+     *              reshaped matrix.
+     * @return A matrix which is equivalent to this matrix but with the specified dimensions.
+     * @throws IllegalArgumentException If either,<br>
+     *                                  - The shape array contains negative indices.<br>
+     *                                  - This matrix cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public Matrix reshape(int[] shape) {
+        return null;
+    }
+
+
+    /**
+     * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
+     * * in the reshaped matrix.
+     *
+     * @param numRows The number of rows in the reshaped matrix.
+     * @param numCols The number of columns in the reshaped matrix.
+     * @return A matrix which is equivalent to this matrix but with the specified dimensions.
+     */
+    @Override
+    public Matrix reshape(int numRows, int numCols) {
+        return null;
+    }
+
+
+    /**
+     * Flattens a matrix to have a single row. To flatten matrix to a single column, see {@link #flatten(int)}.
+     *
+     * @return The flat version of this matrix.
+     */
+    @Override
+    public Matrix flatten() {
+        return null;
+    }
+
+
+    /**
+     * Flattens a matrix along a specified axis. Also see {@link #flatten()}.
+     *
+     * @param axis - If axis=0, flattens to a row vector.<br>
+     *             - If axis=1, flattens to a column vector.
+     * @return The flat version of this matrix.
+     */
+    @Override
+    public Matrix flatten(int axis) {
+        return null;
+    }
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+     */
+    @Override
+    public void setValues(double[][] values) {
+
+    }
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+     */
+    @Override
+    public void setValues(int[][] values) {
+
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public void setCol(double[] values, int colIndex) {
+
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public void setCol(int[] values, int colIndex) {
+
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the column which is to be set.
+     * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public void setRow(double[] values, int rowIndex) {
+
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the column which is to be set.
+     * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public void setRow(int[] values, int rowIndex) {
+
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values. Note that the orientation of the values
+     * vector is <b>NOT</b> taken into account.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public void setCol(Vector values, int colIndex) {
+
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values. Note that the orientation of the values
+     * vector is <b>NOT</b> taken into account.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public void setCol(SparseVector values, int colIndex) {
+
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values. Note that the orientation of the values
+     * vector is <b>NOT</b> taken into account.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the row which is to be set.
+     * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public void setRows(Vector values, int rowIndex) {
+
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values. Note that the orientation of the values
+     * vector is <b>NOT</b> taken into account.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the row which is to be set.
+     * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public void setRows(SparseVector values, int rowIndex) {
+
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public void setSlice(double[][] values, int rowStart, int colStart) {
+
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public void setSlice(int[][] values, int rowStart, int colStart) {
+
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public void setSlice(Matrix values, int rowStart, int colStart) {
+
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public void setSlice(SparseMatrix values, int rowStart, int colStart) {
+
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSliceCopy(Matrix values, int rowStart, int colStart) {
+        return null;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
+        return null;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public CMatrix setSliceCopy(CMatrix values, int rowStart, int colStart) {
+        return null;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public SparseCMatrix setSliceCopy(SparseCMatrix values, int rowStart, int colStart) {
+        return null;
+    }
+
+
+    /**
+     * Removes a specified row from this matrix.
+     *
+     * @param rowIndex Index of the row to remove from this matrix.
+     */
+    @Override
+    public void removeRow(int rowIndex) {
+
+    }
+
+
+    /**
+     * Removes a specified set of rows from this matrix.
+     *
+     * @param rowIndices The indices of the rows to remove from this matrix.
+     */
+    @Override
+    public void removeRows(int... rowIndices) {
+
+    }
+
+
+    /**
+     * Removes a specified column from this matrix.
+     *
+     * @param colIndex Index of the column to remove from this matrix.
+     */
+    @Override
+    public void removeCol(int colIndex) {
+
+    }
+
+
+    /**
+     * Removes a specified set of columns from this matrix.
+     *
+     * @param colIndices Indices of the columns to remove from this matrix.
+     */
+    @Override
+    public void removeCols(int... colIndices) {
+
+    }
+
+
+    /**
+     * Generates a lower triangular matrix from this matrix. That is, copies all values of this matrix from the principle
+     * diagonal and below. The rest of the values in the resultant matrix will be zero.
+     *
+     * @return A lower triangular matrix whose non-zero values are specified by the values in this matrix at the same indices.
+     */
+    @Override
+    public Matrix tril() {
+        return null;
+    }
+
+
+    /**
+     * Generates a pseudo-lower triangular matrix from this matrix. That is, copies all values of this matrix from the
+     * kth diagonal and below. The rest of the values in the resultant matrix will be zero.
+     *
+     * @param k The diagonal for which to copy values at and below relative to the principle diagonal.<br>
+     *          - If k=0, then all values in and below the principle diagonal will be copied.<br>
+     *          - If k=-a, then all values at and below the diagonal which is 'a' diagonals to the left will be copied. <br>
+     *          - If k=a, then all values at and below the diagonal which is 'a' diagonals to the right will be copied.
+     * @return A lower triangular matrix whose non-zero values are specified by the values in this matrix at the same indices.
+     * @throws IllegalArgumentException If k is out of the range of this matrix. That is, if k specifies a diagonal which
+     *                                  does not exist in this matrix.
+     */
+    @Override
+    public Matrix tril(int k) {
+        return null;
+    }
+
+
+    /**
+     * Generates an upper triangular matrix from this matrix. That is, copies all values of this matrix from the principle
+     * diagonal and above. The rest of the values in the resultant matrix will be zero.
+     *
+     * @return An upper triangular matrix whose non-zero values are specified by the values in this matrix at the same indices.
+     */
+    @Override
+    public Matrix triu() {
+        return null;
+    }
+
+
+    /**
+     * Generates a pseudo-upper triangular matrix from this matrix. That is, copies all values of this matrix from the
+     * kth diagonal and above. The rest of the values in the resultant matrix will be zero.
+     *
+     * @param k The diagonal for which to copy values at and below relative to the principle diagonal.<br>
+     *          - If k=0, then all values in and above the principle diagonal will be copied.<br>
+     *          - If k=-a, then all values at and above the diagonal which is 'a' diagonals to the left will be copied. <br>
+     *          - If k=a, then all values at and above the diagonal which is 'a' diagonals to the right will be copied.
+     * @return An upper triangular matrix whose non-zero values are specified by the values in this matrix at the same indices.
+     * @throws IllegalArgumentException If k is out of the range of this matrix. That is, if k specifies a diagonal which
+     *                                  does not exist in this matrix.
+     */
+    @Override
+    public Matrix triu(int k) {
+        return null;
+    }
+
+
+    /**
+     * Generates a diagonal matrix from this matrix. This is, copies all values of this matrix from the principle diagonal. The
+     * rest of the values in the resultant matrix will be zero.
+     *
+     * @return A diagonal matrix whose non-zero entries are specified by the values in this matrix.
+     */
+    @Override
+    public Matrix diag() {
+        return null;
+    }
+
+
+    /**
+     * Generates a diagonal matrix from this matrix. This is, copies all values of this matrix from the principle diagonal
+     * and the k diagonals to the left and k diagonals to the right.
+     * The
+     * rest of the values in the resultant matrix will be zero.
+     *
+     * @param k The number of diagonals in each direction (left or right) to include in the resultant matrix.
+     * @return A diagonal matrix whose non-zero entries are specified by the values in this matrix.
+     * @throws IllegalArgumentException - If k is negative.<br>
+     *                                  - If k is out of range of this matrix.
+     */
+    @Override
+    public Matrix diag(int k) {
+        return null;
+    }
+
+
+    /**
+     * Rounds this matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
+     * be rounded independently.
+     *
+     * @return A copy of this matrix with each entry rounded to the nearest whole number.
+     */
+    @Override
+    public Matrix round() {
+        return null;
+    }
+
+
+    /**
+     * Rounds a matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
+     * be rounded independently.
+     *
+     * @param precision The number of decimal places to round to. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If <code>precision</code> is negative.
+     */
+    @Override
+    public Matrix round(int precision) {
+        return null;
+    }
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
+     * independently. By default, the values must be within 1.0*E^-12 of zero. To specify a threshold value see
+     * {@link #roundToZero(double)}.
+     *
+     * @return A copy of this matrix with rounded values.
+     */
+    @Override
+    public Matrix roundToZero() {
+        return null;
+    }
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
+     * independently.
+     *
+     * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
+     *                  will be rounded to zero. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If threshold is negative.
+     */
+    @Override
+    public Matrix roundToZero(double threshold) {
+        return null;
+    }
+
+
+    /**
+     * Checks if this tensor only contains zeros.
+     *
+     * @return True if this tensor only contains zeros. Otherwise, returns false.
+     */
+    @Override
+    public boolean isZero() {
+        return false;
+    }
+
+
+    /**
+     * Checks if this tensor only contains ones.
+     *
+     * @return True if this tensor only contains oens. Otherwise, returns false.
+     */
+    @Override
+    public boolean isOnes() {
+        return false;
+    }
+
+
+    /**
+     * Sets an index of this tensor to a specified value.
+     *
+     * @param value   Value to set.
+     * @param indices The indices of this tensor for which to set the value.
+     */
+    @Override
+    public void set(double value, int... indices) {
+
+    }
+
+
+    /**
+     * Formats matrix contents as a string.
+     *
+     * @return Matrix as string
+     */
+    public String toString() {
+        String result = "[";
+
+        // Get the current print options.
+        int MAX_ROWS = PrintOptions.getMaxRows();
+        int MAX_COLUMNS = PrintOptions.getMaxColumns();
+        int PADDING = PrintOptions.getPadding();
+        int PRECISION = PrintOptions.getPrecision();
+
+
+        if(!this.isEmpty()) {
+            int max=0, colWidth;
+            List<Integer> maxList = new ArrayList<>();
+
+            for(int j=0; j<this.n; j++) { // Get the maximum length string representation for each column.
+                List<Double> values = Arrays.asList(this.getCol(j));
+                List<String> contents = new ArrayList<>(values.size());
+
+                for(Double v : values) {
+                    contents.add(String.valueOf(v));
+                }
+
+                Optional<Integer> value = contents.stream().map(String::length).max(Integer::compareTo);
+
+                if(value.isPresent()) {
+                    max = value.get();
+                }
+
+                maxList.add(max);
+            }
+
+            StringBuilder resultBuilder = new StringBuilder("[");
+            for(int i = 0; i < m; i++) {
+                if(i >= MAX_ROWS && i < m-1) {
+                    resultBuilder.append("  ...\n ");
+                    i = m-1;
+                }
+
+                resultBuilder.append(" [");
+
+                for(int j = 0; j < n; j++) {
+
+                    if(j >= MAX_COLUMNS && j < n-1) {
+                        colWidth = 3+PADDING;
+                        resultBuilder.append(String.format("%-" + colWidth + "s", StringUtils.center("...", colWidth)));
+                        colWidth = maxList.get(n-1)+PADDING;
+                        resultBuilder.append(String.format("%-" + (colWidth) + "s", StringUtils.center(String.valueOf(entries[i][n - 1]).toString(), colWidth)));
+                        break;
+                    }
+                    else {
+                        colWidth = maxList.get(j)+PADDING;
+                        resultBuilder.append(String.format("%-" + (colWidth) + "s", StringUtils.center(
+                                CNumber.round(new CNumber(entries[i][j]), PRECISION).toString(), colWidth))
+                        );
+                    }
+                }
+                resultBuilder.append("]\n ");
+            }
+            result = resultBuilder.toString();
+
+            result = result.substring(0, result.length()-2) + " ]";
+        }
+        else {
+            result += "[]]";
+        }
+
+        return result;
     }
 }

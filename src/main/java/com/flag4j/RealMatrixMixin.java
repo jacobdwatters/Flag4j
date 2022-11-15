@@ -8,7 +8,9 @@ package com.flag4j;
 public interface RealMatrixMixin<T, W> extends
         RealTensorMixin<T, W>,
         MatrixPropertiesMixin<T, Matrix, SparseMatrix, W, T, Double>,
-        MatrixOperationsMixin<T, Matrix, SparseMatrix, W, T, Double> {
+        MatrixOperationsMixin<T, Matrix, SparseMatrix, W, T, Double>,
+        MatrixComparisonsMixin<T, Matrix, SparseMatrix, W, T, Double>,
+        MatrixManipulationsMixin<T, Matrix, SparseMatrix, W, T, Double> {
 
     /**
      * Checks if a matrix is symmetric. That is, if the matrix is equal to its transpose.

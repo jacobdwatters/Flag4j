@@ -1,5 +1,5 @@
 package com.flag4j;
-
+import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 
 /**
@@ -52,5 +52,64 @@ public abstract class TypedMatrix<T> {
      */
     public Shape getShape() {
         return new Shape(m, n);
+    }
+
+
+    /**
+     * Checks if this tensor is empty. That is, if this tensor contains no elements. This is equivalent to <code>numRows==0 and
+     * numCols==0</code>.
+     * @return True if this tensor is empty (i.e. contains no elements). Otherwise, returns false.
+     */
+    public boolean isEmpty() {
+        return m==0 && n==0;
+    }
+
+
+    /**
+     * Checks if two matrices have the same shape.
+     * @param A First matrix to compare.
+     * @param B Second matrix to compare.
+     * @return True if matrix A and matrix B have the same shape. Otherwise, returns false.
+     */
+    public static boolean sameShape(TypedMatrix A, TypedMatrix B) {
+        return A.getShape().equals(B.getShape());
+    }
+
+
+    /**
+     * Checks if two matrices have the same length along a specified axis.
+     * @param A First matrix to compare.
+     * @param B Second matrix to compare.
+     * @param axis The axis along which to compare the lengths of the two matrices.<br>
+     *             - If axis=0, then the number of rows is compared.<br>
+     *             - If axis=1, then the number of columns is compared.
+     * @return True if matrix A and Matrix B have the same length along the specified axis. Otherwise, returns false.
+     * @throws IllegalArgumentException If axis is not zero or one.
+     */
+    public static boolean sameLength(TypedMatrix A, TypedMatrix B, int axis) {
+        if(axis!=Axis2D.row() || axis!=Axis2D.col()) {
+            // Then this is an unspecified axis
+            throw new IllegalArgumentException(
+                    ErrorMessages.axisErr(axis, Axis2D.allAxes())
+            );
+        }
+
+        boolean result = false;
+
+        if(axis == Axis2D.row()) {
+            result = A.m == B.m;
+
+        } else if(axis == Axis2D.col()) {
+            result = A.n == B.n;
+        }
+
+        return result;
+    }
+
+
+    public static void main(String[] args) {
+        CMatrix A = new CMatrix(5, 5);
+        Matrix B = new Matrix(5, 5);
+        System.out.println(Matrix.sameShape(A, B));
     }
 }

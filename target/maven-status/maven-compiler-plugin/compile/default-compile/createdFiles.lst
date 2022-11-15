@@ -1,11 +1,14 @@
 com\flag4j\RealMatrixMixin.class
+com\flag4j\util\StringUtils.class
 com\flag4j\TensorManipulationsMixin.class
 com\flag4j\linalg\SubSpace.class
 com\flag4j\ComplexMatrixMixin.class
 com\flag4j\CMatrix.class
+com\flag4j\linalg\Hessenburg.class
 com\flag4j\concurrency\ConcurrentOperation.class
 com\flag4j\SparseCMatrix.class
 com\flag4j\concurrency\BuiltInOperations.class
+com\flag4j\util\ShapeChecks.class
 com\flag4j\complex_numbers\CNumberToken.class
 com\flag4j\MatrixPropertiesMixin.class
 com\flag4j\util\RandomCNumber.class

@@ -138,10 +138,20 @@ public class CNumber extends Number {
 
 
     /**
-     * Creates a copy of this complex number.
+     * Creates a copy of this complex number. Same as {@link #clone()}.
      * @return A complex number with real and complex components equivalent to this complex number.
      */
     public CNumber copy() {
+        return new CNumber(this);
+    }
+
+
+    /**
+     * Creates a copy of this complex number. Same as {@link #copy()}.
+     * @return A complex number with real and complex components equivalent to this complex number.
+     */
+    @Override
+    public CNumber clone() {
         return new CNumber(this);
     }
 

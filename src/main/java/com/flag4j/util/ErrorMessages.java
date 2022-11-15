@@ -3,6 +3,8 @@ package com.flag4j.util;
 
 import com.flag4j.Shape;
 
+import java.util.Arrays;
+
 /**
  * Contains error messages for common errors which may occur.
  */
@@ -40,7 +42,14 @@ public abstract class ErrorMessages {
      * Error message for attempted instantiation of a utility class.
      */
     private static final String UTILITY_CLASS_ERR = "Utility class cannot be instantiated";
+    /**
+     * Error message for a negative value when a non-negative was expected.
+     */
     private static final String NEG_VALUE_ERR = "Expecting value to be non-negative but got %s";
+    /**
+     * Error message for disallowed axis.
+     */
+    private static final String AXIS_ERR = "Got an axis of %s but was expecting one of %s";
 
 
     /**
@@ -88,7 +97,7 @@ public abstract class ErrorMessages {
     /**
      * Gets an error message for an attempted construction of a tensor with a negative dimension.
      * @param shape Shape of the tensor.
-     * @return
+     * @return An error message for negative dimension.
      */
     public static String negativeDimErrMsg(Shape shape) {
         return String.format(NEG_DIM_ERR, shape);
@@ -97,13 +106,28 @@ public abstract class ErrorMessages {
 
     /**
      * Gets an error message for an attempted instantiation of a utility class.
-     * @return
+     * @return An error message for the attempted instantiation of a utility class;
      */
     public static String utilityClassErrMsg() {return UTILITY_CLASS_ERR;}
 
 
+    /**
+     * Gets an error message for a negative value when a non-negative was expected.
+     * @param value Negative value.
+     * @return An error message for a negative value.
+     */
     public static String negValueErr(double value) {
         return String.format(NEG_VALUE_ERR, value);
+    }
+
+
+    /**
+     * Gets an error message for a disallowed axis.
+     * @param axis Negative value.
+     * @return An error message for a disallowed axis.
+     */
+    public static String axisErr(int axis, int[] allowedAxes) {
+        return String.format(NEG_VALUE_ERR, axis, Arrays.toString(allowedAxes));
     }
 }
 

@@ -7,6 +7,12 @@ import com.flag4j.util.ErrorMessages;
  */
 public abstract class PrintOptions {
 
+    public static final int DEFAULT_PADDING = 2;
+    public static final int DEFAULT_MAX_ROWS = 10;
+    public static final int DEFAULT_MAX_COLS = 10;
+    public static final int DEFAULT_PRECISION = 8;
+    public static final boolean DEFAULT_CENTER = true;
+
     /**
      * Hide default constructor.
      */
@@ -21,7 +27,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 2
      */
-    private static int padding = 2;
+    private static int padding = DEFAULT_PADDING;
 
 
     /**
@@ -33,7 +39,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 10
      */
-    private static int maxRows = 10;
+    private static int maxRows = DEFAULT_MAX_ROWS;
 
 
     /**
@@ -45,7 +51,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 10
      */
-    private static int maxColumns = 10;
+    private static int maxColumns = DEFAULT_MAX_COLS;
 
 
     /**
@@ -54,15 +60,7 @@ public abstract class PrintOptions {
      * <br><br>
      * Default Value: 8.
      */
-    private static int precision = 8;
-
-
-    /**
-     * A flag for displaying values in scientific notation.
-     * <br><br>
-     * Default value: false.
-     */
-    private static boolean useScientific = false;
+    private static int precision = DEFAULT_PRECISION;
 
 
     /**
@@ -70,7 +68,7 @@ public abstract class PrintOptions {
      * <br><br>
      * Default value: true.
      */
-    private static boolean center = true;
+    private static boolean center = DEFAULT_CENTER;
 
 
     /**
@@ -110,24 +108,6 @@ public abstract class PrintOptions {
      */
     public static int getPrecision() {
         return precision;
-    }
-
-
-    /**
-     * Sets the flag for printing in scientific notation.
-     * @param useScientific Flag to use for printing scientific notation.
-     */
-    public static void setUseScientific(boolean useScientific) {
-        PrintOptions.useScientific = useScientific;
-    }
-
-
-    /**
-     * Gets the current flag for printing in scientific notation.
-     * @return The current flag for weather to print values in scientific notation or not.
-     */
-    public static boolean getUseScientific() {
-        return useScientific;
     }
 
 
@@ -194,5 +174,17 @@ public abstract class PrintOptions {
         }
 
         PrintOptions.padding = padding;
+    }
+
+
+    /**
+     * Resets all print options to their default values.
+     */
+    public static void resetAll() {
+        padding = DEFAULT_PADDING;
+        maxColumns = DEFAULT_MAX_COLS;
+        maxRows = DEFAULT_MAX_ROWS;
+        precision = DEFAULT_PRECISION;
+        center = DEFAULT_CENTER;
     }
 }

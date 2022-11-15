@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Matrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">Matrix.java</span></div><h1>Matrix.java</h1><pre class="source lang-java linenums">package com.flag4j;
 
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.io.PrintOptions;
+import com.flag4j.util.ShapeChecks;
+import com.flag4j.util.StringUtils;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Real Dense Matrix.
  */
-public class Matrix extends TypedMatrix&lt;double[][]&gt; {
+public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixMixin&lt;Matrix, CMatrix&gt; {
 
     /**
      * Creates an empty real dense matrix.
      */
     public Matrix() {
-<span class="fc" id="L14">        super(MatrixTypes.MATRIX, 0, 0);</span>
-<span class="fc" id="L15">        entries = new double[this.m][this.n];</span>
-<span class="fc" id="L16">    }</span>
+<span class="fc" id="L22">        super(MatrixTypes.MATRIX, 0, 0);</span>
+<span class="fc" id="L23">        entries = new double[this.m][this.n];</span>
+<span class="fc" id="L24">    }</span>
 
 
     /**
@@ -22,9 +30,9 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; {
      * @throws IllegalArgumentException if size negative.
      */
     public Matrix(int size) {
-<span class="fc" id="L25">        super(MatrixTypes.MATRIX, size, size);</span>
-<span class="fc" id="L26">        this.entries = new double[this.m][this.n];</span>
-<span class="fc" id="L27">    }</span>
+<span class="fc" id="L33">        super(MatrixTypes.MATRIX, size, size);</span>
+<span class="fc" id="L34">        this.entries = new double[this.m][this.n];</span>
+<span class="fc" id="L35">    }</span>
 
 
     /**
@@ -34,13 +42,13 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; {
      * @throws IllegalArgumentException if size negative.
      */
     public Matrix(int size, double value) {
-<span class="fc" id="L37">        super(MatrixTypes.MATRIX, size, size);</span>
-<span class="fc" id="L38">        this.entries = new double[this.m][this.n];</span>
-<span class="fc" id="L39">        double[] row = new double[this.n];</span>
+<span class="fc" id="L45">        super(MatrixTypes.MATRIX, size, size);</span>
+<span class="fc" id="L46">        this.entries = new double[this.m][this.n];</span>
+<span class="fc" id="L47">        double[] row = new double[this.n];</span>
 
-<span class="fc" id="L41">        Arrays.fill(row, value);</span>
-<span class="fc" id="L42">        Arrays.fill(this.entries, row);</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L49">        Arrays.fill(row, value);</span>
+<span class="fc" id="L50">        Arrays.fill(this.entries, row);</span>
+<span class="fc" id="L51">    }</span>
 
 
     /**
@@ -50,9 +58,9 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; {
      * @throws IllegalArgumentException if either m or n is negative.
      */
     public Matrix(int m, int n) {
-<span class="fc" id="L53">        super(MatrixTypes.MATRIX, m, n);</span>
-<span class="fc" id="L54">        this.entries = new double[this.m][this.n];</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L61">        super(MatrixTypes.MATRIX, m, n);</span>
+<span class="fc" id="L62">        this.entries = new double[this.m][this.n];</span>
+<span class="fc" id="L63">    }</span>
 
 
     /**
@@ -63,13 +71,13 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; {
      * @throws IllegalArgumentException if either m or n is negative.
      */
     public Matrix(int m, int n, double value) {
-<span class="fc" id="L66">        super(MatrixTypes.MATRIX, m, n);</span>
-<span class="fc" id="L67">        this.entries = new double[this.m][this.n];</span>
-<span class="fc" id="L68">        double[] row = new double[this.n];</span>
+<span class="fc" id="L74">        super(MatrixTypes.MATRIX, m, n);</span>
+<span class="fc" id="L75">        this.entries = new double[this.m][this.n];</span>
+<span class="fc" id="L76">        double[] row = new double[this.n];</span>
 
-<span class="fc" id="L70">        Arrays.fill(row, value);</span>
-<span class="fc" id="L71">        Arrays.fill(this.entries, row);</span>
-<span class="fc" id="L72">    }</span>
+<span class="fc" id="L78">        Arrays.fill(row, value);</span>
+<span class="fc" id="L79">        Arrays.fill(this.entries, row);</span>
+<span class="fc" id="L80">    }</span>
 
 
     /**
@@ -77,11 +85,11 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; {
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(double[][] entries) {
-<span class="fc" id="L80">        super(MatrixTypes.MATRIX, entries.length, entries[0].length);</span>
-<span class="fc" id="L81">        this.entries = Arrays.stream(entries)</span>
-<span class="fc" id="L82">                .map(double[]::clone)</span>
-<span class="fc" id="L83">                .toArray(double[][]::new);</span>
-<span class="fc" id="L84">    }</span>
+<span class="fc" id="L88">        super(MatrixTypes.MATRIX, entries.length, entries[0].length);</span>
+<span class="fc" id="L89">        this.entries = Arrays.stream(entries)</span>
+<span class="fc" id="L90">                .map(double[]::clone)</span>
+<span class="fc" id="L91">                .toArray(double[][]::new);</span>
+<span class="fc" id="L92">    }</span>
 
 
     /**
@@ -89,15 +97,15 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; {
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(int[][] entries) {
-<span class="fc" id="L92">        super(MatrixTypes.MATRIX, entries.length, entries[0].length);</span>
-<span class="fc" id="L93">        this.entries = new double[m][n];</span>
+<span class="fc" id="L100">        super(MatrixTypes.MATRIX, entries.length, entries[0].length);</span>
+<span class="fc" id="L101">        this.entries = new double[m][n];</span>
 
-<span class="fc bfc" id="L95" title="All 2 branches covered.">        for(int i=0; i&lt;m; i++) {</span>
-<span class="fc bfc" id="L96" title="All 2 branches covered.">            for(int j=0; j&lt;n; j++) {</span>
-<span class="fc" id="L97">                this.entries[i][j] = entries[i][j];</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        for(int i=0; i&lt;m; i++) {</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">            for(int j=0; j&lt;n; j++) {</span>
+<span class="fc" id="L105">                this.entries[i][j] = entries[i][j];</span>
             }
         }
-<span class="fc" id="L100">    }</span>
+<span class="fc" id="L108">    }</span>
 
 
     /**
@@ -105,10 +113,1731 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; {
      * @param A The matrix defining the entries for this matrix.
      */
     public Matrix(Matrix A) {
-<span class="fc" id="L108">        super(MatrixTypes.MATRIX, A.entries.length, A.entries[0].length);</span>
-<span class="fc" id="L109">        this.entries = Arrays.stream(A.entries)</span>
-<span class="fc" id="L110">                .map(double[]::clone)</span>
-<span class="fc" id="L111">                .toArray(double[][]::new);</span>
-<span class="fc" id="L112">    }</span>
+<span class="fc" id="L116">        super(MatrixTypes.MATRIX, A.entries.length, A.entries[0].length);</span>
+<span class="fc" id="L117">        this.entries = Arrays.stream(A.entries)</span>
+<span class="fc" id="L118">                .map(double[]::clone)</span>
+<span class="fc" id="L119">                .toArray(double[][]::new);</span>
+<span class="fc" id="L120">    }</span>
+
+
+    /**
+     * Computes the element-wise addition between two matrices.
+     *
+     * @param B Second matrix in the addition.
+     * @return The result of adding the matrix B to this matrix element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public Matrix add(Matrix B) {
+        // Ensure shapes are correct for this operation.
+<span class="nc" id="L133">        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());</span>
+<span class="nc" id="L134">        double[][] sum = new double[this.m][this.n];</span>
+
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        for(int i=0; i&lt;this.m; i++) {</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">            for(int j=0; j&lt;this.n; j++) {</span>
+<span class="nc" id="L138">                sum[i][j] = this.entries[i][j] + B.entries[i][j];</span>
+            }
+        }
+
+<span class="nc" id="L142">        return new Matrix(sum);</span>
+    }
+
+
+    /**
+     * Adds specified value to all entries of this tensor.
+     *
+     * @param a Value to add to all entries of this tensor.
+     * @return The result of adding the specified value to each entry of this tensor.
+     */
+    @Override
+    public Matrix add(double a) {
+<span class="nc" id="L154">        double[][] sum = new double[this.m][this.n];</span>
+
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        for(int i=0; i&lt;this.m; i++) {</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">            for(int j=0; j&lt;this.n; j++) {</span>
+<span class="nc" id="L158">                sum[i][j] = this.entries[i][j] + a;</span>
+            }
+        }
+
+<span class="nc" id="L162">        return new Matrix(sum);</span>
+    }
+
+
+    /**
+     * Adds specified value to all entries of this tensor.
+     *
+     * @param a Value to add to all entries of this tensor.
+     * @return The result of adding the specified value to each entry of this tensor.
+     */
+    @Override
+    public CMatrix add(CNumber a) {
+        // TODO: Must add constructors for CMatrix before this method can be implemented.
+<span class="nc" id="L175">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between two tensors of the same rank.
+     *
+     * @param B Second tensor in element-wise subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public Matrix sub(Matrix B) {
+        // Ensure shapes are correct for this operation.
+<span class="nc" id="L189">        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());</span>
+<span class="nc" id="L190">        double[][] difference = new double[this.m][this.n];</span>
+
+<span class="nc bnc" id="L192" title="All 2 branches missed.">        for(int i=0; i&lt;this.m; i++) {</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">            for(int j=0; j&lt;this.n; j++) {</span>
+<span class="nc" id="L194">                difference[i][j] = this.entries[i][j] - B.entries[i][j];</span>
+            }
+        }
+
+<span class="nc" id="L198">        return new Matrix(difference);</span>
+    }
+
+
+    /**
+     * Adds specified value to all entries of this tensor.
+     *
+     * @param a Value to add to all entries of this tensor.
+     * @return The result of adding the specified value to each entry of this tensor.
+     */
+    @Override
+    public Matrix sub(double a) {
+<span class="nc" id="L210">        double[][] difference = new double[this.m][this.n];</span>
+
+<span class="nc bnc" id="L212" title="All 2 branches missed.">        for(int i=0; i&lt;this.m; i++) {</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">            for(int j=0; j&lt;this.n; j++) {</span>
+<span class="nc" id="L214">                difference[i][j] = this.entries[i][j] - a;</span>
+            }
+        }
+
+<span class="nc" id="L218">        return new Matrix(difference);</span>
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor.
+     *
+     * @param a Value to subtract from all entries of this tensor.
+     * @return The result of subtracting the specified value from each entry of this tensor.
+     */
+    @Override
+    public CMatrix sub(CNumber a) {
+<span class="nc" id="L230">        return null;</span>
+    }
+
+
+    /**
+     * Computes scalar multiplication of a tensor.
+     *
+     * @param factor Scalar value to multiply with tensor.
+     * @return The result of multiplying this tensor by the specified scalar.
+     */
+    @Override
+    public Matrix scalMult(double factor) {
+<span class="nc" id="L242">        double[][] product = new double[this.m][this.n];</span>
+
+<span class="nc bnc" id="L244" title="All 2 branches missed.">        for(int i=0; i&lt;this.m; i++) {</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">            for(int j=0; j&lt;this.n; j++) {</span>
+<span class="nc" id="L246">                product[i][j] = factor*this.entries[i][j];</span>
+            }
+        }
+
+<span class="nc" id="L250">        return new Matrix(product);</span>
+    }
+
+
+    /**
+     * Computes scalar multiplication of a tensor.
+     *
+     * @param factor Scalar value to multiply with tensor.
+     * @return The result of multiplying this tensor by the specified scalar.
+     */
+    @Override
+    public CMatrix scalMult(CNumber factor) {
+<span class="nc" id="L262">        return null;</span>
+    }
+
+
+    /**
+     * Computes the scalar division of a tensor.
+     *
+     * @param divisor The scaler value to divide tensor by.
+     * @return The result of dividing this tensor by the specified scalar.
+     * @throws ArithmeticException If divisor is zero.
+     */
+    @Override
+    public Matrix scalDiv(double divisor) {
+<span class="nc" id="L275">        return null;</span>
+    }
+
+
+    /**
+     * Computes the scalar division of a tensor.
+     *
+     * @param divisor The scaler value to divide tensor by.
+     * @return The result of dividing this tensor by the specified scalar.
+     * @throws ArithmeticException If divisor is zero.
+     */
+    @Override
+    public CMatrix scalDiv(CNumber divisor) {
+<span class="nc" id="L288">        return null;</span>
+    }
+
+
+    /**
+     * Sums together all entries in the tensor.
+     *
+     * @return The sum of all entries in this tensor.
+     */
+    @Override
+    public Double sum() {
+<span class="nc" id="L299">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise square root of a tensor.
+     *
+     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
+     * the principle square root i.e. the square root with positive real part.
+     */
+    @Override
+    public CMatrix sqrt() {
+<span class="nc" id="L311">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
+     * be computed.
+     *
+     * @return The result of applying an element-wise absolute value/magnitude to this tensor.
+     */
+    @Override
+    public Matrix abs() {
+<span class="nc" id="L323">        return null;</span>
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #T()}.
+     *
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public Matrix transpose() {
+<span class="nc" id="L334">        return null;</span>
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #transpose()}.
+     *
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public Matrix T() {
+<span class="nc" id="L345">        return null;</span>
+    }
+
+
+    /**
+     * Computes the complex conjugate of a tensor.
+     *
+     * @return The complex conjugate of this tensor.
+     */
+    @Override
+    public Matrix conj() {
+<span class="nc" id="L356">        return null;</span>
+    }
+
+
+    /**
+     * Computes the complex conjugate transpose of a tensor.
+     * Same as {@link #hermTranspose()} and {@link #hermTranspose()}.
+     *
+     * @return The complex conjugate transpose of this tensor.
+     */
+    @Override
+    public Matrix conjT() {
+<span class="nc" id="L368">        return null;</span>
+    }
+
+
+    /**
+     * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
+     * Same as {@link #conjT()} and {@link #H()}.
+     *
+     * @return he complex conjugate transpose (Hermitian transpose) of this tensor.
+     */
+    @Override
+    public Matrix hermTranspose() {
+<span class="nc" id="L380">        return null;</span>
+    }
+
+
+    /**
+     * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
+     * Same as {@link #conjT()} and {@link #hermTranspose()}.
+     *
+     * @return he complex conjugate transpose (Hermitian transpose) of this tensor.
+     */
+    @Override
+    public Matrix H() {
+<span class="nc" id="L392">        return null;</span>
+    }
+
+
+    /**
+     * Computes the reciprocals, element-wise, of a tensor.
+     *
+     * @return A tensor containing the reciprocal elements of this tensor.
+     * @throws ArithmeticException If this tensor contains any zeros.
+     */
+    @Override
+    public Matrix recep() {
+<span class="nc" id="L404">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public Matrix add(SparseMatrix B) {
+<span class="nc" id="L417">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public Matrix add(CMatrix B) {
+<span class="nc" id="L430">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public Matrix add(SparseCMatrix B) {
+<span class="nc" id="L443">        return null;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix B.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public Matrix mult(Matrix B) {
+<span class="nc" id="L456">        return null;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix B.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public Matrix mult(SparseMatrix B) {
+<span class="nc" id="L469">        return null;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix B.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public CMatrix mult(CMatrix B) {
+<span class="nc" id="L482">        return null;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix B.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public CMatrix mult(SparseCMatrix B) {
+<span class="nc" id="L495">        return null;</span>
+    }
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     * @return The result of matrix multiplying this matrix with vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
+     */
+    @Override
+    public Matrix mult(Vector b) {
+<span class="nc" id="L508">        return null;</span>
+    }
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     * @return The result of matrix multiplying this matrix with vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
+     */
+    @Override
+    public Matrix mult(SparseVector b) {
+<span class="nc" id="L521">        return null;</span>
+    }
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     * @return The result of matrix multiplying this matrix with vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
+     */
+    @Override
+    public CMatrix mult(CVector b) {
+<span class="nc" id="L534">        return null;</span>
+    }
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     * @return The result of matrix multiplying this matrix with vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
+     */
+    @Override
+    public CMatrix mult(SparseCVector b) {
+<span class="nc" id="L547">        return null;</span>
+    }
+
+
+    /**
+     * Computes the matrix power with a given exponent. This is equivalent to multiplying a matrix to itself 'exponent'
+     * times. Note, this method is preferred over repeated multiplication of a matrix as this method will be significantly
+     * faster.
+     *
+     * @param exponent The exponent in the matrix power.
+     * @return The result of multiplying this matrix with itself 'exponent' times.
+     */
+    @Override
+    public Matrix pow(int exponent) {
+<span class="nc" id="L561">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard product) between two matrices.
+     *
+     * @param B Second matrix in the element-wise multiplication.
+     * @return The result of element-wise multiplication of this matrix with the matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public Matrix elemMult(Matrix B) {
+<span class="nc" id="L574">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard product) between two matrices.
+     *
+     * @param B Second matrix in the element-wise multiplication.
+     * @return The result of element-wise multiplication of this matrix with the matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public SparseMatrix elemMult(SparseMatrix B) {
+<span class="nc" id="L587">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard product) between two matrices.
+     *
+     * @param B Second matrix in the element-wise multiplication.
+     * @return The result of element-wise multiplication of this matrix with the matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public CMatrix elemMult(CMatrix B) {
+<span class="nc" id="L600">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard product) between two matrices.
+     *
+     * @param B Second matrix in the element-wise multiplication.
+     * @return The result of element-wise multiplication of this matrix with the matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public SparseCMatrix elemMult(SparseCMatrix B) {
+<span class="nc" id="L613">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise division between two matrices.
+     *
+     * @param B Second matrix in the element-wise division.
+     * @return The result of element-wise division of this matrix with the matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     * @throws ArithmeticException      If B contains any zero entries.
+     */
+    @Override
+    public Matrix elemDiv(Matrix B) {
+<span class="nc" id="L627">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise division between two matrices.
+     *
+     * @param B Second matrix in the element-wise division.
+     * @return The result of element-wise division of this matrix with the matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     * @throws ArithmeticException      If B contains any zero entries.
+     */
+    @Override
+    public SparseMatrix elemDiv(CMatrix B) {
+<span class="nc" id="L641">        return null;</span>
+    }
+
+
+    /**
+     * Computes the determinant of a square matrix.
+     *
+     * @return The determinant of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    @Override
+    public Double det() {
+<span class="nc" id="L653">        return null;</span>
+    }
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     *
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public Double fib(Matrix B) {
+<span class="nc" id="L666">        return null;</span>
+    }
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     *
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public Double fib(SparseMatrix B) {
+<span class="nc" id="L679">        return null;</span>
+    }
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     *
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public CNumber fib(CMatrix B) {
+<span class="nc" id="L692">        return null;</span>
+    }
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     *
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public CNumber fib(SparseCMatrix B) {
+<span class="nc" id="L705">        return null;</span>
+    }
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     *
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    @Override
+    public Matrix directSum(Matrix B) {
+<span class="nc" id="L717">        return null;</span>
+    }
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     *
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    @Override
+    public SparseMatrix directSum(SparseMatrix B) {
+<span class="nc" id="L729">        return null;</span>
+    }
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     *
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    @Override
+    public CMatrix directSum(CMatrix B) {
+<span class="nc" id="L741">        return null;</span>
+    }
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     *
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    @Override
+    public SparseCMatrix directSum(SparseCMatrix B) {
+<span class="nc" id="L753">        return null;</span>
+    }
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     *
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    @Override
+    public Matrix invDirectSum(Matrix B) {
+<span class="nc" id="L765">        return null;</span>
+    }
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     *
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    @Override
+    public SparseMatrix invDirectSum(SparseMatrix B) {
+<span class="nc" id="L777">        return null;</span>
+    }
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     *
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    @Override
+    public CMatrix invDirectSum(CMatrix B) {
+<span class="nc" id="L789">        return null;</span>
+    }
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     *
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    @Override
+    public SparseCMatrix invDirectSum(SparseCMatrix B) {
+<span class="nc" id="L801">        return null;</span>
+    }
+
+
+    /**
+     * Sums together the columns of a matrix as if each column was a column vector.
+     *
+     * @return The result of summing together all columns of the matrix as column vectors. If this matrix is an m-by-n matrix, then the result will be
+     * an m-by-1 matrix.
+     */
+    @Override
+    public Matrix sumCols() {
+<span class="nc" id="L813">        return null;</span>
+    }
+
+
+    /**
+     * Sums together the rows of a matrix as if each row was a row vector.
+     *
+     * @return The result of summing together all rows of the matrix as row vectors. If this matrix is an m-by-n matrix, then the result will be
+     * an 1-by-n matrix.
+     */
+    @Override
+    public Matrix sumRows() {
+<span class="nc" id="L825">        return null;</span>
+    }
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     *
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    @Override
+    public Matrix addToEachCol(Vector b) {
+<span class="nc" id="L838">        return null;</span>
+    }
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     *
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    @Override
+    public Matrix addToEachCol(SparseVector b) {
+<span class="nc" id="L851">        return null;</span>
+    }
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     *
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    @Override
+    public CMatrix addToEachCol(CVector b) {
+<span class="nc" id="L864">        return null;</span>
+    }
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     *
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    @Override
+    public CMatrix addToEachCol(SparseCVector b) {
+<span class="nc" id="L877">        return null;</span>
+    }
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     *
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    @Override
+    public Matrix addToEachRow(Vector b) {
+<span class="nc" id="L890">        return null;</span>
+    }
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     *
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    @Override
+    public Matrix addToEachRow(SparseVector b) {
+<span class="nc" id="L903">        return null;</span>
+    }
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     *
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    @Override
+    public CMatrix addToEachRow(CVector b) {
+<span class="nc" id="L916">        return null;</span>
+    }
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     *
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    @Override
+    public CMatrix addToEachRow(SparseCVector b) {
+<span class="nc" id="L929">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrices along columns. &lt;br&gt;
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    @Override
+    public Matrix stack(Matrix B) {
+<span class="nc" id="L943">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrices along columns. &lt;br&gt;
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    @Override
+    public Matrix stack(SparseMatrix B) {
+<span class="nc" id="L957">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrices along columns. &lt;br&gt;
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    @Override
+    public CMatrix stack(CMatrix B) {
+<span class="nc" id="L971">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrices along columns. &lt;br&gt;
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    @Override
+    public CMatrix stack(SparseCMatrix B) {
+<span class="nc" id="L985">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrices along specified axis. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
+     *
+     * @param B    Matrix to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public Matrix stack(Matrix B, int axis) {
+<span class="nc" id="L1003">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrices along specified axis. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
+     *
+     * @param B    Matrix to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public Matrix stack(SparseMatrix B, int axis) {
+<span class="nc" id="L1021">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrices along specified axis. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
+     *
+     * @param B    Matrix to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(CMatrix B, int axis) {
+<span class="nc" id="L1039">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrices along specified axis. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
+     *
+     * @param B    Matrix to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(SparseCMatrix B, int axis) {
+<span class="nc" id="L1057">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrices along rows. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    @Override
+    public Matrix augment(Matrix B) {
+<span class="nc" id="L1071">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrices along rows. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    @Override
+    public Matrix augment(SparseMatrix B) {
+<span class="nc" id="L1085">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrices along rows. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    @Override
+    public CMatrix augment(CMatrix B) {
+<span class="nc" id="L1099">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrices along rows. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    @Override
+    public CMatrix augment(SparseCMatrix B) {
+<span class="nc" id="L1113">        return null;</span>
+    }
+
+
+    /**
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.&lt;br&gt;
+     * Also see {@link #stack(Vector, int)} and {@link #augment(Vector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public Matrix stack(Vector b) {
+<span class="nc" id="L1129">        return null;</span>
+    }
+
+
+    /**
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.&lt;br&gt;
+     * Also see {@link #stack(SparseVector, int)} and {@link #augment(SparseVector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public SparseMatrix stack(SparseVector b) {
+<span class="nc" id="L1145">        return null;</span>
+    }
+
+
+    /**
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.&lt;br&gt;
+     * Also see {@link #stack(CVector, int)} and {@link #augment(CVector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public CMatrix stack(CVector b) {
+<span class="nc" id="L1161">        return null;</span>
+    }
+
+
+    /**
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.&lt;br&gt;
+     * Also see {@link #stack(SparseCVector, int)} and {@link #augment(SparseCVector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public CMatrix stack(SparseCVector b) {
+<span class="nc" id="L1177">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.&lt;br&gt;
+     *
+     * @param b    Vector to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Vector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. &lt;br&gt;
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Vector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public Matrix stack(Vector b, int axis) {
+<span class="nc" id="L1197">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.&lt;br&gt;
+     *
+     * @param b    Vector to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseVector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. &lt;br&gt;
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseVector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public SparseMatrix stack(SparseVector b, int axis) {
+<span class="nc" id="L1217">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.&lt;br&gt;
+     *
+     * @param b    Vector to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(CVector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. &lt;br&gt;
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(CVector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(CVector b, int axis) {
+<span class="nc" id="L1237">        return null;</span>
+    }
+
+
+    /**
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.&lt;br&gt;
+     *
+     * @param b    Vector to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseCVector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. &lt;br&gt;
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseCVector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(SparseCVector b, int axis) {
+<span class="nc" id="L1257">        return null;</span>
+    }
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.&lt;br&gt;
+     * Also see {@link #stack(Vector)} and {@link #stack(Vector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    @Override
+    public Matrix augment(Vector b) {
+<span class="nc" id="L1273">        return null;</span>
+    }
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.&lt;br&gt;
+     * Also see {@link #stack(SparseVector)} and {@link #stack(SparseVector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    @Override
+    public SparseMatrix augment(SparseVector b) {
+<span class="nc" id="L1289">        return null;</span>
+    }
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.&lt;br&gt;
+     * Also see {@link #stack(CVector)} and {@link #stack(CVector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    @Override
+    public CMatrix augment(CVector b) {
+<span class="nc" id="L1305">        return null;</span>
+    }
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.&lt;br&gt;
+     * Also see {@link #stack(SparseCVector)} and {@link #stack(SparseCVector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    @Override
+    public CMatrix augment(SparseCVector b) {
+<span class="nc" id="L1321">        return null;</span>
+    }
+
+
+    /**
+     * Get the row of this matrix at the specified index.
+     *
+     * @param i Index of row to get.
+     * @return The specified row of this matrix.
+     */
+    @Override
+    public Double[] getRow(int i) {
+<span class="nc" id="L1333">        return new Double[0];</span>
+    }
+
+
+    /**
+     * Get the column of this matrix at the specified index.
+     *
+     * @param j Index of column to get.
+     * @return The specified column of this matrix.
+     */
+    @Override
+    public Double[] getCol(int j) {
+<span class="nc" id="L1345">        return new Double[0];</span>
+    }
+
+
+    /**
+     * Gets the number of rows in a matrix.
+     *
+     * @return The number of rows in this matrix.
+     */
+    @Override
+    public int numRows() {
+<span class="nc" id="L1356">        return 0;</span>
+    }
+
+
+    /**
+     * Gets the number of columns in a matrix.
+     *
+     * @return The number of columns in this matrix.
+     */
+    @Override
+    public int numCols() {
+<span class="nc" id="L1367">        return 0;</span>
+    }
+
+
+    /**
+     * Checks if this matrix is square.
+     *
+     * @return True if the matrix is square (i.e. the number of rows equals the number of columns). Otherwise, returns false.
+     */
+    @Override
+    public boolean isSquare() {
+<span class="nc" id="L1378">        return false;</span>
+    }
+
+
+    /**
+     * Checks if a matrix can be represented as a vector. That is, if a matrix has only one row or one column.
+     *
+     * @return True if this matrix can be represented as either a row or column vector.
+     */
+    @Override
+    public boolean isVector() {
+<span class="nc" id="L1389">        return false;</span>
+    }
+
+
+    /**
+     * Checks what type of vector this matrix is. i.e. not a vector, a 1x1 matrix, a row vector, or a column vector.
+     *
+     * @return - If this matrix can not be represented as a vector, then returns -1. &lt;br&gt;
+     * - If this matrix is a 1x1 matrix, then returns 0. &lt;br&gt;
+     * - If this matrix is a row vector, then returns 1. &lt;br&gt;
+     * - If this matrix is a column vector, then returns 2.
+     */
+    @Override
+    public int vectorType() {
+<span class="nc" id="L1403">        return 0;</span>
+    }
+
+
+    /**
+     * Checks if this matrix is triangular (i.e. upper triangular, diagonal, lower triangular).
+     *
+     * @return True is this matrix is triangular. Otherwise, returns false.
+     */
+    @Override
+    public boolean isTri() {
+<span class="nc" id="L1414">        return false;</span>
+    }
+
+
+    /**
+     * Checks if this matrix is lower triangular.
+     *
+     * @return True is this matrix is lower triangular. Otherwise, returns false.
+     */
+    @Override
+    public boolean isTriL() {
+<span class="nc" id="L1425">        return false;</span>
+    }
+
+
+    /**
+     * Checks if this matrix is upper triangular.
+     *
+     * @return True is this matrix is upper triangular. Otherwise, returns false.
+     */
+    @Override
+    public boolean isTriU() {
+<span class="nc" id="L1436">        return false;</span>
+    }
+
+
+    /**
+     * Checks if this matrix is diagonal.
+     *
+     * @return True is this matrix is diagonal. Otherwise, returns false.
+     */
+    @Override
+    public boolean isDiag() {
+<span class="nc" id="L1447">        return false;</span>
+    }
+
+
+    /**
+     * Checks if a matrix has full rank. That is, if a matrices rank is equal to the number of rows in the matrix.
+     *
+     * @return True if this matrix has full rank. Otherwise, returns false.
+     */
+    @Override
+    public boolean isFullRank() {
+<span class="nc" id="L1458">        return false;</span>
+    }
+
+
+    /**
+     * Checks if a matrix is singular. That is, if the matrix is &lt;b&gt;NOT&lt;/b&gt; invertible.&lt;br&gt;
+     * Also see {@link #isInvertible()}.
+     *
+     * @return True if this matrix is singular. Otherwise, returns false.
+     */
+    @Override
+    public boolean isSingular() {
+<span class="nc" id="L1470">        return false;</span>
+    }
+
+
+    /**
+     * Checks if a matrix is invertible.&lt;br&gt;
+     * Also see {@link #isSingular()}.
+     *
+     * @return True if this matrix is invertible.
+     */
+    @Override
+    public boolean isInvertible() {
+<span class="nc" id="L1482">        return false;</span>
+    }
+
+
+    /**
+     * Computes the L&lt;sub&gt;p, q&lt;/sub&gt; norm of this matrix.
+     *
+     * @param p P value in the L&lt;sub&gt;p, q&lt;/sub&gt; norm.
+     * @param q Q value in the L&lt;sub&gt;p, q&lt;/sub&gt; norm.
+     * @return The L&lt;sub&gt;p, q&lt;/sub&gt; norm of this matrix.
+     */
+    @Override
+    public boolean norm(double p, double q) {
+<span class="nc" id="L1495">        return false;</span>
+    }
+
+
+    /**
+     * Computes an orthonormal basis of the row space of this matrix. That is, a set of orthonormal vectors which span
+     * the row space of this matrix.
+     *
+     * @return An orthonormal basis of the row space of this matrix. The vectors are stored as the columns of the returned matrix.
+     */
+    @Override
+    public Matrix rowSpace() {
+<span class="nc" id="L1507">        return null;</span>
+    }
+
+
+    /**
+     * Computes an orthonormal basis of the column space of this matrix. That is, a set of orthonormal vectors which span
+     * the column space of this matrix.
+     *
+     * @return An orthonormal basis of the column space of this matrix. The vectors are stored as the columns of the returned matrix.
+     */
+    @Override
+    public Matrix colSpace() {
+<span class="nc" id="L1519">        return null;</span>
+    }
+
+
+    /**
+     * Computes an orthonormal basis of the null space of this matrix. That is, a set of orthonormal vectors which satisfy
+     * Ax=0 where A is this matrix.
+     *
+     * @return An orthonormal basis of the null space of this matrix. The vectors are stored as the columns of the returned matrix.
+     */
+    @Override
+    public Matrix nullSpace() {
+<span class="nc" id="L1531">        return null;</span>
+    }
+
+
+    /**
+     * Computes an orthonormal basis of the left null space of this matrix. That is, a set of orthonormal vectors which satisfy
+     * A&lt;sup&gt;T&lt;/sup&gt;x=0 where A is this matrix.
+     *
+     * @return An orthonormal basis of the left null space of this matrix. The vectors are stored as the columns of the returned matrix.
+     */
+    @Override
+    public Matrix leftNullSpace() {
+<span class="nc" id="L1543">        return null;</span>
+    }
+
+
+    /**
+     * Checks if the matrix is positive definite.
+     *
+     * @return True if the matrix is positive definite. Otherwise, returns false.
+     */
+    @Override
+    public boolean isPosDef() {
+<span class="nc" id="L1554">        return false;</span>
+    }
+
+
+    /**
+     * Checks if the matrix is positive semi-definite.
+     *
+     * @return True if the matrix is positive semi-definite. Otherwise, returns false.
+     */
+    @Override
+    public boolean isPosSemiDef() {
+<span class="nc" id="L1565">        return false;</span>
+    }
+
+
+    /**
+     * Checks if a matrix is diagonalizable. A matrix is diagonalizable if and only if
+     * the multiplicity for each eigenvalue is equivalent to the eigenspace for that eigenvalue.
+     *
+     * @return True if the matrix is diagonalizable. Otherwise, returns false.
+     */
+    @Override
+    public boolean isDiagonalizable() {
+<span class="nc" id="L1577">        return false;</span>
+    }
+
+
+    /**
+     * Checks if a matrix is symmetric. That is, if the matrix is equal to its transpose.
+     *
+     * @return True if this matrix is symmetric. Otherwise, returns false.
+     */
+    @Override
+    public boolean isSymmetric() {
+<span class="nc" id="L1588">        return false;</span>
+    }
+
+
+    /**
+     * Checks if a matrix is anti-symmetric. That is, if the matrix is equal to the negative of its transpose.
+     *
+     * @return True if this matrix is anti-symmetric. Otherwise, returns false.
+     */
+    @Override
+    public boolean isAntiSymmetric() {
+<span class="nc" id="L1599">        return false;</span>
+    }
+
+
+    /**
+     * Checks if this matrix is orthogonal. That is, if the inverse of this matrix is equal to its transpose.
+     *
+     * @return True if this matrix it is orthogonal. Otherwise, returns false.
+     */
+    @Override
+    public boolean isOrthogonal() {
+<span class="nc" id="L1610">        return false;</span>
+    }
+
+
+    /**
+     * Computes the real square roots of this tensor (element-wise). This method only supports tensors which do not contain
+     * negative values. See {@link TensorOperationsMixin#sqrt()} for a method which computes the complex square roots of
+     * a tensor.
+     *
+     * @return A tensor of the same shape as this tensor which is the result of applying a square root (element-wise) to
+     * this tensor.
+     * @throws IllegalArgumentException If this tensor contains negative values.
+     */
+    @Override
+    public Matrix reSqrt() {
+<span class="nc" id="L1625">        return null;</span>
+    }
+
+
+    /**
+     * Checks if this tensor contains only non-negative values.
+     *
+     * @return True if this tensor only contains non-negative values. Otherwise, returns false.
+     */
+    @Override
+    public boolean isPos() {
+<span class="nc" id="L1636">        return false;</span>
+    }
+
+
+    /**
+     * Checks if this tensor contains only non-positive values.
+     *
+     * @return trie if this tensor only contains non-positive values. Otherwise, returns false.
+     */
+    @Override
+    public boolean isNeg() {
+<span class="nc" id="L1647">        return false;</span>
+    }
+
+
+    /**
+     * Converts this tensor to an equivalent complex tensor. That is, the entries of the resultant matrix will be exactly
+     * the same value but will have type {@link CNumber CNumber} rather than {@link Double}.
+     *
+     * @return A complex matrix which is equivalent to this matrix.
+     */
+    @Override
+    public CMatrix toComplex() {
+<span class="nc" id="L1659">        return null;</span>
+    }
+
+
+    /**
+     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
+     *
+     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
+     */
+    @Override
+    public Double min() {
+<span class="nc" id="L1670">        return null;</span>
+    }
+
+
+    /**
+     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
+     *
+     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
+     */
+    @Override
+    public Double max() {
+<span class="nc" id="L1681">        return null;</span>
+    }
+
+
+    /**
+     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+     * to {@link #min()}.
+     *
+     * @return The minimum value, in absolute value, in this tensor.
+     */
+    @Override
+    public Double minAbs() {
+<span class="nc" id="L1693">        return null;</span>
+    }
+
+
+    /**
+     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+     * to {@link #max()}.
+     *
+     * @return The maximum value, in absolute value, in this tensor.
+     */
+    @Override
+    public Double maxAbs() {
+<span class="nc" id="L1705">        return null;</span>
+    }
+
+
+    /**
+     * Finds the indices of the minimum value in this tensor.
+     *
+     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argMin() {
+<span class="nc" id="L1717">        return new int[0];</span>
+    }
+
+
+    /**
+     * Finds the indices of the maximum value in this tensor.
+     *
+     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argMax() {
+<span class="nc" id="L1729">        return new int[0];</span>
+    }
+
+
+    /**
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
+     *
+     * @return the 2-norm of this tensor.
+     */
+    @Override
+    public Double norm() {
+<span class="nc" id="L1740">        return null;</span>
+    }
+
+
+    /**
+     * Computes the p-norm of this tensor.
+     *
+     * @param p The p value in the p-norm. &lt;br&gt;
+     *          - If p is inf, then this method computes the maximum/infinite norm.
+     * @return The p-norm of this tensor.
+     * @throws IllegalArgumentException If p is less than 1.
+     */
+    @Override
+    public Double norm(double p) {
+<span class="nc" id="L1754">        return null;</span>
+    }
+
+
+    /**
+     * Computes the maximum/infinite norm of this tensor.
+     *
+     * @return The maximum/infinite norm of this tensor.
+     */
+    @Override
+    public Double infNorm() {
+<span class="nc" id="L1765">        return null;</span>
+    }
+
+
+    /**
+     * Formats matrix contents as a string.
+     *
+     * @return Matrix as string
+     */
+    public String toString() {
+<span class="nc" id="L1775">        String result = &quot;[&quot;;</span>
+
+        // Get the current print options.
+<span class="nc" id="L1778">        int MAX_ROWS = PrintOptions.getMaxRows();</span>
+<span class="nc" id="L1779">        int MAX_COLUMNS = PrintOptions.getMaxColumns();</span>
+<span class="nc" id="L1780">        int PADDING = PrintOptions.getPadding();</span>
+<span class="nc" id="L1781">        int PRECISION = PrintOptions.getPrecision();</span>
+
+
+<span class="nc bnc" id="L1784" title="All 2 branches missed.">        if(!this.isEmpty()) {</span>
+<span class="nc" id="L1785">            int max=0, colWidth;</span>
+<span class="nc" id="L1786">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L1788" title="All 2 branches missed.">            for(int j=0; j&lt;this.n; j++) { // Get the maximum length string representation for each column.</span>
+<span class="nc" id="L1789">                List&lt;Double&gt; values = Arrays.asList(this.getCol(j));</span>
+<span class="nc" id="L1790">                List&lt;String&gt; contents = new ArrayList&lt;&gt;(values.size());</span>
+
+<span class="nc bnc" id="L1792" title="All 2 branches missed.">                for(Double v : values) {</span>
+<span class="nc" id="L1793">                    contents.add(String.valueOf(v));</span>
+<span class="nc" id="L1794">                }</span>
+
+<span class="nc" id="L1796">                Optional&lt;Integer&gt; value = contents.stream().map(String::length).max(Integer::compareTo);</span>
+
+<span class="nc bnc" id="L1798" title="All 2 branches missed.">                if(value.isPresent()) {</span>
+<span class="nc" id="L1799">                    max = value.get();</span>
+                }
+
+<span class="nc" id="L1802">                maxList.add(max);</span>
+            }
+
+<span class="nc" id="L1805">            StringBuilder resultBuilder = new StringBuilder(&quot;[&quot;);</span>
+<span class="nc bnc" id="L1806" title="All 2 branches missed.">            for(int i = 0; i &lt; m; i++) {</span>
+<span class="nc bnc" id="L1807" title="All 4 branches missed.">                if(i &gt;= MAX_ROWS &amp;&amp; i &lt; m-1) {</span>
+<span class="nc" id="L1808">                    resultBuilder.append(&quot;  ...\n &quot;);</span>
+<span class="nc" id="L1809">                    i = m-1;</span>
+                }
+
+<span class="nc" id="L1812">                resultBuilder.append(&quot; [&quot;);</span>
+
+<span class="nc bnc" id="L1814" title="All 2 branches missed.">                for(int j = 0; j &lt; n; j++) {</span>
+
+<span class="nc bnc" id="L1816" title="All 4 branches missed.">                    if(j &gt;= MAX_COLUMNS &amp;&amp; j &lt; n-1) {</span>
+<span class="nc" id="L1817">                        colWidth = 3+PADDING;</span>
+<span class="nc" id="L1818">                        resultBuilder.append(String.format(&quot;%-&quot; + colWidth + &quot;s&quot;, StringUtils.center(&quot;...&quot;, colWidth)));</span>
+<span class="nc" id="L1819">                        colWidth = maxList.get(n-1)+PADDING;</span>
+<span class="nc" id="L1820">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(String.valueOf(entries[i][n - 1]).toString(), colWidth)));</span>
+<span class="nc" id="L1821">                        break;</span>
+                    }
+                    else {
+<span class="nc" id="L1824">                        colWidth = maxList.get(j)+PADDING;</span>
+<span class="nc" id="L1825">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(</span>
+<span class="nc" id="L1826">                                CNumber.round(new CNumber(entries[i][j]), PRECISION).toString(), colWidth))</span>
+                        );
+                    }
+                }
+<span class="nc" id="L1830">                resultBuilder.append(&quot;]\n &quot;);</span>
+            }
+<span class="nc" id="L1832">            result = resultBuilder.toString();</span>
+
+<span class="nc" id="L1834">            result = result.substring(0, result.length()-2) + &quot; ]&quot;;</span>
+<span class="nc" id="L1835">        }</span>
+        else {
+<span class="nc" id="L1837">            result += &quot;[]]&quot;;</span>
+        }
+
+<span class="nc" id="L1840">        return result;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
