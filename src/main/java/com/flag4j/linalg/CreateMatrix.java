@@ -1,8 +1,5 @@
 package com.flag4j.linalg;
 
-import com.flag4j.*;
-import com.flag4j.complex_numbers.CNumber;
-
 /**
  * This class provides several methods, which are not provided as constructors, that are useful for creating matrices.
  */
@@ -69,4 +66,7 @@ public class CreateMatrix {
 //     * @return A square, diagonal matrix whose non-zero components are equivalent to those specified by 'values'.
 //     */
 //    SparseCMatrix toDiag(SparseCMatrix values){/*TODO:*/return null;}
+
+    // TODO: add toDiag(int diagAxis), toTril(), toTriu(), toTri(),
+    //  toTril(int diagAxis), toTriu(int diagAxis), toTri(int diagAxis).
 }

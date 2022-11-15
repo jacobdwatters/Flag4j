@@ -1899,6 +1899,18 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
     @Override
+    public void setValues(Double[][] values) {
+
+    }
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+     */
+    @Override
     public void setValues(double[][] values) {
 
     }
@@ -1912,6 +1924,19 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public void setValues(int[][] values) {
+
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public void setCol(Double[] values, int colIndex) {
 
     }
 
@@ -1950,6 +1975,19 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
      */
     @Override
+    public void setRow(Double[] values, int rowIndex) {
+
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the column which is to be set.
+     * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+     */
+    @Override
     public void setRow(double[] values, int rowIndex) {
 
     }
@@ -1969,57 +2007,35 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
 
     /**
-     * Sets a column of this matrix at the given index to the specified values. Note that the orientation of the values
-     * vector is <b>NOT</b> taken into account.
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
      *
-     * @param values   New values for the column.
-     * @param colIndex The index of the column which is to be set.
-     * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
      */
     @Override
-    public void setCol(Vector values, int colIndex) {
+    public void setSlice(Matrix values, int rowStart, int colStart) {
 
     }
 
 
     /**
-     * Sets a column of this matrix at the given index to the specified values. Note that the orientation of the values
-     * vector is <b>NOT</b> taken into account.
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
      *
-     * @param values   New values for the column.
-     * @param colIndex The index of the column which is to be set.
-     * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
      */
     @Override
-    public void setCol(SparseVector values, int colIndex) {
-
-    }
-
-
-    /**
-     * Sets a row of this matrix at the given index to the specified values. Note that the orientation of the values
-     * vector is <b>NOT</b> taken into account.
-     *
-     * @param values   New values for the row.
-     * @param rowIndex The index of the row which is to be set.
-     * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
-     */
-    @Override
-    public void setRows(Vector values, int rowIndex) {
-
-    }
-
-
-    /**
-     * Sets a row of this matrix at the given index to the specified values. Note that the orientation of the values
-     * vector is <b>NOT</b> taken into account.
-     *
-     * @param values   New values for the row.
-     * @param rowIndex The index of the row which is to be set.
-     * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
-     */
-    @Override
-    public void setRows(SparseVector values, int rowIndex) {
+    public void setSlice(Double[][] values, int rowStart, int colStart) {
 
     }
 
@@ -2059,40 +2075,6 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
 
     /**
-     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set.
-     *
-     * @param values   New values for the specified slice.
-     * @param rowStart Starting row index for the slice (inclusive).
-     * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
-     *                                   fit completely within this matrix.
-     */
-    @Override
-    public void setSlice(Matrix values, int rowStart, int colStart) {
-
-    }
-
-
-    /**
-     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set.
-     *
-     * @param values   New values for the specified slice.
-     * @param rowStart Starting row index for the slice (inclusive).
-     * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
-     *                                   fit completely within this matrix.
-     */
-    @Override
-    public void setSlice(SparseMatrix values, int rowStart, int colStart) {
-
-    }
-
-
-    /**
      * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
      * left index location of the slice to set.
      *
@@ -2123,7 +2105,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      *                                   fit completely within this matrix.
      */
     @Override
-    public Matrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
+    public SparseCMatrix setSliceCopy(Double[][] values, int rowStart, int colStart) {
         return null;
     }
 
@@ -2141,7 +2123,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      *                                   fit completely within this matrix.
      */
     @Override
-    public CMatrix setSliceCopy(CMatrix values, int rowStart, int colStart) {
+    public SparseCMatrix setSliceCopy(double[][] values, int rowStart, int colStart) {
         return null;
     }
 
@@ -2159,7 +2141,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      *                                   fit completely within this matrix.
      */
     @Override
-    public SparseCMatrix setSliceCopy(SparseCMatrix values, int rowStart, int colStart) {
+    public SparseCMatrix setSliceCopy(int[][] values, int rowStart, int colStart) {
         return null;
     }
 
@@ -2205,95 +2187,6 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
     @Override
     public void removeCols(int... colIndices) {
 
-    }
-
-
-    /**
-     * Generates a lower triangular matrix from this matrix. That is, copies all values of this matrix from the principle
-     * diagonal and below. The rest of the values in the resultant matrix will be zero.
-     *
-     * @return A lower triangular matrix whose non-zero values are specified by the values in this matrix at the same indices.
-     */
-    @Override
-    public Matrix tril() {
-        return null;
-    }
-
-
-    /**
-     * Generates a pseudo-lower triangular matrix from this matrix. That is, copies all values of this matrix from the
-     * kth diagonal and below. The rest of the values in the resultant matrix will be zero.
-     *
-     * @param k The diagonal for which to copy values at and below relative to the principle diagonal.<br>
-     *          - If k=0, then all values in and below the principle diagonal will be copied.<br>
-     *          - If k=-a, then all values at and below the diagonal which is 'a' diagonals to the left will be copied. <br>
-     *          - If k=a, then all values at and below the diagonal which is 'a' diagonals to the right will be copied.
-     * @return A lower triangular matrix whose non-zero values are specified by the values in this matrix at the same indices.
-     * @throws IllegalArgumentException If k is out of the range of this matrix. That is, if k specifies a diagonal which
-     *                                  does not exist in this matrix.
-     */
-    @Override
-    public Matrix tril(int k) {
-        return null;
-    }
-
-
-    /**
-     * Generates an upper triangular matrix from this matrix. That is, copies all values of this matrix from the principle
-     * diagonal and above. The rest of the values in the resultant matrix will be zero.
-     *
-     * @return An upper triangular matrix whose non-zero values are specified by the values in this matrix at the same indices.
-     */
-    @Override
-    public Matrix triu() {
-        return null;
-    }
-
-
-    /**
-     * Generates a pseudo-upper triangular matrix from this matrix. That is, copies all values of this matrix from the
-     * kth diagonal and above. The rest of the values in the resultant matrix will be zero.
-     *
-     * @param k The diagonal for which to copy values at and below relative to the principle diagonal.<br>
-     *          - If k=0, then all values in and above the principle diagonal will be copied.<br>
-     *          - If k=-a, then all values at and above the diagonal which is 'a' diagonals to the left will be copied. <br>
-     *          - If k=a, then all values at and above the diagonal which is 'a' diagonals to the right will be copied.
-     * @return An upper triangular matrix whose non-zero values are specified by the values in this matrix at the same indices.
-     * @throws IllegalArgumentException If k is out of the range of this matrix. That is, if k specifies a diagonal which
-     *                                  does not exist in this matrix.
-     */
-    @Override
-    public Matrix triu(int k) {
-        return null;
-    }
-
-
-    /**
-     * Generates a diagonal matrix from this matrix. This is, copies all values of this matrix from the principle diagonal. The
-     * rest of the values in the resultant matrix will be zero.
-     *
-     * @return A diagonal matrix whose non-zero entries are specified by the values in this matrix.
-     */
-    @Override
-    public Matrix diag() {
-        return null;
-    }
-
-
-    /**
-     * Generates a diagonal matrix from this matrix. This is, copies all values of this matrix from the principle diagonal
-     * and the k diagonals to the left and k diagonals to the right.
-     * The
-     * rest of the values in the resultant matrix will be zero.
-     *
-     * @param k The number of diagonals in each direction (left or right) to include in the resultant matrix.
-     * @return A diagonal matrix whose non-zero entries are specified by the values in this matrix.
-     * @throws IllegalArgumentException - If k is negative.<br>
-     *                                  - If k is out of range of this matrix.
-     */
-    @Override
-    public Matrix diag(int k) {
-        return null;
     }
 
 
