@@ -25,6 +25,7 @@ com\flag4j\io\PrintOptions.class
 com\flag4j\SparseVector.class
 com\flag4j\VectorComparisonsMixin.class
 com\flag4j\VectorOperationsMixin.class
+com\flag4j\util\Axis2D.class
 com\flag4j\complex_numbers\CNumber.class
 com\flag4j\concurrency\BinaryOperation.class
 com\flag4j\TensorPropertiesMixin.class

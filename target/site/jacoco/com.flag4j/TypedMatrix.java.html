@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TypedMatrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">TypedMatrix.java</span></div><h1>TypedMatrix.java</h1><pre class="source lang-java linenums">package com.flag4j;
-
-import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 
 /**
@@ -34,17 +33,17 @@ public abstract class TypedMatrix&lt;T&gt; {
      * @param n The number of columns in this matrix.
      * @throws IllegalArgumentException if either m or n is negative.
      */
-<span class="fc" id="L37">    protected TypedMatrix(MatrixTypes type, int m, int n) {</span>
-<span class="fc bfc" id="L38" title="All 4 branches covered.">        if(m&lt;0 || n&lt;0) {</span>
-<span class="fc" id="L39">            throw new IllegalArgumentException(</span>
-<span class="fc" id="L40">                    ErrorMessages.negativeDimErrMsg(this.getShape())</span>
+<span class="fc" id="L36">    protected TypedMatrix(MatrixTypes type, int m, int n) {</span>
+<span class="fc bfc" id="L37" title="All 4 branches covered.">        if(m&lt;0 || n&lt;0) {</span>
+<span class="fc" id="L38">            throw new IllegalArgumentException(</span>
+<span class="fc" id="L39">                    ErrorMessages.negativeDimErrMsg(this.getShape())</span>
             );
         }
 
-<span class="fc" id="L44">        this.m = m;</span>
-<span class="fc" id="L45">        this.n = n;</span>
-<span class="fc" id="L46">        this.type = type;</span>
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L43">        this.m = m;</span>
+<span class="fc" id="L44">        this.n = n;</span>
+<span class="fc" id="L45">        this.type = type;</span>
+<span class="fc" id="L46">    }</span>
 
 
     /**
@@ -52,7 +51,7 @@ public abstract class TypedMatrix&lt;T&gt; {
      * @return A shape object describing the
      */
     public Shape getShape() {
-<span class="fc" id="L55">        return new Shape(m, n);</span>
+<span class="fc" id="L54">        return new Shape(m, n);</span>
     }
 
 
@@ -62,20 +61,56 @@ public abstract class TypedMatrix&lt;T&gt; {
      * @return True if this tensor is empty (i.e. contains no elements). Otherwise, returns false.
      */
     public boolean isEmpty() {
-<span class="nc bnc" id="L65" title="All 4 branches missed.">        return m==0 &amp;&amp; n==0;</span>
+<span class="nc bnc" id="L64" title="All 4 branches missed.">        return m==0 &amp;&amp; n==0;</span>
     }
 
 
+    /**
+     * Checks if two matrices have the same shape.
+     * @param A First matrix to compare.
+     * @param B Second matrix to compare.
+     * @return True if matrix A and matrix B have the same shape. Otherwise, returns false.
+     */
     public static boolean sameShape(TypedMatrix A, TypedMatrix B) {
-<span class="nc" id="L70">        return A.getShape().equals(B.getShape());</span>
+<span class="nc" id="L75">        return A.getShape().equals(B.getShape());</span>
+    }
+
+
+    /**
+     * Checks if two matrices have the same length along a specified axis.
+     * @param A First matrix to compare.
+     * @param B Second matrix to compare.
+     * @param axis The axis along which to compare the lengths of the two matrices.&lt;br&gt;
+     *             - If axis=0, then the number of rows is compared.&lt;br&gt;
+     *             - If axis=1, then the number of columns is compared.
+     * @return True if matrix A and Matrix B have the same length along the specified axis. Otherwise, returns false.
+     * @throws IllegalArgumentException If axis is not zero or one.
+     */
+    public static boolean sameLength(TypedMatrix A, TypedMatrix B, int axis) {
+<span class="nc bnc" id="L90" title="All 4 branches missed.">        if(axis!=Axis2D.row() || axis!=Axis2D.col()) {</span>
+            // Then this is an unspecified axis
+<span class="nc" id="L92">            throw new IllegalArgumentException(</span>
+<span class="nc" id="L93">                    ErrorMessages.axisErr(axis, Axis2D.allAxes())</span>
+            );
+        }
+
+<span class="nc" id="L97">        boolean result = false;</span>
+
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        if(axis == Axis2D.row()) {</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">            result = A.m == B.m;</span>
+
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        } else if(axis == Axis2D.col()) {</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">            result = A.n == B.n;</span>
+        }
+
+<span class="nc" id="L106">        return result;</span>
     }
 
 
     public static void main(String[] args) {
-<span class="nc" id="L75">        CMatrix A = new CMatrix(5, 5);</span>
-<span class="nc" id="L76">        Matrix B = new Matrix(4, 5);</span>
-
-<span class="nc" id="L78">        System.out.println(Matrix.sameShape(A, B));</span>
-<span class="nc" id="L79">    }</span>
+<span class="nc" id="L111">        CMatrix A = new CMatrix(5, 5);</span>
+<span class="nc" id="L112">        Matrix B = new Matrix(5, 5);</span>
+<span class="nc" id="L113">        System.out.println(Matrix.sameShape(A, B));</span>
+<span class="nc" id="L114">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

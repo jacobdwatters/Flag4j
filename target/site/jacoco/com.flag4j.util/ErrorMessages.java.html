@@ -3,6 +3,8 @@
 
 import com.flag4j.Shape;
 
+import java.util.Arrays;
+
 /**
  * Contains error messages for common errors which may occur.
  */
@@ -11,8 +13,8 @@ public abstract class ErrorMessages {
     /**
      * Hide default constructor.
      */
-<span class="nc" id="L14">    private ErrorMessages() {</span>
-<span class="nc" id="L15">        throw new IllegalStateException(UTILITY_CLASS_ERR);</span>
+<span class="nc" id="L16">    private ErrorMessages() {</span>
+<span class="nc" id="L17">        throw new IllegalStateException(UTILITY_CLASS_ERR);</span>
     }
 
     /**
@@ -40,7 +42,14 @@ public abstract class ErrorMessages {
      * Error message for attempted instantiation of a utility class.
      */
     private static final String UTILITY_CLASS_ERR = &quot;Utility class cannot be instantiated&quot;;
+    /**
+     * Error message for a negative value when a non-negative was expected.
+     */
     private static final String NEG_VALUE_ERR = &quot;Expecting value to be non-negative but got %s&quot;;
+    /**
+     * Error message for disallowed axis.
+     */
+    private static final String AXIS_ERR = &quot;Got an axis of %s but was expecting one of %s&quot;;
 
 
     /**
@@ -50,7 +59,7 @@ public abstract class ErrorMessages {
      * @return An error message for tensors with mismatching shapes.
      */
     public static String equalShapeErrMsg(Shape shape1, Shape shape2) {
-<span class="fc" id="L53">        return String.format(EQ_SHAPE_MISMATCH_ERR, shape1, shape2);</span>
+<span class="fc" id="L62">        return String.format(EQ_SHAPE_MISMATCH_ERR, shape1, shape2);</span>
     }
 
 
@@ -61,7 +70,7 @@ public abstract class ErrorMessages {
      * @return An error message for matrices with shapes not conducive with matrix multiplication.
      */
     public static String matMultShapeErrMsg(Shape shape1, Shape shape2) {
-<span class="fc" id="L64">        return String.format(MAT_MULT_DIM_MISMATCH_ERR, shape1, shape2);</span>
+<span class="fc" id="L73">        return String.format(MAT_MULT_DIM_MISMATCH_ERR, shape1, shape2);</span>
     }
 
 
@@ -71,7 +80,7 @@ public abstract class ErrorMessages {
      * @return An error message for a vector which is not a row vector.
      */
     public static String vecRowOrientErrMsg(Shape shape) {
-<span class="fc" id="L74">        return String.format(VEC_ROW_ORIENTATION_ERR, shape);</span>
+<span class="fc" id="L83">        return String.format(VEC_ROW_ORIENTATION_ERR, shape);</span>
     }
 
 
@@ -81,29 +90,44 @@ public abstract class ErrorMessages {
      * @return An error message for a vector which is not a row vector.
      */
     public static String vecColOrientErrMsg(Shape shape) {
-<span class="fc" id="L84">        return String.format(VEC_COL_ORIENTATION_ERR, shape);</span>
+<span class="fc" id="L93">        return String.format(VEC_COL_ORIENTATION_ERR, shape);</span>
     }
 
 
     /**
      * Gets an error message for an attempted construction of a tensor with a negative dimension.
      * @param shape Shape of the tensor.
-     * @return
+     * @return An error message for negative dimension.
      */
     public static String negativeDimErrMsg(Shape shape) {
-<span class="fc" id="L94">        return String.format(NEG_DIM_ERR, shape);</span>
+<span class="fc" id="L103">        return String.format(NEG_DIM_ERR, shape);</span>
     }
 
 
     /**
      * Gets an error message for an attempted instantiation of a utility class.
-     * @return
+     * @return An error message for the attempted instantiation of a utility class;
      */
-<span class="fc" id="L102">    public static String utilityClassErrMsg() {return UTILITY_CLASS_ERR;}</span>
+<span class="fc" id="L111">    public static String utilityClassErrMsg() {return UTILITY_CLASS_ERR;}</span>
 
 
+    /**
+     * Gets an error message for a negative value when a non-negative was expected.
+     * @param value Negative value.
+     * @return An error message for a negative value.
+     */
     public static String negValueErr(double value) {
-<span class="fc" id="L106">        return String.format(NEG_VALUE_ERR, value);</span>
+<span class="fc" id="L120">        return String.format(NEG_VALUE_ERR, value);</span>
+    }
+
+
+    /**
+     * Gets an error message for a disallowed axis.
+     * @param axis Negative value.
+     * @return An error message for a disallowed axis.
+     */
+    public static String axisErr(int axis, int[] allowedAxes) {
+<span class="nc" id="L130">        return String.format(NEG_VALUE_ERR, axis, Arrays.toString(allowedAxes));</span>
     }
 }
 

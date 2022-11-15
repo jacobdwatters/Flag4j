@@ -105,11 +105,4 @@ public abstract class TypedMatrix<T> {
 
         return result;
     }
-
-
-    public static void main(String[] args) {
-        CMatrix A = new CMatrix(5, 5);
-        Matrix B = new Matrix(5, 5);
-        System.out.println(Matrix.sameShape(A, B));
-    }
 }
