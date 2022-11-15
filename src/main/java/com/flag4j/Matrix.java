@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.DoubleStream;
 
 /**
  * Real Dense Matrix.
@@ -151,6 +152,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public Matrix add(double a) {
+        // Ensure shapes are correct for this operation.
         double[][] sum = new double[this.m][this.n];
 
         for(int i=0; i<this.m; i++) {
@@ -164,15 +166,23 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
 
     /**
-     * Adds specified value to all entries of this tensor.
+     * Adds specified value to all entries of this tensor. Note, this method will return a
+     * {@link CMatrix complex matrix}.
      *
      * @param a Value to add to all entries of this tensor.
      * @return The result of adding the specified value to each entry of this tensor.
      */
     @Override
     public CMatrix add(CNumber a) {
-        // TODO: Must add constructors for CMatrix before this method can be implemented.
-        return null;
+        CNumber[][] sum = new CNumber[this.m][this.n];
+
+        for(int i=0; i<this.m; i++) {
+            for(int j=0; j<this.n; j++) {
+                sum[i][j] = new CNumber(this.entries[i][j] + a.re, a.im);
+            }
+        }
+
+        return new CMatrix(sum);
     }
 
 
@@ -227,7 +237,15 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public CMatrix sub(CNumber a) {
-        return null;
+        CNumber[][] sum = new CNumber[this.m][this.n];
+
+        for(int i=0; i<this.m; i++) {
+            for(int j=0; j<this.n; j++) {
+                sum[i][j] = new CNumber(this.entries[i][j] - a.re, a.im);
+            }
+        }
+
+        return new CMatrix(sum);
     }
 
 
@@ -259,7 +277,17 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public CMatrix scalMult(CNumber factor) {
-        return null;
+        CNumber[][] product = new CNumber[this.m][this.n];
+
+        for(int i=0; i<this.m; i++) {
+            for(int j=0; j<this.n; j++) {
+                product[i][j] = new CNumber(
+                        factor.re*this.entries[i][j],
+                        factor.im*this.entries[i][j]);
+            }
+        }
+
+        return new CMatrix(product);
     }
 
 
@@ -272,7 +300,15 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public Matrix scalDiv(double divisor) {
-        return null;
+        double[][] quotient = new double[this.m][this.n];
+
+        for(int i=0; i<this.m; i++) {
+            for(int j=0; j<this.n; j++) {
+                quotient[i][j] = this.entries[i][j]/divisor;
+            }
+        }
+
+        return new Matrix(quotient);
     }
 
 
@@ -285,7 +321,18 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public CMatrix scalDiv(CNumber divisor) {
-        return null;
+        CNumber[][] quotient = new CNumber[this.m][this.n];
+        double scaler;
+
+        for(int i=0; i<this.m; i++) {
+            for(int j=0; j<this.n; j++) {
+                scaler = this.entries[i][j] / (divisor.re*divisor.re + divisor.im*divisor.im);
+
+                quotient[i][j] = new CNumber(scaler*divisor.re, -scaler*divisor.im);
+            }
+        }
+
+        return new CMatrix(quotient);
     }
 
 
@@ -296,7 +343,15 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public Double sum() {
-        return null;
+        double sum = 0;
+
+        for(int i=0; i<this.m; i++) {
+            for(int j=0; j<this.n; j++) {
+                sum += entries[i][j];
+            }
+        }
+
+        return sum;
     }
 
 
