@@ -124,6 +124,7 @@ public abstract class ErrorMessages {
     /**
      * Gets an error message for a disallowed axis.
      * @param axis Negative value.
+     * @param allowedAxes An array containing allowed axes.
      * @return An error message for a disallowed axis.
      */
     public static String axisErr(int axis, int[] allowedAxes) {

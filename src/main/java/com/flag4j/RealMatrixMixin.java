@@ -31,4 +31,13 @@ public interface RealMatrixMixin<T, W> extends
      * @return True if this matrix it is orthogonal. Otherwise, returns false.
      */
     boolean isOrthogonal();
+
+
+    /**
+     * Computes the complex element-wise square root of a tensor.
+     *
+     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
+     * the principle square root i.e. the square root with positive real part.
+     */
+    W sqrtComplex();
 }

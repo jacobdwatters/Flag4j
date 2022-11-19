@@ -1,5 +1,7 @@
 package com.flag4j.util;
 
+import com.flag4j.Matrix;
+
 import java.util.Random;
 
 /**
@@ -16,5 +18,23 @@ public class RandomTensor {
         rng = new Random(seed);
     }
 
-    // TODO:
+
+    /**
+     * Gets a matrix with random values. Values are normally distributed with mean of zero and standard deviation
+     * of one.
+     * @param m Number of rows in the resulting matrix.
+     * @param n Number of columns in the resulting matrix.
+     * @return A random matrix with specified size.
+     */
+    public Matrix getRandomMatrix(int m, int n) {
+        Matrix randMat = new Matrix(m, n);
+
+        for(int i=0; i<m; i++) {
+            for(int j=0; j<n; j++) {
+                randMat.entries[i][j] = rng.nextGaussian();
+            }
+        }
+
+        return randMat;
+    }
 }

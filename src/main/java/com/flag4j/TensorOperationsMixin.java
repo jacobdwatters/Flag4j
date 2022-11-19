@@ -112,7 +112,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
      * the principle square root i.e. the square root with positive real part.
      */
-    W sqrt();
+    T sqrt();
 
 
     /**

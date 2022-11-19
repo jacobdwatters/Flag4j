@@ -15,7 +15,7 @@ public abstract class TypedMatrix<T> {
     /**
      * The values of this matrix.
      */
-    T entries;
+    public T entries; // TODO: make protected
     /**
      * The number of rows in this matrix.
      */
@@ -44,6 +44,27 @@ public abstract class TypedMatrix<T> {
         this.n = n;
         this.type = type;
     }
+
+
+    /**
+     * Gets the number of rows in a matrix.
+     *
+     * @return The number of rows in this matrix.
+     */
+    public int numRows() {
+        return m;
+    }
+
+
+    /**
+     * Gets the number of columns in a matrix.
+     *
+     * @return The number of columns in this matrix.
+     */
+    public int numCols() {
+        return n;
+    }
+
 
 
     /**

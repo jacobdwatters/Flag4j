@@ -31,11 +31,13 @@ public final class BuiltInOperations {
 
 <span class="nc" id="L32">    public static final UnaryOperation&lt;Double&gt; roundReal = (Double a) -&gt; Double.valueOf(Math.round(a));</span>
 <span class="nc" id="L33">    public static final UnaryOperation&lt;CNumber&gt; roundComplex = (CNumber a) -&gt; new CNumber(Math.round(a.re), Math.round(a.im));</span>
+<span class="nc" id="L34">    public static final UnaryOperation&lt;Double&gt; absReal = (Double a) -&gt; Double.valueOf(Math.abs(a));</span>
+<span class="nc" id="L35">    public static final UnaryOperation&lt;CNumber&gt; absComplex = (CNumber a) -&gt; a.abs();</span>
 
-<span class="nc" id="L35">    public static final ZeroOperation&lt;Double&gt; randnReal = () -&gt; rand.nextGaussian();</span>
-<span class="nc" id="L36">    public static final ZeroOperation&lt;Double&gt; randuReal = () -&gt; Math.random();</span>
+<span class="nc" id="L37">    public static final ZeroOperation&lt;Double&gt; randnReal = () -&gt; rand.nextGaussian();</span>
+<span class="nc" id="L38">    public static final ZeroOperation&lt;Double&gt; randuReal = () -&gt; Math.random();</span>
 
-<span class="nc" id="L38">    public static final ZeroOperation&lt;CNumber&gt; randnComplex = () -&gt; new CNumber(rand.nextGaussian(), rand.nextGaussian());</span>
-<span class="nc" id="L39">    public static final ZeroOperation&lt;CNumber&gt; randuComplex = () -&gt; new CNumber(Math.random(), Math.random());</span>
+<span class="nc" id="L40">    public static final ZeroOperation&lt;CNumber&gt; randnComplex = () -&gt; new CNumber(rand.nextGaussian(), rand.nextGaussian());</span>
+<span class="nc" id="L41">    public static final ZeroOperation&lt;CNumber&gt; randuComplex = () -&gt; new CNumber(Math.random(), Math.random());</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -17,7 +17,7 @@ public final class StringUtils {
      * @return A whitespace string of specified size with the string s centered within it.
      */
     public static String center(String s, int size) {
-<span class="nc" id="L20">        return center(s, size, ' ');</span>
+<span class="nc" id="L20">        return center(s, size, &quot; &quot;);</span>
     }
 
 
@@ -28,7 +28,7 @@ public final class StringUtils {
      * @param pad Padding character.
      * @return A string made up of the padding character of specified size with the string s centered within it.
      */
-    public static String center(String s, int size, char pad) {
+    public static String center(String s, int size, String pad) {
 <span class="nc bnc" id="L32" title="All 4 branches missed.">        if (s == null || size &lt;= s.length())</span>
 <span class="nc" id="L33">            return s;</span>
 

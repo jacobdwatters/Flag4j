@@ -12,19 +12,6 @@ package com.flag4j;
  */
 interface MatrixPropertiesMixin<T, U, V, W, Y, X extends Number> extends TensorPropertiesMixin<T, U, V, W, Y, X> {
 
-    /**
-     * Gets the number of rows in a matrix.
-     * @return The number of rows in this matrix.
-     */
-    int numRows();
-
-
-    /**
-     * Gets the number of columns in a matrix.
-     * @return The number of columns in this matrix.
-     */
-    int numCols();
-
 
     /**
      * Checks if this matrix is square.

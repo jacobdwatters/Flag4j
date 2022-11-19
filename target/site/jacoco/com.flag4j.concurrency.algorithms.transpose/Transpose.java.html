@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Transpose.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.concurrency.algorithms.transpose</a> &gt; <span class="el_source">Transpose.java</span></div><h1>Transpose.java</h1><pre class="source lang-java linenums">package com.flag4j.concurrency.algorithms.transpose;
+
+import com.flag4j.Matrix;
+import com.flag4j.concurrency.Configurations;
+
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="nc" id="L9">public final class Transpose {</span>
+
+
+    /**
+     * Computes the transpose of matrix A using multiple threads.
+     * @param A The matrix to compute the transpose of.
+     * @return The transpose of this matrix.
+     */
+    public static Matrix concurrentT(Matrix A, boolean byRows) {
+<span class="nc" id="L18">        Matrix T = new Matrix(A.numCols(), A.numRows());</span>
+        List&lt;Thread&gt; threadList;
+
+<span class="nc bnc" id="L21" title="All 2 branches missed.">        if(byRows) {</span>
+<span class="nc" id="L22">            threadList = allocateThreadsByRows(T, A);</span>
+        } else {
+<span class="nc" id="L24">            threadList = allocateThreadsByRowsCols(T, A);</span>
+        }
+
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        for(Thread thread : threadList) { // Join the threads together</span>
+            try {
+<span class="nc" id="L29">                thread.join();</span>
+<span class="nc" id="L30">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L31">                e.printStackTrace();</span>
+<span class="nc" id="L32">            }</span>
+<span class="nc" id="L33">        }</span>
+
+<span class="nc" id="L35">        threadList.clear();</span>
+
+<span class="nc" id="L37">        return T;</span>
+    }
+
+
+    public static List&lt;Thread&gt; allocateThreadsByRows(Matrix dest, Matrix src) {
+<span class="nc" id="L42">        List&lt;Thread&gt; threadList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L43">        int numThreads = Configurations.getNumThreads();</span>
+        int rowBlockSize;
+        int rowEnd;
+
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        if(src.numRows() &lt; numThreads) {</span>
+<span class="nc" id="L48">            rowBlockSize = 1;</span>
+        } else {
+<span class="nc" id="L50">            rowBlockSize = src.numRows()/numThreads;</span>
+        }
+
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        for(int i=0; i&lt;src.numRows(); i += rowBlockSize) {</span>
+<span class="nc" id="L54">            rowEnd = Math.min(i+rowBlockSize, src.numRows());</span>
+<span class="nc" id="L55">            threadList.add(new MatrixTransposeWorker(dest, src, i, rowEnd, 0, src.numCols()));</span>
+<span class="nc" id="L56">            threadList.get(threadList.size()-1).start(); // Start the thread</span>
+        }
+
+<span class="nc" id="L59">        return threadList;</span>
+    }
+
+
+    public static List&lt;Thread&gt; allocateThreadsByRowsCols(Matrix dest, Matrix src) {
+<span class="nc" id="L64">        List&lt;Thread&gt; threadList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L65">        int numThreads = Configurations.getNumThreads();</span>
+        int rowBlockSize, colBlockSize;
+        int rowEnd, colEnd;
+
+<span class="nc bnc" id="L69" title="All 4 branches missed.">        if(src.numRows() &lt; numThreads &amp;&amp; src.numCols() &lt; numThreads) {</span>
+<span class="nc" id="L70">            rowBlockSize = 1;</span>
+<span class="nc" id="L71">            colBlockSize = 1;</span>
+
+        } else {
+<span class="nc" id="L74">            rowBlockSize = 4*src.numRows()/numThreads;</span>
+<span class="nc" id="L75">            colBlockSize = Math.max(1, src.numCols()/4);</span>
+        }
+
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        for(int i=0; i&lt;src.numRows(); i += rowBlockSize) {</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            for(int j=0; j&lt;src.numCols(); j += colBlockSize) {</span>
+<span class="nc" id="L80">                rowEnd = Math.min(i+rowBlockSize, src.numRows());</span>
+<span class="nc" id="L81">                colEnd = Math.min(j+colBlockSize, src.numCols());</span>
+
+<span class="nc" id="L83">                threadList.add(new MatrixTransposeWorker(dest, src, i, rowEnd, j, colEnd));</span>
+<span class="nc" id="L84">                threadList.get(threadList.size()-1).start(); // Start the thread</span>
+            }
+        }
+
+<span class="nc" id="L88">        return threadList;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
