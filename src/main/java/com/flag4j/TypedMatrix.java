@@ -46,6 +46,17 @@ public abstract class TypedMatrix<T> {
     }
 
 
+    protected TypedMatrix(MatrixTypes type, Shape shape) {
+        if(shape.getRank() != 2){
+            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(2, shape.getRank()));
+        }
+
+        this.m = shape.get(0);
+        this.n = shape.get(1);
+        this.type = type;
+    }
+
+
     /**
      * Gets the number of rows in a matrix.
      *

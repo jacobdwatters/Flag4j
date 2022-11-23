@@ -37,7 +37,7 @@ public class Shape {
      * @return The rank for a tensor with this shape.
      */
     public int getRank() {
-<span class="nc" id="L40">        return dims.length;</span>
+<span class="fc" id="L40">        return dims.length;</span>
     }
 
 
@@ -56,7 +56,7 @@ public class Shape {
      * @return The size of this shape object in the specified dimension.
      */
     public int get(int i) {
-<span class="nc" id="L59">        return this.dims[i];</span>
+<span class="fc" id="L59">        return this.dims[i];</span>
     }
 
 
@@ -72,14 +72,14 @@ public class Shape {
      */
     @Override
     public boolean equals(Object b) {
-<span class="nc" id="L75">        boolean result = true;</span>
+<span class="fc" id="L75">        boolean result = true;</span>
 
-<span class="nc bnc" id="L77" title="All 2 branches missed.">        if(b instanceof Shape) {</span>
-<span class="nc" id="L78">            Shape bCopy = (Shape) b;</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        if(b instanceof Shape) {</span>
+<span class="fc" id="L78">            Shape bCopy = (Shape) b;</span>
 
-<span class="nc bnc" id="L80" title="All 2 branches missed.">            if(this.dims.length == bCopy.dims.length) {</span>
-<span class="nc bnc" id="L81" title="All 2 branches missed.">                for(int i=0; i&lt;dims.length; i++) {</span>
-<span class="nc bnc" id="L82" title="All 2 branches missed.">                    if(dims[i] != bCopy.dims[i]) {</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">            if(this.dims.length == bCopy.dims.length) {</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">                for(int i=0; i&lt;dims.length; i++) {</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">                    if(dims[i] != bCopy.dims[i]) {</span>
 <span class="nc" id="L83">                        result = false;</span>
 <span class="nc" id="L84">                        break;</span>
                     }
@@ -88,11 +88,11 @@ public class Shape {
 <span class="nc" id="L88">                result = false;</span>
             }
 
-<span class="nc" id="L91">        } else {</span>
+<span class="fc" id="L91">        } else {</span>
 <span class="nc" id="L92">            result = false;</span>
         }
 
-<span class="nc" id="L95">        return result;</span>
+<span class="fc" id="L95">        return result;</span>
     }
 
 

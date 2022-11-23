@@ -50,6 +50,10 @@ public abstract class ErrorMessages {
      * Error message for disallowed axis.
      */
     private static final String AXIS_ERR = "Got an axis of %s but was expecting one of %s";
+    /**
+     * Error message wrong shape.
+     */
+    private static final String SHAPE_RANK_ERR = "Got a shape of rank %d but was expecting a shape of rank %d";
 
 
     /**
@@ -128,7 +132,18 @@ public abstract class ErrorMessages {
      * @return An error message for a disallowed axis.
      */
     public static String axisErr(int axis, int[] allowedAxes) {
-        return String.format(NEG_VALUE_ERR, axis, Arrays.toString(allowedAxes));
+        return String.format(AXIS_ERR, axis, Arrays.toString(allowedAxes));
+    }
+
+
+    /**
+     * Gets an error message for an incorrect shape.
+     * @param expRank Expected rank of the shape.
+     * @param actRank Actual rank of the shape.
+     * @return An error message for a shape object with wrong shape.
+     */
+    public static String shapeRankErr(int expRank, int actRank) {
+        return String.format(SHAPE_RANK_ERR, expRank, actRank);
     }
 }
 

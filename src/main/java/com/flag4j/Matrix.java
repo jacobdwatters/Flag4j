@@ -3,6 +3,7 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.concurrency.CheckConcurrent;
 import com.flag4j.concurrency.algorithms.addition.ConcurrentAddition;
+import com.flag4j.concurrency.algorithms.subtraction.ConcurrentSubtraction;
 import com.flag4j.concurrency.algorithms.transpose.ConcurrentTranspose;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.util.ShapeChecks;
@@ -125,6 +126,31 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
 
     /**
+     * Creates a real dense matrix with specified shape filled with zeros.
+     * @param shape Shape of matrix.
+     */
+    public Matrix(Shape shape) {
+        super(MatrixTypes.MATRIX, shape);
+        this.entries = new double[this.m][this.n];
+    }
+
+
+    /**
+     * Creates a real dense matrix with specified shape filled with a specific value.
+     * @param shape Shape of matrix.
+     * @param value Value to fill matrix with.
+     */
+    public Matrix(Shape shape, double value) {
+        super(MatrixTypes.MATRIX, shape);
+        this.entries = new double[this.m][this.n];
+        double[] row = new double[this.n];
+
+        Arrays.fill(row, value);
+        Arrays.fill(this.entries, row);
+    }
+
+
+    /**
      * Computes the element-wise addition between two matrices.
      *
      * @param B Second matrix in the addition.
@@ -190,7 +216,8 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
         for(int i=0; i<this.m; i++) {
             for(int j=0; j<this.n; j++) {
-                sum.entries[i][j] = new CNumber(this.entries[i][j] + a.re, a.im);
+                sum.entries[i][j].re = this.entries[i][j] + a.re;
+                sum.entries[i][j].im = a.im;
             }
         }
 
@@ -209,11 +236,20 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
     public Matrix sub(Matrix B) {
         // Ensure shapes are correct for this operation.
         ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());
-        Matrix difference = new Matrix(this.m, this.n);
+        Matrix difference;
 
-        for(int i=0; i<this.m; i++) {
-            for(int j=0; j<this.n; j++) {
-                difference.entries[i][j] = this.entries[i][j] - B.entries[i][j];
+        if(CheckConcurrent.relaxedCheck(this.numRows(), this.numCols())) {
+            // Then compute the matrix addition concurrently.
+            difference = ConcurrentSubtraction.sub(this, B);
+
+        } else {
+            // Then compute the matrix addition on single thread.
+            difference = new Matrix(this.numRows(), this.numCols());
+
+            for(int i=0; i<this.m; i++) {
+                for(int j=0; j<this.n; j++) {
+                    difference.entries[i][j] = this.entries[i][j] - B.entries[i][j];
+                }
             }
         }
 
@@ -253,7 +289,8 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
         for(int i=0; i<this.m; i++) {
             for(int j=0; j<this.n; j++) {
-                difference.entries[i][j] = new CNumber(this.entries[i][j] - a.re, a.im);
+                difference.entries[i][j].re = this.entries[i][j] - a.re;
+                difference.entries[i][j].im = a.im;
             }
         }
 
@@ -293,9 +330,8 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
         for(int i=0; i<this.m; i++) {
             for(int j=0; j<this.n; j++) {
-                product.entries[i][j] = new CNumber(
-                        factor.re*this.entries[i][j],
-                        factor.im*this.entries[i][j]);
+                product.entries[i][j].re = factor.re*this.entries[i][j];
+                product.entries[i][j].im = factor.im*this.entries[i][j];
             }
         }
 
@@ -339,8 +375,8 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
         for(int i=0; i<this.m; i++) {
             for(int j=0; j<this.n; j++) {
                 scaler = this.entries[i][j] / (divisor.re*divisor.re + divisor.im*divisor.im);
-
-                quotient.entries[i][j] = new CNumber(scaler*divisor.re, -scaler*divisor.im);
+                quotient.entries[i][j].re = scaler*divisor.re;
+                quotient.entries[i][j].im = -scaler*divisor.im;
             }
         }
 
@@ -454,54 +490,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public Matrix T() {
-        return null;
-    }
-
-
-    /**
-     * Computes the complex conjugate of a tensor.
-     *
-     * @return The complex conjugate of this tensor.
-     */
-    @Override
-    public Matrix conj() {
-        return null;
-    }
-
-
-    /**
-     * Computes the complex conjugate transpose of a tensor.
-     * Same as {@link #hermTranspose()} and {@link #hermTranspose()}.
-     *
-     * @return The complex conjugate transpose of this tensor.
-     */
-    @Override
-    public Matrix conjT() {
-        return null;
-    }
-
-
-    /**
-     * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
-     * Same as {@link #conjT()} and {@link #H()}.
-     *
-     * @return he complex conjugate transpose (Hermitian transpose) of this tensor.
-     */
-    @Override
-    public Matrix hermTranspose() {
-        return null;
-    }
-
-
-    /**
-     * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
-     * Same as {@link #conjT()} and {@link #hermTranspose()}.
-     *
-     * @return he complex conjugate transpose (Hermitian transpose) of this tensor.
-     */
-    @Override
-    public Matrix H() {
-        return null;
+        return this.transpose();
     }
 
 
@@ -513,7 +502,15 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public Matrix recep() {
-        return null;
+        Matrix recep = new Matrix(this.getShape());
+
+        for(int i=0; i<recep.numRows(); i++) {
+            for(int j=0; j<recep.numCols(); j++) {
+                recep.entries[i][j] = 1/this.entries[i][j];
+            }
+        }
+
+        return recep;
     }
 
 
@@ -538,8 +535,18 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Matrix add(CMatrix B) {
-        return null;
+    public CMatrix add(CMatrix B) {
+        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());
+        CMatrix sum = new CMatrix(this.getShape());
+
+        for(int i=0; i<sum.numRows(); i++) {
+            for(int j=0; j<sum.numRows(); j++) {
+                sum.entries[i][j].re = this.entries[i][j]+B.entries[i][j].re;
+                sum.entries[i][j].im = B.entries[i][j].im;
+            }
+        }
+
+        return sum;
     }
 
 
@@ -551,7 +558,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Matrix add(SparseCMatrix B) {
+    public CMatrix add(SparseCMatrix B) {
         return null;
     }
 
@@ -669,8 +676,16 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      * @return The result of multiplying this matrix with itself 'exponent' times.
      */
     @Override
-    public Matrix pow(int exponent) {
-        return null;
+    public Matrix pow(double exponent) {
+        Matrix power = new Matrix(this.getShape());
+
+        for(int i=0; i<power.numRows(); i++) {
+            for(int j=0; j<power.numCols(); j++) {
+                power.entries[i][j] = Math.pow(this.entries[i][j], exponent);
+            }
+        }
+
+        return power;
     }
 
 
@@ -683,7 +698,16 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public Matrix elemMult(Matrix B) {
-        return null;
+        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());
+        Matrix product = new Matrix(this.getShape());
+
+        for(int i=0; i<product.numRows(); i++) {
+            for(int j=0; j<product.numCols(); j++) {
+                product.entries[i][j] = this.entries[i][j]*B.entries[i][j];
+            }
+        }
+
+        return product;
     }
 
 
@@ -709,7 +733,17 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public CMatrix elemMult(CMatrix B) {
-        return null;
+        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());
+        CMatrix product = new CMatrix(this.getShape());
+
+        for(int i=0; i<product.numRows(); i++) {
+            for(int j=0; j<product.numCols(); j++) {
+                product.entries[i][j].re = this.entries[i][j]*B.entries[i][j].re;
+                product.entries[i][j].im = this.entries[i][j]*B.entries[i][j].im;
+            }
+        }
+
+        return product;
     }
 
 
@@ -736,7 +770,16 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public Matrix elemDiv(Matrix B) {
-        return null;
+        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());
+        Matrix quotient = new Matrix(this.m, this.n);
+
+        for(int i=0; i<this.numRows(); i++) {
+            for(int j=0; j<this.numCols(); j++) {
+                quotient.entries[i][j] = this.entries[i][j]/B.entries[i][j];
+            }
+        }
+
+        return quotient;
     }
 
 
@@ -749,8 +792,23 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      * @throws ArithmeticException      If B contains any zero entries.
      */
     @Override
-    public SparseMatrix elemDiv(CMatrix B) {
-        return null;
+    public CMatrix elemDiv(CMatrix B) {
+        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());
+        CMatrix quotient = new CMatrix(this.m, this.n);
+        double divisorRe, divisorIm;
+        double scaler;
+
+        for(int i=0; i<this.numRows(); i++) {
+            for(int j=0; j<this.numCols(); j++) {
+                divisorRe = B.entries[i][j].re;
+                divisorIm = B.entries[i][j].im;
+                scaler = this.entries[i][j] / (divisorRe*divisorRe + divisorIm*divisorIm);
+                quotient.entries[i][j].re = scaler*divisorRe;
+                quotient.entries[i][j].im = -scaler*divisorIm;
+            }
+        }
+
+        return quotient;
     }
 
 
@@ -922,7 +980,15 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public Matrix sumCols() {
-        return null;
+        Matrix sum = new Matrix(this.numRows(), 1);
+
+        for(int i=0; i<this.numRows(); i++) {
+            for(int j=0; j<this.numCols(); j++) {
+                sum.entries[i][0] += this.entries[i][j];
+            }
+        }
+
+        return sum;
     }
 
 
@@ -934,7 +1000,15 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public Matrix sumRows() {
-        return null;
+        Matrix sum = new Matrix(1, this.numCols());
+
+        for(int i=0; i<this.numRows(); i++) {
+            for(int j=0; j<this.numCols(); j++) {
+                sum.entries[0][j] += this.entries[i][j];
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1442,7 +1516,13 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public Double[] getRow(int i) {
-        return new Double[0];
+        Double[] column = new Double[this.numRows()];
+
+        for(int j=0; j<this.numCols(); j++) {
+            column[j] = this.entries[i][j];
+        }
+
+        return column;
     }
 
 
@@ -1471,7 +1551,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public boolean isSquare() {
-        return false;
+        return this.numRows()==this.numCols();
     }
 
 
@@ -1482,7 +1562,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public boolean isVector() {
-        return false;
+        return this.numRows()==1 || this.numCols()==1;
     }
 
 
@@ -1496,7 +1576,20 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public int vectorType() {
-        return 0;
+
+        int result;
+
+        if(this.numRows() == 1 && this.numCols()==1) {
+            result = 0;
+        } else if(this.numRows() == 1) {
+            result = 1;
+        } else if(this.numCols() == 1) {
+            result = 2;
+        } else {
+            result = -1;
+        }
+
+        return result;
     }
 
 
@@ -1593,54 +1686,6 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
 
     /**
-     * Computes an orthonormal basis of the row space of this matrix. That is, a set of orthonormal vectors which span
-     * the row space of this matrix.
-     *
-     * @return An orthonormal basis of the row space of this matrix. The vectors are stored as the columns of the returned matrix.
-     */
-    @Override
-    public Matrix rowSpace() {
-        return null;
-    }
-
-
-    /**
-     * Computes an orthonormal basis of the column space of this matrix. That is, a set of orthonormal vectors which span
-     * the column space of this matrix.
-     *
-     * @return An orthonormal basis of the column space of this matrix. The vectors are stored as the columns of the returned matrix.
-     */
-    @Override
-    public Matrix colSpace() {
-        return null;
-    }
-
-
-    /**
-     * Computes an orthonormal basis of the null space of this matrix. That is, a set of orthonormal vectors which satisfy
-     * Ax=0 where A is this matrix.
-     *
-     * @return An orthonormal basis of the null space of this matrix. The vectors are stored as the columns of the returned matrix.
-     */
-    @Override
-    public Matrix nullSpace() {
-        return null;
-    }
-
-
-    /**
-     * Computes an orthonormal basis of the left null space of this matrix. That is, a set of orthonormal vectors which satisfy
-     * A<sup>T</sup>x=0 where A is this matrix.
-     *
-     * @return An orthonormal basis of the left null space of this matrix. The vectors are stored as the columns of the returned matrix.
-     */
-    @Override
-    public Matrix leftNullSpace() {
-        return null;
-    }
-
-
-    /**
      * Checks if the matrix is positive definite.
      *
      * @return True if the matrix is positive definite. Otherwise, returns false.
@@ -1681,7 +1726,25 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public boolean isSymmetric() {
-        return false;
+        boolean result = true;
+
+        if(this.isSquare()) {
+            for(int i=1; i<this.numRows(); i++) {
+                for(int j=0; j<i; j++) {
+                    if(this.entries[i][j] != this.entries[j][i]) {
+                        // Then this matrix is not symmetric.
+                        result = false;
+                        break;
+                    }
+                }
+
+                if(!result) {
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
 
@@ -1692,7 +1755,25 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public boolean isAntiSymmetric() {
-        return false;
+        boolean result = true;
+
+        if(this.isSquare()) {
+            for(int i=1; i<this.numRows(); i++) {
+                for(int j=0; j<i; j++) {
+                    if(this.entries[i][j] != -this.entries[j][i]) {
+                        // Then this matrix is not anti-symmetric.
+                        result = false;
+                        break;
+                    }
+                }
+
+                if(!result) {
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
 
@@ -1708,28 +1789,28 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
 
     /**
-     * Computes the real square roots of this tensor (element-wise). This method only supports tensors which do not contain
-     * negative values. See {@link TensorOperationsMixin#sqrt()} for a method which computes the complex square roots of
-     * a tensor.
-     *
-     * @return A tensor of the same shape as this tensor which is the result of applying a square root (element-wise) to
-     * this tensor.
-     * @throws IllegalArgumentException If this tensor contains negative values.
-     */
-    @Override
-    public Matrix reSqrt() {
-        return null;
-    }
-
-
-    /**
      * Checks if this tensor contains only non-negative values.
      *
      * @return True if this tensor only contains non-negative values. Otherwise, returns false.
      */
     @Override
     public boolean isPos() {
-        return false;
+        boolean result = true;
+
+        for(int i=0; i<this.numRows(); i++) {
+            for(int j=0; j<this.numCols(); j++) {
+                if(this.entries[i][j] < 0) {
+                    result = false;
+                    break;
+                }
+
+                if(!result) {
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
 
@@ -1740,7 +1821,22 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public boolean isNeg() {
-        return false;
+        boolean result = true;
+
+        for(int i=0; i<this.numRows(); i++) {
+            for(int j=0; j<this.numCols(); j++) {
+                if(this.entries[i][j] > 0) {
+                    result = false;
+                    break;
+                }
+
+                if(!result) {
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
 
@@ -1752,7 +1848,15 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public CMatrix toComplex() {
-        return null;
+        CMatrix complex = new CMatrix(this.getShape());
+
+        for(int i=0; i<complex.numRows(); i++) {
+            for(int j=0; j<complex.numCols(); j++) {
+                complex.entries[i][j].re = this.entries[i][j];
+            }
+        }
+
+        return complex;
     }
 
 
@@ -1763,7 +1867,17 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public Double min() {
-        return null;
+        double min = Double.MAX_VALUE;
+
+        for(int i=0; i<this.numRows(); i++) {
+            for(int j=0; j<this.numCols(); j++) {
+                if(this.entries[i][j] < min) {
+                    min = this.entries[i][j];
+                }
+            }
+        }
+
+        return min;
     }
 
 
@@ -1774,7 +1888,17 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public Double max() {
-        return null;
+        double max = Double.MIN_NORMAL;
+
+        for(int i=0; i<this.numRows(); i++) {
+            for(int j=0; j<this.numCols(); j++) {
+                if(this.entries[i][j] > max) {
+                    max = this.entries[i][j];
+                }
+            }
+        }
+
+        return max;
     }
 
 
@@ -1786,7 +1910,17 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public Double minAbs() {
-        return null;
+        double min = Double.MAX_VALUE;
+
+        for(int i=0; i<this.numRows(); i++) {
+            for(int j=0; j<this.numCols(); j++) {
+                if(Math.abs(this.entries[i][j]) < min) {
+                    min = Math.abs(this.entries[i][j]);
+                }
+            }
+        }
+
+        return min;
     }
 
 
@@ -1798,7 +1932,17 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public Double maxAbs() {
-        return null;
+        double max = -1;
+
+        for(int i=0; i<this.numRows(); i++) {
+            for(int j=0; j<this.numCols(); j++) {
+                if(Math.abs(this.entries[i][j]) > max) {
+                    max = Math.abs(this.entries[i][j]);
+                }
+            }
+        }
+
+        return max;
     }
 
 
@@ -1810,7 +1954,20 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public int[] argMin() {
-        return new int[0];
+        double min = Double.MAX_VALUE;
+        int[] indices = new int[2];
+
+        for(int i=0; i<this.numRows(); i++) {
+            for(int j=0; j<this.numCols(); j++) {
+                if(this.entries[i][j] <= min) {
+                    min = this.entries[i][j];
+                    indices[0] = i;
+                    indices[1] = j;
+                }
+            }
+        }
+
+        return indices;
     }
 
 
@@ -1822,7 +1979,20 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public int[] argMax() {
-        return new int[0];
+        double max = Double.MIN_NORMAL;
+        int[] indices = new int[2];
+
+        for(int i=0; i<this.numRows(); i++) {
+            for(int j=0; j<this.numCols(); j++) {
+                if(this.entries[i][j] >= max) {
+                    max = this.entries[i][j];
+                    indices[0] = i;
+                    indices[1] = j;
+                }
+            }
+        }
+
+        return indices;
     }
 
 
@@ -1925,7 +2095,27 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public boolean equals(CMatrix B) {
-        return false;
+        boolean result = true;
+
+        if(!this.getShape().equals(B.getShape())) {
+            result = false;
+
+        } else {
+            for(int i=0; i<this.numRows(); i++) {
+                for(int j=0; j<this.numCols(); j++) {
+                    if(this.entries[i][j] != B.entries[i][j].re || B.entries[i][j].im != 0) {
+                        result = false;
+                        break;
+                    }
+                }
+
+                if(!result) {
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
 
@@ -2367,18 +2557,48 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public boolean isZero() {
-        return false;
+        boolean result = true;
+
+        for(int i=0; i<this.numRows(); i++) {
+            for(int j=0; j<this.numCols(); j++) {
+                if(this.entries[i][j] != 0) {
+                    result = false;
+                    break;
+                }
+
+                if(!result) {
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
 
     /**
      * Checks if this tensor only contains ones.
      *
-     * @return True if this tensor only contains oens. Otherwise, returns false.
+     * @return True if this tensor only contains ones. Otherwise, returns false.
      */
     @Override
     public boolean isOnes() {
-        return false;
+        boolean result = true;
+
+        for(int i=0; i<this.numRows(); i++) {
+            for(int j=0; j<this.numCols(); j++) {
+                if(this.entries[i][j] != 1) {
+                    result = false;
+                    break;
+                }
+
+                if(!result) {
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
 
@@ -2408,7 +2628,6 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
         int PADDING = PrintOptions.getPadding();
         int PRECISION = PrintOptions.getPrecision();
 
-
         if(!this.isEmpty()) {
             int max=0, colWidth;
             List<Integer> maxList = new ArrayList<>();
@@ -2419,7 +2638,11 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
                 List<String> values = new ArrayList<>(contents.size());
 
                 for(Double v : contents) {
-                    values.add(String.valueOf(CNumber.round(new CNumber(v), PRECISION).toString()));
+                    if(!v.isInfinite() && !v.isNaN()) {
+                        values.add(String.valueOf(CNumber.round(new CNumber(v), PRECISION).toString()));
+                    } else {
+                        values.add(String.valueOf(v));
+                    }
                 }
 
                 Optional<Integer> value = values.stream().map(String::length).max(Integer::compareTo);
@@ -2451,8 +2674,17 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
                     }
                     else {
                         colWidth = maxList.get(j)+PADDING;
+                        String valueString;
+                        Double v = entries[i][j];
+
+                        if(!v.isInfinite() && !v.isNaN()) {
+                            valueString = CNumber.round(new CNumber(entries[i][j]), PRECISION).toString();
+                        } else {
+                            valueString = String.valueOf(entries[i][j]);
+                        }
+
                         resultBuilder.append(String.format("%-" + (colWidth) + "s", StringUtils.center(
-                                CNumber.round(new CNumber(entries[i][j]), PRECISION).toString(), colWidth))
+                                valueString, colWidth))
                         );
                     }
                 }

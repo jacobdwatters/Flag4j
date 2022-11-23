@@ -98,38 +98,6 @@ interface MatrixPropertiesMixin<T, U, V, W, Y, X extends Number> extends TensorP
 
 
     /**
-     * Computes an orthonormal basis of the row space of this matrix. That is, a set of orthonormal vectors which span
-     * the row space of this matrix.
-     * @return An orthonormal basis of the row space of this matrix. The vectors are stored as the columns of the returned matrix.
-     */
-    T rowSpace();
-
-
-    /**
-     * Computes an orthonormal basis of the column space of this matrix. That is, a set of orthonormal vectors which span
-     * the column space of this matrix.
-     * @return An orthonormal basis of the column space of this matrix. The vectors are stored as the columns of the returned matrix.
-     */
-    T colSpace();
-
-
-    /**
-     * Computes an orthonormal basis of the null space of this matrix. That is, a set of orthonormal vectors which satisfy
-     * Ax=0 where A is this matrix.
-     * @return An orthonormal basis of the null space of this matrix. The vectors are stored as the columns of the returned matrix.
-     */
-    T nullSpace();
-
-
-    /**
-     * Computes an orthonormal basis of the left null space of this matrix. That is, a set of orthonormal vectors which satisfy
-     * A<sup>T</sup>x=0 where A is this matrix.
-     * @return An orthonormal basis of the left null space of this matrix. The vectors are stored as the columns of the returned matrix.
-     */
-    T leftNullSpace();
-
-
-    /**
      * Checks if the matrix is positive definite.
      * @return True if the matrix is positive definite. Otherwise, returns false.
      */

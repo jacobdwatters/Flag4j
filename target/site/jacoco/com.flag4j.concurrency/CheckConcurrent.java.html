@@ -33,7 +33,7 @@
      * @return True if a concurrent algorithm should be used. Otherwise, returns false.
      */
     public static boolean relaxedCheck(int numRows, int numCols) {
-<span class="nc" id="L36">        return standardCheck(numRows, numCols, RELAXED_BASE_THRESHOLD, RELAXED_SMALLER_THRESHOLD, RELAXED_LARGER_THRESHOLD);</span>
+<span class="fc" id="L36">        return standardCheck(numRows, numCols, RELAXED_BASE_THRESHOLD, RELAXED_SMALLER_THRESHOLD, RELAXED_LARGER_THRESHOLD);</span>
     }
 
 
@@ -48,19 +48,19 @@
      * @return True if a concurrent algorithm should be used.
      */
     private static boolean standardCheck(int numRows, int numCols, int baseThreshold, int smallerThreshold, int largerThreshold) {
-<span class="nc" id="L51">        boolean result = false;</span>
+<span class="fc" id="L51">        boolean result = false;</span>
 
-<span class="nc bnc" id="L53" title="All 2 branches missed.">        if(Configurations.getNumThreads() &gt; 1) {</span>
-<span class="nc bnc" id="L54" title="All 4 branches missed.">            if(numRows &gt;= baseThreshold &amp;&amp; numCols &gt;= baseThreshold) {</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if(Configurations.getNumThreads() &gt; 1) {</span>
+<span class="pc bpc" id="L54" title="3 of 4 branches missed.">            if(numRows &gt;= baseThreshold &amp;&amp; numCols &gt;= baseThreshold) {</span>
 <span class="nc" id="L55">                result = true;</span>
-<span class="nc bnc" id="L56" title="All 4 branches missed.">            } else if(numRows &gt;= largerThreshold &amp;&amp; numCols &gt;= smallerThreshold) {</span>
+<span class="pc bpc" id="L56" title="3 of 4 branches missed.">            } else if(numRows &gt;= largerThreshold &amp;&amp; numCols &gt;= smallerThreshold) {</span>
 <span class="nc" id="L57">                result = true;</span>
-<span class="nc bnc" id="L58" title="All 4 branches missed.">            } else if(numCols &gt;= largerThreshold &amp;&amp; numRows &gt;= smallerThreshold) {</span>
+<span class="pc bpc" id="L58" title="3 of 4 branches missed.">            } else if(numCols &gt;= largerThreshold &amp;&amp; numRows &gt;= smallerThreshold) {</span>
 <span class="nc" id="L59">                result = true;</span>
             }
         }
 
-<span class="nc" id="L63">        return result;</span>
+<span class="fc" id="L63">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -9,17 +9,6 @@ package com.flag4j;
 public interface RealTensorMixin<T, W> {
 
     /**
-     * Computes the real square roots of this tensor (element-wise). This method only supports tensors which do not contain
-     * negative values. See {@link TensorOperationsMixin#sqrt()} for a method which computes the complex square roots of
-     * a tensor.
-     * @return A tensor of the same shape as this tensor which is the result of applying a square root (element-wise) to
-     * this tensor.
-     * @throws IllegalArgumentException If this tensor contains negative values.
-     */
-    T reSqrt();
-
-
-    /**
      * Checks if this tensor contains only non-negative values.
      * @return True if this tensor only contains non-negative values. Otherwise, returns false.
      */

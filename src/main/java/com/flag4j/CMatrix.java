@@ -31,6 +31,12 @@ public class CMatrix extends TypedMatrix<CNumber[][]> {
     public CMatrix(int size) {
         super(MatrixTypes.C_MATRIX, size, size);
         this.entries = new CNumber[this.m][this.n];
+
+        for(int i=0; i<this.m; i++) {
+            for(int j=0; j<this.n; j++) {
+                this.entries[i][j] = new CNumber();
+            }
+        }
     }
 
 
@@ -82,7 +88,23 @@ public class CMatrix extends TypedMatrix<CNumber[][]> {
 
         for(int i=0; i<this.m; i++) {
             for(int j=0; j<this.n; j++) {
-                this.entries[i][j] = CNumber.ZERO;
+                this.entries[i][j] = new CNumber();
+            }
+        }
+    }
+
+
+    /**
+     * Creates a complex dense matrix with specified shape.
+     * @param shape Shape of the matrix.
+     */
+    public CMatrix(Shape shape) {
+        super(MatrixTypes.C_MATRIX, shape);
+        this.entries = new CNumber[this.m][this.n];
+
+        for(int i=0; i<this.m; i++) {
+            for(int j=0; j<this.n; j++) {
+                this.entries[i][j] = new CNumber();
             }
         }
     }
@@ -240,6 +262,37 @@ public class CMatrix extends TypedMatrix<CNumber[][]> {
     }
 
 
+    public Shape getShape() {
+        return new Shape(this.m, this.n);
+    }
+
+
+
+    public boolean equals(CMatrix B) {
+        boolean result = true;
+
+        if(!this.getShape().equals(B.getShape())) {
+            result = false;
+
+        } else {
+            for(int i=0; i<this.numRows(); i++) {
+                for(int j=0; j<this.numCols(); j++) {
+                    if(!this.entries[i][j].equals(B.entries[i][j])) {
+                        result = false;
+                        break;
+                    }
+                }
+
+                if(!result) {
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+
     /**
      * Formats matrix contents as a string.
      *
@@ -305,15 +358,5 @@ public class CMatrix extends TypedMatrix<CNumber[][]> {
         }
 
         return result;
-    }
-
-
-    public static void main(String[] args)  {
-        final String[][] d =
-                {{"5", 		"2-2.3i", 	"4.1 + -3.1i"},
-                        {"3i", 	"-i", 		"4.1"},
-                        {"0+0i",	"0", 		"1"}};
-        CMatrix mat = new CMatrix(d);
-        System.out.println(mat);
     }
 }

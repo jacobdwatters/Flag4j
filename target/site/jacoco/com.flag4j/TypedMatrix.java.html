@@ -46,13 +46,24 @@ public abstract class TypedMatrix&lt;T&gt; {
 <span class="fc" id="L46">    }</span>
 
 
+<span class="fc" id="L49">    protected TypedMatrix(MatrixTypes type, Shape shape) {</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if(shape.getRank() != 2){</span>
+<span class="nc" id="L51">            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(2, shape.getRank()));</span>
+        }
+
+<span class="fc" id="L54">        this.m = shape.get(0);</span>
+<span class="fc" id="L55">        this.n = shape.get(1);</span>
+<span class="fc" id="L56">        this.type = type;</span>
+<span class="fc" id="L57">    }</span>
+
+
     /**
      * Gets the number of rows in a matrix.
      *
      * @return The number of rows in this matrix.
      */
     public int numRows() {
-<span class="nc" id="L55">        return m;</span>
+<span class="fc" id="L66">        return m;</span>
     }
 
 
@@ -62,7 +73,7 @@ public abstract class TypedMatrix&lt;T&gt; {
      * @return The number of columns in this matrix.
      */
     public int numCols() {
-<span class="nc" id="L65">        return n;</span>
+<span class="fc" id="L76">        return n;</span>
     }
 
 
@@ -72,7 +83,7 @@ public abstract class TypedMatrix&lt;T&gt; {
      * @return A shape object describing the
      */
     public Shape getShape() {
-<span class="fc" id="L75">        return new Shape(m, n);</span>
+<span class="fc" id="L86">        return new Shape(m, n);</span>
     }
 
 
@@ -82,7 +93,7 @@ public abstract class TypedMatrix&lt;T&gt; {
      * @return True if this tensor is empty (i.e. contains no elements). Otherwise, returns false.
      */
     public boolean isEmpty() {
-<span class="nc bnc" id="L85" title="All 4 branches missed.">        return m==0 &amp;&amp; n==0;</span>
+<span class="pc bpc" id="L96" title="3 of 4 branches missed.">        return m==0 &amp;&amp; n==0;</span>
     }
 
 
@@ -93,7 +104,7 @@ public abstract class TypedMatrix&lt;T&gt; {
      * @return True if matrix A and matrix B have the same shape. Otherwise, returns false.
      */
     public static boolean sameShape(TypedMatrix A, TypedMatrix B) {
-<span class="nc" id="L96">        return A.getShape().equals(B.getShape());</span>
+<span class="nc" id="L107">        return A.getShape().equals(B.getShape());</span>
     }
 
 
@@ -108,23 +119,23 @@ public abstract class TypedMatrix&lt;T&gt; {
      * @throws IllegalArgumentException If axis is not zero or one.
      */
     public static boolean sameLength(TypedMatrix A, TypedMatrix B, int axis) {
-<span class="nc bnc" id="L111" title="All 4 branches missed.">        if(axis!=Axis2D.row() || axis!=Axis2D.col()) {</span>
+<span class="nc bnc" id="L122" title="All 4 branches missed.">        if(axis!=Axis2D.row() || axis!=Axis2D.col()) {</span>
             // Then this is an unspecified axis
-<span class="nc" id="L113">            throw new IllegalArgumentException(</span>
-<span class="nc" id="L114">                    ErrorMessages.axisErr(axis, Axis2D.allAxes())</span>
+<span class="nc" id="L124">            throw new IllegalArgumentException(</span>
+<span class="nc" id="L125">                    ErrorMessages.axisErr(axis, Axis2D.allAxes())</span>
             );
         }
 
-<span class="nc" id="L118">        boolean result = false;</span>
+<span class="nc" id="L129">        boolean result = false;</span>
 
-<span class="nc bnc" id="L120" title="All 2 branches missed.">        if(axis == Axis2D.row()) {</span>
-<span class="nc bnc" id="L121" title="All 2 branches missed.">            result = A.m == B.m;</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        if(axis == Axis2D.row()) {</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">            result = A.m == B.m;</span>
 
-<span class="nc bnc" id="L123" title="All 2 branches missed.">        } else if(axis == Axis2D.col()) {</span>
-<span class="nc bnc" id="L124" title="All 2 branches missed.">            result = A.n == B.n;</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        } else if(axis == Axis2D.col()) {</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">            result = A.n == B.n;</span>
         }
 
-<span class="nc" id="L127">        return result;</span>
+<span class="nc" id="L138">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

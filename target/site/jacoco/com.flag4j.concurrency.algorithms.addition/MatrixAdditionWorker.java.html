@@ -22,24 +22,24 @@ public class MatrixAdditionWorker extends Thread {
      * @param colStart Starting column for worker to add.
      * @param colEnd Ending column for worker to add.
      */
-<span class="nc" id="L25">    public MatrixAdditionWorker(Matrix dest, Matrix src1, Matrix src2, int rowStart, int rowEnd, int colStart, int colEnd) {</span>
-<span class="nc" id="L26">        this.dest = dest;</span>
-<span class="nc" id="L27">        this.src1 = src1;</span>
-<span class="nc" id="L28">        this.src2 = src2;</span>
-<span class="nc" id="L29">        this.rowStart = rowStart;</span>
-<span class="nc" id="L30">        this.rowEnd = rowEnd;</span>
-<span class="nc" id="L31">        this.colStart = colStart;</span>
-<span class="nc" id="L32">        this.colEnd = colEnd;</span>
-<span class="nc" id="L33">    }</span>
+<span class="fc" id="L25">    public MatrixAdditionWorker(Matrix dest, Matrix src1, Matrix src2, int rowStart, int rowEnd, int colStart, int colEnd) {</span>
+<span class="fc" id="L26">        this.dest = dest;</span>
+<span class="fc" id="L27">        this.src1 = src1;</span>
+<span class="fc" id="L28">        this.src2 = src2;</span>
+<span class="fc" id="L29">        this.rowStart = rowStart;</span>
+<span class="fc" id="L30">        this.rowEnd = rowEnd;</span>
+<span class="fc" id="L31">        this.colStart = colStart;</span>
+<span class="fc" id="L32">        this.colEnd = colEnd;</span>
+<span class="fc" id="L33">    }</span>
 
 
     @Override
     public void run() {
-<span class="nc bnc" id="L38" title="All 2 branches missed.">        for(int i=rowStart; i&lt;rowEnd; i++) {</span>
-<span class="nc bnc" id="L39" title="All 2 branches missed.">            for(int j=colStart; j&lt;colEnd; j++) {</span>
-<span class="nc" id="L40">                dest.entries[i][j] = src1.entries[i][j] + src2.entries[i][j];</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        for(int i=rowStart; i&lt;rowEnd; i++) {</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">            for(int j=colStart; j&lt;colEnd; j++) {</span>
+<span class="fc" id="L40">                dest.entries[i][j] = src1.entries[i][j] + src2.entries[i][j];</span>
             }
         }
-<span class="nc" id="L43">    }</span>
+<span class="fc" id="L43">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

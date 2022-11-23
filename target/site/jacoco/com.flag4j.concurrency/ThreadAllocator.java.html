@@ -21,17 +21,17 @@ public final class ThreadAllocator {
 <span class="nc" id="L21">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
     }
 
-<span class="nc" id="L24">    public static BinaryThreadFactory&lt;Matrix&gt; matrixAddThreadFactory = (Matrix dest, Matrix src1, Matrix src2,</span>
+<span class="fc" id="L24">    public static BinaryThreadFactory&lt;Matrix&gt; matrixAddThreadFactory = (Matrix dest, Matrix src1, Matrix src2,</span>
                                                                         int rowStart, int rowEnd,
                                                                         int colStart, int colEnd)
-<span class="nc" id="L27">            -&gt; new MatrixAdditionWorker(dest, src1, src2, rowStart, rowEnd, colStart, colEnd);</span>
+<span class="fc" id="L27">            -&gt; new MatrixAdditionWorker(dest, src1, src2, rowStart, rowEnd, colStart, colEnd);</span>
 
-<span class="nc" id="L29">    public static BinaryThreadFactory&lt;Matrix&gt; matrixSubThreadFactory = (Matrix dest, Matrix src1, Matrix src2,</span>
+<span class="fc" id="L29">    public static BinaryThreadFactory&lt;Matrix&gt; matrixSubThreadFactory = (Matrix dest, Matrix src1, Matrix src2,</span>
                                                                         int rowStart, int rowEnd,
                                                                         int colStart, int colEnd)
 <span class="nc" id="L32">            -&gt; new MatrixSubtractionWorker(dest, src1, src2, rowStart, rowEnd, colStart, colEnd);</span>
 
-<span class="nc" id="L34">    public static UnaryThreadFactory&lt;Matrix&gt; matrixTransposeThreadFactory = (Matrix dest, Matrix src,</span>
+<span class="fc" id="L34">    public static UnaryThreadFactory&lt;Matrix&gt; matrixTransposeThreadFactory = (Matrix dest, Matrix src,</span>
                                                                              int rowStart, int rowEnd,
                                                                              int colStart, int colEnd)
 <span class="nc" id="L37">            -&gt; new MatrixTransposeWorker(dest, src, rowStart, rowEnd, colStart, colEnd);</span>
@@ -46,23 +46,23 @@ public final class ThreadAllocator {
      */
     public static List&lt;Thread&gt; allocateThreads(TypedMatrix dest, TypedMatrix src1, TypedMatrix src2,
                                                BinaryThreadFactory factory) {
-<span class="nc" id="L49">        List&lt;Thread&gt; threadList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L49">        List&lt;Thread&gt; threadList = new ArrayList&lt;&gt;();</span>
         int rowEnd, colEnd;
-<span class="nc" id="L51">        int[] blockSizes = getBlockSizes(src1.numRows(), src1.numCols());</span>
-<span class="nc" id="L52">        int rowBlockSize = blockSizes[0];</span>
-<span class="nc" id="L53">        int colBlockSize = blockSizes[1];</span>
+<span class="fc" id="L51">        int[] blockSizes = getBlockSizes(src1.numRows(), src1.numCols());</span>
+<span class="fc" id="L52">        int rowBlockSize = blockSizes[0];</span>
+<span class="fc" id="L53">        int colBlockSize = blockSizes[1];</span>
 
-<span class="nc bnc" id="L55" title="All 2 branches missed.">        for(int i=0; i&lt;src1.numRows(); i += rowBlockSize) {</span>
-<span class="nc bnc" id="L56" title="All 2 branches missed.">            for(int j=0; j&lt;src1.numCols(); j += colBlockSize) {</span>
-<span class="nc" id="L57">                rowEnd = Math.min(i+rowBlockSize, src1.numRows());</span>
-<span class="nc" id="L58">                colEnd = Math.min(j+colBlockSize, src1.numCols());</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        for(int i=0; i&lt;src1.numRows(); i += rowBlockSize) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">            for(int j=0; j&lt;src1.numCols(); j += colBlockSize) {</span>
+<span class="fc" id="L57">                rowEnd = Math.min(i+rowBlockSize, src1.numRows());</span>
+<span class="fc" id="L58">                colEnd = Math.min(j+colBlockSize, src1.numCols());</span>
 
-<span class="nc" id="L60">                threadList.add(factory.makeThread(dest, src1, src2, i, rowEnd, j, colEnd));</span>
-<span class="nc" id="L61">                threadList.get(threadList.size()-1).start(); // Start the thread</span>
+<span class="fc" id="L60">                threadList.add(factory.makeThread(dest, src1, src2, i, rowEnd, j, colEnd));</span>
+<span class="fc" id="L61">                threadList.get(threadList.size()-1).start(); // Start the thread</span>
             }
         }
 
-<span class="nc" id="L65">        return threadList;</span>
+<span class="fc" id="L65">        return threadList;</span>
     }
 
 
@@ -101,13 +101,13 @@ public final class ThreadAllocator {
      * @return The row and column block sizes.
      */
     private static int[] getBlockSizes(int numRows, int numCols) {
-<span class="nc" id="L104">        int numThreads = Configurations.getNumThreads();</span>
+<span class="fc" id="L104">        int numThreads = Configurations.getNumThreads();</span>
         int rowBlockSize;
         int colBlockSize;
 
-<span class="nc bnc" id="L108" title="All 4 branches missed.">        if(numRows &lt; numThreads &amp;&amp; numCols &lt; numThreads) {</span>
-<span class="nc" id="L109">            rowBlockSize = 1;</span>
-<span class="nc" id="L110">            colBlockSize = 1;</span>
+<span class="pc bpc" id="L108" title="2 of 4 branches missed.">        if(numRows &lt; numThreads &amp;&amp; numCols &lt; numThreads) {</span>
+<span class="fc" id="L109">            rowBlockSize = 1;</span>
+<span class="fc" id="L110">            colBlockSize = 1;</span>
 
 <span class="nc bnc" id="L112" title="All 4 branches missed.">        } else if(numRows &gt;= numThreads &amp;&amp; numCols &gt;= numThreads) {</span>
 <span class="nc" id="L113">            rowBlockSize = (int) Math.floor( ((double) numRows) / Math.sqrt(numThreads) );</span>
@@ -121,7 +121,7 @@ public final class ThreadAllocator {
 <span class="nc" id="L121">            rowBlockSize = Math.max(1, numRows/4);</span>
         }
 
-<span class="nc" id="L124">        return new int[]{rowBlockSize, colBlockSize};</span>
+<span class="fc" id="L124">        return new int[]{rowBlockSize, colBlockSize};</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -21,7 +21,7 @@ public class ConcurrentSubtraction {
      * @param A The matrix to compute the transpose of.
      * @return The transpose of this matrix.
      */
-    public static Matrix add(Matrix A, Matrix B) {
+    public static Matrix sub(Matrix A, Matrix B) {
         Matrix difference = new Matrix(A.numRows(), A.numCols());
         BinaryThreadFactory factory = ThreadAllocator.matrixSubThreadFactory;
         List<Thread> threadList = ThreadAllocator.allocateThreads(difference, A, B, factory);

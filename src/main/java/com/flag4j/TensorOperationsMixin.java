@@ -138,37 +138,6 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
 
 
     /**
-     * Computes the complex conjugate of a tensor.
-     * @return The complex conjugate of this tensor.
-     */
-    T conj();
-
-
-    /**
-     * Computes the complex conjugate transpose of a tensor.
-     * Same as {@link #hermTranspose()} and {@link #hermTranspose()}.
-     * @return The complex conjugate transpose of this tensor.
-     */
-    T conjT();
-
-
-    /**
-     * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
-     * Same as {@link #conjT()} and {@link #H()}.
-     * @return he complex conjugate transpose (Hermitian transpose) of this tensor.
-     */
-    T hermTranspose();
-
-
-    /**
-     * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
-     * Same as {@link #conjT()} and {@link #hermTranspose()}.
-     * @return he complex conjugate transpose (Hermitian transpose) of this tensor.
-     */
-    T H();
-
-
-    /**
      * Computes the reciprocals, element-wise, of a tensor.
      * @return A tensor containing the reciprocal elements of this tensor.
      * @throws ArithmeticException If this tensor contains any zeros.

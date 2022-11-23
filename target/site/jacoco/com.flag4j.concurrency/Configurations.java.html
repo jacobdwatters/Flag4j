@@ -10,24 +10,24 @@ public abstract class Configurations {
 <span class="nc" id="L10">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
     }
 
-<span class="nc" id="L13">    private static final int DEFAULT_NUM_THREADS = Runtime.getRuntime().availableProcessors();</span>
+<span class="fc" id="L13">    private static final int DEFAULT_NUM_THREADS = Runtime.getRuntime().availableProcessors();</span>
     private static final int DEFAULT_BLOCK_SIZE = 32;
     private static final int DEFAULT_MIN_RECURSIVE_SIZE = 128;
 
     /**
      * Number of threads to use in concurrent operations.
      */
-<span class="nc" id="L20">    private static int numThreads = DEFAULT_NUM_THREADS;</span>
+<span class="fc" id="L20">    private static int numThreads = DEFAULT_NUM_THREADS;</span>
 
     /**
      * The block size to use in blocked algorithms.
      */
-<span class="nc" id="L25">    private static int blockSize = DEFAULT_BLOCK_SIZE;</span>
+<span class="fc" id="L25">    private static int blockSize = DEFAULT_BLOCK_SIZE;</span>
 
     /**
      * The minimum size of tensor/matrix/vector to make recursive calls on in recursive algorithms.
      */
-<span class="nc" id="L30">    private static int minRecursiveSize = DEFAULT_MIN_RECURSIVE_SIZE;</span>
+<span class="fc" id="L30">    private static int minRecursiveSize = DEFAULT_MIN_RECURSIVE_SIZE;</span>
 
 
     /**
@@ -49,7 +49,7 @@ public abstract class Configurations {
      * @return Current number of threads to use in concurrent algorithms.
      */
     public static int getNumThreads() {
-<span class="nc" id="L52">        return numThreads;</span>
+<span class="fc" id="L52">        return numThreads;</span>
     }
 
 

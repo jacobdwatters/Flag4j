@@ -39,7 +39,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends TensorO
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    U add(CMatrix B);
+    W add(CMatrix B);
 
 
     /**
@@ -48,7 +48,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends TensorO
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    T add(SparseCMatrix B);
+    W add(SparseCMatrix B);
 
 
     /**
@@ -130,7 +130,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends TensorO
      * @param exponent The exponent in the matrix power.
      * @return The result of multiplying this matrix with itself 'exponent' times.
      */
-    U pow(int exponent);
+    U pow(double exponent);
 
 
     /**
@@ -186,7 +186,7 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends TensorO
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      * @throws ArithmeticException If B contains any zero entries.
      */
-    V elemDiv(CMatrix B);
+    W elemDiv(CMatrix B);
 
 
     /**

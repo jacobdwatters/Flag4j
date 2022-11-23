@@ -10,6 +10,8 @@ class MatrixConstructorTests {
     int[][] expEntriesAint;
     int expNumColsA, expNumRowsA;
     Matrix A, B;
+    Shape shape;
+
 
     /**
      * Tests the default constructor for the Matrix class.
@@ -346,5 +348,38 @@ class MatrixConstructorTests {
         assertArrayEquals(A.entries, B.entries);
         assertEquals(A.m, B.m);
         assertEquals(A.n, B.n);
+    }
+
+
+    @Test
+    void shapeConstructorsTest() {
+        shape = new Shape(6, 3);
+        Matrix A = new Matrix(shape);
+        expEntriesA = new double[6][3];
+        expNumRowsA = 6;
+        expNumColsA = 3;
+
+        assertArrayEquals(expEntriesA, A.entries);
+        assertEquals(expNumRowsA, A.numRows());
+        assertEquals(expNumColsA, A.numCols());
+    }
+
+
+    @Test
+    void shapeValueConstructorsTest() {
+        shape = new Shape(5, 9);
+        Matrix A = new Matrix(shape, -834.34);
+        expEntriesA = new double[][]
+                {{-834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34},
+                {-834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34},
+                {-834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34},
+                {-834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34},
+                {-834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34, -834.34}};
+        expNumRowsA = 5;
+        expNumColsA = 9;
+
+        assertArrayEquals(expEntriesA, A.entries);
+        assertEquals(expNumRowsA, A.numRows());
+        assertEquals(expNumColsA, A.numCols());
     }
 }
