@@ -22,31 +22,31 @@ public class MatrixTransposeWorker extends Thread {
      * @param colStart Starting column for worker to transpose.
      * @param colEnd Ending column for worker to transpose.
      */
-<span class="nc" id="L25">    public MatrixTransposeWorker(Matrix dest, Matrix src, int rowStart, int rowEnd, int colStart, int colEnd) {</span>
-<span class="nc" id="L26">        this.dest = dest;</span>
-<span class="nc" id="L27">        this.src = src;</span>
-<span class="nc" id="L28">        this.rowStart = rowStart;</span>
-<span class="nc" id="L29">        this.rowEnd = rowEnd;</span>
-<span class="nc" id="L30">        this.colStart = colStart;</span>
-<span class="nc" id="L31">        this.colEnd = colEnd;</span>
-<span class="nc" id="L32">    }</span>
+<span class="fc" id="L25">    public MatrixTransposeWorker(Matrix dest, Matrix src, int rowStart, int rowEnd, int colStart, int colEnd) {</span>
+<span class="fc" id="L26">        this.dest = dest;</span>
+<span class="fc" id="L27">        this.src = src;</span>
+<span class="fc" id="L28">        this.rowStart = rowStart;</span>
+<span class="fc" id="L29">        this.rowEnd = rowEnd;</span>
+<span class="fc" id="L30">        this.colStart = colStart;</span>
+<span class="fc" id="L31">        this.colEnd = colEnd;</span>
+<span class="fc" id="L32">    }</span>
 
 
     @Override
     public void run() {
-<span class="nc" id="L37">        int blockSize = Configurations.getBlockSize();</span>
+<span class="fc" id="L37">        int blockSize = Configurations.getBlockSize();</span>
 
         // Using blocked transpose algorithm
-<span class="nc bnc" id="L40" title="All 2 branches missed.">        for (int i=colStart; i&lt;colEnd; i += blockSize) {</span>
-<span class="nc bnc" id="L41" title="All 2 branches missed.">            for (int j=rowStart; j&lt;rowEnd; j += blockSize) {</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        for (int i=colStart; i&lt;colEnd; i += blockSize) {</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">            for (int j=rowStart; j&lt;rowEnd; j += blockSize) {</span>
                 // transpose the block beginning at [i,j]
-<span class="nc bnc" id="L43" title="All 4 branches missed.">                for (int k=i; k&lt;i + blockSize &amp;&amp; k&lt;colEnd; k++) {</span>
-<span class="nc bnc" id="L44" title="All 4 branches missed.">                    for (int l=j; l&lt;j + blockSize &amp;&amp; l&lt;rowEnd; l++) {</span>
-<span class="nc" id="L45">                        dest.entries[k][l] = src.entries[l][k];</span>
+<span class="pc bpc" id="L43" title="1 of 4 branches missed.">                for (int k=i; k&lt;i + blockSize &amp;&amp; k&lt;colEnd; k++) {</span>
+<span class="pc bpc" id="L44" title="1 of 4 branches missed.">                    for (int l=j; l&lt;j + blockSize &amp;&amp; l&lt;rowEnd; l++) {</span>
+<span class="fc" id="L45">                        dest.entries[k][l] = src.entries[l][k];</span>
                     }
                 }
             }
         }
-<span class="nc" id="L50">    }</span>
+<span class="fc" id="L50">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

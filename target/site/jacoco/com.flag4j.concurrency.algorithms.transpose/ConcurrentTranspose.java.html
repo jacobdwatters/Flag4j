@@ -25,22 +25,22 @@ public final class ConcurrentTranspose {
      * @return The transpose of this matrix.
      */
     public static Matrix T(Matrix A) {
-<span class="nc" id="L28">        Matrix T = new Matrix(A.numCols(), A.numRows());</span>
-<span class="nc" id="L29">        UnaryThreadFactory&lt;Matrix&gt; factory = ThreadAllocator.matrixTransposeThreadFactory;</span>
+<span class="fc" id="L28">        Matrix T = new Matrix(A.numCols(), A.numRows());</span>
+<span class="fc" id="L29">        UnaryThreadFactory&lt;Matrix&gt; factory = ThreadAllocator.matrixTransposeThreadFactory;</span>
         List&lt;Thread&gt; threadList;
 
         // Allocates the threads.
-<span class="nc" id="L33">        threadList = ThreadAllocator.allocateThreads(T, A, factory);</span>
+<span class="fc" id="L33">        threadList = ThreadAllocator.allocateThreads(T, A, factory);</span>
 
-<span class="nc bnc" id="L35" title="All 2 branches missed.">        for(Thread thread : threadList) { // Join the threads together</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        for(Thread thread : threadList) { // Join the threads together</span>
             try {
-<span class="nc" id="L37">                thread.join();</span>
+<span class="fc" id="L37">                thread.join();</span>
 <span class="nc" id="L38">            } catch (InterruptedException e) {</span>
 <span class="nc" id="L39">                e.printStackTrace();</span>
-<span class="nc" id="L40">            }</span>
-<span class="nc" id="L41">        }</span>
+<span class="fc" id="L40">            }</span>
+<span class="fc" id="L41">        }</span>
 
-<span class="nc" id="L43">        return T;</span>
+<span class="fc" id="L43">        return T;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
