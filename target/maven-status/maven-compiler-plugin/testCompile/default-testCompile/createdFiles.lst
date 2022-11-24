@@ -7,6 +7,7 @@ com\flag4j\complex_numbers\CNumberExponentialTest.class
 com\flag4j\VectorConstructorTests.class
 com\flag4j\complex_numbers\CNumberBinaryOperationsTest.class
 com\flag4j\complex_numbers\CNumberSqrtTest.class
+com\flag4j\MatrixAgglomerationTests.class
 com\flag4j\util\ErrorMessagesTests.class
 com\flag4j\complex_numbers\CNumberToStringTest.class
 DevelopmentTesting.class
@@ -19,3 +20,4 @@ com\flag4j\complex_numbers\CNumberTrigTest.class
 com\flag4j\complex_numbers\CNumberRoundTest.class
 com\flag4j\complex_numbers\CNumberGettersSettersTest.class
 com\flag4j\MatrixConstructorTests.class
+com\flag4j\MatrixToStringTest.class

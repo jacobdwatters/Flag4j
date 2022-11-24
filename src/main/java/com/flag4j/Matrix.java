@@ -1626,7 +1626,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
     @Override
     public int vectorType() {
 
-        int result;
+        int result = -1;
 
         if(this.numRows() == 1 && this.numCols()==1) {
             result = 0;
@@ -1634,8 +1634,6 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
             result = 1;
         } else if(this.numCols() == 1) {
             result = 2;
-        } else {
-            result = -1;
         }
 
         return result;
@@ -2718,7 +2716,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
                         colWidth = 3+PADDING;
                         resultBuilder.append(String.format("%-" + colWidth + "s", StringUtils.center("...", colWidth)));
                         colWidth = maxList.get(n-1)+PADDING;
-                        resultBuilder.append(String.format("%-" + (colWidth) + "s", StringUtils.center(String.valueOf(entries[i][n - 1]), colWidth)));
+                        resultBuilder.append(String.format("%-" + (colWidth) + "s", CNumber.round(new CNumber(entries[i][n-1]), PRECISION).toString(), colWidth));
                         break;
                     }
                     else {

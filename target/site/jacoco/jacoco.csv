@@ -13,11 +13,11 @@ Flag4j,com.flag4j,SparseVector,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j,Shape,25,91,3,7,10,18,7,7,4,5
 Flag4j,com.flag4j,MatrixTypes,0,27,0,0,0,5,0,1,0,1
 Flag4j,com.flag4j,SparseMatrixFormats,21,0,0,0,4,0,1,0,1,0
-Flag4j,com.flag4j,Matrix,1844,896,212,54,372,119,250,52,143,26
+Flag4j,com.flag4j,Matrix,1247,1500,145,121,276,215,209,93,134,35
 Flag4j,com.flag4j,SparseMatrix,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j,Vector,0,155,0,0,0,38,0,12,0,12
 Flag4j,com.flag4j,VectorTypes,0,27,0,0,0,5,0,1,0,1
-Flag4j,com.flag4j,TypedMatrix,61,70,16,6,11,18,11,8,2,6
+Flag4j,com.flag4j,TypedMatrix,56,75,14,8,11,18,10,9,2,6
 Flag4j,com.flag4j,SparseCMatrix,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j,SparseCVector,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j,CMatrix,538,344,54,28,76,57,40,19,11,7
@@ -32,8 +32,8 @@ Flag4j,com.flag4j.concurrency.algorithms.transpose,ConcurrentTranspose,41,0,2,0,
 Flag4j,com.flag4j.concurrency.algorithms.transpose,MatrixTransposeWorker,90,0,12,0,15,0,8,0,2,0
 Flag4j,com.flag4j.io,TensorWriter,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.io,TensorReader,3,0,0,0,1,0,1,0,1,0
-Flag4j,com.flag4j.io,PrintOptions,18,72,0,8,8,28,2,15,2,11
-Flag4j,com.flag4j.concurrency,CheckConcurrent,27,23,10,4,5,7,9,2,2,2
+Flag4j,com.flag4j.io,PrintOptions,7,83,0,8,2,34,1,16,1,12
+Flag4j,com.flag4j.concurrency,CheckConcurrent,31,23,10,4,6,7,9,2,2,2
 Flag4j,com.flag4j.concurrency,ThreadAllocator,149,129,12,6,22,21,10,7,3,5
 Flag4j,com.flag4j.concurrency,Configurations,32,12,0,0,16,5,8,2,8,2
 Flag4j,com.flag4j.concurrency.algorithms.subtraction,MatrixSubtractionWorker,0,68,0,4,0,13,0,4,0,2
