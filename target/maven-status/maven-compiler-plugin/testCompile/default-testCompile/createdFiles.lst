@@ -18,6 +18,7 @@ com\flag4j\complex_numbers\CNumberConversionTest.class
 com\flag4j\complex_numbers\CNumberMinMaxSumTest.class
 com\flag4j\complex_numbers\CNumberTrigTest.class
 com\flag4j\complex_numbers\CNumberRoundTest.class
+com\flag4j\MatrixTransposeTests.class
 com\flag4j\complex_numbers\CNumberGettersSettersTest.class
 com\flag4j\MatrixConstructorTests.class
 com\flag4j\MatrixToStringTest.class

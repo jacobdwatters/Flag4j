@@ -131,4 +131,20 @@ class MatrixScalMultDivTests {
         actComplex = A.scalDiv(CFactor);
         assertArrayEquals(expComplex.entries, actComplex.entries);
     }
+
+
+    @Test
+    void recepTest() {
+        aEntries = new double[][]{{0, 134, 78}, {144.551, Double.NaN, -0.0},
+                {Double.POSITIVE_INFINITY, 99.34, -74.4422}, {Double.NEGATIVE_INFINITY, 88.3, 1}};
+        expEntries = new double[][]{{Double.POSITIVE_INFINITY, 1.0/134, 1.0/78}, {1.0/144.551, Double.NaN, Double.NEGATIVE_INFINITY},
+                {0.0, 1.0/99.34, 1.0/-74.4422}, {-0.0, 1.0/88.3, 1.0}};
+
+        A = new Matrix(aEntries);
+        exp = new Matrix(expEntries);
+
+        act = A.recep();
+
+        assertArrayEquals(exp.entries, act.entries);
+    }
 }

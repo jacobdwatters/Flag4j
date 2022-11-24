@@ -2,6 +2,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.concurrency.CheckConcurrent;
+import com.flag4j.concurrency.Configurations;
 import com.flag4j.concurrency.algorithms.addition.ConcurrentAddition;
 import com.flag4j.concurrency.algorithms.subtraction.ConcurrentSubtraction;
 import com.flag4j.concurrency.algorithms.transpose.ConcurrentTranspose;
@@ -9,6 +10,7 @@ import com.flag4j.io.PrintOptions;
 import com.flag4j.util.ShapeChecks;
 import com.flag4j.util.StringUtils;
 
+import java.lang.module.Configuration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -477,6 +479,19 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
             transpose = ConcurrentTranspose.T(this);
         } else {
             transpose = new Matrix(this.n, this.m);
+            int blockSize = Configurations.getBlockSize();
+
+            // Using blocked transpose algorithm
+            for (int i=0; i<transpose.numRows(); i += blockSize) {
+                for (int j=0; j< transpose.numCols(); j += blockSize) {
+                    // transpose the block beginning at [i,j]
+                    for (int k=i; k<i + blockSize && k<transpose.numRows(); k++) {
+                        for (int l=j; l<j + blockSize && l<transpose.numCols(); l++) {
+                            transpose.entries[k][l] = this.entries[l][k];
+                        }
+                    }
+                }
+            }
         }
 
         return transpose;
@@ -506,7 +521,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
         for(int i=0; i<recep.numRows(); i++) {
             for(int j=0; j<recep.numCols(); j++) {
-                recep.entries[i][j] = 1/this.entries[i][j];
+                recep.entries[i][j] = 1.0/this.entries[i][j];
             }
         }
 
