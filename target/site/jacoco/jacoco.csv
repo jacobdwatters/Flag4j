@@ -13,7 +13,7 @@ Flag4j,com.flag4j,SparseVector,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j,Shape,25,91,3,7,10,18,7,7,4,5
 Flag4j,com.flag4j,MatrixTypes,0,27,0,0,0,5,0,1,0,1
 Flag4j,com.flag4j,SparseMatrixFormats,21,0,0,0,4,0,1,0,1,0
-Flag4j,com.flag4j,Matrix,2011,654,221,41,372,110,260,37,146,20
+Flag4j,com.flag4j,Matrix,2061,679,228,38,395,96,262,40,147,22
 Flag4j,com.flag4j,SparseMatrix,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j,Vector,0,155,0,0,0,38,0,12,0,12
 Flag4j,com.flag4j,VectorTypes,0,27,0,0,0,5,0,1,0,1
@@ -34,10 +34,10 @@ Flag4j,com.flag4j.io,TensorWriter,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.io,TensorReader,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.io,PrintOptions,18,72,0,8,8,28,2,15,2,11
 Flag4j,com.flag4j.concurrency,CheckConcurrent,27,23,10,4,5,7,9,2,2,2
-Flag4j,com.flag4j.concurrency,ThreadAllocator,160,118,12,6,23,20,11,6,4,4
+Flag4j,com.flag4j.concurrency,ThreadAllocator,149,129,12,6,22,21,10,7,3,5
 Flag4j,com.flag4j.concurrency,Configurations,32,12,0,0,16,5,8,2,8,2
-Flag4j,com.flag4j.concurrency.algorithms.subtraction,MatrixSubtractionWorker,68,0,4,0,13,0,4,0,2,0
-Flag4j,com.flag4j.concurrency.algorithms.subtraction,ConcurrentSubtraction,42,0,2,0,12,0,3,0,2,0
+Flag4j,com.flag4j.concurrency.algorithms.subtraction,MatrixSubtractionWorker,0,68,0,4,0,13,0,4,0,2
+Flag4j,com.flag4j.concurrency.algorithms.subtraction,ConcurrentSubtraction,10,32,0,2,4,8,1,2,1,1
 Flag4j,com.flag4j.complex_numbers,CNumberToken,7,60,1,7,3,13,2,10,1,7
 Flag4j,com.flag4j.complex_numbers,CNumberLexer,38,292,11,57,7,75,12,29,1,6
 Flag4j,com.flag4j.complex_numbers,CNumber,155,1610,9,171,31,303,26,163,17,82

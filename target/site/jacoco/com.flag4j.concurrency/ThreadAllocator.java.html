@@ -29,7 +29,7 @@ public final class ThreadAllocator {
 <span class="fc" id="L29">    public static BinaryThreadFactory&lt;Matrix&gt; matrixSubThreadFactory = (Matrix dest, Matrix src1, Matrix src2,</span>
                                                                         int rowStart, int rowEnd,
                                                                         int colStart, int colEnd)
-<span class="nc" id="L32">            -&gt; new MatrixSubtractionWorker(dest, src1, src2, rowStart, rowEnd, colStart, colEnd);</span>
+<span class="fc" id="L32">            -&gt; new MatrixSubtractionWorker(dest, src1, src2, rowStart, rowEnd, colStart, colEnd);</span>
 
 <span class="fc" id="L34">    public static UnaryThreadFactory&lt;Matrix&gt; matrixTransposeThreadFactory = (Matrix dest, Matrix src,</span>
                                                                              int rowStart, int rowEnd,

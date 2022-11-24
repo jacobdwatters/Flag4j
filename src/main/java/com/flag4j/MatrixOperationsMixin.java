@@ -52,6 +52,42 @@ interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends TensorO
 
 
     /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    U sub(Matrix B);
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    T sub(SparseMatrix B);
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    W sub(CMatrix B);
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    W sub(SparseCMatrix B);
+
+
+    /**
      * Computes the matrix multiplication between two matrices.
      * @param B Second matrix in the matrix multiplication.
      * @return The result of matrix multiplying this matrix with matrix B.

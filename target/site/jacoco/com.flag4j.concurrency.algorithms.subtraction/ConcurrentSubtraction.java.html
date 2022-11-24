@@ -22,19 +22,19 @@ public class ConcurrentSubtraction {
      * @return The transpose of this matrix.
      */
     public static Matrix sub(Matrix A, Matrix B) {
-<span class="nc" id="L25">        Matrix difference = new Matrix(A.numRows(), A.numCols());</span>
-<span class="nc" id="L26">        BinaryThreadFactory factory = ThreadAllocator.matrixSubThreadFactory;</span>
-<span class="nc" id="L27">        List&lt;Thread&gt; threadList = ThreadAllocator.allocateThreads(difference, A, B, factory);</span>
+<span class="fc" id="L25">        Matrix difference = new Matrix(A.numRows(), A.numCols());</span>
+<span class="fc" id="L26">        BinaryThreadFactory factory = ThreadAllocator.matrixSubThreadFactory;</span>
+<span class="fc" id="L27">        List&lt;Thread&gt; threadList = ThreadAllocator.allocateThreads(difference, A, B, factory);</span>
 
-<span class="nc bnc" id="L29" title="All 2 branches missed.">        for(Thread thread : threadList) { // Join the threads together</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        for(Thread thread : threadList) { // Join the threads together</span>
             try {
-<span class="nc" id="L31">                thread.join();</span>
+<span class="fc" id="L31">                thread.join();</span>
 <span class="nc" id="L32">            } catch (InterruptedException e) {</span>
 <span class="nc" id="L33">                e.printStackTrace();</span>
-<span class="nc" id="L34">            }</span>
-<span class="nc" id="L35">        }</span>
+<span class="fc" id="L34">            }</span>
+<span class="fc" id="L35">        }</span>
 
-<span class="nc" id="L37">        return difference;</span>
+<span class="fc" id="L37">        return difference;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

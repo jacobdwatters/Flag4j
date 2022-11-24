@@ -290,7 +290,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
         for(int i=0; i<this.m; i++) {
             for(int j=0; j<this.n; j++) {
                 difference.entries[i][j].re = this.entries[i][j] - a.re;
-                difference.entries[i][j].im = a.im;
+                difference.entries[i][j].im = -a.im;
             }
         }
 
@@ -559,6 +559,55 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public CMatrix add(SparseCMatrix B) {
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public Matrix sub(SparseMatrix B) {
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CMatrix sub(CMatrix B) {
+        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());
+        CMatrix sum = new CMatrix(this.getShape());
+
+        for(int i=0; i<sum.numRows(); i++) {
+            for(int j=0; j<sum.numRows(); j++) {
+                sum.entries[i][j].re = this.entries[i][j]-B.entries[i][j].re;
+                sum.entries[i][j].im = -B.entries[i][j].im;
+            }
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CMatrix sub(SparseCMatrix B) {
         return null;
     }
 

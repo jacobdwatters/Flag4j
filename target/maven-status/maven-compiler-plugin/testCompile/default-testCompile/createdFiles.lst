@@ -1,4 +1,5 @@
 com\flag4j\io\PrintOptionsTests.class
+com\flag4j\MatrixSubTests.class
 com\flag4j\complex_numbers\CNumberPropertiesTest.class
 com\flag4j\complex_numbers\CNumberConstructorTest.class
 com\flag4j\MatrixAddTests.class

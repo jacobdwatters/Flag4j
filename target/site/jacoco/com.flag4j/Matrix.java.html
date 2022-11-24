@@ -235,25 +235,25 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public Matrix sub(Matrix B) {
         // Ensure shapes are correct for this operation.
-<span class="nc" id="L238">        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());</span>
+<span class="fc" id="L238">        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());</span>
         Matrix difference;
 
-<span class="nc bnc" id="L241" title="All 2 branches missed.">        if(CheckConcurrent.relaxedCheck(this.numRows(), this.numCols())) {</span>
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">        if(CheckConcurrent.relaxedCheck(this.numRows(), this.numCols())) {</span>
             // Then compute the matrix addition concurrently.
 <span class="nc" id="L243">            difference = ConcurrentSubtraction.sub(this, B);</span>
 
         } else {
             // Then compute the matrix addition on single thread.
-<span class="nc" id="L247">            difference = new Matrix(this.numRows(), this.numCols());</span>
+<span class="fc" id="L247">            difference = new Matrix(this.numRows(), this.numCols());</span>
 
-<span class="nc bnc" id="L249" title="All 2 branches missed.">            for(int i=0; i&lt;this.m; i++) {</span>
-<span class="nc bnc" id="L250" title="All 2 branches missed.">                for(int j=0; j&lt;this.n; j++) {</span>
-<span class="nc" id="L251">                    difference.entries[i][j] = this.entries[i][j] - B.entries[i][j];</span>
+<span class="fc bfc" id="L249" title="All 2 branches covered.">            for(int i=0; i&lt;this.m; i++) {</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">                for(int j=0; j&lt;this.n; j++) {</span>
+<span class="fc" id="L251">                    difference.entries[i][j] = this.entries[i][j] - B.entries[i][j];</span>
                 }
             }
         }
 
-<span class="nc" id="L256">        return difference;</span>
+<span class="fc" id="L256">        return difference;</span>
     }
 
 
@@ -265,15 +265,15 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix sub(double a) {
-<span class="nc" id="L268">        Matrix difference = new Matrix(this.m, this.n);</span>
+<span class="fc" id="L268">        Matrix difference = new Matrix(this.m, this.n);</span>
 
-<span class="nc bnc" id="L270" title="All 2 branches missed.">        for(int i=0; i&lt;this.m; i++) {</span>
-<span class="nc bnc" id="L271" title="All 2 branches missed.">            for(int j=0; j&lt;this.n; j++) {</span>
-<span class="nc" id="L272">                difference.entries[i][j] = this.entries[i][j] - a;</span>
+<span class="fc bfc" id="L270" title="All 2 branches covered.">        for(int i=0; i&lt;this.m; i++) {</span>
+<span class="fc bfc" id="L271" title="All 2 branches covered.">            for(int j=0; j&lt;this.n; j++) {</span>
+<span class="fc" id="L272">                difference.entries[i][j] = this.entries[i][j] - a;</span>
             }
         }
 
-<span class="nc" id="L276">        return difference;</span>
+<span class="fc" id="L276">        return difference;</span>
     }
 
 
@@ -285,16 +285,16 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix sub(CNumber a) {
-<span class="nc" id="L288">        CMatrix difference = new CMatrix(this.m, this.n);</span>
+<span class="fc" id="L288">        CMatrix difference = new CMatrix(this.m, this.n);</span>
 
-<span class="nc bnc" id="L290" title="All 2 branches missed.">        for(int i=0; i&lt;this.m; i++) {</span>
-<span class="nc bnc" id="L291" title="All 2 branches missed.">            for(int j=0; j&lt;this.n; j++) {</span>
-<span class="nc" id="L292">                difference.entries[i][j].re = this.entries[i][j] - a.re;</span>
-<span class="nc" id="L293">                difference.entries[i][j].im = a.im;</span>
+<span class="fc bfc" id="L290" title="All 2 branches covered.">        for(int i=0; i&lt;this.m; i++) {</span>
+<span class="fc bfc" id="L291" title="All 2 branches covered.">            for(int j=0; j&lt;this.n; j++) {</span>
+<span class="fc" id="L292">                difference.entries[i][j].re = this.entries[i][j] - a.re;</span>
+<span class="fc" id="L293">                difference.entries[i][j].im = -a.im;</span>
             }
         }
 
-<span class="nc" id="L297">        return difference;</span>
+<span class="fc" id="L297">        return difference;</span>
     }
 
 
@@ -564,6 +564,55 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
 
 
     /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public Matrix sub(SparseMatrix B) {
+<span class="nc" id="L575">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CMatrix sub(CMatrix B) {
+<span class="fc" id="L588">        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());</span>
+<span class="fc" id="L589">        CMatrix sum = new CMatrix(this.getShape());</span>
+
+<span class="fc bfc" id="L591" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows(); i++) {</span>
+<span class="fc bfc" id="L592" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numRows(); j++) {</span>
+<span class="fc" id="L593">                sum.entries[i][j].re = this.entries[i][j]-B.entries[i][j].re;</span>
+<span class="fc" id="L594">                sum.entries[i][j].im = -B.entries[i][j].im;</span>
+            }
+        }
+
+<span class="fc" id="L598">        return sum;</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CMatrix sub(SparseCMatrix B) {
+<span class="nc" id="L611">        return null;</span>
+    }
+
+
+    /**
      * Computes the matrix multiplication between two matrices.
      *
      * @param B Second matrix in the matrix multiplication.
@@ -572,7 +621,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix mult(Matrix B) {
-<span class="nc" id="L575">        return null;</span>
+<span class="nc" id="L624">        return null;</span>
     }
 
 
@@ -585,7 +634,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix mult(SparseMatrix B) {
-<span class="nc" id="L588">        return null;</span>
+<span class="nc" id="L637">        return null;</span>
     }
 
 
@@ -598,7 +647,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix mult(CMatrix B) {
-<span class="nc" id="L601">        return null;</span>
+<span class="nc" id="L650">        return null;</span>
     }
 
 
@@ -611,7 +660,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
-<span class="nc" id="L614">        return null;</span>
+<span class="nc" id="L663">        return null;</span>
     }
 
 
@@ -624,7 +673,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix mult(Vector b) {
-<span class="nc" id="L627">        return null;</span>
+<span class="nc" id="L676">        return null;</span>
     }
 
 
@@ -637,7 +686,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix mult(SparseVector b) {
-<span class="nc" id="L640">        return null;</span>
+<span class="nc" id="L689">        return null;</span>
     }
 
 
@@ -650,7 +699,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix mult(CVector b) {
-<span class="nc" id="L653">        return null;</span>
+<span class="nc" id="L702">        return null;</span>
     }
 
 
@@ -663,7 +712,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix mult(SparseCVector b) {
-<span class="nc" id="L666">        return null;</span>
+<span class="nc" id="L715">        return null;</span>
     }
 
 
@@ -677,15 +726,15 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix pow(double exponent) {
-<span class="nc" id="L680">        Matrix power = new Matrix(this.getShape());</span>
+<span class="nc" id="L729">        Matrix power = new Matrix(this.getShape());</span>
 
-<span class="nc bnc" id="L682" title="All 2 branches missed.">        for(int i=0; i&lt;power.numRows(); i++) {</span>
-<span class="nc bnc" id="L683" title="All 2 branches missed.">            for(int j=0; j&lt;power.numCols(); j++) {</span>
-<span class="nc" id="L684">                power.entries[i][j] = Math.pow(this.entries[i][j], exponent);</span>
+<span class="nc bnc" id="L731" title="All 2 branches missed.">        for(int i=0; i&lt;power.numRows(); i++) {</span>
+<span class="nc bnc" id="L732" title="All 2 branches missed.">            for(int j=0; j&lt;power.numCols(); j++) {</span>
+<span class="nc" id="L733">                power.entries[i][j] = Math.pow(this.entries[i][j], exponent);</span>
             }
         }
 
-<span class="nc" id="L688">        return power;</span>
+<span class="nc" id="L737">        return power;</span>
     }
 
 
@@ -698,16 +747,16 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix elemMult(Matrix B) {
-<span class="nc" id="L701">        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());</span>
-<span class="nc" id="L702">        Matrix product = new Matrix(this.getShape());</span>
+<span class="nc" id="L750">        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());</span>
+<span class="nc" id="L751">        Matrix product = new Matrix(this.getShape());</span>
 
-<span class="nc bnc" id="L704" title="All 2 branches missed.">        for(int i=0; i&lt;product.numRows(); i++) {</span>
-<span class="nc bnc" id="L705" title="All 2 branches missed.">            for(int j=0; j&lt;product.numCols(); j++) {</span>
-<span class="nc" id="L706">                product.entries[i][j] = this.entries[i][j]*B.entries[i][j];</span>
+<span class="nc bnc" id="L753" title="All 2 branches missed.">        for(int i=0; i&lt;product.numRows(); i++) {</span>
+<span class="nc bnc" id="L754" title="All 2 branches missed.">            for(int j=0; j&lt;product.numCols(); j++) {</span>
+<span class="nc" id="L755">                product.entries[i][j] = this.entries[i][j]*B.entries[i][j];</span>
             }
         }
 
-<span class="nc" id="L710">        return product;</span>
+<span class="nc" id="L759">        return product;</span>
     }
 
 
@@ -720,7 +769,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public SparseMatrix elemMult(SparseMatrix B) {
-<span class="nc" id="L723">        return null;</span>
+<span class="nc" id="L772">        return null;</span>
     }
 
 
@@ -733,17 +782,17 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix elemMult(CMatrix B) {
-<span class="nc" id="L736">        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());</span>
-<span class="nc" id="L737">        CMatrix product = new CMatrix(this.getShape());</span>
+<span class="nc" id="L785">        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());</span>
+<span class="nc" id="L786">        CMatrix product = new CMatrix(this.getShape());</span>
 
-<span class="nc bnc" id="L739" title="All 2 branches missed.">        for(int i=0; i&lt;product.numRows(); i++) {</span>
-<span class="nc bnc" id="L740" title="All 2 branches missed.">            for(int j=0; j&lt;product.numCols(); j++) {</span>
-<span class="nc" id="L741">                product.entries[i][j].re = this.entries[i][j]*B.entries[i][j].re;</span>
-<span class="nc" id="L742">                product.entries[i][j].im = this.entries[i][j]*B.entries[i][j].im;</span>
+<span class="nc bnc" id="L788" title="All 2 branches missed.">        for(int i=0; i&lt;product.numRows(); i++) {</span>
+<span class="nc bnc" id="L789" title="All 2 branches missed.">            for(int j=0; j&lt;product.numCols(); j++) {</span>
+<span class="nc" id="L790">                product.entries[i][j].re = this.entries[i][j]*B.entries[i][j].re;</span>
+<span class="nc" id="L791">                product.entries[i][j].im = this.entries[i][j]*B.entries[i][j].im;</span>
             }
         }
 
-<span class="nc" id="L746">        return product;</span>
+<span class="nc" id="L795">        return product;</span>
     }
 
 
@@ -756,7 +805,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
-<span class="nc" id="L759">        return null;</span>
+<span class="nc" id="L808">        return null;</span>
     }
 
 
@@ -770,16 +819,16 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix elemDiv(Matrix B) {
-<span class="nc" id="L773">        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());</span>
-<span class="nc" id="L774">        Matrix quotient = new Matrix(this.m, this.n);</span>
+<span class="nc" id="L822">        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());</span>
+<span class="nc" id="L823">        Matrix quotient = new Matrix(this.m, this.n);</span>
 
-<span class="nc bnc" id="L776" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L777" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc" id="L778">                quotient.entries[i][j] = this.entries[i][j]/B.entries[i][j];</span>
+<span class="nc bnc" id="L825" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L826" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc" id="L827">                quotient.entries[i][j] = this.entries[i][j]/B.entries[i][j];</span>
             }
         }
 
-<span class="nc" id="L782">        return quotient;</span>
+<span class="nc" id="L831">        return quotient;</span>
     }
 
 
@@ -793,22 +842,22 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix elemDiv(CMatrix B) {
-<span class="nc" id="L796">        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());</span>
-<span class="nc" id="L797">        CMatrix quotient = new CMatrix(this.m, this.n);</span>
+<span class="nc" id="L845">        ShapeChecks.equalShapeCheck(this.getShape(), B.getShape());</span>
+<span class="nc" id="L846">        CMatrix quotient = new CMatrix(this.m, this.n);</span>
         double divisorRe, divisorIm;
         double scaler;
 
-<span class="nc bnc" id="L801" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L802" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc" id="L803">                divisorRe = B.entries[i][j].re;</span>
-<span class="nc" id="L804">                divisorIm = B.entries[i][j].im;</span>
-<span class="nc" id="L805">                scaler = this.entries[i][j] / (divisorRe*divisorRe + divisorIm*divisorIm);</span>
-<span class="nc" id="L806">                quotient.entries[i][j].re = scaler*divisorRe;</span>
-<span class="nc" id="L807">                quotient.entries[i][j].im = -scaler*divisorIm;</span>
+<span class="nc bnc" id="L850" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L851" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc" id="L852">                divisorRe = B.entries[i][j].re;</span>
+<span class="nc" id="L853">                divisorIm = B.entries[i][j].im;</span>
+<span class="nc" id="L854">                scaler = this.entries[i][j] / (divisorRe*divisorRe + divisorIm*divisorIm);</span>
+<span class="nc" id="L855">                quotient.entries[i][j].re = scaler*divisorRe;</span>
+<span class="nc" id="L856">                quotient.entries[i][j].im = -scaler*divisorIm;</span>
             }
         }
 
-<span class="nc" id="L811">        return quotient;</span>
+<span class="nc" id="L860">        return quotient;</span>
     }
 
 
@@ -820,7 +869,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Double det() {
-<span class="nc" id="L823">        return null;</span>
+<span class="nc" id="L872">        return null;</span>
     }
 
 
@@ -833,7 +882,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Double fib(Matrix B) {
-<span class="nc" id="L836">        return null;</span>
+<span class="nc" id="L885">        return null;</span>
     }
 
 
@@ -846,7 +895,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Double fib(SparseMatrix B) {
-<span class="nc" id="L849">        return null;</span>
+<span class="nc" id="L898">        return null;</span>
     }
 
 
@@ -859,7 +908,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CNumber fib(CMatrix B) {
-<span class="nc" id="L862">        return null;</span>
+<span class="nc" id="L911">        return null;</span>
     }
 
 
@@ -872,7 +921,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CNumber fib(SparseCMatrix B) {
-<span class="nc" id="L875">        return null;</span>
+<span class="nc" id="L924">        return null;</span>
     }
 
 
@@ -884,7 +933,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix directSum(Matrix B) {
-<span class="nc" id="L887">        return null;</span>
+<span class="nc" id="L936">        return null;</span>
     }
 
 
@@ -896,7 +945,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public SparseMatrix directSum(SparseMatrix B) {
-<span class="nc" id="L899">        return null;</span>
+<span class="nc" id="L948">        return null;</span>
     }
 
 
@@ -908,7 +957,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix directSum(CMatrix B) {
-<span class="nc" id="L911">        return null;</span>
+<span class="nc" id="L960">        return null;</span>
     }
 
 
@@ -920,7 +969,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public SparseCMatrix directSum(SparseCMatrix B) {
-<span class="nc" id="L923">        return null;</span>
+<span class="nc" id="L972">        return null;</span>
     }
 
 
@@ -932,7 +981,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix invDirectSum(Matrix B) {
-<span class="nc" id="L935">        return null;</span>
+<span class="nc" id="L984">        return null;</span>
     }
 
 
@@ -944,7 +993,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public SparseMatrix invDirectSum(SparseMatrix B) {
-<span class="nc" id="L947">        return null;</span>
+<span class="nc" id="L996">        return null;</span>
     }
 
 
@@ -956,7 +1005,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix invDirectSum(CMatrix B) {
-<span class="nc" id="L959">        return null;</span>
+<span class="nc" id="L1008">        return null;</span>
     }
 
 
@@ -968,7 +1017,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public SparseCMatrix invDirectSum(SparseCMatrix B) {
-<span class="nc" id="L971">        return null;</span>
+<span class="nc" id="L1020">        return null;</span>
     }
 
 
@@ -980,15 +1029,15 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix sumCols() {
-<span class="nc" id="L983">        Matrix sum = new Matrix(this.numRows(), 1);</span>
+<span class="nc" id="L1032">        Matrix sum = new Matrix(this.numRows(), 1);</span>
 
-<span class="nc bnc" id="L985" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L986" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc" id="L987">                sum.entries[i][0] += this.entries[i][j];</span>
+<span class="nc bnc" id="L1034" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L1035" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc" id="L1036">                sum.entries[i][0] += this.entries[i][j];</span>
             }
         }
 
-<span class="nc" id="L991">        return sum;</span>
+<span class="nc" id="L1040">        return sum;</span>
     }
 
 
@@ -1000,15 +1049,15 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix sumRows() {
-<span class="nc" id="L1003">        Matrix sum = new Matrix(1, this.numCols());</span>
+<span class="nc" id="L1052">        Matrix sum = new Matrix(1, this.numCols());</span>
 
-<span class="nc bnc" id="L1005" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L1006" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc" id="L1007">                sum.entries[0][j] += this.entries[i][j];</span>
+<span class="nc bnc" id="L1054" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L1055" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc" id="L1056">                sum.entries[0][j] += this.entries[i][j];</span>
             }
         }
 
-<span class="nc" id="L1011">        return sum;</span>
+<span class="nc" id="L1060">        return sum;</span>
     }
 
 
@@ -1021,7 +1070,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix addToEachCol(Vector b) {
-<span class="nc" id="L1024">        return null;</span>
+<span class="nc" id="L1073">        return null;</span>
     }
 
 
@@ -1034,7 +1083,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix addToEachCol(SparseVector b) {
-<span class="nc" id="L1037">        return null;</span>
+<span class="nc" id="L1086">        return null;</span>
     }
 
 
@@ -1047,7 +1096,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix addToEachCol(CVector b) {
-<span class="nc" id="L1050">        return null;</span>
+<span class="nc" id="L1099">        return null;</span>
     }
 
 
@@ -1060,7 +1109,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix addToEachCol(SparseCVector b) {
-<span class="nc" id="L1063">        return null;</span>
+<span class="nc" id="L1112">        return null;</span>
     }
 
 
@@ -1073,7 +1122,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix addToEachRow(Vector b) {
-<span class="nc" id="L1076">        return null;</span>
+<span class="nc" id="L1125">        return null;</span>
     }
 
 
@@ -1086,7 +1135,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix addToEachRow(SparseVector b) {
-<span class="nc" id="L1089">        return null;</span>
+<span class="nc" id="L1138">        return null;</span>
     }
 
 
@@ -1099,7 +1148,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix addToEachRow(CVector b) {
-<span class="nc" id="L1102">        return null;</span>
+<span class="nc" id="L1151">        return null;</span>
     }
 
 
@@ -1112,7 +1161,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix addToEachRow(SparseCVector b) {
-<span class="nc" id="L1115">        return null;</span>
+<span class="nc" id="L1164">        return null;</span>
     }
 
 
@@ -1126,7 +1175,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix stack(Matrix B) {
-<span class="nc" id="L1129">        return null;</span>
+<span class="nc" id="L1178">        return null;</span>
     }
 
 
@@ -1140,7 +1189,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix stack(SparseMatrix B) {
-<span class="nc" id="L1143">        return null;</span>
+<span class="nc" id="L1192">        return null;</span>
     }
 
 
@@ -1154,7 +1203,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix stack(CMatrix B) {
-<span class="nc" id="L1157">        return null;</span>
+<span class="nc" id="L1206">        return null;</span>
     }
 
 
@@ -1168,7 +1217,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix stack(SparseCMatrix B) {
-<span class="nc" id="L1171">        return null;</span>
+<span class="nc" id="L1220">        return null;</span>
     }
 
 
@@ -1186,7 +1235,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix stack(Matrix B, int axis) {
-<span class="nc" id="L1189">        return null;</span>
+<span class="nc" id="L1238">        return null;</span>
     }
 
 
@@ -1204,7 +1253,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix stack(SparseMatrix B, int axis) {
-<span class="nc" id="L1207">        return null;</span>
+<span class="nc" id="L1256">        return null;</span>
     }
 
 
@@ -1222,7 +1271,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix stack(CMatrix B, int axis) {
-<span class="nc" id="L1225">        return null;</span>
+<span class="nc" id="L1274">        return null;</span>
     }
 
 
@@ -1240,7 +1289,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix stack(SparseCMatrix B, int axis) {
-<span class="nc" id="L1243">        return null;</span>
+<span class="nc" id="L1292">        return null;</span>
     }
 
 
@@ -1254,7 +1303,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix augment(Matrix B) {
-<span class="nc" id="L1257">        return null;</span>
+<span class="nc" id="L1306">        return null;</span>
     }
 
 
@@ -1268,7 +1317,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix augment(SparseMatrix B) {
-<span class="nc" id="L1271">        return null;</span>
+<span class="nc" id="L1320">        return null;</span>
     }
 
 
@@ -1282,7 +1331,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix augment(CMatrix B) {
-<span class="nc" id="L1285">        return null;</span>
+<span class="nc" id="L1334">        return null;</span>
     }
 
 
@@ -1296,7 +1345,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix augment(SparseCMatrix B) {
-<span class="nc" id="L1299">        return null;</span>
+<span class="nc" id="L1348">        return null;</span>
     }
 
 
@@ -1312,7 +1361,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix stack(Vector b) {
-<span class="nc" id="L1315">        return null;</span>
+<span class="nc" id="L1364">        return null;</span>
     }
 
 
@@ -1328,7 +1377,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public SparseMatrix stack(SparseVector b) {
-<span class="nc" id="L1331">        return null;</span>
+<span class="nc" id="L1380">        return null;</span>
     }
 
 
@@ -1344,7 +1393,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix stack(CVector b) {
-<span class="nc" id="L1347">        return null;</span>
+<span class="nc" id="L1396">        return null;</span>
     }
 
 
@@ -1360,7 +1409,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix stack(SparseCVector b) {
-<span class="nc" id="L1363">        return null;</span>
+<span class="nc" id="L1412">        return null;</span>
     }
 
 
@@ -1380,7 +1429,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix stack(Vector b, int axis) {
-<span class="nc" id="L1383">        return null;</span>
+<span class="nc" id="L1432">        return null;</span>
     }
 
 
@@ -1400,7 +1449,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public SparseMatrix stack(SparseVector b, int axis) {
-<span class="nc" id="L1403">        return null;</span>
+<span class="nc" id="L1452">        return null;</span>
     }
 
 
@@ -1420,7 +1469,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix stack(CVector b, int axis) {
-<span class="nc" id="L1423">        return null;</span>
+<span class="nc" id="L1472">        return null;</span>
     }
 
 
@@ -1440,7 +1489,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix stack(SparseCVector b, int axis) {
-<span class="nc" id="L1443">        return null;</span>
+<span class="nc" id="L1492">        return null;</span>
     }
 
 
@@ -1456,7 +1505,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix augment(Vector b) {
-<span class="nc" id="L1459">        return null;</span>
+<span class="nc" id="L1508">        return null;</span>
     }
 
 
@@ -1472,7 +1521,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public SparseMatrix augment(SparseVector b) {
-<span class="nc" id="L1475">        return null;</span>
+<span class="nc" id="L1524">        return null;</span>
     }
 
 
@@ -1488,7 +1537,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix augment(CVector b) {
-<span class="nc" id="L1491">        return null;</span>
+<span class="nc" id="L1540">        return null;</span>
     }
 
 
@@ -1504,7 +1553,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix augment(SparseCVector b) {
-<span class="nc" id="L1507">        return null;</span>
+<span class="nc" id="L1556">        return null;</span>
     }
 
 
@@ -1516,13 +1565,13 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Double[] getRow(int i) {
-<span class="nc" id="L1519">        Double[] column = new Double[this.numRows()];</span>
+<span class="nc" id="L1568">        Double[] column = new Double[this.numRows()];</span>
 
-<span class="nc bnc" id="L1521" title="All 2 branches missed.">        for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc" id="L1522">            column[j] = this.entries[i][j];</span>
+<span class="nc bnc" id="L1570" title="All 2 branches missed.">        for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc" id="L1571">            column[j] = this.entries[i][j];</span>
         }
 
-<span class="nc" id="L1525">        return column;</span>
+<span class="nc" id="L1574">        return column;</span>
     }
 
 
@@ -1534,13 +1583,13 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Double[] getCol(int j) {
-<span class="fc" id="L1537">        Double[] column = new Double[this.numRows()];</span>
+<span class="nc" id="L1586">        Double[] column = new Double[this.numRows()];</span>
 
-<span class="fc bfc" id="L1539" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="fc" id="L1540">            column[i] = this.entries[i][j];</span>
+<span class="nc bnc" id="L1588" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc" id="L1589">            column[i] = this.entries[i][j];</span>
         }
 
-<span class="fc" id="L1543">        return column;</span>
+<span class="nc" id="L1592">        return column;</span>
     }
 
 
@@ -1551,7 +1600,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isSquare() {
-<span class="nc bnc" id="L1554" title="All 2 branches missed.">        return this.numRows()==this.numCols();</span>
+<span class="nc bnc" id="L1603" title="All 2 branches missed.">        return this.numRows()==this.numCols();</span>
     }
 
 
@@ -1562,7 +1611,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isVector() {
-<span class="nc bnc" id="L1565" title="All 4 branches missed.">        return this.numRows()==1 || this.numCols()==1;</span>
+<span class="nc bnc" id="L1614" title="All 4 branches missed.">        return this.numRows()==1 || this.numCols()==1;</span>
     }
 
 
@@ -1579,17 +1628,17 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
 
         int result;
 
-<span class="nc bnc" id="L1582" title="All 4 branches missed.">        if(this.numRows() == 1 &amp;&amp; this.numCols()==1) {</span>
-<span class="nc" id="L1583">            result = 0;</span>
-<span class="nc bnc" id="L1584" title="All 2 branches missed.">        } else if(this.numRows() == 1) {</span>
-<span class="nc" id="L1585">            result = 1;</span>
-<span class="nc bnc" id="L1586" title="All 2 branches missed.">        } else if(this.numCols() == 1) {</span>
-<span class="nc" id="L1587">            result = 2;</span>
+<span class="nc bnc" id="L1631" title="All 4 branches missed.">        if(this.numRows() == 1 &amp;&amp; this.numCols()==1) {</span>
+<span class="nc" id="L1632">            result = 0;</span>
+<span class="nc bnc" id="L1633" title="All 2 branches missed.">        } else if(this.numRows() == 1) {</span>
+<span class="nc" id="L1634">            result = 1;</span>
+<span class="nc bnc" id="L1635" title="All 2 branches missed.">        } else if(this.numCols() == 1) {</span>
+<span class="nc" id="L1636">            result = 2;</span>
         } else {
-<span class="nc" id="L1589">            result = -1;</span>
+<span class="nc" id="L1638">            result = -1;</span>
         }
 
-<span class="nc" id="L1592">        return result;</span>
+<span class="nc" id="L1641">        return result;</span>
     }
 
 
@@ -1600,7 +1649,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isTri() {
-<span class="nc" id="L1603">        return false;</span>
+<span class="nc" id="L1652">        return false;</span>
     }
 
 
@@ -1611,7 +1660,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isTriL() {
-<span class="nc" id="L1614">        return false;</span>
+<span class="nc" id="L1663">        return false;</span>
     }
 
 
@@ -1622,7 +1671,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isTriU() {
-<span class="nc" id="L1625">        return false;</span>
+<span class="nc" id="L1674">        return false;</span>
     }
 
 
@@ -1633,7 +1682,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isDiag() {
-<span class="nc" id="L1636">        return false;</span>
+<span class="nc" id="L1685">        return false;</span>
     }
 
 
@@ -1644,7 +1693,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isFullRank() {
-<span class="nc" id="L1647">        return false;</span>
+<span class="nc" id="L1696">        return false;</span>
     }
 
 
@@ -1656,7 +1705,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isSingular() {
-<span class="nc" id="L1659">        return false;</span>
+<span class="nc" id="L1708">        return false;</span>
     }
 
 
@@ -1668,7 +1717,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isInvertible() {
-<span class="nc" id="L1671">        return false;</span>
+<span class="nc" id="L1720">        return false;</span>
     }
 
 
@@ -1681,7 +1730,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean norm(double p, double q) {
-<span class="nc" id="L1684">        return false;</span>
+<span class="nc" id="L1733">        return false;</span>
     }
 
 
@@ -1692,7 +1741,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isPosDef() {
-<span class="nc" id="L1695">        return false;</span>
+<span class="nc" id="L1744">        return false;</span>
     }
 
 
@@ -1703,7 +1752,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isPosSemiDef() {
-<span class="nc" id="L1706">        return false;</span>
+<span class="nc" id="L1755">        return false;</span>
     }
 
 
@@ -1715,7 +1764,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isDiagonalizable() {
-<span class="nc" id="L1718">        return false;</span>
+<span class="nc" id="L1767">        return false;</span>
     }
 
 
@@ -1726,25 +1775,25 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isSymmetric() {
-<span class="nc" id="L1729">        boolean result = true;</span>
+<span class="nc" id="L1778">        boolean result = true;</span>
 
-<span class="nc bnc" id="L1731" title="All 2 branches missed.">        if(this.isSquare()) {</span>
-<span class="nc bnc" id="L1732" title="All 2 branches missed.">            for(int i=1; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L1733" title="All 2 branches missed.">                for(int j=0; j&lt;i; j++) {</span>
-<span class="nc bnc" id="L1734" title="All 2 branches missed.">                    if(this.entries[i][j] != this.entries[j][i]) {</span>
+<span class="nc bnc" id="L1780" title="All 2 branches missed.">        if(this.isSquare()) {</span>
+<span class="nc bnc" id="L1781" title="All 2 branches missed.">            for(int i=1; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L1782" title="All 2 branches missed.">                for(int j=0; j&lt;i; j++) {</span>
+<span class="nc bnc" id="L1783" title="All 2 branches missed.">                    if(this.entries[i][j] != this.entries[j][i]) {</span>
                         // Then this matrix is not symmetric.
-<span class="nc" id="L1736">                        result = false;</span>
-<span class="nc" id="L1737">                        break;</span>
+<span class="nc" id="L1785">                        result = false;</span>
+<span class="nc" id="L1786">                        break;</span>
                     }
                 }
 
-<span class="nc bnc" id="L1741" title="All 2 branches missed.">                if(!result) {</span>
-<span class="nc" id="L1742">                    break;</span>
+<span class="nc bnc" id="L1790" title="All 2 branches missed.">                if(!result) {</span>
+<span class="nc" id="L1791">                    break;</span>
                 }
             }
         }
 
-<span class="nc" id="L1747">        return result;</span>
+<span class="nc" id="L1796">        return result;</span>
     }
 
 
@@ -1755,25 +1804,25 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isAntiSymmetric() {
-<span class="nc" id="L1758">        boolean result = true;</span>
+<span class="nc" id="L1807">        boolean result = true;</span>
 
-<span class="nc bnc" id="L1760" title="All 2 branches missed.">        if(this.isSquare()) {</span>
-<span class="nc bnc" id="L1761" title="All 2 branches missed.">            for(int i=1; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L1762" title="All 2 branches missed.">                for(int j=0; j&lt;i; j++) {</span>
-<span class="nc bnc" id="L1763" title="All 2 branches missed.">                    if(this.entries[i][j] != -this.entries[j][i]) {</span>
+<span class="nc bnc" id="L1809" title="All 2 branches missed.">        if(this.isSquare()) {</span>
+<span class="nc bnc" id="L1810" title="All 2 branches missed.">            for(int i=1; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L1811" title="All 2 branches missed.">                for(int j=0; j&lt;i; j++) {</span>
+<span class="nc bnc" id="L1812" title="All 2 branches missed.">                    if(this.entries[i][j] != -this.entries[j][i]) {</span>
                         // Then this matrix is not anti-symmetric.
-<span class="nc" id="L1765">                        result = false;</span>
-<span class="nc" id="L1766">                        break;</span>
+<span class="nc" id="L1814">                        result = false;</span>
+<span class="nc" id="L1815">                        break;</span>
                     }
                 }
 
-<span class="nc bnc" id="L1770" title="All 2 branches missed.">                if(!result) {</span>
-<span class="nc" id="L1771">                    break;</span>
+<span class="nc bnc" id="L1819" title="All 2 branches missed.">                if(!result) {</span>
+<span class="nc" id="L1820">                    break;</span>
                 }
             }
         }
 
-<span class="nc" id="L1776">        return result;</span>
+<span class="nc" id="L1825">        return result;</span>
     }
 
 
@@ -1784,7 +1833,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isOrthogonal() {
-<span class="nc" id="L1787">        return false;</span>
+<span class="nc" id="L1836">        return false;</span>
     }
 
 
@@ -1795,22 +1844,22 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isPos() {
-<span class="nc" id="L1798">        boolean result = true;</span>
+<span class="nc" id="L1847">        boolean result = true;</span>
 
-<span class="nc bnc" id="L1800" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L1801" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc bnc" id="L1802" title="All 2 branches missed.">                if(this.entries[i][j] &lt; 0) {</span>
-<span class="nc" id="L1803">                    result = false;</span>
-<span class="nc" id="L1804">                    break;</span>
+<span class="nc bnc" id="L1849" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L1850" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc bnc" id="L1851" title="All 2 branches missed.">                if(this.entries[i][j] &lt; 0) {</span>
+<span class="nc" id="L1852">                    result = false;</span>
+<span class="nc" id="L1853">                    break;</span>
                 }
 
-<span class="nc bnc" id="L1807" title="All 2 branches missed.">                if(!result) {</span>
-<span class="nc" id="L1808">                    break;</span>
+<span class="nc bnc" id="L1856" title="All 2 branches missed.">                if(!result) {</span>
+<span class="nc" id="L1857">                    break;</span>
                 }
             }
         }
 
-<span class="nc" id="L1813">        return result;</span>
+<span class="nc" id="L1862">        return result;</span>
     }
 
 
@@ -1821,22 +1870,22 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isNeg() {
-<span class="nc" id="L1824">        boolean result = true;</span>
+<span class="nc" id="L1873">        boolean result = true;</span>
 
-<span class="nc bnc" id="L1826" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L1827" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc bnc" id="L1828" title="All 2 branches missed.">                if(this.entries[i][j] &gt; 0) {</span>
-<span class="nc" id="L1829">                    result = false;</span>
-<span class="nc" id="L1830">                    break;</span>
+<span class="nc bnc" id="L1875" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L1876" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc bnc" id="L1877" title="All 2 branches missed.">                if(this.entries[i][j] &gt; 0) {</span>
+<span class="nc" id="L1878">                    result = false;</span>
+<span class="nc" id="L1879">                    break;</span>
                 }
 
-<span class="nc bnc" id="L1833" title="All 2 branches missed.">                if(!result) {</span>
-<span class="nc" id="L1834">                    break;</span>
+<span class="nc bnc" id="L1882" title="All 2 branches missed.">                if(!result) {</span>
+<span class="nc" id="L1883">                    break;</span>
                 }
             }
         }
 
-<span class="nc" id="L1839">        return result;</span>
+<span class="nc" id="L1888">        return result;</span>
     }
 
 
@@ -1848,15 +1897,15 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public CMatrix toComplex() {
-<span class="nc" id="L1851">        CMatrix complex = new CMatrix(this.getShape());</span>
+<span class="nc" id="L1900">        CMatrix complex = new CMatrix(this.getShape());</span>
 
-<span class="nc bnc" id="L1853" title="All 2 branches missed.">        for(int i=0; i&lt;complex.numRows(); i++) {</span>
-<span class="nc bnc" id="L1854" title="All 2 branches missed.">            for(int j=0; j&lt;complex.numCols(); j++) {</span>
-<span class="nc" id="L1855">                complex.entries[i][j].re = this.entries[i][j];</span>
+<span class="nc bnc" id="L1902" title="All 2 branches missed.">        for(int i=0; i&lt;complex.numRows(); i++) {</span>
+<span class="nc bnc" id="L1903" title="All 2 branches missed.">            for(int j=0; j&lt;complex.numCols(); j++) {</span>
+<span class="nc" id="L1904">                complex.entries[i][j].re = this.entries[i][j];</span>
             }
         }
 
-<span class="nc" id="L1859">        return complex;</span>
+<span class="nc" id="L1908">        return complex;</span>
     }
 
 
@@ -1867,17 +1916,17 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Double min() {
-<span class="nc" id="L1870">        double min = Double.MAX_VALUE;</span>
+<span class="nc" id="L1919">        double min = Double.MAX_VALUE;</span>
 
-<span class="nc bnc" id="L1872" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L1873" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc bnc" id="L1874" title="All 2 branches missed.">                if(this.entries[i][j] &lt; min) {</span>
-<span class="nc" id="L1875">                    min = this.entries[i][j];</span>
+<span class="nc bnc" id="L1921" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L1922" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc bnc" id="L1923" title="All 2 branches missed.">                if(this.entries[i][j] &lt; min) {</span>
+<span class="nc" id="L1924">                    min = this.entries[i][j];</span>
                 }
             }
         }
 
-<span class="nc" id="L1880">        return min;</span>
+<span class="nc" id="L1929">        return min;</span>
     }
 
 
@@ -1888,17 +1937,17 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Double max() {
-<span class="nc" id="L1891">        double max = Double.MIN_NORMAL;</span>
+<span class="nc" id="L1940">        double max = Double.MIN_NORMAL;</span>
 
-<span class="nc bnc" id="L1893" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L1894" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc bnc" id="L1895" title="All 2 branches missed.">                if(this.entries[i][j] &gt; max) {</span>
-<span class="nc" id="L1896">                    max = this.entries[i][j];</span>
+<span class="nc bnc" id="L1942" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L1943" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc bnc" id="L1944" title="All 2 branches missed.">                if(this.entries[i][j] &gt; max) {</span>
+<span class="nc" id="L1945">                    max = this.entries[i][j];</span>
                 }
             }
         }
 
-<span class="nc" id="L1901">        return max;</span>
+<span class="nc" id="L1950">        return max;</span>
     }
 
 
@@ -1910,17 +1959,17 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Double minAbs() {
-<span class="nc" id="L1913">        double min = Double.MAX_VALUE;</span>
+<span class="nc" id="L1962">        double min = Double.MAX_VALUE;</span>
 
-<span class="nc bnc" id="L1915" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L1916" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc bnc" id="L1917" title="All 2 branches missed.">                if(Math.abs(this.entries[i][j]) &lt; min) {</span>
-<span class="nc" id="L1918">                    min = Math.abs(this.entries[i][j]);</span>
+<span class="nc bnc" id="L1964" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L1965" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc bnc" id="L1966" title="All 2 branches missed.">                if(Math.abs(this.entries[i][j]) &lt; min) {</span>
+<span class="nc" id="L1967">                    min = Math.abs(this.entries[i][j]);</span>
                 }
             }
         }
 
-<span class="nc" id="L1923">        return min;</span>
+<span class="nc" id="L1972">        return min;</span>
     }
 
 
@@ -1932,17 +1981,17 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Double maxAbs() {
-<span class="nc" id="L1935">        double max = -1;</span>
+<span class="nc" id="L1984">        double max = -1;</span>
 
-<span class="nc bnc" id="L1937" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L1938" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc bnc" id="L1939" title="All 2 branches missed.">                if(Math.abs(this.entries[i][j]) &gt; max) {</span>
-<span class="nc" id="L1940">                    max = Math.abs(this.entries[i][j]);</span>
+<span class="nc bnc" id="L1986" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L1987" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc bnc" id="L1988" title="All 2 branches missed.">                if(Math.abs(this.entries[i][j]) &gt; max) {</span>
+<span class="nc" id="L1989">                    max = Math.abs(this.entries[i][j]);</span>
                 }
             }
         }
 
-<span class="nc" id="L1945">        return max;</span>
+<span class="nc" id="L1994">        return max;</span>
     }
 
 
@@ -1954,20 +2003,20 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L1957">        double min = Double.MAX_VALUE;</span>
-<span class="nc" id="L1958">        int[] indices = new int[2];</span>
+<span class="nc" id="L2006">        double min = Double.MAX_VALUE;</span>
+<span class="nc" id="L2007">        int[] indices = new int[2];</span>
 
-<span class="nc bnc" id="L1960" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L1961" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc bnc" id="L1962" title="All 2 branches missed.">                if(this.entries[i][j] &lt;= min) {</span>
-<span class="nc" id="L1963">                    min = this.entries[i][j];</span>
-<span class="nc" id="L1964">                    indices[0] = i;</span>
-<span class="nc" id="L1965">                    indices[1] = j;</span>
+<span class="nc bnc" id="L2009" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L2010" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc bnc" id="L2011" title="All 2 branches missed.">                if(this.entries[i][j] &lt;= min) {</span>
+<span class="nc" id="L2012">                    min = this.entries[i][j];</span>
+<span class="nc" id="L2013">                    indices[0] = i;</span>
+<span class="nc" id="L2014">                    indices[1] = j;</span>
                 }
             }
         }
 
-<span class="nc" id="L1970">        return indices;</span>
+<span class="nc" id="L2019">        return indices;</span>
     }
 
 
@@ -1979,20 +2028,20 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L1982">        double max = Double.MIN_NORMAL;</span>
-<span class="nc" id="L1983">        int[] indices = new int[2];</span>
+<span class="nc" id="L2031">        double max = Double.MIN_NORMAL;</span>
+<span class="nc" id="L2032">        int[] indices = new int[2];</span>
 
-<span class="nc bnc" id="L1985" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L1986" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc bnc" id="L1987" title="All 2 branches missed.">                if(this.entries[i][j] &gt;= max) {</span>
-<span class="nc" id="L1988">                    max = this.entries[i][j];</span>
-<span class="nc" id="L1989">                    indices[0] = i;</span>
-<span class="nc" id="L1990">                    indices[1] = j;</span>
+<span class="nc bnc" id="L2034" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L2035" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc bnc" id="L2036" title="All 2 branches missed.">                if(this.entries[i][j] &gt;= max) {</span>
+<span class="nc" id="L2037">                    max = this.entries[i][j];</span>
+<span class="nc" id="L2038">                    indices[0] = i;</span>
+<span class="nc" id="L2039">                    indices[1] = j;</span>
                 }
             }
         }
 
-<span class="nc" id="L1995">        return indices;</span>
+<span class="nc" id="L2044">        return indices;</span>
     }
 
 
@@ -2003,7 +2052,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Double norm() {
-<span class="nc" id="L2006">        return null;</span>
+<span class="nc" id="L2055">        return null;</span>
     }
 
 
@@ -2017,7 +2066,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Double norm(double p) {
-<span class="nc" id="L2020">        return null;</span>
+<span class="nc" id="L2069">        return null;</span>
     }
 
 
@@ -2028,7 +2077,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Double infNorm() {
-<span class="nc" id="L2031">        return null;</span>
+<span class="nc" id="L2080">        return null;</span>
     }
 
 
@@ -2039,7 +2088,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isI() {
-<span class="nc" id="L2042">        return false;</span>
+<span class="nc" id="L2091">        return false;</span>
     }
 
 
@@ -2051,27 +2100,27 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean equals(Matrix B) {
-<span class="nc" id="L2054">        boolean result = true;</span>
+<span class="nc" id="L2103">        boolean result = true;</span>
 
-<span class="nc bnc" id="L2056" title="All 2 branches missed.">        if(!this.getShape().equals(B.getShape())) {</span>
-<span class="nc" id="L2057">            result = false;</span>
+<span class="nc bnc" id="L2105" title="All 2 branches missed.">        if(!this.getShape().equals(B.getShape())) {</span>
+<span class="nc" id="L2106">            result = false;</span>
 
         } else {
-<span class="nc bnc" id="L2060" title="All 2 branches missed.">            for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L2061" title="All 2 branches missed.">                for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc bnc" id="L2062" title="All 2 branches missed.">                    if(this.entries[i][j] != B.entries[i][j]) {</span>
-<span class="nc" id="L2063">                        result = false;</span>
-<span class="nc" id="L2064">                        break;</span>
+<span class="nc bnc" id="L2109" title="All 2 branches missed.">            for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L2110" title="All 2 branches missed.">                for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc bnc" id="L2111" title="All 2 branches missed.">                    if(this.entries[i][j] != B.entries[i][j]) {</span>
+<span class="nc" id="L2112">                        result = false;</span>
+<span class="nc" id="L2113">                        break;</span>
                     }
                 }
 
-<span class="nc bnc" id="L2068" title="All 2 branches missed.">                if(!result) {</span>
-<span class="nc" id="L2069">                    break;</span>
+<span class="nc bnc" id="L2117" title="All 2 branches missed.">                if(!result) {</span>
+<span class="nc" id="L2118">                    break;</span>
                 }
             }
         }
 
-<span class="nc" id="L2074">        return result;</span>
+<span class="nc" id="L2123">        return result;</span>
     }
 
 
@@ -2083,7 +2132,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean equals(SparseMatrix B) {
-<span class="nc" id="L2086">        return false;</span>
+<span class="nc" id="L2135">        return false;</span>
     }
 
 
@@ -2095,27 +2144,27 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean equals(CMatrix B) {
-<span class="nc" id="L2098">        boolean result = true;</span>
+<span class="nc" id="L2147">        boolean result = true;</span>
 
-<span class="nc bnc" id="L2100" title="All 2 branches missed.">        if(!this.getShape().equals(B.getShape())) {</span>
-<span class="nc" id="L2101">            result = false;</span>
+<span class="nc bnc" id="L2149" title="All 2 branches missed.">        if(!this.getShape().equals(B.getShape())) {</span>
+<span class="nc" id="L2150">            result = false;</span>
 
         } else {
-<span class="nc bnc" id="L2104" title="All 2 branches missed.">            for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L2105" title="All 2 branches missed.">                for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc bnc" id="L2106" title="All 4 branches missed.">                    if(this.entries[i][j] != B.entries[i][j].re || B.entries[i][j].im != 0) {</span>
-<span class="nc" id="L2107">                        result = false;</span>
-<span class="nc" id="L2108">                        break;</span>
+<span class="nc bnc" id="L2153" title="All 2 branches missed.">            for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L2154" title="All 2 branches missed.">                for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc bnc" id="L2155" title="All 4 branches missed.">                    if(this.entries[i][j] != B.entries[i][j].re || B.entries[i][j].im != 0) {</span>
+<span class="nc" id="L2156">                        result = false;</span>
+<span class="nc" id="L2157">                        break;</span>
                     }
                 }
 
-<span class="nc bnc" id="L2112" title="All 2 branches missed.">                if(!result) {</span>
-<span class="nc" id="L2113">                    break;</span>
+<span class="nc bnc" id="L2161" title="All 2 branches missed.">                if(!result) {</span>
+<span class="nc" id="L2162">                    break;</span>
                 }
             }
         }
 
-<span class="nc" id="L2118">        return result;</span>
+<span class="nc" id="L2167">        return result;</span>
     }
 
 
@@ -2127,7 +2176,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean equals(SparseCMatrix B) {
-<span class="nc" id="L2130">        return false;</span>
+<span class="nc" id="L2179">        return false;</span>
     }
 
 
@@ -2139,7 +2188,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isInv(Matrix B) {
-<span class="nc" id="L2142">        return false;</span>
+<span class="nc" id="L2191">        return false;</span>
     }
 
 
@@ -2156,7 +2205,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix reshape(int[] shape) {
-<span class="nc" id="L2159">        return null;</span>
+<span class="nc" id="L2208">        return null;</span>
     }
 
 
@@ -2170,7 +2219,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix reshape(int numRows, int numCols) {
-<span class="nc" id="L2173">        return null;</span>
+<span class="nc" id="L2222">        return null;</span>
     }
 
 
@@ -2181,7 +2230,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix flatten() {
-<span class="nc" id="L2184">        return null;</span>
+<span class="nc" id="L2233">        return null;</span>
     }
 
 
@@ -2194,7 +2243,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix flatten(int axis) {
-<span class="nc" id="L2197">        return null;</span>
+<span class="nc" id="L2246">        return null;</span>
     }
 
 
@@ -2207,7 +2256,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void setValues(Double[][] values) {
 
-<span class="nc" id="L2210">    }</span>
+<span class="nc" id="L2259">    }</span>
 
 
     /**
@@ -2219,7 +2268,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void setValues(double[][] values) {
 
-<span class="nc" id="L2222">    }</span>
+<span class="nc" id="L2271">    }</span>
 
 
     /**
@@ -2231,7 +2280,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void setValues(int[][] values) {
 
-<span class="nc" id="L2234">    }</span>
+<span class="nc" id="L2283">    }</span>
 
 
     /**
@@ -2244,7 +2293,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void setCol(Double[] values, int colIndex) {
 
-<span class="nc" id="L2247">    }</span>
+<span class="nc" id="L2296">    }</span>
 
 
     /**
@@ -2257,7 +2306,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void setCol(double[] values, int colIndex) {
 
-<span class="nc" id="L2260">    }</span>
+<span class="nc" id="L2309">    }</span>
 
 
     /**
@@ -2270,7 +2319,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void setCol(int[] values, int colIndex) {
 
-<span class="nc" id="L2273">    }</span>
+<span class="nc" id="L2322">    }</span>
 
 
     /**
@@ -2283,7 +2332,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void setRow(Double[] values, int rowIndex) {
 
-<span class="nc" id="L2286">    }</span>
+<span class="nc" id="L2335">    }</span>
 
 
     /**
@@ -2296,7 +2345,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void setRow(double[] values, int rowIndex) {
 
-<span class="nc" id="L2299">    }</span>
+<span class="nc" id="L2348">    }</span>
 
 
     /**
@@ -2309,7 +2358,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void setRow(int[] values, int rowIndex) {
 
-<span class="nc" id="L2312">    }</span>
+<span class="nc" id="L2361">    }</span>
 
 
     /**
@@ -2326,7 +2375,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void setSlice(Matrix values, int rowStart, int colStart) {
 
-<span class="nc" id="L2329">    }</span>
+<span class="nc" id="L2378">    }</span>
 
 
     /**
@@ -2343,7 +2392,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void setSlice(Double[][] values, int rowStart, int colStart) {
 
-<span class="nc" id="L2346">    }</span>
+<span class="nc" id="L2395">    }</span>
 
 
     /**
@@ -2360,7 +2409,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void setSlice(double[][] values, int rowStart, int colStart) {
 
-<span class="nc" id="L2363">    }</span>
+<span class="nc" id="L2412">    }</span>
 
 
     /**
@@ -2377,7 +2426,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void setSlice(int[][] values, int rowStart, int colStart) {
 
-<span class="nc" id="L2380">    }</span>
+<span class="nc" id="L2429">    }</span>
 
 
     /**
@@ -2394,7 +2443,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix setSliceCopy(Matrix values, int rowStart, int colStart) {
-<span class="nc" id="L2397">        return null;</span>
+<span class="nc" id="L2446">        return null;</span>
     }
 
 
@@ -2412,7 +2461,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public SparseCMatrix setSliceCopy(Double[][] values, int rowStart, int colStart) {
-<span class="nc" id="L2415">        return null;</span>
+<span class="nc" id="L2464">        return null;</span>
     }
 
 
@@ -2430,7 +2479,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public SparseCMatrix setSliceCopy(double[][] values, int rowStart, int colStart) {
-<span class="nc" id="L2433">        return null;</span>
+<span class="nc" id="L2482">        return null;</span>
     }
 
 
@@ -2448,7 +2497,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public SparseCMatrix setSliceCopy(int[][] values, int rowStart, int colStart) {
-<span class="nc" id="L2451">        return null;</span>
+<span class="nc" id="L2500">        return null;</span>
     }
 
 
@@ -2460,7 +2509,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void removeRow(int rowIndex) {
 
-<span class="nc" id="L2463">    }</span>
+<span class="nc" id="L2512">    }</span>
 
 
     /**
@@ -2471,7 +2520,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void removeRows(int... rowIndices) {
 
-<span class="nc" id="L2474">    }</span>
+<span class="nc" id="L2523">    }</span>
 
 
     /**
@@ -2482,7 +2531,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void removeCol(int colIndex) {
 
-<span class="nc" id="L2485">    }</span>
+<span class="nc" id="L2534">    }</span>
 
 
     /**
@@ -2493,7 +2542,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void removeCols(int... colIndices) {
 
-<span class="nc" id="L2496">    }</span>
+<span class="nc" id="L2545">    }</span>
 
 
     /**
@@ -2504,7 +2553,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix round() {
-<span class="nc" id="L2507">        return null;</span>
+<span class="nc" id="L2556">        return null;</span>
     }
 
 
@@ -2518,7 +2567,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix round(int precision) {
-<span class="nc" id="L2521">        return null;</span>
+<span class="nc" id="L2570">        return null;</span>
     }
 
 
@@ -2531,7 +2580,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix roundToZero() {
-<span class="nc" id="L2534">        return null;</span>
+<span class="nc" id="L2583">        return null;</span>
     }
 
 
@@ -2546,7 +2595,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public Matrix roundToZero(double threshold) {
-<span class="nc" id="L2549">        return null;</span>
+<span class="nc" id="L2598">        return null;</span>
     }
 
 
@@ -2557,22 +2606,22 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isZero() {
-<span class="nc" id="L2560">        boolean result = true;</span>
+<span class="nc" id="L2609">        boolean result = true;</span>
 
-<span class="nc bnc" id="L2562" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L2563" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc bnc" id="L2564" title="All 2 branches missed.">                if(this.entries[i][j] != 0) {</span>
-<span class="nc" id="L2565">                    result = false;</span>
-<span class="nc" id="L2566">                    break;</span>
+<span class="nc bnc" id="L2611" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L2612" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc bnc" id="L2613" title="All 2 branches missed.">                if(this.entries[i][j] != 0) {</span>
+<span class="nc" id="L2614">                    result = false;</span>
+<span class="nc" id="L2615">                    break;</span>
                 }
 
-<span class="nc bnc" id="L2569" title="All 2 branches missed.">                if(!result) {</span>
-<span class="nc" id="L2570">                    break;</span>
+<span class="nc bnc" id="L2618" title="All 2 branches missed.">                if(!result) {</span>
+<span class="nc" id="L2619">                    break;</span>
                 }
             }
         }
 
-<span class="nc" id="L2575">        return result;</span>
+<span class="nc" id="L2624">        return result;</span>
     }
 
 
@@ -2583,22 +2632,22 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      */
     @Override
     public boolean isOnes() {
-<span class="nc" id="L2586">        boolean result = true;</span>
+<span class="nc" id="L2635">        boolean result = true;</span>
 
-<span class="nc bnc" id="L2588" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
-<span class="nc bnc" id="L2589" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
-<span class="nc bnc" id="L2590" title="All 2 branches missed.">                if(this.entries[i][j] != 1) {</span>
-<span class="nc" id="L2591">                    result = false;</span>
-<span class="nc" id="L2592">                    break;</span>
+<span class="nc bnc" id="L2637" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows(); i++) {</span>
+<span class="nc bnc" id="L2638" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols(); j++) {</span>
+<span class="nc bnc" id="L2639" title="All 2 branches missed.">                if(this.entries[i][j] != 1) {</span>
+<span class="nc" id="L2640">                    result = false;</span>
+<span class="nc" id="L2641">                    break;</span>
                 }
 
-<span class="nc bnc" id="L2595" title="All 2 branches missed.">                if(!result) {</span>
-<span class="nc" id="L2596">                    break;</span>
+<span class="nc bnc" id="L2644" title="All 2 branches missed.">                if(!result) {</span>
+<span class="nc" id="L2645">                    break;</span>
                 }
             }
         }
 
-<span class="nc" id="L2601">        return result;</span>
+<span class="nc" id="L2650">        return result;</span>
     }
 
 
@@ -2611,7 +2660,7 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
     @Override
     public void set(double value, int... indices) {
 
-<span class="nc" id="L2614">    }</span>
+<span class="nc" id="L2663">    }</span>
 
 
     /**
@@ -2620,85 +2669,85 @@ public class Matrix extends TypedMatrix&lt;double[][]&gt; implements RealMatrixM
      * @return Matrix as string
      */
     public String toString() {
-<span class="fc" id="L2623">        String result = &quot;[&quot;;</span>
+<span class="nc" id="L2672">        String result = &quot;[&quot;;</span>
 
         // Get the current print options.
-<span class="fc" id="L2626">        int MAX_ROWS = PrintOptions.getMaxRows();</span>
-<span class="fc" id="L2627">        int MAX_COLUMNS = PrintOptions.getMaxColumns();</span>
-<span class="fc" id="L2628">        int PADDING = PrintOptions.getPadding();</span>
-<span class="fc" id="L2629">        int PRECISION = PrintOptions.getPrecision();</span>
+<span class="nc" id="L2675">        int MAX_ROWS = PrintOptions.getMaxRows();</span>
+<span class="nc" id="L2676">        int MAX_COLUMNS = PrintOptions.getMaxColumns();</span>
+<span class="nc" id="L2677">        int PADDING = PrintOptions.getPadding();</span>
+<span class="nc" id="L2678">        int PRECISION = PrintOptions.getPrecision();</span>
 
-<span class="pc bpc" id="L2631" title="1 of 2 branches missed.">        if(!this.isEmpty()) {</span>
-<span class="fc" id="L2632">            int max=0, colWidth;</span>
-<span class="fc" id="L2633">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L2680" title="All 2 branches missed.">        if(!this.isEmpty()) {</span>
+<span class="nc" id="L2681">            int max=0, colWidth;</span>
+<span class="nc" id="L2682">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;();</span>
 
-<span class="fc bfc" id="L2635" title="All 2 branches covered.">            for(int j=0; j&lt;this.n; j++) { // Get the maximum length string representation for each column.</span>
+<span class="nc bnc" id="L2684" title="All 2 branches missed.">            for(int j=0; j&lt;this.n; j++) { // Get the maximum length string representation for each column.</span>
                 // TODO: This only needs to compute the max value for rows/columns which will actually be printed.
-<span class="fc" id="L2637">                List&lt;Double&gt; contents = Arrays.asList(this.getCol(j));</span>
-<span class="fc" id="L2638">                List&lt;String&gt; values = new ArrayList&lt;&gt;(contents.size());</span>
+<span class="nc" id="L2686">                List&lt;Double&gt; contents = Arrays.asList(this.getCol(j));</span>
+<span class="nc" id="L2687">                List&lt;String&gt; values = new ArrayList&lt;&gt;(contents.size());</span>
 
-<span class="fc bfc" id="L2640" title="All 2 branches covered.">                for(Double v : contents) {</span>
-<span class="pc bpc" id="L2641" title="1 of 4 branches missed.">                    if(!v.isInfinite() &amp;&amp; !v.isNaN()) {</span>
-<span class="nc" id="L2642">                        values.add(String.valueOf(CNumber.round(new CNumber(v), PRECISION).toString()));</span>
+<span class="nc bnc" id="L2689" title="All 2 branches missed.">                for(Double v : contents) {</span>
+<span class="nc bnc" id="L2690" title="All 4 branches missed.">                    if(!v.isInfinite() &amp;&amp; !v.isNaN()) {</span>
+<span class="nc" id="L2691">                        values.add(String.valueOf(CNumber.round(new CNumber(v), PRECISION).toString()));</span>
                     } else {
-<span class="fc" id="L2644">                        values.add(String.valueOf(v));</span>
+<span class="nc" id="L2693">                        values.add(String.valueOf(v));</span>
                     }
-<span class="fc" id="L2646">                }</span>
+<span class="nc" id="L2695">                }</span>
 
-<span class="fc" id="L2648">                Optional&lt;Integer&gt; value = values.stream().map(String::length).max(Integer::compareTo);</span>
+<span class="nc" id="L2697">                Optional&lt;Integer&gt; value = values.stream().map(String::length).max(Integer::compareTo);</span>
 
-<span class="pc bpc" id="L2650" title="1 of 2 branches missed.">                if(value.isPresent()) {</span>
-<span class="fc" id="L2651">                    max = value.get();</span>
+<span class="nc bnc" id="L2699" title="All 2 branches missed.">                if(value.isPresent()) {</span>
+<span class="nc" id="L2700">                    max = value.get();</span>
                 }
 
-<span class="fc" id="L2654">                maxList.add(max);</span>
+<span class="nc" id="L2703">                maxList.add(max);</span>
             }
 
-<span class="fc" id="L2657">            StringBuilder resultBuilder = new StringBuilder(&quot;[&quot;);</span>
-<span class="fc bfc" id="L2658" title="All 2 branches covered.">            for(int i = 0; i &lt; m; i++) {</span>
-<span class="pc bpc" id="L2659" title="3 of 4 branches missed.">                if(i &gt;= MAX_ROWS &amp;&amp; i &lt; m-1) {</span>
-<span class="nc" id="L2660">                    resultBuilder.append(&quot;  ...\n &quot;);</span>
-<span class="nc" id="L2661">                    i = m-1;</span>
+<span class="nc" id="L2706">            StringBuilder resultBuilder = new StringBuilder(&quot;[&quot;);</span>
+<span class="nc bnc" id="L2707" title="All 2 branches missed.">            for(int i = 0; i &lt; m; i++) {</span>
+<span class="nc bnc" id="L2708" title="All 4 branches missed.">                if(i &gt;= MAX_ROWS &amp;&amp; i &lt; m-1) {</span>
+<span class="nc" id="L2709">                    resultBuilder.append(&quot;  ...\n &quot;);</span>
+<span class="nc" id="L2710">                    i = m-1;</span>
                 }
 
-<span class="fc" id="L2664">                resultBuilder.append(&quot; [&quot;);</span>
+<span class="nc" id="L2713">                resultBuilder.append(&quot; [&quot;);</span>
 
-<span class="fc bfc" id="L2666" title="All 2 branches covered.">                for(int j = 0; j &lt; n; j++) {</span>
+<span class="nc bnc" id="L2715" title="All 2 branches missed.">                for(int j = 0; j &lt; n; j++) {</span>
 
-<span class="pc bpc" id="L2668" title="3 of 4 branches missed.">                    if(j &gt;= MAX_COLUMNS &amp;&amp; j &lt; n-1) {</span>
-<span class="nc" id="L2669">                        colWidth = 3+PADDING;</span>
-<span class="nc" id="L2670">                        resultBuilder.append(String.format(&quot;%-&quot; + colWidth + &quot;s&quot;, StringUtils.center(&quot;...&quot;, colWidth)));</span>
-<span class="nc" id="L2671">                        colWidth = maxList.get(n-1)+PADDING;</span>
-<span class="nc" id="L2672">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(String.valueOf(entries[i][n - 1]), colWidth)));</span>
-<span class="nc" id="L2673">                        break;</span>
+<span class="nc bnc" id="L2717" title="All 4 branches missed.">                    if(j &gt;= MAX_COLUMNS &amp;&amp; j &lt; n-1) {</span>
+<span class="nc" id="L2718">                        colWidth = 3+PADDING;</span>
+<span class="nc" id="L2719">                        resultBuilder.append(String.format(&quot;%-&quot; + colWidth + &quot;s&quot;, StringUtils.center(&quot;...&quot;, colWidth)));</span>
+<span class="nc" id="L2720">                        colWidth = maxList.get(n-1)+PADDING;</span>
+<span class="nc" id="L2721">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(String.valueOf(entries[i][n - 1]), colWidth)));</span>
+<span class="nc" id="L2722">                        break;</span>
                     }
                     else {
-<span class="fc" id="L2676">                        colWidth = maxList.get(j)+PADDING;</span>
+<span class="nc" id="L2725">                        colWidth = maxList.get(j)+PADDING;</span>
                         String valueString;
-<span class="fc" id="L2678">                        Double v = entries[i][j];</span>
+<span class="nc" id="L2727">                        Double v = entries[i][j];</span>
 
-<span class="pc bpc" id="L2680" title="1 of 4 branches missed.">                        if(!v.isInfinite() &amp;&amp; !v.isNaN()) {</span>
-<span class="nc" id="L2681">                            valueString = CNumber.round(new CNumber(entries[i][j]), PRECISION).toString();</span>
+<span class="nc bnc" id="L2729" title="All 4 branches missed.">                        if(!v.isInfinite() &amp;&amp; !v.isNaN()) {</span>
+<span class="nc" id="L2730">                            valueString = CNumber.round(new CNumber(entries[i][j]), PRECISION).toString();</span>
                         } else {
-<span class="fc" id="L2683">                            valueString = String.valueOf(entries[i][j]);</span>
+<span class="nc" id="L2732">                            valueString = String.valueOf(entries[i][j]);</span>
                         }
 
-<span class="fc" id="L2686">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(</span>
+<span class="nc" id="L2735">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(</span>
                                 valueString, colWidth))
                         );
                     }
                 }
-<span class="fc" id="L2691">                resultBuilder.append(&quot;]\n &quot;);</span>
+<span class="nc" id="L2740">                resultBuilder.append(&quot;]\n &quot;);</span>
             }
-<span class="fc" id="L2693">            result = resultBuilder.toString();</span>
+<span class="nc" id="L2742">            result = resultBuilder.toString();</span>
 
-<span class="fc" id="L2695">            result = result.substring(0, result.length()-2) + &quot; ]&quot;;</span>
-<span class="fc" id="L2696">        }</span>
+<span class="nc" id="L2744">            result = result.substring(0, result.length()-2) + &quot; ]&quot;;</span>
+<span class="nc" id="L2745">        }</span>
         else {
-<span class="nc" id="L2698">            result += &quot;[]]&quot;;</span>
+<span class="nc" id="L2747">            result += &quot;[]]&quot;;</span>
         }
 
-<span class="fc" id="L2701">        return result;</span>
+<span class="nc" id="L2750">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
