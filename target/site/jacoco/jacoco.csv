@@ -13,14 +13,14 @@ Flag4j,com.flag4j,SparseVector,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j,Shape,25,91,3,7,10,18,7,7,4,5
 Flag4j,com.flag4j,MatrixTypes,0,27,0,0,0,5,0,1,0,1
 Flag4j,com.flag4j,SparseMatrixFormats,21,0,0,0,4,0,1,0,1,0
-Flag4j,com.flag4j,Matrix,2061,679,228,38,395,96,262,40,147,22
+Flag4j,com.flag4j,Matrix,1844,896,212,54,372,119,250,52,143,26
 Flag4j,com.flag4j,SparseMatrix,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j,Vector,0,155,0,0,0,38,0,12,0,12
 Flag4j,com.flag4j,VectorTypes,0,27,0,0,0,5,0,1,0,1
 Flag4j,com.flag4j,TypedMatrix,61,70,16,6,11,18,11,8,2,6
 Flag4j,com.flag4j,SparseCMatrix,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j,SparseCVector,3,0,0,0,1,0,1,0,1,0
-Flag4j,com.flag4j,CMatrix,586,296,58,24,82,51,43,16,12,6
+Flag4j,com.flag4j,CMatrix,538,344,54,28,76,57,40,19,11,7
 Flag4j,com.flag4j,TypedVector,0,28,0,2,0,8,0,2,0,1
 Flag4j,com.flag4j.linalg,Hessenburg,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,Decompose,3,0,0,0,1,0,1,0,1,0

@@ -12,6 +12,7 @@ com\flag4j\complex_numbers\CNumberToStringTest.class
 DevelopmentTesting.class
 com\flag4j\complex_numbers\CNumberComparisonTest.class
 com\flag4j\complex_numbers\CNumberUnaryOperationsTest.class
+com\flag4j\MatrixScalMultDivTests.class
 com\flag4j\complex_numbers\CNumberConversionTest.class
 com\flag4j\complex_numbers\CNumberMinMaxSumTest.class
 com\flag4j\complex_numbers\CNumberTrigTest.class

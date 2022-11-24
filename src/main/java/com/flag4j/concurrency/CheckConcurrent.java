@@ -1,9 +1,16 @@
 package com.flag4j.concurrency;
 
+import com.flag4j.util.ErrorMessages;
+
 /**
  * A class which contains methods for determining if a concurrent algorithm should be applied.
  */
 public final class CheckConcurrent {
+
+    private CheckConcurrent() {
+        // Hide default constructor
+        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+    }
 
     private static final int BASE_THRESHOLD = 9000;
     private static final int LARGER_THRESHOLD = 80000;
