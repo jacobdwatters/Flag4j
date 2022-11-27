@@ -10,7 +10,6 @@ import com.flag4j.io.PrintOptions;
 import com.flag4j.util.ShapeChecks;
 import com.flag4j.util.StringUtils;
 
-import java.lang.module.Configuration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -1580,7 +1579,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      */
     @Override
     public Double[] getRow(int i) {
-        Double[] column = new Double[this.numRows()];
+        Double[] column = new Double[this.numCols()];
 
         for(int j=0; j<this.numCols(); j++) {
             column[j] = this.entries[i][j];
@@ -1804,6 +1803,8 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
                     break;
                 }
             }
+        } else {
+            result = false;
         }
 
         return result;
@@ -1833,6 +1834,8 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
                     break;
                 }
             }
+        } else {
+            result = false;
         }
 
         return result;
@@ -1851,7 +1854,8 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
 
     /**
-     * Checks if this tensor contains only non-negative values.
+     * Checks if this tensor contains only non-negative values. NaN is not considered to be positive, negative or zero.
+     * As such, if this matrix contains NaN, this method will return false.
      *
      * @return True if this tensor only contains non-negative values. Otherwise, returns false.
      */
@@ -1861,7 +1865,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
         for(int i=0; i<this.numRows(); i++) {
             for(int j=0; j<this.numCols(); j++) {
-                if(this.entries[i][j] < 0) {
+                if(this.entries[i][j] < 0 || Double.isNaN(this.entries[i][j])) {
                     result = false;
                     break;
                 }
@@ -1877,7 +1881,8 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
 
     /**
-     * Checks if this tensor contains only non-positive values.
+     * Checks if this tensor contains only non-positive values. NaN is not considered to be positive, negative or zero.
+     * As such, if this matrix contains NaN, this method will return false.
      *
      * @return trie if this tensor only contains non-positive values. Otherwise, returns false.
      */
@@ -1887,7 +1892,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
 
         for(int i=0; i<this.numRows(); i++) {
             for(int j=0; j<this.numCols(); j++) {
-                if(this.entries[i][j] > 0) {
+                if(this.entries[i][j] > 0 || Double.isNaN(this.entries[i][j])) {
                     result = false;
                     break;
                 }
@@ -2618,7 +2623,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      * @return True if this tensor only contains zeros. Otherwise, returns false.
      */
     @Override
-    public boolean isZero() {
+    public boolean isZeros() {
         boolean result = true;
 
         for(int i=0; i<this.numRows(); i++) {

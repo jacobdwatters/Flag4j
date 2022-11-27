@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MatrixAgglomerationTests {
 
-    Matrix A;
-    double[][] aEntries;
+    Matrix A, expMat, actMat;
+    double[][] aEntries, expEntries;
     double exp, act;
     int[] expInts, actInts;
 
@@ -160,5 +160,50 @@ class MatrixAgglomerationTests {
         actInts = A.argMax();
 
         assertArrayEquals(expInts, actInts);
+    }
+
+
+    @Test
+    void sumRowTest() {
+        // ------------ Sub-case 1 ---------------
+        aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        expEntries = new double[][]{{12, 15, 18}};
+        A = new Matrix(aEntries);
+        expMat = new Matrix(expEntries);
+
+        actMat = A.sumRows();
+        assertArrayEquals(expMat.entries, actMat.entries);
+
+        // ------------ Sub-case 2 ---------------
+        aEntries = new double[][]{{-0.123, 234.656}, {0.932344, -85.2}, {103.43, 9.11304}, {93, -924}};
+        expEntries = new double[][]{{-0.123+0.932344+103.43+93,
+                234.656-85.2+9.11304-924}};
+        A = new Matrix(aEntries);
+        expMat = new Matrix(expEntries);
+
+        actMat = A.sumRows();
+        assertArrayEquals(expMat.entries, actMat.entries);
+    }
+
+
+    @Test
+    void sumColTest() {
+        // ------------ Sub-case 1 ---------------
+        aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        expEntries = new double[][]{{6}, {15}, {24}};
+        A = new Matrix(aEntries);
+        expMat = new Matrix(expEntries);
+
+        actMat = A.sumCols();
+        assertArrayEquals(expMat.entries, actMat.entries);
+
+        // ------------ Sub-case 2 ---------------
+        aEntries = new double[][]{{-0.123, 234.656}, {0.932344, -85.2}, {103.43, 9.11304}, {93, -924}};
+        expEntries = new double[][]{{-0.123+234.656}, {0.932344-85.2}, {103.43+9.11304}, {93+-924}};
+        A = new Matrix(aEntries);
+        expMat = new Matrix(expEntries);
+
+        actMat = A.sumCols();
+        assertArrayEquals(expMat.entries, actMat.entries);
     }
 }

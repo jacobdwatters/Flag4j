@@ -10,10 +10,10 @@ Flag4j,com.flag4j.concurrency.algorithms.addition,MatrixAdditionWorker,0,68,0,4,
 Flag4j,com.flag4j,CVector,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j,VectorOrientations,0,15,0,0,0,3,0,1,0,1
 Flag4j,com.flag4j,SparseVector,3,0,0,0,1,0,1,0,1,0
-Flag4j,com.flag4j,Shape,25,91,3,7,10,18,7,7,4,5
+Flag4j,com.flag4j,Shape,22,94,2,8,8,20,6,8,4,5
 Flag4j,com.flag4j,MatrixTypes,0,27,0,0,0,5,0,1,0,1
 Flag4j,com.flag4j,SparseMatrixFormats,21,0,0,0,4,0,1,0,1,0
-Flag4j,com.flag4j,Matrix,1188,1623,142,136,267,230,206,102,131,38
+Flag4j,com.flag4j,Matrix,212,2623,8,274,111,388,116,194,108,61
 Flag4j,com.flag4j,SparseMatrix,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j,Vector,0,155,0,0,0,38,0,12,0,12
 Flag4j,com.flag4j,VectorTypes,0,27,0,0,0,5,0,1,0,1
@@ -41,4 +41,4 @@ Flag4j,com.flag4j.concurrency.algorithms.subtraction,ConcurrentSubtraction,10,32
 Flag4j,com.flag4j.complex_numbers,CNumberToken,7,60,1,7,3,13,2,10,1,7
 Flag4j,com.flag4j.complex_numbers,CNumberLexer,38,292,11,57,7,75,12,29,1,6
 Flag4j,com.flag4j.complex_numbers,CNumber,155,1610,9,171,31,303,26,163,17,82
-Flag4j,com.flag4j.complex_numbers,CNumberParser,17,169,3,15,4,37,4,7,1,1
+Flag4j,com.flag4j.complex_numbers,CNumberParser,8,178,2,16,2,39,3,8,1,1

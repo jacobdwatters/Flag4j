@@ -25,9 +25,9 @@
         CNumberToken imaginary;
 
 <span class="fc" id="L27">        token = lex.getNextToken();</span>
-<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        if(token.matches(&quot;im&quot;, &quot;i&quot;)) { // then we have the imaginary unit</span>
-<span class="nc" id="L29">            result[0] = 0;</span>
-<span class="nc" id="L30">            result[1] = 1;</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        if(token.matches(&quot;im&quot;, &quot;i&quot;)) { // then we have the imaginary unit</span>
+<span class="fc" id="L29">            result[0] = 0;</span>
+<span class="fc" id="L30">            result[1] = 1;</span>
         }
         else {
 <span class="fc" id="L33">            real = token;</span>

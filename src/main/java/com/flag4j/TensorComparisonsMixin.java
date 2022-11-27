@@ -18,7 +18,7 @@ interface TensorComparisonsMixin<T, U, V, W, Y, X extends Number> {
      * Checks if this tensor only contains zeros.
      * @return True if this tensor only contains zeros. Otherwise, returns false.
      */
-    boolean isZero();
+    boolean isZeros();
 
 
     /**
