@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseMatrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">SparseMatrix.java</span></div><h1>SparseMatrix.java</h1><pre class="source lang-java linenums">package com.flag4j;
+
+import com.flag4j.core.SparseMatrixBase;
+
+import java.util.Arrays;
+
+/**
+ * Real sparse matrix. Matrix is stored in coordinate list (COO) format.
+ */
+public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
+
+
+    /**
+     * Creates a square sparse matrix of specified size filled with zeros.
+     * @param size The number of rows/columns in this sparse matrix.
+     */
+    public SparseMatrix(int size) {
+<span class="nc" id="L18">        super(new Shape(size, size), 0, new double[0], new int[0], new int[0]);</span>
+<span class="nc" id="L19">    }</span>
+
+
+    /**
+     * Creates a sparse matrix of specified number of rows and columns filled with zeros.
+     * @param rows The number of rows in this sparse matrix.
+     * @param cols The number of columns in this sparse matrix.
+     */
+    public SparseMatrix(int rows, int cols) {
+<span class="nc" id="L28">        super(new Shape(rows, cols), 0, new double[0], new int[0], new int[0]);</span>
+<span class="nc" id="L29">    }</span>
+
+
+    /**
+     * Creates a sparse matrix of specified shape filled with zeros.
+     * @param shape Shape of this sparse matrix.
+     */
+    public SparseMatrix(Shape shape) {
+<span class="nc" id="L37">        super(shape, 0, new double[0], new int[0], new int[0]);</span>
+<span class="nc" id="L38">    }</span>
+
+
+    /**
+     * Creates a square sparse matrix with specified non-zero entries, row indices, and column indices.
+     * @param size Size of the square sparse matrix.
+     * @param nonZeroEntries Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries.
+     * @param colIndices Column indices of the non-zero entries.
+     */
+    public SparseMatrix(int size, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
+<span class="nc" id="L49">        super(new Shape(size, size), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
+<span class="nc" id="L50">    }</span>
+
+
+    /**
+     * Creates a sparse matrix with specified shape, non-zero entries, row indices, and column indices.
+     * @param rows The number of rows in this sparse matrix.
+     * @param cols The number of columns in this sparse matrix.
+     * @param nonZeroEntries Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries.
+     * @param colIndices Column indices of the non-zero entries.
+     */
+    public SparseMatrix(int rows, int cols, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
+<span class="nc" id="L62">        super(new Shape(rows, cols), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
+<span class="nc" id="L63">    }</span>
+
+
+    /**
+     * Creates a sparse matrix with specified shape, non-zero entries, row indices, and column indices.
+     * @param shape Shape of the sparse matrix.
+     * @param nonZeroEntries Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries.
+     * @param colIndices Column indices of the non-zero entries.
+     */
+    public SparseMatrix(Shape shape, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
+<span class="nc" id="L74">        super(shape, nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
+<span class="nc" id="L75">    }</span>
+
+
+    /**
+     * Creates a square sparse matrix with specified non-zero entries, row indices, and column indices.
+     * @param size Size of the square matrix.
+     * @param nonZeroEntries Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries.
+     * @param colIndices Column indices of the non-zero entries.
+     */
+    public SparseMatrix(int size, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
+<span class="nc" id="L86">        super(new Shape(size, size), nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+                rowIndices, colIndices);
+<span class="nc" id="L88">    }</span>
+
+
+    /**
+     * Creates a sparse matrix with specified shape, non-zero entries, row indices, and column indices.
+     * @param rows The number of rows in this sparse matrix.
+     * @param cols The number of columns in this sparse matrix.
+     * @param nonZeroEntries Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries.
+     * @param colIndices Column indices of the non-zero entries.
+     */
+    public SparseMatrix(int rows, int cols, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
+<span class="nc" id="L100">        super(new Shape(rows, cols), nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+                rowIndices, colIndices);
+<span class="nc" id="L102">    }</span>
+
+
+    /**
+     * Creates a sparse matrix with specified shape, non-zero entries, row indices, and column indices.
+     * @param shape Shape of the sparse matrix.
+     * @param nonZeroEntries Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries.
+     * @param colIndices Column indices of the non-zero entries.
+     * @throws IllegalArgumentException If the number of non-zero entries does not fit within the given shape. Or, if the
+     * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
+     */
+    public SparseMatrix(Shape shape, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
+<span class="nc" id="L115">        super(shape, nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+                rowIndices, colIndices);
+<span class="nc" id="L117">    }</span>
+
+
+//    /**
+//     * Creates a sparse matrix whose entries are specified by a 2D array. This is not the recommended method of constructing
+//     * a sparse matrix. It is recommended to use {@link #SparseMatrix(Shape, double[], int[], int[])} if the coordinate information is already known.
+//     * @param entries Entries of sparse matrix.
+//     */
+//    public SparseMatrix(double[][] entries) {
+//        super(new Shape(entries.length, entries[0].length));
+//
+//        ArrayList&lt;Double&gt; nonZeroEntries = new ArrayList&lt;&gt;(this.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; rowIndices = new ArrayList&lt;&gt;(this.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; colIndices = new ArrayList&lt;&gt;(this.totalEntries()/8);
+//
+//        // Fill entries with non-zero values.
+//        int numCols=super.numCols();
+//        for(int i=0; i&lt;entries.length; i++) {
+//            for(int j=0; j&lt;entries[0].length; j++) {
+//                if(entries[i][j] != 0) {
+//                    nonZeroEntries.add(entries[i][j]);
+//                    rowIndices.add(i);
+//                    colIndices.add(j);
+//                }
+//            }
+//        }
+//
+//        super.entries = nonZeroEntries.stream().mapToDouble(Double::doubleValue).toArray();
+//        super.rowIndices = rowIndices.stream().mapToInt(Integer::intValue).toArray();
+//        super.colIndices = colIndices.stream().mapToInt(Integer::intValue).toArray();
+//        super.setNonZeroEntries(super.entries.length);
+//    }
+//
+//
+//    /**
+//     * Creates a sparse matrix whose entries are specified by a 2D array. This is not the recommended method of constructing
+//     * a sparse matrix. It is recommended to use {@link #SparseMatrix(Shape, int[], int[], int[])} if the coordinate information is already known.
+//     * @param entries Entries of sparse matrix.
+//     */
+//    public SparseMatrix(int[][] entries) {
+//        super(new Shape(entries.length, entries[0].length));
+//
+//        ArrayList&lt;Integer&gt; nonZeroEntries = new ArrayList&lt;&gt;(this.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; rowIndices = new ArrayList&lt;&gt;(this.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; colIndices = new ArrayList&lt;&gt;(this.totalEntries()/8);
+//
+//        // Fill entries with non-zero values.
+//        for(int i=0; i&lt;entries.length; i++) {
+//            for(int j=0; j&lt;entries[0].length; j++) {
+//                if(entries[i][j] != 0) {
+//                    nonZeroEntries.add(entries[i][j]);
+//                    rowIndices.add(i);
+//                    colIndices.add(j);
+//                }
+//            }
+//        }
+//
+//        super.entries = nonZeroEntries.stream().mapToDouble(Integer::doubleValue).toArray();
+//        super.rowIndices = rowIndices.stream().mapToInt(Integer::intValue).toArray();
+//        super.colIndices = colIndices.stream().mapToInt(Integer::intValue).toArray();
+//        super.setNonZeroEntries(super.entries.length);
+//    }
+
+    /**
+     * Constructs a sparse tensor whose shape and values are given by another sparse tensor. This effectively copies
+     * the tensor.
+     * @param A Sparse Matrix to copy.
+     */
+    public SparseMatrix(SparseMatrix A) {
+<span class="nc" id="L186">        super(A.shape.clone(), A.nonZeroEntries(), A.entries.clone(), A.rowIndices.clone(), A.colIndices.clone());</span>
+<span class="nc" id="L187">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

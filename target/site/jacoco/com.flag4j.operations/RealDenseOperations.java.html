@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealDenseOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations</a> &gt; <span class="el_source">RealDenseOperations.java</span></div><h1>RealDenseOperations.java</h1><pre class="source lang-java linenums">package com.flag4j.operations;
+
+import com.flag4j.core.TensorBase;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ShapeChecks;
+
+/**
+ * This class provides methods for computing operations on real dense tensors.
+ */
+public final class RealDenseOperations {
+
+<span class="nc" id="L12">    private RealDenseOperations() {</span>
+        // Hide constructor
+<span class="nc" id="L14">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition of two tensors.
+     * @param A First Tensor of the addition.
+     * @param A Second Tensor of the addition.
+     * @return The element wise addition of two tensors.
+     * @throws IllegalArgumentException If entry arrays are not the same size.
+     */
+    public static double[] add(TensorBase&lt;double[]&gt; A, TensorBase&lt;double[]&gt; B) {
+<span class="nc" id="L26">        ShapeChecks.equalShapeCheck(A.shape, B.shape);</span>
+
+<span class="nc" id="L28">        double[] sum = new double[A.entries.length];</span>
+
+<span class="nc bnc" id="L30" title="All 2 branches missed.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="nc" id="L31">            sum[i] = A.entries[i] + B.entries[i];</span>
+        }
+
+<span class="nc" id="L34">        return sum;</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors.
+     * @param entries1 Entries of first tensor.
+     * @param entries2 Entries of second tensor.
+     * @return The element wise subtraction of two tensors.
+     * @throws IllegalArgumentException If entry arrays are not the same size.
+     */
+    public static double[] sub(double[] entries1, double[] entries2) {
+<span class="fc" id="L46">        ShapeChecks.arrayLengthsCheck(entries1.length, entries2.length);</span>
+
+<span class="fc" id="L48">        double[] sum = new double[entries1.length];</span>
+
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L51">            sum[i] = entries1[i] - entries2[i];</span>
+        }
+
+<span class="fc" id="L54">        return sum;</span>
+    }
+
+
+    /**
+     * Sums all entries in a tensor.
+     * @param entries The entries of the tensor.
+     * @return The sum of all entries in the tensor.
+     */
+    public static double sum(double[] entries) {
+<span class="fc" id="L64">        double sum = 0;</span>
+
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L67">            sum += entries[i];</span>
+        }
+
+<span class="fc" id="L70">        return sum;</span>
+    }
+
+
+    /**
+     * Multiplies all entries in a tensor.
+     * @param entries The entries of the tensor.
+     * @return The product of all entries in the tensor.
+     */
+    public static double prod(double[] entries) {
+        double product;
+
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if(entries.length &gt; 0) {</span>
+<span class="nc" id="L83">            product=1;</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">            for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="nc" id="L85">                product *= entries[i];</span>
+            }
+        } else {
+<span class="nc" id="L88">            product=0;</span>
+        }
+
+<span class="nc" id="L91">        return product;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

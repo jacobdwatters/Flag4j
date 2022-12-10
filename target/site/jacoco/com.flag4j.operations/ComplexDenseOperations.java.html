@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComplexDenseOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations</a> &gt; <span class="el_source">ComplexDenseOperations.java</span></div><h1>ComplexDenseOperations.java</h1><pre class="source lang-java linenums">package com.flag4j.operations;
+
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ShapeChecks;
+
+
+/**
+ * This class provides methods for computing operations on dense complex tensors.
+ */
+public class ComplexDenseOperations {
+
+<span class="nc" id="L13">    private ComplexDenseOperations() {</span>
+        // Hide constructor
+<span class="nc" id="L15">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition of two tensors.
+     * @param entries1 Entries of first tensor.
+     * @param entries2 Entries of second tensor.
+     * @return The element wise addition of two tensors.
+     * @throws IllegalArgumentException If entry arrays are not the same size.
+     */
+    public static CNumber[] add(CNumber[] entries1, CNumber[] entries2) {
+<span class="fc" id="L27">        ShapeChecks.arrayLengthsCheck(entries1.length, entries2.length);</span>
+
+<span class="fc" id="L29">        CNumber[] sum = new CNumber[entries1.length];</span>
+
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L32">            sum[i] = new CNumber(</span>
+                    entries1[i].re + entries2[i].re,
+                    entries1[i].im + entries2[i].im
+            );
+        }
+
+<span class="fc" id="L38">        return sum;</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors.
+     * @param entries1 Entries of first tensor.
+     * @param entries2 Entries of second tensor.
+     * @return The element wise subtraction of two tensors.
+     * @throws IllegalArgumentException If entry arrays are not the same size.
+     */
+    public static CNumber[] sub(CNumber[] entries1, CNumber[] entries2) {
+<span class="fc" id="L50">        ShapeChecks.arrayLengthsCheck(entries1.length, entries2.length);</span>
+
+<span class="fc" id="L52">        CNumber[] diff = new CNumber[entries1.length];</span>
+
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        for(int i=0; i&lt;diff.length; i++) {</span>
+<span class="fc" id="L55">            diff[i] = new CNumber(</span>
+                    entries1[i].re - entries2[i].re,
+                    entries1[i].im - entries2[i].im
+            );
+        }
+
+<span class="fc" id="L61">        return diff;</span>
+    }
+
+
+    /**
+     * Sums all entries in a tensor.
+     * @param entries The entries of the tensor.
+     * @return The sum of all entries in the tensor.
+     */
+    public static CNumber sum(CNumber... entries) {
+<span class="fc" id="L71">        CNumber sum = new CNumber();</span>
+
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L74">            sum.re += entries[i].re;</span>
+<span class="fc" id="L75">            sum.im += entries[i].im;</span>
+        }
+
+<span class="fc" id="L78">        return sum;</span>
+    }
+
+
+    /**
+     * Multiplies all entries in a tensor.
+     * @param entries The entries of the tensor.
+     * @return The product of all entries in the tensor.
+     */
+    public static CNumber prod(CNumber... entries) {
+        CNumber product;
+        double re;
+        double im;
+
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        if(entries.length&gt;0) {</span>
+<span class="fc" id="L93">            product = entries[0];</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">            for(int i=1; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L95">                re = product.re*entries[i].re - product.im*entries[i].im;</span>
+<span class="fc" id="L96">                im = product.re*entries[i].im + product.im*entries[i].re;</span>
+
+<span class="fc" id="L98">                product.re = re;</span>
+<span class="fc" id="L99">                product.im = im;</span>
+            }
+        } else {
+<span class="fc" id="L102">            product = new CNumber();</span>
+        }
+
+<span class="fc" id="L105">        return product;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

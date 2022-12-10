@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseVectorBase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.core</a> &gt; <span class="el_source">SparseVectorBase.java</span></div><h1>SparseVectorBase.java</h1><pre class="source lang-java linenums">package com.flag4j.core;
+
+
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ShapeChecks;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+
+/**
+ * Base class for all sparse vectors.
+ * @param &lt;T&gt; Type of the entries for this sparse vector.
+ */
+public abstract class SparseVectorBase&lt;T&gt; extends VectorBase&lt;T&gt; {
+
+    /**
+     * Indices of non-zero values in this sparse vector.
+     */
+    public final int[] indices;
+    private int nonZeroEntries;
+
+
+    /**
+     * Creates a sparse vector with specified number of entries.
+     * @param totalEntries Number of total entries in this sparse vector, including zeros.
+     * @param nonZeroEntries Number of non-zero entries in this sparse vector.
+     * @param orientation Orientation of this sparse vector.
+     */
+    public SparseVectorBase(int totalEntries, int nonZeroEntries, VectorOrientations orientation, T entries, int[] indices) {
+<span class="fc" id="L31">        super(totalEntries, orientation, entries);</span>
+
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) &lt; 0) {</span>
+<span class="fc" id="L34">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));</span>
+        }
+<span class="fc" id="L36">        ShapeChecks.arrayLengthsCheck(nonZeroEntries, indices.length);</span>
+
+<span class="fc" id="L38">        this.nonZeroEntries = nonZeroEntries;</span>
+<span class="fc" id="L39">        this.indices = indices;</span>
+<span class="fc" id="L40">    }</span>
+
+
+    /**
+     * Sets the number of nonZero entries in this sparse vector.
+     * @param nonZeroEntries
+     */
+    protected void setNonZeroEntries(int nonZeroEntries) {
+<span class="nc" id="L48">        this.nonZeroEntries = nonZeroEntries;</span>
+<span class="nc" id="L49">    }</span>
+
+
+    /**
+     * Gets the number of non-zero entries in this sparse matrix.
+     * @return The number of non-zero entries in this sparse matrix.
+     */
+    public int nonZeroEntries() {
+<span class="fc" id="L57">        return nonZeroEntries;</span>
+    }
+
+
+    /**
+     * Gets the sparsity of this tensor as a decimal percentage.
+     * @return The sparsity of this tensor.
+     */
+    public double sparsity() {
+<span class="nc" id="L66">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
+<span class="nc" id="L67">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
+
+<span class="nc" id="L69">        return sparsity.doubleValue();</span>
+    }
+
+
+    /**
+     * Gets the density of this tensor as a decimal percentage.
+     * @return The density of this tensor.
+     */
+    public double density() {
+<span class="nc" id="L78">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
+<span class="nc" id="L79">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP</span>
+        );
+
+<span class="nc" id="L82">        return density.doubleValue();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

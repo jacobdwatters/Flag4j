@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseCVector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">SparseCVector.java</span></div><h1>SparseCVector.java</h1><pre class="source lang-java linenums">package com.flag4j;
+
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.SparseVectorBase;
+import com.flag4j.core.VectorOrientations;
+
+/**
+ * Complex sparse vector.
+ */
+public class SparseCVector extends SparseVectorBase&lt;CNumber[]&gt; {
+
+
+    /**
+     * Creates a sparse column vector of specified size filled with zeros.
+     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
+     */
+    public SparseCVector(int size) {
+<span class="nc" id="L18">        super(size, 0, VectorOrientations.COL, new CNumber[0], new int[0]);</span>
+<span class="nc" id="L19">    }</span>
+
+
+    /**
+     * Creates a sparse column vector of specified size filled with zeros.
+     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
+     * @param nonZeroEntries The nonZero entries of this sparse vector.
+     * @param indices Indices of the nonZero entries.
+     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
+     * the length of the nonZeroEntries array is greater than the size.
+     */
+    public SparseCVector(int size, int[] nonZeroEntries, int[] indices) {
+<span class="nc" id="L31">        super(size, nonZeroEntries.length, VectorOrientations.COL, new CNumber[nonZeroEntries.length], indices);</span>
+
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="nc" id="L34">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+        }
+<span class="nc" id="L36">    }</span>
+
+
+    /**
+     * Creates a sparse column vector of specified size filled with zeros.
+     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
+     * @param nonZeroEntries The nonZero entries of this sparse vector.
+     * @param indices Indices of the nonZero entries.
+     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
+     * the length of the nonZeroEntries array is greater than the size.
+     */
+    public SparseCVector(int size, double[] nonZeroEntries, int[] indices) {
+<span class="nc" id="L48">        super(size, nonZeroEntries.length, VectorOrientations.COL, new CNumber[nonZeroEntries.length], indices);</span>
+
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="nc" id="L51">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+        }
+<span class="nc" id="L53">    }</span>
+
+
+    /**
+     * Creates a sparse column vector of specified size filled with zeros.
+     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
+     * @param nonZeroEntries The nonZero entries of this sparse vector.
+     * @param indices Indices of the nonZero entries.
+     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
+     * the length of the nonZeroEntries array is greater than the size.
+     */
+    public SparseCVector(int size, CNumber[] nonZeroEntries, int[] indices) {
+<span class="nc" id="L65">        super(size, nonZeroEntries.length, VectorOrientations.COL, nonZeroEntries, indices);</span>
+<span class="nc" id="L66">    }</span>
+
+
+//    /**
+//     * Creates a sparse column vector from a dense array.
+//     * @param entries Dense entries of the vector.
+//     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
+//     * the length of the nonZeroEntries array is greater than the size.
+//     */
+//    public SparseCVector(int[] entries) {
+//        super(entries.length, VectorOrientations.COL);
+//
+//        ArrayList&lt;Integer&gt; nonZeroEntries = new ArrayList&lt;&gt;(super.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; indices = new ArrayList&lt;&gt;(super.totalEntries()/8);
+//
+//        // Fill entries with non-zero values.
+//        for(int i=0; i&lt;entries.length; i++) {
+//            if(entries[i]!=0) {
+//                nonZeroEntries.add(entries[i]);
+//                indices.add(i);
+//            }
+//        }
+//
+//        super.entries = new CNumber[super.nonZeroEntries()];
+//        for(int i=0; i&lt;super.entries.length; i++) {
+//            super.entries[i] = new CNumber(nonZeroEntries.get(i));
+//        }
+//        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
+//        super.setNonZeroEntries(super.entries.length);
+//    }
+//
+//
+//    /**
+//     * Creates a sparse column vector from a dense array.
+//     * @param entries Dense entries of the vector.
+//     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
+//     * the length of the nonZeroEntries array is greater than the size.
+//     */
+//    public SparseCVector(double[] entries) {
+//        super(entries.length, VectorOrientations.COL);
+//
+//        ArrayList&lt;Double&gt; nonZeroEntries = new ArrayList&lt;&gt;(super.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; indices = new ArrayList&lt;&gt;(super.totalEntries()/8);
+//
+//        // Fill entries with non-zero values.
+//        for(int i=0; i&lt;entries.length; i++) {
+//            if(entries[i]!=0) {
+//                nonZeroEntries.add(entries[i]);
+//                indices.add(i);
+//            }
+//        }
+//
+//        super.entries = new CNumber[super.nonZeroEntries()];
+//        for(int i=0; i&lt;super.entries.length; i++) {
+//            super.entries[i] = new CNumber(nonZeroEntries.get(i));
+//        }
+//        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
+//        super.setNonZeroEntries(super.entries.length);
+//    }
+//
+//
+//    /**
+//     * Creates a sparse column vector from a dense array.
+//     * @param entries Dense entries of the vector.
+//     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
+//     * the length of the nonZeroEntries array is greater than the size.
+//     */
+//    public SparseCVector(CNumber[] entries) {
+//        super(entries.length, VectorOrientations.COL);
+//
+//        ArrayList&lt;CNumber&gt; nonZeroEntries = new ArrayList&lt;&gt;(super.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; indices = new ArrayList&lt;&gt;(super.totalEntries()/8);
+//
+//        // Fill entries with non-zero values.
+//        for(int i=0; i&lt;entries.length; i++) {
+//            if(entries[i].re!=0 &amp;&amp; entries[i].im!=0) {
+//                nonZeroEntries.add(entries[i]);
+//                indices.add(i);
+//            }
+//        }
+//
+//        super.entries = new CNumber[super.nonZeroEntries()];
+//        for(int i=0; i&lt;super.entries.length; i++) {
+//            super.entries[i] = nonZeroEntries.get(i).clone();
+//        }
+//        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
+//        super.setNonZeroEntries(super.entries.length);
+//    }
+
+
+    /**
+     * Creates a sparse column vector of specified size filled with zeros.
+     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
+     * @param orientation Orientation of the vector.
+     */
+    public SparseCVector(int size, VectorOrientations orientation) {
+<span class="nc" id="L162">        super(size, 0, orientation, new CNumber[0], new int[0]);</span>
+<span class="nc" id="L163">    }</span>
+
+
+    /**
+     * Creates a sparse column vector of specified size filled with zeros.
+     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
+     * @param nonZeroEntries The nonZero entries of this sparse vector.
+     * @param indices Indices of the nonZero entries.
+     * @param orientation Orientation of the vector.
+     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
+     * the length of the nonZeroEntries array is greater than the size.
+     */
+    public SparseCVector(int size, int[] nonZeroEntries, int[] indices, VectorOrientations orientation) {
+<span class="nc" id="L176">        super(size, nonZeroEntries.length, orientation, new CNumber[nonZeroEntries.length], indices);</span>
+
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="nc" id="L179">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+        }
+<span class="nc" id="L181">    }</span>
+
+
+    /**
+     * Creates a sparse column vector of specified size filled with zeros.
+     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
+     * @param nonZeroEntries The nonZero entries of this sparse vector.
+     * @param indices Indices of the nonZero entries.
+     * @param orientation Orientation of the vector.
+     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
+     * the length of the nonZeroEntries array is greater than the size.
+     */
+    public SparseCVector(int size, double[] nonZeroEntries, int[] indices, VectorOrientations orientation) {
+<span class="nc" id="L194">        super(size, nonZeroEntries.length, orientation, new CNumber[nonZeroEntries.length], indices);</span>
+
+<span class="nc bnc" id="L196" title="All 2 branches missed.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="nc" id="L197">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+        }
+<span class="nc" id="L199">    }</span>
+
+
+    /**
+     * Creates a sparse column vector of specified size filled with zeros.
+     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
+     * @param nonZeroEntries The nonZero entries of this sparse vector.
+     * @param indices Indices of the nonZero entries.
+     * @param orientation Orientation of the vector.
+     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
+     * the length of the nonZeroEntries array is greater than the size.
+     */
+    public SparseCVector(int size, CNumber[] nonZeroEntries, int[] indices, VectorOrientations orientation) {
+<span class="nc" id="L212">        super(size, nonZeroEntries.length, orientation, nonZeroEntries, indices);</span>
+<span class="nc" id="L213">    }</span>
+
+
+    // TODO: These methods (for all sparse tensor classes) will be moved into factory methods
+//    /**
+//     * Creates a sparse column vector from a dense array.
+//     * @param entries Dense entries of the vector.
+//     * @param orientation Orientation of the vector.
+//     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
+//     * the length of the nonZeroEntries array is greater than the size.
+//     */
+//    public SparseCVector(int[] entries, VectorOrientations orientation) {
+//        super(entries.length, orientation);
+//
+//        ArrayList&lt;Integer&gt; nonZeroEntries = new ArrayList&lt;&gt;(super.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; indices = new ArrayList&lt;&gt;(super.totalEntries()/8);
+//
+//        // Fill entries with non-zero values.
+//        for(int i=0; i&lt;entries.length; i++) {
+//            if(entries[i]!=0) {
+//                nonZeroEntries.add(entries[i]);
+//                indices.add(i);
+//            }
+//        }
+//
+//        super.entries = new CNumber[super.nonZeroEntries()];
+//        for(int i=0; i&lt;super.entries.length; i++) {
+//            super.entries[i] = new CNumber(nonZeroEntries.get(i));
+//        }
+//        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
+//        super.setNonZeroEntries(super.entries.length);
+//    }
+//
+//
+//    /**
+//     * Creates a sparse column vector from a dense array.
+//     * @param entries Dense entries of the vector.
+//     * @param orientation Orientation of the vector.
+//     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
+//     * the length of the nonZeroEntries array is greater than the size.
+//     */
+//    public SparseCVector(double[] entries, VectorOrientations orientation) {
+//        super(entries.length, orientation);
+//
+//        ArrayList&lt;Double&gt; nonZeroEntries = new ArrayList&lt;&gt;(super.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; indices = new ArrayList&lt;&gt;(super.totalEntries()/8);
+//
+//        // Fill entries with non-zero values.
+//        for(int i=0; i&lt;entries.length; i++) {
+//            if(entries[i]!=0) {
+//                nonZeroEntries.add(entries[i]);
+//                indices.add(i);
+//            }
+//        }
+//
+//        super.entries = new CNumber[super.nonZeroEntries()];
+//        for(int i=0; i&lt;super.entries.length; i++) {
+//            super.entries[i] = new CNumber(nonZeroEntries.get(i));
+//        }
+//        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
+//        super.setNonZeroEntries(super.entries.length);
+//    }
+//
+//
+//    /**
+//     * Creates a sparse column vector from a dense array.
+//     * @param entries Dense entries of the vector.
+//     * @param orientation Orientation of the vector.
+//     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
+//     * the length of the nonZeroEntries array is greater than the size.
+//     */
+//    public SparseCVector(CNumber[] entries, VectorOrientations orientation) {
+//        super(entries.length, orientation);
+//
+//        ArrayList&lt;CNumber&gt; nonZeroEntries = new ArrayList&lt;&gt;(super.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; indices = new ArrayList&lt;&gt;(super.totalEntries()/8);
+//
+//        // Fill entries with non-zero values.
+//        for(int i=0; i&lt;entries.length; i++) {
+//            if(entries[i].re!=0 &amp;&amp; entries[i].im!=0) {
+//                nonZeroEntries.add(entries[i]);
+//                indices.add(i);
+//            }
+//        }
+//
+//        super.entries = new CNumber[super.nonZeroEntries()];
+//        for(int i=0; i&lt;super.entries.length; i++) {
+//            super.entries[i] = nonZeroEntries.get(i).clone();
+//        }
+//        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
+//        super.setNonZeroEntries(super.entries.length);
+//    }
+
+
+    /**
+     * Constructs a complex sparse vector whose size, orientation, non-zero entries, and indices are specified
+     * by another complex sparse vector.
+     * @param a Vector to copy.
+     */
+    public SparseCVector(SparseCVector a) {
+<span class="nc" id="L313">        super(a.size(), a.nonZeroEntries(), a.getOrientation(), a.entries.clone(), a.indices.clone());</span>
+<span class="nc" id="L314">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

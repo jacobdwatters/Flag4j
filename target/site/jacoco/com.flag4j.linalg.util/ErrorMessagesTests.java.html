@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ErrorMessagesTests.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.linalg.util</a> &gt; <span class="el_source">ErrorMessagesTests.java</span></div><h1>ErrorMessagesTests.java</h1><pre class="source lang-java linenums">package com.flag4j.linalg.util;
+
+import com.flag4j.Shape;
+import com.flag4j.util.ErrorMessages;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+<span class="nc" id="L12">class ErrorMessagesTests {</span>
+    Shape s1, s2;
+    String expMsg;
+
+
+    @Test
+    void equalShapeErrMsgTestCase() {
+        // --------- sub-case 1 ---------
+<span class="nc" id="L20">        s1 = new Shape(new int[]{2});</span>
+<span class="nc" id="L21">        s2 = new Shape(new int[]{5});</span>
+<span class="nc" id="L22">        expMsg = String.format(&quot;Expecting matrices to have the same shape but got shapes %s and %s.&quot;,</span>
+                &quot;2&quot;, &quot;5&quot;);
+
+<span class="nc" id="L25">        Assertions.assertEquals(expMsg, ErrorMessages.equalShapeErrMsg(s1, s2));</span>
+
+
+        // --------- sub-case 2 ---------
+<span class="nc" id="L29">        s1 = new Shape(1, 2, 3, 4);</span>
+<span class="nc" id="L30">        s2 = new Shape(4, 3, 2, 1);</span>
+<span class="nc" id="L31">        expMsg = String.format(&quot;Expecting matrices to have the same shape but got shapes %s and %s.&quot;,</span>
+                &quot;1x2x3x4&quot;, &quot;4x3x2x1&quot;);
+
+<span class="nc" id="L34">        assertEquals(expMsg, ErrorMessages.equalShapeErrMsg(s1, s2));</span>
+<span class="nc" id="L35">    }</span>
+
+
+    @Test
+    void matMultShapeErrMsgTestCase() {
+        // --------- sub-case 1 ---------
+<span class="nc" id="L41">        s1 = new Shape(10, 5);</span>
+<span class="nc" id="L42">        s2 = new Shape(14, 4);</span>
+<span class="nc" id="L43">        expMsg = String.format(&quot;Expecting the number of columns in the first matrix to&quot; +</span>
+                        &quot; match the number rows in the second matrix but got shapes %s and %s.&quot;,
+                &quot;10x5&quot;, &quot;14x4&quot;);
+
+<span class="nc" id="L47">        assertEquals(expMsg, ErrorMessages.matMultShapeErrMsg(s1, s2));</span>
+<span class="nc" id="L48">    }</span>
+
+
+    @Test
+    void vecRowOrientErrMsgTestCase() {
+<span class="nc" id="L53">        s1 = new Shape(14, 1);</span>
+<span class="nc" id="L54">        expMsg = String.format(&quot;Expecting vector to be a row vector but got a vector with shape %s.&quot;,</span>
+                s1);
+
+<span class="nc" id="L57">        assertEquals(expMsg, ErrorMessages.vecRowOrientErrMsg(s1));</span>
+<span class="nc" id="L58">    }</span>
+
+
+    @Test
+    void vecColOrientErrMsgTestCase() {
+<span class="nc" id="L63">        s1 = new Shape(1, 31);</span>
+<span class="nc" id="L64">        expMsg = String.format(&quot;Expecting vector to be a column vector but got a row vector with shape %s.&quot;,</span>
+                s1);
+
+<span class="nc" id="L67">        assertEquals(expMsg, ErrorMessages.vecColOrientErrMsg(s1));</span>
+<span class="nc" id="L68">    }</span>
+
+
+    @Test
+    void negativeDimErrMsgTestCase() {
+<span class="nc" id="L73">        int[] dims = {-1, 1};</span>
+<span class="nc" id="L74">        expMsg = String.format(&quot;Shape dimensions must be non-negative but got shape %s.&quot;,</span>
+<span class="nc" id="L75">                Arrays.toString(dims));</span>
+
+<span class="nc" id="L77">        assertEquals(expMsg, ErrorMessages.negativeDimErrMsg(dims));</span>
+<span class="nc" id="L78">    }</span>
+
+
+    @Test
+    void utilityClassErrMsgTestCase() {
+<span class="nc" id="L83">        expMsg = &quot;Utility class cannot be instantiated&quot;;</span>
+
+<span class="nc" id="L85">        assertEquals(expMsg, ErrorMessages.utilityClassErrMsg());</span>
+<span class="nc" id="L86">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

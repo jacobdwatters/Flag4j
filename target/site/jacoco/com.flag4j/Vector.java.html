@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Vector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">Vector.java</span></div><h1>Vector.java</h1><pre class="source lang-java linenums">package com.flag4j;
+
+import com.flag4j.core.VectorBase;
+import com.flag4j.core.VectorOrientations;
+
+import java.util.Arrays;
+
+
+/**
+ * Real dense vector. Vectors may be oriented as row vectors, column vectors, or unoriented.
+ * See {@link VectorOrientations} for orientations.
+ */
+public class Vector extends VectorBase&lt;double[]&gt; {
+
+
+    /**
+     * Creates a column vector of specified size filled with zeros.
+     * @param size Size of the vector.
+     */
+    public Vector(int size) {
+<span class="fc" id="L21">        super(size, VectorOrientations.COL, new double[size]);</span>
+<span class="fc" id="L22">    }</span>
+
+
+    /**
+     * Creates a column vector of specified size filled with a specified value.
+     * @param size Size of the vector.
+     * @param fillValue Value to fill vector with.
+     */
+    public Vector(int size, double fillValue) {
+<span class="fc" id="L31">        super(size, VectorOrientations.COL, new double[size]);</span>
+<span class="fc" id="L32">        Arrays.fill(super.entries, fillValue);</span>
+<span class="fc" id="L33">    }</span>
+
+
+    /**
+     * Creates a vector of specified size filled with zeros.
+     * @param size Size of the vector.
+     * @param orientation Orientation of the vector.
+     */
+    public Vector(int size, VectorOrientations orientation) {
+<span class="fc" id="L42">        super(size, orientation, new double[size]);</span>
+<span class="fc" id="L43">    }</span>
+
+
+    /**
+     * Creates a vector of specified size filled with zeros.
+     * @param size Size of the vector.
+     * @param fillValue Fills array with
+     * @param orientation Orientation of the vector.
+     */
+    public Vector(int size, double fillValue, VectorOrientations orientation) {
+<span class="fc" id="L53">        super(size, orientation, new double[size]);</span>
+<span class="fc" id="L54">        Arrays.fill(super.entries, fillValue);</span>
+<span class="fc" id="L55">    }</span>
+
+
+    /**
+     * Creates a column vector with specified entries.
+     * @param entries Entries for this column vector.
+     */
+    public Vector(double[] entries) {
+<span class="fc" id="L63">        super(entries.length, VectorOrientations.COL, entries.clone());</span>
+<span class="fc" id="L64">    }</span>
+
+    /**
+     * Creates a vector with specified entries and orientation.
+     * @param entries Entries for this column vector.
+     * @param orientation Orientation of the vector.
+     */
+    public Vector(double[] entries, VectorOrientations orientation) {
+<span class="fc" id="L72">        super(entries.length, orientation, entries.clone());</span>
+<span class="fc" id="L73">    }</span>
+
+
+    /**
+     * Creates a column vector with specified entries.
+     * @param entries Entries for this column vector.
+     */
+    public Vector(int[] entries) {
+<span class="fc" id="L81">        super(entries.length, VectorOrientations.COL, new double[entries.length]);</span>
+
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L84">            super.entries[i] = entries[i];</span>
+        }
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * Creates a vector with specified entries and orientation.
+     * @param entries Entries for this column vector.
+     * @param orientation Orientation of the vector.
+     */
+    public Vector(int[] entries, VectorOrientations orientation) {
+<span class="fc" id="L94">        super(entries.length, orientation, new double[entries.length] );</span>
+
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L97">            super.entries[i] = entries[i];</span>
+        }
+<span class="fc" id="L99">    }</span>
+
+
+    /**
+     * Creates a vector from another vector. This essentially copies the vector.
+     * @param a Vector to make copy of.
+     */
+    public Vector(Vector a) {
+<span class="fc" id="L107">        super(a.entries.length, a.getOrientation(), a.entries.clone());</span>
+<span class="fc" id="L108">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
