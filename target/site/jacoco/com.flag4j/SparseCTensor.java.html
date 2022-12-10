@@ -17,8 +17,8 @@ public class SparseCTensor extends SparseTensorBase&lt;CNumber[]&gt; {
      * @param shape Shape of the tensor.
      */
     public SparseCTensor(Shape shape) {
-<span class="nc" id="L20">        super(shape, 0, new CNumber[0], new int[0][0]);</span>
-<span class="nc" id="L21">    }</span>
+<span class="fc" id="L20">        super(shape, 0, new CNumber[0], new int[0][0]);</span>
+<span class="fc" id="L21">    }</span>
 
 
     /**
@@ -28,12 +28,12 @@ public class SparseCTensor extends SparseTensorBase&lt;CNumber[]&gt; {
      * @param indices Indices of the non-zero entries of the tensor.
      */
     public SparseCTensor(Shape shape, double[] nonZeroEntries, int[][] indices) {
-<span class="nc" id="L31">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</span>
+<span class="fc" id="L31">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</span>
 
-<span class="nc bnc" id="L33" title="All 2 branches missed.">        for(int i=0; i&lt;indices.length; i++) {</span>
-<span class="nc" id="L34">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
+<span class="fc" id="L34">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="nc" id="L36">    }</span>
+<span class="fc" id="L36">    }</span>
 
 
     /**
@@ -43,12 +43,12 @@ public class SparseCTensor extends SparseTensorBase&lt;CNumber[]&gt; {
      * @param indices Indices of the non-zero entries of the tensor.
      */
     public SparseCTensor(Shape shape, int[] nonZeroEntries, int[][] indices) {
-<span class="nc" id="L46">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</span>
+<span class="fc" id="L46">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</span>
 
-<span class="nc bnc" id="L48" title="All 2 branches missed.">        for(int i=0; i&lt;indices.length; i++) {</span>
-<span class="nc" id="L49">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
+<span class="fc" id="L49">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="nc" id="L51">    }</span>
+<span class="fc" id="L51">    }</span>
 
 
     /**
@@ -58,8 +58,8 @@ public class SparseCTensor extends SparseTensorBase&lt;CNumber[]&gt; {
      * @param indices Indices of the non-zero entries of the tensor.
      */
     public SparseCTensor(Shape shape, CNumber[] nonZeroEntries, int[][] indices) {
-<span class="nc" id="L61">        super(shape, nonZeroEntries.length, nonZeroEntries, indices);</span>
-<span class="nc" id="L62">    }</span>
+<span class="fc" id="L61">        super(shape, nonZeroEntries.length, nonZeroEntries, indices);</span>
+<span class="fc" id="L62">    }</span>
 
 
 //    /**
@@ -218,10 +218,10 @@ public class SparseCTensor extends SparseTensorBase&lt;CNumber[]&gt; {
      * @param A
      */
     public SparseCTensor(SparseCTensor A) {
-<span class="nc" id="L221">        super(A.shape.clone(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);</span>
-<span class="nc bnc" id="L222" title="All 2 branches missed.">        for(int i=0; i&lt;indices.length; i++) {</span>
-<span class="nc" id="L223">            super.indices[i] = A.indices[i].clone();</span>
+<span class="fc" id="L221">        super(A.shape.clone(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
+<span class="fc" id="L223">            super.indices[i] = A.indices[i].clone();</span>
         }
-<span class="nc" id="L225">    }</span>
+<span class="fc" id="L225">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

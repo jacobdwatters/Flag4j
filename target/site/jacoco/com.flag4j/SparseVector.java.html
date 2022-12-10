@@ -16,8 +16,8 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      */
     public SparseVector(int size) {
-<span class="nc" id="L19">        super(size, 0, VectorOrientations.COL, new double[0], new int[0]);</span>
-<span class="nc" id="L20">    }</span>
+<span class="fc" id="L19">        super(size, 0, VectorOrientations.COL, new double[0], new int[0]);</span>
+<span class="fc" id="L20">    }</span>
 
 
     /**
@@ -29,10 +29,10 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, int[] nonZeroEntries, int[] indices) {
-<span class="nc" id="L32">        super(size, nonZeroEntries.length, VectorOrientations.COL,</span>
-<span class="nc" id="L33">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L32">        super(size, nonZeroEntries.length, VectorOrientations.COL,</span>
+<span class="fc" id="L33">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
                 indices);
-<span class="nc" id="L35">    }</span>
+<span class="fc" id="L35">    }</span>
 
 
     /**
@@ -44,8 +44,8 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, double[] nonZeroEntries, int[] indices) {
-<span class="nc" id="L47">        super(size, nonZeroEntries.length, VectorOrientations.COL, nonZeroEntries, indices);</span>
-<span class="nc" id="L48">    }</span>
+<span class="fc" id="L47">        super(size, nonZeroEntries.length, VectorOrientations.COL, nonZeroEntries, indices);</span>
+<span class="fc" id="L48">    }</span>
 
 
 //    /**
@@ -106,8 +106,8 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * @param orientation Orientation of the vector.
      */
     public SparseVector(int size, VectorOrientations orientation) {
-<span class="nc" id="L109">        super(size, 0, orientation, new double[0], new int[0]);</span>
-<span class="nc" id="L110">    }</span>
+<span class="fc" id="L109">        super(size, 0, orientation, new double[0], new int[0]);</span>
+<span class="fc" id="L110">    }</span>
 
 
     /**
@@ -120,9 +120,9 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, int[] nonZeroEntries, int[] indices, VectorOrientations orientation) {
-<span class="nc" id="L123">        super(size, nonZeroEntries.length, orientation,</span>
-<span class="nc" id="L124">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(), indices);</span>
-<span class="nc" id="L125">    }</span>
+<span class="fc" id="L123">        super(size, nonZeroEntries.length, orientation,</span>
+<span class="fc" id="L124">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(), indices);</span>
+<span class="fc" id="L125">    }</span>
 
 
     /**
@@ -135,8 +135,8 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, double[] nonZeroEntries, int[] indices, VectorOrientations orientation) {
-<span class="nc" id="L138">        super(size, nonZeroEntries.length, orientation, nonZeroEntries, indices);</span>
-<span class="nc" id="L139">    }</span>
+<span class="fc" id="L138">        super(size, nonZeroEntries.length, orientation, nonZeroEntries, indices);</span>
+<span class="fc" id="L139">    }</span>
 
 //
 //    /**
@@ -198,7 +198,7 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * @param a Sparse vector to copy
      */
     public SparseVector(SparseVector a) {
-<span class="nc" id="L201">        super(a.size(), a.nonZeroEntries(), a.getOrientation(), a.entries.clone(), a.indices.clone());</span>
-<span class="nc" id="L202">    }</span>
+<span class="fc" id="L201">        super(a.size(), a.nonZeroEntries(), a.getOrientation(), a.entries.clone(), a.indices.clone());</span>
+<span class="fc" id="L202">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

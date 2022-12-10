@@ -16,8 +16,8 @@ public class SparseTensor extends SparseTensorBase&lt;double[]&gt; {
      * @param shape Shape of the tensor.
      */
     public SparseTensor(Shape shape) {
-<span class="nc" id="L19">        super(shape, 0, new double[0], new int[0][0]);</span>
-<span class="nc" id="L20">    }</span>
+<span class="fc" id="L19">        super(shape, 0, new double[0], new int[0][0]);</span>
+<span class="fc" id="L20">    }</span>
 
 
     /**
@@ -28,8 +28,8 @@ public class SparseTensor extends SparseTensorBase&lt;double[]&gt; {
      * @param indices Indices of the non-zero entries of the tensor.
      */
     public SparseTensor(Shape shape, double[] nonZeroEntries, int[][] indices) {
-<span class="nc" id="L31">        super(shape, nonZeroEntries.length, nonZeroEntries, indices);</span>
-<span class="nc" id="L32">    }</span>
+<span class="fc" id="L31">        super(shape, nonZeroEntries.length, nonZeroEntries, indices);</span>
+<span class="fc" id="L32">    }</span>
 
 
     /**
@@ -39,8 +39,8 @@ public class SparseTensor extends SparseTensorBase&lt;double[]&gt; {
      * @param indices Indices of the non-zero entries of the tensor.
      */
     public SparseTensor(Shape shape, int[] nonZeroEntries, int[][] indices) {
-<span class="nc" id="L42">        super(shape, nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(), indices);</span>
-<span class="nc" id="L43">    }</span>
+<span class="fc" id="L42">        super(shape, nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(), indices);</span>
+<span class="fc" id="L43">    }</span>
 
 
 //    /**
@@ -149,10 +149,10 @@ public class SparseTensor extends SparseTensorBase&lt;double[]&gt; {
      * @param A Tensor to copy.
      */
     public SparseTensor(SparseTensor A) {
-<span class="nc" id="L152">        super(A.shape.clone(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);</span>
-<span class="nc bnc" id="L153" title="All 2 branches missed.">        for(int i=0; i&lt;indices.length; i++) {</span>
-<span class="nc" id="L154">            super.indices[i] = A.indices[i].clone();</span>
+<span class="fc" id="L152">        super(A.shape.clone(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
+<span class="fc" id="L154">            super.indices[i] = A.indices[i].clone();</span>
         }
-<span class="nc" id="L156">    }</span>
+<span class="fc" id="L156">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

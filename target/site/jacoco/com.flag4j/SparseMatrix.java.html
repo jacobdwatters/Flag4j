@@ -15,8 +15,8 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param size The number of rows/columns in this sparse matrix.
      */
     public SparseMatrix(int size) {
-<span class="nc" id="L18">        super(new Shape(size, size), 0, new double[0], new int[0], new int[0]);</span>
-<span class="nc" id="L19">    }</span>
+<span class="fc" id="L18">        super(new Shape(size, size), 0, new double[0], new int[0], new int[0]);</span>
+<span class="fc" id="L19">    }</span>
 
 
     /**
@@ -25,8 +25,8 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param cols The number of columns in this sparse matrix.
      */
     public SparseMatrix(int rows, int cols) {
-<span class="nc" id="L28">        super(new Shape(rows, cols), 0, new double[0], new int[0], new int[0]);</span>
-<span class="nc" id="L29">    }</span>
+<span class="fc" id="L28">        super(new Shape(rows, cols), 0, new double[0], new int[0], new int[0]);</span>
+<span class="fc" id="L29">    }</span>
 
 
     /**
@@ -34,8 +34,8 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param shape Shape of this sparse matrix.
      */
     public SparseMatrix(Shape shape) {
-<span class="nc" id="L37">        super(shape, 0, new double[0], new int[0], new int[0]);</span>
-<span class="nc" id="L38">    }</span>
+<span class="fc" id="L37">        super(shape, 0, new double[0], new int[0], new int[0]);</span>
+<span class="fc" id="L38">    }</span>
 
 
     /**
@@ -46,8 +46,8 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int size, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="nc" id="L49">        super(new Shape(size, size), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
-<span class="nc" id="L50">    }</span>
+<span class="fc" id="L49">        super(new Shape(size, size), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
+<span class="fc" id="L50">    }</span>
 
 
     /**
@@ -59,8 +59,8 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int rows, int cols, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="nc" id="L62">        super(new Shape(rows, cols), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
-<span class="nc" id="L63">    }</span>
+<span class="fc" id="L62">        super(new Shape(rows, cols), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
+<span class="fc" id="L63">    }</span>
 
 
     /**
@@ -71,8 +71,8 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(Shape shape, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="nc" id="L74">        super(shape, nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
-<span class="nc" id="L75">    }</span>
+<span class="fc" id="L74">        super(shape, nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
+<span class="fc" id="L75">    }</span>
 
 
     /**
@@ -83,9 +83,9 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int size, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="nc" id="L86">        super(new Shape(size, size), nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L86">        super(new Shape(size, size), nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
                 rowIndices, colIndices);
-<span class="nc" id="L88">    }</span>
+<span class="fc" id="L88">    }</span>
 
 
     /**
@@ -97,9 +97,9 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int rows, int cols, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="nc" id="L100">        super(new Shape(rows, cols), nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L100">        super(new Shape(rows, cols), nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
                 rowIndices, colIndices);
-<span class="nc" id="L102">    }</span>
+<span class="fc" id="L102">    }</span>
 
 
     /**
@@ -112,9 +112,9 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseMatrix(Shape shape, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="nc" id="L115">        super(shape, nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L115">        super(shape, nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
                 rowIndices, colIndices);
-<span class="nc" id="L117">    }</span>
+<span class="fc" id="L117">    }</span>
 
 
 //    /**
@@ -183,7 +183,7 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param A Sparse Matrix to copy.
      */
     public SparseMatrix(SparseMatrix A) {
-<span class="nc" id="L186">        super(A.shape.clone(), A.nonZeroEntries(), A.entries.clone(), A.rowIndices.clone(), A.colIndices.clone());</span>
-<span class="nc" id="L187">    }</span>
+<span class="fc" id="L186">        super(A.shape.clone(), A.nonZeroEntries(), A.entries.clone(), A.rowIndices.clone(), A.colIndices.clone());</span>
+<span class="fc" id="L187">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
