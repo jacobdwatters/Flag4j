@@ -46,6 +46,7 @@ public abstract class TypedMatrix<T> {
     }
 
 
+
     protected TypedMatrix(MatrixTypes type, Shape shape) {
         if(shape.getRank() != 2){
             throw new IllegalArgumentException(ErrorMessages.shapeRankErr(2, shape.getRank()));

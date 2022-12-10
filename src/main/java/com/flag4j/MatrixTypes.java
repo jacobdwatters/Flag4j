@@ -19,5 +19,5 @@ public enum MatrixTypes {
     /**
      * Complex sparse matrix
      */
-    SPARSE_C_MATRIX
+    SPARSE_C_MATRIX,
 }

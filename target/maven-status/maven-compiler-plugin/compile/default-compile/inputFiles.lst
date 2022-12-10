@@ -4,6 +4,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\TensorPropertiesMixi
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\complex_numbers\CNumber.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\Matrix.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\io\TensorReader.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\DevelopmentTesting.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\RealMatrixMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\MatrixOperationsMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\TensorOperationsMixin.java
@@ -49,6 +50,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\SparseMatrix.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\VectorOrientations.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\concurrency\UnaryThreadFactory.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\SparseCMatrix.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\TypedSparseMatrix.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\CVector.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\util\ShapeChecks.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\concurrency\algorithms\transpose\ConcurrentTranspose.java

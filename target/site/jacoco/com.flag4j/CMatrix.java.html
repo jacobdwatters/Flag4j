@@ -52,7 +52,7 @@ public class CMatrix extends TypedMatrix&lt;CNumber[][]&gt; {
 
 <span class="nc bnc" id="L53" title="All 2 branches missed.">        for(int i=0; i&lt;this.m; i++) {</span>
 <span class="nc bnc" id="L54" title="All 2 branches missed.">            for(int j=0; j&lt;this.n; j++) {</span>
-<span class="nc" id="L55">                this.entries[i][j] = new CNumber();</span>
+<span class="nc" id="L55">                this.entries[i][j] = new CNumber(value);</span>
             }
         }
 <span class="nc" id="L58">    }</span>
@@ -185,15 +185,15 @@ public class CMatrix extends TypedMatrix&lt;CNumber[][]&gt; {
      * @param entries Entries of the real dense matrix.
      */
     public CMatrix(double[][] entries) {
-<span class="fc" id="L188">        super(MatrixTypes.C_MATRIX, entries.length, entries[0].length);</span>
-<span class="fc" id="L189">        this.entries = new CNumber[m][n];</span>
+<span class="nc" id="L188">        super(MatrixTypes.C_MATRIX, entries.length, entries[0].length);</span>
+<span class="nc" id="L189">        this.entries = new CNumber[m][n];</span>
 
-<span class="fc bfc" id="L191" title="All 2 branches covered.">        for(int i=0; i&lt;m; i++) {</span>
-<span class="fc bfc" id="L192" title="All 2 branches covered.">            for(int j=0; j&lt;n; j++) {</span>
-<span class="fc" id="L193">                this.entries[i][j] = new CNumber(entries[i][j]);</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        for(int i=0; i&lt;m; i++) {</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">            for(int j=0; j&lt;n; j++) {</span>
+<span class="nc" id="L193">                this.entries[i][j] = new CNumber(entries[i][j]);</span>
             }
         }
-<span class="fc" id="L196">    }</span>
+<span class="nc" id="L196">    }</span>
 
 
     /**
@@ -252,13 +252,13 @@ public class CMatrix extends TypedMatrix&lt;CNumber[][]&gt; {
      * @return The specified column of this matrix.
      */
     public CNumber[] getCol(int j) {
-<span class="fc" id="L255">        CNumber[] column = new CNumber[this.m];</span>
+<span class="nc" id="L255">        CNumber[] column = new CNumber[this.m];</span>
 
-<span class="fc bfc" id="L257" title="All 2 branches covered.">        for(int i=0; i&lt;m; i++) {</span>
-<span class="fc" id="L258">            column[i] = this.entries[i][j];</span>
+<span class="nc bnc" id="L257" title="All 2 branches missed.">        for(int i=0; i&lt;m; i++) {</span>
+<span class="nc" id="L258">            column[i] = this.entries[i][j];</span>
         }
 
-<span class="fc" id="L261">        return column;</span>
+<span class="nc" id="L261">        return column;</span>
     }
 
 
@@ -299,41 +299,41 @@ public class CMatrix extends TypedMatrix&lt;CNumber[][]&gt; {
      * @return Matrix as string
      */
     public String toString() {
-<span class="fc" id="L302">        String result = &quot;[&quot;;</span>
+<span class="nc" id="L302">        String result = &quot;[&quot;;</span>
 
         // Get the current print options.
-<span class="fc" id="L305">        int MAX_ROWS = PrintOptions.getMaxRows();</span>
-<span class="fc" id="L306">        int MAX_COLUMNS = PrintOptions.getMaxColumns();</span>
-<span class="fc" id="L307">        int PADDING = PrintOptions.getPadding();</span>
-<span class="fc" id="L308">        int PRECISION = PrintOptions.getPrecision();</span>
+<span class="nc" id="L305">        int MAX_ROWS = PrintOptions.getMaxRows();</span>
+<span class="nc" id="L306">        int MAX_COLUMNS = PrintOptions.getMaxColumns();</span>
+<span class="nc" id="L307">        int PADDING = PrintOptions.getPadding();</span>
+<span class="nc" id="L308">        int PRECISION = PrintOptions.getPrecision();</span>
 
-<span class="pc bpc" id="L310" title="1 of 2 branches missed.">        if(!this.isEmpty()) {</span>
-<span class="fc" id="L311">            int max=0, colWidth;</span>
-<span class="fc" id="L312">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L310" title="All 2 branches missed.">        if(!this.isEmpty()) {</span>
+<span class="nc" id="L311">            int max=0, colWidth;</span>
+<span class="nc" id="L312">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;();</span>
 
-<span class="fc bfc" id="L314" title="All 2 branches covered.">            for(int j=0; j&lt;this.n; j++) { // Get the maximum length string representation for each column.</span>
-<span class="fc" id="L315">                List&lt;CNumber&gt; contents = Arrays.asList(this.getCol(j));</span>
-<span class="fc" id="L316">                Optional&lt;Integer&gt; value = contents.stream().map(CNumber::length).max(Integer::compareTo);</span>
+<span class="nc bnc" id="L314" title="All 2 branches missed.">            for(int j=0; j&lt;this.n; j++) { // Get the maximum length string representation for each column.</span>
+<span class="nc" id="L315">                List&lt;CNumber&gt; contents = Arrays.asList(this.getCol(j));</span>
+<span class="nc" id="L316">                Optional&lt;Integer&gt; value = contents.stream().map(CNumber::length).max(Integer::compareTo);</span>
 
-<span class="pc bpc" id="L318" title="1 of 2 branches missed.">                if(value.isPresent()) {</span>
-<span class="fc" id="L319">                    max = value.get();</span>
+<span class="nc bnc" id="L318" title="All 2 branches missed.">                if(value.isPresent()) {</span>
+<span class="nc" id="L319">                    max = value.get();</span>
                 }
 
-<span class="fc" id="L322">                maxList.add(max);</span>
+<span class="nc" id="L322">                maxList.add(max);</span>
             }
 
-<span class="fc" id="L325">            StringBuilder resultBuilder = new StringBuilder(&quot;[&quot;);</span>
-<span class="fc bfc" id="L326" title="All 2 branches covered.">            for(int i = 0; i &lt; m; i++) {</span>
-<span class="pc bpc" id="L327" title="3 of 4 branches missed.">                if(i &gt;= MAX_ROWS &amp;&amp; i &lt; m-1) {</span>
+<span class="nc" id="L325">            StringBuilder resultBuilder = new StringBuilder(&quot;[&quot;);</span>
+<span class="nc bnc" id="L326" title="All 2 branches missed.">            for(int i = 0; i &lt; m; i++) {</span>
+<span class="nc bnc" id="L327" title="All 4 branches missed.">                if(i &gt;= MAX_ROWS &amp;&amp; i &lt; m-1) {</span>
 <span class="nc" id="L328">                    resultBuilder.append(&quot;  ...\n &quot;);</span>
 <span class="nc" id="L329">                    i = m-1;</span>
                 }
 
-<span class="fc" id="L332">                resultBuilder.append(&quot; [&quot;);</span>
+<span class="nc" id="L332">                resultBuilder.append(&quot; [&quot;);</span>
 
-<span class="fc bfc" id="L334" title="All 2 branches covered.">                for(int j = 0; j &lt; n; j++) {</span>
+<span class="nc bnc" id="L334" title="All 2 branches missed.">                for(int j = 0; j &lt; n; j++) {</span>
 
-<span class="pc bpc" id="L336" title="3 of 4 branches missed.">                    if(j &gt;= MAX_COLUMNS &amp;&amp; j &lt; n-1) {</span>
+<span class="nc bnc" id="L336" title="All 4 branches missed.">                    if(j &gt;= MAX_COLUMNS &amp;&amp; j &lt; n-1) {</span>
 <span class="nc" id="L337">                        colWidth = 3+PADDING;</span>
 <span class="nc" id="L338">                        resultBuilder.append(String.format(&quot;%-&quot; + colWidth + &quot;s&quot;, StringUtils.center(&quot;...&quot;, colWidth)));</span>
 <span class="nc" id="L339">                        colWidth = maxList.get(n-1)+PADDING;</span>
@@ -341,23 +341,23 @@ public class CMatrix extends TypedMatrix&lt;CNumber[][]&gt; {
 <span class="nc" id="L341">                        break;</span>
                     }
                     else {
-<span class="fc" id="L344">                        colWidth = maxList.get(j)+PADDING;</span>
-<span class="fc" id="L345">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(</span>
-<span class="fc" id="L346">                                CNumber.round(entries[i][j], PRECISION).toString(), colWidth))</span>
+<span class="nc" id="L344">                        colWidth = maxList.get(j)+PADDING;</span>
+<span class="nc" id="L345">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(</span>
+<span class="nc" id="L346">                                CNumber.round(entries[i][j], PRECISION).toString(), colWidth))</span>
                         );
                     }
                 }
-<span class="fc" id="L350">                resultBuilder.append(&quot;]\n &quot;);</span>
+<span class="nc" id="L350">                resultBuilder.append(&quot;]\n &quot;);</span>
             }
-<span class="fc" id="L352">            result = resultBuilder.toString();</span>
+<span class="nc" id="L352">            result = resultBuilder.toString();</span>
 
-<span class="fc" id="L354">            result = result.substring(0, result.length()-2) + &quot; ]&quot;;</span>
-<span class="fc" id="L355">        }</span>
+<span class="nc" id="L354">            result = result.substring(0, result.length()-2) + &quot; ]&quot;;</span>
+<span class="nc" id="L355">        }</span>
         else {
 <span class="nc" id="L357">            result += &quot;[]]&quot;;</span>
         }
 
-<span class="fc" id="L360">        return result;</span>
+<span class="nc" id="L360">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

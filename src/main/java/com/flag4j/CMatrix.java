@@ -52,7 +52,7 @@ public class CMatrix extends TypedMatrix<CNumber[][]> {
 
         for(int i=0; i<this.m; i++) {
             for(int j=0; j<this.n; j++) {
-                this.entries[i][j] = new CNumber();
+                this.entries[i][j] = new CNumber(value);
             }
         }
     }

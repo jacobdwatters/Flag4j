@@ -1,11 +1,5 @@
 package com.flag4j.linalg;
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
-import com.flag4j.SparseCMatrix;
-import com.flag4j.SparseMatrix;
-
-
 /**
  * This class contains several methods for computing row echelon, reduced row echelon, and extended reduced row echelon
  * forms of a matrix.

@@ -11,7 +11,7 @@ package com.flag4j;
  * @param <Y> Real Tensor type.
  * @param <X> Tensor entry type.
  */
-interface TensorComparisonsMixin<T, U, V, W, Y, X extends Number> {
+public interface TensorComparisonsMixin<T, U, V, W, Y, X extends Number> {
 
 
     /**
@@ -26,4 +26,12 @@ interface TensorComparisonsMixin<T, U, V, W, Y, X extends Number> {
      * @return True if this tensor only contains oens. Otherwise, returns false.
      */
     boolean isOnes();
+
+
+    /**
+     * Checks if this tensor is equal to a specified Object.
+     * @param B Object to compare this tensor to.
+     */
+    @Override
+    boolean equals(Object B);
 }

@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+// TODO: Change entries array to be 1D
 
 /**
  * Real Dense Matrix. Stored in row major order.
@@ -1853,13 +1854,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
     }
 
 
-    /**
-     * Checks if this tensor contains only non-negative values. NaN is not considered to be positive, negative or zero.
-     * As such, if this matrix contains NaN, this method will return false.
-     *
-     * @return True if this tensor only contains non-negative values. Otherwise, returns false.
-     */
-    @Override
+
     public boolean isPos() {
         boolean result = true;
 
@@ -1880,13 +1875,7 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
     }
 
 
-    /**
-     * Checks if this tensor contains only non-positive values. NaN is not considered to be positive, negative or zero.
-     * As such, if this matrix contains NaN, this method will return false.
-     *
-     * @return trie if this tensor only contains non-positive values. Otherwise, returns false.
-     */
-    @Override
+
     public boolean isNeg() {
         boolean result = true;
 
@@ -1913,7 +1902,6 @@ public class Matrix extends TypedMatrix<double[][]> implements RealMatrixMixin<M
      *
      * @return A complex matrix which is equivalent to this matrix.
      */
-    @Override
     public CMatrix toComplex() {
         CMatrix complex = new CMatrix(this.getShape());
 

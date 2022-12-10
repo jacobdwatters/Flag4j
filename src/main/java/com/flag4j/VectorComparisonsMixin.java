@@ -1,6 +1,11 @@
 package com.flag4j;
 
 
+import com.flag4j.CVector;
+import com.flag4j.SparseCVector;
+import com.flag4j.SparseVector;
+import com.flag4j.Vector;
+
 /**
  * This interface specifies comparisons which all vectors should implement.
  *

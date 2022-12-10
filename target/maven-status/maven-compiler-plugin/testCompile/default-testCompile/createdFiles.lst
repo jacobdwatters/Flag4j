@@ -1,6 +1,5 @@
 com\flag4j\MatrixSubTests.class
 com\flag4j\MatrixVectorTypeTests.class
-com\flag4j\util\MatrixExponentTests.class
 com\flag4j\complex_numbers\CNumberPropertiesTest.class
 com\flag4j\ComplexConversionTests.class
 com\flag4j\MatrixGetterTests.class
@@ -17,13 +16,12 @@ com\flag4j\complex_numbers\CNumberConversionTest.class
 com\flag4j\MatrixSymmetryTests.class
 com\flag4j\complex_numbers\CNumberRoundTest.class
 com\flag4j\complex_numbers\CNumberGettersSettersTest.class
-com\flag4j\MatrixConstructorTests.class
 com\flag4j\MatrixToStringTest.class
 com\flag4j\io\PrintOptionsTests.class
 com\flag4j\MatrixAddTests.class
 com\flag4j\VectorConstructorTests.class
+com\flag4j\ComplexConversionTests$MatrixExponentTests.class
 com\flag4j\complex_numbers\CNumberSqrtTest.class
-DevelopmentTesting.class
 com\flag4j\complex_numbers\CNumberComparisonTest.class
 com\flag4j\complex_numbers\CNumberUnaryOperationsTest.class
 com\flag4j\MatrixScalMultDivTests.class

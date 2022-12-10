@@ -1,4 +1,5 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Flag4j,default,DevelopmentTesting,51,0,0,0,15,0,2,0,2,0
 Flag4j,com.flag4j.util,RandomCNumber,17,0,0,0,6,0,2,0,2,0
 Flag4j,com.flag4j.util,StringUtils,9,48,2,6,3,9,3,4,1,2
 Flag4j,com.flag4j.util,ShapeChecks,48,5,9,1,13,2,7,1,2,1
@@ -12,15 +13,16 @@ Flag4j,com.flag4j,VectorOrientations,0,15,0,0,0,3,0,1,0,1
 Flag4j,com.flag4j,SparseVector,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j,Shape,22,94,2,8,8,20,6,8,4,5
 Flag4j,com.flag4j,MatrixTypes,0,27,0,0,0,5,0,1,0,1
+Flag4j,com.flag4j,TypedSparseMatrix,6,0,0,0,2,0,1,0,1,0
 Flag4j,com.flag4j,SparseMatrixFormats,21,0,0,0,4,0,1,0,1,0
-Flag4j,com.flag4j,Matrix,212,2623,8,274,111,388,116,194,108,61
-Flag4j,com.flag4j,SparseMatrix,3,0,0,0,1,0,1,0,1,0
+Flag4j,com.flag4j,Matrix,474,2361,24,258,152,347,134,176,118,51
+Flag4j,com.flag4j,SparseMatrix,6,0,0,0,2,0,1,0,1,0
 Flag4j,com.flag4j,Vector,0,155,0,0,0,38,0,12,0,12
 Flag4j,com.flag4j,VectorTypes,0,27,0,0,0,5,0,1,0,1
-Flag4j,com.flag4j,TypedMatrix,56,75,14,8,11,18,10,9,2,6
+Flag4j,com.flag4j,TypedMatrix,63,68,16,6,13,16,12,7,2,6
 Flag4j,com.flag4j,SparseCMatrix,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j,SparseCVector,3,0,0,0,1,0,1,0,1,0
-Flag4j,com.flag4j,CMatrix,538,344,54,28,76,57,40,19,11,7
+Flag4j,com.flag4j,CMatrix,744,139,70,12,114,19,49,10,14,4
 Flag4j,com.flag4j,TypedVector,0,28,0,2,0,8,0,2,0,1
 Flag4j,com.flag4j.linalg,Hessenburg,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,Decompose,3,0,0,0,1,0,1,0,1,0

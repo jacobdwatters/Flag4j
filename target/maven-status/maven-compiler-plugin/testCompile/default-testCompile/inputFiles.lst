@@ -2,13 +2,11 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixTransposeTests
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\io\PrintOptionsTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberConstructorTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\ComplexConversionTests.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\util\MatrixExponentTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixElemMultDiveTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberComparisonTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixVectorTypeTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberPropertiesTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberRoundTest.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\DevelopmentTesting.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberGettersSettersTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixGetterTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixSubTests.java
@@ -19,7 +17,6 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\ElementwisePropertyT
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixAbsTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixSymmetryTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\VectorConstructorTests.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberTrigTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixAgglomerationTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixToStringTest.java

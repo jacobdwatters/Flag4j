@@ -1,6 +1,8 @@
 package com.flag4j;
 
 
+import com.flag4j.SparseCMatrix;
+
 /**
  * This interface specifies manipulations which all matrices should implement.
  *

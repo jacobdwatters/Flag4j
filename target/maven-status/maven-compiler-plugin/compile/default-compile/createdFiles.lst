@@ -20,7 +20,6 @@ com\flag4j\CVector.class
 com\flag4j\concurrency\Configurations.class
 com\flag4j\io\TensorWriter.class
 com\flag4j\TypedMatrix.class
-com\flag4j\RealTensorMixin.class
 com\flag4j\TensorComparisonsMixin.class
 com\flag4j\io\PrintOptions.class
 com\flag4j\SparseVector.class
@@ -30,6 +29,7 @@ com\flag4j\util\Axis2D.class
 com\flag4j\complex_numbers\CNumber.class
 com\flag4j\concurrency\algorithms\transpose\MatrixTransposeWorker.class
 com\flag4j\TensorPropertiesMixin.class
+com\flag4j\TypedSparseMatrix.class
 com\flag4j\MatrixComparisonsMixin.class
 com\flag4j\VectorManipulationsMixin.class
 com\flag4j\SparseMatrixFormats.class
@@ -56,6 +56,7 @@ com\flag4j\SparseMatrix.class
 com\flag4j\linalg\CreateMatrix.class
 com\flag4j\concurrency\ThreadAllocator.class
 com\flag4j\concurrency\UnaryThreadFactory.class
+DevelopmentTesting.class
 com\flag4j\complex_numbers\CNumberLexer.class
 com\flag4j\concurrency\CheckConcurrent.class
 com\flag4j\linalg\RowEchelon.class

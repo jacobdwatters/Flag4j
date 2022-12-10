@@ -1,6 +1,4 @@
 package com.flag4j;
-
-
 import com.flag4j.complex_numbers.CNumber;
 
 /**
@@ -13,7 +11,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <Y> Real Tensor type.
  * @param <X> Tensor entry type.
  */
-interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
+public interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
 
 
     /**

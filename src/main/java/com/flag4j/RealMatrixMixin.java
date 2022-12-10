@@ -6,7 +6,6 @@ package com.flag4j;
  * @param <W> Complex matrix type.
  */
 public interface RealMatrixMixin<T, W> extends
-        RealTensorMixin<T, W>,
         MatrixPropertiesMixin<T, Matrix, SparseMatrix, W, T, Double>,
         MatrixOperationsMixin<T, Matrix, SparseMatrix, W, T, Double>,
         MatrixComparisonsMixin<T, Matrix, SparseMatrix, W, T, Double>,
