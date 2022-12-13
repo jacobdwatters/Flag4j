@@ -685,7 +685,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix add(CMatrix B) {
-        return null;
+        return new CMatrix(this.shape.clone(),
+                RealComplexDenseOperations.add(this.entries, a)
+        );
     }
 
 
