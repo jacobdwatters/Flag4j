@@ -4,7 +4,7 @@ package com.flag4j.operations.concurrency;
  * A worker class for concurrent binary operations.
  * @param <T> Type of array to work on.
  */
-public abstract class BinaryOperationWorker<T> extends Thread {
+public abstract class BinaryOperationWorker<T> implements Runnable {
     public T src1, src2, dest;
     public int start, end;
 

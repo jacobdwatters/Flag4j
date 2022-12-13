@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DenseThreadAllocator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.concurrency</a> &gt; <span class="el_source">DenseThreadAllocator.java</span></div><h1>DenseThreadAllocator.java</h1><pre class="source lang-java linenums">package com.flag4j.operations.concurrency;
 
+import com.flag4j.Matrix;
 import com.flag4j.core.TensorBase;
-import com.flag4j.operations.concurrency.algorithms.addition.DenseAdditionWorker;
-import com.flag4j.operations.concurrency.algorithms.subtraction.MatrixSubtractionWorker;
-import com.flag4j.operations.concurrency.algorithms.transpose.MatrixTransposeWorker;
 import com.flag4j.util.ErrorMessages;
 
 import java.util.ArrayList;
@@ -15,23 +13,10 @@ import java.util.List;
  */
 public final class DenseThreadAllocator {
 
-<span class="nc" id="L18">    private DenseThreadAllocator() {</span>
+<span class="nc" id="L16">    private DenseThreadAllocator() {</span>
         // Hide default constructor
-<span class="nc" id="L20">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+<span class="nc" id="L18">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
     }
-
-
-<span class="nc" id="L24">    public static BinaryThreadFactory&lt;double[]&gt; matrixAddThreadFactory = (double[] dest, double[] src1, double[] src2,</span>
-                                                                        int start, int end)
-<span class="nc" id="L26">            -&gt; new DenseAdditionWorker(dest, src1, src2, start, end);</span>
-
-<span class="nc" id="L28">    public static BinaryThreadFactory&lt;double[]&gt; matrixSubThreadFactory = (double[] dest, double[] src1, double[] src2,</span>
-                                                                        int start, int end)
-<span class="nc" id="L30">            -&gt; new MatrixSubtractionWorker(dest, src1, src2, start, end);</span>
-
-<span class="nc" id="L32">    public static UnaryThreadFactory&lt;double[]&gt; matrixTransposeThreadFactory = (double[] dest, double[] src,</span>
-                                                                             int start, int end)
-<span class="nc" id="L34">            -&gt; new MatrixTransposeWorker(dest, src, start, end);</span>
 
 
     /**
@@ -39,25 +24,23 @@ public final class DenseThreadAllocator {
      * @param dest Destination matrix for transpose.
      * @param src1 Source matrix for transpose.
      * @param src2 Source matrix for transpose.
-     * @return A list of {@link DenseAdditionWorker} threads which will concurrently transpose the matrix.
+     * @return A list of runnable objects
      */
-    public static List&lt;Thread&gt; allocateThreads(TensorBase dest, TensorBase src1, TensorBase src2,
-                                               BinaryThreadFactory factory) {
-
+    public static List&lt;Runnable&gt; allocateThreads(TensorBase dest, TensorBase src1, TensorBase src2,
+                                                         BinaryThreadFactory factory) {
         // Evenly distribute work amongst thread size
-<span class="nc" id="L48">        List&lt;Thread&gt; threadList = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L49">        int numThreads = Configurations.getNumThreads();</span>
-<span class="nc" id="L50">        int chunkSize = Math.max(src1.totalEntries().intValue()/numThreads, 1);</span>
+<span class="nc" id="L32">        int numThreads = Configurations.getNumThreads();</span>
+<span class="nc" id="L33">        int chunkSize = Math.max(src1.totalEntries().intValue()/numThreads, 1);</span>
         int end;
+<span class="nc" id="L35">        List&lt;Runnable&gt; tasks = new ArrayList&lt;&gt;(numThreads);</span>
 
-<span class="nc bnc" id="L53" title="All 2 branches missed.">        for(int i=0; i&lt;src1.totalEntries().intValue(); i+=chunkSize) {</span>
-<span class="nc" id="L54">            end = Math.min(i+chunkSize, src1.totalEntries().intValue());</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        for(int i=0; i&lt;src1.totalEntries().intValue(); i+=chunkSize) {</span>
+<span class="nc" id="L38">            end = Math.min(i+chunkSize, src1.totalEntries().intValue());</span>
 
-<span class="nc" id="L56">            threadList.add(factory.makeThread(dest.entries, src1.entries, src2.entries, i, end));</span>
-<span class="nc" id="L57">            threadList.get(threadList.size()-1).start(); // Start the thread</span>
+<span class="nc" id="L40">            tasks.add((factory.makeThread(dest.entries, src1.entries, src2.entries, i, end)));</span>
         }
 
-<span class="nc" id="L60">        return threadList;</span>
+<span class="nc" id="L43">        return tasks;</span>
     }
 
 
@@ -65,24 +48,23 @@ public final class DenseThreadAllocator {
      * Allocate and start threads for concurrent unary operation.
      * @param dest Destination Tensor for the operation.
      * @param src Source tensor for operation to be applied to.
-     * @return A list of worker threads which will concurrently apply operation to the source tensor.
+     * @return A list of runnable objects.
      */
-    public static List&lt;Thread&gt; allocateThreads(TensorBase dest, TensorBase src,
+    public static List&lt;Runnable&gt; allocateThreads(TensorBase dest, TensorBase src,
                                                UnaryThreadFactory factory) {
         // Evenly distribute work amongst thread size
-<span class="nc" id="L73">        List&lt;Thread&gt; threadList = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L74">        int numThreads = Configurations.getNumThreads();</span>
-<span class="nc" id="L75">        int chunkSize = src.totalEntries().intValue();</span>
+<span class="nc" id="L56">        int numThreads = Configurations.getNumThreads();</span>
+<span class="nc" id="L57">        int chunkSize = Math.max(src.totalEntries().intValue()/numThreads, 1);</span>
         int end;
+<span class="nc" id="L59">        List&lt;Runnable&gt; tasks = new ArrayList&lt;&gt;(numThreads);</span>
 
-<span class="nc bnc" id="L78" title="All 2 branches missed.">        for(int i=0; i&lt;numThreads; i++) {</span>
-<span class="nc" id="L79">            end = Math.min(i+chunkSize, src.totalEntries().intValue());</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        for(int i=0; i&lt;src.totalEntries().intValue(); i+=chunkSize) {</span>
+<span class="nc" id="L62">            end = Math.min(i+chunkSize, src.totalEntries().intValue());</span>
 
-<span class="nc" id="L81">            threadList.add(factory.makeThread(dest.entries, src.entries, i, end));</span>
-<span class="nc" id="L82">            threadList.get(threadList.size()-1).start(); // Start the thread</span>
+<span class="nc" id="L64">            tasks.add((factory.makeThread(dest, src, i, end)));</span>
         }
 
-<span class="nc" id="L85">        return threadList;</span>
+<span class="nc" id="L67">        return tasks;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

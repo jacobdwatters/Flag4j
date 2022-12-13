@@ -1,5 +1,4 @@
 com\flag4j\core\VectorOperationsMixin.class
-com\flag4j\operations\concurrency\algorithms\transpose\ConcurrentTranspose.class
 com\flag4j\operations\concurrency\UnaryOperationWorker.class
 com\flag4j\core\SparseMatrixBase.class
 com\flag4j\core\VectorComparisonsMixin.class
@@ -8,10 +7,10 @@ com\flag4j\core\MatrixOperationsMixin.class
 com\flag4j\core\RealMatrixMixin.class
 com\flag4j\core\MatrixComparisonsMixin.class
 com\flag4j\SparseVector.class
-com\flag4j\operations\concurrency\algorithms\subtraction\ConcurrentSubtraction.class
 com\flag4j\operations\concurrency\Configurations.class
 com\flag4j\core\RealTensorMixin.class
-com\flag4j\operations\concurrency\algorithms\subtraction\MatrixSubtractionWorker.class
+com\flag4j\core\ComplexMatrixBase.class
+com\flag4j\core\RealMatrixBase.class
 com\flag4j\operations\RealDenseOperations.class
 com\flag4j\operations\concurrency\CheckConcurrent.class
 com\flag4j\core\VectorOrientations.class
@@ -20,11 +19,9 @@ com\flag4j\operations\ComplexDenseOperations.class
 com\flag4j\operations\concurrency\BinaryThreadFactory.class
 com\flag4j\core\MatrixManipulationsMixin.class
 com\flag4j\core\VectorBase.class
-com\flag4j\operations\concurrency\algorithms\transpose\MatrixTransposeWorker.class
 com\flag4j\core\VectorManipulationsMixin.class
-com\flag4j\operations\concurrency\algorithms\addition\ConcurrentAddition.class
+com\flag4j\operations\RealComplexDenseOperations.class
 com\flag4j\operations\concurrency\UnaryThreadFactory.class
-com\flag4j\operations\concurrency\algorithms\addition\DenseAdditionWorker.class
 com\flag4j\core\ComplexMatrixMixin.class
 com\flag4j\core\SparseVectorBase.class
 com\flag4j\core\MatrixPropertiesMixin.class

@@ -15,5 +15,5 @@ public interface BinaryThreadFactory<M> {
      * @param end Ending index thread to work on.
      * @return The created thread.
      */
-    Thread makeThread(M dest, M src1, M src2, int start, int end);
+    Runnable makeThread(M dest, M src1, M src2, int start, int end);
 }

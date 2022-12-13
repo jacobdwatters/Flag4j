@@ -1,5 +1,6 @@
 package com.flag4j.operations;
 
+import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ShapeChecks;
@@ -8,7 +9,7 @@ import com.flag4j.util.ShapeChecks;
 /**
  * This class provides methods for computing operations on dense complex tensors.
  */
-public class ComplexDenseOperations {
+public final class ComplexDenseOperations {
 
     private ComplexDenseOperations() {
         // Hide constructor
@@ -18,21 +19,53 @@ public class ComplexDenseOperations {
 
     /**
      * Computes the element-wise addition of two tensors.
-     * @param entries1 Entries of first tensor.
-     * @param entries2 Entries of second tensor.
+     * @param src1 Entries of first tensor.
+     * @param shape1 Shape of first tensor.
+     * @param src2 Entries of second tensor.
+     * @param shape2 Shape of second tensor.
      * @return The element wise addition of two tensors.
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
-    public static CNumber[] add(CNumber[] entries1, CNumber[] entries2) {
-        ShapeChecks.arrayLengthsCheck(entries1.length, entries2.length);
+    public static CNumber[] add(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+        ShapeChecks.equalShapeCheck(shape1, shape2);
 
-        CNumber[] sum = new CNumber[entries1.length];
+        CNumber[] sum = new CNumber[src1.length];
 
         for(int i=0; i<sum.length; i++) {
-            sum[i] = new CNumber(
-                    entries1[i].re + entries2[i].re,
-                    entries1[i].im + entries2[i].im
-            );
+            sum[i] = src1[i].add(src2[i]);
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Adds a scalar value to all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     */
+    public static CNumber[] add(CNumber[] src1, double a) {
+        CNumber[] sum = new CNumber[src1.length];
+
+        for(int i=0; i<sum.length; i++) {
+            sum[i] = src1[i].add(a);
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Adds a scalar value to all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The tensor-scalar addition of the two parameters.
+     */
+    public static CNumber[] add(CNumber[] src1, CNumber a) {
+        CNumber[] sum = new CNumber[src1.length];
+
+        for(int i=0; i<sum.length; i++) {
+            sum[i] = src1[i].add(a);
         }
 
         return sum;
@@ -41,21 +74,20 @@ public class ComplexDenseOperations {
 
     /**
      * Computes the element-wise subtraction of two tensors.
-     * @param entries1 Entries of first tensor.
-     * @param entries2 Entries of second tensor.
+     * @param src1 Entries of first tensor.
+     * @param shape1 Shape of first tensor.
+     * @param src2 Entries of second tensor.
+     * @param shape2 Shape of second tensor.
      * @return The element wise subtraction of two tensors.
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
-    public static CNumber[] sub(CNumber[] entries1, CNumber[] entries2) {
-        ShapeChecks.arrayLengthsCheck(entries1.length, entries2.length);
+    public static CNumber[] sub(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+        ShapeChecks.equalShapeCheck(shape1, shape2);
 
-        CNumber[] diff = new CNumber[entries1.length];
+        CNumber[] diff = new CNumber[src1.length];
 
         for(int i=0; i<diff.length; i++) {
-            diff[i] = new CNumber(
-                    entries1[i].re - entries2[i].re,
-                    entries1[i].im - entries2[i].im
-            );
+            diff[i] = src1[i].sub(src2[i]);
         }
 
         return diff;
@@ -63,16 +95,49 @@ public class ComplexDenseOperations {
 
 
     /**
+     * Subtracts a scalar value from all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The tensor-scalar subtraction of the two parameters.
+     */
+    public static CNumber[] sub(CNumber[] src1, double a) {
+        CNumber[] sum = new CNumber[src1.length];
+
+        for(int i=0; i<sum.length; i++) {
+            sum[i] = src1[i].sub(a);
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Subtracts a scalar value from all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The tensor-scalar subtraction of the two parameters.
+     */
+    public static CNumber[] sub(CNumber[] src1, CNumber a) {
+        CNumber[] sum = new CNumber[src1.length];
+
+        for(int i=0; i<sum.length; i++) {
+            sum[i] = src1[i].sub(a);
+        }
+
+        return sum;
+    }
+
+
+    /**
      * Sums all entries in a tensor.
-     * @param entries The entries of the tensor.
+     * @param src Entries of tensor to sum.
      * @return The sum of all entries in the tensor.
      */
-    public static CNumber sum(CNumber... entries) {
+    public static CNumber sum(CNumber[] src) {
         CNumber sum = new CNumber();
 
-        for(int i=0; i<entries.length; i++) {
-            sum.re += entries[i].re;
-            sum.im += entries[i].im;
+        for(CNumber value : src) {
+           sum = sum.add(value);
         }
 
         return sum;
@@ -81,22 +146,16 @@ public class ComplexDenseOperations {
 
     /**
      * Multiplies all entries in a tensor.
-     * @param entries The entries of the tensor.
-     * @return The product of all entries in the tensor.
+     * @param src Entries of tensor to compute product of.
+     * @return The product of all src in the tensor.
      */
-    public static CNumber prod(CNumber... entries) {
+    public static CNumber prod(CNumber[] src) {
         CNumber product;
-        double re;
-        double im;
 
-        if(entries.length>0) {
-            product = entries[0];
-            for(int i=1; i<entries.length; i++) {
-                re = product.re*entries[i].re - product.im*entries[i].im;
-                im = product.re*entries[i].im + product.im*entries[i].re;
-
-                product.re = re;
-                product.im = im;
+        if(src.length>0) {
+            product = new CNumber(1);
+            for(CNumber value : src) {
+               product = product.mult(value);
             }
         } else {
             product = new CNumber();

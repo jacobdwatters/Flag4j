@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealDenseOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations</a> &gt; <span class="el_source">RealDenseOperations.java</span></div><h1>RealDenseOperations.java</h1><pre class="source lang-java linenums">package com.flag4j.operations;
 
-import com.flag4j.core.TensorBase;
+import com.flag4j.Shape;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ShapeChecks;
 
 /**
- * This class provides methods for computing operations on real dense tensors.
+ * This class provides low level methods for computing operations on real dense tensors.
  */
 public final class RealDenseOperations {
 
@@ -17,57 +17,76 @@ public final class RealDenseOperations {
 
     /**
      * Computes the element-wise addition of two tensors.
-     * @param A First Tensor of the addition.
-     * @param A Second Tensor of the addition.
+     * @param entries1 Entries of first Tensor of the addition.
+     * @param shape1 Shape of first tensor.
+     * @param entries2 Entries of second Tensor of the addition.
+     * @param shape2 Shape of second tensor.
      * @return The element wise addition of two tensors.
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
-    public static double[] add(TensorBase&lt;double[]&gt; A, TensorBase&lt;double[]&gt; B) {
-<span class="fc" id="L26">        ShapeChecks.equalShapeCheck(A.shape, B.shape);</span>
+    public static double[] add(double[] entries1, Shape shape1, double[] entries2, Shape shape2) {
+<span class="fc" id="L28">        ShapeChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L29">        double[] sum = new double[entries1.length];</span>
 
-<span class="fc" id="L28">        double[] sum = new double[A.entries.length];</span>
-
-<span class="fc bfc" id="L30" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
-<span class="fc" id="L31">            sum[i] = A.entries[i] + B.entries[i];</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L32">            sum[i] = entries1[i] + entries2[i];</span>
         }
 
-<span class="fc" id="L34">        return sum;</span>
+<span class="fc" id="L35">        return sum;</span>
+    }
+
+
+    /**
+     * Adds a scalar to every element of a tensor.
+     * @param entries entries of tensor to add scalar to.
+     * @param b Scalar to add to tensor.
+     * @return The tensor scalar addition.
+     */
+    public static double[] add(double[] entries, double b) {
+<span class="nc" id="L46">        double[] sum = new double[entries.length];</span>
+
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="nc" id="L49">            sum[i] = entries[i] + b;</span>
+        }
+
+<span class="nc" id="L52">        return sum;</span>
     }
 
 
     /**
      * Computes the element-wise subtraction of two tensors.
      * @param entries1 Entries of first tensor.
+     * @param shape1 Shape of first tensor.
      * @param entries2 Entries of second tensor.
+     * @param shape2 Shape of second tensor.
      * @return The element wise subtraction of two tensors.
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
-    public static double[] sub(double[] entries1, double[] entries2) {
-<span class="fc" id="L46">        ShapeChecks.arrayLengthsCheck(entries1.length, entries2.length);</span>
+    public static double[] sub(double[] entries1, Shape shape1, double[] entries2, Shape shape2) {
+<span class="fc" id="L66">        ShapeChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L67">        double[] sum = new double[entries1.length];</span>
 
-<span class="fc" id="L48">        double[] sum = new double[entries1.length];</span>
-
-<span class="fc bfc" id="L50" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
-<span class="fc" id="L51">            sum[i] = entries1[i] - entries2[i];</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L70">            sum[i] = entries1[i] - entries2[i];</span>
         }
 
-<span class="fc" id="L54">        return sum;</span>
+<span class="fc" id="L73">        return sum;</span>
     }
 
 
     /**
      * Sums all entries in a tensor.
-     * @param entries The entries of the tensor.
+     * @param entries Entries of tensor so sum.
      * @return The sum of all entries in the tensor.
      */
     public static double sum(double[] entries) {
-<span class="fc" id="L64">        double sum = 0;</span>
+<span class="fc" id="L83">        double sum = 0;</span>
 
-<span class="fc bfc" id="L66" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc" id="L67">            sum += entries[i];</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        for(double value : entries) {</span>
+<span class="fc" id="L86">            sum += value;</span>
         }
 
-<span class="fc" id="L70">        return sum;</span>
+<span class="fc" id="L89">        return sum;</span>
     }
 
 
@@ -79,16 +98,16 @@ public final class RealDenseOperations {
     public static double prod(double[] entries) {
         double product;
 
-<span class="fc bfc" id="L82" title="All 2 branches covered.">        if(entries.length &gt; 0) {</span>
-<span class="fc" id="L83">            product=1;</span>
-<span class="fc bfc" id="L84" title="All 2 branches covered.">            for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc" id="L85">                product *= entries[i];</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if(entries.length &gt; 0) {</span>
+<span class="fc" id="L102">            product=1;</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">            for(double value : entries) {</span>
+<span class="fc" id="L104">                product *= value;</span>
             }
         } else {
-<span class="fc" id="L88">            product=0;</span>
+<span class="fc" id="L107">            product=0;</span>
         }
 
-<span class="fc" id="L91">        return product;</span>
+<span class="fc" id="L110">        return product;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

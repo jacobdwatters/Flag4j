@@ -4,7 +4,7 @@ package com.flag4j.operations.concurrency;
  * Worker for unary operations.
  * @param <T> Storage type for the tensor.
  */
-public abstract class UnaryOperationWorker<T> extends Thread {
+public abstract class UnaryOperationWorker<T> implements Runnable {
     T src, dest;
     int start, end;
 

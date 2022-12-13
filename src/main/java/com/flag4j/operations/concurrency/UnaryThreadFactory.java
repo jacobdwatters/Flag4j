@@ -14,5 +14,5 @@ public interface UnaryThreadFactory<M> {
      * @param end Ending row for thread to work on.
      * @return The created thread.
      */
-    Thread makeThread(M dest, M src, int start, int end);
+    Runnable makeThread(M dest, M src, int start, int end);
 }

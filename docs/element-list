@@ -5,7 +5,4 @@ com.flag4j.io
 com.flag4j.linalg
 com.flag4j.operations
 com.flag4j.operations.concurrency
-com.flag4j.operations.concurrency.algorithms.addition
-com.flag4j.operations.concurrency.algorithms.subtraction
-com.flag4j.operations.concurrency.algorithms.transpose
 com.flag4j.util

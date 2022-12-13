@@ -8,10 +8,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\concurren
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\Matrix.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\io\TensorReader.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\Tensor.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\concurrency\algorithms\addition\ConcurrentAddition.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\concurrency\algorithms\transpose\MatrixTransposeWorker.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\SparseTensor.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\concurrency\algorithms\addition\DenseAdditionWorker.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\SparseVectorBase.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\VectorOrientations.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\ComplexTensorMixin.java
@@ -20,6 +17,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\Decompose.jav
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\VectorOperationsMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\TensorComparisonsMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\MatrixManipulationsMixin.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\RealComplexDenseOperations.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\SparseTensorBase.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\io\TensorWriter.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\concurrency\BinaryThreadFactory.java
@@ -29,14 +27,13 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\CreateMatrix.
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\SparseCTensor.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\MatrixBase.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\SparseVector.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\ComplexMatrixBase.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\SubSpace.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\concurrency\algorithms\subtraction\MatrixSubtractionWorker.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\concurrency\CheckConcurrent.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\CMatrix.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\complex_numbers\CNumberToken.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\Shape.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\TensorManipulationsMixin.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\concurrency\algorithms\transpose\ConcurrentTranspose.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\TensorOperationsMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\VectorPropertiesMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\Eigen.java
@@ -51,7 +48,6 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\VectorCompariso
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\SparseCVector.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\CTensor.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\util\Axis2D.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\concurrency\algorithms\subtraction\ConcurrentSubtraction.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\Vector.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\util\ErrorMessages.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\SparseMatrix.java
@@ -59,6 +55,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\SparseCMatrix.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\ComplexDenseOperations.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\VectorManipulationsMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\ComplexMatrixMixin.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\RealMatrixBase.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\VectorBase.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\CVector.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\MatrixOperationsMixin.java

@@ -1,12 +1,14 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.ComplexMatrixBase;
 import com.flag4j.core.MatrixBase;
+import com.flag4j.core.RealMatrixBase;
 
 /**
  * Complex dense matrix. Stored in row major format.
  */
-public class CMatrix extends MatrixBase<CNumber[]> {
+public class CMatrix extends ComplexMatrixBase {
 
 
     /**
@@ -243,5 +245,15 @@ public class CMatrix extends MatrixBase<CNumber[]> {
      */
     public CMatrix(Shape shape, CNumber[] entries) {
         super(shape, entries);
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent real matrix. Imaginary components are ignored.
+     * @return A real matrix with equivalent real parts.
+     */
+    @Override
+    public Matrix toReal() {
+        return null;
     }
 }

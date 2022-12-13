@@ -4,7 +4,7 @@
  * A worker class for concurrent binary operations.
  * @param &lt;T&gt; Type of array to work on.
  */
-public abstract class BinaryOperationWorker&lt;T&gt; extends Thread {
+public abstract class BinaryOperationWorker&lt;T&gt; implements Runnable {
     public T src1, src2, dest;
     public int start, end;
 

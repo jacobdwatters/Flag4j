@@ -13,7 +13,7 @@ import com.flag4j.SparseCMatrix;
  * @param <Y> Real matrix type.
  * @param <X> Matrix entry type.
  */
-interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> extends TensorManipulationsMixin<T, U, V, W, Y, X> {
+public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> extends TensorManipulationsMixin<T, U, V, W, Y, X> {
 
     /**
      * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries

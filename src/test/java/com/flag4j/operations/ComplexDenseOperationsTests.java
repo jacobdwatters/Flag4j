@@ -1,5 +1,6 @@
 package com.flag4j.operations;
 
+import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +13,7 @@ class ComplexDenseOperationsTests {
     CNumber[] src1, src2;
     CNumber[] expResult;
     CNumber expResultC;
+    Shape shape1, shape2;
 
 
     @Test
@@ -23,20 +25,26 @@ class ComplexDenseOperationsTests {
                 new CNumber(0, -1943.134), new CNumber(-9234.1, -3245)};
         expResult = new CNumber[]{new CNumber(9-9234.23, -1), new CNumber(-0.99+109.2234, 13.445+1.435),
                 new CNumber(0.9133, -1943.134), new CNumber(-9234.1, 10.3-3245)};
-        assertArrayEquals(expResult, add(src1, src2));
+        shape1 = new Shape(src1.length);
+        shape2 = new Shape(src2.length);
+        assertArrayEquals(expResult, add(src1, shape1, src2, shape2));
 
         // ---------- Sub-case 2 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};
         src2 = new CNumber[]{new CNumber(9-9234.23, -1), new CNumber(-0.99+109.2234, 13.445+1.435),
                 new CNumber(0.9133, -1943.134), new CNumber(-9234.1, 10.3-3245), new CNumber(0, 1)};
-        assertThrows(IllegalArgumentException.class, () -> add(src1, src2));
+        shape1 = new Shape(src1.length);
+        shape2 = new Shape(src2.length);
+        assertThrows(IllegalArgumentException.class, () -> add(src1, shape1, src2, shape2));
 
         // ---------- Sub-case 3 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};
         src2 = new CNumber[]{new CNumber(9-9234.23, -1), new CNumber(-0.99+109.2234, 13.445+1.435)};
-        assertThrows(IllegalArgumentException.class, () -> add(src1, src2));
+        shape1 = new Shape(src1.length);
+        shape2 = new Shape(src2.length);
+        assertThrows(IllegalArgumentException.class, () -> add(src1, shape1, src2, shape2));
     }
 
 
@@ -50,20 +58,26 @@ class ComplexDenseOperationsTests {
 
         expResult = new CNumber[]{new CNumber(9+9234.23, -1), new CNumber(-0.99-109.2234, 13.445-1.435),
                 new CNumber(0.9133, 1943.134), new CNumber(9234.1, 10.3+3245)};
-        assertArrayEquals(expResult, sub(src1, src2));
+        shape1 = new Shape(src1.length);
+        shape2 = new Shape(src2.length);
+        assertArrayEquals(expResult, sub(src1, shape1, src2, shape2));
 
         // ---------- Sub-case 2 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};
         src2 = new CNumber[]{new CNumber(9-9234.23, -1), new CNumber(-0.99+109.2234, 13.445+1.435),
                 new CNumber(0.9133, -1943.134), new CNumber(-9234.1, 10.3-3245), new CNumber(0, 1)};
-        assertThrows(IllegalArgumentException.class, () -> sub(src1, src2));
+        shape1 = new Shape(src1.length);
+        shape2 = new Shape(src2.length);
+        assertThrows(IllegalArgumentException.class, () -> sub(src1, shape1, src2, shape2));
 
         // ---------- Sub-case 3 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};
         src2 = new CNumber[]{new CNumber(9-9234.23, -1), new CNumber(-0.99+109.2234, 13.445+1.435)};
-        assertThrows(IllegalArgumentException.class, () -> sub(src1, src2));
+        shape1 = new Shape(src1.length);
+        shape2 = new Shape(src2.length);
+        assertThrows(IllegalArgumentException.class, () -> sub(src1, shape1, src2, shape2));
     }
 
 
@@ -74,6 +88,7 @@ class ComplexDenseOperationsTests {
         expResultC = new CNumber(9-0.99+0.9133, -1+13.445+10.3);
         assertEquals(expResultC, sum(src1));
     }
+
 
     @Test
     void prodTest() {

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealComplexDenseOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations</a> &gt; <span class="el_source">RealComplexDenseOperations.java</span></div><h1>RealComplexDenseOperations.java</h1><pre class="source lang-java linenums">package com.flag4j.operations;
+
+
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.ComplexMatrixBase;
+import com.flag4j.core.RealMatrixBase;
+import com.flag4j.core.TensorBase;
+import com.flag4j.util.ShapeChecks;
+
+/**
+ * This class provides methods for computing operations on one real and one complex tensor.
+ */
+<span class="nc" id="L13">public class RealComplexDenseOperations {</span>
+
+
+    /**
+     * Computes the element-wise addition of two tensors.
+     * @param A First Tensor of the addition.
+     * @param B Second Tensor of the addition.
+     * @return The element-wise addition of two tensors.
+     * @throws IllegalArgumentException If A and B do not have the same shape.
+     */
+    public static CNumber[] add(RealMatrixBase A, ComplexMatrixBase B) {
+<span class="nc" id="L24">        ShapeChecks.equalShapeCheck(A.shape, B.shape);</span>
+
+<span class="nc" id="L26">        CNumber[] sum = new CNumber[A.entries.length];</span>
+
+<span class="nc bnc" id="L28" title="All 2 branches missed.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="nc" id="L29">            sum[i] = new CNumber(</span>
+                    A.entries[i] + B.entries[i].re,
+                    B.entries[i].im
+            );
+        }
+
+<span class="nc" id="L35">        return sum;</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors.
+     * @param A First Tensor of the addition.
+     * @param B Second Tensor of the addition.
+     * @return The element-wise subtraction of two tensors.
+     * @throws IllegalArgumentException If A and B do not have the same shape.
+     */
+    public static CNumber[] sub(RealMatrixBase A, ComplexMatrixBase B) {
+<span class="nc" id="L47">        ShapeChecks.equalShapeCheck(A.shape, B.shape);</span>
+
+<span class="nc" id="L49">        CNumber[] difference = new CNumber[A.entries.length];</span>
+
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        for(int i=0; i&lt;difference.length; i++) {</span>
+<span class="nc" id="L52">            difference[i] = new CNumber(</span>
+                    A.entries[i]-B.entries[i].re,
+                    -B.entries[i].im
+            );
+        }
+
+<span class="nc" id="L58">        return difference;</span>
+    }
+
+
+    public static CNumber[] sub(ComplexMatrixBase A, RealMatrixBase B) {
+<span class="nc" id="L63">        ShapeChecks.equalShapeCheck(A.shape, B.shape);</span>
+
+<span class="nc" id="L65">        CNumber[] difference = new CNumber[A.entries.length];</span>
+
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        for(int i=0; i&lt;difference.length; i++) {</span>
+
+        }
+
+<span class="nc" id="L71">        return difference;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

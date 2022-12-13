@@ -16,7 +16,7 @@ import com.flag4j.SparseMatrix;
  * @param <Y> Real matrix type.
  * @param <X> matrix entry type.
  */
-interface MatrixComparisonsMixin<T, U, V, W, Y, X extends Number> extends TensorComparisonsMixin<T, U, V, W, Y, X> {
+public interface MatrixComparisonsMixin<T, U, V, W, Y, X extends Number> extends TensorComparisonsMixin<T, U, V, W, Y, X> {
 
     /**
      * Checks if this matrix is the identity matrix.

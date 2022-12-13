@@ -3,9 +3,13 @@
 import com.flag4j.Matrix;
 import com.flag4j.operations.concurrency.BinaryThreadFactory;
 import com.flag4j.operations.concurrency.DenseThreadAllocator;
+import com.flag4j.operations.concurrency.ThreadManager;
 import com.flag4j.util.ErrorMessages;
+import static com.flag4j.operations.concurrency.ThreadManager.executor;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 
 /**
@@ -13,9 +17,9 @@ import java.util.List;
  */
 public class ConcurrentAddition {
 
-<span class="nc" id="L16">    private ConcurrentAddition() {</span>
+<span class="nc" id="L20">    private ConcurrentAddition() {</span>
         // Hide default constructor
-<span class="nc" id="L18">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+<span class="nc" id="L22">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
     }
 
 
@@ -25,19 +29,16 @@ public class ConcurrentAddition {
      * @return The transpose of this matrix.
      */
     public static Matrix add(Matrix A, Matrix B) {
-<span class="nc" id="L28">        Matrix sum = new Matrix(A.numRows(), A.numCols());</span>
-<span class="nc" id="L29">        BinaryThreadFactory&lt;double[]&gt; factory = DenseThreadAllocator.matrixAddThreadFactory;</span>
-<span class="nc" id="L30">        List&lt;Thread&gt; threadList = DenseThreadAllocator.allocateThreads(sum, A, B, factory);</span>
+<span class="nc" id="L32">        Matrix sum = new Matrix(A.numRows(), A.numCols());</span>
+<span class="nc" id="L33">        BinaryThreadFactory&lt;double[]&gt; factory = DenseThreadAllocator.matrixAddThreadFactory;</span>
+<span class="nc" id="L34">        List&lt;Runnable&gt; tasks = DenseThreadAllocator.allocateThreads(sum, A, B, factory);</span>
 
-<span class="nc bnc" id="L32" title="All 2 branches missed.">        for(Thread thread : threadList) { // Join the threads together</span>
-            try {
-<span class="nc" id="L34">                thread.join();</span>
-<span class="nc" id="L35">            } catch (InterruptedException e) {</span>
-<span class="nc" id="L36">                e.printStackTrace();</span>
-<span class="nc" id="L37">            }</span>
-<span class="nc" id="L38">        }</span>
+<span class="nc" id="L36">        CompletableFuture&lt;?&gt;[] futures = tasks.stream()</span>
+<span class="nc" id="L37">                .map(task -&gt; CompletableFuture.runAsync(task, ThreadManager.executor))</span>
+<span class="nc" id="L38">                .toArray(CompletableFuture[]::new);</span>
+<span class="nc" id="L39">        CompletableFuture.allOf(futures).join();</span>
 
-<span class="nc" id="L40">        return sum;</span>
+<span class="nc" id="L41">        return sum;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

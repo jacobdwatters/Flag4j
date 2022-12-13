@@ -4,7 +4,7 @@
  * Worker for unary operations.
  * @param &lt;T&gt; Storage type for the tensor.
  */
-public abstract class UnaryOperationWorker&lt;T&gt; extends Thread {
+public abstract class UnaryOperationWorker&lt;T&gt; implements Runnable {
     T src, dest;
     int start, end;
 

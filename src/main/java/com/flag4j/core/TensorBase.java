@@ -54,7 +54,7 @@ public abstract class TensorBase<T> implements Serializable {
 
     /**
      * Gets the entries of this tensor as a 1D array.
-     * @return
+     * @return The entries of this tensor.
      */
     public T getEntries() {
         return this.entries;
@@ -76,7 +76,7 @@ public abstract class TensorBase<T> implements Serializable {
      * @param B Second tensor.
      * @return True if this tensor and B have the same shape. False otherwise.
      */
-    public boolean sameShape(TensorBase B) {
+    public boolean sameShape(TensorBase<?> B) {
         return this.shape.equals(B.shape);
     }
 
@@ -89,7 +89,7 @@ public abstract class TensorBase<T> implements Serializable {
      * @return True if tensor A and tensor B have the same length along the specified axis. Otherwise, returns false.
      * @throws IllegalArgumentException If axis is negative or unspecified for the two tensors.
      */
-    public static boolean sameLength(TensorBase A, TensorBase B, int axis) {
+    public static boolean sameLength(TensorBase<?> A, TensorBase<?> B, int axis) {
         if(axis < 0 || axis>=Math.max(A.shape.getRank(), B.shape.getRank())) {
             throw new IllegalArgumentException(
                     ErrorMessages.axisErr(axis)
@@ -97,23 +97,5 @@ public abstract class TensorBase<T> implements Serializable {
         }
 
         return A.shape.dims[axis]==B.shape.dims[axis];
-    }
-
-
-    /**
-     * Checks if this tensor is empty. That is, has zero size.
-     * @return True if this tensor has zero size,
-     */
-    public boolean isEmpty() {
-        boolean result = false;
-
-        for(int dim : shape.dims) {
-            if(dim==0) {
-                result=true;
-                break;
-            }
-        }
-
-        return result;
     }
 }
