@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
@@ -5,6 +29,7 @@ import com.flag4j.core.*;
 import com.flag4j.operations.RealComplexDenseOperations;
 import com.flag4j.operations.RealDenseOperations;
 import java.util.Arrays;
+
 
 /**
  * Real dense matrix. Stored in row major format.
@@ -686,7 +711,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public CMatrix add(CMatrix B) {
         return new CMatrix(this.shape.clone(),
-                RealComplexDenseOperations.add(this.entries, a)
+                RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape)
         );
     }
 
@@ -713,7 +738,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sub(Matrix B) {
-        return null;
+        return new Matrix(this.shape.clone(),
+                RealDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
+        );
     }
 
 
@@ -725,7 +752,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sub(double a) {
-        return null;
+        return new Matrix(this.shape.clone(),
+                RealDenseOperations.sub(this.entries, a)
+        );
     }
 
 
@@ -737,7 +766,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix sub(CNumber a) {
-        return null;
+        return new CMatrix(this.shape.clone(),
+                RealComplexDenseOperations.sub(this.entries, a)
+        );
     }
 
 
@@ -749,7 +780,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix scalMult(double factor) {
-        return null;
+        return new Matrix(this.shape.clone(),
+                RealDenseOperations.scalMult(this.entries, factor)
+        );
     }
 
 
@@ -761,7 +794,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix scalMult(CNumber factor) {
-        return null;
+        return new CMatrix(this.shape.clone(),
+                RealComplexDenseOperations.scalMult(this.entries, factor)
+        );
     }
 
 

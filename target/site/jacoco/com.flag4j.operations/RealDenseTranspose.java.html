@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealDenseTranspose.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations</a> &gt; <span class="el_source">RealDenseTranspose.java</span></div><h1>RealDenseTranspose.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations;
+
+import com.flag4j.Shape;
+import com.flag4j.operations.concurrency.Configurations;
+import com.flag4j.operations.concurrency.ThreadManager;
+import com.flag4j.util.ErrorMessages;
+
+
+/**
+ * This class contains several algorithms for computing the matrix transpose.
+ */
+public final class RealDenseTranspose {
+
+<span class="nc" id="L38">    private RealDenseTranspose() {</span>
+        // Hide constructor
+<span class="nc" id="L40">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Transposes tensor along specified axes.
+     * @param src Entries of the tensor.
+     * @param shape Shape of the tensor to transpose.
+     * @param axis1 First axis to swap in transpose.
+     * @param axis2 Second axis to swap in transpose.
+     * @return The transpose of the tensor along the specified axes.
+     */
+    public static double[] standard(double[] src, Shape shape, int axis1, int axis2) {
+        // TODO:
+<span class="nc" id="L54">        return null;</span>
+    }
+
+
+    /**
+     * Transposes a matrix using the standard algorithm.
+     * @param src Entries of the matrix to transpose.
+     * @param numRows Number of rows in the matrix.
+     * @param numCols Number of columns in the matrix.
+     * @return The transpose of the matrix.
+     */
+    public static double[] standardMatrix(double[] src, final int numRows, final int numCols) {
+<span class="nc" id="L66">        double[] transpose = new double[numRows*numCols];</span>
+
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L70">                transpose[i + j*numRows] = src[j + i*numCols];</span>
+            }
+        }
+
+<span class="nc" id="L74">        return transpose;</span>
+    }
+
+
+    /**
+     * Transposes a matrix using a blocked algorithm. To get or set the block size see
+     * {@link Configurations#getBlockSize()} or {@link Configurations#setBlockSize(int)}.
+     * @return The transpose of this tensor along specified axes
+     */
+    public static double[] blockedMatrix(double[] src, final int numRows, final int numCols) {
+<span class="nc" id="L84">        double[] transpose = new double[numRows*numCols];</span>
+<span class="nc" id="L85">        final int blockSize = Configurations.getBlockSize();</span>
+        int blockRowEnd;
+        int blockColEnd;
+
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i+=blockSize) {</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j+=blockSize) {</span>
+<span class="nc" id="L91">                blockRowEnd = Math.min(i+blockSize, numRows);</span>
+<span class="nc" id="L92">                blockColEnd = Math.min(j+blockSize, numCols);</span>
+
+                // Transpose the block beginning at (i, j)
+<span class="nc bnc" id="L95" title="All 2 branches missed.">                for(int blockI=i; blockI&lt;blockRowEnd; blockI++) {</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">                    for(int blockJ=j; blockJ&lt;blockColEnd; blockJ++) {</span>
+<span class="nc" id="L97">                        transpose[blockI + blockJ*numRows] = src[blockJ + blockI*numCols];</span>
+                    }
+                }
+
+<span class="nc" id="L101">                transpose[i+j*numRows] = src[j+i*numCols];</span>
+            }
+        }
+
+<span class="nc" id="L105">        return transpose;</span>
+    }
+
+
+    /**
+     * Computes the transpose of a matrix using a standard concurrent algorithm.
+     * @param src Entries of the matrix to transpose.
+     * @param numRows Number of rows in source matrix.
+     * @param numCols Number of columns in source matrix.
+     * @return The transpose of the source matrix.
+     */
+    public static double[] standardMatrixConcurrent(double[] src, final int numRows, final int numCols) {
+<span class="nc" id="L117">        double[] dest = new double[src.length];</span>
+
+        // Compute transpose concurrently.
+<span class="nc" id="L120">        ThreadManager.loopFor(0, numRows, (i) -&gt; {</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L122">                dest[i + j*numRows] = src[j + i*numCols];</span>
+            }
+<span class="nc" id="L124">        });</span>
+
+<span class="nc" id="L126">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the transpose of a matrix using a blocked concurrent algorithm.
+     * @param src Entries of the matrix to transpose.
+     * @param numRows Number of rows in source matrix.
+     * @param numCols Number of columns in source matrix.
+     * @return The transpose of the source matrix.
+     */
+    public static double[] blockedMatrixConcurrent(final double[] src, final int numRows, final int numCols) {
+<span class="nc" id="L138">        double[] dest = new double[src.length];</span>
+<span class="nc" id="L139">        final int blockSize = Configurations.getBlockSize();</span>
+
+        // Compute transpose concurrently.
+<span class="nc" id="L142">        ThreadManager.loopFor(0, numRows, blockSize, (i) -&gt; {</span>
+            int blockRowEnd;
+            int blockColEnd;
+
+<span class="nc bnc" id="L146" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j+=blockSize) {</span>
+<span class="nc" id="L147">                blockRowEnd = Math.min(i+blockSize, numRows);</span>
+<span class="nc" id="L148">                blockColEnd = Math.min(j+blockSize, numCols);</span>
+
+                // Transpose the block beginning at (i, j)
+<span class="nc bnc" id="L151" title="All 2 branches missed.">                for(int blockI=i; blockI&lt;Math.min(i+blockSize, numRows); blockI++) {</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">                    for(int blockJ=j; blockJ&lt;Math.min(j+blockSize, numCols); blockJ++) {</span>
+<span class="nc" id="L153">                        dest[blockI + blockJ*numRows] = src[blockJ + blockI*numCols];</span>
+                    }
+                }
+
+<span class="nc" id="L157">                dest[i+j*numRows] = src[j+i*numCols];</span>
+            }
+<span class="nc" id="L159">        });</span>
+
+<span class="nc" id="L161">        return dest;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

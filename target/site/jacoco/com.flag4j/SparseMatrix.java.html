@@ -1,4 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseMatrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">SparseMatrix.java</span></div><h1>SparseMatrix.java</h1><pre class="source lang-java linenums">package com.flag4j;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseMatrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">SparseMatrix.java</span></div><h1>SparseMatrix.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j;
 
 import com.flag4j.core.SparseMatrixBase;
 
@@ -15,8 +39,8 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param size The number of rows/columns in this sparse matrix.
      */
     public SparseMatrix(int size) {
-<span class="fc" id="L18">        super(new Shape(size, size), 0, new double[0], new int[0], new int[0]);</span>
-<span class="fc" id="L19">    }</span>
+<span class="fc" id="L42">        super(new Shape(size, size), 0, new double[0], new int[0], new int[0]);</span>
+<span class="fc" id="L43">    }</span>
 
 
     /**
@@ -25,8 +49,8 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param cols The number of columns in this sparse matrix.
      */
     public SparseMatrix(int rows, int cols) {
-<span class="fc" id="L28">        super(new Shape(rows, cols), 0, new double[0], new int[0], new int[0]);</span>
-<span class="fc" id="L29">    }</span>
+<span class="fc" id="L52">        super(new Shape(rows, cols), 0, new double[0], new int[0], new int[0]);</span>
+<span class="fc" id="L53">    }</span>
 
 
     /**
@@ -34,8 +58,8 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param shape Shape of this sparse matrix.
      */
     public SparseMatrix(Shape shape) {
-<span class="fc" id="L37">        super(shape, 0, new double[0], new int[0], new int[0]);</span>
-<span class="fc" id="L38">    }</span>
+<span class="fc" id="L61">        super(shape, 0, new double[0], new int[0], new int[0]);</span>
+<span class="fc" id="L62">    }</span>
 
 
     /**
@@ -46,8 +70,8 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int size, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L49">        super(new Shape(size, size), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L73">        super(new Shape(size, size), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
+<span class="fc" id="L74">    }</span>
 
 
     /**
@@ -59,8 +83,8 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int rows, int cols, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L62">        super(new Shape(rows, cols), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L86">        super(new Shape(rows, cols), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
+<span class="fc" id="L87">    }</span>
 
 
     /**
@@ -71,8 +95,8 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(Shape shape, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L74">        super(shape, nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L98">        super(shape, nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
+<span class="fc" id="L99">    }</span>
 
 
     /**
@@ -83,9 +107,9 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int size, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L86">        super(new Shape(size, size), nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L110">        super(new Shape(size, size), nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
                 rowIndices, colIndices);
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L112">    }</span>
 
 
     /**
@@ -97,9 +121,9 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int rows, int cols, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L100">        super(new Shape(rows, cols), nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L124">        super(new Shape(rows, cols), nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
                 rowIndices, colIndices);
-<span class="fc" id="L102">    }</span>
+<span class="fc" id="L126">    }</span>
 
 
     /**
@@ -112,9 +136,9 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseMatrix(Shape shape, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L115">        super(shape, nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L139">        super(shape, nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
                 rowIndices, colIndices);
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L141">    }</span>
 
 
 //    /**
@@ -183,7 +207,7 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
      * @param A Sparse Matrix to copy.
      */
     public SparseMatrix(SparseMatrix A) {
-<span class="fc" id="L186">        super(A.shape.clone(), A.nonZeroEntries(), A.entries.clone(), A.rowIndices.clone(), A.colIndices.clone());</span>
-<span class="fc" id="L187">    }</span>
+<span class="fc" id="L210">        super(A.shape.clone(), A.nonZeroEntries(), A.entries.clone(), A.rowIndices.clone(), A.colIndices.clone());</span>
+<span class="fc" id="L211">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.flag4j.complex_numbers;
 
 import com.flag4j.util.ErrorMessages;
@@ -467,8 +491,7 @@ public class CNumber extends Number {
      * @return The absolute value/magnitude of this complex number as a double.
      */
     public double magAsDouble() {
-        double mag = Math.sqrt(this.re*this.re + this.im*this.im);
-        return mag;
+        return Math.sqrt(this.re* this.re + this.im* this.im);
     }
 
 
@@ -834,7 +857,7 @@ public class CNumber extends Number {
 
     /**
      * Computes the complex argument function for a complex number.
-     * is computed. This method wraps is equivalent to {@link CNumber#atan2AsCNumber(CNumber)} (CNumber)}. <br>
+     * is computed. This method wraps is equivalent to {@link CNumber#atan2AsCNumber(CNumber) CNumber}. <br>
      * To get the result as an double see {@link CNumber#argAsCNumber(CNumber)}.
      * @param num The input to the atan2 function.
      * @return The output of the atan2 function given the specified input. If the complex number is zero, then {@link Double#NaN}
@@ -1170,9 +1193,7 @@ public class CNumber extends Number {
      * - If the magnitude of this number is greater than that of <code>b</code>, then this method will return a positive number.
      */
     public int compareTo(CNumber b) {
-        if(this.magAsDouble() == b.magAsDouble()) {return 0;}
-        else if(this.magAsDouble() < b.magAsDouble()) {return -1;}
-        else {return 1;}
+        return Double.compare(this.magAsDouble(), b.magAsDouble());
     }
 
 
@@ -1396,9 +1417,9 @@ public class CNumber extends Number {
             max = Double.NaN;
         }
 
-        for(int i=0; i<values.length; i++) {
-            currMax = values[i].re;
-            if(currMax > max) {
+        for (CNumber value : values) {
+            currMax = value.re;
+            if (currMax > max) {
                 max = currMax;
             }
         }

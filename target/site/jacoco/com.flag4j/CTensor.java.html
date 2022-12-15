@@ -1,4 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CTensor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">CTensor.java</span></div><h1>CTensor.java</h1><pre class="source lang-java linenums">package com.flag4j;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CTensor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">CTensor.java</span></div><h1>CTensor.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.TensorBase;
@@ -15,12 +39,12 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @param shape Shape of the tensor.
      */
     public CTensor(Shape shape) {
-<span class="fc" id="L18">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L42">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
 
-<span class="fc bfc" id="L20" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValue(); i++) {</span>
-<span class="fc" id="L21">            super.entries[i] = new CNumber();</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValue(); i++) {</span>
+<span class="fc" id="L45">            super.entries[i] = new CNumber();</span>
         }
-<span class="fc" id="L23">    }</span>
+<span class="fc" id="L47">    }</span>
 
 
     /**
@@ -29,12 +53,12 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @param fillValue Value to fill tensor with.
      */
     public CTensor(Shape shape, double fillValue) {
-<span class="fc" id="L32">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L56">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
 
-<span class="fc bfc" id="L34" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValue(); i++) {</span>
-<span class="fc" id="L35">            super.entries[i] = new CNumber(fillValue);</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValue(); i++) {</span>
+<span class="fc" id="L59">            super.entries[i] = new CNumber(fillValue);</span>
         }
-<span class="fc" id="L37">    }</span>
+<span class="fc" id="L61">    }</span>
 
 
     /**
@@ -43,12 +67,12 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @param fillValue Value to fill tensor with.
      */
     public CTensor(Shape shape, CNumber fillValue) {
-<span class="fc" id="L46">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L70">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
 
-<span class="fc bfc" id="L48" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValue(); i++) {</span>
-<span class="fc" id="L49">            super.entries[i] = fillValue.clone();</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValue(); i++) {</span>
+<span class="fc" id="L73">            super.entries[i] = fillValue.clone();</span>
         }
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L75">    }</span>
 
 
     /**
@@ -58,16 +82,16 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @throws IllegalArgumentException If the shape does not match the number of entries.
      */
     public CTensor(Shape shape, double[] entries) {
-<span class="fc" id="L61">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L85">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
 
-<span class="fc bfc" id="L63" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
-<span class="fc" id="L64">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="fc" id="L88">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
         }
 
-<span class="fc bfc" id="L67" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValue(); i++) {</span>
-<span class="fc" id="L68">            super.entries[i] = new CNumber(entries[i]);</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValue(); i++) {</span>
+<span class="fc" id="L92">            super.entries[i] = new CNumber(entries[i]);</span>
         }
-<span class="fc" id="L70">    }</span>
+<span class="fc" id="L94">    }</span>
 
 
     /**
@@ -77,16 +101,16 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @throws IllegalArgumentException If the shape does not match the number of entries.
      */
     public CTensor(Shape shape, int[] entries) {
-<span class="fc" id="L80">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L104">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
 
-<span class="fc bfc" id="L82" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
-<span class="fc" id="L83">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="fc" id="L107">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
         }
 
-<span class="fc bfc" id="L86" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValue(); i++) {</span>
-<span class="fc" id="L87">            super.entries[i] = new CNumber(entries[i]);</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValue(); i++) {</span>
+<span class="fc" id="L111">            super.entries[i] = new CNumber(entries[i]);</span>
         }
-<span class="fc" id="L89">    }</span>
+<span class="fc" id="L113">    }</span>
 
 
     /**
@@ -97,12 +121,12 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @throws IllegalArgumentException If the shape does not match the number of entries.
      */
     public CTensor(Shape shape, CNumber[] entries) {
-<span class="fc" id="L100">        super(shape, entries);</span>
+<span class="fc" id="L124">        super(shape, entries);</span>
 
-<span class="fc bfc" id="L102" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
-<span class="fc" id="L103">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="fc" id="L127">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
         }
-<span class="fc" id="L105">    }</span>
+<span class="fc" id="L129">    }</span>
 
 
     /**
@@ -110,11 +134,11 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @param A Tensor specifying shape and entries.
      */
     public CTensor(Tensor A) {
-<span class="fc" id="L113">        super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);</span>
-<span class="fc bfc" id="L114" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValue(); i++) {</span>
-<span class="fc" id="L115">            super.entries[i] = new CNumber(A.entries[i]);</span>
+<span class="fc" id="L137">        super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValue(); i++) {</span>
+<span class="fc" id="L139">            super.entries[i] = new CNumber(A.entries[i]);</span>
         }
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L141">    }</span>
 
 
     /**
@@ -122,10 +146,10 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @param A Tensor specifying shape and entries.
      */
     public CTensor(CTensor A) {
-<span class="fc" id="L125">        super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);</span>
-<span class="fc bfc" id="L126" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValue(); i++) {</span>
-<span class="fc" id="L127">            super.entries[i] = A.entries[i].clone();</span>
+<span class="fc" id="L149">        super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValue(); i++) {</span>
+<span class="fc" id="L151">            super.entries[i] = A.entries[i].clone();</span>
         }
-<span class="fc" id="L129">    }</span>
+<span class="fc" id="L153">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

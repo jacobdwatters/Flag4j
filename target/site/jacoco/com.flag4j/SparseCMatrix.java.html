@@ -1,4 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseCMatrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">SparseCMatrix.java</span></div><h1>SparseCMatrix.java</h1><pre class="source lang-java linenums">package com.flag4j;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseCMatrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">SparseCMatrix.java</span></div><h1>SparseCMatrix.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.SparseMatrixBase;
@@ -14,8 +38,8 @@ public class SparseCMatrix extends SparseMatrixBase&lt;CNumber[]&gt; {
      * @param size size of the square matrix.
      */
     public SparseCMatrix(int size) {
-<span class="fc" id="L17">        super(new Shape(size, size), 0, new CNumber[0], new int[0], new int[0]);</span>
-<span class="fc" id="L18">    }</span>
+<span class="fc" id="L41">        super(new Shape(size, size), 0, new CNumber[0], new int[0], new int[0]);</span>
+<span class="fc" id="L42">    }</span>
 
 
     /**
@@ -24,8 +48,8 @@ public class SparseCMatrix extends SparseMatrixBase&lt;CNumber[]&gt; {
      * @param cols Number of columns in the sparse matrix.
      */
     public SparseCMatrix(int rows, int cols) {
-<span class="fc" id="L27">        super(new Shape(rows, cols), 0, new CNumber[0], new int[0], new int[0]);</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L51">        super(new Shape(rows, cols), 0, new CNumber[0], new int[0], new int[0]);</span>
+<span class="fc" id="L52">    }</span>
 
 
     /**
@@ -33,8 +57,8 @@ public class SparseCMatrix extends SparseMatrixBase&lt;CNumber[]&gt; {
      * @param shape Shape of this sparse matrix.
      */
     public SparseCMatrix(Shape shape) {
-<span class="fc" id="L36">        super(shape, 0, new CNumber[0], new int[0], new int[0]);</span>
-<span class="fc" id="L37">    }</span>
+<span class="fc" id="L60">        super(shape, 0, new CNumber[0], new int[0], new int[0]);</span>
+<span class="fc" id="L61">    }</span>
 
 
     /**
@@ -47,12 +71,12 @@ public class SparseCMatrix extends SparseMatrixBase&lt;CNumber[]&gt; {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(int size, CNumber[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L50">        super(new Shape(size, size), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
+<span class="fc" id="L74">        super(new Shape(size, size), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
 
-<span class="fc bfc" id="L52" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L53">            super.entries[i] = nonZeroEntries[i].clone();</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="fc" id="L77">            super.entries[i] = nonZeroEntries[i].clone();</span>
         }
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L79">    }</span>
 
 
     /**
@@ -66,12 +90,12 @@ public class SparseCMatrix extends SparseMatrixBase&lt;CNumber[]&gt; {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(int rows, int cols, CNumber[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L69">        super(new Shape(rows, cols), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
+<span class="fc" id="L93">        super(new Shape(rows, cols), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
 
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L72">            super.entries[i] = nonZeroEntries[i].clone();</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="fc" id="L96">            super.entries[i] = nonZeroEntries[i].clone();</span>
         }
-<span class="fc" id="L74">    }</span>
+<span class="fc" id="L98">    }</span>
 
 
     /**
@@ -84,8 +108,8 @@ public class SparseCMatrix extends SparseMatrixBase&lt;CNumber[]&gt; {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(Shape shape, CNumber[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L87">        super(shape, nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L111">        super(shape, nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
+<span class="fc" id="L112">    }</span>
 
 
     /**
@@ -98,12 +122,12 @@ public class SparseCMatrix extends SparseMatrixBase&lt;CNumber[]&gt; {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(int size, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L101">        super(new Shape(size, size), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
+<span class="fc" id="L125">        super(new Shape(size, size), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
 
-<span class="fc bfc" id="L103" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L104">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="fc" id="L128">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="fc" id="L106">    }</span>
+<span class="fc" id="L130">    }</span>
 
 
     /**
@@ -117,12 +141,12 @@ public class SparseCMatrix extends SparseMatrixBase&lt;CNumber[]&gt; {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(int rows, int cols, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L120">        super(new Shape(rows, cols), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
+<span class="fc" id="L144">        super(new Shape(rows, cols), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
 
-<span class="fc bfc" id="L122" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L123">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="fc" id="L147">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="fc" id="L125">    }</span>
+<span class="fc" id="L149">    }</span>
 
 
     /**
@@ -135,12 +159,12 @@ public class SparseCMatrix extends SparseMatrixBase&lt;CNumber[]&gt; {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(Shape shape, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L138">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
+<span class="fc" id="L162">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
 
-<span class="fc bfc" id="L140" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L141">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="fc" id="L165">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="fc" id="L143">    }</span>
+<span class="fc" id="L167">    }</span>
 
 
     /**
@@ -153,12 +177,12 @@ public class SparseCMatrix extends SparseMatrixBase&lt;CNumber[]&gt; {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(int size, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L156">        super(new Shape(size, size), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
+<span class="fc" id="L180">        super(new Shape(size, size), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
 
-<span class="fc bfc" id="L158" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L159">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="fc" id="L183">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="fc" id="L161">    }</span>
+<span class="fc" id="L185">    }</span>
 
 
     /**
@@ -172,12 +196,12 @@ public class SparseCMatrix extends SparseMatrixBase&lt;CNumber[]&gt; {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(int rows, int cols, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L175">        super(new Shape(rows, cols), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
+<span class="fc" id="L199">        super(new Shape(rows, cols), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
 
-<span class="fc bfc" id="L177" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L178">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="fc" id="L202">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="fc" id="L180">    }</span>
+<span class="fc" id="L204">    }</span>
 
 
     /**
@@ -190,12 +214,12 @@ public class SparseCMatrix extends SparseMatrixBase&lt;CNumber[]&gt; {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(Shape shape, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L193">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
+<span class="fc" id="L217">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
 
-<span class="fc bfc" id="L195" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L196">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="fc" id="L220">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="fc" id="L198">    }</span>
+<span class="fc" id="L222">    }</span>
 
 
 //    /**
@@ -315,11 +339,11 @@ public class SparseCMatrix extends SparseMatrixBase&lt;CNumber[]&gt; {
      * @param A Complex sparse matrix to copy.
      */
     public SparseCMatrix(SparseCMatrix A) {
-<span class="fc" id="L318">        super(A.shape.clone(), A.nonZeroEntries(), new CNumber[A.nonZeroEntries()], A.rowIndices.clone(), A.colIndices.clone());</span>
+<span class="fc" id="L342">        super(A.shape.clone(), A.nonZeroEntries(), new CNumber[A.nonZeroEntries()], A.rowIndices.clone(), A.colIndices.clone());</span>
 
-<span class="fc bfc" id="L320" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L321">            super.entries[i] = A.entries[i].clone();</span>
+<span class="fc bfc" id="L344" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="fc" id="L345">            super.entries[i] = A.entries[i].clone();</span>
         }
-<span class="fc" id="L323">    }</span>
+<span class="fc" id="L347">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

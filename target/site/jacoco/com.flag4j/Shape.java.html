@@ -1,4 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Shape.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">Shape.java</span></div><h1>Shape.java</h1><pre class="source lang-java linenums">package com.flag4j;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Shape.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">Shape.java</span></div><h1>Shape.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j;
 
 import com.flag4j.util.ErrorMessages;
 
@@ -21,14 +45,14 @@ public class Shape implements Serializable {
      * @param dims A list of the dimension measurements for this shape object. All entries must be non-negative.
      * @throws IllegalArgumentException If any dimension is negative.
      */
-<span class="fc" id="L24">    public Shape(int... dims) {</span>
+<span class="fc" id="L48">    public Shape(int... dims) {</span>
         // Ensure all dimensions for the shape object are non-negative.
-<span class="fc bfc" id="L26" title="All 4 branches covered.">        if(Arrays.stream(dims).anyMatch(i -&gt; i &lt; 0)) {</span>
-<span class="fc" id="L27">            throw new IllegalArgumentException(ErrorMessages.negativeDimErrMsg(dims));</span>
+<span class="fc bfc" id="L50" title="All 4 branches covered.">        if(Arrays.stream(dims).anyMatch(i -&gt; i &lt; 0)) {</span>
+<span class="fc" id="L51">            throw new IllegalArgumentException(ErrorMessages.negativeDimErrMsg(dims));</span>
         }
 
-<span class="fc" id="L30">        this.dims = dims.clone();</span>
-<span class="fc" id="L31">    }</span>
+<span class="fc" id="L54">        this.dims = dims.clone();</span>
+<span class="fc" id="L55">    }</span>
 
 
     /**
@@ -36,7 +60,7 @@ public class Shape implements Serializable {
      * @return The rank for a tensor with this shape.
      */
     public int getRank() {
-<span class="fc" id="L39">        return dims.length;</span>
+<span class="fc" id="L63">        return dims.length;</span>
     }
 
 
@@ -45,7 +69,7 @@ public class Shape implements Serializable {
      * @return Shape of a tensor as an integer array.
      */
     public int[] getDims() {
-<span class="fc" id="L48">        return this.dims;</span>
+<span class="fc" id="L72">        return this.dims;</span>
     }
 
 
@@ -55,7 +79,7 @@ public class Shape implements Serializable {
      * @return The size of this shape object in the specified dimension.
      */
     public int get(int i) {
-<span class="fc" id="L58">        return this.dims[i];</span>
+<span class="fc" id="L82">        return this.dims[i];</span>
     }
 
 
@@ -66,17 +90,17 @@ public class Shape implements Serializable {
     public BigInteger totalEntries() {
         BigInteger product;
 
-<span class="fc bfc" id="L69" title="All 2 branches covered.">        if(dims.length&gt;0) {</span>
-<span class="fc" id="L70">            product = BigInteger.ONE;</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if(dims.length&gt;0) {</span>
+<span class="fc" id="L94">            product = BigInteger.ONE;</span>
 
-<span class="fc bfc" id="L72" title="All 2 branches covered.">            for(int dim : dims) {</span>
-<span class="fc" id="L73">                product = product.multiply(BigInteger.valueOf(dim));</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">            for(int dim : dims) {</span>
+<span class="fc" id="L97">                product = product.multiply(BigInteger.valueOf(dim));</span>
             }
         } else {
-<span class="fc" id="L76">            product = BigInteger.ZERO;</span>
+<span class="fc" id="L100">            product = BigInteger.ZERO;</span>
         }
 
-<span class="fc" id="L79">        return product;</span>
+<span class="fc" id="L103">        return product;</span>
     }
 
 
@@ -86,7 +110,7 @@ public class Shape implements Serializable {
      */
     @Override
     public Shape clone() {
-<span class="fc" id="L89">        return new Shape(dims.clone());</span>
+<span class="fc" id="L113">        return new Shape(dims.clone());</span>
     }
 
 
@@ -97,27 +121,27 @@ public class Shape implements Serializable {
      */
     @Override
     public boolean equals(Object b) {
-<span class="fc" id="L100">        boolean result = true;</span>
+<span class="fc" id="L124">        boolean result = true;</span>
 
-<span class="fc bfc" id="L102" title="All 2 branches covered.">        if(b instanceof Shape) {</span>
-<span class="fc" id="L103">            Shape bCopy = (Shape) b;</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        if(b instanceof Shape) {</span>
+<span class="fc" id="L127">            Shape bCopy = (Shape) b;</span>
 
-<span class="fc bfc" id="L105" title="All 2 branches covered.">            if(this.dims.length == bCopy.dims.length) {</span>
-<span class="fc bfc" id="L106" title="All 2 branches covered.">                for(int i=0; i&lt;dims.length; i++) {</span>
-<span class="fc bfc" id="L107" title="All 2 branches covered.">                    if(dims[i] != bCopy.dims[i]) {</span>
-<span class="fc" id="L108">                        result = false;</span>
-<span class="fc" id="L109">                        break;</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">            if(this.dims.length == bCopy.dims.length) {</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">                for(int i=0; i&lt;dims.length; i++) {</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">                    if(dims[i] != bCopy.dims[i]) {</span>
+<span class="fc" id="L132">                        result = false;</span>
+<span class="fc" id="L133">                        break;</span>
                     }
                 }
             } else {
-<span class="fc" id="L113">                result = false;</span>
+<span class="fc" id="L137">                result = false;</span>
             }
 
-<span class="fc" id="L116">        } else {</span>
-<span class="fc" id="L117">            result = false;</span>
+<span class="fc" id="L140">        } else {</span>
+<span class="fc" id="L141">            result = false;</span>
         }
 
-<span class="fc" id="L120">        return result;</span>
+<span class="fc" id="L144">        return result;</span>
     }
 
 
@@ -128,7 +152,7 @@ public class Shape implements Serializable {
      */
     @Override
     public int hashCode() {
-<span class="nc" id="L131">        return Arrays.hashCode(this.dims);</span>
+<span class="nc" id="L155">        return Arrays.hashCode(this.dims);</span>
     }
 
 
@@ -137,14 +161,14 @@ public class Shape implements Serializable {
      * @return The string representation for this Shape object.
      */
     public String toString() {
-<span class="fc" id="L140">        StringBuilder result = new StringBuilder();</span>
+<span class="fc" id="L164">        StringBuilder result = new StringBuilder();</span>
 
-<span class="fc bfc" id="L142" title="All 2 branches covered.">        for(int d : dims) {</span>
-<span class="fc" id="L143">            result.append(d + &quot;x&quot;);</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        for(int d : dims) {</span>
+<span class="fc" id="L167">            result.append(d + &quot;x&quot;);</span>
         }
-<span class="fc" id="L145">        result.deleteCharAt(result.length()-1); // Remove excess 'x' character.</span>
+<span class="fc" id="L169">        result.deleteCharAt(result.length()-1); // Remove excess 'x' character.</span>
 
-<span class="fc" id="L147">        return result.toString();</span>
+<span class="fc" id="L171">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

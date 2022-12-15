@@ -1,4 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseMatrixBase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.core</a> &gt; <span class="el_source">SparseMatrixBase.java</span></div><h1>SparseMatrixBase.java</h1><pre class="source lang-java linenums">package com.flag4j.core;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseMatrixBase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.core</a> &gt; <span class="el_source">SparseMatrixBase.java</span></div><h1>SparseMatrixBase.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.core;
 
 import com.flag4j.Shape;
 import com.flag4j.util.ErrorMessages;
@@ -38,17 +62,17 @@ public abstract class SparseMatrixBase&lt;T&gt; extends MatrixBase&lt;T&gt; {
      * equal.
      */
     public SparseMatrixBase(Shape shape, int nonZeroEntries, T entries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L41">        super(shape, entries);</span>
+<span class="fc" id="L65">        super(shape, entries);</span>
 
-<span class="fc bfc" id="L43" title="All 2 branches covered.">        if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) &lt; 0) {</span>
-<span class="fc" id="L44">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) &lt; 0) {</span>
+<span class="fc" id="L68">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));</span>
         }
-<span class="fc" id="L46">        ShapeChecks.arrayLengthsCheck(nonZeroEntries, rowIndices.length, colIndices.length);</span>
+<span class="fc" id="L70">        ShapeChecks.arrayLengthsCheck(nonZeroEntries, rowIndices.length, colIndices.length);</span>
 
-<span class="fc" id="L48">        this.nonZeroEntries = nonZeroEntries;</span>
-<span class="fc" id="L49">        this.rowIndices = rowIndices;</span>
-<span class="fc" id="L50">        this.colIndices = colIndices;</span>
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L72">        this.nonZeroEntries = nonZeroEntries;</span>
+<span class="fc" id="L73">        this.rowIndices = rowIndices;</span>
+<span class="fc" id="L74">        this.colIndices = colIndices;</span>
+<span class="fc" id="L75">    }</span>
 
 
     /**
@@ -56,8 +80,8 @@ public abstract class SparseMatrixBase&lt;T&gt; extends MatrixBase&lt;T&gt; {
      * @param nonZeroEntries New number of non-zero entries in this sparse matrix.
      */
     protected void setNonZeroEntries(int nonZeroEntries) {
-<span class="nc" id="L59">        this.nonZeroEntries = nonZeroEntries;</span>
-<span class="nc" id="L60">    }</span>
+<span class="nc" id="L83">        this.nonZeroEntries = nonZeroEntries;</span>
+<span class="nc" id="L84">    }</span>
 
 
     /**
@@ -65,7 +89,7 @@ public abstract class SparseMatrixBase&lt;T&gt; extends MatrixBase&lt;T&gt; {
      * @return The number of non-zero entries in this sparse matrix.
      */
     public int nonZeroEntries() {
-<span class="fc" id="L68">        return nonZeroEntries;</span>
+<span class="fc" id="L92">        return nonZeroEntries;</span>
     }
 
 
@@ -74,10 +98,10 @@ public abstract class SparseMatrixBase&lt;T&gt; extends MatrixBase&lt;T&gt; {
      * @return The sparsity of this matrix.
      */
     public double sparsity() {
-<span class="nc" id="L77">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
-<span class="nc" id="L78">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50,RoundingMode.HALF_UP);</span>
+<span class="nc" id="L101">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
+<span class="nc" id="L102">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50,RoundingMode.HALF_UP);</span>
 
-<span class="nc" id="L80">        return sparsity.doubleValue();</span>
+<span class="nc" id="L104">        return sparsity.doubleValue();</span>
     }
 
 
@@ -86,10 +110,10 @@ public abstract class SparseMatrixBase&lt;T&gt; extends MatrixBase&lt;T&gt; {
      * @return The density of this matrix.
      */
     public double density() {
-<span class="nc" id="L89">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
-<span class="nc" id="L90">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
+<span class="nc" id="L113">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
+<span class="nc" id="L114">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
 
-<span class="nc" id="L92">        return density.doubleValue();</span>
+<span class="nc" id="L116">        return density.doubleValue();</span>
     }
 
     // TODO: Add abstract methods for sparse matrices. i.e. toDense().

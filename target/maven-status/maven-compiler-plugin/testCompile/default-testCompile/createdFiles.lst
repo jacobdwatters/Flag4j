@@ -1,4 +1,5 @@
 com\flag4j\operations\ComplexDenseOperationsTests.class
+com\flag4j\operations\RealComplexDenseOperationsTests.class
 com\flag4j\ShapeTests.class
 com\flag4j\SparseCVectorConstructorTests.class
 com\flag4j\SparseMatrixConstructorTests.class
@@ -6,13 +7,13 @@ com\flag4j\util\ErrorMessagesTests.class
 com\flag4j\CMatrixConstructorTests.class
 com\flag4j\SparseVectorConstructorTests.class
 com\flag4j\operations\ReadDenseOperationsTests.class
+com\flag4j\Testing.class
 com\flag4j\CTensorConstructorTests.class
 com\flag4j\MatrixConstructorTests.class
 com\flag4j\io\PrintOptionsTests.class
 com\flag4j\SparseTensorConstructorTests.class
 com\flag4j\TensorConstructorTests.class
 com\flag4j\VectorConstructorTests.class
-com\flag4j\util\ArrayUtils.class
 com\flag4j\SparseCMatrixConstructorTests.class
 com\flag4j\CVectorConstructorTests.class
 com\flag4j\SparseCTensorConstructorTests.class

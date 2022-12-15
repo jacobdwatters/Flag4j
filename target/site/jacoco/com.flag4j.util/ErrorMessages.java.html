@@ -1,4 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ErrorMessages.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.util</a> &gt; <span class="el_source">ErrorMessages.java</span></div><h1>ErrorMessages.java</h1><pre class="source lang-java linenums">package com.flag4j.util;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ErrorMessages.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.util</a> &gt; <span class="el_source">ErrorMessages.java</span></div><h1>ErrorMessages.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.util;
 
 
 import com.flag4j.Shape;
@@ -13,8 +37,8 @@ public abstract class ErrorMessages {
     /**
      * Hide default constructor.
      */
-<span class="nc" id="L16">    private ErrorMessages() {</span>
-<span class="nc" id="L17">        throw new IllegalStateException(UTILITY_CLASS_ERR);</span>
+<span class="nc" id="L40">    private ErrorMessages() {</span>
+<span class="nc" id="L41">        throw new IllegalStateException(UTILITY_CLASS_ERR);</span>
     }
 
     /**
@@ -78,7 +102,7 @@ public abstract class ErrorMessages {
      * @return An error message for tensors with mismatching shapes.
      */
     public static String equalShapeErrMsg(Shape shape1, Shape shape2) {
-<span class="fc" id="L81">        return String.format(EQ_SHAPE_MISMATCH_ERR, shape1, shape2);</span>
+<span class="fc" id="L105">        return String.format(EQ_SHAPE_MISMATCH_ERR, shape1, shape2);</span>
     }
 
 
@@ -89,7 +113,7 @@ public abstract class ErrorMessages {
      * @return An error message for matrices with shapes not conducive with matrix multiplication.
      */
     public static String matMultShapeErrMsg(Shape shape1, Shape shape2) {
-<span class="fc" id="L92">        return String.format(MAT_MULT_DIM_MISMATCH_ERR, shape1, shape2);</span>
+<span class="fc" id="L116">        return String.format(MAT_MULT_DIM_MISMATCH_ERR, shape1, shape2);</span>
     }
 
 
@@ -99,7 +123,7 @@ public abstract class ErrorMessages {
      * @return An error message for a vector which is not a row vector.
      */
     public static String vecRowOrientErrMsg(Shape shape) {
-<span class="fc" id="L102">        return String.format(VEC_ROW_ORIENTATION_ERR, shape);</span>
+<span class="fc" id="L126">        return String.format(VEC_ROW_ORIENTATION_ERR, shape);</span>
     }
 
 
@@ -109,7 +133,7 @@ public abstract class ErrorMessages {
      * @return An error message for a vector which is not a row vector.
      */
     public static String vecColOrientErrMsg(Shape shape) {
-<span class="fc" id="L112">        return String.format(VEC_COL_ORIENTATION_ERR, shape);</span>
+<span class="fc" id="L136">        return String.format(VEC_COL_ORIENTATION_ERR, shape);</span>
     }
 
 
@@ -119,8 +143,8 @@ public abstract class ErrorMessages {
      * @return An error message for negative dimension.
      */
     public static String negativeDimErrMsg(int[] dims) {
-<span class="fc" id="L122">        return String.format(NEG_DIM_ERR,</span>
-<span class="fc" id="L123">                Arrays.toString(dims));</span>
+<span class="fc" id="L146">        return String.format(NEG_DIM_ERR,</span>
+<span class="fc" id="L147">                Arrays.toString(dims));</span>
     }
 
 
@@ -128,7 +152,7 @@ public abstract class ErrorMessages {
      * Gets an error message for an attempted instantiation of a utility class.
      * @return An error message for the attempted instantiation of a utility class;
      */
-<span class="fc" id="L131">    public static String utilityClassErrMsg() {return UTILITY_CLASS_ERR;}</span>
+<span class="fc" id="L155">    public static String utilityClassErrMsg() {return UTILITY_CLASS_ERR;}</span>
 
 
     /**
@@ -137,7 +161,7 @@ public abstract class ErrorMessages {
      * @return An error message for a negative value.
      */
     public static String negValueErr(double value) {
-<span class="fc" id="L140">        return String.format(NEG_VALUE_ERR, value);</span>
+<span class="fc" id="L164">        return String.format(NEG_VALUE_ERR, value);</span>
     }
 
 
@@ -148,7 +172,7 @@ public abstract class ErrorMessages {
      * @return An error message for a disallowed axis.
      */
     public static String axisErr(int axis, int[] allowedAxes) {
-<span class="nc" id="L151">        return String.format(AXIS_ERR_RANGE, axis, Arrays.toString(allowedAxes));</span>
+<span class="nc" id="L175">        return String.format(AXIS_ERR_RANGE, axis, Arrays.toString(allowedAxes));</span>
     }
 
 
@@ -158,7 +182,7 @@ public abstract class ErrorMessages {
      * @return An error message for a disallowed axis.
      */
     public static String axisErr(int axis) {
-<span class="nc" id="L161">        return String.format(AXIS_ERR, axis);</span>
+<span class="nc" id="L185">        return String.format(AXIS_ERR, axis);</span>
     }
 
 
@@ -169,7 +193,7 @@ public abstract class ErrorMessages {
      * @return An error message for a shape object with wrong shape.
      */
     public static String shapeRankErr(int actRank, int expRank) {
-<span class="nc" id="L172">        return String.format(SHAPE_RANK_ERR, actRank, expRank);</span>
+<span class="nc" id="L196">        return String.format(SHAPE_RANK_ERR, actRank, expRank);</span>
     }
 
 
@@ -180,7 +204,7 @@ public abstract class ErrorMessages {
      * @return An error message for a shape which cannot hold a specified number of entries.
      */
     public static String shapeEntriesError(Shape shape, int numEntries) {
-<span class="fc" id="L183">        return String.format(SHAPE_ENTRIES_ERR, shape.toString(), numEntries);</span>
+<span class="fc" id="L207">        return String.format(SHAPE_ENTRIES_ERR, shape.toString(), numEntries);</span>
     }
 
 
@@ -190,7 +214,7 @@ public abstract class ErrorMessages {
      * @return An error message for an ordinal which is not a valid vector orientation.
      */
     public static String vectorOrientationErr(int ordinal) {
-<span class="nc" id="L193">        return String.format(VECTOR_ORIENTATION_ERR, ordinal);</span>
+<span class="nc" id="L217">        return String.format(VECTOR_ORIENTATION_ERR, ordinal);</span>
     }
 
 
@@ -200,7 +224,7 @@ public abstract class ErrorMessages {
      * @return An error message for arrays which were expected to be the same length.
      */
     public static String getArrayLengthsMismatchErr(int... lengths) {
-<span class="fc" id="L203">        return String.format(ARRAY_LENGTHS_MISMATCH, Arrays.toString(lengths));</span>
+<span class="fc" id="L227">        return String.format(ARRAY_LENGTHS_MISMATCH, Arrays.toString(lengths));</span>
     }
 }
 

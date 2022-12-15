@@ -1,7 +1,6 @@
 package com.flag4j.operations;
 
 import com.flag4j.Shape;
-import com.flag4j.Tensor;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static com.flag4j.operations.RealDenseOperations.*;
@@ -13,6 +12,7 @@ class ReadDenseOperationsTests {
     double expResultD;
     Shape shape1;
     Shape shape2;
+    double a;
 
 
     @Test
@@ -46,6 +46,18 @@ class ReadDenseOperationsTests {
 
 
     @Test
+    void addScalarTest() {
+        // ---------- Sub-case 1 -----------------
+        src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
+        a = 11.93;
+        expResult = new double[]{1+a, 0.98332+a, 134.556+a,
+                -9.13+a, -100.234+a, 0.0000000004+a};
+
+        assertArrayEquals(expResult, add(src1, a));
+    }
+
+
+    @Test
     void subTest() {
         // ---------- Sub-case 1 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
@@ -73,6 +85,18 @@ class ReadDenseOperationsTests {
 
 
     @Test
+    void subScalarTest() {
+        // ---------- Sub-case 1 -----------------
+        src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
+        a = 11.93;
+        expResult = new double[]{1-a, 0.98332-a, 134.556-a,
+                -9.13-a, -100.234-a, 0.0000000004-a};
+
+        assertArrayEquals(expResult, sub(src1, a));
+    }
+
+
+    @Test
     void sumTest() {
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         expResultD = 1+0.98332+134.556+-9.13+-100.234+0.0000000004;
@@ -90,5 +114,17 @@ class ReadDenseOperationsTests {
         src1 = new double[]{};
         expResultD = 0;
         assertEquals(expResultD, prod(src1));
+    }
+
+
+    @Test
+    void scaleMultTest() {
+        // ---------- Sub-case 1 -----------------
+        src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
+        a = 11.93;
+        expResult = new double[]{1*a, 0.98332*a, 134.556*a,
+                -9.13*a, -100.234*a, 0.0000000004*a};
+
+        assertArrayEquals(expResult, scalMult(src1, a));
     }
 }

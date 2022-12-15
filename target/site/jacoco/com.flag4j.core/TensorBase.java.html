@@ -1,4 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TensorBase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.core</a> &gt; <span class="el_source">TensorBase.java</span></div><h1>TensorBase.java</h1><pre class="source lang-java linenums">package com.flag4j.core;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TensorBase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.core</a> &gt; <span class="el_source">TensorBase.java</span></div><h1>TensorBase.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.core;
 
 import com.flag4j.Shape;
 import com.flag4j.util.ErrorMessages;
@@ -28,10 +52,10 @@ public abstract class TensorBase&lt;T&gt; implements Serializable {
      * @param shape Shape of this tensor.
      * @param entries Entries of this tensor.
      */
-<span class="fc" id="L31">    public TensorBase(Shape shape, T entries) {</span>
-<span class="fc" id="L32">        this.shape = shape;</span>
-<span class="fc" id="L33">        this.entries = entries;</span>
-<span class="fc" id="L34">    }</span>
+<span class="fc" id="L55">    public TensorBase(Shape shape, T entries) {</span>
+<span class="fc" id="L56">        this.shape = shape;</span>
+<span class="fc" id="L57">        this.entries = entries;</span>
+<span class="fc" id="L58">    }</span>
 
 
     /**
@@ -39,7 +63,7 @@ public abstract class TensorBase&lt;T&gt; implements Serializable {
      * @return The shape of this tensor.
      */
     public Shape getShape() {
-<span class="fc" id="L42">        return this.shape;</span>
+<span class="fc" id="L66">        return this.shape;</span>
     }
 
 
@@ -48,16 +72,16 @@ public abstract class TensorBase&lt;T&gt; implements Serializable {
      * @return The rank of this tensor.
      */
     public int getRank() {
-<span class="fc" id="L51">        return this.shape.getRank();</span>
+<span class="fc" id="L75">        return this.shape.getRank();</span>
     }
 
 
     /**
      * Gets the entries of this tensor as a 1D array.
-     * @return
+     * @return The entries of this tensor.
      */
     public T getEntries() {
-<span class="nc" id="L60">        return this.entries;</span>
+<span class="nc" id="L84">        return this.entries;</span>
     }
 
 
@@ -67,7 +91,7 @@ public abstract class TensorBase&lt;T&gt; implements Serializable {
      */
     public BigInteger totalEntries() {
         // Use the shape to compute the number of entries. This ensures the result is also correct for sparse tensors.
-<span class="fc" id="L70">        return shape.totalEntries();</span>
+<span class="fc" id="L94">        return shape.totalEntries();</span>
     }
 
 
@@ -76,8 +100,8 @@ public abstract class TensorBase&lt;T&gt; implements Serializable {
      * @param B Second tensor.
      * @return True if this tensor and B have the same shape. False otherwise.
      */
-    public boolean sameShape(TensorBase B) {
-<span class="nc" id="L80">        return this.shape.equals(B.shape);</span>
+    public boolean sameShape(TensorBase&lt;?&gt; B) {
+<span class="nc" id="L104">        return this.shape.equals(B.shape);</span>
     }
 
 
@@ -89,32 +113,14 @@ public abstract class TensorBase&lt;T&gt; implements Serializable {
      * @return True if tensor A and tensor B have the same length along the specified axis. Otherwise, returns false.
      * @throws IllegalArgumentException If axis is negative or unspecified for the two tensors.
      */
-    public static boolean sameLength(TensorBase A, TensorBase B, int axis) {
-<span class="nc bnc" id="L93" title="All 4 branches missed.">        if(axis &lt; 0 || axis&gt;=Math.max(A.shape.getRank(), B.shape.getRank())) {</span>
-<span class="nc" id="L94">            throw new IllegalArgumentException(</span>
-<span class="nc" id="L95">                    ErrorMessages.axisErr(axis)</span>
+    public static boolean sameLength(TensorBase&lt;?&gt; A, TensorBase&lt;?&gt; B, int axis) {
+<span class="nc bnc" id="L117" title="All 4 branches missed.">        if(axis &lt; 0 || axis&gt;=Math.max(A.shape.getRank(), B.shape.getRank())) {</span>
+<span class="nc" id="L118">            throw new IllegalArgumentException(</span>
+<span class="nc" id="L119">                    ErrorMessages.axisErr(axis)</span>
             );
         }
 
-<span class="nc bnc" id="L99" title="All 2 branches missed.">        return A.shape.dims[axis]==B.shape.dims[axis];</span>
-    }
-
-
-    /**
-     * Checks if this tensor is empty. That is, has zero size.
-     * @return True if this tensor has zero size,
-     */
-    public boolean isEmpty() {
-<span class="nc" id="L108">        boolean result = false;</span>
-
-<span class="nc bnc" id="L110" title="All 2 branches missed.">        for(int dim : shape.dims) {</span>
-<span class="nc bnc" id="L111" title="All 2 branches missed.">            if(dim==0) {</span>
-<span class="nc" id="L112">                result=true;</span>
-<span class="nc" id="L113">                break;</span>
-            }
-        }
-
-<span class="nc" id="L117">        return result;</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        return A.shape.dims[axis]==B.shape.dims[axis];</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

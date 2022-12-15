@@ -1,4 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseCVector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">SparseCVector.java</span></div><h1>SparseCVector.java</h1><pre class="source lang-java linenums">package com.flag4j;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseCVector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">SparseCVector.java</span></div><h1>SparseCVector.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.SparseVectorBase;
@@ -15,8 +39,8 @@ public class SparseCVector extends SparseVectorBase&lt;CNumber[]&gt; {
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      */
     public SparseCVector(int size) {
-<span class="fc" id="L18">        super(size, 0, VectorOrientations.COL, new CNumber[0], new int[0]);</span>
-<span class="fc" id="L19">    }</span>
+<span class="fc" id="L42">        super(size, 0, VectorOrientations.COL, new CNumber[0], new int[0]);</span>
+<span class="fc" id="L43">    }</span>
 
 
     /**
@@ -28,12 +52,12 @@ public class SparseCVector extends SparseVectorBase&lt;CNumber[]&gt; {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, int[] nonZeroEntries, int[] indices) {
-<span class="fc" id="L31">        super(size, nonZeroEntries.length, VectorOrientations.COL, new CNumber[nonZeroEntries.length], indices);</span>
+<span class="fc" id="L55">        super(size, nonZeroEntries.length, VectorOrientations.COL, new CNumber[nonZeroEntries.length], indices);</span>
 
-<span class="fc bfc" id="L33" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L34">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="fc" id="L58">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L60">    }</span>
 
 
     /**
@@ -45,12 +69,12 @@ public class SparseCVector extends SparseVectorBase&lt;CNumber[]&gt; {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, double[] nonZeroEntries, int[] indices) {
-<span class="fc" id="L48">        super(size, nonZeroEntries.length, VectorOrientations.COL, new CNumber[nonZeroEntries.length], indices);</span>
+<span class="fc" id="L72">        super(size, nonZeroEntries.length, VectorOrientations.COL, new CNumber[nonZeroEntries.length], indices);</span>
 
-<span class="fc bfc" id="L50" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L51">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="fc" id="L75">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="fc" id="L53">    }</span>
+<span class="fc" id="L77">    }</span>
 
 
     /**
@@ -62,8 +86,8 @@ public class SparseCVector extends SparseVectorBase&lt;CNumber[]&gt; {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, CNumber[] nonZeroEntries, int[] indices) {
-<span class="fc" id="L65">        super(size, nonZeroEntries.length, VectorOrientations.COL, nonZeroEntries, indices);</span>
-<span class="fc" id="L66">    }</span>
+<span class="fc" id="L89">        super(size, nonZeroEntries.length, VectorOrientations.COL, nonZeroEntries, indices);</span>
+<span class="fc" id="L90">    }</span>
 
 
 //    /**
@@ -159,8 +183,8 @@ public class SparseCVector extends SparseVectorBase&lt;CNumber[]&gt; {
      * @param orientation Orientation of the vector.
      */
     public SparseCVector(int size, VectorOrientations orientation) {
-<span class="fc" id="L162">        super(size, 0, orientation, new CNumber[0], new int[0]);</span>
-<span class="fc" id="L163">    }</span>
+<span class="fc" id="L186">        super(size, 0, orientation, new CNumber[0], new int[0]);</span>
+<span class="fc" id="L187">    }</span>
 
 
     /**
@@ -173,12 +197,12 @@ public class SparseCVector extends SparseVectorBase&lt;CNumber[]&gt; {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, int[] nonZeroEntries, int[] indices, VectorOrientations orientation) {
-<span class="fc" id="L176">        super(size, nonZeroEntries.length, orientation, new CNumber[nonZeroEntries.length], indices);</span>
+<span class="fc" id="L200">        super(size, nonZeroEntries.length, orientation, new CNumber[nonZeroEntries.length], indices);</span>
 
-<span class="fc bfc" id="L178" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L179">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="fc" id="L203">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="fc" id="L181">    }</span>
+<span class="fc" id="L205">    }</span>
 
 
     /**
@@ -191,12 +215,12 @@ public class SparseCVector extends SparseVectorBase&lt;CNumber[]&gt; {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, double[] nonZeroEntries, int[] indices, VectorOrientations orientation) {
-<span class="fc" id="L194">        super(size, nonZeroEntries.length, orientation, new CNumber[nonZeroEntries.length], indices);</span>
+<span class="fc" id="L218">        super(size, nonZeroEntries.length, orientation, new CNumber[nonZeroEntries.length], indices);</span>
 
-<span class="fc bfc" id="L196" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L197">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L220" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
+<span class="fc" id="L221">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="fc" id="L199">    }</span>
+<span class="fc" id="L223">    }</span>
 
 
     /**
@@ -209,8 +233,8 @@ public class SparseCVector extends SparseVectorBase&lt;CNumber[]&gt; {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, CNumber[] nonZeroEntries, int[] indices, VectorOrientations orientation) {
-<span class="fc" id="L212">        super(size, nonZeroEntries.length, orientation, nonZeroEntries, indices);</span>
-<span class="fc" id="L213">    }</span>
+<span class="fc" id="L236">        super(size, nonZeroEntries.length, orientation, nonZeroEntries, indices);</span>
+<span class="fc" id="L237">    }</span>
 
 
     // TODO: These methods (for all sparse tensor classes) will be moved into factory methods
@@ -310,7 +334,7 @@ public class SparseCVector extends SparseVectorBase&lt;CNumber[]&gt; {
      * @param a Vector to copy.
      */
     public SparseCVector(SparseCVector a) {
-<span class="fc" id="L313">        super(a.size(), a.nonZeroEntries(), a.getOrientation(), a.entries.clone(), a.indices.clone());</span>
-<span class="fc" id="L314">    }</span>
+<span class="fc" id="L337">        super(a.size(), a.nonZeroEntries(), a.getOrientation(), a.entries.clone(), a.indices.clone());</span>
+<span class="fc" id="L338">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

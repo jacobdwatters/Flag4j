@@ -1,9 +1,35 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.flag4j.operations.concurrency;
 
 import com.flag4j.util.ErrorMessages;
 
+import java.util.concurrent.ForkJoinPool;
+
 /**
- * Configurations for concurrent operations.
+ * Configurations for standard and concurrent operations.
  */
 public abstract class Configurations {
     private Configurations() {
@@ -14,10 +40,6 @@ public abstract class Configurations {
     private static final int DEFAULT_BLOCK_SIZE = 32;
     private static final int DEFAULT_MIN_RECURSIVE_SIZE = 128;
 
-    /**
-     * Number of threads to use in concurrent operations.
-     */
-    private static int numThreads = DEFAULT_NUM_THREADS;
 
     /**
      * The block size to use in blocked algorithms.
@@ -35,12 +57,12 @@ public abstract class Configurations {
      * virtual machine. Note that this value may change during runtime. This method will include logical cores so the value
      * returned may be higher than the number of physical cores on the machine if hyper-threading is enabled.
      * <br><br>
-     * This is implemented as: <code>{@link #numThreads} = {@link Runtime#availableProcessors() Runtime.getRuntime().availableProcessors()};</code>
-     * @return The new value of {@link #numThreads}, i.e. the number of available processors.
+     * This is implemented as: <code>numThreads = {@link Runtime#availableProcessors() Runtime.getRuntime().availableProcessors()};</code>
+     * @return The new value of numThreads, i.e. the number of available processors.
      */
     static int setNumThreadsAsAvailableProcessors() {
-        numThreads = Runtime.getRuntime().availableProcessors();
-        return numThreads;
+        ThreadManager.threadPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
+        return ThreadManager.threadPool.getParallelism();
     }
 
 
@@ -49,7 +71,7 @@ public abstract class Configurations {
      * @return Current number of threads to use in concurrent algorithms.
      */
     public static int getNumThreads() {
-        return numThreads;
+        return ThreadManager.threadPool.getParallelism();
     }
 
 
@@ -58,7 +80,7 @@ public abstract class Configurations {
      * @param numThreads Number of threads to use in concurrent algorithms.
      */
     public static void setNumThreads(int numThreads) {
-        Configurations.numThreads = numThreads;
+        ThreadManager.threadPool = new ForkJoinPool(Math.max(1, numThreads));
     }
 
 
@@ -76,7 +98,7 @@ public abstract class Configurations {
      * @param blockSize Block size to be used in concurrent algorithms.
      */
     public static void setBlockSize(int blockSize) {
-        Configurations.blockSize = blockSize;
+        Configurations.blockSize = Math.max(1, blockSize);
     }
 
 
@@ -94,7 +116,7 @@ public abstract class Configurations {
      * @param minRecursiveSize New minimum size.
      */
     public static void setMinRecursiveSize(int minRecursiveSize) {
-        Configurations.minRecursiveSize = minRecursiveSize;
+        Configurations.minRecursiveSize = Math.max(1, minRecursiveSize);
     }
 
 
@@ -102,7 +124,7 @@ public abstract class Configurations {
      * Resets all configurations to their default values.
      */
     public static void resetAll() {
-        numThreads = DEFAULT_NUM_THREADS;
+        ThreadManager.threadPool = new ForkJoinPool(DEFAULT_NUM_THREADS);
         blockSize = DEFAULT_BLOCK_SIZE;
         minRecursiveSize = DEFAULT_MIN_RECURSIVE_SIZE;
     }
