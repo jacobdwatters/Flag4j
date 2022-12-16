@@ -27,6 +27,7 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.SparseVectorBase;
 import com.flag4j.core.VectorOrientations;
+import com.flag4j.util.ArrayUtils;
 
 /**
  * Complex sparse vector.
@@ -53,10 +54,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      */
     public SparseCVector(int size, int[] nonZeroEntries, int[] indices) {
         super(size, nonZeroEntries.length, VectorOrientations.COL, new CNumber[nonZeroEntries.length], indices);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(nonZeroEntries[i]);
-        }
+        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
 
@@ -70,10 +68,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      */
     public SparseCVector(int size, double[] nonZeroEntries, int[] indices) {
         super(size, nonZeroEntries.length, VectorOrientations.COL, new CNumber[nonZeroEntries.length], indices);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(nonZeroEntries[i]);
-        }
+        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
 
@@ -198,10 +193,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      */
     public SparseCVector(int size, int[] nonZeroEntries, int[] indices, VectorOrientations orientation) {
         super(size, nonZeroEntries.length, orientation, new CNumber[nonZeroEntries.length], indices);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(nonZeroEntries[i]);
-        }
+        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
 
@@ -216,10 +208,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      */
     public SparseCVector(int size, double[] nonZeroEntries, int[] indices, VectorOrientations orientation) {
         super(size, nonZeroEntries.length, orientation, new CNumber[nonZeroEntries.length], indices);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(nonZeroEntries[i]);
-        }
+        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
 
@@ -334,6 +323,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      * @param a Vector to copy.
      */
     public SparseCVector(SparseCVector a) {
-        super(a.size(), a.nonZeroEntries(), a.getOrientation(), a.entries.clone(), a.indices.clone());
+        super(a.size(), a.nonZeroEntries(), a.getOrientation(), new CNumber[a.nonZeroEntries()], a.indices.clone());
+        ArrayUtils.copy2CNumber(a.entries, super.entries);
     }
 }

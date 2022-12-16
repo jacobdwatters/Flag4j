@@ -26,8 +26,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexMatrixBase;
-import com.flag4j.core.MatrixBase;
-import com.flag4j.core.RealMatrixBase;
+import com.flag4j.util.ArrayUtils;
 
 /**
  * Complex dense matrix. Stored in row major format.
@@ -241,10 +240,7 @@ public class CMatrix extends ComplexMatrixBase {
      */
     public CMatrix(Matrix A) {
         super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(A.entries[i]);
-        }
+        ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
 
 
@@ -254,10 +250,7 @@ public class CMatrix extends ComplexMatrixBase {
      */
     public CMatrix(CMatrix A) {
         super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = A.entries[i].clone();
-        }
+        ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
 
 

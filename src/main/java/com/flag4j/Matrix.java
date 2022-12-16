@@ -28,6 +28,7 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
 import com.flag4j.operations.RealComplexDenseOperations;
 import com.flag4j.operations.RealDenseOperations;
+
 import java.util.Arrays;
 
 

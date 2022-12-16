@@ -41,7 +41,6 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\Hessenburg.ja
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\util\StringUtils.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\util\RandomCNumber.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\TensorPropertiesMixin.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\Testing.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\SparseMatrixBase.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\util\RandomTensor.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\VectorComparisonsMixin.java
@@ -59,6 +58,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\RealMatrixBase.
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\VectorBase.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\CVector.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\MatrixOperationsMixin.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\ComplexDenseTranspose.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\util\ShapeChecks.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\io\PrintOptions.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\complex_numbers\CNumberLexer.java

@@ -26,6 +26,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.SparseMatrixBase;
+import com.flag4j.util.ArrayUtils;
 
 /**
  * Complex sparse matrix. Stored in COO (Coordinate) format.
@@ -72,10 +73,7 @@ public class SparseCMatrix extends SparseMatrixBase<CNumber[]> {
      */
     public SparseCMatrix(int size, CNumber[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
         super(new Shape(size, size), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = nonZeroEntries[i].clone();
-        }
+        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
 
@@ -91,10 +89,7 @@ public class SparseCMatrix extends SparseMatrixBase<CNumber[]> {
      */
     public SparseCMatrix(int rows, int cols, CNumber[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
         super(new Shape(rows, cols), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = nonZeroEntries[i].clone();
-        }
+        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
 
@@ -123,10 +118,7 @@ public class SparseCMatrix extends SparseMatrixBase<CNumber[]> {
      */
     public SparseCMatrix(int size, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
         super(new Shape(size, size), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(nonZeroEntries[i]);
-        }
+        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
 
@@ -142,10 +134,7 @@ public class SparseCMatrix extends SparseMatrixBase<CNumber[]> {
      */
     public SparseCMatrix(int rows, int cols, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
         super(new Shape(rows, cols), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(nonZeroEntries[i]);
-        }
+        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
 
@@ -160,10 +149,7 @@ public class SparseCMatrix extends SparseMatrixBase<CNumber[]> {
      */
     public SparseCMatrix(Shape shape, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
         super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(nonZeroEntries[i]);
-        }
+        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
 
@@ -178,10 +164,7 @@ public class SparseCMatrix extends SparseMatrixBase<CNumber[]> {
      */
     public SparseCMatrix(int size, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
         super(new Shape(size, size), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(nonZeroEntries[i]);
-        }
+        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
 
@@ -197,10 +180,7 @@ public class SparseCMatrix extends SparseMatrixBase<CNumber[]> {
      */
     public SparseCMatrix(int rows, int cols, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
         super(new Shape(rows, cols), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(nonZeroEntries[i]);
-        }
+        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
 
@@ -215,10 +195,7 @@ public class SparseCMatrix extends SparseMatrixBase<CNumber[]> {
      */
     public SparseCMatrix(Shape shape, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
         super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(nonZeroEntries[i]);
-        }
+        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
 
@@ -340,9 +317,6 @@ public class SparseCMatrix extends SparseMatrixBase<CNumber[]> {
      */
     public SparseCMatrix(SparseCMatrix A) {
         super(A.shape.clone(), A.nonZeroEntries(), new CNumber[A.nonZeroEntries()], A.rowIndices.clone(), A.colIndices.clone());
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = A.entries[i].clone();
-        }
+        ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
 }

@@ -6,11 +6,13 @@ com\flag4j\SparseMatrixConstructorTests.class
 com\flag4j\util\ErrorMessagesTests.class
 com\flag4j\CMatrixConstructorTests.class
 com\flag4j\SparseVectorConstructorTests.class
+com\flag4j\util\RandomCNumberTests.class
 com\flag4j\operations\ReadDenseOperationsTests.class
-com\flag4j\Testing.class
+com\flag4j\operations\RealDenseTransposeTests.class
 com\flag4j\CTensorConstructorTests.class
 com\flag4j\MatrixConstructorTests.class
 com\flag4j\io\PrintOptionsTests.class
+com\flag4j\operations\ComplexDenseTransposeTests.class
 com\flag4j\SparseTensorConstructorTests.class
 com\flag4j\TensorConstructorTests.class
 com\flag4j\VectorConstructorTests.class

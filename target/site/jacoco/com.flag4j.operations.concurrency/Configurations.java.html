@@ -36,7 +36,7 @@ public abstract class Configurations {
 <span class="nc" id="L36">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
     }
 
-<span class="nc" id="L39">    private static final int DEFAULT_NUM_THREADS = Runtime.getRuntime().availableProcessors();</span>
+<span class="fc" id="L39">    private static final int DEFAULT_NUM_THREADS = Runtime.getRuntime().availableProcessors();</span>
     private static final int DEFAULT_BLOCK_SIZE = 32;
     private static final int DEFAULT_MIN_RECURSIVE_SIZE = 128;
 
@@ -44,12 +44,12 @@ public abstract class Configurations {
     /**
      * The block size to use in blocked algorithms.
      */
-<span class="nc" id="L47">    private static int blockSize = DEFAULT_BLOCK_SIZE;</span>
+<span class="fc" id="L47">    private static int blockSize = DEFAULT_BLOCK_SIZE;</span>
 
     /**
      * The minimum size of tensor/matrix/vector to make recursive calls on in recursive algorithms.
      */
-<span class="nc" id="L52">    private static int minRecursiveSize = DEFAULT_MIN_RECURSIVE_SIZE;</span>
+<span class="fc" id="L52">    private static int minRecursiveSize = DEFAULT_MIN_RECURSIVE_SIZE;</span>
 
 
     /**
@@ -89,7 +89,7 @@ public abstract class Configurations {
      * @return Current block size to use in concurrent algorithms.
      */
     public static int getBlockSize() {
-<span class="nc" id="L92">        return blockSize;</span>
+<span class="fc" id="L92">        return blockSize;</span>
     }
 
 

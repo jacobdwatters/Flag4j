@@ -9,12 +9,12 @@ com\flag4j\operations\concurrency\Configurations.class
 com\flag4j\core\RealTensorMixin.class
 com\flag4j\core\ComplexMatrixBase.class
 com\flag4j\core\RealMatrixBase.class
+com\flag4j\operations\ComplexDenseTranspose.class
 com\flag4j\operations\RealDenseOperations.class
 com\flag4j\operations\concurrency\CheckConcurrent.class
 com\flag4j\core\VectorOrientations.class
 com\flag4j\core\VectorPropertiesMixin.class
 com\flag4j\operations\ComplexDenseOperations.class
-com\flag4j\Testing.class
 com\flag4j\core\MatrixManipulationsMixin.class
 com\flag4j\core\VectorBase.class
 com\flag4j\core\VectorManipulationsMixin.class

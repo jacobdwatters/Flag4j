@@ -27,6 +27,7 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.VectorBase;
 import com.flag4j.core.VectorOrientations;
+import com.flag4j.util.ArrayUtils;
 
 /**
  * Complex dense vector. Vectors may be oriented as row vectors, column vectors, or unoriented.
@@ -40,10 +41,7 @@ public class CVector extends VectorBase<CNumber[]> {
      */
     public CVector(int size) {
         super(size, VectorOrientations.COL, new CNumber[size]);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber();
-        }
+        ArrayUtils.fillZeros(super.entries);
     }
 
 
@@ -54,10 +52,7 @@ public class CVector extends VectorBase<CNumber[]> {
      */
     public CVector(int size, double fillValue) {
         super(size, VectorOrientations.COL, new CNumber[size]);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(fillValue);
-        }
+        ArrayUtils.fill(super.entries, fillValue);
     }
 
 
@@ -68,10 +63,7 @@ public class CVector extends VectorBase<CNumber[]> {
      */
     public CVector(int size, CNumber fillValue) {
         super(size, VectorOrientations.COL, new CNumber[size]);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = fillValue.clone();
-        }
+        ArrayUtils.fill(super.entries, fillValue);
     }
 
 
@@ -82,10 +74,7 @@ public class CVector extends VectorBase<CNumber[]> {
      */
     public CVector(int size, VectorOrientations orientation) {
         super(size, orientation, new CNumber[size]);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber();
-        }
+        ArrayUtils.fillZeros(super.entries);
     }
 
 
@@ -97,10 +86,7 @@ public class CVector extends VectorBase<CNumber[]> {
      */
     public CVector(int size, double fillValue, VectorOrientations orientation) {
         super(size, orientation, new CNumber[size]);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(fillValue);
-        }
+        ArrayUtils.fill(super.entries, fillValue);
     }
 
 
@@ -112,10 +98,7 @@ public class CVector extends VectorBase<CNumber[]> {
      */
     public CVector(int size, CNumber fillValue, VectorOrientations orientation) {
         super(size, orientation, new CNumber[size]);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = fillValue.clone();
-        }
+        ArrayUtils.fill(super.entries, fillValue);
     }
 
 
@@ -125,10 +108,7 @@ public class CVector extends VectorBase<CNumber[]> {
      */
     public CVector(double[] entries) {
         super(entries.length, VectorOrientations.COL, new CNumber[entries.length]);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(entries[i]);
-        }
+        ArrayUtils.copy2CNumber(entries, super.entries);
     }
 
     /**
@@ -138,10 +118,7 @@ public class CVector extends VectorBase<CNumber[]> {
      */
     public CVector(double[] entries, VectorOrientations orientation) {
         super(entries.length, orientation, new CNumber[entries.length]);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(entries[i]);
-        }
+        ArrayUtils.copy2CNumber(entries, super.entries);
     }
 
 
@@ -151,10 +128,7 @@ public class CVector extends VectorBase<CNumber[]> {
      */
     public CVector(int[] entries) {
         super(entries.length, VectorOrientations.COL, new CNumber[entries.length]);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(entries[i]);
-        }
+        ArrayUtils.copy2CNumber(entries, super.entries);
     }
 
     /**
@@ -164,10 +138,7 @@ public class CVector extends VectorBase<CNumber[]> {
      */
     public CVector(int[] entries, VectorOrientations orientation) {
         super(entries.length, orientation, new CNumber[entries.length]);
-
-        for(int i=0; i<super.entries.length; i++) {
-            super.entries[i] = new CNumber(entries[i]);
-        }
+        ArrayUtils.copy2CNumber(entries, super.entries);
     }
 
 
@@ -196,8 +167,6 @@ public class CVector extends VectorBase<CNumber[]> {
      */
     public CVector(CVector a) {
         super(a.size(), a.getOrientation(), new CNumber[a.totalEntries().intValue()]);
-        for(int i=0; i<super.totalEntries().intValue(); i++) {
-            super.entries[i] = new CNumber(a.entries[i]);
-        }
+        ArrayUtils.copy2CNumber(a.entries, super.entries);
     }
 }

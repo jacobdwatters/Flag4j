@@ -26,6 +26,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.TensorBase;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 
 /**
@@ -40,10 +41,7 @@ public class CTensor extends TensorBase<CNumber[]> {
      */
     public CTensor(Shape shape) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
-
-        for(int i=0; i<super.totalEntries().intValue(); i++) {
-            super.entries[i] = new CNumber();
-        }
+        ArrayUtils.fillZeros(super.entries);
     }
 
 
@@ -54,10 +52,7 @@ public class CTensor extends TensorBase<CNumber[]> {
      */
     public CTensor(Shape shape, double fillValue) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
-
-        for(int i=0; i<super.totalEntries().intValue(); i++) {
-            super.entries[i] = new CNumber(fillValue);
-        }
+        ArrayUtils.fill(super.entries, fillValue);
     }
 
 
@@ -68,10 +63,7 @@ public class CTensor extends TensorBase<CNumber[]> {
      */
     public CTensor(Shape shape, CNumber fillValue) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
-
-        for(int i=0; i<super.totalEntries().intValue(); i++) {
-            super.entries[i] = fillValue.clone();
-        }
+        ArrayUtils.fill(super.entries, fillValue);
     }
 
 
@@ -88,9 +80,7 @@ public class CTensor extends TensorBase<CNumber[]> {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
         }
 
-        for(int i=0; i<super.totalEntries().intValue(); i++) {
-            super.entries[i] = new CNumber(entries[i]);
-        }
+        ArrayUtils.copy2CNumber(entries, super.entries);
     }
 
 
@@ -107,9 +97,7 @@ public class CTensor extends TensorBase<CNumber[]> {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
         }
 
-        for(int i=0; i<super.totalEntries().intValue(); i++) {
-            super.entries[i] = new CNumber(entries[i]);
-        }
+        ArrayUtils.copy2CNumber(entries, super.entries);
     }
 
 
@@ -135,9 +123,7 @@ public class CTensor extends TensorBase<CNumber[]> {
      */
     public CTensor(Tensor A) {
         super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);
-        for(int i=0; i<super.totalEntries().intValue(); i++) {
-            super.entries[i] = new CNumber(A.entries[i]);
-        }
+        ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
 
 
@@ -147,8 +133,6 @@ public class CTensor extends TensorBase<CNumber[]> {
      */
     public CTensor(CTensor A) {
         super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);
-        for(int i=0; i<super.totalEntries().intValue(); i++) {
-            super.entries[i] = A.entries[i].clone();
-        }
+        ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
 }

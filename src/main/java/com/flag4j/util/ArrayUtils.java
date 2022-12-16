@@ -39,96 +39,127 @@ public final class ArrayUtils {
 
     /**
      * Converts array to an array of {@link CNumber complex numbers}.
-     * @param array Array to convert.
-     * @return An equivalent array of {@link CNumber complex numbers}.
+     * @param src Array to convert.
+     * @param dest Destination array.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
-    public static CNumber[] toCNumber(int[] array) {
-        CNumber[] complexArray = new CNumber[array.length];
+    public static void copy2CNumber(int[] src, CNumber[] dest) {
+        ShapeChecks.arrayLengthsCheck(src.length, dest.length);
 
-        for(int i=0; i<complexArray.length; i++) {
-            complexArray[i] = new CNumber(array[i]);
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = new CNumber(src[i]);
         }
-
-        return complexArray;
     }
 
 
     /**
      * Converts array to an array of {@link CNumber complex numbers}.
-     * @param array Array to convert.
-     * @return An equivalent array of {@link CNumber complex numbers}.
+     * @param src Array to convert.
+     * @param dest Destination array.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
-    public static CNumber[] toCNumber(double[] array) {
-        CNumber[] complexArray = new CNumber[array.length];
+    public static void copy2CNumber(double[] src, CNumber[] dest) {
+        ShapeChecks.arrayLengthsCheck(src.length, dest.length);
 
-        for(int i=0; i<complexArray.length; i++) {
-            complexArray[i] = new CNumber(array[i]);
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = new CNumber(src[i]);
         }
-
-        return complexArray;
     }
 
 
     /**
      * Converts array to an array of {@link CNumber complex numbers}.
-     * @param array Array to convert.
-     * @return An equivalent array of {@link CNumber complex numbers}.
+     * @param src Array to convert.
+     * @param dest Destination array.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
-    public static CNumber[] toCNumber(Integer[] array) {
-        CNumber[] complexArray = new CNumber[array.length];
+    public static void copy2CNumber(Integer[] src, CNumber[] dest) {
+        ShapeChecks.arrayLengthsCheck(src.length, dest.length);
 
-        for(int i=0; i<complexArray.length; i++) {
-            complexArray[i] = new CNumber(array[i]);
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = new CNumber(src[i]);
         }
-
-        return complexArray;
     }
 
 
     /**
      * Converts array to an array of {@link CNumber complex numbers}.
-     * @param array Array to convert.
-     * @return An equivalent array of {@link CNumber complex numbers}.
+     * @param src Array to convert.
+     * @param dest Destination array.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
-    public static CNumber[] toCNumber(Double[] array) {
-        CNumber[] complexArray = new CNumber[array.length];
+    public static void copy2CNumber(Double[] src, CNumber[] dest) {
+        ShapeChecks.arrayLengthsCheck(src.length, dest.length);
 
-        for(int i=0; i<complexArray.length; i++) {
-            complexArray[i] = new CNumber(array[i]);
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = new CNumber(src[i]);
         }
-
-        return complexArray;
     }
 
 
     /**
      * Converts array to an array of {@link CNumber complex numbers}.
-     * @param array Array to convert.
-     * @return An equivalent array of {@link CNumber complex numbers}.
+     * @param src Array to convert.
+     * @param dest Destination array.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
-    public static CNumber[] toCNumber(String[] array) {
-        CNumber[] complexArray = new CNumber[array.length];
+    public static void copy2CNumber(String[] src, CNumber[] dest) {
+        ShapeChecks.arrayLengthsCheck(src.length, dest.length);
 
-        for(int i=0; i<complexArray.length; i++) {
-            complexArray[i] = new CNumber(array[i]);
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = new CNumber(src[i]);
         }
-
-        return complexArray;
     }
 
 
     /**
-     * Copies an array of {@link CNumber complex numbers}.
-     * @param array Array to copy.
-     * @return A copy of the specified array.
+     * Converts array to an array of {@link CNumber complex numbers}.
+     * @param src Source array to convert.
+     * @param dest Destination array.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
-    public static CNumber[] copyCNumber(CNumber[] array) {
-        CNumber[] complexArray = new CNumber[array.length];
+    public static void copy2CNumber(CNumber[] src, CNumber[] dest) {
+        ShapeChecks.arrayLengthsCheck(src.length, dest.length);
 
-        for(int i=0; i<complexArray.length; i++) {
-            complexArray[i] = new CNumber(array[i]);
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = new CNumber(src[i]);
         }
+    }
 
-        return complexArray;
+
+    /**
+     * Fills an array with complex numbers with zeros.
+     * @param dest Array to fill with zeros.
+     */
+    public static void fillZeros(CNumber[] dest) {
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = new CNumber();
+        }
+    }
+
+
+    /**
+     * Fills an array with specified value.
+     * @param dest Array to fill.
+     * @param fillValue Value to fill array with.
+     */
+    public static void fill(CNumber[] dest, double fillValue) {
+        // TODO: Investigate speed of using Arrays.setAll(...) and Arrays.parallelSetAll(...)
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = new CNumber(fillValue);
+        }
+    }
+
+
+    /**
+     * Fills an array with specified value.
+     * @param dest Array to fill.
+     * @param fillValue Value to fill array with.
+     */
+    public static void fill(CNumber[] dest, CNumber fillValue) {
+        // TODO: Investigate speed of using Arrays.setAll(...) and Arrays.parallelSetAll(...)
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = fillValue.clone();
+        }
     }
 }

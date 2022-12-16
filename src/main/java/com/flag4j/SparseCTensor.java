@@ -27,8 +27,6 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.SparseTensorBase;
 
-import java.util.Arrays;
-
 
 /**
  * Complex sparse tensor.

@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ShapeTests {
     int expRank, expValue;
-    int[] expDims1, expDims2;
+    int[] expDims1, expDims2, expStrides, indices;
     Shape shape1;
     Shape shape2;
 
@@ -117,5 +117,94 @@ class ShapeTests {
         shape1 = new Shape(expDims1);
 
         assertFalse(shape1.equals(Double.valueOf(1)));
+    }
+
+
+    @Test
+    void strideTest() {
+        // -------------- Sub-case 1 --------------
+        shape1 = new Shape(4, 2, 3);
+        expStrides = new int[]{6, 3, 1};
+
+        assertArrayEquals(expStrides, shape1.createNewStrides());
+
+        // -------------- Sub-case 2 --------------
+        shape1 = new Shape();
+        expStrides = new int[]{};
+
+        assertArrayEquals(expStrides, shape1.createNewStrides());
+
+        // -------------- Sub-case 3 --------------
+        shape1 = new Shape(15, 2, 3, 9);
+        expStrides = new int[]{54, 27, 9, 1};
+
+        assertArrayEquals(expStrides, shape1.createNewStrides());
+    }
+
+    @Test
+    void entriesIndexTest() {
+        // -------------- Sub-case 1 --------------
+        shape1 = new Shape(4, 2, 3);
+        indices = new int[]{1, 0, 2};
+        expValue = 8;
+        assertEquals(expValue, shape1.entriesIndex(indices));
+
+        // -------------- Sub-case 2 --------------
+        shape1 = new Shape(4, 2, 3);
+        indices = new int[]{2, 1, 1};
+        expValue = 16;
+        assertEquals(expValue, shape1.entriesIndex(indices));
+
+        // -------------- Sub-case 3 --------------
+        shape1 = new Shape(15, 2, 3, 9);
+        indices = new int[]{11, 0, 1, 5};
+        expValue = 608;
+        assertEquals(expValue, shape1.entriesIndex(indices));
+
+        // -------------- Sub-case 4 --------------
+        shape1 = new Shape(15, 2, 3, 9);
+        indices = new int[]{11, 0, 1, 5, 1};
+        assertThrows(IllegalArgumentException.class, () -> shape1.entriesIndex(indices));
+
+        // -------------- Sub-case 5 --------------
+        shape1 = new Shape(15, 2, 3, 9);
+        indices = new int[]{11, 2, 1, 5};
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> shape1.entriesIndex(indices));
+
+        // -------------- Sub-case 6 --------------
+        shape1 = new Shape(15, 2, 3, 9);
+        indices = new int[]{11, 1, 1, 101};
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> shape1.entriesIndex(indices));
+    }
+
+
+    @Test
+    void swapAxesTest() {
+        // -------------- Sub-case 1 --------------
+        shape1 = new Shape(4, 2, 3);
+        shape1.swapAxes(0, 1);
+        expDims1 = new int[]{2, 4, 3};
+        expStrides = new int[]{12, 3, 1};
+
+        assertArrayEquals(expDims1, shape1.dims);
+        assertArrayEquals(expStrides, shape1.getStrides());
+
+        // -------------- Sub-case 2 --------------
+        shape1 = new Shape(4, 2, 3);
+        shape1.swapAxes(1, 0);
+        expDims1 = new int[]{2, 4, 3};
+        expStrides = new int[]{12, 3, 1};
+
+        assertArrayEquals(expDims1, shape1.dims);
+        assertArrayEquals(expStrides, shape1.getStrides());
+
+        // -------------- Sub-case 3 --------------
+        shape1 = new Shape(4, 2, 3);
+        shape1.swapAxes(0, 2);
+        expDims1 = new int[]{3, 2, 4};
+        expStrides = new int[]{8, 4, 1};
+
+        assertArrayEquals(expDims1, shape1.dims);
+        assertArrayEquals(expStrides, shape1.getStrides());
     }
 }

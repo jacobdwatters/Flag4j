@@ -31,13 +31,17 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 /**
- * An object to store the shape of a tensor. Note that the array holding the shape of the tensor is mutable.
+ * An object to store the shape of a tensor. Note that this object is mutable.
  */
 public class Shape implements Serializable {
     /**
-     * An array containing the size of each dimension of this tensor.
+     * An array containing the size of each dimension of this shape.
      */
     public int[] dims;
+    /**
+     * An array containing the strides of all dimensions within this shape.
+     */
+    public int[] strides;
 
 
     /**
@@ -52,6 +56,7 @@ public class Shape implements Serializable {
         }
 
         this.dims = dims.clone();
+        this.strides = this.createNewStrides();
     }
 
 
@@ -74,12 +79,42 @@ public class Shape implements Serializable {
 
 
     /**
+     * Gets the shape of a tensor as an array.
+     * @return Shape of a tensor as an integer array.
+     */
+    public int[] getStrides() {
+        return this.strides;
+    }
+
+
+    /**
      * Get the size of the shape object in the specified dimension.
      * @param i Dimension to get the size of.
      * @return The size of this shape object in the specified dimension.
      */
     public int get(int i) {
         return this.dims[i];
+    }
+
+
+    /**
+     * Constructs strides for each dimension of this shape as if for a newly constructed tensor.
+     * i.e. Strides will be a decreasing sequence with the last stride being 1.
+     * @return The strides for all dimensions of a newly constructed tensor with this shape.
+     */
+    public int[] createNewStrides() {
+        int[] strides = new int[dims.length];
+
+        if(strides.length>0) {
+            // Stride along last axis is always one for new strides.
+            strides[strides.length-1] = 1;
+
+            for(int i=strides.length-2; i>=0; i--) {
+                strides[i] = dims[i+1]*strides[i+1];
+            }
+        }
+
+        return strides;
     }
 
 
@@ -94,6 +129,11 @@ public class Shape implements Serializable {
         if(indices.length != dims.length) {
             throw new IllegalArgumentException(ErrorMessages.getIndicesRankErr(indices.length, dims.length));
         }
+        if(indices.length>0 && indices[indices.length-1] >= dims[dims.length-1]) {
+            throw new ArrayIndexOutOfBoundsException("Index " + indices[indices.length-1] + " out of bounds for axis " +
+                    (indices.length-1) + " of tensor with shape " + this);
+        }
+
         int index = 0;
 
         for(int i=0; i<indices.length-1; i++) {
@@ -101,6 +141,8 @@ public class Shape implements Serializable {
                 throw new ArrayIndexOutOfBoundsException("Index " + indices[i] + " out of bounds for axis " + i +
                         " of tensor with shape " + this);
             }
+
+            index += indices[i]*strides[i];
         }
 
         return index + indices[indices.length-1];
@@ -108,15 +150,19 @@ public class Shape implements Serializable {
 
 
     /**
-     * Swaps two axes of this shape.
+     * Swaps two axes of this shape. New strides are constructed for this shape.
      * @param axis1 First axis to swap.
      * @param axis2 Second axis to swap.
      * @return Returns this shape.
+     * @throws ArrayIndexOutOfBoundsException If either axis is not within [0, {@link #getRank() rank}-1].
      */
     public Shape swapAxes(int axis1, int axis2) {
         int temp = dims[axis1];
         dims[axis1] = dims[axis2];
         dims[axis2] = temp;
+
+        this.strides = this.createNewStrides();
+
         return this;
     }
 
@@ -143,8 +189,8 @@ public class Shape implements Serializable {
 
 
     /**
-     * Creates a copy of this shape object.
-     * @return
+     * Creates a deep copy of this shape object. This is a distinct object not a reference to the same object.
+     * @return A deep copy of this shape object.
      */
     @Override
     public Shape clone() {
@@ -203,7 +249,7 @@ public class Shape implements Serializable {
         StringBuilder result = new StringBuilder();
 
         for(int d : dims) {
-            result.append(d + "x");
+            result.append(d).append("x");
         }
         result.deleteCharAt(result.length()-1); // Remove excess 'x' character.
 

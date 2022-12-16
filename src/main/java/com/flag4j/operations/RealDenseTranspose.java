@@ -24,14 +24,13 @@
 
 package com.flag4j.operations;
 
-import com.flag4j.Shape;
 import com.flag4j.operations.concurrency.Configurations;
 import com.flag4j.operations.concurrency.ThreadManager;
 import com.flag4j.util.ErrorMessages;
 
 
 /**
- * This class contains several algorithms for computing the matrix transpose.
+ * This class contains several algorithms for computing the transpose of a real dense tensor.
  */
 public final class RealDenseTranspose {
 
@@ -41,28 +40,28 @@ public final class RealDenseTranspose {
     }
 
 
-    /**
-     * Transposes tensor along specified axes.
-     * @param src Entries of the tensor.
-     * @param shape Shape of the tensor to transpose.
-     * @param axis1 First axis to swap in transpose.
-     * @param axis2 Second axis to swap in transpose.
-     * @return The transpose of the tensor along the specified axes.
-     */
-    public static double[] standard(double[] src, Shape shape, int axis1, int axis2) {
-        double[] dest = new double[shape.totalEntries().intValue()];
-        Shape destShape = shape.clone().swapAxes(axis1, axis2);
-
-        int[] srcIndices = new int[shape.dims.length];
-        int[] destIndices = new int[shape.dims.length];
-
-        for(int i=0; i<src.length; i++) {
-            dest[shape.entriesIndex(destIndices)] = dest[shape.entriesIndex(srcIndices)];
-            // TODO: Increase srcIndices and get destIndices.
-        }
-
-        return dest;
-    }
+//    /**
+//     * Transposes tensor along specified axes.
+//     * @param src Entries of the tensor.
+//     * @param shape Shape of the tensor to transpose.
+//     * @param axis1 First axis to swap in transpose.
+//     * @param axis2 Second axis to swap in transpose.
+//     * @return The transpose of the tensor along the specified axes.
+//     */
+//    public static double[] standard(double[] src, Shape shape, int axis1, int axis2) {
+//        double[] dest = new double[shape.totalEntries().intValue()];
+//        Shape destShape = shape.clone().swapAxes(axis1, axis2);
+//
+//        int[] srcIndices = new int[shape.dims.length];
+//        int[] destIndices = new int[shape.dims.length];
+//
+//        for(int i=0; i<src.length; i++) {
+//            dest[shape.entriesIndex(destIndices)] = dest[shape.entriesIndex(srcIndices)];
+//            // TODO: Increase srcIndices and get destIndices.
+//        }
+//
+//        return dest;
+//    }
 
 
     /**
@@ -72,7 +71,7 @@ public final class RealDenseTranspose {
      * @param numCols Number of columns in the matrix.
      * @return The transpose of the matrix.
      */
-    public static double[] standardMatrix(double[] src, final int numRows, final int numCols) {
+    public static double[] standardMatrix(final double[] src, final int numRows, final int numCols) {
         double[] transpose = new double[numRows*numCols];
 
         for(int i=0; i<numRows; i++) {
@@ -90,7 +89,7 @@ public final class RealDenseTranspose {
      * {@link Configurations#getBlockSize()} or {@link Configurations#setBlockSize(int)}.
      * @return The transpose of this tensor along specified axes
      */
-    public static double[] blockedMatrix(double[] src, final int numRows, final int numCols) {
+    public static double[] blockedMatrix(final double[] src, final int numRows, final int numCols) {
         double[] transpose = new double[numRows*numCols];
         final int blockSize = Configurations.getBlockSize();
         int blockRowEnd;
@@ -123,7 +122,7 @@ public final class RealDenseTranspose {
      * @param numCols Number of columns in source matrix.
      * @return The transpose of the source matrix.
      */
-    public static double[] standardMatrixConcurrent(double[] src, final int numRows, final int numCols) {
+    public static double[] standardMatrixConcurrent(final double[] src, final int numRows, final int numCols) {
         double[] dest = new double[src.length];
 
         // Compute transpose concurrently.
