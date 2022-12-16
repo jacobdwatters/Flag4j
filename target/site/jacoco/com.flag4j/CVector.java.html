@@ -27,6 +27,7 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.VectorBase;
 import com.flag4j.core.VectorOrientations;
+import com.flag4j.util.ArrayUtils;
 
 /**
  * Complex dense vector. Vectors may be oriented as row vectors, column vectors, or unoriented.
@@ -39,12 +40,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; {
      * @param size Size of the vector.
      */
     public CVector(int size) {
-<span class="fc" id="L42">        super(size, VectorOrientations.COL, new CNumber[size]);</span>
-
-<span class="fc bfc" id="L44" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L45">            super.entries[i] = new CNumber();</span>
-        }
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L43">        super(size, VectorOrientations.COL, new CNumber[size]);</span>
+<span class="fc" id="L44">        ArrayUtils.fillZeros(super.entries);</span>
+<span class="fc" id="L45">    }</span>
 
 
     /**
@@ -53,12 +51,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; {
      * @param fillValue Value to fill vector with.
      */
     public CVector(int size, double fillValue) {
-<span class="fc" id="L56">        super(size, VectorOrientations.COL, new CNumber[size]);</span>
-
-<span class="fc bfc" id="L58" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L59">            super.entries[i] = new CNumber(fillValue);</span>
-        }
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L54">        super(size, VectorOrientations.COL, new CNumber[size]);</span>
+<span class="fc" id="L55">        ArrayUtils.fill(super.entries, fillValue);</span>
+<span class="fc" id="L56">    }</span>
 
 
     /**
@@ -67,12 +62,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; {
      * @param fillValue Value to fill vector with.
      */
     public CVector(int size, CNumber fillValue) {
-<span class="fc" id="L70">        super(size, VectorOrientations.COL, new CNumber[size]);</span>
-
-<span class="fc bfc" id="L72" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L73">            super.entries[i] = fillValue.clone();</span>
-        }
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L65">        super(size, VectorOrientations.COL, new CNumber[size]);</span>
+<span class="fc" id="L66">        ArrayUtils.fill(super.entries, fillValue);</span>
+<span class="fc" id="L67">    }</span>
 
 
     /**
@@ -81,12 +73,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; {
      * @param orientation Orientation of the vector.
      */
     public CVector(int size, VectorOrientations orientation) {
-<span class="fc" id="L84">        super(size, orientation, new CNumber[size]);</span>
-
-<span class="fc bfc" id="L86" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L87">            super.entries[i] = new CNumber();</span>
-        }
-<span class="fc" id="L89">    }</span>
+<span class="fc" id="L76">        super(size, orientation, new CNumber[size]);</span>
+<span class="fc" id="L77">        ArrayUtils.fillZeros(super.entries);</span>
+<span class="fc" id="L78">    }</span>
 
 
     /**
@@ -96,12 +85,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; {
      * @param orientation Orientation of the vector.
      */
     public CVector(int size, double fillValue, VectorOrientations orientation) {
-<span class="fc" id="L99">        super(size, orientation, new CNumber[size]);</span>
-
-<span class="fc bfc" id="L101" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L102">            super.entries[i] = new CNumber(fillValue);</span>
-        }
-<span class="fc" id="L104">    }</span>
+<span class="fc" id="L88">        super(size, orientation, new CNumber[size]);</span>
+<span class="fc" id="L89">        ArrayUtils.fill(super.entries, fillValue);</span>
+<span class="fc" id="L90">    }</span>
 
 
     /**
@@ -111,12 +97,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; {
      * @param orientation Orientation of the vector.
      */
     public CVector(int size, CNumber fillValue, VectorOrientations orientation) {
-<span class="fc" id="L114">        super(size, orientation, new CNumber[size]);</span>
-
-<span class="fc bfc" id="L116" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L117">            super.entries[i] = fillValue.clone();</span>
-        }
-<span class="fc" id="L119">    }</span>
+<span class="fc" id="L100">        super(size, orientation, new CNumber[size]);</span>
+<span class="fc" id="L101">        ArrayUtils.fill(super.entries, fillValue);</span>
+<span class="fc" id="L102">    }</span>
 
 
     /**
@@ -124,12 +107,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; {
      * @param entries Entries for this column vector.
      */
     public CVector(double[] entries) {
-<span class="fc" id="L127">        super(entries.length, VectorOrientations.COL, new CNumber[entries.length]);</span>
-
-<span class="fc bfc" id="L129" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L130">            super.entries[i] = new CNumber(entries[i]);</span>
-        }
-<span class="fc" id="L132">    }</span>
+<span class="fc" id="L110">        super(entries.length, VectorOrientations.COL, new CNumber[entries.length]);</span>
+<span class="fc" id="L111">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
+<span class="fc" id="L112">    }</span>
 
     /**
      * Creates a vector with specified entries and orientation.
@@ -137,12 +117,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; {
      * @param orientation Orientation of the vector.
      */
     public CVector(double[] entries, VectorOrientations orientation) {
-<span class="fc" id="L140">        super(entries.length, orientation, new CNumber[entries.length]);</span>
-
-<span class="fc bfc" id="L142" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L143">            super.entries[i] = new CNumber(entries[i]);</span>
-        }
-<span class="fc" id="L145">    }</span>
+<span class="fc" id="L120">        super(entries.length, orientation, new CNumber[entries.length]);</span>
+<span class="fc" id="L121">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
+<span class="fc" id="L122">    }</span>
 
 
     /**
@@ -150,12 +127,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; {
      * @param entries Entries for this column vector.
      */
     public CVector(int[] entries) {
-<span class="fc" id="L153">        super(entries.length, VectorOrientations.COL, new CNumber[entries.length]);</span>
-
-<span class="fc bfc" id="L155" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L156">            super.entries[i] = new CNumber(entries[i]);</span>
-        }
-<span class="fc" id="L158">    }</span>
+<span class="fc" id="L130">        super(entries.length, VectorOrientations.COL, new CNumber[entries.length]);</span>
+<span class="fc" id="L131">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
+<span class="fc" id="L132">    }</span>
 
     /**
      * Creates a vector with specified entries and orientation.
@@ -163,12 +137,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; {
      * @param orientation Orientation of the vector.
      */
     public CVector(int[] entries, VectorOrientations orientation) {
-<span class="fc" id="L166">        super(entries.length, orientation, new CNumber[entries.length]);</span>
-
-<span class="fc bfc" id="L168" title="All 2 branches covered.">        for(int i=0; i&lt;super.entries.length; i++) {</span>
-<span class="fc" id="L169">            super.entries[i] = new CNumber(entries[i]);</span>
-        }
-<span class="fc" id="L171">    }</span>
+<span class="fc" id="L140">        super(entries.length, orientation, new CNumber[entries.length]);</span>
+<span class="fc" id="L141">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
+<span class="fc" id="L142">    }</span>
 
 
     /**
@@ -176,8 +147,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; {
      * @param entries Entries for this column vector.
      */
     public CVector(CNumber[] entries) {
-<span class="fc" id="L179">        super(entries.length, VectorOrientations.COL, entries);</span>
-<span class="fc" id="L180">    }</span>
+<span class="fc" id="L150">        super(entries.length, VectorOrientations.COL, entries);</span>
+<span class="fc" id="L151">    }</span>
 
 
     /**
@@ -186,8 +157,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; {
      * @param orientation Orientation of the vector.
      */
     public CVector(CNumber[] entries, VectorOrientations orientation) {
-<span class="fc" id="L189">        super(entries.length, orientation, entries);</span>
-<span class="fc" id="L190">    }</span>
+<span class="fc" id="L160">        super(entries.length, orientation, entries);</span>
+<span class="fc" id="L161">    }</span>
 
 
     /**
@@ -195,10 +166,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; {
      * @param a Complex vector to copy.
      */
     public CVector(CVector a) {
-<span class="fc" id="L198">        super(a.size(), a.getOrientation(), new CNumber[a.totalEntries().intValue()]);</span>
-<span class="fc bfc" id="L199" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValue(); i++) {</span>
-<span class="fc" id="L200">            super.entries[i] = new CNumber(a.entries[i]);</span>
-        }
-<span class="fc" id="L202">    }</span>
+<span class="fc" id="L169">        super(a.size(), a.getOrientation(), new CNumber[a.totalEntries().intValue()]);</span>
+<span class="fc" id="L170">        ArrayUtils.copy2CNumber(a.entries, super.entries);</span>
+<span class="fc" id="L171">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
