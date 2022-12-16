@@ -84,6 +84,44 @@ public class Shape implements Serializable {
 
 
     /**
+     * Computes the index of the 1D data array for a dense tensor from tensor indices with this shape.
+     * @param indices Indices of tensor with this shape.
+     * @return The index of the element at the specified indices in the 1D data array of a dense tensor.
+     * @throws IllegalArgumentException If the number of indices does not match the rank of this shape.
+     * @throws ArrayIndexOutOfBoundsException If any index does not fit within a tensor with this shape.
+     */
+    public int entriesIndex(int... indices) {
+        if(indices.length != dims.length) {
+            throw new IllegalArgumentException(ErrorMessages.getIndicesRankErr(indices.length, dims.length));
+        }
+        int index = 0;
+
+        for(int i=0; i<indices.length-1; i++) {
+            if(indices[i] < 0 || indices[i] >= dims[i]) {
+                throw new ArrayIndexOutOfBoundsException("Index " + indices[i] + " out of bounds for axis " + i +
+                        " of tensor with shape " + this);
+            }
+        }
+
+        return index + indices[indices.length-1];
+    }
+
+
+    /**
+     * Swaps two axes of this shape.
+     * @param axis1 First axis to swap.
+     * @param axis2 Second axis to swap.
+     * @return Returns this shape.
+     */
+    public Shape swapAxes(int axis1, int axis2) {
+        int temp = dims[axis1];
+        dims[axis1] = dims[axis2];
+        dims[axis2] = temp;
+        return this;
+    }
+
+
+    /**
      * Gets the total number of entries for a tensor with this shape.
      * @return The total number of entries for a tensor with this shape.
      */
@@ -123,6 +161,7 @@ public class Shape implements Serializable {
     public boolean equals(Object b) {
         boolean result = true;
 
+        // Ensure the object is the same type
         if(b instanceof Shape) {
             Shape bCopy = (Shape) b;
 

@@ -93,7 +93,12 @@ public abstract class ErrorMessages {
     /**
      * Error message for arrays which were expected to be the same length.
      */
-    private static final String ARRAY_LENGTHS_MISMATCH = "Arrays lengths must match but got lengths: %s.";
+    private static final String ARRAY_LENGTHS_MISMATCH_ERR = "Arrays lengths must match but got lengths: %s.";
+    /**
+     * Error message for a number of indices which does not match the rank of the tensor being indexed.
+     */
+    private static final String INDICES_RANK_ERR = "Number of indices does not match the rank of the tensor." +
+            " Got %s indices but expected %s";
 
     /**
      * Gets an error message for two tensors with mismatching shapes.
@@ -224,7 +229,18 @@ public abstract class ErrorMessages {
      * @return An error message for arrays which were expected to be the same length.
      */
     public static String getArrayLengthsMismatchErr(int... lengths) {
-        return String.format(ARRAY_LENGTHS_MISMATCH, Arrays.toString(lengths));
+        return String.format(ARRAY_LENGTHS_MISMATCH_ERR, Arrays.toString(lengths));
+    }
+
+
+    /**
+     * Gets an error message for a tensor being indexed with a number of indices not equal to the rank of the tensor.
+     * @param numIndices Number of indices.
+     * @param rank Rank of the tensor.
+     * @return An error message for a tensor being indexed with a number if indices not equal ot the rank of the tensor.
+     */
+    public static String getIndicesRankErr(int numIndices, int rank) {
+        return String.format(INDICES_RANK_ERR, numIndices, rank);
     }
 }
 

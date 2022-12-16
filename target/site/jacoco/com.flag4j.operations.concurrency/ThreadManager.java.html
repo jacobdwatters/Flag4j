@@ -25,6 +25,8 @@
 package com.flag4j.operations.concurrency;
 
 
+import com.flag4j.util.ErrorMessages;
+
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.IntConsumer;
@@ -34,47 +36,44 @@ import java.util.stream.IntStream;
  * This class contains the base thread pool for all concurrent operations and several methods for managing the
  * pool.
  */
-<span class="nc" id="L37">public class ThreadManager {</span>
+<span class="nc" id="L39">public class ThreadManager {</span>
 
-<span class="nc" id="L39">    protected static ForkJoinPool threadPool = new ForkJoinPool();</span>
-
-
-    /**
-     * Concurrent for loop. Each loop with spawn as a thread up to the maximum number of threads.
-     *
-     * @param start starting value, inclusive
-     * @param endExclusive ending value, exclusive
-     * @param consumer The consumer
-     */
-    public static void loopFor( int start, int endExclusive, IntConsumer consumer ) {
-        try {
-<span class="nc" id="L51">            threadPool.submit(() -&gt; IntStream.range(start, endExclusive).parallel().forEach(consumer)).get();</span>
-<span class="nc" id="L52">        } catch (InterruptedException | ExecutionException e) {</span>
-<span class="nc" id="L53">            e.printStackTrace();</span>
-<span class="nc" id="L54">        }</span>
-<span class="nc" id="L55">    }</span>
+<span class="nc" id="L41">    protected static ForkJoinPool threadPool = new ForkJoinPool();</span>
 
 
     /**
-     * Concurrent for loop. Each loop with spawn as a thread up to the maximum number of threads.
-     *
-     * @param start starting value, inclusive
-     * @param endExclusive ending value, exclusive
-     * @param step fixed sized step for each iteration
-     * @param consumer The consumer
+     * Applies a concurrent loop to a function.
+     * @param startIndex Starting index for concurrent loop.
+     * @param endIndex Ending index for concurrent loop (exclusive).
+     * @param function Function to apply each iteration. Function is dependent on iteration index.
      */
-    public static void loopFor( int start, int endExclusive, int step, IntConsumer consumer ) {
-<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (step &lt;= 0)</span>
-<span class="nc" id="L68">            throw new IllegalArgumentException(&quot;Step must be a positive number.&quot;);</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (start &gt;= endExclusive)</span>
-<span class="nc" id="L70">            return;</span>
+    public static void concurrentLoop(int startIndex, int endIndex, IntConsumer function) {
         try {
-<span class="nc" id="L72">            int range = endExclusive - start;</span>
-<span class="nc bnc" id="L73" title="All 2 branches missed.">            int iterations = range/step + ((range%step == 0) ? 0 : 1);</span>
-<span class="nc" id="L74">            threadPool.submit(() -&gt; IntStream.range(0, iterations).parallel().forEach(i -&gt; consumer.accept(start + i*step))).get();</span>
-<span class="nc" id="L75">        } catch (InterruptedException | ExecutionException e) {</span>
-<span class="nc" id="L76">            e.printStackTrace();</span>
-<span class="nc" id="L77">        }</span>
-<span class="nc" id="L78">    }</span>
+<span class="nc" id="L52">            threadPool.submit(() -&gt; IntStream.range(startIndex, endIndex).parallel().forEach(function)).get();</span>
+<span class="nc" id="L53">        } catch (InterruptedException | ExecutionException e) {</span>
+<span class="nc" id="L54">            e.printStackTrace();</span>
+<span class="nc" id="L55">        }</span>
+<span class="nc" id="L56">    }</span>
+
+
+
+    /**
+     * Applies a concurrent loop to a function.
+     * @param startIndex Starting index for concurrent loop.
+     * @param endIndex Ending index for concurrent loop (exclusive).
+     * @param step Step size for the index variable of the loop.
+     * @param function Function to apply each iteration. Function is dependent on iteration index.
+     */
+    public static void concurrentLoop(int startIndex, int endIndex, int step, IntConsumer function ) {
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (step &lt;= 0)</span>
+<span class="nc" id="L69">            throw new IllegalArgumentException(ErrorMessages.negValueErr(startIndex));</span>
+        try {
+<span class="nc" id="L71">            int range = endIndex - startIndex;</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">            int iterations = range/step + ((range%step == 0) ? 0 : 1);</span>
+<span class="nc" id="L73">            threadPool.submit(() -&gt; IntStream.range(0, iterations).parallel().forEach(i -&gt; function.accept(startIndex + i*step))).get();</span>
+<span class="nc" id="L74">        } catch (InterruptedException | ExecutionException e) {</span>
+<span class="nc" id="L75">            e.printStackTrace();</span>
+<span class="nc" id="L76">        }</span>
+<span class="nc" id="L77">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

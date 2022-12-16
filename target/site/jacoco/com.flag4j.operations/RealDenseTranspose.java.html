@@ -50,8 +50,18 @@ public final class RealDenseTranspose {
      * @return The transpose of the tensor along the specified axes.
      */
     public static double[] standard(double[] src, Shape shape, int axis1, int axis2) {
-        // TODO:
-<span class="nc" id="L54">        return null;</span>
+<span class="nc" id="L53">        double[] dest = new double[shape.totalEntries().intValue()];</span>
+<span class="nc" id="L54">        Shape destShape = shape.clone().swapAxes(axis1, axis2);</span>
+
+<span class="nc" id="L56">        int[] srcIndices = new int[shape.dims.length];</span>
+<span class="nc" id="L57">        int[] destIndices = new int[shape.dims.length];</span>
+
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="nc" id="L60">            dest[shape.entriesIndex(destIndices)] = dest[shape.entriesIndex(srcIndices)];</span>
+            // TODO: Increase srcIndices and get destIndices.
+        }
+
+<span class="nc" id="L64">        return dest;</span>
     }
 
 
@@ -63,15 +73,15 @@ public final class RealDenseTranspose {
      * @return The transpose of the matrix.
      */
     public static double[] standardMatrix(double[] src, final int numRows, final int numCols) {
-<span class="nc" id="L66">        double[] transpose = new double[numRows*numCols];</span>
+<span class="nc" id="L76">        double[] transpose = new double[numRows*numCols];</span>
 
-<span class="nc bnc" id="L68" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="nc" id="L70">                transpose[i + j*numRows] = src[j + i*numCols];</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L80">                transpose[j*numRows + i] = src[i*numCols + j];</span>
             }
         }
 
-<span class="nc" id="L74">        return transpose;</span>
+<span class="nc" id="L84">        return transpose;</span>
     }
 
 
@@ -81,28 +91,28 @@ public final class RealDenseTranspose {
      * @return The transpose of this tensor along specified axes
      */
     public static double[] blockedMatrix(double[] src, final int numRows, final int numCols) {
-<span class="nc" id="L84">        double[] transpose = new double[numRows*numCols];</span>
-<span class="nc" id="L85">        final int blockSize = Configurations.getBlockSize();</span>
+<span class="nc" id="L94">        double[] transpose = new double[numRows*numCols];</span>
+<span class="nc" id="L95">        final int blockSize = Configurations.getBlockSize();</span>
         int blockRowEnd;
         int blockColEnd;
 
-<span class="nc bnc" id="L89" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i+=blockSize) {</span>
-<span class="nc bnc" id="L90" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j+=blockSize) {</span>
-<span class="nc" id="L91">                blockRowEnd = Math.min(i+blockSize, numRows);</span>
-<span class="nc" id="L92">                blockColEnd = Math.min(j+blockSize, numCols);</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i+=blockSize) {</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j+=blockSize) {</span>
+<span class="nc" id="L101">                blockRowEnd = Math.min(i+blockSize, numRows);</span>
+<span class="nc" id="L102">                blockColEnd = Math.min(j+blockSize, numCols);</span>
 
                 // Transpose the block beginning at (i, j)
-<span class="nc bnc" id="L95" title="All 2 branches missed.">                for(int blockI=i; blockI&lt;blockRowEnd; blockI++) {</span>
-<span class="nc bnc" id="L96" title="All 2 branches missed.">                    for(int blockJ=j; blockJ&lt;blockColEnd; blockJ++) {</span>
-<span class="nc" id="L97">                        transpose[blockI + blockJ*numRows] = src[blockJ + blockI*numCols];</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">                for(int blockI=i; blockI&lt;blockRowEnd; blockI++) {</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">                    for(int blockJ=j; blockJ&lt;blockColEnd; blockJ++) {</span>
+<span class="nc" id="L107">                        transpose[blockI + blockJ*numRows] = src[blockJ + blockI*numCols];</span>
                     }
                 }
 
-<span class="nc" id="L101">                transpose[i+j*numRows] = src[j+i*numCols];</span>
+<span class="nc" id="L111">                transpose[i+j*numRows] = src[j+i*numCols];</span>
             }
         }
 
-<span class="nc" id="L105">        return transpose;</span>
+<span class="nc" id="L115">        return transpose;</span>
     }
 
 
@@ -114,16 +124,16 @@ public final class RealDenseTranspose {
      * @return The transpose of the source matrix.
      */
     public static double[] standardMatrixConcurrent(double[] src, final int numRows, final int numCols) {
-<span class="nc" id="L117">        double[] dest = new double[src.length];</span>
+<span class="nc" id="L127">        double[] dest = new double[src.length];</span>
 
         // Compute transpose concurrently.
-<span class="nc" id="L120">        ThreadManager.loopFor(0, numRows, (i) -&gt; {</span>
-<span class="nc bnc" id="L121" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="nc" id="L122">                dest[i + j*numRows] = src[j + i*numCols];</span>
+<span class="nc" id="L130">        ThreadManager.concurrentLoop(0, numRows, (i) -&gt; {</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L132">                dest[i + j*numRows] = src[j + i*numCols];</span>
             }
-<span class="nc" id="L124">        });</span>
+<span class="nc" id="L134">        });</span>
 
-<span class="nc" id="L126">        return dest;</span>
+<span class="nc" id="L136">        return dest;</span>
     }
 
 
@@ -135,30 +145,30 @@ public final class RealDenseTranspose {
      * @return The transpose of the source matrix.
      */
     public static double[] blockedMatrixConcurrent(final double[] src, final int numRows, final int numCols) {
-<span class="nc" id="L138">        double[] dest = new double[src.length];</span>
-<span class="nc" id="L139">        final int blockSize = Configurations.getBlockSize();</span>
+<span class="nc" id="L148">        double[] dest = new double[src.length];</span>
+<span class="nc" id="L149">        final int blockSize = Configurations.getBlockSize();</span>
 
         // Compute transpose concurrently.
-<span class="nc" id="L142">        ThreadManager.loopFor(0, numRows, blockSize, (i) -&gt; {</span>
+<span class="nc" id="L152">        ThreadManager.concurrentLoop(0, numRows, blockSize, (i) -&gt; {</span>
             int blockRowEnd;
             int blockColEnd;
 
-<span class="nc bnc" id="L146" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j+=blockSize) {</span>
-<span class="nc" id="L147">                blockRowEnd = Math.min(i+blockSize, numRows);</span>
-<span class="nc" id="L148">                blockColEnd = Math.min(j+blockSize, numCols);</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j+=blockSize) {</span>
+<span class="nc" id="L157">                blockRowEnd = Math.min(i+blockSize, numRows);</span>
+<span class="nc" id="L158">                blockColEnd = Math.min(j+blockSize, numCols);</span>
 
                 // Transpose the block beginning at (i, j)
-<span class="nc bnc" id="L151" title="All 2 branches missed.">                for(int blockI=i; blockI&lt;Math.min(i+blockSize, numRows); blockI++) {</span>
-<span class="nc bnc" id="L152" title="All 2 branches missed.">                    for(int blockJ=j; blockJ&lt;Math.min(j+blockSize, numCols); blockJ++) {</span>
-<span class="nc" id="L153">                        dest[blockI + blockJ*numRows] = src[blockJ + blockI*numCols];</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">                for(int blockI=i; blockI&lt;blockRowEnd; blockI++) {</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">                    for(int blockJ=j; blockJ&lt;blockColEnd; blockJ++) {</span>
+<span class="nc" id="L163">                        dest[blockI + blockJ*numRows] = src[blockJ + blockI*numCols];</span>
                     }
                 }
 
-<span class="nc" id="L157">                dest[i+j*numRows] = src[j+i*numCols];</span>
+<span class="nc" id="L167">                dest[i+j*numRows] = src[j+i*numCols];</span>
             }
-<span class="nc" id="L159">        });</span>
+<span class="nc" id="L169">        });</span>
 
-<span class="nc" id="L161">        return dest;</span>
+<span class="nc" id="L171">        return dest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

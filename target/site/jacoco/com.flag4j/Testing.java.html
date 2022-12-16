@@ -45,8 +45,8 @@ import java.util.Arrays;
 
 
     public static void main(String[] args) {
-<span class="nc" id="L48">        int numRows = 10000;</span>
-<span class="nc" id="L49">        int numCols = 30000;</span>
+<span class="nc" id="L48">        int numRows = 1800;</span>
+<span class="nc" id="L49">        int numCols = 1500;</span>
 
         long startTime, endTime;
 
@@ -75,7 +75,7 @@ import java.util.Arrays;
 <span class="nc" id="L75">        startTime = System.nanoTime();</span>
 <span class="nc" id="L76">        RealDenseTranspose.blockedMatrixConcurrent(A, numRows, numCols);</span>
 <span class="nc" id="L77">        endTime = System.nanoTime();</span>
-<span class="nc" id="L78">        System.out.println(&quot;Standard Concurrent: &quot; + (endTime-startTime)/1000000.0 + &quot; ms&quot;);</span>
+<span class="nc" id="L78">        System.out.println(&quot;Blocked Concurrent: &quot; + (endTime-startTime)/1000000.0 + &quot; ms&quot;);</span>
 <span class="nc" id="L79">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -49,8 +49,8 @@ public enum Axis2D {
 
 
     /**
-     * Gets an array of all axis ordinals.
-     * @return An array of all axis ordinals.
+     * Gets an array of all axes ordinals.
+     * @return An array of all axes ordinals.
      */
     public static int[] allAxes() {
         return new int[]{ROW.ordinal(), COL.ordinal()};

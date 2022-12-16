@@ -50,8 +50,18 @@ public final class RealDenseTranspose {
      * @return The transpose of the tensor along the specified axes.
      */
     public static double[] standard(double[] src, Shape shape, int axis1, int axis2) {
-        // TODO:
-        return null;
+        double[] dest = new double[shape.totalEntries().intValue()];
+        Shape destShape = shape.clone().swapAxes(axis1, axis2);
+
+        int[] srcIndices = new int[shape.dims.length];
+        int[] destIndices = new int[shape.dims.length];
+
+        for(int i=0; i<src.length; i++) {
+            dest[shape.entriesIndex(destIndices)] = dest[shape.entriesIndex(srcIndices)];
+            // TODO: Increase srcIndices and get destIndices.
+        }
+
+        return dest;
     }
 
 
@@ -67,7 +77,7 @@ public final class RealDenseTranspose {
 
         for(int i=0; i<numRows; i++) {
             for(int j=0; j<numCols; j++) {
-                transpose[i + j*numRows] = src[j + i*numCols];
+                transpose[j*numRows + i] = src[i*numCols + j];
             }
         }
 
@@ -148,8 +158,8 @@ public final class RealDenseTranspose {
                 blockColEnd = Math.min(j+blockSize, numCols);
 
                 // Transpose the block beginning at (i, j)
-                for(int blockI=i; blockI<Math.min(i+blockSize, numRows); blockI++) {
-                    for(int blockJ=j; blockJ<Math.min(j+blockSize, numCols); blockJ++) {
+                for(int blockI=i; blockI<blockRowEnd; blockI++) {
+                    for(int blockJ=j; blockJ<blockColEnd; blockJ++) {
                         dest[blockI + blockJ*numRows] = src[blockJ + blockI*numCols];
                     }
                 }
