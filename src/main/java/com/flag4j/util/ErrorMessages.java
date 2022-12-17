@@ -99,6 +99,15 @@ public abstract class ErrorMessages {
      */
     private static final String INDICES_RANK_ERR = "Number of indices does not match the rank of the tensor." +
             " Got %s indices but expected %s";
+    /**
+     * Error message for shapes which cannot be broadcast.
+     */
+    private static final String SHAPE_BROADCAST_ERR = "Shapes %s and %s can not be broadcast because they specify " +
+            "a different number of total entries.";
+    /**
+     * Error message for arrays which do not have the same total number of entries.
+     */
+    private static final String TOTAL_ENTRIES_ERR = "Arrays do not have the same total number of entries.";
 
     /**
      * Gets an error message for two tensors with mismatching shapes.
@@ -241,6 +250,26 @@ public abstract class ErrorMessages {
      */
     public static String getIndicesRankErr(int numIndices, int rank) {
         return String.format(INDICES_RANK_ERR, numIndices, rank);
+    }
+
+
+    /**
+     * Gets an error message for two shapes which cannot be broadcast together.
+     * @param shape1 First shape.
+     * @param shape2 Second shape.
+     * @return An error message for two shapes which cannot be broadcast together.
+     */
+    public static String getShapeBroadcastErr(Shape shape1, Shape shape2) {
+        return String.format(SHAPE_BROADCAST_ERR, shape1, shape2);
+    }
+
+
+    /**
+     * Gets an error message for arrays which do not have the same total number of entries.
+     * @return An error message for arrays which do not have the same total number of entries.
+     */
+    public static String getTotalEntriesErr() {
+        return TOTAL_ENTRIES_ERR;
     }
 }
 

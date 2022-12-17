@@ -26,7 +26,7 @@ package com.flag4j.core;
 
 import com.flag4j.Shape;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ShapeChecks;
+import com.flag4j.util.ShapeArrayChecks;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -56,9 +56,9 @@ public abstract class SparseTensorBase<T> extends TensorBase<T> {
         if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) < 0) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));
         }
-        ShapeChecks.arrayLengthsCheck(nonZeroEntries, indices.length);
+        ShapeArrayChecks.arrayLengthsCheck(nonZeroEntries, indices.length);
         if (indices.length > 0) {
-            ShapeChecks.arrayLengthsCheck(super.getRank(), indices[0].length);
+            ShapeArrayChecks.arrayLengthsCheck(super.getRank(), indices[0].length);
         }
 
         this.nonZeroEntries = nonZeroEntries;

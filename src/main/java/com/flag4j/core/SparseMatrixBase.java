@@ -26,7 +26,7 @@ package com.flag4j.core;
 
 import com.flag4j.Shape;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ShapeChecks;
+import com.flag4j.util.ShapeArrayChecks;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -67,7 +67,7 @@ public abstract class SparseMatrixBase<T> extends MatrixBase<T> {
         if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) < 0) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));
         }
-        ShapeChecks.arrayLengthsCheck(nonZeroEntries, rowIndices.length, colIndices.length);
+        ShapeArrayChecks.arrayLengthsCheck(nonZeroEntries, rowIndices.length, colIndices.length);
 
         this.nonZeroEntries = nonZeroEntries;
         this.rowIndices = rowIndices;

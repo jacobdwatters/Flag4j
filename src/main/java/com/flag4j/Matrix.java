@@ -26,8 +26,12 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
-import com.flag4j.operations.RealComplexDenseOperations;
-import com.flag4j.operations.RealDenseOperations;
+import com.flag4j.operations.dense.real.RealDenseSetValueOperations;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import com.flag4j.operations.dense.real.RealDenseOperations;
+import com.flag4j.util.Axis2D;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ShapeArrayChecks;
 
 import java.util.Arrays;
 
@@ -164,7 +168,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix toComplex() {
-        return null;
+        return new CMatrix(this);
     }
 
 
@@ -180,19 +184,21 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
-     * Checks if two matrices are equal (element-wise.)
+     * Checks if two matrices are equal (element-wise).
+     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
      *
      * @param B Second matrix in the equality.
      * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
      */
     @Override
     public boolean equals(Matrix B) {
-        return Arrays.equals(this.entries, B.entries);
+        return Arrays.equals(this.entries, B.entries) && this.shape.equals(B.shape);
     }
 
 
     /**
-     * Checks if two matrices are equal (element-wise.)
+     * Checks if two matrices are equal (element-wise).
+     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
      *
      * @param B Second matrix in the equality.
      * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
@@ -243,22 +249,23 @@ public class Matrix extends RealMatrixBase implements
      * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
      * in the reshaped matrix.
      *
-     * @param shape An array of length 2 containing, in order, the number of rows and the number of columns for the
-     *              reshaped matrix.
+     * @param shape New Shape.
      * @return A matrix which is equivalent to this matrix but with the specified dimensions.
      * @throws IllegalArgumentException If either,<br>
      *                                  - The shape array contains negative indices.<br>
      *                                  - This matrix cannot be reshaped to the specified dimensions.
      */
     @Override
-    public Matrix reshape(int[] shape) {
-        return null;
+    public Matrix reshape(Shape shape) {
+        // Ensure the total number of entries in each shape is equal
+        ShapeArrayChecks.broadcastCheck(shape, this.shape);
+        return new Matrix(shape, entries.clone());
     }
 
 
     /**
      * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
-     * * in the reshaped matrix.
+     * in the reshaped matrix.
      *
      * @param numRows The number of rows in the reshaped matrix.
      * @param numCols The number of columns in the reshaped matrix.
@@ -266,7 +273,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix reshape(int numRows, int numCols) {
-        return null;
+        return reshape(new Shape(numRows, numCols));
     }
 
 
@@ -277,7 +284,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix flatten() {
-        return null;
+        return reshape(new Shape(1, entries.length));
     }
 
 
@@ -290,7 +297,16 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix flatten(int axis) {
-        return null;
+        if(axis==Axis2D.row()) {
+            // Flatten to single row
+            return reshape(new Shape(1, entries.length));
+        } else if(axis==Axis2D.col()) {
+            // Flatten to single column
+            return reshape(new Shape(entries.length, 1));
+        } else {
+            // Unknown axis
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, Axis2D.allAxes()));
+        }
     }
 
 
@@ -302,7 +318,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(Double[][] values) {
-
+        RealDenseSetValueOperations.setValues(values, this.entries);
     }
 
 
@@ -314,7 +330,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(double[][] values) {
-
+        RealDenseSetValueOperations.setValues(values, this.entries);
     }
 
 
@@ -326,7 +342,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(int[][] values) {
-
+        RealDenseSetValueOperations.setValues(values, this.entries);
     }
 
 

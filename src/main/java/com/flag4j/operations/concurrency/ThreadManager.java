@@ -24,7 +24,6 @@
 
 package com.flag4j.operations.concurrency;
 
-
 import com.flag4j.util.ErrorMessages;
 
 import java.util.concurrent.ExecutionException;
@@ -70,7 +69,9 @@ public class ThreadManager {
         try {
             int range = endIndex - startIndex;
             int iterations = range/step + ((range%step == 0) ? 0 : 1);
-            threadPool.submit(() -> IntStream.range(0, iterations).parallel().forEach(i -> function.accept(startIndex + i*step))).get();
+            threadPool.submit(() -> IntStream.range(0, iterations).parallel().forEach(
+                    i -> function.accept(startIndex + i*step))
+            ).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }

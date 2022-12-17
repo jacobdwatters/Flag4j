@@ -25,6 +25,7 @@
 package com.flag4j.core;
 
 
+import com.flag4j.Shape;
 import com.flag4j.SparseCMatrix;
 
 /**
@@ -49,7 +50,7 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * - The shape array contains negative indices.<br>
      * - This matrix cannot be reshaped to the specified dimensions.
      */
-    T reshape(int[] shape);
+    T reshape(Shape shape);
 
 
     /**

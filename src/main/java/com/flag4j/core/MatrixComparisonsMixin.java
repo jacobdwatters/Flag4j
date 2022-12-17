@@ -50,7 +50,8 @@ public interface MatrixComparisonsMixin<T, U, V, W, Y, X extends Number> extends
 
 
     /**
-     * Checks if two matrices are equal (element-wise.)
+     * Checks if two matrices are equal (element-wise).
+     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
      * @param B Second matrix in the equality.
      * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
      */
@@ -58,7 +59,8 @@ public interface MatrixComparisonsMixin<T, U, V, W, Y, X extends Number> extends
 
 
     /**
-     * Checks if two matrices are equal (element-wise.)
+     * Checks if two matrices are equal (element-wise).
+     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
      * @param B Second matrix in the equality.
      * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
      */
@@ -66,7 +68,8 @@ public interface MatrixComparisonsMixin<T, U, V, W, Y, X extends Number> extends
 
 
     /**
-     * Checks if two matrices are equal (element-wise.)
+     * Checks if two matrices are equal (element-wise).
+     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
      * @param B Second matrix in the equality.
      * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
      */
@@ -74,7 +77,8 @@ public interface MatrixComparisonsMixin<T, U, V, W, Y, X extends Number> extends
 
 
     /**
-     * Checks if two matrices are equal (element-wise.)
+     * Checks if two matrices are equal (element-wise).
+     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
      * @param B Second matrix in the equality.
      * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
      */

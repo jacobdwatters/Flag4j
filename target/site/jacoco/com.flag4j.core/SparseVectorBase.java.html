@@ -26,7 +26,7 @@ package com.flag4j.core;
 
 
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ShapeChecks;
+import com.flag4j.util.ShapeArrayChecks;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -57,7 +57,7 @@ public abstract class SparseVectorBase&lt;T&gt; extends VectorBase&lt;T&gt; {
 <span class="fc bfc" id="L57" title="All 2 branches covered.">        if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) &lt; 0) {</span>
 <span class="fc" id="L58">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));</span>
         }
-<span class="fc" id="L60">        ShapeChecks.arrayLengthsCheck(nonZeroEntries, indices.length);</span>
+<span class="fc" id="L60">        ShapeArrayChecks.arrayLengthsCheck(nonZeroEntries, indices.length);</span>
 
 <span class="fc" id="L62">        this.nonZeroEntries = nonZeroEntries;</span>
 <span class="fc" id="L63">        this.indices = indices;</span>

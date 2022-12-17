@@ -24,7 +24,6 @@
 
 package com.flag4j.operations.concurrency;
 
-
 import com.flag4j.util.ErrorMessages;
 
 import java.util.concurrent.ExecutionException;
@@ -36,9 +35,9 @@ import java.util.stream.IntStream;
  * This class contains the base thread pool for all concurrent operations and several methods for managing the
  * pool.
  */
-<span class="nc" id="L39">public class ThreadManager {</span>
+<span class="nc" id="L38">public class ThreadManager {</span>
 
-<span class="fc" id="L41">    protected static ForkJoinPool threadPool = new ForkJoinPool();</span>
+<span class="fc" id="L40">    protected static ForkJoinPool threadPool = new ForkJoinPool();</span>
 
 
     /**
@@ -49,11 +48,11 @@ import java.util.stream.IntStream;
      */
     public static void concurrentLoop(int startIndex, int endIndex, IntConsumer function) {
         try {
-<span class="fc" id="L52">            threadPool.submit(() -&gt; IntStream.range(startIndex, endIndex).parallel().forEach(function)).get();</span>
-<span class="nc" id="L53">        } catch (InterruptedException | ExecutionException e) {</span>
-<span class="nc" id="L54">            e.printStackTrace();</span>
-<span class="fc" id="L55">        }</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L51">            threadPool.submit(() -&gt; IntStream.range(startIndex, endIndex).parallel().forEach(function)).get();</span>
+<span class="nc" id="L52">        } catch (InterruptedException | ExecutionException e) {</span>
+<span class="nc" id="L53">            e.printStackTrace();</span>
+<span class="fc" id="L54">        }</span>
+<span class="fc" id="L55">    }</span>
 
 
 
@@ -65,15 +64,17 @@ import java.util.stream.IntStream;
      * @param function Function to apply each iteration. Function is dependent on iteration index.
      */
     public static void concurrentLoop(int startIndex, int endIndex, int step, IntConsumer function ) {
-<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        if (step &lt;= 0)</span>
-<span class="nc" id="L69">            throw new IllegalArgumentException(ErrorMessages.negValueErr(startIndex));</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (step &lt;= 0)</span>
+<span class="nc" id="L68">            throw new IllegalArgumentException(ErrorMessages.negValueErr(startIndex));</span>
         try {
-<span class="fc" id="L71">            int range = endIndex - startIndex;</span>
-<span class="pc bpc" id="L72" title="1 of 2 branches missed.">            int iterations = range/step + ((range%step == 0) ? 0 : 1);</span>
-<span class="fc" id="L73">            threadPool.submit(() -&gt; IntStream.range(0, iterations).parallel().forEach(i -&gt; function.accept(startIndex + i*step))).get();</span>
-<span class="nc" id="L74">        } catch (InterruptedException | ExecutionException e) {</span>
-<span class="nc" id="L75">            e.printStackTrace();</span>
-<span class="fc" id="L76">        }</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L70">            int range = endIndex - startIndex;</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">            int iterations = range/step + ((range%step == 0) ? 0 : 1);</span>
+<span class="fc" id="L72">            threadPool.submit(() -&gt; IntStream.range(0, iterations).parallel().forEach(</span>
+<span class="fc" id="L73">                    i -&gt; function.accept(startIndex + i*step))</span>
+<span class="fc" id="L74">            ).get();</span>
+<span class="nc" id="L75">        } catch (InterruptedException | ExecutionException e) {</span>
+<span class="nc" id="L76">            e.printStackTrace();</span>
+<span class="fc" id="L77">        }</span>
+<span class="fc" id="L78">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
