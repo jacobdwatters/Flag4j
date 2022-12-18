@@ -51,6 +51,7 @@ public class ThreadManager {
             threadPool.submit(() -> IntStream.range(startIndex, endIndex).parallel().forEach(function)).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -74,6 +75,7 @@ public class ThreadManager {
             ).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 }
