@@ -3,6 +3,8 @@ com.flag4j.complex_numbers
 com.flag4j.core
 com.flag4j.io
 com.flag4j.linalg
-com.flag4j.operations
 com.flag4j.operations.concurrency
+com.flag4j.operations.dense.complex
+com.flag4j.operations.dense.real
+com.flag4j.operations.dense.real_complex
 com.flag4j.util
