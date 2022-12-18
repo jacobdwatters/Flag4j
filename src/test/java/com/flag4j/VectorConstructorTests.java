@@ -1,339 +1,495 @@
 package com.flag4j;
 
-import org.junit.jupiter.api.Test;
+
+import com.flag4j.core.VectorOrientations;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class VectorConstructorTests {
-    private static Vector a;
-    private static Vector b;
-    private static double[] expEntries;
-    private static int[] expEntriesInt;
-    private static VectorOrientations expOrientation;
-    private static int expSize;
+
+    int expSize;
+    double fillValue;
+    Shape expShape;
+    VectorOrientations expOrientation;
+    double[] expEntries;
+    int[] entriesI;
+    Vector a, b;
 
     @Test
-    void defaultConstructorTestCase() {
-        expOrientation = VectorOrientations.COLUMN_VECTOR;
-        expEntries = new double[0];
+    void sizeTest() {
+        // ----------- Sub-case 1 ------------
+        expSize = 5;
+        expShape = new Shape(new int[]{expSize});
+        expOrientation = VectorOrientations.COL;
+        expEntries = new double[expSize];
+
+        a = new Vector(expSize);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+
+        // ----------- Sub-case 2 ------------
         expSize = 0;
-        a = new Vector();
+        expShape = new Shape(new int[]{expSize});
+        expOrientation = VectorOrientations.COL;
+        expEntries = new double[expSize];
 
+        a = new Vector(expSize);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
         assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
+
+        // ----------- Sub-case 3 ------------
+        expSize = -1;
+        assertThrows(NegativeArraySizeException.class, () -> new Vector(expSize));
     }
 
-
     @Test
-    void orientConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
-        expOrientation = VectorOrientations.COLUMN_VECTOR;
-        expEntries = new double[0];
+    void sizeFillTest() {
+        // ----------- Sub-case 1 ------------
+        expSize = 5;
+        fillValue = -10.23423;
+        expShape = new Shape(new int[]{expSize});
+        expOrientation = VectorOrientations.COL;
+        expEntries = new double[expSize];
+        Arrays.fill(expEntries, fillValue);
+
+        a = new Vector(expSize, fillValue);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+
+        // ----------- Sub-case 2 ------------
         expSize = 0;
-        a = new Vector(VectorOrientations.COLUMN_VECTOR);
+        fillValue = -10.23423;
+        expShape = new Shape(new int[]{expSize});
+        expOrientation = VectorOrientations.COL;
+        expEntries = new double[expSize];
+        Arrays.fill(expEntries, fillValue);
 
+        a = new Vector(expSize,fillValue);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
         assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
 
-        // ------------ Sub-case 2 ------------
-        expOrientation = VectorOrientations.ROW_VECTOR;
-        expEntries = new double[0];
+        // ----------- Sub-case 3 ------------
+        expSize = -1;
+        fillValue = -10.23423;
+        assertThrows(NegativeArraySizeException.class, () -> new Vector(expSize, fillValue));
+    }
+
+
+    @Test
+    void sizeOrientationTest() {
+        // ----------- Sub-case 1 ------------
+        expSize = 5;
+        expShape = new Shape(new int[]{expSize});
+        expOrientation = VectorOrientations.COL;
+        expEntries = new double[expSize];
+
+        a = new Vector(expSize, expOrientation);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+
+        // ----------- Sub-case 2 ------------
         expSize = 0;
-        a = new Vector(VectorOrientations.ROW_VECTOR);
+        expShape = new Shape(new int[]{expSize});
+        expOrientation = VectorOrientations.COL;
+        expEntries = new double[expSize];
 
+        a = new Vector(expSize, expOrientation);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
         assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
-    }
 
+        // ----------- Sub-case 3 ------------
+        expSize = 5;
+        expShape = new Shape(new int[]{expSize});
+        expOrientation = VectorOrientations.ROW;
+        expEntries = new double[expSize];
 
-    @Test
-    void sizeConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
-        expOrientation = VectorOrientations.COLUMN_VECTOR;
-        expEntries = new double[10];
-        expSize = 10;
-        a = new Vector(10);
+        a = new Vector(expSize, expOrientation);
 
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
         assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
 
-
-        // ------------ Sub-case 2 ------------
-        expOrientation = VectorOrientations.COLUMN_VECTOR;
-        expEntries = new double[0];
+        // ----------- Sub-case 4 ------------
         expSize = 0;
-        a = new Vector(0);
+        expShape = new Shape(new int[]{expSize});
+        expOrientation = VectorOrientations.ROW;
+        expEntries = new double[expSize];
 
+        a = new Vector(expSize, expOrientation);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
         assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
 
-        // ------------ Sub-case 3 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Vector(-1));
-
-        // ------------ Sub-case 4 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Vector(-5));
+        // ----------- Sub-case 5 ------------
+        expSize = -1;
+        assertThrows(NegativeArraySizeException.class, () -> new Vector(expSize, expOrientation));
     }
 
 
     @Test
-    void sizeOrientConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
-        expOrientation = VectorOrientations.COLUMN_VECTOR;
-        expEntries = new double[10];
-        expSize = 10;
-        a = new Vector(10, VectorOrientations.COLUMN_VECTOR);
+    void sizeFillOrientationTest() {
+        // ----------- Sub-case 1 ------------
+        expSize = 5;
+        fillValue = -0.12334;
+        expShape = new Shape(new int[]{expSize});
+        expOrientation = VectorOrientations.COL;
+        expEntries = new double[expSize];
+        Arrays.fill(expEntries, fillValue);
 
+        a = new Vector(expSize, fillValue, expOrientation);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
         assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
 
+        // ----------- Sub-case 2 ------------
+        expSize = 0;
+        fillValue = -0.12334;
+        expShape = new Shape(new int[]{expSize});
+        expOrientation = VectorOrientations.COL;
+        expEntries = new double[expSize];
+        Arrays.fill(expEntries, fillValue);
 
-        // ------------ Sub-case 2 ------------
-        expOrientation = VectorOrientations.ROW_VECTOR;
-        expEntries = new double[14];
-        expSize = 14;
-        a = new Vector(14, VectorOrientations.ROW_VECTOR);
+        a = new Vector(expSize, fillValue, expOrientation);
 
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
         assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
 
-        // ------------ Sub-case 3 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Vector(-1, VectorOrientations.COLUMN_VECTOR));
+        // ----------- Sub-case 3 ------------
+        expSize = 5;
+        fillValue = -0.12334;
+        expShape = new Shape(new int[]{expSize});
+        expOrientation = VectorOrientations.ROW;
+        expEntries = new double[expSize];
+        Arrays.fill(expEntries, fillValue);
 
-        // ------------ Sub-case 4 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Vector(-5, VectorOrientations.ROW_VECTOR));
+        a = new Vector(expSize, fillValue, expOrientation);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+
+        // ----------- Sub-case 4 ------------
+        expSize = 0;
+        fillValue = -0.12334;
+        expShape = new Shape(new int[]{expSize});
+        expOrientation = VectorOrientations.ROW;
+        expEntries = new double[expSize];
+        Arrays.fill(expEntries, fillValue);
+
+        a = new Vector(expSize, fillValue, expOrientation);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+
+        // ----------- Sub-case 5 ------------
+        expSize = -1;
+        assertThrows(NegativeArraySizeException.class,
+                () -> new Vector(expSize, fillValue, expOrientation));
     }
 
 
-    @Test
-    void sizeValueConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
-        expOrientation = VectorOrientations.COLUMN_VECTOR;
-        expEntries = new double[10];
-        expSize = 10;
-        a = new Vector(10, 90.13);
-        Arrays.fill(expEntries, 90.13);
 
-        assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
-
-
-        // ------------ Sub-case 2 ------------
-        expOrientation = VectorOrientations.COLUMN_VECTOR;
-        expEntries = new double[14];
-        expSize = 14;
-        a = new Vector(14,-1033);
-        Arrays.fill(expEntries, -1033);
-
-        assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
-
-        // ------------ Sub-case 3 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Vector(-1, 93));
-
-        // ------------ Sub-case 4 ------------
-        assertThrows(IllegalArgumentException.class, () -> new Vector(-5, 15));
-    }
 
 
     @Test
-    void sizeValueOrientConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
-        expOrientation = VectorOrientations.COLUMN_VECTOR;
-        expEntries = new double[10];
-        expSize = 10;
-        a = new Vector(10, 90.13, VectorOrientations.COLUMN_VECTOR);
-        Arrays.fill(expEntries, 90.13);
-
-        assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
-
-
-        // ------------ Sub-case 2 ------------
-        expOrientation = VectorOrientations.ROW_VECTOR;
-        expEntries = new double[14];
-        expSize = 14;
-        a = new Vector(14,-1033, VectorOrientations.ROW_VECTOR);
-        Arrays.fill(expEntries, -1033);
-
-        assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
-
-        // ------------ Sub-case 3 ------------
-        assertThrows(IllegalArgumentException.class, () ->
-                new Vector(-1, 93, VectorOrientations.ROW_VECTOR));
-
-        // ------------ Sub-case 4 ------------
-        assertThrows(IllegalArgumentException.class, () ->
-                new Vector(-5, 15, VectorOrientations.COLUMN_VECTOR));
-    }
-
-
-    @Test
-    void entriesConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
-        expOrientation = VectorOrientations.COLUMN_VECTOR;
-        expEntries = new double[]{1, 3, -1, Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY};
+    void entriesTest() {
+        // ----------- Sub-case 1 ------------
+        expEntries = new double[]{1.0433, 2, -3, 4, 5, 6, 7, 100, -0.1231};
         expSize = expEntries.length;
+        expOrientation = VectorOrientations.COL;
+        expShape = new Shape(expSize);
+
         a = new Vector(expEntries);
 
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
         assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
-    }
 
-
-    @Test
-    void entriesOrientConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
-        expOrientation = VectorOrientations.COLUMN_VECTOR;
-        expEntries = new double[]{1, 3, -1, Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY};
+        // ----------- Sub-case 2 ------------
+        expEntries = new double[]{-0.234974};
         expSize = expEntries.length;
-        a = new Vector(expEntries, VectorOrientations.COLUMN_VECTOR);
+        expOrientation = VectorOrientations.COL;
+        expShape = new Shape(expSize);
 
-        assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
-
-        // ------------ Sub-case 2 ------------
-        expOrientation = VectorOrientations.ROW_VECTOR;
-        expEntries = new double[]{1, 3, -1, Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY};
-        expSize = expEntries.length;
-        a = new Vector(expEntries, VectorOrientations.ROW_VECTOR);
-
-        assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
-    }
-
-
-    @Test
-    void entriesIntConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
-        expOrientation = VectorOrientations.COLUMN_VECTOR;
-        expEntriesInt = new int[]{1, 3, -1};
-        expEntries = new double[]{1, 3, -1};
-        expSize = expEntries.length;
-        a = new Vector(expEntriesInt);
-
-        assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
-    }
-
-
-    @Test
-    void entriesIntOrientConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
-        expOrientation = VectorOrientations.COLUMN_VECTOR;
-        expEntriesInt = new int[]{1, 3, -1};
-        expEntries = new double[]{1, 3, -1};
-        expSize = expEntries.length;
-        a = new Vector(expEntriesInt, VectorOrientations.COLUMN_VECTOR);
-
-        assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
-
-        // ------------ Sub-case 2 ------------
-        expOrientation = VectorOrientations.ROW_VECTOR;
-        expEntries = new double[]{1, 3, -1};
-        expEntries = new double[]{1, 3, -1};
-        expSize = expEntries.length;
-        a = new Vector(expEntriesInt, VectorOrientations.ROW_VECTOR);
-
-        assertArrayEquals(expEntries, a.entries);
-        assertEquals(expSize, a.m);
-        assertEquals(expOrientation, a.orientation);
-    }
-
-
-    @Test
-    void vecConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
-        expOrientation = VectorOrientations.COLUMN_VECTOR;
-        expEntries = new double[]{4.3, -1, 201.123, 1e-4, Double.NEGATIVE_INFINITY};
-        expSize = expEntries.length;
         a = new Vector(expEntries);
-        b = new Vector(a);
 
-        assertArrayEquals(expEntries, b.entries);
-        assertEquals(expSize, b.m);
-        assertEquals(expOrientation, b.orientation);
-
-
-        // ------------ Sub-case 2 ------------
-        expOrientation = VectorOrientations.ROW_VECTOR;
-        expEntries = new double[]{4.3, -1, 201.123, 1e-4, Double.NEGATIVE_INFINITY};
-        expSize = expEntries.length;
-        a = new Vector(expEntries, VectorOrientations.ROW_VECTOR);
-        b = new Vector(a);
-
-        assertArrayEquals(expEntries, b.entries);
-        assertEquals(expSize, b.m);
-        assertEquals(expOrientation, b.orientation);
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
     }
 
 
     @Test
-    void vecOrientTestCase() {
-        // ------------ Sub-case 1 ------------
-        expOrientation = VectorOrientations.COLUMN_VECTOR;
-        expEntries = new double[]{4.3, -1, 201.123, 1e-4, Double.NEGATIVE_INFINITY};
+    void entriesOrientationTest() {
+        // ----------- Sub-case 1 ------------
+        expEntries = new double[]{1.0433, 2, -3, 4, 5, 6, 7, 100, -0.1231};
         expSize = expEntries.length;
-        a = new Vector(expEntries);
-        b = new Vector(a, VectorOrientations.COLUMN_VECTOR);
+        expOrientation = VectorOrientations.COL;
+        expShape = new Shape(expSize);
 
-        assertArrayEquals(expEntries, b.entries);
-        assertEquals(expSize, b.m);
-        assertEquals(expOrientation, b.orientation);
+        a = new Vector(expEntries, expOrientation);
 
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
 
-        // ------------ Sub-case 2 ------------
-        expOrientation = VectorOrientations.ROW_VECTOR;
-        expEntries = new double[]{4.3, -1, 201.123, 1e-4, Double.NEGATIVE_INFINITY};
+        // ----------- Sub-case 2 ------------
+        expEntries = new double[]{-0.234974};
         expSize = expEntries.length;
-        a = new Vector(expEntries, VectorOrientations.COLUMN_VECTOR);
-        b = new Vector(a, VectorOrientations.ROW_VECTOR);
+        expOrientation = VectorOrientations.COL;
+        expShape = new Shape(expSize);
 
-        assertArrayEquals(expEntries, b.entries);
-        assertEquals(expSize, b.m);
-        assertEquals(expOrientation, b.orientation);
+        a = new Vector(expEntries, expOrientation);
 
-        // ------------ Sub-case 3 ------------
-        expOrientation = VectorOrientations.COLUMN_VECTOR;
-        expEntries = new double[]{4.3, -1, 201.123, 1e-4, Double.NEGATIVE_INFINITY};
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+
+        // ----------- Sub-case 3 ------------
+        expEntries = new double[]{1.0433, 2, -3, 4, 5, 6, 7, 100, -0.1231};
         expSize = expEntries.length;
-        a = new Vector(expEntries, VectorOrientations.ROW_VECTOR);
-        b = new Vector(a, VectorOrientations.COLUMN_VECTOR);
+        expOrientation = VectorOrientations.ROW;
+        expShape = new Shape(expSize);
 
-        assertArrayEquals(expEntries, b.entries);
-        assertEquals(expSize, b.m);
-        assertEquals(expOrientation, b.orientation);
+        a = new Vector(expEntries, expOrientation);
 
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
 
-        // ------------ Sub-case 4 ------------
-        expOrientation = VectorOrientations.ROW_VECTOR;
-        expEntries = new double[]{4.3, -1, 201.123, 1e-4, Double.NEGATIVE_INFINITY};
+        // ----------- Sub-case 4 ------------
+        expEntries = new double[]{-0.234974};
         expSize = expEntries.length;
-        a = new Vector(expEntries, VectorOrientations.ROW_VECTOR);
-        b = new Vector(a, VectorOrientations.ROW_VECTOR);
+        expOrientation = VectorOrientations.ROW;
+        expShape = new Shape(expSize);
 
-        assertArrayEquals(expEntries, b.entries);
-        assertEquals(expSize, b.m);
-        assertEquals(expOrientation, b.orientation);
+        a = new Vector(expEntries, expOrientation);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+    }
+
+
+    @Test
+    void entriesITest() {
+        // ----------- Sub-case 1 ------------
+        entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
+        expSize = entriesI.length;
+        expOrientation = VectorOrientations.COL;
+        expShape = new Shape(expSize);
+        expEntries = new double[expSize];
+        for(int i=0; i<entriesI.length; i++) {
+            expEntries[i] = entriesI[i];
+        }
+
+        a = new Vector(entriesI);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+
+        // ----------- Sub-case 2 ------------
+        entriesI = new int[]{-22};
+        expSize = entriesI.length;
+        expOrientation = VectorOrientations.COL;
+        expShape = new Shape(expSize);
+        expEntries = new double[expSize];
+        for(int i=0; i<entriesI.length; i++) {
+            expEntries[i] = entriesI[i];
+        }
+
+        a = new Vector(entriesI);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+    }
+
+
+    @Test
+    void entriesIOrientationTest() {
+        // ----------- Sub-case 1 ------------
+        entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
+        expSize = entriesI.length;
+        expOrientation = VectorOrientations.COL;
+        expShape = new Shape(expSize);
+        expEntries = new double[expSize];
+        for(int i=0; i<entriesI.length; i++) {
+            expEntries[i] = entriesI[i];
+        }
+
+        a = new Vector(entriesI, expOrientation);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+
+        // ----------- Sub-case 2 ------------
+        entriesI = new int[]{-22};
+        expSize = entriesI.length;
+        expOrientation = VectorOrientations.COL;
+        expShape = new Shape(expSize);
+        expEntries = new double[expSize];
+        for(int i=0; i<entriesI.length; i++) {
+            expEntries[i] = entriesI[i];
+        }
+
+        a = new Vector(entriesI, expOrientation);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+
+        // ----------- Sub-case 3 ------------
+        entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
+        expSize = entriesI.length;
+        expOrientation = VectorOrientations.ROW;
+        expShape = new Shape(expSize);
+        expEntries = new double[expSize];
+        for(int i=0; i<entriesI.length; i++) {
+            expEntries[i] = entriesI[i];
+        }
+
+        a = new Vector(entriesI, expOrientation);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+
+        // ----------- Sub-case 4 ------------
+        entriesI = new int[]{-22};
+        expSize = entriesI.length;
+        expOrientation = VectorOrientations.ROW;
+        expShape = new Shape(expSize);
+        expEntries = new double[expSize];
+        for(int i=0; i<entriesI.length; i++) {
+            expEntries[i] = entriesI[i];
+        }
+
+        a = new Vector(entriesI, expOrientation);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+    }
+
+
+    @Test
+    void copyTest() {
+        // ----------- Sub-case 1 ------------
+        entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
+        expSize = entriesI.length;
+        expOrientation = VectorOrientations.COL;
+        expShape = new Shape(expSize);
+        expEntries = new double[expSize];
+        for(int i=0; i<entriesI.length; i++) {
+            expEntries[i] = entriesI[i];
+        }
+
+        b = new Vector(entriesI, expOrientation);
+        a = new Vector(b);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+
+        // ----------- Sub-case 2 ------------
+        entriesI = new int[]{-22};
+        expSize = entriesI.length;
+        expOrientation = VectorOrientations.COL;
+        expShape = new Shape(expSize);
+        expEntries = new double[expSize];
+        for(int i=0; i<entriesI.length; i++) {
+            expEntries[i] = entriesI[i];
+        }
+
+        b = new Vector(entriesI, expOrientation);
+        a = new Vector(b);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+
+        // ----------- Sub-case 3 ------------
+        entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
+        expSize = entriesI.length;
+        expOrientation = VectorOrientations.ROW;
+        expShape = new Shape(expSize);
+        expEntries = new double[expSize];
+        for(int i=0; i<entriesI.length; i++) {
+            expEntries[i] = entriesI[i];
+        }
+
+        b = new Vector(entriesI, expOrientation);
+        a = new Vector(b);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
+
+        // ----------- Sub-case 4 ------------
+        entriesI = new int[]{-22};
+        expSize = entriesI.length;
+        expOrientation = VectorOrientations.ROW;
+        expShape = new Shape(expSize);
+        expEntries = new double[expSize];
+        for(int i=0; i<entriesI.length; i++) {
+            expEntries[i] = entriesI[i];
+        }
+
+        b = new Vector(entriesI, expOrientation);
+        a = new Vector(b);
+
+        assertEquals(expSize, a.size());
+        assertEquals(expShape, a.shape);
+        assertEquals(expOrientation, a.getOrientation());
+        assertArrayEquals(expEntries, a.entries);
     }
 }

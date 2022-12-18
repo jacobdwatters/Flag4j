@@ -1,31 +1,63 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Shape.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">Shape.java</span></div><h1>Shape.java</h1><pre class="source lang-java linenums">package com.flag4j;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Shape.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">Shape.java</span></div><h1>Shape.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j;
+
+import com.flag4j.util.ErrorMessages;
+
+import java.io.Serializable;
+import java.math.BigInteger;
+import java.util.Arrays;
 
 /**
- * An object to store the shape of a tensor. Note that the array holding the shape of the tensor is mutable.
+ * An object to store the shape of a tensor. Note that this object is mutable.
  */
-public class Shape {
+public class Shape implements Serializable {
     /**
-     * An array containing the size of each dimension of this tensor.
+     * An array containing the size of each dimension of this shape.
      */
     public int[] dims;
-
-
     /**
-     * Constructs a shape object with a specified rank such that all dimensions measure zero.
-     * @param rank Rank of the tensor which this shape object describes.
+     * An array containing the strides of all dimensions within this shape.
      */
-<span class="nc" id="L17">    public Shape(int rank) {</span>
-<span class="nc" id="L18">        dims = new int[rank];</span>
-<span class="nc" id="L19">    }</span>
+    public int[] strides;
 
 
     /**
      * Constructs a shape object from specified dimension measurements.
-     * @param dims A list of the dimension measurements for this shape object.
+     * @param dims A list of the dimension measurements for this shape object. All entries must be non-negative.
+     * @throws IllegalArgumentException If any dimension is negative.
      */
-<span class="fc" id="L26">    public Shape(int... dims) {</span>
-<span class="fc" id="L27">        this.dims = dims.clone();</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L52">    public Shape(int... dims) {</span>
+        // Ensure all dimensions for the shape object are non-negative.
+<span class="fc bfc" id="L54" title="All 4 branches covered.">        if(Arrays.stream(dims).anyMatch(i -&gt; i &lt; 0)) {</span>
+<span class="fc" id="L55">            throw new IllegalArgumentException(ErrorMessages.negativeDimErrMsg(dims));</span>
+        }
+
+<span class="fc" id="L58">        this.dims = dims.clone();</span>
+<span class="fc" id="L59">        this.strides = this.createNewStrides();</span>
+<span class="fc" id="L60">    }</span>
 
 
     /**
@@ -33,7 +65,7 @@ public class Shape {
      * @return The rank for a tensor with this shape.
      */
     public int getRank() {
-<span class="nc" id="L36">        return dims.length;</span>
+<span class="fc" id="L68">        return dims.length;</span>
     }
 
 
@@ -42,7 +74,16 @@ public class Shape {
      * @return Shape of a tensor as an integer array.
      */
     public int[] getDims() {
-<span class="nc" id="L45">        return this.dims;</span>
+<span class="fc" id="L77">        return this.dims;</span>
+    }
+
+
+    /**
+     * Gets the shape of a tensor as an array.
+     * @return Shape of a tensor as an integer array.
+     */
+    public int[] getStrides() {
+<span class="fc" id="L86">        return this.strides;</span>
     }
 
 
@@ -52,7 +93,165 @@ public class Shape {
      * @return The size of this shape object in the specified dimension.
      */
     public int get(int i) {
-<span class="nc" id="L55">        return this.dims[i];</span>
+<span class="fc" id="L96">        return this.dims[i];</span>
+    }
+
+
+    /**
+     * Constructs strides for each dimension of this shape as if for a newly constructed tensor.
+     * i.e. Strides will be a decreasing sequence with the last stride being 1.
+     * @return The strides for all dimensions of a newly constructed tensor with this shape.
+     */
+    public int[] createNewStrides() {
+<span class="fc" id="L106">        int[] strides = new int[dims.length];</span>
+
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        if(strides.length&gt;0) {</span>
+            // Stride along last axis is always one for new strides.
+<span class="fc" id="L110">            strides[strides.length-1] = 1;</span>
+
+<span class="fc bfc" id="L112" title="All 2 branches covered.">            for(int i=strides.length-2; i&gt;=0; i--) {</span>
+<span class="fc" id="L113">                strides[i] = dims[i+1]*strides[i+1];</span>
+            }
+        }
+
+<span class="fc" id="L117">        return strides;</span>
+    }
+
+
+    /**
+     * Computes the index of the 1D data array for a dense tensor from tensor indices with this shape.
+     * @param indices Indices of tensor with this shape.
+     * @return The index of the element at the specified indices in the 1D data array of a dense tensor.
+     * @throws IllegalArgumentException If the number of indices does not match the rank of this shape.
+     * @throws ArrayIndexOutOfBoundsException If any index does not fit within a tensor with this shape.
+     */
+    public int entriesIndex(int... indices) {
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        if(indices.length != dims.length) {</span>
+<span class="fc" id="L130">            throw new IllegalArgumentException(ErrorMessages.getIndicesRankErr(indices.length, dims.length));</span>
+        }
+<span class="pc bpc" id="L132" title="1 of 4 branches missed.">        if(indices.length&gt;0 &amp;&amp; indices[indices.length-1] &gt;= dims[dims.length-1]) {</span>
+<span class="fc" id="L133">            throw new ArrayIndexOutOfBoundsException(&quot;Index &quot; + indices[indices.length-1] + &quot; out of bounds for axis &quot; +</span>
+                    (indices.length-1) + &quot; of tensor with shape &quot; + this);
+        }
+
+<span class="fc" id="L137">        int index = 0;</span>
+
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length-1; i++) {</span>
+<span class="pc bpc" id="L140" title="1 of 4 branches missed.">            if(indices[i] &lt; 0 || indices[i] &gt;= dims[i]) {</span>
+<span class="fc" id="L141">                throw new ArrayIndexOutOfBoundsException(&quot;Index &quot; + indices[i] + &quot; out of bounds for axis &quot; + i +</span>
+                        &quot; of tensor with shape &quot; + this);
+            }
+
+<span class="fc" id="L145">            index += indices[i]*strides[i];</span>
+        }
+
+<span class="fc" id="L148">        return index + indices[indices.length-1];</span>
+    }
+
+
+    /**
+     * Swaps two axes of this shape. New strides are constructed for this shape.
+     * @param axis1 First axis to swap.
+     * @param axis2 Second axis to swap.
+     * @return Returns this shape.
+     * @throws ArrayIndexOutOfBoundsException If either axis is not within [0, {@link #getRank() rank}-1].
+     */
+    public Shape swapAxes(int axis1, int axis2) {
+<span class="fc" id="L160">        int temp = dims[axis1];</span>
+<span class="fc" id="L161">        dims[axis1] = dims[axis2];</span>
+<span class="fc" id="L162">        dims[axis2] = temp;</span>
+
+<span class="fc" id="L164">        this.strides = this.createNewStrides();</span>
+
+<span class="fc" id="L166">        return this;</span>
+    }
+
+
+    /**
+     * Gets the total number of entries for a tensor with this shape.
+     * @return The total number of entries for a tensor with this shape.
+     */
+    public BigInteger totalEntries() {
+        BigInteger product;
+
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        if(dims.length&gt;0) {</span>
+<span class="fc" id="L178">            product = BigInteger.ONE;</span>
+
+<span class="fc bfc" id="L180" title="All 2 branches covered.">            for(int dim : dims) {</span>
+<span class="fc" id="L181">                product = product.multiply(BigInteger.valueOf(dim));</span>
+            }
+        } else {
+<span class="fc" id="L184">            product = BigInteger.ZERO;</span>
+        }
+
+<span class="fc" id="L187">        return product;</span>
+    }
+
+
+    /**
+     * Creates a deep copy of this shape object. This is a distinct object not a reference to the same object.
+     * @return A deep copy of this shape object.
+     */
+    @Override
+    public Shape clone() {
+<span class="fc" id="L197">        return new Shape(dims.clone());</span>
+    }
+
+
+    /**
+     * Checks if an object is equal to this shape.
+     * @param b Object to compare with this shape.
+     * @return True if d is a Shape object and equal to this shape.
+     */
+    @Override
+    public boolean equals(Object b) {
+<span class="fc" id="L208">        boolean result = true;</span>
+
+        // Ensure the object is the same type
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        if(b instanceof Shape) {</span>
+<span class="fc" id="L212">            Shape bCopy = (Shape) b;</span>
+
+<span class="fc bfc" id="L214" title="All 2 branches covered.">            if(this.dims.length == bCopy.dims.length) {</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">                for(int i=0; i&lt;dims.length; i++) {</span>
+<span class="fc bfc" id="L216" title="All 2 branches covered.">                    if(dims[i] != bCopy.dims[i]) {</span>
+<span class="fc" id="L217">                        result = false;</span>
+<span class="fc" id="L218">                        break;</span>
+                    }
+                }
+            } else {
+<span class="fc" id="L222">                result = false;</span>
+            }
+
+<span class="fc" id="L225">        } else {</span>
+<span class="fc" id="L226">            result = false;</span>
+        }
+
+<span class="fc" id="L229">        return result;</span>
+    }
+
+
+    /**
+     * Gets the next indices for a tensor with this shape.
+     * @param currentIndices Current indices. This array is modified.
+     * @param i Index of 1d data array.
+     */
+    public void getNextIndices(int[] currentIndices, int i) {
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        for(int j=0; j&lt;currentIndices.length; j++) {</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">            if((i+1)%strides[j]==0) {</span>
+<span class="fc" id="L241">                currentIndices[j] = (currentIndices[j]+1) % dims[j];</span>
+            }
+        }
+<span class="fc" id="L244">    }</span>
+
+
+    /**
+     * Generates the hashcode for this shape object. This is computed by passing the dims array of this shape object to
+     * {@link java.util.Arrays#hashCode(int[])}.
+     * @return The hashcode for this array object.
+     */
+    @Override
+    public int hashCode() {
+<span class="nc" id="L254">        return Arrays.hashCode(this.dims);</span>
     }
 
 
@@ -61,14 +260,14 @@ public class Shape {
      * @return The string representation for this Shape object.
      */
     public String toString() {
-<span class="fc" id="L64">        StringBuilder result = new StringBuilder(&quot;&quot;);</span>
+<span class="fc" id="L263">        StringBuilder result = new StringBuilder();</span>
 
-<span class="fc bfc" id="L66" title="All 2 branches covered.">        for(int d : dims) {</span>
-<span class="fc" id="L67">            result.append(d + &quot;x&quot;);</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">        for(int d : dims) {</span>
+<span class="fc" id="L266">            result.append(d).append(&quot;x&quot;);</span>
         }
-<span class="fc" id="L69">        result.deleteCharAt(result.length()-1); // Remove excess 'x' character.</span>
+<span class="fc" id="L268">        result.deleteCharAt(result.length()-1); // Remove excess 'x' character.</span>
 
-<span class="fc" id="L71">        return result.toString();</span>
+<span class="fc" id="L270">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

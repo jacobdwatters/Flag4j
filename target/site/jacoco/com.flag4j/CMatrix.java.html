@@ -1,9 +1,289 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CMatrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">CMatrix.java</span></div><h1>CMatrix.java</h1><pre class="source lang-java linenums">package com.flag4j;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CMatrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">CMatrix.java</span></div><h1>CMatrix.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
+package com.flag4j;
+
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.ComplexMatrixBase;
+import com.flag4j.util.ArrayUtils;
 
 /**
- * Complex Dense Matrix.
+ * Complex dense matrix. Stored in row major format.
  */
-<span class="nc" id="L7">public class CMatrix {</span>
+public class CMatrix extends ComplexMatrixBase {
+
+
+    /**
+     * Constructs a square complex dense matrix of a specified size. The entries of the matrix will default to zero.
+     * @param size Size of the square matrix.
+     * @throws IllegalArgumentException if size negative.
+     */
+    public CMatrix(int size) {
+<span class="fc" id="L43">        super(new Shape(size, size), new CNumber[size*size]);</span>
+
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L46">            super.entries[i] = new CNumber();</span>
+        }
+<span class="fc" id="L48">    }</span>
+
+
+    /**
+     * Creates a square complex dense matrix with a specified fill value.
+     * @param size Size of the square matrix.
+     * @param value Value to fill this matrix with.
+     * @throws IllegalArgumentException if size negative.
+     */
+    public CMatrix(int size, double value) {
+<span class="fc" id="L58">        super(new Shape(size, size), new CNumber[size*size]);</span>
+
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L61">            super.entries[i] = new CNumber(value);</span>
+        }
+<span class="fc" id="L63">    }</span>
+
+
+    /**
+     * Creates a square complex dense matrix with a specified fill value.
+     * @param size Size of the square matrix.
+     * @param value Value to fill this matrix with.
+     * @throws IllegalArgumentException if size negative.
+     */
+    public CMatrix(int size, CNumber value) {
+<span class="fc" id="L73">        super(new Shape(size, size), new CNumber[size*size]);</span>
+
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L76">            super.entries[i] = value.clone();</span>
+        }
+<span class="fc" id="L78">    }</span>
+
+
+    /**
+     * Creates a complex dense matrix of a specified shape filled with zeros.
+     * @param rows The number of rows in the matrix.
+     * @param cols The number of columns in the matrix.
+     * @throws IllegalArgumentException if either rows or cols is negative.
+     */
+    public CMatrix(int rows, int cols) {
+<span class="fc" id="L88">        super(new Shape(rows, cols), new CNumber[rows*cols]);</span>
+
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L91">            super.entries[i] = new CNumber();</span>
+        }
+<span class="fc" id="L93">    }</span>
+
+
+    /**
+     * Creates a complex dense matrix with a specified shape and fills the matrix with the specified value.
+     * @param rows Number of rows in the matrix.
+     * @param cols Number of columns in the matrix.
+     * @param value Value to fill this matrix with.
+     * @throws IllegalArgumentException if either rows or cols is negative.
+     */
+    public CMatrix(int rows, int cols, double value) {
+<span class="fc" id="L104">        super(new Shape(rows, cols), new CNumber[rows*cols]);</span>
+
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L107">            super.entries[i] = new CNumber(value);</span>
+        }
+<span class="fc" id="L109">    }</span>
+
+
+    /**
+     * Creates a complex dense matrix with a specified shape and fills the matrix with the specified value.
+     * @param rows Number of rows in the matrix.
+     * @param cols Number of columns in the matrix.
+     * @param value Value to fill this matrix with.
+     * @throws IllegalArgumentException if either rows or cols is negative.
+     */
+    public CMatrix(int rows, int cols, CNumber value) {
+<span class="fc" id="L120">        super(new Shape(rows, cols), new CNumber[rows*cols]);</span>
+
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L123">            super.entries[i] = value.clone();</span>
+        }
+<span class="fc" id="L125">    }</span>
+
+
+    /**
+     * Creates a complex dense matrix with specified shape.
+     * @param shape Shape of the matrix.
+     */
+    public CMatrix(Shape shape) {
+<span class="fc" id="L133">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L136">            super.entries[i] = new CNumber();</span>
+        }
+<span class="fc" id="L138">    }</span>
+
+
+    /**
+     * Creates a complex dense matrix with specified shape filled with specified value.
+     * @param shape Shape of the matrix.
+     * @param value Value to fill matrix with.
+     */
+    public CMatrix(Shape shape, double value) {
+<span class="fc" id="L147">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L150">            super.entries[i] = new CNumber(value);</span>
+        }
+<span class="fc" id="L152">    }</span>
+
+
+    /**
+     * Creates a complex dense matrix with specified shape filled with specified value.
+     * @param shape Shape of the matrix.
+     * @param value Value to fill matrix with.
+     */
+    public CMatrix(Shape shape, CNumber value) {
+<span class="fc" id="L161">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L164">            super.entries[i] = value.clone();</span>
+        }
+<span class="fc" id="L166">    }</span>
+
+
+    /**
+     * Creates a complex dense matrix whose entries are specified by a double array.
+     * @param entries Entries of the real dense matrix.
+     */
+    public CMatrix(String[][] entries) {
+<span class="fc" id="L174">        super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);</span>
+
+        // Copy the string array
+<span class="fc" id="L177">        int index=0;</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        for(String[] row : entries) {</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            for(String value : row) {</span>
+<span class="fc" id="L180">                super.entries[index++] = new CNumber(value);</span>
+            }
+        }
+<span class="fc" id="L183">    }</span>
+
+
+    /**
+     * Creates a complex dense matrix whose entries are specified by a double array.
+     * @param entries Entries of the real dense matrix.
+     */
+    public CMatrix(CNumber[][] entries) {
+<span class="fc" id="L191">        super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);</span>
+
+        // Copy the string array
+<span class="fc" id="L194">        int index=0;</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        for(CNumber[] row : entries) {</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">            for(CNumber value : row) {</span>
+<span class="fc" id="L197">                super.entries[index++] = value.clone();</span>
+            }
+        }
+<span class="fc" id="L200">    }</span>
+
+
+    /**
+     * Creates a complex dense matrix whose entries are specified by a double array.
+     * @param entries Entries of the real dense matrix.
+     */
+    public CMatrix(double[][] entries) {
+<span class="fc" id="L208">        super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);</span>
+
+        // Copy the double array
+<span class="fc" id="L211">        int index=0;</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        for(double[] row : entries) {</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">            for(double value : row) {</span>
+<span class="fc" id="L214">                super.entries[index++] = new CNumber(value);</span>
+            }
+        }
+<span class="fc" id="L217">    }</span>
+
+
+    /**
+     * Creates a complex dense matrix whose entries are specified by a double array.
+     * @param entries Entries of the real dense matrix.
+     */
+    public CMatrix(int[][] entries) {
+<span class="fc" id="L225">        super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);</span>
+
+        // Copy the int array
+<span class="fc" id="L228">        int index=0;</span>
+<span class="fc bfc" id="L229" title="All 2 branches covered.">        for(int[] row : entries) {</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">            for(int value : row) {</span>
+<span class="fc" id="L231">                super.entries[index++] = new CNumber(value);</span>
+            }
+        }
+<span class="fc" id="L234">    }</span>
+
+
+    /**
+     * Creates a complex dense matrix which is a copy of a specified matrix.
+     * @param A The matrix defining the entries for this matrix.
+     */
+    public CMatrix(Matrix A) {
+<span class="fc" id="L242">        super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);</span>
+<span class="fc" id="L243">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
+<span class="fc" id="L244">    }</span>
+
+
+    /**
+     * Creates a complex dense matrix which is a copy of a specified matrix.
+     * @param A The matrix defining the entries for this matrix.
+     */
+    public CMatrix(CMatrix A) {
+<span class="fc" id="L252">        super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);</span>
+<span class="fc" id="L253">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
+<span class="fc" id="L254">    }</span>
+
+
+    /**
+     * Constructs a complex matrix with specified shapes and entries. Note, unlike other constructors, the entries parameter
+     * is not copied.
+     * @param shape Shape of the matrix.
+     * @param entries Entries of the matrix.
+     */
+    public CMatrix(Shape shape, CNumber[] entries) {
+<span class="fc" id="L264">        super(shape, entries);</span>
+<span class="fc" id="L265">    }</span>
+
+
+    /**
+     * Constructs a complex matrix with specified shapes and entries. Note, unlike other constructors, the entries parameter
+     * is not copied.
+     * @param numRows Number of rows in the matrix.
+     * @param numCols Number of columns in the matrix.
+     * @param entries Entries of the matrix.
+     */
+    public CMatrix(int numRows, int numCols, CNumber[] entries) {
+<span class="nc" id="L276">        super(new Shape(numRows, numCols), entries);</span>
+<span class="nc" id="L277">    }</span>
+
+
+    /**
+     * Converts this matrix to an equivalent real matrix. Imaginary components are ignored.
+     * @return A real matrix with equivalent real parts.
+     */
+    @Override
+    public Matrix toReal() {
+<span class="nc" id="L286">        return null;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

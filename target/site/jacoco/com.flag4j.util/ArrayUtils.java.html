@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ArrayUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.util</a> &gt; <span class="el_source">ArrayUtils.java</span></div><h1>ArrayUtils.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.util;
+
+import com.flag4j.complex_numbers.CNumber;
+
+import java.util.Arrays;
+
+/**
+ * This class provides several methods useful for array manipulation.
+ */
+public final class ArrayUtils {
+
+<span class="nc" id="L36">    private ArrayUtils() {</span>
+        // Hide Constructor
+<span class="nc" id="L38">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Converts array to an array of {@link CNumber complex numbers}.
+     * @param src Array to convert.
+     * @param dest Destination array.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     */
+    public static void copy2CNumber(int[] src, CNumber[] dest) {
+<span class="fc" id="L49">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L52">            dest[i] = new CNumber(src[i]);</span>
+        }
+<span class="fc" id="L54">    }</span>
+
+
+    /**
+     * Converts array to an array of {@link CNumber complex numbers}.
+     * @param src Array to convert.
+     * @param dest Destination array.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     */
+    public static void copy2CNumber(double[] src, CNumber[] dest) {
+<span class="fc" id="L64">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L67">            dest[i] = new CNumber(src[i]);</span>
+        }
+<span class="fc" id="L69">    }</span>
+
+
+    /**
+     * Converts array to an array of {@link CNumber complex numbers}.
+     * @param src Array to convert.
+     * @param dest Destination array.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     */
+    public static void copy2CNumber(Integer[] src, CNumber[] dest) {
+<span class="fc" id="L79">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L82">            dest[i] = new CNumber(src[i]);</span>
+        }
+<span class="fc" id="L84">    }</span>
+
+
+    /**
+     * Converts array to an array of {@link CNumber complex numbers}.
+     * @param src Array to convert.
+     * @param dest Destination array.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     */
+    public static void copy2CNumber(Double[] src, CNumber[] dest) {
+<span class="fc" id="L94">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L97">            dest[i] = new CNumber(src[i]);</span>
+        }
+<span class="fc" id="L99">    }</span>
+
+
+    /**
+     * Converts array to an array of {@link CNumber complex numbers}.
+     * @param src Array to convert.
+     * @param dest Destination array.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     */
+    public static void copy2CNumber(String[] src, CNumber[] dest) {
+<span class="fc" id="L109">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L112">            dest[i] = new CNumber(src[i]);</span>
+        }
+<span class="fc" id="L114">    }</span>
+
+
+    /**
+     * Converts array to an array of {@link CNumber complex numbers}.
+     * @param src Source array to convert.
+     * @param dest Destination array.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     */
+    public static void copy2CNumber(CNumber[] src, CNumber[] dest) {
+<span class="fc" id="L124">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L127">            dest[i] = new CNumber(src[i]);</span>
+        }
+<span class="fc" id="L129">    }</span>
+
+
+    /**
+     * Fills an array with complex numbers with zeros.
+     * @param dest Array to fill with zeros.
+     */
+    public static void fillZeros(CNumber[] dest) {
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L138">            dest[i] = new CNumber();</span>
+        }
+<span class="fc" id="L140">    }</span>
+
+
+    /**
+     * Fills an array with specified value.
+     * @param dest Array to fill.
+     * @param fillValue Value to fill array with.
+     */
+    public static void fill(CNumber[] dest, double fillValue) {
+        // TODO: Investigate speed of using Arrays.setAll(...) and Arrays.parallelSetAll(...)
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L151">            dest[i] = new CNumber(fillValue);</span>
+        }
+<span class="fc" id="L153">    }</span>
+
+
+    /**
+     * Fills an array with specified value.
+     * @param dest Array to fill.
+     * @param fillValue Value to fill array with.
+     */
+    public static void fill(CNumber[] dest, CNumber fillValue) {
+        // TODO: Investigate speed of using Arrays.setAll(...) and Arrays.parallelSetAll(...)
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L164">            dest[i] = fillValue.clone();</span>
+        }
+<span class="fc" id="L166">    }</span>
+
+
+    /**
+     * Swaps to elements in an array. This is done in place.
+     * @param arr Array to swap elements in. This array is modified.
+     * @param i Index of first value to swap.
+     * @param j Index of second value to swap.
+     * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
+     */
+    public static void swap(int[] arr, int i, int j) {
+<span class="fc" id="L177">        int temp = arr[i];</span>
+<span class="fc" id="L178">        arr[i] = arr[j];</span>
+<span class="fc" id="L179">        arr[j] = temp;</span>
+<span class="fc" id="L180">    }</span>
+
+
+
+    /**
+     * Swaps to elements in an array. This is done in place.
+     * @param arr Array to swap elements in. This array is modified.
+     * @param i Index of first value to swap.
+     * @param j Index of second value to swap.
+     * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
+     */
+    public static void swap(double[] arr, int i, int j) {
+<span class="fc" id="L192">        double temp = arr[i];</span>
+<span class="fc" id="L193">        arr[i] = arr[j];</span>
+<span class="fc" id="L194">        arr[j] = temp;</span>
+<span class="fc" id="L195">    }</span>
+
+
+    /**
+     * Swaps to elements in an array. This is done in place.
+     * @param arr Array to swap elements in. This array is modified.
+     * @param i Index of first value to swap.
+     * @param j Index of second value to swap.
+     * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
+     */
+    public static void swap(Object[] arr, int i, int j) {
+<span class="fc" id="L206">        Object temp = arr[i];</span>
+<span class="fc" id="L207">        arr[i] = arr[j];</span>
+<span class="fc" id="L208">        arr[j] = temp;</span>
+<span class="fc" id="L209">    }</span>
+
+
+    /**
+     * Gets an array filled with integers from {@code start} (inclusive) to {@code end} (exclusive)
+     * @param start Staring value (inclusive).
+     * @param end Stopping value (exclusive).
+     * @return An array containing the integer range {@code [start, end)}.
+     */
+    public static double[] range(int start, int end) {
+<span class="nc" id="L219">        double[] rangeArr = new double[end-start];</span>
+<span class="nc" id="L220">        Arrays.setAll(rangeArr, (i) -&gt; start+i);</span>
+<span class="nc" id="L221">        return rangeArr;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

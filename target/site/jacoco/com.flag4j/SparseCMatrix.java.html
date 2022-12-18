@@ -1,9 +1,323 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseCMatrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">SparseCMatrix.java</span></div><h1>SparseCMatrix.java</h1><pre class="source lang-java linenums">package com.flag4j;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseCMatrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">SparseCMatrix.java</span></div><h1>SparseCMatrix.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
+package com.flag4j;
+
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.SparseMatrixBase;
+import com.flag4j.util.ArrayUtils;
 
 /**
- * Sparse Complex Matrix.
+ * Complex sparse matrix. Stored in COO (Coordinate) format.
  */
-<span class="nc" id="L7">public class SparseCMatrix {</span>
+public class SparseCMatrix extends SparseMatrixBase&lt;CNumber[]&gt; {
+
+
+    /**
+     * Creates a square sparse matrix filled with zeros.
+     * @param size size of the square matrix.
+     */
+    public SparseCMatrix(int size) {
+<span class="fc" id="L42">        super(new Shape(size, size), 0, new CNumber[0], new int[0], new int[0]);</span>
+<span class="fc" id="L43">    }</span>
+
+
+    /**
+     * Creates a sparse matrix of specified size filled with zeros.
+     * @param rows Number of rows in the sparse matrix.
+     * @param cols Number of columns in the sparse matrix.
+     */
+    public SparseCMatrix(int rows, int cols) {
+<span class="fc" id="L52">        super(new Shape(rows, cols), 0, new CNumber[0], new int[0], new int[0]);</span>
+<span class="fc" id="L53">    }</span>
+
+
+    /**
+     * Creates a sparse matrix of specified shape filled with zeros.
+     * @param shape Shape of this sparse matrix.
+     */
+    public SparseCMatrix(Shape shape) {
+<span class="fc" id="L61">        super(shape, 0, new CNumber[0], new int[0], new int[0]);</span>
+<span class="fc" id="L62">    }</span>
+
+
+    /**
+     * Creates a  square sparse matrix with specified non-zero entries, row indices, and column indices.
+     * @param size Size of the square matrix.
+     * @param nonZeroEntries Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries.
+     * @param colIndices Column indices of the non-zero entries.
+     * @throws IllegalArgumentException If the number of non-zero entries does not fit within the given shape. Or, if the
+     * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
+     */
+    public SparseCMatrix(int size, CNumber[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
+<span class="fc" id="L75">        super(new Shape(size, size), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
+<span class="fc" id="L76">        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);</span>
+<span class="fc" id="L77">    }</span>
+
+
+    /**
+     * Creates a sparse matrix with specified size, non-zero entries, row indices, and column indices.
+     * @param rows Number of rows in the sparse matrix.
+     * @param cols Number of columns in the sparse matrix.
+     * @param nonZeroEntries Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries.
+     * @param colIndices Column indices of the non-zero entries.
+     * @throws IllegalArgumentException If the number of non-zero entries does not fit within the given shape. Or, if the
+     * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
+     */
+    public SparseCMatrix(int rows, int cols, CNumber[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
+<span class="fc" id="L91">        super(new Shape(rows, cols), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
+<span class="fc" id="L92">        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);</span>
+<span class="fc" id="L93">    }</span>
+
+
+    /**
+     * Creates a sparse matrix with specified shape, non-zero entries, row indices, and column indices.
+     * @param shape Shape of the sparse matrix.
+     * @param nonZeroEntries Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries.
+     * @param colIndices Column indices of the non-zero entries.
+     * @throws IllegalArgumentException If the number of non-zero entries does not fit within the given shape. Or, if the
+     * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
+     */
+    public SparseCMatrix(Shape shape, CNumber[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
+<span class="fc" id="L106">        super(shape, nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
+<span class="fc" id="L107">    }</span>
+
+
+    /**
+     * Creates a  square sparse matrix with specified non-zero entries, row indices, and column indices.
+     * @param size Size of the square matrix.
+     * @param nonZeroEntries Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries.
+     * @param colIndices Column indices of the non-zero entries.
+     * @throws IllegalArgumentException If the number of non-zero entries does not fit within the given shape. Or, if the
+     * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
+     */
+    public SparseCMatrix(int size, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
+<span class="fc" id="L120">        super(new Shape(size, size), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
+<span class="fc" id="L121">        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);</span>
+<span class="fc" id="L122">    }</span>
+
+
+    /**
+     * Creates a sparse matrix with specified size, non-zero entries, row indices, and column indices.
+     * @param rows Number of rows in the sparse matrix.
+     * @param cols Number of columns in the sparse matrix.
+     * @param nonZeroEntries Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries.
+     * @param colIndices Column indices of the non-zero entries.
+     * @throws IllegalArgumentException If the number of non-zero entries does not fit within the given shape. Or, if the
+     * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
+     */
+    public SparseCMatrix(int rows, int cols, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
+<span class="fc" id="L136">        super(new Shape(rows, cols), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
+<span class="fc" id="L137">        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);</span>
+<span class="fc" id="L138">    }</span>
+
+
+    /**
+     * Creates a sparse matrix with specified shape, non-zero entries, row indices, and column indices.
+     * @param shape Shape of the sparse matrix.
+     * @param nonZeroEntries Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries.
+     * @param colIndices Column indices of the non-zero entries.
+     * @throws IllegalArgumentException If the number of non-zero entries does not fit within the given shape. Or, if the
+     * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
+     */
+    public SparseCMatrix(Shape shape, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
+<span class="fc" id="L151">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
+<span class="fc" id="L152">        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);</span>
+<span class="fc" id="L153">    }</span>
+
+
+    /**
+     * Creates a  square sparse matrix with specified non-zero entries, row indices, and column indices.
+     * @param size Size of the square matrix.
+     * @param nonZeroEntries Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries.
+     * @param colIndices Column indices of the non-zero entries.
+     * @throws IllegalArgumentException If the number of non-zero entries does not fit within the given shape. Or, if the
+     * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
+     */
+    public SparseCMatrix(int size, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
+<span class="fc" id="L166">        super(new Shape(size, size), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
+<span class="fc" id="L167">        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);</span>
+<span class="fc" id="L168">    }</span>
+
+
+    /**
+     * Creates a sparse matrix with specified size, non-zero entries, row indices, and column indices.
+     * @param rows Number of rows in the sparse matrix.
+     * @param cols Number of columns in the sparse matrix.
+     * @param nonZeroEntries Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries.
+     * @param colIndices Column indices of the non-zero entries.
+     * @throws IllegalArgumentException If the number of non-zero entries does not fit within the given shape. Or, if the
+     * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
+     */
+    public SparseCMatrix(int rows, int cols, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
+<span class="fc" id="L182">        super(new Shape(rows, cols), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
+<span class="fc" id="L183">        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);</span>
+<span class="fc" id="L184">    }</span>
+
+
+    /**
+     * Creates a sparse matrix with specified shape, non-zero entries, row indices, and column indices.
+     * @param shape Shape of the sparse matrix.
+     * @param nonZeroEntries Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of the non-zero entries.
+     * @param colIndices Column indices of the non-zero entries.
+     * @throws IllegalArgumentException If the number of non-zero entries does not fit within the given shape. Or, if the
+     * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
+     */
+    public SparseCMatrix(Shape shape, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
+<span class="fc" id="L197">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);</span>
+<span class="fc" id="L198">        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);</span>
+<span class="fc" id="L199">    }</span>
+
+
+//    /**
+//     * Creates a sparse matrix whose entries are specified by a 2D array. This is not the recommended method of constructing
+//     * a sparse matrix. It is recommended to use {@link #SparseCMatrix(Shape, double[], int[], int[])} if the coordinate information is already known.
+//     * @param entries Entries of sparse matrix.
+//     */
+//    public SparseCMatrix(double[][] entries) {
+//        super(new Shape(entries.length, entries[0].length));
+//
+//        ArrayList&lt;Double&gt; nonZeroEntries = new ArrayList&lt;&gt;(this.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; rowIndices = new ArrayList&lt;&gt;(this.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; colIndices = new ArrayList&lt;&gt;(this.totalEntries()/8);
+//
+//        // Fill entries with non-zero values.
+//        int numCols=super.numCols();
+//        for(int i=0; i&lt;entries.length; i++) {
+//            for(int j=0; j&lt;entries[0].length; j++) {
+//                if(entries[i][j] != 0) {
+//                    nonZeroEntries.add(entries[i][j]);
+//                    rowIndices.add(i);
+//                    colIndices.add(j);
+//                }
+//            }
+//        }
+//
+//        nonZeroEntries.trimToSize();
+//
+//        super.setNonZeroEntries(nonZeroEntries.size());
+//        super.entries = new CNumber[super.nonZeroEntries()];
+//
+//        for(int i=0; i&lt;nonZeroEntries.size(); i++) {
+//            super.entries[i] = new CNumber(nonZeroEntries.get(i));
+//        }
+//
+//        super.rowIndices = rowIndices.stream().mapToInt(Integer::intValue).toArray();
+//        super.colIndices = colIndices.stream().mapToInt(Integer::intValue).toArray();
+//
+//    }
+//
+//
+//    /**
+//     * Creates a sparse matrix whose entries are specified by a 2D array. This is not the recommended method of constructing
+//     * a sparse matrix. It is recommended to use {@link #SparseCMatrix(Shape, int[], int[], int[])} if the coordinate information is already known.
+//     * @param entries Entries of sparse matrix.
+//     */
+//    public SparseCMatrix(int[][] entries) {
+//        super(new Shape(entries.length, entries[0].length));
+//
+//        ArrayList&lt;Integer&gt; nonZeroEntries = new ArrayList&lt;&gt;(this.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; rowIndices = new ArrayList&lt;&gt;(this.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; colIndices = new ArrayList&lt;&gt;(this.totalEntries()/8);
+//
+//        // Fill entries with non-zero values.
+//        for(int i=0; i&lt;entries.length; i++) {
+//            for(int j=0; j&lt;entries[0].length; j++) {
+//                if(entries[i][j] != 0) {
+//                    nonZeroEntries.add(entries[i][j]);
+//                    rowIndices.add(i);
+//                    colIndices.add(j);
+//                }
+//            }
+//        }
+//
+//        nonZeroEntries.trimToSize();
+//        super.setNonZeroEntries(nonZeroEntries.size());
+//        super.entries = new CNumber[super.nonZeroEntries()];
+//
+//        for(int i=0; i&lt;nonZeroEntries.size(); i++) {
+//            super.entries[i] = new CNumber(nonZeroEntries.get(i));
+//        }
+//
+//        super.rowIndices = rowIndices.stream().mapToInt(Integer::intValue).toArray();
+//        super.colIndices = colIndices.stream().mapToInt(Integer::intValue).toArray();
+//    }
+//
+//
+//    /**
+//     * Creates a sparse matrix whose entries are specified by a 2D array. This is not the recommended method of constructing
+//     * a sparse matrix. It is recommended to use {@link #SparseCMatrix(Shape, CNumber[], int[], int[])} if the coordinate information is already known.
+//     * @param entries Entries of sparse matrix.
+//     */
+//    public SparseCMatrix(CNumber[][] entries) {
+//        super(new Shape(entries.length, entries[0].length));
+//
+//        ArrayList&lt;CNumber&gt; nonZeroEntries = new ArrayList&lt;&gt;(this.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; rowIndices = new ArrayList&lt;&gt;(this.totalEntries()/8);
+//        ArrayList&lt;Integer&gt; colIndices = new ArrayList&lt;&gt;(this.totalEntries()/8);
+//
+//        // Fill entries with non-zero values.
+//        for(int i=0; i&lt;entries.length; i++) {
+//            for(int j=0; j&lt;entries[0].length; j++) {
+//                if(entries[i][j].re != 0 &amp;&amp; entries[i][j].im != 0) {
+//                    nonZeroEntries.add(entries[i][j]);
+//                    rowIndices.add(i);
+//                    colIndices.add(j);
+//                }
+//            }
+//        }
+//
+//        nonZeroEntries.trimToSize();
+//        super.setNonZeroEntries(nonZeroEntries.size());
+//        super.entries = new CNumber[super.nonZeroEntries()];
+//
+//        for(int i=0; i&lt;nonZeroEntries.size(); i++) {
+//            super.entries[i] = nonZeroEntries.get(i).clone();
+//        }
+//
+//        super.rowIndices = rowIndices.stream().mapToInt(Integer::intValue).toArray();
+//        super.colIndices = colIndices.stream().mapToInt(Integer::intValue).toArray();
+//    }
+
+
+    /**
+     * Constructs a sparse complex matrix whose non-zero entries, indices, and shape are specified by another
+     * complex sparse matrix.
+     * @param A Complex sparse matrix to copy.
+     */
+    public SparseCMatrix(SparseCMatrix A) {
+<span class="fc" id="L319">        super(A.shape.clone(), A.nonZeroEntries(), new CNumber[A.nonZeroEntries()], A.rowIndices.clone(), A.colIndices.clone());</span>
+<span class="fc" id="L320">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
+<span class="fc" id="L321">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

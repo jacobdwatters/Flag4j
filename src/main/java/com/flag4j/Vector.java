@@ -1,137 +1,133 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.flag4j;
+
+import com.flag4j.core.VectorBase;
+import com.flag4j.core.VectorOrientations;
 
 import java.util.Arrays;
 
+
 /**
- * Real Dense Vector.
+ * Real dense vector. Vectors may be oriented as row vectors, column vectors, or unoriented.
+ * See {@link VectorOrientations} for orientations.
  */
-public class Vector extends TypedVector<double[]> {
-
-    /**
-     * Creates an empty column vector of size 0
-     */
-    public Vector() {
-        super(VectorTypes.VECTOR, 0, VectorOrientations.COLUMN_VECTOR);
-        entries = new double[this.m];
-    }
+public class Vector extends VectorBase<double[]> {
 
 
     /**
-     * Creates an empty vector of size 0 with a specified orientation.
-     * @param orientation The orientation of this vector.
-     */
-    public Vector(VectorOrientations orientation) {
-        super(VectorTypes.VECTOR, 0, orientation);
-        entries = new double[this.m];
-    }
-
-
-    /**
-     * Creates a column vector filled with zeros.
-     * @param size The number of entries in this column vector.
+     * Creates a column vector of specified size filled with zeros.
+     * @param size Size of the vector.
      */
     public Vector(int size) {
-        super(VectorTypes.VECTOR, size, VectorOrientations.COLUMN_VECTOR);
-        entries = new double[this.m];
+        super(size, VectorOrientations.COL, new double[size]);
     }
 
 
     /**
-     * Creates a vector filled with zeros with a specified orientation.
-     * @param size The number of entries in this column vector.
-     * @param orientation The orientation of this vector.
+     * Creates a column vector of specified size filled with a specified value.
+     * @param size Size of the vector.
+     * @param fillValue Value to fill vector with.
+     */
+    public Vector(int size, double fillValue) {
+        super(size, VectorOrientations.COL, new double[size]);
+        Arrays.fill(super.entries, fillValue);
+    }
+
+
+    /**
+     * Creates a vector of specified size filled with zeros.
+     * @param size Size of the vector.
+     * @param orientation Orientation of the vector.
      */
     public Vector(int size, VectorOrientations orientation) {
-        super(VectorTypes.VECTOR, size, orientation);
-        entries = new double[this.m];
+        super(size, orientation, new double[size]);
     }
 
 
     /**
-     * Creates a column vector with a specified size and fill value.
-     * @param size The number of entries in this column vector.
-     * @param value The fill value for this vector.
+     * Creates a vector of specified size filled with zeros.
+     * @param size Size of the vector.
+     * @param fillValue Fills array with
+     * @param orientation Orientation of the vector.
      */
-    public Vector(int size, double value) {
-        super(VectorTypes.VECTOR, size, VectorOrientations.COLUMN_VECTOR);
-        entries = new double[this.m];
-        Arrays.fill(entries, value);
-    }
-
-
-    /**
-     * Creates a vector with a specified size, fill value, and orientation.
-     * @param size The number of entries in this column vector.
-     * @param value The fill value for this vector.
-     * @param orientation The orientation of this vector.
-     */
-    public Vector(int size, double value, VectorOrientations orientation) {
-        super(VectorTypes.VECTOR, size, orientation);
-        entries = new double[this.m];
-        Arrays.fill(entries, value);
+    public Vector(int size, double fillValue, VectorOrientations orientation) {
+        super(size, orientation, new double[size]);
+        Arrays.fill(super.entries, fillValue);
     }
 
 
     /**
      * Creates a column vector with specified entries.
-     * @param entries The entries for this column vector.
+     * @param entries Entries for this column vector.
      */
-    public Vector(double... entries) {
-        super(VectorTypes.VECTOR, entries.length, VectorOrientations.COLUMN_VECTOR);
-        this.entries = entries.clone();
+    public Vector(double[] entries) {
+        super(entries.length, VectorOrientations.COL, entries.clone());
     }
-
 
     /**
      * Creates a vector with specified entries and orientation.
-     * @param entries The entries for this column vector.
-     * @param orientation The orientation of this vector.
+     * @param entries Entries for this column vector.
+     * @param orientation Orientation of the vector.
      */
     public Vector(double[] entries, VectorOrientations orientation) {
-        super(VectorTypes.VECTOR, entries.length, orientation);
-        this.entries = entries.clone();
+        super(entries.length, orientation, entries.clone());
     }
 
 
     /**
      * Creates a column vector with specified entries.
-     * @param entries The entries for this column vector.
+     * @param entries Entries for this column vector.
      */
-    public Vector(int... entries) {
-        super(VectorTypes.VECTOR, entries.length, VectorOrientations.COLUMN_VECTOR);
-        this.entries = Arrays.stream(entries).asDoubleStream().toArray();
-    }
+    public Vector(int[] entries) {
+        super(entries.length, VectorOrientations.COL, new double[entries.length]);
 
+        for(int i=0; i<entries.length; i++) {
+            super.entries[i] = entries[i];
+        }
+    }
 
     /**
      * Creates a vector with specified entries and orientation.
-     * @param entries The entries for this column vector.
-     * @param orientation The orientation of this vector.
+     * @param entries Entries for this column vector.
+     * @param orientation Orientation of the vector.
      */
     public Vector(int[] entries, VectorOrientations orientation) {
-        super(VectorTypes.VECTOR, entries.length, orientation);
-        this.entries = Arrays.stream(entries).asDoubleStream().toArray();
+        super(entries.length, orientation, new double[entries.length] );
+
+        for(int i=0; i<entries.length; i++) {
+            super.entries[i] = entries[i];
+        }
     }
 
 
     /**
-     * Creates a vector with orientation and entries specified by another vector.
-     * @param a The vector which specifies the orientation and entries of this vector.
+     * Creates a vector from another vector. This essentially copies the vector.
+     * @param a Vector to make copy of.
      */
     public Vector(Vector a) {
-        super(VectorTypes.VECTOR, a.entries.length, a.orientation);
-        this.entries = a.entries.clone();
-    }
-
-
-    /**
-     * Creates a vector with entries specified by another vector. The orientation of the resulting vector is specified separately and need not
-     * match the orientation of the vector a.
-     * @param a The vector which specifies the entries of this vector.
-     * @param orientation The orientation of the vector.
-     */
-    public Vector(Vector a, VectorOrientations orientation) {
-        super(VectorTypes.VECTOR, a.entries.length, orientation);
-        this.entries = a.entries.clone();
+        super(a.entries.length, a.getOrientation(), a.entries.clone());
     }
 }

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Configurations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.concurrency</a> &gt; <span class="el_source">Configurations.java</span></div><h1>Configurations.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.concurrency;
+
+import com.flag4j.util.ErrorMessages;
+
+import java.util.concurrent.ForkJoinPool;
+
+/**
+ * Configurations for standard and concurrent operations.
+ */
+public abstract class Configurations {
+<span class="nc" id="L35">    private Configurations() {</span>
+<span class="nc" id="L36">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+    }
+
+<span class="fc" id="L39">    private static final int DEFAULT_NUM_THREADS = Runtime.getRuntime().availableProcessors();</span>
+    private static final int DEFAULT_BLOCK_SIZE = 32;
+    private static final int DEFAULT_MIN_RECURSIVE_SIZE = 128;
+
+
+    /**
+     * The block size to use in blocked algorithms.
+     */
+<span class="fc" id="L47">    private static int blockSize = DEFAULT_BLOCK_SIZE;</span>
+
+    /**
+     * The minimum size of tensor/matrix/vector to make recursive calls on in recursive algorithms.
+     */
+<span class="fc" id="L52">    private static int minRecursiveSize = DEFAULT_MIN_RECURSIVE_SIZE;</span>
+
+
+    /**
+     * Sets the number of threads for use in concurrent operations as the number of processors available to the Java
+     * virtual machine. Note that this value may change during runtime. This method will include logical cores so the value
+     * returned may be higher than the number of physical cores on the machine if hyper-threading is enabled.
+     * &lt;br&gt;&lt;br&gt;
+     * This is implemented as: &lt;code&gt;numThreads = {@link Runtime#availableProcessors() Runtime.getRuntime().availableProcessors()};&lt;/code&gt;
+     * @return The new value of numThreads, i.e. the number of available processors.
+     */
+    static int setNumThreadsAsAvailableProcessors() {
+<span class="nc" id="L64">        ThreadManager.threadPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());</span>
+<span class="nc" id="L65">        return ThreadManager.threadPool.getParallelism();</span>
+    }
+
+
+    /**
+     * Gets the current number of threads to be used.
+     * @return Current number of threads to use in concurrent algorithms.
+     */
+    public static int getNumThreads() {
+<span class="fc" id="L74">        return ThreadManager.threadPool.getParallelism();</span>
+    }
+
+
+    /**
+     * Sets the number of threads to use in concurrent algorithms.
+     * @param numThreads Number of threads to use in concurrent algorithms.
+     */
+    public static void setNumThreads(int numThreads) {
+<span class="nc" id="L83">        ThreadManager.threadPool = new ForkJoinPool(Math.max(1, numThreads));</span>
+<span class="nc" id="L84">    }</span>
+
+
+    /**
+     * Gets the current block size used in blocked algorithms.
+     * @return Current block size to use in concurrent algorithms.
+     */
+    public static int getBlockSize() {
+<span class="fc" id="L92">        return blockSize;</span>
+    }
+
+
+    /**
+     * Sets the current block size used in blocked algorithms.
+     * @param blockSize Block size to be used in concurrent algorithms.
+     */
+    public static void setBlockSize(int blockSize) {
+<span class="nc" id="L101">        Configurations.blockSize = Math.max(1, blockSize);</span>
+<span class="nc" id="L102">    }</span>
+
+
+    /**
+     * Gets the minimum size of tensor/matrix/vector to make recursive calls on in recursive algorithms.
+     * @return minimum size of tensor/matrix/vector to make recursive calls on in recursive algorithms.
+     */
+    public static int getMinRecursiveSize() {
+<span class="nc" id="L110">        return minRecursiveSize;</span>
+    }
+
+
+    /**
+     * Sets the minimum size of tensor/matrix/vector to make recursive calls on in recursive algorithms.
+     * @param minRecursiveSize New minimum size.
+     */
+    public static void setMinRecursiveSize(int minRecursiveSize) {
+<span class="nc" id="L119">        Configurations.minRecursiveSize = Math.max(1, minRecursiveSize);</span>
+<span class="nc" id="L120">    }</span>
+
+
+    /**
+     * Resets all configurations to their default values.
+     */
+    public static void resetAll() {
+<span class="nc" id="L127">        ThreadManager.threadPool = new ForkJoinPool(DEFAULT_NUM_THREADS);</span>
+<span class="nc" id="L128">        blockSize = DEFAULT_BLOCK_SIZE;</span>
+<span class="nc" id="L129">        minRecursiveSize = DEFAULT_MIN_RECURSIVE_SIZE;</span>
+<span class="nc" id="L130">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseMatrixConstructorTests.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">SparseMatrixConstructorTests.java</span></div><h1>SparseMatrixConstructorTests.java</h1><pre class="source lang-java linenums">package com.flag4j;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+<span class="nc" id="L9">class SparseMatrixConstructorTests {</span>
+    double[] expNonZero;
+    int[] expNonZeroI, expRowIndices, expColIndices;
+    int size, rows, cols;
+    Shape expShape;
+    SparseMatrix A, B;
+
+    @Test
+    void sizeTest() {
+        // --------------- Sub-case 1 ---------------
+<span class="nc" id="L19">        size = 5;</span>
+<span class="nc" id="L20">        expShape = new Shape(5, 5);</span>
+<span class="nc" id="L21">        expNonZero = new double[0];</span>
+<span class="nc" id="L22">        expRowIndices = new int[0];</span>
+<span class="nc" id="L23">        expColIndices = new int[0];</span>
+<span class="nc" id="L24">        A = new SparseMatrix(size);</span>
+
+<span class="nc" id="L26">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L27">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L28">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L29">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+
+        // --------------- Sub-case 2 ---------------
+<span class="nc" id="L32">        size = -1;</span>
+<span class="nc" id="L33">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(size));</span>
+<span class="nc" id="L34">    }</span>
+
+
+    @Test
+    void rowsColsTest() {
+        // --------------- Sub-case 1 ---------------
+<span class="nc" id="L40">        rows = 10;</span>
+<span class="nc" id="L41">        cols = 12;</span>
+<span class="nc" id="L42">        expShape = new Shape(rows, cols);</span>
+<span class="nc" id="L43">        expNonZero = new double[0];</span>
+<span class="nc" id="L44">        expRowIndices = new int[0];</span>
+<span class="nc" id="L45">        expColIndices = new int[0];</span>
+<span class="nc" id="L46">        A = new SparseMatrix(rows, cols);</span>
+
+<span class="nc" id="L48">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L49">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L50">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L51">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+
+        // --------------- Sub-case 2 ---------------
+<span class="nc" id="L54">        rows = 100123;</span>
+<span class="nc" id="L55">        cols = 99123341;</span>
+<span class="nc" id="L56">        expShape = new Shape(rows, cols);</span>
+<span class="nc" id="L57">        expNonZero = new double[0];</span>
+<span class="nc" id="L58">        expRowIndices = new int[0];</span>
+<span class="nc" id="L59">        expColIndices = new int[0];</span>
+<span class="nc" id="L60">        A = new SparseMatrix(rows, cols);</span>
+
+<span class="nc" id="L62">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L63">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L64">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L65">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+
+        // --------------- Sub-case 2 ---------------
+<span class="nc" id="L68">        rows = -1;</span>
+<span class="nc" id="L69">        cols = 12;</span>
+<span class="nc" id="L70">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(rows, cols));</span>
+
+        // --------------- Sub-case 3 ---------------
+<span class="nc" id="L73">        rows = 1;</span>
+<span class="nc" id="L74">        cols = -12;</span>
+<span class="nc" id="L75">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(rows, cols));</span>
+
+        // --------------- Sub-case 4 ---------------
+<span class="nc" id="L78">        rows = -1;</span>
+<span class="nc" id="L79">        cols = -2;</span>
+<span class="nc" id="L80">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(rows, cols));</span>
+<span class="nc" id="L81">    }</span>
+
+
+    @Test
+    void shapeTest() {
+        // --------------- Sub-case 1 ---------------
+<span class="nc" id="L87">        rows = 10;</span>
+<span class="nc" id="L88">        cols = 12;</span>
+<span class="nc" id="L89">        expShape = new Shape(rows, cols);</span>
+<span class="nc" id="L90">        expNonZero = new double[0];</span>
+<span class="nc" id="L91">        expRowIndices = new int[0];</span>
+<span class="nc" id="L92">        expColIndices = new int[0];</span>
+<span class="nc" id="L93">        A = new SparseMatrix(expShape);</span>
+
+<span class="nc" id="L95">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L96">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L97">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L98">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+
+        // --------------- Sub-case 2 ---------------
+<span class="nc" id="L101">        rows = 100123;</span>
+<span class="nc" id="L102">        cols = 99123341;</span>
+<span class="nc" id="L103">        expShape = new Shape(rows, cols);</span>
+<span class="nc" id="L104">        expNonZero = new double[0];</span>
+<span class="nc" id="L105">        expRowIndices = new int[0];</span>
+<span class="nc" id="L106">        expColIndices = new int[0];</span>
+<span class="nc" id="L107">        A = new SparseMatrix(expShape);</span>
+
+<span class="nc" id="L109">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L110">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L111">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L112">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+<span class="nc" id="L113">    }</span>
+
+
+    @Test
+    void sizeEntriesIndicesTest() {
+        // --------------- Sub-case 1 ---------------
+<span class="nc" id="L119">        size = 5;</span>
+<span class="nc" id="L120">        expShape = new Shape(size, size);</span>
+<span class="nc" id="L121">        expNonZero = new double[]{1, 2, 5, 6};</span>
+<span class="nc" id="L122">        expRowIndices = new int[]{0, 0, 1, 3};</span>
+<span class="nc" id="L123">        expColIndices = new int[]{0, 4, 1, 4};</span>
+<span class="nc" id="L124">        A = new SparseMatrix(size, expNonZero, expRowIndices, expColIndices);</span>
+
+<span class="nc" id="L126">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L127">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L128">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L129">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+
+        // --------------- Sub-case 2 ---------------
+<span class="nc" id="L132">        size = -1;</span>
+<span class="nc" id="L133">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(size, expNonZero, expRowIndices, expColIndices));</span>
+
+        // --------------- Sub-case 3 ---------------
+<span class="nc" id="L136">        size = 2;</span>
+<span class="nc" id="L137">        expShape = new Shape(size, size);</span>
+<span class="nc" id="L138">        expNonZero = new double[]{1, 2, 5, 6, 5};</span>
+<span class="nc" id="L139">        expRowIndices = new int[]{0, 0, 1, 3, 4};</span>
+<span class="nc" id="L140">        expColIndices = new int[]{0, 4, 1, 3, 4};</span>
+
+<span class="nc" id="L142">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(size, expNonZero, expRowIndices, expColIndices));</span>
+
+        // --------------- Sub-case 4 ---------------
+<span class="nc" id="L145">        size = 5;</span>
+<span class="nc" id="L146">        expShape = new Shape(size, size);</span>
+<span class="nc" id="L147">        expNonZero = new double[]{1, 2, 5};</span>
+<span class="nc" id="L148">        expRowIndices = new int[]{0, 0, 1, 3};</span>
+<span class="nc" id="L149">        expColIndices = new int[]{0, 4, 1, 4};</span>
+
+<span class="nc" id="L151">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(size, expNonZero, expRowIndices, expColIndices));</span>
+
+        // --------------- Sub-case 4 ---------------
+<span class="nc" id="L154">        size = 5;</span>
+<span class="nc" id="L155">        expShape = new Shape(size, size);</span>
+<span class="nc" id="L156">        expNonZero = new double[]{1, 2, 5, 4};</span>
+<span class="nc" id="L157">        expRowIndices = new int[]{0, 0, 1, 3};</span>
+<span class="nc" id="L158">        expColIndices = new int[]{0, 4, 1};</span>
+
+<span class="nc" id="L160">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(size, expNonZero, expRowIndices, expColIndices));</span>
+<span class="nc" id="L161">    }</span>
+
+
+    @Test
+    void rowColEntriesIndicesTest() {
+        // --------------- Sub-case 1 ---------------
+<span class="nc" id="L167">        rows = 10;</span>
+<span class="nc" id="L168">        cols = 12;</span>
+<span class="nc" id="L169">        expShape = new Shape(rows, cols);</span>
+<span class="nc" id="L170">        expNonZero = new double[]{-1, 0.234345, 133.1, 24.5, -933.1};</span>
+<span class="nc" id="L171">        expRowIndices = new int[]{0, 4, 5, 5, 10};</span>
+<span class="nc" id="L172">        expColIndices = new int[]{0, 1, 2, 3, 4};</span>
+<span class="nc" id="L173">        A = new SparseMatrix(rows, cols, expNonZero, expRowIndices, expColIndices);</span>
+
+<span class="nc" id="L175">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L176">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L177">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L178">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+
+        // --------------- Sub-case 2 ---------------
+<span class="nc" id="L181">        rows = 100123;</span>
+<span class="nc" id="L182">        cols = 99123341;</span>
+<span class="nc" id="L183">        expShape = new Shape(rows, cols);</span>
+<span class="nc" id="L184">        expNonZero = new double[]{-1, 0.234345, 133.1, 24.5, -933.1};</span>
+<span class="nc" id="L185">        expRowIndices = new int[]{0, 4, 5, 5, 10};</span>
+<span class="nc" id="L186">        expColIndices = new int[]{0, 0, 0, 1, 0};</span>
+<span class="nc" id="L187">        A = new SparseMatrix(rows, cols, expNonZero, expRowIndices, expColIndices);</span>
+
+<span class="nc" id="L189">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L190">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L191">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L192">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+
+        // --------------- Sub-case 2 ---------------
+<span class="nc" id="L195">        rows = -1;</span>
+<span class="nc" id="L196">        cols = 12;</span>
+<span class="nc" id="L197">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(rows, cols, expNonZero, expRowIndices, expColIndices));</span>
+
+        // --------------- Sub-case 3 ---------------
+<span class="nc" id="L200">        rows = 1;</span>
+<span class="nc" id="L201">        cols = -12;</span>
+<span class="nc" id="L202">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(rows, cols, expNonZero, expRowIndices, expColIndices));</span>
+
+        // --------------- Sub-case 4 ---------------
+<span class="nc" id="L205">        rows = -1;</span>
+<span class="nc" id="L206">        cols = -2;</span>
+<span class="nc" id="L207">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(rows, cols, expNonZero, expRowIndices, expColIndices));</span>
+<span class="nc" id="L208">    }</span>
+
+
+    @Test
+    void shapeEntriesIndicesTest() {
+        // --------------- Sub-case 1 ---------------
+<span class="nc" id="L214">        rows = 10;</span>
+<span class="nc" id="L215">        cols = 12;</span>
+<span class="nc" id="L216">        expShape = new Shape(rows, cols);</span>
+<span class="nc" id="L217">        expNonZero = new double[]{-1, 0.234345, 133.1, 24.5, -933.1};</span>
+<span class="nc" id="L218">        expRowIndices = new int[]{0, 4, 5, 5, 10};</span>
+<span class="nc" id="L219">        expColIndices = new int[]{0, 1, 2, 3, 4};</span>
+<span class="nc" id="L220">        A = new SparseMatrix(expShape, expNonZero, expRowIndices, expColIndices);</span>
+
+<span class="nc" id="L222">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L223">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L224">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L225">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+
+        // --------------- Sub-case 2 ---------------
+<span class="nc" id="L228">        rows = 100123;</span>
+<span class="nc" id="L229">        cols = 99123341;</span>
+<span class="nc" id="L230">        expShape = new Shape(rows, cols);</span>
+<span class="nc" id="L231">        expNonZero = new double[]{-1, 0.234345, 133.1, 24.5, -933.1};</span>
+<span class="nc" id="L232">        expRowIndices = new int[]{0, 4, 5, 5, 10};</span>
+<span class="nc" id="L233">        expColIndices = new int[]{0, 0, 0, 1, 0};</span>
+<span class="nc" id="L234">        A = new SparseMatrix(expShape, expNonZero, expRowIndices, expColIndices);</span>
+
+<span class="nc" id="L236">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L237">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L238">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L239">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+<span class="nc" id="L240">    }</span>
+
+
+    @Test
+    void sizeEntriesIntIndicesTest() {
+        // --------------- Sub-case 1 ---------------
+<span class="nc" id="L246">        size = 5;</span>
+<span class="nc" id="L247">        expShape = new Shape(size, size);</span>
+<span class="nc" id="L248">        expNonZeroI = new int[]{1, 2, 5, 6};</span>
+<span class="nc" id="L249">        expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();</span>
+<span class="nc" id="L250">        expRowIndices = new int[]{0, 0, 1, 3};</span>
+<span class="nc" id="L251">        expColIndices = new int[]{0, 4, 1, 4};</span>
+<span class="nc" id="L252">        A = new SparseMatrix(size, expNonZeroI, expRowIndices, expColIndices);</span>
+
+<span class="nc" id="L254">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L255">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L256">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L257">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+
+        // --------------- Sub-case 2 ---------------
+<span class="nc" id="L260">        size = -1;</span>
+<span class="nc" id="L261">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(size, expNonZeroI, expRowIndices, expColIndices));</span>
+
+        // --------------- Sub-case 3 ---------------
+<span class="nc" id="L264">        size = 2;</span>
+<span class="nc" id="L265">        expShape = new Shape(size, size);</span>
+<span class="nc" id="L266">        expNonZeroI = new int[]{1, 2, 5, 6, 5};</span>
+<span class="nc" id="L267">        expRowIndices = new int[]{0, 0, 1, 3, 4};</span>
+<span class="nc" id="L268">        expColIndices = new int[]{0, 4, 1, 3, 4};</span>
+
+<span class="nc" id="L270">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(size, expNonZeroI, expRowIndices, expColIndices));</span>
+
+        // --------------- Sub-case 4 ---------------
+<span class="nc" id="L273">        size = 5;</span>
+<span class="nc" id="L274">        expShape = new Shape(size, size);</span>
+<span class="nc" id="L275">        expNonZeroI = new int[]{1, 2, 5};</span>
+<span class="nc" id="L276">        expRowIndices = new int[]{0, 0, 1, 3};</span>
+<span class="nc" id="L277">        expColIndices = new int[]{0, 4, 1, 4};</span>
+
+<span class="nc" id="L279">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(size, expNonZeroI, expRowIndices, expColIndices));</span>
+
+        // --------------- Sub-case 4 ---------------
+<span class="nc" id="L282">        size = 5;</span>
+<span class="nc" id="L283">        expShape = new Shape(size, size);</span>
+<span class="nc" id="L284">        expNonZeroI = new int[]{1, 2, 5, 4};</span>
+<span class="nc" id="L285">        expRowIndices = new int[]{0, 0, 1, 3};</span>
+<span class="nc" id="L286">        expColIndices = new int[]{0, 4, 1};</span>
+
+<span class="nc" id="L288">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(size, expNonZeroI, expRowIndices, expColIndices));</span>
+<span class="nc" id="L289">    }</span>
+
+
+    @Test
+    void rowColEntriesIntIndicesTest() {
+        // --------------- Sub-case 1 ---------------
+<span class="nc" id="L295">        rows = 10;</span>
+<span class="nc" id="L296">        cols = 12;</span>
+<span class="nc" id="L297">        expShape = new Shape(rows, cols);</span>
+<span class="nc" id="L298">        expNonZeroI = new int[]{-1, 234345, 133, 24, -933};</span>
+<span class="nc" id="L299">        expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();</span>
+<span class="nc" id="L300">        expRowIndices = new int[]{0, 4, 5, 5, 10};</span>
+<span class="nc" id="L301">        expColIndices = new int[]{0, 1, 2, 3, 4};</span>
+<span class="nc" id="L302">        A = new SparseMatrix(rows, cols, expNonZeroI, expRowIndices, expColIndices);</span>
+
+<span class="nc" id="L304">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L305">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L306">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L307">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+
+        // --------------- Sub-case 2 ---------------
+<span class="nc" id="L310">        rows = 100123;</span>
+<span class="nc" id="L311">        cols = 99123341;</span>
+<span class="nc" id="L312">        expShape = new Shape(rows, cols);</span>
+<span class="nc" id="L313">        expNonZeroI = new int[]{-1, 234345, 133, 24, -933};</span>
+<span class="nc" id="L314">        expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();</span>
+<span class="nc" id="L315">        expRowIndices = new int[]{0, 4, 5, 5, 10};</span>
+<span class="nc" id="L316">        expColIndices = new int[]{0, 0, 0, 1, 0};</span>
+<span class="nc" id="L317">        A = new SparseMatrix(rows, cols, expNonZeroI, expRowIndices, expColIndices);</span>
+
+<span class="nc" id="L319">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L320">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L321">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L322">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+
+        // --------------- Sub-case 2 ---------------
+<span class="nc" id="L325">        rows = -1;</span>
+<span class="nc" id="L326">        cols = 12;</span>
+<span class="nc" id="L327">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(rows, cols, expNonZeroI, expRowIndices, expColIndices));</span>
+
+        // --------------- Sub-case 3 ---------------
+<span class="nc" id="L330">        rows = 1;</span>
+<span class="nc" id="L331">        cols = -12;</span>
+<span class="nc" id="L332">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(rows, cols, expNonZeroI, expRowIndices, expColIndices));</span>
+
+        // --------------- Sub-case 4 ---------------
+<span class="nc" id="L335">        rows = -1;</span>
+<span class="nc" id="L336">        cols = -2;</span>
+<span class="nc" id="L337">        assertThrows(IllegalArgumentException.class, () -&gt; new SparseMatrix(rows, cols, expNonZeroI, expRowIndices, expColIndices));</span>
+<span class="nc" id="L338">    }</span>
+
+    @Test
+    void shapeEntriesIntIndicesTest() {
+        // --------------- Sub-case 1 ---------------
+<span class="nc" id="L343">        rows = 10;</span>
+<span class="nc" id="L344">        cols = 12;</span>
+<span class="nc" id="L345">        expShape = new Shape(rows, cols);</span>
+<span class="nc" id="L346">        expNonZeroI = new int[]{-1, 234345, 133, 24, -933};</span>
+<span class="nc" id="L347">        expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();</span>
+<span class="nc" id="L348">        expRowIndices = new int[]{0, 4, 5, 5, 10};</span>
+<span class="nc" id="L349">        expColIndices = new int[]{0, 1, 2, 3, 4};</span>
+<span class="nc" id="L350">        A = new SparseMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);</span>
+
+<span class="nc" id="L352">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L353">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L354">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L355">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+
+        // --------------- Sub-case 2 ---------------
+<span class="nc" id="L358">        rows = 100123;</span>
+<span class="nc" id="L359">        cols = 99123341;</span>
+<span class="nc" id="L360">        expShape = new Shape(rows, cols);</span>
+<span class="nc" id="L361">        expNonZeroI = new int[]{-1, 234345, 133, 24, -933};</span>
+<span class="nc" id="L362">        expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();</span>
+<span class="nc" id="L363">        expRowIndices = new int[]{0, 4, 5, 5, 10};</span>
+<span class="nc" id="L364">        expColIndices = new int[]{0, 0, 0, 1, 0};</span>
+<span class="nc" id="L365">        A = new SparseMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);</span>
+
+<span class="nc" id="L367">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L368">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L369">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L370">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+<span class="nc" id="L371">    }</span>
+
+
+    @Test
+    void copyTest() {
+        // --------------- Sub-case 1 ---------------
+<span class="nc" id="L377">        rows = 10;</span>
+<span class="nc" id="L378">        cols = 12;</span>
+<span class="nc" id="L379">        expShape = new Shape(rows, cols);</span>
+<span class="nc" id="L380">        expNonZeroI = new int[]{-1, 234345, 133, 24, -933};</span>
+<span class="nc" id="L381">        expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();</span>
+<span class="nc" id="L382">        expRowIndices = new int[]{0, 4, 5, 5, 10};</span>
+<span class="nc" id="L383">        expColIndices = new int[]{0, 1, 2, 3, 4};</span>
+<span class="nc" id="L384">        B = new SparseMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);</span>
+<span class="nc" id="L385">        A = new SparseMatrix(B);</span>
+
+<span class="nc" id="L387">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L388">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L389">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L390">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+
+        // --------------- Sub-case 2 ---------------
+<span class="nc" id="L393">        rows = 100123;</span>
+<span class="nc" id="L394">        cols = 99123341;</span>
+<span class="nc" id="L395">        expShape = new Shape(rows, cols);</span>
+<span class="nc" id="L396">        expNonZeroI = new int[]{-1, 234345, 133, 24, -933};</span>
+<span class="nc" id="L397">        expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();</span>
+<span class="nc" id="L398">        expRowIndices = new int[]{0, 4, 5, 5, 10};</span>
+<span class="nc" id="L399">        expColIndices = new int[]{0, 0, 0, 1, 0};</span>
+<span class="nc" id="L400">        B = new SparseMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);</span>
+<span class="nc" id="L401">        A = new SparseMatrix(B);</span>
+
+<span class="nc" id="L403">        assertEquals(expShape, A.shape);</span>
+<span class="nc" id="L404">        assertArrayEquals(expNonZero, A.entries);</span>
+<span class="nc" id="L405">        assertArrayEquals(expColIndices, A.colIndices);</span>
+<span class="nc" id="L406">        assertArrayEquals(expRowIndices, A.rowIndices);</span>
+<span class="nc" id="L407">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

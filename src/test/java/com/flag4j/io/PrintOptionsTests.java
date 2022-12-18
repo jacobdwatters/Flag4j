@@ -13,21 +13,18 @@ class PrintOptionsTests {
         assertEquals(10, PrintOptions.getMaxRows());
         assertEquals(10, PrintOptions.getMaxColumns());
         assertEquals(8, PrintOptions.getPrecision());
-        assertEquals(false, PrintOptions.getUseScientific());
         assertEquals(true, PrintOptions.getCenter());
 
         PrintOptions.setPadding(14);
         PrintOptions.setMaxRows(15);
         PrintOptions.setMaxColumns(100);
         PrintOptions.setPrecision(134);
-        PrintOptions.setUseScientific(true);
         PrintOptions.setCenter(false);
 
         assertEquals(14, PrintOptions.getPadding());
         assertEquals(15, PrintOptions.getMaxRows());
         assertEquals(100, PrintOptions.getMaxColumns());
         assertEquals(134, PrintOptions.getPrecision());
-        assertEquals(true, PrintOptions.getUseScientific());
         assertEquals(false, PrintOptions.getCenter());
 
         assertThrows(IllegalArgumentException.class, () -> PrintOptions.setPadding(-1));

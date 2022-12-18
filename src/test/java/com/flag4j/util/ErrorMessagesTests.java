@@ -1,7 +1,11 @@
 package com.flag4j.util;
 
 import com.flag4j.Shape;
+import com.flag4j.util.ErrorMessages;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,7 +22,7 @@ class ErrorMessagesTests {
         expMsg = String.format("Expecting matrices to have the same shape but got shapes %s and %s.",
                 "2", "5");
 
-        assertEquals(expMsg, ErrorMessages.equalShapeErrMsg(s1, s2));
+        Assertions.assertEquals(expMsg, ErrorMessages.equalShapeErrMsg(s1, s2));
 
 
         // --------- sub-case 2 ---------
@@ -66,11 +70,11 @@ class ErrorMessagesTests {
 
     @Test
     void negativeDimErrMsgTestCase() {
-        s1 = new Shape(-1, 1);
+        int[] dims = {-1, 1};
         expMsg = String.format("Shape dimensions must be non-negative but got shape %s.",
-                s1);
+                Arrays.toString(dims));
 
-        assertEquals(expMsg, ErrorMessages.negativeDimErrMsg(s1));
+        assertEquals(expMsg, ErrorMessages.negativeDimErrMsg(dims));
     }
 
 

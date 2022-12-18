@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.flag4j.io;
 
 import com.flag4j.util.ErrorMessages;
@@ -6,6 +30,12 @@ import com.flag4j.util.ErrorMessages;
  * Print options for matrices and vectors
  */
 public abstract class PrintOptions {
+
+    public static final int DEFAULT_PADDING = 2;
+    public static final int DEFAULT_MAX_ROWS = 10;
+    public static final int DEFAULT_MAX_COLS = 10;
+    public static final int DEFAULT_PRECISION = 8;
+    public static final boolean DEFAULT_CENTER = true;
 
     /**
      * Hide default constructor.
@@ -21,7 +51,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 2
      */
-    private static int padding = 2;
+    private static int padding = DEFAULT_PADDING;
 
 
     /**
@@ -33,7 +63,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 10
      */
-    private static int maxRows = 10;
+    private static int maxRows = DEFAULT_MAX_ROWS;
 
 
     /**
@@ -45,7 +75,7 @@ public abstract class PrintOptions {
      *
      * Default Value: 10
      */
-    private static int maxColumns = 10;
+    private static int maxColumns = DEFAULT_MAX_COLS;
 
 
     /**
@@ -54,15 +84,7 @@ public abstract class PrintOptions {
      * <br><br>
      * Default Value: 8.
      */
-    private static int precision = 8;
-
-
-    /**
-     * A flag for displaying values in scientific notation.
-     * <br><br>
-     * Default value: false.
-     */
-    private static boolean useScientific = false;
+    private static int precision = DEFAULT_PRECISION;
 
 
     /**
@@ -70,7 +92,7 @@ public abstract class PrintOptions {
      * <br><br>
      * Default value: true.
      */
-    private static boolean center = true;
+    private static boolean center = DEFAULT_CENTER;
 
 
     /**
@@ -110,24 +132,6 @@ public abstract class PrintOptions {
      */
     public static int getPrecision() {
         return precision;
-    }
-
-
-    /**
-     * Sets the flag for printing in scientific notation.
-     * @param useScientific Flag to use for printing scientific notation.
-     */
-    public static void setUseScientific(boolean useScientific) {
-        PrintOptions.useScientific = useScientific;
-    }
-
-
-    /**
-     * Gets the current flag for printing in scientific notation.
-     * @return The current flag for weather to print values in scientific notation or not.
-     */
-    public static boolean getUseScientific() {
-        return useScientific;
     }
 
 
@@ -194,5 +198,17 @@ public abstract class PrintOptions {
         }
 
         PrintOptions.padding = padding;
+    }
+
+
+    /**
+     * Resets all print options to their default values.
+     */
+    public static void resetAll() {
+        padding = DEFAULT_PADDING;
+        maxColumns = DEFAULT_MAX_COLS;
+        maxRows = DEFAULT_MAX_ROWS;
+        precision = DEFAULT_PRECISION;
+        center = DEFAULT_CENTER;
     }
 }

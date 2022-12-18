@@ -1,7 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ErrorMessages.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.util</a> &gt; <span class="el_source">ErrorMessages.java</span></div><h1>ErrorMessages.java</h1><pre class="source lang-java linenums">package com.flag4j.util;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ErrorMessages.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.util</a> &gt; <span class="el_source">ErrorMessages.java</span></div><h1>ErrorMessages.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.util;
 
 
 import com.flag4j.Shape;
+
+import java.util.Arrays;
 
 /**
  * Contains error messages for common errors which may occur.
@@ -11,8 +37,8 @@ public abstract class ErrorMessages {
     /**
      * Hide default constructor.
      */
-<span class="nc" id="L14">    private ErrorMessages() {</span>
-<span class="nc" id="L15">        throw new IllegalStateException(UTILITY_CLASS_ERR);</span>
+<span class="nc" id="L40">    private ErrorMessages() {</span>
+<span class="nc" id="L41">        throw new IllegalStateException(UTILITY_CLASS_ERR);</span>
     }
 
     /**
@@ -40,8 +66,48 @@ public abstract class ErrorMessages {
      * Error message for attempted instantiation of a utility class.
      */
     private static final String UTILITY_CLASS_ERR = &quot;Utility class cannot be instantiated&quot;;
+    /**
+     * Error message for a negative value when a non-negative was expected.
+     */
     private static final String NEG_VALUE_ERR = &quot;Expecting value to be non-negative but got %s&quot;;
-
+    /**
+     * Error message for disallowed axis.
+     */
+    private static final String AXIS_ERR_RANGE = &quot;Got an axis of %s but was expecting one of %s&quot;;
+    /**
+     * Error message for disallowed axis.
+     */
+    private static final String AXIS_ERR = &quot;The axis %s is unspecified.&quot;;
+    /**
+     * Error message wrong shape.
+     */
+    private static final String SHAPE_RANK_ERR = &quot;Got a shape of rank %d but was expecting a shape of rank %d&quot;;
+    /**
+     * Error message for a shape size which cannot contain a specified number of entries.
+     */
+    private static final String SHAPE_ENTRIES_ERR = &quot;The shape %s cannot hold %d entries.&quot;;
+    /**
+     * Error message for a ordinal which is not a valid vector orientation ordinal.
+     */
+    private static final String VECTOR_ORIENTATION_ERR = &quot;Unknown orientation ordinal %s. Must be either 0, 1, or 2.&quot;;
+    /**
+     * Error message for arrays which were expected to be the same length.
+     */
+    private static final String ARRAY_LENGTHS_MISMATCH_ERR = &quot;Arrays lengths must match but got lengths: %s.&quot;;
+    /**
+     * Error message for a number of indices which does not match the rank of the tensor being indexed.
+     */
+    private static final String INDICES_RANK_ERR = &quot;Number of indices does not match the rank of the tensor.&quot; +
+            &quot; Got %s indices but expected %s&quot;;
+    /**
+     * Error message for shapes which cannot be broadcast.
+     */
+    private static final String SHAPE_BROADCAST_ERR = &quot;Shapes %s and %s can not be broadcast because they specify &quot; +
+            &quot;a different number of total entries.&quot;;
+    /**
+     * Error message for arrays which do not have the same total number of entries.
+     */
+    private static final String TOTAL_ENTRIES_ERR = &quot;Arrays do not have the same total number of entries.&quot;;
 
     /**
      * Gets an error message for two tensors with mismatching shapes.
@@ -50,7 +116,7 @@ public abstract class ErrorMessages {
      * @return An error message for tensors with mismatching shapes.
      */
     public static String equalShapeErrMsg(Shape shape1, Shape shape2) {
-<span class="fc" id="L53">        return String.format(EQ_SHAPE_MISMATCH_ERR, shape1, shape2);</span>
+<span class="fc" id="L119">        return String.format(EQ_SHAPE_MISMATCH_ERR, shape1, shape2);</span>
     }
 
 
@@ -61,7 +127,7 @@ public abstract class ErrorMessages {
      * @return An error message for matrices with shapes not conducive with matrix multiplication.
      */
     public static String matMultShapeErrMsg(Shape shape1, Shape shape2) {
-<span class="fc" id="L64">        return String.format(MAT_MULT_DIM_MISMATCH_ERR, shape1, shape2);</span>
+<span class="fc" id="L130">        return String.format(MAT_MULT_DIM_MISMATCH_ERR, shape1, shape2);</span>
     }
 
 
@@ -71,7 +137,7 @@ public abstract class ErrorMessages {
      * @return An error message for a vector which is not a row vector.
      */
     public static String vecRowOrientErrMsg(Shape shape) {
-<span class="fc" id="L74">        return String.format(VEC_ROW_ORIENTATION_ERR, shape);</span>
+<span class="fc" id="L140">        return String.format(VEC_ROW_ORIENTATION_ERR, shape);</span>
     }
 
 
@@ -81,29 +147,129 @@ public abstract class ErrorMessages {
      * @return An error message for a vector which is not a row vector.
      */
     public static String vecColOrientErrMsg(Shape shape) {
-<span class="fc" id="L84">        return String.format(VEC_COL_ORIENTATION_ERR, shape);</span>
+<span class="fc" id="L150">        return String.format(VEC_COL_ORIENTATION_ERR, shape);</span>
     }
 
 
     /**
      * Gets an error message for an attempted construction of a tensor with a negative dimension.
-     * @param shape Shape of the tensor.
-     * @return
+     * @param dims Shape of the tensor.
+     * @return An error message for negative dimension.
      */
-    public static String negativeDimErrMsg(Shape shape) {
-<span class="fc" id="L94">        return String.format(NEG_DIM_ERR, shape);</span>
+    public static String negativeDimErrMsg(int[] dims) {
+<span class="fc" id="L160">        return String.format(NEG_DIM_ERR,</span>
+<span class="fc" id="L161">                Arrays.toString(dims));</span>
     }
 
 
     /**
      * Gets an error message for an attempted instantiation of a utility class.
-     * @return
+     * @return An error message for the attempted instantiation of a utility class;
      */
-<span class="fc" id="L102">    public static String utilityClassErrMsg() {return UTILITY_CLASS_ERR;}</span>
+<span class="fc" id="L169">    public static String utilityClassErrMsg() {return UTILITY_CLASS_ERR;}</span>
 
 
+    /**
+     * Gets an error message for a negative value when a non-negative was expected.
+     * @param value Negative value.
+     * @return An error message for a negative value.
+     */
     public static String negValueErr(double value) {
-<span class="fc" id="L106">        return String.format(NEG_VALUE_ERR, value);</span>
+<span class="fc" id="L178">        return String.format(NEG_VALUE_ERR, value);</span>
+    }
+
+
+    /**
+     * Gets an error message for a disallowed axis.
+     * @param axis Negative value.
+     * @param allowedAxes An array containing allowed axes.
+     * @return An error message for a disallowed axis.
+     */
+    public static String axisErr(int axis, int[] allowedAxes) {
+<span class="fc" id="L189">        return String.format(AXIS_ERR_RANGE, axis, Arrays.toString(allowedAxes));</span>
+    }
+
+
+    /**
+     * Gets an error message for a disallowed axis.
+     * @param axis Negative value.
+     * @return An error message for a disallowed axis.
+     */
+    public static String axisErr(int axis) {
+<span class="nc" id="L199">        return String.format(AXIS_ERR, axis);</span>
+    }
+
+
+    /**
+     * Gets an error message for an incorrect shape.
+     * @param expRank Expected rank of the shape.
+     * @param actRank Actual rank of the shape.
+     * @return An error message for a shape object with wrong shape.
+     */
+    public static String shapeRankErr(int actRank, int expRank) {
+<span class="nc" id="L210">        return String.format(SHAPE_RANK_ERR, actRank, expRank);</span>
+    }
+
+
+    /**
+     * Gets an error message for a shape which cannot hold a specified number of entries.
+     * @param shape Shape.
+     * @param numEntries Number of entries to hold.
+     * @return An error message for a shape which cannot hold a specified number of entries.
+     */
+    public static String shapeEntriesError(Shape shape, int numEntries) {
+<span class="fc" id="L221">        return String.format(SHAPE_ENTRIES_ERR, shape.toString(), numEntries);</span>
+    }
+
+
+    /**
+     * Gets an error message for an ordinal which is not a valid vector orientation.
+     * @param ordinal Ordinal for orientation.
+     * @return An error message for an ordinal which is not a valid vector orientation.
+     */
+    public static String vectorOrientationErr(int ordinal) {
+<span class="nc" id="L231">        return String.format(VECTOR_ORIENTATION_ERR, ordinal);</span>
+    }
+
+
+    /**
+     * Gets an error message for arrays which were expected to be the same length.
+     * @param lengths Lengths of arrays.
+     * @return An error message for arrays which were expected to be the same length.
+     */
+    public static String getArrayLengthsMismatchErr(int... lengths) {
+<span class="fc" id="L241">        return String.format(ARRAY_LENGTHS_MISMATCH_ERR, Arrays.toString(lengths));</span>
+    }
+
+
+    /**
+     * Gets an error message for a tensor being indexed with a number of indices not equal to the rank of the tensor.
+     * @param numIndices Number of indices.
+     * @param rank Rank of the tensor.
+     * @return An error message for a tensor being indexed with a number if indices not equal ot the rank of the tensor.
+     */
+    public static String getIndicesRankErr(int numIndices, int rank) {
+<span class="fc" id="L252">        return String.format(INDICES_RANK_ERR, numIndices, rank);</span>
+    }
+
+
+    /**
+     * Gets an error message for two shapes which cannot be broadcast together.
+     * @param shape1 First shape.
+     * @param shape2 Second shape.
+     * @return An error message for two shapes which cannot be broadcast together.
+     */
+    public static String getShapeBroadcastErr(Shape shape1, Shape shape2) {
+<span class="fc" id="L263">        return String.format(SHAPE_BROADCAST_ERR, shape1, shape2);</span>
+    }
+
+
+    /**
+     * Gets an error message for arrays which do not have the same total number of entries.
+     * @return An error message for arrays which do not have the same total number of entries.
+     */
+    public static String getTotalEntriesErr() {
+<span class="fc" id="L272">        return TOTAL_ENTRIES_ERR;</span>
     }
 }
 

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TensorBase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.core</a> &gt; <span class="el_source">TensorBase.java</span></div><h1>TensorBase.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.core;
+
+import com.flag4j.Shape;
+import com.flag4j.util.ErrorMessages;
+
+import java.io.Serializable;
+import java.math.BigInteger;
+
+
+/**
+ * A tensor with typed entries.
+ * @param &lt;T&gt; Type of the entries of this tensor.
+ */
+public abstract class TensorBase&lt;T&gt; implements Serializable {
+
+    /**
+     * Entries of this tensor.
+     */
+    public final T entries;
+    /**
+     * The shape of this tensor
+     */
+    public final Shape shape;
+
+
+    /**
+     * Creates an empty tensor with given shape.
+     * @param shape Shape of this tensor.
+     * @param entries Entries of this tensor.
+     */
+<span class="fc" id="L55">    public TensorBase(Shape shape, T entries) {</span>
+<span class="fc" id="L56">        this.shape = shape;</span>
+<span class="fc" id="L57">        this.entries = entries;</span>
+<span class="fc" id="L58">    }</span>
+
+
+    /**
+     * Gets the shape of this tensor.
+     * @return The shape of this tensor.
+     */
+    public Shape getShape() {
+<span class="fc" id="L66">        return this.shape;</span>
+    }
+
+
+    /**
+     * Gets the rank of this tensor.
+     * @return The rank of this tensor.
+     */
+    public int getRank() {
+<span class="fc" id="L75">        return this.shape.getRank();</span>
+    }
+
+
+    /**
+     * Gets the entries of this tensor as a 1D array.
+     * @return The entries of this tensor.
+     */
+    public T getEntries() {
+<span class="nc" id="L84">        return this.entries;</span>
+    }
+
+
+    /**
+     * Gets the total number of entries in this tensor.
+     * @return The total number of entries in this tensor.
+     */
+    public BigInteger totalEntries() {
+        // Use the shape to compute the number of entries. This ensures the result is also correct for sparse tensors.
+<span class="fc" id="L94">        return shape.totalEntries();</span>
+    }
+
+
+    /**
+     * Checks if a tensor has the same shape as this tensor.
+     * @param B Second tensor.
+     * @return True if this tensor and B have the same shape. False otherwise.
+     */
+    public boolean sameShape(TensorBase&lt;?&gt; B) {
+<span class="nc" id="L104">        return this.shape.equals(B.shape);</span>
+    }
+
+
+    /**
+     * Checks if two matrices have the same length along a specified axis.
+     * @param A First tensor to compare.
+     * @param B Second tensor to compare.
+     * @param axis The axis along which to compare the lengths of the two tensors.
+     * @return True if tensor A and tensor B have the same length along the specified axis. Otherwise, returns false.
+     * @throws IllegalArgumentException If axis is negative or unspecified for the two tensors.
+     */
+    public static boolean sameLength(TensorBase&lt;?&gt; A, TensorBase&lt;?&gt; B, int axis) {
+<span class="nc bnc" id="L117" title="All 4 branches missed.">        if(axis &lt; 0 || axis&gt;=Math.max(A.shape.getRank(), B.shape.getRank())) {</span>
+<span class="nc" id="L118">            throw new IllegalArgumentException(</span>
+<span class="nc" id="L119">                    ErrorMessages.axisErr(axis)</span>
+            );
+        }
+
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        return A.shape.dims[axis]==B.shape.dims[axis];</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
