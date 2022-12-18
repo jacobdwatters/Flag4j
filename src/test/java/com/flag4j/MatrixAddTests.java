@@ -27,7 +27,7 @@ class MatrixAddTests {
         A = new Matrix(aEntries);
         B = new Matrix(bEntries);
         expShape = A.shape.clone();
-        expEntries = new double[]{1+0.333, 2+56.4, 3+13.4, 4+-1.44, 5+5, 6+85.1, 7+1.343, 8+6.7, 9+88.4};
+        expEntries = new double[]{1+0.333, 2+56.4, 3+13.4, 4-1.44, 5+5, 6+85.1, 7+1.343, 8+6.7, 9-88.4};
 
         sum = A.add(B);
 

@@ -24,13 +24,17 @@
 
 package com.flag4j.operations.dense.real;
 
+import com.flag4j.Shape;
+import com.flag4j.Vector;
+import com.flag4j.core.VectorOrientations;
 import com.flag4j.operations.concurrency.Configurations;
 import com.flag4j.operations.concurrency.ThreadManager;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 
 
 /**
- * This class contains several algorithms for computing the transpose of a real dense tensor.
+ * This class contains several low-level algorithms for computing the transpose of real dense tensors.
  */
 public final class RealDenseTranspose {
 
@@ -40,28 +44,40 @@ public final class RealDenseTranspose {
     }
 
 
-//    /**
-//     * Transposes tensor along specified axes.
-//     * @param src Entries of the tensor.
-//     * @param shape Shape of the tensor to transpose.
-//     * @param axis1 First axis to swap in transpose.
-//     * @param axis2 Second axis to swap in transpose.
-//     * @return The transpose of the tensor along the specified axes.
-//     */
-//    public static double[] standard(double[] src, Shape shape, int axis1, int axis2) {
-//        double[] dest = new double[shape.totalEntries().intValue()];
-//        Shape destShape = shape.clone().swapAxes(axis1, axis2);
-//
-//        int[] srcIndices = new int[shape.dims.length];
-//        int[] destIndices = new int[shape.dims.length];
-//
-//        for(int i=0; i<src.length; i++) {
-//            dest[shape.entriesIndex(destIndices)] = dest[shape.entriesIndex(srcIndices)];
-//            // TODO: Increase srcIndices and get destIndices.
-//        }
-//
-//        return dest;
-//    }
+    /**
+     * Transposes tensor along specified axes.
+     * @param src Entries of the tensor.
+     * @param shape Shape of the tensor to transpose.
+     * @param axis1 First axis to swap in transpose.
+     * @param axis2 Second axis to swap in transpose.
+     * @return The transpose of the tensor along the specified axes.
+     */
+    public static double[] standard(final double[] src, final Shape shape, final int axis1, final int axis2) {
+        if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
+                    " tensor.");
+        }
+
+        double[] dest = new double[shape.totalEntries().intValue()];
+        Shape destShape = shape.clone().swapAxes(axis1, axis2);
+
+        int[] srcIndices = new int[shape.getRank()];
+        int[] destIndices = srcIndices.clone();
+        ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
+
+        for(int i=0; i<src.length; i++) {
+            dest[destShape.entriesIndex(destIndices)] = src[shape.entriesIndex(srcIndices)]; // Apply transpose for the element
+            // TODO: Is there a way to quickly compute indices without using i?
+            //  Since the getNextIndices(...) call is dependent on the source indices from the previous iteration,
+            //  this loop CANNOT be made concurrent.
+            shape.getNextIndices(srcIndices, i); // Get the next indices for the source tensor.
+
+            destIndices = srcIndices.clone();
+            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
+        }
+
+        return dest;
+    }
 
 
     /**

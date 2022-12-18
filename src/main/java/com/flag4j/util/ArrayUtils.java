@@ -26,6 +26,8 @@ package com.flag4j.util;
 
 import com.flag4j.complex_numbers.CNumber;
 
+import java.util.Arrays;
+
 /**
  * This class provides several methods useful for array manipulation.
  */
@@ -161,5 +163,61 @@ public final class ArrayUtils {
         for(int i=0; i<dest.length; i++) {
             dest[i] = fillValue.clone();
         }
+    }
+
+
+    /**
+     * Swaps to elements in an array. This is done in place.
+     * @param arr Array to swap elements in. This array is modified.
+     * @param i Index of first value to swap.
+     * @param j Index of second value to swap.
+     * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
+     */
+    public static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+
+
+    /**
+     * Swaps to elements in an array. This is done in place.
+     * @param arr Array to swap elements in. This array is modified.
+     * @param i Index of first value to swap.
+     * @param j Index of second value to swap.
+     * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
+     */
+    public static void swap(double[] arr, int i, int j) {
+        double temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+
+    /**
+     * Swaps to elements in an array. This is done in place.
+     * @param arr Array to swap elements in. This array is modified.
+     * @param i Index of first value to swap.
+     * @param j Index of second value to swap.
+     * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
+     */
+    public static void swap(Object[] arr, int i, int j) {
+        Object temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+
+    /**
+     * Gets an array filled with integers from {@code start} (inclusive) to {@code end} (exclusive)
+     * @param start Staring value (inclusive).
+     * @param end Stopping value (exclusive).
+     * @return An array containing the integer range {@code [start, end)}.
+     */
+    public static double[] range(int start, int end) {
+        double[] rangeArr = new double[end-start];
+        Arrays.setAll(rangeArr, (i) -> start+i);
+        return rangeArr;
     }
 }

@@ -38,9 +38,9 @@ public class RandomTensor {
 <span class="nc" id="L38">        rng = new Random();</span>
 <span class="nc" id="L39">    }</span>
 
-<span class="nc" id="L41">    public RandomTensor(long seed) {</span>
-<span class="nc" id="L42">        rng = new Random(seed);</span>
-<span class="nc" id="L43">    }</span>
+<span class="fc" id="L41">    public RandomTensor(long seed) {</span>
+<span class="fc" id="L42">        rng = new Random(seed);</span>
+<span class="fc" id="L43">    }</span>
 
 
     /**
@@ -51,13 +51,13 @@ public class RandomTensor {
      * @return A random matrix with specified size.
      */
     public Matrix getRandomMatrix(int m, int n) {
-<span class="nc" id="L54">        Matrix randMat = new Matrix(m, n);</span>
+<span class="fc" id="L54">        Matrix randMat = new Matrix(m, n);</span>
 
-<span class="nc bnc" id="L56" title="All 2 branches missed.">        for(int i=0; i&lt;randMat.totalEntries().intValue(); i++) {</span>
-<span class="nc" id="L57">            randMat.entries[i] = rng.nextGaussian();</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        for(int i=0; i&lt;randMat.totalEntries().intValue(); i++) {</span>
+<span class="fc" id="L57">            randMat.entries[i] = rng.nextGaussian();</span>
         }
 
-<span class="nc" id="L60">        return randMat;</span>
+<span class="fc" id="L60">        return randMat;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

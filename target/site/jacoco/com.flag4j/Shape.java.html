@@ -231,13 +231,27 @@ public class Shape implements Serializable {
 
 
     /**
+     * Gets the next indices for a tensor with this shape.
+     * @param currentIndices Current indices. This array is modified.
+     * @param i Index of 1d data array.
+     */
+    public void getNextIndices(int[] currentIndices, int i) {
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        for(int j=0; j&lt;currentIndices.length; j++) {</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">            if((i+1)%strides[j]==0) {</span>
+<span class="fc" id="L241">                currentIndices[j] = (currentIndices[j]+1) % dims[j];</span>
+            }
+        }
+<span class="fc" id="L244">    }</span>
+
+
+    /**
      * Generates the hashcode for this shape object. This is computed by passing the dims array of this shape object to
      * {@link java.util.Arrays#hashCode(int[])}.
      * @return The hashcode for this array object.
      */
     @Override
     public int hashCode() {
-<span class="nc" id="L240">        return Arrays.hashCode(this.dims);</span>
+<span class="nc" id="L254">        return Arrays.hashCode(this.dims);</span>
     }
 
 
@@ -246,14 +260,14 @@ public class Shape implements Serializable {
      * @return The string representation for this Shape object.
      */
     public String toString() {
-<span class="fc" id="L249">        StringBuilder result = new StringBuilder();</span>
+<span class="fc" id="L263">        StringBuilder result = new StringBuilder();</span>
 
-<span class="fc bfc" id="L251" title="All 2 branches covered.">        for(int d : dims) {</span>
-<span class="fc" id="L252">            result.append(d).append(&quot;x&quot;);</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">        for(int d : dims) {</span>
+<span class="fc" id="L266">            result.append(d).append(&quot;x&quot;);</span>
         }
-<span class="fc" id="L254">        result.deleteCharAt(result.length()-1); // Remove excess 'x' character.</span>
+<span class="fc" id="L268">        result.deleteCharAt(result.length()-1); // Remove excess 'x' character.</span>
 
-<span class="fc" id="L256">        return result.toString();</span>
+<span class="fc" id="L270">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

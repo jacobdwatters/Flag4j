@@ -51,14 +51,14 @@ public final class CheckConcurrent {
      * @param numCols Number of columns in matrix.
      * @return True if a concurrent algorithm should be used. False if a single thread algorithm should be used.
      */
-    public static boolean simpleCheck(int numRows, int numCols) {
+    public static boolean simpleMatrixCheck(int numRows, int numCols) {
         return standardCheck(numRows, numCols, BASE_THRESHOLD, SMALLER_THRESHOLD, LARGER_THRESHOLD);
     }
 
 
     /**
      * Applies a check to determine if a concurrent algorithm should be applied. This method is similar to
-     * {@link #simpleCheck(int, int)} but uses more relaxed parameters.
+     * {@link #simpleMatrixCheck(int, int)} but uses more relaxed parameters.
      * @param numRows Number of rows in the matrix.
      * @param numCols Number of columns in the matrix.
      * @return True if a concurrent algorithm should be used. Otherwise, returns false.

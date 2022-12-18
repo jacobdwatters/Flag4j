@@ -231,6 +231,20 @@ public class Shape implements Serializable {
 
 
     /**
+     * Gets the next indices for a tensor with this shape.
+     * @param currentIndices Current indices. This array is modified.
+     * @param i Index of 1d data array.
+     */
+    public void getNextIndices(int[] currentIndices, int i) {
+        for(int j=0; j<currentIndices.length; j++) {
+            if((i+1)%strides[j]==0) {
+                currentIndices[j] = (currentIndices[j]+1) % dims[j];
+            }
+        }
+    }
+
+
+    /**
      * Generates the hashcode for this shape object. This is computed by passing the dims array of this shape object to
      * {@link java.util.Arrays#hashCode(int[])}.
      * @return The hashcode for this array object.

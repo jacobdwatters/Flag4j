@@ -26,7 +26,9 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
+import com.flag4j.operations.concurrency.CheckConcurrent;
 import com.flag4j.operations.dense.real.RealDenseSetValueOperations;
+import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense.real.RealDenseOperations;
 import com.flag4j.util.Axis2D;
@@ -879,13 +881,28 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
-     * Computes the transpose of a tensor. Same as {@link #T()}.
+     * Computes the transpose of the matrix. Same as {@link #T()}.
      *
-     * @return The transpose of this tensor.
+     * @return The transpose of this matrix.
      */
     @Override
     public Matrix transpose() {
-        return null;
+        double[] transposeEntries;
+
+        // TODO: Check if standard or blocked should be used.
+        if(CheckConcurrent.simpleMatrixCheck(numRows(), numCols())) {
+            // Use concurrent implementation
+            transposeEntries = RealDenseTranspose.blockedMatrixConcurrent(
+                    entries, numRows(), numCols()
+            );
+        } else {
+            // Use sequential implementation
+            transposeEntries = RealDenseTranspose.blockedMatrix(
+                    entries, numRows(), numCols()
+            );
+        }
+
+        return new Matrix(new Shape(numCols(), numRows()), transposeEntries);
     }
 
 
@@ -896,7 +913,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix T() {
-        return null;
+        return transpose();
     }
 
 
