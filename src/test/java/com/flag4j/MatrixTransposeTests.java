@@ -29,18 +29,5 @@ class MatrixTransposeTests {
         assertArrayEquals(expT.entries, AT.entries);
         assertEquals(expT.numRows(), AT.numRows());
         assertEquals(expT.numCols(), AT.numCols());
-
-        // --------------- Sub-case 2 ---------------
-        numRows = 9000;
-        numCols = 9000;
-        A = rng.getRandomMatrix(numRows, numCols);
-        expT = new Matrix(
-                new Shape(numCols, numRows),
-                RealDenseTranspose.blockedMatrixConcurrent(A.entries, numRows, numCols)
-        );
-        AT = A.T();
-        assertArrayEquals(expT.entries, AT.entries);
-        assertEquals(expT.numRows(), AT.numRows());
-        assertEquals(expT.numCols(), AT.numCols());
     }
 }
