@@ -1,7 +1,7 @@
 package com.flag4j;
 
 
-import com.flag4j.core.VectorOrientations;
+import com.flag4j.core.VectorOrientation;
 
 import java.util.Arrays;
 
@@ -13,7 +13,7 @@ class VectorConstructorTests {
     int expSize;
     double fillValue;
     Shape expShape;
-    VectorOrientations expOrientation;
+    VectorOrientation expOrientation;
     double[] expEntries;
     int[] entriesI;
     Vector a, b;
@@ -23,7 +23,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 1 ------------
         expSize = 5;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expEntries = new double[expSize];
 
         a = new Vector(expSize);
@@ -36,7 +36,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 2 ------------
         expSize = 0;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expEntries = new double[expSize];
 
         a = new Vector(expSize);
@@ -57,7 +57,7 @@ class VectorConstructorTests {
         expSize = 5;
         fillValue = -10.23423;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expEntries = new double[expSize];
         Arrays.fill(expEntries, fillValue);
 
@@ -72,7 +72,7 @@ class VectorConstructorTests {
         expSize = 0;
         fillValue = -10.23423;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expEntries = new double[expSize];
         Arrays.fill(expEntries, fillValue);
 
@@ -95,7 +95,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 1 ------------
         expSize = 5;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expEntries = new double[expSize];
 
         a = new Vector(expSize, expOrientation);
@@ -108,7 +108,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 2 ------------
         expSize = 0;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expEntries = new double[expSize];
 
         a = new Vector(expSize, expOrientation);
@@ -121,7 +121,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 3 ------------
         expSize = 5;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expEntries = new double[expSize];
 
         a = new Vector(expSize, expOrientation);
@@ -134,7 +134,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 4 ------------
         expSize = 0;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expEntries = new double[expSize];
 
         a = new Vector(expSize, expOrientation);
@@ -156,7 +156,7 @@ class VectorConstructorTests {
         expSize = 5;
         fillValue = -0.12334;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expEntries = new double[expSize];
         Arrays.fill(expEntries, fillValue);
 
@@ -171,7 +171,7 @@ class VectorConstructorTests {
         expSize = 0;
         fillValue = -0.12334;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expEntries = new double[expSize];
         Arrays.fill(expEntries, fillValue);
 
@@ -186,7 +186,7 @@ class VectorConstructorTests {
         expSize = 5;
         fillValue = -0.12334;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expEntries = new double[expSize];
         Arrays.fill(expEntries, fillValue);
 
@@ -201,7 +201,7 @@ class VectorConstructorTests {
         expSize = 0;
         fillValue = -0.12334;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expEntries = new double[expSize];
         Arrays.fill(expEntries, fillValue);
 
@@ -227,7 +227,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 1 ------------
         expEntries = new double[]{1.0433, 2, -3, 4, 5, 6, 7, 100, -0.1231};
         expSize = expEntries.length;
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
 
         a = new Vector(expEntries);
@@ -240,7 +240,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 2 ------------
         expEntries = new double[]{-0.234974};
         expSize = expEntries.length;
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
 
         a = new Vector(expEntries);
@@ -257,7 +257,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 1 ------------
         expEntries = new double[]{1.0433, 2, -3, 4, 5, 6, 7, 100, -0.1231};
         expSize = expEntries.length;
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
 
         a = new Vector(expEntries, expOrientation);
@@ -270,7 +270,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 2 ------------
         expEntries = new double[]{-0.234974};
         expSize = expEntries.length;
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
 
         a = new Vector(expEntries, expOrientation);
@@ -283,7 +283,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 3 ------------
         expEntries = new double[]{1.0433, 2, -3, 4, 5, 6, 7, 100, -0.1231};
         expSize = expEntries.length;
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expShape = new Shape(expSize);
 
         a = new Vector(expEntries, expOrientation);
@@ -296,7 +296,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 4 ------------
         expEntries = new double[]{-0.234974};
         expSize = expEntries.length;
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expShape = new Shape(expSize);
 
         a = new Vector(expEntries, expOrientation);
@@ -313,7 +313,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 1 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
         expSize = entriesI.length;
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
         expEntries = new double[expSize];
         for(int i=0; i<entriesI.length; i++) {
@@ -330,7 +330,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 2 ------------
         entriesI = new int[]{-22};
         expSize = entriesI.length;
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
         expEntries = new double[expSize];
         for(int i=0; i<entriesI.length; i++) {
@@ -351,7 +351,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 1 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
         expSize = entriesI.length;
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
         expEntries = new double[expSize];
         for(int i=0; i<entriesI.length; i++) {
@@ -368,7 +368,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 2 ------------
         entriesI = new int[]{-22};
         expSize = entriesI.length;
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
         expEntries = new double[expSize];
         for(int i=0; i<entriesI.length; i++) {
@@ -385,7 +385,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 3 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
         expSize = entriesI.length;
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expShape = new Shape(expSize);
         expEntries = new double[expSize];
         for(int i=0; i<entriesI.length; i++) {
@@ -402,7 +402,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 4 ------------
         entriesI = new int[]{-22};
         expSize = entriesI.length;
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expShape = new Shape(expSize);
         expEntries = new double[expSize];
         for(int i=0; i<entriesI.length; i++) {
@@ -423,7 +423,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 1 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
         expSize = entriesI.length;
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
         expEntries = new double[expSize];
         for(int i=0; i<entriesI.length; i++) {
@@ -441,7 +441,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 2 ------------
         entriesI = new int[]{-22};
         expSize = entriesI.length;
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
         expEntries = new double[expSize];
         for(int i=0; i<entriesI.length; i++) {
@@ -459,7 +459,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 3 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
         expSize = entriesI.length;
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expShape = new Shape(expSize);
         expEntries = new double[expSize];
         for(int i=0; i<entriesI.length; i++) {
@@ -477,7 +477,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 4 ------------
         entriesI = new int[]{-22};
         expSize = entriesI.length;
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expShape = new Shape(expSize);
         expEntries = new double[expSize];
         for(int i=0; i<entriesI.length; i++) {

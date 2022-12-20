@@ -25,14 +25,14 @@
 package com.flag4j;
 
 import com.flag4j.core.VectorBase;
-import com.flag4j.core.VectorOrientations;
+import com.flag4j.core.VectorOrientation;
 
 import java.util.Arrays;
 
 
 /**
  * Real dense vector. Vectors may be oriented as row vectors, column vectors, or unoriented.
- * See {@link VectorOrientations} for orientations.
+ * See {@link VectorOrientation} for orientations.
  */
 public class Vector extends VectorBase<double[]> {
 
@@ -42,7 +42,7 @@ public class Vector extends VectorBase<double[]> {
      * @param size Size of the vector.
      */
     public Vector(int size) {
-        super(size, VectorOrientations.COL, new double[size]);
+        super(size, VectorOrientation.COL, new double[size]);
     }
 
 
@@ -52,7 +52,7 @@ public class Vector extends VectorBase<double[]> {
      * @param fillValue Value to fill vector with.
      */
     public Vector(int size, double fillValue) {
-        super(size, VectorOrientations.COL, new double[size]);
+        super(size, VectorOrientation.COL, new double[size]);
         Arrays.fill(super.entries, fillValue);
     }
 
@@ -62,7 +62,7 @@ public class Vector extends VectorBase<double[]> {
      * @param size Size of the vector.
      * @param orientation Orientation of the vector.
      */
-    public Vector(int size, VectorOrientations orientation) {
+    public Vector(int size, VectorOrientation orientation) {
         super(size, orientation, new double[size]);
     }
 
@@ -73,7 +73,7 @@ public class Vector extends VectorBase<double[]> {
      * @param fillValue Fills array with
      * @param orientation Orientation of the vector.
      */
-    public Vector(int size, double fillValue, VectorOrientations orientation) {
+    public Vector(int size, double fillValue, VectorOrientation orientation) {
         super(size, orientation, new double[size]);
         Arrays.fill(super.entries, fillValue);
     }
@@ -84,7 +84,7 @@ public class Vector extends VectorBase<double[]> {
      * @param entries Entries for this column vector.
      */
     public Vector(double[] entries) {
-        super(entries.length, VectorOrientations.COL, entries.clone());
+        super(entries.length, VectorOrientation.COL, entries.clone());
     }
 
     /**
@@ -92,7 +92,7 @@ public class Vector extends VectorBase<double[]> {
      * @param entries Entries for this column vector.
      * @param orientation Orientation of the vector.
      */
-    public Vector(double[] entries, VectorOrientations orientation) {
+    public Vector(double[] entries, VectorOrientation orientation) {
         super(entries.length, orientation, entries.clone());
     }
 
@@ -102,7 +102,7 @@ public class Vector extends VectorBase<double[]> {
      * @param entries Entries for this column vector.
      */
     public Vector(int[] entries) {
-        super(entries.length, VectorOrientations.COL, new double[entries.length]);
+        super(entries.length, VectorOrientation.COL, new double[entries.length]);
 
         for(int i=0; i<entries.length; i++) {
             super.entries[i] = entries[i];
@@ -114,7 +114,7 @@ public class Vector extends VectorBase<double[]> {
      * @param entries Entries for this column vector.
      * @param orientation Orientation of the vector.
      */
-    public Vector(int[] entries, VectorOrientations orientation) {
+    public Vector(int[] entries, VectorOrientation orientation) {
         super(entries.length, orientation, new double[entries.length] );
 
         for(int i=0; i<entries.length; i++) {

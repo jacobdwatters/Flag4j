@@ -25,12 +25,13 @@
 package com.flag4j.operations.dense.real;
 
 
+import com.flag4j.Shape;
 import com.flag4j.util.ShapeArrayChecks;
 
 /**
  * This class contains low-level implementations of setting operations for real dense tensors.
  */
-public class RealDenseSetValueOperations {
+public class RealDenseSetOperations {
 
 
     /**
@@ -167,5 +168,17 @@ public class RealDenseSetValueOperations {
                 dest[count++] = src[i][j];
             }
         }
+    }
+
+
+    /**
+     * Sets an element of a tensor to the specified value.
+     * @param src Elements of the tensor. This will be modified.
+     * @param shape Shape of the tensor.
+     * @param value Value to set specified index to.
+     * @param indices Indices of tensor value to be set.
+     */
+    public static void set(double[] src, Shape shape, double value, int... indices) {
+        src[shape.entriesIndex(indices)] = value;
     }
 }

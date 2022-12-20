@@ -25,6 +25,10 @@
 package com.flag4j.util;
 
 import com.flag4j.Matrix;
+import com.flag4j.Shape;
+import com.flag4j.Tensor;
+import com.flag4j.Vector;
+import com.flag4j.core.VectorOrientation;
 
 import java.util.Random;
 
@@ -44,14 +48,49 @@ public class RandomTensor {
 
 
     /**
+     * Gets a tensor with random values. Values are normally distributed with mean of zero and standard deviation
+     * of one.
+     * @param shape Shape of the tensor.
+     * @return A random vector of specified size.
+     */
+    public Tensor getRandomTensor(Shape shape) {
+        Tensor randTensor = new Tensor(shape);
+
+        for(int i=0; i<randTensor.totalEntries().intValue(); i++) {
+            randTensor.entries[i] = rng.nextGaussian();
+        }
+
+        return randTensor;
+    }
+
+
+    /**
+     * Gets a vector with random values. Values are normally distributed with mean of zero and standard deviation
+     * of one.
+     * @param size Size of the vector.
+     * @param orientation Orientation of the vector.
+     * @return A random vector of specified size.
+     */
+    public Vector getRandomVector(int size, VectorOrientation orientation) {
+        Vector randVec = new Vector(size, orientation);
+
+        for(int i=0; i<randVec.totalEntries().intValue(); i++) {
+            randVec.entries[i] = rng.nextGaussian();
+        }
+
+        return randVec;
+    }
+
+
+    /**
      * Gets a matrix with random values. Values are normally distributed with mean of zero and standard deviation
      * of one.
-     * @param m Number of rows in the resulting matrix.
-     * @param n Number of columns in the resulting matrix.
+     * @param rows Number of rows in the resulting matrix.
+     * @param cols Number of columns in the resulting matrix.
      * @return A random matrix with specified size.
      */
-    public Matrix getRandomMatrix(int m, int n) {
-        Matrix randMat = new Matrix(m, n);
+    public Matrix getRandomMatrix(int rows, int cols) {
+        Matrix randMat = new Matrix(rows, cols);
 
         for(int i=0; i<randMat.totalEntries().intValue(); i++) {
             randMat.entries[i] = rng.nextGaussian();

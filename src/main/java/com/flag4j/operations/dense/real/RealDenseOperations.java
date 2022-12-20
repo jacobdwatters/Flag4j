@@ -25,6 +25,7 @@
 package com.flag4j.operations.dense.real;
 
 import com.flag4j.Shape;
+import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ShapeArrayChecks;
 
@@ -116,22 +117,6 @@ public final class RealDenseOperations {
 
 
     /**
-     * Sums all entries in a tensor.
-     * @param src Entries of tensor so sum.
-     * @return The sum of all src in the tensor.
-     */
-    public static double sum(double[] src) {
-        double sum = 0;
-
-        for(double value : src) {
-            sum += value;
-        }
-
-        return sum;
-    }
-
-
-    /**
      * Multiplies all entries in a tensor.
      * @param src The entries of the tensor.
      * @return The product of all entries in the tensor.
@@ -153,21 +138,70 @@ public final class RealDenseOperations {
 
 
     /**
-     * Computes the scalar multiplication of a tensor.
+     * Computes the scalar division of a tensor.
      * @param src Entries of the tensor.
-     * @param a Scalar value to multiply.
-     * @return The scalar multiplication of the tensor.
+     * @param divisor Scalar to divide by.
+     * @return The scalar division of the tensor.
      */
-    public static double[] scalMult(double[] src, double a) {
-        double[] product = new double[src.length];
+    public static double[] scalDiv(double[] src, double divisor) {
+        return RealOperations.scalMult(src, 1/divisor);
+    }
+
+
+    /**
+     * Computes the reciprocals, element-wise, of a tensor.
+     * @param src Elements of the tensor.
+     * @return The element-wise reciprocals of the tensor.
+     */
+    public static double[] recep(double[] src) {
+        double[] receps = new double[src.length];
+
+        for(int i=0; i<receps.length; i++) {
+            receps[i] = 1/src[i];
+        }
+
+        return receps;
+    }
+
+
+    /**
+     * Computes the element-wise multiplication of two tensors. Also called the Hadamard product.
+     * @param src1 First tensor in element-wise multiplication.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise multiplication.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise multiplication of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static double[] elemMult(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+        ShapeArrayChecks.equalShapeCheck(shape1, shape2);
+        double[] product = new double[src1.length];
 
         for(int i=0; i<product.length; i++) {
-            product[i] = src[i]*a;
+            product[i] = src1[i]*src2[i];
         }
 
         return product;
     }
 
 
+    /**
+     * Computes the element-wise division of two tensors.
+     * @param src1 First tensor in element-wise division.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise division.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise division of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static double[] elemDiv(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+        ShapeArrayChecks.equalShapeCheck(shape1, shape2);
+        double[] product = new double[src1.length];
 
+        for(int i=0; i<product.length; i++) {
+            product[i] = src1[i]/src2[i];
+        }
+
+        return product;
+    }
 }

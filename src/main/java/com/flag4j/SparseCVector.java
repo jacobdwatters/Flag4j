@@ -26,7 +26,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.SparseVectorBase;
-import com.flag4j.core.VectorOrientations;
+import com.flag4j.core.VectorOrientation;
 import com.flag4j.util.ArrayUtils;
 
 /**
@@ -40,7 +40,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      */
     public SparseCVector(int size) {
-        super(size, 0, VectorOrientations.COL, new CNumber[0], new int[0]);
+        super(size, 0, VectorOrientation.COL, new CNumber[0], new int[0]);
     }
 
 
@@ -53,7 +53,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, int[] nonZeroEntries, int[] indices) {
-        super(size, nonZeroEntries.length, VectorOrientations.COL, new CNumber[nonZeroEntries.length], indices);
+        super(size, nonZeroEntries.length, VectorOrientation.COL, new CNumber[nonZeroEntries.length], indices);
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
@@ -67,7 +67,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, double[] nonZeroEntries, int[] indices) {
-        super(size, nonZeroEntries.length, VectorOrientations.COL, new CNumber[nonZeroEntries.length], indices);
+        super(size, nonZeroEntries.length, VectorOrientation.COL, new CNumber[nonZeroEntries.length], indices);
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
@@ -81,7 +81,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, CNumber[] nonZeroEntries, int[] indices) {
-        super(size, nonZeroEntries.length, VectorOrientations.COL, nonZeroEntries, indices);
+        super(size, nonZeroEntries.length, VectorOrientation.COL, nonZeroEntries, indices);
     }
 
 
@@ -177,7 +177,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      * @param orientation Orientation of the vector.
      */
-    public SparseCVector(int size, VectorOrientations orientation) {
+    public SparseCVector(int size, VectorOrientation orientation) {
         super(size, 0, orientation, new CNumber[0], new int[0]);
     }
 
@@ -191,7 +191,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
      * the length of the nonZeroEntries array is greater than the size.
      */
-    public SparseCVector(int size, int[] nonZeroEntries, int[] indices, VectorOrientations orientation) {
+    public SparseCVector(int size, int[] nonZeroEntries, int[] indices, VectorOrientation orientation) {
         super(size, nonZeroEntries.length, orientation, new CNumber[nonZeroEntries.length], indices);
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
@@ -206,7 +206,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
      * the length of the nonZeroEntries array is greater than the size.
      */
-    public SparseCVector(int size, double[] nonZeroEntries, int[] indices, VectorOrientations orientation) {
+    public SparseCVector(int size, double[] nonZeroEntries, int[] indices, VectorOrientation orientation) {
         super(size, nonZeroEntries.length, orientation, new CNumber[nonZeroEntries.length], indices);
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
@@ -221,7 +221,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
      * the length of the nonZeroEntries array is greater than the size.
      */
-    public SparseCVector(int size, CNumber[] nonZeroEntries, int[] indices, VectorOrientations orientation) {
+    public SparseCVector(int size, CNumber[] nonZeroEntries, int[] indices, VectorOrientation orientation) {
         super(size, nonZeroEntries.length, orientation, nonZeroEntries, indices);
     }
 

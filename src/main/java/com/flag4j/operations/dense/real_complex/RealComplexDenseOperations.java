@@ -145,14 +145,90 @@ public final class RealComplexDenseOperations {
     /**
      * Computes the scalar multiplication of a tensor.
      * @param entries Entries of the tensor.
-     * @param a Scalar value to multiply.
+     * @param factor Scalar value to multiply.
      * @return The scalar multiplication of the tensor.
      */
-    public static CNumber[] scalMult(double[] entries, CNumber a) {
+    public static CNumber[] scalMult(double[] entries, CNumber factor) {
         CNumber[] product = new CNumber[entries.length];
 
         for(int i=0; i<product.length; i++) {
-            product[i] = a.mult(entries[i]);
+            product[i] = factor.mult(entries[i]);
+        }
+
+        return product;
+    }
+
+
+    /**
+     * Computes the scalar multiplication of a tensor.
+     * @param entries Entries of the tensor.
+     * @param divisor Scalar value to multiply.
+     * @return The scalar multiplication of the tensor.
+     */
+    public static CNumber[] scalDiv(double[] entries, CNumber divisor) {
+        return scalMult(entries, divisor.multInv());
+    }
+
+
+    /**
+     * Computes the element-wise multiplication of two tensors. Also called the Hadamard product.
+     * @param src1 First tensor in element-wise multiplication.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise multiplication.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise multiplication of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CNumber[] elemMult(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
+        ShapeArrayChecks.equalShapeCheck(shape1, shape2);
+        CNumber[] product = new CNumber[src1.length];
+
+        for(int i=0; i<product.length; i++) {
+            product[i] = src1[i].mult(src2[i]);
+        }
+
+        return product;
+    }
+
+
+    /**
+     * Computes the element-wise division of two tensors.
+     * @param src1 First tensor in element-wise division.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise division.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise division of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
+        ShapeArrayChecks.equalShapeCheck(shape1, shape2);
+        CNumber[] product = new CNumber[src1.length];
+
+        for(int i=0; i<product.length; i++) {
+            product[i] = src1[i].div(src2[i]);
+        }
+
+        return product;
+    }
+
+
+    /**
+     * Computes the element-wise division of two tensors.
+     * @param src1 First tensor in element-wise division.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise division.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise division of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CNumber[] elemDiv(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+        ShapeArrayChecks.equalShapeCheck(shape1, shape2);
+        CNumber[] product = new CNumber[src1.length];
+        double divisor;
+
+        for(int i=0; i<product.length; i++) {
+            divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].re;
+            product[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);
         }
 
         return product;

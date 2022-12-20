@@ -25,14 +25,14 @@
 package com.flag4j;
 
 import com.flag4j.core.VectorBase;
-import com.flag4j.core.VectorOrientations;
+import com.flag4j.core.VectorOrientation;
 
 import java.util.Arrays;
 
 
 /**
  * Real dense vector. Vectors may be oriented as row vectors, column vectors, or unoriented.
- * See {@link VectorOrientations} for orientations.
+ * See {@link VectorOrientation} for orientations.
  */
 public class Vector extends VectorBase&lt;double[]&gt; {
 
@@ -42,7 +42,7 @@ public class Vector extends VectorBase&lt;double[]&gt; {
      * @param size Size of the vector.
      */
     public Vector(int size) {
-<span class="fc" id="L45">        super(size, VectorOrientations.COL, new double[size]);</span>
+<span class="fc" id="L45">        super(size, VectorOrientation.COL, new double[size]);</span>
 <span class="fc" id="L46">    }</span>
 
 
@@ -52,7 +52,7 @@ public class Vector extends VectorBase&lt;double[]&gt; {
      * @param fillValue Value to fill vector with.
      */
     public Vector(int size, double fillValue) {
-<span class="fc" id="L55">        super(size, VectorOrientations.COL, new double[size]);</span>
+<span class="fc" id="L55">        super(size, VectorOrientation.COL, new double[size]);</span>
 <span class="fc" id="L56">        Arrays.fill(super.entries, fillValue);</span>
 <span class="fc" id="L57">    }</span>
 
@@ -62,7 +62,7 @@ public class Vector extends VectorBase&lt;double[]&gt; {
      * @param size Size of the vector.
      * @param orientation Orientation of the vector.
      */
-    public Vector(int size, VectorOrientations orientation) {
+    public Vector(int size, VectorOrientation orientation) {
 <span class="fc" id="L66">        super(size, orientation, new double[size]);</span>
 <span class="fc" id="L67">    }</span>
 
@@ -73,7 +73,7 @@ public class Vector extends VectorBase&lt;double[]&gt; {
      * @param fillValue Fills array with
      * @param orientation Orientation of the vector.
      */
-    public Vector(int size, double fillValue, VectorOrientations orientation) {
+    public Vector(int size, double fillValue, VectorOrientation orientation) {
 <span class="fc" id="L77">        super(size, orientation, new double[size]);</span>
 <span class="fc" id="L78">        Arrays.fill(super.entries, fillValue);</span>
 <span class="fc" id="L79">    }</span>
@@ -84,7 +84,7 @@ public class Vector extends VectorBase&lt;double[]&gt; {
      * @param entries Entries for this column vector.
      */
     public Vector(double[] entries) {
-<span class="fc" id="L87">        super(entries.length, VectorOrientations.COL, entries.clone());</span>
+<span class="fc" id="L87">        super(entries.length, VectorOrientation.COL, entries.clone());</span>
 <span class="fc" id="L88">    }</span>
 
     /**
@@ -92,7 +92,7 @@ public class Vector extends VectorBase&lt;double[]&gt; {
      * @param entries Entries for this column vector.
      * @param orientation Orientation of the vector.
      */
-    public Vector(double[] entries, VectorOrientations orientation) {
+    public Vector(double[] entries, VectorOrientation orientation) {
 <span class="fc" id="L96">        super(entries.length, orientation, entries.clone());</span>
 <span class="fc" id="L97">    }</span>
 
@@ -102,7 +102,7 @@ public class Vector extends VectorBase&lt;double[]&gt; {
      * @param entries Entries for this column vector.
      */
     public Vector(int[] entries) {
-<span class="fc" id="L105">        super(entries.length, VectorOrientations.COL, new double[entries.length]);</span>
+<span class="fc" id="L105">        super(entries.length, VectorOrientation.COL, new double[entries.length]);</span>
 
 <span class="fc bfc" id="L107" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
 <span class="fc" id="L108">            super.entries[i] = entries[i];</span>
@@ -114,7 +114,7 @@ public class Vector extends VectorBase&lt;double[]&gt; {
      * @param entries Entries for this column vector.
      * @param orientation Orientation of the vector.
      */
-    public Vector(int[] entries, VectorOrientations orientation) {
+    public Vector(int[] entries, VectorOrientation orientation) {
 <span class="fc" id="L118">        super(entries.length, orientation, new double[entries.length] );</span>
 
 <span class="fc bfc" id="L120" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>

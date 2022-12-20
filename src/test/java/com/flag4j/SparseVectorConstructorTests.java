@@ -1,6 +1,6 @@
 package com.flag4j;
 
-import com.flag4j.core.VectorOrientations;
+import com.flag4j.core.VectorOrientation;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,7 +11,7 @@ class SparseVectorConstructorTests {
     double[] expEntries;
     int[] expEntriesI;
     int[] expIndices;
-    VectorOrientations expOrientation;
+    VectorOrientation expOrientation;
     SparseVector a, b;
 
 
@@ -22,7 +22,7 @@ class SparseVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new double[0];
         expIndices = new int[0];
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         a = new SparseVector(expSize);
 
         assertEquals(expSize, a.size());
@@ -44,7 +44,7 @@ class SparseVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         a = new SparseVector(expSize, expEntries, expIndices);
 
         assertEquals(expSize, a.size());
@@ -83,7 +83,7 @@ class SparseVectorConstructorTests {
         expEntriesI = new int[]{1, 4, 5, 1001, -11};
         expEntries = Arrays.stream(expEntriesI).asDoubleStream().toArray();
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         a = new SparseVector(expSize, expEntriesI, expIndices);
 
         assertEquals(expSize, a.size());
@@ -125,7 +125,7 @@ class SparseVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new double[0];
         expIndices = new int[0];
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         a = new SparseVector(expSize, expOrientation);
 
         assertEquals(expSize, a.size());
@@ -144,7 +144,7 @@ class SparseVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new double[0];
         expIndices = new int[0];
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         a = new SparseVector(expSize, expOrientation);
 
         assertEquals(expSize, a.size());
@@ -162,7 +162,7 @@ class SparseVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         a = new SparseVector(expSize, expEntries, expIndices, expOrientation);
 
         assertEquals(expSize, a.size());
@@ -172,7 +172,7 @@ class SparseVectorConstructorTests {
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034};
         assertThrows(IllegalArgumentException.class,
@@ -201,7 +201,7 @@ class SparseVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         a = new SparseVector(expSize, expEntries, expIndices, expOrientation);
 
         assertEquals(expSize, a.size());
@@ -211,7 +211,7 @@ class SparseVectorConstructorTests {
 
         // ------------- Sub-case 6 -------------
         expSize = -1;
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034};
         assertThrows(IllegalArgumentException.class,
@@ -220,7 +220,7 @@ class SparseVectorConstructorTests {
         // ------------- Sub-case 7 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034};
 
@@ -230,7 +230,7 @@ class SparseVectorConstructorTests {
         // ------------- Sub-case 8 -------------
         expSize = 3;
         expShape = new Shape(expSize);
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034};
 
@@ -247,7 +247,7 @@ class SparseVectorConstructorTests {
         expEntriesI = new int[]{1, 4, 5, 1001, -11};
         expEntries = Arrays.stream(expEntriesI).asDoubleStream().toArray();
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         a = new SparseVector(expSize, expEntriesI, expIndices, expOrientation);
 
         assertEquals(expSize, a.size());
@@ -257,7 +257,7 @@ class SparseVectorConstructorTests {
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expEntriesI = new int[]{1, 4, 5, 1001, -11};
         expEntries = Arrays.stream(expEntriesI).asDoubleStream().toArray();
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
@@ -267,7 +267,7 @@ class SparseVectorConstructorTests {
         // ------------- Sub-case 3 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expEntriesI = new int[]{1, 4, 5, 1001, -11};
         expEntries = Arrays.stream(expEntriesI).asDoubleStream().toArray();
         expIndices = new int[]{0, 11, 10003, 20034};
@@ -279,7 +279,7 @@ class SparseVectorConstructorTests {
         expSize = 3;
         expShape = new Shape(expSize);
         expEntriesI = new int[]{1, 4, 5, 1001, -11};
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         expEntries = Arrays.stream(expEntriesI).asDoubleStream().toArray();
         expIndices = new int[]{0, 11, 10003, 20034};
 
@@ -292,7 +292,7 @@ class SparseVectorConstructorTests {
         expEntriesI = new int[]{1, 4, 5, 1001, -11};
         expEntries = Arrays.stream(expEntriesI).asDoubleStream().toArray();
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         a = new SparseVector(expSize, expEntriesI, expIndices, expOrientation);
 
         assertEquals(expSize, a.size());
@@ -302,7 +302,7 @@ class SparseVectorConstructorTests {
 
         // ------------- Sub-case 6 -------------
         expSize = -1;
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expEntriesI = new int[]{1, 4, 5, 1001, -11};
         expEntries = Arrays.stream(expEntriesI).asDoubleStream().toArray();
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
@@ -312,7 +312,7 @@ class SparseVectorConstructorTests {
         // ------------- Sub-case 7 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expEntriesI = new int[]{1, 4, 5, 1001, -11};
         expEntries = Arrays.stream(expEntriesI).asDoubleStream().toArray();
         expIndices = new int[]{0, 11, 10003, 20034};
@@ -324,7 +324,7 @@ class SparseVectorConstructorTests {
         expSize = 3;
         expShape = new Shape(expSize);
         expEntriesI = new int[]{1, 4, 5, 1001, -11};
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         expEntries = Arrays.stream(expEntriesI).asDoubleStream().toArray();
         expIndices = new int[]{0, 11, 10003, 20034};
 
@@ -340,7 +340,7 @@ class SparseVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        expOrientation = VectorOrientations.COL;
+        expOrientation = VectorOrientation.COL;
         b = new SparseVector(expSize, expEntries, expIndices, expOrientation);
         a = new SparseVector(b);
 
@@ -354,7 +354,7 @@ class SparseVectorConstructorTests {
         expShape = new Shape(expSize);
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034, 1001233};
-        expOrientation = VectorOrientations.ROW;
+        expOrientation = VectorOrientation.ROW;
         b = new SparseVector(expSize, expEntries, expIndices, expOrientation);
         a = new SparseVector(b);
 

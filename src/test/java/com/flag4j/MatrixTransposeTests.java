@@ -1,7 +1,5 @@
 package com.flag4j;
 
-
-import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.util.RandomTensor;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

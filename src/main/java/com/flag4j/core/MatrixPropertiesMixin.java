@@ -122,20 +122,6 @@ public interface MatrixPropertiesMixin<T, U, V, W, Y, X extends Number> extends 
 
 
     /**
-     * Checks if the matrix is positive definite.
-     * @return True if the matrix is positive definite. Otherwise, returns false.
-     */
-    boolean isPosDef();
-
-
-    /**
-     * Checks if the matrix is positive semi-definite.
-     * @return True if the matrix is positive semi-definite. Otherwise returns false.
-     */
-    boolean isPosSemiDef();
-
-
-    /**
     * Checks if a matrix is diagonalizable. A matrix is diagonalizable if and only if
     * the multiplicity for each eigenvalue is equivalent to the eigenspace for that eigenvalue.
     *

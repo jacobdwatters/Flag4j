@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense.real</a> &gt; <span class="el_source">RealOperations.java</span></div><h1>RealOperations.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense.real;
+
+/**
+ * This class provides low level methods for computing operations on real tensors. These methods can be applied to
+ * either sparse or dense real tensors.
+ */
+<span class="nc" id="L31">public class RealOperations {</span>
+
+    /**
+     * Computes the scalar multiplication of a tensor.
+     * @param src Entries of the tensor.
+     * @param factor Scalar value to multiply.
+     * @return The scalar multiplication of the tensor.
+     */
+    public static double[] scalMult(double[] src, double factor) {
+<span class="fc" id="L40">        double[] product = new double[src.length];</span>
+
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L43">            product[i] = src[i]*factor;</span>
+        }
+
+<span class="fc" id="L46">        return product;</span>
+    }
+
+
+    /**
+     * Computes the element-wise square root of a tensor.
+     * @param src Elements of the tensor.
+     * @return The element-wise square root of the tensor.
+     */
+    public static double[] sqrt(double[] src) {
+<span class="nc" id="L56">        double[] roots = new double[src.length];</span>
+
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        for(int i=0; i&lt;roots.length; i++) {</span>
+<span class="nc" id="L59">            roots[i] = Math.sqrt(src[i]);</span>
+        }
+
+<span class="nc" id="L62">        return roots;</span>
+    }
+    
+
+    /**
+     * Computes the element-wise absolute value of a tensor.
+     * @param src Elements of the tensor.
+     * @return The element-wise absolute value of the tensor.
+     */
+    public static double[] abs(double[] src) {
+<span class="nc" id="L72">        double[] abs = new double[src.length];</span>
+
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        for(int i=0; i&lt;abs.length; i++) {</span>
+<span class="nc" id="L75">            abs[i] = Math.abs(src[i]);</span>
+        }
+
+<span class="nc" id="L78">        return abs;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

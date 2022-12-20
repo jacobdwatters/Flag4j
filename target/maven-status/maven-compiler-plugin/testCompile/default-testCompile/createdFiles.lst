@@ -1,3 +1,4 @@
+com\flag4j\operations\dense\real\RealDenseSetOperationsTests.class
 com\flag4j\util\StringUtilsTests.class
 com\flag4j\ShapeTests.class
 com\flag4j\SparseCVectorConstructorTests.class
@@ -13,7 +14,6 @@ com\flag4j\MatrixReshapeTests.class
 com\flag4j\MatrixConstructorTests.class
 com\flag4j\io\PrintOptionsTests.class
 com\flag4j\SparseTensorConstructorTests.class
-com\flag4j\operations\dense\real\RealDenseSetValueOperationsTests.class
 com\flag4j\TensorConstructorTests.class
 com\flag4j\MatrixAddTests.class
 com\flag4j\util\ArrayUtilTests.class

@@ -25,6 +25,10 @@
 package com.flag4j.util;
 
 import com.flag4j.Matrix;
+import com.flag4j.Shape;
+import com.flag4j.Tensor;
+import com.flag4j.Vector;
+import com.flag4j.core.VectorOrientation;
 
 import java.util.Random;
 
@@ -34,30 +38,65 @@ import java.util.Random;
 public class RandomTensor {
     private final Random rng;
 
-<span class="nc" id="L37">    public RandomTensor() {</span>
-<span class="nc" id="L38">        rng = new Random();</span>
-<span class="nc" id="L39">    }</span>
+<span class="nc" id="L41">    public RandomTensor() {</span>
+<span class="nc" id="L42">        rng = new Random();</span>
+<span class="nc" id="L43">    }</span>
 
-<span class="fc" id="L41">    public RandomTensor(long seed) {</span>
-<span class="fc" id="L42">        rng = new Random(seed);</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L45">    public RandomTensor(long seed) {</span>
+<span class="fc" id="L46">        rng = new Random(seed);</span>
+<span class="fc" id="L47">    }</span>
+
+
+    /**
+     * Gets a tensor with random values. Values are normally distributed with mean of zero and standard deviation
+     * of one.
+     * @param shape Shape of the tensor.
+     * @return A random vector of specified size.
+     */
+    public Tensor getRandomTensor(Shape shape) {
+<span class="nc" id="L57">        Tensor randTensor = new Tensor(shape);</span>
+
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        for(int i=0; i&lt;randTensor.totalEntries().intValue(); i++) {</span>
+<span class="nc" id="L60">            randTensor.entries[i] = rng.nextGaussian();</span>
+        }
+
+<span class="nc" id="L63">        return randTensor;</span>
+    }
+
+
+    /**
+     * Gets a vector with random values. Values are normally distributed with mean of zero and standard deviation
+     * of one.
+     * @param size Size of the vector.
+     * @param orientation Orientation of the vector.
+     * @return A random vector of specified size.
+     */
+    public Vector getRandomVector(int size, VectorOrientation orientation) {
+<span class="nc" id="L75">        Vector randVec = new Vector(size, orientation);</span>
+
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        for(int i=0; i&lt;randVec.totalEntries().intValue(); i++) {</span>
+<span class="nc" id="L78">            randVec.entries[i] = rng.nextGaussian();</span>
+        }
+
+<span class="nc" id="L81">        return randVec;</span>
+    }
 
 
     /**
      * Gets a matrix with random values. Values are normally distributed with mean of zero and standard deviation
      * of one.
-     * @param m Number of rows in the resulting matrix.
-     * @param n Number of columns in the resulting matrix.
+     * @param rows Number of rows in the resulting matrix.
+     * @param cols Number of columns in the resulting matrix.
      * @return A random matrix with specified size.
      */
-    public Matrix getRandomMatrix(int m, int n) {
-<span class="fc" id="L54">        Matrix randMat = new Matrix(m, n);</span>
+    public Matrix getRandomMatrix(int rows, int cols) {
+<span class="nc" id="L93">        Matrix randMat = new Matrix(rows, cols);</span>
 
-<span class="fc bfc" id="L56" title="All 2 branches covered.">        for(int i=0; i&lt;randMat.totalEntries().intValue(); i++) {</span>
-<span class="fc" id="L57">            randMat.entries[i] = rng.nextGaussian();</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">        for(int i=0; i&lt;randMat.totalEntries().intValue(); i++) {</span>
+<span class="nc" id="L96">            randMat.entries[i] = rng.nextGaussian();</span>
         }
 
-<span class="fc" id="L60">        return randMat;</span>
+<span class="nc" id="L99">        return randMat;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
