@@ -47,7 +47,7 @@ public class Aggregate {
 
     /**
      * Computes the minimum value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
-     * this method to be used for real sparse or dense arrays.
+     * this method to be used for real sparse or dense tensors.
      * @param entries Entries of the tensor.
      * @return The minimum value in the tensor.
      */
@@ -73,7 +73,7 @@ public class Aggregate {
 
     /**
      * Computes the maximum value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
-     * this method to be used for real sparse or dense arrays.
+     * this method to be used for real sparse or dense tensors.
      * @param entries Entries of the tensor.
      * @return The maximum value in the tensor.
      */
@@ -99,7 +99,7 @@ public class Aggregate {
 
     /**
      * Computes the minimum absolute value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
-     * this method to be used for real sparse or dense arrays.
+     * this method to be used for real sparse or dense tensors.
      * @param entries Entries of the tensor.
      * @return The minimum absolute value in the tensor.
      */
@@ -125,7 +125,7 @@ public class Aggregate {
 
     /**
      * Computes the maximum absolute value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
-     * this method to be used for real sparse or dense arrays.
+     * this method to be used for real sparse or dense tensors.
      * @param entries Entries of the tensor.
      * @return The maximum absolute value in the tensor.
      */
@@ -133,8 +133,8 @@ public class Aggregate {
         double currMax = 0;
 
         for(double value : entries) {
-            if(value > currMax) {
-                currMax = value; // Update current maximum.
+            if(Math.abs(value) > currMax) {
+                currMax = Math.abs(value); // Update current maximum.
             }
         }
 

@@ -47,7 +47,7 @@ package com.flag4j.operations.common.real;
 
     /**
      * Computes the minimum value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
-     * this method to be used for real sparse or dense arrays.
+     * this method to be used for real sparse or dense tensors.
      * @param entries Entries of the tensor.
      * @return The minimum value in the tensor.
      */
@@ -73,7 +73,7 @@ package com.flag4j.operations.common.real;
 
     /**
      * Computes the maximum value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
-     * this method to be used for real sparse or dense arrays.
+     * this method to be used for real sparse or dense tensors.
      * @param entries Entries of the tensor.
      * @return The maximum value in the tensor.
      */
@@ -99,7 +99,7 @@ package com.flag4j.operations.common.real;
 
     /**
      * Computes the minimum absolute value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
-     * this method to be used for real sparse or dense arrays.
+     * this method to be used for real sparse or dense tensors.
      * @param entries Entries of the tensor.
      * @return The minimum absolute value in the tensor.
      */
@@ -125,7 +125,7 @@ package com.flag4j.operations.common.real;
 
     /**
      * Computes the maximum absolute value in a tensor. Note, if the entries array is empty, this method will return 0 allowing
-     * this method to be used for real sparse or dense arrays.
+     * this method to be used for real sparse or dense tensors.
      * @param entries Entries of the tensor.
      * @return The maximum absolute value in the tensor.
      */
@@ -133,8 +133,8 @@ package com.flag4j.operations.common.real;
 <span class="nc" id="L133">        double currMax = 0;</span>
 
 <span class="nc bnc" id="L135" title="All 2 branches missed.">        for(double value : entries) {</span>
-<span class="nc bnc" id="L136" title="All 2 branches missed.">            if(value &gt; currMax) {</span>
-<span class="nc" id="L137">                currMax = value; // Update current maximum.</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">            if(Math.abs(value) &gt; currMax) {</span>
+<span class="nc" id="L137">                currMax = Math.abs(value); // Update current maximum.</span>
             }
         }
 

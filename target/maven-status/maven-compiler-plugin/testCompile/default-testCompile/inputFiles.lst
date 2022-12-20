@@ -24,13 +24,13 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixConstructorTes
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CTensorConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberTrigTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberToStringTest.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\real\RealDenseSetOperationsTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\real_complex\RealComplexDenseOperationsTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixReshapeTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberConversionTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseTensorConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberBinaryOperationsTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixAddTests.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\real\RealDenseSetValueOperationsTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseCTensorConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseVectorConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\complex\ComplexDenseTransposeTests.java
