@@ -828,8 +828,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix scalDiv(double divisor) {
-<span class="nc" id="L831">        return new Matrix(this.shape.clone(),</span>
-<span class="nc" id="L832">                RealDenseOperations.scalDiv(this.entries, divisor)</span>
+<span class="fc" id="L831">        return new Matrix(this.shape.clone(),</span>
+<span class="fc" id="L832">                RealDenseOperations.scalDiv(this.entries, divisor)</span>
         );
     }
 
@@ -843,8 +843,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix scalDiv(CNumber divisor) {
-<span class="nc" id="L846">        return new CMatrix(this.shape.clone(),</span>
-<span class="nc" id="L847">                RealComplexDenseOperations.scalDiv(this.entries, divisor)</span>
+<span class="fc" id="L846">        return new CMatrix(this.shape.clone(),</span>
+<span class="fc" id="L847">                RealComplexDenseOperations.scalDiv(this.entries, divisor)</span>
         );
     }
 
@@ -856,7 +856,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double sum() {
-<span class="nc" id="L859">        return Aggregate.sum(entries);</span>
+<span class="fc" id="L859">        return Aggregate.sum(entries);</span>
     }
 
 
@@ -934,9 +934,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix recep() {
-<span class="nc" id="L937">        return new Matrix(</span>
-<span class="nc" id="L938">                shape.clone(),</span>
-<span class="nc" id="L939">                RealDenseOperations.recep(entries)</span>
+<span class="fc" id="L937">        return new Matrix(</span>
+<span class="fc" id="L938">                shape.clone(),</span>
+<span class="fc" id="L939">                RealDenseOperations.recep(entries)</span>
         );
     }
 
@@ -2078,7 +2078,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double min() {
-<span class="nc" id="L2081">        return Aggregate.min(entries);</span>
+<span class="fc" id="L2081">        return Aggregate.min(entries);</span>
     }
 
 
@@ -2088,7 +2088,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double max() {
-<span class="nc" id="L2091">        return Aggregate.max(entries);</span>
+<span class="fc" id="L2091">        return Aggregate.max(entries);</span>
     }
 
 
@@ -2100,7 +2100,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double minAbs() {
-<span class="nc" id="L2103">        return Aggregate.minAbs(entries);</span>
+<span class="fc" id="L2103">        return Aggregate.minAbs(entries);</span>
     }
 
 
@@ -2112,7 +2112,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double maxAbs() {
-<span class="nc" id="L2115">        return Aggregate.maxAbs(entries);</span>
+<span class="fc" id="L2115">        return Aggregate.maxAbs(entries);</span>
     }
 
 

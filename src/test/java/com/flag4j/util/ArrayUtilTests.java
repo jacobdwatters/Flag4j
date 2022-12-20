@@ -9,6 +9,7 @@ class ArrayUtilTests {
     Double[] srcD;
     String[] srcS;
     CNumber[] expArr, actArr;
+    double[] expRange;
 
     @Test
     void copy2CNumberTest() {
@@ -58,7 +59,7 @@ class ArrayUtilTests {
         ArrayUtils.swap(srcd, i, j);
         assertArrayEquals(expd, srcd);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- Sub-case 3 --------------
         i = 3;
         j = 1;
         CNumber[] srcC = new CNumber[]{
@@ -69,5 +70,20 @@ class ArrayUtilTests {
                 new CNumber(-3), new CNumber(2)};
         ArrayUtils.swap(srcC, i, j);
         assertArrayEquals(expC, srcC);
+    }
+
+
+    @Test
+    void rangeTest() {
+        // -------------- Sub-case 1 --------------
+        expRange = new double[]{-1, 0, 1, 2, 3, 4, 5, 6, 7};
+        assertArrayEquals(expRange, ArrayUtils.range(-1, 8));
+
+        // -------------- Sub-case 2 --------------
+        expRange = new double[]{99, 100, 101, 102};
+        assertArrayEquals(expRange, ArrayUtils.range(99, 103));
+
+        // -------------- Sub-case 3 --------------
+        assertThrows(NegativeArraySizeException.class, ()->ArrayUtils.range(5, 1));
     }
 }

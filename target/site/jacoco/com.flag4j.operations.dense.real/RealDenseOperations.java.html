@@ -144,7 +144,7 @@ public final class RealDenseOperations {
      * @return The scalar division of the tensor.
      */
     public static double[] scalDiv(double[] src, double divisor) {
-<span class="nc" id="L147">        return RealOperations.scalMult(src, 1/divisor);</span>
+<span class="fc" id="L147">        return RealOperations.scalMult(src, 1/divisor);</span>
     }
 
 
@@ -154,13 +154,13 @@ public final class RealDenseOperations {
      * @return The element-wise reciprocals of the tensor.
      */
     public static double[] recep(double[] src) {
-<span class="nc" id="L157">        double[] receps = new double[src.length];</span>
+<span class="fc" id="L157">        double[] receps = new double[src.length];</span>
 
-<span class="nc bnc" id="L159" title="All 2 branches missed.">        for(int i=0; i&lt;receps.length; i++) {</span>
-<span class="nc" id="L160">            receps[i] = 1/src[i];</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        for(int i=0; i&lt;receps.length; i++) {</span>
+<span class="fc" id="L160">            receps[i] = 1/src[i];</span>
         }
 
-<span class="nc" id="L163">        return receps;</span>
+<span class="fc" id="L163">        return receps;</span>
     }
 
 

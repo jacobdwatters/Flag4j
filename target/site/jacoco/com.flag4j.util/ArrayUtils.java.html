@@ -216,9 +216,14 @@ public final class ArrayUtils {
      * @return An array containing the integer range {@code [start, end)}.
      */
     public static double[] range(int start, int end) {
-<span class="nc" id="L219">        double[] rangeArr = new double[end-start];</span>
-<span class="nc" id="L220">        Arrays.setAll(rangeArr, (i) -&gt; start+i);</span>
-<span class="nc" id="L221">        return rangeArr;</span>
+<span class="fc" id="L219">        double[] rangeArr = new double[end-start];</span>
+
+<span class="fc" id="L221">        int j=0;</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">        for(int i=start; i&lt;end; i++) {</span>
+<span class="fc" id="L223">            rangeArr[j++]=i;</span>
+        }
+
+<span class="fc" id="L226">        return rangeArr;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
