@@ -25,8 +25,6 @@
 package com.flag4j.operations.dense.real;
 
 import com.flag4j.Shape;
-import com.flag4j.Vector;
-import com.flag4j.core.VectorOrientations;
 import com.flag4j.operations.concurrency.Configurations;
 import com.flag4j.operations.concurrency.ThreadManager;
 import com.flag4j.util.ArrayUtils;
@@ -45,7 +43,8 @@ public final class RealDenseTranspose {
 
 
     /**
-     * Transposes tensor along specified axes.
+     * Transposes tensor along specified axes using a standard transpose algorithm. In this context, transposing a
+     * tensor is equivalent to swapping a pair of axes.
      * @param src Entries of the tensor.
      * @param shape Shape of the tensor to transpose.
      * @param axis1 First axis to swap in transpose.
@@ -60,21 +59,42 @@ public final class RealDenseTranspose {
 
         double[] dest = new double[shape.totalEntries().intValue()];
         Shape destShape = shape.clone().swapAxes(axis1, axis2);
-
-        int[] srcIndices = new int[shape.getRank()];
-        int[] destIndices = srcIndices.clone();
-        ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
+        int[] destIndices;
 
         for(int i=0; i<src.length; i++) {
-            dest[destShape.entriesIndex(destIndices)] = src[shape.entriesIndex(srcIndices)]; // Apply transpose for the element
-            // TODO: Is there a way to quickly compute indices without using i?
-            //  Since the getNextIndices(...) call is dependent on the source indices from the previous iteration,
-            //  this loop CANNOT be made concurrent.
-            shape.getNextIndices(srcIndices, i); // Get the next indices for the source tensor.
-
-            destIndices = srcIndices.clone();
+            destIndices = shape.getIndices(i);
             ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
+            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
         }
+
+        return dest;
+    }
+
+
+    /**
+     * Transposes tensor along specified axes using a standard concurrent transpose algorithm.
+     * In this context, transposing a tensor is equivalent to swapping a pair of axes.
+     * @param src Entries of the tensor.
+     * @param shape Shape of the tensor to transpose.
+     * @param axis1 First axis to swap in transpose.
+     * @param axis2 Second axis to swap in transpose.
+     * @return The transpose of the tensor along the specified axes.
+     */
+    public static double[] standardConcurrent(final double[] src, final Shape shape, final int axis1, final int axis2) {
+        if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
+                    " tensor.");
+        }
+
+        double[] dest = new double[shape.totalEntries().intValue()];
+        Shape destShape = shape.clone().swapAxes(axis1, axis2);
+
+        // Compute transpose concurrently
+        ThreadManager.concurrentLoop(0, src.length, (i) -> {
+            int[] destIndices = shape.getIndices(i);
+            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
+            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element
+        });
 
         return dest;
     }

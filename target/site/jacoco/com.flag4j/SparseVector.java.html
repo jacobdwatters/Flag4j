@@ -25,7 +25,7 @@
 package com.flag4j;
 
 import com.flag4j.core.SparseVectorBase;
-import com.flag4j.core.VectorOrientations;
+import com.flag4j.core.VectorOrientation;
 
 import java.util.Arrays;
 
@@ -40,7 +40,7 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      */
     public SparseVector(int size) {
-<span class="fc" id="L43">        super(size, 0, VectorOrientations.COL, new double[0], new int[0]);</span>
+<span class="fc" id="L43">        super(size, 0, VectorOrientation.COL, new double[0], new int[0]);</span>
 <span class="fc" id="L44">    }</span>
 
 
@@ -53,7 +53,7 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, int[] nonZeroEntries, int[] indices) {
-<span class="fc" id="L56">        super(size, nonZeroEntries.length, VectorOrientations.COL,</span>
+<span class="fc" id="L56">        super(size, nonZeroEntries.length, VectorOrientation.COL,</span>
 <span class="fc" id="L57">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
                 indices);
 <span class="fc" id="L59">    }</span>
@@ -68,7 +68,7 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, double[] nonZeroEntries, int[] indices) {
-<span class="fc" id="L71">        super(size, nonZeroEntries.length, VectorOrientations.COL, nonZeroEntries, indices);</span>
+<span class="fc" id="L71">        super(size, nonZeroEntries.length, VectorOrientation.COL, nonZeroEntries, indices);</span>
 <span class="fc" id="L72">    }</span>
 
 
@@ -129,7 +129,7 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      * @param orientation Orientation of the vector.
      */
-    public SparseVector(int size, VectorOrientations orientation) {
+    public SparseVector(int size, VectorOrientation orientation) {
 <span class="fc" id="L133">        super(size, 0, orientation, new double[0], new int[0]);</span>
 <span class="fc" id="L134">    }</span>
 
@@ -143,7 +143,7 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
      * the length of the nonZeroEntries array is greater than the size.
      */
-    public SparseVector(int size, int[] nonZeroEntries, int[] indices, VectorOrientations orientation) {
+    public SparseVector(int size, int[] nonZeroEntries, int[] indices, VectorOrientation orientation) {
 <span class="fc" id="L147">        super(size, nonZeroEntries.length, orientation,</span>
 <span class="fc" id="L148">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(), indices);</span>
 <span class="fc" id="L149">    }</span>
@@ -158,7 +158,7 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
      * the length of the nonZeroEntries array is greater than the size.
      */
-    public SparseVector(int size, double[] nonZeroEntries, int[] indices, VectorOrientations orientation) {
+    public SparseVector(int size, double[] nonZeroEntries, int[] indices, VectorOrientation orientation) {
 <span class="fc" id="L162">        super(size, nonZeroEntries.length, orientation, nonZeroEntries, indices);</span>
 <span class="fc" id="L163">    }</span>
 

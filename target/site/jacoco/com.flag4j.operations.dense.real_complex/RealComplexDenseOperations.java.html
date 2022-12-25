@@ -145,17 +145,93 @@ public final class RealComplexDenseOperations {
     /**
      * Computes the scalar multiplication of a tensor.
      * @param entries Entries of the tensor.
-     * @param a Scalar value to multiply.
+     * @param factor Scalar value to multiply.
      * @return The scalar multiplication of the tensor.
      */
-    public static CNumber[] scalMult(double[] entries, CNumber a) {
+    public static CNumber[] scalMult(double[] entries, CNumber factor) {
 <span class="fc" id="L152">        CNumber[] product = new CNumber[entries.length];</span>
 
 <span class="fc bfc" id="L154" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="fc" id="L155">            product[i] = a.mult(entries[i]);</span>
+<span class="fc" id="L155">            product[i] = factor.mult(entries[i]);</span>
         }
 
 <span class="fc" id="L158">        return product;</span>
+    }
+
+
+    /**
+     * Computes the scalar multiplication of a tensor.
+     * @param entries Entries of the tensor.
+     * @param divisor Scalar value to multiply.
+     * @return The scalar multiplication of the tensor.
+     */
+    public static CNumber[] scalDiv(double[] entries, CNumber divisor) {
+<span class="fc" id="L169">        return scalMult(entries, divisor.multInv());</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication of two tensors. Also called the Hadamard product.
+     * @param src1 First tensor in element-wise multiplication.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise multiplication.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise multiplication of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CNumber[] elemMult(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L183">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L184">        CNumber[] product = new CNumber[src1.length];</span>
+
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L187">            product[i] = src1[i].mult(src2[i]);</span>
+        }
+
+<span class="fc" id="L190">        return product;</span>
+    }
+
+
+    /**
+     * Computes the element-wise division of two tensors.
+     * @param src1 First tensor in element-wise division.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise division.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise division of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="nc" id="L204">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="nc" id="L205">        CNumber[] product = new CNumber[src1.length];</span>
+
+<span class="nc bnc" id="L207" title="All 2 branches missed.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="nc" id="L208">            product[i] = src1[i].div(src2[i]);</span>
+        }
+
+<span class="nc" id="L211">        return product;</span>
+    }
+
+
+    /**
+     * Computes the element-wise division of two tensors.
+     * @param src1 First tensor in element-wise division.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise division.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise division of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CNumber[] elemDiv(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="fc" id="L225">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L226">        CNumber[] product = new CNumber[src1.length];</span>
+        double divisor;
+
+<span class="fc bfc" id="L229" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L230">            divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;</span>
+<span class="fc" id="L231">            product[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);</span>
+        }
+
+<span class="fc" id="L234">        return product;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

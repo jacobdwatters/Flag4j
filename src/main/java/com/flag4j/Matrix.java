@@ -26,11 +26,11 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
+import com.flag4j.operations.common.real.Aggregate;
+import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.concurrency.CheckConcurrent;
-import com.flag4j.operations.dense.real.RealDenseSetValueOperations;
-import com.flag4j.operations.dense.real.RealDenseTranspose;
+import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import com.flag4j.operations.dense.real.RealDenseOperations;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ShapeArrayChecks;
@@ -320,7 +320,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(Double[][] values) {
-        RealDenseSetValueOperations.setValues(values, this.entries);
+        RealDenseSetOperations.setValues(values, this.entries);
     }
 
 
@@ -332,7 +332,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(double[][] values) {
-        RealDenseSetValueOperations.setValues(values, this.entries);
+        RealDenseSetOperations.setValues(values, this.entries);
     }
 
 
@@ -344,7 +344,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(int[][] values) {
-        RealDenseSetValueOperations.setValues(values, this.entries);
+        RealDenseSetOperations.setValues(values, this.entries);
     }
 
 
@@ -800,7 +800,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public Matrix scalMult(double factor) {
         return new Matrix(this.shape.clone(),
-                RealDenseOperations.scalMult(this.entries, factor)
+                RealOperations.scalMult(this.entries, factor)
         );
     }
 
@@ -828,7 +828,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix scalDiv(double divisor) {
-        return null;
+        return new Matrix(this.shape.clone(),
+                RealDenseOperations.scalDiv(this.entries, divisor)
+        );
     }
 
 
@@ -841,7 +843,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix scalDiv(CNumber divisor) {
-        return null;
+        return new CMatrix(this.shape.clone(),
+                RealComplexDenseOperations.scalDiv(this.entries, divisor)
+        );
     }
 
 
@@ -852,19 +856,22 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double sum() {
-        return null;
+        return Aggregate.sum(entries);
     }
 
 
     /**
-     * Computes the element-wise square root of a tensor.
+     * Computes the element-wise square root of a tensor. If this matrix contains negative entries, the corresponding
+     * square root will be {@code NaN}.
      *
      * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
      * the principle square root i.e. the square root with positive real part.
      */
     @Override
     public Matrix sqrt() {
-        return null;
+        return new Matrix(this.shape.clone(),
+                RealOperations.sqrt(entries)
+        );
     }
 
 
@@ -876,7 +883,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix abs() {
-        return null;
+        return new Matrix(this.shape.clone(),
+                RealOperations.abs(entries)
+        );
     }
 
 
@@ -925,7 +934,10 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix recep() {
-        return null;
+        return new Matrix(
+                shape.clone(),
+                RealDenseOperations.recep(entries)
+        );
     }
 
 
@@ -951,7 +963,10 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix sub(CMatrix B) {
-        return null;
+        return new CMatrix(
+                shape.clone(),
+                RealComplexDenseOperations.sub(entries, shape, B.entries, B.shape)
+        );
     }
 
 
@@ -1095,7 +1110,10 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix elemMult(Matrix B) {
-        return null;
+        return new Matrix(
+                shape.clone(),
+                RealDenseOperations.elemMult(entries, shape, B.entries, B.shape)
+        );
     }
 
 
@@ -1121,7 +1139,10 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix elemMult(CMatrix B) {
-        return null;
+        return new CMatrix(
+                shape.clone(),
+                RealComplexDenseOperations.elemMult(B.entries, B.shape, entries, shape)
+        );
     }
 
 
@@ -1148,7 +1169,10 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix elemDiv(Matrix B) {
-        return null;
+        return new Matrix(
+                shape.clone(),
+                RealDenseOperations.elemDiv(entries, shape, B.entries, B.shape)
+        );
     }
 
 
@@ -1162,7 +1186,10 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix elemDiv(CMatrix B) {
-        return null;
+        return new CMatrix(
+                shape.clone(),
+                RealComplexDenseOperations.elemDiv(entries, shape, B.entries, B.shape)
+        );
     }
 
 
@@ -1877,7 +1904,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isSquare() {
-        return false;
+        return numRows()==numCols();
     }
 
 
@@ -1888,7 +1915,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isVector() {
-        return false;
+        return numRows()<=1 || numCols()<=1;
     }
 
 
@@ -1999,28 +2026,6 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
-     * Checks if the matrix is positive definite.
-     *
-     * @return True if the matrix is positive definite. Otherwise, returns false.
-     */
-    @Override
-    public boolean isPosDef() {
-        return false;
-    }
-
-
-    /**
-     * Checks if the matrix is positive semi-definite.
-     *
-     * @return True if the matrix is positive semi-definite. Otherwise, returns false.
-     */
-    @Override
-    public boolean isPosSemiDef() {
-        return false;
-    }
-
-
-    /**
      * Checks if a matrix is diagonalizable. A matrix is diagonalizable if and only if
      * the multiplicity for each eigenvalue is equivalent to the eigenspace for that eigenvalue.
      *
@@ -2039,7 +2044,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isZeros() {
-        return false;
+        return RealDenseCheckOperations.isZeros(entries);
     }
 
 
@@ -2050,7 +2055,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isOnes() {
-        return false;
+        return RealDenseCheckOperations.isOnes(entries);
     }
 
 
@@ -2062,7 +2067,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void set(double value, int... indices) {
-
+        RealDenseSetOperations.set(entries, shape, value, indices);
     }
 
 
@@ -2073,18 +2078,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double min() {
-        return null;
+        return Aggregate.min(entries);
     }
 
 
     /**
-     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
-     *
-     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
+     * Finds the maximum value in this matrix. If this matrix has zero entries, the method will return 0.
+     * @return The maximum value in this matrix.
      */
     @Override
     public Double max() {
-        return null;
+        return Aggregate.max(entries);
     }
 
 
@@ -2096,7 +2100,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double minAbs() {
-        return null;
+        return Aggregate.minAbs(entries);
     }
 
 
@@ -2108,7 +2112,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double maxAbs() {
-        return null;
+        return Aggregate.maxAbs(entries);
     }
 
 
@@ -2120,7 +2124,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public int[] argMin() {
-        return new int[0];
+        return shape.getIndices(AggregateDenseReal.argMin(entries));
     }
 
 
@@ -2132,7 +2136,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public int[] argMax() {
-        return new int[0];
+        return shape.getIndices(AggregateDenseReal.argMax(entries));
     }
 
 

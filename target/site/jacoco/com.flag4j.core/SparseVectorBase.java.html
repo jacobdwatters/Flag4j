@@ -51,7 +51,7 @@ public abstract class SparseVectorBase&lt;T&gt; extends VectorBase&lt;T&gt; {
      * @param nonZeroEntries Number of non-zero entries in this sparse vector.
      * @param orientation Orientation of this sparse vector.
      */
-    public SparseVectorBase(int totalEntries, int nonZeroEntries, VectorOrientations orientation, T entries, int[] indices) {
+    public SparseVectorBase(int totalEntries, int nonZeroEntries, VectorOrientation orientation, T entries, int[] indices) {
 <span class="fc" id="L55">        super(totalEntries, orientation, entries);</span>
 
 <span class="fc bfc" id="L57" title="All 2 branches covered.">        if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) &lt; 0) {</span>

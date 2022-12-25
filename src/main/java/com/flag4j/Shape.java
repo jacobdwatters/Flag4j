@@ -24,6 +24,7 @@
 
 package com.flag4j;
 
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 
 import java.io.Serializable;
@@ -146,6 +147,26 @@ public class Shape implements Serializable {
         }
 
         return index + indices[indices.length-1];
+    }
+
+
+    /**
+     * Computes the tensor indices based on an index from the internal 1D data array.
+     * @param index Index of internal 1D data array.
+     * @return The multidimensional indices corresponding to the 1D data array index. This will be an array of integers
+     * with size equal to the rank of this shape.
+     */
+    public int[] getIndices(int index) {
+        int[] indices = new int[this.getRank()];
+        indices[indices.length-1] = index % dims[dims.length-1];
+        int upStream = index;
+
+        for(int i=indices.length-2; i>=0; i--) {
+            upStream = (upStream-indices[i+1]) / dims[i+1];
+            indices[i] = upStream%dims[i];
+        }
+
+        return indices;
     }
 
 

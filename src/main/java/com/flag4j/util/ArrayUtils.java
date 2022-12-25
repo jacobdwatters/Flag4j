@@ -217,7 +217,12 @@ public final class ArrayUtils {
      */
     public static double[] range(int start, int end) {
         double[] rangeArr = new double[end-start];
-        Arrays.setAll(rangeArr, (i) -> start+i);
+
+        int j=0;
+        for(int i=start; i<end; i++) {
+            rangeArr[j++]=i;
+        }
+
         return rangeArr;
     }
 }

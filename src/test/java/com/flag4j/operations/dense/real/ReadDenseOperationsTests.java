@@ -1,6 +1,7 @@
 package com.flag4j.operations.dense.real;
 
 import com.flag4j.Shape;
+import com.flag4j.operations.common.real.RealOperations;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static com.flag4j.operations.dense.real.RealDenseOperations.*;
@@ -97,13 +98,6 @@ class ReadDenseOperationsTests {
 
 
     @Test
-    void sumTest() {
-        src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
-        expResultD = 1+0.98332+134.556+-9.13+-100.234+0.0000000004;
-        assertEquals(expResultD, sum(src1));
-    }
-
-    @Test
     void prodTest() {
         // ---------- Sub-case 1 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.8000000004};
@@ -125,6 +119,6 @@ class ReadDenseOperationsTests {
         expResult = new double[]{1*a, 0.98332*a, 134.556*a,
                 -9.13*a, -100.234*a, 0.0000000004*a};
 
-        assertArrayEquals(expResult, scalMult(src1, a));
+        assertArrayEquals(expResult, RealOperations.scalMult(src1, a));
     }
 }

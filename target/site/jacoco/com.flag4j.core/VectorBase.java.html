@@ -33,14 +33,14 @@ import com.flag4j.Shape;
  */
 public abstract class VectorBase&lt;T&gt; extends TensorBase&lt;T&gt; {
 
-    VectorOrientations orientation;
+    VectorOrientation orientation;
 
     /**
      * Constructs a basic vector with the specified number of entries.
      * @param size Number of entries in this vector.
      * @param orientation Orientation of this vector.
      */
-    public VectorBase(int size, VectorOrientations orientation, T entries) {
+    public VectorBase(int size, VectorOrientation orientation, T entries) {
 <span class="fc" id="L44">        super(new Shape(size), entries);</span>
 <span class="fc" id="L45">        this.orientation = orientation;</span>
 <span class="fc" id="L46">    }</span>
@@ -58,15 +58,15 @@ public abstract class VectorBase&lt;T&gt; extends TensorBase&lt;T&gt; {
     /**
      * Gets the oriented shape of this vector.
      * @return The oriented shape of this vector. &lt;br&gt;
-     * If this vector is a {@link VectorOrientations#ROW row} vector, then
+     * If this vector is a {@link VectorOrientation#ROW row} vector, then
      * the shape will be {@code (1, this.size())}. &lt;br&gt;
-     * If this vector is a {@link VectorOrientations#COL column} vector or an {@link VectorOrientations#UNORIENTED unoriented}
+     * If this vector is a {@link VectorOrientation#COL column} vector or an {@link VectorOrientation#UNORIENTED unoriented}
      * vector then the shape will be {@code (1, this.size())}.
      */
     public Shape getOrientedShape() {
         Shape orientedShape;
 
-<span class="nc bnc" id="L69" title="All 2 branches missed.">        if(this.orientation==VectorOrientations.ROW) {</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if(this.orientation== VectorOrientation.ROW) {</span>
 <span class="nc" id="L70">            orientedShape = new Shape(1, this.size());</span>
         } else {
 <span class="nc" id="L72">            orientedShape = new Shape(this.size(), 1);</span>
@@ -80,7 +80,7 @@ public abstract class VectorBase&lt;T&gt; extends TensorBase&lt;T&gt; {
      * Gets the orientation of this vector.
      * @return The orientation of this vector.
      */
-    public VectorOrientations getOrientation() {
+    public VectorOrientation getOrientation() {
 <span class="fc" id="L84">        return this.orientation;</span>
     }
 }

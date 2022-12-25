@@ -33,14 +33,14 @@ import com.flag4j.Shape;
  */
 public abstract class VectorBase<T> extends TensorBase<T> {
 
-    VectorOrientations orientation;
+    VectorOrientation orientation;
 
     /**
      * Constructs a basic vector with the specified number of entries.
      * @param size Number of entries in this vector.
      * @param orientation Orientation of this vector.
      */
-    public VectorBase(int size, VectorOrientations orientation, T entries) {
+    public VectorBase(int size, VectorOrientation orientation, T entries) {
         super(new Shape(size), entries);
         this.orientation = orientation;
     }
@@ -58,15 +58,15 @@ public abstract class VectorBase<T> extends TensorBase<T> {
     /**
      * Gets the oriented shape of this vector.
      * @return The oriented shape of this vector. <br>
-     * If this vector is a {@link VectorOrientations#ROW row} vector, then
+     * If this vector is a {@link VectorOrientation#ROW row} vector, then
      * the shape will be {@code (1, this.size())}. <br>
-     * If this vector is a {@link VectorOrientations#COL column} vector or an {@link VectorOrientations#UNORIENTED unoriented}
+     * If this vector is a {@link VectorOrientation#COL column} vector or an {@link VectorOrientation#UNORIENTED unoriented}
      * vector then the shape will be {@code (1, this.size())}.
      */
     public Shape getOrientedShape() {
         Shape orientedShape;
 
-        if(this.orientation==VectorOrientations.ROW) {
+        if(this.orientation== VectorOrientation.ROW) {
             orientedShape = new Shape(1, this.size());
         } else {
             orientedShape = new Shape(this.size(), 1);
@@ -80,7 +80,7 @@ public abstract class VectorBase<T> extends TensorBase<T> {
      * Gets the orientation of this vector.
      * @return The orientation of this vector.
      */
-    public VectorOrientations getOrientation() {
+    public VectorOrientation getOrientation() {
         return this.orientation;
     }
 }
