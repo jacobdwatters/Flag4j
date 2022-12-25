@@ -174,14 +174,14 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static double[] elemMult(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="nc" id="L177">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
-<span class="nc" id="L178">        double[] product = new double[src1.length];</span>
+<span class="fc" id="L177">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L178">        double[] product = new double[src1.length];</span>
 
-<span class="nc bnc" id="L180" title="All 2 branches missed.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="nc" id="L181">            product[i] = src1[i]*src2[i];</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L181">            product[i] = src1[i]*src2[i];</span>
         }
 
-<span class="nc" id="L184">        return product;</span>
+<span class="fc" id="L184">        return product;</span>
     }
 
 
@@ -195,14 +195,14 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static double[] elemDiv(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="nc" id="L198">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
-<span class="nc" id="L199">        double[] product = new double[src1.length];</span>
+<span class="fc" id="L198">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L199">        double[] product = new double[src1.length];</span>
 
-<span class="nc bnc" id="L201" title="All 2 branches missed.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="nc" id="L202">            product[i] = src1[i]/src2[i];</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L202">            product[i] = src1[i]/src2[i];</span>
         }
 
-<span class="nc" id="L205">        return product;</span>
+<span class="fc" id="L205">        return product;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -43,17 +43,4 @@ public enum VectorOrientation {
      * Indicates that the vector is not oriented. It will be treated as a row/column vector as needed.
      */
     UNORIENTED;
-
-
-    public static VectorOrientation getFromOrdinal(int ordinal) {
-        if(ordinal==ROW.ordinal()) {
-            return ROW;
-        } else if(ordinal==COL.ordinal()) {
-            return COL;
-        } else if(ordinal==UNORIENTED.ordinal()) {
-            return UNORIENTED;
-        } else {
-            throw new IllegalArgumentException(ErrorMessages.vectorOrientationErr(ordinal));
-        }
-    }
 }

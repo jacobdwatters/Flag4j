@@ -1110,9 +1110,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix elemMult(Matrix B) {
-<span class="nc" id="L1113">        return new Matrix(</span>
-<span class="nc" id="L1114">                shape.clone(),</span>
-<span class="nc" id="L1115">                RealDenseOperations.elemMult(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L1113">        return new Matrix(</span>
+<span class="fc" id="L1114">                shape.clone(),</span>
+<span class="fc" id="L1115">                RealDenseOperations.elemMult(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1139,9 +1139,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix elemMult(CMatrix B) {
-<span class="nc" id="L1142">        return new CMatrix(</span>
-<span class="nc" id="L1143">                shape.clone(),</span>
-<span class="nc" id="L1144">                RealComplexDenseOperations.elemMult(B.entries, B.shape, entries, shape)</span>
+<span class="fc" id="L1142">        return new CMatrix(</span>
+<span class="fc" id="L1143">                shape.clone(),</span>
+<span class="fc" id="L1144">                RealComplexDenseOperations.elemMult(B.entries, B.shape, entries, shape)</span>
         );
     }
 
@@ -1169,9 +1169,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix elemDiv(Matrix B) {
-<span class="nc" id="L1172">        return new Matrix(</span>
-<span class="nc" id="L1173">                shape.clone(),</span>
-<span class="nc" id="L1174">                RealDenseOperations.elemDiv(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L1172">        return new Matrix(</span>
+<span class="fc" id="L1173">                shape.clone(),</span>
+<span class="fc" id="L1174">                RealDenseOperations.elemDiv(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1186,9 +1186,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix elemDiv(CMatrix B) {
-<span class="nc" id="L1189">        return new CMatrix(</span>
-<span class="nc" id="L1190">                shape.clone(),</span>
-<span class="nc" id="L1191">                RealComplexDenseOperations.elemDiv(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L1189">        return new CMatrix(</span>
+<span class="fc" id="L1190">                shape.clone(),</span>
+<span class="fc" id="L1191">                RealComplexDenseOperations.elemDiv(entries, shape, B.entries, B.shape)</span>
         );
     }
 

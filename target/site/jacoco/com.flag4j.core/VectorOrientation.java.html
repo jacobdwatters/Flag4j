@@ -43,18 +43,5 @@ import com.flag4j.util.ErrorMessages;
      * Indicates that the vector is not oriented. It will be treated as a row/column vector as needed.
      */
 <span class="fc" id="L45">    UNORIENTED;</span>
-
-
-    public static VectorOrientation getFromOrdinal(int ordinal) {
-<span class="nc bnc" id="L49" title="All 2 branches missed.">        if(ordinal==ROW.ordinal()) {</span>
-<span class="nc" id="L50">            return ROW;</span>
-<span class="nc bnc" id="L51" title="All 2 branches missed.">        } else if(ordinal==COL.ordinal()) {</span>
-<span class="nc" id="L52">            return COL;</span>
-<span class="nc bnc" id="L53" title="All 2 branches missed.">        } else if(ordinal==UNORIENTED.ordinal()) {</span>
-<span class="nc" id="L54">            return UNORIENTED;</span>
-        } else {
-<span class="nc" id="L56">            throw new IllegalArgumentException(ErrorMessages.vectorOrientationErr(ordinal));</span>
-        }
-    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

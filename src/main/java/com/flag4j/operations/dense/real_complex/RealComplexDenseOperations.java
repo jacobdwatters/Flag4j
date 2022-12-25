@@ -227,7 +227,7 @@ public final class RealComplexDenseOperations {
         double divisor;
 
         for(int i=0; i<product.length; i++) {
-            divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].re;
+            divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;
             product[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);
         }
 

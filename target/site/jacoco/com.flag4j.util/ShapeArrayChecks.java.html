@@ -60,25 +60,25 @@ public final class ShapeArrayChecks {
      * @throws IllegalArgumentException If shapes do not satisfy the requirements of matrix multiplication.
      */
     public static void matMultShapeCheck(Shape shape1, Shape shape2) {
-<span class="nc" id="L63">        boolean pass = true;</span>
+<span class="fc" id="L63">        boolean pass = true;</span>
 
         // If the shapes are not of rank 2 then they are not matrices.
-<span class="nc bnc" id="L66" title="All 4 branches missed.">        if(shape1.getRank()==2 &amp;&amp; shape2.getRank()==2) {</span>
+<span class="pc bpc" id="L66" title="1 of 4 branches missed.">        if(shape1.getRank()==2 &amp;&amp; shape2.getRank()==2) {</span>
             // Ensure the number of columns in matrix one is equal to the number of rows in matrix 2.
-<span class="nc bnc" id="L68" title="All 2 branches missed.">            if(shape1.dims[1] != shape2.dims[0]) {</span>
-<span class="nc" id="L69">                pass = false;</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">            if(shape1.dims[1] != shape2.dims[0]) {</span>
+<span class="fc" id="L69">                pass = false;</span>
             }
 
         } else {
-<span class="nc" id="L73">            pass = false;</span>
+<span class="fc" id="L73">            pass = false;</span>
         }
 
-<span class="nc bnc" id="L76" title="All 2 branches missed.">        if(!pass) { // Check if the shapes pass the test.</span>
-<span class="nc" id="L77">            throw new IllegalArgumentException(</span>
-<span class="nc" id="L78">                    ErrorMessages.matMultShapeErrMsg(shape1, shape2)</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        if(!pass) { // Check if the shapes pass the test.</span>
+<span class="fc" id="L77">            throw new IllegalArgumentException(</span>
+<span class="fc" id="L78">                    ErrorMessages.matMultShapeErrMsg(shape1, shape2)</span>
             );
         }
-<span class="nc" id="L81">    }</span>
+<span class="fc" id="L81">    }</span>
 
 
     /**
