@@ -28,6 +28,9 @@ package com.flag4j.core;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 
+/**
+ * The base class for all complex matrices.
+ */
 public abstract class ComplexMatrixBase extends MatrixBase<CNumber[]> {
 
 

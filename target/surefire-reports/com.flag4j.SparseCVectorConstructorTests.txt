@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.flag4j.SparseCVectorConstructorTests
 -------------------------------------------------------------------------------
-Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 s - in com.flag4j.SparseCVectorConstructorTests
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.042 s - in com.flag4j.SparseCVectorConstructorTests

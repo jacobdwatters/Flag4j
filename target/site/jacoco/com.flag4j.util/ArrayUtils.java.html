@@ -26,16 +26,15 @@ package com.flag4j.util;
 
 import com.flag4j.complex_numbers.CNumber;
 
-import java.util.Arrays;
 
 /**
  * This class provides several methods useful for array manipulation.
  */
 public final class ArrayUtils {
 
-<span class="nc" id="L36">    private ArrayUtils() {</span>
+<span class="nc" id="L35">    private ArrayUtils() {</span>
         // Hide Constructor
-<span class="nc" id="L38">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+<span class="nc" id="L37">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
     }
 
 
@@ -46,12 +45,12 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(int[] src, CNumber[] dest) {
-<span class="fc" id="L49">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L48">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
 
-<span class="fc bfc" id="L51" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="fc" id="L52">            dest[i] = new CNumber(src[i]);</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L51">            dest[i] = new CNumber(src[i]);</span>
         }
-<span class="fc" id="L54">    }</span>
+<span class="fc" id="L53">    }</span>
 
 
     /**
@@ -61,12 +60,12 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(double[] src, CNumber[] dest) {
-<span class="fc" id="L64">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L63">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
 
-<span class="fc bfc" id="L66" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="fc" id="L67">            dest[i] = new CNumber(src[i]);</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L66">            dest[i] = new CNumber(src[i]);</span>
         }
-<span class="fc" id="L69">    }</span>
+<span class="fc" id="L68">    }</span>
 
 
     /**
@@ -76,12 +75,12 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(Integer[] src, CNumber[] dest) {
-<span class="fc" id="L79">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L78">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
 
-<span class="fc bfc" id="L81" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="fc" id="L82">            dest[i] = new CNumber(src[i]);</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L81">            dest[i] = new CNumber(src[i]);</span>
         }
-<span class="fc" id="L84">    }</span>
+<span class="fc" id="L83">    }</span>
 
 
     /**
@@ -91,12 +90,12 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(Double[] src, CNumber[] dest) {
-<span class="fc" id="L94">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L93">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
 
-<span class="fc bfc" id="L96" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="fc" id="L97">            dest[i] = new CNumber(src[i]);</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L96">            dest[i] = new CNumber(src[i]);</span>
         }
-<span class="fc" id="L99">    }</span>
+<span class="fc" id="L98">    }</span>
 
 
     /**
@@ -106,12 +105,12 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(String[] src, CNumber[] dest) {
-<span class="fc" id="L109">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L108">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
 
-<span class="fc bfc" id="L111" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="fc" id="L112">            dest[i] = new CNumber(src[i]);</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L111">            dest[i] = new CNumber(src[i]);</span>
         }
-<span class="fc" id="L114">    }</span>
+<span class="fc" id="L113">    }</span>
 
 
     /**
@@ -121,12 +120,12 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(CNumber[] src, CNumber[] dest) {
-<span class="fc" id="L124">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L123">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
 
-<span class="fc bfc" id="L126" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="fc" id="L127">            dest[i] = new CNumber(src[i]);</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L126">            dest[i] = new CNumber(src[i]);</span>
         }
-<span class="fc" id="L129">    }</span>
+<span class="fc" id="L128">    }</span>
 
 
     /**
@@ -134,10 +133,10 @@ public final class ArrayUtils {
      * @param dest Array to fill with zeros.
      */
     public static void fillZeros(CNumber[] dest) {
-<span class="fc bfc" id="L137" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="fc" id="L138">            dest[i] = new CNumber();</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L137">            dest[i] = new CNumber();</span>
         }
-<span class="fc" id="L140">    }</span>
+<span class="fc" id="L139">    }</span>
 
 
     /**
@@ -147,10 +146,10 @@ public final class ArrayUtils {
      */
     public static void fill(CNumber[] dest, double fillValue) {
         // TODO: Investigate speed of using Arrays.setAll(...) and Arrays.parallelSetAll(...)
-<span class="fc bfc" id="L150" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="fc" id="L151">            dest[i] = new CNumber(fillValue);</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L150">            dest[i] = new CNumber(fillValue);</span>
         }
-<span class="fc" id="L153">    }</span>
+<span class="fc" id="L152">    }</span>
 
 
     /**
@@ -160,10 +159,10 @@ public final class ArrayUtils {
      */
     public static void fill(CNumber[] dest, CNumber fillValue) {
         // TODO: Investigate speed of using Arrays.setAll(...) and Arrays.parallelSetAll(...)
-<span class="fc bfc" id="L163" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="fc" id="L164">            dest[i] = fillValue.clone();</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L163">            dest[i] = fillValue.clone();</span>
         }
-<span class="fc" id="L166">    }</span>
+<span class="fc" id="L165">    }</span>
 
 
     /**
@@ -174,10 +173,10 @@ public final class ArrayUtils {
      * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
      */
     public static void swap(int[] arr, int i, int j) {
-<span class="fc" id="L177">        int temp = arr[i];</span>
-<span class="fc" id="L178">        arr[i] = arr[j];</span>
-<span class="fc" id="L179">        arr[j] = temp;</span>
-<span class="fc" id="L180">    }</span>
+<span class="fc" id="L176">        int temp = arr[i];</span>
+<span class="fc" id="L177">        arr[i] = arr[j];</span>
+<span class="fc" id="L178">        arr[j] = temp;</span>
+<span class="fc" id="L179">    }</span>
 
 
 
@@ -189,10 +188,10 @@ public final class ArrayUtils {
      * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
      */
     public static void swap(double[] arr, int i, int j) {
-<span class="fc" id="L192">        double temp = arr[i];</span>
-<span class="fc" id="L193">        arr[i] = arr[j];</span>
-<span class="fc" id="L194">        arr[j] = temp;</span>
-<span class="fc" id="L195">    }</span>
+<span class="fc" id="L191">        double temp = arr[i];</span>
+<span class="fc" id="L192">        arr[i] = arr[j];</span>
+<span class="fc" id="L193">        arr[j] = temp;</span>
+<span class="fc" id="L194">    }</span>
 
 
     /**
@@ -203,10 +202,10 @@ public final class ArrayUtils {
      * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
      */
     public static void swap(Object[] arr, int i, int j) {
-<span class="fc" id="L206">        Object temp = arr[i];</span>
-<span class="fc" id="L207">        arr[i] = arr[j];</span>
-<span class="fc" id="L208">        arr[j] = temp;</span>
-<span class="fc" id="L209">    }</span>
+<span class="fc" id="L205">        Object temp = arr[i];</span>
+<span class="fc" id="L206">        arr[i] = arr[j];</span>
+<span class="fc" id="L207">        arr[j] = temp;</span>
+<span class="fc" id="L208">    }</span>
 
 
     /**
@@ -216,14 +215,14 @@ public final class ArrayUtils {
      * @return An array containing the integer range {@code [start, end)}.
      */
     public static double[] range(int start, int end) {
-<span class="fc" id="L219">        double[] rangeArr = new double[end-start];</span>
+<span class="fc" id="L218">        double[] rangeArr = new double[end-start];</span>
 
-<span class="fc" id="L221">        int j=0;</span>
-<span class="fc bfc" id="L222" title="All 2 branches covered.">        for(int i=start; i&lt;end; i++) {</span>
-<span class="fc" id="L223">            rangeArr[j++]=i;</span>
+<span class="fc" id="L220">        int j=0;</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">        for(int i=start; i&lt;end; i++) {</span>
+<span class="fc" id="L222">            rangeArr[j++]=i;</span>
         }
 
-<span class="fc" id="L226">        return rangeArr;</span>
+<span class="fc" id="L225">        return rangeArr;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

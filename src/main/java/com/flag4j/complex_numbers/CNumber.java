@@ -695,6 +695,7 @@ public class CNumber extends Number {
 
     /**
      * Computes the complex logarithm, with specified base, of a complex number.
+     * @param base Base of the logarithm.
      * @param num Input to the complex logarithm function with specified base.
      * @return The principle value of the complex logarithm, with specified base, for the given input.
      */
@@ -705,6 +706,7 @@ public class CNumber extends Number {
 
     /**
      * Computes the complex logarithm, with specified base, of a complex number.
+     * @param base Base of the logarithm.
      * @param num Input to the complex logarithm function with specified base.
      * @return The principle value of the complex logarithm, with specified base, for the given input.
      */
@@ -715,6 +717,7 @@ public class CNumber extends Number {
 
     /**
      * Computes the complex logarithm, with specified base, of a complex number.
+     * @param base Base of the logarithm.
      * @param num Input to the complex logarithm function with specified base.
      * @return The principle value of the complex logarithm, with specified base, for the given input.
      */
@@ -1167,7 +1170,7 @@ public class CNumber extends Number {
 
     /**
      * Checks if a number is near zero in magnitude.
-     *
+     * @param n Number to round.
      * @param tol - tolerance of how close to zero is
      * 		considered "near".
      * @return Returns true if magnitude of number is less than or equal to

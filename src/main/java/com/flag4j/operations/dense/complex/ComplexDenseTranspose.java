@@ -64,6 +64,9 @@ public class ComplexDenseTranspose {
     /**
      * Transposes a matrix using a blocked algorithm. To get or set the block size see
      * {@link Configurations#getBlockSize()} or {@link Configurations#setBlockSize(int)}.
+     * @param src Source matrix in the transpose.
+     * @param numRows Number of rows in the matrix.
+     * @param numCols Number of columns in the matrix.
      * @return The transpose of this tensor along specified axes
      */
     public static CNumber[] blockedMatrix(final CNumber[] src, final int numRows, final int numCols) {

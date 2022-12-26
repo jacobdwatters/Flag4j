@@ -61,7 +61,7 @@ public abstract class MatrixBase<T> extends TensorBase<T> {
 
     /**
      * Gets the number of columns in this matrix.
-     * @return
+     * @return The number of columns in this matrix.
      */
     public int numCols() {
         return shape.dims[Axis2D.col()];

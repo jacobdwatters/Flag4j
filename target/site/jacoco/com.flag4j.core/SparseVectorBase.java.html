@@ -65,12 +65,13 @@ public abstract class SparseVectorBase&lt;T&gt; extends VectorBase&lt;T&gt; {
 
 
     /**
-     * Sets the number of nonZero entries in this sparse vector.
-     * @param nonZeroEntries
+     * Sets the number of non-zero entries in this sparse vector. WARNING: Caution should be used when calling this
+     * method.
+     * @param nonZeroEntries Non-zero entries contained within this sparse vector.
      */
     protected void setNonZeroEntries(int nonZeroEntries) {
-<span class="nc" id="L72">        this.nonZeroEntries = nonZeroEntries;</span>
-<span class="nc" id="L73">    }</span>
+<span class="nc" id="L73">        this.nonZeroEntries = nonZeroEntries;</span>
+<span class="nc" id="L74">    }</span>
 
 
     /**
@@ -78,7 +79,7 @@ public abstract class SparseVectorBase&lt;T&gt; extends VectorBase&lt;T&gt; {
      * @return The number of non-zero entries in this sparse matrix.
      */
     public int nonZeroEntries() {
-<span class="fc" id="L81">        return nonZeroEntries;</span>
+<span class="fc" id="L82">        return nonZeroEntries;</span>
     }
 
 
@@ -87,10 +88,10 @@ public abstract class SparseVectorBase&lt;T&gt; extends VectorBase&lt;T&gt; {
      * @return The sparsity of this tensor.
      */
     public double sparsity() {
-<span class="nc" id="L90">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
-<span class="nc" id="L91">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
+<span class="nc" id="L91">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
+<span class="nc" id="L92">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
 
-<span class="nc" id="L93">        return sparsity.doubleValue();</span>
+<span class="nc" id="L94">        return sparsity.doubleValue();</span>
     }
 
 
@@ -99,11 +100,11 @@ public abstract class SparseVectorBase&lt;T&gt; extends VectorBase&lt;T&gt; {
      * @return The density of this tensor.
      */
     public double density() {
-<span class="nc" id="L102">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
-<span class="nc" id="L103">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP</span>
+<span class="nc" id="L103">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
+<span class="nc" id="L104">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP</span>
         );
 
-<span class="nc" id="L106">        return density.doubleValue();</span>
+<span class="nc" id="L107">        return density.doubleValue();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

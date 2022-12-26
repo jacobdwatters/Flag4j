@@ -153,7 +153,7 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
-     * Constructs a matrix with specified shape and entries. Note, unlike other constructors, the entries parameter
+     * Constructs a matrix with specified shape and entries. Note, unlike other constructors, the entries' parameter
      * is not copied.
      * @param shape Shape of the matrix
      * @param entries Entries of the matrix.
@@ -822,7 +822,7 @@ public class Matrix extends RealMatrixBase implements
     /**
      * Computes the scalar division of a tensor.
      *
-     * @param divisor The scaler value to divide tensor by.
+     * @param divisor The scalar value to divide tensor by.
      * @return The result of dividing this tensor by the specified scalar.
      * @throws ArithmeticException If divisor is zero.
      */

@@ -31,10 +31,25 @@ import com.flag4j.util.ErrorMessages;
  */
 public abstract class PrintOptions {
 
+    /**
+     * Default padding between elements when printing.
+     */
     public static final int DEFAULT_PADDING = 2;
+    /**
+     * Default maximum number of rows to print.
+     */
     public static final int DEFAULT_MAX_ROWS = 10;
+    /**
+     * Default maximum number of columns to print.
+     */
     public static final int DEFAULT_MAX_COLS = 10;
+    /**
+     * Default precision (i.e. number of decimals) to use when printing.
+     */
     public static final int DEFAULT_PRECISION = 8;
+    /**
+     * Default flag for centering elements when printing.
+     */
     public static final boolean DEFAULT_CENTER = true;
 
     /**
@@ -146,7 +161,7 @@ public abstract class PrintOptions {
 
     /**
      * Sets the maximum number of columns to print.
-     * @param maxColumns
+     * @param maxColumns Maximum number of columns to print.
      */
     public static void setMaxColumns(int maxColumns) {
         if(maxColumns < 0) {

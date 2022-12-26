@@ -29,7 +29,13 @@ package com.flag4j.complex_numbers;
  * A CNumberToken is the smallest unit of a string which is being parsed to a complex number.
  */
 class CNumberToken {
+    /**
+     * The kind of this token.
+     */
     private final String kind;
+    /**
+     * The details of this token.
+     */
     private final String details;
 
 

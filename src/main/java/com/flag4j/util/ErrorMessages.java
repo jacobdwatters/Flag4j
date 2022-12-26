@@ -87,7 +87,7 @@ public abstract class ErrorMessages {
      */
     private static final String SHAPE_ENTRIES_ERR = "The shape %s cannot hold %d entries.";
     /**
-     * Error message for a ordinal which is not a valid vector orientation ordinal.
+     * Error message for an ordinal which is not a valid vector orientation ordinal.
      */
     private static final String VECTOR_ORIENTATION_ERR = "Unknown orientation ordinal %s. Must be either 0, 1, or 2.";
     /**

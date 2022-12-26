@@ -42,6 +42,9 @@ public abstract class SparseVectorBase<T> extends VectorBase<T> {
      * Indices of non-zero values in this sparse vector.
      */
     public final int[] indices;
+    /**
+     * Number of non-zero entries of this sparse vec
+     */
     private int nonZeroEntries;
 
 
@@ -50,6 +53,9 @@ public abstract class SparseVectorBase<T> extends VectorBase<T> {
      * @param totalEntries Number of total entries in this sparse vector, including zeros.
      * @param nonZeroEntries Number of non-zero entries in this sparse vector.
      * @param orientation Orientation of this sparse vector.
+     * @param entries Non-zero entries of this sparse vector.
+     * @param indices Indices of the non-zero entries of this tensor.
+     * @throws IllegalArgumentException If the lengths of the entries and incicies arrays are not equal.
      */
     public SparseVectorBase(int totalEntries, int nonZeroEntries, VectorOrientation orientation, T entries, int[] indices) {
         super(totalEntries, orientation, entries);
@@ -65,8 +71,9 @@ public abstract class SparseVectorBase<T> extends VectorBase<T> {
 
 
     /**
-     * Sets the number of nonZero entries in this sparse vector.
-     * @param nonZeroEntries
+     * Sets the number of non-zero entries in this sparse vector. WARNING: Caution should be used when calling this
+     * method.
+     * @param nonZeroEntries Non-zero entries contained within this sparse vector.
      */
     protected void setNonZeroEntries(int nonZeroEntries) {
         this.nonZeroEntries = nonZeroEntries;

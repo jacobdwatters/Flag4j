@@ -33,6 +33,9 @@ import java.util.Random;
  * This class contains methods for generating random complex numbers. Wraps {@link Random} class.
  */
 public class RandomCNumber {
+    /**
+     * Random number generator.
+     */
     private final Random rng;
 
 
@@ -79,7 +82,7 @@ public class RandomCNumber {
      * Generates a random real or complex number a, or a+bi where a and b are
      * normally distributed pseudorandom numbers with a mean of zero and standard deviation of one.
      *
-     * @param complex Selects if a real or complex number should be selected..
+     * @param complex Selects if a real or complex number should be selected.
      * @return If <code>complex</code> false, a random real number is returned. If <code>complex</code> true, a random real and imaginary component are chosen
      * and a complex number is returned.
      */
@@ -147,7 +150,7 @@ public class RandomCNumber {
                     + "min: " + min + " and max: " + max);
         }
 
-        if (magnitude_flag.length > 0 && magnitude_flag[0] == true) {
+        if (magnitude_flag.length > 0 && magnitude_flag[0]) {
             if(min < 0 || max < 0) {
                 throw new IllegalArgumentException("For complex numbers, min and max must be non-negative values but received "
                         + "min: " + min + " and max: " + max);

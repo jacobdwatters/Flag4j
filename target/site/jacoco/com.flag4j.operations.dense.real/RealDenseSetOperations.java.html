@@ -106,9 +106,9 @@ import com.flag4j.util.ShapeArrayChecks;
 <span class="fc" id="L106">        ShapeArrayChecks.equalTotalEntries(src, dest);</span>
 <span class="fc" id="L107">        int count = 0;</span>
 
-<span class="fc bfc" id="L109" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc bfc" id="L110" title="All 2 branches covered.">            for(int j=0; j&lt;src[0].length; j++) {</span>
-<span class="fc" id="L111">                dest[count++] = src[i][j];</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        for(Double[] doubles : src) {</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">            for(int j = 0; j &lt; src[0].length; j++) {</span>
+<span class="fc" id="L111">                dest[count++] = doubles[j];</span>
             }
         }
 <span class="fc" id="L114">    }</span>
@@ -125,9 +125,9 @@ import com.flag4j.util.ShapeArrayChecks;
 <span class="fc" id="L125">        ShapeArrayChecks.equalTotalEntries(src, dest);</span>
 <span class="fc" id="L126">        int count = 0;</span>
 
-<span class="fc bfc" id="L128" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc bfc" id="L129" title="All 2 branches covered.">            for(int j=0; j&lt;src[0].length; j++) {</span>
-<span class="fc" id="L130">                dest[count++] = src[i][j];</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        for(Integer[] integers : src) {</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">            for(int j = 0; j &lt; src[0].length; j++) {</span>
+<span class="fc" id="L130">                dest[count++] = integers[j];</span>
             }
         }
 <span class="fc" id="L133">    }</span>
@@ -144,9 +144,9 @@ import com.flag4j.util.ShapeArrayChecks;
 <span class="fc" id="L144">        ShapeArrayChecks.equalTotalEntries(src, dest);</span>
 <span class="fc" id="L145">        int count = 0;</span>
 
-<span class="fc bfc" id="L147" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc bfc" id="L148" title="All 2 branches covered.">            for(int j=0; j&lt;src[0].length; j++) {</span>
-<span class="fc" id="L149">                dest[count++] = src[i][j];</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        for(double[] doubles : src) {</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">            for(int j = 0; j &lt; src[0].length; j++) {</span>
+<span class="fc" id="L149">                dest[count++] = doubles[j];</span>
             }
         }
 <span class="fc" id="L152">    }</span>
@@ -163,9 +163,9 @@ import com.flag4j.util.ShapeArrayChecks;
 <span class="fc" id="L163">        ShapeArrayChecks.equalTotalEntries(src, dest);</span>
 <span class="fc" id="L164">        int count = 0;</span>
 
-<span class="fc bfc" id="L166" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc bfc" id="L167" title="All 2 branches covered.">            for(int j=0; j&lt;src[0].length; j++) {</span>
-<span class="fc" id="L168">                dest[count++] = src[i][j];</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        for(int[] ints : src) {</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">            for(int j = 0; j &lt; src[0].length; j++) {</span>
+<span class="fc" id="L168">                dest[count++] = ints[j];</span>
             }
         }
 <span class="fc" id="L171">    }</span>

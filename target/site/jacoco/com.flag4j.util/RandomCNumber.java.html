@@ -79,7 +79,7 @@ public class RandomCNumber {
      * Generates a random real or complex number a, or a+bi where a and b are
      * normally distributed pseudorandom numbers with a mean of zero and standard deviation of one.
      *
-     * @param complex Selects if a real or complex number should be selected..
+     * @param complex Selects if a real or complex number should be selected.
      * @return If &lt;code&gt;complex&lt;/code&gt; false, a random real number is returned. If &lt;code&gt;complex&lt;/code&gt; true, a random real and imaginary component are chosen
      * and a complex number is returned.
      */
@@ -147,7 +147,7 @@ public class RandomCNumber {
                     + &quot;min: &quot; + min + &quot; and max: &quot; + max);
         }
 
-<span class="pc bpc" id="L150" title="1 of 4 branches missed.">        if (magnitude_flag.length &gt; 0 &amp;&amp; magnitude_flag[0] == true) {</span>
+<span class="pc bpc" id="L150" title="1 of 4 branches missed.">        if (magnitude_flag.length &gt; 0 &amp;&amp; magnitude_flag[0]) {</span>
 <span class="pc bpc" id="L151" title="1 of 4 branches missed.">            if(min &lt; 0 || max &lt; 0) {</span>
 <span class="fc" id="L152">                throw new IllegalArgumentException(&quot;For complex numbers, min and max must be non-negative values but received &quot;</span>
                         + &quot;min: &quot; + min + &quot; and max: &quot; + max);

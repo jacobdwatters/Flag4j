@@ -106,7 +106,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
 
     /**
      * Computes the scalar division of a tensor.
-     * @param divisor The scaler value to divide tensor by.
+     * @param divisor The scalar value to divide tensor by.
      * @return The result of dividing this tensor by the specified scalar.
      * @throws ArithmeticException If divisor is zero.
      */
@@ -115,7 +115,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
 
     /**
      * Computes the scalar division of a tensor.
-     * @param divisor The scaler value to divide tensor by.
+     * @param divisor The scalar value to divide tensor by.
      * @return The result of dividing this tensor by the specified scalar.
      * @throws ArithmeticException If divisor is zero.
      */

@@ -29,9 +29,15 @@ package com.flag4j.complex_numbers;
  * A lexer for producing the tokens of a complex number represented as a string.
  */
 class CNumberLexer {
+    /**
+     * Error message for unexpected symbol.
+     */
     private final String errMsg = "Unexpected symbol while parsing CNumber: $s";
 
-    protected String content = ""; // Content of Lexer
+    /**
+     * Content of the lexer.
+     */
+    protected String content;
 
     /**
      * @param content - String representation of complex number

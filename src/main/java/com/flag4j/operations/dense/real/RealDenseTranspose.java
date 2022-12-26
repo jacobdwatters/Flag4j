@@ -123,6 +123,9 @@ public final class RealDenseTranspose {
     /**
      * Transposes a matrix using a blocked algorithm. To get or set the block size see
      * {@link Configurations#getBlockSize()} or {@link Configurations#setBlockSize(int)}.
+     * @param src Source entries to compute transpose of.
+     * @param numRows Number of rows in the matrix.
+     * @param numCols Number of columns in the matrix.
      * @return The transpose of this tensor along specified axes
      */
     public static double[] blockedMatrix(final double[] src, final int numRows, final int numCols) {

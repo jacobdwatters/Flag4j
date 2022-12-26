@@ -37,6 +37,9 @@ import java.util.stream.IntStream;
  */
 public class ThreadManager {
 
+    /**
+     * Thread pool for managing threads executing concurrent operations.
+     */
     protected static ForkJoinPool threadPool = new ForkJoinPool();
 
 

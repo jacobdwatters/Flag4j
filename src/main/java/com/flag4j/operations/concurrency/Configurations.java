@@ -36,8 +36,17 @@ public abstract class Configurations {
         throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
     }
 
+    /**
+     * The default number of threads to use for concurrent algorithms.
+     */
     private static final int DEFAULT_NUM_THREADS = Runtime.getRuntime().availableProcessors();
+    /**
+     * The default block size for blocked algorithms.
+     */
     private static final int DEFAULT_BLOCK_SIZE = 32;
+    /**
+     * The default minimum recursive size for recursive algorithms.
+     */
     private static final int DEFAULT_MIN_RECURSIVE_SIZE = 128;
 
 

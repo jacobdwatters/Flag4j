@@ -42,6 +42,9 @@ public abstract class SparseTensorBase<T> extends TensorBase<T> {
      * Indices for non-zero entries of this tensor. Will have shape (rank-by-nonZeroEntries)
      */
     public final int[][] indices;
+    /**
+     * The number of non-zero entries in this sparse tensor.
+     */
     private final int nonZeroEntries;
 
 
@@ -49,6 +52,12 @@ public abstract class SparseTensorBase<T> extends TensorBase<T> {
      * Creates a sparse tensor with specified shape.
      * @param shape Shape of this tensor.
      * @param nonZeroEntries Number of non-zero entries in the sparse tensor.
+     * @param entries Non-zero entries of this sparse tensor.
+     * @param indices Indices of the non-zero entries.
+     * @throws IllegalArgumentException If the number of rows in the indices array is not equal to the number of
+     * elements in the entries array.
+     * @throws IllegalArgumentException If the number of columns in the entries array is not equal to the rank of this
+     * tensor.
      */
     public SparseTensorBase(Shape shape, int nonZeroEntries, T entries, int[][] indices) {
         super(shape, entries);
