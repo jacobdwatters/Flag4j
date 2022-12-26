@@ -36,12 +36,23 @@ import java.util.Random;
  * This class contains methods for generating random matrices and vectors.
  */
 public class RandomTensor {
+    /**
+     * Random number generator.
+     */
     private final Random rng;
 
+    /**
+     * Constructs a new random tensor generator with a seed which is unlikely to be the same as other
+     * from any other invocation of this constructor.
+     */
     public RandomTensor() {
         rng = new Random();
     }
 
+    /**
+     * Constructs a random tensor generator with a specified seed. Use this constructor for reproducible results.
+     * @param seed Seed of the random tensor generator.
+     */
     public RandomTensor(long seed) {
         rng = new Random(seed);
     }

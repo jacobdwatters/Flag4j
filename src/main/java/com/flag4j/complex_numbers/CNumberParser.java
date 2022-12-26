@@ -85,6 +85,7 @@ public class CNumberParser {
                     imaginary = lex.getNextToken();
                 }
 
+                // The operator is negative
                 if(imaginary.matches("im", "i")) { // Then we have the unit imaginary number
                     token = lex.getNextToken();
                     token.errorCheck("eof", "");
@@ -92,9 +93,6 @@ public class CNumberParser {
                     result[0] = Double.parseDouble(real.getDetails());
                     result[1] = 1;
 
-                    if(operator.getDetails().equals("-")) { // The operator is negative
-                        result[1] = -result[1];
-                    }
                 }
                 else { // Then we have a multiple of the unit imaginary number
                     imaginary.errorCheck("num");
@@ -108,9 +106,9 @@ public class CNumberParser {
                     result[0] = Double.parseDouble(real.getDetails());
                     result[1] = Double.parseDouble(imaginary.getDetails());
 
-                    if(operator.getDetails().equals("-")) { // The operator is negative
-                        result[1] = -result[1];
-                    }
+                }
+                if(operator.getDetails().equals("-")) { // The operator is negative
+                    result[1] = -result[1];
                 }
             }
         }

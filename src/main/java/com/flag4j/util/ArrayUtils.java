@@ -26,7 +26,6 @@ package com.flag4j.util;
 
 import com.flag4j.complex_numbers.CNumber;
 
-import java.util.Arrays;
 
 /**
  * This class provides several methods useful for array manipulation.

@@ -24,8 +24,6 @@
 
 package com.flag4j.core;
 
-import com.flag4j.util.ErrorMessages;
-
 /**
  * A simple enum class which contains possible orientations for a vector. i.e. a row or column vector.
  */
@@ -42,5 +40,5 @@ public enum VectorOrientation {
     /**
      * Indicates that the vector is not oriented. It will be treated as a row/column vector as needed.
      */
-    UNORIENTED;
+    UNORIENTED
 }

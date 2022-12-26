@@ -33,12 +33,16 @@ import com.flag4j.Shape;
  */
 public abstract class VectorBase<T> extends TensorBase<T> {
 
+    /**
+     * The orientation of this vector.
+     */
     VectorOrientation orientation;
 
     /**
      * Constructs a basic vector with the specified number of entries.
      * @param size Number of entries in this vector.
      * @param orientation Orientation of this vector.
+     * @param entries The non-zero entries of this sparse tensor.
      */
     public VectorBase(int size, VectorOrientation orientation, T entries) {
         super(new Shape(size), entries);

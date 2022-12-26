@@ -57,9 +57,7 @@ public final class StringUtils {
             return s;
 
         StringBuilder sb = new StringBuilder(size);
-        for (int i = 0; i < (size - s.length()) / 2; i++) {
-            sb.append(pad);
-        }
+        sb.append(String.valueOf(pad).repeat((size - s.length()) / 2));
         sb.append(s);
         while (sb.length() < size) {
             sb.append(pad);

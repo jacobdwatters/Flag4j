@@ -24,6 +24,10 @@
 
 package com.flag4j.linalg;
 
+
+/**
+ * This class contains several methods for determining the positive definiteness of a matrix.
+ */
 public class PositiveDefiniteness {
 //    /**
 //     * Checks if the matrix is positive definite.

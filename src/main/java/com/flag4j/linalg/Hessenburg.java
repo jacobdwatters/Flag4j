@@ -24,5 +24,9 @@
 
 package com.flag4j.linalg;
 
+
+/**
+ * This class contains several methods for converting matrices to upper Hessenburg form using similarity transforms.
+ */
 public class Hessenburg {
 }

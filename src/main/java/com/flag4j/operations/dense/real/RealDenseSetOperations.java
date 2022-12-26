@@ -106,9 +106,9 @@ public class RealDenseSetOperations {
         ShapeArrayChecks.equalTotalEntries(src, dest);
         int count = 0;
 
-        for(int i=0; i<src.length; i++) {
-            for(int j=0; j<src[0].length; j++) {
-                dest[count++] = src[i][j];
+        for(Double[] doubles : src) {
+            for(int j = 0; j < src[0].length; j++) {
+                dest[count++] = doubles[j];
             }
         }
     }
@@ -125,9 +125,9 @@ public class RealDenseSetOperations {
         ShapeArrayChecks.equalTotalEntries(src, dest);
         int count = 0;
 
-        for(int i=0; i<src.length; i++) {
-            for(int j=0; j<src[0].length; j++) {
-                dest[count++] = src[i][j];
+        for(Integer[] integers : src) {
+            for(int j = 0; j < src[0].length; j++) {
+                dest[count++] = integers[j];
             }
         }
     }
@@ -144,9 +144,9 @@ public class RealDenseSetOperations {
         ShapeArrayChecks.equalTotalEntries(src, dest);
         int count = 0;
 
-        for(int i=0; i<src.length; i++) {
-            for(int j=0; j<src[0].length; j++) {
-                dest[count++] = src[i][j];
+        for(double[] doubles : src) {
+            for(int j = 0; j < src[0].length; j++) {
+                dest[count++] = doubles[j];
             }
         }
     }
@@ -163,9 +163,9 @@ public class RealDenseSetOperations {
         ShapeArrayChecks.equalTotalEntries(src, dest);
         int count = 0;
 
-        for(int i=0; i<src.length; i++) {
-            for(int j=0; j<src[0].length; j++) {
-                dest[count++] = src[i][j];
+        for(int[] ints : src) {
+            for(int j = 0; j < src[0].length; j++) {
+                dest[count++] = ints[j];
             }
         }
     }

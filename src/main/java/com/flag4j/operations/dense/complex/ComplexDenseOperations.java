@@ -67,6 +67,7 @@ public final class ComplexDenseOperations {
      * Adds a scalar value to all entries of a tensor.
      * @param src1 Entries of first tensor.
      * @param a Scalar to add to all entries of this tensor.
+     * @return The result of adding the scalar value to all entries of the source tensor.
      */
     public static CNumber[] add(CNumber[] src1, double a) {
         CNumber[] sum = new CNumber[src1.length];

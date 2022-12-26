@@ -2,14 +2,14 @@ GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_
 Flag4j,com.flag4j.operations.concurrency,ThreadManager,22,67,2,2,8,12,3,6,1,6
 Flag4j,com.flag4j.operations.concurrency,CheckConcurrent,25,29,8,6,5,8,8,3,2,2
 Flag4j,com.flag4j.operations.concurrency,Configurations,46,13,0,0,15,5,7,3,7,3
-Flag4j,com.flag4j.util,RandomCNumber,0,185,2,14,0,29,2,13,0,7
-Flag4j,com.flag4j.util,StringUtils,7,50,1,7,2,10,2,5,1,2
+Flag4j,com.flag4j.util,RandomCNumber,0,184,2,14,0,29,2,13,0,7
+Flag4j,com.flag4j.util,StringUtils,7,46,1,5,2,9,2,4,1,2
 Flag4j,com.flag4j.util,ArrayUtils,7,302,0,20,2,50,1,23,1,13
 Flag4j,com.flag4j.util,Axis2D,0,34,0,0,0,5,0,4,0,4
 Flag4j,com.flag4j.util,ShapeArrayChecks,7,189,1,29,2,42,2,24,1,10
 Flag4j,com.flag4j.util,RandomTensor,82,9,6,0,15,3,7,1,4,1
 Flag4j,com.flag4j.util,ErrorMessages,42,136,0,0,5,14,4,13,4,13
-Flag4j,com.flag4j.operations.dense.complex,ComplexDenseSetOperations,7,331,0,28,2,49,1,24,1,10
+Flag4j,com.flag4j.operations.dense.complex,ComplexDenseSetOperations,7,361,0,28,2,49,1,24,1,10
 Flag4j,com.flag4j.operations.dense.complex,ComplexDenseTranspose,7,241,0,20,2,34,1,16,1,6
 Flag4j,com.flag4j.operations.dense.complex,ComplexDenseOperations,7,247,0,22,2,44,1,21,1,10
 Flag4j,com.flag4j,CVector,0,158,0,0,0,37,0,13,0,13
@@ -43,7 +43,7 @@ Flag4j,com.flag4j.linalg,SubSpace,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,CreateMatrix,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.operations.dense.real,RealDenseOperations,7,210,0,18,2,39,1,18,1,9
 Flag4j,com.flag4j.operations.dense.real,RealDenseTranspose,7,337,0,26,2,53,1,22,1,9
-Flag4j,com.flag4j.operations.dense.real,RealDenseSetOperations,10,245,0,22,3,39,2,19,2,8
+Flag4j,com.flag4j.operations.dense.real,RealDenseSetOperations,10,269,0,22,3,39,2,19,2,8
 Flag4j,com.flag4j.operations.dense.real,RealDenseCheckOperations,61,0,8,0,14,0,7,0,3,0
 Flag4j,com.flag4j.operations.dense.real,AggregateDenseReal,55,0,8,0,15,0,7,0,3,0
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseOperations,34,259,2,16,7,39,3,17,2,9
@@ -53,6 +53,6 @@ Flag4j,com.flag4j.io,PrintOptions,18,72,0,8,8,28,2,15,2,11
 Flag4j,com.flag4j.operations.common.real,Aggregate,3,150,0,24,1,30,1,17,1,5
 Flag4j,com.flag4j.operations.common.real,RealOperations,45,22,4,2,9,4,5,2,3,1
 Flag4j,com.flag4j.complex_numbers,CNumberToken,24,43,3,5,6,10,5,7,2,6
-Flag4j,com.flag4j.complex_numbers,CNumberLexer,32,295,10,58,5,77,11,30,1,6
+Flag4j,com.flag4j.complex_numbers,CNumberLexer,32,292,10,58,5,76,11,30,1,6
 Flag4j,com.flag4j.complex_numbers,CNumber,155,1602,9,167,31,300,26,161,17,82
-Flag4j,com.flag4j.complex_numbers,CNumberParser,8,178,2,16,2,39,3,8,1,1
+Flag4j,com.flag4j.complex_numbers,CNumberParser,8,166,2,14,2,37,3,7,1,1

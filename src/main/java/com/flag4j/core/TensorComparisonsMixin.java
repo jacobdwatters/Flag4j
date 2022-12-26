@@ -47,7 +47,7 @@ public interface TensorComparisonsMixin<T, U, V, W, Y, X extends Number> {
 
     /**
      * Checks if this tensor only contains ones.
-     * @return True if this tensor only contains oens. Otherwise, returns false.
+     * @return True if this tensor only contains ones. Otherwise, returns false.
      */
     boolean isOnes();
 
