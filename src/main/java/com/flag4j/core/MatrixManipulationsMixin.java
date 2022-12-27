@@ -233,7 +233,7 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    SparseCMatrix setSliceCopy(X[][] values, int rowStart, int colStart);
+    T setSliceCopy(X[][] values, int rowStart, int colStart);
 
     /**
      * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
@@ -246,7 +246,7 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    SparseCMatrix setSliceCopy(double[][] values, int rowStart, int colStart);
+    T setSliceCopy(double[][] values, int rowStart, int colStart);
 
 
     /**
@@ -260,35 +260,39 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    SparseCMatrix setSliceCopy(int[][] values, int rowStart, int colStart);
+    T setSliceCopy(int[][] values, int rowStart, int colStart);
 
 
     /**
      * Removes a specified row from this matrix.
      * @param rowIndex Index of the row to remove from this matrix.
+     * @return a copy of this matrix with the specified row removed.
      */
-    void removeRow(int rowIndex);
+    T removeRow(int rowIndex);
 
 
     /**
      * Removes a specified set of rows from this matrix.
      * @param rowIndices The indices of the rows to remove from this matrix.
+     * @return a copy of this matrix with the specified rows removed.
      */
-    void removeRows(int... rowIndices);
+    T removeRows(int... rowIndices);
 
 
     /**
      * Removes a specified column from this matrix.
      * @param colIndex Index of the column to remove from this matrix.
+     * @return a copy of this matrix with the specified column removed.
      */
-    void removeCol(int colIndex);
+    T removeCol(int colIndex);
 
 
     /**
      * Removes a specified set of columns from this matrix.
      * @param colIndices Indices of the columns to remove from this matrix.
+     * @return a copy of this matrix with the specified columns removed.
      */
-    void removeCols(int... colIndices);
+    T removeCols(int... colIndices);
 
 
     /**

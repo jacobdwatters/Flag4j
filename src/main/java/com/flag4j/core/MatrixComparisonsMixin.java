@@ -50,42 +50,6 @@ public interface MatrixComparisonsMixin<T, U, V, W, Y, X extends Number> extends
 
 
     /**
-     * Checks if two matrices are equal (element-wise).
-     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
-     * @param B Second matrix in the equality.
-     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
-     */
-    boolean equals(Matrix B);
-
-
-    /**
-     * Checks if two matrices are equal (element-wise).
-     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
-     * @param B Second matrix in the equality.
-     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
-     */
-    boolean equals(SparseMatrix B);
-
-
-    /**
-     * Checks if two matrices are equal (element-wise).
-     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
-     * @param B Second matrix in the equality.
-     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
-     */
-    boolean equals(CMatrix B);
-
-
-    /**
-     * Checks if two matrices are equal (element-wise).
-     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
-     * @param B Second matrix in the equality.
-     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
-     */
-    boolean equals(SparseCMatrix B);
-
-
-    /**
      * Checks if matrices are inverses of each other.
      * @param B Second matrix.
      * @return True if matrix B is an inverse of this matrix. Otherwise, returns false. Otherwise, returns false.

@@ -26,6 +26,8 @@ package com.flag4j.util;
 
 import com.flag4j.complex_numbers.CNumber;
 
+import java.util.ArrayList;
+
 
 /**
  * This class provides several methods useful for array manipulation.
@@ -140,6 +142,44 @@ public final class ArrayUtils {
 
 
     /**
+     * Checks if an array contains only zeros.
+     * @param src Array to check if it only contains zeros.
+     * @return True if the {@code src} array contains only zeros.
+     */
+    public static boolean isZeros(double[] src) {
+        boolean allZeros = true;
+
+        for(double value : src) {
+            if(value!=0) {
+                allZeros = false;
+                break;
+            }
+        }
+
+        return allZeros;
+    }
+
+
+    /**
+     * Checks if an array contains only zeros.
+     * @param src Array to check if it only contains zeros.
+     * @return True if the {@code src} array contains only zeros.
+     */
+    public static boolean isZeros(CNumber[] src) {
+        boolean allZeros = true;
+
+        for(CNumber value : src) {
+            if(value.re!=0 || value.im!=0) {
+                allZeros = false;
+                break;
+            }
+        }
+
+        return allZeros;
+    }
+
+
+    /**
      * Fills an array with specified value.
      * @param dest Array to fill.
      * @param fillValue Value to fill array with.
@@ -149,6 +189,22 @@ public final class ArrayUtils {
         for(int i=0; i<dest.length; i++) {
             dest[i] = new CNumber(fillValue);
         }
+    }
+
+
+    /**
+     * Converts an array of doubles to an {@link ArrayList array list}.
+     * @param src Array to convert.
+     * @return An equivalent array list.
+     */
+    public static ArrayList<Double> toArrayList(double[] src) {
+        ArrayList<Double> list = new ArrayList<>(src.length);
+
+        for(double value : src) {
+            list.add(value);
+        }
+
+        return list;
     }
 
 
@@ -223,5 +279,30 @@ public final class ArrayUtils {
         }
 
         return rangeArr;
+    }
+
+
+    /**
+     * Checks if a double array is numerically equal to a {@link CNumber complex number} array.
+     * @param src1 Double array.
+     * @param src2 Complex number array.
+     * @return True if all entries in {@code src2} have zero imaginary component and real component equal to the
+     * corresponding entry in {@code src1}. Otherwise, returns false.
+     */
+    public static boolean equals(double[] src1, CNumber[] src2) {
+        boolean equal = true;
+
+        if(src1.length != src2.length) {
+            equal = false;
+        } else {
+            for(int i=0; i<src1.length; i++) {
+                if(src1[i]!=src2[i].re || src2[i].im != 0) {
+                    equal = false;
+                    break; // No need to continue.
+                }
+            }
+        }
+
+        return equal;
     }
 }

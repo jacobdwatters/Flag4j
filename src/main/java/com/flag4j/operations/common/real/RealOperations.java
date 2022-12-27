@@ -24,6 +24,12 @@
 
 package com.flag4j.operations.common.real;
 
+import com.flag4j.Shape;
+import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.Axis2D;
+
+import static com.flag4j.operations.common.real.Aggregate.maxAbs;
+
 /**
  * This class provides low level methods for computing operations on real tensors. These methods can be applied to
  * either sparse or dense real tensors.
@@ -76,5 +82,89 @@ public class RealOperations {
         }
 
         return abs;
+    }
+
+
+    /**
+     * Compute the L<sub>p, q</sub> norm of a matrix.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p First parameter in L<sub>p, q</sub> norm.
+     * @param q Second parameter in L<sub>p, q</sub> norm.
+     * @return The L<sub>p, q</sub> norm of the matrix.
+     */
+    public static double matrixNorm(double[] src, Shape shape, double p, double q) {
+        double norm = 0;
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+
+        // TODO: Is transposing first faster here?
+        for(int j=0; j<cols; j++) {
+            for(int i=0; i<rows; i++) {
+                norm += Math.pow(src[shape.entriesIndex(i, j)], p);
+            }
+            norm += Math.pow(norm, q/p);
+        }
+
+        return Math.pow(norm, 1/q);
+    }
+
+
+    /**
+     * Compute the L<sub>p</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link #matrixNorm(double[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p Parameter in L<sub>p</sub> norm.
+     * @return The L<sub>p</sub> norm of the matrix.
+     */
+    public static double matrixNorm(double[] src, Shape shape, double p) {
+        double norm = 0;
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+
+        // TODO: Is transposing first faster here?
+        for(int j=0; j<cols; j++) {
+            for(int i=0; i<rows; i++) {
+                norm += Math.pow(src[shape.entriesIndex(i, j)], p);
+            }
+            norm += Math.pow(norm, 1.0/p);
+        }
+
+        return norm;
+    }
+
+
+    /**
+     * Compute the L<sub>2</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link #matrixNorm(double[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return The L<sub>2</sub> norm of the matrix.
+     */
+    public static double matrixNorm(double[] src, Shape shape) {
+        double norm = 0;
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+
+        // TODO: Is transposing first faster here?
+        for(int j=0; j<cols; j++) {
+            for(int i=0; i<rows; i++) {
+                norm += Math.pow(src[shape.entriesIndex(i, j)], 2);
+            }
+            norm += Math.sqrt(norm);
+        }
+
+        return norm;
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
+     * @param src Entries of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    public static double matrixInfNorm(double[] src) {
+        return maxAbs(src);
     }
 }

@@ -64,31 +64,34 @@ public class ComplexDenseTranspose {
     /**
      * Transposes a matrix using a blocked algorithm. To get or set the block size see
      * {@link Configurations#getBlockSize()} or {@link Configurations#setBlockSize(int)}.
+     * @param src Source matrix in the transpose.
+     * @param numRows Number of rows in the matrix.
+     * @param numCols Number of columns in the matrix.
      * @return The transpose of this tensor along specified axes
      */
     public static CNumber[] blockedMatrix(final CNumber[] src, final int numRows, final int numCols) {
-<span class="fc" id="L70">        CNumber[] transpose = new CNumber[numRows*numCols];</span>
-<span class="fc" id="L71">        final int blockSize = Configurations.getBlockSize();</span>
+<span class="fc" id="L73">        CNumber[] transpose = new CNumber[numRows*numCols];</span>
+<span class="fc" id="L74">        final int blockSize = Configurations.getBlockSize();</span>
         int blockRowEnd;
         int blockColEnd;
 
-<span class="fc bfc" id="L75" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i+=blockSize) {</span>
-<span class="fc bfc" id="L76" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j+=blockSize) {</span>
-<span class="fc" id="L77">                blockRowEnd = Math.min(i+blockSize, numRows);</span>
-<span class="fc" id="L78">                blockColEnd = Math.min(j+blockSize, numCols);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i+=blockSize) {</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j+=blockSize) {</span>
+<span class="fc" id="L80">                blockRowEnd = Math.min(i+blockSize, numRows);</span>
+<span class="fc" id="L81">                blockColEnd = Math.min(j+blockSize, numCols);</span>
 
                 // Transpose the block beginning at (i, j)
-<span class="fc bfc" id="L81" title="All 2 branches covered.">                for(int blockI=i; blockI&lt;blockRowEnd; blockI++) {</span>
-<span class="fc bfc" id="L82" title="All 2 branches covered.">                    for(int blockJ=j; blockJ&lt;blockColEnd; blockJ++) {</span>
-<span class="fc" id="L83">                        transpose[blockI + blockJ*numRows] = src[blockJ + blockI*numCols].clone();</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">                for(int blockI=i; blockI&lt;blockRowEnd; blockI++) {</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">                    for(int blockJ=j; blockJ&lt;blockColEnd; blockJ++) {</span>
+<span class="fc" id="L86">                        transpose[blockI + blockJ*numRows] = src[blockJ + blockI*numCols].clone();</span>
                     }
                 }
 
-<span class="fc" id="L87">                transpose[i+j*numRows] = src[j+i*numCols];</span>
+<span class="fc" id="L90">                transpose[i+j*numRows] = src[j+i*numCols];</span>
             }
         }
 
-<span class="fc" id="L91">        return transpose;</span>
+<span class="fc" id="L94">        return transpose;</span>
     }
 
 
@@ -100,16 +103,16 @@ public class ComplexDenseTranspose {
      * @return The transpose of the source matrix.
      */
     public static CNumber[] standardMatrixConcurrent(final CNumber[] src, final int numRows, final int numCols) {
-<span class="fc" id="L103">        CNumber[] dest = new CNumber[src.length];</span>
+<span class="fc" id="L106">        CNumber[] dest = new CNumber[src.length];</span>
 
         // Compute transpose concurrently.
-<span class="fc" id="L106">        ThreadManager.concurrentLoop(0, numRows, (i) -&gt; {</span>
-<span class="fc bfc" id="L107" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L108">                dest[i + j*numRows] = src[j + i*numCols].clone();</span>
+<span class="fc" id="L109">        ThreadManager.concurrentLoop(0, numRows, (i) -&gt; {</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L111">                dest[i + j*numRows] = src[j + i*numCols].clone();</span>
             }
-<span class="fc" id="L110">        });</span>
+<span class="fc" id="L113">        });</span>
 
-<span class="fc" id="L112">        return dest;</span>
+<span class="fc" id="L115">        return dest;</span>
     }
 
 
@@ -121,30 +124,30 @@ public class ComplexDenseTranspose {
      * @return The transpose of the source matrix.
      */
     public static CNumber[] blockedMatrixConcurrent(final CNumber[] src, final int numRows, final int numCols) {
-<span class="fc" id="L124">        CNumber[] dest = new CNumber[src.length];</span>
-<span class="fc" id="L125">        final int blockSize = Configurations.getBlockSize();</span>
+<span class="fc" id="L127">        CNumber[] dest = new CNumber[src.length];</span>
+<span class="fc" id="L128">        final int blockSize = Configurations.getBlockSize();</span>
 
         // Compute transpose concurrently.
-<span class="fc" id="L128">        ThreadManager.concurrentLoop(0, numRows, blockSize, (i) -&gt; {</span>
+<span class="fc" id="L131">        ThreadManager.concurrentLoop(0, numRows, blockSize, (i) -&gt; {</span>
             int blockRowEnd;
             int blockColEnd;
 
-<span class="fc bfc" id="L132" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j+=blockSize) {</span>
-<span class="fc" id="L133">                blockRowEnd = Math.min(i+blockSize, numRows);</span>
-<span class="fc" id="L134">                blockColEnd = Math.min(j+blockSize, numCols);</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j+=blockSize) {</span>
+<span class="fc" id="L136">                blockRowEnd = Math.min(i+blockSize, numRows);</span>
+<span class="fc" id="L137">                blockColEnd = Math.min(j+blockSize, numCols);</span>
 
                 // Transpose the block beginning at (i, j)
-<span class="fc bfc" id="L137" title="All 2 branches covered.">                for(int blockI=i; blockI&lt;blockRowEnd; blockI++) {</span>
-<span class="fc bfc" id="L138" title="All 2 branches covered.">                    for(int blockJ=j; blockJ&lt;blockColEnd; blockJ++) {</span>
-<span class="fc" id="L139">                        dest[blockI + blockJ*numRows] = src[blockJ + blockI*numCols].clone();</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">                for(int blockI=i; blockI&lt;blockRowEnd; blockI++) {</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">                    for(int blockJ=j; blockJ&lt;blockColEnd; blockJ++) {</span>
+<span class="fc" id="L142">                        dest[blockI + blockJ*numRows] = src[blockJ + blockI*numCols].clone();</span>
                     }
                 }
 
-<span class="fc" id="L143">                dest[i+j*numRows] = src[j+i*numCols];</span>
+<span class="fc" id="L146">                dest[i+j*numRows] = src[j+i*numCols];</span>
             }
-<span class="fc" id="L145">        });</span>
+<span class="fc" id="L148">        });</span>
 
-<span class="fc" id="L147">        return dest;</span>
+<span class="fc" id="L150">        return dest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

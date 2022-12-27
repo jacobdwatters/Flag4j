@@ -36,15 +36,26 @@ import java.util.Random;
  * This class contains methods for generating random matrices and vectors.
  */
 public class RandomTensor {
+    /**
+     * Random number generator.
+     */
     private final Random rng;
 
-<span class="nc" id="L41">    public RandomTensor() {</span>
-<span class="nc" id="L42">        rng = new Random();</span>
-<span class="nc" id="L43">    }</span>
+    /**
+     * Constructs a new random tensor generator with a seed which is unlikely to be the same as other
+     * from any other invocation of this constructor.
+     */
+<span class="nc" id="L48">    public RandomTensor() {</span>
+<span class="nc" id="L49">        rng = new Random();</span>
+<span class="nc" id="L50">    }</span>
 
-<span class="fc" id="L45">    public RandomTensor(long seed) {</span>
-<span class="fc" id="L46">        rng = new Random(seed);</span>
-<span class="fc" id="L47">    }</span>
+    /**
+     * Constructs a random tensor generator with a specified seed. Use this constructor for reproducible results.
+     * @param seed Seed of the random tensor generator.
+     */
+<span class="fc" id="L56">    public RandomTensor(long seed) {</span>
+<span class="fc" id="L57">        rng = new Random(seed);</span>
+<span class="fc" id="L58">    }</span>
 
 
     /**
@@ -54,13 +65,13 @@ public class RandomTensor {
      * @return A random vector of specified size.
      */
     public Tensor getRandomTensor(Shape shape) {
-<span class="nc" id="L57">        Tensor randTensor = new Tensor(shape);</span>
+<span class="nc" id="L68">        Tensor randTensor = new Tensor(shape);</span>
 
-<span class="nc bnc" id="L59" title="All 2 branches missed.">        for(int i=0; i&lt;randTensor.totalEntries().intValue(); i++) {</span>
-<span class="nc" id="L60">            randTensor.entries[i] = rng.nextGaussian();</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        for(int i=0; i&lt;randTensor.totalEntries().intValue(); i++) {</span>
+<span class="nc" id="L71">            randTensor.entries[i] = rng.nextGaussian();</span>
         }
 
-<span class="nc" id="L63">        return randTensor;</span>
+<span class="nc" id="L74">        return randTensor;</span>
     }
 
 
@@ -72,13 +83,13 @@ public class RandomTensor {
      * @return A random vector of specified size.
      */
     public Vector getRandomVector(int size, VectorOrientation orientation) {
-<span class="nc" id="L75">        Vector randVec = new Vector(size, orientation);</span>
+<span class="nc" id="L86">        Vector randVec = new Vector(size, orientation);</span>
 
-<span class="nc bnc" id="L77" title="All 2 branches missed.">        for(int i=0; i&lt;randVec.totalEntries().intValue(); i++) {</span>
-<span class="nc" id="L78">            randVec.entries[i] = rng.nextGaussian();</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        for(int i=0; i&lt;randVec.totalEntries().intValue(); i++) {</span>
+<span class="nc" id="L89">            randVec.entries[i] = rng.nextGaussian();</span>
         }
 
-<span class="nc" id="L81">        return randVec;</span>
+<span class="nc" id="L92">        return randVec;</span>
     }
 
 
@@ -90,13 +101,13 @@ public class RandomTensor {
      * @return A random matrix with specified size.
      */
     public Matrix getRandomMatrix(int rows, int cols) {
-<span class="nc" id="L93">        Matrix randMat = new Matrix(rows, cols);</span>
+<span class="nc" id="L104">        Matrix randMat = new Matrix(rows, cols);</span>
 
-<span class="nc bnc" id="L95" title="All 2 branches missed.">        for(int i=0; i&lt;randMat.totalEntries().intValue(); i++) {</span>
-<span class="nc" id="L96">            randMat.entries[i] = rng.nextGaussian();</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">        for(int i=0; i&lt;randMat.totalEntries().intValue(); i++) {</span>
+<span class="nc" id="L107">            randMat.entries[i] = rng.nextGaussian();</span>
         }
 
-<span class="nc" id="L99">        return randMat;</span>
+<span class="nc" id="L110">        return randMat;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

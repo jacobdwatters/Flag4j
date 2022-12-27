@@ -29,23 +29,29 @@ package com.flag4j.complex_numbers;
  * A lexer for producing the tokens of a complex number represented as a string.
  */
 class CNumberLexer {
-<span class="fc" id="L32">    private final String errMsg = &quot;Unexpected symbol while parsing CNumber: $s&quot;;</span>
+    /**
+     * Error message for unexpected symbol.
+     */
+<span class="fc" id="L35">    private final String errMsg = &quot;Unexpected symbol while parsing CNumber: $s&quot;;</span>
 
-    protected String content; // Content of Lexer
+    /**
+     * Content of the lexer.
+     */
+    protected String content;
 
     /**
      * @param content - String representation of complex number
      */
-<span class="fc" id="L39">    public CNumberLexer(String content) {</span>
-<span class="fc" id="L40">        this.content = content;</span>
-<span class="fc" id="L41">    }</span>
+<span class="fc" id="L45">    public CNumberLexer(String content) {</span>
+<span class="fc" id="L46">        this.content = content;</span>
+<span class="fc" id="L47">    }</span>
 
 
     /**
      * Gets the content of this Lexer.
      * @return content of Lexer
      */
-<span class="nc" id="L48">    public String getContent() { return content; }</span>
+<span class="nc" id="L54">    public String getContent() { return content; }</span>
 
 
     /**
@@ -53,7 +59,7 @@ class CNumberLexer {
      * @return returns true if character is digit. Otherwise, returns false.
      */
     protected boolean digit(int code ) {
-<span class="fc bfc" id="L56" title="All 4 branches covered.">        return 48&lt;=code &amp;&amp; code&lt;=57;</span>
+<span class="fc bfc" id="L62" title="All 4 branches covered.">        return 48&lt;=code &amp;&amp; code&lt;=57;</span>
     }
 
 
@@ -64,14 +70,14 @@ class CNumberLexer {
      * @return Returns ascii value of the next symbol from content. If content is empty then returns -1
      */
     protected int getNextSymbol() {
-<span class="fc" id="L67">        int result = -1;</span>
+<span class="fc" id="L73">        int result = -1;</span>
 
-<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (content.length() &gt; 0) {</span>
-<span class="fc" id="L70">            result = content.charAt(0);</span>
-<span class="fc" id="L71">            content = content.substring(1);</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (content.length() &gt; 0) {</span>
+<span class="fc" id="L76">            result = content.charAt(0);</span>
+<span class="fc" id="L77">            content = content.substring(1);</span>
         }
 
-<span class="fc" id="L74">        return result;</span>
+<span class="fc" id="L80">        return result;</span>
     }
 
 
@@ -84,14 +90,14 @@ class CNumberLexer {
      * @param sym - symbol to place back into content string
      */
     protected void putBackSymbol(int sym) {
-<span class="fc bfc" id="L87" title="All 2 branches covered.">        if(sym == -1) {</span>
-<span class="fc" id="L88">            content = &quot;&quot;;</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if(sym == -1) {</span>
+<span class="fc" id="L94">            content = &quot;&quot;;</span>
         }
         else {
-<span class="fc" id="L91">            content = (char) sym + content;</span>
+<span class="fc" id="L97">            content = (char) sym + content;</span>
         }
 
-<span class="fc" id="L94">    }</span>
+<span class="fc" id="L100">    }</span>
 
 
     /**
@@ -102,113 +108,113 @@ class CNumberLexer {
      */
     public CNumberToken getNextToken() {
 
-<span class="fc" id="L105">        int state = 1;  // state of FA</span>
-<span class="fc" id="L106">        String data = &quot;&quot;;  // specific info for the CNumberToken</span>
-<span class="fc" id="L107">        boolean done = false;</span>
+<span class="fc" id="L111">        int state = 1;  // state of FA</span>
+<span class="fc" id="L112">        String data = &quot;&quot;;  // specific info for the CNumberToken</span>
+<span class="fc" id="L113">        boolean done = false;</span>
         int sym;  // holds current symbol
 
 
         do {
-<span class="fc" id="L112">            sym = getNextSymbol(); // Will return -1 if there is no symbol to get</span>
+<span class="fc" id="L118">            sym = getNextSymbol(); // Will return -1 if there is no symbol to get</span>
 
-<span class="fc bfc" id="L114" title="All 2 branches covered.">            if(state == 1) {</span>
-<span class="pc bpc" id="L115" title="3 of 8 branches missed.">                if(sym == 9 || sym == 10 || sym == 13 ||</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">            if(state == 1) {</span>
+<span class="pc bpc" id="L121" title="3 of 8 branches missed.">                if(sym == 9 || sym == 10 || sym == 13 ||</span>
                         sym == 32) { // Whitespace
-<span class="fc" id="L117">                    state = 1;</span>
+<span class="fc" id="L123">                    state = 1;</span>
                 }
-<span class="fc bfc" id="L119" title="All 2 branches covered.">                else if(sym == 45) {</span>
-<span class="fc" id="L120">                    state = 2;</span>
-<span class="fc" id="L121">                    data += (char) sym;</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">                else if(sym == 45) {</span>
+<span class="fc" id="L126">                    state = 2;</span>
+<span class="fc" id="L127">                    data += (char) sym;</span>
                 }
-<span class="fc bfc" id="L123" title="All 2 branches covered.">                else if(sym == 43) {</span>
-<span class="fc" id="L124">                    state = 4;</span>
-<span class="fc" id="L125">                    data += (char) sym;</span>
-<span class="fc" id="L126">                    done = true;</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">                else if(sym == 43) {</span>
+<span class="fc" id="L130">                    state = 4;</span>
+<span class="fc" id="L131">                    data += (char) sym;</span>
+<span class="fc" id="L132">                    done = true;</span>
                 }
-<span class="fc bfc" id="L128" title="All 2 branches covered.">                else if(digit(sym)) {</span>
-<span class="fc" id="L129">                    state = 3;</span>
-<span class="fc" id="L130">                    data += (char) sym;</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">                else if(digit(sym)) {</span>
+<span class="fc" id="L135">                    state = 3;</span>
+<span class="fc" id="L136">                    data += (char) sym;</span>
                 }
-<span class="fc bfc" id="L132" title="All 2 branches covered.">                else if(sym == 'i') {</span>
-<span class="fc" id="L133">                    state = 6;</span>
-<span class="fc" id="L134">                    data += (char) sym;</span>
-<span class="fc" id="L135">                    done = true;</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">                else if(sym == 'i') {</span>
+<span class="fc" id="L139">                    state = 6;</span>
+<span class="fc" id="L140">                    data += (char) sym;</span>
+<span class="fc" id="L141">                    done = true;</span>
                 }
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">                else if(sym == -1) { // We have reached the end of the string</span>
-<span class="fc" id="L138">                    state = 5;</span>
-<span class="fc" id="L139">                    done = true;</span>
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">                else if(sym == -1) { // We have reached the end of the string</span>
+<span class="fc" id="L144">                    state = 5;</span>
+<span class="fc" id="L145">                    done = true;</span>
                 }
                 else {
-<span class="nc" id="L142">                    error(String.format(errMsg, (char) sym));</span>
+<span class="nc" id="L148">                    error(String.format(errMsg, (char) sym));</span>
                 }
             }
 
-<span class="fc bfc" id="L146" title="All 2 branches covered.">            else if(state == 2) {</span>
-<span class="pc bpc" id="L147" title="3 of 8 branches missed.">                if(sym == 9 || sym == 10 || sym == 13 ||</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">            else if(state == 2) {</span>
+<span class="pc bpc" id="L153" title="3 of 8 branches missed.">                if(sym == 9 || sym == 10 || sym == 13 ||</span>
                         sym == 32) { // Whitespace
-<span class="fc" id="L149">                    putBackSymbol(sym);</span>
-<span class="fc" id="L150">                    done = true;</span>
+<span class="fc" id="L155">                    putBackSymbol(sym);</span>
+<span class="fc" id="L156">                    done = true;</span>
                 }
-<span class="fc bfc" id="L152" title="All 2 branches covered.">                else if(digit(sym)) {</span>
-<span class="fc" id="L153">                    state = 3;</span>
-<span class="fc" id="L154">                    data += (char) sym;</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">                else if(digit(sym)) {</span>
+<span class="fc" id="L159">                    state = 3;</span>
+<span class="fc" id="L160">                    data += (char) sym;</span>
                 }
                 else {
-<span class="fc" id="L157">                    putBackSymbol(sym);</span>
-<span class="fc" id="L158">                    done = true;</span>
+<span class="fc" id="L163">                    putBackSymbol(sym);</span>
+<span class="fc" id="L164">                    done = true;</span>
                 }
             }
-<span class="fc bfc" id="L161" title="All 2 branches covered.">            else if(state == 3) {</span>
-<span class="fc bfc" id="L162" title="All 2 branches covered.">                if(digit(sym)) {</span>
-<span class="fc" id="L163">                    state = 3;</span>
-<span class="fc" id="L164">                    data += (char) sym;</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">            else if(state == 3) {</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">                if(digit(sym)) {</span>
+<span class="fc" id="L169">                    state = 3;</span>
+<span class="fc" id="L170">                    data += (char) sym;</span>
                 }
-<span class="fc bfc" id="L166" title="All 2 branches covered.">                else if(sym == '.') {</span>
-<span class="fc" id="L167">                    state = 7;</span>
-<span class="fc" id="L168">                    data += (char) sym;</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">                else if(sym == '.') {</span>
+<span class="fc" id="L173">                    state = 7;</span>
+<span class="fc" id="L174">                    data += (char) sym;</span>
                 }
                 else {
-<span class="fc" id="L171">                    putBackSymbol(sym);</span>
-<span class="fc" id="L172">                    done = true;</span>
+<span class="fc" id="L177">                    putBackSymbol(sym);</span>
+<span class="fc" id="L178">                    done = true;</span>
                 }
             }
-<span class="fc bfc" id="L175" title="All 2 branches covered.">            else if(state == 7) {</span>
-<span class="pc bpc" id="L176" title="1 of 2 branches missed.">                if(digit(sym)) {</span>
-<span class="fc" id="L177">                    state = 8;</span>
-<span class="fc" id="L178">                    data += (char) sym;</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">            else if(state == 7) {</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">                if(digit(sym)) {</span>
+<span class="fc" id="L183">                    state = 8;</span>
+<span class="fc" id="L184">                    data += (char) sym;</span>
                 }
                 else {
-<span class="nc" id="L181">                    error(String.format(errMsg, (char) sym));</span>
+<span class="nc" id="L187">                    error(String.format(errMsg, (char) sym));</span>
                 }
             }
-<span class="pc bpc" id="L184" title="1 of 2 branches missed.">            else if(state == 8) {</span>
-<span class="fc bfc" id="L185" title="All 2 branches covered.">                if(digit(sym)) {</span>
-<span class="fc" id="L186">                    state = 8;</span>
-<span class="fc" id="L187">                    data += (char) sym;</span>
+<span class="pc bpc" id="L190" title="1 of 2 branches missed.">            else if(state == 8) {</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">                if(digit(sym)) {</span>
+<span class="fc" id="L192">                    state = 8;</span>
+<span class="fc" id="L193">                    data += (char) sym;</span>
                 }
                 else {
-<span class="fc" id="L190">                    putBackSymbol(sym);</span>
-<span class="fc" id="L191">                    done = true;</span>
+<span class="fc" id="L196">                    putBackSymbol(sym);</span>
+<span class="fc" id="L197">                    done = true;</span>
                 }
             }
 
-<span class="fc bfc" id="L195" title="All 2 branches covered.">        } while(!done);</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        } while(!done);</span>
 
-<span class="fc bfc" id="L197" title="All 4 branches covered.">        if(state == 2 || state == 4) { // we have an operator</span>
-<span class="fc" id="L198">            return new CNumberToken(&quot;opp&quot;, data);</span>
+<span class="fc bfc" id="L203" title="All 4 branches covered.">        if(state == 2 || state == 4) { // we have an operator</span>
+<span class="fc" id="L204">            return new CNumberToken(&quot;opp&quot;, data);</span>
         }
-<span class="fc bfc" id="L200" title="All 4 branches covered.">        else if(state == 3 || state == 8) { // we have a number</span>
-<span class="fc" id="L201">            return new CNumberToken(&quot;num&quot;, data);</span>
+<span class="fc bfc" id="L206" title="All 4 branches covered.">        else if(state == 3 || state == 8) { // we have a number</span>
+<span class="fc" id="L207">            return new CNumberToken(&quot;num&quot;, data);</span>
         }
-<span class="fc bfc" id="L203" title="All 2 branches covered.">        else if(state == 5) { // end of number</span>
-<span class="fc" id="L204">            return new CNumberToken(&quot;eof&quot;, data);</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">        else if(state == 5) { // end of number</span>
+<span class="fc" id="L210">            return new CNumberToken(&quot;eof&quot;, data);</span>
         }
-<span class="pc bpc" id="L206" title="1 of 2 branches missed.">        else if(state == 6) { // we have the imaginary unit</span>
-<span class="fc" id="L207">            return new CNumberToken(&quot;im&quot;, data);</span>
+<span class="pc bpc" id="L212" title="1 of 2 branches missed.">        else if(state == 6) { // we have the imaginary unit</span>
+<span class="fc" id="L213">            return new CNumberToken(&quot;im&quot;, data);</span>
         }
         else {
-<span class="nc" id="L210">            error(&quot;somehow Lexer FA halted in bad state &quot; + state );</span>
-<span class="nc" id="L211">            return null;</span>
+<span class="nc" id="L216">            error(&quot;somehow Lexer FA halted in bad state &quot; + state );</span>
+<span class="nc" id="L217">            return null;</span>
         }
     }
 
@@ -218,7 +224,7 @@ class CNumberLexer {
      * @param message - error message to print
      */
     protected static void error( String message ) {
-<span class="fc" id="L221">        throw new RuntimeException(message);</span>
+<span class="fc" id="L227">        throw new RuntimeException(message);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
