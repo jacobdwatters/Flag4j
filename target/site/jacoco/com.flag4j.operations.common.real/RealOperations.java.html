@@ -24,11 +24,17 @@
 
 package com.flag4j.operations.common.real;
 
+import com.flag4j.Shape;
+import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.Axis2D;
+
+import static com.flag4j.operations.common.real.Aggregate.maxAbs;
+
 /**
  * This class provides low level methods for computing operations on real tensors. These methods can be applied to
  * either sparse or dense real tensors.
  */
-<span class="nc" id="L31">public class RealOperations {</span>
+<span class="nc" id="L37">public class RealOperations {</span>
 
     /**
      * Computes the scalar multiplication of a tensor.
@@ -37,13 +43,13 @@ package com.flag4j.operations.common.real;
      * @return The scalar multiplication of the tensor.
      */
     public static double[] scalMult(double[] src, double factor) {
-<span class="fc" id="L40">        double[] product = new double[src.length];</span>
+<span class="fc" id="L46">        double[] product = new double[src.length];</span>
 
-<span class="fc bfc" id="L42" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="fc" id="L43">            product[i] = src[i]*factor;</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L49">            product[i] = src[i]*factor;</span>
         }
 
-<span class="fc" id="L46">        return product;</span>
+<span class="fc" id="L52">        return product;</span>
     }
 
 
@@ -53,13 +59,13 @@ package com.flag4j.operations.common.real;
      * @return The element-wise square root of the tensor.
      */
     public static double[] sqrt(double[] src) {
-<span class="nc" id="L56">        double[] roots = new double[src.length];</span>
+<span class="nc" id="L62">        double[] roots = new double[src.length];</span>
 
-<span class="nc bnc" id="L58" title="All 2 branches missed.">        for(int i=0; i&lt;roots.length; i++) {</span>
-<span class="nc" id="L59">            roots[i] = Math.sqrt(src[i]);</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        for(int i=0; i&lt;roots.length; i++) {</span>
+<span class="nc" id="L65">            roots[i] = Math.sqrt(src[i]);</span>
         }
 
-<span class="nc" id="L62">        return roots;</span>
+<span class="nc" id="L68">        return roots;</span>
     }
 
 
@@ -69,13 +75,97 @@ package com.flag4j.operations.common.real;
      * @return The element-wise absolute value of the tensor.
      */
     public static double[] abs(double[] src) {
-<span class="nc" id="L72">        double[] abs = new double[src.length];</span>
+<span class="nc" id="L78">        double[] abs = new double[src.length];</span>
 
-<span class="nc bnc" id="L74" title="All 2 branches missed.">        for(int i=0; i&lt;abs.length; i++) {</span>
-<span class="nc" id="L75">            abs[i] = Math.abs(src[i]);</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        for(int i=0; i&lt;abs.length; i++) {</span>
+<span class="nc" id="L81">            abs[i] = Math.abs(src[i]);</span>
         }
 
-<span class="nc" id="L78">        return abs;</span>
+<span class="nc" id="L84">        return abs;</span>
+    }
+
+
+    /**
+     * Compute the L&lt;sub&gt;p, q&lt;/sub&gt; norm of a matrix.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p First parameter in L&lt;sub&gt;p, q&lt;/sub&gt; norm.
+     * @param q Second parameter in L&lt;sub&gt;p, q&lt;/sub&gt; norm.
+     * @return The L&lt;sub&gt;p, q&lt;/sub&gt; norm of the matrix.
+     */
+    public static double matrixNorm(double[] src, Shape shape, double p, double q) {
+<span class="nc" id="L97">        double norm = 0;</span>
+<span class="nc" id="L98">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="nc" id="L99">        int cols = shape.dims[Axis2D.col()];</span>
+
+        // TODO: Is transposing first faster here?
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        for(int j=0; j&lt;cols; j++) {</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">            for(int i=0; i&lt;rows; i++) {</span>
+<span class="nc" id="L104">                norm += Math.pow(src[shape.entriesIndex(i, j)], p);</span>
+            }
+<span class="nc" id="L106">            norm += Math.pow(norm, q/p);</span>
+        }
+
+<span class="nc" id="L109">        return Math.pow(norm, 1/q);</span>
+    }
+
+
+    /**
+     * Compute the L&lt;sub&gt;p&lt;/sub&gt; norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link #matrixNorm(double[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p Parameter in L&lt;sub&gt;p&lt;/sub&gt; norm.
+     * @return The L&lt;sub&gt;p&lt;/sub&gt; norm of the matrix.
+     */
+    public static double matrixNorm(double[] src, Shape shape, double p) {
+<span class="nc" id="L122">        double norm = 0;</span>
+<span class="nc" id="L123">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="nc" id="L124">        int cols = shape.dims[Axis2D.col()];</span>
+
+        // TODO: Is transposing first faster here?
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        for(int j=0; j&lt;cols; j++) {</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">            for(int i=0; i&lt;rows; i++) {</span>
+<span class="nc" id="L129">                norm += Math.pow(src[shape.entriesIndex(i, j)], p);</span>
+            }
+<span class="nc" id="L131">            norm += Math.pow(norm, 1.0/p);</span>
+        }
+
+<span class="nc" id="L134">        return norm;</span>
+    }
+
+
+    /**
+     * Compute the L&lt;sub&gt;2&lt;/sub&gt; norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link #matrixNorm(double[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return The L&lt;sub&gt;2&lt;/sub&gt; norm of the matrix.
+     */
+    public static double matrixNorm(double[] src, Shape shape) {
+<span class="nc" id="L146">        double norm = 0;</span>
+<span class="nc" id="L147">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="nc" id="L148">        int cols = shape.dims[Axis2D.col()];</span>
+
+        // TODO: Is transposing first faster here?
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        for(int j=0; j&lt;cols; j++) {</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">            for(int i=0; i&lt;rows; i++) {</span>
+<span class="nc" id="L153">                norm += Math.pow(src[shape.entriesIndex(i, j)], 2);</span>
+            }
+<span class="nc" id="L155">            norm += Math.sqrt(norm);</span>
+        }
+
+<span class="nc" id="L158">        return norm;</span>
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
+     * @param src Entries of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    public static double matrixInfNorm(double[] src) {
+<span class="nc" id="L168">        return maxAbs(src);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
