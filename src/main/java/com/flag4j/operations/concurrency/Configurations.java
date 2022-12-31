@@ -49,7 +49,6 @@ public abstract class Configurations {
      */
     private static final int DEFAULT_MIN_RECURSIVE_SIZE = 128;
 
-
     /**
      * The block size to use in blocked algorithms.
      */
