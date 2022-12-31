@@ -25,11 +25,6 @@
 package com.flag4j.core;
 
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
-import com.flag4j.SparseCMatrix;
-import com.flag4j.SparseMatrix;
-
 /**
  * This interface specifies comparisons which all matrices should implement.
  *

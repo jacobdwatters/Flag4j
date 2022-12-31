@@ -36,6 +36,16 @@ import com.flag4j.util.ErrorMessages;
 public abstract class MatrixBase<T> extends TensorBase<T> {
 
     /**
+     * The number of rows in this matrix.
+     */
+    public final int numRows;
+    /**
+     * The number of columns in this matrix.
+     */
+    public final int numCols;
+
+
+    /**
      * Constructs a basic matrix with a given shape.
      * @param shape Shape of this matrix.
      * @param entries Entries of this matrix.
@@ -43,6 +53,9 @@ public abstract class MatrixBase<T> extends TensorBase<T> {
      */
     public MatrixBase(Shape shape, T entries) {
         super(shape, entries);
+
+        numRows = shape.dims[Axis2D.row()];
+        numCols = shape.dims[Axis2D.col()];
 
         if(shape.getRank() != 2) {
             throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), 2));
@@ -55,7 +68,7 @@ public abstract class MatrixBase<T> extends TensorBase<T> {
      * @return The number of rows in this matrix.
      */
     public int numRows() {
-        return shape.dims[Axis2D.row()];
+        return numRows;
     }
 
 
@@ -64,6 +77,6 @@ public abstract class MatrixBase<T> extends TensorBase<T> {
      * @return The number of columns in this matrix.
      */
     public int numCols() {
-        return shape.dims[Axis2D.col()];
+        return numCols;
     }
 }

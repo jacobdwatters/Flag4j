@@ -26,7 +26,6 @@ package com.flag4j.core;
 
 
 import com.flag4j.Shape;
-import com.flag4j.SparseCMatrix;
 
 /**
  * This interface specifies manipulations which all matrices should implement.

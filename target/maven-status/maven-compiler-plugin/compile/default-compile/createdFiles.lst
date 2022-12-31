@@ -1,5 +1,6 @@
 com\flag4j\operations\dense\real\RealDenseEquals.class
-com\flag4j\Testing.class
+com\flag4j\operations\dense\real\RealMatrixMultiplication.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseEquals.class
 com\flag4j\operations\dense_sparse\real\RealDenseSparseEquals.class
 com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseEquals.class
+com\flag4j\TestingMatMult.class

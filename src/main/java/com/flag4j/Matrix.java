@@ -42,7 +42,7 @@ import java.util.Arrays;
 
 
 /**
- * Real dense matrix. Stored in row major format.
+ * Real dense matrix. Stored in row major format. This class is equivalent to a real dense tensor of rank 2.
  */
 public class Matrix extends RealMatrixBase implements
         MatrixComparisonsMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double>,
@@ -193,8 +193,8 @@ public class Matrix extends RealMatrixBase implements
         boolean result = true;
 
         if(isSquare()) {
-            for(int i=0; i<numRows(); i++) {
-                if(this.entries[shape.entriesIndex(i, i)]!=1) {
+            for(int i=0; i<numRows; i++) {
+                if(this.entries[i*numCols + i]!=1) {
                     result = false;
                     break; // No need to continue.
                 }
@@ -365,7 +365,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setCol(Double[] values, int colIndex) {
-        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numRows());
+        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[shape.entriesIndex(i, colIndex)] = values[i];
@@ -382,7 +382,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setCol(double[] values, int colIndex) {
-        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numRows());
+        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[shape.entriesIndex(i, colIndex)] = values[i];
@@ -399,7 +399,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setCol(int[] values, int colIndex) {
-        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numRows());
+        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[shape.entriesIndex(i, colIndex)] = values[i];
@@ -433,7 +433,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setRow(double[] values, int rowIndex) {
-        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numCols());
+        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numCols);
 
         for(int i=0; i<values.length; i++) {
             super.entries[shape.entriesIndex(rowIndex, i)] = values[i];
@@ -450,7 +450,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setRow(int[] values, int rowIndex) {
-        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numCols());
+        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numCols);
 
         for(int i=0; i<values.length; i++) {
             super.entries[shape.entriesIndex(rowIndex, i)] = values[i];
@@ -471,8 +471,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setSlice(Matrix values, int rowStart, int colStart) {
-        for(int i=0; i<values.numRows(); i++) {
-            for(int j=0; j<values.numCols(); j++) {
+        for(int i=0; i<values.numRows; i++) {
+            for(int j=0; j<values.numCols; j++) {
                 this.entries[shape.entriesIndex(i, j)] = values.entries[values.shape.entriesIndex(i, j)];
             }
         }
@@ -558,8 +558,8 @@ public class Matrix extends RealMatrixBase implements
     public Matrix setSliceCopy(Matrix values, int rowStart, int colStart) {
         Matrix copy = new Matrix(this);
 
-        for(int i=0; i<values.numRows(); i++) {
-            for(int j=0; j<values.numCols(); j++) {
+        for(int i=0; i<values.numRows; i++) {
+            for(int j=0; j<values.numCols; j++) {
                 copy.entries[shape.entriesIndex(i, j)] = values.entries[values.shape.entriesIndex(i, j)];
             }
         }
@@ -653,14 +653,14 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix removeRow(int rowIndex) {
-        Matrix copy = new Matrix(this.numRows()-1, this.numCols());
+        Matrix copy = new Matrix(this.numRows-1, this.numCols);
 
         int row = 0;
         int col = 0;
 
-        for(int i=0; i<this.numRows(); i++) {
+        for(int i=0; i<this.numRows; i++) {
             if(i!=rowIndex) {
-                for(int j=0; j<this.numCols(); j++) {
+                for(int j=0; j<this.numCols; j++) {
                     copy.entries[shape.entriesIndex(row, col)] = this.entries[shape.entriesIndex(i, j)];
                     col++;
                 }
@@ -998,19 +998,19 @@ public class Matrix extends RealMatrixBase implements
         double[] transposeEntries;
 
         // TODO: Check if standard or blocked should be used.
-        if(CheckConcurrent.simpleMatrixCheck(numRows(), numCols())) {
+        if(CheckConcurrent.simpleMatrixCheck(numRows, numCols)) {
             // Use concurrent implementation
             transposeEntries = RealDenseTranspose.blockedMatrixConcurrent(
-                    entries, numRows(), numCols()
+                    entries, numRows, numCols
             );
         } else {
             // Use sequential implementation
             transposeEntries = RealDenseTranspose.blockedMatrix(
-                    entries, numRows(), numCols()
+                    entries, numRows, numCols
             );
         }
 
-        return new Matrix(new Shape(numCols(), numRows()), transposeEntries);
+        return new Matrix(new Shape(numCols, numRows), transposeEntries);
     }
 
 
@@ -1973,6 +1973,19 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
+     * Gets the element in this matrix at the specified indices.
+     * @param indices Indices of element.
+     * @return The element at the specified indices.
+     * @throws IllegalArgumentException If the number of indices is not two.
+     */
+    @Override
+    public Double get(int... indices) {
+        ShapeArrayChecks.arrayLengthsCheck(indices.length, shape.getRank());
+        return entries[shape.entriesIndex(indices)];
+    }
+
+
+    /**
      * Get the row of this matrix at the specified index.
      *
      * @param i Index of row to get.
@@ -2003,7 +2016,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isSquare() {
-        return numRows()==numCols();
+        return numRows==numCols;
     }
 
 
@@ -2014,7 +2027,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isVector() {
-        return numRows()<=1 || numCols()<=1;
+        return numRows<=1 || numCols<=1;
     }
 
 

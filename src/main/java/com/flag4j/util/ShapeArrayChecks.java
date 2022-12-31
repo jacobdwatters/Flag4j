@@ -65,7 +65,7 @@ public final class ShapeArrayChecks {
         // If the shapes are not of rank 2 then they are not matrices.
         if(shape1.getRank()==2 && shape2.getRank()==2) {
             // Ensure the number of columns in matrix one is equal to the number of rows in matrix 2.
-            if(shape1.dims[1] != shape2.dims[0]) {
+            if(shape1.dims[Axis2D.col()] != shape2.dims[Axis2D.row()]) {
                 pass = false;
             }
 

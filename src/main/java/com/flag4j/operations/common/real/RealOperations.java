@@ -25,7 +25,6 @@
 package com.flag4j.operations.common.real;
 
 import com.flag4j.Shape;
-import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
 
 import static com.flag4j.operations.common.real.Aggregate.maxAbs;
