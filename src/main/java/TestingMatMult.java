@@ -25,6 +25,7 @@
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.operations.dense.real.RealMatrixMultiplication;
+import com.flag4j.util.Axis2D;
 import com.flag4j.util.RandomTensor;
 
 public class TestingMatMult {
@@ -43,7 +44,7 @@ public class TestingMatMult {
 
         for(int i=0; i<runs; i++) {
             Matrix A = rng.getRandomMatrix(numRows, numCols);
-            Matrix B = rng.getRandomMatrix(numRows, numCols);
+            Matrix B = rng.getRandomMatrix(numCols, 1);
 
             // ---------------------- Sequential Algorithms ----------------------
             startTime = System.nanoTime();
@@ -52,7 +53,7 @@ public class TestingMatMult {
             runTimes[0] += (endTime-startTime)*1.0e-6;
 
             startTime = System.nanoTime();
-            RealMatrixMultiplication.standardReordered(A.entries, A.shape, B.entries, B.shape);
+            RealMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
             endTime = System.nanoTime();
             runTimes[1] += (endTime-startTime)*1.0e-6;
 
@@ -73,7 +74,7 @@ public class TestingMatMult {
             runTimes[4] += (endTime-startTime)*1.0e-6;
 
             startTime = System.nanoTime();
-            RealMatrixMultiplication.concurrentStandardReordered(A.entries, A.shape, B.entries, B.shape);
+            RealMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
             endTime = System.nanoTime();
             runTimes[5] += (endTime-startTime)*1.0e-6;
 
@@ -91,15 +92,15 @@ public class TestingMatMult {
         Object[] row = new Object[runTimes.length+1];
         row[0] = shape.toString();
         for(int i=1; i<row.length; i++) {
-            row[i] = runTimes[i-1]/ (double) runs;
+            row[i] = runTimes[i-1] / (double) runs;
         }
 
         System.out.println(String.format(rowBase, row));
     }
 
     public static void main(String[] args) {
-        int[] sizeList = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 25, 30, 40, 50, 100, 250};
-        int runs = 500;
+        Shape[] shapeList = {new Shape(15000, 15000)};
+        int runs = 1;
 
         System.out.println("Flag4j Square Matrix-Matrix Multiply Benchmarks:");
         System.out.println("Runtimes averaged over " + runs + " runs. All times in ms.");
@@ -109,9 +110,9 @@ public class TestingMatMult {
         System.out.println("----------------------------------------------------------------------" +
                 "----------------------------------------------------------------------------");
 
-        for(int size : sizeList) {
-            int numRows = size;
-            int numCols = numRows;
+        for(Shape shape : shapeList) {
+            int numRows = shape.get(Axis2D.row());
+            int numCols = shape.get(Axis2D.col());
             runFlag4jAlgos(numRows, numCols, runs);
         }
     }

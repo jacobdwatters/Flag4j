@@ -26,6 +26,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
+import com.flag4j.operations.MatrixMultiply;
 import com.flag4j.operations.common.real.Aggregate;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.concurrency.CheckConcurrent;
@@ -1091,7 +1092,10 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(Matrix B) {
-        return null;
+        double[] entries = MatrixMultiply.dispatch(this, B);
+        Shape shape = new Shape(this.numRows, B.numCols);
+
+        return new Matrix(shape, entries);
     }
 
 

@@ -84,7 +84,7 @@ public class RealMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
-    public static double[] standardReordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static double[] reordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         ShapeArrayChecks.matMultShapeCheck(shape1, shape2);
 
         int rows1 = shape1.dims[Axis2D.row()];
@@ -229,7 +229,7 @@ public class RealMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
-    public static double[] concurrentStandardReordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static double[] concurrentReordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         ShapeArrayChecks.matMultShapeCheck(shape1, shape2);
 
         int rows1 = shape1.dims[Axis2D.row()];
