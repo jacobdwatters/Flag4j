@@ -110,6 +110,7 @@ public class MatrixMultiply {
         if(getRatio(shape1) >= SQUARENESS_RATIO) {
             // Then the first matrix is approximately square.
             if(cols2==1) {
+                // Multiplying by a column vector.
                 if(rows1<=100) {
                     algorithm = Algorithm.STANDARD;
                 } else if(rows1<=300) {
@@ -160,7 +161,7 @@ public class MatrixMultiply {
                 } else if(rows1<=50){
                     algorithm = Algorithm.CONCURRENT_STANDARD;
                 } else {
-                    algorithm = Algorithm.CONCURRENT_STANDARD;
+                    algorithm = Algorithm.CONCURRENT_REORDERED;
                 }
             }
         }
@@ -173,7 +174,7 @@ public class MatrixMultiply {
      * Computes the squareness ratio of a matrix. This is a value between 0 and 1 with 1 being perfectly
      * square and 0 being a row/column vector.
      * @param shape Shape of the matrix to compute the squareness ratio of.
-     * @return
+     * @return The squareness ratio for the specified shape.
      */
     private static double getRatio(Shape shape) {
         int numRows = shape.get(Axis2D.row());
