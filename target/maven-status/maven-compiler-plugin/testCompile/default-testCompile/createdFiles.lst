@@ -27,12 +27,14 @@ com\flag4j\MatrixReshapeTests.class
 com\flag4j\MatrixConstructorTests.class
 com\flag4j\io\PrintOptionsTests.class
 com\flag4j\SparseTensorConstructorTests.class
+com\flag4j\operations\dense\complex\ComplexMatrixMultiplyTests.class
 com\flag4j\TensorConstructorTests.class
 com\flag4j\MatrixAddTests.class
 com\flag4j\util\ArrayUtilTests.class
 com\flag4j\VectorConstructorTests.class
 com\flag4j\operations\dense\complex\ComplexDenseOperationsTests.class
 com\flag4j\complex_numbers\CNumberSqrtTest.class
+com\flag4j\operations\dense\real\MatrixMultiplyTests.class
 com\flag4j\SparseCMatrixConstructorTests.class
 com\flag4j\operations\dense\real\RealDenseTransposeTests.class
 com\flag4j\complex_numbers\CNumberComparisonTest.class

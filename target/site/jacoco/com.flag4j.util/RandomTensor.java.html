@@ -24,10 +24,7 @@
 
 package com.flag4j.util;
 
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
-import com.flag4j.Tensor;
-import com.flag4j.Vector;
+import com.flag4j.*;
 import com.flag4j.core.VectorOrientation;
 
 import java.util.Random;
@@ -40,21 +37,24 @@ public class RandomTensor {
      * Random number generator.
      */
     private final Random rng;
+    private final RandomCNumber complex_rng;
 
     /**
      * Constructs a new random tensor generator with a seed which is unlikely to be the same as other
      * from any other invocation of this constructor.
      */
-<span class="nc" id="L48">    public RandomTensor() {</span>
-<span class="nc" id="L49">        rng = new Random();</span>
-<span class="nc" id="L50">    }</span>
+<span class="nc" id="L46">    public RandomTensor() {</span>
+<span class="nc" id="L47">        rng = new Random();</span>
+<span class="nc" id="L48">        complex_rng = new RandomCNumber();</span>
+<span class="nc" id="L49">    }</span>
 
     /**
      * Constructs a random tensor generator with a specified seed. Use this constructor for reproducible results.
      * @param seed Seed of the random tensor generator.
      */
-<span class="fc" id="L56">    public RandomTensor(long seed) {</span>
-<span class="fc" id="L57">        rng = new Random(seed);</span>
+<span class="fc" id="L55">    public RandomTensor(long seed) {</span>
+<span class="fc" id="L56">        rng = new Random(seed);</span>
+<span class="fc" id="L57">        complex_rng = new RandomCNumber(seed);</span>
 <span class="fc" id="L58">    }</span>
 
 
@@ -108,6 +108,41 @@ public class RandomTensor {
         }
 
 <span class="nc" id="L110">        return randMat;</span>
+    }
+
+
+    /**
+     * Gets a complex tensor with random values. Values are normally distributed with mean of zero and standard deviation
+     * of one.
+     * @param shape Shape of the tensor.
+     * @return A random vector of specified size.
+     */
+    public CTensor getRandomCTensor(Shape shape) {
+<span class="nc" id="L121">        CTensor randTensor = new CTensor(shape);</span>
+
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        for(int i=0; i&lt;randTensor.totalEntries().intValue(); i++) {</span>
+<span class="nc" id="L124">            randTensor.entries[i] = complex_rng.randn();</span>
+        }
+
+<span class="nc" id="L127">        return randTensor;</span>
+    }
+
+
+    /**
+     * Gets a complex matrix with random values. Values are normally distributed with mean of zero and standard deviation
+     * of one.
+     * @param rows Number of rows in the resulting matrix.
+     * @param cols Number of columns in the resulting matrix.
+     * @return A random matrix with specified size.
+     */
+    public CMatrix getRandomCMatrix(int rows, int cols) {
+<span class="nc" id="L139">        CMatrix randMat = new CMatrix(rows, cols);</span>
+
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        for(int i=0; i&lt;randMat.totalEntries().intValue(); i++) {</span>
+<span class="nc" id="L142">            randMat.entries[i] = complex_rng.randn();</span>
+        }
+
+<span class="nc" id="L145">        return randMat;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

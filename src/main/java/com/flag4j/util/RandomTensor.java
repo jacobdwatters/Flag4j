@@ -24,10 +24,7 @@
 
 package com.flag4j.util;
 
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
-import com.flag4j.Tensor;
-import com.flag4j.Vector;
+import com.flag4j.*;
 import com.flag4j.core.VectorOrientation;
 
 import java.util.Random;
@@ -40,6 +37,7 @@ public class RandomTensor {
      * Random number generator.
      */
     private final Random rng;
+    private final RandomCNumber complex_rng;
 
     /**
      * Constructs a new random tensor generator with a seed which is unlikely to be the same as other
@@ -47,6 +45,7 @@ public class RandomTensor {
      */
     public RandomTensor() {
         rng = new Random();
+        complex_rng = new RandomCNumber();
     }
 
     /**
@@ -55,6 +54,7 @@ public class RandomTensor {
      */
     public RandomTensor(long seed) {
         rng = new Random(seed);
+        complex_rng = new RandomCNumber(seed);
     }
 
 
@@ -105,6 +105,41 @@ public class RandomTensor {
 
         for(int i=0; i<randMat.totalEntries().intValue(); i++) {
             randMat.entries[i] = rng.nextGaussian();
+        }
+
+        return randMat;
+    }
+
+
+    /**
+     * Gets a complex tensor with random values. Values are normally distributed with mean of zero and standard deviation
+     * of one.
+     * @param shape Shape of the tensor.
+     * @return A random vector of specified size.
+     */
+    public CTensor getRandomCTensor(Shape shape) {
+        CTensor randTensor = new CTensor(shape);
+
+        for(int i=0; i<randTensor.totalEntries().intValue(); i++) {
+            randTensor.entries[i] = complex_rng.randn();
+        }
+
+        return randTensor;
+    }
+
+
+    /**
+     * Gets a complex matrix with random values. Values are normally distributed with mean of zero and standard deviation
+     * of one.
+     * @param rows Number of rows in the resulting matrix.
+     * @param cols Number of columns in the resulting matrix.
+     * @return A random matrix with specified size.
+     */
+    public CMatrix getRandomCMatrix(int rows, int cols) {
+        CMatrix randMat = new CMatrix(rows, cols);
+
+        for(int i=0; i<randMat.totalEntries().intValue(); i++) {
+            randMat.entries[i] = complex_rng.randn();
         }
 
         return randMat;

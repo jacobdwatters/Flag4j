@@ -22,8 +22,10 @@
  * SOFTWARE.
  */
 
+import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
+import com.flag4j.operations.dense.complex.ComplexMatrixMultiplication;
 import com.flag4j.operations.dense.real.RealMatrixMultiplication;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.RandomTensor;
@@ -36,6 +38,10 @@ public class TestingMatMult {
     static final String header = "%10s | %14s | %14s | %14s | %14s | %14s | %14s | %14s | %14s";
     static final String rowBase = "%10s | %14.5f | %14.5f | %14.5f | %14.5f | %14.5f | %14.5f | %14.5f | %14.5f";
 
+    static String[] vectorAlgorithmNames = {"Shape", "ik", "ik Blocked", "ik MT", "ik Blocked MT"};
+    static final String vectorHeader = "%10s | %14s | %14s | %14s | %14s";
+    static final String vectorRowBase = "%10s | %14.5f | %14.5f | %14.5f | %14.5f";
+
     public static void runFlag4jAlgos(int numRows, int numCols, int runs) {
         long startTime, endTime;
         double[] runTimes = new double[8];
@@ -44,7 +50,7 @@ public class TestingMatMult {
 
         for(int i=0; i<runs; i++) {
             Matrix A = rng.getRandomMatrix(numRows, numCols);
-            Matrix B = rng.getRandomMatrix(numCols, 1);
+            Matrix B = rng.getRandomMatrix(numCols, numRows);
 
             // ---------------------- Sequential Algorithms ----------------------
             startTime = System.nanoTime();
@@ -98,22 +104,127 @@ public class TestingMatMult {
         System.out.println(String.format(rowBase, row));
     }
 
+    public static void runComplexFlag4jAlgos(int numRows, int numCols, int runs) {
+        long startTime, endTime;
+        double[] runTimes = new double[8];
+
+        Shape shape = new Shape(numRows, numCols);
+
+        for(int i=0; i<runs; i++) {
+            CMatrix A = rng.getRandomCMatrix(numRows, numCols);
+            CMatrix B = rng.getRandomCMatrix(numCols, numRows);
+
+            // ---------------------- Sequential Algorithms ----------------------
+            startTime = System.nanoTime();
+            ComplexMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
+            endTime = System.nanoTime();
+            runTimes[0] += (endTime-startTime)*1.0e-6;
+
+            startTime = System.nanoTime();
+            ComplexMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+            endTime = System.nanoTime();
+            runTimes[1] += (endTime-startTime)*1.0e-6;
+
+            startTime = System.nanoTime();
+            ComplexMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
+            endTime = System.nanoTime();
+            runTimes[2] += (endTime-startTime)*1.0e-6;
+
+            startTime = System.nanoTime();
+            ComplexMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+            endTime = System.nanoTime();
+            runTimes[3] += (endTime-startTime)*1.0e-6;
+
+            // --------------------- Concurrent Algorithms ---------------------
+            startTime = System.nanoTime();
+            ComplexMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+            endTime = System.nanoTime();
+            runTimes[4] += (endTime-startTime)*1.0e-6;
+
+            startTime = System.nanoTime();
+            ComplexMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+            endTime = System.nanoTime();
+            runTimes[5] += (endTime-startTime)*1.0e-6;
+
+            startTime = System.nanoTime();
+            ComplexMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+            endTime = System.nanoTime();
+            runTimes[6] += (endTime-startTime)*1.0e-6;
+
+            startTime = System.nanoTime();
+            ComplexMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+            endTime = System.nanoTime();
+            runTimes[7] += (endTime-startTime)*1.0e-6;
+        }
+
+        Object[] row = new Object[runTimes.length+1];
+        row[0] = shape.toString();
+        for(int i=1; i<row.length; i++) {
+            row[i] = runTimes[i-1] / (double) runs;
+        }
+
+        System.out.println(String.format(rowBase, row));
+    }
+
+    public static void runMatVecFlag4jAlgos(int numRows, int numCols, int runs) {
+        long startTime, endTime;
+        double[] runTimes = new double[8];
+
+        Shape shape = new Shape(numRows, numCols);
+
+        for(int i=0; i<runs; i++) {
+            Matrix A = rng.getRandomMatrix(numRows, numCols);
+            Matrix B = rng.getRandomMatrix(numCols, 1);
+
+            // --------------- Concurrent Algorithms ---------------
+            startTime = System.nanoTime();
+            RealMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
+            endTime = System.nanoTime();
+            runTimes[0] += (endTime-startTime)*1.0e-6;
+
+            startTime = System.nanoTime();
+            RealMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
+            endTime = System.nanoTime();
+            runTimes[1] += (endTime-startTime)*1.0e-6;
+
+            // --------------- Concurrent Algorithms ---------------
+            startTime = System.nanoTime();
+            RealMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
+            endTime = System.nanoTime();
+            runTimes[2] += (endTime-startTime)*1.0e-6;
+
+            startTime = System.nanoTime();
+            RealMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
+            endTime = System.nanoTime();
+            runTimes[3] += (endTime-startTime)*1.0e-6;
+        }
+
+        Object[] row = new Object[runTimes.length+1];
+        row[0] = shape.toString();
+        for(int i=1; i<row.length; i++) {
+            row[i] = runTimes[i-1] / (double) runs;
+        }
+
+        System.out.println(String.format(vectorRowBase, row));
+    }
+
+
     public static void main(String[] args) {
-        Shape[] shapeList = {new Shape(15000, 15000)};
+        Shape[] shapeList = {new Shape(18000, 18000)};
         int runs = 1;
 
         System.out.println("Flag4j Square Matrix-Matrix Multiply Benchmarks:");
         System.out.println("Runtimes averaged over " + runs + " runs. All times in ms.");
         System.out.println("System Info: OS-Widows; CPU-Intel i7 12700k 3.6 GHz; Cores-12; Logical Processors-20; RAM-32 GB.\n");
 
-        System.out.println(String.format(header, algorithmNames));
+        System.out.println(String.format(vectorHeader, vectorAlgorithmNames));
         System.out.println("----------------------------------------------------------------------" +
                 "----------------------------------------------------------------------------");
 
         for(Shape shape : shapeList) {
             int numRows = shape.get(Axis2D.row());
             int numCols = shape.get(Axis2D.col());
-            runFlag4jAlgos(numRows, numCols, runs);
+            runMatVecFlag4jAlgos(numRows, numCols, runs);
         }
     }
 }

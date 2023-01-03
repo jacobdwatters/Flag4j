@@ -33,7 +33,8 @@ import com.flag4j.util.ShapeArrayChecks;
 
 /**
  * This class contains several low level methods for computing matrix-matrix multiplications. This includes transpose
- * multiplications.
+ * multiplications. <br>
+ * <b>WARNING:</b> These methods do not perform any sanity checks.
  */
 public class RealMatrixMultiplication {
 
@@ -50,11 +51,8 @@ public class RealMatrixMultiplication {
      * @param src2 Entries of the second matrix.
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
-     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static double[] standard(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.matMultShapeCheck(shape1, shape2);
-
         int rows1 = shape1.dims[Axis2D.row()];
         int cols1 = shape1.dims[Axis2D.col()];
         int rows2 = shape2.dims[Axis2D.row()];
@@ -82,11 +80,8 @@ public class RealMatrixMultiplication {
      * @param src2 Entries of the second matrix.
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
-     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static double[] reordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.matMultShapeCheck(shape1, shape2);
-
         int rows1 = shape1.dims[Axis2D.row()];
         int cols1 = shape1.dims[Axis2D.col()];
         int rows2 = shape2.dims[Axis2D.row()];
@@ -113,11 +108,8 @@ public class RealMatrixMultiplication {
      * @param src2 Entries of the second matrix.
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
-     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static double[] blocked(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.matMultShapeCheck(shape1, shape2);
-
         int rows1 = shape1.dims[Axis2D.row()];
         int cols1 = shape1.dims[Axis2D.col()];
         int rows2 = shape2.dims[Axis2D.row()];
@@ -154,11 +146,8 @@ public class RealMatrixMultiplication {
      * @param src2 Entries of the second matrix.
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
-     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static double[] blockedReordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.matMultShapeCheck(shape1, shape2);
-
         int rows1 = shape1.dims[Axis2D.row()];
         int cols1 = shape1.dims[Axis2D.col()];
         int rows2 = shape2.dims[Axis2D.row()];
@@ -195,11 +184,8 @@ public class RealMatrixMultiplication {
      * @param src2 Entries of the second matrix.
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
-     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static double[] concurrentStandard(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.matMultShapeCheck(shape1, shape2);
-
         int rows1 = shape1.dims[Axis2D.row()];
         int cols1 = shape1.dims[Axis2D.col()];
         int rows2 = shape2.dims[Axis2D.row()];
@@ -227,11 +213,8 @@ public class RealMatrixMultiplication {
      * @param src2 Entries of the second matrix.
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
-     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static double[] concurrentReordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.matMultShapeCheck(shape1, shape2);
-
         int rows1 = shape1.dims[Axis2D.row()];
         int cols1 = shape1.dims[Axis2D.col()];
         int rows2 = shape2.dims[Axis2D.row()];
@@ -259,11 +242,8 @@ public class RealMatrixMultiplication {
      * @param src2 Entries of the second matrix.
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
-     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static double[] concurrentBlocked(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.matMultShapeCheck(shape1, shape2);
-
         int rows1 = shape1.dims[Axis2D.row()];
         int cols1 = shape1.dims[Axis2D.col()];
         int rows2 = shape2.dims[Axis2D.row()];
@@ -300,11 +280,8 @@ public class RealMatrixMultiplication {
      * @param src2 Entries of the second matrix.
      * @param shape2 Shape fo the second matrix.
      * @return The result of matrix multiplying the two matrices.
-     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static double[] concurrentBlockedReordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.matMultShapeCheck(shape1, shape2);
-
         int rows1 = shape1.dims[Axis2D.row()];
         int cols1 = shape1.dims[Axis2D.col()];
         int rows2 = shape2.dims[Axis2D.row()];
@@ -324,6 +301,122 @@ public class RealMatrixMultiplication {
                                 dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];
                             }
                         }
+                    }
+                }
+            }
+        });
+
+        return dest;
+    }
+
+
+    /**
+     * Computes the multiplication of a real dense matrix with a real dense vector using the standard algorithm.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] standardVector(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+        int rows1 = shape1.dims[Axis2D.row()];
+        int cols1 = shape1.dims[Axis2D.col()];
+        int rows2 = shape2.dims[Axis2D.row()];
+
+        double[] dest = new double[rows1];
+
+        for(int i=0; i<rows1; i++) {
+            for(int k=0; k<rows2; k++) {
+                dest[i] += src1[i*cols1 + k]*src2[k];
+            }
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Computes the multiplication of a real dense matrix with a real dense vector using a blocked algorithm.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] blockedVector(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+        int rows1 = shape1.dims[Axis2D.row()];
+        int cols1 = shape1.dims[Axis2D.col()];
+        int rows2 = shape2.dims[Axis2D.row()];
+
+        double[] dest = new double[rows1];
+        int bsize = Configurations.getBlockSize();
+
+        // Blocked matrix-vector multiply
+        for(int ii=0; ii<rows1; ii += bsize) {
+            for(int kk=0; kk<rows2; kk += bsize) {
+                // Multiply the current blocks
+                for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                    for(int k=kk; k<kk+bsize && k<rows2; k++) {
+                        dest[i] += src1[i*cols1 + k]*src2[k];
+                    }
+                }
+            }
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Computes the multiplication of a real dense matrix with a real dense vector using a concurrent implementation of the standard
+     * matrix multiplication algorithm.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] concurrentStandardVector(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+        int rows1 = shape1.dims[Axis2D.row()];
+        int cols1 = shape1.dims[Axis2D.col()];
+        int rows2 = shape2.dims[Axis2D.row()];
+
+        double[] dest = new double[rows1];
+
+        ThreadManager.concurrentLoop(0, rows1, (i) -> {
+            for(int k=0; k<rows2; k++) {
+                dest[i] += src1[i*cols1 + k]*src2[k];
+            }
+        });
+
+        return dest;
+    }
+
+
+    /**
+     * Computes the multiplication of a real dense matrix with a real dense vector using a concurrent implementation of a blocked
+     * algorithm.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] concurrentBlockedVector(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+        int rows1 = shape1.dims[Axis2D.row()];
+        int cols1 = shape1.dims[Axis2D.col()];
+        int rows2 = shape2.dims[Axis2D.row()];
+
+        double[] dest = new double[rows1];
+        int bsize = Configurations.getBlockSize();
+
+        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {
+            // Blocked matrix-vector multiply
+            for(int kk=0; kk<rows2; kk += bsize) {
+                // Multiply the current blocks
+                for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                    for(int k=kk; k<kk+bsize && k<rows2; k++) {
+                        dest[i] += src1[i*cols1 + k]*src2[k];
                     }
                 }
             }

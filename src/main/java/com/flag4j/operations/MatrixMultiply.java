@@ -28,6 +28,7 @@ import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.operations.dense.real.RealMatrixMultiplication;
 import com.flag4j.util.Axis2D;
+import com.flag4j.util.ShapeArrayChecks;
 
 
 /**
@@ -54,10 +55,21 @@ public class MatrixMultiply {
      * @param A First matrix in matrix multiplication.
      * @param B Second matrix in matrix multiplication.
      * @return The result of the matrix multiplication.
+     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static double[] dispatch(Matrix A, Matrix B) {
+        ShapeArrayChecks.matMultShapeCheck(A.shape, B.shape);
+
+        Algorithm algorithm;
         double[] dest;
-        Algorithm algorithm = chooseAlgorithm(A.shape, B.shape);
+
+        if(B.numCols==1) {
+            algorithm = chooseAlgorithmVector(A.shape);
+        } else {
+            algorithm = chooseAlgorithm(A.shape, B.shape);
+        }
+
+
 
         switch(algorithm) {
             case STANDARD:
@@ -85,8 +97,8 @@ public class MatrixMultiply {
                 dest = RealMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
                 break;
             default:
-                // Default to the reordered implementation just in case.
-                dest = RealMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+                // Default to the concurrent reordered implementation just in case.
+                dest = RealMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
         }
 
         return dest;
@@ -142,7 +154,6 @@ public class MatrixMultiply {
             }
         } else {
             // Then there are more columns than rows in the first matrix
-            // TODO: Columns greater than Rows
             if(cols1<=100) {
                 if(rows1<=20) {
                     algorithm = Algorithm.REORDERED;
@@ -170,6 +181,23 @@ public class MatrixMultiply {
     }
 
 
+    public static Algorithm chooseAlgorithmVector(Shape shape) {
+        Algorithm algorithm;
+
+        int rows = shape.get(Axis2D.row());
+
+        if(rows<=300) {
+            algorithm = Algorithm.BLOCKED_VECTOR;
+        } else if(rows<=2048) {
+            algorithm = Algorithm.CONCURRENT_BLOCKED_VECTOR;
+        } else {
+            algorithm = Algorithm.CONCURRENT_STANDARD_VECTOR;
+        }
+
+        return algorithm;
+    }
+
+
     /**
      * Computes the squareness ratio of a matrix. This is a value between 0 and 1 with 1 being perfectly
      * square and 0 being a row/column vector.
@@ -190,6 +218,7 @@ public class MatrixMultiply {
      */
     private enum Algorithm {
         STANDARD, REORDERED, BLOCKED, BLOCKED_REORDERED,
-        CONCURRENT_STANDARD, CONCURRENT_REORDERED, CONCURRENT_BLOCKED, CONCURRENT_BLOCKED_REORDERED
+        CONCURRENT_STANDARD, CONCURRENT_REORDERED, CONCURRENT_BLOCKED, CONCURRENT_BLOCKED_REORDERED,
+        STANDARD_VECTOR, BLOCKED_VECTOR, CONCURRENT_STANDARD_VECTOR, CONCURRENT_BLOCKED_VECTOR
     }
 }

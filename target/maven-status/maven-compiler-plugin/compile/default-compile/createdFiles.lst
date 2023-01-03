@@ -1,5 +1,6 @@
 com\flag4j\operations\dense\real\RealDenseEquals.class
 com\flag4j\operations\dense\real\RealMatrixMultiplication.class
+com\flag4j\operations\dense\complex\ComplexMatrixMultiplication.class
 com\flag4j\operations\MatrixMultiply.class
 com\flag4j\operations\MatrixMultiply$1.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseEquals.class
