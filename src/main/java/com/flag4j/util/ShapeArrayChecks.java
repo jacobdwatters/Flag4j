@@ -191,4 +191,31 @@ public final class ShapeArrayChecks {
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
         }
     }
+
+
+    /**
+     * Checks if a set of values is greater than or equal to a specified threshold.
+     * @param threshold Threshold value.
+     * @param values Values to compare against threshold.
+     * @throws IllegalArgumentException If any of the values are less than the threshold.
+     */
+    public static void assertGreaterEq(double threshold, double... values) {
+        for(double value : values) {
+            if(value<threshold) {
+                throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));
+            }
+        }
+    }
+
+
+    /**
+     * Checks if a shape represents a square matrix.
+     * @param shape Shape to check.
+     * @throws IllegalArgumentException If the shape is not of rank 2 and square.
+     */
+    public static void assertSquare(Shape shape) {
+        if(shape.getRank()!=2 || shape.get(0)!=shape.get(1)) {
+
+        }
+    }
 }

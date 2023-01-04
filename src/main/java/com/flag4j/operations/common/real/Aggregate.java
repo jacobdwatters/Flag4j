@@ -25,10 +25,17 @@
 package com.flag4j.operations.common.real;
 
 
+import com.flag4j.util.ErrorMessages;
+
 /**
  * This class contains several low-level methods useful for computing aggregation operations on dense/sparse tensors.
  */
 public class Aggregate {
+
+    private Aggregate() {
+        // Hide default constructor.
+        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+    }
 
 
     /**

@@ -191,5 +191,32 @@ public final class ShapeArrayChecks {
 <span class="fc" id="L191">            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());</span>
         }
 <span class="fc" id="L193">    }</span>
+
+
+    /**
+     * Checks if a set of values is greater than or equal to a specified threshold.
+     * @param threshold Threshold value.
+     * @param values Values to compare against threshold.
+     * @throws IllegalArgumentException If any of the values are less than the threshold.
+     */
+    public static void assertGreaterEq(double threshold, double... values) {
+<span class="fc bfc" id="L203" title="All 2 branches covered.">        for(double value : values) {</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">            if(value&lt;threshold) {</span>
+<span class="nc" id="L205">                throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));</span>
+            }
+        }
+<span class="fc" id="L208">    }</span>
+
+
+    /**
+     * Checks if a shape represents a square matrix.
+     * @param shape Shape to check.
+     * @throws IllegalArgumentException If the shape is not of rank 2 and square.
+     */
+    public static void assertSquare(Shape shape) {
+<span class="nc bnc" id="L217" title="All 4 branches missed.">        if(shape.getRank()!=2 || shape.get(0)!=shape.get(1)) {</span>
+
+        }
+<span class="nc" id="L220">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

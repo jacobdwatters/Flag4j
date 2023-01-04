@@ -137,7 +137,7 @@ public class Shape implements Serializable {
 <span class="fc" id="L137">        int index = 0;</span>
 
 <span class="fc bfc" id="L139" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length-1; i++) {</span>
-<span class="pc bpc" id="L140" title="1 of 4 branches missed.">            if(indices[i] &lt; 0 || indices[i] &gt;= dims[i]) {</span>
+<span class="fc bfc" id="L140" title="All 4 branches covered.">            if(indices[i] &lt; 0 || indices[i] &gt;= dims[i]) {</span>
 <span class="fc" id="L141">                throw new ArrayIndexOutOfBoundsException(&quot;Index &quot; + indices[i] + &quot; out of bounds for axis &quot; + i +</span>
                         &quot; of tensor with shape &quot; + this);
             }

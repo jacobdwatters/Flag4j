@@ -26,6 +26,11 @@ package com.flag4j.operations.common.real;
 
 import com.flag4j.Shape;
 import com.flag4j.util.Axis2D;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ShapeArrayChecks;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static com.flag4j.operations.common.real.Aggregate.maxAbs;
 
@@ -91,18 +96,23 @@ public class RealOperations {
      * @param p First parameter in L<sub>p, q</sub> norm.
      * @param q Second parameter in L<sub>p, q</sub> norm.
      * @return The L<sub>p, q</sub> norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
      */
     public static double matrixNorm(double[] src, Shape shape, double p, double q) {
+        ShapeArrayChecks.assertGreaterEq(1, p, q);
+
         double norm = 0;
+        double colSum;
         int rows = shape.dims[Axis2D.row()];
         int cols = shape.dims[Axis2D.col()];
 
         // TODO: Is transposing first faster here?
         for(int j=0; j<cols; j++) {
+            colSum=0;
             for(int i=0; i<rows; i++) {
-                norm += Math.pow(src[shape.entriesIndex(i, j)], p);
+                colSum += Math.pow(Math.abs(src[i*cols + j]), p);
             }
-            norm += Math.pow(norm, q/p);
+            norm += Math.pow(colSum, q/p);
         }
 
         return Math.pow(norm, 1/q);
@@ -116,18 +126,24 @@ public class RealOperations {
      * @param shape Shape of the matrix.
      * @param p Parameter in L<sub>p</sub> norm.
      * @return The L<sub>p</sub> norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} is less than 1.
      */
     public static double matrixNorm(double[] src, Shape shape, double p) {
+        ShapeArrayChecks.assertGreaterEq(1, p);
+
         double norm = 0;
+        double colSum;
         int rows = shape.dims[Axis2D.row()];
         int cols = shape.dims[Axis2D.col()];
 
         // TODO: Is transposing first faster here?
         for(int j=0; j<cols; j++) {
+            colSum=0;
             for(int i=0; i<rows; i++) {
-                norm += Math.pow(src[shape.entriesIndex(i, j)], p);
+                colSum += Math.pow(Math.abs(src[i*cols + j]), p);
             }
-            norm += Math.pow(norm, 1.0/p);
+
+            norm += Math.pow(colSum, 1.0/p);
         }
 
         return norm;
@@ -146,12 +162,15 @@ public class RealOperations {
         int rows = shape.dims[Axis2D.row()];
         int cols = shape.dims[Axis2D.col()];
 
+        double colSum;
+
         // TODO: Is transposing first faster here?
         for(int j=0; j<cols; j++) {
+            colSum = 0;
             for(int i=0; i<rows; i++) {
-                norm += Math.pow(src[shape.entriesIndex(i, j)], 2);
+                colSum += Math.pow(src[i*cols + j], 2);
             }
-            norm += Math.sqrt(norm);
+            norm += Math.sqrt(colSum);
         }
 
         return norm;
@@ -163,7 +182,98 @@ public class RealOperations {
      * @param src Entries of the matrix.
      * @return The infinity norm of the matrix.
      */
-    public static double matrixInfNorm(double[] src) {
+    public static double matrixMaxNorm(double[] src) {
         return maxAbs(src);
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
+     * @param src Entries of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    public static double matrixInfNorm(double[] src, Shape shape) {
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+        double[] rowSums = new double[rows];
+
+        // TODO: Is transposing first faster?
+        for(int i=0; i<rows; i++) {
+            for(int j=0; j<cols; j++) {
+                rowSums[i] += Math.abs(src[i*cols + j]);
+            }
+        }
+
+        return maxAbs(rowSums);
+    }
+
+
+    /**
+     * Rounds the values of a tensor to the nearest integer. Also see {@link #round(double[], int)}.
+     * @param src Entries of the tensor to round.
+     * @return The result of rounding all entries of the source tensor to the nearest integer.
+     * @throws IllegalArgumentException If {@code precision} is negative.
+     */
+    public static double[] round(double[] src) {
+        double[] dest = new double[src.length];
+
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = Math.round(src[i]);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Rounds the values of a tensor with specified precision. Note, if precision is zero, {@link #round(double[])} is
+     * preferred.
+     * @param src Entries of the tensor to round.
+     * @param precision Precision to round to (i.e. the number of decimal places).
+     * @return The result of rounding all entries of the source tensor with the specified precision.
+     * @throws IllegalArgumentException If {@code precision} is negative.
+     */
+    public static double[] round(double[] src, int precision) {
+        if(precision<0) {
+            throw new IllegalArgumentException(ErrorMessages.negValueErr(precision));
+        }
+
+        BigDecimal bd;
+        double[] dest = new double[src.length];
+
+        for(int i=0; i<dest.length; i++) {
+            bd = new BigDecimal(Double.toString(src[i]));
+            bd = bd.setScale(precision, RoundingMode.HALF_UP);
+            dest[i] = bd.doubleValue();
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero.
+     *
+     * @param threshold Threshold for rounding values to zero. That is, if a value in this tensor is less than
+     *                  the threshold in absolute value then it will be rounded to zero. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If {@code threshold} is negative.
+     */
+    public static double[] roundToZero(double[] src, double threshold) {
+        if(threshold<0) {
+            throw new IllegalArgumentException(ErrorMessages.negValueErr(threshold));
+        }
+
+        double[] dest = new double[src.length];
+
+        for(int i=0; i<dest.length; i++) {
+            if(Math.abs(src[i]) < threshold) {
+                dest[i] = 0;
+            } else {
+                dest[i] = src[i];
+            }
+        }
+
+        return dest;
     }
 }

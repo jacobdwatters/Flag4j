@@ -780,4 +780,22 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @return The specified column of this matrix.
      */
     X[] getCol(int j);
+
+
+    /**
+     * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
+     * Same as {@link #tr()}
+     * @return The trace of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    X trace();
+
+
+    /**
+     * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
+     * Same as {@link #trace()}
+     * @return The trace of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    X tr();
 }

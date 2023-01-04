@@ -25,6 +25,7 @@
 package com.flag4j.core;
 
 
+import com.flag4j.Matrix;
 import com.flag4j.Shape;
 
 /**
@@ -111,6 +112,8 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
     void setCol(X[] values, int colIndex);
 
 
+    void setCol(Integer[] values, int colIndex);
+
     /**
      * Sets a column of this matrix at the given index to the specified values.
      * @param values New values for the column.
@@ -137,6 +140,8 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      */
     void setRow(X[] values, int rowIndex);
 
+
+    void setRow(Integer[] values, int rowIndex);
 
     /**
      * Sets a row of this matrix at the given index to the specified values.
@@ -180,6 +185,8 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      */
     void setSlice(X[][] values, int rowStart, int colStart);
 
+
+    void setSlice(Integer[][] values, int rowStart, int colStart);
 
     /**
      * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
@@ -233,6 +240,8 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * fit completely within this matrix.
      */
     T setSliceCopy(X[][] values, int rowStart, int colStart);
+
+    Matrix setSliceCopy(Integer[][] values, int rowStart, int colStart);
 
     /**
      * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper

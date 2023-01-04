@@ -25,6 +25,8 @@
 package com.flag4j.core;
 
 import com.flag4j.Shape;
+import com.flag4j.operations.dense.real.RealDenseSetOperations;
+import com.flag4j.util.ShapeArrayChecks;
 
 
 /**
@@ -50,4 +52,15 @@ public abstract class RealMatrixBase extends MatrixBase<double[]> {
      * @return A complex matrix with equivalent real part and zero imaginary part.
      */
     public abstract ComplexMatrixBase toComplex();
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+     */
+    public void setValues(Integer[][] values) {
+        ShapeArrayChecks.equalShapeCheck(shape, new Shape(values.length, values[0].length));
+        RealDenseSetOperations.setValues(values, this.entries);
+    }
 }
