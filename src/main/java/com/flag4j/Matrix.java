@@ -284,7 +284,7 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
-     * Creates a hashcode for this matrix. Note, method combines {@link Arrays#hashCode(double[])} on the
+     * Creates a hashcode for this matrix. Note, method adds {@link Arrays#hashCode(double[])} on the
      * underlying data array and the underlying shape array.
      * @return The hashcode for this matrix.
      */
