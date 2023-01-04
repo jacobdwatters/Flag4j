@@ -284,6 +284,17 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
+     * Creates a hashcode for this matrix. Note, method combines {@link Arrays#hashCode(double[])} on the
+     * underlying data array and the underlying shape array.
+     * @return The hashcode for this matrix.
+     */
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);
+    }
+
+
+    /**
      * Checks if matrices are inverses of each other.
      *
      * @param B Second matrix.
