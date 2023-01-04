@@ -87,7 +87,7 @@ interface TensorPropertiesMixin<T, U, V, W, Y, X extends Number> {
      * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
      * @return the 2-norm of this tensor.
      */
-    X norm();
+    double norm();
 
 
     /**
@@ -97,12 +97,12 @@ interface TensorPropertiesMixin<T, U, V, W, Y, X extends Number> {
      * @return The p-norm of this tensor.
      * @throws IllegalArgumentException If p is less than 1.
      */
-    X norm(double p);
+    double norm(double p);
 
 
     /**
      * Computes the maximum/infinite norm of this tensor.
      * @return The maximum/infinite norm of this tensor.
      */
-    X infNorm();
+    double infNorm();
 }

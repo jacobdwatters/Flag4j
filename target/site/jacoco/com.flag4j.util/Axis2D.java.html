@@ -28,14 +28,21 @@ package com.flag4j.util;
  * Simple enum class for two-dimensional axis. The row axis has ordinal 0 and the column axis has ordinal 1.
  */
 <span class="fc" id="L30">public enum Axis2D {</span>
-<span class="fc" id="L31">    ROW, COL;</span>
+    /**
+     * Row of 2D tensor.
+     */
+<span class="fc" id="L34">    ROW,</span>
+    /**
+     * Column of 2D tensor
+     */
+<span class="fc" id="L38">    COL;</span>
 
     /**
      * Get the ordinal of the row axis in 2D.
      * @return The ordinal of the row axis in 2D.
      */
     public static int row() {
-<span class="fc" id="L38">        return ROW.ordinal();</span>
+<span class="fc" id="L45">        return ROW.ordinal();</span>
     }
 
 
@@ -44,7 +51,7 @@ package com.flag4j.util;
      * @return The ordinal of the column axis in 2D.
      */
     public static int col() {
-<span class="fc" id="L47">        return COL.ordinal();</span>
+<span class="fc" id="L54">        return COL.ordinal();</span>
     }
 
 
@@ -53,7 +60,7 @@ package com.flag4j.util;
      * @return An array of all axes ordinals.
      */
     public static int[] allAxes() {
-<span class="fc" id="L56">        return new int[]{ROW.ordinal(), COL.ordinal()};</span>
+<span class="fc" id="L63">        return new int[]{ROW.ordinal(), COL.ordinal()};</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

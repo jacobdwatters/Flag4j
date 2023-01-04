@@ -27,7 +27,7 @@ package com.flag4j.operations.dense.real_complex;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ShapeArrayChecks;
+import com.flag4j.util.ParameterChecks;
 
 
 /**
@@ -52,7 +52,7 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static CNumber[] add(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.equalShapeCheck(shape1, shape2);
+        ParameterChecks.assertEqualShape(shape1, shape2);
 
         CNumber[] sum = new CNumber[src1.length];
 
@@ -92,7 +92,7 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static CNumber[] sub(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.equalShapeCheck(shape1, shape2);
+        ParameterChecks.assertEqualShape(shape1, shape2);
 
         CNumber[] diff = new CNumber[src1.length];
 
@@ -114,7 +114,7 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static CNumber[] sub(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        ShapeArrayChecks.equalShapeCheck(shape1, shape2);
+        ParameterChecks.assertEqualShape(shape1, shape2);
 
         CNumber[] diff = new CNumber[src1.length];
 
@@ -181,7 +181,7 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemMult(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.equalShapeCheck(shape1, shape2);
+        ParameterChecks.assertEqualShape(shape1, shape2);
         CNumber[] product = new CNumber[src1.length];
 
         for(int i=0; i<product.length; i++) {
@@ -202,7 +202,7 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.equalShapeCheck(shape1, shape2);
+        ParameterChecks.assertEqualShape(shape1, shape2);
         CNumber[] product = new CNumber[src1.length];
 
         for(int i=0; i<product.length; i++) {
@@ -223,7 +223,7 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemDiv(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        ShapeArrayChecks.equalShapeCheck(shape1, shape2);
+        ParameterChecks.assertEqualShape(shape1, shape2);
         CNumber[] product = new CNumber[src1.length];
         double divisor;
 

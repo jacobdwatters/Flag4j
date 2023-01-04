@@ -237,7 +237,7 @@ public class SparseCTensor extends SparseTensorBase&lt;CNumber[]&gt; {
     /**
      * Constructs a sparse complex tensor whose non-zero values, indices, and shape are specified by another sparse complex
      * tensor.
-     * @param A
+     * @param A The sparse complex tensor to construct a copy of.
      */
     public SparseCTensor(SparseCTensor A) {
 <span class="fc" id="L243">        super(A.shape.clone(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);</span>

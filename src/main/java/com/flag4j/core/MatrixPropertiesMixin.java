@@ -118,7 +118,7 @@ public interface MatrixPropertiesMixin<T, U, V, W, Y, X extends Number> extends 
      * @param q Q value in the L<sub>p, q</sub> norm.
      * @return The L<sub>p, q</sub> norm of this matrix.
      */
-    boolean norm(double p, double q);
+    double norm(double p, double q);
 
 
     /**
@@ -128,4 +128,6 @@ public interface MatrixPropertiesMixin<T, U, V, W, Y, X extends Number> extends 
     * @return True if the matrix is diagonalizable. Otherwise, returns false.
     */
     boolean isDiagonalizable();
+
+    double maxNorm();
 }

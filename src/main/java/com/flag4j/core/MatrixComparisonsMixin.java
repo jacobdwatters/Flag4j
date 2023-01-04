@@ -25,11 +25,6 @@
 package com.flag4j.core;
 
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
-import com.flag4j.SparseCMatrix;
-import com.flag4j.SparseMatrix;
-
 /**
  * This interface specifies comparisons which all matrices should implement.
  *
@@ -47,42 +42,6 @@ public interface MatrixComparisonsMixin<T, U, V, W, Y, X extends Number> extends
      * @return True if this matrix is the identity matrix. Otherwise, returns false.
      */
     boolean isI();
-
-
-    /**
-     * Checks if two matrices are equal (element-wise).
-     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
-     * @param B Second matrix in the equality.
-     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
-     */
-    boolean equals(Matrix B);
-
-
-    /**
-     * Checks if two matrices are equal (element-wise).
-     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
-     * @param B Second matrix in the equality.
-     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
-     */
-    boolean equals(SparseMatrix B);
-
-
-    /**
-     * Checks if two matrices are equal (element-wise).
-     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
-     * @param B Second matrix in the equality.
-     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
-     */
-    boolean equals(CMatrix B);
-
-
-    /**
-     * Checks if two matrices are equal (element-wise).
-     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
-     * @param B Second matrix in the equality.
-     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
-     */
-    boolean equals(SparseCMatrix B);
 
 
     /**

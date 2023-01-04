@@ -29,7 +29,13 @@ package com.flag4j.complex_numbers;
  * A CNumberToken is the smallest unit of a string which is being parsed to a complex number.
  */
 class CNumberToken {
+    /**
+     * The kind of this token.
+     */
     private final String kind;
+    /**
+     * The details of this token.
+     */
     private final String details;
 
 
@@ -38,9 +44,9 @@ class CNumberToken {
      * @param k Kind of token to create.
      * @param d Details of the token.
      */
-<span class="fc" id="L41">    protected CNumberToken( String k, String d ) {</span>
-<span class="fc" id="L42">        kind = k;  details = d;</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L47">    protected CNumberToken( String k, String d ) {</span>
+<span class="fc" id="L48">        kind = k;  details = d;</span>
+<span class="fc" id="L49">    }</span>
 
 
     /**
@@ -50,7 +56,7 @@ class CNumberToken {
      * @return true if token kind equalTo s.
      */
     protected boolean isKind( String s ) {
-<span class="fc" id="L53">        return kind.equals( s );</span>
+<span class="fc" id="L59">        return kind.equals( s );</span>
     }
 
 
@@ -58,14 +64,14 @@ class CNumberToken {
      * Gets the kind of this token.
      * @return token kind.
      */
-<span class="nc" id="L61">    protected String getKind() { return kind; }</span>
+<span class="nc" id="L67">    protected String getKind() { return kind; }</span>
 
 
     /**
      * Gets the details of this token.
      * @return token details.
      */
-<span class="fc" id="L68">    protected String getDetails() { return details; }</span>
+<span class="fc" id="L74">    protected String getDetails() { return details; }</span>
 
 
     /**
@@ -76,7 +82,7 @@ class CNumberToken {
      * @return True if token matches kind and details, otherwise false.
      */
     protected boolean matches( String k, String d ) {
-<span class="pc bpc" id="L79" title="1 of 4 branches missed.">        return kind.equals(k) &amp;&amp; details.equals(d);</span>
+<span class="pc bpc" id="L85" title="1 of 4 branches missed.">        return kind.equals(k) &amp;&amp; details.equals(d);</span>
     }
 
 
@@ -87,11 +93,11 @@ class CNumberToken {
      * @param d token details
      */
     protected void errorCheck(String k, String d) {
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if(!this.matches(k, d)) {</span>
-<span class="nc" id="L91">            System.out.println(&quot;Expecting token [&quot; + k + &quot;,&quot; + d + &quot;] but got &quot; + this);</span>
-<span class="nc" id="L92">            System.exit(1);</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if(!this.matches(k, d)) {</span>
+<span class="nc" id="L97">            System.out.println(&quot;Expecting token [&quot; + k + &quot;,&quot; + d + &quot;] but got &quot; + this);</span>
+<span class="nc" id="L98">            System.exit(1);</span>
         }
-<span class="fc" id="L94">    }</span>
+<span class="fc" id="L100">    }</span>
 
 
     /**
@@ -100,11 +106,11 @@ class CNumberToken {
      * @param k token kind.
      */
     protected void errorCheck(String k) {
-<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        if(!this.kind.equals(k)) {</span>
-<span class="nc" id="L104">            System.out.println(&quot;Expecting token of kind &quot; + k + &quot; but got &quot; + this);</span>
-<span class="nc" id="L105">            System.exit(1);</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        if(!this.kind.equals(k)) {</span>
+<span class="nc" id="L110">            System.out.println(&quot;Expecting token of kind &quot; + k + &quot; but got &quot; + this);</span>
+<span class="nc" id="L111">            System.exit(1);</span>
         }
-<span class="fc" id="L107">    }</span>
+<span class="fc" id="L113">    }</span>
 
 
     /**
@@ -112,7 +118,7 @@ class CNumberToken {
      * @return A string representing of this token.
      */
     public String toString() {
-<span class="nc" id="L115">        return &quot;[&quot; + this.kind + &quot;,&quot; + this.details + &quot;]&quot;;</span>
+<span class="nc" id="L121">        return &quot;[&quot; + this.kind + &quot;,&quot; + this.details + &quot;]&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

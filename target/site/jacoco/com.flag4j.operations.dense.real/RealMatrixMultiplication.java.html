@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealMatrixMultiplication.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense.real</a> &gt; <span class="el_source">RealMatrixMultiplication.java</span></div><h1>RealMatrixMultiplication.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense.real;
+
+import com.flag4j.Shape;
+import com.flag4j.operations.concurrency.Configurations;
+import com.flag4j.operations.concurrency.ThreadManager;
+import com.flag4j.util.Axis2D;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ShapeArrayChecks;
+
+/**
+ * This class contains several low level methods for computing matrix-matrix multiplications. This includes transpose
+ * multiplications. &lt;br&gt;
+ * &lt;b&gt;WARNING:&lt;/b&gt; These methods do not perform any sanity checks.
+ */
+public class RealMatrixMultiplication {
+
+<span class="nc" id="L41">    private RealMatrixMultiplication() {</span>
+        // Hide default constructor.
+<span class="nc" id="L43">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two real dense matrices using the standard algorithm.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] standard(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L56">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L57">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L58">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L59">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L61">        double[] dest = new double[rows1*cols2];</span>
+
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for(int i=0; i&lt;rows1; i++) {</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">            for(int j=0; j&lt;cols2; j++) {</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">                for(int k=0; k&lt;rows2; k++) {</span>
+<span class="fc" id="L66">                    dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];</span>
+                }
+            }
+        }
+
+<span class="fc" id="L71">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two real dense matrices using the standard algorithm with j-k loops
+     * swapped.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] reordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L85">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L86">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L87">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L88">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L90">        double[] dest = new double[rows1*cols2];</span>
+
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        for(int i=0; i&lt;rows1; i++) {</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            for(int k=0; k&lt;rows2; k++) {</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">                for(int j=0; j&lt;cols2; j++) {</span>
+<span class="fc" id="L95">                    dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];</span>
+                }
+            }
+        }
+
+<span class="fc" id="L100">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication of two real dense matrices using a blocked algorithm.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] blocked(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L113">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L114">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L115">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L116">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L118">        double[] dest = new double[rows1*cols2];</span>
+<span class="fc" id="L119">        int bsize = Configurations.getBlockSize();</span>
+
+        // Blocked matrix multiply
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        for(int ii=0; ii&lt;rows1; ii += bsize) {</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">            for(int jj=0; jj&lt;cols2; jj += bsize) {</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">                for(int kk=0; kk&lt;rows2; kk += bsize) {</span>
+                    // Multiply the current blocks
+<span class="pc bpc" id="L126" title="1 of 4 branches missed.">                    for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
+<span class="pc bpc" id="L127" title="1 of 4 branches missed.">                        for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;cols2; j++) {</span>
+<span class="pc bpc" id="L128" title="1 of 4 branches missed.">                            for(int k=kk; k&lt;kk+bsize &amp;&amp; k&lt;rows2; k++) {</span>
+<span class="fc" id="L129">                                dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];</span>
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+<span class="fc" id="L137">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication of two real dense matrices using a blocked algorithm with the j-k loops
+     * swapped.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] blockedReordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L151">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L152">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L153">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L154">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L156">        double[] dest = new double[rows1*cols2];</span>
+<span class="fc" id="L157">        int bsize = Configurations.getBlockSize();</span>
+
+        // Blocked matrix multiply
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        for(int ii=0; ii&lt;rows1; ii += bsize) {</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">            for(int kk=0; kk&lt;rows2; kk += bsize) {</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">                for(int jj=0; jj&lt;cols2; jj += bsize) {</span>
+                    // Multiply the current blocks
+<span class="pc bpc" id="L164" title="1 of 4 branches missed.">                    for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
+<span class="pc bpc" id="L165" title="1 of 4 branches missed.">                        for(int k=kk; k&lt;kk+bsize &amp;&amp; k&lt;rows2; k++) {</span>
+<span class="pc bpc" id="L166" title="1 of 4 branches missed.">                            for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;cols2; j++) {</span>
+<span class="fc" id="L167">                                dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];</span>
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+<span class="fc" id="L175">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication of two real dense matrices using a concurrent implementation of the standard
+     * matrix multiplication algorithm.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] concurrentStandard(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L189">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L190">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L191">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L192">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L194">        double[] dest = new double[rows1*cols2];</span>
+
+<span class="fc" id="L196">        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">            for(int j=0; j&lt;cols2; j++) {</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">                for(int k=0; k&lt;rows2; k++) {</span>
+<span class="fc" id="L199">                    dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];</span>
+                }
+            }
+<span class="fc" id="L202">        });</span>
+
+<span class="fc" id="L204">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication of two real dense matrices using a concurrent implementation of the standard
+     * matrix multiplication algorithm with j-k loops swapped.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] concurrentReordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L218">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L219">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L220">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L221">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L223">        double[] dest = new double[rows1*cols2];</span>
+
+<span class="fc" id="L225">        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">            for(int k=0; k&lt;rows2; k++) {</span>
+<span class="fc bfc" id="L227" title="All 2 branches covered.">                for(int j=0; j&lt;cols2; j++) {</span>
+<span class="fc" id="L228">                    dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];</span>
+                }
+            }
+<span class="fc" id="L231">        });</span>
+
+<span class="fc" id="L233">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication of two real dense matrices using a concurrent implementation of a blocked
+     * algorithm.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] concurrentBlocked(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L247">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L248">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L249">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L250">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L252">        double[] dest = new double[rows1*cols2];</span>
+<span class="fc" id="L253">        int bsize = Configurations.getBlockSize();</span>
+
+<span class="fc" id="L255">        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -&gt; {</span>
+            // Blocked matrix multiply
+<span class="fc bfc" id="L257" title="All 2 branches covered.">            for(int jj=0; jj&lt;cols2; jj += bsize) {</span>
+<span class="fc bfc" id="L258" title="All 2 branches covered.">                for(int kk=0; kk&lt;rows2; kk += bsize) {</span>
+                    // Multiply the current blocks
+<span class="pc bpc" id="L260" title="1 of 4 branches missed.">                    for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
+<span class="pc bpc" id="L261" title="1 of 4 branches missed.">                        for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;cols2; j++) {</span>
+<span class="pc bpc" id="L262" title="1 of 4 branches missed.">                            for(int k=kk; k&lt;kk+bsize &amp;&amp; k&lt;rows2; k++) {</span>
+<span class="fc" id="L263">                                dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];</span>
+                            }
+                        }
+                    }
+                }
+            }
+<span class="fc" id="L269">        });</span>
+
+<span class="fc" id="L271">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication of two real dense matrices using a concurrent implementation of a blocked
+     * algorithm with the j-k loops swapped.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] concurrentBlockedReordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L285">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L286">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L287">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L288">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L290">        double[] dest = new double[rows1*cols2];</span>
+<span class="fc" id="L291">        int bsize = Configurations.getBlockSize();</span>
+
+<span class="fc" id="L293">        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -&gt; {</span>
+            // Blocked matrix multiply
+<span class="fc bfc" id="L295" title="All 2 branches covered.">            for(int kk=0; kk&lt;rows2; kk += bsize) {</span>
+<span class="fc bfc" id="L296" title="All 2 branches covered.">                for(int jj=0; jj&lt;cols2; jj += bsize) {</span>
+                    // Multiply the current blocks
+<span class="pc bpc" id="L298" title="1 of 4 branches missed.">                    for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
+<span class="pc bpc" id="L299" title="1 of 4 branches missed.">                        for(int k=kk; k&lt;kk+bsize &amp;&amp; k&lt;rows2; k++) {</span>
+<span class="pc bpc" id="L300" title="1 of 4 branches missed.">                            for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;cols2; j++) {</span>
+<span class="fc" id="L301">                                dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];</span>
+                            }
+                        }
+                    }
+                }
+            }
+<span class="fc" id="L307">        });</span>
+
+<span class="fc" id="L309">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the multiplication of a real dense matrix with a real dense vector using the standard algorithm.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] standardVector(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L322">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L323">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L324">        int rows2 = shape2.dims[Axis2D.row()];</span>
+
+<span class="fc" id="L326">        double[] dest = new double[rows1];</span>
+
+<span class="fc bfc" id="L328" title="All 2 branches covered.">        for(int i=0; i&lt;rows1; i++) {</span>
+<span class="fc bfc" id="L329" title="All 2 branches covered.">            for(int k=0; k&lt;rows2; k++) {</span>
+<span class="fc" id="L330">                dest[i] += src1[i*cols1 + k]*src2[k];</span>
+            }
+        }
+
+<span class="fc" id="L334">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the multiplication of a real dense matrix with a real dense vector using a blocked algorithm.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] blockedVector(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L347">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L348">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L349">        int rows2 = shape2.dims[Axis2D.row()];</span>
+
+<span class="fc" id="L351">        double[] dest = new double[rows1];</span>
+<span class="fc" id="L352">        int bsize = Configurations.getBlockSize();</span>
+
+        // Blocked matrix-vector multiply
+<span class="fc bfc" id="L355" title="All 2 branches covered.">        for(int ii=0; ii&lt;rows1; ii += bsize) {</span>
+<span class="fc bfc" id="L356" title="All 2 branches covered.">            for(int kk=0; kk&lt;rows2; kk += bsize) {</span>
+                // Multiply the current blocks
+<span class="pc bpc" id="L358" title="1 of 4 branches missed.">                for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
+<span class="pc bpc" id="L359" title="1 of 4 branches missed.">                    for(int k=kk; k&lt;kk+bsize &amp;&amp; k&lt;rows2; k++) {</span>
+<span class="fc" id="L360">                        dest[i] += src1[i*cols1 + k]*src2[k];</span>
+                    }
+                }
+            }
+        }
+
+<span class="fc" id="L366">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the multiplication of a real dense matrix with a real dense vector using a concurrent implementation of the standard
+     * matrix multiplication algorithm.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] concurrentStandardVector(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L380">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L381">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L382">        int rows2 = shape2.dims[Axis2D.row()];</span>
+
+<span class="fc" id="L384">        double[] dest = new double[rows1];</span>
+
+<span class="fc" id="L386">        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</span>
+<span class="fc bfc" id="L387" title="All 2 branches covered.">            for(int k=0; k&lt;rows2; k++) {</span>
+<span class="fc" id="L388">                dest[i] += src1[i*cols1 + k]*src2[k];</span>
+            }
+<span class="fc" id="L390">        });</span>
+
+<span class="fc" id="L392">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the multiplication of a real dense matrix with a real dense vector using a concurrent implementation of a blocked
+     * algorithm.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape fo the second matrix.
+     * @return The result of matrix multiplying the two matrices.
+     */
+    public static double[] concurrentBlockedVector(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L406">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L407">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L408">        int rows2 = shape2.dims[Axis2D.row()];</span>
+
+<span class="fc" id="L410">        double[] dest = new double[rows1];</span>
+<span class="fc" id="L411">        int bsize = Configurations.getBlockSize();</span>
+
+<span class="fc" id="L413">        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -&gt; {</span>
+            // Blocked matrix-vector multiply
+<span class="fc bfc" id="L415" title="All 2 branches covered.">            for(int kk=0; kk&lt;rows2; kk += bsize) {</span>
+                // Multiply the current blocks
+<span class="pc bpc" id="L417" title="1 of 4 branches missed.">                for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
+<span class="pc bpc" id="L418" title="1 of 4 branches missed.">                    for(int k=kk; k&lt;kk+bsize &amp;&amp; k&lt;rows2; k++) {</span>
+<span class="fc" id="L419">                        dest[i] += src1[i*cols1 + k]*src2[k];</span>
+                    }
+                }
+            }
+<span class="fc" id="L423">        });</span>
+
+<span class="fc" id="L425">        return dest;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

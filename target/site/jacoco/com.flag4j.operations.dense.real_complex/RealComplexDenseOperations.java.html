@@ -68,15 +68,16 @@ public final class RealComplexDenseOperations {
      * Adds a scalar value to all entries of a tensor.
      * @param src1 Entries of first tensor.
      * @param a Scalar to add to all entries of this tensor.
+     * @return The result of adding the scalar to each entry of the tensor.
      */
     public static CNumber[] add(double[] src1, CNumber a) {
-<span class="fc" id="L73">        CNumber[] sum = new CNumber[src1.length];</span>
+<span class="fc" id="L74">        CNumber[] sum = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L75" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
-<span class="fc" id="L76">            sum[i] = a.add(src1[i]);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L77">            sum[i] = a.add(src1[i]);</span>
         }
 
-<span class="fc" id="L79">        return sum;</span>
+<span class="fc" id="L80">        return sum;</span>
     }
 
 
@@ -91,15 +92,15 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static CNumber[] sub(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="fc" id="L94">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L95">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
 
-<span class="fc" id="L96">        CNumber[] diff = new CNumber[src1.length];</span>
+<span class="fc" id="L97">        CNumber[] diff = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L98" title="All 2 branches covered.">        for(int i=0; i&lt;diff.length; i++) {</span>
-<span class="fc" id="L99">            diff[i] = src1[i].sub(src2[i]);</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        for(int i=0; i&lt;diff.length; i++) {</span>
+<span class="fc" id="L100">            diff[i] = src1[i].sub(src2[i]);</span>
         }
 
-<span class="fc" id="L102">        return diff;</span>
+<span class="fc" id="L103">        return diff;</span>
     }
 
 
@@ -113,15 +114,15 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static CNumber[] sub(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L116">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L117">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
 
-<span class="fc" id="L118">        CNumber[] diff = new CNumber[src1.length];</span>
+<span class="fc" id="L119">        CNumber[] diff = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L120" title="All 2 branches covered.">        for(int i=0; i&lt;diff.length; i++) {</span>
-<span class="fc" id="L121">            diff[i] = new CNumber(src1[i]-src2[i].re, -src2[i].im);</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        for(int i=0; i&lt;diff.length; i++) {</span>
+<span class="fc" id="L122">            diff[i] = new CNumber(src1[i]-src2[i].re, -src2[i].im);</span>
         }
 
-<span class="fc" id="L124">        return diff;</span>
+<span class="fc" id="L125">        return diff;</span>
     }
 
 
@@ -132,13 +133,13 @@ public final class RealComplexDenseOperations {
      * @return The tensor-scalar subtraction of the two parameters.
      */
     public static CNumber[] sub(double[] src1, CNumber a) {
-<span class="fc" id="L135">        CNumber[] sum = new CNumber[src1.length];</span>
+<span class="fc" id="L136">        CNumber[] sum = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L137" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
-<span class="fc" id="L138">            sum[i] = new CNumber(src1[i]-a.re, -a.im);</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L139">            sum[i] = new CNumber(src1[i]-a.re, -a.im);</span>
         }
 
-<span class="fc" id="L141">        return sum;</span>
+<span class="fc" id="L142">        return sum;</span>
     }
 
 
@@ -149,13 +150,13 @@ public final class RealComplexDenseOperations {
      * @return The scalar multiplication of the tensor.
      */
     public static CNumber[] scalMult(double[] entries, CNumber factor) {
-<span class="fc" id="L152">        CNumber[] product = new CNumber[entries.length];</span>
+<span class="fc" id="L153">        CNumber[] product = new CNumber[entries.length];</span>
 
-<span class="fc bfc" id="L154" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="fc" id="L155">            product[i] = factor.mult(entries[i]);</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L156">            product[i] = factor.mult(entries[i]);</span>
         }
 
-<span class="fc" id="L158">        return product;</span>
+<span class="fc" id="L159">        return product;</span>
     }
 
 
@@ -166,7 +167,7 @@ public final class RealComplexDenseOperations {
      * @return The scalar multiplication of the tensor.
      */
     public static CNumber[] scalDiv(double[] entries, CNumber divisor) {
-<span class="fc" id="L169">        return scalMult(entries, divisor.multInv());</span>
+<span class="fc" id="L170">        return scalMult(entries, divisor.multInv());</span>
     }
 
 
@@ -180,14 +181,14 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemMult(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="fc" id="L183">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
-<span class="fc" id="L184">        CNumber[] product = new CNumber[src1.length];</span>
+<span class="fc" id="L184">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L185">        CNumber[] product = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L186" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="fc" id="L187">            product[i] = src1[i].mult(src2[i]);</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L188">            product[i] = src1[i].mult(src2[i]);</span>
         }
 
-<span class="fc" id="L190">        return product;</span>
+<span class="fc" id="L191">        return product;</span>
     }
 
 
@@ -201,14 +202,14 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="nc" id="L204">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
-<span class="nc" id="L205">        CNumber[] product = new CNumber[src1.length];</span>
+<span class="nc" id="L205">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="nc" id="L206">        CNumber[] product = new CNumber[src1.length];</span>
 
-<span class="nc bnc" id="L207" title="All 2 branches missed.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="nc" id="L208">            product[i] = src1[i].div(src2[i]);</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="nc" id="L209">            product[i] = src1[i].div(src2[i]);</span>
         }
 
-<span class="nc" id="L211">        return product;</span>
+<span class="nc" id="L212">        return product;</span>
     }
 
 
@@ -222,16 +223,16 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemDiv(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L225">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
-<span class="fc" id="L226">        CNumber[] product = new CNumber[src1.length];</span>
+<span class="fc" id="L226">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L227">        CNumber[] product = new CNumber[src1.length];</span>
         double divisor;
 
-<span class="fc bfc" id="L229" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="fc" id="L230">            divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;</span>
-<span class="fc" id="L231">            product[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L231">            divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;</span>
+<span class="fc" id="L232">            product[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);</span>
         }
 
-<span class="fc" id="L234">        return product;</span>
+<span class="fc" id="L235">        return product;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

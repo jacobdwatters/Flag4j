@@ -26,20 +26,23 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
+import com.flag4j.operations.MatrixMultiply;
 import com.flag4j.operations.common.real.Aggregate;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.concurrency.CheckConcurrent;
 import com.flag4j.operations.dense.real.*;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ShapeArrayChecks;
+import com.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
 
-
 /**
- * Real dense matrix. Stored in row major format.
+ * Real dense matrix. Stored in row major format. This class is equivalent to a real dense tensor of rank 2.
  */
 public class Matrix extends RealMatrixBase implements
         MatrixComparisonsMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double>,
@@ -98,11 +101,53 @@ public class Matrix extends RealMatrixBase implements
      * Creates a real dense matrix whose entries are specified by a double array.
      * @param entries Entries of the real dense matrix.
      */
+    public Matrix(Double[][] entries) {
+        super(new Shape(entries.length, entries[0].length),
+                new double[entries.length*entries[0].length]);
+
+        int index = 0;
+
+        for(Double[] row : entries) {
+            for(Double value : row) {
+                super.entries[index++] = value;
+            }
+        }
+    }
+
+
+    /**
+     * Creates a real dense matrix whose entries are specified by a double array.
+     * @param entries Entries of the real dense matrix.
+     */
+    public Matrix(Integer[][] entries) {
+        super(new Shape(entries.length, entries[0].length),
+                new double[entries.length*entries[0].length]);
+
+        int index = 0;
+
+        for(Integer[] row : entries) {
+            for(Integer value : row) {
+                super.entries[index++] = value;
+            }
+        }
+    }
+
+
+    /**
+     * Creates a real dense matrix whose entries are specified by a double array.
+     * @param entries Entries of the real dense matrix.
+     */
     public Matrix(double[][] entries) {
         super(new Shape(entries.length, entries[0].length),
-                Arrays.stream(entries)
-                .flatMapToDouble(Arrays::stream)
-                .toArray());
+                new double[entries.length*entries[0].length]);
+
+        int index = 0;
+
+        for(double[] row : entries) {
+            for(double value : row) {
+                super.entries[index++] = value;
+            }
+        }
     }
 
 
@@ -175,63 +220,66 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
-     * Checks if this matrix is the identity matrix.
+     * Checks if this matrix is the identity matrix. That is, checks if this matrix is square and contains
+     * only ones along the principle diagonal and zeros everywhere else.
      *
      * @return True if this matrix is the identity matrix. Otherwise, returns false.
      */
     @Override
     public boolean isI() {
-        return false;
+        if(isSquare()) {
+            for(int i=0; i<numRows; i++) {
+                for(int j=0; j<numCols; j++) {
+                    if(i==j && entries[i*numCols + j]!=1) {
+                        return false; // No need to continue
+                    } else if(i!=j && entries[i*numCols + j]!=0) {
+                        return false; // No need to continue
+                    }
+                }
+            }
+
+        } else {
+            // An identity matrix must be square.
+            return false;
+        }
+
+        // If we make it to this point this matrix must be an identity matrix.
+        return true;
     }
 
 
     /**
-     * Checks if two matrices are equal (element-wise).
-     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
-     *
-     * @param B Second matrix in the equality.
-     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
+     * Checks if an object is equal to this matrix object. Valid object types are: {@link Matrix}, {@link CMatrix},
+     * {@link SparseMatrix}, and {@link SparseCMatrix}. These matrices are equal to this matrix if all entries are
+     * numerically equal to the corresponding element of this matrix. If the matrix is complex, then the imaginary
+     * component must be zero to be equal.
+     * @param object Object to check equality with this matrix.
+     * @return True if the two matrices are numerically equivalent and false otherwise.
      */
-    @Override
-    public boolean equals(Matrix B) {
-        return Arrays.equals(this.entries, B.entries) && this.shape.equals(B.shape);
-    }
+    public boolean equals(Object object) {
+        boolean equal;
 
+        if(object instanceof Matrix) {
+            Matrix mat = (Matrix) object;
+            equal = RealDenseEquals.matrixEquals(this, mat);
 
-    /**
-     * Checks if two matrices are equal (element-wise).
-     * This method considers {@code NaN} equal to itself and {@code 0.0d} equal to {@code -0.0d}.
-     *
-     * @param B Second matrix in the equality.
-     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
-     */
-    @Override
-    public boolean equals(SparseMatrix B) {
-        return false;
-    }
+        } else if(object instanceof CMatrix) {
+            CMatrix mat = (CMatrix) object;
+            equal = RealComplexDenseEquals.matrixEquals(this, mat);
 
+        } else if(object instanceof SparseMatrix) {
+            SparseMatrix mat = (SparseMatrix) object;
+            equal = RealDenseSparseEquals.matrixEquals(this, mat);
 
-    /**
-     * Checks if two matrices are equal (element-wise.)
-     *
-     * @param B Second matrix in the equality.
-     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
-     */
-    @Override
-    public boolean equals(CMatrix B) {
-        return false;
-    }
+        } else if(object instanceof SparseCMatrix) {
+            SparseCMatrix mat = (SparseCMatrix) object;
+            equal = RealComplexDenseSparseEquals.matrixEquals(this, mat);
 
+        } else {
+            equal = false;
+        }
 
-    /**
-     * Checks if two matrices are equal (element-wise.)
-     *
-     * @param B Second matrix in the equality.
-     * @return True if this matrix and matrix B are equivalent element-wise. Otherwise, returns false.
-     */
-    @Override
-    public boolean equals(SparseCMatrix B) {
-        return false;
+        return equal;
     }
 
 
@@ -260,7 +308,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public Matrix reshape(Shape shape) {
         // Ensure the total number of entries in each shape is equal
-        ShapeArrayChecks.broadcastCheck(shape, this.shape);
+        ParameterChecks.assertBroadcastable(shape, this.shape);
         return new Matrix(shape, entries.clone());
     }
 
@@ -320,6 +368,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(Double[][] values) {
+        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         RealDenseSetOperations.setValues(values, this.entries);
     }
 
@@ -332,6 +381,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(double[][] values) {
+        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
+        RealDenseSetOperations.setValues(values, this.entries);
+    }
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+     */
+    @Override
+    public void setValues(Integer[][] values) {
+        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         RealDenseSetOperations.setValues(values, this.entries);
     }
 
@@ -344,6 +407,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(int[][] values) {
+        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         RealDenseSetOperations.setValues(values, this.entries);
     }
 
@@ -357,7 +421,28 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setCol(Double[] values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
+        for(int i=0; i<values.length; i++) {
+            super.entries[i*numCols + colIndex] = values[i];
+        }
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public void setCol(Integer[] values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
+
+        for(int i=0; i<values.length; i++) {
+            super.entries[i*numCols + colIndex] = values[i];
+        }
     }
 
 
@@ -370,7 +455,11 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setCol(double[] values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
+        for(int i=0; i<values.length; i++) {
+            super.entries[i*numCols + colIndex] = values[i];
+        }
     }
 
 
@@ -383,7 +472,11 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setCol(int[] values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
+        for(int i=0; i<values.length; i++) {
+            super.entries[i*numCols + colIndex] = values[i];
+        }
     }
 
 
@@ -396,7 +489,28 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setRow(Double[] values, int rowIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
 
+        for(int i=0; i<values.length; i++) {
+            super.entries[rowIndex*numCols + i] = values[i];
+        }
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the column which is to be set.
+     * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public void setRow(Integer[] values, int rowIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
+
+        for(int i=0; i<values.length; i++) {
+            super.entries[rowIndex*numCols + i] = values[i];
+        }
     }
 
 
@@ -409,7 +523,11 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setRow(double[] values, int rowIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
 
+        for(int i=0; i<values.length; i++) {
+            super.entries[rowIndex*numCols + i] = values[i];
+        }
     }
 
 
@@ -422,13 +540,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setRow(int[] values, int rowIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
 
+        for(int i=0; i<values.length; i++) {
+            super.entries[rowIndex*numCols + i] = values[i];
+        }
     }
 
 
     /**
      * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set.
+     * left index location of the slice to set within this matrix.
      *
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
@@ -439,7 +561,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setSlice(Matrix values, int rowStart, int colStart) {
-
+        for(int i=0; i<values.numRows; i++) {
+            for(int j=0; j<values.numCols; j++) {
+                this.entries[(i+rowStart)*numCols + j+colStart] =
+                        values.entries[i* values.numCols + j];
+            }
+        }
     }
 
 
@@ -456,7 +583,32 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setSlice(Double[][] values, int rowStart, int colStart) {
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
+            }
+        }
+    }
 
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public void setSlice(Integer[][] values, int rowStart, int colStart) {
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
+            }
+        }
     }
 
 
@@ -473,7 +625,11 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setSlice(double[][] values, int rowStart, int colStart) {
-
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
+            }
+        }
     }
 
 
@@ -490,7 +646,11 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setSlice(int[][] values, int rowStart, int colStart) {
-
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
+            }
+        }
     }
 
 
@@ -508,7 +668,15 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix setSliceCopy(Matrix values, int rowStart, int colStart) {
-        return null;
+        Matrix copy = new Matrix(this);
+
+        for(int i=0; i<values.numRows; i++) {
+            for(int j=0; j<values.numCols; j++) {
+                copy.entries[(i+rowStart)*numCols + j+colStart] = values.entries[values.shape.entriesIndex(i, j)];
+            }
+        }
+
+        return copy;
     }
 
 
@@ -525,8 +693,16 @@ public class Matrix extends RealMatrixBase implements
      *                                   fit completely within this matrix.
      */
     @Override
-    public SparseCMatrix setSliceCopy(Double[][] values, int rowStart, int colStart) {
-        return null;
+    public Matrix setSliceCopy(Double[][] values, int rowStart, int colStart) {
+        Matrix copy = new Matrix(this);
+
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
+            }
+        }
+
+        return copy;
     }
 
 
@@ -543,8 +719,16 @@ public class Matrix extends RealMatrixBase implements
      *                                   fit completely within this matrix.
      */
     @Override
-    public SparseCMatrix setSliceCopy(double[][] values, int rowStart, int colStart) {
-        return null;
+    public Matrix setSliceCopy(Integer[][] values, int rowStart, int colStart) {
+        Matrix copy = new Matrix(this);
+
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
+            }
+        }
+
+        return copy;
     }
 
 
@@ -561,19 +745,66 @@ public class Matrix extends RealMatrixBase implements
      *                                   fit completely within this matrix.
      */
     @Override
-    public SparseCMatrix setSliceCopy(int[][] values, int rowStart, int colStart) {
-        return null;
+    public Matrix setSliceCopy(double[][] values, int rowStart, int colStart) {
+        Matrix copy = new Matrix(this);
+
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
+            }
+        }
+
+        return copy;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSliceCopy(int[][] values, int rowStart, int colStart) {
+        Matrix copy = new Matrix(this);
+
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
+            }
+        }
+
+        return copy;
     }
 
 
     /**
      * Removes a specified row from this matrix.
-     *
      * @param rowIndex Index of the row to remove from this matrix.
+     * @return A copy of this matrix with the specified column removed.
      */
     @Override
-    public void removeRow(int rowIndex) {
+    public Matrix removeRow(int rowIndex) {
+        Matrix copy = new Matrix(this.numRows-1, this.numCols);
 
+        int row = 0;
+
+        for(int i=0; i<this.numRows; i++) {
+            if(i!=rowIndex) {
+                for(int j=0; j<this.numCols; j++) {
+                    copy.entries[row*copy.numCols + j] = this.entries[i*numCols + j];
+                }
+                row++;
+            }
+        }
+
+        return copy;
     }
 
 
@@ -581,10 +812,11 @@ public class Matrix extends RealMatrixBase implements
      * Removes a specified set of rows from this matrix.
      *
      * @param rowIndices The indices of the rows to remove from this matrix.
+     * @return a copy of this matrix with the specified column removed.
      */
     @Override
-    public void removeRows(int... rowIndices) {
-
+    public Matrix removeRows(int... rowIndices) {
+        return null;
     }
 
 
@@ -592,10 +824,25 @@ public class Matrix extends RealMatrixBase implements
      * Removes a specified column from this matrix.
      *
      * @param colIndex Index of the column to remove from this matrix.
+     * @return a copy of this matrix with the specified column removed.
      */
     @Override
-    public void removeCol(int colIndex) {
+    public Matrix removeCol(int colIndex) {
+        Matrix copy = new Matrix(this.numRows, this.numCols-1);
 
+        int col;
+
+        for(int i=0; i<this.numRows; i++) {
+            col = 0;
+            for(int j=0; j<this.numCols; j++) {
+                if(j!=colIndex) {
+                    copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];
+                    col++;
+                }
+            }
+        }
+
+        return copy;
     }
 
 
@@ -603,10 +850,11 @@ public class Matrix extends RealMatrixBase implements
      * Removes a specified set of columns from this matrix.
      *
      * @param colIndices Indices of the columns to remove from this matrix.
+     * @return a copy of this matrix with the specified column removed.
      */
     @Override
-    public void removeCols(int... colIndices) {
-
+    public Matrix removeCols(int... colIndices) {
+        return null;
     }
 
 
@@ -618,7 +866,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix round() {
-        return null;
+        return new Matrix(this.shape, RealOperations.round(this.entries));
     }
 
 
@@ -632,7 +880,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix round(int precision) {
-        return null;
+        return new Matrix(this.shape, RealOperations.round(this.entries, precision));
     }
 
 
@@ -645,7 +893,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix roundToZero() {
-        return null;
+        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, 1.0E-12));
     }
 
 
@@ -660,7 +908,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix roundToZero(double threshold) {
-        return null;
+        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, threshold));
     }
 
 
@@ -899,19 +1147,19 @@ public class Matrix extends RealMatrixBase implements
         double[] transposeEntries;
 
         // TODO: Check if standard or blocked should be used.
-        if(CheckConcurrent.simpleMatrixCheck(numRows(), numCols())) {
+        if(CheckConcurrent.simpleMatrixCheck(numRows, numCols)) {
             // Use concurrent implementation
             transposeEntries = RealDenseTranspose.blockedMatrixConcurrent(
-                    entries, numRows(), numCols()
+                    entries, numRows, numCols
             );
         } else {
             // Use sequential implementation
             transposeEntries = RealDenseTranspose.blockedMatrix(
-                    entries, numRows(), numCols()
+                    entries, numRows, numCols
             );
         }
 
-        return new Matrix(new Shape(numCols(), numRows()), transposeEntries);
+        return new Matrix(new Shape(numCols, numRows), transposeEntries);
     }
 
 
@@ -992,7 +1240,10 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(Matrix B) {
-        return null;
+        double[] entries = MatrixMultiply.dispatch(this, B);
+        Shape shape = new Shape(this.numRows, B.numCols);
+
+        return new Matrix(shape, entries);
     }
 
 
@@ -1874,6 +2125,19 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
+     * Gets the element in this matrix at the specified indices.
+     * @param indices Indices of element.
+     * @return The element at the specified indices.
+     * @throws IllegalArgumentException If the number of indices is not two.
+     */
+    @Override
+    public Double get(int... indices) {
+        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
+        return entries[shape.entriesIndex(indices)];
+    }
+
+
+    /**
      * Get the row of this matrix at the specified index.
      *
      * @param i Index of row to get.
@@ -1898,13 +2162,47 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
+     * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
+     * Same as {@link #tr()}
+     *
+     * @return The trace of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    @Override
+    public Double trace() {
+        ParameterChecks.assertSquare(this.shape);
+        double sum = 0;
+        int colsOffset = this.numCols+1;
+
+        for(int i=0; i<this.numRows; i++) {
+            sum += this.entries[i*colsOffset];
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
+     * Same as {@link #trace()}
+     *
+     * @return The trace of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    @Override
+    public Double tr() {
+        return trace();
+    }
+
+
+    /**
      * Checks if this matrix is square.
      *
      * @return True if the matrix is square (i.e. the number of rows equals the number of columns). Otherwise, returns false.
      */
     @Override
     public boolean isSquare() {
-        return numRows()==numCols();
+        return numRows==numCols;
     }
 
 
@@ -1915,7 +2213,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isVector() {
-        return numRows()<=1 || numCols()<=1;
+        return numRows<=1 || numCols<=1;
     }
 
 
@@ -2020,8 +2318,8 @@ public class Matrix extends RealMatrixBase implements
      * @return The L<sub>p, q</sub> norm of this matrix.
      */
     @Override
-    public boolean norm(double p, double q) {
-        return false;
+    public double norm(double p, double q) {
+        return RealOperations.matrixNorm(entries, shape, p, q);
     }
 
 
@@ -2146,8 +2444,8 @@ public class Matrix extends RealMatrixBase implements
      * @return the 2-norm of this tensor.
      */
     @Override
-    public Double norm() {
-        return null;
+    public double norm() {
+        return RealOperations.matrixNorm(entries, shape);
     }
 
 
@@ -2160,8 +2458,8 @@ public class Matrix extends RealMatrixBase implements
      * @throws IllegalArgumentException If p is less than 1.
      */
     @Override
-    public Double norm(double p) {
-        return null;
+    public double norm(double p) {
+        return RealOperations.matrixNorm(entries, shape, p);
     }
 
 
@@ -2171,7 +2469,18 @@ public class Matrix extends RealMatrixBase implements
      * @return The maximum/infinite norm of this tensor.
      */
     @Override
-    public Double infNorm() {
-        return null;
+    public double infNorm() {
+        return RealOperations.matrixInfNorm(entries, shape);
+    }
+
+
+    /**
+     * Computes the maximum/infinite norm of this tensor.
+     *
+     * @return The maximum/infinite norm of this tensor.
+     */
+    @Override
+    public double maxNorm() {
+        return RealOperations.matrixMaxNorm(entries);
     }
 }

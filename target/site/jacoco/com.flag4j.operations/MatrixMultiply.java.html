@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MatrixMultiply.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations</a> &gt; <span class="el_source">MatrixMultiply.java</span></div><h1>MatrixMultiply.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations;
+
+import com.flag4j.Matrix;
+import com.flag4j.Shape;
+import com.flag4j.operations.dense.real.RealMatrixMultiplication;
+import com.flag4j.util.Axis2D;
+import com.flag4j.util.ShapeArrayChecks;
+
+
+/**
+ * Dispatches matrix multiplication to the appropriate algorithm based on the size of the matrices to be multiplied.
+ */
+<span class="nc" id="L37">public class MatrixMultiply {</span>
+
+    /**
+     * Ration measuring squareness. the closer to one, the more square the matrix is.
+     */
+    private static final double SQUARENESS_RATIO = 0.75;
+    /**
+     * Threshold for small matrices which should be multiplied using the standard ikj algorithm.
+     */
+    private static final int SEQUENTIAL_SWAPPED_THRESHOLD = 40;
+    /**
+     * Threshold for matrices to use the concurrent ikj algorithm.
+     */
+    private static final int CONCURRENT_SWAPPED_THRESHOLD = 3072;
+
+
+    /**
+     * Dispatches a matrix multiplication problem to the appropriate algorithm based on the size.
+     * @param A First matrix in matrix multiplication.
+     * @param B Second matrix in matrix multiplication.
+     * @return The result of the matrix multiplication.
+     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
+     */
+    public static double[] dispatch(Matrix A, Matrix B) {
+<span class="nc" id="L61">        ShapeArrayChecks.matMultShapeCheck(A.shape, B.shape);</span>
+
+        Algorithm algorithm;
+        double[] dest;
+
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if(B.numCols==1) {</span>
+<span class="nc" id="L67">            algorithm = chooseAlgorithmVector(A.shape);</span>
+        } else {
+<span class="nc" id="L69">            algorithm = chooseAlgorithm(A.shape, B.shape);</span>
+        }
+
+
+
+<span class="nc bnc" id="L74" title="All 9 branches missed.">        switch(algorithm) {</span>
+            case STANDARD:
+<span class="nc" id="L76">                dest = RealMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L77">                break;</span>
+            case REORDERED:
+<span class="nc" id="L79">                dest = RealMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L80">                break;</span>
+            case BLOCKED:
+<span class="nc" id="L82">                dest = RealMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L83">                break;</span>
+            case BLOCKED_REORDERED:
+<span class="nc" id="L85">                dest = RealMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L86">                break;</span>
+            case CONCURRENT_STANDARD:
+<span class="nc" id="L88">                dest = RealMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L89">                break;</span>
+            case CONCURRENT_REORDERED:
+<span class="nc" id="L91">                dest = RealMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L92">                break;</span>
+            case CONCURRENT_BLOCKED:
+<span class="nc" id="L94">                dest = RealMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L95">                break;</span>
+            case CONCURRENT_BLOCKED_REORDERED:
+<span class="nc" id="L97">                dest = RealMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L98">                break;</span>
+            default:
+                // Default to the concurrent reordered implementation just in case.
+<span class="nc" id="L101">                dest = RealMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);</span>
+        }
+
+<span class="nc" id="L104">        return dest;</span>
+    }
+
+
+    /**
+     * Dynamically chooses matrix multiply algorithm based on the shapes of the two matrices to multiply.
+     * @param shape1 The shape of the first matrix.
+     * @param shape2 The shape fo the second matrix.
+     * @return The algorithm to use in the matrix multiplication.
+     */
+    private static Algorithm chooseAlgorithm(Shape shape1, Shape shape2) {
+        Algorithm algorithm;
+
+<span class="nc" id="L117">        int rows1 = shape1.get(Axis2D.row());</span>
+<span class="nc" id="L118">        int cols1 = shape1.get(Axis2D.col());</span>
+<span class="nc" id="L119">        int cols2 = shape2.get(Axis2D.col());</span>
+
+        // TODO: Extract constants to final variables
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        if(getRatio(shape1) &gt;= SQUARENESS_RATIO) {</span>
+            // Then the first matrix is approximately square.
+<span class="nc bnc" id="L124" title="All 2 branches missed.">            if(cols2==1) {</span>
+                // Multiplying by a column vector.
+<span class="nc bnc" id="L126" title="All 2 branches missed.">                if(rows1&lt;=100) {</span>
+<span class="nc" id="L127">                    algorithm = Algorithm.STANDARD;</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">                } else if(rows1&lt;=300) {</span>
+<span class="nc" id="L129">                    algorithm = Algorithm.BLOCKED;</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">                } else if(rows1&lt;=1024) {</span>
+<span class="nc" id="L131">                    algorithm = Algorithm.CONCURRENT_BLOCKED;</span>
+                } else {
+<span class="nc" id="L133">                    algorithm = Algorithm.CONCURRENT_STANDARD;</span>
+                }
+
+            } else {
+<span class="nc bnc" id="L137" title="All 2 branches missed.">                if(rows1&lt;SEQUENTIAL_SWAPPED_THRESHOLD) {</span>
+<span class="nc" id="L138">                    algorithm = Algorithm.REORDERED;</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">                } else if(rows1&lt;CONCURRENT_SWAPPED_THRESHOLD) {</span>
+<span class="nc" id="L140">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+                } else {
+                /* For large matrices, use a concurrent, blocked algorithm with the j-k loops swapped for
+                better cache performance on modern systems */
+<span class="nc" id="L144">                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
+                }
+            }
+
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        } else if(rows1&gt;cols1) {</span>
+            // Then there are more rows than columns in the first matrix
+<span class="nc bnc" id="L150" title="All 4 branches missed.">            if(rows1&lt;=100 &amp;&amp; cols1&lt;=5) {</span>
+<span class="nc" id="L151">                algorithm = Algorithm.REORDERED;</span>
+            } else {
+<span class="nc" id="L153">                algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+            }
+        } else {
+            // Then there are more columns than rows in the first matrix
+<span class="nc bnc" id="L157" title="All 2 branches missed.">            if(cols1&lt;=100) {</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">                if(rows1&lt;=20) {</span>
+<span class="nc" id="L159">                    algorithm = Algorithm.REORDERED;</span>
+                } else {
+<span class="nc" id="L161">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+                }
+<span class="nc bnc" id="L163" title="All 2 branches missed.">            } else if(cols1&lt;=500) {</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">                if(rows1&lt;=10) {</span>
+<span class="nc" id="L165">                    algorithm = Algorithm.REORDERED;</span>
+                } else {
+<span class="nc" id="L167">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+                }
+            } else {
+<span class="nc bnc" id="L170" title="All 2 branches missed.">                if(rows1&lt;=5) {</span>
+<span class="nc" id="L171">                    algorithm = Algorithm.REORDERED;</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">                } else if(rows1&lt;=50){</span>
+<span class="nc" id="L173">                    algorithm = Algorithm.CONCURRENT_STANDARD;</span>
+                } else {
+<span class="nc" id="L175">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+                }
+            }
+        }
+
+<span class="nc" id="L180">        return algorithm;</span>
+    }
+
+
+    public static Algorithm chooseAlgorithmVector(Shape shape) {
+        Algorithm algorithm;
+
+<span class="nc" id="L187">        int rows = shape.get(Axis2D.row());</span>
+
+<span class="nc bnc" id="L189" title="All 2 branches missed.">        if(rows&lt;=300) {</span>
+<span class="nc" id="L190">            algorithm = Algorithm.BLOCKED_VECTOR;</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        } else if(rows&lt;=2048) {</span>
+<span class="nc" id="L192">            algorithm = Algorithm.CONCURRENT_BLOCKED_VECTOR;</span>
+        } else {
+<span class="nc" id="L194">            algorithm = Algorithm.CONCURRENT_STANDARD_VECTOR;</span>
+        }
+
+<span class="nc" id="L197">        return algorithm;</span>
+    }
+
+
+    /**
+     * Computes the squareness ratio of a matrix. This is a value between 0 and 1 with 1 being perfectly
+     * square and 0 being a row/column vector.
+     * @param shape Shape of the matrix to compute the squareness ratio of.
+     * @return The squareness ratio for the specified shape.
+     */
+    private static double getRatio(Shape shape) {
+<span class="nc" id="L208">        int numRows = shape.get(Axis2D.row());</span>
+<span class="nc" id="L209">        int numCols = shape.get(Axis2D.col());</span>
+
+<span class="nc" id="L211">        double ratio = Math.abs(numRows-numCols);</span>
+<span class="nc" id="L212">        return 1-ratio/Math.max(numRows, numCols);</span>
+    }
+
+
+    /**
+     * Simple enum class containing all possible choices of matrix multiply algorithms.
+     */
+<span class="nc" id="L219">    private enum Algorithm {</span>
+<span class="nc" id="L220">        STANDARD, REORDERED, BLOCKED, BLOCKED_REORDERED,</span>
+<span class="nc" id="L221">        CONCURRENT_STANDARD, CONCURRENT_REORDERED, CONCURRENT_BLOCKED, CONCURRENT_BLOCKED_REORDERED,</span>
+<span class="nc" id="L222">        STANDARD_VECTOR, BLOCKED_VECTOR, CONCURRENT_STANDARD_VECTOR, CONCURRENT_BLOCKED_VECTOR</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

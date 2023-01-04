@@ -25,10 +25,17 @@
 package com.flag4j.operations.common.real;
 
 
+import com.flag4j.util.ErrorMessages;
+
 /**
  * This class contains several low-level methods useful for computing aggregation operations on dense/sparse tensors.
  */
-<span class="nc" id="L31">public class Aggregate {</span>
+public class Aggregate {
+
+<span class="nc" id="L35">    private Aggregate() {</span>
+        // Hide default constructor.
+<span class="nc" id="L37">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+    }
 
 
     /**
@@ -37,11 +44,11 @@ package com.flag4j.operations.common.real;
      * @return The sum of all entries in this tensor.
      */
     public static double sum(final double[] entries) {
-<span class="fc" id="L40">        double sum = 0;</span>
-<span class="fc bfc" id="L41" title="All 2 branches covered.">        for(double value : entries) {</span>
-<span class="fc" id="L42">            sum += value;</span>
+<span class="fc" id="L47">        double sum = 0;</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for(double value : entries) {</span>
+<span class="fc" id="L49">            sum += value;</span>
         }
-<span class="fc" id="L44">        return sum;</span>
+<span class="fc" id="L51">        return sum;</span>
     }
 
 
@@ -54,20 +61,20 @@ package com.flag4j.operations.common.real;
     public static double min(final double[] entries) {
         double currMin;
 
-<span class="fc bfc" id="L57" title="All 2 branches covered.">        if(entries.length!=0) {</span>
-<span class="fc" id="L58">            currMin = Double.MAX_VALUE;</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if(entries.length!=0) {</span>
+<span class="fc" id="L65">            currMin = Double.MAX_VALUE;</span>
 
-<span class="fc bfc" id="L60" title="All 2 branches covered.">            for(double value : entries) {</span>
-<span class="fc bfc" id="L61" title="All 2 branches covered.">                if(value &lt; currMin) {</span>
-<span class="fc" id="L62">                    currMin = value; // Update current minimum.</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">            for(double value : entries) {</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">                if(value &lt; currMin) {</span>
+<span class="fc" id="L69">                    currMin = value; // Update current minimum.</span>
                 }
             }
 
         } else {
-<span class="fc" id="L67">            currMin = 0;</span>
+<span class="fc" id="L74">            currMin = 0;</span>
         }
 
-<span class="fc" id="L70">        return currMin;</span>
+<span class="fc" id="L77">        return currMin;</span>
     }
 
 
@@ -80,20 +87,20 @@ package com.flag4j.operations.common.real;
     public static double max(final double[] entries) {
         double currMax;
 
-<span class="fc bfc" id="L83" title="All 2 branches covered.">        if(entries.length!=0) {</span>
-<span class="fc" id="L84">            currMax = Double.MIN_NORMAL;</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if(entries.length!=0) {</span>
+<span class="fc" id="L91">            currMax = Double.MIN_NORMAL;</span>
 
-<span class="fc bfc" id="L86" title="All 2 branches covered.">            for(double value : entries) {</span>
-<span class="fc bfc" id="L87" title="All 2 branches covered.">                if(value &gt; currMax) {</span>
-<span class="fc" id="L88">                    currMax = value; // Update current maximum.</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            for(double value : entries) {</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">                if(value &gt; currMax) {</span>
+<span class="fc" id="L95">                    currMax = value; // Update current maximum.</span>
                 }
             }
 
         } else {
-<span class="fc" id="L93">            currMax = 0;</span>
+<span class="fc" id="L100">            currMax = 0;</span>
         }
 
-<span class="fc" id="L96">        return currMax;</span>
+<span class="fc" id="L103">        return currMax;</span>
     }
 
 
@@ -106,20 +113,20 @@ package com.flag4j.operations.common.real;
     public static double minAbs(final double[] entries) {
         double currMin;
 
-<span class="fc bfc" id="L109" title="All 2 branches covered.">        if(entries.length!=0) {</span>
-<span class="fc" id="L110">            currMin = Double.MAX_VALUE;</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        if(entries.length!=0) {</span>
+<span class="fc" id="L117">            currMin = Double.MAX_VALUE;</span>
 
-<span class="fc bfc" id="L112" title="All 2 branches covered.">            for(double value : entries) {</span>
-<span class="fc bfc" id="L113" title="All 2 branches covered.">                if(Math.abs(value) &lt; currMin) {</span>
-<span class="fc" id="L114">                    currMin = Math.abs(value); // Update current minimum.</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">            for(double value : entries) {</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">                if(Math.abs(value) &lt; currMin) {</span>
+<span class="fc" id="L121">                    currMin = Math.abs(value); // Update current minimum.</span>
                 }
             }
 
         } else {
-<span class="fc" id="L119">            currMin = 0;</span>
+<span class="fc" id="L126">            currMin = 0;</span>
         }
 
-<span class="fc" id="L122">        return currMin;</span>
+<span class="fc" id="L129">        return currMin;</span>
     }
 
 
@@ -130,15 +137,15 @@ package com.flag4j.operations.common.real;
      * @return The maximum absolute value in the tensor.
      */
     public static double maxAbs(final double[] entries) {
-<span class="fc" id="L133">        double currMax = 0;</span>
+<span class="fc" id="L140">        double currMax = 0;</span>
 
-<span class="fc bfc" id="L135" title="All 2 branches covered.">        for(double value : entries) {</span>
-<span class="fc bfc" id="L136" title="All 2 branches covered.">            if(Math.abs(value) &gt; currMax) {</span>
-<span class="fc" id="L137">                currMax = Math.abs(value); // Update current maximum.</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        for(double value : entries) {</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">            if(Math.abs(value) &gt; currMax) {</span>
+<span class="fc" id="L144">                currMax = Math.abs(value); // Update current maximum.</span>
             }
         }
 
-<span class="fc" id="L141">        return currMax;</span>
+<span class="fc" id="L148">        return currMax;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -108,6 +108,15 @@ public abstract class ErrorMessages {
      * Error message for arrays which do not have the same total number of entries.
      */
     private static final String TOTAL_ENTRIES_ERR = &quot;Arrays do not have the same total number of entries.&quot;;
+    /**
+     * Error message for parameters which are expected to be greater than or equal to some threshold.
+     */
+    private static final String GREATER_EQ_ERR = &quot;Expecting parameters to be greater than or equal to %d but got %d.&quot;;
+    /**
+     * Error message for parameters which are expected to be square.
+     */
+    private static final String SQUARE_SHAPE_ERR = &quot;Expecting matrix to be square but got shape %s&quot;;
+
 
     /**
      * Gets an error message for two tensors with mismatching shapes.
@@ -116,7 +125,7 @@ public abstract class ErrorMessages {
      * @return An error message for tensors with mismatching shapes.
      */
     public static String equalShapeErrMsg(Shape shape1, Shape shape2) {
-<span class="fc" id="L119">        return String.format(EQ_SHAPE_MISMATCH_ERR, shape1, shape2);</span>
+<span class="fc" id="L128">        return String.format(EQ_SHAPE_MISMATCH_ERR, shape1, shape2);</span>
     }
 
 
@@ -127,7 +136,7 @@ public abstract class ErrorMessages {
      * @return An error message for matrices with shapes not conducive with matrix multiplication.
      */
     public static String matMultShapeErrMsg(Shape shape1, Shape shape2) {
-<span class="fc" id="L130">        return String.format(MAT_MULT_DIM_MISMATCH_ERR, shape1, shape2);</span>
+<span class="fc" id="L139">        return String.format(MAT_MULT_DIM_MISMATCH_ERR, shape1, shape2);</span>
     }
 
 
@@ -137,7 +146,7 @@ public abstract class ErrorMessages {
      * @return An error message for a vector which is not a row vector.
      */
     public static String vecRowOrientErrMsg(Shape shape) {
-<span class="fc" id="L140">        return String.format(VEC_ROW_ORIENTATION_ERR, shape);</span>
+<span class="fc" id="L149">        return String.format(VEC_ROW_ORIENTATION_ERR, shape);</span>
     }
 
 
@@ -147,7 +156,7 @@ public abstract class ErrorMessages {
      * @return An error message for a vector which is not a row vector.
      */
     public static String vecColOrientErrMsg(Shape shape) {
-<span class="fc" id="L150">        return String.format(VEC_COL_ORIENTATION_ERR, shape);</span>
+<span class="fc" id="L159">        return String.format(VEC_COL_ORIENTATION_ERR, shape);</span>
     }
 
 
@@ -157,8 +166,8 @@ public abstract class ErrorMessages {
      * @return An error message for negative dimension.
      */
     public static String negativeDimErrMsg(int[] dims) {
-<span class="fc" id="L160">        return String.format(NEG_DIM_ERR,</span>
-<span class="fc" id="L161">                Arrays.toString(dims));</span>
+<span class="fc" id="L169">        return String.format(NEG_DIM_ERR,</span>
+<span class="fc" id="L170">                Arrays.toString(dims));</span>
     }
 
 
@@ -166,7 +175,7 @@ public abstract class ErrorMessages {
      * Gets an error message for an attempted instantiation of a utility class.
      * @return An error message for the attempted instantiation of a utility class;
      */
-<span class="fc" id="L169">    public static String utilityClassErrMsg() {return UTILITY_CLASS_ERR;}</span>
+<span class="fc" id="L178">    public static String utilityClassErrMsg() {return UTILITY_CLASS_ERR;}</span>
 
 
     /**
@@ -175,7 +184,7 @@ public abstract class ErrorMessages {
      * @return An error message for a negative value.
      */
     public static String negValueErr(double value) {
-<span class="fc" id="L178">        return String.format(NEG_VALUE_ERR, value);</span>
+<span class="fc" id="L187">        return String.format(NEG_VALUE_ERR, value);</span>
     }
 
 
@@ -186,7 +195,7 @@ public abstract class ErrorMessages {
      * @return An error message for a disallowed axis.
      */
     public static String axisErr(int axis, int[] allowedAxes) {
-<span class="fc" id="L189">        return String.format(AXIS_ERR_RANGE, axis, Arrays.toString(allowedAxes));</span>
+<span class="fc" id="L198">        return String.format(AXIS_ERR_RANGE, axis, Arrays.toString(allowedAxes));</span>
     }
 
 
@@ -196,7 +205,7 @@ public abstract class ErrorMessages {
      * @return An error message for a disallowed axis.
      */
     public static String axisErr(int axis) {
-<span class="nc" id="L199">        return String.format(AXIS_ERR, axis);</span>
+<span class="nc" id="L208">        return String.format(AXIS_ERR, axis);</span>
     }
 
 
@@ -207,7 +216,7 @@ public abstract class ErrorMessages {
      * @return An error message for a shape object with wrong shape.
      */
     public static String shapeRankErr(int actRank, int expRank) {
-<span class="nc" id="L210">        return String.format(SHAPE_RANK_ERR, actRank, expRank);</span>
+<span class="nc" id="L219">        return String.format(SHAPE_RANK_ERR, actRank, expRank);</span>
     }
 
 
@@ -218,7 +227,7 @@ public abstract class ErrorMessages {
      * @return An error message for a shape which cannot hold a specified number of entries.
      */
     public static String shapeEntriesError(Shape shape, int numEntries) {
-<span class="fc" id="L221">        return String.format(SHAPE_ENTRIES_ERR, shape.toString(), numEntries);</span>
+<span class="fc" id="L230">        return String.format(SHAPE_ENTRIES_ERR, shape.toString(), numEntries);</span>
     }
 
 
@@ -228,7 +237,7 @@ public abstract class ErrorMessages {
      * @return An error message for an ordinal which is not a valid vector orientation.
      */
     public static String vectorOrientationErr(int ordinal) {
-<span class="nc" id="L231">        return String.format(VECTOR_ORIENTATION_ERR, ordinal);</span>
+<span class="nc" id="L240">        return String.format(VECTOR_ORIENTATION_ERR, ordinal);</span>
     }
 
 
@@ -238,7 +247,7 @@ public abstract class ErrorMessages {
      * @return An error message for arrays which were expected to be the same length.
      */
     public static String getArrayLengthsMismatchErr(int... lengths) {
-<span class="fc" id="L241">        return String.format(ARRAY_LENGTHS_MISMATCH_ERR, Arrays.toString(lengths));</span>
+<span class="fc" id="L250">        return String.format(ARRAY_LENGTHS_MISMATCH_ERR, Arrays.toString(lengths));</span>
     }
 
 
@@ -249,7 +258,7 @@ public abstract class ErrorMessages {
      * @return An error message for a tensor being indexed with a number if indices not equal ot the rank of the tensor.
      */
     public static String getIndicesRankErr(int numIndices, int rank) {
-<span class="fc" id="L252">        return String.format(INDICES_RANK_ERR, numIndices, rank);</span>
+<span class="fc" id="L261">        return String.format(INDICES_RANK_ERR, numIndices, rank);</span>
     }
 
 
@@ -260,7 +269,7 @@ public abstract class ErrorMessages {
      * @return An error message for two shapes which cannot be broadcast together.
      */
     public static String getShapeBroadcastErr(Shape shape1, Shape shape2) {
-<span class="fc" id="L263">        return String.format(SHAPE_BROADCAST_ERR, shape1, shape2);</span>
+<span class="fc" id="L272">        return String.format(SHAPE_BROADCAST_ERR, shape1, shape2);</span>
     }
 
 
@@ -269,7 +278,29 @@ public abstract class ErrorMessages {
      * @return An error message for arrays which do not have the same total number of entries.
      */
     public static String getTotalEntriesErr() {
-<span class="fc" id="L272">        return TOTAL_ENTRIES_ERR;</span>
+<span class="fc" id="L281">        return TOTAL_ENTRIES_ERR;</span>
+    }
+
+
+    /**
+     * Gets an error message for a value which was expected to be greater than of equal to a specified threshold but wasn't.
+     * @param threshold Threshold value.
+     * @param value Value expected to be greater than or equal to the threshold value.
+     * @return An error message for a value which was expected to be greater than of equal to a
+     * specified threshold but wasn't.
+     */
+    public static String getGreaterEqErr(double threshold, double value) {
+<span class="nc" id="L293">        return String.format(GREATER_EQ_ERR, threshold, value);</span>
+    }
+
+
+    /**
+     * Gets an error message for a shape which was expected to be square but was not
+     * @param shape Shape of the tensor.
+     * @return An error message for a shape which was expected to be square but was not
+     */
+    public static String getSquareShapeErr(Shape shape) {
+<span class="nc" id="L303">        return String.format(SQUARE_SHAPE_ERR, shape.toString());</span>
     }
 }
 

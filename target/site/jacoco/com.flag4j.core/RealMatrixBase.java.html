@@ -25,6 +25,8 @@
 package com.flag4j.core;
 
 import com.flag4j.Shape;
+import com.flag4j.operations.dense.real.RealDenseSetOperations;
+import com.flag4j.util.ShapeArrayChecks;
 
 
 /**
@@ -41,8 +43,8 @@ public abstract class RealMatrixBase extends MatrixBase&lt;double[]&gt; {
      * @throws IllegalArgumentException If the shape parameter is not of rank 2.
      */
     public RealMatrixBase(Shape shape, double[] entries) {
-<span class="fc" id="L44">        super(shape, entries);</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L46">        super(shape, entries);</span>
+<span class="fc" id="L47">    }</span>
 
 
     /**
@@ -50,5 +52,16 @@ public abstract class RealMatrixBase extends MatrixBase&lt;double[]&gt; {
      * @return A complex matrix with equivalent real part and zero imaginary part.
      */
     public abstract ComplexMatrixBase toComplex();
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+     */
+    public void setValues(Integer[][] values) {
+<span class="nc" id="L63">        ShapeArrayChecks.equalShapeCheck(shape, new Shape(values.length, values[0].length));</span>
+<span class="nc" id="L64">        RealDenseSetOperations.setValues(values, this.entries);</span>
+<span class="nc" id="L65">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

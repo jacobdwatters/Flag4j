@@ -27,7 +27,7 @@ package com.flag4j.operations.dense.real;
 import com.flag4j.Shape;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ShapeArrayChecks;
+import com.flag4j.util.ParameterChecks;
 
 /**
  * This class provides low level methods for computing operations on real dense tensors.
@@ -50,7 +50,7 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static double[] add(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.equalShapeCheck(shape1, shape2);
+        ParameterChecks.assertEqualShape(shape1, shape2);
         double[] sum = new double[src1.length];
 
         for(int i=0; i<sum.length; i++) {
@@ -88,7 +88,7 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static double[] sub(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.equalShapeCheck(shape1, shape2);
+        ParameterChecks.assertEqualShape(shape1, shape2);
         double[] sum = new double[src1.length];
 
         for(int i=0; i<sum.length; i++) {
@@ -174,7 +174,7 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static double[] elemMult(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.equalShapeCheck(shape1, shape2);
+        ParameterChecks.assertEqualShape(shape1, shape2);
         double[] product = new double[src1.length];
 
         for(int i=0; i<product.length; i++) {
@@ -195,7 +195,7 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static double[] elemDiv(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ShapeArrayChecks.equalShapeCheck(shape1, shape2);
+        ParameterChecks.assertEqualShape(shape1, shape2);
         double[] product = new double[src1.length];
 
         for(int i=0; i<product.length; i++) {

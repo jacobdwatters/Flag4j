@@ -165,4 +165,13 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @throws ArithmeticException If this tensor contains any zeros.
      */
     T recep();
+
+
+    /**
+     * Gets the element in this tensor at the specified indices.
+     * @param indices Indices of element.
+     * @return The element at the specified indices.
+     * @throws IllegalArgumentException If the number of indices does not match the rank of this tensor.
+     */
+    X get(int... indices);
 }

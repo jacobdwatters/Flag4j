@@ -30,10 +30,10 @@ import com.flag4j.complex_numbers.CNumber;
 /**
  * This class contains several methods for checking properties of shapes and arrays.
  */
-public final class ShapeArrayChecks {
+public final class ParameterChecks {
 
     // Hide constructor
-    private ShapeArrayChecks() {
+    private ParameterChecks() {
         throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
     }
 
@@ -44,7 +44,7 @@ public final class ShapeArrayChecks {
      * @param shape2 Second shape.
      * @throws IllegalArgumentException If shapes are not equivalent.
      */
-    public static void equalShapeCheck(Shape shape1, Shape shape2) {
+    public static void assertEqualShape(Shape shape1, Shape shape2) {
         if(!shape1.equals(shape2)) {
             throw new IllegalArgumentException(
                     ErrorMessages.equalShapeErrMsg(shape1, shape2)
@@ -59,13 +59,13 @@ public final class ShapeArrayChecks {
      * @param shape2 Second shape.
      * @throws IllegalArgumentException If shapes do not satisfy the requirements of matrix multiplication.
      */
-    public static void matMultShapeCheck(Shape shape1, Shape shape2) {
+    public static void assertMatMultShapes(Shape shape1, Shape shape2) {
         boolean pass = true;
 
         // If the shapes are not of rank 2 then they are not matrices.
         if(shape1.getRank()==2 && shape2.getRank()==2) {
             // Ensure the number of columns in matrix one is equal to the number of rows in matrix 2.
-            if(shape1.dims[1] != shape2.dims[0]) {
+            if(shape1.dims[Axis2D.col()] != shape2.dims[Axis2D.row()]) {
                 pass = false;
             }
 
@@ -86,7 +86,7 @@ public final class ShapeArrayChecks {
      * @param lengths An array of array lengths.
      * @throws IllegalArgumentException If all lengths are not equal.
      */
-    public static void arrayLengthsCheck(int... lengths) {
+    public static void assertArrayLengthsEq(int... lengths) {
         boolean allEqual = true;
 
         for(int i=0; i<lengths.length-1; i++) {
@@ -108,7 +108,7 @@ public final class ShapeArrayChecks {
      * @param shape2 Second shape to compare.
      * @throws IllegalArgumentException If the two shapes do not have the same total number of entries.
      */
-    public static void broadcastCheck(Shape shape1, Shape shape2) {
+    public static void assertBroadcastable(Shape shape1, Shape shape2) {
         if(!shape1.totalEntries().equals(shape2.totalEntries())) {
             throw new IllegalArgumentException(ErrorMessages.getShapeBroadcastErr(shape1, shape2));
         }
@@ -121,7 +121,7 @@ public final class ShapeArrayChecks {
      * @param arr2 Second array.
      * @throws IllegalArgumentException If arrays do not have the same number of total entries.
      */
-    public static void equalTotalEntries(Object[][] arr1, double[] arr2) {
+    public static void assertTotalEntriesEq(Object[][] arr1, double[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
         }
@@ -134,7 +134,7 @@ public final class ShapeArrayChecks {
      * @param arr2 Second array.
      * @throws IllegalArgumentException If arrays do not have the same number of total entries.
      */
-    public static void equalTotalEntries(double[][] arr1, double[] arr2) {
+    public static void assertTotalEntriesEq(double[][] arr1, double[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
         }
@@ -147,7 +147,7 @@ public final class ShapeArrayChecks {
      * @param arr2 Second array.
      * @throws IllegalArgumentException If arrays do not have the same number of total entries.
      */
-    public static void equalTotalEntries(int[][] arr1, double[] arr2) {
+    public static void assertTotalEntriesEq(int[][] arr1, double[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
         }
@@ -160,7 +160,7 @@ public final class ShapeArrayChecks {
      * @param arr2 Second array.
      * @throws IllegalArgumentException If arrays do not have the same number of total entries.
      */
-    public static void equalTotalEntries(Object[][] arr1, CNumber[] arr2) {
+    public static void assertTotalEntriesEq(Object[][] arr1, CNumber[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
         }
@@ -173,7 +173,7 @@ public final class ShapeArrayChecks {
      * @param arr2 Second array.
      * @throws IllegalArgumentException If arrays do not have the same number of total entries.
      */
-    public static void equalTotalEntries(double[][] arr1, CNumber[] arr2) {
+    public static void assertTotalEntriesEq(double[][] arr1, CNumber[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
         }
@@ -186,9 +186,36 @@ public final class ShapeArrayChecks {
      * @param arr2 Second array.
      * @throws IllegalArgumentException If arrays do not have the same number of total entries.
      */
-    public static void equalTotalEntries(int[][] arr1, CNumber[] arr2) {
+    public static void assertTotalEntriesEq(int[][] arr1, CNumber[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length) {
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
+        }
+    }
+
+
+    /**
+     * Checks if a set of values is greater than or equal to a specified threshold.
+     * @param threshold Threshold value.
+     * @param values Values to compare against threshold.
+     * @throws IllegalArgumentException If any of the values are less than the threshold.
+     */
+    public static void assertGreaterEq(double threshold, double... values) {
+        for(double value : values) {
+            if(value<threshold) {
+                throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));
+            }
+        }
+    }
+
+
+    /**
+     * Checks if a shape represents a square matrix.
+     * @param shape Shape to check.
+     * @throws IllegalArgumentException If the shape is not of rank 2 with equal rows and columns.
+     */
+    public static void assertSquare(Shape shape) {
+        if(shape.getRank()!=2 || shape.get(0)!=shape.get(1)) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.getSquareShapeErr(shape)));
         }
     }
 }

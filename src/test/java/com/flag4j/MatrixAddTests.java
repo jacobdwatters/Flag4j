@@ -13,7 +13,7 @@ class MatrixAddTests {
     CMatrix BC;
     double b;
     CNumber bC;
-    Matrix sum;
+    Matrix sum, exp;
     CMatrix sumC;
     Shape expShape;
     double[] expEntries;
@@ -28,11 +28,11 @@ class MatrixAddTests {
         B = new Matrix(bEntries);
         expShape = A.shape.clone();
         expEntries = new double[]{1+0.333, 2+56.4, 3+13.4, 4-1.44, 5+5, 6+85.1, 7+1.343, 8+6.7, 9-88.4};
+        exp = new Matrix(expShape, expEntries);
 
         sum = A.add(B);
 
-        assertArrayEquals(expEntries, sum.entries);
-        assertEquals(expShape, sum.shape);
+        assertEquals(exp, sum);
 
         // --------------- Sub-case 2 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
@@ -41,11 +41,11 @@ class MatrixAddTests {
         B = new Matrix(bEntries);
         expShape = A.shape.clone();
         expEntries = new double[]{1+0.333, 2+56.4, 3+13.4, 4 - 1.44, 5+5, 6+85.1};
+        exp = new Matrix(expShape, expEntries);
 
         sum = A.add(B);
 
-        assertArrayEquals(expEntries, sum.entries);
-        assertEquals(expShape, sum.shape);
+        assertEquals(exp, sum);
 
         // --------------- Sub-case 3 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
@@ -71,11 +71,11 @@ class MatrixAddTests {
         A = new Matrix(aEntries);
         expShape = A.shape.clone();
         expEntries = new double[]{1+2.133, 2+2.133, 3+2.133, 4+2.133, 5+2.133, 6+2.133, 7+2.133, 8+2.133, 9+2.133};
+        exp = new Matrix(expShape, expEntries);
 
         sum = A.add(b);
 
-        assertArrayEquals(expEntries, sum.entries);
-        assertEquals(expShape, sum.shape);
+        assertEquals(exp, sum);
 
         // --------------- Sub-case 2 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
@@ -83,11 +83,11 @@ class MatrixAddTests {
         A = new Matrix(aEntries);
         expShape = A.shape.clone();
         expEntries = new double[]{1+2.133, 2+2.133, 3+2.133, 4+2.133, 5+2.133, 6+2.133};
+        exp = new Matrix(expShape, expEntries);
 
         sum = A.add(b);
 
-        assertArrayEquals(expEntries, sum.entries);
-        assertEquals(expShape, sum.shape);
+        assertEquals(exp, sum);
     }
 
 

@@ -33,6 +33,9 @@ import java.util.Random;
  * This class contains methods for generating random complex numbers. Wraps {@link Random} class.
  */
 public class RandomCNumber {
+    /**
+     * Random number generator.
+     */
     private final Random rng;
 
 
@@ -40,9 +43,9 @@ public class RandomCNumber {
      * Constructs a complex value random number generator. The seed of this random number generator is
      * very likely to be distinct from any other invocation of this constructor.
      */
-<span class="fc" id="L43">    public RandomCNumber() {</span>
-<span class="fc" id="L44">        rng = new Random();</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L46">    public RandomCNumber() {</span>
+<span class="fc" id="L47">        rng = new Random();</span>
+<span class="fc" id="L48">    }</span>
 
 
     /**
@@ -50,9 +53,9 @@ public class RandomCNumber {
      * results.
      * @param seed Seed for this random number generator.
      */
-<span class="fc" id="L53">    public RandomCNumber(long seed) {</span>
-<span class="fc" id="L54">        rng = new Random(seed);</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L56">    public RandomCNumber(long seed) {</span>
+<span class="fc" id="L57">        rng = new Random(seed);</span>
+<span class="fc" id="L58">    }</span>
 
 
     /**
@@ -62,7 +65,7 @@ public class RandomCNumber {
      * @return A random real number from a standard normal distribution.
      */
     public CNumber randn() {
-<span class="fc" id="L65">        return randn(false);</span>
+<span class="fc" id="L68">        return randn(false);</span>
     }
 
 
@@ -71,7 +74,7 @@ public class RandomCNumber {
      * @return random real number
      */
     public CNumber random() {
-<span class="fc" id="L74">        return new CNumber(Math.random());</span>
+<span class="fc" id="L77">        return new CNumber(Math.random());</span>
     }
 
 
@@ -84,14 +87,14 @@ public class RandomCNumber {
      * and a complex number is returned.
      */
     public  CNumber randn(boolean complex) {
-<span class="fc" id="L87">        double real = rng.nextGaussian();</span>
+<span class="fc" id="L90">        double real = rng.nextGaussian();</span>
         double imaginary;
 
-<span class="fc bfc" id="L90" title="All 2 branches covered.">        if(complex) {</span>
-<span class="fc" id="L91">            imaginary = rng.nextGaussian();</span>
-<span class="fc" id="L92">            return new CNumber(real, imaginary);</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if(complex) {</span>
+<span class="fc" id="L94">            imaginary = rng.nextGaussian();</span>
+<span class="fc" id="L95">            return new CNumber(real, imaginary);</span>
         } else {
-<span class="fc" id="L94">            return new CNumber(real);</span>
+<span class="fc" id="L97">            return new CNumber(real);</span>
         }
     }
 
@@ -104,20 +107,20 @@ public class RandomCNumber {
      */
     public CNumber random(double mag) {
 
-<span class="fc bfc" id="L107" title="All 2 branches covered.">        if(mag &lt; 0) {</span>
-<span class="fc" id="L108">            throw new IllegalArgumentException(&quot;Magnitude must be non-negative.&quot;);</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if(mag &lt; 0) {</span>
+<span class="fc" id="L111">            throw new IllegalArgumentException(&quot;Magnitude must be non-negative.&quot;);</span>
         }
 
         // By Pythagorean theorem, this will result in a complex number with specified magnitude
-<span class="fc" id="L112">        double real = rng.nextDouble()*mag;</span>
-<span class="fc" id="L113">        double imaginary = Math.sqrt(Math.pow(mag, 2) - Math.pow(real, 2));</span>
+<span class="fc" id="L115">        double real = rng.nextDouble()*mag;</span>
+<span class="fc" id="L116">        double imaginary = Math.sqrt(Math.pow(mag, 2) - Math.pow(real, 2));</span>
 
-<span class="fc" id="L115">        CNumber[] result_list = {new CNumber(real, imaginary),  // 1st quadrant result</span>
+<span class="fc" id="L118">        CNumber[] result_list = {new CNumber(real, imaginary),  // 1st quadrant result</span>
                 new CNumber(-real, imaginary),  // 2nd quadrant result
                 new CNumber(-real, -imaginary),  // 3rd quadrant result
                 new CNumber(real, -imaginary)}; // 4th quadrant result
 
-<span class="fc" id="L120">        return result_list[rng.nextInt(4)]; // Choose value randomly from one quadrant.</span>
+<span class="fc" id="L123">        return result_list[rng.nextInt(4)]; // Choose value randomly from one quadrant.</span>
     }
 
 
@@ -138,26 +141,26 @@ public class RandomCNumber {
      * @return random real or complex number between min and max.
      */
     public CNumber random(double min, double max, boolean... magnitude_flag) {
-<span class="fc bfc" id="L141" title="All 2 branches covered.">        if(magnitude_flag.length &gt; 1) {</span>
-<span class="fc" id="L142">            throw new IllegalArgumentException(&quot;Can have at most one optional flag but got &quot; + magnitude_flag.length);</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        if(magnitude_flag.length &gt; 1) {</span>
+<span class="fc" id="L145">            throw new IllegalArgumentException(&quot;Can have at most one optional flag but got &quot; + magnitude_flag.length);</span>
         }
 
-<span class="fc bfc" id="L145" title="All 2 branches covered.">        if(min &gt; max) {</span>
-<span class="fc" id="L146">            throw new IllegalArgumentException(&quot;min must be less than or equal to max but received &quot;</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        if(min &gt; max) {</span>
+<span class="fc" id="L149">            throw new IllegalArgumentException(&quot;min must be less than or equal to max but received &quot;</span>
                     + &quot;min: &quot; + min + &quot; and max: &quot; + max);
         }
 
-<span class="pc bpc" id="L150" title="1 of 4 branches missed.">        if (magnitude_flag.length &gt; 0 &amp;&amp; magnitude_flag[0]) {</span>
-<span class="pc bpc" id="L151" title="1 of 4 branches missed.">            if(min &lt; 0 || max &lt; 0) {</span>
-<span class="fc" id="L152">                throw new IllegalArgumentException(&quot;For complex numbers, min and max must be non-negative values but received &quot;</span>
+<span class="pc bpc" id="L153" title="1 of 4 branches missed.">        if (magnitude_flag.length &gt; 0 &amp;&amp; magnitude_flag[0]) {</span>
+<span class="pc bpc" id="L154" title="1 of 4 branches missed.">            if(min &lt; 0 || max &lt; 0) {</span>
+<span class="fc" id="L155">                throw new IllegalArgumentException(&quot;For complex numbers, min and max must be non-negative values but received &quot;</span>
                         + &quot;min: &quot; + min + &quot; and max: &quot; + max);
             }
 
-<span class="fc" id="L156">            double mag = Math.random()*(max - min) + min;</span>
-<span class="fc" id="L157">            return random(mag);</span>
+<span class="fc" id="L159">            double mag = Math.random()*(max - min) + min;</span>
+<span class="fc" id="L160">            return random(mag);</span>
 
         } else {
-<span class="fc" id="L160">            return new CNumber(Math.random()*(max - min) + min);</span>
+<span class="fc" id="L163">            return new CNumber(Math.random()*(max - min) + min);</span>
         }
     }
 }

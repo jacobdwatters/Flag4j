@@ -43,12 +43,11 @@ public abstract class Configurations {
     /**
      * The default block size for blocked algorithms.
      */
-    private static final int DEFAULT_BLOCK_SIZE = 32;
+    private static final int DEFAULT_BLOCK_SIZE = 64;
     /**
      * The default minimum recursive size for recursive algorithms.
      */
     private static final int DEFAULT_MIN_RECURSIVE_SIZE = 128;
-
 
     /**
      * The block size to use in blocked algorithms.

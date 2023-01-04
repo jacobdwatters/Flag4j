@@ -24,58 +24,57 @@
 
 package com.flag4j;
 
-import com.flag4j.operations.RealDenseTranspose;
+
+import com.flag4j.operations.dense.real.RealMatrixMultiplication;
 import com.flag4j.util.RandomTensor;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
-<span class="nc" id="L32">public class Testing {</span>
+<span class="nc" id="L34">public class Testing {</span>
 
-    static void checkEq(double[] arr1, double[] arr2) {
-<span class="nc bnc" id="L35" title="All 2 branches missed.">        if(arr1.length != arr2.length) {</span>
-<span class="nc" id="L36">            throw new RuntimeException(&quot;Arrays are not equal lengths.&quot;);</span>
-        }
 
-<span class="nc bnc" id="L39" title="All 2 branches missed.">        for(int i=0; i&lt;arr1.length; i++) {</span>
-<span class="nc bnc" id="L40" title="All 2 branches missed.">            if(arr1[i] != arr2[i]) {</span>
-<span class="nc" id="L41">                throw new RuntimeException(&quot;Arrays are not equal: &quot; + arr1[i] + &quot;, &quot; + arr2[i]);</span>
+    public static void printMat(Matrix mat) {
+
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        for(int i=0; i&lt;mat.numRows(); i++) {</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">            for(int j=0; j&lt;mat.numCols(); j++) {</span>
+<span class="nc" id="L41">                System.out.print(mat.get(i, j));</span>
+
+<span class="nc bnc" id="L43" title="All 2 branches missed.">                if(j!=mat.numCols()-1) {</span>
+<span class="nc" id="L44">                    System.out.print(&quot;, &quot;);</span>
+                }
             }
+<span class="nc" id="L47">            System.out.println();</span>
         }
-<span class="nc" id="L44">    }</span>
+<span class="nc" id="L49">    }</span>
 
 
     public static void main(String[] args) {
-<span class="nc" id="L48">        int numRows = 1800;</span>
-<span class="nc" id="L49">        int numCols = 1500;</span>
-
         long startTime, endTime;
+        double[] re1, re2;
+<span class="nc" id="L55">        RandomTensor rtg = new RandomTensor(42l);</span>
 
-<span class="nc" id="L53">        RandomTensor rng = new RandomTensor();</span>
-<span class="nc" id="L54">        double[] A = rng.getRandomMatrix(numRows, numCols).entries;</span>
+<span class="nc" id="L57">        int numRows = 3000;</span>
+<span class="nc" id="L58">        int numCols = 3000;</span>
 
-        // Transpose algorithm 2
-<span class="nc" id="L57">        startTime = System.nanoTime();</span>
-<span class="nc" id="L58">        RealDenseTranspose.standardMatrix(A, numRows, numCols);</span>
-<span class="nc" id="L59">        endTime = System.nanoTime();</span>
-<span class="nc" id="L60">        System.out.println(&quot;Standard: &quot; + (endTime-startTime)/1000000.0 + &quot; ms&quot;);</span>
+<span class="nc" id="L60">        Matrix A = rtg.getRandomMatrix(numRows, numCols);</span>
 
-        // Transpose algorithm 3
-<span class="nc" id="L63">        startTime = System.nanoTime();</span>
-<span class="nc" id="L64">        RealDenseTranspose.blockedMatrix(A, numRows, numCols);</span>
-<span class="nc" id="L65">        endTime = System.nanoTime();</span>
-<span class="nc" id="L66">        System.out.println(&quot;Blocked: &quot; + (endTime-startTime)/1000000.0 + &quot; ms&quot;);</span>
+<span class="nc" id="L62">        startTime = System.nanoTime();</span>
+<span class="nc" id="L63">        re1 = RealMatrixMultiplication.standard(A.entries, A.shape, A.entries, A.shape);</span>
+<span class="nc" id="L64">        endTime = System.nanoTime();</span>
+<span class="nc" id="L65">        System.out.println(String.format(&quot;standard: %.2f ms&quot;, (endTime-startTime)*1.0e-6));</span>
 
-        // Transpose algorithm 4
-<span class="nc" id="L69">        startTime = System.nanoTime();</span>
-<span class="nc" id="L70">        RealDenseTranspose.standardMatrixConcurrent(A, numRows, numCols);</span>
-<span class="nc" id="L71">        endTime = System.nanoTime();</span>
-<span class="nc" id="L72">        System.out.println(&quot;Standard Concurrent: &quot; + (endTime-startTime)/1000000.0 + &quot; ms&quot;);</span>
+<span class="nc" id="L67">        startTime = System.nanoTime();</span>
+<span class="nc" id="L68">        RealMatrixMultiplication.standardSwapped(A.entries, A.shape, A.entries, A.shape);</span>
+<span class="nc" id="L69">        endTime = System.nanoTime();</span>
+<span class="nc" id="L70">        System.out.println(String.format(&quot;swapped: %.2f ms&quot;, (endTime-startTime)*1.0e-6));</span>
 
-        // Transpose algorithm 5
-<span class="nc" id="L75">        startTime = System.nanoTime();</span>
-<span class="nc" id="L76">        RealDenseTranspose.blockedMatrixConcurrent(A, numRows, numCols);</span>
-<span class="nc" id="L77">        endTime = System.nanoTime();</span>
-<span class="nc" id="L78">        System.out.println(&quot;Blocked Concurrent: &quot; + (endTime-startTime)/1000000.0 + &quot; ms&quot;);</span>
-<span class="nc" id="L79">    }</span>
+<span class="nc" id="L72">        startTime = System.nanoTime();</span>
+<span class="nc" id="L73">        re2 = RealMatrixMultiplication.emjlReorder(A.entries, A.shape, A.entries, A.shape);</span>
+<span class="nc" id="L74">        endTime = System.nanoTime();</span>
+<span class="nc" id="L75">        System.out.println(String.format(&quot;emjlReorder: %.2f ms&quot;, (endTime-startTime)*1.0e-6));</span>
+
+<span class="nc" id="L77">        System.out.println(Arrays.equals(re1, re2));</span>
+<span class="nc" id="L78">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

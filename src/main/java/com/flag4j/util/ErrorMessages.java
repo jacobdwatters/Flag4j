@@ -108,6 +108,15 @@ public abstract class ErrorMessages {
      * Error message for arrays which do not have the same total number of entries.
      */
     private static final String TOTAL_ENTRIES_ERR = "Arrays do not have the same total number of entries.";
+    /**
+     * Error message for parameters which are expected to be greater than or equal to some threshold.
+     */
+    private static final String GREATER_EQ_ERR = "Expecting parameters to be greater than or equal to %d but got %d.";
+    /**
+     * Error message for parameters which are expected to be square.
+     */
+    private static final String SQUARE_SHAPE_ERR = "Expecting matrix to be square but got shape %s";
+
 
     /**
      * Gets an error message for two tensors with mismatching shapes.
@@ -270,6 +279,28 @@ public abstract class ErrorMessages {
      */
     public static String getTotalEntriesErr() {
         return TOTAL_ENTRIES_ERR;
+    }
+
+
+    /**
+     * Gets an error message for a value which was expected to be greater than of equal to a specified threshold but wasn't.
+     * @param threshold Threshold value.
+     * @param value Value expected to be greater than or equal to the threshold value.
+     * @return An error message for a value which was expected to be greater than of equal to a
+     * specified threshold but wasn't.
+     */
+    public static String getGreaterEqErr(double threshold, double value) {
+        return String.format(GREATER_EQ_ERR, threshold, value);
+    }
+
+
+    /**
+     * Gets an error message for a shape which was expected to be square but was not
+     * @param shape Shape of the tensor.
+     * @return An error message for a shape which was expected to be square but was not
+     */
+    public static String getSquareShapeErr(Shape shape) {
+        return String.format(SQUARE_SHAPE_ERR, shape.toString());
     }
 }
 
