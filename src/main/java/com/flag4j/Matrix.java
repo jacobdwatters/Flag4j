@@ -37,7 +37,7 @@ import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ShapeArrayChecks;
+import com.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
 
@@ -308,7 +308,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public Matrix reshape(Shape shape) {
         // Ensure the total number of entries in each shape is equal
-        ShapeArrayChecks.broadcastCheck(shape, this.shape);
+        ParameterChecks.assertBroadcastable(shape, this.shape);
         return new Matrix(shape, entries.clone());
     }
 
@@ -368,7 +368,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(Double[][] values) {
-        ShapeArrayChecks.equalShapeCheck(shape, new Shape(values.length, values[0].length));
+        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         RealDenseSetOperations.setValues(values, this.entries);
     }
 
@@ -381,7 +381,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(double[][] values) {
-        ShapeArrayChecks.equalShapeCheck(shape, new Shape(values.length, values[0].length));
+        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         RealDenseSetOperations.setValues(values, this.entries);
     }
 
@@ -394,7 +394,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(Integer[][] values) {
-        ShapeArrayChecks.equalShapeCheck(shape, new Shape(values.length, values[0].length));
+        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         RealDenseSetOperations.setValues(values, this.entries);
     }
 
@@ -407,7 +407,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(int[][] values) {
-        ShapeArrayChecks.equalShapeCheck(shape, new Shape(values.length, values[0].length));
+        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         RealDenseSetOperations.setValues(values, this.entries);
     }
 
@@ -421,7 +421,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setCol(Double[] values, int colIndex) {
-        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numRows);
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = values[i];
@@ -438,7 +438,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setCol(Integer[] values, int colIndex) {
-        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numRows);
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = values[i];
@@ -455,7 +455,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setCol(double[] values, int colIndex) {
-        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numRows);
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = values[i];
@@ -472,7 +472,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setCol(int[] values, int colIndex) {
-        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numRows);
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = values[i];
@@ -489,7 +489,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setRow(Double[] values, int rowIndex) {
-        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numCols());
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = values[i];
@@ -506,7 +506,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setRow(Integer[] values, int rowIndex) {
-        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numCols());
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = values[i];
@@ -523,7 +523,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setRow(double[] values, int rowIndex) {
-        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numCols);
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = values[i];
@@ -540,7 +540,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setRow(int[] values, int rowIndex) {
-        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numCols);
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = values[i];
@@ -2132,7 +2132,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double get(int... indices) {
-        ShapeArrayChecks.arrayLengthsCheck(indices.length, shape.getRank());
+        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
         return entries[shape.entriesIndex(indices)];
     }
 
@@ -2170,7 +2170,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double trace() {
-        ShapeArrayChecks.assertSquare(this.shape);
+        ParameterChecks.assertSquare(this.shape);
         double sum = 0;
         int colsOffset = this.numCols+1;
 

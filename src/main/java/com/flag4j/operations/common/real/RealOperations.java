@@ -27,7 +27,7 @@ package com.flag4j.operations.common.real;
 import com.flag4j.Shape;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ShapeArrayChecks;
+import com.flag4j.util.ParameterChecks;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -99,7 +99,7 @@ public class RealOperations {
      * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
      */
     public static double matrixNorm(double[] src, Shape shape, double p, double q) {
-        ShapeArrayChecks.assertGreaterEq(1, p, q);
+        ParameterChecks.assertGreaterEq(1, p, q);
 
         double norm = 0;
         double colSum;
@@ -129,7 +129,7 @@ public class RealOperations {
      * @throws IllegalArgumentException If {@code p} is less than 1.
      */
     public static double matrixNorm(double[] src, Shape shape, double p) {
-        ShapeArrayChecks.assertGreaterEq(1, p);
+        ParameterChecks.assertGreaterEq(1, p);
 
         double norm = 0;
         double colSum;

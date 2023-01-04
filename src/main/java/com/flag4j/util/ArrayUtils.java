@@ -47,7 +47,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(int[] src, CNumber[] dest) {
-        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);
+        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
         for(int i=0; i<dest.length; i++) {
             dest[i] = new CNumber(src[i]);
@@ -62,7 +62,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(double[] src, CNumber[] dest) {
-        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);
+        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
         for(int i=0; i<dest.length; i++) {
             dest[i] = new CNumber(src[i]);
@@ -77,7 +77,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(Integer[] src, CNumber[] dest) {
-        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);
+        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
         for(int i=0; i<dest.length; i++) {
             dest[i] = new CNumber(src[i]);
@@ -92,7 +92,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(Double[] src, CNumber[] dest) {
-        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);
+        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
         for(int i=0; i<dest.length; i++) {
             dest[i] = new CNumber(src[i]);
@@ -107,7 +107,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(String[] src, CNumber[] dest) {
-        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);
+        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
         for(int i=0; i<dest.length; i++) {
             dest[i] = new CNumber(src[i]);
@@ -122,7 +122,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(CNumber[] src, CNumber[] dest) {
-        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);
+        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
 
         for(int i=0; i<dest.length; i++) {
             dest[i] = new CNumber(src[i]);

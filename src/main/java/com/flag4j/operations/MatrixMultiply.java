@@ -28,7 +28,7 @@ import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.operations.dense.real.RealMatrixMultiplication;
 import com.flag4j.util.Axis2D;
-import com.flag4j.util.ShapeArrayChecks;
+import com.flag4j.util.ParameterChecks;
 
 
 /**
@@ -58,7 +58,7 @@ public class MatrixMultiply {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static double[] dispatch(Matrix A, Matrix B) {
-        ShapeArrayChecks.matMultShapeCheck(A.shape, B.shape);
+        ParameterChecks.assertMatMultShapes(A.shape, B.shape);
 
         Algorithm algorithm;
         double[] dest;

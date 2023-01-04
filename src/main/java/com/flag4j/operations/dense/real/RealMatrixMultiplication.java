@@ -29,7 +29,6 @@ import com.flag4j.operations.concurrency.Configurations;
 import com.flag4j.operations.concurrency.ThreadManager;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ShapeArrayChecks;
 
 /**
  * This class contains several low level methods for computing matrix-matrix multiplications. This includes transpose
