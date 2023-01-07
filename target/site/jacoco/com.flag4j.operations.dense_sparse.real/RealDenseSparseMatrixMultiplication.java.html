@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealDenseSparseMatrixMultiplication.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense_sparse.real</a> &gt; <span class="el_source">RealDenseSparseMatrixMultiplication.java</span></div><h1>RealDenseSparseMatrixMultiplication.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense_sparse.real;
+
+import com.flag4j.Shape;
+import com.flag4j.util.Axis2D;
+import com.flag4j.util.ErrorMessages;
+
+/**
+ * This class contains low level methods for computing the matrix multiplication (and matrix vector multiplication) between
+ * a real dense/sparse matrix and a real sparse/dense matrix or vector.
+ */
+public class RealDenseSparseMatrixMultiplication {
+
+<span class="nc" id="L37">    private RealDenseSparseMatrixMultiplication() {</span>
+        // Hide default constructor.
+<span class="nc" id="L39">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Computes the dense matrix sparse vector multiplication.
+     * @param src1 Entries of the dense matrix.
+     * @param shape1 Shape of the dense matrix.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries in sparse vector.
+     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+     */
+    public static double[] standardVector(double[] src1, Shape shape1, double[] src2, int[] indices) {
+<span class="nc" id="L52">        int denseRows = shape1.dims[Axis2D.row()];</span>
+<span class="nc" id="L53">        int denseCols = shape1.dims[Axis2D.col()];</span>
+<span class="nc" id="L54">        int nonZeros = src2.length;</span>
+
+<span class="nc" id="L56">        double[] dest = new double[denseRows];</span>
+        int k;
+
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        for(int i=0; i&lt;denseRows; i++) {</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">            for(int j=0; j&lt;nonZeros; j++) {</span>
+<span class="nc" id="L61">                k = indices[j];</span>
+<span class="nc" id="L62">                dest[i] += src1[i*denseCols + k]*src2[j];</span>
+            }
+        }
+
+<span class="nc" id="L66">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the sparse matrix dense vector multiplication.
+     * @param src1 Entries of the dense matrix.
+     * @param indices Indices of non-zero entries in sparse matrix (row-major).
+     * @param shape1 Shape of the sparse matrix.
+     * @param src2 Entries of the dense vector.
+     * @param shape2 Shape of the dense vector.
+     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+     */
+    public static double[] standardVector(double[] src1, int[][] indices, Shape shape1, double[] src2, Shape shape2) {
+<span class="nc" id="L80">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="nc" id="L81">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="nc" id="L82">        int rows2 = shape2.dims[Axis2D.row()];</span>
+
+<span class="nc" id="L84">        double[] dest = new double[rows1];</span>
+        // TODO:
+
+<span class="nc" id="L87">        return dest;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
