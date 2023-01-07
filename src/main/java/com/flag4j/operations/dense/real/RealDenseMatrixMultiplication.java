@@ -364,17 +364,9 @@ public class RealDenseMatrixMultiplication {
                 for(int jj=0; jj<cols2; jj += bsize) {
                     // Multiply the current blocks
                     for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                        int src1IndexStart = i*cols1;
-                        int destIndexStart = i*cols2;
-
                         for(int k=kk; k<kk+bsize && k<rows2; k++) {
-                            int src2Index = k*cols2;
-                            double src1Value = src1[src1IndexStart + k];
-                            int destIndex = destIndexStart;
-                            int end = src2Index + Math.min(bsize, cols2);
-
-                            while(src2Index<end) {
-                                dest[destIndex++] += src1Value*src2[src2Index++];
+                            for(int j=jj; j<jj+bsize && j<cols2; j++) {
+                                dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];
                             }
                         }
                     }
