@@ -1,9 +1,16 @@
+com\flag4j\operations\dense_sparse\real\RealDenseSparseOperations.class
 com\flag4j\operations\dense\real\RealDenseEquals.class
-com\flag4j\operations\dense\real\RealMatrixMultiplication.class
+com\flag4j\operations\dense\real\RealDenseMatrixMultiplication.class
+com\flag4j\operations\MatrixTranspose$1.class
+com\flag4j\operations\MatrixTranspose$Algorithm.class
+com\flag4j\operations\MatrixTranspose.class
 com\flag4j\operations\dense\complex\ComplexMatrixMultiplication.class
 com\flag4j\operations\MatrixMultiply.class
+com\flag4j\util\ParameterChecks.class
 com\flag4j\operations\MatrixMultiply$1.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseEquals.class
 com\flag4j\operations\MatrixMultiply$Algorithm.class
 com\flag4j\operations\dense_sparse\real\RealDenseSparseEquals.class
 com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseEquals.class
+com\flag4j\operations\dense_sparse\real\RealDenseSparseMatrixMultiplication.class
+com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseOperations.class

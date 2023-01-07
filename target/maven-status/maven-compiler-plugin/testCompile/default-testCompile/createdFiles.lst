@@ -26,7 +26,6 @@ com\flag4j\operations\dense\complex\ComplexDenseSetOperationsTests.class
 com\flag4j\MatrixAggregationTests.class
 com\flag4j\MatrixElemMultTests.class
 com\flag4j\util\StringUtilsTests.class
-com\flag4j\util\ShapeArrayChecksTests.class
 com\flag4j\SparseCVectorConstructorTests.class
 com\flag4j\SparseMatrixConstructorTests.class
 com\flag4j\MatrixElemDivTests.class
@@ -46,6 +45,7 @@ com\flag4j\RemoveRowColTests.class
 com\flag4j\VectorConstructorTests.class
 com\flag4j\operations\dense\complex\ComplexDenseOperationsTests.class
 com\flag4j\operations\dense\real\MatrixMultiplyTests.class
+com\flag4j\util\ParameterChecksTests.class
 com\flag4j\SparseCMatrixConstructorTests.class
 com\flag4j\operations\dense\real\RealDenseTransposeTests.class
 com\flag4j\complex_numbers\CNumberComparisonTest.class

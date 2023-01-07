@@ -36,7 +36,7 @@ public class RealComplexDenseEquals {
 
     private RealComplexDenseEquals() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 

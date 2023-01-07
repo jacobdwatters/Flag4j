@@ -373,6 +373,25 @@ public class CNumber extends Number {
 
 
     /**
+     * Subtracts a specified number from this complex number and stores the result in this complex number.
+     * @param b The value to add to this complex number.
+     */
+    public void subEq(CNumber b) {
+        this.re -= b.re;
+        this.im -= b.im;
+    }
+
+
+    /**
+     * Subtracts a specified number to this complex number and stores the result in this complex number.
+     * @param b The value to add to this complex number.
+     */
+    public void subEq(double b) {
+        this.re -= b;
+    }
+
+
+    /**
      * Subtracting two complex numbers.
      * @param b The number to subtract from complex number.
      * @return The result of subtracting b from this complex number.

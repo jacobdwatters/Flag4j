@@ -38,7 +38,7 @@ public final class RealComplexDenseOperations {
 
     private RealComplexDenseOperations() {
         // Hide constructor
-        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 

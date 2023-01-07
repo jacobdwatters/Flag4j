@@ -33,7 +33,7 @@ public final class CheckConcurrent {
 
 <span class="nc" id="L34">    private CheckConcurrent() {</span>
         // Hide default constructor
-<span class="nc" id="L36">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+<span class="nc" id="L36">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
     private static final int BASE_THRESHOLD = 9000;
@@ -82,8 +82,8 @@ public final class CheckConcurrent {
 <span class="fc" id="L82">        boolean result = false;</span>
 
 <span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if(Configurations.getNumThreads() &gt; 1) {</span>
-<span class="pc bpc" id="L85" title="1 of 4 branches missed.">            if(numRows &gt;= baseThreshold &amp;&amp; numCols &gt;= baseThreshold) {</span>
-<span class="fc" id="L86">                result = true;</span>
+<span class="pc bpc" id="L85" title="3 of 4 branches missed.">            if(numRows &gt;= baseThreshold &amp;&amp; numCols &gt;= baseThreshold) {</span>
+<span class="nc" id="L86">                result = true;</span>
 <span class="pc bpc" id="L87" title="3 of 4 branches missed.">            } else if(numRows &gt;= largerThreshold &amp;&amp; numCols &gt;= smallerThreshold) {</span>
 <span class="nc" id="L88">                result = true;</span>
 <span class="pc bpc" id="L89" title="3 of 4 branches missed.">            } else if(numCols &gt;= largerThreshold &amp;&amp; numRows &gt;= smallerThreshold) {</span>

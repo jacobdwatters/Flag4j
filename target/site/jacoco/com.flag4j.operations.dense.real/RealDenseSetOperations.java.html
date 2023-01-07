@@ -26,7 +26,7 @@ package com.flag4j.operations.dense.real;
 
 
 import com.flag4j.Shape;
-import com.flag4j.util.ShapeArrayChecks;
+import com.flag4j.util.ParameterChecks;
 
 /**
  * This class contains low-level implementations of setting operations for real dense tensors.
@@ -42,7 +42,7 @@ import com.flag4j.util.ShapeArrayChecks;
      * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
      */
     public static void setValues(Double[] src, final double[] dest) {
-<span class="fc" id="L45">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L45">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
 
 <span class="fc bfc" id="L47" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
 <span class="fc" id="L48">            dest[i] = src[i];</span>
@@ -58,7 +58,7 @@ import com.flag4j.util.ShapeArrayChecks;
      * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
      */
     public static void setValues(Integer[] src, final double[] dest) {
-<span class="fc" id="L61">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L61">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
 
 <span class="fc bfc" id="L63" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
 <span class="fc" id="L64">            dest[i] = src[i];</span>
@@ -74,7 +74,7 @@ import com.flag4j.util.ShapeArrayChecks;
      * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
      */
     public static void setValues(double[] src, final double[] dest) {
-<span class="fc" id="L77">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L77">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
 <span class="fc" id="L78">        System.arraycopy(src, 0, dest, 0, src.length);</span>
 <span class="fc" id="L79">    }</span>
 
@@ -87,7 +87,7 @@ import com.flag4j.util.ShapeArrayChecks;
      * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
      */
     public static void setValues(int[] src, final double[] dest) {
-<span class="fc" id="L90">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L90">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
 
 <span class="fc bfc" id="L92" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
 <span class="fc" id="L93">            dest[i] = src[i];</span>
@@ -103,7 +103,7 @@ import com.flag4j.util.ShapeArrayChecks;
      * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
      */
     public static void setValues(Double[][] src, final double[] dest) {
-<span class="fc" id="L106">        ShapeArrayChecks.equalTotalEntries(src, dest);</span>
+<span class="fc" id="L106">        ParameterChecks.assertTotalEntriesEq(src, dest);</span>
 <span class="fc" id="L107">        int count = 0;</span>
 
 <span class="fc bfc" id="L109" title="All 2 branches covered.">        for(Double[] doubles : src) {</span>
@@ -122,7 +122,7 @@ import com.flag4j.util.ShapeArrayChecks;
      * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
      */
     public static void setValues(Integer[][] src, final double[] dest) {
-<span class="fc" id="L125">        ShapeArrayChecks.equalTotalEntries(src, dest);</span>
+<span class="fc" id="L125">        ParameterChecks.assertTotalEntriesEq(src, dest);</span>
 <span class="fc" id="L126">        int count = 0;</span>
 
 <span class="fc bfc" id="L128" title="All 2 branches covered.">        for(Integer[] integers : src) {</span>
@@ -141,7 +141,7 @@ import com.flag4j.util.ShapeArrayChecks;
      * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
      */
     public static void setValues(double[][] src, final double[] dest) {
-<span class="fc" id="L144">        ShapeArrayChecks.equalTotalEntries(src, dest);</span>
+<span class="fc" id="L144">        ParameterChecks.assertTotalEntriesEq(src, dest);</span>
 <span class="fc" id="L145">        int count = 0;</span>
 
 <span class="fc bfc" id="L147" title="All 2 branches covered.">        for(double[] doubles : src) {</span>
@@ -160,7 +160,7 @@ import com.flag4j.util.ShapeArrayChecks;
      * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
      */
     public static void setValues(int[][] src, final double[] dest) {
-<span class="fc" id="L163">        ShapeArrayChecks.equalTotalEntries(src, dest);</span>
+<span class="fc" id="L163">        ParameterChecks.assertTotalEntriesEq(src, dest);</span>
 <span class="fc" id="L164">        int count = 0;</span>
 
 <span class="fc bfc" id="L166" title="All 2 branches covered.">        for(int[] ints : src) {</span>

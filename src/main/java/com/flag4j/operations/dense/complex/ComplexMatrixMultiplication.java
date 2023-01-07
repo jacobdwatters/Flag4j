@@ -42,7 +42,7 @@ public class ComplexMatrixMultiplication {
 
     private ComplexMatrixMultiplication() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 

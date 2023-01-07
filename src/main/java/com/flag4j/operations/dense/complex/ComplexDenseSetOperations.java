@@ -35,7 +35,7 @@ public class ComplexDenseSetOperations {
 
     private ComplexDenseSetOperations() {
         // Hide constructor.
-        throw new IllegalArgumentException(ErrorMessages.utilityClassErrMsg());
+        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());
     }
 
     /**

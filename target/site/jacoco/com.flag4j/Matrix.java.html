@@ -27,6 +27,7 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
 import com.flag4j.operations.MatrixMultiply;
+import com.flag4j.operations.MatrixTranspose;
 import com.flag4j.operations.common.real.Aggregate;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.concurrency.CheckConcurrent;
@@ -34,15 +35,18 @@ import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ShapeArrayChecks;
+import com.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
 
 /**
- * Real dense matrix. Stored in row major format. This class is equivalent to a real dense tensor of rank 2.
+ * Real dense matrix. Stored in row major format. This class is mostly equivalent to a real dense tensor of rank 2.
  */
 public class Matrix extends RealMatrixBase implements
         MatrixComparisonsMixin&lt;Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double&gt;,
@@ -57,8 +61,8 @@ public class Matrix extends RealMatrixBase implements
      * @throws IllegalArgumentException if size negative.
      */
     public Matrix(int size) {
-<span class="fc" id="L60">        super(new Shape(size, size), new double[size*size]);</span>
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L64">        super(new Shape(size, size), new double[size*size]);</span>
+<span class="fc" id="L65">    }</span>
 
 
     /**
@@ -68,9 +72,9 @@ public class Matrix extends RealMatrixBase implements
      * @throws IllegalArgumentException if size negative.
      */
     public Matrix(int size, double value) {
-<span class="fc" id="L71">        super(new Shape(size, size), new double[size*size]);</span>
-<span class="fc" id="L72">        Arrays.fill(super.entries, value);</span>
-<span class="fc" id="L73">    }</span>
+<span class="fc" id="L75">        super(new Shape(size, size), new double[size*size]);</span>
+<span class="fc" id="L76">        Arrays.fill(super.entries, value);</span>
+<span class="fc" id="L77">    }</span>
 
 
     /**
@@ -80,8 +84,8 @@ public class Matrix extends RealMatrixBase implements
      * @throws IllegalArgumentException if either m or n is negative.
      */
     public Matrix(int rows, int cols) {
-<span class="fc" id="L83">        super(new Shape(rows, cols), new double[rows*cols]);</span>
-<span class="fc" id="L84">    }</span>
+<span class="fc" id="L87">        super(new Shape(rows, cols), new double[rows*cols]);</span>
+<span class="fc" id="L88">    }</span>
 
 
     /**
@@ -92,9 +96,9 @@ public class Matrix extends RealMatrixBase implements
      * @throws IllegalArgumentException if either m or n is negative.
      */
     public Matrix(int rows, int cols, double value) {
-<span class="fc" id="L95">        super(new Shape(rows, cols), new double[rows*cols]);</span>
-<span class="fc" id="L96">        Arrays.fill(super.entries, value);</span>
-<span class="fc" id="L97">    }</span>
+<span class="fc" id="L99">        super(new Shape(rows, cols), new double[rows*cols]);</span>
+<span class="fc" id="L100">        Arrays.fill(super.entries, value);</span>
+<span class="fc" id="L101">    }</span>
 
 
     /**
@@ -102,17 +106,17 @@ public class Matrix extends RealMatrixBase implements
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(Double[][] entries) {
-<span class="fc" id="L105">        super(new Shape(entries.length, entries[0].length),</span>
+<span class="fc" id="L109">        super(new Shape(entries.length, entries[0].length),</span>
                 new double[entries.length*entries[0].length]);
 
-<span class="fc" id="L108">        int index = 0;</span>
+<span class="fc" id="L112">        int index = 0;</span>
 
-<span class="fc bfc" id="L110" title="All 2 branches covered.">        for(Double[] row : entries) {</span>
-<span class="fc bfc" id="L111" title="All 2 branches covered.">            for(Double value : row) {</span>
-<span class="fc" id="L112">                super.entries[index++] = value;</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        for(Double[] row : entries) {</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">            for(Double value : row) {</span>
+<span class="fc" id="L116">                super.entries[index++] = value;</span>
             }
         }
-<span class="fc" id="L115">    }</span>
+<span class="fc" id="L119">    }</span>
 
 
     /**
@@ -120,17 +124,17 @@ public class Matrix extends RealMatrixBase implements
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(Integer[][] entries) {
-<span class="fc" id="L123">        super(new Shape(entries.length, entries[0].length),</span>
+<span class="fc" id="L127">        super(new Shape(entries.length, entries[0].length),</span>
                 new double[entries.length*entries[0].length]);
 
-<span class="fc" id="L126">        int index = 0;</span>
+<span class="fc" id="L130">        int index = 0;</span>
 
-<span class="fc bfc" id="L128" title="All 2 branches covered.">        for(Integer[] row : entries) {</span>
-<span class="fc bfc" id="L129" title="All 2 branches covered.">            for(Integer value : row) {</span>
-<span class="fc" id="L130">                super.entries[index++] = value;</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        for(Integer[] row : entries) {</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">            for(Integer value : row) {</span>
+<span class="fc" id="L134">                super.entries[index++] = value;</span>
             }
         }
-<span class="fc" id="L133">    }</span>
+<span class="fc" id="L137">    }</span>
 
 
     /**
@@ -138,17 +142,17 @@ public class Matrix extends RealMatrixBase implements
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(double[][] entries) {
-<span class="fc" id="L141">        super(new Shape(entries.length, entries[0].length),</span>
+<span class="fc" id="L145">        super(new Shape(entries.length, entries[0].length),</span>
                 new double[entries.length*entries[0].length]);
 
-<span class="fc" id="L144">        int index = 0;</span>
+<span class="fc" id="L148">        int index = 0;</span>
 
-<span class="fc bfc" id="L146" title="All 2 branches covered.">        for(double[] row : entries) {</span>
-<span class="fc bfc" id="L147" title="All 2 branches covered.">            for(double value : row) {</span>
-<span class="fc" id="L148">                super.entries[index++] = value;</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        for(double[] row : entries) {</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">            for(double value : row) {</span>
+<span class="fc" id="L152">                super.entries[index++] = value;</span>
             }
         }
-<span class="fc" id="L151">    }</span>
+<span class="fc" id="L155">    }</span>
 
 
     /**
@@ -156,16 +160,16 @@ public class Matrix extends RealMatrixBase implements
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(int[][] entries) {
-<span class="fc" id="L159">        super(new Shape(entries.length, entries[0].length), new double[entries.length*entries[0].length]);</span>
+<span class="fc" id="L163">        super(new Shape(entries.length, entries[0].length), new double[entries.length*entries[0].length]);</span>
 
         // Copy the int array
-<span class="fc" id="L162">        int index=0;</span>
-<span class="fc bfc" id="L163" title="All 2 branches covered.">        for(int[] row : entries) {</span>
-<span class="fc bfc" id="L164" title="All 2 branches covered.">            for(int value : row) {</span>
-<span class="fc" id="L165">                super.entries[index++] = value;</span>
+<span class="fc" id="L166">        int index=0;</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">        for(int[] row : entries) {</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">            for(int value : row) {</span>
+<span class="fc" id="L169">                super.entries[index++] = value;</span>
             }
         }
-<span class="fc" id="L168">    }</span>
+<span class="fc" id="L172">    }</span>
 
 
     /**
@@ -173,8 +177,8 @@ public class Matrix extends RealMatrixBase implements
      * @param A The matrix defining the entries for this matrix.
      */
     public Matrix(Matrix A) {
-<span class="fc" id="L176">        super(A.shape.clone(), A.entries.clone());</span>
-<span class="fc" id="L177">    }</span>
+<span class="fc" id="L180">        super(A.shape.clone(), A.entries.clone());</span>
+<span class="fc" id="L181">    }</span>
 
 
     /**
@@ -182,8 +186,8 @@ public class Matrix extends RealMatrixBase implements
      * @param shape Shape of matrix.
      */
     public Matrix(Shape shape) {
-<span class="fc" id="L185">        super(shape, new double[shape.totalEntries().intValue()]);</span>
-<span class="fc" id="L186">    }</span>
+<span class="fc" id="L189">        super(shape, new double[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L190">    }</span>
 
 
     /**
@@ -192,9 +196,9 @@ public class Matrix extends RealMatrixBase implements
      * @param value Value to fill matrix with.
      */
     public Matrix(Shape shape, double value) {
-<span class="fc" id="L195">        super(shape, new double[shape.totalEntries().intValue()]);</span>
-<span class="fc" id="L196">        Arrays.fill(super.entries, value);</span>
-<span class="fc" id="L197">    }</span>
+<span class="fc" id="L199">        super(shape, new double[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L200">        Arrays.fill(super.entries, value);</span>
+<span class="fc" id="L201">    }</span>
 
 
     /**
@@ -204,8 +208,20 @@ public class Matrix extends RealMatrixBase implements
      * @param entries Entries of the matrix.
      */
     public Matrix(Shape shape, double[] entries) {
-<span class="fc" id="L207">        super(shape, entries);</span>
-<span class="fc" id="L208">    }</span>
+<span class="fc" id="L211">        super(shape, entries);</span>
+<span class="fc" id="L212">    }</span>
+
+
+    /**
+     * Constructs a matrix with specified shape and entries. Note, unlike other constructors, the entries' parameter
+     * is not copied.
+     * @param numRows Number of rows in this matrix.
+     * @param numCols Number of columns in this matrix.
+     * @param entries Entries of the matrix.
+     */
+    public Matrix(int numRows, int numCols, double[] entries) {
+<span class="fc" id="L223">        super(new Shape(numRows, numCols), entries);</span>
+<span class="fc" id="L224">    }</span>
 
 
     /**
@@ -215,7 +231,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix toComplex() {
-<span class="nc" id="L218">        return new CMatrix(this);</span>
+<span class="nc" id="L234">        return new CMatrix(this);</span>
     }
 
 
@@ -227,24 +243,24 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isI() {
-<span class="fc bfc" id="L230" title="All 2 branches covered.">        if(isSquare()) {</span>
-<span class="fc bfc" id="L231" title="All 2 branches covered.">            for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L232" title="All 2 branches covered.">                for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc bfc" id="L233" title="All 4 branches covered.">                    if(i==j &amp;&amp; entries[i*numCols + j]!=1) {</span>
-<span class="fc" id="L234">                        return false; // No need to continue</span>
-<span class="fc bfc" id="L235" title="All 4 branches covered.">                    } else if(i!=j &amp;&amp; entries[i*numCols + j]!=0) {</span>
-<span class="fc" id="L236">                        return false; // No need to continue</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">        if(isSquare()) {</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">            for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">                for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc bfc" id="L249" title="All 4 branches covered.">                    if(i==j &amp;&amp; entries[i*numCols + j]!=1) {</span>
+<span class="fc" id="L250">                        return false; // No need to continue</span>
+<span class="fc bfc" id="L251" title="All 4 branches covered.">                    } else if(i!=j &amp;&amp; entries[i*numCols + j]!=0) {</span>
+<span class="fc" id="L252">                        return false; // No need to continue</span>
                     }
                 }
             }
 
         } else {
             // An identity matrix must be square.
-<span class="fc" id="L243">            return false;</span>
+<span class="fc" id="L259">            return false;</span>
         }
 
         // If we make it to this point this matrix must be an identity matrix.
-<span class="fc" id="L247">        return true;</span>
+<span class="fc" id="L263">        return true;</span>
     }
 
 
@@ -259,27 +275,38 @@ public class Matrix extends RealMatrixBase implements
     public boolean equals(Object object) {
         boolean equal;
 
-<span class="fc bfc" id="L262" title="All 2 branches covered.">        if(object instanceof Matrix) {</span>
-<span class="fc" id="L263">            Matrix mat = (Matrix) object;</span>
-<span class="fc" id="L264">            equal = RealDenseEquals.matrixEquals(this, mat);</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">        if(object instanceof Matrix) {</span>
+<span class="fc" id="L279">            Matrix mat = (Matrix) object;</span>
+<span class="fc" id="L280">            equal = RealDenseEquals.matrixEquals(this, mat);</span>
 
-<span class="fc bfc" id="L266" title="All 2 branches covered.">        } else if(object instanceof CMatrix) {</span>
-<span class="fc" id="L267">            CMatrix mat = (CMatrix) object;</span>
-<span class="fc" id="L268">            equal = RealComplexDenseEquals.matrixEquals(this, mat);</span>
+<span class="fc bfc" id="L282" title="All 2 branches covered.">        } else if(object instanceof CMatrix) {</span>
+<span class="fc" id="L283">            CMatrix mat = (CMatrix) object;</span>
+<span class="fc" id="L284">            equal = RealComplexDenseEquals.matrixEquals(this, mat);</span>
 
-<span class="fc bfc" id="L270" title="All 2 branches covered.">        } else if(object instanceof SparseMatrix) {</span>
-<span class="fc" id="L271">            SparseMatrix mat = (SparseMatrix) object;</span>
-<span class="fc" id="L272">            equal = RealDenseSparseEquals.matrixEquals(this, mat);</span>
+<span class="fc bfc" id="L286" title="All 2 branches covered.">        } else if(object instanceof SparseMatrix) {</span>
+<span class="fc" id="L287">            SparseMatrix mat = (SparseMatrix) object;</span>
+<span class="fc" id="L288">            equal = RealDenseSparseEquals.matrixEquals(this, mat);</span>
 
-<span class="fc bfc" id="L274" title="All 2 branches covered.">        } else if(object instanceof SparseCMatrix) {</span>
-<span class="fc" id="L275">            SparseCMatrix mat = (SparseCMatrix) object;</span>
-<span class="fc" id="L276">            equal = RealComplexDenseSparseEquals.matrixEquals(this, mat);</span>
+<span class="pc bpc" id="L290" title="1 of 2 branches missed.">        } else if(object instanceof SparseCMatrix) {</span>
+<span class="fc" id="L291">            SparseCMatrix mat = (SparseCMatrix) object;</span>
+<span class="fc" id="L292">            equal = RealComplexDenseSparseEquals.matrixEquals(this, mat);</span>
 
-<span class="fc" id="L278">        } else {</span>
-<span class="fc" id="L279">            equal = false;</span>
+<span class="fc" id="L294">        } else {</span>
+<span class="nc" id="L295">            equal = false;</span>
         }
 
-<span class="fc" id="L282">        return equal;</span>
+<span class="fc" id="L298">        return equal;</span>
+    }
+
+
+    /**
+     * Creates a hashcode for this matrix. Note, method adds {@link Arrays#hashCode(double[])} on the
+     * underlying data array and the underlying shape array.
+     * @return The hashcode for this matrix.
+     */
+    @Override
+    public int hashCode() {
+<span class="nc" id="L309">        return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);</span>
     }
 
 
@@ -291,7 +318,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isInv(Matrix B) {
-<span class="nc" id="L294">        return false;</span>
+<span class="nc" id="L321">        return this.mult(B).roundToZero().isI();</span>
     }
 
 
@@ -308,8 +335,8 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public Matrix reshape(Shape shape) {
         // Ensure the total number of entries in each shape is equal
-<span class="fc" id="L311">        ShapeArrayChecks.broadcastCheck(shape, this.shape);</span>
-<span class="fc" id="L312">        return new Matrix(shape, entries.clone());</span>
+<span class="fc" id="L338">        ParameterChecks.assertBroadcastable(shape, this.shape);</span>
+<span class="fc" id="L339">        return new Matrix(shape, entries.clone());</span>
     }
 
 
@@ -323,7 +350,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix reshape(int numRows, int numCols) {
-<span class="fc" id="L326">        return reshape(new Shape(numRows, numCols));</span>
+<span class="fc" id="L353">        return reshape(new Shape(numRows, numCols));</span>
     }
 
 
@@ -334,7 +361,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix flatten() {
-<span class="fc" id="L337">        return reshape(new Shape(1, entries.length));</span>
+<span class="fc" id="L364">        return reshape(new Shape(1, entries.length));</span>
     }
 
 
@@ -347,15 +374,15 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix flatten(int axis) {
-<span class="fc bfc" id="L350" title="All 2 branches covered.">        if(axis==Axis2D.row()) {</span>
+<span class="fc bfc" id="L377" title="All 2 branches covered.">        if(axis==Axis2D.row()) {</span>
             // Flatten to single row
-<span class="fc" id="L352">            return reshape(new Shape(1, entries.length));</span>
-<span class="fc bfc" id="L353" title="All 2 branches covered.">        } else if(axis==Axis2D.col()) {</span>
+<span class="fc" id="L379">            return reshape(new Shape(1, entries.length));</span>
+<span class="fc bfc" id="L380" title="All 2 branches covered.">        } else if(axis==Axis2D.col()) {</span>
             // Flatten to single column
-<span class="fc" id="L355">            return reshape(new Shape(entries.length, 1));</span>
+<span class="fc" id="L382">            return reshape(new Shape(entries.length, 1));</span>
         } else {
             // Unknown axis
-<span class="fc" id="L358">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, Axis2D.allAxes()));</span>
+<span class="fc" id="L385">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, Axis2D.allAxes()));</span>
         }
     }
 
@@ -368,9 +395,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(Double[][] values) {
-<span class="fc" id="L371">        ShapeArrayChecks.equalShapeCheck(shape, new Shape(values.length, values[0].length));</span>
-<span class="fc" id="L372">        RealDenseSetOperations.setValues(values, this.entries);</span>
-<span class="fc" id="L373">    }</span>
+<span class="fc" id="L398">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
+<span class="fc" id="L399">        RealDenseSetOperations.setValues(values, this.entries);</span>
+<span class="fc" id="L400">    }</span>
 
 
     /**
@@ -381,9 +408,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(double[][] values) {
-<span class="fc" id="L384">        ShapeArrayChecks.equalShapeCheck(shape, new Shape(values.length, values[0].length));</span>
-<span class="fc" id="L385">        RealDenseSetOperations.setValues(values, this.entries);</span>
-<span class="fc" id="L386">    }</span>
+<span class="fc" id="L411">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
+<span class="fc" id="L412">        RealDenseSetOperations.setValues(values, this.entries);</span>
+<span class="fc" id="L413">    }</span>
 
 
     /**
@@ -394,9 +421,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(Integer[][] values) {
-<span class="fc" id="L397">        ShapeArrayChecks.equalShapeCheck(shape, new Shape(values.length, values[0].length));</span>
-<span class="fc" id="L398">        RealDenseSetOperations.setValues(values, this.entries);</span>
-<span class="fc" id="L399">    }</span>
+<span class="fc" id="L424">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
+<span class="fc" id="L425">        RealDenseSetOperations.setValues(values, this.entries);</span>
+<span class="fc" id="L426">    }</span>
 
 
     /**
@@ -407,9 +434,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setValues(int[][] values) {
-<span class="fc" id="L410">        ShapeArrayChecks.equalShapeCheck(shape, new Shape(values.length, values[0].length));</span>
-<span class="fc" id="L411">        RealDenseSetOperations.setValues(values, this.entries);</span>
-<span class="fc" id="L412">    }</span>
+<span class="fc" id="L437">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
+<span class="fc" id="L438">        RealDenseSetOperations.setValues(values, this.entries);</span>
+<span class="fc" id="L439">    }</span>
 
 
     /**
@@ -421,12 +448,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setCol(Double[] values, int colIndex) {
-<span class="fc" id="L424">        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numRows);</span>
+<span class="fc" id="L451">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
 
-<span class="fc bfc" id="L426" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L427">            super.entries[i*numCols + colIndex] = values[i];</span>
+<span class="fc bfc" id="L453" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L454">            super.entries[i*numCols + colIndex] = values[i];</span>
         }
-<span class="fc" id="L429">    }</span>
+<span class="fc" id="L456">    }</span>
 
 
     /**
@@ -438,12 +465,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setCol(Integer[] values, int colIndex) {
-<span class="fc" id="L441">        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numRows);</span>
+<span class="fc" id="L468">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
 
-<span class="fc bfc" id="L443" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L444">            super.entries[i*numCols + colIndex] = values[i];</span>
+<span class="fc bfc" id="L470" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L471">            super.entries[i*numCols + colIndex] = values[i];</span>
         }
-<span class="fc" id="L446">    }</span>
+<span class="fc" id="L473">    }</span>
 
 
     /**
@@ -455,12 +482,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setCol(double[] values, int colIndex) {
-<span class="fc" id="L458">        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numRows);</span>
+<span class="fc" id="L485">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
 
-<span class="fc bfc" id="L460" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L461">            super.entries[i*numCols + colIndex] = values[i];</span>
+<span class="fc bfc" id="L487" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L488">            super.entries[i*numCols + colIndex] = values[i];</span>
         }
-<span class="fc" id="L463">    }</span>
+<span class="fc" id="L490">    }</span>
 
 
     /**
@@ -472,12 +499,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setCol(int[] values, int colIndex) {
-<span class="fc" id="L475">        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numRows);</span>
+<span class="fc" id="L502">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
 
-<span class="fc bfc" id="L477" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L478">            super.entries[i*numCols + colIndex] = values[i];</span>
+<span class="fc bfc" id="L504" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L505">            super.entries[i*numCols + colIndex] = values[i];</span>
         }
-<span class="fc" id="L480">    }</span>
+<span class="fc" id="L507">    }</span>
 
 
     /**
@@ -489,12 +516,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setRow(Double[] values, int rowIndex) {
-<span class="fc" id="L492">        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numCols());</span>
+<span class="fc" id="L519">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());</span>
 
-<span class="fc bfc" id="L494" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L495">            super.entries[rowIndex*numCols + i] = values[i];</span>
+<span class="fc bfc" id="L521" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L522">            super.entries[rowIndex*numCols + i] = values[i];</span>
         }
-<span class="fc" id="L497">    }</span>
+<span class="fc" id="L524">    }</span>
 
 
     /**
@@ -506,12 +533,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setRow(Integer[] values, int rowIndex) {
-<span class="fc" id="L509">        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numCols());</span>
+<span class="fc" id="L536">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());</span>
 
-<span class="fc bfc" id="L511" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L512">            super.entries[rowIndex*numCols + i] = values[i];</span>
+<span class="fc bfc" id="L538" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L539">            super.entries[rowIndex*numCols + i] = values[i];</span>
         }
-<span class="fc" id="L514">    }</span>
+<span class="fc" id="L541">    }</span>
 
 
     /**
@@ -523,12 +550,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setRow(double[] values, int rowIndex) {
-<span class="fc" id="L526">        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numCols);</span>
+<span class="fc" id="L553">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);</span>
 
-<span class="fc bfc" id="L528" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L529">            super.entries[rowIndex*numCols + i] = values[i];</span>
+<span class="fc bfc" id="L555" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L556">            super.entries[rowIndex*numCols + i] = values[i];</span>
         }
-<span class="fc" id="L531">    }</span>
+<span class="fc" id="L558">    }</span>
 
 
     /**
@@ -540,12 +567,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setRow(int[] values, int rowIndex) {
-<span class="fc" id="L543">        ShapeArrayChecks.arrayLengthsCheck(values.length, this.numCols);</span>
+<span class="fc" id="L570">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);</span>
 
-<span class="fc bfc" id="L545" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L546">            super.entries[rowIndex*numCols + i] = values[i];</span>
+<span class="fc bfc" id="L572" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L573">            super.entries[rowIndex*numCols + i] = values[i];</span>
         }
-<span class="fc" id="L548">    }</span>
+<span class="fc" id="L575">    }</span>
 
 
     /**
@@ -561,13 +588,13 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setSlice(Matrix values, int rowStart, int colStart) {
-<span class="fc bfc" id="L564" title="All 2 branches covered.">        for(int i=0; i&lt;values.numRows; i++) {</span>
-<span class="fc bfc" id="L565" title="All 2 branches covered.">            for(int j=0; j&lt;values.numCols; j++) {</span>
-<span class="fc" id="L566">                this.entries[(i+rowStart)*numCols + j+colStart] =</span>
+<span class="fc bfc" id="L591" title="All 2 branches covered.">        for(int i=0; i&lt;values.numRows; i++) {</span>
+<span class="fc bfc" id="L592" title="All 2 branches covered.">            for(int j=0; j&lt;values.numCols; j++) {</span>
+<span class="fc" id="L593">                this.entries[(i+rowStart)*numCols + j+colStart] =</span>
                         values.entries[i* values.numCols + j];
             }
         }
-<span class="fc" id="L570">    }</span>
+<span class="fc" id="L597">    }</span>
 
 
     /**
@@ -583,12 +610,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setSlice(Double[][] values, int rowStart, int colStart) {
-<span class="fc bfc" id="L586" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L587" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L588">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L613" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L614" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L615">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
-<span class="fc" id="L591">    }</span>
+<span class="fc" id="L618">    }</span>
 
 
     /**
@@ -604,12 +631,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setSlice(Integer[][] values, int rowStart, int colStart) {
-<span class="fc bfc" id="L607" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L608" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L609">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L634" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L635" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L636">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
-<span class="fc" id="L612">    }</span>
+<span class="fc" id="L639">    }</span>
 
 
     /**
@@ -625,12 +652,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setSlice(double[][] values, int rowStart, int colStart) {
-<span class="fc bfc" id="L628" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L629" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L630">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L655" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L656" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L657">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
-<span class="fc" id="L633">    }</span>
+<span class="fc" id="L660">    }</span>
 
 
     /**
@@ -646,12 +673,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setSlice(int[][] values, int rowStart, int colStart) {
-<span class="fc bfc" id="L649" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L650" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L651">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L676" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L677" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L678">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
-<span class="fc" id="L654">    }</span>
+<span class="fc" id="L681">    }</span>
 
 
     /**
@@ -668,15 +695,15 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix setSliceCopy(Matrix values, int rowStart, int colStart) {
-<span class="fc" id="L671">        Matrix copy = new Matrix(this);</span>
+<span class="fc" id="L698">        Matrix copy = new Matrix(this);</span>
 
-<span class="fc bfc" id="L673" title="All 2 branches covered.">        for(int i=0; i&lt;values.numRows; i++) {</span>
-<span class="fc bfc" id="L674" title="All 2 branches covered.">            for(int j=0; j&lt;values.numCols; j++) {</span>
-<span class="fc" id="L675">                copy.entries[(i+rowStart)*numCols + j+colStart] = values.entries[values.shape.entriesIndex(i, j)];</span>
+<span class="fc bfc" id="L700" title="All 2 branches covered.">        for(int i=0; i&lt;values.numRows; i++) {</span>
+<span class="fc bfc" id="L701" title="All 2 branches covered.">            for(int j=0; j&lt;values.numCols; j++) {</span>
+<span class="fc" id="L702">                copy.entries[(i+rowStart)*numCols + j+colStart] = values.entries[values.shape.entriesIndex(i, j)];</span>
             }
         }
 
-<span class="fc" id="L679">        return copy;</span>
+<span class="fc" id="L706">        return copy;</span>
     }
 
 
@@ -694,15 +721,15 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix setSliceCopy(Double[][] values, int rowStart, int colStart) {
-<span class="fc" id="L697">        Matrix copy = new Matrix(this);</span>
+<span class="fc" id="L724">        Matrix copy = new Matrix(this);</span>
 
-<span class="fc bfc" id="L699" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L700" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L701">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L726" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L727" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L728">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
 
-<span class="fc" id="L705">        return copy;</span>
+<span class="fc" id="L732">        return copy;</span>
     }
 
 
@@ -720,15 +747,15 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix setSliceCopy(Integer[][] values, int rowStart, int colStart) {
-<span class="fc" id="L723">        Matrix copy = new Matrix(this);</span>
+<span class="fc" id="L750">        Matrix copy = new Matrix(this);</span>
 
-<span class="fc bfc" id="L725" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L726" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L727">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L752" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L753" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L754">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
 
-<span class="fc" id="L731">        return copy;</span>
+<span class="fc" id="L758">        return copy;</span>
     }
 
 
@@ -746,15 +773,15 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix setSliceCopy(double[][] values, int rowStart, int colStart) {
-<span class="fc" id="L749">        Matrix copy = new Matrix(this);</span>
+<span class="fc" id="L776">        Matrix copy = new Matrix(this);</span>
 
-<span class="fc bfc" id="L751" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L752" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L753">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L778" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L779" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L780">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
 
-<span class="fc" id="L757">        return copy;</span>
+<span class="fc" id="L784">        return copy;</span>
     }
 
 
@@ -772,15 +799,15 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix setSliceCopy(int[][] values, int rowStart, int colStart) {
-<span class="fc" id="L775">        Matrix copy = new Matrix(this);</span>
+<span class="fc" id="L802">        Matrix copy = new Matrix(this);</span>
 
-<span class="fc bfc" id="L777" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L778" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L779">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L804" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L805" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L806">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
 
-<span class="fc" id="L783">        return copy;</span>
+<span class="fc" id="L810">        return copy;</span>
     }
 
 
@@ -791,32 +818,45 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix removeRow(int rowIndex) {
-<span class="fc" id="L794">        Matrix copy = new Matrix(this.numRows-1, this.numCols);</span>
+<span class="fc" id="L821">        Matrix copy = new Matrix(this.numRows-1, this.numCols);</span>
 
-<span class="fc" id="L796">        int row = 0;</span>
+<span class="fc" id="L823">        int row = 0;</span>
 
-<span class="fc bfc" id="L798" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc bfc" id="L799" title="All 2 branches covered.">            if(i!=rowIndex) {</span>
-<span class="fc bfc" id="L800" title="All 2 branches covered.">                for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="fc" id="L801">                    copy.entries[row*copy.numCols + j] = this.entries[i*numCols + j];</span>
+<span class="fc bfc" id="L825" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L826" title="All 2 branches covered.">            if(i!=rowIndex) {</span>
+<span class="fc bfc" id="L827" title="All 2 branches covered.">                for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L828">                    copy.entries[row*copy.numCols + j] = this.entries[i*numCols + j];</span>
                 }
-<span class="fc" id="L803">                row++;</span>
+<span class="fc" id="L830">                row++;</span>
             }
         }
 
-<span class="fc" id="L807">        return copy;</span>
+<span class="fc" id="L834">        return copy;</span>
     }
 
 
     /**
      * Removes a specified set of rows from this matrix.
      *
-     * @param rowIndices The indices of the rows to remove from this matrix.
+     * @param rowIndices The indices of the rows to remove from this matrix. Assumed to contain unique values.
      * @return a copy of this matrix with the specified column removed.
      */
     @Override
     public Matrix removeRows(int... rowIndices) {
-<span class="nc" id="L819">        return null;</span>
+<span class="nc" id="L846">        Matrix copy = new Matrix(this.numRows-rowIndices.length, this.numCols);</span>
+
+<span class="nc" id="L848">        int row = 0;</span>
+
+<span class="nc bnc" id="L850" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="nc bnc" id="L851" title="All 2 branches missed.">            if(ArrayUtils.inArray(rowIndices, i)) {</span>
+<span class="nc bnc" id="L852" title="All 2 branches missed.">                for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="nc" id="L853">                    copy.entries[row*copy.numCols + j] = this.entries[i*numCols + j];</span>
+                }
+<span class="nc" id="L855">                row++;</span>
+            }
+        }
+
+<span class="nc" id="L859">        return copy;</span>
     }
 
 
@@ -828,33 +868,47 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix removeCol(int colIndex) {
-<span class="fc" id="L831">        Matrix copy = new Matrix(this.numRows, this.numCols-1);</span>
+<span class="fc" id="L871">        Matrix copy = new Matrix(this.numRows, this.numCols-1);</span>
 
         int col;
 
-<span class="fc bfc" id="L835" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc" id="L836">            col = 0;</span>
-<span class="fc bfc" id="L837" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="fc bfc" id="L838" title="All 2 branches covered.">                if(j!=colIndex) {</span>
-<span class="fc" id="L839">                    copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];</span>
-<span class="fc" id="L840">                    col++;</span>
+<span class="fc bfc" id="L875" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L876">            col = 0;</span>
+<span class="fc bfc" id="L877" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc bfc" id="L878" title="All 2 branches covered.">                if(j!=colIndex) {</span>
+<span class="fc" id="L879">                    copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];</span>
+<span class="fc" id="L880">                    col++;</span>
                 }
             }
         }
 
-<span class="fc" id="L845">        return copy;</span>
+<span class="fc" id="L885">        return copy;</span>
     }
 
 
     /**
      * Removes a specified set of columns from this matrix.
      *
-     * @param colIndices Indices of the columns to remove from this matrix.
+     * @param colIndices Indices of the columns to remove from this matrix. Assumed to contain unique values.
      * @return a copy of this matrix with the specified column removed.
      */
     @Override
     public Matrix removeCols(int... colIndices) {
-<span class="nc" id="L857">        return null;</span>
+<span class="nc" id="L897">        Matrix copy = new Matrix(this.numRows, this.numCols-colIndices.length);</span>
+
+        int col;
+
+<span class="nc bnc" id="L901" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="nc" id="L902">            col = 0;</span>
+<span class="nc bnc" id="L903" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="nc bnc" id="L904" title="All 2 branches missed.">                if(ArrayUtils.inArray(colIndices, j)) {</span>
+<span class="nc" id="L905">                    copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];</span>
+<span class="nc" id="L906">                    col++;</span>
+                }
+            }
+        }
+
+<span class="nc" id="L911">        return copy;</span>
     }
 
 
@@ -866,7 +920,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix round() {
-<span class="fc" id="L869">        return new Matrix(this.shape, RealOperations.round(this.entries));</span>
+<span class="fc" id="L923">        return new Matrix(this.shape, RealOperations.round(this.entries));</span>
     }
 
 
@@ -880,7 +934,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix round(int precision) {
-<span class="fc" id="L883">        return new Matrix(this.shape, RealOperations.round(this.entries, precision));</span>
+<span class="fc" id="L937">        return new Matrix(this.shape, RealOperations.round(this.entries, precision));</span>
     }
 
 
@@ -893,7 +947,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix roundToZero() {
-<span class="fc" id="L896">        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, 1.0E-12));</span>
+<span class="fc" id="L950">        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, 1.0E-12));</span>
     }
 
 
@@ -908,7 +962,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix roundToZero(double threshold) {
-<span class="fc" id="L911">        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, threshold));</span>
+<span class="fc" id="L965">        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, threshold));</span>
     }
 
 
@@ -921,8 +975,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix add(Matrix B) {
-<span class="fc" id="L924">        return new Matrix(this.shape.clone(),</span>
-<span class="fc" id="L925">                RealDenseOperations.add(this.entries, this.shape, B.entries, B.shape)</span>
+<span class="fc" id="L978">        return new Matrix(this.shape.clone(),</span>
+<span class="fc" id="L979">                RealDenseOperations.add(this.entries, this.shape, B.entries, B.shape)</span>
         );
     }
 
@@ -935,8 +989,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix add(double a) {
-<span class="fc" id="L938">        return new Matrix(this.shape.clone(),</span>
-<span class="fc" id="L939">                RealDenseOperations.add(this.entries, a)</span>
+<span class="fc" id="L992">        return new Matrix(this.shape.clone(),</span>
+<span class="fc" id="L993">                RealDenseOperations.add(this.entries, a)</span>
         );
     }
 
@@ -949,8 +1003,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix add(CNumber a) {
-<span class="fc" id="L952">        return new CMatrix(this.shape.clone(),</span>
-<span class="fc" id="L953">                RealComplexDenseOperations.add(this.entries, a)</span>
+<span class="fc" id="L1006">        return new CMatrix(this.shape.clone(),</span>
+<span class="fc" id="L1007">                RealComplexDenseOperations.add(this.entries, a)</span>
         );
     }
 
@@ -964,7 +1018,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix add(SparseMatrix B) {
-<span class="nc" id="L967">        return null;</span>
+<span class="nc" id="L1021">        return RealDenseSparseOperations.add(this, B);</span>
     }
 
 
@@ -977,8 +1031,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix add(CMatrix B) {
-<span class="fc" id="L980">        return new CMatrix(this.shape.clone(),</span>
-<span class="fc" id="L981">                RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape)</span>
+<span class="fc" id="L1034">        return new CMatrix(this.shape.clone(),</span>
+<span class="fc" id="L1035">                RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape)</span>
         );
     }
 
@@ -992,7 +1046,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix add(SparseCMatrix B) {
-<span class="nc" id="L995">        return null;</span>
+<span class="nc" id="L1049">        return RealComplexDenseSparseOperations.add(this, B);</span>
     }
 
 
@@ -1005,8 +1059,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sub(Matrix B) {
-<span class="nc" id="L1008">        return new Matrix(this.shape.clone(),</span>
-<span class="nc" id="L1009">                RealDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)</span>
+<span class="nc" id="L1062">        return new Matrix(this.shape.clone(),</span>
+<span class="nc" id="L1063">                RealDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1019,8 +1073,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sub(double a) {
-<span class="nc" id="L1022">        return new Matrix(this.shape.clone(),</span>
-<span class="nc" id="L1023">                RealDenseOperations.sub(this.entries, a)</span>
+<span class="nc" id="L1076">        return new Matrix(this.shape.clone(),</span>
+<span class="nc" id="L1077">                RealDenseOperations.sub(this.entries, a)</span>
         );
     }
 
@@ -1033,8 +1087,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix sub(CNumber a) {
-<span class="nc" id="L1036">        return new CMatrix(this.shape.clone(),</span>
-<span class="nc" id="L1037">                RealComplexDenseOperations.sub(this.entries, a)</span>
+<span class="nc" id="L1090">        return new CMatrix(this.shape.clone(),</span>
+<span class="nc" id="L1091">                RealComplexDenseOperations.sub(this.entries, a)</span>
         );
     }
 
@@ -1047,8 +1101,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix scalMult(double factor) {
-<span class="nc" id="L1050">        return new Matrix(this.shape.clone(),</span>
-<span class="nc" id="L1051">                RealOperations.scalMult(this.entries, factor)</span>
+<span class="nc" id="L1104">        return new Matrix(this.shape.clone(),</span>
+<span class="nc" id="L1105">                RealOperations.scalMult(this.entries, factor)</span>
         );
     }
 
@@ -1061,8 +1115,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix scalMult(CNumber factor) {
-<span class="nc" id="L1064">        return new CMatrix(this.shape.clone(),</span>
-<span class="nc" id="L1065">                RealComplexDenseOperations.scalMult(this.entries, factor)</span>
+<span class="nc" id="L1118">        return new CMatrix(this.shape.clone(),</span>
+<span class="nc" id="L1119">                RealComplexDenseOperations.scalMult(this.entries, factor)</span>
         );
     }
 
@@ -1076,8 +1130,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix scalDiv(double divisor) {
-<span class="fc" id="L1079">        return new Matrix(this.shape.clone(),</span>
-<span class="fc" id="L1080">                RealDenseOperations.scalDiv(this.entries, divisor)</span>
+<span class="fc" id="L1133">        return new Matrix(this.shape.clone(),</span>
+<span class="fc" id="L1134">                RealDenseOperations.scalDiv(this.entries, divisor)</span>
         );
     }
 
@@ -1091,8 +1145,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix scalDiv(CNumber divisor) {
-<span class="fc" id="L1094">        return new CMatrix(this.shape.clone(),</span>
-<span class="fc" id="L1095">                RealComplexDenseOperations.scalDiv(this.entries, divisor)</span>
+<span class="fc" id="L1148">        return new CMatrix(this.shape.clone(),</span>
+<span class="fc" id="L1149">                RealComplexDenseOperations.scalDiv(this.entries, divisor)</span>
         );
     }
 
@@ -1104,7 +1158,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double sum() {
-<span class="fc" id="L1107">        return Aggregate.sum(entries);</span>
+<span class="fc" id="L1161">        return Aggregate.sum(entries);</span>
     }
 
 
@@ -1117,8 +1171,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sqrt() {
-<span class="fc" id="L1120">        return new Matrix(this.shape.clone(),</span>
-<span class="fc" id="L1121">                RealOperations.sqrt(entries)</span>
+<span class="fc" id="L1174">        return new Matrix(this.shape.clone(),</span>
+<span class="fc" id="L1175">                RealOperations.sqrt(entries)</span>
         );
     }
 
@@ -1131,8 +1185,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix abs() {
-<span class="fc" id="L1134">        return new Matrix(this.shape.clone(),</span>
-<span class="fc" id="L1135">                RealOperations.abs(entries)</span>
+<span class="fc" id="L1188">        return new Matrix(this.shape.clone(),</span>
+<span class="fc" id="L1189">                RealOperations.abs(entries)</span>
         );
     }
 
@@ -1144,22 +1198,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix transpose() {
-        double[] transposeEntries;
-
-        // TODO: Check if standard or blocked should be used.
-<span class="pc bpc" id="L1150" title="1 of 2 branches missed.">        if(CheckConcurrent.simpleMatrixCheck(numRows, numCols)) {</span>
-            // Use concurrent implementation
-<span class="nc" id="L1152">            transposeEntries = RealDenseTranspose.blockedMatrixConcurrent(</span>
-                    entries, numRows, numCols
-            );
-        } else {
-            // Use sequential implementation
-<span class="fc" id="L1157">            transposeEntries = RealDenseTranspose.blockedMatrix(</span>
-                    entries, numRows, numCols
-            );
-        }
-
-<span class="fc" id="L1162">        return new Matrix(new Shape(numCols, numRows), transposeEntries);</span>
+<span class="fc" id="L1201">        return MatrixTranspose.dispatch(this);</span>
     }
 
 
@@ -1170,7 +1209,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix T() {
-<span class="fc" id="L1173">        return transpose();</span>
+<span class="fc" id="L1212">        return transpose();</span>
     }
 
 
@@ -1182,9 +1221,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix recep() {
-<span class="fc" id="L1185">        return new Matrix(</span>
-<span class="fc" id="L1186">                shape.clone(),</span>
-<span class="fc" id="L1187">                RealDenseOperations.recep(entries)</span>
+<span class="fc" id="L1224">        return new Matrix(</span>
+<span class="fc" id="L1225">                shape.clone(),</span>
+<span class="fc" id="L1226">                RealDenseOperations.recep(entries)</span>
         );
     }
 
@@ -1198,7 +1237,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sub(SparseMatrix B) {
-<span class="nc" id="L1201">        return null;</span>
+<span class="nc" id="L1240">        return RealDenseSparseOperations.sub(this, B);</span>
     }
 
 
@@ -1211,9 +1250,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix sub(CMatrix B) {
-<span class="nc" id="L1214">        return new CMatrix(</span>
-<span class="nc" id="L1215">                shape.clone(),</span>
-<span class="nc" id="L1216">                RealComplexDenseOperations.sub(entries, shape, B.entries, B.shape)</span>
+<span class="nc" id="L1253">        return new CMatrix(</span>
+<span class="nc" id="L1254">                shape.clone(),</span>
+<span class="nc" id="L1255">                RealComplexDenseOperations.sub(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1227,7 +1266,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix sub(SparseCMatrix B) {
-<span class="nc" id="L1230">        return null;</span>
+<span class="nc" id="L1269">        return RealComplexDenseSparseOperations.sub(this, B);</span>
     }
 
 
@@ -1240,10 +1279,10 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(Matrix B) {
-<span class="nc" id="L1243">        double[] entries = MatrixMultiply.dispatch(this, B);</span>
-<span class="nc" id="L1244">        Shape shape = new Shape(this.numRows, B.numCols);</span>
+<span class="nc" id="L1282">        double[] entries = MatrixMultiply.dispatch(this, B);</span>
+<span class="nc" id="L1283">        Shape shape = new Shape(this.numRows, B.numCols);</span>
 
-<span class="nc" id="L1246">        return new Matrix(shape, entries);</span>
+<span class="nc" id="L1285">        return new Matrix(shape, entries);</span>
     }
 
 
@@ -1256,7 +1295,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(SparseMatrix B) {
-<span class="nc" id="L1259">        return null;</span>
+        // TODO: Implementation
+<span class="nc" id="L1299">        return null;</span>
     }
 
 
@@ -1269,7 +1309,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(CMatrix B) {
-<span class="nc" id="L1272">        return null;</span>
+        // TODO: Implementation
+<span class="nc" id="L1313">        return null;</span>
     }
 
 
@@ -1282,7 +1323,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
-<span class="nc" id="L1285">        return null;</span>
+        // TODO: Implementation
+<span class="nc" id="L1327">        return null;</span>
     }
 
 
@@ -1295,7 +1337,10 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(Vector b) {
-<span class="nc" id="L1298">        return null;</span>
+<span class="nc" id="L1340">        double[] entries = MatrixMultiply.dispatch(this, b);</span>
+<span class="nc" id="L1341">        Shape shape = new Shape(this.numRows, 1);</span>
+
+<span class="nc" id="L1343">        return new Matrix(shape, entries);</span>
     }
 
 
@@ -1308,7 +1353,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(SparseVector b) {
-<span class="nc" id="L1311">        return null;</span>
+        // TODO: Implementation
+<span class="nc" id="L1357">        return null;</span>
     }
 
 
@@ -1321,7 +1367,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(CVector b) {
-<span class="nc" id="L1324">        return null;</span>
+        // TODO: Implementation
+<span class="nc" id="L1371">        return null;</span>
     }
 
 
@@ -1334,7 +1381,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCVector b) {
-<span class="nc" id="L1337">        return null;</span>
+        // TODO: Implementation
+<span class="nc" id="L1385">        return null;</span>
     }
 
 
@@ -1345,10 +1393,12 @@ public class Matrix extends RealMatrixBase implements
      *
      * @param exponent The exponent in the matrix power.
      * @return The result of multiplying this matrix with itself 'exponent' times.
+     * @throws IllegalArgumentException If this matrix is not square.
      */
     @Override
     public Matrix pow(double exponent) {
-<span class="nc" id="L1351">        return null;</span>
+        // TODO: Implementation
+<span class="nc" id="L1401">        return null;</span>
     }
 
 
@@ -1361,9 +1411,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix elemMult(Matrix B) {
-<span class="fc" id="L1364">        return new Matrix(</span>
-<span class="fc" id="L1365">                shape.clone(),</span>
-<span class="fc" id="L1366">                RealDenseOperations.elemMult(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L1414">        return new Matrix(</span>
+<span class="fc" id="L1415">                shape.clone(),</span>
+<span class="fc" id="L1416">                RealDenseOperations.elemMult(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1377,7 +1427,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public SparseMatrix elemMult(SparseMatrix B) {
-<span class="nc" id="L1380">        return null;</span>
+<span class="nc" id="L1430">        return RealDenseSparseOperations.elemMult(this, B);</span>
     }
 
 
@@ -1390,9 +1440,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix elemMult(CMatrix B) {
-<span class="fc" id="L1393">        return new CMatrix(</span>
-<span class="fc" id="L1394">                shape.clone(),</span>
-<span class="fc" id="L1395">                RealComplexDenseOperations.elemMult(B.entries, B.shape, entries, shape)</span>
+<span class="fc" id="L1443">        return new CMatrix(</span>
+<span class="fc" id="L1444">                shape.clone(),</span>
+<span class="fc" id="L1445">                RealComplexDenseOperations.elemMult(B.entries, B.shape, entries, shape)</span>
         );
     }
 
@@ -1406,7 +1456,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
-<span class="nc" id="L1409">        return null;</span>
+<span class="nc" id="L1459">        return RealComplexDenseSparseOperations.elemMult(this, B);</span>
     }
 
 
@@ -1420,9 +1470,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix elemDiv(Matrix B) {
-<span class="fc" id="L1423">        return new Matrix(</span>
-<span class="fc" id="L1424">                shape.clone(),</span>
-<span class="fc" id="L1425">                RealDenseOperations.elemDiv(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L1473">        return new Matrix(</span>
+<span class="fc" id="L1474">                shape.clone(),</span>
+<span class="fc" id="L1475">                RealDenseOperations.elemDiv(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1437,9 +1487,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix elemDiv(CMatrix B) {
-<span class="fc" id="L1440">        return new CMatrix(</span>
-<span class="fc" id="L1441">                shape.clone(),</span>
-<span class="fc" id="L1442">                RealComplexDenseOperations.elemDiv(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L1490">        return new CMatrix(</span>
+<span class="fc" id="L1491">                shape.clone(),</span>
+<span class="fc" id="L1492">                RealComplexDenseOperations.elemDiv(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1452,7 +1502,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double det() {
-<span class="nc" id="L1455">        return null;</span>
+        // TODO: Implement using QR Factorization
+<span class="nc" id="L1506">        return null;</span>
     }
 
 
@@ -1465,7 +1516,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double fib(Matrix B) {
-<span class="nc" id="L1468">        return null;</span>
+<span class="nc" id="L1519">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
+
+<span class="nc" id="L1521">        return this.T().mult(B).trace();</span>
     }
 
 
@@ -1478,7 +1531,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double fib(SparseMatrix B) {
-<span class="nc" id="L1481">        return null;</span>
+        // TODO: Implement after implementing A.mult(B) where A is real dense, and B is real sparse.
+<span class="nc" id="L1535">        return null;</span>
     }
 
 
@@ -1491,7 +1545,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CNumber fib(CMatrix B) {
-<span class="nc" id="L1494">        return null;</span>
+        // TODO: Implement after implementing A.mult(B) where A is real dense, and B is complex dense.
+        //  Also implement C.trace() where C is complex dense.
+<span class="nc" id="L1550">        return null;</span>
     }
 
 
@@ -1504,7 +1560,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CNumber fib(SparseCMatrix B) {
-<span class="nc" id="L1507">        return null;</span>
+        // TODO: Implement after implementing A.mult(B) where A is real dense, and B is complex sparse.
+        //  Also implement C.trace() where C is complex sparse.
+<span class="nc" id="L1565">        return null;</span>
     }
 
 
@@ -1516,7 +1574,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix directSum(Matrix B) {
-<span class="nc" id="L1519">        return null;</span>
+<span class="nc" id="L1577">        return null;</span>
     }
 
 
@@ -1528,7 +1586,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public SparseMatrix directSum(SparseMatrix B) {
-<span class="nc" id="L1531">        return null;</span>
+<span class="nc" id="L1589">        return null;</span>
     }
 
 
@@ -1540,7 +1598,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix directSum(CMatrix B) {
-<span class="nc" id="L1543">        return null;</span>
+<span class="nc" id="L1601">        return null;</span>
     }
 
 
@@ -1552,7 +1610,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public SparseCMatrix directSum(SparseCMatrix B) {
-<span class="nc" id="L1555">        return null;</span>
+<span class="nc" id="L1613">        return null;</span>
     }
 
 
@@ -1564,7 +1622,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix invDirectSum(Matrix B) {
-<span class="nc" id="L1567">        return null;</span>
+        // TODO: Implementation
+<span class="nc" id="L1626">        return null;</span>
     }
 
 
@@ -1576,7 +1635,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public SparseMatrix invDirectSum(SparseMatrix B) {
-<span class="nc" id="L1579">        return null;</span>
+        // TODO: Implementation
+<span class="nc" id="L1639">        return null;</span>
     }
 
 
@@ -1588,7 +1648,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(CMatrix B) {
-<span class="nc" id="L1591">        return null;</span>
+        // TODO: Implementation
+<span class="nc" id="L1652">        return null;</span>
     }
 
 
@@ -1600,7 +1661,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public SparseCMatrix invDirectSum(SparseCMatrix B) {
-<span class="nc" id="L1603">        return null;</span>
+        // TODO: Implementation
+<span class="nc" id="L1665">        return null;</span>
     }
 
 
@@ -1612,7 +1674,15 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sumCols() {
-<span class="nc" id="L1615">        return null;</span>
+<span class="nc" id="L1677">        Matrix sum = new Matrix(this.numRows, 1);</span>
+
+<span class="nc bnc" id="L1679" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="nc bnc" id="L1680" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="nc" id="L1681">                sum.entries[i] += this.entries[i*numCols + j];</span>
+            }
+        }
+
+<span class="nc" id="L1685">        return sum;</span>
     }
 
 
@@ -1624,7 +1694,16 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sumRows() {
-<span class="nc" id="L1627">        return null;</span>
+<span class="nc" id="L1697">        Matrix sum = new Matrix(1, this.numCols);</span>
+
+        // TODO: Is it faster to transpose first?
+<span class="nc bnc" id="L1700" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="nc bnc" id="L1701" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="nc" id="L1702">                sum.entries[j] += this.entries[i*numCols + j];</span>
+            }
+        }
+
+<span class="nc" id="L1706">        return sum;</span>
     }
 
 
@@ -1634,10 +1713,20 @@ public class Matrix extends RealMatrixBase implements
      *
      * @param b Vector to add to each column of this matrix.
      * @return The result of adding the vector b to each column of this matrix.
+     * @throws IllegalArgumentException If the vector has a different number of entries as rows in the matrix.
      */
     @Override
     public Matrix addToEachCol(Vector b) {
-<span class="nc" id="L1640">        return null;</span>
+<span class="nc" id="L1720">        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);</span>
+<span class="nc" id="L1721">        Matrix sum = new Matrix(this);</span>
+
+<span class="nc bnc" id="L1723" title="All 2 branches missed.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="nc bnc" id="L1724" title="All 2 branches missed.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="nc" id="L1725">                sum.entries[i*sum.numCols + j] += b.entries[i];</span>
+            }
+        }
+
+<span class="nc" id="L1729">        return sum;</span>
     }
 
 
@@ -1650,7 +1739,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix addToEachCol(SparseVector b) {
-<span class="nc" id="L1653">        return null;</span>
+<span class="nc" id="L1742">        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());</span>
+<span class="nc" id="L1743">        Matrix sum = new Matrix(this);</span>
+
+        int index;
+
+<span class="nc bnc" id="L1747" title="All 2 branches missed.">        for(int i=0; i&lt;b.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L1748">            index = b.indices[i];</span>
+
+<span class="nc bnc" id="L1750" title="All 2 branches missed.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="nc" id="L1751">                sum.entries[index*sum.numCols + j] += b.entries[index];</span>
+            }
+        }
+
+<span class="nc" id="L1755">        return sum;</span>
     }
 
 
@@ -1663,7 +1765,16 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(CVector b) {
-<span class="nc" id="L1666">        return null;</span>
+<span class="nc" id="L1768">        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);</span>
+<span class="nc" id="L1769">        CMatrix sum = new CMatrix(this);</span>
+
+<span class="nc bnc" id="L1771" title="All 2 branches missed.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="nc bnc" id="L1772" title="All 2 branches missed.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="nc" id="L1773">                sum.entries[i*sum.numCols + j].addEq(b.entries[i]);</span>
+            }
+        }
+
+<span class="nc" id="L1777">        return sum;</span>
     }
 
 
@@ -1676,7 +1787,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(SparseCVector b) {
-<span class="nc" id="L1679">        return null;</span>
+<span class="nc" id="L1790">        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());</span>
+<span class="nc" id="L1791">        CMatrix sum = new CMatrix(this);</span>
+
+        int index;
+
+<span class="nc bnc" id="L1795" title="All 2 branches missed.">        for(int i=0; i&lt;b.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L1796">            index = b.indices[i];</span>
+
+<span class="nc bnc" id="L1798" title="All 2 branches missed.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="nc" id="L1799">                sum.entries[index*sum.numCols + j].addEq(b.entries[index]);</span>
+            }
+        }
+
+<span class="nc" id="L1803">        return sum;</span>
     }
 
 
@@ -1689,7 +1813,16 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix addToEachRow(Vector b) {
-<span class="nc" id="L1692">        return null;</span>
+<span class="nc" id="L1816">        ParameterChecks.assertArrayLengthsEq(numCols, b.entries.length);</span>
+<span class="nc" id="L1817">        Matrix sum = new Matrix(this);</span>
+
+<span class="nc bnc" id="L1819" title="All 2 branches missed.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="nc bnc" id="L1820" title="All 2 branches missed.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="nc" id="L1821">                sum.entries[i*sum.numCols + j] += b.entries[j];</span>
+            }
+        }
+
+<span class="nc" id="L1825">        return sum;</span>
     }
 
 
@@ -1702,7 +1835,16 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix addToEachRow(SparseVector b) {
-<span class="nc" id="L1705">        return null;</span>
+<span class="nc" id="L1838">        ParameterChecks.assertArrayLengthsEq(numCols, b.totalEntries().intValue());</span>
+<span class="nc" id="L1839">        Matrix sum = new Matrix(this);</span>
+
+<span class="nc bnc" id="L1841" title="All 2 branches missed.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="nc bnc" id="L1842" title="All 2 branches missed.">            for(int j=0; j&lt;b.nonZeroEntries(); j++) {</span>
+<span class="nc" id="L1843">                sum.entries[i*sum.numCols + j] += b.entries[j];</span>
+            }
+        }
+
+<span class="nc" id="L1847">        return sum;</span>
     }
 
 
@@ -1715,7 +1857,16 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(CVector b) {
-<span class="nc" id="L1718">        return null;</span>
+<span class="nc" id="L1860">        ParameterChecks.assertArrayLengthsEq(numCols, b.entries.length);</span>
+<span class="nc" id="L1861">        CMatrix sum = new CMatrix(this);</span>
+
+<span class="nc bnc" id="L1863" title="All 2 branches missed.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="nc bnc" id="L1864" title="All 2 branches missed.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="nc" id="L1865">                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);</span>
+            }
+        }
+
+<span class="nc" id="L1869">        return sum;</span>
     }
 
 
@@ -1728,7 +1879,16 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(SparseCVector b) {
-<span class="nc" id="L1731">        return null;</span>
+<span class="nc" id="L1882">        ParameterChecks.assertArrayLengthsEq(numCols, b.totalEntries().intValue());</span>
+<span class="nc" id="L1883">        CMatrix sum = new CMatrix(this);</span>
+
+<span class="nc bnc" id="L1885" title="All 2 branches missed.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="nc bnc" id="L1886" title="All 2 branches missed.">            for(int j=0; j&lt;b.nonZeroEntries(); j++) {</span>
+<span class="nc" id="L1887">                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);</span>
+            }
+        }
+
+<span class="nc" id="L1891">        return sum;</span>
     }
 
 
@@ -1742,7 +1902,13 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix stack(Matrix B) {
-<span class="nc" id="L1745">        return null;</span>
+<span class="nc" id="L1905">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
+<span class="nc" id="L1906">        Matrix stacked = new Matrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
+
+<span class="nc" id="L1908">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+<span class="nc" id="L1909">        System.arraycopy(B.entries, 0, stacked, this.entries.length, B.entries.length);</span>
+
+<span class="nc" id="L1911">        return stacked;</span>
     }
 
 
@@ -1756,7 +1922,21 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix stack(SparseMatrix B) {
-<span class="nc" id="L1759">        return null;</span>
+<span class="nc" id="L1925">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
+<span class="nc" id="L1926">        Matrix stacked = new Matrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
+
+<span class="nc" id="L1928">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+
+        int row, col;
+
+<span class="nc bnc" id="L1932" title="All 2 branches missed.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="nc" id="L1933">            row = B.rowIndices[i];</span>
+<span class="nc" id="L1934">            col = B.colIndices[i];</span>
+            // Offset the row index for destination matrix. i.e. row+this.numRows
+<span class="nc" id="L1936">            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i];</span>
+        }
+
+<span class="nc" id="L1939">        return stacked;</span>
     }
 
 
@@ -1770,7 +1950,23 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(CMatrix B) {
-<span class="nc" id="L1773">        return null;</span>
+<span class="nc" id="L1953">        ParameterChecks.assertArrayLengthsEq(numCols, B.numCols);</span>
+<span class="nc" id="L1954">        CMatrix stacked = new CMatrix(new Shape(numRows + B.numRows, numCols));</span>
+
+<span class="nc bnc" id="L1956" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L1957" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L1958">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+            }
+        }
+
+
+<span class="nc bnc" id="L1963" title="All 2 branches missed.">        for(int i=numRows; i&lt;B.numRows; i++) {</span>
+<span class="nc bnc" id="L1964" title="All 2 branches missed.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="nc" id="L1965">                stacked.entries[i*stacked.numCols + j] = B.entries[i*numCols+j].clone();</span>
+            }
+        }
+
+<span class="nc" id="L1969">        return stacked;</span>
     }
 
 
@@ -1784,7 +1980,24 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCMatrix B) {
-<span class="nc" id="L1787">        return null;</span>
+<span class="nc" id="L1983">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
+<span class="nc" id="L1984">        CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
+
+<span class="nc bnc" id="L1986" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L1987" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L1988">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+            }
+        }
+
+        int row, col;
+<span class="nc bnc" id="L1993" title="All 2 branches missed.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="nc" id="L1994">            row = B.rowIndices[i];</span>
+<span class="nc" id="L1995">            col = B.colIndices[i];</span>
+            // Offset the row index for destination matrix. i.e. row+this.numRows
+<span class="nc" id="L1997">            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i].clone();</span>
+        }
+
+<span class="nc" id="L2000">        return stacked;</span>
     }
 
 
@@ -1802,7 +2015,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix stack(Matrix B, int axis) {
-<span class="nc" id="L1805">        return null;</span>
+        Matrix stacked;
+
+<span class="nc bnc" id="L2020" title="All 2 branches missed.">        if(axis==0) {</span>
+<span class="nc" id="L2021">            stacked = this.augment(B);</span>
+<span class="nc bnc" id="L2022" title="All 2 branches missed.">        } else if(axis==1) {</span>
+<span class="nc" id="L2023">            stacked = this.stack(B);</span>
+        } else {
+<span class="nc" id="L2025">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+        }
+
+<span class="nc" id="L2028">        return stacked;</span>
     }
 
 
@@ -1820,7 +2043,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix stack(SparseMatrix B, int axis) {
-<span class="nc" id="L1823">        return null;</span>
+        Matrix stacked;
+
+<span class="nc bnc" id="L2048" title="All 2 branches missed.">        if(axis==0) {</span>
+<span class="nc" id="L2049">            stacked = this.augment(B);</span>
+<span class="nc bnc" id="L2050" title="All 2 branches missed.">        } else if(axis==1) {</span>
+<span class="nc" id="L2051">            stacked = this.stack(B);</span>
+        } else {
+<span class="nc" id="L2053">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+        }
+
+<span class="nc" id="L2056">        return stacked;</span>
     }
 
 
@@ -1838,7 +2071,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(CMatrix B, int axis) {
-<span class="nc" id="L1841">        return null;</span>
+        CMatrix stacked;
+
+<span class="nc bnc" id="L2076" title="All 2 branches missed.">        if(axis==0) {</span>
+<span class="nc" id="L2077">            stacked = this.augment(B);</span>
+<span class="nc bnc" id="L2078" title="All 2 branches missed.">        } else if(axis==1) {</span>
+<span class="nc" id="L2079">            stacked = this.stack(B);</span>
+        } else {
+<span class="nc" id="L2081">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+        }
+
+<span class="nc" id="L2084">        return stacked;</span>
     }
 
 
@@ -1856,7 +2099,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCMatrix B, int axis) {
-<span class="nc" id="L1859">        return null;</span>
+        CMatrix stacked;
+
+<span class="nc bnc" id="L2104" title="All 2 branches missed.">        if(axis==0) {</span>
+<span class="nc" id="L2105">            stacked = this.augment(B);</span>
+<span class="nc bnc" id="L2106" title="All 2 branches missed.">        } else if(axis==1) {</span>
+<span class="nc" id="L2107">            stacked = this.stack(B);</span>
+        } else {
+<span class="nc" id="L2109">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+        }
+
+<span class="nc" id="L2112">        return stacked;</span>
     }
 
 
@@ -1870,7 +2123,24 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix augment(Matrix B) {
-<span class="nc" id="L1873">        return null;</span>
+<span class="nc" id="L2126">        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);</span>
+<span class="nc" id="L2127">        Matrix augmented = new Matrix(new Shape(numRows, numCols+B.numCols));</span>
+
+        // Copy entries from this matrix.
+<span class="nc bnc" id="L2130" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L2131" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L2132">                augmented.entries[i*augmented.numCols + j] = entries[i*numCols + j];</span>
+            }
+        }
+
+        // Copy entries from the B matrix.
+<span class="nc bnc" id="L2137" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L2138" title="All 2 branches missed.">            for(int j=numCols; j&lt;augmented.numCols; j++) {</span>
+<span class="nc" id="L2139">                augmented.entries[i*augmented.numCols + j] = B.entries[i*numCols + j];</span>
+            }
+        }
+
+<span class="nc" id="L2143">        return augmented;</span>
     }
 
 
@@ -1884,7 +2154,25 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix augment(SparseMatrix B) {
-<span class="nc" id="L1887">        return null;</span>
+<span class="nc" id="L2157">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
+<span class="nc" id="L2158">        Matrix augmented = new Matrix(new Shape(this.numRows, this.numCols+B.numCols));</span>
+
+        // Copy entries from this matrix.
+<span class="nc bnc" id="L2161" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L2162" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L2163">                augmented.entries[i*augmented.numCols + j] = entries[i*numCols + j];</span>
+            }
+        }
+
+        int row, col;
+<span class="nc bnc" id="L2168" title="All 2 branches missed.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="nc" id="L2169">            row = B.rowIndices[i];</span>
+<span class="nc" id="L2170">            col = B.colIndices[i];</span>
+            // Offset the col index for destination matrix. i.e. col+this.numCols
+<span class="nc" id="L2172">            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i];</span>
+        }
+
+<span class="nc" id="L2175">        return augmented;</span>
     }
 
 
@@ -1898,7 +2186,24 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix augment(CMatrix B) {
-<span class="nc" id="L1901">        return null;</span>
+<span class="nc" id="L2189">        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);</span>
+<span class="nc" id="L2190">        CMatrix augmented = new CMatrix(new Shape(numRows, numCols+B.numCols));</span>
+
+        // Copy entries from this matrix.
+<span class="nc bnc" id="L2193" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L2194" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L2195">                augmented.entries[i*augmented.numCols + j].re = entries[i*numCols + j];</span>
+            }
+        }
+
+        // Copy entries from the B matrix.
+<span class="nc bnc" id="L2200" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L2201" title="All 2 branches missed.">            for(int j=numCols; j&lt;augmented.numCols; j++) {</span>
+<span class="nc" id="L2202">                augmented.entries[i*augmented.numCols + j] = B.entries[i*numCols + j].clone();</span>
+            }
+        }
+
+<span class="nc" id="L2206">        return augmented;</span>
     }
 
 
@@ -1912,7 +2217,25 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseCMatrix B) {
-<span class="nc" id="L1915">        return null;</span>
+<span class="nc" id="L2220">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
+<span class="nc" id="L2221">        CMatrix augmented = new CMatrix(new Shape(this.numRows, this.numCols+B.numCols));</span>
+
+        // Copy entries from this matrix.
+<span class="nc bnc" id="L2224" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L2225" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L2226">                augmented.entries[i*augmented.numCols + j].re = entries[i*numCols + j];</span>
+            }
+        }
+
+        int row, col;
+<span class="nc bnc" id="L2231" title="All 2 branches missed.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="nc" id="L2232">            row = B.rowIndices[i];</span>
+<span class="nc" id="L2233">            col = B.colIndices[i];</span>
+            // Offset the col index for destination matrix. i.e. col+this.numCols
+<span class="nc" id="L2235">            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i].clone();</span>
+        }
+
+<span class="nc" id="L2238">        return augmented;</span>
     }
 
 
@@ -1928,7 +2251,13 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix stack(Vector b) {
-<span class="nc" id="L1931">        return null;</span>
+<span class="nc" id="L2254">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);</span>
+<span class="nc" id="L2255">        Matrix stacked = new Matrix(this.numRows+1, this.numCols);</span>
+
+<span class="nc" id="L2257">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+<span class="nc" id="L2258">        System.arraycopy(b.entries, 0, stacked.entries, this.entries.length, b.entries.length);</span>
+
+<span class="nc" id="L2260">        return stacked;</span>
     }
 
 
@@ -1943,8 +2272,20 @@ public class Matrix extends RealMatrixBase implements
      *                                  the vector b.
      */
     @Override
-    public SparseMatrix stack(SparseVector b) {
-<span class="nc" id="L1947">        return null;</span>
+    public Matrix stack(SparseVector b) {
+<span class="nc" id="L2276">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);</span>
+<span class="nc" id="L2277">        Matrix stacked = new Matrix(this.numRows+1, this.numCols);</span>
+
+<span class="nc" id="L2279">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+
+        int index;
+
+<span class="nc bnc" id="L2283" title="All 2 branches missed.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="nc" id="L2284">            index = b.indices[i];</span>
+<span class="nc" id="L2285">            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[index];</span>
+        }
+
+<span class="nc" id="L2288">        return stacked;</span>
     }
 
 
@@ -1960,7 +2301,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(CVector b) {
-<span class="nc" id="L1963">        return null;</span>
+<span class="nc" id="L2304">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);</span>
+<span class="nc" id="L2305">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
+
+<span class="nc bnc" id="L2307" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L2308" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L2309">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+            }
+        }
+
+<span class="nc bnc" id="L2313" title="All 2 branches missed.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="nc" id="L2314">            stacked.entries[(stacked.numRows-1)*numCols + i] = b.entries[i].clone();</span>
+        }
+
+<span class="nc" id="L2317">        return stacked;</span>
     }
 
 
@@ -1976,7 +2330,22 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCVector b) {
-<span class="nc" id="L1979">        return null;</span>
+<span class="nc" id="L2333">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);</span>
+<span class="nc" id="L2334">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
+
+<span class="nc bnc" id="L2336" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L2337" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L2338">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+            }
+        }
+
+        int index;
+<span class="nc bnc" id="L2343" title="All 2 branches missed.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="nc" id="L2344">            index = b.indices[i];</span>
+<span class="nc" id="L2345">            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[index];</span>
+        }
+
+<span class="nc" id="L2348">        return stacked;</span>
     }
 
 
@@ -1996,7 +2365,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix stack(Vector b, int axis) {
-<span class="nc" id="L1999">        return null;</span>
+        Matrix stacked;
+
+<span class="nc bnc" id="L2370" title="All 2 branches missed.">        if(axis==0) {</span>
+<span class="nc" id="L2371">            stacked = this.augment(b);</span>
+<span class="nc bnc" id="L2372" title="All 2 branches missed.">        } else if(axis==1) {</span>
+<span class="nc" id="L2373">            stacked = this.stack(b);</span>
+        } else {
+<span class="nc" id="L2375">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+        }
+
+<span class="nc" id="L2378">        return stacked;</span>
     }
 
 
@@ -2015,8 +2394,18 @@ public class Matrix extends RealMatrixBase implements
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public SparseMatrix stack(SparseVector b, int axis) {
-<span class="nc" id="L2019">        return null;</span>
+    public Matrix stack(SparseVector b, int axis) {
+        Matrix stacked;
+
+<span class="nc bnc" id="L2400" title="All 2 branches missed.">        if(axis==0) {</span>
+<span class="nc" id="L2401">            stacked = this.augment(b);</span>
+<span class="nc bnc" id="L2402" title="All 2 branches missed.">        } else if(axis==1) {</span>
+<span class="nc" id="L2403">            stacked = this.stack(b);</span>
+        } else {
+<span class="nc" id="L2405">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+        }
+
+<span class="nc" id="L2408">        return stacked;</span>
     }
 
 
@@ -2036,7 +2425,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(CVector b, int axis) {
-<span class="nc" id="L2039">        return null;</span>
+        CMatrix stacked;
+
+<span class="nc bnc" id="L2430" title="All 2 branches missed.">        if(axis==0) {</span>
+<span class="nc" id="L2431">            stacked = this.augment(b);</span>
+<span class="nc bnc" id="L2432" title="All 2 branches missed.">        } else if(axis==1) {</span>
+<span class="nc" id="L2433">            stacked = this.stack(b);</span>
+        } else {
+<span class="nc" id="L2435">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+        }
+
+<span class="nc" id="L2438">        return stacked;</span>
     }
 
 
@@ -2056,7 +2455,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCVector b, int axis) {
-<span class="nc" id="L2059">        return null;</span>
+        CMatrix stacked;
+
+<span class="nc bnc" id="L2460" title="All 2 branches missed.">        if(axis==0) {</span>
+<span class="nc" id="L2461">            stacked = this.augment(b);</span>
+<span class="nc bnc" id="L2462" title="All 2 branches missed.">        } else if(axis==1) {</span>
+<span class="nc" id="L2463">            stacked = this.stack(b);</span>
+        } else {
+<span class="nc" id="L2465">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+        }
+
+<span class="nc" id="L2468">        return stacked;</span>
     }
 
 
@@ -2072,7 +2481,22 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix augment(Vector b) {
-<span class="nc" id="L2075">        return null;</span>
+<span class="nc" id="L2484">        ParameterChecks.assertArrayLengthsEq(numCols, b.entries.length);</span>
+<span class="nc" id="L2485">        Matrix stacked = new Matrix(numRows, numCols+1);</span>
+
+        // Copy elements of this matrix.
+<span class="nc bnc" id="L2488" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L2489" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L2490">                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j];</span>
+            }
+        }
+
+        // Copy elements from b vector.
+<span class="nc bnc" id="L2495" title="All 2 branches missed.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="nc" id="L2496">            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i];</span>
+        }
+
+<span class="nc" id="L2499">        return stacked;</span>
     }
 
 
@@ -2087,8 +2511,23 @@ public class Matrix extends RealMatrixBase implements
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public SparseMatrix augment(SparseVector b) {
-<span class="nc" id="L2091">        return null;</span>
+    public Matrix augment(SparseVector b) {
+<span class="nc" id="L2515">        ParameterChecks.assertArrayLengthsEq(numCols, b.entries.length);</span>
+<span class="nc" id="L2516">        Matrix stacked = new Matrix(numRows, numCols+1);</span>
+
+        // Copy elements of this matrix.
+<span class="nc bnc" id="L2519" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L2520" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L2521">                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j];</span>
+            }
+        }
+
+        // Copy elements from b vector.
+<span class="nc bnc" id="L2526" title="All 2 branches missed.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="nc" id="L2527">            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i];</span>
+        }
+
+<span class="nc" id="L2530">        return stacked;</span>
     }
 
 
@@ -2104,7 +2543,22 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix augment(CVector b) {
-<span class="nc" id="L2107">        return null;</span>
+<span class="nc" id="L2546">        ParameterChecks.assertArrayLengthsEq(numCols, b.entries.length);</span>
+<span class="nc" id="L2547">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
+
+        // Copy elements of this matrix.
+<span class="nc bnc" id="L2550" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L2551" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L2552">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+            }
+        }
+
+        // Copy elements from b vector.
+<span class="nc bnc" id="L2557" title="All 2 branches missed.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="nc" id="L2558">            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i].clone();</span>
+        }
+
+<span class="nc" id="L2561">        return stacked;</span>
     }
 
 
@@ -2120,7 +2574,22 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseCVector b) {
-<span class="nc" id="L2123">        return null;</span>
+<span class="nc" id="L2577">        ParameterChecks.assertArrayLengthsEq(numCols, b.entries.length);</span>
+<span class="nc" id="L2578">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
+
+        // Copy elements of this matrix.
+<span class="nc bnc" id="L2581" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L2582" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc" id="L2583">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+            }
+        }
+
+        // Copy elements from b vector.
+<span class="nc bnc" id="L2588" title="All 2 branches missed.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="nc" id="L2589">            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i].clone();</span>
+        }
+
+<span class="nc" id="L2592">        return stacked;</span>
     }
 
 
@@ -2132,8 +2601,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double get(int... indices) {
-<span class="nc" id="L2135">        ShapeArrayChecks.arrayLengthsCheck(indices.length, shape.getRank());</span>
-<span class="nc" id="L2136">        return entries[shape.entriesIndex(indices)];</span>
+<span class="nc" id="L2604">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
+<span class="nc" id="L2605">        return entries[shape.entriesIndex(indices)];</span>
     }
 
 
@@ -2142,10 +2611,17 @@ public class Matrix extends RealMatrixBase implements
      *
      * @param i Index of row to get.
      * @return The specified row of this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} is less than zero or greater than/equal to
+     * the number of rows in this matrix.
      */
     @Override
-    public Double[] getRow(int i) {
-<span class="nc" id="L2148">        return new Double[0];</span>
+    public Matrix getRow(int i) {
+<span class="nc" id="L2619">        int start = i*numCols;</span>
+<span class="nc" id="L2620">        int stop = start+numCols;</span>
+
+<span class="nc" id="L2622">        double[] row = Arrays.copyOfRange(this.entries, start, stop);</span>
+
+<span class="nc" id="L2624">        return new Matrix(new Shape(1, numCols), row);</span>
     }
 
 
@@ -2156,8 +2632,14 @@ public class Matrix extends RealMatrixBase implements
      * @return The specified column of this matrix.
      */
     @Override
-    public Double[] getCol(int j) {
-<span class="nc" id="L2160">        return new Double[0];</span>
+    public Matrix getCol(int j) {
+<span class="nc" id="L2636">        double[] col = new double[numRows];</span>
+
+<span class="nc bnc" id="L2638" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc" id="L2639">            col[i] = entries[i*numCols + j];</span>
+        }
+
+<span class="nc" id="L2642">        return new Matrix(new Shape(numRows, 1), col);</span>
     }
 
 
@@ -2170,15 +2652,15 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double trace() {
-<span class="nc" id="L2173">        ShapeArrayChecks.assertSquare(this.shape);</span>
-<span class="nc" id="L2174">        double sum = 0;</span>
-<span class="nc" id="L2175">        int colsOffset = this.numCols+1;</span>
+<span class="nc" id="L2655">        ParameterChecks.assertSquare(this.shape);</span>
+<span class="nc" id="L2656">        double sum = 0;</span>
+<span class="nc" id="L2657">        int colsOffset = this.numCols+1;</span>
 
-<span class="nc bnc" id="L2177" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="nc" id="L2178">            sum += this.entries[i*colsOffset];</span>
+<span class="nc bnc" id="L2659" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="nc" id="L2660">            sum += this.entries[i*colsOffset];</span>
         }
 
-<span class="nc" id="L2181">        return sum;</span>
+<span class="nc" id="L2663">        return sum;</span>
     }
 
 
@@ -2191,7 +2673,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double tr() {
-<span class="nc" id="L2194">        return trace();</span>
+<span class="nc" id="L2676">        return trace();</span>
     }
 
 
@@ -2202,7 +2684,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isSquare() {
-<span class="fc bfc" id="L2205" title="All 2 branches covered.">        return numRows==numCols;</span>
+<span class="fc bfc" id="L2687" title="All 2 branches covered.">        return numRows==numCols;</span>
     }
 
 
@@ -2213,7 +2695,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isVector() {
-<span class="nc bnc" id="L2216" title="All 4 branches missed.">        return numRows&lt;=1 || numCols&lt;=1;</span>
+<span class="nc bnc" id="L2698" title="All 4 branches missed.">        return numRows&lt;=1 || numCols&lt;=1;</span>
     }
 
 
@@ -2227,7 +2709,23 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public int vectorType() {
-<span class="nc" id="L2230">        return 0;</span>
+        int type;
+
+<span class="nc bnc" id="L2714" title="All 4 branches missed.">        if(numRows==1 || numCols==1) {</span>
+<span class="nc bnc" id="L2715" title="All 4 branches missed.">            if(numRows==1 &amp;&amp; numCols==1) {</span>
+<span class="nc" id="L2716">                type = 0;</span>
+<span class="nc bnc" id="L2717" title="All 2 branches missed.">            } else if(numRows==1) {</span>
+<span class="nc" id="L2718">                type = 1;</span>
+            } else {
+                // Then this matrix is equivalent to a column vector.
+<span class="nc" id="L2721">                type = 2;</span>
+            }
+        } else {
+            // Then this matrix is not equivalent to any vector.
+<span class="nc" id="L2725">            type = -1;</span>
+        }
+
+<span class="nc" id="L2728">        return type;</span>
     }
 
 
@@ -2238,7 +2736,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isTri() {
-<span class="nc" id="L2241">        return false;</span>
+<span class="nc bnc" id="L2739" title="All 4 branches missed.">        return isTriL() || isTriU();</span>
     }
 
 
@@ -2249,7 +2747,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isTriL() {
-<span class="nc" id="L2252">        return false;</span>
+<span class="nc" id="L2750">        boolean result = isSquare();</span>
+
+<span class="nc bnc" id="L2752" title="All 2 branches missed.">        if(result) {</span>
+            // Ensure upper half is zeros.
+<span class="nc bnc" id="L2754" title="All 2 branches missed.">            for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L2755" title="All 2 branches missed.">                for(int j=i+1; j&lt;numCols; j++) {</span>
+<span class="nc bnc" id="L2756" title="All 2 branches missed.">                    if(entries[i*numCols + j] != 0) {</span>
+<span class="nc" id="L2757">                        return false; // No need to continue.</span>
+                    }
+                }
+            }
+        }
+
+<span class="nc" id="L2763">        return result;</span>
     }
 
 
@@ -2260,7 +2771,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isTriU() {
-<span class="nc" id="L2263">        return false;</span>
+<span class="nc" id="L2774">        boolean result = isSquare();</span>
+
+<span class="nc bnc" id="L2776" title="All 2 branches missed.">        if(result) {</span>
+            // Ensure lower half is zeros.
+<span class="nc bnc" id="L2778" title="All 2 branches missed.">            for(int i=1; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L2779" title="All 2 branches missed.">                for(int j=0; j&lt;i; j++) {</span>
+<span class="nc bnc" id="L2780" title="All 2 branches missed.">                    if(entries[i*numCols + j] != 0) {</span>
+<span class="nc" id="L2781">                        return false; // No need to continue.</span>
+                    }
+                }
+            }
+        }
+
+<span class="nc" id="L2787">        return result;</span>
     }
 
 
@@ -2271,7 +2795,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isDiag() {
-<span class="nc" id="L2274">        return false;</span>
+<span class="nc bnc" id="L2798" title="All 4 branches missed.">        return isTriL() &amp;&amp; isTriU();</span>
     }
 
 
@@ -2282,7 +2806,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isFullRank() {
-<span class="nc" id="L2285">        return false;</span>
+        // TODO: Implementation
+<span class="nc" id="L2810">        return false;</span>
     }
 
 
@@ -2294,7 +2819,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isSingular() {
-<span class="nc" id="L2297">        return false;</span>
+        // TODO: Implementation
+<span class="nc" id="L2823">        return false;</span>
     }
 
 
@@ -2306,7 +2832,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isInvertible() {
-<span class="nc" id="L2309">        return false;</span>
+<span class="nc bnc" id="L2835" title="All 2 branches missed.">        return !isSingular();</span>
     }
 
 
@@ -2319,7 +2845,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double norm(double p, double q) {
-<span class="fc" id="L2322">        return RealOperations.matrixNorm(entries, shape, p, q);</span>
+<span class="fc" id="L2848">        return RealOperations.matrixNorm(entries, shape, p, q);</span>
     }
 
 
@@ -2331,7 +2857,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isDiagonalizable() {
-<span class="nc" id="L2334">        return false;</span>
+        // TODO: Implementation
+<span class="nc" id="L2861">        return false;</span>
     }
 
 
@@ -2342,7 +2869,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isZeros() {
-<span class="nc" id="L2345">        return RealDenseCheckOperations.isZeros(entries);</span>
+<span class="nc" id="L2872">        return RealDenseCheckOperations.isZeros(entries);</span>
     }
 
 
@@ -2353,7 +2880,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isOnes() {
-<span class="nc" id="L2356">        return RealDenseCheckOperations.isOnes(entries);</span>
+<span class="nc" id="L2883">        return RealDenseCheckOperations.isOnes(entries);</span>
     }
 
 
@@ -2362,11 +2889,13 @@ public class Matrix extends RealMatrixBase implements
      *
      * @param value   Value to set.
      * @param indices The indices of this tensor for which to set the value.
+     * @throws IllegalArgumentException If the number of indices is not 2.
      */
     @Override
     public void set(double value, int... indices) {
-<span class="nc" id="L2368">        RealDenseSetOperations.set(entries, shape, value, indices);</span>
-<span class="nc" id="L2369">    }</span>
+<span class="nc" id="L2896">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
+<span class="nc" id="L2897">        RealDenseSetOperations.set(entries, shape, value, indices);</span>
+<span class="nc" id="L2898">    }</span>
 
 
     /**
@@ -2376,7 +2905,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double min() {
-<span class="fc" id="L2379">        return Aggregate.min(entries);</span>
+<span class="fc" id="L2908">        return Aggregate.min(entries);</span>
     }
 
 
@@ -2386,7 +2915,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double max() {
-<span class="fc" id="L2389">        return Aggregate.max(entries);</span>
+<span class="fc" id="L2918">        return Aggregate.max(entries);</span>
     }
 
 
@@ -2398,7 +2927,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double minAbs() {
-<span class="fc" id="L2401">        return Aggregate.minAbs(entries);</span>
+<span class="fc" id="L2930">        return Aggregate.minAbs(entries);</span>
     }
 
 
@@ -2410,7 +2939,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double maxAbs() {
-<span class="fc" id="L2413">        return Aggregate.maxAbs(entries);</span>
+<span class="fc" id="L2942">        return Aggregate.maxAbs(entries);</span>
     }
 
 
@@ -2422,7 +2951,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L2425">        return shape.getIndices(AggregateDenseReal.argMin(entries));</span>
+<span class="nc" id="L2954">        return shape.getIndices(AggregateDenseReal.argMin(entries));</span>
     }
 
 
@@ -2434,7 +2963,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L2437">        return shape.getIndices(AggregateDenseReal.argMax(entries));</span>
+<span class="nc" id="L2966">        return shape.getIndices(AggregateDenseReal.argMax(entries));</span>
     }
 
 
@@ -2445,7 +2974,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double norm() {
-<span class="fc" id="L2448">        return RealOperations.matrixNorm(entries, shape);</span>
+<span class="fc" id="L2977">        return RealOperations.matrixNorm(entries, shape);</span>
     }
 
 
@@ -2459,7 +2988,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double norm(double p) {
-<span class="fc" id="L2462">        return RealOperations.matrixNorm(entries, shape, p);</span>
+<span class="fc" id="L2991">        return RealOperations.matrixNorm(entries, shape, p);</span>
     }
 
 
@@ -2470,7 +2999,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double infNorm() {
-<span class="fc" id="L2473">        return RealOperations.matrixInfNorm(entries, shape);</span>
+<span class="fc" id="L3002">        return RealOperations.matrixInfNorm(entries, shape);</span>
     }
 
 
@@ -2481,7 +3010,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double maxNorm() {
-<span class="fc" id="L2484">        return RealOperations.matrixMaxNorm(entries);</span>
+<span class="fc" id="L3013">        return RealOperations.matrixMaxNorm(entries);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

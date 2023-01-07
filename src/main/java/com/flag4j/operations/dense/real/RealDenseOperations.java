@@ -36,7 +36,7 @@ public final class RealDenseOperations {
 
     private RealDenseOperations() {
         // Hide constructor
-        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 

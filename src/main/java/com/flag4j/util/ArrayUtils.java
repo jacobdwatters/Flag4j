@@ -36,7 +36,7 @@ public final class ArrayUtils {
 
     private ArrayUtils() {
         // Hide Constructor
-        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 
@@ -305,4 +305,91 @@ public final class ArrayUtils {
 
         return equal;
     }
+
+
+    /**
+     * Checks if a set of values is in an array.
+     * @param src Source array.
+     * @param values Values to check if they are in the source array.
+     * @return A boolean array with the same length as {@code values} describing if the associated values are in the
+     * array.
+     */
+    public static boolean[] inArray(double[] src, double... values) {
+        boolean[] result = new boolean[values.length];
+
+        for(double entry : src) {
+            for(int i=0; i<values.length; i++) {
+                if(entry==values[i]) {
+                    result[i]=true;
+                }
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Checks if a value is in an array.
+     * @param src Source array.
+     * @param value Values to check if they are in the source array.
+     * @return A boolean describing if the specified value is in the array or not.
+     */
+    public static boolean inArray(double[] src, double value) {
+        boolean result = false;
+
+        for(double entry : src) {
+            if(entry==value) {
+                result=true;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Checks if a value is in an array.
+     * @param src Source array.
+     * @param value Values to check if they are in the source array.
+     * @return A boolean describing if the specified value is in the array or not.
+     */
+    public static boolean inArray(int[] src, int value) {
+        boolean result = false;
+
+        for(double entry : src) {
+            if(entry==value) {
+                result=true;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Checks if a set of values is in an array.
+     * @param src Source array.
+     * @param values Values to check if they are in the source array.
+     * @return A boolean array with the same length as {@code values} describing if the associated values are in the
+     * array.
+     */
+    public static boolean[] inArray(int[] src, int... values) {
+        boolean[] result = new boolean[values.length];
+
+        for(double entry : src) {
+            for(int i=0; i<values.length; i++) {
+                if(entry==values[i]) {
+                    result[i]=true;
+                }
+            }
+        }
+
+        return result;
+    }
+
+
+
 }

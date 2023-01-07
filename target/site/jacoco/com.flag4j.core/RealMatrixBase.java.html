@@ -26,7 +26,7 @@ package com.flag4j.core;
 
 import com.flag4j.Shape;
 import com.flag4j.operations.dense.real.RealDenseSetOperations;
-import com.flag4j.util.ShapeArrayChecks;
+import com.flag4j.util.ParameterChecks;
 
 
 /**
@@ -60,7 +60,7 @@ public abstract class RealMatrixBase extends MatrixBase&lt;double[]&gt; {
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
     public void setValues(Integer[][] values) {
-<span class="nc" id="L63">        ShapeArrayChecks.equalShapeCheck(shape, new Shape(values.length, values[0].length));</span>
+<span class="nc" id="L63">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
 <span class="nc" id="L64">        RealDenseSetOperations.setValues(values, this.entries);</span>
 <span class="nc" id="L65">    }</span>
 }

@@ -36,7 +36,7 @@ public final class ArrayUtils {
 
 <span class="nc" id="L37">    private ArrayUtils() {</span>
         // Hide Constructor
-<span class="nc" id="L39">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+<span class="nc" id="L39">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -47,7 +47,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(int[] src, CNumber[] dest) {
-<span class="fc" id="L50">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L50">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
 
 <span class="fc bfc" id="L52" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
 <span class="fc" id="L53">            dest[i] = new CNumber(src[i]);</span>
@@ -62,7 +62,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(double[] src, CNumber[] dest) {
-<span class="fc" id="L65">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L65">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
 
 <span class="fc bfc" id="L67" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
 <span class="fc" id="L68">            dest[i] = new CNumber(src[i]);</span>
@@ -77,7 +77,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(Integer[] src, CNumber[] dest) {
-<span class="fc" id="L80">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L80">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
 
 <span class="fc bfc" id="L82" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
 <span class="fc" id="L83">            dest[i] = new CNumber(src[i]);</span>
@@ -92,7 +92,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(Double[] src, CNumber[] dest) {
-<span class="fc" id="L95">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L95">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
 
 <span class="fc bfc" id="L97" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
 <span class="fc" id="L98">            dest[i] = new CNumber(src[i]);</span>
@@ -107,7 +107,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(String[] src, CNumber[] dest) {
-<span class="fc" id="L110">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L110">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
 
 <span class="fc bfc" id="L112" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
 <span class="fc" id="L113">            dest[i] = new CNumber(src[i]);</span>
@@ -122,7 +122,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      */
     public static void copy2CNumber(CNumber[] src, CNumber[] dest) {
-<span class="fc" id="L125">        ShapeArrayChecks.arrayLengthsCheck(src.length, dest.length);</span>
+<span class="fc" id="L125">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
 
 <span class="fc bfc" id="L127" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
 <span class="fc" id="L128">            dest[i] = new CNumber(src[i]);</span>
@@ -305,5 +305,92 @@ public final class ArrayUtils {
 
 <span class="fc" id="L306">        return equal;</span>
     }
+
+
+    /**
+     * Checks if a set of values is in an array.
+     * @param src Source array.
+     * @param values Values to check if they are in the source array.
+     * @return A boolean array with the same length as {@code values} describing if the associated values are in the
+     * array.
+     */
+    public static boolean[] inArray(double[] src, double... values) {
+<span class="nc" id="L318">        boolean[] result = new boolean[values.length];</span>
+
+<span class="nc bnc" id="L320" title="All 2 branches missed.">        for(double entry : src) {</span>
+<span class="nc bnc" id="L321" title="All 2 branches missed.">            for(int i=0; i&lt;values.length; i++) {</span>
+<span class="nc bnc" id="L322" title="All 2 branches missed.">                if(entry==values[i]) {</span>
+<span class="nc" id="L323">                    result[i]=true;</span>
+                }
+            }
+        }
+
+<span class="nc" id="L328">        return result;</span>
+    }
+
+
+    /**
+     * Checks if a value is in an array.
+     * @param src Source array.
+     * @param value Values to check if they are in the source array.
+     * @return A boolean describing if the specified value is in the array or not.
+     */
+    public static boolean inArray(double[] src, double value) {
+<span class="nc" id="L339">        boolean result = false;</span>
+
+<span class="nc bnc" id="L341" title="All 2 branches missed.">        for(double entry : src) {</span>
+<span class="nc bnc" id="L342" title="All 2 branches missed.">            if(entry==value) {</span>
+<span class="nc" id="L343">                result=true;</span>
+<span class="nc" id="L344">                break;</span>
+            }
+        }
+
+<span class="nc" id="L348">        return result;</span>
+    }
+
+
+    /**
+     * Checks if a value is in an array.
+     * @param src Source array.
+     * @param value Values to check if they are in the source array.
+     * @return A boolean describing if the specified value is in the array or not.
+     */
+    public static boolean inArray(int[] src, int value) {
+<span class="nc" id="L359">        boolean result = false;</span>
+
+<span class="nc bnc" id="L361" title="All 2 branches missed.">        for(double entry : src) {</span>
+<span class="nc bnc" id="L362" title="All 2 branches missed.">            if(entry==value) {</span>
+<span class="nc" id="L363">                result=true;</span>
+<span class="nc" id="L364">                break;</span>
+            }
+        }
+
+<span class="nc" id="L368">        return result;</span>
+    }
+
+
+    /**
+     * Checks if a set of values is in an array.
+     * @param src Source array.
+     * @param values Values to check if they are in the source array.
+     * @return A boolean array with the same length as {@code values} describing if the associated values are in the
+     * array.
+     */
+    public static boolean[] inArray(int[] src, int... values) {
+<span class="nc" id="L380">        boolean[] result = new boolean[values.length];</span>
+
+<span class="nc bnc" id="L382" title="All 2 branches missed.">        for(double entry : src) {</span>
+<span class="nc bnc" id="L383" title="All 2 branches missed.">            for(int i=0; i&lt;values.length; i++) {</span>
+<span class="nc bnc" id="L384" title="All 2 branches missed.">                if(entry==values[i]) {</span>
+<span class="nc" id="L385">                    result[i]=true;</span>
+                }
+            }
+        }
+
+<span class="nc" id="L390">        return result;</span>
+    }
+
+
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

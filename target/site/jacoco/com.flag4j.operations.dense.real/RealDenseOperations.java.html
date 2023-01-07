@@ -27,7 +27,7 @@ package com.flag4j.operations.dense.real;
 import com.flag4j.Shape;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ShapeArrayChecks;
+import com.flag4j.util.ParameterChecks;
 
 /**
  * This class provides low level methods for computing operations on real dense tensors.
@@ -36,7 +36,7 @@ public final class RealDenseOperations {
 
 <span class="nc" id="L37">    private RealDenseOperations() {</span>
         // Hide constructor
-<span class="nc" id="L39">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+<span class="nc" id="L39">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -50,7 +50,7 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static double[] add(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="fc" id="L53">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L53">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
 <span class="fc" id="L54">        double[] sum = new double[src1.length];</span>
 
 <span class="fc bfc" id="L56" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
@@ -88,7 +88,7 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static double[] sub(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="fc" id="L91">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L91">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
 <span class="fc" id="L92">        double[] sum = new double[src1.length];</span>
 
 <span class="fc bfc" id="L94" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
@@ -174,7 +174,7 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static double[] elemMult(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="fc" id="L177">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L177">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
 <span class="fc" id="L178">        double[] product = new double[src1.length];</span>
 
 <span class="fc bfc" id="L180" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
@@ -195,7 +195,7 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static double[] elemDiv(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="fc" id="L198">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L198">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
 <span class="fc" id="L199">        double[] product = new double[src1.length];</span>
 
 <span class="fc bfc" id="L201" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>

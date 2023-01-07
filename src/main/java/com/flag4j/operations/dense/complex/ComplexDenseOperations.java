@@ -37,7 +37,7 @@ public final class ComplexDenseOperations {
 
     private ComplexDenseOperations() {
         // Hide constructor
-        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 

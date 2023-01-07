@@ -34,7 +34,7 @@ public final class ParameterChecks {
 
     // Hide constructor
     private ParameterChecks() {
-        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 

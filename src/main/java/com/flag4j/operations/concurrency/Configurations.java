@@ -33,7 +33,7 @@ import java.util.concurrent.ForkJoinPool;
  */
 public abstract class Configurations {
     private Configurations() {
-        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
     /**

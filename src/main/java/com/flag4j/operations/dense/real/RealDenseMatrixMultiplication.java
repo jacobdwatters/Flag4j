@@ -35,11 +35,11 @@ import com.flag4j.util.ErrorMessages;
  * multiplications. <br>
  * <b>WARNING:</b> These methods do not perform any sanity checks.
  */
-public class RealMatrixMultiplication {
+public class RealDenseMatrixMultiplication {
 
-    private RealMatrixMultiplication() {
+    private RealDenseMatrixMultiplication() {
         // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 
@@ -59,10 +59,21 @@ public class RealMatrixMultiplication {
 
         double[] dest = new double[rows1*cols2];
 
+        int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
+
         for(int i=0; i<rows1; i++) {
+            src1IndexStart = i*cols1;
+            destIndexStart = i*cols2;
+
             for(int j=0; j<cols2; j++) {
-                for(int k=0; k<rows2; k++) {
-                    dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];
+                src2Index = j;
+                src1Index = src1IndexStart;
+                destIndex = destIndexStart + j;
+                end = src1Index + rows2;
+
+                while(src1Index<end) {
+                    dest[destIndex] += src1[src1Index++]*src2[src2Index];
+                    src2Index += cols2;
                 }
             }
         }
@@ -88,10 +99,21 @@ public class RealMatrixMultiplication {
 
         double[] dest = new double[rows1*cols2];
 
+        int src2Index, destIndex, src1IndexStart, destIndexStart, end;
+        double src1Value;
+
         for(int i=0; i<rows1; i++) {
+            src1IndexStart = i*cols1;
+            destIndexStart = i*cols2;
+
             for(int k=0; k<rows2; k++) {
-                for(int j=0; j<cols2; j++) {
-                    dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];
+                src2Index = k*cols2;
+                src1Value = src1[src1IndexStart + k];
+                destIndex = destIndexStart;
+                end = src2Index + cols2;
+
+                while(src2Index<end) {
+                    dest[destIndex++] += src1Value*src2[src2Index++];
                 }
             }
         }
@@ -116,6 +138,7 @@ public class RealMatrixMultiplication {
 
         double[] dest = new double[rows1*cols2];
         int bsize = Configurations.getBlockSize();
+        int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
 
         // Blocked matrix multiply
         for(int ii=0; ii<rows1; ii += bsize) {
@@ -123,9 +146,18 @@ public class RealMatrixMultiplication {
                 for(int kk=0; kk<rows2; kk += bsize) {
                     // Multiply the current blocks
                     for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                        src1IndexStart = i*cols1;
+                        destIndexStart = i*cols2;
+
                         for(int j=jj; j<jj+bsize && j<cols2; j++) {
-                            for(int k=kk; k<kk+bsize && k<rows2; k++) {
-                                dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];
+                            src2Index = j;
+                            src1Index = src1IndexStart;
+                            destIndex = destIndexStart + j;
+                            end = src1Index + Math.min(bsize, rows2);
+
+                            while(src1Index<end) {
+                                dest[destIndex] += src1[src1Index++]*src2[src2Index];
+                                src2Index += cols2;
                             }
                         }
                     }
@@ -155,15 +187,27 @@ public class RealMatrixMultiplication {
         double[] dest = new double[rows1*cols2];
         int bsize = Configurations.getBlockSize();
 
+        int src2Index, destIndex, src1IndexStart, destIndexStart, end;
+        double src1Value;
+
         // Blocked matrix multiply
         for(int ii=0; ii<rows1; ii += bsize) {
             for(int kk=0; kk<rows2; kk += bsize) {
                 for(int jj=0; jj<cols2; jj += bsize) {
                     // Multiply the current blocks
                     for(int i=ii; i<ii+bsize && i<rows1; i++) {
+
+                        src1IndexStart = i*cols1;
+                        destIndexStart = i*cols2;
+
                         for(int k=kk; k<kk+bsize && k<rows2; k++) {
-                            for(int j=jj; j<jj+bsize && j<cols2; j++) {
-                                dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];
+                            src2Index = k*cols2;
+                            src1Value = src1[src1IndexStart + k];
+                            destIndex = destIndexStart;
+                            end = src2Index + Math.min(bsize, cols2);
+
+                            while(src2Index<end) {
+                                dest[destIndex++] += src1Value*src2[src2Index++];
                             }
                         }
                     }
@@ -193,9 +237,17 @@ public class RealMatrixMultiplication {
         double[] dest = new double[rows1*cols2];
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
+            int src1IndexStart = i*cols1;
+            int destIndexStart = i*cols2;
+
             for(int j=0; j<cols2; j++) {
+                int src2Index = j;
+                int src1Index = src1IndexStart;
+                int destIndex = destIndexStart + j;
+
                 for(int k=0; k<rows2; k++) {
-                    dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];
+                    dest[destIndex] += src1[src1Index++]*src2[src2Index];
+                    src2Index += cols2;
                 }
             }
         });
@@ -222,9 +274,17 @@ public class RealMatrixMultiplication {
         double[] dest = new double[rows1*cols2];
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
+            int src1IndexStart = i*cols1;
+            int destIndexStart = i*cols2;
+
             for(int k=0; k<rows2; k++) {
-                for(int j=0; j<cols2; j++) {
-                    dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];
+                int src2Index = k*cols2;
+                double src1Value = src1[src1IndexStart + k];
+                int destIndex = destIndexStart;
+                int end = src2Index + cols2;
+
+                while(src2Index<end) {
+                    dest[destIndex++] += src1Value*src2[src2Index++];
                 }
             }
         });
@@ -257,9 +317,18 @@ public class RealMatrixMultiplication {
                 for(int kk=0; kk<rows2; kk += bsize) {
                     // Multiply the current blocks
                     for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                        int src1IndexStart = i*cols1;
+                        int destIndexStart = i*cols2;
+
                         for(int j=jj; j<jj+bsize && j<cols2; j++) {
-                            for(int k=kk; k<kk+bsize && k<rows2; k++) {
-                                dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];
+                            int src2Index = j;
+                            int src1Index = src1IndexStart;
+                            int destIndex = destIndexStart + j;
+                            int end = src1Index + Math.min(bsize, rows2);
+
+                            while(src1Index<end) {
+                                dest[destIndex] += src1[src1Index++]*src2[src2Index];
+                                src2Index += cols2;
                             }
                         }
                     }
@@ -295,9 +364,17 @@ public class RealMatrixMultiplication {
                 for(int jj=0; jj<cols2; jj += bsize) {
                     // Multiply the current blocks
                     for(int i=ii; i<ii+bsize && i<rows1; i++) {
+                        int src1IndexStart = i*cols1;
+                        int destIndexStart = i*cols2;
+
                         for(int k=kk; k<kk+bsize && k<rows2; k++) {
-                            for(int j=jj; j<jj+bsize && j<cols2; j++) {
-                                dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];
+                            int src2Index = k*cols2;
+                            double src1Value = src1[src1IndexStart + k];
+                            int destIndex = destIndexStart;
+                            int end = src2Index + Math.min(bsize, cols2);
+
+                            while(src2Index<end) {
+                                dest[destIndex++] += src1Value*src2[src2Index++];
                             }
                         }
                     }
@@ -323,10 +400,13 @@ public class RealMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         double[] dest = new double[rows1];
+        int src1Index;
 
         for(int i=0; i<rows1; i++) {
+            src1Index = i*cols1;
+
             for(int k=0; k<rows2; k++) {
-                dest[i] += src1[i*cols1 + k]*src2[k];
+                dest[i] += src1[src1Index + k]*src2[k];
             }
         }
 

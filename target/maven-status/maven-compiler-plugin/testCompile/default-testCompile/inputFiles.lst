@@ -1,6 +1,5 @@
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixElementScalarTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberConstructorTest.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\util\ShapeArrayChecksTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseCVectorConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixElemMultTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberComparisonTest.java
@@ -17,6 +16,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixEqualsTests.ja
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\common\real\MatrixNormTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\real\MatrixMultiplyTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixReshapeTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\util\ParameterChecksTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberConversionTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseTensorConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixAddTests.java

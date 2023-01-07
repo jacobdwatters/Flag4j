@@ -26,15 +26,22 @@ package com.flag4j.operations;
 
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
-import com.flag4j.operations.dense.real.RealMatrixMultiplication;
+import com.flag4j.Vector;
+import com.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
 import com.flag4j.util.Axis2D;
+import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
 
 /**
  * Dispatches matrix multiplication to the appropriate algorithm based on the size of the matrices to be multiplied.
  */
-public class MatrixMultiply {
+public final class MatrixMultiply {
+
+    private MatrixMultiply() {
+        // Hide default constructor.
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+    }
 
     /**
      * Ration measuring squareness. the closer to one, the more square the matrix is.
@@ -48,6 +55,37 @@ public class MatrixMultiply {
      * Threshold for matrices to use the concurrent ikj algorithm.
      */
     private static final int CONCURRENT_SWAPPED_THRESHOLD = 3072;
+
+
+    public static double[] dispatch(Matrix A, Vector b) {
+        Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
+        ParameterChecks.assertMatMultShapes(A.shape, bMatShape);
+
+        Algorithm algorithm;
+        double[] dest;
+
+        algorithm = chooseAlgorithmVector(A.shape);
+
+        switch(algorithm) {
+            case STANDARD_VECTOR:
+                dest = RealDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            case BLOCKED_VECTOR:
+                dest = RealDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            case CONCURRENT_STANDARD_VECTOR:
+                dest = RealDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            case CONCURRENT_BLOCKED_VECTOR:
+                dest = RealDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            default:
+                // Default to the concurrent reordered implementation just in case.
+                dest = RealDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+        }
+
+        return dest;
+    }
 
 
     /**
@@ -70,35 +108,46 @@ public class MatrixMultiply {
         }
 
 
-
         switch(algorithm) {
             case STANDARD:
-                dest = RealMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
+                dest = RealDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
                 break;
             case REORDERED:
-                dest = RealMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
                 break;
             case BLOCKED:
-                dest = RealMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
+                dest = RealDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
                 break;
             case BLOCKED_REORDERED:
-                dest = RealMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
                 break;
             case CONCURRENT_STANDARD:
-                dest = RealMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+                dest = RealDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
                 break;
             case CONCURRENT_REORDERED:
-                dest = RealMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
                 break;
             case CONCURRENT_BLOCKED:
-                dest = RealMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+                dest = RealDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
                 break;
             case CONCURRENT_BLOCKED_REORDERED:
-                dest = RealMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case STANDARD_VECTOR:
+                dest = RealDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case BLOCKED_VECTOR:
+                dest = RealDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_STANDARD_VECTOR:
+                dest = RealDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_BLOCKED_VECTOR:
+                dest = RealDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
                 break;
             default:
                 // Default to the concurrent reordered implementation just in case.
-                dest = RealMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+                dest = RealDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
         }
 
         return dest;
