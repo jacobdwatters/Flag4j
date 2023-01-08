@@ -25,12 +25,13 @@ Flag4j,com.flag4j.operations.dense.real,RealDenseTranspose,7,321,0,26,2,67,1,22,
 Flag4j,com.flag4j.operations.dense.real,RealDenseSetOperations,10,269,0,22,3,39,2,19,2,8
 Flag4j,com.flag4j.operations.dense.real,RealDenseEquals,8,17,2,2,2,1,3,1,1,1
 Flag4j,com.flag4j.operations.dense.real,RealDenseCheckOperations,61,0,8,0,14,0,7,0,3,0
-Flag4j,com.flag4j.operations.dense.real,RealDenseMatrixMultiplication,7,1125,12,96,2,191,13,60,1,18
+Flag4j,com.flag4j.operations.dense.real,RealDenseMatrixMultiplication,7,1121,13,97,2,186,14,60,1,18
 Flag4j,com.flag4j.operations.dense.real,AggregateDenseReal,55,0,8,0,15,0,7,0,3,0
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseOperations,34,259,2,16,7,39,3,17,2,9
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseEquals,7,18,1,3,2,1,2,2,1,1
+Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseMatrixMultiplication,2201,0,220,0,374,0,147,0,37,0
 Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseOperations,222,0,8,0,31,0,9,0,5,0
-Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseMatrixMultiplication,80,0,4,0,16,0,5,0,3,0
+Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseMatrixMultiplication,645,0,42,0,103,0,37,0,16,0
 Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseEquals,7,88,0,8,2,16,1,5,1,1
 Flag4j,com.flag4j.operations,MatrixTranspose,54,42,7,2,12,10,7,2,1,2
 Flag4j,com.flag4j.operations,MatrixMultiply.Algorithm,75,0,0,0,4,0,1,0,1,0
@@ -44,6 +45,7 @@ Flag4j,com.flag4j.operations.concurrency,ThreadManager,17,72,2,2,5,15,3,6,1,6
 Flag4j,com.flag4j.operations.concurrency,CheckConcurrent,31,23,10,4,6,7,9,2,2,2
 Flag4j,com.flag4j.operations.concurrency,Configurations,46,13,0,0,15,5,7,3,7,3
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseEquals,7,98,0,10,2,16,1,6,1,1
+Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseMatrixMultiplication,1243,0,84,0,204,0,73,0,31,0
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseOperations,279,0,10,0,38,0,11,0,6,0
 Flag4j,com.flag4j,CVector,0,158,0,0,0,37,0,13,0,13
 Flag4j,com.flag4j,SparseVector,0,80,0,0,0,16,0,7,0,7

@@ -324,6 +324,7 @@ public class RealDenseMatrixMultiplication {
                             int src2Index = j;
                             int src1Index = src1IndexStart;
                             int destIndex = destIndexStart + j;
+                            // TODO: This is not correct. Should be: end = Math.min(src1Index + bsize, rows2)
                             int end = src1Index + Math.min(bsize, rows2);
 
                             while(src1Index<end) {
