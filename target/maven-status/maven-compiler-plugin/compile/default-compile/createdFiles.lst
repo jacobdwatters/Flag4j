@@ -3,12 +3,14 @@ com\flag4j\operations\dense\real\RealDenseEquals.class
 com\flag4j\operations\dense\real\RealDenseMatrixMultiplication.class
 com\flag4j\operations\MatrixTranspose$1.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseMatrixMultiplication.class
+com\flag4j\operations\sparse\real_complex\RealComplexSparseMatrixMultiplication.class
 com\flag4j\operations\MatrixTranspose$Algorithm.class
 com\flag4j\operations\MatrixTranspose.class
-com\flag4j\operations\dense\complex\ComplexMatrixMultiplication.class
 com\flag4j\operations\MatrixMultiply.class
+com\flag4j\operations\dense\complex\ComplexDenseMatrixMultiplication.class
 com\flag4j\util\ParameterChecks.class
 com\flag4j\operations\MatrixMultiply$1.class
+com\flag4j\operations\sparse\complex\ComplexSparseMatrixMultiplication.class
 com\flag4j\operations\sparse\real\RealSparseMatrixMultiplication.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseEquals.class
 com\flag4j\operations\MatrixMultiply$Algorithm.class

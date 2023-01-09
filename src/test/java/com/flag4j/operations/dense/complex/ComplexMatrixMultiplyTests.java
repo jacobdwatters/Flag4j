@@ -26,35 +26,35 @@ class ComplexMatrixMultiplyTests {
         B = new CMatrix(entriesB);
 
         // ------------ Sub-case 1 ------------
-        act = ComplexMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 2 ------------
-        act = ComplexMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 3 ------------
-        act = ComplexMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 4 ------------
-        act = ComplexMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 5 ------------
-        act = ComplexMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 6 ------------
-        act = ComplexMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 7 ------------
-        act = ComplexMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 8 ------------
-        act = ComplexMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
     }
 
@@ -75,35 +75,35 @@ class ComplexMatrixMultiplyTests {
         B = new CMatrix(entriesB);
 
         // ------------ Sub-case 1 ------------
-        act = ComplexMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 2 ------------
-        act = ComplexMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 3 ------------
-        act = ComplexMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 4 ------------
-        act = ComplexMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 5 ------------
-        act = ComplexMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 6 ------------
-        act = ComplexMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 7 ------------
-        act = ComplexMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 8 ------------
-        act = ComplexMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
     }
 
@@ -124,19 +124,19 @@ class ComplexMatrixMultiplyTests {
         B = new CMatrix(entriesB);
 
         // ------------ Sub-case 1 ------------
-        act = ComplexMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 2 ------------
-        act = ComplexMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 3 ------------
-        act = ComplexMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 4 ------------
-        act = ComplexMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
+        act = ComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
     }
 }

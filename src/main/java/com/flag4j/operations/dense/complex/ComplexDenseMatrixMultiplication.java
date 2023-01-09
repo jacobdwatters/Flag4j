@@ -38,9 +38,9 @@ import com.flag4j.util.ErrorMessages;
  * multiplications. <br>
  * <b>WARNING:</b> These methods do not perform any sanity checks.
  */
-public class ComplexMatrixMultiplication {
+public class ComplexDenseMatrixMultiplication {
 
-    private ComplexMatrixMultiplication() {
+    private ComplexDenseMatrixMultiplication() {
         // Hide default constructor.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }

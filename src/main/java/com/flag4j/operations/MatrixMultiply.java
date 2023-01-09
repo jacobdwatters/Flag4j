@@ -24,10 +24,13 @@
 
 package com.flag4j.operations;
 
+import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.Vector;
+import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
+import com.flag4j.operations.dense.complex.ComplexDenseMatrixMultiplication;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -64,7 +67,7 @@ public final class MatrixMultiply {
         Algorithm algorithm;
         double[] dest;
 
-        algorithm = chooseAlgorithmVector(A.shape);
+        algorithm = chooseAlgorithmRealVector(A.shape);
 
         switch(algorithm) {
             case STANDARD_VECTOR:
@@ -102,9 +105,9 @@ public final class MatrixMultiply {
         double[] dest;
 
         if(B.numCols==1) {
-            algorithm = chooseAlgorithmVector(A.shape);
+            algorithm = chooseAlgorithmRealVector(A.shape);
         } else {
-            algorithm = chooseAlgorithm(A.shape, B.shape);
+            algorithm = chooseAlgorithmReal(A.shape, B.shape);
         }
 
 
@@ -155,12 +158,77 @@ public final class MatrixMultiply {
 
 
     /**
+     * Dispatches a matrix multiplication problem to the appropriate algorithm based on the size.
+     * @param A First matrix in matrix multiplication.
+     * @param B Second matrix in matrix multiplication.
+     * @return The result of the matrix multiplication.
+     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
+     */
+    public static CNumber[] dispatch(CMatrix A, CMatrix B) {
+        ParameterChecks.assertMatMultShapes(A.shape, B.shape);
+
+        Algorithm algorithm;
+        CNumber[] dest;
+
+        if(B.numCols==1) {
+            algorithm = chooseAlgorithmRealVector(A.shape);
+        } else {
+            algorithm = chooseAlgorithmReal(A.shape, B.shape);
+        }
+
+        switch(algorithm) {
+            case STANDARD:
+                dest = ComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case REORDERED:
+                dest = ComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case BLOCKED:
+                dest = ComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case BLOCKED_REORDERED:
+                dest = ComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_STANDARD:
+                dest = ComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_REORDERED:
+                dest = ComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_BLOCKED:
+                dest = ComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_BLOCKED_REORDERED:
+                dest = ComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case STANDARD_VECTOR:
+                dest = ComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case BLOCKED_VECTOR:
+                dest = ComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_STANDARD_VECTOR:
+                dest = ComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_BLOCKED_VECTOR:
+                dest = ComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            default:
+                // Default to the concurrent reordered implementation just in case.
+                dest = ComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+        }
+
+        return dest;
+    }
+
+
+    /**
      * Dynamically chooses matrix multiply algorithm based on the shapes of the two matrices to multiply.
      * @param shape1 The shape of the first matrix.
      * @param shape2 The shape fo the second matrix.
      * @return The algorithm to use in the matrix multiplication.
      */
-    private static Algorithm chooseAlgorithm(Shape shape1, Shape shape2) {
+    private static Algorithm chooseAlgorithmReal(Shape shape1, Shape shape2) {
         Algorithm algorithm;
 
         int rows1 = shape1.get(Axis2D.row());
@@ -230,7 +298,7 @@ public final class MatrixMultiply {
     }
 
 
-    public static Algorithm chooseAlgorithmVector(Shape shape) {
+    public static Algorithm chooseAlgorithmRealVector(Shape shape) {
         Algorithm algorithm;
 
         int rows = shape.get(Axis2D.row());
@@ -241,6 +309,84 @@ public final class MatrixMultiply {
             algorithm = Algorithm.CONCURRENT_BLOCKED_VECTOR;
         } else {
             algorithm = Algorithm.CONCURRENT_STANDARD_VECTOR;
+        }
+
+        return algorithm;
+    }
+
+
+    /**
+     * Dynamically chooses matrix multiply algorithm based on the shapes of the two matrices to multiply.
+     * @param shape1 The shape of the first matrix.
+     * @param shape2 The shape fo the second matrix.
+     * @return The algorithm to use in the matrix multiplication.
+     */
+    public static Algorithm chooseAlgorithmComplex(Shape shape1, Shape shape2) {
+        Algorithm algorithm;
+
+        int rows1 = shape1.get(Axis2D.row());
+        int cols1 = shape1.get(Axis2D.col());
+        int cols2 = shape2.get(Axis2D.col());
+
+        // TODO: Extract constants to final variables
+        if(getRatio(shape1) >= SQUARENESS_RATIO) {
+            // Then the first matrix is approximately square.
+            if(cols2==1) {
+                // Multiplying by a column vector.
+                if(rows1<=250) {
+                    algorithm = Algorithm.STANDARD;
+                } else if(rows1<=1024) {
+                    algorithm = Algorithm.CONCURRENT_BLOCKED;
+                } else {
+                    algorithm = Algorithm.CONCURRENT_STANDARD;
+                }
+
+            } else {
+                if(rows1<=30) {
+                    algorithm = Algorithm.REORDERED;
+                } else if(rows1<=250) {
+                    algorithm = Algorithm.CONCURRENT_REORDERED;
+                } else {
+                /* For large matrices, use a concurrent, blocked algorithm with the j-k loops swapped for
+                better cache performance on modern systems */
+                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;
+                }
+            }
+
+        } else if(rows1>cols1) {
+            // Then there are more rows than columns in the first matrix
+            if(rows1<=100) {
+                if(cols1<=4) algorithm = Algorithm.REORDERED;
+                else algorithm = Algorithm.CONCURRENT_REORDERED;
+            } else {
+                if(cols1<=45) algorithm = Algorithm.CONCURRENT_REORDERED;
+                else algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;
+            }
+        } else {
+            // Then there are more columns than rows in the first matrix
+            if(cols1<=100) {
+                if(rows1<=20) {
+                    algorithm = Algorithm.REORDERED;
+                } else {
+                    algorithm = Algorithm.CONCURRENT_REORDERED;
+                }
+            } else if(cols1<=500) {
+                if(rows1<=10) {
+                    algorithm = Algorithm.REORDERED;
+                } else if(rows1<=200) {
+                    algorithm = Algorithm.CONCURRENT_REORDERED;
+                } else {
+                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;
+                }
+            } else {
+                if(rows1<=5) {
+                    algorithm = Algorithm.REORDERED;
+                } else if(rows1<=15){
+                    algorithm = Algorithm.CONCURRENT_REORDERED;
+                } else {
+                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;
+                }
+            }
         }
 
         return algorithm;
