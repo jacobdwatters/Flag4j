@@ -29,6 +29,7 @@ import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.concurrency.Configurations;
 import com.flag4j.operations.concurrency.ThreadManager;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 
@@ -62,6 +63,7 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
 
@@ -102,6 +104,7 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         int src2Index, destIndex, src1IndexStart, destIndexStart, end;
         double src1Value;
@@ -141,7 +144,8 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        int bsize = Configurations.getBlockSize();
+        ArrayUtils.fill(dest, CNumber.ZERO);
+        int bsize = Configurations.getBlockSize()/2;
         int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
 
         // Blocked matrix multiply
@@ -189,7 +193,8 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        int bsize = Configurations.getBlockSize();
+        ArrayUtils.fill(dest, CNumber.ZERO);
+        int bsize = Configurations.getBlockSize()/2;
 
         int src2Index, destIndex, src1IndexStart, destIndexStart, end;
         double src1Value;
@@ -239,6 +244,7 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             int src1IndexStart = i*cols1;
@@ -276,6 +282,7 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             int src1IndexStart = i*cols1;
@@ -313,7 +320,8 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        int bsize = Configurations.getBlockSize();
+        ArrayUtils.fill(dest, CNumber.ZERO);
+        int bsize = Configurations.getBlockSize()/2;
 
         ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {
             // Blocked matrix multiply
@@ -361,7 +369,8 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        int bsize = Configurations.getBlockSize();
+        ArrayUtils.fill(dest, CNumber.ZERO);
+        int bsize = Configurations.getBlockSize()/2;
 
         ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {
             // Blocked matrix multiply
@@ -397,6 +406,7 @@ public class RealComplexDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
         int src1Index;
 
         for(int i=0; i<rows1; i++) {
@@ -425,7 +435,8 @@ public class RealComplexDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         CNumber[] dest = new CNumber[rows1];
-        int bsize = Configurations.getBlockSize();
+        ArrayUtils.fill(dest, CNumber.ZERO);
+        int bsize = Configurations.getBlockSize()/2;
 
         // Blocked matrix-vector multiply
         for(int ii=0; ii<rows1; ii += bsize) {
@@ -458,6 +469,7 @@ public class RealComplexDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             for(int k=0; k<rows2; k++) {
@@ -484,7 +496,8 @@ public class RealComplexDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         CNumber[] dest = new CNumber[rows1];
-        int bsize = Configurations.getBlockSize();
+        ArrayUtils.fill(dest, CNumber.ZERO);
+        int bsize = Configurations.getBlockSize()/2;
 
         ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {
             // Blocked matrix-vector multiply
@@ -524,6 +537,7 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
 
@@ -564,6 +578,7 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         int src2Index, destIndex, src1IndexStart, destIndexStart, end;
         CNumber src1Value;
@@ -603,7 +618,8 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        int bsize = Configurations.getBlockSize();
+        ArrayUtils.fill(dest, CNumber.ZERO);
+        int bsize = Configurations.getBlockSize()/2;
         int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
 
         // Blocked matrix multiply
@@ -651,7 +667,8 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        int bsize = Configurations.getBlockSize();
+        ArrayUtils.fill(dest, CNumber.ZERO);
+        int bsize = Configurations.getBlockSize()/2;
 
         int src2Index, destIndex, src1IndexStart, destIndexStart, end;
         CNumber src1Value;
@@ -701,6 +718,7 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             int src1IndexStart = i*cols1;
@@ -738,6 +756,7 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             int src1IndexStart = i*cols1;
@@ -775,7 +794,8 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        int bsize = Configurations.getBlockSize();
+        ArrayUtils.fill(dest, CNumber.ZERO);
+        int bsize = Configurations.getBlockSize()/2;
 
         ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {
             // Blocked matrix multiply
@@ -823,7 +843,8 @@ public class RealComplexDenseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        int bsize = Configurations.getBlockSize();
+        ArrayUtils.fill(dest, CNumber.ZERO);
+        int bsize = Configurations.getBlockSize()/2;
 
         ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {
             // Blocked matrix multiply
@@ -859,6 +880,7 @@ public class RealComplexDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
         int src1Index;
 
         for(int i=0; i<rows1; i++) {
@@ -887,7 +909,8 @@ public class RealComplexDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         CNumber[] dest = new CNumber[rows1];
-        int bsize = Configurations.getBlockSize();
+        ArrayUtils.fill(dest, CNumber.ZERO);
+        int bsize = Configurations.getBlockSize()/2;
 
         // Blocked matrix-vector multiply
         for(int ii=0; ii<rows1; ii += bsize) {
@@ -920,6 +943,7 @@ public class RealComplexDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             for(int k=0; k<rows2; k++) {
@@ -946,6 +970,7 @@ public class RealComplexDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
         int bsize = Configurations.getBlockSize();
 
         ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {

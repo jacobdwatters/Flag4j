@@ -29,6 +29,7 @@ import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.concurrency.Configurations;
 import com.flag4j.operations.concurrency.ThreadManager;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 
@@ -61,6 +62,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         int row, col;
 
@@ -96,6 +98,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         int row, col;
 
@@ -129,6 +132,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             // Loop over non-zero entries of sparse matrix.
@@ -163,6 +167,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, src1.length, (i) -> {
             int row = rowIndices[i];
@@ -194,6 +199,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         int row, col;
 
@@ -229,6 +235,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         int row, col;
 
@@ -262,6 +269,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             // Loop over non-zero entries of sparse matrix.
@@ -296,6 +304,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, src1.length, (i) -> {
             int row = rowIndices[i];
