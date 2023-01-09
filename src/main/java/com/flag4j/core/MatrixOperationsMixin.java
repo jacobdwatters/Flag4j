@@ -191,7 +191,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @param exponent The exponent in the matrix power.
      * @return The result of multiplying this matrix with itself 'exponent' times.
      */
-    U pow(double exponent);
+    U pow(int exponent);
 
 
     /**
@@ -307,7 +307,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    V directSum(SparseMatrix B);
+    T directSum(SparseMatrix B);
 
 
     /**
@@ -323,7 +323,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    SparseCMatrix directSum(SparseCMatrix B);
+    W directSum(SparseCMatrix B);
 
 
     /**
@@ -339,7 +339,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    V invDirectSum(SparseMatrix B);
+    T invDirectSum(SparseMatrix B);
 
 
     /**
@@ -355,7 +355,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    SparseCMatrix invDirectSum(SparseCMatrix B);
+    W invDirectSum(SparseCMatrix B);
 
 
     /**

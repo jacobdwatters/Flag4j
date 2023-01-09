@@ -24,16 +24,14 @@
 
 package com.flag4j.operations;
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
-import com.flag4j.Vector;
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
 import com.flag4j.operations.dense.complex.ComplexDenseMatrixMultiplication;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ParameterChecks;
+import static com.flag4j.util.ParameterChecks.*;
 
 
 /**
@@ -60,9 +58,15 @@ public final class MatrixMultiply {
     private static final int CONCURRENT_SWAPPED_THRESHOLD = 3072;
 
 
+    /**
+     * Dynamically chooses the appropriate matrix-vector multiplication algorithm based on the shapes of the matrix and vector.
+     * @param A Matrix to multiply.
+     * @param b Vector to multiply.
+     * @return The result of the matrix-vector multiplication.
+     */
     public static double[] dispatch(Matrix A, Vector b) {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
-        ParameterChecks.assertMatMultShapes(A.shape, bMatShape);
+        assertMatMultShapes(A.shape, bMatShape);
 
         Algorithm algorithm;
         double[] dest;
@@ -92,6 +96,117 @@ public final class MatrixMultiply {
 
 
     /**
+     * Dynamically chooses the appropriate matrix-vector multiplication algorithm based on the shapes of the matrix and vector.
+     * @param A Matrix to multiply.
+     * @param b Vector to multiply.
+     * @return The result of the matrix-vector multiplication.
+     */
+    public static CNumber[] dispatch(Matrix A, CVector b) {
+        Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
+        assertMatMultShapes(A.shape, bMatShape);
+
+        Algorithm algorithm;
+        CNumber[] dest;
+
+        algorithm = chooseAlgorithmRealComplexVector(A.shape);
+
+        switch(algorithm) {
+            case STANDARD_VECTOR:
+                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            case BLOCKED_VECTOR:
+                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            case CONCURRENT_STANDARD_VECTOR:
+                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            case CONCURRENT_BLOCKED_VECTOR:
+                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            default:
+                // Default to the concurrent reordered implementation just in case.
+                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Dynamically chooses the appropriate matrix-vector multiplication algorithm based on the shapes of the matrix and vector.
+     * @param A Matrix to multiply.
+     * @param b Vector to multiply.
+     * @return The result of the matrix-vector multiplication.
+     */
+    public static CNumber[] dispatch(CMatrix A, Vector b) {
+        Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
+        assertMatMultShapes(A.shape, bMatShape);
+
+        Algorithm algorithm;
+        CNumber[] dest;
+
+        algorithm = chooseAlgorithmRealComplexVector(A.shape);
+
+        switch(algorithm) {
+            case STANDARD_VECTOR:
+                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            case BLOCKED_VECTOR:
+                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            case CONCURRENT_STANDARD_VECTOR:
+                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            case CONCURRENT_BLOCKED_VECTOR:
+                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            default:
+                // Default to the concurrent reordered implementation just in case.
+                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Dynamically chooses the appropriate matrix-vector multiplication algorithm based on the shapes of the matrix and vector.
+     * @param A Matrix to multiply.
+     * @param b Vector to multiply.
+     * @return The result of the matrix-vector multiplication.
+     */
+    public static CNumber[] dispatch(CMatrix A, CVector b) {
+        Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
+        assertMatMultShapes(A.shape, bMatShape);
+
+        Algorithm algorithm;
+        CNumber[] dest;
+
+        algorithm = chooseAlgorithmRealComplexVector(A.shape);
+
+        switch(algorithm) {
+            case STANDARD_VECTOR:
+                dest = ComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            case BLOCKED_VECTOR:
+                dest = ComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            case CONCURRENT_STANDARD_VECTOR:
+                dest = ComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            case CONCURRENT_BLOCKED_VECTOR:
+                dest = ComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
+                break;
+            default:
+                // Default to the concurrent reordered implementation just in case.
+                dest = ComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
+        }
+
+        return dest;
+    }
+
+
+    /**
      * Dispatches a matrix multiplication problem to the appropriate algorithm based on the size.
      * @param A First matrix in matrix multiplication.
      * @param B Second matrix in matrix multiplication.
@@ -99,7 +214,7 @@ public final class MatrixMultiply {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static double[] dispatch(Matrix A, Matrix B) {
-        ParameterChecks.assertMatMultShapes(A.shape, B.shape);
+        assertMatMultShapes(A.shape, B.shape);
 
         Algorithm algorithm;
         double[] dest;
@@ -109,7 +224,6 @@ public final class MatrixMultiply {
         } else {
             algorithm = chooseAlgorithmReal(A.shape, B.shape);
         }
-
 
         switch(algorithm) {
             case STANDARD:
@@ -165,15 +279,15 @@ public final class MatrixMultiply {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static CNumber[] dispatch(CMatrix A, CMatrix B) {
-        ParameterChecks.assertMatMultShapes(A.shape, B.shape);
+        assertMatMultShapes(A.shape, B.shape);
 
         Algorithm algorithm;
         CNumber[] dest;
 
         if(B.numCols==1) {
-            algorithm = chooseAlgorithmRealVector(A.shape);
+            algorithm = chooseAlgorithmComplexVector(A.shape);
         } else {
-            algorithm = chooseAlgorithmReal(A.shape, B.shape);
+            algorithm = chooseAlgorithmComplex(A.shape, B.shape);
         }
 
         switch(algorithm) {
@@ -223,6 +337,133 @@ public final class MatrixMultiply {
 
 
     /**
+     * Dispatches a matrix multiplication problem to the appropriate algorithm based on the size.
+     * @param A First matrix in matrix multiplication.
+     * @param B Second matrix in matrix multiplication.
+     * @return The result of the matrix multiplication.
+     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
+     */
+    public static CNumber[] dispatch(Matrix A, CMatrix B) {
+        assertMatMultShapes(A.shape, B.shape);
+
+        Algorithm algorithm;
+        CNumber[] dest;
+
+        if(B.numCols==1) {
+            algorithm = chooseAlgorithmRealComplexVector(A.shape);
+        } else {
+            algorithm = chooseAlgorithmRealComplex(A.shape, B.shape);
+        }
+
+        switch(algorithm) {
+            case STANDARD:
+                dest = RealComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case REORDERED:
+                dest = RealComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case BLOCKED:
+                dest = RealComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case BLOCKED_REORDERED:
+                dest = RealComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_STANDARD:
+                dest = RealComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_REORDERED:
+                dest = RealComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_BLOCKED:
+                dest = RealComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_BLOCKED_REORDERED:
+                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case STANDARD_VECTOR:
+                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case BLOCKED_VECTOR:
+                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_STANDARD_VECTOR:
+                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_BLOCKED_VECTOR:
+                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            default:
+                // Default to the concurrent reordered implementation just in case.
+                dest = RealComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Dispatches a matrix multiplication problem to the appropriate algorithm based on the size.
+     * @param A First matrix in matrix multiplication.
+     * @param B Second matrix in matrix multiplication.
+     * @return The result of the matrix multiplication.
+     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
+     */
+    public static CNumber[] dispatch(CMatrix A, Matrix B) {
+        assertMatMultShapes(A.shape, B.shape);
+
+        Algorithm algorithm;
+        CNumber[] dest;
+
+        if(B.numCols==1) {
+            algorithm = chooseAlgorithmRealComplexVector(A.shape);
+        } else {
+            algorithm = chooseAlgorithmRealComplex(A.shape, B.shape);
+        }
+
+        switch(algorithm) {
+            case STANDARD:
+                dest = RealComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case REORDERED:
+                dest = RealComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case BLOCKED:
+                dest = RealComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case BLOCKED_REORDERED:
+                dest = RealComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_STANDARD:
+                dest = RealComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_REORDERED:
+                dest = RealComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_BLOCKED:
+                dest = RealComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_BLOCKED_REORDERED:
+                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case STANDARD_VECTOR:
+                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case BLOCKED_VECTOR:
+                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            case CONCURRENT_STANDARD_VECTOR:
+                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+            default:
+                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
+                break;
+        }
+
+        return dest;
+    }
+
+
+    /**
      * Dynamically chooses matrix multiply algorithm based on the shapes of the two matrices to multiply.
      * @param shape1 The shape of the first matrix.
      * @param shape2 The shape fo the second matrix.
@@ -233,33 +474,18 @@ public final class MatrixMultiply {
 
         int rows1 = shape1.get(Axis2D.row());
         int cols1 = shape1.get(Axis2D.col());
-        int cols2 = shape2.get(Axis2D.col());
 
         // TODO: Extract constants to final variables
         if(getRatio(shape1) >= SQUARENESS_RATIO) {
             // Then the first matrix is approximately square.
-            if(cols2==1) {
-                // Multiplying by a column vector.
-                if(rows1<=100) {
-                    algorithm = Algorithm.STANDARD;
-                } else if(rows1<=300) {
-                    algorithm = Algorithm.BLOCKED;
-                } else if(rows1<=1024) {
-                    algorithm = Algorithm.CONCURRENT_BLOCKED;
-                } else {
-                    algorithm = Algorithm.CONCURRENT_STANDARD;
-                }
-
+            if(rows1<SEQUENTIAL_SWAPPED_THRESHOLD) {
+                algorithm = Algorithm.REORDERED;
+            } else if(rows1<CONCURRENT_SWAPPED_THRESHOLD) {
+                algorithm = Algorithm.CONCURRENT_REORDERED;
             } else {
-                if(rows1<SEQUENTIAL_SWAPPED_THRESHOLD) {
-                    algorithm = Algorithm.REORDERED;
-                } else if(rows1<CONCURRENT_SWAPPED_THRESHOLD) {
-                    algorithm = Algorithm.CONCURRENT_REORDERED;
-                } else {
-                /* For large matrices, use a concurrent, blocked algorithm with the j-k loops swapped for
-                better cache performance on modern systems */
-                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;
-                }
+            /* For large matrices, use a concurrent, blocked algorithm with the j-k loops swapped for
+            better cache performance on modern systems */
+                algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;
             }
 
         } else if(rows1>cols1) {
@@ -298,6 +524,11 @@ public final class MatrixMultiply {
     }
 
 
+    /**
+     * Dynamically chooses matrix-vector multiply algorithm based on the shapes of the matrix to multiply.
+     * @param shape The shape of the matrix.
+     * @return The algorithm to use in the matrix multiplication.
+     */
     public static Algorithm chooseAlgorithmRealVector(Shape shape) {
         Algorithm algorithm;
 
@@ -326,31 +557,18 @@ public final class MatrixMultiply {
 
         int rows1 = shape1.get(Axis2D.row());
         int cols1 = shape1.get(Axis2D.col());
-        int cols2 = shape2.get(Axis2D.col());
 
         // TODO: Extract constants to final variables
         if(getRatio(shape1) >= SQUARENESS_RATIO) {
             // Then the first matrix is approximately square.
-            if(cols2==1) {
-                // Multiplying by a column vector.
-                if(rows1<=250) {
-                    algorithm = Algorithm.STANDARD;
-                } else if(rows1<=1024) {
-                    algorithm = Algorithm.CONCURRENT_BLOCKED;
-                } else {
-                    algorithm = Algorithm.CONCURRENT_STANDARD;
-                }
-
+            if(rows1<=30) {
+                algorithm = Algorithm.REORDERED;
+            } else if(rows1<=250) {
+                algorithm = Algorithm.CONCURRENT_REORDERED;
             } else {
-                if(rows1<=30) {
-                    algorithm = Algorithm.REORDERED;
-                } else if(rows1<=250) {
-                    algorithm = Algorithm.CONCURRENT_REORDERED;
-                } else {
-                /* For large matrices, use a concurrent, blocked algorithm with the j-k loops swapped for
-                better cache performance on modern systems */
-                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;
-                }
+            /* For large matrices, use a concurrent, blocked algorithm with the j-k loops swapped for
+            better cache performance on modern systems */
+                algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;
             }
 
         } else if(rows1>cols1) {
@@ -387,6 +605,115 @@ public final class MatrixMultiply {
                     algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;
                 }
             }
+        }
+
+        return algorithm;
+    }
+
+
+    /**
+     * Dynamically chooses matrix-vector multiply algorithm based on the shapes of the matrix to multiply.
+     * @param shape The shape of the matrix.
+     * @return The algorithm to use in the matrix multiplication.
+     */
+    public static Algorithm chooseAlgorithmComplexVector(Shape shape) {
+        Algorithm algorithm;
+
+        int rows = shape.get(Axis2D.row());
+
+        if(rows<=250) {
+            algorithm = Algorithm.STANDARD_VECTOR;
+        } else if(rows<=1024) {
+            algorithm = Algorithm.CONCURRENT_BLOCKED_VECTOR;
+        } else {
+            algorithm = Algorithm.CONCURRENT_STANDARD_VECTOR;
+        }
+
+        return algorithm;
+    }
+
+
+    /**
+     * Dynamically chooses matrix multiply algorithm based on the shapes of the two matrices to multiply.
+     * @param shape1 The shape of the first matrix.
+     * @param shape2 The shape fo the second matrix.
+     * @return The algorithm to use in the matrix multiplication.
+     */
+    public static Algorithm chooseAlgorithmRealComplex(Shape shape1, Shape shape2) {
+        Algorithm algorithm;
+
+        int rows1 = shape1.get(Axis2D.row());
+        int cols1 = shape1.get(Axis2D.col());
+
+        // TODO: Extract constants to final variables
+        if(getRatio(shape1) >= SQUARENESS_RATIO) {
+            // Then the first matrix is approximately square.
+            if(rows1<=40) {
+                algorithm = Algorithm.REORDERED;
+            } else if(rows1<=225) {
+                algorithm = Algorithm.CONCURRENT_REORDERED;
+            } else {
+            /* For large matrices, use a concurrent, blocked algorithm with the j-k loops swapped for
+            better cache performance on modern systems */
+                algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;
+            }
+
+        } else if(rows1>cols1) {
+            // Then there are more rows than columns in the first matrix
+            if(rows1<=100) {
+                if(cols1<=2) algorithm = Algorithm.REORDERED;
+                else algorithm = Algorithm.CONCURRENT_REORDERED;
+            } else {
+                if(cols1<=45) algorithm = Algorithm.CONCURRENT_REORDERED;
+                else algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;
+            }
+        } else {
+            // Then there are more columns than rows in the first matrix
+            if(cols1<=100) {
+                if(rows1<=15) {
+                    algorithm = Algorithm.REORDERED;
+                } else {
+                    algorithm = Algorithm.CONCURRENT_REORDERED;
+                }
+            } else if(cols1<=500) {
+                if(rows1<=15) {
+                    algorithm = Algorithm.REORDERED;
+                } else if(rows1<=100) {
+                    algorithm = Algorithm.CONCURRENT_REORDERED;
+                } else {
+                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;
+                }
+            } else {
+                if(rows1<=2) {
+                    algorithm = Algorithm.REORDERED;
+                } else if(rows1<=15){
+                    algorithm = Algorithm.BLOCKED_REORDERED;
+                } else if(rows1<=150) {
+                    algorithm = Algorithm.CONCURRENT_REORDERED;
+                } else {
+                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;
+                }
+            }
+        }
+
+        return algorithm;
+    }
+
+
+    /**
+     * Dynamically chooses matrix-vector multiply algorithm based on the shapes of the matrix to multiply.
+     * @param shape The shape of the matrix.
+     * @return The algorithm to use in the matrix multiplication.
+     */
+    public static Algorithm chooseAlgorithmRealComplexVector(Shape shape) {
+        Algorithm algorithm;
+
+        int rows = shape.get(Axis2D.row());
+
+        if(rows<=600) {
+            algorithm = Algorithm.STANDARD_VECTOR;
+        } else {
+            algorithm = Algorithm.CONCURRENT_BLOCKED_VECTOR;
         }
 
         return algorithm;

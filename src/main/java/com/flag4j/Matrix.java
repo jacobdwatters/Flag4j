@@ -30,13 +30,15 @@ import com.flag4j.operations.MatrixMultiply;
 import com.flag4j.operations.MatrixTranspose;
 import com.flag4j.operations.common.real.Aggregate;
 import com.flag4j.operations.common.real.RealOperations;
-import com.flag4j.operations.concurrency.CheckConcurrent;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
@@ -1295,8 +1297,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(SparseMatrix B) {
-        // TODO: Implementation
-        return null;
+        double[] entries = RealDenseSparseMatrixMultiplication.standard(
+                this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
+        );
+        Shape shape = new Shape(this.numRows, B.numCols);
+
+        return new Matrix(shape, entries);
     }
 
 
@@ -1309,8 +1315,10 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(CMatrix B) {
-        // TODO: Implementation
-        return null;
+        CNumber[] entries = MatrixMultiply.dispatch(this, B);
+        Shape shape = new Shape(this.numRows, B.numCols);
+
+        return new CMatrix(shape, entries);
     }
 
 
@@ -1323,8 +1331,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
-        // TODO: Implementation
-        return null;
+        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(
+                this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
+        );
+        Shape shape = new Shape(this.numRows, B.numCols);
+
+        return new CMatrix(shape, entries);
     }
 
 
@@ -1353,8 +1365,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(SparseVector b) {
-        // TODO: Implementation
-        return null;
+        double[] entries = RealDenseSparseMatrixMultiplication.standardVector(
+                this.entries, this.shape, b.entries, b.indices
+        );
+        Shape shape = new Shape(this.numRows, 1);
+
+        return new Matrix(shape, entries);
     }
 
 
@@ -1367,8 +1383,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(CVector b) {
-        // TODO: Implementation
-        return null;
+        CNumber[] entries = RealComplexDenseMatrixMultiplication.standardVector(
+                this.entries, this.shape, b.entries, b.shape
+        );
+        Shape shape = new Shape(this.numRows, 1);
+
+        return new CMatrix(shape, entries);
     }
 
 
@@ -1381,8 +1401,12 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCVector b) {
-        // TODO: Implementation
-        return null;
+        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standardVector(
+                this.entries, this.shape, b.entries, b.indices
+        );
+        Shape shape = new Shape(this.numRows, 1);
+
+        return new CMatrix(shape, entries);
     }
 
 
@@ -1393,12 +1417,21 @@ public class Matrix extends RealMatrixBase implements
      *
      * @param exponent The exponent in the matrix power.
      * @return The result of multiplying this matrix with itself 'exponent' times.
-     * @throws IllegalArgumentException If this matrix is not square.
+     * @throws IllegalArgumentException If this matrix is not square or if exponent is negative.
      */
     @Override
-    public Matrix pow(double exponent) {
-        // TODO: Implementation
-        return null;
+    public Matrix pow(int exponent) {
+        ParameterChecks.assertGreaterEq(1, exponent);
+        ParameterChecks.assertSquare(this.shape);
+
+        // TODO: Is there a better implementation
+        Matrix result = new Matrix(this);
+
+        for(int i=1; i<exponent; i++) {
+            result = result.mult(this);
+        }
+
+        return result;
     }
 
 
@@ -1531,8 +1564,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double fib(SparseMatrix B) {
-        // TODO: Implement after implementing A.mult(B) where A is real dense, and B is real sparse.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).trace();
     }
 
 
@@ -1574,7 +1607,23 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix directSum(Matrix B) {
-        return null;
+        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; i<this.numCols; j++) {
+                sum.entries[i*sum.numCols + j] = entries[i*numCols + j];
+            }
+        }
+
+        // Copy over second matrix.
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; i<B.numCols; j++) {
+                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = B.entries[i*B.numCols + j];
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1585,8 +1634,26 @@ public class Matrix extends RealMatrixBase implements
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public SparseMatrix directSum(SparseMatrix B) {
-        return null;
+    public Matrix directSum(SparseMatrix B) {
+        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; i<this.numCols; j++) {
+                sum.entries[i*sum.numCols + j] = entries[i*numCols + j];
+            }
+        }
+
+        // Copy over second matrix.
+        int row, col;
+        for(int i=0; i<B.nonZeroEntries(); i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+
+            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i];
+        }
+
+        return sum;
     }
 
 
@@ -1598,7 +1665,23 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix directSum(CMatrix B) {
-        return null;
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; i<this.numCols; j++) {
+                sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);
+            }
+        }
+
+        // Copy over second matrix.
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; i<B.numCols; j++) {
+                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = B.entries[i*B.numCols + j].clone();
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1609,8 +1692,26 @@ public class Matrix extends RealMatrixBase implements
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public SparseCMatrix directSum(SparseCMatrix B) {
-        return null;
+    public CMatrix directSum(SparseCMatrix B) {
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; i<this.numCols; j++) {
+                sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);
+            }
+        }
+
+        // Copy over second matrix.
+        int row, col;
+        for(int i=0; i<B.nonZeroEntries(); i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+
+            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i].clone();
+        }
+
+        return sum;
     }
 
 
@@ -1622,8 +1723,23 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix invDirectSum(Matrix B) {
-        // TODO: Implementation
-        return null;
+        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; i<this.numCols; j++) {
+                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = entries[i*numCols + j];
+            }
+        }
+
+        // Copy over second matrix.
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; i<B.numCols; j++) {
+                sum.entries[i*sum.numCols + j] = B.entries[i*B.numCols + j];
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1634,9 +1750,26 @@ public class Matrix extends RealMatrixBase implements
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public SparseMatrix invDirectSum(SparseMatrix B) {
-        // TODO: Implementation
-        return null;
+    public Matrix invDirectSum(SparseMatrix B) {
+        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; i<this.numCols; j++) {
+                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = entries[i*numCols + j];
+            }
+        }
+
+        // Copy over second matrix.
+        int row, col;
+        for(int i=0; i<B.nonZeroEntries(); i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+
+            sum.entries[row*sum.numCols + col] = B.entries[i];
+        }
+
+        return sum;
     }
 
 
@@ -1648,8 +1781,23 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(CMatrix B) {
-        // TODO: Implementation
-        return null;
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; i<this.numCols; j++) {
+                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = new CNumber(entries[i*numCols + j]);
+            }
+        }
+
+        // Copy over second matrix.
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; i<B.numCols; j++) {
+                sum.entries[i*sum.numCols + j] = B.entries[i*B.numCols + j].clone();
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1660,9 +1808,26 @@ public class Matrix extends RealMatrixBase implements
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public SparseCMatrix invDirectSum(SparseCMatrix B) {
-        // TODO: Implementation
-        return null;
+    public CMatrix invDirectSum(SparseCMatrix B) {
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; i<this.numCols; j++) {
+                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = new CNumber(entries[i*numCols + j]);
+            }
+        }
+
+        // Copy over second matrix.
+        int row, col;
+        for(int i=0; i<B.nonZeroEntries(); i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+
+            sum.entries[row*sum.numCols + col] = B.entries[i].clone();
+        }
+
+        return sum;
     }
 
 
@@ -1696,7 +1861,6 @@ public class Matrix extends RealMatrixBase implements
     public Matrix sumRows() {
         Matrix sum = new Matrix(1, this.numCols);
 
-        // TODO: Is it faster to transpose first?
         for(int i=0; i<this.numRows; i++) {
             for(int j=0; j<this.numCols; j++) {
                 sum.entries[j] += this.entries[i*numCols + j];
