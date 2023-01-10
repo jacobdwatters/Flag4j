@@ -1,7 +1,7 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 Flag4j,com.flag4j.util,RandomCNumber,0,184,2,14,0,29,2,13,0,7
 Flag4j,com.flag4j.util,StringUtils,7,46,1,5,2,9,2,4,1,2
-Flag4j,com.flag4j.util,ArrayUtils,210,365,29,31,37,63,22,30,7,15
+Flag4j,com.flag4j.util,ArrayUtils,181,394,25,35,31,69,19,33,6,16
 Flag4j,com.flag4j.util,Axis2D,0,34,0,0,0,6,0,4,0,4
 Flag4j,com.flag4j.util,ShapeArrayChecks,26,210,5,33,5,45,5,27,2,11
 Flag4j,com.flag4j.util,ParameterChecks,35,210,5,33,6,45,5,27,2,11
@@ -23,7 +23,7 @@ Flag4j,com.flag4j.core,VectorOrientation,0,21,0,0,0,4,0,1,0,1
 Flag4j,com.flag4j.operations.dense.real,RealDenseOperations,7,210,0,18,2,39,1,18,1,9
 Flag4j,com.flag4j.operations.dense.real,RealDenseTranspose,7,321,0,26,2,67,1,22,1,9
 Flag4j,com.flag4j.operations.dense.real,RealDenseSetOperations,10,269,0,22,3,39,2,19,2,8
-Flag4j,com.flag4j.operations.dense.real,RealDenseEquals,8,17,2,2,2,1,3,1,1,1
+Flag4j,com.flag4j.operations.dense.real,RealDenseEquals,7,18,0,4,2,1,1,3,1,1
 Flag4j,com.flag4j.operations.dense.real,RealDenseCheckOperations,61,0,8,0,14,0,7,0,3,0
 Flag4j,com.flag4j.operations.dense.real,RealDenseMatrixMultiplication,7,1121,13,97,2,186,14,60,1,18
 Flag4j,com.flag4j.operations.dense.real,AggregateDenseReal,55,0,8,0,15,0,7,0,3,0
@@ -56,13 +56,13 @@ Flag4j,com.flag4j,SparseTensor,0,70,0,2,0,10,0,5,0,4
 Flag4j,com.flag4j,Tensor,21,83,0,6,4,16,2,8,2,5
 Flag4j,com.flag4j,Shape,4,424,1,39,1,66,2,34,1,15
 Flag4j,com.flag4j,SparseCTensor,0,118,0,6,0,16,0,8,0,5
-Flag4j,com.flag4j,Matrix,3952,1874,269,111,436,230,228,128,93,73
+Flag4j,com.flag4j,Matrix,3411,2422,227,153,378,288,200,156,85,81
 Flag4j,com.flag4j,SparseMatrix,0,189,0,0,0,20,0,10,0,10
 Flag4j,com.flag4j,Vector,0,122,0,4,0,24,0,11,0,9
 Flag4j,com.flag4j,CTensor,0,145,0,6,0,29,0,11,0,8
 Flag4j,com.flag4j,SparseCMatrix,0,288,0,0,0,35,0,13,0,13
 Flag4j,com.flag4j,SparseCVector,0,125,0,0,0,23,0,9,0,9
-Flag4j,com.flag4j,CMatrix,19,632,0,34,3,68,2,33,2,16
+Flag4j,com.flag4j,CMatrix,21,658,1,35,4,74,3,35,2,18
 Flag4j,com.flag4j.linalg,Hessenburg,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,Decompose,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,RowEchelon,3,0,0,0,1,0,1,0,1,0

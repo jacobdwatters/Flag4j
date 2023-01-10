@@ -28,6 +28,8 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexMatrixBase;
 import com.flag4j.util.ArrayUtils;
 
+import java.util.Arrays;
+
 /**
  * Complex dense matrix. Stored in row major format.
  */
@@ -284,5 +286,25 @@ public class CMatrix extends ComplexMatrixBase {
     @Override
     public Matrix toReal() {
         return null;
+    }
+
+
+    @Override
+    public boolean equals(Object B) {
+        boolean result;
+
+        if(B instanceof CMatrix) {
+            CMatrix mat = (CMatrix) B;
+            result = Arrays.equals(this.entries, mat.entries);
+        } else {
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    public CNumber get(int... indices) {
+        return this.entries[this.shape.entriesIndex(indices)];
     }
 }

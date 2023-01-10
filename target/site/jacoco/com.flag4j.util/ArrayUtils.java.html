@@ -356,16 +356,16 @@ public final class ArrayUtils {
      * @return A boolean describing if the specified value is in the array or not.
      */
     public static boolean inArray(int[] src, int value) {
-<span class="nc" id="L359">        boolean result = false;</span>
+<span class="fc" id="L359">        boolean result = false;</span>
 
-<span class="nc bnc" id="L361" title="All 2 branches missed.">        for(double entry : src) {</span>
-<span class="nc bnc" id="L362" title="All 2 branches missed.">            if(entry==value) {</span>
-<span class="nc" id="L363">                result=true;</span>
-<span class="nc" id="L364">                break;</span>
+<span class="fc bfc" id="L361" title="All 2 branches covered.">        for(double entry : src) {</span>
+<span class="fc bfc" id="L362" title="All 2 branches covered.">            if(entry==value) {</span>
+<span class="fc" id="L363">                result=true;</span>
+<span class="fc" id="L364">                break;</span>
             }
         }
 
-<span class="nc" id="L368">        return result;</span>
+<span class="fc" id="L368">        return result;</span>
     }
 
 

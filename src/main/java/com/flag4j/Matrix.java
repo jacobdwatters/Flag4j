@@ -850,7 +850,7 @@ public class Matrix extends RealMatrixBase implements
         int row = 0;
 
         for(int i=0; i<this.numRows; i++) {
-            if(ArrayUtils.inArray(rowIndices, i)) {
+            if(!ArrayUtils.inArray(rowIndices, i)) {
                 for(int j=0; j<this.numCols; j++) {
                     copy.entries[row*copy.numCols + j] = this.entries[i*numCols + j];
                 }
@@ -903,7 +903,7 @@ public class Matrix extends RealMatrixBase implements
         for(int i=0; i<this.numRows; i++) {
             col = 0;
             for(int j=0; j<this.numCols; j++) {
-                if(ArrayUtils.inArray(colIndices, j)) {
+                if(!ArrayUtils.inArray(colIndices, j)) {
                     copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];
                     col++;
                 }
@@ -2070,7 +2070,7 @@ public class Matrix extends RealMatrixBase implements
         Matrix stacked = new Matrix(new Shape(this.numRows + B.numRows, this.numCols));
 
         System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
-        System.arraycopy(B.entries, 0, stacked, this.entries.length, B.entries.length);
+        System.arraycopy(B.entries, 0, stacked.entries, this.entries.length, B.entries.length);
 
         return stacked;
     }
@@ -2115,7 +2115,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public CMatrix stack(CMatrix B) {
         ParameterChecks.assertArrayLengthsEq(numCols, B.numCols);
-        CMatrix stacked = new CMatrix(new Shape(numRows + B.numRows, numCols));
+        CMatrix stacked = new CMatrix(new Shape(numRows+B.numRows, numCols));
 
         for(int i=0; i<numRows; i++) {
             for(int j=0; j<numCols; j++) {
@@ -2123,10 +2123,9 @@ public class Matrix extends RealMatrixBase implements
             }
         }
 
-
-        for(int i=numRows; i<B.numRows; i++) {
+        for(int i=0; i<B.numRows; i++) {
             for(int j=0; j<B.numCols; j++) {
-                stacked.entries[i*stacked.numCols + j] = B.entries[i*numCols+j].clone();
+                stacked.entries[(i + numRows)*stacked.numCols + j] = B.entries[i*B.numCols+j].clone();
             }
         }
 
@@ -2298,9 +2297,9 @@ public class Matrix extends RealMatrixBase implements
         }
 
         // Copy entries from the B matrix.
-        for(int i=0; i<numRows; i++) {
-            for(int j=numCols; j<augmented.numCols; j++) {
-                augmented.entries[i*augmented.numCols + j] = B.entries[i*numCols + j];
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; j<B.numCols; j++) {
+                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j];
             }
         }
 
@@ -2361,9 +2360,9 @@ public class Matrix extends RealMatrixBase implements
         }
 
         // Copy entries from the B matrix.
-        for(int i=0; i<numRows; i++) {
-            for(int j=numCols; j<augmented.numCols; j++) {
-                augmented.entries[i*augmented.numCols + j] = B.entries[i*numCols + j].clone();
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; j<B.numCols; j++) {
+                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j].clone();
             }
         }
 
