@@ -11,4 +11,7 @@ com.flag4j.operations.dense_sparse.real_complex
 com.flag4j.operations.dense.complex
 com.flag4j.operations.dense.real
 com.flag4j.operations.dense.real_complex
+com.flag4j.operations.sparse.complex
+com.flag4j.operations.sparse.real
+com.flag4j.operations.sparse.real_complex
 com.flag4j.util

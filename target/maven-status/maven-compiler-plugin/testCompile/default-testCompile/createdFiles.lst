@@ -53,3 +53,4 @@ com\flag4j\operations\common\real\unaryOperationTests.class
 com\flag4j\MatrixEqualsTests.class
 com\flag4j\SparseCTensorConstructorTests.class
 com\flag4j\MatrixTransposeTests.class
+com\flag4j\MatrixStackTests.class
