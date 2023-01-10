@@ -1020,7 +1020,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix add(SparseMatrix B) {
-<span class="nc" id="L1023">        return RealDenseSparseOperations.add(this, B);</span>
+<span class="fc" id="L1023">        return RealDenseSparseOperations.add(this, B);</span>
     }
 
 
@@ -1048,7 +1048,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix add(SparseCMatrix B) {
-<span class="nc" id="L1051">        return RealComplexDenseSparseOperations.add(this, B);</span>
+<span class="fc" id="L1051">        return RealComplexDenseSparseOperations.add(this, B);</span>
     }
 
 
@@ -1061,8 +1061,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sub(Matrix B) {
-<span class="nc" id="L1064">        return new Matrix(this.shape.clone(),</span>
-<span class="nc" id="L1065">                RealDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)</span>
+<span class="fc" id="L1064">        return new Matrix(this.shape.clone(),</span>
+<span class="fc" id="L1065">                RealDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1075,8 +1075,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sub(double a) {
-<span class="nc" id="L1078">        return new Matrix(this.shape.clone(),</span>
-<span class="nc" id="L1079">                RealDenseOperations.sub(this.entries, a)</span>
+<span class="fc" id="L1078">        return new Matrix(this.shape.clone(),</span>
+<span class="fc" id="L1079">                RealDenseOperations.sub(this.entries, a)</span>
         );
     }
 
@@ -1089,8 +1089,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix sub(CNumber a) {
-<span class="nc" id="L1092">        return new CMatrix(this.shape.clone(),</span>
-<span class="nc" id="L1093">                RealComplexDenseOperations.sub(this.entries, a)</span>
+<span class="fc" id="L1092">        return new CMatrix(this.shape.clone(),</span>
+<span class="fc" id="L1093">                RealComplexDenseOperations.sub(this.entries, a)</span>
         );
     }
 
@@ -1239,7 +1239,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sub(SparseMatrix B) {
-<span class="nc" id="L1242">        return RealDenseSparseOperations.sub(this, B);</span>
+<span class="fc" id="L1242">        return RealDenseSparseOperations.sub(this, B);</span>
     }
 
 
@@ -1252,9 +1252,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix sub(CMatrix B) {
-<span class="nc" id="L1255">        return new CMatrix(</span>
-<span class="nc" id="L1256">                shape.clone(),</span>
-<span class="nc" id="L1257">                RealComplexDenseOperations.sub(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L1255">        return new CMatrix(</span>
+<span class="fc" id="L1256">                shape.clone(),</span>
+<span class="fc" id="L1257">                RealComplexDenseOperations.sub(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1268,7 +1268,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix sub(SparseCMatrix B) {
-<span class="nc" id="L1271">        return RealComplexDenseSparseOperations.sub(this, B);</span>
+<span class="fc" id="L1271">        return RealComplexDenseSparseOperations.sub(this, B);</span>
     }
 
 

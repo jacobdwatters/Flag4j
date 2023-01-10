@@ -93,7 +93,7 @@ public class SparseTensor extends SparseTensorBase<double[]> {
 //
 //            if(entries[i]!=0) {
 //                nonZeroEntries.add(entries[i]);
-//                indices.add(entryIndices.clone());
+//                indices.add(entryIndices.copy());
 //            }
 //
 //            // Compute the indices for next entry based on the shape of the tensor.
@@ -143,7 +143,7 @@ public class SparseTensor extends SparseTensorBase<double[]> {
 //
 //            if(entries[i]!=0) {
 //                nonZeroEntries.add(entries[i]);
-//                indices.add(entryIndices.clone());
+//                indices.add(entryIndices.copy());
 //            }
 //
 //            // Compute the indices for next entry based on the shape of the tensor.
@@ -173,7 +173,7 @@ public class SparseTensor extends SparseTensorBase<double[]> {
      * @param A Tensor to copy.
      */
     public SparseTensor(SparseTensor A) {
-        super(A.shape.clone(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);
+        super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);
         for(int i=0; i<indices.length; i++) {
             super.indices[i] = A.indices[i].clone();
         }

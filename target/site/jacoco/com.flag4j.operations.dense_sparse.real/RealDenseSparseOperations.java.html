@@ -46,18 +46,18 @@ public class RealDenseSparseOperations {
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static Matrix add(Matrix src1, SparseMatrix src2) {
-<span class="nc" id="L49">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L49">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
-<span class="nc" id="L52">        Matrix dest = new Matrix(src1);</span>
+<span class="fc" id="L52">        Matrix dest = new Matrix(src1);</span>
 
-<span class="nc bnc" id="L54" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L55">            row = src2.rowIndices[i];</span>
-<span class="nc" id="L56">            col = src2.colIndices[i];</span>
-<span class="nc" id="L57">            dest.entries[row*src1.numCols + col] += src2.entries[i];</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L55">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L56">            col = src2.colIndices[i];</span>
+<span class="fc" id="L57">            dest.entries[row*src1.numCols + col] += src2.entries[i];</span>
         }
 
-<span class="nc" id="L60">        return dest;</span>
+<span class="fc" id="L60">        return dest;</span>
     }
 
 
@@ -67,18 +67,18 @@ public class RealDenseSparseOperations {
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static Matrix sub(Matrix src1, SparseMatrix src2) {
-<span class="nc" id="L70">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L70">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
-<span class="nc" id="L73">        Matrix dest = new Matrix(src1);</span>
+<span class="fc" id="L73">        Matrix dest = new Matrix(src1);</span>
 
-<span class="nc bnc" id="L75" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L76">            row = src2.rowIndices[i];</span>
-<span class="nc" id="L77">            col = src2.colIndices[i];</span>
-<span class="nc" id="L78">            dest.entries[row*src1.numCols + col] -= src2.entries[i];</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L76">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L77">            col = src2.colIndices[i];</span>
+<span class="fc" id="L78">            dest.entries[row*src1.numCols + col] -= src2.entries[i];</span>
         }
 
-<span class="nc" id="L81">        return dest;</span>
+<span class="fc" id="L81">        return dest;</span>
     }
 
 

@@ -122,7 +122,7 @@ public class CTensor extends TensorBase<CNumber[]> {
      * @param A Tensor specifying shape and entries.
      */
     public CTensor(Tensor A) {
-        super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);
+        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);
         ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
 
@@ -132,7 +132,7 @@ public class CTensor extends TensorBase<CNumber[]> {
      * @param A Tensor specifying shape and entries.
      */
     public CTensor(CTensor A) {
-        super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);
+        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);
         ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
 }

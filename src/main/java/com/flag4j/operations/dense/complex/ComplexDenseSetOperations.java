@@ -129,7 +129,7 @@ public class ComplexDenseSetOperations {
 
         for(CNumber[] cNumbers : src) {
             for(int j = 0; j < src[0].length; j++) {
-                dest[count++] = cNumbers[j].clone();
+                dest[count++] = cNumbers[j].copy();
             }
         }
     }

@@ -165,7 +165,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
 //
 //        super.entries = new CNumber[super.nonZeroEntries()];
 //        for(int i=0; i<super.entries.length; i++) {
-//            super.entries[i] = nonZeroEntries.get(i).clone();
+//            super.entries[i] = nonZeroEntries.get(i).copy();
 //        }
 //        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
 //        super.setNonZeroEntries(super.entries.length);
@@ -310,7 +310,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
 //
 //        super.entries = new CNumber[super.nonZeroEntries()];
 //        for(int i=0; i<super.entries.length; i++) {
-//            super.entries[i] = nonZeroEntries.get(i).clone();
+//            super.entries[i] = nonZeroEntries.get(i).copy();
 //        }
 //        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
 //        super.setNonZeroEntries(super.entries.length);

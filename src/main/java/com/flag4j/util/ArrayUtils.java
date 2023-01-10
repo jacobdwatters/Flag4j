@@ -216,7 +216,7 @@ public final class ArrayUtils {
     public static void fill(CNumber[] dest, CNumber fillValue) {
         // TODO: Investigate speed of using Arrays.setAll(...) and Arrays.parallelSetAll(...)
         for(int i=0; i<dest.length; i++) {
-            dest[i] = fillValue.clone();
+            dest[i] = fillValue.copy();
         }
     }
 

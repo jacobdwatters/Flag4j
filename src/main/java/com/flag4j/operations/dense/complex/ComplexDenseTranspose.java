@@ -59,13 +59,13 @@ public class ComplexDenseTranspose {
         }
 
         CNumber[] dest = new CNumber[shape.totalEntries().intValue()];
-        Shape destShape = shape.clone().swapAxes(axis1, axis2);
+        Shape destShape = shape.copy().swapAxes(axis1, axis2);
         int[] destIndices;
 
         for(int i=0; i<src.length; i++) {
             destIndices = shape.getIndices(i);
             ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i].clone(); // Apply transpose for the element
+            dest[destShape.entriesIndex(destIndices)] = src[i].copy(); // Apply transpose for the element
         }
 
         return dest;
@@ -88,13 +88,13 @@ public class ComplexDenseTranspose {
         }
 
         CNumber[] dest = new CNumber[shape.totalEntries().intValue()];
-        Shape destShape = shape.clone().swapAxes(axis1, axis2);
+        Shape destShape = shape.copy().swapAxes(axis1, axis2);
 
         // Compute transpose concurrently
         ThreadManager.concurrentLoop(0, src.length, (i) -> {
             int[] destIndices = shape.getIndices(i);
             ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-            dest[destShape.entriesIndex(destIndices)] = src[i].clone(); // Apply transpose for the element
+            dest[destShape.entriesIndex(destIndices)] = src[i].copy(); // Apply transpose for the element
         });
 
         return dest;
@@ -120,7 +120,7 @@ public class ComplexDenseTranspose {
             end = destIndex + numRows;
 
             while (destIndex < end) {
-                dest[destIndex++] = src[srcIndex].clone();
+                dest[destIndex++] = src[srcIndex].copy();
                 srcIndex += numCols;
             }
         }
@@ -156,7 +156,7 @@ public class ComplexDenseTranspose {
                     end = destIndex + blockRowEnd;
 
                     while (destIndex < end) {
-                        dest[destIndex++] = src[srcIndex].clone();
+                        dest[destIndex++] = src[srcIndex].copy();
                         srcIndex += numCols;
                     }
                 }
@@ -184,7 +184,7 @@ public class ComplexDenseTranspose {
             int end = destIndex + numRows;
 
             while (destIndex < end) {
-                dest[destIndex++] = src[srcIndex].clone();
+                dest[destIndex++] = src[srcIndex].copy();
                 srcIndex += numCols;
             }
         });
@@ -217,7 +217,7 @@ public class ComplexDenseTranspose {
                     int end = destIndex + blockRowEnd;
 
                     while (destIndex < end) {
-                        dest[destIndex++] = src[srcIndex].clone();
+                        dest[destIndex++] = src[srcIndex].copy();
                         srcIndex += numCols;
                     }
                 }
@@ -245,7 +245,7 @@ public class ComplexDenseTranspose {
         }
 
         CNumber[] dest = new CNumber[shape.totalEntries().intValue()];
-        Shape destShape = shape.clone().swapAxes(axis1, axis2);
+        Shape destShape = shape.copy().swapAxes(axis1, axis2);
         int[] destIndices;
 
         for(int i=0; i<src.length; i++) {
@@ -274,7 +274,7 @@ public class ComplexDenseTranspose {
         }
 
         CNumber[] dest = new CNumber[shape.totalEntries().intValue()];
-        Shape destShape = shape.clone().swapAxes(axis1, axis2);
+        Shape destShape = shape.copy().swapAxes(axis1, axis2);
 
         // Compute transpose concurrently
         ThreadManager.concurrentLoop(0, src.length, (i) -> {

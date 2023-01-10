@@ -179,7 +179,7 @@ public class Matrix extends RealMatrixBase implements
      * @param A The matrix defining the entries for this matrix.
      */
     public Matrix(Matrix A) {
-        super(A.shape.clone(), A.entries.clone());
+        super(A.shape.copy(), A.entries.clone());
     }
 
 
@@ -553,10 +553,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public void setRow(double[] values, int rowIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
-
-        for(int i=0; i<values.length; i++) {
-            super.entries[rowIndex*numCols + i] = values[i];
-        }
+        System.arraycopy(values, 0, super.entries, rowIndex*numCols, values.length);
     }
 
 
@@ -826,9 +823,7 @@ public class Matrix extends RealMatrixBase implements
 
         for(int i=0; i<this.numRows; i++) {
             if(i!=rowIndex) {
-                for(int j=0; j<this.numCols; j++) {
-                    copy.entries[row*copy.numCols + j] = this.entries[i*numCols + j];
-                }
+                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }
         }
@@ -851,9 +846,7 @@ public class Matrix extends RealMatrixBase implements
 
         for(int i=0; i<this.numRows; i++) {
             if(!ArrayUtils.inArray(rowIndices, i)) {
-                for(int j=0; j<this.numCols; j++) {
-                    copy.entries[row*copy.numCols + j] = this.entries[i*numCols + j];
-                }
+                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }
         }
@@ -977,7 +970,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix add(Matrix B) {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealDenseOperations.add(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -991,7 +984,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix add(double a) {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealDenseOperations.add(this.entries, a)
         );
     }
@@ -1005,7 +998,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix add(CNumber a) {
-        return new CMatrix(this.shape.clone(),
+        return new CMatrix(this.shape.copy(),
                 RealComplexDenseOperations.add(this.entries, a)
         );
     }
@@ -1033,7 +1026,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix add(CMatrix B) {
-        return new CMatrix(this.shape.clone(),
+        return new CMatrix(this.shape.copy(),
                 RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape)
         );
     }
@@ -1061,7 +1054,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sub(Matrix B) {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -1075,7 +1068,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sub(double a) {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealDenseOperations.sub(this.entries, a)
         );
     }
@@ -1089,7 +1082,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix sub(CNumber a) {
-        return new CMatrix(this.shape.clone(),
+        return new CMatrix(this.shape.copy(),
                 RealComplexDenseOperations.sub(this.entries, a)
         );
     }
@@ -1103,7 +1096,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix scalMult(double factor) {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealOperations.scalMult(this.entries, factor)
         );
     }
@@ -1117,7 +1110,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix scalMult(CNumber factor) {
-        return new CMatrix(this.shape.clone(),
+        return new CMatrix(this.shape.copy(),
                 RealComplexDenseOperations.scalMult(this.entries, factor)
         );
     }
@@ -1132,7 +1125,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix scalDiv(double divisor) {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealDenseOperations.scalDiv(this.entries, divisor)
         );
     }
@@ -1141,13 +1134,13 @@ public class Matrix extends RealMatrixBase implements
     /**
      * Computes the scalar division of a tensor.
      *
-     * @param divisor The scaler value to divide tensor by.
+     * @param divisor The scalar value to divide tensor by.
      * @return The result of dividing this tensor by the specified scalar.
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
     public CMatrix scalDiv(CNumber divisor) {
-        return new CMatrix(this.shape.clone(),
+        return new CMatrix(this.shape.copy(),
                 RealComplexDenseOperations.scalDiv(this.entries, divisor)
         );
     }
@@ -1173,7 +1166,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sqrt() {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealOperations.sqrt(entries)
         );
     }
@@ -1187,7 +1180,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix abs() {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealOperations.abs(entries)
         );
     }
@@ -1224,7 +1217,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public Matrix recep() {
         return new Matrix(
-                shape.clone(),
+                shape.copy(),
                 RealDenseOperations.recep(entries)
         );
     }
@@ -1253,7 +1246,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public CMatrix sub(CMatrix B) {
         return new CMatrix(
-                shape.clone(),
+                shape.copy(),
                 RealComplexDenseOperations.sub(entries, shape, B.entries, B.shape)
         );
     }
@@ -1445,7 +1438,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public Matrix elemMult(Matrix B) {
         return new Matrix(
-                shape.clone(),
+                shape.copy(),
                 RealDenseOperations.elemMult(entries, shape, B.entries, B.shape)
         );
     }
@@ -1474,7 +1467,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public CMatrix elemMult(CMatrix B) {
         return new CMatrix(
-                shape.clone(),
+                shape.copy(),
                 RealComplexDenseOperations.elemMult(B.entries, B.shape, entries, shape)
         );
     }
@@ -1504,7 +1497,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public Matrix elemDiv(Matrix B) {
         return new Matrix(
-                shape.clone(),
+                shape.copy(),
                 RealDenseOperations.elemDiv(entries, shape, B.entries, B.shape)
         );
     }
@@ -1521,7 +1514,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public CMatrix elemDiv(CMatrix B) {
         return new CMatrix(
-                shape.clone(),
+                shape.copy(),
                 RealComplexDenseOperations.elemDiv(entries, shape, B.entries, B.shape)
         );
     }
@@ -1611,16 +1604,12 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy over first matrix.
         for(int i=0; i<this.numRows; i++) {
-            for(int j=0; i<this.numCols; j++) {
-                sum.entries[i*sum.numCols + j] = entries[i*numCols + j];
-            }
+            System.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);
         }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
-            for(int j=0; i<B.numCols; j++) {
-                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = B.entries[i*B.numCols + j];
-            }
+            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i + numRows)*sum.numCols + numCols, B.numCols);
         }
 
         return sum;
@@ -1639,9 +1628,7 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy over first matrix.
         for(int i=0; i<this.numRows; i++) {
-            for(int j=0; i<this.numCols; j++) {
-                sum.entries[i*sum.numCols + j] = entries[i*numCols + j];
-            }
+            System.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);
         }
 
         // Copy over second matrix.
@@ -1669,15 +1656,15 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy over first matrix.
         for(int i=0; i<this.numRows; i++) {
-            for(int j=0; i<this.numCols; j++) {
+            for(int j=0; j<this.numCols; j++) {
                 sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);
             }
         }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
-            for(int j=0; i<B.numCols; j++) {
-                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = B.entries[i*B.numCols + j].clone();
+            for(int j=0; j<B.numCols; j++) {
+                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = B.entries[i*B.numCols + j].copy();
             }
         }
 
@@ -1697,7 +1684,7 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy over first matrix.
         for(int i=0; i<this.numRows; i++) {
-            for(int j=0; i<this.numCols; j++) {
+            for(int j=0; j<this.numCols; j++) {
                 sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);
             }
         }
@@ -1708,7 +1695,7 @@ public class Matrix extends RealMatrixBase implements
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
-            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i].clone();
+            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i].copy();
         }
 
         return sum;
@@ -1727,16 +1714,12 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy over first matrix.
         for(int i=0; i<this.numRows; i++) {
-            for(int j=0; i<this.numCols; j++) {
-                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = entries[i*numCols + j];
-            }
+            System.arraycopy(entries, i*numCols, sum.entries, (i + numRows)*sum.numCols + numCols, this.numCols);
         }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
-            for(int j=0; i<B.numCols; j++) {
-                sum.entries[i*sum.numCols + j] = B.entries[i*B.numCols + j];
-            }
+            System.arraycopy(B.entries, i*B.numCols, sum.entries, i*sum.numCols, B.numCols);
         }
 
         return sum;
@@ -1755,9 +1738,7 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy over first matrix.
         for(int i=0; i<this.numRows; i++) {
-            for(int j=0; i<this.numCols; j++) {
-                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = entries[i*numCols + j];
-            }
+            System.arraycopy(entries, i*numCols, sum.entries, (i + numRows)*sum.numCols + numCols, this.numCols);
         }
 
         // Copy over second matrix.
@@ -1785,15 +1766,15 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy over first matrix.
         for(int i=0; i<this.numRows; i++) {
-            for(int j=0; i<this.numCols; j++) {
+            for(int j=0; j<this.numCols; j++) {
                 sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = new CNumber(entries[i*numCols + j]);
             }
         }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
-            for(int j=0; i<B.numCols; j++) {
-                sum.entries[i*sum.numCols + j] = B.entries[i*B.numCols + j].clone();
+            for(int j=0; j<B.numCols; j++) {
+                sum.entries[i*sum.numCols + j] = B.entries[i*B.numCols + j].copy();
             }
         }
 
@@ -1813,7 +1794,7 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy over first matrix.
         for(int i=0; i<this.numRows; i++) {
-            for(int j=0; i<this.numCols; j++) {
+            for(int j=0; j<this.numCols; j++) {
                 sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = new CNumber(entries[i*numCols + j]);
             }
         }
@@ -1824,7 +1805,7 @@ public class Matrix extends RealMatrixBase implements
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
-            sum.entries[row*sum.numCols + col] = B.entries[i].clone();
+            sum.entries[row*sum.numCols + col] = B.entries[i].copy();
         }
 
         return sum;
@@ -2125,7 +2106,7 @@ public class Matrix extends RealMatrixBase implements
 
         for(int i=0; i<B.numRows; i++) {
             for(int j=0; j<B.numCols; j++) {
-                stacked.entries[(i + numRows)*stacked.numCols + j] = B.entries[i*B.numCols+j].clone();
+                stacked.entries[(i + numRows)*stacked.numCols + j] = B.entries[i*B.numCols+j].copy();
             }
         }
 
@@ -2157,7 +2138,7 @@ public class Matrix extends RealMatrixBase implements
             row = B.rowIndices[i];
             col = B.colIndices[i];
             // Offset the row index for destination matrix. i.e. row+this.numRows
-            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i].clone();
+            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i].copy();
         }
 
         return stacked;
@@ -2291,9 +2272,7 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy entries from this matrix.
         for(int i=0; i<numRows; i++) {
-            for(int j=0; j<numCols; j++) {
-                augmented.entries[i*augmented.numCols + j] = entries[i*numCols + j];
-            }
+            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);
         }
 
         // Copy entries from the B matrix.
@@ -2322,9 +2301,7 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy entries from this matrix.
         for(int i=0; i<numRows; i++) {
-            for(int j=0; j<numCols; j++) {
-                augmented.entries[i*augmented.numCols + j] = entries[i*numCols + j];
-            }
+            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);
         }
 
         int row, col;
@@ -2362,7 +2339,7 @@ public class Matrix extends RealMatrixBase implements
         // Copy entries from the B matrix.
         for(int i=0; i<B.numRows; i++) {
             for(int j=0; j<B.numCols; j++) {
-                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j].clone();
+                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j].copy();
             }
         }
 
@@ -2395,7 +2372,7 @@ public class Matrix extends RealMatrixBase implements
             row = B.rowIndices[i];
             col = B.colIndices[i];
             // Offset the col index for destination matrix. i.e. col+this.numCols
-            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i].clone();
+            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i].copy();
         }
 
         return augmented;
@@ -2474,7 +2451,7 @@ public class Matrix extends RealMatrixBase implements
         }
 
         for(int i=0; i<b.entries.length; i++) {
-            stacked.entries[(stacked.numRows-1)*numCols + i] = b.entries[i].clone();
+            stacked.entries[(stacked.numRows-1)*numCols + i] = b.entries[i].copy();
         }
 
         return stacked;
@@ -2649,9 +2626,7 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy elements of this matrix.
         for(int i=0; i<numRows; i++) {
-            for(int j=0; j<numCols; j++) {
-                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j];
-            }
+            System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);
         }
 
         // Copy elements from b vector.
@@ -2680,9 +2655,8 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy elements of this matrix.
         for(int i=0; i<numRows; i++) {
-            for(int j=0; j<numCols; j++) {
-                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j];
-            }
+            if (numCols >= 0)
+                System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);
         }
 
         // Copy elements from b vector.
@@ -2718,7 +2692,7 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy elements from b vector.
         for(int i=0; i<b.entries.length; i++) {
-            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i].clone();
+            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();
         }
 
         return stacked;
@@ -2749,7 +2723,7 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy elements from b vector.
         for(int i=0; i<b.entries.length; i++) {
-            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i].clone();
+            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();
         }
 
         return stacked;
