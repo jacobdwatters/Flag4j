@@ -39,7 +39,6 @@ class MatrixStackTests {
     Matrix exp;
     CMatrix expC;
 
-
     @Test
     void realDenseTest() {
         // -----------------------  Sub-case 1 -----------------------
