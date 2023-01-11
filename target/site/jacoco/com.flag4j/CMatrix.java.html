@@ -75,7 +75,7 @@ public class CMatrix extends ComplexMatrixBase {
 <span class="fc" id="L75">        super(new Shape(size, size), new CNumber[size*size]);</span>
 
 <span class="fc bfc" id="L77" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc" id="L78">            super.entries[i] = value.clone();</span>
+<span class="fc" id="L78">            super.entries[i] = value.copy();</span>
         }
 <span class="fc" id="L80">    }</span>
 
@@ -122,7 +122,7 @@ public class CMatrix extends ComplexMatrixBase {
 <span class="fc" id="L122">        super(new Shape(rows, cols), new CNumber[rows*cols]);</span>
 
 <span class="fc bfc" id="L124" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc" id="L125">            super.entries[i] = value.clone();</span>
+<span class="fc" id="L125">            super.entries[i] = value.copy();</span>
         }
 <span class="fc" id="L127">    }</span>
 
@@ -163,7 +163,7 @@ public class CMatrix extends ComplexMatrixBase {
 <span class="fc" id="L163">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
 
 <span class="fc bfc" id="L165" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc" id="L166">            super.entries[i] = value.clone();</span>
+<span class="fc" id="L166">            super.entries[i] = value.copy();</span>
         }
 <span class="fc" id="L168">    }</span>
 
@@ -196,7 +196,7 @@ public class CMatrix extends ComplexMatrixBase {
 <span class="fc" id="L196">        int index=0;</span>
 <span class="fc bfc" id="L197" title="All 2 branches covered.">        for(CNumber[] row : entries) {</span>
 <span class="fc bfc" id="L198" title="All 2 branches covered.">            for(CNumber value : row) {</span>
-<span class="fc" id="L199">                super.entries[index++] = value.clone();</span>
+<span class="fc" id="L199">                super.entries[index++] = value.copy();</span>
             }
         }
 <span class="fc" id="L202">    }</span>
@@ -241,7 +241,7 @@ public class CMatrix extends ComplexMatrixBase {
      * @param A The matrix defining the entries for this matrix.
      */
     public CMatrix(Matrix A) {
-<span class="fc" id="L244">        super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);</span>
+<span class="fc" id="L244">        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);</span>
 <span class="fc" id="L245">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
 <span class="fc" id="L246">    }</span>
 
@@ -251,7 +251,7 @@ public class CMatrix extends ComplexMatrixBase {
      * @param A The matrix defining the entries for this matrix.
      */
     public CMatrix(CMatrix A) {
-<span class="fc" id="L254">        super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);</span>
+<span class="fc" id="L254">        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);</span>
 <span class="fc" id="L255">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
 <span class="fc" id="L256">    }</span>
 
@@ -305,7 +305,7 @@ public class CMatrix extends ComplexMatrixBase {
 
 
     public CNumber get(int... indices) {
-<span class="fc" id="L308">        return this.entries[this.shape.entriesIndex(indices)];</span>
+<span class="nc" id="L308">        return this.entries[this.shape.entriesIndex(indices)];</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

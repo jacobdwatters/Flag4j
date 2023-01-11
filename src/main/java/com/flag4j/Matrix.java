@@ -2296,7 +2296,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix augment(SparseMatrix B) {
-        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
+        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);
         Matrix augmented = new Matrix(new Shape(this.numRows, this.numCols+B.numCols));
 
         // Copy entries from this matrix.
@@ -2357,7 +2357,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseCMatrix B) {
-        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
+        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);
         CMatrix augmented = new CMatrix(new Shape(this.numRows, this.numCols+B.numCols));
 
         // Copy entries from this matrix.
@@ -2413,7 +2413,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix stack(SparseVector b) {
-        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);
+        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());
         Matrix stacked = new Matrix(this.numRows+1, this.numCols);
 
         System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
@@ -2422,7 +2422,7 @@ public class Matrix extends RealMatrixBase implements
 
         for(int i=0; i<b.entries.length; i++) {
             index = b.indices[i];
-            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[index];
+            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[i];
         }
 
         return stacked;
@@ -2470,7 +2470,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCVector b) {
-        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);
+        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());
         CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);
 
         for(int i=0; i<numRows; i++) {
@@ -2482,7 +2482,7 @@ public class Matrix extends RealMatrixBase implements
         int index;
         for(int i=0; i<b.entries.length; i++) {
             index = b.indices[i];
-            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[index];
+            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[i];
         }
 
         return stacked;
@@ -2621,7 +2621,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix augment(Vector b) {
-        ParameterChecks.assertArrayLengthsEq(numCols, b.entries.length);
+        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);
         Matrix stacked = new Matrix(numRows, numCols+1);
 
         // Copy elements of this matrix.
@@ -2650,7 +2650,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix augment(SparseVector b) {
-        ParameterChecks.assertArrayLengthsEq(numCols, b.entries.length);
+        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());
         Matrix stacked = new Matrix(numRows, numCols+1);
 
         // Copy elements of this matrix.
@@ -2680,7 +2680,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix augment(CVector b) {
-        ParameterChecks.assertArrayLengthsEq(numCols, b.entries.length);
+        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);
         CMatrix stacked = new CMatrix(numRows, numCols+1);
 
         // Copy elements of this matrix.
@@ -2711,7 +2711,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseCVector b) {
-        ParameterChecks.assertArrayLengthsEq(numCols, b.entries.length);
+        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());
         CMatrix stacked = new CMatrix(numRows, numCols+1);
 
         // Copy elements of this matrix.

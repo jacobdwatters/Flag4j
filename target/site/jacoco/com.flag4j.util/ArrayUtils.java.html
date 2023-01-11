@@ -216,7 +216,7 @@ public final class ArrayUtils {
     public static void fill(CNumber[] dest, CNumber fillValue) {
         // TODO: Investigate speed of using Arrays.setAll(...) and Arrays.parallelSetAll(...)
 <span class="fc bfc" id="L218" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="fc" id="L219">            dest[i] = fillValue.clone();</span>
+<span class="fc" id="L219">            dest[i] = fillValue.copy();</span>
         }
 <span class="fc" id="L221">    }</span>
 
@@ -391,6 +391,43 @@ public final class ArrayUtils {
     }
 
 
+    /**
+     * Flattens a two-dimensional array.
+     * @param src Array to flatten.
+     * @return The flattened array.
+     */
+    public static double[] flatten(double[][] src) {
+<span class="fc" id="L400">        double[] flat = new double[src.length*src[0].length];</span>
 
+        // Copy 2D array to 1D array.
+<span class="fc" id="L403">        int i=0;</span>
+<span class="fc bfc" id="L404" title="All 2 branches covered.">        for(double[] row : src) {</span>
+<span class="fc bfc" id="L405" title="All 2 branches covered.">            for(double value : row) {</span>
+<span class="fc" id="L406">                flat[i++] = value;</span>
+            }
+        }
+
+<span class="fc" id="L410">        return flat;</span>
+    }
+
+
+    /**
+     * Flattens a two-dimensional array.
+     * @param src Array to flatten.
+     * @return The flattened array.
+     */
+    public static CNumber[] flatten(CNumber[][] src) {
+<span class="fc" id="L420">        CNumber[] flat = new CNumber[src.length*src[0].length];</span>
+
+        // Copy 2D array to 1D array.
+<span class="fc" id="L423">        int i=0;</span>
+<span class="fc bfc" id="L424" title="All 2 branches covered.">        for(CNumber[] row : src) {</span>
+<span class="fc bfc" id="L425" title="All 2 branches covered.">            for(CNumber value : row) {</span>
+<span class="fc" id="L426">                flat[i++] = value.copy();</span>
+            }
+        }
+
+<span class="fc" id="L430">        return flat;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -59,13 +59,13 @@ public class ComplexDenseTranspose {
         }
 
 <span class="nc" id="L61">        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];</span>
-<span class="nc" id="L62">        Shape destShape = shape.clone().swapAxes(axis1, axis2);</span>
+<span class="nc" id="L62">        Shape destShape = shape.copy().swapAxes(axis1, axis2);</span>
         int[] destIndices;
 
 <span class="nc bnc" id="L65" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
 <span class="nc" id="L66">            destIndices = shape.getIndices(i);</span>
 <span class="nc" id="L67">            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.</span>
-<span class="nc" id="L68">            dest[destShape.entriesIndex(destIndices)] = src[i].clone(); // Apply transpose for the element</span>
+<span class="nc" id="L68">            dest[destShape.entriesIndex(destIndices)] = src[i].copy(); // Apply transpose for the element</span>
         }
 
 <span class="nc" id="L71">        return dest;</span>
@@ -88,13 +88,13 @@ public class ComplexDenseTranspose {
         }
 
 <span class="nc" id="L90">        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];</span>
-<span class="nc" id="L91">        Shape destShape = shape.clone().swapAxes(axis1, axis2);</span>
+<span class="nc" id="L91">        Shape destShape = shape.copy().swapAxes(axis1, axis2);</span>
 
         // Compute transpose concurrently
 <span class="nc" id="L94">        ThreadManager.concurrentLoop(0, src.length, (i) -&gt; {</span>
 <span class="nc" id="L95">            int[] destIndices = shape.getIndices(i);</span>
 <span class="nc" id="L96">            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.</span>
-<span class="nc" id="L97">            dest[destShape.entriesIndex(destIndices)] = src[i].clone(); // Apply transpose for the element</span>
+<span class="nc" id="L97">            dest[destShape.entriesIndex(destIndices)] = src[i].copy(); // Apply transpose for the element</span>
 <span class="nc" id="L98">        });</span>
 
 <span class="nc" id="L100">        return dest;</span>
@@ -120,7 +120,7 @@ public class ComplexDenseTranspose {
 <span class="fc" id="L120">            end = destIndex + numRows;</span>
 
 <span class="fc bfc" id="L122" title="All 2 branches covered.">            while (destIndex &lt; end) {</span>
-<span class="fc" id="L123">                dest[destIndex++] = src[srcIndex].clone();</span>
+<span class="fc" id="L123">                dest[destIndex++] = src[srcIndex].copy();</span>
 <span class="fc" id="L124">                srcIndex += numCols;</span>
             }
         }
@@ -156,7 +156,7 @@ public class ComplexDenseTranspose {
 <span class="fc" id="L156">                    end = destIndex + blockRowEnd;</span>
 
 <span class="fc bfc" id="L158" title="All 2 branches covered.">                    while (destIndex &lt; end) {</span>
-<span class="fc" id="L159">                        dest[destIndex++] = src[srcIndex].clone();</span>
+<span class="fc" id="L159">                        dest[destIndex++] = src[srcIndex].copy();</span>
 <span class="fc" id="L160">                        srcIndex += numCols;</span>
                     }
                 }
@@ -184,7 +184,7 @@ public class ComplexDenseTranspose {
 <span class="fc" id="L184">            int end = destIndex + numRows;</span>
 
 <span class="fc bfc" id="L186" title="All 2 branches covered.">            while (destIndex &lt; end) {</span>
-<span class="fc" id="L187">                dest[destIndex++] = src[srcIndex].clone();</span>
+<span class="fc" id="L187">                dest[destIndex++] = src[srcIndex].copy();</span>
 <span class="fc" id="L188">                srcIndex += numCols;</span>
             }
 <span class="fc" id="L190">        });</span>
@@ -217,7 +217,7 @@ public class ComplexDenseTranspose {
 <span class="fc" id="L217">                    int end = destIndex + blockRowEnd;</span>
 
 <span class="fc bfc" id="L219" title="All 2 branches covered.">                    while (destIndex &lt; end) {</span>
-<span class="fc" id="L220">                        dest[destIndex++] = src[srcIndex].clone();</span>
+<span class="fc" id="L220">                        dest[destIndex++] = src[srcIndex].copy();</span>
 <span class="fc" id="L221">                        srcIndex += numCols;</span>
                     }
                 }
@@ -245,7 +245,7 @@ public class ComplexDenseTranspose {
         }
 
 <span class="nc" id="L247">        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];</span>
-<span class="nc" id="L248">        Shape destShape = shape.clone().swapAxes(axis1, axis2);</span>
+<span class="nc" id="L248">        Shape destShape = shape.copy().swapAxes(axis1, axis2);</span>
         int[] destIndices;
 
 <span class="nc bnc" id="L251" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
@@ -274,7 +274,7 @@ public class ComplexDenseTranspose {
         }
 
 <span class="nc" id="L276">        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];</span>
-<span class="nc" id="L277">        Shape destShape = shape.clone().swapAxes(axis1, axis2);</span>
+<span class="nc" id="L277">        Shape destShape = shape.copy().swapAxes(axis1, axis2);</span>
 
         // Compute transpose concurrently
 <span class="nc" id="L280">        ThreadManager.concurrentLoop(0, src.length, (i) -&gt; {</span>

@@ -58,7 +58,7 @@ public final class RealDenseTranspose {
         }
 
 <span class="fc" id="L60">        double[] dest = new double[shape.totalEntries().intValue()];</span>
-<span class="fc" id="L61">        Shape destShape = shape.clone().swapAxes(axis1, axis2);</span>
+<span class="fc" id="L61">        Shape destShape = shape.copy().swapAxes(axis1, axis2);</span>
         int[] destIndices;
 
 <span class="fc bfc" id="L64" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
@@ -87,7 +87,7 @@ public final class RealDenseTranspose {
         }
 
 <span class="fc" id="L89">        double[] dest = new double[shape.totalEntries().intValue()];</span>
-<span class="fc" id="L90">        Shape destShape = shape.clone().swapAxes(axis1, axis2);</span>
+<span class="fc" id="L90">        Shape destShape = shape.copy().swapAxes(axis1, axis2);</span>
 
         // Compute transpose concurrently
 <span class="fc" id="L93">        ThreadManager.concurrentLoop(0, src.length, (i) -&gt; {</span>

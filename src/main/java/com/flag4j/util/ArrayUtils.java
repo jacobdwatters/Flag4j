@@ -391,5 +391,42 @@ public final class ArrayUtils {
     }
 
 
+    /**
+     * Flattens a two-dimensional array.
+     * @param src Array to flatten.
+     * @return The flattened array.
+     */
+    public static double[] flatten(double[][] src) {
+        double[] flat = new double[src.length*src[0].length];
 
+        // Copy 2D array to 1D array.
+        int i=0;
+        for(double[] row : src) {
+            for(double value : row) {
+                flat[i++] = value;
+            }
+        }
+
+        return flat;
+    }
+
+
+    /**
+     * Flattens a two-dimensional array.
+     * @param src Array to flatten.
+     * @return The flattened array.
+     */
+    public static CNumber[] flatten(CNumber[][] src) {
+        CNumber[] flat = new CNumber[src.length*src[0].length];
+
+        // Copy 2D array to 1D array.
+        int i=0;
+        for(CNumber[] row : src) {
+            for(CNumber value : row) {
+                flat[i++] = value.copy();
+            }
+        }
+
+        return flat;
+    }
 }
