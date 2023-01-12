@@ -8,7 +8,7 @@ class MatrixAggregationTests {
     double[][] aEntries;
     Matrix A;
     Double expAg;
-    int expAgInt;
+    int[] expIndices;
 
     @Test
     void sumTest() {
@@ -87,5 +87,37 @@ class MatrixAggregationTests {
         A = new Matrix(aEntries);
         expAg = 0.0;
         assertEquals(expAg, A.minAbs());
+    }
+
+
+    @Test
+    void argMinTest() {
+        // ----------- Sub-case 1 -----------
+        aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
+        A = new Matrix(aEntries);
+        expIndices = new int[]{1, 1};
+        assertArrayEquals(expIndices, A.argMin());
+
+        // ----------- Sub-case 2 -----------
+        aEntries = new double[][]{{}};
+        A = new Matrix(aEntries);
+        expIndices = new int[]{};
+        assertArrayEquals(expIndices, A.argMin());
+    }
+
+
+    @Test
+    void argMaxTest() {
+        // ----------- Sub-case 1 -----------
+        aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
+        A = new Matrix(aEntries);
+        expIndices = new int[]{0, 2};
+        assertArrayEquals(expIndices, A.argMax());
+
+        // ----------- Sub-case 2 -----------
+        aEntries = new double[][]{{}};
+        A = new Matrix(aEntries);
+        expIndices = new int[]{};
+        assertArrayEquals(expIndices, A.argMax());
     }
 }

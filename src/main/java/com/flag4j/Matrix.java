@@ -3084,11 +3084,15 @@ public class Matrix extends RealMatrixBase implements
      * Finds the indices of the minimum value in this tensor.
      *
      * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
+     * entry (in row-major ordering) are returned. If this matrix is empty the array returned will be empty.
      */
     @Override
     public int[] argMin() {
-        return shape.getIndices(AggregateDenseReal.argMin(entries));
+        if(this.entries.length==0) {
+            return new int[]{};
+        } else {
+            return shape.getIndices(AggregateDenseReal.argMin(entries));
+        }
     }
 
 
@@ -3096,11 +3100,15 @@ public class Matrix extends RealMatrixBase implements
      * Finds the indices of the maximum value in this tensor.
      *
      * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
+     * entry (in row-major ordering) are returned. If this matrix is empty the array returned will be empty.
      */
     @Override
     public int[] argMax() {
-        return shape.getIndices(AggregateDenseReal.argMax(entries));
+        if(this.entries.length==0) {
+            return new int[]{};
+        } else {
+            return shape.getIndices(AggregateDenseReal.argMax(entries));
+        }
     }
 
 

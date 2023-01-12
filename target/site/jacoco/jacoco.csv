@@ -26,7 +26,7 @@ Flag4j,com.flag4j.operations.dense.real,RealDenseSetOperations,10,269,0,22,3,39,
 Flag4j,com.flag4j.operations.dense.real,RealDenseEquals,7,18,0,4,2,1,1,3,1,1
 Flag4j,com.flag4j.operations.dense.real,RealDenseCheckOperations,61,0,8,0,14,0,7,0,3,0
 Flag4j,com.flag4j.operations.dense.real,RealDenseMatrixMultiplication,7,1121,13,97,2,186,14,60,1,18
-Flag4j,com.flag4j.operations.dense.real,AggregateDenseReal,55,0,8,0,15,0,7,0,3,0
+Flag4j,com.flag4j.operations.dense.real,AggregateDenseReal,3,52,0,8,1,14,1,6,1,2
 Flag4j,com.flag4j.operations.sparse.complex,ComplexSparseMatrixMultiplication,274,0,20,0,50,0,17,0,7,0
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseOperations,34,259,2,16,7,39,3,17,2,9
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseEquals,7,18,1,3,2,1,2,2,1,1
@@ -56,7 +56,7 @@ Flag4j,com.flag4j,SparseTensor,0,70,0,2,0,10,0,5,0,4
 Flag4j,com.flag4j,Tensor,21,83,0,6,4,16,2,8,2,5
 Flag4j,com.flag4j,Shape,50,393,6,34,9,62,7,30,3,14
 Flag4j,com.flag4j,SparseCTensor,0,118,0,6,0,16,0,8,0,5
-Flag4j,com.flag4j,Matrix,1933,3733,133,223,223,431,127,217,59,107
+Flag4j,com.flag4j,Matrix,1917,3765,133,227,221,437,125,221,57,109
 Flag4j,com.flag4j,SparseMatrix,0,189,0,0,0,20,0,10,0,10
 Flag4j,com.flag4j,Vector,0,122,0,4,0,24,0,11,0,9
 Flag4j,com.flag4j,CTensor,0,145,0,6,0,29,0,11,0,8

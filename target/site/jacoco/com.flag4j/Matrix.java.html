@@ -3084,11 +3084,15 @@ public class Matrix extends RealMatrixBase implements
      * Finds the indices of the minimum value in this tensor.
      *
      * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
+     * entry (in row-major ordering) are returned. If this matrix is empty the array returned will be empty.
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L3091">        return shape.getIndices(AggregateDenseReal.argMin(entries));</span>
+<span class="fc bfc" id="L3091" title="All 2 branches covered.">        if(this.entries.length==0) {</span>
+<span class="fc" id="L3092">            return new int[]{};</span>
+        } else {
+<span class="fc" id="L3094">            return shape.getIndices(AggregateDenseReal.argMin(entries));</span>
+        }
     }
 
 
@@ -3096,11 +3100,15 @@ public class Matrix extends RealMatrixBase implements
      * Finds the indices of the maximum value in this tensor.
      *
      * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
+     * entry (in row-major ordering) are returned. If this matrix is empty the array returned will be empty.
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L3103">        return shape.getIndices(AggregateDenseReal.argMax(entries));</span>
+<span class="fc bfc" id="L3107" title="All 2 branches covered.">        if(this.entries.length==0) {</span>
+<span class="fc" id="L3108">            return new int[]{};</span>
+        } else {
+<span class="fc" id="L3110">            return shape.getIndices(AggregateDenseReal.argMax(entries));</span>
+        }
     }
 
 
@@ -3111,7 +3119,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double norm() {
-<span class="fc" id="L3114">        return RealOperations.matrixNorm(entries, shape);</span>
+<span class="fc" id="L3122">        return RealOperations.matrixNorm(entries, shape);</span>
     }
 
 
@@ -3125,7 +3133,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double norm(double p) {
-<span class="fc" id="L3128">        return RealOperations.matrixNorm(entries, shape, p);</span>
+<span class="fc" id="L3136">        return RealOperations.matrixNorm(entries, shape, p);</span>
     }
 
 
@@ -3136,7 +3144,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double infNorm() {
-<span class="fc" id="L3139">        return RealOperations.matrixInfNorm(entries, shape);</span>
+<span class="fc" id="L3147">        return RealOperations.matrixInfNorm(entries, shape);</span>
     }
 
 
@@ -3147,7 +3155,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double maxNorm() {
-<span class="fc" id="L3150">        return RealOperations.matrixMaxNorm(entries);</span>
+<span class="fc" id="L3158">        return RealOperations.matrixMaxNorm(entries);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
