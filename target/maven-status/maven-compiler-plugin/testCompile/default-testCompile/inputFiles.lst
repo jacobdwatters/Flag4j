@@ -7,6 +7,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNum
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberRoundTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberGettersSettersTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberUnaryOperationsTest.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixAddToEachColTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseMatrixConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\real\RoundTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\ShapeTests.java
@@ -18,6 +19,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\rea
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\util\ParameterChecksTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberConversionTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseTensorConstructorTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixAddToEachRowTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixEqualsTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseCTensorConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseVectorConstructorTests.java
@@ -42,6 +44,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixElement
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\complex\ComplexDenseSetOperationsTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberMinMaxSumTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixSubTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixSumRowsColsTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixStackTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseCMatrixConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CTensorConstructorTests.java

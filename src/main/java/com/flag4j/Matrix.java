@@ -1872,7 +1872,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix addToEachCol(Vector b) {
-        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);
+        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
         Matrix sum = new Matrix(this);
 
         for(int i=0; i<sum.numRows; i++) {
@@ -1894,7 +1894,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix addToEachCol(SparseVector b) {
-        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());
+        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
         Matrix sum = new Matrix(this);
 
         int index;
@@ -1903,7 +1903,7 @@ public class Matrix extends RealMatrixBase implements
             index = b.indices[i];
 
             for(int j=0; j<sum.numCols; j++) {
-                sum.entries[index*sum.numCols + j] += b.entries[index];
+                sum.entries[index*sum.numCols + j] += b.entries[i];
             }
         }
 
@@ -1920,7 +1920,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(CVector b) {
-        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);
+        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
         CMatrix sum = new CMatrix(this);
 
         for(int i=0; i<sum.numRows; i++) {
@@ -1942,7 +1942,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(SparseCVector b) {
-        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());
+        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
         CMatrix sum = new CMatrix(this);
 
         int index;
@@ -1951,7 +1951,7 @@ public class Matrix extends RealMatrixBase implements
             index = b.indices[i];
 
             for(int j=0; j<sum.numCols; j++) {
-                sum.entries[index*sum.numCols + j].addEq(b.entries[index]);
+                sum.entries[index*sum.numCols + j].addEq(b.entries[i]);
             }
         }
 
@@ -1968,7 +1968,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix addToEachRow(Vector b) {
-        ParameterChecks.assertArrayLengthsEq(numCols, b.entries.length);
+        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
         Matrix sum = new Matrix(this);
 
         for(int i=0; i<sum.numRows; i++) {
@@ -1990,12 +1990,14 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix addToEachRow(SparseVector b) {
-        ParameterChecks.assertArrayLengthsEq(numCols, b.totalEntries().intValue());
+        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
         Matrix sum = new Matrix(this);
 
+        int col;
         for(int i=0; i<sum.numRows; i++) {
             for(int j=0; j<b.nonZeroEntries(); j++) {
-                sum.entries[i*sum.numCols + j] += b.entries[j];
+                col = b.indices[j];
+                sum.entries[i*sum.numCols + col] += b.entries[j];
             }
         }
 
@@ -2012,7 +2014,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(CVector b) {
-        ParameterChecks.assertArrayLengthsEq(numCols, b.entries.length);
+        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
         CMatrix sum = new CMatrix(this);
 
         for(int i=0; i<sum.numRows; i++) {
@@ -2034,12 +2036,14 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(SparseCVector b) {
-        ParameterChecks.assertArrayLengthsEq(numCols, b.totalEntries().intValue());
+        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
         CMatrix sum = new CMatrix(this);
 
+        int col;
         for(int i=0; i<sum.numRows; i++) {
             for(int j=0; j<b.nonZeroEntries(); j++) {
-                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);
+                col = b.indices[j];
+                sum.entries[i*sum.numCols + col].addEq(b.entries[j]);
             }
         }
 

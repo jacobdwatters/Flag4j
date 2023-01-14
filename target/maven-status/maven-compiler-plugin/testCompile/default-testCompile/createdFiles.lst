@@ -1,5 +1,6 @@
 com\flag4j\matrix\MatrixEqualsTests.class
 com\flag4j\matrix\MatrixElemDivTests.class
+com\flag4j\matrix\MatrixAddToEachColTests.class
 com\flag4j\matrix\MatrixScalMultTests.class
 com\flag4j\matrix\MatrixSubTests.class
 com\flag4j\matrix\MatrixStackTests.class
@@ -11,9 +12,11 @@ com\flag4j\matrix\MatrixElementScalarTests.class
 com\flag4j\matrix\MatrixReshapeTests.class
 com\flag4j\matrix\MatrixVectorTests.class
 com\flag4j\matrix\MatrixDirectSumTests.class
+com\flag4j\matrix\MatrixAddToEachRowTests.class
 com\flag4j\matrix\MatrixSetOperationTests.class
 com\flag4j\matrix\MatrixConstructorTests.class
 com\flag4j\matrix\MatrixTransposeTests.class
 com\flag4j\matrix\MatrixZerosOnesTests.class
 com\flag4j\matrix\MatrixPropertiesTests.class
+com\flag4j\matrix\MatrixSumRowsColsTests.class
 com\flag4j\matrix\MatrixElemMultTests.class
