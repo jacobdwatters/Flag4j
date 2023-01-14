@@ -62,7 +62,7 @@ Flag4j,com.flag4j,Vector,0,122,0,4,0,24,0,11,0,9
 Flag4j,com.flag4j,CTensor,0,145,0,6,0,29,0,11,0,8
 Flag4j,com.flag4j,SparseCMatrix,0,288,0,0,0,35,0,13,0,13
 Flag4j,com.flag4j,SparseCVector,0,125,0,0,0,23,0,9,0,9
-Flag4j,com.flag4j,CMatrix,347,649,3,35,160,73,157,34,155,17
+Flag4j,com.flag4j,CMatrix,380,649,3,35,162,73,159,34,157,17
 Flag4j,com.flag4j.linalg,Hessenburg,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,Decompose,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,RowEchelon,3,0,0,0,1,0,1,0,1,0
@@ -70,6 +70,8 @@ Flag4j,com.flag4j.linalg,Eigen,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,PositiveDefiniteness,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,SubSpace,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,CreateMatrix,3,0,0,0,1,0,1,0,1,0
+Flag4j,com.flag4j.operations.common.complex,AggregateComplex,105,0,12,0,18,0,10,0,4,0
+Flag4j,com.flag4j.operations.common.complex,ComplexOperations,49,0,4,0,10,0,5,0,3,0
 Flag4j,com.flag4j.io,TensorWriter,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.io,TensorReader,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.io,PrintOptions,18,72,0,8,8,28,2,15,2,11

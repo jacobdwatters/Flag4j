@@ -30,6 +30,8 @@ import com.flag4j.core.MatrixComparisonsMixin;
 import com.flag4j.core.MatrixOperationsMixin;
 import com.flag4j.core.MatrixManipulationsMixin;
 import com.flag4j.core.MatrixPropertiesMixin;
+import com.flag4j.operations.common.complex.AggregateComplex;
+import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.util.ArrayUtils;
 
@@ -51,12 +53,12 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws IllegalArgumentException if size negative.
      */
     public CMatrix(int size) {
-<span class="fc" id="L54">        super(new Shape(size, size), new CNumber[size*size]);</span>
+<span class="fc" id="L56">        super(new Shape(size, size), new CNumber[size*size]);</span>
 
-<span class="fc bfc" id="L56" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc" id="L57">            super.entries[i] = new CNumber();</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L59">            super.entries[i] = new CNumber();</span>
         }
-<span class="fc" id="L59">    }</span>
+<span class="fc" id="L61">    }</span>
 
 
     /**
@@ -66,12 +68,12 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws IllegalArgumentException if size negative.
      */
     public CMatrix(int size, double value) {
-<span class="fc" id="L69">        super(new Shape(size, size), new CNumber[size*size]);</span>
+<span class="fc" id="L71">        super(new Shape(size, size), new CNumber[size*size]);</span>
 
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc" id="L72">            super.entries[i] = new CNumber(value);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L74">            super.entries[i] = new CNumber(value);</span>
         }
-<span class="fc" id="L74">    }</span>
+<span class="fc" id="L76">    }</span>
 
 
     /**
@@ -81,12 +83,12 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws IllegalArgumentException if size negative.
      */
     public CMatrix(int size, CNumber value) {
-<span class="fc" id="L84">        super(new Shape(size, size), new CNumber[size*size]);</span>
+<span class="fc" id="L86">        super(new Shape(size, size), new CNumber[size*size]);</span>
 
-<span class="fc bfc" id="L86" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc" id="L87">            super.entries[i] = value.copy();</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L89">            super.entries[i] = value.copy();</span>
         }
-<span class="fc" id="L89">    }</span>
+<span class="fc" id="L91">    }</span>
 
 
     /**
@@ -96,12 +98,12 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws IllegalArgumentException if either rows or cols is negative.
      */
     public CMatrix(int rows, int cols) {
-<span class="fc" id="L99">        super(new Shape(rows, cols), new CNumber[rows*cols]);</span>
+<span class="fc" id="L101">        super(new Shape(rows, cols), new CNumber[rows*cols]);</span>
 
-<span class="fc bfc" id="L101" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc" id="L102">            super.entries[i] = new CNumber();</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L104">            super.entries[i] = new CNumber();</span>
         }
-<span class="fc" id="L104">    }</span>
+<span class="fc" id="L106">    }</span>
 
 
     /**
@@ -112,12 +114,12 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws IllegalArgumentException if either rows or cols is negative.
      */
     public CMatrix(int rows, int cols, double value) {
-<span class="fc" id="L115">        super(new Shape(rows, cols), new CNumber[rows*cols]);</span>
+<span class="fc" id="L117">        super(new Shape(rows, cols), new CNumber[rows*cols]);</span>
 
-<span class="fc bfc" id="L117" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc" id="L118">            super.entries[i] = new CNumber(value);</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L120">            super.entries[i] = new CNumber(value);</span>
         }
-<span class="fc" id="L120">    }</span>
+<span class="fc" id="L122">    }</span>
 
 
     /**
@@ -128,12 +130,12 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws IllegalArgumentException if either rows or cols is negative.
      */
     public CMatrix(int rows, int cols, CNumber value) {
-<span class="fc" id="L131">        super(new Shape(rows, cols), new CNumber[rows*cols]);</span>
+<span class="fc" id="L133">        super(new Shape(rows, cols), new CNumber[rows*cols]);</span>
 
-<span class="fc bfc" id="L133" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc" id="L134">            super.entries[i] = value.copy();</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L136">            super.entries[i] = value.copy();</span>
         }
-<span class="fc" id="L136">    }</span>
+<span class="fc" id="L138">    }</span>
 
 
     /**
@@ -141,12 +143,12 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param shape Shape of the matrix.
      */
     public CMatrix(Shape shape) {
-<span class="fc" id="L144">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L146">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
 
-<span class="fc bfc" id="L146" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc" id="L147">            super.entries[i] = new CNumber();</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L149">            super.entries[i] = new CNumber();</span>
         }
-<span class="fc" id="L149">    }</span>
+<span class="fc" id="L151">    }</span>
 
 
     /**
@@ -155,12 +157,12 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param value Value to fill matrix with.
      */
     public CMatrix(Shape shape, double value) {
-<span class="fc" id="L158">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L160">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
 
-<span class="fc bfc" id="L160" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc" id="L161">            super.entries[i] = new CNumber(value);</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L163">            super.entries[i] = new CNumber(value);</span>
         }
-<span class="fc" id="L163">    }</span>
+<span class="fc" id="L165">    }</span>
 
 
     /**
@@ -169,12 +171,12 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param value Value to fill matrix with.
      */
     public CMatrix(Shape shape, CNumber value) {
-<span class="fc" id="L172">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L174">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
 
-<span class="fc bfc" id="L174" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc" id="L175">            super.entries[i] = value.copy();</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L177">            super.entries[i] = value.copy();</span>
         }
-<span class="fc" id="L177">    }</span>
+<span class="fc" id="L179">    }</span>
 
 
     /**
@@ -182,16 +184,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param entries Entries of the real dense matrix.
      */
     public CMatrix(String[][] entries) {
-<span class="fc" id="L185">        super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);</span>
+<span class="fc" id="L187">        super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);</span>
 
         // Copy the string array
-<span class="fc" id="L188">        int index=0;</span>
-<span class="fc bfc" id="L189" title="All 2 branches covered.">        for(String[] row : entries) {</span>
-<span class="fc bfc" id="L190" title="All 2 branches covered.">            for(String value : row) {</span>
-<span class="fc" id="L191">                super.entries[index++] = new CNumber(value);</span>
+<span class="fc" id="L190">        int index=0;</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">        for(String[] row : entries) {</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">            for(String value : row) {</span>
+<span class="fc" id="L193">                super.entries[index++] = new CNumber(value);</span>
             }
         }
-<span class="fc" id="L194">    }</span>
+<span class="fc" id="L196">    }</span>
 
 
     /**
@@ -199,16 +201,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param entries Entries of the real dense matrix.
      */
     public CMatrix(CNumber[][] entries) {
-<span class="fc" id="L202">        super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);</span>
+<span class="fc" id="L204">        super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);</span>
 
         // Copy the string array
-<span class="fc" id="L205">        int index=0;</span>
-<span class="fc bfc" id="L206" title="All 2 branches covered.">        for(CNumber[] row : entries) {</span>
-<span class="fc bfc" id="L207" title="All 2 branches covered.">            for(CNumber value : row) {</span>
-<span class="fc" id="L208">                super.entries[index++] = value.copy();</span>
+<span class="fc" id="L207">        int index=0;</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        for(CNumber[] row : entries) {</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">            for(CNumber value : row) {</span>
+<span class="fc" id="L210">                super.entries[index++] = value.copy();</span>
             }
         }
-<span class="fc" id="L211">    }</span>
+<span class="fc" id="L213">    }</span>
 
 
     /**
@@ -216,16 +218,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param entries Entries of the real dense matrix.
      */
     public CMatrix(double[][] entries) {
-<span class="fc" id="L219">        super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);</span>
+<span class="fc" id="L221">        super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);</span>
 
         // Copy the double array
-<span class="fc" id="L222">        int index=0;</span>
-<span class="fc bfc" id="L223" title="All 2 branches covered.">        for(double[] row : entries) {</span>
-<span class="fc bfc" id="L224" title="All 2 branches covered.">            for(double value : row) {</span>
-<span class="fc" id="L225">                super.entries[index++] = new CNumber(value);</span>
+<span class="fc" id="L224">        int index=0;</span>
+<span class="fc bfc" id="L225" title="All 2 branches covered.">        for(double[] row : entries) {</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">            for(double value : row) {</span>
+<span class="fc" id="L227">                super.entries[index++] = new CNumber(value);</span>
             }
         }
-<span class="fc" id="L228">    }</span>
+<span class="fc" id="L230">    }</span>
 
 
     /**
@@ -233,16 +235,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param entries Entries of the real dense matrix.
      */
     public CMatrix(int[][] entries) {
-<span class="fc" id="L236">        super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);</span>
+<span class="fc" id="L238">        super(new Shape(entries.length, entries[0].length), new CNumber[entries.length*entries[0].length]);</span>
 
         // Copy the int array
-<span class="fc" id="L239">        int index=0;</span>
-<span class="fc bfc" id="L240" title="All 2 branches covered.">        for(int[] row : entries) {</span>
-<span class="fc bfc" id="L241" title="All 2 branches covered.">            for(int value : row) {</span>
-<span class="fc" id="L242">                super.entries[index++] = new CNumber(value);</span>
+<span class="fc" id="L241">        int index=0;</span>
+<span class="fc bfc" id="L242" title="All 2 branches covered.">        for(int[] row : entries) {</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">            for(int value : row) {</span>
+<span class="fc" id="L244">                super.entries[index++] = new CNumber(value);</span>
             }
         }
-<span class="fc" id="L245">    }</span>
+<span class="fc" id="L247">    }</span>
 
 
     /**
@@ -250,9 +252,9 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param A The matrix defining the entries for this matrix.
      */
     public CMatrix(Matrix A) {
-<span class="fc" id="L253">        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);</span>
-<span class="fc" id="L254">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
-<span class="fc" id="L255">    }</span>
+<span class="fc" id="L255">        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);</span>
+<span class="fc" id="L256">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
+<span class="fc" id="L257">    }</span>
 
 
     /**
@@ -260,9 +262,9 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param A The matrix defining the entries for this matrix.
      */
     public CMatrix(CMatrix A) {
-<span class="fc" id="L263">        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);</span>
-<span class="fc" id="L264">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
-<span class="fc" id="L265">    }</span>
+<span class="fc" id="L265">        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);</span>
+<span class="fc" id="L266">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
+<span class="fc" id="L267">    }</span>
 
 
     /**
@@ -272,8 +274,8 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param entries Entries of the matrix.
      */
     public CMatrix(Shape shape, CNumber[] entries) {
-<span class="fc" id="L275">        super(shape, entries);</span>
-<span class="fc" id="L276">    }</span>
+<span class="fc" id="L277">        super(shape, entries);</span>
+<span class="fc" id="L278">    }</span>
 
 
     /**
@@ -284,8 +286,8 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param entries Entries of the matrix.
      */
     public CMatrix(int numRows, int numCols, CNumber[] entries) {
-<span class="nc" id="L287">        super(new Shape(numRows, numCols), entries);</span>
-<span class="nc" id="L288">    }</span>
+<span class="nc" id="L289">        super(new Shape(numRows, numCols), entries);</span>
+<span class="nc" id="L290">    }</span>
 
 
     /**
@@ -294,7 +296,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public Matrix toReal() {
-<span class="nc" id="L297">        return new Matrix(this.shape.copy(), ArrayUtils.getReals(entries));</span>
+<span class="nc" id="L299">        return new Matrix(this.shape.copy(), ArrayUtils.getReals(entries));</span>
     }
 
 
@@ -305,7 +307,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isZeros() {
-<span class="nc" id="L308">        return false;</span>
+<span class="nc" id="L310">        return false;</span>
     }
 
 
@@ -316,24 +318,25 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isOnes() {
-<span class="nc" id="L319">        return false;</span>
+<span class="nc" id="L321">        return false;</span>
     }
+
 
     @Override
     public boolean equals(Object B) {
         boolean equal;
 
-<span class="pc bpc" id="L326" title="1 of 2 branches missed.">        if(B instanceof CMatrix) {</span>
-<span class="fc" id="L327">            CMatrix mat = (CMatrix) B;</span>
-<span class="fc" id="L328">            equal = Arrays.equals(this.entries, mat.entries);</span>
-<span class="pc bnc" id="L329" title="All 2 branches missed.">        } else if(B instanceof Matrix) {</span>
-<span class="nc" id="L330">            Matrix mat = (Matrix) B;</span>
-<span class="nc" id="L331">            equal = RealComplexDenseEquals.matrixEquals(mat, this);</span>
-<span class="nc" id="L332">        } else {</span>
-<span class="nc" id="L333">            equal = false;</span>
+<span class="pc bpc" id="L329" title="1 of 2 branches missed.">        if(B instanceof CMatrix) {</span>
+<span class="fc" id="L330">            CMatrix mat = (CMatrix) B;</span>
+<span class="fc" id="L331">            equal = Arrays.equals(this.entries, mat.entries);</span>
+<span class="pc bnc" id="L332" title="All 2 branches missed.">        } else if(B instanceof Matrix) {</span>
+<span class="nc" id="L333">            Matrix mat = (Matrix) B;</span>
+<span class="nc" id="L334">            equal = RealComplexDenseEquals.matrixEquals(mat, this);</span>
+<span class="nc" id="L335">        } else {</span>
+<span class="nc" id="L336">            equal = false;</span>
         }
 
-<span class="fc" id="L336">        return equal;</span>
+<span class="fc" id="L339">        return equal;</span>
     }
 
 
@@ -344,7 +347,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public int hashCode() {
-<span class="nc" id="L347">        return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);</span>
+<span class="nc" id="L350">        return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);</span>
     }
 
 
@@ -356,7 +359,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber get(int... indices) {
-<span class="nc" id="L359">        return this.entries[this.shape.entriesIndex(indices)];</span>
+<span class="nc" id="L362">        return this.entries[this.shape.entriesIndex(indices)];</span>
     }
 
 
@@ -367,7 +370,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isI() {
-<span class="nc" id="L370">        return false;</span>
+<span class="nc" id="L373">        return false;</span>
     }
 
 
@@ -379,7 +382,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isInv(CMatrix B) {
-<span class="nc" id="L382">        return false;</span>
+<span class="nc" id="L385">        return false;</span>
     }
 
 
@@ -396,7 +399,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix reshape(Shape shape) {
-<span class="nc" id="L399">        return null;</span>
+<span class="nc" id="L402">        return null;</span>
     }
 
 
@@ -410,7 +413,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix reshape(int numRows, int numCols) {
-<span class="nc" id="L413">        return null;</span>
+<span class="nc" id="L416">        return null;</span>
     }
 
 
@@ -421,7 +424,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix flatten() {
-<span class="nc" id="L424">        return null;</span>
+<span class="nc" id="L427">        return null;</span>
     }
 
 
@@ -434,7 +437,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix flatten(int axis) {
-<span class="nc" id="L437">        return null;</span>
+<span class="nc" id="L440">        return null;</span>
     }
 
 
@@ -447,7 +450,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setValues(CNumber[][] values) {
 
-<span class="nc" id="L450">    }</span>
+<span class="nc" id="L453">    }</span>
 
 
     /**
@@ -459,7 +462,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setValues(double[][] values) {
 
-<span class="nc" id="L462">    }</span>
+<span class="nc" id="L465">    }</span>
 
 
     /**
@@ -471,7 +474,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setValues(int[][] values) {
 
-<span class="nc" id="L474">    }</span>
+<span class="nc" id="L477">    }</span>
 
 
     /**
@@ -484,7 +487,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setCol(CNumber[] values, int colIndex) {
 
-<span class="nc" id="L487">    }</span>
+<span class="nc" id="L490">    }</span>
 
 
     /**
@@ -497,7 +500,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setCol(Integer[] values, int colIndex) {
 
-<span class="nc" id="L500">    }</span>
+<span class="nc" id="L503">    }</span>
 
 
     /**
@@ -510,7 +513,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setCol(double[] values, int colIndex) {
 
-<span class="nc" id="L513">    }</span>
+<span class="nc" id="L516">    }</span>
 
 
     /**
@@ -523,7 +526,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setCol(int[] values, int colIndex) {
 
-<span class="nc" id="L526">    }</span>
+<span class="nc" id="L529">    }</span>
 
 
     /**
@@ -536,7 +539,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setRow(CNumber[] values, int rowIndex) {
 
-<span class="nc" id="L539">    }</span>
+<span class="nc" id="L542">    }</span>
 
 
     /**
@@ -549,7 +552,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setRow(Integer[] values, int rowIndex) {
 
-<span class="nc" id="L552">    }</span>
+<span class="nc" id="L555">    }</span>
 
 
     /**
@@ -562,7 +565,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setRow(double[] values, int rowIndex) {
 
-<span class="nc" id="L565">    }</span>
+<span class="nc" id="L568">    }</span>
 
 
     /**
@@ -575,7 +578,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setRow(int[] values, int rowIndex) {
 
-<span class="nc" id="L578">    }</span>
+<span class="nc" id="L581">    }</span>
 
 
     /**
@@ -592,7 +595,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setSlice(CMatrix values, int rowStart, int colStart) {
 
-<span class="nc" id="L595">    }</span>
+<span class="nc" id="L598">    }</span>
 
 
     /**
@@ -609,7 +612,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setSlice(CNumber[][] values, int rowStart, int colStart) {
 
-<span class="nc" id="L612">    }</span>
+<span class="nc" id="L615">    }</span>
 
 
     /**
@@ -626,7 +629,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setSlice(Integer[][] values, int rowStart, int colStart) {
 
-<span class="nc" id="L629">    }</span>
+<span class="nc" id="L632">    }</span>
 
 
     /**
@@ -643,7 +646,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setSlice(double[][] values, int rowStart, int colStart) {
 
-<span class="nc" id="L646">    }</span>
+<span class="nc" id="L649">    }</span>
 
 
     /**
@@ -660,7 +663,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void setSlice(int[][] values, int rowStart, int colStart) {
 
-<span class="nc" id="L663">    }</span>
+<span class="nc" id="L666">    }</span>
 
 
     /**
@@ -677,7 +680,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix setSliceCopy(CMatrix values, int rowStart, int colStart) {
-<span class="nc" id="L680">        return null;</span>
+<span class="nc" id="L683">        return null;</span>
     }
 
 
@@ -695,7 +698,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix setSliceCopy(CNumber[][] values, int rowStart, int colStart) {
-<span class="nc" id="L698">        return null;</span>
+<span class="nc" id="L701">        return null;</span>
     }
 
 
@@ -713,7 +716,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public Matrix setSliceCopy(Integer[][] values, int rowStart, int colStart) {
-<span class="nc" id="L716">        return null;</span>
+<span class="nc" id="L719">        return null;</span>
     }
 
 
@@ -731,7 +734,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix setSliceCopy(double[][] values, int rowStart, int colStart) {
-<span class="nc" id="L734">        return null;</span>
+<span class="nc" id="L737">        return null;</span>
     }
 
 
@@ -749,7 +752,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix setSliceCopy(int[][] values, int rowStart, int colStart) {
-<span class="nc" id="L752">        return null;</span>
+<span class="nc" id="L755">        return null;</span>
     }
 
 
@@ -761,7 +764,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix removeRow(int rowIndex) {
-<span class="nc" id="L764">        return null;</span>
+<span class="nc" id="L767">        return null;</span>
     }
 
 
@@ -773,7 +776,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix removeRows(int... rowIndices) {
-<span class="nc" id="L776">        return null;</span>
+<span class="nc" id="L779">        return null;</span>
     }
 
 
@@ -785,7 +788,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix removeCol(int colIndex) {
-<span class="nc" id="L788">        return null;</span>
+<span class="nc" id="L791">        return null;</span>
     }
 
 
@@ -797,7 +800,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix removeCols(int... colIndices) {
-<span class="nc" id="L800">        return null;</span>
+<span class="nc" id="L803">        return null;</span>
     }
 
 
@@ -809,7 +812,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix round() {
-<span class="nc" id="L812">        return null;</span>
+<span class="nc" id="L815">        return null;</span>
     }
 
 
@@ -823,7 +826,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix round(int precision) {
-<span class="nc" id="L826">        return null;</span>
+<span class="nc" id="L829">        return null;</span>
     }
 
 
@@ -836,7 +839,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix roundToZero() {
-<span class="nc" id="L839">        return null;</span>
+<span class="nc" id="L842">        return null;</span>
     }
 
 
@@ -851,7 +854,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix roundToZero(double threshold) {
-<span class="nc" id="L854">        return null;</span>
+<span class="nc" id="L857">        return null;</span>
     }
 
 
@@ -864,7 +867,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(Matrix B) {
-<span class="nc" id="L867">        return null;</span>
+<span class="nc" id="L870">        return null;</span>
     }
 
 
@@ -877,7 +880,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(SparseMatrix B) {
-<span class="nc" id="L880">        return null;</span>
+<span class="nc" id="L883">        return null;</span>
     }
 
 
@@ -890,7 +893,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(CMatrix B) {
-<span class="nc" id="L893">        return null;</span>
+<span class="nc" id="L896">        return null;</span>
     }
 
 
@@ -902,7 +905,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(double a) {
-<span class="nc" id="L905">        return null;</span>
+<span class="nc" id="L908">        return null;</span>
     }
 
 
@@ -914,7 +917,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(CNumber a) {
-<span class="nc" id="L917">        return null;</span>
+<span class="nc" id="L920">        return null;</span>
     }
 
 
@@ -927,7 +930,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(SparseCMatrix B) {
-<span class="nc" id="L930">        return null;</span>
+<span class="nc" id="L933">        return null;</span>
     }
 
 
@@ -940,7 +943,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(Matrix B) {
-<span class="nc" id="L943">        return null;</span>
+<span class="nc" id="L946">        return null;</span>
     }
 
 
@@ -953,7 +956,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(SparseMatrix B) {
-<span class="nc" id="L956">        return null;</span>
+<span class="nc" id="L959">        return null;</span>
     }
 
 
@@ -966,7 +969,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(CMatrix B) {
-<span class="nc" id="L969">        return null;</span>
+<span class="nc" id="L972">        return null;</span>
     }
 
 
@@ -978,7 +981,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(double a) {
-<span class="nc" id="L981">        return null;</span>
+<span class="nc" id="L984">        return null;</span>
     }
 
 
@@ -990,7 +993,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(CNumber a) {
-<span class="nc" id="L993">        return null;</span>
+<span class="nc" id="L996">        return null;</span>
     }
 
 
@@ -1002,7 +1005,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix scalMult(double factor) {
-<span class="nc" id="L1005">        return null;</span>
+<span class="nc" id="L1008">        return null;</span>
     }
 
 
@@ -1014,7 +1017,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix scalMult(CNumber factor) {
-<span class="nc" id="L1017">        return null;</span>
+<span class="nc" id="L1020">        return null;</span>
     }
 
 
@@ -1027,7 +1030,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix scalDiv(double divisor) {
-<span class="nc" id="L1030">        return null;</span>
+<span class="nc" id="L1033">        return null;</span>
     }
 
 
@@ -1040,7 +1043,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix scalDiv(CNumber divisor) {
-<span class="nc" id="L1043">        return null;</span>
+<span class="nc" id="L1046">        return null;</span>
     }
 
 
@@ -1051,7 +1054,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber sum() {
-<span class="nc" id="L1054">        return null;</span>
+<span class="nc" id="L1057">        return AggregateComplex.sum(this.entries);</span>
     }
 
 
@@ -1063,7 +1066,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sqrt() {
-<span class="nc" id="L1066">        return null;</span>
+<span class="nc" id="L1069">        return new CMatrix(this.shape.copy(), ComplexOperations.sqrt(this.entries));</span>
     }
 
 
@@ -1074,8 +1077,8 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return The result of applying an element-wise absolute value/magnitude to this tensor.
      */
     @Override
-    public Matrix abs() {
-<span class="nc" id="L1078">        return null;</span>
+    public CMatrix abs() {
+<span class="nc" id="L1081">        return new CMatrix(this.shape.copy(), ComplexOperations.abs(this.entries));</span>
     }
 
 
@@ -1086,7 +1089,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix transpose() {
-<span class="nc" id="L1089">        return null;</span>
+<span class="nc" id="L1092">        return null;</span>
     }
 
 
@@ -1097,7 +1100,31 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix T() {
-<span class="nc" id="L1100">        return null;</span>
+<span class="nc" id="L1103">        return null;</span>
+    }
+
+
+    /**
+     * Computes the hermation transpose (i.e. the conjugate transpose) of the matrix.
+     * Same as {@link #H()}.
+     *
+     * @return The conjugate transpose.
+     */
+    @Override
+    public CMatrix hermationTranspose() {
+<span class="nc" id="L1115">        return null;</span>
+    }
+
+
+    /**
+     * Computes the hermation transpose (i.e. the conjugate transpose) of the matrix.
+     * Same as {@link #hermationTranspose()}.
+     *
+     * @return The conjugate transpose.
+     */
+    @Override
+    public CMatrix H() {
+<span class="nc" id="L1127">        return null;</span>
     }
 
 
@@ -1109,7 +1136,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix recep() {
-<span class="nc" id="L1112">        return null;</span>
+<span class="nc" id="L1139">        return null;</span>
     }
 
 
@@ -1122,7 +1149,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(SparseCMatrix B) {
-<span class="nc" id="L1125">        return null;</span>
+<span class="nc" id="L1152">        return null;</span>
     }
 
 
@@ -1135,7 +1162,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(Matrix B) {
-<span class="nc" id="L1138">        return null;</span>
+<span class="nc" id="L1165">        return null;</span>
     }
 
 
@@ -1148,7 +1175,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseMatrix B) {
-<span class="nc" id="L1151">        return null;</span>
+<span class="nc" id="L1178">        return null;</span>
     }
 
 
@@ -1161,7 +1188,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(CMatrix B) {
-<span class="nc" id="L1164">        return null;</span>
+<span class="nc" id="L1191">        return null;</span>
     }
 
 
@@ -1174,7 +1201,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
-<span class="nc" id="L1177">        return null;</span>
+<span class="nc" id="L1204">        return null;</span>
     }
 
 
@@ -1187,7 +1214,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(Vector b) {
-<span class="nc" id="L1190">        return null;</span>
+<span class="nc" id="L1217">        return null;</span>
     }
 
 
@@ -1200,7 +1227,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseVector b) {
-<span class="nc" id="L1203">        return null;</span>
+<span class="nc" id="L1230">        return null;</span>
     }
 
 
@@ -1213,7 +1240,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(CVector b) {
-<span class="nc" id="L1216">        return null;</span>
+<span class="nc" id="L1243">        return null;</span>
     }
 
 
@@ -1226,7 +1253,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCVector b) {
-<span class="nc" id="L1229">        return null;</span>
+<span class="nc" id="L1256">        return null;</span>
     }
 
 
@@ -1240,7 +1267,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix pow(int exponent) {
-<span class="nc" id="L1243">        return null;</span>
+<span class="nc" id="L1270">        return null;</span>
     }
 
 
@@ -1253,7 +1280,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix elemMult(Matrix B) {
-<span class="nc" id="L1256">        return null;</span>
+<span class="nc" id="L1283">        return null;</span>
     }
 
 
@@ -1266,7 +1293,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public SparseCMatrix elemMult(SparseMatrix B) {
-<span class="nc" id="L1269">        return null;</span>
+<span class="nc" id="L1296">        return null;</span>
     }
 
 
@@ -1279,7 +1306,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix elemMult(CMatrix B) {
-<span class="nc" id="L1282">        return null;</span>
+<span class="nc" id="L1309">        return null;</span>
     }
 
 
@@ -1292,7 +1319,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
-<span class="nc" id="L1295">        return null;</span>
+<span class="nc" id="L1322">        return null;</span>
     }
 
 
@@ -1306,7 +1333,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix elemDiv(Matrix B) {
-<span class="nc" id="L1309">        return null;</span>
+<span class="nc" id="L1336">        return null;</span>
     }
 
 
@@ -1320,7 +1347,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix elemDiv(CMatrix B) {
-<span class="nc" id="L1323">        return null;</span>
+<span class="nc" id="L1350">        return null;</span>
     }
 
 
@@ -1332,7 +1359,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber det() {
-<span class="nc" id="L1335">        return null;</span>
+<span class="nc" id="L1362">        return null;</span>
     }
 
 
@@ -1345,7 +1372,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber fib(Matrix B) {
-<span class="nc" id="L1348">        return null;</span>
+<span class="nc" id="L1375">        return null;</span>
     }
 
 
@@ -1358,7 +1385,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber fib(SparseMatrix B) {
-<span class="nc" id="L1361">        return null;</span>
+<span class="nc" id="L1388">        return null;</span>
     }
 
 
@@ -1371,7 +1398,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber fib(CMatrix B) {
-<span class="nc" id="L1374">        return null;</span>
+<span class="nc" id="L1401">        return null;</span>
     }
 
 
@@ -1384,7 +1411,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber fib(SparseCMatrix B) {
-<span class="nc" id="L1387">        return null;</span>
+<span class="nc" id="L1414">        return null;</span>
     }
 
 
@@ -1396,7 +1423,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix directSum(Matrix B) {
-<span class="nc" id="L1399">        return null;</span>
+<span class="nc" id="L1426">        return null;</span>
     }
 
 
@@ -1408,7 +1435,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix directSum(SparseMatrix B) {
-<span class="nc" id="L1411">        return null;</span>
+<span class="nc" id="L1438">        return null;</span>
     }
 
 
@@ -1420,7 +1447,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix directSum(CMatrix B) {
-<span class="nc" id="L1423">        return null;</span>
+<span class="nc" id="L1450">        return null;</span>
     }
 
 
@@ -1432,7 +1459,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix directSum(SparseCMatrix B) {
-<span class="nc" id="L1435">        return null;</span>
+<span class="nc" id="L1462">        return null;</span>
     }
 
 
@@ -1444,7 +1471,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(Matrix B) {
-<span class="nc" id="L1447">        return null;</span>
+<span class="nc" id="L1474">        return null;</span>
     }
 
 
@@ -1456,7 +1483,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(SparseMatrix B) {
-<span class="nc" id="L1459">        return null;</span>
+<span class="nc" id="L1486">        return null;</span>
     }
 
 
@@ -1468,7 +1495,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(CMatrix B) {
-<span class="nc" id="L1471">        return null;</span>
+<span class="nc" id="L1498">        return null;</span>
     }
 
 
@@ -1480,7 +1507,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(SparseCMatrix B) {
-<span class="nc" id="L1483">        return null;</span>
+<span class="nc" id="L1510">        return null;</span>
     }
 
 
@@ -1492,7 +1519,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sumCols() {
-<span class="nc" id="L1495">        return null;</span>
+<span class="nc" id="L1522">        return null;</span>
     }
 
 
@@ -1504,7 +1531,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sumRows() {
-<span class="nc" id="L1507">        return null;</span>
+<span class="nc" id="L1534">        return null;</span>
     }
 
 
@@ -1517,7 +1544,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(Vector b) {
-<span class="nc" id="L1520">        return null;</span>
+<span class="nc" id="L1547">        return null;</span>
     }
 
 
@@ -1530,7 +1557,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(SparseVector b) {
-<span class="nc" id="L1533">        return null;</span>
+<span class="nc" id="L1560">        return null;</span>
     }
 
 
@@ -1543,7 +1570,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(CVector b) {
-<span class="nc" id="L1546">        return null;</span>
+<span class="nc" id="L1573">        return null;</span>
     }
 
 
@@ -1556,7 +1583,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(SparseCVector b) {
-<span class="nc" id="L1559">        return null;</span>
+<span class="nc" id="L1586">        return null;</span>
     }
 
 
@@ -1569,7 +1596,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(Vector b) {
-<span class="nc" id="L1572">        return null;</span>
+<span class="nc" id="L1599">        return null;</span>
     }
 
 
@@ -1582,7 +1609,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(SparseVector b) {
-<span class="nc" id="L1585">        return null;</span>
+<span class="nc" id="L1612">        return null;</span>
     }
 
 
@@ -1595,7 +1622,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(CVector b) {
-<span class="nc" id="L1598">        return null;</span>
+<span class="nc" id="L1625">        return null;</span>
     }
 
 
@@ -1608,7 +1635,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(SparseCVector b) {
-<span class="nc" id="L1611">        return null;</span>
+<span class="nc" id="L1638">        return null;</span>
     }
 
 
@@ -1622,7 +1649,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(Matrix B) {
-<span class="nc" id="L1625">        return null;</span>
+<span class="nc" id="L1652">        return null;</span>
     }
 
 
@@ -1636,7 +1663,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseMatrix B) {
-<span class="nc" id="L1639">        return null;</span>
+<span class="nc" id="L1666">        return null;</span>
     }
 
 
@@ -1650,7 +1677,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(CMatrix B) {
-<span class="nc" id="L1653">        return null;</span>
+<span class="nc" id="L1680">        return null;</span>
     }
 
 
@@ -1664,7 +1691,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCMatrix B) {
-<span class="nc" id="L1667">        return null;</span>
+<span class="nc" id="L1694">        return null;</span>
     }
 
 
@@ -1682,7 +1709,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(Matrix B, int axis) {
-<span class="nc" id="L1685">        return null;</span>
+<span class="nc" id="L1712">        return null;</span>
     }
 
 
@@ -1700,7 +1727,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseMatrix B, int axis) {
-<span class="nc" id="L1703">        return null;</span>
+<span class="nc" id="L1730">        return null;</span>
     }
 
 
@@ -1718,7 +1745,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(CMatrix B, int axis) {
-<span class="nc" id="L1721">        return null;</span>
+<span class="nc" id="L1748">        return null;</span>
     }
 
 
@@ -1736,7 +1763,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCMatrix B, int axis) {
-<span class="nc" id="L1739">        return null;</span>
+<span class="nc" id="L1766">        return null;</span>
     }
 
 
@@ -1750,7 +1777,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(Matrix B) {
-<span class="nc" id="L1753">        return null;</span>
+<span class="nc" id="L1780">        return null;</span>
     }
 
 
@@ -1764,7 +1791,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseMatrix B) {
-<span class="nc" id="L1767">        return null;</span>
+<span class="nc" id="L1794">        return null;</span>
     }
 
 
@@ -1778,7 +1805,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(CMatrix B) {
-<span class="nc" id="L1781">        return null;</span>
+<span class="nc" id="L1808">        return null;</span>
     }
 
 
@@ -1792,7 +1819,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseCMatrix B) {
-<span class="nc" id="L1795">        return null;</span>
+<span class="nc" id="L1822">        return null;</span>
     }
 
 
@@ -1808,7 +1835,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(Vector b) {
-<span class="nc" id="L1811">        return null;</span>
+<span class="nc" id="L1838">        return null;</span>
     }
 
 
@@ -1824,7 +1851,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseVector b) {
-<span class="nc" id="L1827">        return null;</span>
+<span class="nc" id="L1854">        return null;</span>
     }
 
 
@@ -1840,7 +1867,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(CVector b) {
-<span class="nc" id="L1843">        return null;</span>
+<span class="nc" id="L1870">        return null;</span>
     }
 
 
@@ -1856,7 +1883,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCVector b) {
-<span class="nc" id="L1859">        return null;</span>
+<span class="nc" id="L1886">        return null;</span>
     }
 
 
@@ -1876,7 +1903,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(Vector b, int axis) {
-<span class="nc" id="L1879">        return null;</span>
+<span class="nc" id="L1906">        return null;</span>
     }
 
 
@@ -1896,7 +1923,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseVector b, int axis) {
-<span class="nc" id="L1899">        return null;</span>
+<span class="nc" id="L1926">        return null;</span>
     }
 
 
@@ -1916,7 +1943,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(CVector b, int axis) {
-<span class="nc" id="L1919">        return null;</span>
+<span class="nc" id="L1946">        return null;</span>
     }
 
 
@@ -1936,7 +1963,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCVector b, int axis) {
-<span class="nc" id="L1939">        return null;</span>
+<span class="nc" id="L1966">        return null;</span>
     }
 
 
@@ -1952,7 +1979,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(Vector b) {
-<span class="nc" id="L1955">        return null;</span>
+<span class="nc" id="L1982">        return null;</span>
     }
 
 
@@ -1968,7 +1995,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseVector b) {
-<span class="nc" id="L1971">        return null;</span>
+<span class="nc" id="L1998">        return null;</span>
     }
 
 
@@ -1984,7 +2011,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(CVector b) {
-<span class="nc" id="L1987">        return null;</span>
+<span class="nc" id="L2014">        return null;</span>
     }
 
 
@@ -2000,7 +2027,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseCVector b) {
-<span class="nc" id="L2003">        return null;</span>
+<span class="nc" id="L2030">        return null;</span>
     }
 
 
@@ -2012,7 +2039,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix getRow(int i) {
-<span class="nc" id="L2015">        return null;</span>
+<span class="nc" id="L2042">        return null;</span>
     }
 
 
@@ -2024,7 +2051,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix getCol(int j) {
-<span class="nc" id="L2027">        return null;</span>
+<span class="nc" id="L2054">        return null;</span>
     }
 
 
@@ -2037,7 +2064,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber trace() {
-<span class="nc" id="L2040">        return null;</span>
+<span class="nc" id="L2067">        return null;</span>
     }
 
 
@@ -2050,7 +2077,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber tr() {
-<span class="nc" id="L2053">        return null;</span>
+<span class="nc" id="L2080">        return null;</span>
     }
 
 
@@ -2063,7 +2090,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix I(int size) {
-<span class="nc" id="L2066">        return null;</span>
+<span class="nc" id="L2093">        return null;</span>
     }
 
 
@@ -2078,7 +2105,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix I(int numRows, int numCols) {
-<span class="nc" id="L2081">        return null;</span>
+<span class="nc" id="L2108">        return null;</span>
     }
 
 
@@ -2092,7 +2119,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix I(Shape shape) {
-<span class="nc" id="L2095">        return null;</span>
+<span class="nc" id="L2122">        return null;</span>
     }
 
 
@@ -2103,7 +2130,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isSquare() {
-<span class="nc" id="L2106">        return false;</span>
+<span class="nc" id="L2133">        return false;</span>
     }
 
 
@@ -2114,7 +2141,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isVector() {
-<span class="nc" id="L2117">        return false;</span>
+<span class="nc" id="L2144">        return false;</span>
     }
 
 
@@ -2128,7 +2155,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public int vectorType() {
-<span class="nc" id="L2131">        return 0;</span>
+<span class="nc" id="L2158">        return 0;</span>
     }
 
 
@@ -2139,7 +2166,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isTri() {
-<span class="nc" id="L2142">        return false;</span>
+<span class="nc" id="L2169">        return false;</span>
     }
 
 
@@ -2150,7 +2177,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isTriL() {
-<span class="nc" id="L2153">        return false;</span>
+<span class="nc" id="L2180">        return false;</span>
     }
 
 
@@ -2161,7 +2188,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isTriU() {
-<span class="nc" id="L2164">        return false;</span>
+<span class="nc" id="L2191">        return false;</span>
     }
 
 
@@ -2172,7 +2199,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isDiag() {
-<span class="nc" id="L2175">        return false;</span>
+<span class="nc" id="L2202">        return false;</span>
     }
 
 
@@ -2183,7 +2210,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isFullRank() {
-<span class="nc" id="L2186">        return false;</span>
+<span class="nc" id="L2213">        return false;</span>
     }
 
 
@@ -2195,7 +2222,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isSingular() {
-<span class="nc" id="L2198">        return false;</span>
+<span class="nc" id="L2225">        return false;</span>
     }
 
 
@@ -2207,7 +2234,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isInvertible() {
-<span class="nc" id="L2210">        return false;</span>
+<span class="nc" id="L2237">        return false;</span>
     }
 
 
@@ -2220,7 +2247,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double norm(double p, double q) {
-<span class="nc" id="L2223">        return 0;</span>
+<span class="nc" id="L2250">        return 0;</span>
     }
 
 
@@ -2232,7 +2259,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isDiagonalizable() {
-<span class="nc" id="L2235">        return false;</span>
+<span class="nc" id="L2262">        return false;</span>
     }
 
 
@@ -2243,7 +2270,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double maxNorm() {
-<span class="nc" id="L2246">        return 0;</span>
+<span class="nc" id="L2273">        return 0;</span>
     }
 
 
@@ -2256,7 +2283,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public void set(double value, int... indices) {
 
-<span class="nc" id="L2259">    }</span>
+<span class="nc" id="L2286">    }</span>
 
 
     /**
@@ -2266,7 +2293,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber min() {
-<span class="nc" id="L2269">        return null;</span>
+<span class="nc" id="L2296">        return minAbs();</span>
     }
 
 
@@ -2277,7 +2304,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber max() {
-<span class="nc" id="L2280">        return null;</span>
+<span class="nc" id="L2307">        return maxAbs();</span>
     }
 
 
@@ -2289,7 +2316,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber minAbs() {
-<span class="nc" id="L2292">        return null;</span>
+<span class="nc" id="L2319">        return AggregateComplex.minAbs(this.entries);</span>
     }
 
 
@@ -2301,7 +2328,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber maxAbs() {
-<span class="nc" id="L2304">        return null;</span>
+<span class="nc" id="L2331">        return AggregateComplex.maxAbs(this.entries);</span>
     }
 
 
@@ -2313,7 +2340,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L2316">        return new int[0];</span>
+<span class="nc" id="L2343">        return new int[0];</span>
     }
 
 
@@ -2325,7 +2352,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L2328">        return new int[0];</span>
+<span class="nc" id="L2355">        return new int[0];</span>
     }
 
 
@@ -2336,7 +2363,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double norm() {
-<span class="nc" id="L2339">        return 0;</span>
+<span class="nc" id="L2366">        return 0;</span>
     }
 
 
@@ -2350,7 +2377,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L2353">        return 0;</span>
+<span class="nc" id="L2380">        return 0;</span>
     }
 
 
@@ -2361,7 +2388,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L2364">        return 0;</span>
+<span class="nc" id="L2391">        return 0;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -30,6 +30,8 @@ import com.flag4j.core.MatrixComparisonsMixin;
 import com.flag4j.core.MatrixOperationsMixin;
 import com.flag4j.core.MatrixManipulationsMixin;
 import com.flag4j.core.MatrixPropertiesMixin;
+import com.flag4j.operations.common.complex.AggregateComplex;
+import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.util.ArrayUtils;
 
@@ -1052,7 +1054,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber sum() {
-        return null;
+        return AggregateComplex.sum(this.entries);
     }
 
 
@@ -1064,7 +1066,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sqrt() {
-        return null;
+        return new CMatrix(this.shape.copy(), ComplexOperations.sqrt(this.entries));
     }
 
 
@@ -1075,8 +1077,8 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return The result of applying an element-wise absolute value/magnitude to this tensor.
      */
     @Override
-    public Matrix abs() {
-        return null;
+    public CMatrix abs() {
+        return new CMatrix(this.shape.copy(), ComplexOperations.abs(this.entries));
     }
 
 
@@ -1098,6 +1100,30 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix T() {
+        return null;
+    }
+
+
+    /**
+     * Computes the hermation transpose (i.e. the conjugate transpose) of the matrix.
+     * Same as {@link #H()}.
+     *
+     * @return The conjugate transpose.
+     */
+    @Override
+    public CMatrix hermationTranspose() {
+        return null;
+    }
+
+
+    /**
+     * Computes the hermation transpose (i.e. the conjugate transpose) of the matrix.
+     * Same as {@link #hermationTranspose()}.
+     *
+     * @return The conjugate transpose.
+     */
+    @Override
+    public CMatrix H() {
         return null;
     }
 
@@ -2290,7 +2316,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber minAbs() {
-        return null;
+        return AggregateComplex.minAbs(this.entries);
     }
 
 
@@ -2302,7 +2328,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber maxAbs() {
-        return null;
+        return AggregateComplex.maxAbs(this.entries);
     }
 
 
