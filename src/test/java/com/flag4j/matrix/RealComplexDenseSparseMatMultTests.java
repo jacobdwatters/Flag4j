@@ -1,9 +1,6 @@
 package com.flag4j.matrix;
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
-import com.flag4j.SparseCMatrix;
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import static com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication.*;
 import org.junit.jupiter.api.Test;
@@ -14,15 +11,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class RealComplexDenseSparseMatMultTests {
 
     double[][] aEntries;
-    CNumber[][] expCEntries;
+    CNumber[][] expCEntries, bComplexEntries;
 
     Matrix A;
-    CMatrix expC;
+    CMatrix expC, BComplex;
 
     CNumber[] bEntries;
+    SparseCMatrix BSparseComplex;
+    Shape shape;
+
+    SparseMatrix ASparse;
+    SparseVector ASparseVector;
+    double[] aSparseEntries;
+
     int[] rowIndices, colIndices;
-    SparseCMatrix B;
-    Shape bShape;
 
     @Test
     void matMultTests() {
@@ -35,16 +37,16 @@ class RealComplexDenseSparseMatMultTests {
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i"), new CNumber("11.67-2.0i")};
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
-        bShape = new Shape(3, 2);
-        B = new SparseCMatrix(bShape, bEntries, rowIndices, colIndices);
+        shape = new Shape(3, 2);
+        BSparseComplex = new SparseCMatrix(shape, bEntries, rowIndices, colIndices);
         expCEntries = new CNumber[][]{{new CNumber("-92.7375568794+927.8378999999999i"), new CNumber("0.00143541-0.000246i")},
                 {new CNumber("-515.255376035+5155.1225i"), new CNumber("-10.7763114+1.84684i")},
                 {new CNumber("-0.00012148943299999999+0.0012154999999999998i"), new CNumber("0.0")},
                 {new CNumber("-11.4330901794+114.3879i"), new CNumber("-115804.09409999999+19846.46i")}};
         expC = new CMatrix(expCEntries);
 
-        assertArrayEquals(expC.entries, standard(A.entries, A.shape, B.entries, B.rowIndices, B.colIndices, B.shape));
-        assertArrayEquals(expC.entries, concurrentStandard(A.entries, A.shape, B.entries, B.rowIndices, B.colIndices, B.shape));
+        assertArrayEquals(expC.entries, standard(A.entries, A.shape, BSparseComplex.entries, BSparseComplex.rowIndices, BSparseComplex.colIndices, BSparseComplex.shape));
+        assertArrayEquals(expC.entries, concurrentStandard(A.entries, A.shape, BSparseComplex.entries, BSparseComplex.rowIndices, BSparseComplex.colIndices, BSparseComplex.shape));
 
 
         // ---------------------- Sub-case 2 ----------------------
@@ -56,15 +58,58 @@ class RealComplexDenseSparseMatMultTests {
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i"), new CNumber("11.67-2.0i")};
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
-        bShape = new Shape(3, 4);
-        B = new SparseCMatrix(bShape, bEntries, rowIndices, colIndices);
+        shape = new Shape(3, 4);
+        BSparseComplex = new SparseCMatrix(shape, bEntries, rowIndices, colIndices);
         expCEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
                 {new CNumber("-1.04985560794+10.503789999999999i"), new CNumber("-92.7375568794+927.8378999999999i"), new CNumber("-0.00011494769430000002+0.0011500500000000001i")},
                 {new CNumber("-10881.6915+1864.9i"), new CNumber("6434.2545-1102.7i"), new CNumber("-10.7763114+1.84684i")}};
         expC = new CMatrix(expCEntries);
 
-        assertArrayEquals(expC.entries, standard(B.entries, B.rowIndices, B.colIndices, B.shape, A.entries, A.shape));
-        assertArrayEquals(expC.entries, concurrentStandard(B.entries, B.rowIndices, B.colIndices, B.shape, A.entries, A.shape));
+        assertArrayEquals(expC.entries, standard(BSparseComplex.entries, BSparseComplex.rowIndices, BSparseComplex.colIndices, BSparseComplex.shape, A.entries, A.shape));
+        assertArrayEquals(expC.entries, concurrentStandard(BSparseComplex.entries, BSparseComplex.rowIndices, BSparseComplex.colIndices, BSparseComplex.shape, A.entries, A.shape));
+
+        // ---------------------- Sub-case 3 ----------------------
+        aSparseEntries = new double[]{1, 9.43};
+        rowIndices = new int[]{0, 2};
+        colIndices = new int[]{2, 1};
+        shape = new Shape(4, 3);
+        ASparse = new SparseMatrix(shape, aSparseEntries, rowIndices, colIndices);
+        bComplexEntries = new CNumber[][]{
+                {new CNumber(1.34, 13.4), new CNumber(234.6, 6)},
+                {new CNumber(-9.55, 1.9414), new CNumber(9, 1)},
+                {new CNumber(0.9923, -985.2), new CNumber(9234)}};
+        BComplex = new CMatrix(bComplexEntries);
+        expCEntries = new CNumber[][]{{new CNumber("0.9923-985.2i"), new CNumber("9234.0")},
+                {new CNumber("0.0"), new CNumber("0.0")},
+                {new CNumber("-90.0565+18.307402i"), new CNumber("84.87+9.43i")},
+                {new CNumber("0.0"), new CNumber("0.0")}};
+        expC = new CMatrix(expCEntries);
+
+        assertArrayEquals(expC.entries, standard(ASparse.entries, ASparse.rowIndices, ASparse.colIndices, ASparse.shape,
+                BComplex.entries, BComplex.shape));
+        assertArrayEquals(expC.entries, concurrentStandard(ASparse.entries, ASparse.rowIndices, ASparse.colIndices, ASparse.shape,
+                BComplex.entries, BComplex.shape));
+
+        // ---------------------- Sub-case 4 ----------------------
+        aSparseEntries = new double[]{1, 9.43};
+        rowIndices = new int[]{0, 1};
+        colIndices = new int[]{2, 1};
+        shape = new Shape(2, 3);
+        ASparse = new SparseMatrix(shape, aSparseEntries, rowIndices, colIndices);
+        bComplexEntries = new CNumber[][]{
+                {new CNumber(1.34, 13.4), new CNumber(234.6, 6)},
+                {new CNumber(-9.55, 1.9414), new CNumber(9, 1)},
+                {new CNumber(0.9923, -985.2), new CNumber(9234)}};
+        BComplex = new CMatrix(bComplexEntries);
+        expCEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("2212.278+56.58i"), new CNumber("1.34+13.4i")},
+                {new CNumber("0.0"), new CNumber("84.87+9.43i"), new CNumber("-9.55+1.9414i")},
+                {new CNumber("0.0"), new CNumber("87076.62"), new CNumber("0.9923-985.2i")}};
+        expC = new CMatrix(expCEntries);
+
+        assertArrayEquals(expC.entries, standard(BComplex.entries, BComplex.shape,
+                ASparse.entries, ASparse.rowIndices, ASparse.colIndices, ASparse.shape));
+        assertArrayEquals(expC.entries, concurrentStandard(BComplex.entries, BComplex.shape,
+                ASparse.entries, ASparse.rowIndices, ASparse.colIndices, ASparse.shape));
     }
 
 
@@ -79,17 +124,18 @@ class RealComplexDenseSparseMatMultTests {
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i"), new CNumber("11.67-2.0i")};
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 0};
-        bShape = new Shape(3, 1);
-        B = new SparseCMatrix(bShape, bEntries, rowIndices, colIndices);
+        shape = new Shape(3, 1);
+        BSparseComplex = new SparseCMatrix(shape, bEntries, rowIndices, colIndices);
         expCEntries = new CNumber[][]{{new CNumber("-92.7361214694+927.8376539999999i")},
                 {new CNumber("-526.0316874350001+5156.969340000001i")},
                 {new CNumber("-0.00012148943299999999+0.0012154999999999998i")},
                 {new CNumber("-115815.52719017939+19960.8479i")}};
         expC = new CMatrix(expCEntries);
 
-        assertArrayEquals(expC.entries, standardVector(A.entries, A.shape, B.entries, B.rowIndices));
-        assertArrayEquals(expC.entries, concurrentStandardVector(A.entries, A.shape, B.entries, B.rowIndices));
-
+        assertArrayEquals(expC.entries, standardVector(A.entries, A.shape, BSparseComplex.entries, BSparseComplex.rowIndices));
+        assertArrayEquals(expC.entries, concurrentStandardVector(A.entries, A.shape, BSparseComplex.entries, BSparseComplex.rowIndices));
+        assertArrayEquals(expC.entries, blockedVector(A.entries, A.shape, BSparseComplex.entries, BSparseComplex.rowIndices));
+        assertArrayEquals(expC.entries, concurrentBlockedVector(A.entries, A.shape, BSparseComplex.entries, BSparseComplex.rowIndices));
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new double[][]{{1.1234},
@@ -100,14 +146,60 @@ class RealComplexDenseSparseMatMultTests {
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i"), new CNumber("11.67-2.0i")};
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
-        bShape = new Shape(3, 4);
-        B = new SparseCMatrix(bShape, bEntries, rowIndices, colIndices);
+        shape = new Shape(3, 4);
+        BSparseComplex = new SparseCMatrix(shape, bEntries, rowIndices, colIndices);
         expCEntries = new CNumber[][]{{new CNumber("0.0")},
                 {new CNumber("-1.04985560794+10.503789999999999i")},
                 {new CNumber("-10881.6915+1864.9i")}};
         expC = new CMatrix(expCEntries);
 
-        assertArrayEquals(expC.entries, standardVector(B.entries, B.rowIndices, B.colIndices, B.shape, A.entries, A.shape));
-        assertArrayEquals(expC.entries, concurrentStandardVector(B.entries, B.rowIndices, B.colIndices, B.shape, A.entries, A.shape));
+        assertArrayEquals(expC.entries, standardVector(BSparseComplex.entries, BSparseComplex.rowIndices, BSparseComplex.colIndices, BSparseComplex.shape, A.entries, A.shape));
+        assertArrayEquals(expC.entries, concurrentStandardVector(BSparseComplex.entries, BSparseComplex.rowIndices, BSparseComplex.colIndices, BSparseComplex.shape, A.entries, A.shape));
+
+        // ---------------------- Sub-case 3 ----------------------
+        aSparseEntries = new double[]{1, 9.43};
+        rowIndices = new int[]{0, 2};
+        colIndices = new int[]{2, 1};
+        shape = new Shape(4, 3);
+        ASparse = new SparseMatrix(shape, aSparseEntries, rowIndices, colIndices);
+        bComplexEntries = new CNumber[][]{
+                {new CNumber(1.34, 13.4)},
+                {new CNumber(-9.55, 1.9414)},
+                {new CNumber(0.9923, -985.2)}};
+        BComplex = new CMatrix(bComplexEntries);
+        expCEntries = new CNumber[][]{{new CNumber("0.9923-985.2i")},
+                {new CNumber("0.0")},
+                {new CNumber("-90.0565+18.307402i")},
+                {new CNumber("0.0")}};
+        expC = new CMatrix(expCEntries);
+
+        assertArrayEquals(expC.entries, standardVector(ASparse.entries, ASparse.rowIndices, ASparse.colIndices, ASparse.shape,
+                BComplex.entries, BComplex.shape));
+        assertArrayEquals(expC.entries, concurrentStandardVector(ASparse.entries, ASparse.rowIndices, ASparse.colIndices, ASparse.shape,
+                BComplex.entries, BComplex.shape));
+
+        // ---------------------- Sub-case 4 ----------------------
+        aSparseEntries = new double[]{9.43};
+        rowIndices = new int[]{1};
+        ASparseVector = new SparseVector(2, aSparseEntries, rowIndices);
+        bComplexEntries = new CNumber[][]{
+                {new CNumber(1.34, 13.4), new CNumber(234.6, 6)},
+                {new CNumber(-9.55, 1.9414), new CNumber(9, 1)},
+                {new CNumber(0.9923, -985.2), new CNumber(9234)}};
+        BComplex = new CMatrix(bComplexEntries);
+        expCEntries = new CNumber[][]{{new CNumber("2212.278+56.58i")},
+                {new CNumber("84.87+9.43i")},
+                {new CNumber("87076.62")}};
+        expC = new CMatrix(expCEntries);
+
+        assertArrayEquals(expC.entries, standardVector(BComplex.entries, BComplex.shape,
+                ASparseVector.entries, ASparseVector.indices));
+        assertArrayEquals(expC.entries, concurrentStandardVector(BComplex.entries, BComplex.shape,
+                ASparseVector.entries, ASparseVector.indices));
+        assertArrayEquals(expC.entries, blockedVector(BComplex.entries, BComplex.shape,
+                ASparseVector.entries, ASparseVector.indices));
+        assertArrayEquals(expC.entries, concurrentBlockedVector(BComplex.entries, BComplex.shape,
+                ASparseVector.entries, ASparseVector.indices));
+
     }
 }

@@ -48,7 +48,7 @@ Flag4j,com.flag4j.operations.concurrency,ThreadManager,12,77,2,2,2,18,3,6,1,6
 Flag4j,com.flag4j.operations.concurrency,CheckConcurrent,31,23,10,4,6,7,9,2,2,2
 Flag4j,com.flag4j.operations.concurrency,Configurations,46,13,0,0,15,5,7,3,7,3
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseEquals,7,98,0,10,2,16,1,6,1,1
-Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseMatrixMultiplication,831,472,64,20,140,84,51,22,19,12
+Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseMatrixMultiplication,7,1276,8,76,2,218,9,64,1,30
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseOperations,120,159,4,6,17,21,5,6,3,3
 Flag4j,com.flag4j,CVector,0,158,0,0,0,37,0,13,0,13
 Flag4j,com.flag4j,SparseVector,0,80,0,0,0,16,0,7,0,7
