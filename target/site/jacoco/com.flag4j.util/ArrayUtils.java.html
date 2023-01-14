@@ -442,5 +442,21 @@ public final class ArrayUtils {
 
 <span class="fc" id="L443">        return flat;</span>
     }
+
+
+    /**
+     * Constructs a double array from the real components of a complex valued array.
+     * @param src Complex array.
+     * @return An array containing the real components of the source array.
+     */
+    public static double[] getReals(CNumber[] src) {
+<span class="nc" id="L453">        double[] reals = new double[src.length];</span>
+
+<span class="nc bnc" id="L455" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="nc" id="L456">            reals[i] = src[i].re;</span>
+        }
+
+<span class="nc" id="L459">        return reals;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -176,26 +176,25 @@ public class ComplexSparseMatrixMultiplication {
      */
     public static CNumber[] concurrentStandardVector(CNumber[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                                      CNumber[] src2, int[] indices) {
+<span class="fc" id="L179">        int rows1 = shape1.dims[Axis2D.row()];</span>
 
-<span class="fc" id="L180">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L181">        CNumber[] dest = new CNumber[rows1];</span>
+<span class="fc" id="L182">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
 
-<span class="fc" id="L182">        CNumber[] dest = new CNumber[rows1];</span>
-<span class="fc" id="L183">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
+<span class="fc" id="L184">        ThreadManager.concurrentLoop(0, src1.length, (i) -&gt; {</span>
+<span class="fc" id="L185">            int r1 = rowIndices1[i]; // = i</span>
+<span class="fc" id="L186">            int c1 = colIndices1[i]; // = k</span>
 
-<span class="fc" id="L185">        ThreadManager.concurrentLoop(0, src1.length, (i) -&gt; {</span>
-<span class="fc" id="L186">            int r1 = rowIndices1[i]; // = i</span>
-<span class="fc" id="L187">            int c1 = colIndices1[i]; // = k</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="fc" id="L189">                int r2 = indices[j]; // = k</span>
 
-<span class="fc bfc" id="L189" title="All 2 branches covered.">            for(int j=0; j&lt;src2.length; j++) {</span>
-<span class="fc" id="L190">                int r2 = indices[j]; // = k</span>
-
-<span class="fc bfc" id="L192" title="All 2 branches covered.">                if(c1==r2) { // Then we multiply and add to sum.</span>
-<span class="fc" id="L193">                    dest[r1].addEq(src1[i].mult(src2[j]));</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">                if(c1==r2) { // Then we multiply and add to sum.</span>
+<span class="fc" id="L192">                    dest[r1].addEq(src1[i].mult(src2[j]));</span>
                 }
             }
-<span class="fc" id="L196">        });</span>
+<span class="fc" id="L195">        });</span>
 
-<span class="fc" id="L198">        return dest;</span>
+<span class="fc" id="L197">        return dest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
