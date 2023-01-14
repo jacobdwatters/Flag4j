@@ -94,7 +94,6 @@ public class RealComplexDenseSparseMatrixMultiplication {
     public static CNumber[] standard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                     CNumber[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
@@ -163,7 +162,6 @@ public class RealComplexDenseSparseMatrixMultiplication {
     public static CNumber[] concurrentStandard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                               CNumber[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
@@ -231,7 +229,6 @@ public class RealComplexDenseSparseMatrixMultiplication {
     public static CNumber[] standard(CNumber[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                      double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
@@ -300,7 +297,6 @@ public class RealComplexDenseSparseMatrixMultiplication {
     public static CNumber[] concurrentStandard(CNumber[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                                double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
