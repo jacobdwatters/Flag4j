@@ -41,14 +41,14 @@ Flag4j,com.flag4j.operations,MatrixMultiply,1306,190,161,10,250,41,122,7,9,7
 Flag4j,com.flag4j.operations,MatrixTranspose.Algorithm,0,27,0,0,0,2,0,1,0,1
 Flag4j,com.flag4j.complex_numbers,CNumberToken,24,43,3,5,6,10,5,7,2,6
 Flag4j,com.flag4j.complex_numbers,CNumberLexer,32,292,10,58,5,76,11,30,1,6
-Flag4j,com.flag4j.complex_numbers,CNumber,164,1632,9,167,34,306,27,163,18,84
+Flag4j,com.flag4j.complex_numbers,CNumber,164,1632,8,168,34,306,26,164,18,84
 Flag4j,com.flag4j.complex_numbers,CNumberParser,8,166,2,14,2,37,3,7,1,1
 Flag4j,com.flag4j.operations.sparse.real,RealSparseMatrixMultiplication,282,0,20,0,50,0,17,0,7,0
-Flag4j,com.flag4j.operations.concurrency,ThreadManager,17,72,2,2,5,15,3,6,1,6
+Flag4j,com.flag4j.operations.concurrency,ThreadManager,12,77,2,2,2,18,3,6,1,6
 Flag4j,com.flag4j.operations.concurrency,CheckConcurrent,31,23,10,4,6,7,9,2,2,2
 Flag4j,com.flag4j.operations.concurrency,Configurations,46,13,0,0,15,5,7,3,7,3
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseEquals,7,98,0,10,2,16,1,6,1,1
-Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseMatrixMultiplication,1149,121,76,8,192,21,67,6,29,2
+Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseMatrixMultiplication,831,472,64,20,140,84,51,22,19,12
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseOperations,120,159,4,6,17,21,5,6,3,3
 Flag4j,com.flag4j,CVector,0,158,0,0,0,37,0,13,0,13
 Flag4j,com.flag4j,SparseVector,0,80,0,0,0,16,0,7,0,7

@@ -15,6 +15,7 @@ com\flag4j\operations\dense_sparse\real\RealDenseSparseMatMultTests.class
 com\flag4j\matrix\MatrixReshapeTests.class
 com\flag4j\matrix\MatrixVectorCheckTests.class
 com\flag4j\matrix\MatrixVectorTests.class
+com\flag4j\matrix\RealComplexDenseSparseMatMultTests.class
 com\flag4j\matrix\MatrixDirectSumTests.class
 com\flag4j\matrix\MatrixAddToEachRowTests.class
 com\flag4j\matrix\MatrixSetOperationTests.class

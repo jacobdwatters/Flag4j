@@ -51,6 +51,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixStackTe
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\real_complex\RealComplexDenseMatMultTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseCMatrixConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CTensorConstructorTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\RealComplexDenseSparseMatMultTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberTrigTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixReshapeTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\RemoveRowColTests.java

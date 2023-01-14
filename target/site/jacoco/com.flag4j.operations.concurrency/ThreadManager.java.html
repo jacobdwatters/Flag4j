@@ -52,9 +52,9 @@ import java.util.stream.IntStream;
     public static void concurrentLoop(int startIndex, int endIndex, IntConsumer function) {
         try {
 <span class="fc" id="L54">            threadPool.submit(() -&gt; IntStream.range(startIndex, endIndex).parallel().forEach(function)).get();</span>
-<span class="nc" id="L55">        } catch (InterruptedException | ExecutionException e) {</span>
-<span class="nc" id="L56">            e.printStackTrace();</span>
-<span class="nc" id="L57">            Thread.currentThread().interrupt();</span>
+<span class="fc" id="L55">        } catch (InterruptedException | ExecutionException e) {</span>
+<span class="fc" id="L56">            e.printStackTrace();</span>
+<span class="fc" id="L57">            Thread.currentThread().interrupt();</span>
 <span class="fc" id="L58">        }</span>
 <span class="fc" id="L59">    }</span>
 

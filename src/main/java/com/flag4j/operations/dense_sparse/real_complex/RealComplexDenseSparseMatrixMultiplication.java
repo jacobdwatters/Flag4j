@@ -363,6 +363,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
                                           Shape shape1, CNumber[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
         int row, col;
 
         for(int i=0; i<src1.length; i++) {
@@ -392,6 +393,8 @@ public class RealComplexDenseSparseMatrixMultiplication {
         int bsize = Configurations.getBlockSize(); // Get the block size to use.
 
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
+
         int k;
 
         // Blocked matrix-vector multiply
@@ -425,6 +428,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
         int rows2 = src2.length;
 
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             for(int j=0; j<rows2; j++) {
@@ -451,6 +455,8 @@ public class RealComplexDenseSparseMatrixMultiplication {
                                                     Shape shape1, CNumber[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
+
 
         ThreadManager.concurrentLoop(0, src1.length, (i) -> {
             int row = rowIndices[i];
@@ -479,6 +485,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
         final int bsize = Configurations.getBlockSize(); // Get the block size to use.
 
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         // Blocked matrix-vector multiply
         ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {
@@ -511,6 +518,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
         int nonZeros = src2.length;
 
         CNumber[] dest = new CNumber[denseRows];
+        ArrayUtils.fill(dest, CNumber.ZERO);
         int k;
 
         for(int i=0; i<denseRows; i++) {
@@ -538,6 +546,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
                                            Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
         int row, col;
 
         for(int i=0; i<src1.length; i++) {
@@ -567,6 +576,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
         int bsize = Configurations.getBlockSize(); // Get the block size to use.
 
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
         int k;
 
         // Blocked matrix-vector multiply
@@ -600,6 +610,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
         int rows2 = src2.length;
 
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             for(int j=0; j<rows2; j++) {
@@ -626,6 +637,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
                                                      Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, src1.length, (i) -> {
             int row = rowIndices[i];
@@ -654,6 +666,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
         final int bsize = Configurations.getBlockSize(); // Get the block size to use.
 
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         // Blocked matrix-vector multiply
         ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {
