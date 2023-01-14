@@ -11,6 +11,7 @@ com\flag4j\matrix\MatrixTriangularTests.class
 com\flag4j\matrix\MatrixAggregationTests.class
 com\flag4j\matrix\MatrixMultTests.class
 com\flag4j\matrix\MatrixElementScalarTests.class
+com\flag4j\operations\dense_sparse\real\RealDenseSparseMatMultTests.class
 com\flag4j\matrix\MatrixReshapeTests.class
 com\flag4j\matrix\MatrixVectorCheckTests.class
 com\flag4j\matrix\MatrixVectorTests.class
