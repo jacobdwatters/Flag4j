@@ -1610,19 +1610,19 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix directSum(Matrix B) {
-<span class="nc" id="L1613">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1613">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="nc bnc" id="L1616" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="nc" id="L1617">            System.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
+<span class="fc bfc" id="L1616" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1617">            System.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
         }
 
         // Copy over second matrix.
-<span class="nc bnc" id="L1621" title="All 2 branches missed.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="nc" id="L1622">            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i + numRows)*sum.numCols + numCols, B.numCols);</span>
+<span class="fc bfc" id="L1621" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc" id="L1622">            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i + numRows)*sum.numCols + numCols, B.numCols);</span>
         }
 
-<span class="nc" id="L1625">        return sum;</span>
+<span class="fc" id="L1625">        return sum;</span>
     }
 
 
@@ -1634,23 +1634,23 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix directSum(SparseMatrix B) {
-<span class="nc" id="L1637">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1637">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="nc bnc" id="L1640" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="nc" id="L1641">            System.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
+<span class="fc bfc" id="L1640" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1641">            System.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
         }
 
         // Copy over second matrix.
         int row, col;
-<span class="nc bnc" id="L1646" title="All 2 branches missed.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L1647">            row = B.rowIndices[i];</span>
-<span class="nc" id="L1648">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L1646" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L1647">            row = B.rowIndices[i];</span>
+<span class="fc" id="L1648">            col = B.colIndices[i];</span>
 
-<span class="nc" id="L1650">            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i];</span>
+<span class="fc" id="L1650">            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i];</span>
         }
 
-<span class="nc" id="L1653">        return sum;</span>
+<span class="fc" id="L1653">        return sum;</span>
     }
 
 
@@ -1662,23 +1662,23 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix directSum(CMatrix B) {
-<span class="nc" id="L1665">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1665">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="nc bnc" id="L1668" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="nc bnc" id="L1669" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="nc" id="L1670">                sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
+<span class="fc bfc" id="L1668" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1669" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1670">                sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
             }
         }
 
         // Copy over second matrix.
-<span class="nc bnc" id="L1675" title="All 2 branches missed.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="nc bnc" id="L1676" title="All 2 branches missed.">            for(int j=0; j&lt;B.numCols; j++) {</span>
-<span class="nc" id="L1677">                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = B.entries[i*B.numCols + j].copy();</span>
+<span class="fc bfc" id="L1675" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L1676" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L1677">                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = B.entries[i*B.numCols + j].copy();</span>
             }
         }
 
-<span class="nc" id="L1681">        return sum;</span>
+<span class="fc" id="L1681">        return sum;</span>
     }
 
 
@@ -1690,25 +1690,25 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix directSum(SparseCMatrix B) {
-<span class="nc" id="L1693">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1693">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="nc bnc" id="L1696" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="nc bnc" id="L1697" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="nc" id="L1698">                sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
+<span class="fc bfc" id="L1696" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1697" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1698">                sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
             }
         }
 
         // Copy over second matrix.
         int row, col;
-<span class="nc bnc" id="L1704" title="All 2 branches missed.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L1705">            row = B.rowIndices[i];</span>
-<span class="nc" id="L1706">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L1704" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L1705">            row = B.rowIndices[i];</span>
+<span class="fc" id="L1706">            col = B.colIndices[i];</span>
 
-<span class="nc" id="L1708">            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i].copy();</span>
+<span class="fc" id="L1708">            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i].copy();</span>
         }
 
-<span class="nc" id="L1711">        return sum;</span>
+<span class="fc" id="L1711">        return sum;</span>
     }
 
 
@@ -1720,19 +1720,19 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix invDirectSum(Matrix B) {
-<span class="nc" id="L1723">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1723">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="nc bnc" id="L1726" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="nc" id="L1727">            System.arraycopy(entries, i*numCols, sum.entries, (i + numRows)*sum.numCols + numCols, this.numCols);</span>
+<span class="fc bfc" id="L1726" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1727">            System.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);</span>
         }
 
         // Copy over second matrix.
-<span class="nc bnc" id="L1731" title="All 2 branches missed.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="nc" id="L1732">            System.arraycopy(B.entries, i*B.numCols, sum.entries, i*sum.numCols, B.numCols);</span>
+<span class="fc bfc" id="L1731" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc" id="L1732">            System.arraycopy(B.entries, i*B.numCols, sum.entries, i*sum.numCols+this.numCols, B.numCols);</span>
         }
 
-<span class="nc" id="L1735">        return sum;</span>
+<span class="fc" id="L1735">        return sum;</span>
     }
 
 
@@ -1744,23 +1744,23 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix invDirectSum(SparseMatrix B) {
-<span class="nc" id="L1747">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1747">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="nc bnc" id="L1750" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="nc" id="L1751">            System.arraycopy(entries, i*numCols, sum.entries, (i + numRows)*sum.numCols + numCols, this.numCols);</span>
+<span class="fc bfc" id="L1750" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1751">            System.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);</span>
         }
 
         // Copy over second matrix.
         int row, col;
-<span class="nc bnc" id="L1756" title="All 2 branches missed.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L1757">            row = B.rowIndices[i];</span>
-<span class="nc" id="L1758">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L1756" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L1757">            row = B.rowIndices[i];</span>
+<span class="fc" id="L1758">            col = B.colIndices[i];</span>
 
-<span class="nc" id="L1760">            sum.entries[row*sum.numCols + col] = B.entries[i];</span>
+<span class="fc" id="L1760">            sum.entries[row*sum.numCols + col + this.numCols] = B.entries[i];</span>
         }
 
-<span class="nc" id="L1763">        return sum;</span>
+<span class="fc" id="L1763">        return sum;</span>
     }
 
 
@@ -1772,23 +1772,23 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(CMatrix B) {
-<span class="nc" id="L1775">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1775">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="nc bnc" id="L1778" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="nc bnc" id="L1779" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="nc" id="L1780">                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = new CNumber(entries[i*numCols + j]);</span>
+<span class="fc bfc" id="L1778" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1779" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1780">                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
             }
         }
 
         // Copy over second matrix.
-<span class="nc bnc" id="L1785" title="All 2 branches missed.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="nc bnc" id="L1786" title="All 2 branches missed.">            for(int j=0; j&lt;B.numCols; j++) {</span>
-<span class="nc" id="L1787">                sum.entries[i*sum.numCols + j] = B.entries[i*B.numCols + j].copy();</span>
+<span class="fc bfc" id="L1785" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L1786" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L1787">                sum.entries[i*sum.numCols + j + this.numCols] = B.entries[i*B.numCols + j].copy();</span>
             }
         }
 
-<span class="nc" id="L1791">        return sum;</span>
+<span class="fc" id="L1791">        return sum;</span>
     }
 
 
@@ -1800,25 +1800,25 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(SparseCMatrix B) {
-<span class="nc" id="L1803">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1803">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="nc bnc" id="L1806" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="nc bnc" id="L1807" title="All 2 branches missed.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="nc" id="L1808">                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = new CNumber(entries[i*numCols + j]);</span>
+<span class="fc bfc" id="L1806" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1807" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1808">                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
             }
         }
 
         // Copy over second matrix.
         int row, col;
-<span class="nc bnc" id="L1814" title="All 2 branches missed.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L1815">            row = B.rowIndices[i];</span>
-<span class="nc" id="L1816">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L1814" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L1815">            row = B.rowIndices[i];</span>
+<span class="fc" id="L1816">            col = B.colIndices[i];</span>
 
-<span class="nc" id="L1818">            sum.entries[row*sum.numCols + col] = B.entries[i].copy();</span>
+<span class="fc" id="L1818">            sum.entries[row*sum.numCols + col + this.numCols] = B.entries[i].copy();</span>
         }
 
-<span class="nc" id="L1821">        return sum;</span>
+<span class="fc" id="L1821">        return sum;</span>
     }
 
 

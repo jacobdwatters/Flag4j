@@ -56,7 +56,7 @@ Flag4j,com.flag4j,SparseTensor,0,70,0,2,0,10,0,5,0,4
 Flag4j,com.flag4j,Tensor,21,83,0,6,4,16,2,8,2,5
 Flag4j,com.flag4j,Shape,35,408,6,34,5,66,6,31,2,15
 Flag4j,com.flag4j,SparseCTensor,0,118,0,6,0,16,0,8,0,5
-Flag4j,com.flag4j,Matrix,1545,4283,129,235,174,501,106,245,40,129
+Flag4j,com.flag4j,Matrix,867,4961,85,279,112,563,76,275,32,137
 Flag4j,com.flag4j,SparseMatrix,0,189,0,0,0,20,0,10,0,10
 Flag4j,com.flag4j,Vector,0,122,0,4,0,24,0,11,0,9
 Flag4j,com.flag4j,CTensor,0,145,0,6,0,29,0,11,0,8
@@ -74,4 +74,4 @@ Flag4j,com.flag4j.io,TensorWriter,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.io,TensorReader,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.io,PrintOptions,18,72,0,8,8,28,2,15,2,11
 Flag4j,com.flag4j.operations.common.real,Aggregate,7,150,0,24,2,30,1,17,1,5
-Flag4j,com.flag4j.operations.common.real,RealOperations,3,389,0,34,1,69,1,28,1,11
+Flag4j,com.flag4j.operations.common.real,RealOperations,7,389,0,34,2,69,1,28,1,11

@@ -10,6 +10,7 @@ com\flag4j\matrix\MatrixMultTests.class
 com\flag4j\matrix\MatrixElementScalarTests.class
 com\flag4j\matrix\MatrixReshapeTests.class
 com\flag4j\matrix\MatrixVectorTests.class
+com\flag4j\matrix\MatrixDirectSumTests.class
 com\flag4j\matrix\MatrixSetOperationTests.class
 com\flag4j\matrix\MatrixConstructorTests.class
 com\flag4j\matrix\MatrixTransposeTests.class

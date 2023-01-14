@@ -1724,12 +1724,12 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy over first matrix.
         for(int i=0; i<this.numRows; i++) {
-            System.arraycopy(entries, i*numCols, sum.entries, (i + numRows)*sum.numCols + numCols, this.numCols);
+            System.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);
         }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
-            System.arraycopy(B.entries, i*B.numCols, sum.entries, i*sum.numCols, B.numCols);
+            System.arraycopy(B.entries, i*B.numCols, sum.entries, i*sum.numCols+this.numCols, B.numCols);
         }
 
         return sum;
@@ -1748,7 +1748,7 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy over first matrix.
         for(int i=0; i<this.numRows; i++) {
-            System.arraycopy(entries, i*numCols, sum.entries, (i + numRows)*sum.numCols + numCols, this.numCols);
+            System.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);
         }
 
         // Copy over second matrix.
@@ -1757,7 +1757,7 @@ public class Matrix extends RealMatrixBase implements
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
-            sum.entries[row*sum.numCols + col] = B.entries[i];
+            sum.entries[row*sum.numCols + col + this.numCols] = B.entries[i];
         }
 
         return sum;
@@ -1777,14 +1777,14 @@ public class Matrix extends RealMatrixBase implements
         // Copy over first matrix.
         for(int i=0; i<this.numRows; i++) {
             for(int j=0; j<this.numCols; j++) {
-                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = new CNumber(entries[i*numCols + j]);
+                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);
             }
         }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
             for(int j=0; j<B.numCols; j++) {
-                sum.entries[i*sum.numCols + j] = B.entries[i*B.numCols + j].copy();
+                sum.entries[i*sum.numCols + j + this.numCols] = B.entries[i*B.numCols + j].copy();
             }
         }
 
@@ -1805,7 +1805,7 @@ public class Matrix extends RealMatrixBase implements
         // Copy over first matrix.
         for(int i=0; i<this.numRows; i++) {
             for(int j=0; j<this.numCols; j++) {
-                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = new CNumber(entries[i*numCols + j]);
+                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);
             }
         }
 
@@ -1815,7 +1815,7 @@ public class Matrix extends RealMatrixBase implements
             row = B.rowIndices[i];
             col = B.colIndices[i];
 
-            sum.entries[row*sum.numCols + col] = B.entries[i].copy();
+            sum.entries[row*sum.numCols + col + this.numCols] = B.entries[i].copy();
         }
 
         return sum;
