@@ -28,6 +28,7 @@ import com.flag4j.Shape;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -36,7 +37,7 @@ import java.math.RoundingMode;
  * Base class for all sparse tensor.
  * @param <T> Type of the entries of the sparse tensor.
  */
-public abstract class SparseTensorBase<T> extends TensorBase<T> {
+public abstract class SparseTensorBase<T extends Serializable> extends TensorBase<T> {
 
     /**
      * Indices for non-zero entries of this tensor. Will have shape (rank-by-nonZeroEntries)

@@ -28,6 +28,7 @@ import com.flag4j.Shape;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -35,7 +36,7 @@ import java.math.RoundingMode;
 /**
  * Base class for all sparse matrices.
  */
-public abstract class SparseMatrixBase&lt;T&gt; extends MatrixBase&lt;T&gt; {
+public abstract class SparseMatrixBase&lt;T extends Serializable&gt; extends MatrixBase&lt;T&gt; {
 
     /**
      * Row indices.
@@ -62,17 +63,17 @@ public abstract class SparseMatrixBase&lt;T&gt; extends MatrixBase&lt;T&gt; {
      * equal.
      */
     public SparseMatrixBase(Shape shape, int nonZeroEntries, T entries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L65">        super(shape, entries);</span>
+<span class="fc" id="L66">        super(shape, entries);</span>
 
-<span class="fc bfc" id="L67" title="All 2 branches covered.">        if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) &lt; 0) {</span>
-<span class="fc" id="L68">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) &lt; 0) {</span>
+<span class="fc" id="L69">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));</span>
         }
-<span class="fc" id="L70">        ParameterChecks.assertArrayLengthsEq(nonZeroEntries, rowIndices.length, colIndices.length);</span>
+<span class="fc" id="L71">        ParameterChecks.assertArrayLengthsEq(nonZeroEntries, rowIndices.length, colIndices.length);</span>
 
-<span class="fc" id="L72">        this.nonZeroEntries = nonZeroEntries;</span>
-<span class="fc" id="L73">        this.rowIndices = rowIndices;</span>
-<span class="fc" id="L74">        this.colIndices = colIndices;</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L73">        this.nonZeroEntries = nonZeroEntries;</span>
+<span class="fc" id="L74">        this.rowIndices = rowIndices;</span>
+<span class="fc" id="L75">        this.colIndices = colIndices;</span>
+<span class="fc" id="L76">    }</span>
 
 
     /**
@@ -80,8 +81,8 @@ public abstract class SparseMatrixBase&lt;T&gt; extends MatrixBase&lt;T&gt; {
      * @param nonZeroEntries New number of non-zero entries in this sparse matrix.
      */
     protected void setNonZeroEntries(int nonZeroEntries) {
-<span class="nc" id="L83">        this.nonZeroEntries = nonZeroEntries;</span>
-<span class="nc" id="L84">    }</span>
+<span class="nc" id="L84">        this.nonZeroEntries = nonZeroEntries;</span>
+<span class="nc" id="L85">    }</span>
 
 
     /**
@@ -89,7 +90,7 @@ public abstract class SparseMatrixBase&lt;T&gt; extends MatrixBase&lt;T&gt; {
      * @return The number of non-zero entries in this sparse matrix.
      */
     public int nonZeroEntries() {
-<span class="fc" id="L92">        return nonZeroEntries;</span>
+<span class="fc" id="L93">        return nonZeroEntries;</span>
     }
 
 
@@ -98,10 +99,10 @@ public abstract class SparseMatrixBase&lt;T&gt; extends MatrixBase&lt;T&gt; {
      * @return The sparsity of this matrix.
      */
     public double sparsity() {
-<span class="nc" id="L101">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
-<span class="nc" id="L102">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50,RoundingMode.HALF_UP);</span>
+<span class="nc" id="L102">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
+<span class="nc" id="L103">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50,RoundingMode.HALF_UP);</span>
 
-<span class="nc" id="L104">        return sparsity.doubleValue();</span>
+<span class="nc" id="L105">        return sparsity.doubleValue();</span>
     }
 
 
@@ -110,10 +111,10 @@ public abstract class SparseMatrixBase&lt;T&gt; extends MatrixBase&lt;T&gt; {
      * @return The density of this matrix.
      */
     public double density() {
-<span class="nc" id="L113">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
-<span class="nc" id="L114">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
+<span class="nc" id="L114">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
+<span class="nc" id="L115">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
 
-<span class="nc" id="L116">        return density.doubleValue();</span>
+<span class="nc" id="L117">        return density.doubleValue();</span>
     }
 
     // TODO: Add abstract methods for sparse matrices. i.e. toDense().

@@ -28,6 +28,7 @@ import com.flag4j.Shape;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -36,7 +37,7 @@ import java.math.RoundingMode;
  * Base class for all sparse tensor.
  * @param &lt;T&gt; Type of the entries of the sparse tensor.
  */
-public abstract class SparseTensorBase&lt;T&gt; extends TensorBase&lt;T&gt; {
+public abstract class SparseTensorBase&lt;T extends Serializable&gt; extends TensorBase&lt;T&gt; {
 
     /**
      * Indices for non-zero entries of this tensor. Will have shape (rank-by-nonZeroEntries)
@@ -60,19 +61,19 @@ public abstract class SparseTensorBase&lt;T&gt; extends TensorBase&lt;T&gt; {
      * tensor.
      */
     public SparseTensorBase(Shape shape, int nonZeroEntries, T entries, int[][] indices) {
-<span class="fc" id="L63">        super(shape, entries);</span>
+<span class="fc" id="L64">        super(shape, entries);</span>
 
-<span class="fc bfc" id="L65" title="All 2 branches covered.">        if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) &lt; 0) {</span>
-<span class="fc" id="L66">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) &lt; 0) {</span>
+<span class="fc" id="L67">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));</span>
         }
-<span class="fc" id="L68">        ParameterChecks.assertArrayLengthsEq(nonZeroEntries, indices.length);</span>
-<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (indices.length &gt; 0) {</span>
-<span class="fc" id="L70">            ParameterChecks.assertArrayLengthsEq(super.getRank(), indices[0].length);</span>
+<span class="fc" id="L69">        ParameterChecks.assertArrayLengthsEq(nonZeroEntries, indices.length);</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (indices.length &gt; 0) {</span>
+<span class="fc" id="L71">            ParameterChecks.assertArrayLengthsEq(super.getRank(), indices[0].length);</span>
         }
 
-<span class="fc" id="L73">        this.nonZeroEntries = nonZeroEntries;</span>
-<span class="fc" id="L74">        this.indices = indices;</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L74">        this.nonZeroEntries = nonZeroEntries;</span>
+<span class="fc" id="L75">        this.indices = indices;</span>
+<span class="fc" id="L76">    }</span>
 
 
     /**
@@ -80,7 +81,7 @@ public abstract class SparseTensorBase&lt;T&gt; extends TensorBase&lt;T&gt; {
      * @return The number of non-zero entries in this sparse tensor.
      */
     public int nonZeroEntries() {
-<span class="fc" id="L83">        return nonZeroEntries;</span>
+<span class="fc" id="L84">        return nonZeroEntries;</span>
     }
 
 
@@ -89,10 +90,10 @@ public abstract class SparseTensorBase&lt;T&gt; extends TensorBase&lt;T&gt; {
      * @return The sparsity of this tensor.
      */
     public double sparsity() {
-<span class="nc" id="L92">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
-<span class="nc" id="L93">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
+<span class="nc" id="L93">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
+<span class="nc" id="L94">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
 
-<span class="nc" id="L95">        return sparsity.doubleValue();</span>
+<span class="nc" id="L96">        return sparsity.doubleValue();</span>
     }
 
 
@@ -101,11 +102,11 @@ public abstract class SparseTensorBase&lt;T&gt; extends TensorBase&lt;T&gt; {
      * @return The density of this tensor.
      */
     public double density() {
-<span class="nc" id="L104">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
-<span class="nc" id="L105">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP</span>
+<span class="nc" id="L105">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
+<span class="nc" id="L106">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP</span>
         );
 
-<span class="nc" id="L108">        return density.doubleValue();</span>
+<span class="nc" id="L109">        return density.doubleValue();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

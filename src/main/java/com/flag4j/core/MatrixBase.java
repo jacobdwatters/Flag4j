@@ -28,12 +28,14 @@ import com.flag4j.Shape;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 
+import java.io.Serializable;
+
 
 /**
  * The base class for all matrices.
  * @param <T> The type of entries for this matrix.
  */
-public abstract class MatrixBase<T> extends TensorBase<T> {
+public abstract class MatrixBase<T extends Serializable> extends TensorBase<T> {
 
     /**
      * The number of rows in this matrix.
