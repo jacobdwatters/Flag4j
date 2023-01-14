@@ -442,4 +442,20 @@ public final class ArrayUtils {
 
         return flat;
     }
+
+
+    /**
+     * Constructs a double array from the real components of a complex valued array.
+     * @param src Complex array.
+     * @return An array containing the real components of the source array.
+     */
+    public static double[] getReals(CNumber[] src) {
+        double[] reals = new double[src.length];
+
+        for(int i=0; i<src.length; i++) {
+            reals[i] = src[i].re;
+        }
+
+        return reals;
+    }
 }

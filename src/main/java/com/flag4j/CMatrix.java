@@ -26,6 +26,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexMatrixBase;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.util.ArrayUtils;
 
 import java.util.Arrays;
@@ -285,22 +286,36 @@ public class CMatrix extends ComplexMatrixBase {
      */
     @Override
     public Matrix toReal() {
-        return null;
+        return new Matrix(this.shape.copy(), ArrayUtils.getReals(entries));
     }
 
 
     @Override
     public boolean equals(Object B) {
-        boolean result;
+        boolean equal;
 
         if(B instanceof CMatrix) {
             CMatrix mat = (CMatrix) B;
-            result = Arrays.equals(this.entries, mat.entries);
+            equal = Arrays.equals(this.entries, mat.entries);
+        } else if(B instanceof Matrix) {
+            Matrix mat = (Matrix) B;
+            equal = RealComplexDenseEquals.matrixEquals(mat, this);
         } else {
-            result = false;
+            equal = false;
         }
 
-        return result;
+        return equal;
+    }
+
+
+    /**
+     * Creates a hashcode for this matrix. Note, method adds {@link Arrays#hashCode(double[])} on the
+     * underlying data array and the underlying shape array.
+     * @return The hashcode for this matrix.
+     */
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);
     }
 
 

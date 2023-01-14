@@ -1,7 +1,7 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 Flag4j,com.flag4j.util,RandomCNumber,0,184,2,14,0,29,2,13,0,7
 Flag4j,com.flag4j.util,StringUtils,7,46,1,5,2,9,2,4,1,2
-Flag4j,com.flag4j.util,ArrayUtils,181,509,25,45,31,84,19,41,6,19
+Flag4j,com.flag4j.util,ArrayUtils,202,509,27,45,35,84,21,41,7,19
 Flag4j,com.flag4j.util,Axis2D,0,34,0,0,0,6,0,4,0,4
 Flag4j,com.flag4j.util,ShapeArrayChecks,26,210,5,33,5,45,5,27,2,11
 Flag4j,com.flag4j.util,ParameterChecks,22,233,3,37,4,50,4,30,1,13
@@ -62,7 +62,7 @@ Flag4j,com.flag4j,Vector,0,122,0,4,0,24,0,11,0,9
 Flag4j,com.flag4j,CTensor,0,145,0,6,0,29,0,11,0,8
 Flag4j,com.flag4j,SparseCMatrix,0,288,0,0,0,35,0,13,0,13
 Flag4j,com.flag4j,SparseCVector,0,125,0,0,0,23,0,9,0,9
-Flag4j,com.flag4j,CMatrix,30,649,1,35,5,73,4,34,3,17
+Flag4j,com.flag4j,CMatrix,60,649,3,35,9,73,6,34,4,17
 Flag4j,com.flag4j.linalg,Hessenburg,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,Decompose,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,RowEchelon,3,0,0,0,1,0,1,0,1,0
