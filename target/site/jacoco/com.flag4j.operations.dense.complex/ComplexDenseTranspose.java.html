@@ -296,22 +296,22 @@ public class ComplexDenseTranspose {
      * @return The transpose of the matrix.
      */
     public static CNumber[] standardMatrixHerm(final CNumber[] src, final int numRows, final int numCols) {
-<span class="nc" id="L299">        CNumber[] dest = new CNumber[numRows*numCols];</span>
+<span class="fc" id="L299">        CNumber[] dest = new CNumber[numRows*numCols];</span>
 
         int destIndex, srcIndex, end;
 
-<span class="nc bnc" id="L303" title="All 2 branches missed.">        for (int i=0; i&lt;numCols; i++) {</span>
-<span class="nc" id="L304">            srcIndex = i;</span>
-<span class="nc" id="L305">            destIndex = i*numRows;</span>
-<span class="nc" id="L306">            end = destIndex + numRows;</span>
+<span class="fc bfc" id="L303" title="All 2 branches covered.">        for (int i=0; i&lt;numCols; i++) {</span>
+<span class="fc" id="L304">            srcIndex = i;</span>
+<span class="fc" id="L305">            destIndex = i*numRows;</span>
+<span class="fc" id="L306">            end = destIndex + numRows;</span>
 
-<span class="nc bnc" id="L308" title="All 2 branches missed.">            while (destIndex &lt; end) {</span>
-<span class="nc" id="L309">                dest[destIndex++] = src[srcIndex].conj();</span>
-<span class="nc" id="L310">                srcIndex += numCols;</span>
+<span class="fc bfc" id="L308" title="All 2 branches covered.">            while (destIndex &lt; end) {</span>
+<span class="fc" id="L309">                dest[destIndex++] = src[srcIndex].conj();</span>
+<span class="fc" id="L310">                srcIndex += numCols;</span>
             }
         }
 
-<span class="nc" id="L314">        return dest;</span>
+<span class="fc" id="L314">        return dest;</span>
     }
 
 
@@ -324,32 +324,32 @@ public class ComplexDenseTranspose {
      * @return The complex conjugate transpose of this matrix.
      */
     public static CNumber[] blockedMatrixHerm(final CNumber[] src, final int numRows, final int numCols) {
-<span class="nc" id="L327">        CNumber[] dest = new CNumber[numRows*numCols];</span>
-<span class="nc" id="L328">        final int blockSize = Configurations.getBlockSize();</span>
+<span class="fc" id="L327">        CNumber[] dest = new CNumber[numRows*numCols];</span>
+<span class="fc" id="L328">        final int blockSize = Configurations.getBlockSize();</span>
         int blockRowEnd;
         int blockColEnd;
         int srcIndex, destIndex, end;
 
-<span class="nc bnc" id="L333" title="All 2 branches missed.">        for(int i=0; i&lt;numCols; i+=blockSize) {</span>
-<span class="nc bnc" id="L334" title="All 2 branches missed.">            for(int j=0; j&lt;numRows; j+=blockSize) {</span>
-<span class="nc" id="L335">                blockRowEnd = Math.min(blockSize, numRows);</span>
-<span class="nc" id="L336">                blockColEnd = Math.min(i+blockSize, numCols);</span>
+<span class="fc bfc" id="L333" title="All 2 branches covered.">        for(int i=0; i&lt;numCols; i+=blockSize) {</span>
+<span class="fc bfc" id="L334" title="All 2 branches covered.">            for(int j=0; j&lt;numRows; j+=blockSize) {</span>
+<span class="fc" id="L335">                blockRowEnd = Math.min(blockSize, numRows);</span>
+<span class="fc" id="L336">                blockColEnd = Math.min(i+blockSize, numCols);</span>
 
                 // Transpose the block beginning at (i, j)
-<span class="nc bnc" id="L339" title="All 2 branches missed.">                for(int blockI=i; blockI&lt;blockColEnd; blockI++) {</span>
-<span class="nc" id="L340">                    srcIndex = blockI;</span>
-<span class="nc" id="L341">                    destIndex = blockI*numRows;</span>
-<span class="nc" id="L342">                    end = destIndex + blockRowEnd;</span>
+<span class="fc bfc" id="L339" title="All 2 branches covered.">                for(int blockI=i; blockI&lt;blockColEnd; blockI++) {</span>
+<span class="fc" id="L340">                    srcIndex = blockI;</span>
+<span class="fc" id="L341">                    destIndex = blockI*numRows;</span>
+<span class="fc" id="L342">                    end = destIndex + blockRowEnd;</span>
 
-<span class="nc bnc" id="L344" title="All 2 branches missed.">                    while (destIndex &lt; end) {</span>
-<span class="nc" id="L345">                        dest[destIndex++] = src[srcIndex].conj();</span>
-<span class="nc" id="L346">                        srcIndex += numCols;</span>
+<span class="fc bfc" id="L344" title="All 2 branches covered.">                    while (destIndex &lt; end) {</span>
+<span class="fc" id="L345">                        dest[destIndex++] = src[srcIndex].conj();</span>
+<span class="fc" id="L346">                        srcIndex += numCols;</span>
                     }
                 }
             }
         }
 
-<span class="nc" id="L352">        return dest;</span>
+<span class="fc" id="L352">        return dest;</span>
     }
 
 
@@ -361,21 +361,21 @@ public class ComplexDenseTranspose {
      * @return The complex conjugate transpose of the source matrix.
      */
     public static CNumber[] standardMatrixConcurrentHerm(final CNumber[] src, final int numRows, final int numCols) {
-<span class="nc" id="L364">        CNumber[] dest = new CNumber[src.length];</span>
+<span class="fc" id="L364">        CNumber[] dest = new CNumber[src.length];</span>
 
         // Compute transpose concurrently.
-<span class="nc" id="L367">        ThreadManager.concurrentLoop(0, numCols, (i) -&gt; {</span>
-<span class="nc" id="L368">            int srcIndex = i;</span>
-<span class="nc" id="L369">            int destIndex = i*numRows;</span>
-<span class="nc" id="L370">            int end = destIndex + numRows;</span>
+<span class="fc" id="L367">        ThreadManager.concurrentLoop(0, numCols, (i) -&gt; {</span>
+<span class="fc" id="L368">            int srcIndex = i;</span>
+<span class="fc" id="L369">            int destIndex = i*numRows;</span>
+<span class="fc" id="L370">            int end = destIndex + numRows;</span>
 
-<span class="nc bnc" id="L372" title="All 2 branches missed.">            while (destIndex &lt; end) {</span>
-<span class="nc" id="L373">                dest[destIndex++] = src[srcIndex].conj();</span>
-<span class="nc" id="L374">                srcIndex += numCols;</span>
+<span class="fc bfc" id="L372" title="All 2 branches covered.">            while (destIndex &lt; end) {</span>
+<span class="fc" id="L373">                dest[destIndex++] = src[srcIndex].conj();</span>
+<span class="fc" id="L374">                srcIndex += numCols;</span>
             }
-<span class="nc" id="L376">        });</span>
+<span class="fc" id="L376">        });</span>
 
-<span class="nc" id="L378">        return dest;</span>
+<span class="fc" id="L378">        return dest;</span>
     }
 
 
@@ -387,30 +387,30 @@ public class ComplexDenseTranspose {
      * @return The complex conjugate transpose of the source matrix.
      */
     public static CNumber[] blockedMatrixConcurrentHerm(final CNumber[] src, final int numRows, final int numCols) {
-<span class="nc" id="L390">        CNumber[] dest = new CNumber[src.length];</span>
-<span class="nc" id="L391">        final int blockSize = Configurations.getBlockSize();</span>
+<span class="fc" id="L390">        CNumber[] dest = new CNumber[src.length];</span>
+<span class="fc" id="L391">        final int blockSize = Configurations.getBlockSize();</span>
 
         // Compute transpose concurrently.
-<span class="nc" id="L394">        ThreadManager.concurrentLoop(0, numCols, blockSize, (i) -&gt; {</span>
-<span class="nc bnc" id="L395" title="All 2 branches missed.">            for(int j=0; j&lt;numRows; j+=blockSize) {</span>
-<span class="nc" id="L396">                int blockRowEnd = Math.min(blockSize, numRows);</span>
-<span class="nc" id="L397">                int blockColEnd = Math.min(i+blockSize, numCols);</span>
+<span class="fc" id="L394">        ThreadManager.concurrentLoop(0, numCols, blockSize, (i) -&gt; {</span>
+<span class="fc bfc" id="L395" title="All 2 branches covered.">            for(int j=0; j&lt;numRows; j+=blockSize) {</span>
+<span class="fc" id="L396">                int blockRowEnd = Math.min(blockSize, numRows);</span>
+<span class="fc" id="L397">                int blockColEnd = Math.min(i+blockSize, numCols);</span>
 
                 // Transpose the block beginning at (i, j)
-<span class="nc bnc" id="L400" title="All 2 branches missed.">                for(int blockI=i; blockI&lt;blockColEnd; blockI++) {</span>
-<span class="nc" id="L401">                    int srcIndex = blockI;</span>
-<span class="nc" id="L402">                    int destIndex = blockI*numRows;</span>
-<span class="nc" id="L403">                    int end = destIndex + blockRowEnd;</span>
+<span class="fc bfc" id="L400" title="All 2 branches covered.">                for(int blockI=i; blockI&lt;blockColEnd; blockI++) {</span>
+<span class="fc" id="L401">                    int srcIndex = blockI;</span>
+<span class="fc" id="L402">                    int destIndex = blockI*numRows;</span>
+<span class="fc" id="L403">                    int end = destIndex + blockRowEnd;</span>
 
-<span class="nc bnc" id="L405" title="All 2 branches missed.">                    while (destIndex &lt; end) {</span>
-<span class="nc" id="L406">                        dest[destIndex++] = src[srcIndex].conj();</span>
-<span class="nc" id="L407">                        srcIndex += numCols;</span>
+<span class="fc bfc" id="L405" title="All 2 branches covered.">                    while (destIndex &lt; end) {</span>
+<span class="fc" id="L406">                        dest[destIndex++] = src[srcIndex].conj();</span>
+<span class="fc" id="L407">                        srcIndex += numCols;</span>
                     }
                 }
             }
-<span class="nc" id="L411">        });</span>
+<span class="fc" id="L411">        });</span>
 
-<span class="nc" id="L413">        return dest;</span>
+<span class="fc" id="L413">        return dest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

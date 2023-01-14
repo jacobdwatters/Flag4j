@@ -2897,7 +2897,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isVector() {
-<span class="nc bnc" id="L2900" title="All 4 branches missed.">        return numRows&lt;=1 || numCols&lt;=1;</span>
+<span class="fc bfc" id="L2900" title="All 4 branches covered.">        return numRows&lt;=1 || numCols&lt;=1;</span>
     }
 
 
@@ -2913,21 +2913,21 @@ public class Matrix extends RealMatrixBase implements
     public int vectorType() {
         int type;
 
-<span class="nc bnc" id="L2916" title="All 4 branches missed.">        if(numRows==1 || numCols==1) {</span>
-<span class="nc bnc" id="L2917" title="All 4 branches missed.">            if(numRows==1 &amp;&amp; numCols==1) {</span>
-<span class="nc" id="L2918">                type = 0;</span>
-<span class="nc bnc" id="L2919" title="All 2 branches missed.">            } else if(numRows==1) {</span>
-<span class="nc" id="L2920">                type = 1;</span>
+<span class="fc bfc" id="L2916" title="All 4 branches covered.">        if(numRows==1 || numCols==1) {</span>
+<span class="fc bfc" id="L2917" title="All 4 branches covered.">            if(numRows==1 &amp;&amp; numCols==1) {</span>
+<span class="fc" id="L2918">                type = 0;</span>
+<span class="fc bfc" id="L2919" title="All 2 branches covered.">            } else if(numRows==1) {</span>
+<span class="fc" id="L2920">                type = 1;</span>
             } else {
                 // Then this matrix is equivalent to a column vector.
-<span class="nc" id="L2923">                type = 2;</span>
+<span class="fc" id="L2923">                type = 2;</span>
             }
         } else {
             // Then this matrix is not equivalent to any vector.
-<span class="nc" id="L2927">            type = -1;</span>
+<span class="fc" id="L2927">            type = -1;</span>
         }
 
-<span class="nc" id="L2930">        return type;</span>
+<span class="fc" id="L2930">        return type;</span>
     }
 
 
