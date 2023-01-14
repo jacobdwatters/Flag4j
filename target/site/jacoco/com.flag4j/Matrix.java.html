@@ -2813,7 +2813,7 @@ public class Matrix extends RealMatrixBase implements
 
     /**
      * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
-     * Same as {@link #trace()}
+     * Same as {@link #trace()}.
      *
      * @return The trace of this matrix.
      * @throws IllegalArgumentException If this matrix is not square.
@@ -3067,7 +3067,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isZeros() {
-<span class="nc" id="L3070">        return RealDenseCheckOperations.isZeros(entries);</span>
+<span class="fc" id="L3070">        return RealDenseCheckOperations.isZeros(entries);</span>
     }
 
 
@@ -3078,7 +3078,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isOnes() {
-<span class="nc" id="L3081">        return RealDenseCheckOperations.isOnes(entries);</span>
+<span class="fc" id="L3081">        return RealDenseCheckOperations.isOnes(entries);</span>
     }
 
 

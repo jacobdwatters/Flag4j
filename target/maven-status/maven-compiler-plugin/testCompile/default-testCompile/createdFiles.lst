@@ -13,5 +13,6 @@ com\flag4j\matrix\MatrixVectorTests.class
 com\flag4j\matrix\MatrixSetOperationTests.class
 com\flag4j\matrix\MatrixConstructorTests.class
 com\flag4j\matrix\MatrixTransposeTests.class
+com\flag4j\matrix\MatrixZerosOnesTests.class
 com\flag4j\matrix\MatrixPropertiesTests.class
 com\flag4j\matrix\MatrixElemMultTests.class

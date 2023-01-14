@@ -27,6 +27,7 @@ package com.flag4j.util;
 import com.flag4j.complex_numbers.CNumber;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -217,6 +218,18 @@ public final class ArrayUtils {
         // TODO: Investigate speed of using Arrays.setAll(...) and Arrays.parallelSetAll(...)
         for(int i=0; i<dest.length; i++) {
             dest[i] = fillValue.copy();
+        }
+    }
+
+
+    /**
+     * Fills an array with the specified value;
+     * @param dest Array to fill.
+     * @param fillValue Value to fill array with.
+     */
+    public static void fill(double[][] dest, double fillValue) {
+        for(int i=0; i<dest.length; i++) {
+            Arrays.fill(dest[i], 1);
         }
     }
 

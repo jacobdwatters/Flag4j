@@ -43,16 +43,16 @@ public class RealDenseCheckOperations {
      * @return True if this tensor only contains zeros. Otherwise, returns false.
      */
     public static boolean isZeros(double[] src) {
-<span class="nc" id="L46">        boolean allZeros = true;</span>
+<span class="fc" id="L46">        boolean allZeros = true;</span>
 
-<span class="nc bnc" id="L48" title="All 2 branches missed.">        for(double value : src) {</span>
-<span class="nc bnc" id="L49" title="All 2 branches missed.">            if(value != 0) {</span>
-<span class="nc" id="L50">                allZeros = false;</span>
-<span class="nc" id="L51">                break; // No need to look further.</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for(double value : src) {</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">            if(value != 0) {</span>
+<span class="fc" id="L50">                allZeros = false;</span>
+<span class="fc" id="L51">                break; // No need to look further.</span>
             }
         }
 
-<span class="nc" id="L55">        return allZeros;</span>
+<span class="fc" id="L55">        return allZeros;</span>
     }
 
 
@@ -62,16 +62,16 @@ public class RealDenseCheckOperations {
      * @return True if this tensor only contains ones. Otherwise, returns false.
      */
     public static boolean isOnes(double[] src) {
-<span class="nc" id="L65">        boolean allZeros = true;</span>
+<span class="fc" id="L65">        boolean allZeros = true;</span>
 
-<span class="nc bnc" id="L67" title="All 2 branches missed.">        for(double value : src) {</span>
-<span class="nc bnc" id="L68" title="All 2 branches missed.">            if(value != 1) {</span>
-<span class="nc" id="L69">                allZeros = false;</span>
-<span class="nc" id="L70">                break; // No need to look further.</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        for(double value : src) {</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">            if(value != 1) {</span>
+<span class="fc" id="L69">                allZeros = false;</span>
+<span class="fc" id="L70">                break; // No need to look further.</span>
             }
         }
 
-<span class="nc" id="L74">        return allZeros;</span>
+<span class="fc" id="L74">        return allZeros;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
