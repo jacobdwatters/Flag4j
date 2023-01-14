@@ -37,6 +37,10 @@ public abstract class VectorBase<T> extends TensorBase<T> {
      * The orientation of this vector.
      */
     VectorOrientation orientation;
+    /**
+     * Size of the matrix.
+     */
+    public final int size;
 
     /**
      * Constructs a basic vector with the specified number of entries.
@@ -47,6 +51,7 @@ public abstract class VectorBase<T> extends TensorBase<T> {
     public VectorBase(int size, VectorOrientation orientation, T entries) {
         super(new Shape(size), entries);
         this.orientation = orientation;
+        this.size = size;
     }
 
 
@@ -55,7 +60,7 @@ public abstract class VectorBase<T> extends TensorBase<T> {
      * @return The size, i.e. number of entries, of this vector.
      */
     public int size() {
-        return super.totalEntries().intValue();
+        return size;
     }
 
 

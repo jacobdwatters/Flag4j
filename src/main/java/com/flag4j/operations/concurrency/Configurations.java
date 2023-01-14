@@ -33,7 +33,7 @@ import java.util.concurrent.ForkJoinPool;
  */
 public abstract class Configurations {
     private Configurations() {
-        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
     /**
@@ -93,7 +93,7 @@ public abstract class Configurations {
 
 
     /**
-     * Gets the current block size used in blocked algorithms.
+     * Gets the current block size used in blocked algorithms. If it has not been changed it will {@link #DEFAULT_BLOCK_SIZE default to 64}.
      * @return Current block size to use in concurrent algorithms.
      */
     public static int getBlockSize() {

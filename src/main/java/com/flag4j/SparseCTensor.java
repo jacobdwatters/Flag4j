@@ -110,7 +110,7 @@ public class SparseCTensor extends SparseTensorBase<CNumber[]> {
 //
 //            if(entries[i]!=0) {
 //                nonZeroEntries.add(entries[i]);
-//                indices.add(entryIndices.clone());
+//                indices.add(entryIndices.copy());
 //            }
 //
 //            // Compute the indices for next entry based on the shape of the tensor.
@@ -160,7 +160,7 @@ public class SparseCTensor extends SparseTensorBase<CNumber[]> {
 //
 //            if(entries[i]!=0) {
 //                nonZeroEntries.add(entries[i]);
-//                indices.add(entryIndices.clone());
+//                indices.add(entryIndices.copy());
 //            }
 //
 //            // Compute the indices for next entry based on the shape of the tensor.
@@ -210,7 +210,7 @@ public class SparseCTensor extends SparseTensorBase<CNumber[]> {
 //
 //            if(entries[i].re!=0 || entries[i].im!=0) {
 //                nonZeroEntries.add(entries[i]);
-//                indices.add(entryIndices.clone());
+//                indices.add(entryIndices.copy());
 //            }
 //
 //            // Compute the indices for next entry based on the shape of the tensor.
@@ -228,7 +228,7 @@ public class SparseCTensor extends SparseTensorBase<CNumber[]> {
 //        super.indices = new int[super.nonZeroEntries()][super.getRank()];
 //
 //        for(int i=0; i<nonZeroEntries.size(); i++) {
-//            super.entries[i] = nonZeroEntries.get(i).clone();
+//            super.entries[i] = nonZeroEntries.get(i).copy();
 //            super.indices[i] = indices.get(i);
 //        }
 //    }
@@ -240,7 +240,7 @@ public class SparseCTensor extends SparseTensorBase<CNumber[]> {
      * @param A The sparse complex tensor to construct a copy of.
      */
     public SparseCTensor(SparseCTensor A) {
-        super(A.shape.clone(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);
+        super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);
         for(int i=0; i<indices.length; i++) {
             super.indices[i] = A.indices[i].clone();
         }

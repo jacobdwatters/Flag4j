@@ -191,7 +191,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @param exponent The exponent in the matrix power.
      * @return The result of multiplying this matrix with itself 'exponent' times.
      */
-    U pow(double exponent);
+    U pow(int exponent);
 
 
     /**
@@ -307,7 +307,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    V directSum(SparseMatrix B);
+    T directSum(SparseMatrix B);
 
 
     /**
@@ -323,7 +323,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @param B Second matrix in the direct sum.
      * @return The result of direct summing this matrix with B.
      */
-    SparseCMatrix directSum(SparseCMatrix B);
+    W directSum(SparseCMatrix B);
 
 
     /**
@@ -339,7 +339,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    V invDirectSum(SparseMatrix B);
+    T invDirectSum(SparseMatrix B);
 
 
     /**
@@ -355,7 +355,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @param B Second matrix in inverse direct sum.
      * @return The result of inverse direct summing this matrix with B.
      */
-    SparseCMatrix invDirectSum(SparseCMatrix B);
+    W invDirectSum(SparseCMatrix B);
 
 
     /**
@@ -617,7 +617,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
      * the vector b.
      */
-    V stack(SparseVector b);
+    T stack(SparseVector b);
 
 
     /**
@@ -677,7 +677,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
-    V stack(SparseVector b, int axis);
+    T stack(SparseVector b, int axis);
 
 
     /**
@@ -737,7 +737,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @return The result of augmenting b to the right of this matrix.
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
-    V augment(SparseVector b);
+    T augment(SparseVector b);
 
 
     /**
@@ -771,7 +771,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @param i Index of row to get.
      * @return The specified row of this matrix.
      */
-    X[] getRow(int i);
+    T getRow(int i);
 
 
     /**
@@ -779,7 +779,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @param j Index of column to get.
      * @return The specified column of this matrix.
      */
-    X[] getCol(int j);
+    T getCol(int j);
 
 
     /**
@@ -798,4 +798,34 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @throws IllegalArgumentException If this matrix is not square.
      */
     X tr();
+
+
+    /**
+     * Constructs an identity matrix of the specified size.
+     * @param size Size of the identity matrix.
+     * @return An identity matrix of specified size.
+     * @throws IllegalArgumentException If the specified size is less than 1.
+     */
+    T I(int size);
+
+
+    /**
+     * Constructs an identity-like matrix of the specified shape. That is, a matrix of zeros with ones along the
+     * principle diagonal.
+     * @param numRows Number of rows in the identity-like matrix.
+     * @param numCols Number of columns in the identity-like matrix.
+     * @return An identity matrix of specified shape.
+     * @throws IllegalArgumentException If the specified number of rows or columns is less than 1.
+     */
+    T I(int numRows, int numCols);
+
+
+    /**
+     * Constructs an identity-like matrix of the specified shape. That is, a matrix of zeros with ones along the
+     * principle diagonal.
+     * @param shape Shape of the identity-like matrix.
+     * @return An identity matrix of specified size.
+     * @throws IllegalArgumentException If the specified shape is not rank 2.
+     */
+    T I(Shape shape);
 }

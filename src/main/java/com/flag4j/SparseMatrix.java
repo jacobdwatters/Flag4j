@@ -207,6 +207,6 @@ public class SparseMatrix extends SparseMatrixBase<double[]> {
      * @param A Sparse Matrix to copy.
      */
     public SparseMatrix(SparseMatrix A) {
-        super(A.shape.clone(), A.nonZeroEntries(), A.entries.clone(), A.rowIndices.clone(), A.colIndices.clone());
+        super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), A.rowIndices.clone(), A.colIndices.clone());
     }
 }

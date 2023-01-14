@@ -33,7 +33,7 @@ public final class CheckConcurrent {
 
     private CheckConcurrent() {
         // Hide default constructor
-        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
     private static final int BASE_THRESHOLD = 9000;

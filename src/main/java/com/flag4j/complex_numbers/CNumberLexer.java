@@ -135,7 +135,7 @@ class CNumberLexer {
                     state = 3;
                     data += (char) sym;
                 }
-                else if(sym == 'i') {
+                else if(sym == 'i' || sym == 'j') {
                     state = 6;
                     data += (char) sym;
                     done = true;
@@ -210,7 +210,7 @@ class CNumberLexer {
             return new CNumberToken("eof", data);
         }
         else if(state == 6) { // we have the imaginary unit
-            return new CNumberToken("im", data);
+            return new CNumberToken("im","i");
         }
         else {
             error("somehow Lexer FA halted in bad state " + state );

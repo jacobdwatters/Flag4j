@@ -59,7 +59,7 @@ public class AggregateDenseReal {
      * @return The index of the maximum value in this tensor. If there are zero entries in the array, -1 is returned.
      */
     public static int argMax(double[] entries) {
-        double currMax = Double.MAX_VALUE;
+        double currMax = Double.MIN_VALUE;
         int currMaxIndex = -1;
 
         for(int i=0; i<entries.length; i++) {

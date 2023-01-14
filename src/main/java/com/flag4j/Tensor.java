@@ -93,7 +93,7 @@ public class Tensor extends TensorBase<double[]> {
      * @param A tensor to copy.
      */
     public Tensor(Tensor A) {
-        super(A.shape.clone(), A.entries.clone());
+        super(A.shape.copy(), A.entries.clone());
     }
 
 
@@ -102,7 +102,7 @@ public class Tensor extends TensorBase<double[]> {
      * @param A Matrix to copy to tensor.
      */
     public Tensor(Matrix A) {
-        super(A.shape.clone(), A.entries.clone());
+        super(A.shape.copy(), A.entries.clone());
     }
 
 

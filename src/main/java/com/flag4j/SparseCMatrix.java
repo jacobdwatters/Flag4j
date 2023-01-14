@@ -302,7 +302,7 @@ public class SparseCMatrix extends SparseMatrixBase<CNumber[]> {
 //        super.entries = new CNumber[super.nonZeroEntries()];
 //
 //        for(int i=0; i<nonZeroEntries.size(); i++) {
-//            super.entries[i] = nonZeroEntries.get(i).clone();
+//            super.entries[i] = nonZeroEntries.get(i).copy();
 //        }
 //
 //        super.rowIndices = rowIndices.stream().mapToInt(Integer::intValue).toArray();
@@ -316,7 +316,7 @@ public class SparseCMatrix extends SparseMatrixBase<CNumber[]> {
      * @param A Complex sparse matrix to copy.
      */
     public SparseCMatrix(SparseCMatrix A) {
-        super(A.shape.clone(), A.nonZeroEntries(), new CNumber[A.nonZeroEntries()], A.rowIndices.clone(), A.colIndices.clone());
+        super(A.shape.copy(), A.nonZeroEntries(), new CNumber[A.nonZeroEntries()], A.rowIndices.clone(), A.colIndices.clone());
         ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
 }

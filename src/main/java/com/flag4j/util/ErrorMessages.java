@@ -175,7 +175,7 @@ public abstract class ErrorMessages {
      * Gets an error message for an attempted instantiation of a utility class.
      * @return An error message for the attempted instantiation of a utility class;
      */
-    public static String utilityClassErrMsg() {return UTILITY_CLASS_ERR;}
+    public static String getUtilityClassErrMsg() {return UTILITY_CLASS_ERR;}
 
 
     /**
@@ -194,7 +194,7 @@ public abstract class ErrorMessages {
      * @param allowedAxes An array containing allowed axes.
      * @return An error message for a disallowed axis.
      */
-    public static String axisErr(int axis, int[] allowedAxes) {
+    public static String axisErr(int axis, int... allowedAxes) {
         return String.format(AXIS_ERR_RANGE, axis, Arrays.toString(allowedAxes));
     }
 

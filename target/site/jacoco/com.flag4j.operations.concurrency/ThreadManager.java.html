@@ -52,9 +52,9 @@ import java.util.stream.IntStream;
     public static void concurrentLoop(int startIndex, int endIndex, IntConsumer function) {
         try {
 <span class="fc" id="L54">            threadPool.submit(() -&gt; IntStream.range(startIndex, endIndex).parallel().forEach(function)).get();</span>
-<span class="nc" id="L55">        } catch (InterruptedException | ExecutionException e) {</span>
-<span class="nc" id="L56">            e.printStackTrace();</span>
-<span class="nc" id="L57">            Thread.currentThread().interrupt();</span>
+<span class="fc" id="L55">        } catch (InterruptedException | ExecutionException e) {</span>
+<span class="fc" id="L56">            e.printStackTrace();</span>
+<span class="fc" id="L57">            Thread.currentThread().interrupt();</span>
 <span class="fc" id="L58">        }</span>
 <span class="fc" id="L59">    }</span>
 
@@ -76,9 +76,9 @@ import java.util.stream.IntStream;
 <span class="fc" id="L76">            threadPool.submit(() -&gt; IntStream.range(0, iterations).parallel().forEach(</span>
 <span class="fc" id="L77">                    i -&gt; function.accept(startIndex + i*step))</span>
 <span class="fc" id="L78">            ).get();</span>
-<span class="nc" id="L79">        } catch (InterruptedException | ExecutionException e) {</span>
-<span class="nc" id="L80">            e.printStackTrace();</span>
-<span class="nc" id="L81">            Thread.currentThread().interrupt();</span>
+<span class="fc" id="L79">        } catch (InterruptedException | ExecutionException e) {</span>
+<span class="fc" id="L80">            e.printStackTrace();</span>
+<span class="fc" id="L81">            Thread.currentThread().interrupt();</span>
 <span class="fc" id="L82">        }</span>
 <span class="fc" id="L83">    }</span>
 }

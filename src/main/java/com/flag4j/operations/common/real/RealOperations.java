@@ -40,6 +40,11 @@ import static com.flag4j.operations.common.real.Aggregate.maxAbs;
  */
 public class RealOperations {
 
+    private RealOperations() {
+        // Hide default constructor for utility class.
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+    }
+
     /**
      * Computes the scalar multiplication of a tensor.
      * @param src Entries of the tensor.

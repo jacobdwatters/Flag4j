@@ -22,35 +22,35 @@ class MatrixMultiplyTests {
         B = new Matrix(entriesB);
 
         // ------------ Sub-case 1 ------------
-        act = RealMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 2 ------------
-        act = RealMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 3 ------------
-        act = RealMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 4 ------------
-        act = RealMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 5 ------------
-        act = RealMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 6 ------------
-        act = RealMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 7 ------------
-        act = RealMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 8 ------------
-        act = RealMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
     }
 
@@ -73,35 +73,35 @@ class MatrixMultiplyTests {
         B = new Matrix(entriesB);
 
         // ------------ Sub-case 1 ------------
-        act = RealMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 2 ------------
-        act = RealMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 3 ------------
-        act = RealMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 4 ------------
-        act = RealMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 5 ------------
-        act = RealMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 6 ------------
-        act = RealMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 7 ------------
-        act = RealMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 8 ------------
-        act = RealMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
     }
 
@@ -117,19 +117,19 @@ class MatrixMultiplyTests {
         B = new Matrix(entriesB);
 
         // ------------ Sub-case 1 ------------
-        act = RealMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 2 ------------
-        act = RealMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 3 ------------
-        act = RealMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
 
         // ------------ Sub-case 4 ------------
-        act = RealMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
+        act = RealDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);
         assertArrayEquals(exp, act);
     }
 }

@@ -56,7 +56,7 @@ public abstract class PrintOptions {
      * Hide default constructor.
      */
     private PrintOptions() {
-        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
     /**

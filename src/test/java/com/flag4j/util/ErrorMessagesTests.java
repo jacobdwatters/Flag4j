@@ -1,7 +1,6 @@
 package com.flag4j.util;
 
 import com.flag4j.Shape;
-import com.flag4j.util.ErrorMessages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -82,6 +81,6 @@ class ErrorMessagesTests {
     void utilityClassErrMsgTestCase() {
         expMsg = "Utility class cannot be instantiated";
 
-        assertEquals(expMsg, ErrorMessages.utilityClassErrMsg());
+        assertEquals(expMsg, ErrorMessages.getUtilityClassErrMsg());
     }
 }

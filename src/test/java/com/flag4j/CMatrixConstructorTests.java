@@ -72,7 +72,7 @@ class CMatrixConstructorTests {
         expEntries = new CNumber[size*size];
 
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = value.clone();
+            expEntries[i] = value.copy();
         }
 
         expNumRows = size;
@@ -90,7 +90,7 @@ class CMatrixConstructorTests {
         expEntries = new CNumber[size*size];
 
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = value.clone();
+            expEntries[i] = value.copy();
         }
 
         expNumRows = size;
@@ -217,7 +217,7 @@ class CMatrixConstructorTests {
         value = new CNumber(900.13);
 
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = value.clone();
+            expEntries[i] = value.copy();
         }
 
         A = new CMatrix(expNumRows, expNumCols, value);
@@ -234,7 +234,7 @@ class CMatrixConstructorTests {
         value = new CNumber(-1, -13);
 
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = value.clone();
+            expEntries[i] = value.copy();
         }
 
         A = new CMatrix(expNumRows, expNumCols, value);
@@ -370,7 +370,7 @@ class CMatrixConstructorTests {
         expEntries = new CNumber[expNumRows*expNumCols];
 
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = value.clone();
+            expEntries[i] = value.copy();
         }
 
         A = new CMatrix(shape, value);
@@ -388,7 +388,7 @@ class CMatrixConstructorTests {
         expEntries = new CNumber[expNumRows*expNumCols];
 
         for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = value.clone();
+            expEntries[i] = value.copy();
         }
 
         A = new CMatrix(shape, value);

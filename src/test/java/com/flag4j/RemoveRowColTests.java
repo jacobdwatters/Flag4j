@@ -7,6 +7,7 @@ class RemoveRowColTests {
     double[][] aEntries, expEntries;
     Matrix A, exp;
     int index;
+    int[] indices;
 
     @Test
     void removeRowTest() {
@@ -85,5 +86,85 @@ class RemoveRowColTests {
         exp = new Matrix(expEntries);
 
         assertThrows(ArrayIndexOutOfBoundsException.class, ()-> A.removeCol(index));
+    }
+
+
+    @Test
+    void removeRowsTest() {
+        // ------------ Sub-case 1 ------------
+        aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
+        A = new Matrix(aEntries);
+        indices = new int[]{1, 2};
+        expEntries = new double[][]{{1, 2, 3}, {10, 11, 12}};
+        exp = new Matrix(expEntries);
+
+        assertEquals(exp, A.removeRows(indices));
+
+        // ------------ Sub-case 2 ------------
+        aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
+        A = new Matrix(aEntries);
+        indices = new int[]{0, 1, 3};
+        expEntries = new double[][]{{7, 8, 9}};
+        exp = new Matrix(expEntries);
+
+        assertEquals(exp, A.removeRows(indices));
+
+        // ------------ Sub-case 3 ------------
+        aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
+        A = new Matrix(aEntries);
+        indices = new int[]{0, -1, 3};
+        expEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        exp = new Matrix(expEntries);
+
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()-> A.removeRows(indices));
+
+        // ------------ Sub-case 4 ------------
+        aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
+        A = new Matrix(aEntries);
+        indices = new int[]{0, 1, 13};
+        expEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        exp = new Matrix(expEntries);
+
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()-> A.removeRows(indices));
+    }
+
+
+    @Test
+    void removeColsTest() {
+        // ------------ Sub-case 1 ------------
+        aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
+        A = new Matrix(aEntries);
+        indices = new int[]{1, 2};
+        expEntries = new double[][]{{1}, {4}, {7}, {10}};
+        exp = new Matrix(expEntries);
+
+        assertEquals(exp, A.removeCols(indices));
+
+        // ------------ Sub-case 2 ------------
+        aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
+        A = new Matrix(aEntries);
+        indices = new int[]{1};
+        expEntries = new double[][]{{1, 3}, {4, 6}, {7, 9}, {10, 12}};
+        exp = new Matrix(expEntries);
+
+        assertEquals(exp, A.removeCols(indices));
+
+        // ------------ Sub-case 3 ------------
+        aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
+        A = new Matrix(aEntries);
+        indices = new int[]{0, -1, 3};
+        expEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        exp = new Matrix(expEntries);
+
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()-> A.removeCols(indices));
+
+        // ------------ Sub-case 4 ------------
+        aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
+        A = new Matrix(aEntries);
+        indices = new int[]{0, 1, 13};
+        expEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        exp = new Matrix(expEntries);
+
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()-> A.removeCols(indices));
     }
 }

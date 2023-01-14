@@ -27,14 +27,20 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
 import com.flag4j.operations.MatrixMultiply;
+import com.flag4j.operations.MatrixTranspose;
 import com.flag4j.operations.common.real.Aggregate;
 import com.flag4j.operations.common.real.RealOperations;
-import com.flag4j.operations.concurrency.CheckConcurrent;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -42,7 +48,7 @@ import com.flag4j.util.ParameterChecks;
 import java.util.Arrays;
 
 /**
- * Real dense matrix. Stored in row major format. This class is equivalent to a real dense tensor of rank 2.
+ * Real dense matrix. Stored in row major format. This class is mostly equivalent to a real dense tensor of rank 2.
  */
 public class Matrix extends RealMatrixBase implements
         MatrixComparisonsMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double>,
@@ -173,7 +179,7 @@ public class Matrix extends RealMatrixBase implements
      * @param A The matrix defining the entries for this matrix.
      */
     public Matrix(Matrix A) {
-        super(A.shape.clone(), A.entries.clone());
+        super(A.shape.copy(), A.entries.clone());
     }
 
 
@@ -205,6 +211,18 @@ public class Matrix extends RealMatrixBase implements
      */
     public Matrix(Shape shape, double[] entries) {
         super(shape, entries);
+    }
+
+
+    /**
+     * Constructs a matrix with specified shape and entries. Note, unlike other constructors, the entries' parameter
+     * is not copied.
+     * @param numRows Number of rows in this matrix.
+     * @param numCols Number of columns in this matrix.
+     * @param entries Entries of the matrix.
+     */
+    public Matrix(int numRows, int numCols, double[] entries) {
+        super(new Shape(numRows, numCols), entries);
     }
 
 
@@ -302,7 +320,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isInv(Matrix B) {
-        return false;
+        return this.mult(B).roundToZero().isI();
     }
 
 
@@ -535,10 +553,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public void setRow(double[] values, int rowIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
-
-        for(int i=0; i<values.length; i++) {
-            super.entries[rowIndex*numCols + i] = values[i];
-        }
+        System.arraycopy(values, 0, super.entries, rowIndex*numCols, values.length);
     }
 
 
@@ -808,9 +823,7 @@ public class Matrix extends RealMatrixBase implements
 
         for(int i=0; i<this.numRows; i++) {
             if(i!=rowIndex) {
-                for(int j=0; j<this.numCols; j++) {
-                    copy.entries[row*copy.numCols + j] = this.entries[i*numCols + j];
-                }
+                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }
         }
@@ -822,12 +835,23 @@ public class Matrix extends RealMatrixBase implements
     /**
      * Removes a specified set of rows from this matrix.
      *
-     * @param rowIndices The indices of the rows to remove from this matrix.
+     * @param rowIndices The indices of the rows to remove from this matrix. Assumed to contain unique values.
      * @return a copy of this matrix with the specified column removed.
      */
     @Override
     public Matrix removeRows(int... rowIndices) {
-        return null;
+        Matrix copy = new Matrix(this.numRows-rowIndices.length, this.numCols);
+
+        int row = 0;
+
+        for(int i=0; i<this.numRows; i++) {
+            if(!ArrayUtils.inArray(rowIndices, i)) {
+                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
+                row++;
+            }
+        }
+
+        return copy;
     }
 
 
@@ -860,12 +884,26 @@ public class Matrix extends RealMatrixBase implements
     /**
      * Removes a specified set of columns from this matrix.
      *
-     * @param colIndices Indices of the columns to remove from this matrix.
+     * @param colIndices Indices of the columns to remove from this matrix. Assumed to contain unique values.
      * @return a copy of this matrix with the specified column removed.
      */
     @Override
     public Matrix removeCols(int... colIndices) {
-        return null;
+        Matrix copy = new Matrix(this.numRows, this.numCols-colIndices.length);
+
+        int col;
+
+        for(int i=0; i<this.numRows; i++) {
+            col = 0;
+            for(int j=0; j<this.numCols; j++) {
+                if(!ArrayUtils.inArray(colIndices, j)) {
+                    copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];
+                    col++;
+                }
+            }
+        }
+
+        return copy;
     }
 
 
@@ -932,7 +970,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix add(Matrix B) {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealDenseOperations.add(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -946,7 +984,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix add(double a) {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealDenseOperations.add(this.entries, a)
         );
     }
@@ -960,7 +998,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix add(CNumber a) {
-        return new CMatrix(this.shape.clone(),
+        return new CMatrix(this.shape.copy(),
                 RealComplexDenseOperations.add(this.entries, a)
         );
     }
@@ -975,7 +1013,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix add(SparseMatrix B) {
-        return null;
+        return RealDenseSparseOperations.add(this, B);
     }
 
 
@@ -988,7 +1026,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix add(CMatrix B) {
-        return new CMatrix(this.shape.clone(),
+        return new CMatrix(this.shape.copy(),
                 RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape)
         );
     }
@@ -1003,7 +1041,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix add(SparseCMatrix B) {
-        return null;
+        return RealComplexDenseSparseOperations.add(this, B);
     }
 
 
@@ -1016,7 +1054,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sub(Matrix B) {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
         );
     }
@@ -1030,7 +1068,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sub(double a) {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealDenseOperations.sub(this.entries, a)
         );
     }
@@ -1044,7 +1082,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix sub(CNumber a) {
-        return new CMatrix(this.shape.clone(),
+        return new CMatrix(this.shape.copy(),
                 RealComplexDenseOperations.sub(this.entries, a)
         );
     }
@@ -1058,7 +1096,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix scalMult(double factor) {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealOperations.scalMult(this.entries, factor)
         );
     }
@@ -1072,7 +1110,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix scalMult(CNumber factor) {
-        return new CMatrix(this.shape.clone(),
+        return new CMatrix(this.shape.copy(),
                 RealComplexDenseOperations.scalMult(this.entries, factor)
         );
     }
@@ -1087,7 +1125,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix scalDiv(double divisor) {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealDenseOperations.scalDiv(this.entries, divisor)
         );
     }
@@ -1096,13 +1134,13 @@ public class Matrix extends RealMatrixBase implements
     /**
      * Computes the scalar division of a tensor.
      *
-     * @param divisor The scaler value to divide tensor by.
+     * @param divisor The scalar value to divide tensor by.
      * @return The result of dividing this tensor by the specified scalar.
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
     public CMatrix scalDiv(CNumber divisor) {
-        return new CMatrix(this.shape.clone(),
+        return new CMatrix(this.shape.copy(),
                 RealComplexDenseOperations.scalDiv(this.entries, divisor)
         );
     }
@@ -1128,7 +1166,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sqrt() {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealOperations.sqrt(entries)
         );
     }
@@ -1142,7 +1180,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix abs() {
-        return new Matrix(this.shape.clone(),
+        return new Matrix(this.shape.copy(),
                 RealOperations.abs(entries)
         );
     }
@@ -1155,22 +1193,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix transpose() {
-        double[] transposeEntries;
-
-        // TODO: Check if standard or blocked should be used.
-        if(CheckConcurrent.simpleMatrixCheck(numRows, numCols)) {
-            // Use concurrent implementation
-            transposeEntries = RealDenseTranspose.blockedMatrixConcurrent(
-                    entries, numRows, numCols
-            );
-        } else {
-            // Use sequential implementation
-            transposeEntries = RealDenseTranspose.blockedMatrix(
-                    entries, numRows, numCols
-            );
-        }
-
-        return new Matrix(new Shape(numCols, numRows), transposeEntries);
+        return MatrixTranspose.dispatch(this);
     }
 
 
@@ -1194,7 +1217,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public Matrix recep() {
         return new Matrix(
-                shape.clone(),
+                shape.copy(),
                 RealDenseOperations.recep(entries)
         );
     }
@@ -1209,7 +1232,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sub(SparseMatrix B) {
-        return null;
+        return RealDenseSparseOperations.sub(this, B);
     }
 
 
@@ -1223,7 +1246,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public CMatrix sub(CMatrix B) {
         return new CMatrix(
-                shape.clone(),
+                shape.copy(),
                 RealComplexDenseOperations.sub(entries, shape, B.entries, B.shape)
         );
     }
@@ -1238,7 +1261,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix sub(SparseCMatrix B) {
-        return null;
+        return RealComplexDenseSparseOperations.sub(this, B);
     }
 
 
@@ -1267,7 +1290,13 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(SparseMatrix B) {
-        return null;
+        ParameterChecks.assertMatMultShapes(this.shape, B.shape);
+        double[] entries = RealDenseSparseMatrixMultiplication.standard(
+                this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
+        );
+        Shape shape = new Shape(this.numRows, B.numCols);
+
+        return new Matrix(shape, entries);
     }
 
 
@@ -1280,7 +1309,10 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(CMatrix B) {
-        return null;
+        CNumber[] entries = MatrixMultiply.dispatch(this, B);
+        Shape shape = new Shape(this.numRows, B.numCols);
+
+        return new CMatrix(shape, entries);
     }
 
 
@@ -1293,7 +1325,13 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
-        return null;
+        ParameterChecks.assertMatMultShapes(this.shape, B.shape);
+        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(
+                this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
+        );
+        Shape shape = new Shape(this.numRows, B.numCols);
+
+        return new CMatrix(shape, entries);
     }
 
 
@@ -1306,7 +1344,11 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(Vector b) {
-        return null;
+        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
+        double[] entries = MatrixMultiply.dispatch(this, b);
+        Shape shape = new Shape(this.numRows, 1);
+
+        return new Matrix(shape, entries);
     }
 
 
@@ -1319,7 +1361,13 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(SparseVector b) {
-        return null;
+        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
+        double[] entries = RealDenseSparseMatrixMultiplication.standardVector(
+                this.entries, this.shape, b.entries, b.indices
+        );
+        Shape shape = new Shape(this.numRows, 1);
+
+        return new Matrix(shape, entries);
     }
 
 
@@ -1332,7 +1380,13 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(CVector b) {
-        return null;
+        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
+        CNumber[] entries = RealComplexDenseMatrixMultiplication.standardVector(
+                this.entries, this.shape, b.entries, b.shape
+        );
+        Shape shape = new Shape(this.numRows, 1);
+
+        return new CMatrix(shape, entries);
     }
 
 
@@ -1345,7 +1399,13 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCVector b) {
-        return null;
+        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
+        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standardVector(
+                this.entries, this.shape, b.entries, b.indices
+        );
+        Shape shape = new Shape(this.numRows, 1);
+
+        return new CMatrix(shape, entries);
     }
 
 
@@ -1355,11 +1415,27 @@ public class Matrix extends RealMatrixBase implements
      * faster.
      *
      * @param exponent The exponent in the matrix power.
-     * @return The result of multiplying this matrix with itself 'exponent' times.
+     * @return The result of multiplying this matrix with itself 'exponent' times. If the exponent is zero, then the
+     * identity matrix is returned.
+     * @throws IllegalArgumentException If this matrix is not square or if exponent is negative.
      */
     @Override
-    public Matrix pow(double exponent) {
-        return null;
+    public Matrix pow(int exponent) {
+        ParameterChecks.assertGreaterEq(0, exponent);
+        ParameterChecks.assertSquare(this.shape);
+        Matrix result;
+
+        if(exponent==0) {
+            result = I(this.shape);
+        } else {
+            result = new Matrix(this);
+
+            for(int i=1; i<exponent; i++) {
+                result = result.mult(this);
+            }
+        }
+
+        return result;
     }
 
 
@@ -1373,7 +1449,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public Matrix elemMult(Matrix B) {
         return new Matrix(
-                shape.clone(),
+                shape.copy(),
                 RealDenseOperations.elemMult(entries, shape, B.entries, B.shape)
         );
     }
@@ -1388,7 +1464,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public SparseMatrix elemMult(SparseMatrix B) {
-        return null;
+        return RealDenseSparseOperations.elemMult(this, B);
     }
 
 
@@ -1402,7 +1478,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public CMatrix elemMult(CMatrix B) {
         return new CMatrix(
-                shape.clone(),
+                shape.copy(),
                 RealComplexDenseOperations.elemMult(B.entries, B.shape, entries, shape)
         );
     }
@@ -1417,7 +1493,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
-        return null;
+        return RealComplexDenseSparseOperations.elemMult(this, B);
     }
 
 
@@ -1432,7 +1508,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public Matrix elemDiv(Matrix B) {
         return new Matrix(
-                shape.clone(),
+                shape.copy(),
                 RealDenseOperations.elemDiv(entries, shape, B.entries, B.shape)
         );
     }
@@ -1449,7 +1525,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public CMatrix elemDiv(CMatrix B) {
         return new CMatrix(
-                shape.clone(),
+                shape.copy(),
                 RealComplexDenseOperations.elemDiv(entries, shape, B.entries, B.shape)
         );
     }
@@ -1463,6 +1539,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double det() {
+        // TODO: Implement using QR Factorization
         return null;
     }
 
@@ -1476,7 +1553,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double fib(Matrix B) {
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).trace();
     }
 
 
@@ -1489,7 +1567,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double fib(SparseMatrix B) {
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).trace();
     }
 
 
@@ -1502,6 +1581,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CNumber fib(CMatrix B) {
+        // TODO: Implement after implementing A.mult(B) where A is real dense, and B is complex dense.
+        //  Also implement C.trace() where C is complex dense.
         return null;
     }
 
@@ -1515,6 +1596,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CNumber fib(SparseCMatrix B) {
+        // TODO: Implement after implementing A.mult(B) where A is real dense, and B is complex sparse.
+        //  Also implement C.trace() where C is complex sparse.
         return null;
     }
 
@@ -1527,7 +1610,19 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix directSum(Matrix B) {
-        return null;
+        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            System.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);
+        }
+
+        // Copy over second matrix.
+        for(int i=0; i<B.numRows; i++) {
+            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i + numRows)*sum.numCols + numCols, B.numCols);
+        }
+
+        return sum;
     }
 
 
@@ -1538,8 +1633,24 @@ public class Matrix extends RealMatrixBase implements
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public SparseMatrix directSum(SparseMatrix B) {
-        return null;
+    public Matrix directSum(SparseMatrix B) {
+        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            System.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);
+        }
+
+        // Copy over second matrix.
+        int row, col;
+        for(int i=0; i<B.nonZeroEntries(); i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+
+            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i];
+        }
+
+        return sum;
     }
 
 
@@ -1551,7 +1662,23 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix directSum(CMatrix B) {
-        return null;
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; j<this.numCols; j++) {
+                sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);
+            }
+        }
+
+        // Copy over second matrix.
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; j<B.numCols; j++) {
+                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = B.entries[i*B.numCols + j].copy();
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1562,8 +1689,26 @@ public class Matrix extends RealMatrixBase implements
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public SparseCMatrix directSum(SparseCMatrix B) {
-        return null;
+    public CMatrix directSum(SparseCMatrix B) {
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; j<this.numCols; j++) {
+                sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);
+            }
+        }
+
+        // Copy over second matrix.
+        int row, col;
+        for(int i=0; i<B.nonZeroEntries(); i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+
+            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i].copy();
+        }
+
+        return sum;
     }
 
 
@@ -1575,7 +1720,19 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix invDirectSum(Matrix B) {
-        return null;
+        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            System.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);
+        }
+
+        // Copy over second matrix.
+        for(int i=0; i<B.numRows; i++) {
+            System.arraycopy(B.entries, i*B.numCols, sum.entries, i*sum.numCols+this.numCols, B.numCols);
+        }
+
+        return sum;
     }
 
 
@@ -1586,8 +1743,24 @@ public class Matrix extends RealMatrixBase implements
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public SparseMatrix invDirectSum(SparseMatrix B) {
-        return null;
+    public Matrix invDirectSum(SparseMatrix B) {
+        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            System.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);
+        }
+
+        // Copy over second matrix.
+        int row, col;
+        for(int i=0; i<B.nonZeroEntries(); i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+
+            sum.entries[row*sum.numCols + col + this.numCols] = B.entries[i];
+        }
+
+        return sum;
     }
 
 
@@ -1599,7 +1772,23 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(CMatrix B) {
-        return null;
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; j<this.numCols; j++) {
+                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);
+            }
+        }
+
+        // Copy over second matrix.
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; j<B.numCols; j++) {
+                sum.entries[i*sum.numCols + j + this.numCols] = B.entries[i*B.numCols + j].copy();
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1610,8 +1799,26 @@ public class Matrix extends RealMatrixBase implements
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public SparseCMatrix invDirectSum(SparseCMatrix B) {
-        return null;
+    public CMatrix invDirectSum(SparseCMatrix B) {
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; j<this.numCols; j++) {
+                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);
+            }
+        }
+
+        // Copy over second matrix.
+        int row, col;
+        for(int i=0; i<B.nonZeroEntries(); i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+
+            sum.entries[row*sum.numCols + col + this.numCols] = B.entries[i].copy();
+        }
+
+        return sum;
     }
 
 
@@ -1623,7 +1830,15 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sumCols() {
-        return null;
+        Matrix sum = new Matrix(this.numRows, 1);
+
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; j<this.numCols; j++) {
+                sum.entries[i] += this.entries[i*numCols + j];
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1635,7 +1850,15 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix sumRows() {
-        return null;
+        Matrix sum = new Matrix(1, this.numCols);
+
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; j<this.numCols; j++) {
+                sum.entries[j] += this.entries[i*numCols + j];
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1645,10 +1868,20 @@ public class Matrix extends RealMatrixBase implements
      *
      * @param b Vector to add to each column of this matrix.
      * @return The result of adding the vector b to each column of this matrix.
+     * @throws IllegalArgumentException If the vector has a different number of entries as rows in the matrix.
      */
     @Override
     public Matrix addToEachCol(Vector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
+        Matrix sum = new Matrix(this);
+
+        for(int i=0; i<sum.numRows; i++) {
+            for(int j=0; j<sum.numCols; j++) {
+                sum.entries[i*sum.numCols + j] += b.entries[i];
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1661,7 +1894,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix addToEachCol(SparseVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
+        Matrix sum = new Matrix(this);
+
+        int index;
+
+        for(int i=0; i<b.nonZeroEntries(); i++) {
+            index = b.indices[i];
+
+            for(int j=0; j<sum.numCols; j++) {
+                sum.entries[index*sum.numCols + j] += b.entries[i];
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1674,7 +1920,16 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(CVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
+        CMatrix sum = new CMatrix(this);
+
+        for(int i=0; i<sum.numRows; i++) {
+            for(int j=0; j<sum.numCols; j++) {
+                sum.entries[i*sum.numCols + j].addEq(b.entries[i]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1687,7 +1942,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(SparseCVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
+        CMatrix sum = new CMatrix(this);
+
+        int index;
+
+        for(int i=0; i<b.nonZeroEntries(); i++) {
+            index = b.indices[i];
+
+            for(int j=0; j<sum.numCols; j++) {
+                sum.entries[index*sum.numCols + j].addEq(b.entries[i]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1700,7 +1968,16 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix addToEachRow(Vector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
+        Matrix sum = new Matrix(this);
+
+        for(int i=0; i<sum.numRows; i++) {
+            for(int j=0; j<sum.numCols; j++) {
+                sum.entries[i*sum.numCols + j] += b.entries[j];
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1713,7 +1990,18 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix addToEachRow(SparseVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
+        Matrix sum = new Matrix(this);
+
+        int col;
+        for(int i=0; i<sum.numRows; i++) {
+            for(int j=0; j<b.nonZeroEntries(); j++) {
+                col = b.indices[j];
+                sum.entries[i*sum.numCols + col] += b.entries[j];
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1726,7 +2014,16 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(CVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
+        CMatrix sum = new CMatrix(this);
+
+        for(int i=0; i<sum.numRows; i++) {
+            for(int j=0; j<sum.numCols; j++) {
+                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1739,7 +2036,18 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(SparseCVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
+        CMatrix sum = new CMatrix(this);
+
+        int col;
+        for(int i=0; i<sum.numRows; i++) {
+            for(int j=0; j<b.nonZeroEntries(); j++) {
+                col = b.indices[j];
+                sum.entries[i*sum.numCols + col].addEq(b.entries[j]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1753,7 +2061,13 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix stack(Matrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
+        Matrix stacked = new Matrix(new Shape(this.numRows + B.numRows, this.numCols));
+
+        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
+        System.arraycopy(B.entries, 0, stacked.entries, this.entries.length, B.entries.length);
+
+        return stacked;
     }
 
 
@@ -1767,7 +2081,21 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix stack(SparseMatrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
+        Matrix stacked = new Matrix(new Shape(this.numRows + B.numRows, this.numCols));
+
+        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
+
+        int row, col;
+
+        for(int i=0; i<B.entries.length; i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+            // Offset the row index for destination matrix. i.e. row+this.numRows
+            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i];
+        }
+
+        return stacked;
     }
 
 
@@ -1781,7 +2109,22 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(CMatrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numCols, B.numCols);
+        CMatrix stacked = new CMatrix(new Shape(numRows+B.numRows, numCols));
+
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];
+            }
+        }
+
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; j<B.numCols; j++) {
+                stacked.entries[(i + numRows)*stacked.numCols + j] = B.entries[i*B.numCols+j].copy();
+            }
+        }
+
+        return stacked;
     }
 
 
@@ -1795,7 +2138,24 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCMatrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
+        CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));
+
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];
+            }
+        }
+
+        int row, col;
+        for(int i=0; i<B.entries.length; i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+            // Offset the row index for destination matrix. i.e. row+this.numRows
+            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i].copy();
+        }
+
+        return stacked;
     }
 
 
@@ -1813,7 +2173,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix stack(Matrix B, int axis) {
-        return null;
+        Matrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(B);
+        } else if(axis==1) {
+            stacked = this.stack(B);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -1831,7 +2201,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix stack(SparseMatrix B, int axis) {
-        return null;
+        Matrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(B);
+        } else if(axis==1) {
+            stacked = this.stack(B);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -1849,7 +2229,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(CMatrix B, int axis) {
-        return null;
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(B);
+        } else if(axis==1) {
+            stacked = this.stack(B);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -1867,7 +2257,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCMatrix B, int axis) {
-        return null;
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(B);
+        } else if(axis==1) {
+            stacked = this.stack(B);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -1881,7 +2281,22 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix augment(Matrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);
+        Matrix augmented = new Matrix(new Shape(numRows, numCols+B.numCols));
+
+        // Copy entries from this matrix.
+        for(int i=0; i<numRows; i++) {
+            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);
+        }
+
+        // Copy entries from the B matrix.
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; j<B.numCols; j++) {
+                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j];
+            }
+        }
+
+        return augmented;
     }
 
 
@@ -1895,7 +2310,23 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix augment(SparseMatrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);
+        Matrix augmented = new Matrix(new Shape(this.numRows, this.numCols+B.numCols));
+
+        // Copy entries from this matrix.
+        for(int i=0; i<numRows; i++) {
+            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);
+        }
+
+        int row, col;
+        for(int i=0; i<B.entries.length; i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+            // Offset the col index for destination matrix. i.e. col+this.numCols
+            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i];
+        }
+
+        return augmented;
     }
 
 
@@ -1909,7 +2340,24 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix augment(CMatrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);
+        CMatrix augmented = new CMatrix(new Shape(numRows, numCols+B.numCols));
+
+        // Copy entries from this matrix.
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                augmented.entries[i*augmented.numCols + j].re = entries[i*numCols + j];
+            }
+        }
+
+        // Copy entries from the B matrix.
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; j<B.numCols; j++) {
+                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j].copy();
+            }
+        }
+
+        return augmented;
     }
 
 
@@ -1923,7 +2371,25 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseCMatrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);
+        CMatrix augmented = new CMatrix(new Shape(this.numRows, this.numCols+B.numCols));
+
+        // Copy entries from this matrix.
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                augmented.entries[i*augmented.numCols + j].re = entries[i*numCols + j];
+            }
+        }
+
+        int row, col;
+        for(int i=0; i<B.entries.length; i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+            // Offset the col index for destination matrix. i.e. col+this.numCols
+            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i].copy();
+        }
+
+        return augmented;
     }
 
 
@@ -1939,7 +2405,13 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix stack(Vector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);
+        Matrix stacked = new Matrix(this.numRows+1, this.numCols);
+
+        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
+        System.arraycopy(b.entries, 0, stacked.entries, this.entries.length, b.entries.length);
+
+        return stacked;
     }
 
 
@@ -1954,8 +2426,20 @@ public class Matrix extends RealMatrixBase implements
      *                                  the vector b.
      */
     @Override
-    public SparseMatrix stack(SparseVector b) {
-        return null;
+    public Matrix stack(SparseVector b) {
+        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());
+        Matrix stacked = new Matrix(this.numRows+1, this.numCols);
+
+        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
+
+        int index;
+
+        for(int i=0; i<b.entries.length; i++) {
+            index = b.indices[i];
+            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[i];
+        }
+
+        return stacked;
     }
 
 
@@ -1971,7 +2455,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(CVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);
+        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);
+
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];
+            }
+        }
+
+        for(int i=0; i<b.entries.length; i++) {
+            stacked.entries[(stacked.numRows-1)*numCols + i] = b.entries[i].copy();
+        }
+
+        return stacked;
     }
 
 
@@ -1987,7 +2484,22 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());
+        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);
+
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];
+            }
+        }
+
+        int index;
+        for(int i=0; i<b.entries.length; i++) {
+            index = b.indices[i];
+            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[i];
+        }
+
+        return stacked;
     }
 
 
@@ -2007,7 +2519,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix stack(Vector b, int axis) {
-        return null;
+        Matrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(b);
+        } else if(axis==1) {
+            stacked = this.stack(b);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -2026,8 +2548,18 @@ public class Matrix extends RealMatrixBase implements
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public SparseMatrix stack(SparseVector b, int axis) {
-        return null;
+    public Matrix stack(SparseVector b, int axis) {
+        Matrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(b);
+        } else if(axis==1) {
+            stacked = this.stack(b);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -2047,7 +2579,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(CVector b, int axis) {
-        return null;
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(b);
+        } else if(axis==1) {
+            stacked = this.stack(b);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -2067,7 +2609,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCVector b, int axis) {
-        return null;
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(b);
+        } else if(axis==1) {
+            stacked = this.stack(b);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -2083,7 +2635,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix augment(Vector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);
+        Matrix stacked = new Matrix(numRows, numCols+1);
+
+        // Copy elements of this matrix.
+        for(int i=0; i<numRows; i++) {
+            System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);
+        }
+
+        // Copy elements from b vector.
+        for(int i=0; i<b.entries.length; i++) {
+            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i];
+        }
+
+        return stacked;
     }
 
 
@@ -2098,8 +2663,22 @@ public class Matrix extends RealMatrixBase implements
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public SparseMatrix augment(SparseVector b) {
-        return null;
+    public Matrix augment(SparseVector b) {
+        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());
+        Matrix stacked = new Matrix(numRows, numCols+1);
+
+        // Copy elements of this matrix.
+        for(int i=0; i<numRows; i++) {
+            if (numCols >= 0)
+                System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);
+        }
+
+        // Copy elements from b vector.
+        for(int i=0; i<b.entries.length; i++) {
+            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i];
+        }
+
+        return stacked;
     }
 
 
@@ -2115,7 +2694,22 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix augment(CVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);
+        CMatrix stacked = new CMatrix(numRows, numCols+1);
+
+        // Copy elements of this matrix.
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];
+            }
+        }
+
+        // Copy elements from b vector.
+        for(int i=0; i<b.entries.length; i++) {
+            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();
+        }
+
+        return stacked;
     }
 
 
@@ -2131,7 +2725,22 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseCVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());
+        CMatrix stacked = new CMatrix(numRows, numCols+1);
+
+        // Copy elements of this matrix.
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];
+            }
+        }
+
+        // Copy elements from b vector.
+        for(int i=0; i<b.entries.length; i++) {
+            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();
+        }
+
+        return stacked;
     }
 
 
@@ -2153,10 +2762,17 @@ public class Matrix extends RealMatrixBase implements
      *
      * @param i Index of row to get.
      * @return The specified row of this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} is less than zero or greater than/equal to
+     * the number of rows in this matrix.
      */
     @Override
-    public Double[] getRow(int i) {
-        return new Double[0];
+    public Matrix getRow(int i) {
+        int start = i*numCols;
+        int stop = start+numCols;
+
+        double[] row = Arrays.copyOfRange(this.entries, start, stop);
+
+        return new Matrix(new Shape(1, numCols), row);
     }
 
 
@@ -2167,8 +2783,14 @@ public class Matrix extends RealMatrixBase implements
      * @return The specified column of this matrix.
      */
     @Override
-    public Double[] getCol(int j) {
-        return new Double[0];
+    public Matrix getCol(int j) {
+        double[] col = new double[numRows];
+
+        for(int i=0; i<numRows; i++) {
+            col[i] = entries[i*numCols + j];
+        }
+
+        return new Matrix(new Shape(numRows, 1), col);
     }
 
 
@@ -2195,7 +2817,7 @@ public class Matrix extends RealMatrixBase implements
 
     /**
      * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
-     * Same as {@link #trace()}
+     * Same as {@link #trace()}.
      *
      * @return The trace of this matrix.
      * @throws IllegalArgumentException If this matrix is not square.
@@ -2203,6 +2825,57 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public Double tr() {
         return trace();
+    }
+
+
+    /**
+     * Constructs an identity matrix of the specified size.
+     *
+     * @param size Size of the identity matrix.
+     * @return An identity matrix of specified size.
+     * @throws IllegalArgumentException If the specified size is less than 1.
+     */
+    @Override
+    public Matrix I(int size) {
+        return I(size, size);
+    }
+
+
+    /**
+     * Constructs an identity-like matrix of the specified shape. That is, a matrix of zeros with ones along the
+     * principle diagonal.
+     *
+     * @param numRows Number of rows in the identity-like matrix.
+     * @param numCols Number of columns in the identity-like matrix.
+     * @return An identity matrix of specified shape.
+     * @throws IllegalArgumentException If the specified number of rows or columns is less than 1.
+     */
+    @Override
+    public Matrix I(int numRows, int numCols) {
+        ParameterChecks.assertGreaterEq(1, numRows, numCols);
+        Matrix I = new Matrix(numRows, numCols);
+        int stop = Math.min(numRows, numCols);
+
+        for(int i=0; i<stop; i++) {
+            I.entries[i*numCols+i] = 1;
+        }
+
+        return I;
+    }
+
+
+    /**
+     * Constructs an identity-like matrix of the specified shape. That is, a matrix of zeros with ones along the
+     * principle diagonal.
+     *
+     * @param shape Shape of the identity-like matrix.
+     * @return An identity matrix of specified size.
+     * @throws IllegalArgumentException If the specified shape is not rank 2.
+     */
+    @Override
+    public Matrix I(Shape shape) {
+        ParameterChecks.assertRank(2, shape);
+        return I(shape.get(0), shape.get(1));
     }
 
 
@@ -2238,7 +2911,23 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public int vectorType() {
-        return 0;
+        int type;
+
+        if(numRows==1 || numCols==1) {
+            if(numRows==1 && numCols==1) {
+                type = 0;
+            } else if(numRows==1) {
+                type = 1;
+            } else {
+                // Then this matrix is equivalent to a column vector.
+                type = 2;
+            }
+        } else {
+            // Then this matrix is not equivalent to any vector.
+            type = -1;
+        }
+
+        return type;
     }
 
 
@@ -2249,7 +2938,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isTri() {
-        return false;
+        return isTriL() || isTriU();
     }
 
 
@@ -2260,7 +2949,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isTriL() {
-        return false;
+        boolean result = isSquare();
+
+        if(result) {
+            // Ensure upper half is zeros.
+            for(int i=0; i<numRows; i++) {
+                for(int j=i+1; j<numCols; j++) {
+                    if(entries[i*numCols + j] != 0) {
+                        return false; // No need to continue.
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
 
@@ -2271,7 +2973,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isTriU() {
-        return false;
+        boolean result = isSquare();
+
+        if(result) {
+            // Ensure lower half is zeros.
+            for(int i=1; i<numRows; i++) {
+                for(int j=0; j<i; j++) {
+                    if(entries[i*numCols + j] != 0) {
+                        return false; // No need to continue.
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
 
@@ -2282,7 +2997,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isDiag() {
-        return false;
+        return isTriL() && isTriU();
     }
 
 
@@ -2293,6 +3008,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isFullRank() {
+        // TODO: Implementation
         return false;
     }
 
@@ -2305,6 +3021,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isSingular() {
+        // TODO: Implementation
         return false;
     }
 
@@ -2317,7 +3034,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isInvertible() {
-        return false;
+        return !isSingular();
     }
 
 
@@ -2342,6 +3059,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isDiagonalizable() {
+        // TODO: Implementation
         return false;
     }
 
@@ -2373,9 +3091,11 @@ public class Matrix extends RealMatrixBase implements
      *
      * @param value   Value to set.
      * @param indices The indices of this tensor for which to set the value.
+     * @throws IllegalArgumentException If the number of indices is not 2.
      */
     @Override
     public void set(double value, int... indices) {
+        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
         RealDenseSetOperations.set(entries, shape, value, indices);
     }
 
@@ -2429,11 +3149,15 @@ public class Matrix extends RealMatrixBase implements
      * Finds the indices of the minimum value in this tensor.
      *
      * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
+     * entry (in row-major ordering) are returned. If this matrix is empty the array returned will be empty.
      */
     @Override
     public int[] argMin() {
-        return shape.getIndices(AggregateDenseReal.argMin(entries));
+        if(this.entries.length==0) {
+            return new int[]{};
+        } else {
+            return shape.getIndices(AggregateDenseReal.argMin(entries));
+        }
     }
 
 
@@ -2441,11 +3165,15 @@ public class Matrix extends RealMatrixBase implements
      * Finds the indices of the maximum value in this tensor.
      *
      * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
+     * entry (in row-major ordering) are returned. If this matrix is empty the array returned will be empty.
      */
     @Override
     public int[] argMax() {
-        return shape.getIndices(AggregateDenseReal.argMax(entries));
+        if(this.entries.length==0) {
+            return new int[]{};
+        } else {
+            return shape.getIndices(AggregateDenseReal.argMax(entries));
+        }
     }
 
 

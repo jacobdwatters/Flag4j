@@ -61,11 +61,21 @@ public class Shape implements Serializable {
 
 
     /**
+     * Copy constructor which creates a copy of the specified shape.
+     * @param shape Shape to copy.
+     */
+<span class="fc" id="L67">    public Shape(Shape shape) {</span>
+<span class="fc" id="L68">        this.dims = shape.dims.clone();</span>
+<span class="fc" id="L69">        this.strides = shape.strides.clone();</span>
+<span class="fc" id="L70">    }</span>
+
+
+    /**
      * Gets the rank of a tensor with this shape.
      * @return The rank for a tensor with this shape.
      */
     public int getRank() {
-<span class="fc" id="L68">        return dims.length;</span>
+<span class="fc" id="L78">        return dims.length;</span>
     }
 
 
@@ -74,7 +84,7 @@ public class Shape implements Serializable {
      * @return Shape of a tensor as an integer array.
      */
     public int[] getDims() {
-<span class="fc" id="L77">        return this.dims;</span>
+<span class="fc" id="L87">        return this.dims;</span>
     }
 
 
@@ -83,7 +93,7 @@ public class Shape implements Serializable {
      * @return Shape of a tensor as an integer array.
      */
     public int[] getStrides() {
-<span class="fc" id="L86">        return this.strides;</span>
+<span class="fc" id="L96">        return this.strides;</span>
     }
 
 
@@ -93,7 +103,7 @@ public class Shape implements Serializable {
      * @return The size of this shape object in the specified dimension.
      */
     public int get(int i) {
-<span class="fc" id="L96">        return this.dims[i];</span>
+<span class="fc" id="L106">        return this.dims[i];</span>
     }
 
 
@@ -103,18 +113,18 @@ public class Shape implements Serializable {
      * @return The strides for all dimensions of a newly constructed tensor with this shape.
      */
     public int[] createNewStrides() {
-<span class="fc" id="L106">        int[] strides = new int[dims.length];</span>
+<span class="fc" id="L116">        int[] strides = new int[dims.length];</span>
 
-<span class="fc bfc" id="L108" title="All 2 branches covered.">        if(strides.length&gt;0) {</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        if(strides.length&gt;0) {</span>
             // Stride along last axis is always one for new strides.
-<span class="fc" id="L110">            strides[strides.length-1] = 1;</span>
+<span class="fc" id="L120">            strides[strides.length-1] = 1;</span>
 
-<span class="fc bfc" id="L112" title="All 2 branches covered.">            for(int i=strides.length-2; i&gt;=0; i--) {</span>
-<span class="fc" id="L113">                strides[i] = dims[i+1]*strides[i+1];</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">            for(int i=strides.length-2; i&gt;=0; i--) {</span>
+<span class="fc" id="L123">                strides[i] = dims[i+1]*strides[i+1];</span>
             }
         }
 
-<span class="fc" id="L117">        return strides;</span>
+<span class="fc" id="L127">        return strides;</span>
     }
 
 
@@ -126,26 +136,26 @@ public class Shape implements Serializable {
      * @throws ArrayIndexOutOfBoundsException If any index does not fit within a tensor with this shape.
      */
     public int entriesIndex(int... indices) {
-<span class="fc bfc" id="L129" title="All 2 branches covered.">        if(indices.length != dims.length) {</span>
-<span class="fc" id="L130">            throw new IllegalArgumentException(ErrorMessages.getIndicesRankErr(indices.length, dims.length));</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        if(indices.length != dims.length) {</span>
+<span class="fc" id="L140">            throw new IllegalArgumentException(ErrorMessages.getIndicesRankErr(indices.length, dims.length));</span>
         }
-<span class="pc bpc" id="L132" title="1 of 4 branches missed.">        if(indices.length&gt;0 &amp;&amp; indices[indices.length-1] &gt;= dims[dims.length-1]) {</span>
-<span class="fc" id="L133">            throw new ArrayIndexOutOfBoundsException(&quot;Index &quot; + indices[indices.length-1] + &quot; out of bounds for axis &quot; +</span>
+<span class="pc bpc" id="L142" title="1 of 4 branches missed.">        if(indices.length&gt;0 &amp;&amp; indices[indices.length-1] &gt;= dims[dims.length-1]) {</span>
+<span class="fc" id="L143">            throw new ArrayIndexOutOfBoundsException(&quot;Index &quot; + indices[indices.length-1] + &quot; out of bounds for axis &quot; +</span>
                     (indices.length-1) + &quot; of tensor with shape &quot; + this);
         }
 
-<span class="fc" id="L137">        int index = 0;</span>
+<span class="fc" id="L147">        int index = 0;</span>
 
-<span class="fc bfc" id="L139" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length-1; i++) {</span>
-<span class="fc bfc" id="L140" title="All 4 branches covered.">            if(indices[i] &lt; 0 || indices[i] &gt;= dims[i]) {</span>
-<span class="fc" id="L141">                throw new ArrayIndexOutOfBoundsException(&quot;Index &quot; + indices[i] + &quot; out of bounds for axis &quot; + i +</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length-1; i++) {</span>
+<span class="pc bpc" id="L150" title="1 of 4 branches missed.">            if(indices[i] &lt; 0 || indices[i] &gt;= dims[i]) {</span>
+<span class="fc" id="L151">                throw new ArrayIndexOutOfBoundsException(&quot;Index &quot; + indices[i] + &quot; out of bounds for axis &quot; + i +</span>
                         &quot; of tensor with shape &quot; + this);
             }
 
-<span class="fc" id="L145">            index += indices[i]*strides[i];</span>
+<span class="fc" id="L155">            index += indices[i]*strides[i];</span>
         }
 
-<span class="fc" id="L148">        return index + indices[indices.length-1];</span>
+<span class="fc" id="L158">        return index + indices[indices.length-1];</span>
     }
 
 
@@ -156,16 +166,16 @@ public class Shape implements Serializable {
      * with size equal to the rank of this shape.
      */
     public int[] getIndices(int index) {
-<span class="fc" id="L159">        int[] indices = new int[this.getRank()];</span>
-<span class="fc" id="L160">        indices[indices.length-1] = index % dims[dims.length-1];</span>
-<span class="fc" id="L161">        int upStream = index;</span>
+<span class="fc" id="L169">        int[] indices = new int[this.getRank()];</span>
+<span class="fc" id="L170">        indices[indices.length-1] = index % dims[dims.length-1];</span>
+<span class="fc" id="L171">        int upStream = index;</span>
 
-<span class="fc bfc" id="L163" title="All 2 branches covered.">        for(int i=indices.length-2; i&gt;=0; i--) {</span>
-<span class="fc" id="L164">            upStream = (upStream-indices[i+1]) / dims[i+1];</span>
-<span class="fc" id="L165">            indices[i] = upStream%dims[i];</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        for(int i=indices.length-2; i&gt;=0; i--) {</span>
+<span class="fc" id="L174">            upStream = (upStream-indices[i+1]) / dims[i+1];</span>
+<span class="fc" id="L175">            indices[i] = upStream%dims[i];</span>
         }
 
-<span class="fc" id="L168">        return indices;</span>
+<span class="fc" id="L178">        return indices;</span>
     }
 
 
@@ -177,13 +187,13 @@ public class Shape implements Serializable {
      * @throws ArrayIndexOutOfBoundsException If either axis is not within [0, {@link #getRank() rank}-1].
      */
     public Shape swapAxes(int axis1, int axis2) {
-<span class="fc" id="L180">        int temp = dims[axis1];</span>
-<span class="fc" id="L181">        dims[axis1] = dims[axis2];</span>
-<span class="fc" id="L182">        dims[axis2] = temp;</span>
+<span class="fc" id="L190">        int temp = dims[axis1];</span>
+<span class="fc" id="L191">        dims[axis1] = dims[axis2];</span>
+<span class="fc" id="L192">        dims[axis2] = temp;</span>
 
-<span class="fc" id="L184">        this.strides = this.createNewStrides();</span>
+<span class="fc" id="L194">        this.strides = this.createNewStrides();</span>
 
-<span class="fc" id="L186">        return this;</span>
+<span class="fc" id="L196">        return this;</span>
     }
 
 
@@ -194,17 +204,17 @@ public class Shape implements Serializable {
     public BigInteger totalEntries() {
         BigInteger product;
 
-<span class="fc bfc" id="L197" title="All 2 branches covered.">        if(dims.length&gt;0) {</span>
-<span class="fc" id="L198">            product = BigInteger.ONE;</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">        if(dims.length&gt;0) {</span>
+<span class="fc" id="L208">            product = BigInteger.ONE;</span>
 
-<span class="fc bfc" id="L200" title="All 2 branches covered.">            for(int dim : dims) {</span>
-<span class="fc" id="L201">                product = product.multiply(BigInteger.valueOf(dim));</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">            for(int dim : dims) {</span>
+<span class="fc" id="L211">                product = product.multiply(BigInteger.valueOf(dim));</span>
             }
         } else {
-<span class="fc" id="L204">            product = BigInteger.ZERO;</span>
+<span class="fc" id="L214">            product = BigInteger.ZERO;</span>
         }
 
-<span class="fc" id="L207">        return product;</span>
+<span class="fc" id="L217">        return product;</span>
     }
 
 
@@ -212,9 +222,8 @@ public class Shape implements Serializable {
      * Creates a deep copy of this shape object. This is a distinct object not a reference to the same object.
      * @return A deep copy of this shape object.
      */
-    @Override
-    public Shape clone() {
-<span class="fc" id="L217">        return new Shape(dims.clone());</span>
+    public Shape copy() {
+<span class="fc" id="L226">        return new Shape(dims.clone());</span>
     }
 
 
@@ -225,28 +234,28 @@ public class Shape implements Serializable {
      */
     @Override
     public boolean equals(Object b) {
-<span class="fc" id="L228">        boolean result = true;</span>
+<span class="fc" id="L237">        boolean result = true;</span>
 
         // Ensure the object is the same type
-<span class="fc bfc" id="L231" title="All 2 branches covered.">        if(b instanceof Shape) {</span>
-<span class="fc" id="L232">            Shape bCopy = (Shape) b;</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">        if(b instanceof Shape) {</span>
+<span class="fc" id="L241">            Shape bCopy = (Shape) b;</span>
 
-<span class="fc bfc" id="L234" title="All 2 branches covered.">            if(this.dims.length == bCopy.dims.length) {</span>
-<span class="fc bfc" id="L235" title="All 2 branches covered.">                for(int i=0; i&lt;dims.length; i++) {</span>
-<span class="fc bfc" id="L236" title="All 2 branches covered.">                    if(dims[i] != bCopy.dims[i]) {</span>
-<span class="fc" id="L237">                        result = false;</span>
-<span class="fc" id="L238">                        break;</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">            if(this.dims.length == bCopy.dims.length) {</span>
+<span class="fc bfc" id="L244" title="All 2 branches covered.">                for(int i=0; i&lt;dims.length; i++) {</span>
+<span class="fc bfc" id="L245" title="All 2 branches covered.">                    if(dims[i] != bCopy.dims[i]) {</span>
+<span class="fc" id="L246">                        result = false;</span>
+<span class="fc" id="L247">                        break;</span>
                     }
                 }
             } else {
-<span class="fc" id="L242">                result = false;</span>
+<span class="fc" id="L251">                result = false;</span>
             }
 
-<span class="fc" id="L245">        } else {</span>
-<span class="fc" id="L246">            result = false;</span>
+<span class="fc" id="L254">        } else {</span>
+<span class="fc" id="L255">            result = false;</span>
         }
 
-<span class="fc" id="L249">        return result;</span>
+<span class="fc" id="L258">        return result;</span>
     }
 
 
@@ -256,12 +265,12 @@ public class Shape implements Serializable {
      * @param i Index of 1d data array.
      */
     public void getNextIndices(int[] currentIndices, int i) {
-<span class="fc bfc" id="L259" title="All 2 branches covered.">        for(int j=0; j&lt;currentIndices.length; j++) {</span>
-<span class="fc bfc" id="L260" title="All 2 branches covered.">            if((i+1)%strides[j]==0) {</span>
-<span class="fc" id="L261">                currentIndices[j] = (currentIndices[j]+1) % dims[j];</span>
+<span class="nc bnc" id="L268" title="All 2 branches missed.">        for(int j=0; j&lt;currentIndices.length; j++) {</span>
+<span class="nc bnc" id="L269" title="All 2 branches missed.">            if((i+1)%strides[j]==0) {</span>
+<span class="nc" id="L270">                currentIndices[j] = (currentIndices[j]+1) % dims[j];</span>
             }
         }
-<span class="fc" id="L264">    }</span>
+<span class="nc" id="L273">    }</span>
 
 
     /**
@@ -271,7 +280,7 @@ public class Shape implements Serializable {
      */
     @Override
     public int hashCode() {
-<span class="nc" id="L274">        return Arrays.hashCode(this.dims);</span>
+<span class="nc" id="L283">        return Arrays.hashCode(this.dims);</span>
     }
 
 
@@ -280,14 +289,14 @@ public class Shape implements Serializable {
      * @return The string representation for this Shape object.
      */
     public String toString() {
-<span class="fc" id="L283">        StringBuilder result = new StringBuilder();</span>
+<span class="fc" id="L292">        StringBuilder result = new StringBuilder();</span>
 
-<span class="fc bfc" id="L285" title="All 2 branches covered.">        for(int d : dims) {</span>
-<span class="fc" id="L286">            result.append(d).append(&quot;x&quot;);</span>
+<span class="fc bfc" id="L294" title="All 2 branches covered.">        for(int d : dims) {</span>
+<span class="fc" id="L295">            result.append(d).append(&quot;x&quot;);</span>
         }
-<span class="fc" id="L288">        result.deleteCharAt(result.length()-1); // Remove excess 'x' character.</span>
+<span class="fc" id="L297">        result.deleteCharAt(result.length()-1); // Remove excess 'x' character.</span>
 
-<span class="fc" id="L290">        return result.toString();</span>
+<span class="fc" id="L299">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

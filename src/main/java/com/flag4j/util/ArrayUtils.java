@@ -27,6 +27,7 @@ package com.flag4j.util;
 import com.flag4j.complex_numbers.CNumber;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -36,7 +37,7 @@ public final class ArrayUtils {
 
     private ArrayUtils() {
         // Hide Constructor
-        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 
@@ -216,7 +217,19 @@ public final class ArrayUtils {
     public static void fill(CNumber[] dest, CNumber fillValue) {
         // TODO: Investigate speed of using Arrays.setAll(...) and Arrays.parallelSetAll(...)
         for(int i=0; i<dest.length; i++) {
-            dest[i] = fillValue.clone();
+            dest[i] = fillValue.copy();
+        }
+    }
+
+
+    /**
+     * Fills an array with the specified value;
+     * @param dest Array to fill.
+     * @param fillValue Value to fill array with.
+     */
+    public static void fill(double[][] dest, double fillValue) {
+        for(int i=0; i<dest.length; i++) {
+            Arrays.fill(dest[i], 1);
         }
     }
 
@@ -304,5 +317,129 @@ public final class ArrayUtils {
         }
 
         return equal;
+    }
+
+
+    /**
+     * Checks if a set of values is in an array.
+     * @param src Source array.
+     * @param values Values to check if they are in the source array.
+     * @return A boolean array with the same length as {@code values} describing if the associated values are in the
+     * array.
+     */
+    public static boolean[] inArray(double[] src, double... values) {
+        boolean[] result = new boolean[values.length];
+
+        for(double entry : src) {
+            for(int i=0; i<values.length; i++) {
+                if(entry==values[i]) {
+                    result[i]=true;
+                }
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Checks if a value is in an array.
+     * @param src Source array.
+     * @param value Values to check if they are in the source array.
+     * @return A boolean describing if the specified value is in the array or not.
+     */
+    public static boolean inArray(double[] src, double value) {
+        boolean result = false;
+
+        for(double entry : src) {
+            if(entry==value) {
+                result=true;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Checks if a value is in an array.
+     * @param src Source array.
+     * @param value Values to check if they are in the source array.
+     * @return A boolean describing if the specified value is in the array or not.
+     */
+    public static boolean inArray(int[] src, int value) {
+        boolean result = false;
+
+        for(double entry : src) {
+            if(entry==value) {
+                result=true;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Checks if a set of values is in an array.
+     * @param src Source array.
+     * @param values Values to check if they are in the source array.
+     * @return A boolean array with the same length as {@code values} describing if the associated values are in the
+     * array.
+     */
+    public static boolean[] inArray(int[] src, int... values) {
+        boolean[] result = new boolean[values.length];
+
+        for(double entry : src) {
+            for(int i=0; i<values.length; i++) {
+                if(entry==values[i]) {
+                    result[i]=true;
+                }
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Flattens a two-dimensional array.
+     * @param src Array to flatten.
+     * @return The flattened array.
+     */
+    public static double[] flatten(double[][] src) {
+        double[] flat = new double[src.length*src[0].length];
+
+        // Copy 2D array to 1D array.
+        int i=0;
+        for(double[] row : src) {
+            for(double value : row) {
+                flat[i++] = value;
+            }
+        }
+
+        return flat;
+    }
+
+
+    /**
+     * Flattens a two-dimensional array.
+     * @param src Array to flatten.
+     * @return The flattened array.
+     */
+    public static CNumber[] flatten(CNumber[][] src) {
+        CNumber[] flat = new CNumber[src.length*src[0].length];
+
+        // Copy 2D array to 1D array.
+        int i=0;
+        for(CNumber[] row : src) {
+            for(CNumber value : row) {
+                flat[i++] = value.copy();
+            }
+        }
+
+        return flat;
     }
 }

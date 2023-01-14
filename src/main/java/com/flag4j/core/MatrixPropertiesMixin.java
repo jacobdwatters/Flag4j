@@ -129,5 +129,10 @@ public interface MatrixPropertiesMixin<T, U, V, W, Y, X extends Number> extends 
     */
     boolean isDiagonalizable();
 
+
+    /**
+     * Computes the max norm of a matrix.
+     * @return The max norm of this matrix.
+     */
     double maxNorm();
 }

@@ -27,7 +27,7 @@ package com.flag4j.operations.dense.complex;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ShapeArrayChecks;
+import com.flag4j.util.ParameterChecks;
 
 
 /**
@@ -37,7 +37,7 @@ public final class ComplexDenseOperations {
 
 <span class="nc" id="L38">    private ComplexDenseOperations() {</span>
         // Hide constructor
-<span class="nc" id="L40">        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());</span>
+<span class="nc" id="L40">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -51,7 +51,7 @@ public final class ComplexDenseOperations {
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static CNumber[] add(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L54">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L54">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
 
 <span class="fc" id="L56">        CNumber[] sum = new CNumber[src1.length];</span>
 
@@ -107,7 +107,7 @@ public final class ComplexDenseOperations {
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static CNumber[] sub(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L110">        ShapeArrayChecks.equalShapeCheck(shape1, shape2);</span>
+<span class="fc" id="L110">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
 
 <span class="fc" id="L112">        CNumber[] diff = new CNumber[src1.length];</span>
 

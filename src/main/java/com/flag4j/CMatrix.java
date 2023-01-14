@@ -28,6 +28,8 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexMatrixBase;
 import com.flag4j.util.ArrayUtils;
 
+import java.util.Arrays;
+
 /**
  * Complex dense matrix. Stored in row major format.
  */
@@ -73,7 +75,7 @@ public class CMatrix extends ComplexMatrixBase {
         super(new Shape(size, size), new CNumber[size*size]);
 
         for(int i=0; i<entries.length; i++) {
-            super.entries[i] = value.clone();
+            super.entries[i] = value.copy();
         }
     }
 
@@ -120,7 +122,7 @@ public class CMatrix extends ComplexMatrixBase {
         super(new Shape(rows, cols), new CNumber[rows*cols]);
 
         for(int i=0; i<entries.length; i++) {
-            super.entries[i] = value.clone();
+            super.entries[i] = value.copy();
         }
     }
 
@@ -161,7 +163,7 @@ public class CMatrix extends ComplexMatrixBase {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
 
         for(int i=0; i<entries.length; i++) {
-            super.entries[i] = value.clone();
+            super.entries[i] = value.copy();
         }
     }
 
@@ -194,7 +196,7 @@ public class CMatrix extends ComplexMatrixBase {
         int index=0;
         for(CNumber[] row : entries) {
             for(CNumber value : row) {
-                super.entries[index++] = value.clone();
+                super.entries[index++] = value.copy();
             }
         }
     }
@@ -239,7 +241,7 @@ public class CMatrix extends ComplexMatrixBase {
      * @param A The matrix defining the entries for this matrix.
      */
     public CMatrix(Matrix A) {
-        super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);
+        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);
         ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
 
@@ -249,7 +251,7 @@ public class CMatrix extends ComplexMatrixBase {
      * @param A The matrix defining the entries for this matrix.
      */
     public CMatrix(CMatrix A) {
-        super(A.shape.clone(), new CNumber[A.totalEntries().intValue()]);
+        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);
         ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
 
@@ -284,5 +286,25 @@ public class CMatrix extends ComplexMatrixBase {
     @Override
     public Matrix toReal() {
         return null;
+    }
+
+
+    @Override
+    public boolean equals(Object B) {
+        boolean result;
+
+        if(B instanceof CMatrix) {
+            CMatrix mat = (CMatrix) B;
+            result = Arrays.equals(this.entries, mat.entries);
+        } else {
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    public CNumber get(int... indices) {
+        return this.entries[this.shape.entriesIndex(indices)];
     }
 }

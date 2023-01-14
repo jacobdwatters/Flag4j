@@ -33,7 +33,7 @@ import java.math.RoundingMode;
  * A complex number stored in rectangular form.
  */
 public class CNumber extends Number {
-    // TODO: Constants should be private and accessed through method which returns a clone
+    // TODO: Constants should be private and accessed through method which returns a copy
     // Several constants are provided for convenience.
     /**
      * The complex number with zero imaginary and real parts.
@@ -160,23 +160,14 @@ public class CNumber extends Number {
         this.re = complexNum.re;
         this.im = complexNum.im;
     }
+    
 
 
     /**
-     * Creates a copy of this complex number. Same as {@link #clone()}.
+     * Creates a copy of this complex number. Same as {@link #CNumber(CNumber)}.
      * @return A complex number with real and complex components equivalent to this complex number.
      */
     public CNumber copy() {
-        return new CNumber(this);
-    }
-
-
-    /**
-     * Creates a copy of this complex number. Same as {@link #copy()}.
-     * @return A complex number with real and complex components equivalent to this complex number.
-     */
-    @Override
-    public CNumber clone() {
         return new CNumber(this);
     }
 
@@ -369,6 +360,25 @@ public class CNumber extends Number {
      */
     public void addEq(double b) {
         this.re += b;
+    }
+
+
+    /**
+     * Subtracts a specified number from this complex number and stores the result in this complex number.
+     * @param b The value to add to this complex number.
+     */
+    public void subEq(CNumber b) {
+        this.re -= b.re;
+        this.im -= b.im;
+    }
+
+
+    /**
+     * Subtracts a specified number to this complex number and stores the result in this complex number.
+     * @param b The value to add to this complex number.
+     */
+    public void subEq(double b) {
+        this.re -= b;
     }
 
 

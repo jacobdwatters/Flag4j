@@ -61,6 +61,16 @@ public class Shape implements Serializable {
 
 
     /**
+     * Copy constructor which creates a copy of the specified shape.
+     * @param shape Shape to copy.
+     */
+    public Shape(Shape shape) {
+        this.dims = shape.dims.clone();
+        this.strides = shape.strides.clone();
+    }
+
+
+    /**
      * Gets the rank of a tensor with this shape.
      * @return The rank for a tensor with this shape.
      */
@@ -212,8 +222,7 @@ public class Shape implements Serializable {
      * Creates a deep copy of this shape object. This is a distinct object not a reference to the same object.
      * @return A deep copy of this shape object.
      */
-    @Override
-    public Shape clone() {
+    public Shape copy() {
         return new Shape(dims.clone());
     }
 

@@ -38,7 +38,7 @@ public final class RealDenseTranspose {
 
     private RealDenseTranspose() {
         // Hide constructor
-        throw new IllegalStateException(ErrorMessages.utilityClassErrMsg());
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 
@@ -58,7 +58,7 @@ public final class RealDenseTranspose {
         }
 
         double[] dest = new double[shape.totalEntries().intValue()];
-        Shape destShape = shape.clone().swapAxes(axis1, axis2);
+        Shape destShape = shape.copy().swapAxes(axis1, axis2);
         int[] destIndices;
 
         for(int i=0; i<src.length; i++) {
@@ -87,7 +87,7 @@ public final class RealDenseTranspose {
         }
 
         double[] dest = new double[shape.totalEntries().intValue()];
-        Shape destShape = shape.clone().swapAxes(axis1, axis2);
+        Shape destShape = shape.copy().swapAxes(axis1, axis2);
 
         // Compute transpose concurrently
         ThreadManager.concurrentLoop(0, src.length, (i) -> {
@@ -108,15 +108,22 @@ public final class RealDenseTranspose {
      * @return The transpose of the matrix.
      */
     public static double[] standardMatrix(final double[] src, final int numRows, final int numCols) {
-        double[] transpose = new double[numRows*numCols];
+        double[] dest = new double[numRows*numCols];
 
-        for(int i=0; i<numRows; i++) {
-            for(int j=0; j<numCols; j++) {
-                transpose[j*numRows + i] = src[i*numCols + j];
+        int destIndex, srcIndex, end;
+
+        for (int i=0; i<numCols; i++) {
+            srcIndex = i;
+            destIndex = i*numRows;
+            end = destIndex + numRows;
+
+            while (destIndex < end) {
+                dest[destIndex++] = src[srcIndex];
+                srcIndex += numCols;
             }
         }
 
-        return transpose;
+        return dest;
     }
 
 
@@ -129,28 +136,32 @@ public final class RealDenseTranspose {
      * @return The transpose of this tensor along specified axes
      */
     public static double[] blockedMatrix(final double[] src, final int numRows, final int numCols) {
-        double[] transpose = new double[numRows*numCols];
+        double[] dest = new double[numRows*numCols];
         final int blockSize = Configurations.getBlockSize();
         int blockRowEnd;
         int blockColEnd;
+        int srcIndex, destIndex, end;
 
-        for(int i=0; i<numRows; i+=blockSize) {
-            for(int j=0; j<numCols; j+=blockSize) {
-                blockRowEnd = Math.min(i+blockSize, numRows);
-                blockColEnd = Math.min(j+blockSize, numCols);
+        for(int i=0; i<numCols; i+=blockSize) {
+            for(int j=0; j<numRows; j+=blockSize) {
+                blockRowEnd = Math.min(blockSize, numRows);
+                blockColEnd = Math.min(i+blockSize, numCols);
 
                 // Transpose the block beginning at (i, j)
-                for(int blockI=i; blockI<blockRowEnd; blockI++) {
-                    for(int blockJ=j; blockJ<blockColEnd; blockJ++) {
-                        transpose[blockI + blockJ*numRows] = src[blockJ + blockI*numCols];
+                for(int blockI=i; blockI<blockColEnd; blockI++) {
+                    srcIndex = blockI;
+                    destIndex = blockI*numRows;
+                    end = destIndex + blockRowEnd;
+
+                    while (destIndex < end) {
+                        dest[destIndex++] = src[srcIndex];
+                        srcIndex += numCols;
                     }
                 }
-
-                transpose[i+j*numRows] = src[j+i*numCols];
             }
         }
 
-        return transpose;
+        return dest;
     }
 
 
@@ -165,9 +176,14 @@ public final class RealDenseTranspose {
         double[] dest = new double[src.length];
 
         // Compute transpose concurrently.
-        ThreadManager.concurrentLoop(0, numRows, (i) -> {
-            for(int j=0; j<numCols; j++) {
-                dest[i + j*numRows] = src[j + i*numCols];
+        ThreadManager.concurrentLoop(0, numCols, (i) -> {
+            int srcIndex = i;
+            int destIndex = i*numRows;
+            int end = destIndex + numRows;
+
+            while (destIndex < end) {
+                dest[destIndex++] = src[srcIndex];
+                srcIndex += numCols;
             }
         });
 
@@ -187,22 +203,22 @@ public final class RealDenseTranspose {
         final int blockSize = Configurations.getBlockSize();
 
         // Compute transpose concurrently.
-        ThreadManager.concurrentLoop(0, numRows, blockSize, (i) -> {
-            int blockRowEnd;
-            int blockColEnd;
-
-            for(int j=0; j<numCols; j+=blockSize) {
-                blockRowEnd = Math.min(i+blockSize, numRows);
-                blockColEnd = Math.min(j+blockSize, numCols);
+        ThreadManager.concurrentLoop(0, numCols, blockSize, (i) -> {
+            for(int j=0; j<numRows; j+=blockSize) {
+                int blockRowEnd = Math.min(blockSize, numRows);
+                int blockColEnd = Math.min(i+blockSize, numCols);
 
                 // Transpose the block beginning at (i, j)
-                for(int blockI=i; blockI<blockRowEnd; blockI++) {
-                    for(int blockJ=j; blockJ<blockColEnd; blockJ++) {
-                        dest[blockI + blockJ*numRows] = src[blockJ + blockI*numCols];
+                for(int blockI=i; blockI<blockColEnd; blockI++) {
+                    int srcIndex = blockI;
+                    int destIndex = blockI*numRows;
+                    int end = destIndex + blockRowEnd;
+
+                    while (destIndex < end) {
+                        dest[destIndex++] = src[srcIndex];
+                        srcIndex += numCols;
                     }
                 }
-
-                dest[i+j*numRows] = src[j+i*numCols];
             }
         });
 
