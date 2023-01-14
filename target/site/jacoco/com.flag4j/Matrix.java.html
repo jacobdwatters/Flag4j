@@ -2938,7 +2938,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isTri() {
-<span class="nc bnc" id="L2941" title="All 4 branches missed.">        return isTriL() || isTriU();</span>
+<span class="fc bfc" id="L2941" title="All 4 branches covered.">        return isTriL() || isTriU();</span>
     }
 
 
@@ -2949,20 +2949,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isTriL() {
-<span class="nc" id="L2952">        boolean result = isSquare();</span>
+<span class="fc" id="L2952">        boolean result = isSquare();</span>
 
-<span class="nc bnc" id="L2954" title="All 2 branches missed.">        if(result) {</span>
+<span class="fc bfc" id="L2954" title="All 2 branches covered.">        if(result) {</span>
             // Ensure upper half is zeros.
-<span class="nc bnc" id="L2956" title="All 2 branches missed.">            for(int i=0; i&lt;numRows; i++) {</span>
-<span class="nc bnc" id="L2957" title="All 2 branches missed.">                for(int j=i+1; j&lt;numCols; j++) {</span>
-<span class="nc bnc" id="L2958" title="All 2 branches missed.">                    if(entries[i*numCols + j] != 0) {</span>
-<span class="nc" id="L2959">                        return false; // No need to continue.</span>
+<span class="fc bfc" id="L2956" title="All 2 branches covered.">            for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2957" title="All 2 branches covered.">                for(int j=i+1; j&lt;numCols; j++) {</span>
+<span class="fc bfc" id="L2958" title="All 2 branches covered.">                    if(entries[i*numCols + j] != 0) {</span>
+<span class="fc" id="L2959">                        return false; // No need to continue.</span>
                     }
                 }
             }
         }
 
-<span class="nc" id="L2965">        return result;</span>
+<span class="fc" id="L2965">        return result;</span>
     }
 
 
@@ -2973,20 +2973,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isTriU() {
-<span class="nc" id="L2976">        boolean result = isSquare();</span>
+<span class="fc" id="L2976">        boolean result = isSquare();</span>
 
-<span class="nc bnc" id="L2978" title="All 2 branches missed.">        if(result) {</span>
+<span class="fc bfc" id="L2978" title="All 2 branches covered.">        if(result) {</span>
             // Ensure lower half is zeros.
-<span class="nc bnc" id="L2980" title="All 2 branches missed.">            for(int i=1; i&lt;numRows; i++) {</span>
-<span class="nc bnc" id="L2981" title="All 2 branches missed.">                for(int j=0; j&lt;i; j++) {</span>
-<span class="nc bnc" id="L2982" title="All 2 branches missed.">                    if(entries[i*numCols + j] != 0) {</span>
-<span class="nc" id="L2983">                        return false; // No need to continue.</span>
+<span class="fc bfc" id="L2980" title="All 2 branches covered.">            for(int i=1; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2981" title="All 2 branches covered.">                for(int j=0; j&lt;i; j++) {</span>
+<span class="fc bfc" id="L2982" title="All 2 branches covered.">                    if(entries[i*numCols + j] != 0) {</span>
+<span class="fc" id="L2983">                        return false; // No need to continue.</span>
                     }
                 }
             }
         }
 
-<span class="nc" id="L2989">        return result;</span>
+<span class="fc" id="L2989">        return result;</span>
     }
 
 
@@ -2997,7 +2997,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isDiag() {
-<span class="nc bnc" id="L3000" title="All 4 branches missed.">        return isTriL() &amp;&amp; isTriU();</span>
+<span class="fc bfc" id="L3000" title="All 4 branches covered.">        return isTriL() &amp;&amp; isTriU();</span>
     }
 
 

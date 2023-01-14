@@ -6,6 +6,7 @@ com\flag4j\matrix\MatrixSubTests.class
 com\flag4j\matrix\MatrixStackTests.class
 com\flag4j\matrix\MatrixFibTests.class
 com\flag4j\matrix\MatrixAddTests.class
+com\flag4j\matrix\MatrixTriangularTests.class
 com\flag4j\matrix\MatrixAggregationTests.class
 com\flag4j\matrix\MatrixMultTests.class
 com\flag4j\matrix\MatrixElementScalarTests.class
