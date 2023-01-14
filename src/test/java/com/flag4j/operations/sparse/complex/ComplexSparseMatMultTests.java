@@ -49,6 +49,7 @@ class ComplexSparseMatMultTests {
                 B.entries, B.rowIndices, B.colIndices, B.shape));
     }
 
+
     @Test
     void matVecMultTest() {
         // ----------------------- Sub-case 1 -----------------------

@@ -37,6 +37,9 @@ public abstract class VectorBase<T> extends TensorBase<T> {
      * The orientation of this vector.
      */
     VectorOrientation orientation;
+    /**
+     * Size of the matrix.
+     */
     public final int size;
 
     /**

@@ -45,6 +45,8 @@ public class RealComplexDenseSparseOperations {
 
     /**
      * Adds a real dense matrix to a complex sparse matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
      * @return The result of the matrix addition.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
@@ -66,6 +68,8 @@ public class RealComplexDenseSparseOperations {
 
     /**
      * Adds a real dense matrix to a real sparse matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
      * @return The result of the matrix addition.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
@@ -87,6 +91,8 @@ public class RealComplexDenseSparseOperations {
 
     /**
      * Subtracts a real sparse matrix from a real dense matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
@@ -108,6 +114,8 @@ public class RealComplexDenseSparseOperations {
 
     /**
      * Subtracts a real sparse matrix from a real dense matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
@@ -130,6 +138,8 @@ public class RealComplexDenseSparseOperations {
 
     /**
      * Computes the element-wise multiplication between a real dense matrix and a real sparse matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
      * @return The result of element-wise multiplication.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */

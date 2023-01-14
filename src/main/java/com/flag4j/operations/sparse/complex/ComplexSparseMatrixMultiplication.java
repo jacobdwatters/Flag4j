@@ -176,7 +176,6 @@ public class ComplexSparseMatrixMultiplication {
      */
     public static CNumber[] concurrentStandardVector(CNumber[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                                      CNumber[] src2, int[] indices) {
-
         int rows1 = shape1.dims[Axis2D.row()];
 
         CNumber[] dest = new CNumber[rows1];
