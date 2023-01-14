@@ -215,7 +215,20 @@ public final class ParameterChecks {
      */
     public static void assertSquare(Shape shape) {
         if(shape.getRank()!=2 || shape.get(0)!=shape.get(1)) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.getSquareShapeErr(shape)));
+            throw new IllegalArgumentException(ErrorMessages.getSquareShapeErr(shape));
+        }
+    }
+
+
+    /**
+     * Checks that a shape has the specified rank.
+     * @param expRank Expected rank.
+     * @param shape Shape to check.
+     * @throws IllegalArgumentException If the specified shape does not have the expected rank.
+     */
+    public static void assertRank(int expRank, Shape shape) {
+        if(shape.getRank() != expRank) {
+            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), expRank));
         }
     }
 }

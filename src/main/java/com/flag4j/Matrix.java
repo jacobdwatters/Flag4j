@@ -1290,6 +1290,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(SparseMatrix B) {
+        ParameterChecks.assertMatMultShapes(this.shape, B.shape);
         double[] entries = RealDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
         );
@@ -1324,6 +1325,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
+        ParameterChecks.assertMatMultShapes(this.shape, B.shape);
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
         );
@@ -1342,6 +1344,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(Vector b) {
+        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         double[] entries = MatrixMultiply.dispatch(this, b);
         Shape shape = new Shape(this.numRows, 1);
 
@@ -1358,6 +1361,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(SparseVector b) {
+        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         double[] entries = RealDenseSparseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.indices
         );
@@ -1376,6 +1380,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(CVector b) {
+        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = RealComplexDenseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.shape
         );
@@ -1394,6 +1399,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCVector b) {
+        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.indices
         );
@@ -1409,19 +1415,24 @@ public class Matrix extends RealMatrixBase implements
      * faster.
      *
      * @param exponent The exponent in the matrix power.
-     * @return The result of multiplying this matrix with itself 'exponent' times.
+     * @return The result of multiplying this matrix with itself 'exponent' times. If the exponent is zero, then the
+     * identity matrix is returned.
      * @throws IllegalArgumentException If this matrix is not square or if exponent is negative.
      */
     @Override
     public Matrix pow(int exponent) {
-        ParameterChecks.assertGreaterEq(1, exponent);
+        ParameterChecks.assertGreaterEq(0, exponent);
         ParameterChecks.assertSquare(this.shape);
+        Matrix result;
 
-        // TODO: Is there a better implementation
-        Matrix result = new Matrix(this);
+        if(exponent==0) {
+            result = I(this.shape);
+        } else {
+            result = new Matrix(this);
 
-        for(int i=1; i<exponent; i++) {
-            result = result.mult(this);
+            for(int i=1; i<exponent; i++) {
+                result = result.mult(this);
+            }
         }
 
         return result;
@@ -1543,7 +1554,6 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public Double fib(Matrix B) {
         ParameterChecks.assertEqualShape(this.shape, B.shape);
-
         return this.T().mult(B).trace();
     }
 
@@ -2803,7 +2813,7 @@ public class Matrix extends RealMatrixBase implements
 
     /**
      * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
-     * Same as {@link #trace()}
+     * Same as {@link #trace()}.
      *
      * @return The trace of this matrix.
      * @throws IllegalArgumentException If this matrix is not square.
@@ -2811,6 +2821,57 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public Double tr() {
         return trace();
+    }
+
+
+    /**
+     * Constructs an identity matrix of the specified size.
+     *
+     * @param size Size of the identity matrix.
+     * @return An identity matrix of specified size.
+     * @throws IllegalArgumentException If the specified size is less than 1.
+     */
+    @Override
+    public Matrix I(int size) {
+        return I(size, size);
+    }
+
+
+    /**
+     * Constructs an identity-like matrix of the specified shape. That is, a matrix of zeros with ones along the
+     * principle diagonal.
+     *
+     * @param numRows Number of rows in the identity-like matrix.
+     * @param numCols Number of columns in the identity-like matrix.
+     * @return An identity matrix of specified shape.
+     * @throws IllegalArgumentException If the specified number of rows or columns is less than 1.
+     */
+    @Override
+    public Matrix I(int numRows, int numCols) {
+        ParameterChecks.assertGreaterEq(1, numRows, numCols);
+        Matrix I = new Matrix(numRows, numCols);
+        int stop = Math.min(numRows, numCols);
+
+        for(int i=0; i<stop; i++) {
+            I.entries[i*numCols+i] = 1;
+        }
+
+        return I;
+    }
+
+
+    /**
+     * Constructs an identity-like matrix of the specified shape. That is, a matrix of zeros with ones along the
+     * principle diagonal.
+     *
+     * @param shape Shape of the identity-like matrix.
+     * @return An identity matrix of specified size.
+     * @throws IllegalArgumentException If the specified shape is not rank 2.
+     */
+    @Override
+    public Matrix I(Shape shape) {
+        ParameterChecks.assertRank(2, shape);
+        return I(shape.get(0), shape.get(1));
     }
 
 

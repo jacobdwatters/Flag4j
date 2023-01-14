@@ -98,34 +98,34 @@ public class RealComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] reordered(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="nc" id="L101">        int rows1 = shape1.dims[Axis2D.row()];</span>
-<span class="nc" id="L102">        int cols1 = shape1.dims[Axis2D.col()];</span>
-<span class="nc" id="L103">        int rows2 = shape2.dims[Axis2D.row()];</span>
-<span class="nc" id="L104">        int cols2 = shape2.dims[Axis2D.col()];</span>
+<span class="fc" id="L101">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L102">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L103">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L104">        int cols2 = shape2.dims[Axis2D.col()];</span>
 
-<span class="nc" id="L106">        CNumber[] dest = new CNumber[rows1*cols2];</span>
-<span class="nc" id="L107">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
+<span class="fc" id="L106">        CNumber[] dest = new CNumber[rows1*cols2];</span>
+<span class="fc" id="L107">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
 
         int src2Index, destIndex, src1IndexStart, destIndexStart, end;
         double src1Value;
 
-<span class="nc bnc" id="L112" title="All 2 branches missed.">        for(int i=0; i&lt;rows1; i++) {</span>
-<span class="nc" id="L113">            src1IndexStart = i*cols1;</span>
-<span class="nc" id="L114">            destIndexStart = i*cols2;</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        for(int i=0; i&lt;rows1; i++) {</span>
+<span class="fc" id="L113">            src1IndexStart = i*cols1;</span>
+<span class="fc" id="L114">            destIndexStart = i*cols2;</span>
 
-<span class="nc bnc" id="L116" title="All 2 branches missed.">            for(int k=0; k&lt;rows2; k++) {</span>
-<span class="nc" id="L117">                src2Index = k*cols2;</span>
-<span class="nc" id="L118">                src1Value = src1[src1IndexStart + k];</span>
-<span class="nc" id="L119">                destIndex = destIndexStart;</span>
-<span class="nc" id="L120">                end = src2Index + cols2;</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">            for(int k=0; k&lt;rows2; k++) {</span>
+<span class="fc" id="L117">                src2Index = k*cols2;</span>
+<span class="fc" id="L118">                src1Value = src1[src1IndexStart + k];</span>
+<span class="fc" id="L119">                destIndex = destIndexStart;</span>
+<span class="fc" id="L120">                end = src2Index + cols2;</span>
 
-<span class="nc bnc" id="L122" title="All 2 branches missed.">                while(src2Index&lt;end) {</span>
-<span class="nc" id="L123">                    dest[destIndex++].addEq(src2[src2Index++].mult(src1Value));</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">                while(src2Index&lt;end) {</span>
+<span class="fc" id="L123">                    dest[destIndex++].addEq(src2[src2Index++].mult(src1Value));</span>
                 }
             }
         }
 
-<span class="nc" id="L128">        return dest;</span>
+<span class="fc" id="L128">        return dest;</span>
     }
 
 
@@ -401,23 +401,23 @@ public class RealComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] standardVector(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="nc" id="L404">        int rows1 = shape1.dims[Axis2D.row()];</span>
-<span class="nc" id="L405">        int cols1 = shape1.dims[Axis2D.col()];</span>
-<span class="nc" id="L406">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L404">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L405">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L406">        int rows2 = shape2.dims[Axis2D.row()];</span>
 
-<span class="nc" id="L408">        CNumber[] dest = new CNumber[rows1];</span>
-<span class="nc" id="L409">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
+<span class="fc" id="L408">        CNumber[] dest = new CNumber[rows1];</span>
+<span class="fc" id="L409">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
         int src1Index;
 
-<span class="nc bnc" id="L412" title="All 2 branches missed.">        for(int i=0; i&lt;rows1; i++) {</span>
-<span class="nc" id="L413">            src1Index = i*cols1;</span>
+<span class="fc bfc" id="L412" title="All 2 branches covered.">        for(int i=0; i&lt;rows1; i++) {</span>
+<span class="fc" id="L413">            src1Index = i*cols1;</span>
 
-<span class="nc bnc" id="L415" title="All 2 branches missed.">            for(int k=0; k&lt;rows2; k++) {</span>
-<span class="nc" id="L416">                dest[i].addEq(src2[k].mult(src1[src1Index + k]));</span>
+<span class="fc bfc" id="L415" title="All 2 branches covered.">            for(int k=0; k&lt;rows2; k++) {</span>
+<span class="fc" id="L416">                dest[i].addEq(src2[k].mult(src1[src1Index + k]));</span>
             }
         }
 
-<span class="nc" id="L420">        return dest;</span>
+<span class="fc" id="L420">        return dest;</span>
     }
 
 

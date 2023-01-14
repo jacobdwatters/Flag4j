@@ -335,6 +335,7 @@ public class RealComplexDenseSparseMatrixMultiplication {
         int nonZeros = src2.length;
 
         CNumber[] dest = new CNumber[denseRows];
+        ArrayUtils.fill(dest, CNumber.ZERO);
         int k;
 
         for(int i=0; i<denseRows; i++) {
