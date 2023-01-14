@@ -5,6 +5,7 @@ com\flag4j\matrix\MatrixScalMultTests.class
 com\flag4j\matrix\MatrixSubTests.class
 com\flag4j\matrix\MatrixStackTests.class
 com\flag4j\matrix\MatrixFibTests.class
+com\flag4j\operations\sparse\complex\ComplexSparseMatMultTests.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseMatMultTests.class
 com\flag4j\matrix\MatrixAddTests.class
 com\flag4j\matrix\MatrixTriangularTests.class

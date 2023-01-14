@@ -27,6 +27,7 @@ package com.flag4j.operations.sparse.complex;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.concurrency.ThreadManager;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 
@@ -61,6 +62,7 @@ public class ComplexSparseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         // r1, c1, r2, and c2 store row/column indices for non-zero values in src1 and src2.
         int r1, c1, r2, c2;
@@ -103,6 +105,7 @@ public class ComplexSparseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, src1.length, (i)->{
             int r1 = rowIndices1[i]; // = i
@@ -130,16 +133,15 @@ public class ComplexSparseMatrixMultiplication {
      * @param shape1 Shape of the first sparse matrix.
      * @param src2 Non-zero entries of the second sparse matrix.
      * @param indices Indices of non-zero entries in the sparse vector.
-     * @param shape2 Shape of the second sparse matrix.
      * @return The result of the matrix-vector multiplication stored in a dense matrix.
      */
     public static CNumber[] standardVector(CNumber[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
-                                           CNumber[] src2, int[] indices, Shape shape2) {
+                                           CNumber[] src2, int[] indices) {
 
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
 
-        CNumber[] dest = new CNumber[rows1*cols2];
+        CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         // r1, c1, r2, and store the indices for non-zero values in src1 and src2.
         int r1, c1, r2;
@@ -152,7 +154,7 @@ public class ComplexSparseMatrixMultiplication {
                 r2 = indices[j]; // = k
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1*cols2].addEq(src1[i].mult(src2[j]));
+                    dest[r1].addEq(src1[i].mult(src2[j]));
                 }
             }
         }
@@ -170,16 +172,15 @@ public class ComplexSparseMatrixMultiplication {
      * @param shape1 Shape of the first sparse matrix.
      * @param src2 Non-zero entries of the second sparse matrix.
      * @param indices Indices of non-zero entries in the sparse vector.
-     * @param shape2 Shape of the second sparse matrix.
      * @return The result of the matrix-vector multiplication stored in a dense matrix.
      */
     public static CNumber[] concurrentStandardVector(CNumber[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
-                                                     CNumber[] src2, int[] indices, Shape shape2) {
+                                                     CNumber[] src2, int[] indices) {
 
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
 
-        CNumber[] dest = new CNumber[rows1*cols2];
+        CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fill(dest, CNumber.ZERO);
 
         ThreadManager.concurrentLoop(0, src1.length, (i) -> {
             int r1 = rowIndices1[i]; // = i
@@ -189,7 +190,7 @@ public class ComplexSparseMatrixMultiplication {
                 int r2 = indices[j]; // = k
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1*cols2].addEq(src1[i].mult(src2[j]));
+                    dest[r1].addEq(src1[i].mult(src2[j]));
                 }
             }
         });
