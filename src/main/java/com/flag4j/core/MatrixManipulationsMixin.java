@@ -25,7 +25,6 @@
 package com.flag4j.core;
 
 
-import com.flag4j.Matrix;
 import com.flag4j.Shape;
 
 /**
@@ -276,7 +275,7 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    Matrix setSliceCopy(Integer[][] values, int rowStart, int colStart);
+    T setSliceCopy(Integer[][] values, int rowStart, int colStart);
 
 
     /**

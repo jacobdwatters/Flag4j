@@ -4,7 +4,6 @@ import com.flag4j.Shape;
 import com.flag4j.operations.common.real.RealOperations;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import static com.flag4j.operations.dense.real.RealDenseOperations.*;
 
 class ReadDenseOperationsTests {
 

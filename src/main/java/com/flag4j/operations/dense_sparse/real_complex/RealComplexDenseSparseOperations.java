@@ -113,6 +113,29 @@ public class RealComplexDenseSparseOperations {
 
 
     /**
+     * Subtracts a real sparse matrix from a complex dense matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @return The result of the matrix subtraction.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static CMatrix sub(CMatrix src1, SparseMatrix src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        int row, col;
+        CMatrix dest = new CMatrix(src1);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            row = src2.rowIndices[i];
+            col = src2.colIndices[i];
+            dest.entries[row*src1.numCols + col].subEq(src2.entries[i]);
+        }
+
+        return dest;
+    }
+
+
+    /**
      * Subtracts a real sparse matrix from a real dense matrix.
      * @param src1 First matrix.
      * @param src2 Second matrix.

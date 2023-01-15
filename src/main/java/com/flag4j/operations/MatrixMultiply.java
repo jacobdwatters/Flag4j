@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,8 @@ package com.flag4j.operations;
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
-import com.flag4j.operations.dense.complex.ComplexDenseMatrixMultiplication;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
+import com.flag4j.operations.dense.complex.ComplexDenseMatrixMultiplication;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import static com.flag4j.util.ParameterChecks.*;

@@ -32,8 +32,20 @@ import com.flag4j.core.MatrixManipulationsMixin;
 import com.flag4j.core.MatrixPropertiesMixin;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.dense.complex.ComplexDenseEquals;
+import com.flag4j.operations.dense.complex.ComplexDenseOperations;
+import com.flag4j.operations.dense.complex.ComplexDenseProperties;
+import com.flag4j.operations.dense.complex.ComplexDenseSetOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
 import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.Axis2D;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
 
@@ -46,6 +58,8 @@ public class CMatrix extends ComplexMatrixBase implements
         MatrixOperationsMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber>,
         MatrixPropertiesMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber> {
 
+
+    public static final double DEFAULT_ROUND_TO_ZERO_THRESHOLD = 1e-12;
 
     /**
      * Constructs a square complex dense matrix of a specified size. The entries of the matrix will default to zero.
@@ -307,7 +321,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isZeros() {
-        return false;
+        return ArrayUtils.isZeros(this.entries);
     }
 
 
@@ -318,20 +332,32 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isOnes() {
-        return false;
+        return ComplexDenseProperties.isOnes(this.entries);
     }
 
 
+    /**
+     * Checks if an object is equal to this matrix.
+     * @param B Object to compare this matrix to.
+     * @return True if B is an instance of a matrix ({@link Matrix}, {@link CMatrix}, {@link SparseMatrix}, or {@link SparseCMatrix})
+     * and is numerically element-wise equal to this matrix.
+     */
     @Override
     public boolean equals(Object B) {
         boolean equal;
 
         if(B instanceof CMatrix) {
             CMatrix mat = (CMatrix) B;
-            equal = Arrays.equals(this.entries, mat.entries);
+            equal = ComplexDenseEquals.matrixEquals(this, mat);
         } else if(B instanceof Matrix) {
             Matrix mat = (Matrix) B;
             equal = RealComplexDenseEquals.matrixEquals(mat, this);
+        } else if(B instanceof SparseMatrix) {
+            SparseMatrix mat = (SparseMatrix) B;
+            equal = RealComplexDenseSparseEquals.matrixEquals(this, mat);
+        } else if(B instanceof SparseCMatrix) {
+            SparseCMatrix mat = (SparseCMatrix) B;
+            equal = ComplexDenseSparseEquals.matrixEquals(this, mat);
         } else {
             equal = false;
         }
@@ -370,7 +396,24 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isI() {
-        return false;
+        if(isSquare()) {
+            for(int i=0; i<numRows; i++) {
+                for(int j=0; j<numCols; j++) {
+                    if(i==j && !entries[i*numCols + j].equals(CNumber.ONE)) {
+                        return false; // No need to continue
+                    } else if(i!=j && !entries[i*numCols + j].equals(CNumber.ZERO)) {
+                        return false; // No need to continue
+                    }
+                }
+            }
+
+        } else {
+            // An identity matrix must be square.
+            return false;
+        }
+
+        // If we make it to this point this matrix must be an identity matrix.
+        return true;
     }
 
 
@@ -382,7 +425,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isInv(CMatrix B) {
-        return false;
+        return this.mult(B).roundToZero().isI();
     }
 
 
@@ -399,7 +442,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix reshape(Shape shape) {
-        return null;
+        // Ensure the total number of entries in each shape is equal
+        ParameterChecks.assertBroadcastable(shape, this.shape);
+        return new CMatrix(shape, entries.clone());
     }
 
 
@@ -413,7 +458,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix reshape(int numRows, int numCols) {
-        return null;
+        return reshape(new Shape(numRows, numCols));
     }
 
 
@@ -424,7 +469,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix flatten() {
-        return null;
+        return reshape(new Shape(1, entries.length));
     }
 
 
@@ -437,7 +482,16 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix flatten(int axis) {
-        return null;
+        if(axis== Axis2D.row()) {
+            // Flatten to single row
+            return reshape(new Shape(1, entries.length));
+        } else if(axis==Axis2D.col()) {
+            // Flatten to single column
+            return reshape(new Shape(entries.length, 1));
+        } else {
+            // Unknown axis
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, Axis2D.allAxes()));
+        }
     }
 
 
@@ -449,7 +503,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setValues(CNumber[][] values) {
-
+        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
+        ComplexDenseSetOperations.setValues(values, this.entries);
     }
 
 
@@ -461,7 +516,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setValues(double[][] values) {
-
+        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
+        ComplexDenseSetOperations.setValues(values, this.entries);
     }
 
 
@@ -473,7 +529,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setValues(int[][] values) {
-
+        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
+        ComplexDenseSetOperations.setValues(values, this.entries);
     }
 
 
@@ -486,7 +543,11 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setCol(CNumber[] values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
+        for(int i=0; i<values.length; i++) {
+            super.entries[i*numCols + colIndex] = values[i].copy();
+        }
     }
 
 
@@ -499,7 +560,11 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setCol(Integer[] values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
+        for(int i=0; i<values.length; i++) {
+            super.entries[i*numCols + colIndex] = new CNumber(values[i]);
+        }
     }
 
 
@@ -512,7 +577,11 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setCol(double[] values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
+        for(int i=0; i<values.length; i++) {
+            super.entries[i*numCols + colIndex] = new CNumber(values[i]);
+        }
     }
 
 
@@ -525,7 +594,11 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setCol(int[] values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
+        for(int i=0; i<values.length; i++) {
+            super.entries[i*numCols + colIndex] = new CNumber(values[i]);
+        }
     }
 
 
@@ -538,7 +611,11 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setRow(CNumber[] values, int rowIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
 
+        for(int i=0; i<values.length; i++) {
+            super.entries[rowIndex*numCols + i] = values[i].copy();
+        }
     }
 
 
@@ -551,7 +628,11 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setRow(Integer[] values, int rowIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
 
+        for(int i=0; i<values.length; i++) {
+            super.entries[rowIndex*numCols + i] = new CNumber(values[i]);
+        }
     }
 
 
@@ -564,7 +645,11 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setRow(double[] values, int rowIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
 
+        for(int i=0; i<values.length; i++) {
+            super.entries[rowIndex*numCols + i] = new CNumber(values[i]);
+        }
     }
 
 
@@ -577,7 +662,11 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setRow(int[] values, int rowIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
 
+        for(int i=0; i<values.length; i++) {
+            super.entries[rowIndex*numCols + i] = new CNumber(values[i]);
+        }
     }
 
 
@@ -594,7 +683,12 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setSlice(CMatrix values, int rowStart, int colStart) {
-
+        for(int i=0; i<values.numRows; i++) {
+            for(int j=0; j<values.numCols; j++) {
+                this.entries[(i+rowStart)*numCols + j+colStart] =
+                        values.entries[i* values.numCols + j].copy();
+            }
+        }
     }
 
 
@@ -611,7 +705,11 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setSlice(CNumber[][] values, int rowStart, int colStart) {
-
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j].copy();
+            }
+        }
     }
 
 
@@ -628,7 +726,11 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setSlice(Integer[][] values, int rowStart, int colStart) {
-
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
+            }
+        }
     }
 
 
@@ -645,7 +747,11 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setSlice(double[][] values, int rowStart, int colStart) {
-
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
+            }
+        }
     }
 
 
@@ -662,7 +768,11 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setSlice(int[][] values, int rowStart, int colStart) {
-
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
+            }
+        }
     }
 
 
@@ -680,7 +790,15 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix setSliceCopy(CMatrix values, int rowStart, int colStart) {
-        return null;
+        CMatrix copy = new CMatrix(this);
+
+        for(int i=0; i<values.numRows; i++) {
+            for(int j=0; j<values.numCols; j++) {
+                copy.entries[(i+rowStart)*numCols + j+colStart] = values.entries[values.shape.entriesIndex(i, j)].copy();
+            }
+        }
+
+        return copy;
     }
 
 
@@ -698,7 +816,15 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix setSliceCopy(CNumber[][] values, int rowStart, int colStart) {
-        return null;
+        CMatrix copy = new CMatrix(this);
+
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j].copy();
+            }
+        }
+
+        return copy;
     }
 
 
@@ -715,8 +841,16 @@ public class CMatrix extends ComplexMatrixBase implements
      *                                   fit completely within this matrix.
      */
     @Override
-    public Matrix setSliceCopy(Integer[][] values, int rowStart, int colStart) {
-        return null;
+    public CMatrix setSliceCopy(Integer[][] values, int rowStart, int colStart) {
+        CMatrix copy = new CMatrix(this);
+
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                copy.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
+            }
+        }
+
+        return copy;
     }
 
 
@@ -734,7 +868,15 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix setSliceCopy(double[][] values, int rowStart, int colStart) {
-        return null;
+        CMatrix copy = new CMatrix(this);
+
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                copy.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
+            }
+        }
+
+        return copy;
     }
 
 
@@ -752,7 +894,15 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix setSliceCopy(int[][] values, int rowStart, int colStart) {
-        return null;
+        CMatrix copy = new CMatrix(this);
+
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                copy.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
+            }
+        }
+
+        return copy;
     }
 
 
@@ -764,7 +914,18 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix removeRow(int rowIndex) {
-        return null;
+        CMatrix copy = new CMatrix(this.numRows-1, this.numCols);
+
+        int row = 0;
+
+        for(int i=0; i<this.numRows; i++) {
+            if(i!=rowIndex) {
+                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
+                row++;
+            }
+        }
+
+        return copy;
     }
 
 
@@ -776,7 +937,18 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix removeRows(int... rowIndices) {
-        return null;
+        CMatrix copy = new CMatrix(this.numRows-rowIndices.length, this.numCols);
+
+        int row = 0;
+
+        for(int i=0; i<this.numRows; i++) {
+            if(!ArrayUtils.inArray(rowIndices, i)) {
+                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
+                row++;
+            }
+        }
+
+        return copy;
     }
 
 
@@ -788,7 +960,21 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix removeCol(int colIndex) {
-        return null;
+        CMatrix copy = new CMatrix(this.numRows, this.numCols-1);
+
+        int col;
+
+        for(int i=0; i<this.numRows; i++) {
+            col = 0;
+            for(int j=0; j<this.numCols; j++) {
+                if(j!=colIndex) {
+                    copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];
+                    col++;
+                }
+            }
+        }
+
+        return copy;
     }
 
 
@@ -800,7 +986,21 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix removeCols(int... colIndices) {
-        return null;
+        CMatrix copy = new CMatrix(this.numRows, this.numCols-colIndices.length);
+
+        int col;
+
+        for(int i=0; i<this.numRows; i++) {
+            col = 0;
+            for(int j=0; j<this.numCols; j++) {
+                if(!ArrayUtils.inArray(colIndices, j)) {
+                    copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];
+                    col++;
+                }
+            }
+        }
+
+        return copy;
     }
 
 
@@ -812,7 +1012,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix round() {
-        return null;
+        return new CMatrix(this.shape, ComplexOperations.round(this.entries));
     }
 
 
@@ -826,7 +1026,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix round(int precision) {
-        return null;
+        return new CMatrix(this.shape, ComplexOperations.round(this.entries, precision));
     }
 
 
@@ -839,7 +1039,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix roundToZero() {
-        return null;
+        return roundToZero(DEFAULT_ROUND_TO_ZERO_THRESHOLD);
     }
 
 
@@ -854,7 +1054,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix roundToZero(double threshold) {
-        return null;
+        return new CMatrix(this.shape, ComplexOperations.roundToZero(this.entries, threshold));
     }
 
 
@@ -867,7 +1067,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(Matrix B) {
-        return null;
+        return new CMatrix(this.shape.copy(),
+                RealComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)
+        );
     }
 
 
@@ -880,7 +1082,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(SparseMatrix B) {
-        return null;
+        return RealComplexDenseSparseOperations.add(this, B);
     }
 
 
@@ -893,31 +1095,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(CMatrix B) {
-        return null;
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CMatrix add(double a) {
-        return null;
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CMatrix add(CNumber a) {
-        return null;
+        return new CMatrix(this.shape.copy(),
+                ComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)
+        );
     }
 
 
@@ -930,7 +1110,35 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(SparseCMatrix B) {
-        return null;
+        return ComplexDenseSparseOperations.add(this, B);
+    }
+
+
+    /**
+     * Adds specified value to all entries of this tensor.
+     *
+     * @param a Value to add to all entries of this tensor.
+     * @return The result of adding the specified value to each entry of this tensor.
+     */
+    @Override
+    public CMatrix add(double a) {
+        return new CMatrix(this.shape.copy(),
+                ComplexDenseOperations.add(this.entries, a)
+        );
+    }
+
+
+    /**
+     * Adds specified value to all entries of this tensor.
+     *
+     * @param a Value to add to all entries of this tensor.
+     * @return The result of adding the specified value to each entry of this tensor.
+     */
+    @Override
+    public CMatrix add(CNumber a) {
+        return new CMatrix(this.shape.copy(),
+                ComplexDenseOperations.add(this.entries, a)
+        );
     }
 
 
@@ -943,7 +1151,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(Matrix B) {
-        return null;
+        return new CMatrix(this.shape.copy(),
+                RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
+        );
     }
 
 
@@ -956,7 +1166,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(SparseMatrix B) {
-        return null;
+        return RealComplexDenseSparseOperations.sub(this, B);
     }
 
 
@@ -969,7 +1179,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(CMatrix B) {
-        return null;
+        return new CMatrix(this.shape.copy(),
+                ComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
+        );
     }
 
 
@@ -981,7 +1193,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(double a) {
-        return null;
+        return new CMatrix(this.shape.copy(),
+                ComplexDenseOperations.sub(this.entries, a)
+        );
     }
 
 
@@ -993,7 +1207,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(CNumber a) {
-        return null;
+        return new CMatrix(this.shape.copy(),
+                ComplexDenseOperations.sub(this.entries, a)
+        );
     }
 
 
@@ -1005,7 +1221,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix scalMult(double factor) {
-        return null;
+        return new CMatrix(this.shape.copy(),
+                ComplexOperations.scalMult(this.entries, factor)
+        );
     }
 
 
@@ -1017,7 +1235,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix scalMult(CNumber factor) {
-        return null;
+        return new CMatrix(this.shape.copy(),
+                ComplexOperations.scalMult(this.entries, factor)
+        );
     }
 
 
@@ -1149,7 +1369,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(SparseCMatrix B) {
-        return null;
+        return ComplexDenseSparseOperations.sub(this, B);
     }
 
 

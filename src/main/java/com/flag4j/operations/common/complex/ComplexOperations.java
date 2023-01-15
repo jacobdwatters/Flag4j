@@ -28,6 +28,9 @@ package com.flag4j.operations.common.complex;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * This class provides low level methods for computing operations on real tensors. These methods can be applied to
  * either sparse or dense real tensors.
@@ -69,5 +72,102 @@ public class ComplexOperations {
         }
 
         return abs;
+    }
+
+
+    /**
+     * Rounds the values of a tensor to the nearest integer. Also see {@link #round(CNumber[], int)}.
+     * @param src Entries of the tensor to round.
+     * @return The result of rounding all entries of the source tensor to the nearest integer.
+     * @throws IllegalArgumentException If {@code precision} is negative.
+     */
+    public static CNumber[] round(CNumber[] src) {
+        CNumber[] dest = new CNumber[src.length];
+
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = CNumber.round(src[i]);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Rounds the values of a tensor with specified precision. Note, if precision is zero, {@link #round(CNumber[])} is
+     * preferred.
+     * @param src Entries of the tensor to round.
+     * @param precision Precision to round to (i.e. the number of decimal places).
+     * @return The result of rounding all entries of the source tensor with the specified precision.
+     * @throws IllegalArgumentException If {@code precision} is negative.
+     */
+    public static CNumber[] round(CNumber[] src, int precision) {
+        if(precision<0) {
+            throw new IllegalArgumentException(ErrorMessages.negValueErr(precision));
+        }
+
+        CNumber[] dest = new CNumber[src.length];
+
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = CNumber.round(src[i], precision);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero.
+     *
+     * @param threshold Threshold for rounding values to zero. That is, if a value in this tensor is less than
+     *                  the threshold in absolute value then it will be rounded to zero. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If {@code threshold} is negative.
+     */
+    public static CNumber[] roundToZero(CNumber[] src, double threshold) {
+        if(threshold<0) {
+            throw new IllegalArgumentException(ErrorMessages.negValueErr(threshold));
+        }
+
+        CNumber[] dest = new CNumber[src.length];
+
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = CNumber.roundToZero(src[i], threshold);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Computes the scalar multiplication of a tensor with a scalar value.
+     * @param src Entries of the tensor.
+     * @param factor Scalar value.
+     * @return The result of the scalar multiplication of a tensor.
+     */
+    public static CNumber[] scalMult(CNumber[] src, double factor) {
+        CNumber[] dest = new CNumber[src.length];
+
+        for(int i=0; i<src.length; i++) {
+            dest[i] = src[i].mult(factor);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Computes the scalar multiplication of a tensor with a scalar value.
+     * @param src Entries of the tensor.
+     * @param factor Scalar value.
+     * @return The result of the scalar multiplication of a tensor.
+     */
+    public static CNumber[] scalMult(CNumber[] src, CNumber factor) {
+        CNumber[] dest = new CNumber[src.length];
+
+        for(int i=0; i<src.length; i++) {
+            dest[i] = src[i].mult(factor);
+        }
+
+        return dest;
     }
 }

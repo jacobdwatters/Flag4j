@@ -1,2 +1,7 @@
-com\flag4j\operations\common\complex\AggregateComplex.class
+com\flag4j\TempTests.class
 com\flag4j\operations\common\complex\ComplexOperations.class
+com\flag4j\operations\dense\real\RealDenseProperties.class
+com\flag4j\operations\common\complex\AggregateComplex.class
+com\flag4j\operations\dense\complex\ComplexDenseProperties.class
+com\flag4j\operations\dense\complex\ComplexDenseEquals.class
+com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseEquals.class

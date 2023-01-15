@@ -5,9 +5,6 @@ import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static com.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication.*;
-
 class RealComplexDenseMatMultTests {
     double[][] aEntries;
     CNumber[][] expCEntries;

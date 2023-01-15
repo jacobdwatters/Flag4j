@@ -1198,9 +1198,24 @@ public class CNumber extends Number {
 
 
     /**
+     * Rounds a complex numbers to zero if its magnitude within the specified tolerance from zero.
+     * @param n Number to round.
+     * @param tol Max distances in complex plane for which number should be rounded to zero.
+     * @return The
+     */
+    public static CNumber roundToZero(CNumber n, double tol) {
+        if(nearZero(n, tol)) {
+            return new CNumber();
+        } else {
+            return n.copy();
+        }
+    }
+
+
+    /**
      * Checks if a number is near zero in magnitude.
      * @param n Number to round.
-     * @param tol - tolerance of how close to zero is
+     * @param tol Tolerance of how close to zero is
      * 		considered "near".
      * @return Returns true if magnitude of number is less than or equal to
      * 		<code>tol</code>. Otherwise, returns false.

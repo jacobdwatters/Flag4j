@@ -3,9 +3,7 @@ package com.flag4j.operations.dense_sparse.real;
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.SparseMatrix;
-import static com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication.*;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 class RealDenseSparseMatMultTests {
     double[] bEntries;

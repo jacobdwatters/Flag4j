@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,37 +22,19 @@
  * SOFTWARE.
  */
 
-package com.flag4j.operations.dense.real;
+package com.flag4j.operations.dense.complex;
 
+import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
 
 /**
- * This class contains low-level implementations for operations which check if a tensor satisfies some property.
+ * This class contains low-level implementations for operations which check if a complex tensor satisfies some property.
  */
-public class RealDenseCheckOperations {
+public class ComplexDenseProperties {
 
-    private RealDenseCheckOperations() {
-        // Hide default constructor.
+    private ComplexDenseProperties() {
+        // Hide default constructor in utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
-    }
-
-
-    /**
-     * Checks if this tensor only contains zeros.
-     * @param src Elements of the tensor.
-     * @return True if this tensor only contains zeros. Otherwise, returns false.
-     */
-    public static boolean isZeros(double[] src) {
-        boolean allZeros = true;
-
-        for(double value : src) {
-            if(value != 0) {
-                allZeros = false;
-                break; // No need to look further.
-            }
-        }
-
-        return allZeros;
     }
 
 
@@ -61,11 +43,11 @@ public class RealDenseCheckOperations {
      * @param src Elements of the tensor.
      * @return True if this tensor only contains ones. Otherwise, returns false.
      */
-    public static boolean isOnes(double[] src) {
+    public static boolean isOnes(CNumber[] src) {
         boolean allZeros = true;
 
-        for(double value : src) {
-            if(value != 1) {
+        for(CNumber value : src) {
+            if(!value.equals(CNumber.ONE)) {
                 allZeros = false;
                 break; // No need to look further.
             }

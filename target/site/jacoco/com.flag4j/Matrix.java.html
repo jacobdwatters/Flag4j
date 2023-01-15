@@ -274,13 +274,13 @@ public class Matrix extends RealMatrixBase implements
      * @param object Object to check equality with this matrix.
      * @return True if the two matrices are numerically equivalent and false otherwise.
      */
+    @Override
     public boolean equals(Object object) {
         boolean equal;
 
-<span class="fc bfc" id="L280" title="All 2 branches covered.">        if(object instanceof Matrix) {</span>
-<span class="fc" id="L281">            Matrix mat = (Matrix) object;</span>
-<span class="fc" id="L282">            equal = RealDenseEquals.matrixEquals(this, mat);</span>
-
+<span class="fc bfc" id="L281" title="All 2 branches covered.">        if(object instanceof Matrix) {</span>
+<span class="fc" id="L282">            Matrix mat = (Matrix) object;</span>
+<span class="fc" id="L283">            equal = RealDenseEquals.matrixEquals(this, mat);</span>
 <span class="fc bfc" id="L284" title="All 2 branches covered.">        } else if(object instanceof CMatrix) {</span>
 <span class="fc" id="L285">            CMatrix mat = (CMatrix) object;</span>
 <span class="fc" id="L286">            equal = RealComplexDenseEquals.matrixEquals(this, mat);</span>
@@ -3071,7 +3071,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isZeros() {
-<span class="fc" id="L3074">        return RealDenseCheckOperations.isZeros(entries);</span>
+<span class="fc" id="L3074">        return ArrayUtils.isZeros(entries);</span>
     }
 
 
@@ -3082,7 +3082,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isOnes() {
-<span class="fc" id="L3085">        return RealDenseCheckOperations.isOnes(entries);</span>
+<span class="fc" id="L3085">        return RealDenseProperties.isOnes(entries);</span>
     }
 
 

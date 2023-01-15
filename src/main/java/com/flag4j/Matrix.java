@@ -57,6 +57,8 @@ public class Matrix extends RealMatrixBase implements
         MatrixPropertiesMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double> {
 
 
+    public static final double DEFAULT_ROUND_TO_ZERO_THRESHOLD = 1.0E-12;
+
     /**
      * Constructs a square real dense matrix of a specified size. The entries of the matrix will default to zero.
      * @param size Size of the square matrix.
@@ -274,13 +276,13 @@ public class Matrix extends RealMatrixBase implements
      * @param object Object to check equality with this matrix.
      * @return True if the two matrices are numerically equivalent and false otherwise.
      */
+    @Override
     public boolean equals(Object object) {
         boolean equal;
 
         if(object instanceof Matrix) {
             Matrix mat = (Matrix) object;
             equal = RealDenseEquals.matrixEquals(this, mat);
-
         } else if(object instanceof CMatrix) {
             CMatrix mat = (CMatrix) object;
             equal = RealComplexDenseEquals.matrixEquals(this, mat);
@@ -942,7 +944,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix roundToZero() {
-        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, 1.0E-12));
+        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD));
     }
 
 
@@ -3071,7 +3073,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isZeros() {
-        return RealDenseCheckOperations.isZeros(entries);
+        return ArrayUtils.isZeros(entries);
     }
 
 
@@ -3082,7 +3084,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isOnes() {
-        return RealDenseCheckOperations.isOnes(entries);
+        return RealDenseProperties.isOnes(entries);
     }
 
 

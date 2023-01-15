@@ -24,9 +24,11 @@
 
 package com.flag4j.core;
 
+import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
 
 import java.io.Serializable;
 
@@ -54,15 +56,15 @@ public abstract class MatrixBase&lt;T extends Serializable&gt; extends TensorBas
      * @throws IllegalArgumentException If the shape parameter is not of rank 2.
      */
     public MatrixBase(Shape shape, T entries) {
-<span class="fc" id="L57">        super(shape, entries);</span>
+<span class="fc" id="L59">        super(shape, entries);</span>
 
-<span class="fc" id="L59">        numRows = shape.dims[Axis2D.row()];</span>
-<span class="fc" id="L60">        numCols = shape.dims[Axis2D.col()];</span>
+<span class="fc" id="L61">        numRows = shape.dims[Axis2D.row()];</span>
+<span class="fc" id="L62">        numCols = shape.dims[Axis2D.col()];</span>
 
-<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if(shape.getRank() != 2) {</span>
-<span class="nc" id="L63">            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), 2));</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if(shape.getRank() != 2) {</span>
+<span class="nc" id="L65">            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), 2));</span>
         }
-<span class="fc" id="L65">    }</span>
+<span class="fc" id="L67">    }</span>
 
 
     /**
@@ -70,7 +72,7 @@ public abstract class MatrixBase&lt;T extends Serializable&gt; extends TensorBas
      * @return The number of rows in this matrix.
      */
     public int numRows() {
-<span class="fc" id="L73">        return numRows;</span>
+<span class="fc" id="L75">        return numRows;</span>
     }
 
 
@@ -79,7 +81,7 @@ public abstract class MatrixBase&lt;T extends Serializable&gt; extends TensorBas
      * @return The number of columns in this matrix.
      */
     public int numCols() {
-<span class="fc" id="L82">        return numCols;</span>
+<span class="fc" id="L84">        return numCols;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComplexDenseSparseEquals.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense_sparse.complex</a> &gt; <span class="el_source">ComplexDenseSparseEquals.java</span></div><h1>ComplexDenseSparseEquals.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense_sparse.complex;
+
+import com.flag4j.CMatrix;
+import com.flag4j.SparseCMatrix;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.ErrorMessages;
+
+import java.util.Arrays;
+
+/**
+ * This class provides methods for checking the equality of a complex dense tensor with a complex sparse tensor.
+ */
+public class ComplexDenseSparseEquals {
+
+<span class="nc" id="L40">    private ComplexDenseSparseEquals() {</span>
+        // Hide constructor for utility class.
+<span class="nc" id="L42">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Checks if two real dense matrices are equal.
+     * @param A First matrix.
+     * @param B Second matrix.
+     * @return True if the two matrices are element-wise equivalent.
+     */
+    public static boolean matrixEquals(CMatrix A, SparseCMatrix B) {
+<span class="nc" id="L53">        boolean equal = true;</span>
+
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        if(A.shape.equals(B.shape)) {</span>
+<span class="nc" id="L56">            CNumber[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);</span>
+
+            int rowIndex, colIndex;
+            int entriesIndex;
+
+            // Remove all nonZero entries from the entries of this matrix.
+<span class="nc bnc" id="L62" title="All 2 branches missed.">            for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L63">                rowIndex = B.rowIndices[i];</span>
+<span class="nc" id="L64">                colIndex = B.colIndices[i];</span>
+<span class="nc" id="L65">                entriesIndex = A.shape.entriesIndex(rowIndex, colIndex);</span>
+
+<span class="nc bnc" id="L67" title="All 2 branches missed.">                if(!entriesCopy[entriesIndex].equals(B.entries[i])) {</span>
+<span class="nc" id="L68">                    equal = false;</span>
+<span class="nc" id="L69">                    break;</span>
+                }
+
+<span class="nc" id="L72">                entriesCopy[A.shape.entriesIndex(rowIndex, colIndex)] = new CNumber();</span>
+            }
+
+<span class="nc bnc" id="L75" title="All 2 branches missed.">            if(equal) {</span>
+                // Now, if this matrix is equal to the sparse matrix, there should only be zeros left in the entriesStack
+<span class="nc" id="L77">                equal = ArrayUtils.isZeros(entriesCopy);</span>
+            }
+
+<span class="nc" id="L80">        } else {</span>
+<span class="nc" id="L81">            equal = false;</span>
+        }
+
+<span class="nc" id="L84">        return equal;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

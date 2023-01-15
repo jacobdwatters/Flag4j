@@ -5,9 +5,7 @@ import com.flag4j.Shape;
 import com.flag4j.SparseCMatrix;
 import com.flag4j.SparseCVector;
 import com.flag4j.complex_numbers.CNumber;
-import static com.flag4j.operations.sparse.complex.ComplexSparseMatrixMultiplication.*;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ComplexSparseMatMultTests {
 

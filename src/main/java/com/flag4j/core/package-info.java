@@ -26,5 +26,4 @@
  * This package contains the core interfaces and abstract classes that specify the functionality of the algebraic objects
  * within Flag4j. Namely, tensors, matrices, and vectors.
  */
-
 package com.flag4j.core;

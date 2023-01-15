@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,11 @@
 
 package com.flag4j.operations.dense_sparse.real_complex;
 
+import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
 import com.flag4j.SparseCMatrix;
+import com.flag4j.SparseMatrix;
+import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 
@@ -43,7 +46,7 @@ public class RealComplexDenseSparseEquals {
 
 
     /**
-     * Checks if two real dense matrices are equal.
+     * Checks if a real dense matrix is equal to a sparse complex matrix.
      * @param A First matrix.
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
@@ -69,6 +72,48 @@ public class RealComplexDenseSparseEquals {
                 }
 
                 entriesCopy[A.shape.entriesIndex(rowIndex, colIndex)] = 0;
+            }
+
+            if(equal) {
+                // Now, if this matrix is equal to the sparse matrix, there should only be zeros left in the entriesStack
+                equal = ArrayUtils.isZeros(entriesCopy);
+            }
+
+        } else {
+            equal = false;
+        }
+
+        return equal;
+    }
+
+
+    /**
+     * Checks if a dense complex matrix is equal to a real sparse matrix.
+     * @param A First matrix.
+     * @param B Second matrix.
+     * @return True if the two matrices are element-wise equivalent.
+     */
+    public static boolean matrixEquals(CMatrix A, SparseMatrix B) {
+        boolean equal = true;
+
+        if(A.shape.equals(B.shape)) {
+            CNumber[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);
+
+            int rowIndex, colIndex;
+            int entriesIndex;
+
+            // Remove all nonZero entries from the entries of this matrix.
+            for(int i=0; i<B.nonZeroEntries(); i++) {
+                rowIndex = B.rowIndices[i];
+                colIndex = B.colIndices[i];
+                entriesIndex = A.shape.entriesIndex(rowIndex, colIndex);
+
+                if(!entriesCopy[entriesIndex].equals(B.entries[i])) {
+                    equal = false;
+                    break;
+                }
+
+                entriesCopy[A.shape.entriesIndex(rowIndex, colIndex)] = new CNumber();
             }
 
             if(equal) {
