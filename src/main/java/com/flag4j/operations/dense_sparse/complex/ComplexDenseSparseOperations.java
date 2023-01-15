@@ -26,8 +26,10 @@ package com.flag4j.operations.dense_sparse.complex;
 
 
 import com.flag4j.CMatrix;
+import com.flag4j.Matrix;
 import com.flag4j.SparseCMatrix;
 import com.flag4j.SparseMatrix;
+import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -85,5 +87,26 @@ public class ComplexDenseSparseOperations {
         }
 
         return dest;
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between a real dense matrix and a real sparse matrix.
+     * @return The result of element-wise multiplication.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static SparseCMatrix elemMult(CMatrix src1, SparseCMatrix src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        int row, col;
+        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];
+
+        for(int i=0; i<destEntries.length; i++) {
+            row = src2.rowIndices[i];
+            col = src2.colIndices[i];
+            destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);
+        }
+
+        return new SparseCMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);
     }
 }

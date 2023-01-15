@@ -4,6 +4,8 @@ import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
+import static com.flag4j.operations.common.complex.AggregateComplex.sum;
+import static com.flag4j.operations.dense.complex.ComplexDenseOperations.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

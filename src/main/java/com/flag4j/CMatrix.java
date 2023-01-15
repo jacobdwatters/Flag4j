@@ -30,6 +30,7 @@ import com.flag4j.core.MatrixComparisonsMixin;
 import com.flag4j.core.MatrixOperationsMixin;
 import com.flag4j.core.MatrixManipulationsMixin;
 import com.flag4j.core.MatrixPropertiesMixin;
+import com.flag4j.operations.MatrixMultiply;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.dense.complex.ComplexDenseEquals;
@@ -39,8 +40,10 @@ import com.flag4j.operations.dense.complex.ComplexDenseSetOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
@@ -59,7 +62,7 @@ public class CMatrix extends ComplexMatrixBase implements
         MatrixPropertiesMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber> {
 
 
-    public static final double DEFAULT_ROUND_TO_ZERO_THRESHOLD = 1e-12;
+    private static final double DEFAULT_ROUND_TO_ZERO_THRESHOLD = 1e-12;
 
     /**
      * Constructs a square complex dense matrix of a specified size. The entries of the matrix will default to zero.
@@ -1250,7 +1253,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix scalDiv(double divisor) {
-        return null;
+        return new CMatrix(this.shape.copy(),
+                ComplexDenseOperations.scalDiv(this.entries, divisor)
+        );
     }
 
 
@@ -1263,7 +1268,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix scalDiv(CNumber divisor) {
-        return null;
+        return new CMatrix(this.shape.copy(),
+                ComplexDenseOperations.scalDiv(this.entries, divisor)
+        );
     }
 
 
@@ -1309,7 +1316,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix transpose() {
-        return null;
+        return T();
     }
 
 
@@ -1320,6 +1327,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix T() {
+        // TODO: Create dispatch method to choose algorithm
         return null;
     }
 
@@ -1332,7 +1340,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix hermationTranspose() {
-        return null;
+        return H();
     }
 
 
@@ -1344,6 +1352,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix H() {
+        // TODO: Create dispatch method to choose algorithm
         return null;
     }
 
@@ -1356,7 +1365,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix recep() {
-        return null;
+        return new CMatrix(
+                shape.copy(),
+                ComplexDenseOperations.recep(entries)
+        );
     }
 
 
@@ -1382,7 +1394,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(Matrix B) {
-        return null;
+        CNumber[] entries = MatrixMultiply.dispatch(this, B);
+        Shape shape = new Shape(this.numRows, B.numCols);
+
+        return new CMatrix(shape, entries);
     }
 
 
@@ -1395,7 +1410,14 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseMatrix B) {
-        return null;
+        // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
+        ParameterChecks.assertMatMultShapes(this.shape, B.shape);
+        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(
+                this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
+        );
+        Shape shape = new Shape(this.numRows, B.numCols);
+
+        return new CMatrix(shape, entries);
     }
 
 
@@ -1408,7 +1430,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(CMatrix B) {
-        return null;
+        CNumber[] entries = MatrixMultiply.dispatch(this, B);
+        Shape shape = new Shape(this.numRows, B.numCols);
+
+        return new CMatrix(shape, entries);
     }
 
 
@@ -1421,7 +1446,14 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
-        return null;
+        // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
+        ParameterChecks.assertMatMultShapes(this.shape, B.shape);
+        CNumber[] entries = ComplexDenseSparseMatrixMultiplication.standard(
+                this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
+        );
+        Shape shape = new Shape(this.numRows, B.numCols);
+
+        return new CMatrix(shape, entries);
     }
 
 
@@ -1434,7 +1466,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(Vector b) {
-        return null;
+        CNumber[] entries = MatrixMultiply.dispatch(this, b);
+        Shape shape = new Shape(this.numRows, 1);
+
+        return new CMatrix(shape, entries);
     }
 
 
@@ -1447,6 +1482,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseVector b) {
+        // TODO: Create dispatch method to choose algorithm
         return null;
     }
 
@@ -1460,6 +1496,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(CVector b) {
+        // TODO: Create dispatch method to choose algorithm
         return null;
     }
 
@@ -1473,6 +1510,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCVector b) {
+        // TODO: Create dispatch method to choose algorithm
         return null;
     }
 
@@ -1487,7 +1525,21 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix pow(int exponent) {
-        return null;
+        ParameterChecks.assertGreaterEq(0, exponent);
+        ParameterChecks.assertSquare(this.shape);
+        CMatrix result;
+
+        if(exponent==0) {
+            result = I(this.shape);
+        } else {
+            result = new CMatrix(this);
+
+            for(int i=1; i<exponent; i++) {
+                result = result.mult(this);
+            }
+        }
+
+        return result;
     }
 
 
@@ -1500,7 +1552,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix elemMult(Matrix B) {
-        return null;
+        return new CMatrix(
+                shape.copy(),
+                RealComplexDenseOperations.elemMult(entries, shape, B.entries, B.shape)
+        );
     }
 
 
@@ -1513,7 +1568,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public SparseCMatrix elemMult(SparseMatrix B) {
-        return null;
+        return RealComplexDenseSparseOperations.elemMult(this, B);
     }
 
 
@@ -1526,7 +1581,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix elemMult(CMatrix B) {
-        return null;
+        return new CMatrix(
+                shape.copy(),
+                ComplexDenseOperations.elemMult(entries, shape, B.entries, B.shape)
+        );
     }
 
 
@@ -1539,7 +1597,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
-        return null;
+        return ComplexDenseSparseOperations.elemMult(this, B);
     }
 
 
@@ -1553,7 +1611,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix elemDiv(Matrix B) {
-        return null;
+        return new CMatrix(
+                shape.copy(),
+                RealComplexDenseOperations.elemDiv(entries, shape, B.entries, B.shape)
+        );
     }
 
 
@@ -1567,7 +1628,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix elemDiv(CMatrix B) {
-        return null;
+        return new CMatrix(
+                shape.copy(),
+                ComplexDenseOperations.elemDiv(entries, shape, B.entries, B.shape)
+        );
     }
 
 

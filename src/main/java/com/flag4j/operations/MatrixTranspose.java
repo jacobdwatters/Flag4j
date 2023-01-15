@@ -90,7 +90,7 @@ public final class MatrixTranspose {
      * @return The appropriate matrix transpose algorithm.
      */
     private static Algorithm chooseAlgorithm(Shape shape) {
-        Algorithm algorithm = Algorithm.BLOCKED;
+        Algorithm algorithm;
 
         int numEntries = shape.totalEntries().intValue();
 

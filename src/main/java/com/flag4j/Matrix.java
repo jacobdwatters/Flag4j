@@ -1292,6 +1292,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(SparseMatrix B) {
+        // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
         ParameterChecks.assertMatMultShapes(this.shape, B.shape);
         double[] entries = RealDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
@@ -1327,6 +1328,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
+        // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
         ParameterChecks.assertMatMultShapes(this.shape, B.shape);
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape

@@ -7,6 +7,9 @@ import com.flag4j.SparseCVector;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
+import static com.flag4j.operations.sparse.complex.ComplexSparseMatrixMultiplication.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+
 class ComplexSparseMatMultTests {
 
     CNumber[][] expEntries;

@@ -45,11 +45,11 @@ public class AggregateComplex {
      * @return The sum of all entries in this tensor.
      */
     public static CNumber sum(final CNumber[] entries) {
-<span class="nc" id="L48">        CNumber sum = new CNumber();</span>
-<span class="nc bnc" id="L49" title="All 2 branches missed.">        for(CNumber value : entries) {</span>
-<span class="nc" id="L50">            sum.addEq(value);</span>
+<span class="fc" id="L48">        CNumber sum = new CNumber();</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for(CNumber value : entries) {</span>
+<span class="fc" id="L50">            sum.addEq(value);</span>
         }
-<span class="nc" id="L52">        return sum;</span>
+<span class="fc" id="L52">        return sum;</span>
     }
 
 

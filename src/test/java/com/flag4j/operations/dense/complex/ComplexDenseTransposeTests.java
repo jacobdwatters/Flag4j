@@ -2,6 +2,8 @@ package com.flag4j.operations.dense.complex;
 
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
+
+import static com.flag4j.operations.dense.complex.ComplexDenseTranspose.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class ComplexDenseTransposeTests {

@@ -5,6 +5,7 @@ import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
+import static com.flag4j.operations.dense.real_complex.RealComplexDenseOperations.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

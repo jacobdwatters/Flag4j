@@ -160,7 +160,7 @@ public class RealComplexDenseSparseOperations {
 
 
     /**
-     * Computes the element-wise multiplication between a real dense matrix and a real sparse matrix.
+     * Computes the element-wise multiplication between a real dense matrix and a complex sparse matrix.
      * @param src1 First matrix.
      * @param src2 Second matrix.
      * @return The result of element-wise multiplication.
@@ -176,6 +176,29 @@ public class RealComplexDenseSparseOperations {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
             destEntries[i] = src2.entries[i].mult(src1.entries[row*src1.numCols + col]);
+        }
+
+        return new SparseCMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between a complex dense matrix and a real sparse matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @return The result of element-wise multiplication.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static SparseCMatrix elemMult(CMatrix src1, SparseMatrix src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        int row, col;
+        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];
+
+        for(int i=0; i<destEntries.length; i++) {
+            row = src2.rowIndices[i];
+            col = src2.colIndices[i];
+            destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);
         }
 
         return new SparseCMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);
