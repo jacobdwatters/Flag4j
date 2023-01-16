@@ -22,10 +22,44 @@
  * SOFTWARE.
  */
 
-package com.flag4j.linalg;
+package com.flag4j.operations.concurrency.util;
 
 /**
- * This class provides several matrix decompositions.
+ * Simple enum class for two-dimensional axis. The row axis has ordinal 0 and the column axis has ordinal 1.
  */
-public class Decompose {
+public enum Axis2D {
+    /**
+     * Row of 2D tensor.
+     */
+    ROW,
+    /**
+     * Column of 2D tensor
+     */
+    COL;
+
+    /**
+     * Get the ordinal of the row axis in 2D.
+     * @return The ordinal of the row axis in 2D.
+     */
+    public static int row() {
+        return ROW.ordinal();
+    }
+
+
+    /**
+     * Get the ordinal of the column axis in 2D.
+     * @return The ordinal of the column axis in 2D.
+     */
+    public static int col() {
+        return COL.ordinal();
+    }
+
+
+    /**
+     * Gets an array of all axes ordinals.
+     * @return An array of all axes ordinals.
+     */
+    public static int[] allAxes() {
+        return new int[]{ROW.ordinal(), COL.ordinal()};
+    }
 }

@@ -68,4 +68,6 @@ public abstract class ComplexMatrixBase extends MatrixBase<CNumber[]> {
      * @return The conjugate transpose.
      */
     public abstract CMatrix H();
+
+    public abstract void set(CNumber value, int... indices);
 }

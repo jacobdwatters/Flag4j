@@ -24,7 +24,7 @@
 
 package com.flag4j.operations.dense.real;
 
-import com.flag4j.util.ErrorMessages;
+import com.flag4j.operations.concurrency.util.ErrorMessages;
 
 /**
  * This class contains low-level implementations for operations which check if a tensor satisfies some property.

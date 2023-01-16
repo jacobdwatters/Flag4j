@@ -25,7 +25,7 @@
 package com.flag4j.operations.dense.complex;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.util.ErrorMessages;
+import com.flag4j.operations.concurrency.util.ErrorMessages;
 
 /**
  * This class contains low-level implementations for operations which check if a complex tensor satisfies some property.

@@ -24,11 +24,9 @@
 
 package com.flag4j.core;
 
-import com.flag4j.Matrix;
 import com.flag4j.Shape;
-import com.flag4j.util.Axis2D;
-import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ParameterChecks;
+import com.flag4j.operations.concurrency.util.Axis2D;
+import com.flag4j.operations.concurrency.util.ErrorMessages;
 
 import java.io.Serializable;
 

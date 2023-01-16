@@ -24,7 +24,7 @@
 
 package com.flag4j.io;
 
-import com.flag4j.util.ErrorMessages;
+import com.flag4j.operations.concurrency.util.ErrorMessages;
 
 /**
  * Print options for matrices and vectors

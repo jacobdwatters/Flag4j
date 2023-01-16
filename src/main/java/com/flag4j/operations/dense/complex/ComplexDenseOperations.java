@@ -26,8 +26,12 @@ package com.flag4j.operations.dense.complex;
 
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ParameterChecks;
+import com.flag4j.operations.concurrency.util.Axis2D;
+import com.flag4j.operations.concurrency.util.ErrorMessages;
+import com.flag4j.operations.concurrency.util.ParameterChecks;
+
+import static com.flag4j.operations.common.complex.AggregateComplex.maxAbs;
+import static com.flag4j.operations.common.real.Aggregate.maxAbs;
 
 
 /**
@@ -314,5 +318,120 @@ public final class ComplexDenseOperations {
         }
 
         return product;
+    }
+
+
+    /**
+     * Compute the L<sub>p, q</sub> norm of a matrix.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p First parameter in L<sub>p, q</sub> norm.
+     * @param q Second parameter in L<sub>p, q</sub> norm.
+     * @return The L<sub>p, q</sub> norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
+     */
+    public static double matrixNormLpq(CNumber[] src, Shape shape, double p, double q) {
+        ParameterChecks.assertGreaterEq(1, p, q);
+
+        double norm = 0;
+        double colSum;
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+
+        for(int j=0; j<cols; j++) {
+            colSum = 0;
+            for(int i=0; i<rows; i++) {
+                colSum += (Math.pow(src[i*cols + j].magAsDouble(), p));
+            }
+            norm += Math.pow(colSum, q/p);
+        }
+
+        return Math.pow(norm, 1/q);
+    }
+
+
+    /**
+     * Compute the L<sub>p</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link ComplexDenseOperations#matrixNormLpq(CNumber[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p Parameter in L<sub>p</sub> norm.
+     * @return The L<sub>p</sub> norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} is less than 1.
+     */
+    public static double matrixNormLp(CNumber[] src, Shape shape, double p) {
+        ParameterChecks.assertGreaterEq(1, p);
+
+        double norm = 0;
+        double colSum;
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+
+        for(int j=0; j<cols; j++) {
+            colSum=0;
+            for(int i=0; i<rows; i++) {
+                colSum += Math.pow(src[i*cols + j].magAsDouble(), p);
+            }
+
+            norm += Math.pow(colSum, 1.0/p);
+        }
+
+        return norm;
+    }
+
+
+    /**
+     * Compute the L<sub>2</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link ComplexDenseOperations#matrixNormLpq(CNumber[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return The L<sub>2</sub> norm of the matrix.
+     */
+    public static double matrixNormL2(CNumber[] src, Shape shape) {
+        double norm = 0;
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+
+        double colSum;
+
+        for(int j=0; j<cols; j++) {
+            colSum = 0;
+            for(int i=0; i<rows; i++) {
+                colSum += Math.pow(src[i*cols + j].magAsDouble(), 2);
+            }
+            norm += Math.sqrt(colSum);
+        }
+
+        return norm;
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
+     * @param src Entries of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    public static double matrixMaxNorm(CNumber[] src) {
+        return maxAbs(src).re;
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum absolute value in this matrix.
+     * @param src Entries of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    public static double matrixInfNorm(CNumber[] src, Shape shape) {
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+        double[] rowSums = new double[rows];
+
+        for(int i=0; i<rows; i++) {
+            for(int j=0; j<cols; j++) {
+                rowSums[i] += src[i*cols + j].magAsDouble();
+            }
+        }
+
+        return maxAbs(rowSums);
     }
 }

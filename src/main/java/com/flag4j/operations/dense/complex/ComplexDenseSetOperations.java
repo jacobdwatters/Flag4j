@@ -24,9 +24,10 @@
 
 package com.flag4j.operations.dense.complex;
 
+import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ParameterChecks;
+import com.flag4j.operations.concurrency.util.ErrorMessages;
+import com.flag4j.operations.concurrency.util.ParameterChecks;
 
 /**
  * This class contains low-level implementations of setting operations for complex dense tensors.
@@ -209,5 +210,29 @@ public class ComplexDenseSetOperations {
                 dest[count++] = new CNumber(ints[j]);
             }
         }
+    }
+
+
+    /**
+     * Sets an element of a tensor to the specified value.
+     * @param src Elements of the tensor. This will be modified.
+     * @param shape Shape of the tensor.
+     * @param value Value to set specified index to.
+     * @param indices Indices of tensor value to be set.
+     */
+    public static void set(CNumber[] src, Shape shape, double value, int... indices) {
+        src[shape.entriesIndex(indices)] = new CNumber(value);
+    }
+
+
+    /**
+     * Sets an element of a tensor to the specified value.
+     * @param src Elements of the tensor. This will be modified.
+     * @param shape Shape of the tensor.
+     * @param value Value to set specified index to.
+     * @param indices Indices of tensor value to be set.
+     */
+    public static void set(CNumber[] src, Shape shape, CNumber value, int... indices) {
+        src[shape.entriesIndex(indices)] = new CNumber(value);
     }
 }

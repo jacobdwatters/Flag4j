@@ -24,7 +24,7 @@
 
 package com.flag4j.complex_numbers;
 
-import com.flag4j.util.ErrorMessages;
+import com.flag4j.operations.concurrency.util.ErrorMessages;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

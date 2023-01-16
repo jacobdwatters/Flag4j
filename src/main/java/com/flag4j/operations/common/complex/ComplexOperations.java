@@ -26,10 +26,7 @@ package com.flag4j.operations.common.complex;
 
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.util.ErrorMessages;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import com.flag4j.operations.concurrency.util.ErrorMessages;
 
 /**
  * This class provides low level methods for computing operations on real tensors. These methods can be applied to

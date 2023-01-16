@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,35 +22,35 @@
  * SOFTWARE.
  */
 
-package com.flag4j.operations.dense.real;
+package com.flag4j.operations.dense.complex;
 
-
+import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.concurrency.util.ErrorMessages;
 
 /**
  * This class contains several low-level methods useful for computing aggregation operations on dense tensors.
  */
-public class AggregateDenseReal {
+public class AggregateDenseComplex {
 
-    private AggregateDenseReal() {
+    private AggregateDenseComplex() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 
     /**
-     * Computes the index of the minimum value in this tensor. If the minimum value occurs at more than one index,
+     * Computes the index of the minimum value by magnitude in this tensor. If the minimum value occurs at more than one index,
      * the index of the first occurrence is taken.
      * @param entries Entries of the tensor.
-     * @return The index of the minimum value in this tensor. If there are zero entries in the array, -1 is returned.
+     * @return The index of the minimum value by magnitude in this tensor. If there are zero entries in the array, -1 is returned.
      */
-    public static int argMin(double[] entries) {
+    public static int argMin(CNumber[] entries) {
         double currMin = Double.MAX_VALUE;
         int currMinIndex = -1;
 
         for(int i=0; i<entries.length; i++) {
-            if(entries[i] < currMin) {
-                currMin = entries[i]; // Update current minimum.
+            if(entries[i].magAsDouble() < currMin) {
+                currMin = entries[i].magAsDouble(); // Update current minimum.
                 currMinIndex = i;
             }
         }
@@ -60,18 +60,18 @@ public class AggregateDenseReal {
 
 
     /**
-     * Computes the index of the maximum value in this tensor. If the maximum value occurs at more than one index,
+     * Computes the index of the maximum value by magnitude in this tensor. If the maximum value occurs at more than one index,
      * the index of the first occurrence is taken.
      * @param entries Entries of the tensor.
-     * @return The index of the maximum value in this tensor. If there are zero entries in the array, -1 is returned.
+     * @return The index of the maximum value by magnitude in this tensor. If there are zero entries in the array, -1 is returned.
      */
-    public static int argMax(double[] entries) {
+    public static int argMax(CNumber[] entries) {
         double currMax = Double.MIN_VALUE;
         int currMaxIndex = -1;
 
         for(int i=0; i<entries.length; i++) {
-            if(entries[i] > currMax) {
-                currMax = entries[i]; // Update current minimum.
+            if(entries[i].magAsDouble() > currMax) {
+                currMax = entries[i].magAsDouble(); // Update current minimum.
                 currMaxIndex = i;
             }
         }

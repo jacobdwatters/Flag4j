@@ -2,10 +2,8 @@ package com.flag4j.matrix;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.util.ArrayUtils;
+import com.flag4j.operations.concurrency.util.ArrayUtils;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 

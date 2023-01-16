@@ -40,10 +40,10 @@ import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
-import com.flag4j.util.ArrayUtils;
-import com.flag4j.util.Axis2D;
-import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ParameterChecks;
+import com.flag4j.operations.concurrency.util.ArrayUtils;
+import com.flag4j.operations.concurrency.util.Axis2D;
+import com.flag4j.operations.concurrency.util.ErrorMessages;
+import com.flag4j.operations.concurrency.util.ParameterChecks;
 
 import java.util.Arrays;
 
@@ -236,6 +236,25 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public CMatrix toComplex() {
         return new CMatrix(this);
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent complex tensor.
+     * @return A tensor which is equivalent to this matrix.
+     */
+    public Tensor toTensor() {
+        return new Tensor(this.shape.copy(), this.entries.clone());
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent vector. If this matrix is not shaped as a row/column vector,
+     * it will be flattened then converted to a vector.
+     * @return A vector equivalent to this matrix.
+     */
+    public Vector toVector() {
+        return new Vector(this.entries.clone());
     }
 
 
@@ -3047,7 +3066,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double norm(double p, double q) {
-        return RealOperations.matrixNorm(entries, shape, p, q);
+        return RealDenseOperations.matrixNormLpq(entries, shape, p, q);
     }
 
 
@@ -3184,7 +3203,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double norm() {
-        return RealOperations.matrixNorm(entries, shape);
+        return RealDenseOperations.matrixNormL2(entries, shape);
     }
 
 
@@ -3198,7 +3217,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double norm(double p) {
-        return RealOperations.matrixNorm(entries, shape, p);
+        return RealDenseOperations.matrixNormLp(entries, shape, p);
     }
 
 
@@ -3209,7 +3228,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double infNorm() {
-        return RealOperations.matrixInfNorm(entries, shape);
+        return RealDenseOperations.matrixInfNorm(entries, shape);
     }
 
 
@@ -3220,6 +3239,18 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double maxNorm() {
-        return RealOperations.matrixMaxNorm(entries);
+        return RealDenseOperations.matrixMaxNorm(entries);
+    }
+
+
+    /**
+     * Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
+     * Note that here, rank is <b>NOT</b> the same as a tensor rank.
+     *
+     * @return The matrix rank of this matrix.
+     */
+    @Override
+    public int matrixRank() {
+        return 0;
     }
 }

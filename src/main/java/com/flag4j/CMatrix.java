@@ -33,11 +33,7 @@ import com.flag4j.core.MatrixPropertiesMixin;
 import com.flag4j.operations.MatrixMultiply;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.dense.complex.ComplexDenseEquals;
-import com.flag4j.operations.dense.complex.ComplexDenseOperations;
-import com.flag4j.operations.dense.complex.ComplexDenseProperties;
-import com.flag4j.operations.dense.complex.ComplexDenseSetOperations;
-import com.flag4j.operations.dense.real.RealDenseSetOperations;
+import com.flag4j.operations.dense.complex.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
@@ -46,10 +42,10 @@ import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
-import com.flag4j.util.ArrayUtils;
-import com.flag4j.util.Axis2D;
-import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ParameterChecks;
+import com.flag4j.operations.concurrency.util.ArrayUtils;
+import com.flag4j.operations.concurrency.util.Axis2D;
+import com.flag4j.operations.concurrency.util.ErrorMessages;
+import com.flag4j.operations.concurrency.util.ParameterChecks;
 
 import java.util.Arrays;
 
@@ -319,6 +315,25 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
+     * Converts this matrix to an equivalent complex tensor.
+     * @return A complex tensor which is equivalent to this matrix.
+     */
+    public CTensor toTensor() {
+        return new CTensor(this.shape.copy(), ArrayUtils.copyOfRange(entries, 0, entries.length));
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent vector. If this matrix is not shaped as a row/column vector,
+     * it will be flattened then converted to a vector.
+     * @return A vector equivalent to this matrix.
+     */
+    public CVector toVector() {
+        return new CVector(ArrayUtils.copyOfRange(entries, 0, entries.length));
+    }
+
+
+    /**
      * Checks if this tensor only contains zeros.
      *
      * @return True if this tensor only contains zeros. Otherwise, returns false.
@@ -448,7 +463,7 @@ public class CMatrix extends ComplexMatrixBase implements
     public CMatrix reshape(Shape shape) {
         // Ensure the total number of entries in each shape is equal
         ParameterChecks.assertBroadcastable(shape, this.shape);
-        return new CMatrix(shape, entries.clone());
+        return new CMatrix(shape, ArrayUtils.copyOfRange(entries, 0, entries.length));
     }
 
 
@@ -1483,8 +1498,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseVector b) {
-        // TODO: Create dispatch method to choose algorithm
-        return null;
+        // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
+        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);
+        Shape shape = new Shape(this.numRows, 1);
+        return new CMatrix(shape, entries);
     }
 
 
@@ -1497,8 +1514,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(CVector b) {
-        // TODO: Create dispatch method to choose algorithm
-        return null;
+        CNumber[] entries = MatrixMultiply.dispatch(this, b);
+        Shape shape = new Shape(this.numRows, 1);
+
+        return new CMatrix(shape, entries);
     }
 
 
@@ -1511,8 +1530,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCVector b) {
-        // TODO: Create dispatch method to choose algorithm
-        return null;
+        // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
+        CNumber[] entries = ComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);
+        Shape shape = new Shape(this.numRows, 1);
+        return new CMatrix(shape, entries);
     }
 
 
@@ -3131,7 +3152,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double norm(double p, double q) {
-        return 0;
+        return ComplexDenseOperations.matrixNormLpq(entries, shape, p, q);
     }
 
 
@@ -3155,6 +3176,18 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double maxNorm() {
+        return ComplexDenseOperations.matrixMaxNorm(entries);
+    }
+
+
+    /**
+     * Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
+     * Note that here, rank is <b>NOT</b> the same as a tensor rank.
+     *
+     * @return The matrix rank of this matrix.
+     */
+    @Override
+    public int matrixRank() {
         return 0;
     }
 
@@ -3167,6 +3200,21 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void set(double value, int... indices) {
+        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
+        ComplexDenseSetOperations.set(entries, shape, value, indices);
+    }
+
+
+    /**
+     * Sets an index of this tensor to a specified value.
+     *
+     * @param value   Value to set.
+     * @param indices The indices of this tensor for which to set the value.
+     */
+    @Override
+    public void set(CNumber value, int... indices) {
+        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
+        ComplexDenseSetOperations.set(entries, shape, value, indices);
     }
 
 
@@ -3224,7 +3272,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public int[] argMin() {
-        return new int[0];
+        return shape.getIndices(AggregateDenseComplex.argMin(entries));
     }
 
 
@@ -3236,7 +3284,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public int[] argMax() {
-        return new int[0];
+        return shape.getIndices(AggregateDenseComplex.argMax(entries));
     }
 
 
@@ -3247,7 +3295,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double norm() {
-        return 0;
+        return ComplexDenseOperations.matrixNormL2(entries, shape);
     }
 
 
@@ -3261,7 +3309,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double norm(double p) {
-        return 0;
+        return ComplexDenseOperations.matrixNormLp(entries, shape, p);
     }
 
 
@@ -3272,6 +3320,6 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double infNorm() {
-        return 0;
+        return ComplexDenseOperations.matrixInfNorm(entries, shape);
     }
 }

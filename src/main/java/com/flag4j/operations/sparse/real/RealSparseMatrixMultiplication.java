@@ -27,8 +27,8 @@ package com.flag4j.operations.sparse.real;
 
 import com.flag4j.Shape;
 import com.flag4j.operations.concurrency.ThreadManager;
-import com.flag4j.util.Axis2D;
-import com.flag4j.util.ErrorMessages;
+import com.flag4j.operations.concurrency.util.Axis2D;
+import com.flag4j.operations.concurrency.util.ErrorMessages;
 
 /**
  * This class contains low level implementations of matrix multiplication for real sparse matrices.

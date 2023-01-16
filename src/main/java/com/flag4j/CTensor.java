@@ -26,8 +26,8 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.TensorBase;
-import com.flag4j.util.ArrayUtils;
-import com.flag4j.util.ErrorMessages;
+import com.flag4j.operations.concurrency.util.ArrayUtils;
+import com.flag4j.operations.concurrency.util.ErrorMessages;
 
 /**
  * Complex dense tensor.

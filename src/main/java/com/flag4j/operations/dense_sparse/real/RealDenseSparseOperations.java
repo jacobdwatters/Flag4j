@@ -26,8 +26,8 @@ package com.flag4j.operations.dense_sparse.real;
 
 import com.flag4j.Matrix;
 import com.flag4j.SparseMatrix;
-import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ParameterChecks;
+import com.flag4j.operations.concurrency.util.ErrorMessages;
+import com.flag4j.operations.concurrency.util.ParameterChecks;
 
 /**
  * This class contains methods to apply common binary operations to a real dense matrix and to a real sparse matrix.
