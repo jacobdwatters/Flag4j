@@ -25,6 +25,7 @@
 package com.flag4j.util;
 
 import com.flag4j.complex_numbers.CNumber;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -117,6 +118,64 @@ public final class ArrayUtils {
 
 
     /**
+     * Performs an array copy similar to {@link System#arraycopy(Object, int, Object, int, int)} but creates a deep copy
+     * of each element in the source array.
+     * @param src The source array.
+     * @param srcPos The starting position from which to copy elements of the source array.
+     * @param dest The destination array for the copy.
+     * @param destPos Starting index to place copied elements in the destination array.
+     * @param length The number of array elements to be copied.
+     * @throws ArrayIndexOutOfBoundsException If the destPos parameter plus the length parameter exceeds the length of the
+     * source array length or the destination array length.
+     */
+    public static void arraycopy(@NotNull CNumber[] src, int srcPos, @NotNull CNumber[] dest, int destPos, int length) {
+        for(int i=0; i<length; i++) {
+            dest[i+destPos] = src[i+srcPos].copy();
+        }
+    }
+
+
+
+    /**
+     * Performs an array copy similar to {@link System#arraycopy(Object, int, Object, int, int)} but creates a deep copy
+     * of each element in the source array.
+     * @param src The source array.
+     * @param srcPos The starting position from which to copy elements of the source array.
+     * @param dest The destination array for the copy.
+     * @param destPos Starting index to place copied elements in the destination array.
+     * @param length The number of array elements to be copied.
+     * @throws ArrayIndexOutOfBoundsException If the destPos parameter plus the length parameter exceeds the length of the
+     * source array length or the destination array length.
+     */
+    public static void arraycopy(@NotNull double[] src, int srcPos, @NotNull CNumber[] dest, int destPos, int length) {
+        for(int i=0; i<length; i++) {
+            dest[i+destPos] = new CNumber(src[i+srcPos]);
+        }
+    }
+
+
+    /**
+     * Copies a range of an array into a new array. Similar to {@link Arrays#copyOfRange(Object[], int, int)} but
+     * performs a deep copy.
+     * @param src Source array to copy from.
+     * @param start Staring index of range to copy (inclusive).
+     * @param stop Stopping index of range to copy (Exclusive).
+     * @return An array of length {@code stop-start} containing a deep copy of the specified range of the source array.
+     * @throws NegativeArraySizeException If stop is less than start.
+     */
+    public static CNumber[] copyOfRange(CNumber[] src, int start, int stop) {
+        CNumber[] dest = new CNumber[stop-start];
+
+        int count=0;
+        for(int i=start; i<stop; i++) {
+            dest[count++] = src[i];
+        }
+
+        return dest;
+    }
+
+
+    /**
      * Converts array to an array of {@link CNumber complex numbers}.
      * @param src Source array to convert.
      * @param dest Destination array.
@@ -124,7 +183,6 @@ public final class ArrayUtils {
      */
     public static void copy2CNumber(CNumber[] src, CNumber[] dest) {
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
-
         for(int i=0; i<dest.length; i++) {
             dest[i] = new CNumber(src[i]);
         }
@@ -228,8 +286,8 @@ public final class ArrayUtils {
      * @param fillValue Value to fill array with.
      */
     public static void fill(double[][] dest, double fillValue) {
-        for(int i=0; i<dest.length; i++) {
-            Arrays.fill(dest[i], 1);
+        for (double[] doubles : dest) {
+            Arrays.fill(doubles, 1);
         }
     }
 

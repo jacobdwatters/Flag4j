@@ -1585,9 +1585,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CNumber fib(CMatrix B) {
-        // TODO: Implement after implementing A.mult(B) where A is real dense, and B is complex dense.
-        //  Also implement C.trace() where C is complex dense.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).trace();
     }
 
 
@@ -1600,9 +1599,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CNumber fib(SparseCMatrix B) {
-        // TODO: Implement after implementing A.mult(B) where A is real dense, and B is complex sparse.
-        //  Also implement C.trace() where C is complex sparse.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).trace();
     }
 
 
@@ -1677,9 +1675,7 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
-            for(int j=0; j<B.numCols; j++) {
-                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = B.entries[i*B.numCols + j].copy();
-            }
+            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i+numRows)*sum.numCols+(numCols), B.numCols);
         }
 
         return sum;

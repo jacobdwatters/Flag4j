@@ -37,6 +37,7 @@ import com.flag4j.operations.dense.complex.ComplexDenseEquals;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
 import com.flag4j.operations.dense.complex.ComplexDenseProperties;
 import com.flag4j.operations.dense.complex.ComplexDenseSetOperations;
+import com.flag4j.operations.dense.real.RealDenseSetOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
@@ -923,7 +924,7 @@ public class CMatrix extends ComplexMatrixBase implements
 
         for(int i=0; i<this.numRows; i++) {
             if(i!=rowIndex) {
-                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
+                ArrayUtils.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }
         }
@@ -946,7 +947,7 @@ public class CMatrix extends ComplexMatrixBase implements
 
         for(int i=0; i<this.numRows; i++) {
             if(!ArrayUtils.inArray(rowIndices, i)) {
-                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
+                ArrayUtils.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }
         }
@@ -1656,7 +1657,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber fib(Matrix B) {
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).trace();
     }
 
 
@@ -1669,7 +1671,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber fib(SparseMatrix B) {
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).trace();
     }
 
 
@@ -1682,7 +1685,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber fib(CMatrix B) {
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).trace();
     }
 
 
@@ -1695,7 +1699,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber fib(SparseCMatrix B) {
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).trace();
     }
 
 
@@ -1707,7 +1712,21 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix directSum(Matrix B) {
-        return null;
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            ArrayUtils.arraycopy(entries, i*numCols , sum.entries, i*sum.numCols, this.numCols);
+        }
+
+        // Copy over second matrix.
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; j<B.numCols; j++) {
+                sum.entries[(i+numRows)*numCols + j + numCols] = new CNumber(B.entries[i*B.numCols + j]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1719,7 +1738,23 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix directSum(SparseMatrix B) {
-        return null;
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            ArrayUtils.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);
+        }
+
+        // Copy over second matrix.
+        int row, col;
+        for(int i=0; i<B.nonZeroEntries(); i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+
+            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = new CNumber(B.entries[i]);
+        }
+
+        return sum;
     }
 
 
@@ -1731,7 +1766,19 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix directSum(CMatrix B) {
-        return null;
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            ArrayUtils.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);
+        }
+
+        // Copy over second matrix.
+        for(int i=0; i<B.numRows; i++) {
+            ArrayUtils.arraycopy(B.entries, i*B.numCols, sum.entries, (i+numRows)*sum.numCols + numCols, B.numCols);
+        }
+
+        return sum;
     }
 
 
@@ -1743,7 +1790,23 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix directSum(SparseCMatrix B) {
-        return null;
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            ArrayUtils.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);
+        }
+
+        // Copy over second matrix.
+        int row, col;
+        for(int i=0; i<B.nonZeroEntries(); i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+
+            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i].copy();
+        }
+
+        return sum;
     }
 
 
@@ -1755,7 +1818,21 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(Matrix B) {
-        return null;
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            ArrayUtils.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);
+        }
+
+        // Copy over second matrix.
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; j<B.numCols; j++) {
+                sum.entries[i*sum.numCols + j + this.numCols] = new CNumber(B.entries[i*B.numCols + j]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1767,7 +1844,23 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(SparseMatrix B) {
-        return null;
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            ArrayUtils.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);
+        }
+
+        // Copy over second matrix.
+        int row, col;
+        for(int i=0; i<B.nonZeroEntries(); i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+
+            sum.entries[row*sum.numCols + col + this.numCols] = new CNumber(B.entries[i]);
+        }
+
+        return sum;
     }
 
 
@@ -1779,7 +1872,23 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(CMatrix B) {
-        return null;
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; j<this.numCols; j++) {
+                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);
+            }
+        }
+
+        // Copy over second matrix.
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; j<B.numCols; j++) {
+                sum.entries[i*sum.numCols + j + this.numCols] = B.entries[i*B.numCols + j].copy();
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1791,7 +1900,25 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(SparseCMatrix B) {
-        return null;
+        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);
+
+        // Copy over first matrix.
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; j<this.numCols; j++) {
+                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);
+            }
+        }
+
+        // Copy over second matrix.
+        int row, col;
+        for(int i=0; i<B.nonZeroEntries(); i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+
+            sum.entries[row*sum.numCols + col + this.numCols] = B.entries[i].copy();
+        }
+
+        return sum;
     }
 
 
@@ -1803,7 +1930,15 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sumCols() {
-        return null;
+        CMatrix sum = new CMatrix(this.numRows, 1);
+
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; j<this.numCols; j++) {
+                sum.entries[i].addEq(this.entries[i*numCols + j]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1815,7 +1950,15 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sumRows() {
-        return null;
+        CMatrix sum = new CMatrix(1, this.numCols);
+
+        for(int i=0; i<this.numRows; i++) {
+            for(int j=0; j<this.numCols; j++) {
+                sum.entries[j].addEq(this.entries[i*numCols + j]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1828,7 +1971,16 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(Vector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
+        CMatrix sum = new CMatrix(this);
+
+        for(int i=0; i<sum.numRows; i++) {
+            for(int j=0; j<sum.numCols; j++) {
+                sum.entries[i*sum.numCols + j].addEq(b.entries[i]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1841,7 +1993,20 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(SparseVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
+        CMatrix sum = new CMatrix(this);
+
+        int index;
+
+        for(int i=0; i<b.nonZeroEntries(); i++) {
+            index = b.indices[i];
+
+            for(int j=0; j<sum.numCols; j++) {
+                sum.entries[index*sum.numCols + j].addEq(b.entries[i]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1854,7 +2019,16 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(CVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
+        CMatrix sum = new CMatrix(this);
+
+        for(int i=0; i<sum.numRows; i++) {
+            for(int j=0; j<sum.numCols; j++) {
+                sum.entries[i*sum.numCols + j].addEq(b.entries[i]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1867,7 +2041,20 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(SparseCVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, b.size);
+        CMatrix sum = new CMatrix(this);
+
+        int index;
+
+        for(int i=0; i<b.nonZeroEntries(); i++) {
+            index = b.indices[i];
+
+            for(int j=0; j<sum.numCols; j++) {
+                sum.entries[index*sum.numCols + j].addEq(b.entries[i]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1880,7 +2067,16 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(Vector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
+        CMatrix sum = new CMatrix(this);
+
+        for(int i=0; i<sum.numRows; i++) {
+            for(int j=0; j<sum.numCols; j++) {
+                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1893,7 +2089,18 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(SparseVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
+        CMatrix sum = new CMatrix(this);
+
+        int col;
+        for(int i=0; i<sum.numRows; i++) {
+            for(int j=0; j<b.nonZeroEntries(); j++) {
+                col = b.indices[j];
+                sum.entries[i*sum.numCols + col].addEq(b.entries[j]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1906,7 +2113,16 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(CVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
+        CMatrix sum = new CMatrix(this);
+
+        for(int i=0; i<sum.numRows; i++) {
+            for(int j=0; j<sum.numCols; j++) {
+                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1919,7 +2135,18 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(SparseCVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numCols, b.size);
+        CMatrix sum = new CMatrix(this);
+
+        int col;
+        for(int i=0; i<sum.numRows; i++) {
+            for(int j=0; j<b.nonZeroEntries(); j++) {
+                col = b.indices[j];
+                sum.entries[i*sum.numCols + col].addEq(b.entries[j]);
+            }
+        }
+
+        return sum;
     }
 
 
@@ -1933,7 +2160,13 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(Matrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
+        CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));
+
+        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, stacked.entries, this.entries.length, B.entries.length);
+
+        return stacked;
     }
 
 
@@ -1947,7 +2180,21 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseMatrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
+        CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));
+
+        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
+
+        int row, col;
+
+        for(int i=0; i<B.entries.length; i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+            // Offset the row index for destination matrix. i.e. row+this.numRows
+            stacked.entries[(row+this.numRows)*stacked.numCols + col] = new CNumber(B.entries[i]);
+        }
+
+        return stacked;
     }
 
 
@@ -1961,7 +2208,22 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(CMatrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numCols, B.numCols);
+        CMatrix stacked = new CMatrix(new Shape(numRows+B.numRows, numCols));
+
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();
+            }
+        }
+
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; j<B.numCols; j++) {
+                stacked.entries[(i + numRows)*stacked.numCols + j] = B.entries[i*B.numCols+j].copy();
+            }
+        }
+
+        return stacked;
     }
 
 
@@ -1975,7 +2237,24 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCMatrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);
+        CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));
+
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();
+            }
+        }
+
+        int row, col;
+        for(int i=0; i<B.entries.length; i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+            // Offset the row index for destination matrix. i.e. row+this.numRows
+            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i].copy();
+        }
+
+        return stacked;
     }
 
 
@@ -1993,7 +2272,17 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(Matrix B, int axis) {
-        return null;
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(B);
+        } else if(axis==1) {
+            stacked = this.stack(B);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -2011,7 +2300,17 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseMatrix B, int axis) {
-        return null;
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(B);
+        } else if(axis==1) {
+            stacked = this.stack(B);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -2029,7 +2328,17 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(CMatrix B, int axis) {
-        return null;
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(B);
+        } else if(axis==1) {
+            stacked = this.stack(B);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -2047,7 +2356,17 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCMatrix B, int axis) {
-        return null;
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(B);
+        } else if(axis==1) {
+            stacked = this.stack(B);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -2061,7 +2380,22 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(Matrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);
+        CMatrix augmented = new CMatrix(new Shape(numRows, numCols+B.numCols));
+
+        // Copy entries from this matrix.
+        for(int i=0; i<numRows; i++) {
+            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);
+        }
+
+        // Copy entries from the B matrix.
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; j<B.numCols; j++) {
+                augmented.entries[i*augmented.numCols + j + numCols] = new CNumber(B.entries[i*B.numCols + j]);
+            }
+        }
+
+        return augmented;
     }
 
 
@@ -2075,7 +2409,23 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseMatrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);
+        CMatrix augmented = new CMatrix(new Shape(this.numRows, this.numCols+B.numCols));
+
+        // Copy entries from this matrix.
+        for(int i=0; i<numRows; i++) {
+            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);
+        }
+
+        int row, col;
+        for(int i=0; i<B.entries.length; i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+            // Offset the col index for destination matrix. i.e. col+this.numCols
+            augmented.entries[row*augmented.numCols + (col + numCols)] = new CNumber(B.entries[i]);
+        }
+
+        return augmented;
     }
 
 
@@ -2089,7 +2439,24 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(CMatrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);
+        CMatrix augmented = new CMatrix(new Shape(numRows, numCols+B.numCols));
+
+        // Copy entries from this matrix.
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                augmented.entries[i*augmented.numCols + j] = entries[i*numCols + j].copy();
+            }
+        }
+
+        // Copy entries from the B matrix.
+        for(int i=0; i<B.numRows; i++) {
+            for(int j=0; j<B.numCols; j++) {
+                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j].copy();
+            }
+        }
+
+        return augmented;
     }
 
 
@@ -2103,7 +2470,25 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseCMatrix B) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);
+        CMatrix augmented = new CMatrix(new Shape(this.numRows, this.numCols+B.numCols));
+
+        // Copy entries from this matrix.
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                augmented.entries[i*augmented.numCols + j] = entries[i*numCols + j].copy();
+            }
+        }
+
+        int row, col;
+        for(int i=0; i<B.entries.length; i++) {
+            row = B.rowIndices[i];
+            col = B.colIndices[i];
+            // Offset the col index for destination matrix. i.e. col+this.numCols
+            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i].copy();
+        }
+
+        return augmented;
     }
 
 
@@ -2119,7 +2504,13 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(Vector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);
+        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);
+
+        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
+        ArrayUtils.arraycopy(b.entries, 0, stacked.entries, this.entries.length, b.entries.length);
+
+        return stacked;
     }
 
 
@@ -2135,7 +2526,19 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());
+        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);
+
+        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
+
+        int index;
+
+        for(int i=0; i<b.entries.length; i++) {
+            index = b.indices[i];
+            stacked.entries[(stacked.numRows-1)*numCols + index] = new CNumber(b.entries[i]);
+        }
+
+        return stacked;
     }
 
 
@@ -2151,7 +2554,20 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(CVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);
+        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);
+
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();
+            }
+        }
+
+        for(int i=0; i<b.entries.length; i++) {
+            stacked.entries[(stacked.numRows-1)*numCols + i] = b.entries[i].copy();
+        }
+
+        return stacked;
     }
 
 
@@ -2167,7 +2583,22 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());
+        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);
+
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();
+            }
+        }
+
+        int index;
+        for(int i=0; i<b.entries.length; i++) {
+            index = b.indices[i];
+            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[i];
+        }
+
+        return stacked;
     }
 
 
@@ -2187,7 +2618,17 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(Vector b, int axis) {
-        return null;
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(b);
+        } else if(axis==1) {
+            stacked = this.stack(b);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -2207,7 +2648,17 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseVector b, int axis) {
-        return null;
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(b);
+        } else if(axis==1) {
+            stacked = this.stack(b);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -2227,7 +2678,17 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(CVector b, int axis) {
-        return null;
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(b);
+        } else if(axis==1) {
+            stacked = this.stack(b);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -2247,7 +2708,17 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCVector b, int axis) {
-        return null;
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = this.augment(b);
+        } else if(axis==1) {
+            stacked = this.stack(b);
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+        }
+
+        return stacked;
     }
 
 
@@ -2263,7 +2734,20 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(Vector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);
+        CMatrix stacked = new CMatrix(numRows, numCols+1);
+
+        // Copy elements of this matrix.
+        for(int i=0; i<numRows; i++) {
+            System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);
+        }
+
+        // Copy elements from b vector.
+        for(int i=0; i<b.entries.length; i++) {
+            stacked.entries[i*stacked.numCols + stacked.numCols-1] = new CNumber(b.entries[i]);
+        }
+
+        return stacked;
     }
 
 
@@ -2279,7 +2763,21 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());
+        CMatrix stacked = new CMatrix(numRows, numCols+1);
+
+        // Copy elements of this matrix.
+        for(int i=0; i<numRows; i++) {
+            if (numCols >= 0)
+                System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);
+        }
+
+        // Copy elements from b vector.
+        for(int i=0; i<b.entries.length; i++) {
+            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = new CNumber(b.entries[i]);
+        }
+
+        return stacked;
     }
 
 
@@ -2295,7 +2793,22 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(CVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);
+        CMatrix stacked = new CMatrix(numRows, numCols+1);
+
+        // Copy elements of this matrix.
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();
+            }
+        }
+
+        // Copy elements from b vector.
+        for(int i=0; i<b.entries.length; i++) {
+            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();
+        }
+
+        return stacked;
     }
 
 
@@ -2311,7 +2824,22 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseCVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());
+        CMatrix stacked = new CMatrix(numRows, numCols+1);
+
+        // Copy elements of this matrix.
+        for(int i=0; i<numRows; i++) {
+            for(int j=0; j<numCols; j++) {
+                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();
+            }
+        }
+
+        // Copy elements from b vector.
+        for(int i=0; i<b.entries.length; i++) {
+            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();
+        }
+
+        return stacked;
     }
 
 
@@ -2323,7 +2851,12 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix getRow(int i) {
-        return null;
+        int start = i*numCols;
+        int stop = start+numCols;
+
+        CNumber[] row = ArrayUtils.copyOfRange(this.entries, start, stop);
+
+        return new CMatrix(new Shape(1, numCols), row);
     }
 
 
@@ -2335,7 +2868,13 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix getCol(int j) {
-        return null;
+        CNumber[] col = new CNumber[numRows];
+
+        for(int i=0; i<numRows; i++) {
+            col[i] = entries[i*numCols + j].copy();
+        }
+
+        return new CMatrix(new Shape(numRows, 1), col);
     }
 
 
@@ -2348,7 +2887,15 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber trace() {
-        return null;
+        ParameterChecks.assertSquare(this.shape);
+        CNumber sum = new CNumber();
+        int colsOffset = this.numCols+1;
+
+        for(int i=0; i<this.numRows; i++) {
+            sum.addEq(this.entries[i*colsOffset]);
+        }
+
+        return sum;
     }
 
 
@@ -2361,7 +2908,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber tr() {
-        return null;
+        return trace();
     }
 
 
@@ -2374,7 +2921,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix I(int size) {
-        return null;
+        return I(size, size);
     }
 
 
@@ -2389,7 +2936,15 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix I(int numRows, int numCols) {
-        return null;
+        ParameterChecks.assertGreaterEq(1, numRows, numCols);
+        CMatrix I = new CMatrix(numRows, numCols);
+        int stop = Math.min(numRows, numCols);
+
+        for(int i=0; i<stop; i++) {
+            I.entries[i*numCols+i] = CNumber.ONE.copy();
+        }
+
+        return I;
     }
 
 
@@ -2403,7 +2958,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix I(Shape shape) {
-        return null;
+        ParameterChecks.assertRank(2, shape);
+        return I(shape.get(0), shape.get(1));
     }
 
 
@@ -2414,7 +2970,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isSquare() {
-        return false;
+        return numRows==numCols;
     }
 
 
@@ -2425,7 +2981,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isVector() {
-        return false;
+        return numRows<=1 || numCols<=1;
     }
 
 
@@ -2439,7 +2995,23 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public int vectorType() {
-        return 0;
+        int type;
+
+        if(numRows==1 || numCols==1) {
+            if(numRows==1 && numCols==1) {
+                type = 0;
+            } else if(numRows==1) {
+                type = 1;
+            } else {
+                // Then this matrix is equivalent to a column vector.
+                type = 2;
+            }
+        } else {
+            // Then this matrix is not equivalent to any vector.
+            type = -1;
+        }
+
+        return type;
     }
 
 
@@ -2450,7 +3022,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isTri() {
-        return false;
+        return isTriL() || isTriU();
     }
 
 
@@ -2461,7 +3033,20 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isTriL() {
-        return false;
+        boolean result = isSquare();
+
+        if(result) {
+            // Ensure upper half is zeros.
+            for(int i=0; i<numRows; i++) {
+                for(int j=i+1; j<numCols; j++) {
+                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {
+                        return false; // No need to continue.
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
 
@@ -2472,7 +3057,20 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isTriU() {
-        return false;
+        boolean result = isSquare();
+
+        if(result) {
+            // Ensure lower half is zeros.
+            for(int i=1; i<numRows; i++) {
+                for(int j=0; j<i; j++) {
+                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {
+                        return false; // No need to continue.
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
 
@@ -2483,7 +3081,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isDiag() {
-        return false;
+        return isTriL() && isTriU();
     }
 
 
@@ -2494,6 +3092,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isFullRank() {
+        // TODO: Implementation
         return false;
     }
 
@@ -2506,6 +3105,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isSingular() {
+        // TODO: Implementation
         return false;
     }
 
@@ -2518,7 +3118,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isInvertible() {
-        return false;
+        return !isSingular();
     }
 
 
@@ -2543,6 +3143,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isDiagonalizable() {
+        // TODO: Implementation
         return false;
     }
 
@@ -2566,7 +3167,6 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void set(double value, int... indices) {
-
     }
 
 

@@ -224,15 +224,15 @@ public final class RealComplexDenseOperations {
      */
     public static CNumber[] elemDiv(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
 <span class="fc" id="L226">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
-<span class="fc" id="L227">        CNumber[] product = new CNumber[src1.length];</span>
+<span class="fc" id="L227">        CNumber[] quotient = new CNumber[src1.length];</span>
         double divisor;
 
-<span class="fc bfc" id="L230" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
 <span class="fc" id="L231">            divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;</span>
-<span class="fc" id="L232">            product[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);</span>
+<span class="fc" id="L232">            quotient[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);</span>
         }
 
-<span class="fc" id="L235">        return product;</span>
+<span class="fc" id="L235">        return quotient;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

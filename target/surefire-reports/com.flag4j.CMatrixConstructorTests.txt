@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.flag4j.CMatrixConstructorTests
 -------------------------------------------------------------------------------
-Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.072 s - in com.flag4j.CMatrixConstructorTests
+Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.067 s - in com.flag4j.CMatrixConstructorTests

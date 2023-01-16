@@ -31,7 +31,7 @@ import com.flag4j.util.ParameterChecks;
 
 
 /**
- * This class provides methods for computing operations on dense complex tensors.
+ * This class provides low level methods for computing operations on dense complex tensors.
  */
 public final class ComplexDenseOperations {
 
@@ -271,6 +271,49 @@ public final class ComplexDenseOperations {
         }
 
 <span class="nc" id="L273">        return receps;</span>
+    }
+
+
+
+    /**
+     * Computes the element-wise multiplication of two tensors. Also called the Hadamard product.
+     * @param src1 First tensor in element-wise multiplication.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise multiplication.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise multiplication of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CNumber[] elemMult(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="nc" id="L288">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="nc" id="L289">        CNumber[] product = new CNumber[src1.length];</span>
+
+<span class="nc bnc" id="L291" title="All 2 branches missed.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="nc" id="L292">            product[i] = src1[i].mult(src2[i]);</span>
+        }
+
+<span class="nc" id="L295">        return product;</span>
+    }
+
+
+    /**
+     * Computes the element-wise division of two tensors.
+     * @param src1 First tensor in element-wise division.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise division.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise division of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="nc" id="L309">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="nc" id="L310">        CNumber[] product = new CNumber[src1.length];</span>
+
+<span class="nc bnc" id="L312" title="All 2 branches missed.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="nc" id="L313">            product[i] = src1[i].div(src2[i]);</span>
+        }
+
+<span class="nc" id="L316">        return product;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
