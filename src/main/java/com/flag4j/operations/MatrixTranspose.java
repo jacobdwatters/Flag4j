@@ -24,8 +24,11 @@
 
 package com.flag4j.operations;
 
+import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.operations.dense.complex.ComplexDenseTranspose;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.concurrency.util.ErrorMessages;
 
@@ -35,12 +38,8 @@ import com.flag4j.operations.concurrency.util.ErrorMessages;
  */
 public final class MatrixTranspose {
 
-    private MatrixTranspose() {
-        // Hide default constructor.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
-    }
-
-
+    private static final int COMPLEX_BLOCKED_THRESHOLD = 5_000;
+    private static final int HERMATION_BLOCKED_THRESHOLD = 50_000;
     /**
      * Threshold for using standard transpose implementation.
      */
@@ -49,6 +48,11 @@ public final class MatrixTranspose {
      * Threshold for number of elements in matrix to use concurrent implementation.
      */
     private static final int CONCURRENT_THRESHOLD = 125_000;
+
+    private MatrixTranspose() {
+        // Hide default constructor.
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+    }
 
 
     /**
@@ -72,15 +76,53 @@ public final class MatrixTranspose {
             case CONCURRENT_STANDARD:
                 dest = RealDenseTranspose.standardMatrixConcurrent(src.entries, src.numRows, src.numCols);
                 break;
-            case CONCURRENT_BLOCKED:
-                dest = RealDenseTranspose.blockedMatrixConcurrent(src.entries, src.numRows, src.numCols);
-                break;
             default:
-                dest = RealDenseTranspose.blockedMatrix(src.entries, src.numRows, src.numCols);
+                dest = RealDenseTranspose.blockedMatrixConcurrent(src.entries, src.numRows, src.numCols);
                 break;
         }
 
         return new Matrix(src.numCols, src.numRows, dest);
+    }
+
+
+    /**
+     * Dispatches a matrix transpose problem to the appropriate algorithm based in its shape and size.
+     * @param src Matrix to transpose.
+     * @return The transpose of the source matrix.
+     */
+    public static CMatrix dispatch(CMatrix src) {
+
+        CNumber[] dest;
+
+        Algorithm algorithm = chooseAlgorithm(src.shape);
+
+        if(algorithm==Algorithm.BLOCKED) {
+            dest = ComplexDenseTranspose.blockedMatrix(src.entries, src.numRows, src.numCols);
+        } else {
+            dest = ComplexDenseTranspose.blockedMatrixConcurrent(src.entries, src.numRows, src.numCols);
+        }
+
+        return new CMatrix(src.numCols, src.numRows, dest);
+    }
+
+
+    /**
+     * Dispatches a matrix hermation transpose problem to the appropriate algorithm based in its shape and size.
+     * @param src Matrix to transpose.
+     * @return The transpose of the source matrix.
+     */
+    public static CMatrix dispatchHermation(CMatrix src) {
+        CNumber[] dest;
+
+        Algorithm algorithm = chooseAlgorithmHermation(src.shape);
+
+        if(algorithm==Algorithm.BLOCKED) {
+            dest = ComplexDenseTranspose.blockedMatrixHerm(src.entries, src.numRows, src.numCols);
+        } else {
+            dest = ComplexDenseTranspose.blockedMatrixConcurrentHerm(src.entries, src.numRows, src.numCols);
+        }
+
+        return new CMatrix(src.numCols, src.numRows, dest);
     }
 
 
@@ -90,6 +132,50 @@ public final class MatrixTranspose {
      * @return The appropriate matrix transpose algorithm.
      */
     private static Algorithm chooseAlgorithm(Shape shape) {
+        Algorithm algorithm;
+
+        int numEntries = shape.totalEntries().intValue();
+
+        if(numEntries < COMPLEX_BLOCKED_THRESHOLD) {
+            // Use blocked algorithm
+            algorithm = Algorithm.BLOCKED;
+        } else {
+            // Use concurrent blocked implementation.
+            algorithm = Algorithm.CONCURRENT_BLOCKED;
+        }
+
+        return algorithm;
+    }
+
+
+    /**
+     * Chooses the appropriate matrix hermation transpose algorithm based on the shape of a matrix.
+     * @param shape Shape of matrix to transpose.
+     * @return The appropriate matrix transpose algorithm.
+     */
+    private static Algorithm chooseAlgorithmHermation(Shape shape) {
+        Algorithm algorithm;
+
+        int numEntries = shape.totalEntries().intValue();
+
+        if(numEntries < HERMATION_BLOCKED_THRESHOLD) {
+            // Use blocked algorithm
+            algorithm = Algorithm.BLOCKED;
+        } else {
+            // Use concurrent blocked implementation.
+            algorithm = Algorithm.CONCURRENT_BLOCKED;
+        }
+
+        return algorithm;
+    }
+
+
+    /**
+     * Chooses the appropriate matrix transpose algorithm based on the shape of a matrix.
+     * @param shape Shape of matrix to transpose.
+     * @return The appropriate matrix transpose algorithm.
+     */
+    private static Algorithm chooseAlgorithmComplex(Shape shape) {
         Algorithm algorithm;
 
         int numEntries = shape.totalEntries().intValue();

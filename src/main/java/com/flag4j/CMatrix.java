@@ -31,6 +31,7 @@ import com.flag4j.core.MatrixOperationsMixin;
 import com.flag4j.core.MatrixManipulationsMixin;
 import com.flag4j.core.MatrixPropertiesMixin;
 import com.flag4j.operations.MatrixMultiply;
+import com.flag4j.operations.MatrixTranspose;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.dense.complex.*;
@@ -1326,7 +1327,8 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
-     * Computes the transpose of a tensor. Same as {@link #T()}.
+     * Computes the transpose of a tensor. Same as {@link #T()}.<br>
+     * This method does <b>NOT</b> compute the conjugate transpose. You may be looking for {@link #H()}.
      *
      * @return The transpose of this tensor.
      */
@@ -1337,14 +1339,14 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
-     * Computes the transpose of a tensor. Same as {@link #transpose()}.
+     * Computes the transpose of a tensor. Same as {@link #transpose()}.<br>
+     * This method does <b>NOT</b> compute the conjugate transpose. You may be looking for {@link #H()}.
      *
      * @return The transpose of this tensor.
      */
     @Override
     public CMatrix T() {
-        // TODO: Create dispatch method to choose algorithm
-        return null;
+        return MatrixTranspose.dispatch(this);
     }
 
 
@@ -1368,8 +1370,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix H() {
-        // TODO: Create dispatch method to choose algorithm
-        return null;
+        return MatrixTranspose.dispatchHermation(this);
     }
 
 
