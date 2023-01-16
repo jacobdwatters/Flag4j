@@ -4,8 +4,10 @@ com.flag4j.core
 com.flag4j.io
 com.flag4j.linalg
 com.flag4j.operations
+com.flag4j.operations.common.complex
 com.flag4j.operations.common.real
 com.flag4j.operations.concurrency
+com.flag4j.operations.dense_sparse.complex
 com.flag4j.operations.dense_sparse.real
 com.flag4j.operations.dense_sparse.real_complex
 com.flag4j.operations.dense.complex
