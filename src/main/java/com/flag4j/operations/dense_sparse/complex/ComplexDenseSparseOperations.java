@@ -28,8 +28,8 @@ package com.flag4j.operations.dense_sparse.complex;
 import com.flag4j.CMatrix;
 import com.flag4j.SparseCMatrix;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.operations.concurrency.util.ErrorMessages;
-import com.flag4j.operations.concurrency.util.ParameterChecks;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
 
 /**
  * This class contains methods to apply common binary operations to a complex dense/sparse matrix and to a complex sparse/dense matrix.

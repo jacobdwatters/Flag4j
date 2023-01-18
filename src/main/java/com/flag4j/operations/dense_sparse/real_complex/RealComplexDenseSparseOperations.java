@@ -29,8 +29,8 @@ import com.flag4j.Matrix;
 import com.flag4j.SparseCMatrix;
 import com.flag4j.SparseMatrix;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.operations.concurrency.util.ErrorMessages;
-import com.flag4j.operations.concurrency.util.ParameterChecks;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
 
 /**
  * This class contains methods to apply common binary operations to a real/complex dense matrix and to a complex/real sparse matrix.

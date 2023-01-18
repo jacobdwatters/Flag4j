@@ -27,8 +27,8 @@ package com.flag4j.operations.dense.real;
 import com.flag4j.Shape;
 import com.flag4j.operations.concurrency.Configurations;
 import com.flag4j.operations.concurrency.ThreadManager;
-import com.flag4j.operations.concurrency.util.ArrayUtils;
-import com.flag4j.operations.concurrency.util.ErrorMessages;
+import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.ErrorMessages;
 
 
 /**

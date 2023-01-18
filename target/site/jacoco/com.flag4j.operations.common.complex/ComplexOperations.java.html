@@ -28,18 +28,15 @@ package com.flag4j.operations.common.complex;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 /**
  * This class provides low level methods for computing operations on real tensors. These methods can be applied to
  * either sparse or dense real tensors.
  */
 public class ComplexOperations {
 
-<span class="nc" id="L40">    private ComplexOperations() {</span>
+<span class="nc" id="L37">    private ComplexOperations() {</span>
         // Hide constructor for utility class.
-<span class="nc" id="L42">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L39">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -49,13 +46,13 @@ public class ComplexOperations {
      * @return The element-wise square root of the tensor.
      */
     public static CNumber[] sqrt(CNumber[] src) {
-<span class="nc" id="L52">        CNumber[] roots = new CNumber[src.length];</span>
+<span class="nc" id="L49">        CNumber[] roots = new CNumber[src.length];</span>
 
-<span class="nc bnc" id="L54" title="All 2 branches missed.">        for(int i=0; i&lt;roots.length; i++) {</span>
-<span class="nc" id="L55">            roots[i] = CNumber.sqrt(src[i]);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        for(int i=0; i&lt;roots.length; i++) {</span>
+<span class="nc" id="L52">            roots[i] = CNumber.sqrt(src[i]);</span>
         }
 
-<span class="nc" id="L58">        return roots;</span>
+<span class="nc" id="L55">        return roots;</span>
     }
 
 
@@ -65,13 +62,13 @@ public class ComplexOperations {
      * @return The element-wise absolute value of the tensor.
      */
     public static CNumber[] abs(CNumber[] src) {
-<span class="nc" id="L68">        CNumber[] abs = new CNumber[src.length];</span>
+<span class="nc" id="L65">        CNumber[] abs = new CNumber[src.length];</span>
 
-<span class="nc bnc" id="L70" title="All 2 branches missed.">        for(int i=0; i&lt;abs.length; i++) {</span>
-<span class="nc" id="L71">            abs[i] = src[i].mag();</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        for(int i=0; i&lt;abs.length; i++) {</span>
+<span class="nc" id="L68">            abs[i] = src[i].mag();</span>
         }
 
-<span class="nc" id="L74">        return abs;</span>
+<span class="nc" id="L71">        return abs;</span>
     }
 
 
@@ -82,13 +79,13 @@ public class ComplexOperations {
      * @throws IllegalArgumentException If {@code precision} is negative.
      */
     public static CNumber[] round(CNumber[] src) {
-<span class="nc" id="L85">        CNumber[] dest = new CNumber[src.length];</span>
+<span class="nc" id="L82">        CNumber[] dest = new CNumber[src.length];</span>
 
-<span class="nc bnc" id="L87" title="All 2 branches missed.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="nc" id="L88">            dest[i] = CNumber.round(src[i]);</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="nc" id="L85">            dest[i] = CNumber.round(src[i]);</span>
         }
 
-<span class="nc" id="L91">        return dest;</span>
+<span class="nc" id="L88">        return dest;</span>
     }
 
 
@@ -101,17 +98,17 @@ public class ComplexOperations {
      * @throws IllegalArgumentException If {@code precision} is negative.
      */
     public static CNumber[] round(CNumber[] src, int precision) {
-<span class="nc bnc" id="L104" title="All 2 branches missed.">        if(precision&lt;0) {</span>
-<span class="nc" id="L105">            throw new IllegalArgumentException(ErrorMessages.negValueErr(precision));</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        if(precision&lt;0) {</span>
+<span class="nc" id="L102">            throw new IllegalArgumentException(ErrorMessages.negValueErr(precision));</span>
         }
 
-<span class="nc" id="L108">        CNumber[] dest = new CNumber[src.length];</span>
+<span class="nc" id="L105">        CNumber[] dest = new CNumber[src.length];</span>
 
-<span class="nc bnc" id="L110" title="All 2 branches missed.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="nc" id="L111">            dest[i] = CNumber.round(src[i], precision);</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="nc" id="L108">            dest[i] = CNumber.round(src[i], precision);</span>
         }
 
-<span class="nc" id="L114">        return dest;</span>
+<span class="nc" id="L111">        return dest;</span>
     }
 
 
@@ -124,17 +121,17 @@ public class ComplexOperations {
      * @throws IllegalArgumentException If {@code threshold} is negative.
      */
     public static CNumber[] roundToZero(CNumber[] src, double threshold) {
-<span class="nc bnc" id="L127" title="All 2 branches missed.">        if(threshold&lt;0) {</span>
-<span class="nc" id="L128">            throw new IllegalArgumentException(ErrorMessages.negValueErr(threshold));</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if(threshold&lt;0) {</span>
+<span class="nc" id="L125">            throw new IllegalArgumentException(ErrorMessages.negValueErr(threshold));</span>
         }
 
-<span class="nc" id="L131">        CNumber[] dest = new CNumber[src.length];</span>
+<span class="nc" id="L128">        CNumber[] dest = new CNumber[src.length];</span>
 
-<span class="nc bnc" id="L133" title="All 2 branches missed.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="nc" id="L134">            dest[i] = CNumber.roundToZero(src[i], threshold);</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="nc" id="L131">            dest[i] = CNumber.roundToZero(src[i], threshold);</span>
         }
 
-<span class="nc" id="L137">        return dest;</span>
+<span class="nc" id="L134">        return dest;</span>
     }
 
 
@@ -145,13 +142,13 @@ public class ComplexOperations {
      * @return The result of the scalar multiplication of a tensor.
      */
     public static CNumber[] scalMult(CNumber[] src, double factor) {
-<span class="nc" id="L148">        CNumber[] dest = new CNumber[src.length];</span>
+<span class="nc" id="L145">        CNumber[] dest = new CNumber[src.length];</span>
 
-<span class="nc bnc" id="L150" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="nc" id="L151">            dest[i] = src[i].mult(factor);</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="nc" id="L148">            dest[i] = src[i].mult(factor);</span>
         }
 
-<span class="nc" id="L154">        return dest;</span>
+<span class="nc" id="L151">        return dest;</span>
     }
 
 
@@ -162,13 +159,13 @@ public class ComplexOperations {
      * @return The result of the scalar multiplication of a tensor.
      */
     public static CNumber[] scalMult(CNumber[] src, CNumber factor) {
-<span class="nc" id="L165">        CNumber[] dest = new CNumber[src.length];</span>
+<span class="nc" id="L162">        CNumber[] dest = new CNumber[src.length];</span>
 
-<span class="nc bnc" id="L167" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="nc" id="L168">            dest[i] = src[i].mult(factor);</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="nc" id="L165">            dest[i] = src[i].mult(factor);</span>
         }
 
-<span class="nc" id="L171">        return dest;</span>
+<span class="nc" id="L168">        return dest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

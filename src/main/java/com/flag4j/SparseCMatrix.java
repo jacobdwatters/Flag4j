@@ -26,7 +26,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.SparseMatrixBase;
-import com.flag4j.operations.concurrency.util.ArrayUtils;
+import com.flag4j.util.ArrayUtils;
 
 /**
  * Complex sparse matrix. Stored in COO (Coordinate) format.

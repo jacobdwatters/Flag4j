@@ -375,4 +375,8 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * @throws IllegalArgumentException If threshold is negative.
      */
     T roundToZero(double threshold);
+
+    void swapRows(int rowIndex1, int rowIndex2);
+
+    void swapCols(int colIndex1, int colIndex2);
 }

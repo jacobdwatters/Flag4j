@@ -26,9 +26,9 @@ package com.flag4j.operations.dense.real;
 
 import com.flag4j.Shape;
 import com.flag4j.operations.common.real.RealOperations;
-import com.flag4j.operations.concurrency.util.Axis2D;
-import com.flag4j.operations.concurrency.util.ErrorMessages;
-import com.flag4j.operations.concurrency.util.ParameterChecks;
+import com.flag4j.util.Axis2D;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
 
 import static com.flag4j.operations.common.real.Aggregate.maxAbs;
 

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,44 +22,19 @@
  * SOFTWARE.
  */
 
-package com.flag4j.operations.concurrency.util;
+package com.flag4j.linalg.decompositions;
+
+import com.flag4j.core.MatrixBase;
 
 /**
- * Simple enum class for two-dimensional axis. The row axis has ordinal 0 and the column axis has ordinal 1.
+ * This interface specifies methods which should be implemented in all decompositions.
+ * @param <T> Matrix type to decompose.
  */
-public enum Axis2D {
-    /**
-     * Row of 2D tensor.
-     */
-    ROW,
-    /**
-     * Column of 2D tensor
-     */
-    COL;
+public interface Decomposition<T extends MatrixBase> {
 
     /**
-     * Get the ordinal of the row axis in 2D.
-     * @return The ordinal of the row axis in 2D.
+     * Applies decomposition to the source matrix.
+     * @param src The source matrix to decompose.
      */
-    public static int row() {
-        return ROW.ordinal();
-    }
-
-
-    /**
-     * Get the ordinal of the column axis in 2D.
-     * @return The ordinal of the column axis in 2D.
-     */
-    public static int col() {
-        return COL.ordinal();
-    }
-
-
-    /**
-     * Gets an array of all axes ordinals.
-     * @return An array of all axes ordinals.
-     */
-    public static int[] allAxes() {
-        return new int[]{ROW.ordinal(), COL.ordinal()};
-    }
+    void decompose(T src);
 }

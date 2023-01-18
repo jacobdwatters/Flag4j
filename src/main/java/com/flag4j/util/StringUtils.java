@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.flag4j.operations.concurrency.util;
+package com.flag4j.util;
 
 /**
  * A class which provides simple utility methods for {@link String strings}.
@@ -62,6 +62,7 @@ public final class StringUtils {
         while (sb.length() < size) {
             sb.append(pad);
         }
+
         return sb.toString();
     }
 }

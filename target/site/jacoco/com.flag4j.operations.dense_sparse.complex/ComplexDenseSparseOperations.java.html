@@ -26,9 +26,7 @@ package com.flag4j.operations.dense_sparse.complex;
 
 
 import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
 import com.flag4j.SparseCMatrix;
-import com.flag4j.SparseMatrix;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -38,9 +36,9 @@ import com.flag4j.util.ParameterChecks;
  */
 public class ComplexDenseSparseOperations {
 
-<span class="nc" id="L41">    private ComplexDenseSparseOperations() {</span>
+<span class="nc" id="L39">    private ComplexDenseSparseOperations() {</span>
         // Hide default constructor for utility class.
-<span class="nc" id="L43">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L41">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -52,18 +50,18 @@ public class ComplexDenseSparseOperations {
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static CMatrix add(CMatrix src1, SparseCMatrix src2) {
-<span class="nc" id="L55">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="nc" id="L53">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
-<span class="nc" id="L58">        CMatrix dest = new CMatrix(src1);</span>
+<span class="nc" id="L56">        CMatrix dest = new CMatrix(src1);</span>
 
-<span class="nc bnc" id="L60" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L61">            row = src2.rowIndices[i];</span>
-<span class="nc" id="L62">            col = src2.colIndices[i];</span>
-<span class="nc" id="L63">            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L59">            row = src2.rowIndices[i];</span>
+<span class="nc" id="L60">            col = src2.colIndices[i];</span>
+<span class="nc" id="L61">            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);</span>
         }
 
-<span class="nc" id="L66">        return dest;</span>
+<span class="nc" id="L64">        return dest;</span>
     }
 
 
@@ -75,18 +73,18 @@ public class ComplexDenseSparseOperations {
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static CMatrix sub(CMatrix src1, SparseCMatrix src2) {
-<span class="nc" id="L78">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="nc" id="L76">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
-<span class="nc" id="L81">        CMatrix dest = new CMatrix(src1);</span>
+<span class="nc" id="L79">        CMatrix dest = new CMatrix(src1);</span>
 
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L84">            row = src2.rowIndices[i];</span>
-<span class="nc" id="L85">            col = src2.colIndices[i];</span>
-<span class="nc" id="L86">            dest.entries[row*src1.numCols + col].subEq(src2.entries[i]);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L82">            row = src2.rowIndices[i];</span>
+<span class="nc" id="L83">            col = src2.colIndices[i];</span>
+<span class="nc" id="L84">            dest.entries[row*src1.numCols + col].subEq(src2.entries[i]);</span>
         }
 
-<span class="nc" id="L89">        return dest;</span>
+<span class="nc" id="L87">        return dest;</span>
     }
 
 
@@ -96,18 +94,18 @@ public class ComplexDenseSparseOperations {
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static SparseCMatrix elemMult(CMatrix src1, SparseCMatrix src2) {
-<span class="nc" id="L99">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="nc" id="L97">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
-<span class="nc" id="L102">        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];</span>
+<span class="nc" id="L100">        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];</span>
 
-<span class="nc bnc" id="L104" title="All 2 branches missed.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
-<span class="nc" id="L105">            row = src2.rowIndices[i];</span>
-<span class="nc" id="L106">            col = src2.colIndices[i];</span>
-<span class="nc" id="L107">            destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
+<span class="nc" id="L103">            row = src2.rowIndices[i];</span>
+<span class="nc" id="L104">            col = src2.colIndices[i];</span>
+<span class="nc" id="L105">            destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);</span>
         }
 
-<span class="nc" id="L110">        return new SparseCMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);</span>
+<span class="nc" id="L108">        return new SparseCMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

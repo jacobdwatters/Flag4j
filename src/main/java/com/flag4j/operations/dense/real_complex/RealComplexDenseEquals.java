@@ -28,8 +28,8 @@ import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.operations.concurrency.util.ArrayUtils;
-import com.flag4j.operations.concurrency.util.ErrorMessages;
+import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.ErrorMessages;
 
 /**
  * This class provides methods for checking the equality of one real and one complex dense tensors.

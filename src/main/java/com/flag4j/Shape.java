@@ -24,7 +24,7 @@
 
 package com.flag4j;
 
-import com.flag4j.operations.concurrency.util.ErrorMessages;
+import com.flag4j.util.ErrorMessages;
 
 import java.io.Serializable;
 import java.math.BigInteger;

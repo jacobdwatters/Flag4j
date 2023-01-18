@@ -30,7 +30,7 @@ import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.dense.complex.ComplexDenseTranspose;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
-import com.flag4j.operations.concurrency.util.ErrorMessages;
+import com.flag4j.util.ErrorMessages;
 
 
 /**

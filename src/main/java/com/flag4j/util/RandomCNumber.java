@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.flag4j.operations.concurrency.util;
+package com.flag4j.util;
 
 import com.flag4j.complex_numbers.CNumber;
 

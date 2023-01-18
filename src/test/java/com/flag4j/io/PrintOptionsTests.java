@@ -31,5 +31,7 @@ class PrintOptionsTests {
         assertThrows(IllegalArgumentException.class, () -> PrintOptions.setMaxRows(-1));
         assertThrows(IllegalArgumentException.class, () -> PrintOptions.setMaxColumns(-1));
         assertThrows(IllegalArgumentException.class, () -> PrintOptions.setPrecision(-1));
+
+        PrintOptions.resetAll();
     }
 }

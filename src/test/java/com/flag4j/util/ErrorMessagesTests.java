@@ -1,7 +1,6 @@
 package com.flag4j.util;
 
 import com.flag4j.Shape;
-import com.flag4j.operations.concurrency.util.ErrorMessages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

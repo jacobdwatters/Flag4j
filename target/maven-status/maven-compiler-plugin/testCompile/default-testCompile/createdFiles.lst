@@ -1,3 +1,4 @@
+com\flag4j\linalg\decompositions\LUDecompositionTests.class
 com\flag4j\matrix\MatrixEqualsTests.class
 com\flag4j\matrix\MatrixElemDivTests.class
 com\flag4j\matrix\MatrixAddToEachColTests.class

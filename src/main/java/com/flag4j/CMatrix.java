@@ -30,6 +30,7 @@ import com.flag4j.core.MatrixComparisonsMixin;
 import com.flag4j.core.MatrixOperationsMixin;
 import com.flag4j.core.MatrixManipulationsMixin;
 import com.flag4j.core.MatrixPropertiesMixin;
+import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.MatrixMultiply;
 import com.flag4j.operations.MatrixTranspose;
 import com.flag4j.operations.common.complex.AggregateComplex;
@@ -43,12 +44,12 @@ import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
-import com.flag4j.operations.concurrency.util.ArrayUtils;
-import com.flag4j.operations.concurrency.util.Axis2D;
-import com.flag4j.operations.concurrency.util.ErrorMessages;
-import com.flag4j.operations.concurrency.util.ParameterChecks;
+import com.flag4j.util.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Complex dense matrix. Stored in row major format.
@@ -2941,8 +2942,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return An identity matrix of specified size.
      * @throws IllegalArgumentException If the specified size is less than 1.
      */
-    @Override
-    public CMatrix I(int size) {
+    public static CMatrix I(int size) {
         return I(size, size);
     }
 
@@ -2956,8 +2956,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return An identity matrix of specified shape.
      * @throws IllegalArgumentException If the specified number of rows or columns is less than 1.
      */
-    @Override
-    public CMatrix I(int numRows, int numCols) {
+    public static CMatrix I(int numRows, int numCols) {
         ParameterChecks.assertGreaterEq(1, numRows, numCols);
         CMatrix I = new CMatrix(numRows, numCols);
         int stop = Math.min(numRows, numCols);
@@ -2978,8 +2977,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return An identity matrix of specified size.
      * @throws IllegalArgumentException If the specified shape is not rank 2.
      */
-    @Override
-    public CMatrix I(Shape shape) {
+    public static CMatrix I(Shape shape) {
         ParameterChecks.assertRank(2, shape);
         return I(shape.get(0), shape.get(1));
     }
@@ -3290,6 +3288,50 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
+     * Swaps specified rows in the matrix. This is done in place.
+     * @param rowIndex1 Index of the first row to swap.
+     * @param rowIndex2 Index of the second row to swap.
+     * @throws ArrayIndexOutOfBoundsException If either index is outside the matrix bounds.
+     */
+    @Override
+    public void swapRows(int rowIndex1, int rowIndex2) {
+        ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);
+        ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);
+        ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);
+
+        CNumber temp;
+        for(int j=0; j<numCols; j++) {
+            // Swap elements.
+            temp = entries[rowIndex1*numCols + j];
+            entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];
+            entries[rowIndex2*numCols + j] = temp;
+        }
+    }
+
+
+    /**
+     * Swaps specified columns in the matrix. This is done in place.
+     * @param colIndex1 Index of the first column to swap.
+     * @param colIndex2 Index of the second column to swap.
+     * @throws ArrayIndexOutOfBoundsException If either index is outside the matrix bounds.
+     */
+    @Override
+    public void swapCols(int colIndex1, int colIndex2) {
+        ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);
+        ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);
+        ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);
+
+        CNumber temp;
+        for(int i=0; i<numRows; i++) {
+            // Swap elements.
+            temp = entries[i*numCols + colIndex1];
+            entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];
+            entries[i*numCols + colIndex2] = temp;
+        }
+    }
+
+
+    /**
      * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
      *
      * @return the 2-norm of this tensor.
@@ -3322,5 +3364,69 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public double infNorm() {
         return ComplexDenseOperations.matrixInfNorm(entries, shape);
+    }
+
+
+
+    /**
+     * Formats matrix contents as a string.
+     *
+     * @return Matrix as string
+     */
+    public String toString() {
+        String result = "[";
+
+        if(entries.length!=0) {
+            int max=0, colWidth;
+            List<Integer> maxList = new ArrayList<>();
+
+            for(int j=0; j<numCols; j++) { // Get the maximum length string representation for each column.
+                List<CNumber> contents = Arrays.asList(this.getCol(j).entries);
+
+                Optional<Integer> value = contents.stream().map(CNumber::length).max(Integer::compareTo);
+
+                if(value.isPresent()) {
+                    max = value.get();
+                }
+
+                maxList.add(max);
+            }
+
+            StringBuilder resultBuilder = new StringBuilder("[");
+            for(int i = 0; i<numRows; i++) {
+                if(i >= PrintOptions.getMaxRows() && i < numRows-1) {
+                    resultBuilder.append("  ...\n ");
+                    i = numRows-1;
+                }
+
+                resultBuilder.append(" [");
+
+                for(int j = 0; j<numRows; j++) {
+
+                    if(j >= PrintOptions.getMaxColumns() && j < numRows-1) {
+                        colWidth = 3+PrintOptions.getPadding();
+                        resultBuilder.append(String.format("%-" + colWidth + "s", StringUtils.center("...", colWidth)));
+                        colWidth = maxList.get(numRows-1)+PrintOptions.getPadding();
+                        resultBuilder.append(String.format("%-" + (colWidth) + "s", StringUtils.center(get(i,numCols - 1).toString(), colWidth)));
+                        break;
+                    }
+                    else {
+                        colWidth = maxList.get(j)+PrintOptions.getPadding();
+                        resultBuilder.append(String.format("%-" + (colWidth) + "s", StringUtils.center(
+                                CNumber.round(get(i, j), PrintOptions.getPrecision()).toString(), colWidth))
+                        );
+                    }
+                }
+                resultBuilder.append("]\n ");
+            }
+            result = resultBuilder.toString();
+
+            result = result.substring(0, result.length()-2) + " ]";
+        }
+        else {
+            result += "[]]";
+        }
+
+        return result;
     }
 }

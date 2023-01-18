@@ -26,7 +26,7 @@ package com.flag4j.core;
 
 import com.flag4j.Shape;
 import com.flag4j.operations.dense.real.RealDenseSetOperations;
-import com.flag4j.operations.concurrency.util.ParameterChecks;
+import com.flag4j.util.ParameterChecks;
 
 
 /**

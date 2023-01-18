@@ -25,7 +25,7 @@
 package com.flag4j.operations.dense.complex;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.operations.concurrency.util.ErrorMessages;
+import com.flag4j.util.ErrorMessages;
 
 /**
  * This class contains several low-level methods useful for computing aggregation operations on dense tensors.

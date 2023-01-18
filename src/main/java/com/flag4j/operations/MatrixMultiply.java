@@ -29,9 +29,9 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
 import com.flag4j.operations.dense.complex.ComplexDenseMatrixMultiplication;
-import com.flag4j.operations.concurrency.util.Axis2D;
-import com.flag4j.operations.concurrency.util.ErrorMessages;
-import static com.flag4j.operations.concurrency.util.ParameterChecks.*;
+import com.flag4j.util.Axis2D;
+import com.flag4j.util.ErrorMessages;
+import static com.flag4j.util.ParameterChecks.*;
 
 
 /**

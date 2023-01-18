@@ -26,7 +26,7 @@ package com.flag4j.operations.dense.real;
 
 
 import com.flag4j.Shape;
-import com.flag4j.operations.concurrency.util.ParameterChecks;
+import com.flag4j.util.ParameterChecks;
 
 /**
  * This class contains low-level implementations of setting operations for real dense tensors.
