@@ -60,9 +60,6 @@ public class CMatrix extends ComplexMatrixBase implements
         MatrixOperationsMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber>,
         MatrixPropertiesMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber> {
 
-
-    private static final double DEFAULT_ROUND_TO_ZERO_THRESHOLD = 1e-12;
-
     /**
      * Constructs a square complex dense matrix of a specified size. The entries of the matrix will default to zero.
      * @param size Size of the square matrix.

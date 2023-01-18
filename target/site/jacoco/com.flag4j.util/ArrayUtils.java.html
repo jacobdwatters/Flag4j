@@ -165,14 +165,14 @@ public final class ArrayUtils {
      * @throws NegativeArraySizeException If stop is less than start.
      */
     public static CNumber[] copyOfRange(CNumber[] src, int start, int stop) {
-<span class="nc" id="L168">        CNumber[] dest = new CNumber[stop-start];</span>
+<span class="fc" id="L168">        CNumber[] dest = new CNumber[stop-start];</span>
 
-<span class="nc" id="L170">        int count=0;</span>
-<span class="nc bnc" id="L171" title="All 2 branches missed.">        for(int i=start; i&lt;stop; i++) {</span>
-<span class="nc" id="L172">            dest[count++] = src[i];</span>
+<span class="fc" id="L170">        int count=0;</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        for(int i=start; i&lt;stop; i++) {</span>
+<span class="fc" id="L172">            dest[count++] = src[i];</span>
         }
 
-<span class="nc" id="L175">        return dest;</span>
+<span class="fc" id="L175">        return dest;</span>
     }
 
 
@@ -226,16 +226,16 @@ public final class ArrayUtils {
      * @return True if the {@code src} array contains only zeros.
      */
     public static boolean isZeros(CNumber[] src) {
-<span class="nc" id="L229">        boolean allZeros = true;</span>
+<span class="fc" id="L229">        boolean allZeros = true;</span>
 
-<span class="nc bnc" id="L231" title="All 2 branches missed.">        for(CNumber value : src) {</span>
-<span class="nc bnc" id="L232" title="All 4 branches missed.">            if(value.re!=0 || value.im!=0) {</span>
-<span class="nc" id="L233">                allZeros = false;</span>
-<span class="nc" id="L234">                break;</span>
+<span class="fc bfc" id="L231" title="All 2 branches covered.">        for(CNumber value : src) {</span>
+<span class="pc bpc" id="L232" title="1 of 4 branches missed.">            if(value.re!=0 || value.im!=0) {</span>
+<span class="fc" id="L233">                allZeros = false;</span>
+<span class="fc" id="L234">                break;</span>
             }
         }
 
-<span class="nc" id="L238">        return allZeros;</span>
+<span class="fc" id="L238">        return allZeros;</span>
     }
 
 
@@ -509,13 +509,13 @@ public final class ArrayUtils {
      * @return An array containing the real components of the source array.
      */
     public static double[] getReals(CNumber[] src) {
-<span class="nc" id="L512">        double[] reals = new double[src.length];</span>
+<span class="fc" id="L512">        double[] reals = new double[src.length];</span>
 
-<span class="nc bnc" id="L514" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="nc" id="L515">            reals[i] = src[i].re;</span>
+<span class="fc bfc" id="L514" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L515">            reals[i] = src[i].re;</span>
         }
 
-<span class="nc" id="L518">        return reals;</span>
+<span class="fc" id="L518">        return reals;</span>
     }
 
 

@@ -134,7 +134,6 @@ class LUDecompositionTests {
         assertEquals(expL, L);
         assertEquals(expU, U);
 
-
         // -------------------------- Sub-case 2 --------------------------
         aEntries = new double[][]
                 {{1.4, 5.67, -9.23},
@@ -234,11 +233,6 @@ class LUDecompositionTests {
         U = LU.getU();
         P = LU.getP();
         Q = LU.getQ();
-
-        System.out.println(L + "\n");
-        System.out.println(U + "\n");
-        System.out.println(P + "\n");
-        System.out.println(Q + "\n");
 
         assertEquals(expP, P);
         assertEquals(expQ, Q);

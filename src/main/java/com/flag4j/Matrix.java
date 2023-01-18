@@ -46,7 +46,6 @@ import com.flag4j.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Real dense matrix. Stored in row major format. This class is mostly equivalent to a real dense tensor of rank 2.
@@ -58,7 +57,7 @@ public class Matrix extends RealMatrixBase implements
         MatrixPropertiesMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double> {
 
 
-    public static final double DEFAULT_ROUND_TO_ZERO_THRESHOLD = 1.0E-12;
+//    public static final double DEFAULT_ROUND_TO_ZERO_THRESHOLD = 1.0E-12;
 
     /**
      * Constructs a square real dense matrix of a specified size. The entries of the matrix will default to zero.

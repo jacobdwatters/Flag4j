@@ -38,6 +38,10 @@ import java.io.Serializable;
 public abstract class MatrixBase<T extends Serializable> extends TensorBase<T> {
 
     /**
+     * Default value for rounding to zero.
+     */
+    protected static final double DEFAULT_ROUND_TO_ZERO_THRESHOLD = 1e-12;
+    /**
      * The number of rows in this matrix.
      */
     public final int numRows;

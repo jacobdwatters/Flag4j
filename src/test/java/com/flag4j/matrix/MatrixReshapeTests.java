@@ -12,7 +12,6 @@ class MatrixReshapeTests {
     Matrix B;
     Shape expShape;
     int rows, cols;
-    double[] expEntries;
 
     @Test
     void reshapeTest() {

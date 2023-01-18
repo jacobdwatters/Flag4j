@@ -44,16 +44,16 @@ public class ComplexDenseProperties {
      * @return True if this tensor only contains ones. Otherwise, returns false.
      */
     public static boolean isOnes(CNumber[] src) {
-<span class="nc" id="L47">        boolean allZeros = true;</span>
+<span class="fc" id="L47">        boolean allZeros = true;</span>
 
-<span class="nc bnc" id="L49" title="All 2 branches missed.">        for(CNumber value : src) {</span>
-<span class="nc bnc" id="L50" title="All 2 branches missed.">            if(!value.equals(CNumber.ONE)) {</span>
-<span class="nc" id="L51">                allZeros = false;</span>
-<span class="nc" id="L52">                break; // No need to look further.</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for(CNumber value : src) {</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if(!value.equals(CNumber.ONE)) {</span>
+<span class="fc" id="L51">                allZeros = false;</span>
+<span class="fc" id="L52">                break; // No need to look further.</span>
             }
         }
 
-<span class="nc" id="L56">        return allZeros;</span>
+<span class="fc" id="L56">        return allZeros;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
