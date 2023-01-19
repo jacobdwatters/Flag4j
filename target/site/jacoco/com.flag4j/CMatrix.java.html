@@ -521,9 +521,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setValues(CNumber[][] values) {
-<span class="nc" id="L524">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
-<span class="nc" id="L525">        ComplexDenseSetOperations.setValues(values, this.entries);</span>
-<span class="nc" id="L526">    }</span>
+<span class="fc" id="L524">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
+<span class="fc" id="L525">        ComplexDenseSetOperations.setValues(values, this.entries);</span>
+<span class="fc" id="L526">    }</span>
 
 
     /**
@@ -561,12 +561,12 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setCol(CNumber[] values, int colIndex) {
-<span class="nc" id="L564">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
+<span class="fc" id="L564">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
 
-<span class="nc bnc" id="L566" title="All 2 branches missed.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="nc" id="L567">            super.entries[i*numCols + colIndex] = values[i].copy();</span>
+<span class="fc bfc" id="L566" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L567">            super.entries[i*numCols + colIndex] = values[i].copy();</span>
         }
-<span class="nc" id="L569">    }</span>
+<span class="fc" id="L569">    }</span>
 
 
     /**
