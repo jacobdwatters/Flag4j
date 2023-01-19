@@ -2771,8 +2771,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double get(int... indices) {
-<span class="nc" id="L2774">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
-<span class="nc" id="L2775">        return entries[shape.entriesIndex(indices)];</span>
+<span class="fc" id="L2774">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
+<span class="fc" id="L2775">        return entries[shape.entriesIndex(indices)];</span>
     }
 
 
@@ -2803,13 +2803,13 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix getCol(int j) {
-<span class="nc" id="L2806">        double[] col = new double[numRows];</span>
+<span class="fc" id="L2806">        double[] col = new double[numRows];</span>
 
-<span class="nc bnc" id="L2808" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="nc" id="L2809">            col[i] = entries[i*numCols + j];</span>
+<span class="fc bfc" id="L2808" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L2809">            col[i] = entries[i*numCols + j];</span>
         }
 
-<span class="nc" id="L2812">        return new Matrix(new Shape(numRows, 1), col);</span>
+<span class="fc" id="L2812">        return new Matrix(new Shape(numRows, 1), col);</span>
     }
 
 
@@ -3301,29 +3301,29 @@ public class Matrix extends RealMatrixBase implements
      * @return Matrix as string
      */
     public String toString() {
-<span class="nc" id="L3304">        String result = &quot;[&quot;;</span>
+<span class="fc" id="L3304">        String result = &quot;[&quot;;</span>
 
-<span class="nc bnc" id="L3306" title="All 2 branches missed.">        if(entries.length!=0) {</span>
+<span class="pc bpc" id="L3306" title="1 of 2 branches missed.">        if(entries.length!=0) {</span>
             int colWidth;
-<span class="nc" id="L3308">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L3308">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;();</span>
 
-<span class="nc bnc" id="L3310" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc bfc" id="L3310" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
                 // Get the maximum length string representation for each column.
-<span class="nc" id="L3312">                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries));</span>
+<span class="fc" id="L3312">                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries));</span>
             }
 
-<span class="nc" id="L3315">            StringBuilder resultBuilder = new StringBuilder(&quot;[&quot;);</span>
-<span class="nc bnc" id="L3316" title="All 2 branches missed.">            for(int i=0; i&lt;numCols; i++) {</span>
-<span class="nc bnc" id="L3317" title="All 4 branches missed.">                if(i &gt;= PrintOptions.getMaxRows() &amp;&amp; i &lt; numCols-1) {</span>
+<span class="fc" id="L3315">            StringBuilder resultBuilder = new StringBuilder(&quot;[&quot;);</span>
+<span class="fc bfc" id="L3316" title="All 2 branches covered.">            for(int i=0; i&lt;numRows; i++) {</span>
+<span class="pc bpc" id="L3317" title="3 of 4 branches missed.">                if(i &gt;= PrintOptions.getMaxRows() &amp;&amp; i &lt; numCols-1) {</span>
 <span class="nc" id="L3318">                    resultBuilder.append(&quot;  ...\n &quot;);</span>
 <span class="nc" id="L3319">                    i = numCols-1;</span>
                 }
 
-<span class="nc" id="L3322">                resultBuilder.append(&quot; [&quot;);</span>
+<span class="fc" id="L3322">                resultBuilder.append(&quot; [&quot;);</span>
 
-<span class="nc bnc" id="L3324" title="All 2 branches missed.">                for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc bfc" id="L3324" title="All 2 branches covered.">                for(int j=0; j&lt;numCols; j++) {</span>
 
-<span class="nc bnc" id="L3326" title="All 4 branches missed.">                    if(j &gt;= PrintOptions.getMaxColumns() &amp;&amp; j &lt; numCols-1) {</span>
+<span class="pc bpc" id="L3326" title="3 of 4 branches missed.">                    if(j &gt;= PrintOptions.getMaxColumns() &amp;&amp; j &lt; numCols-1) {</span>
 <span class="nc" id="L3327">                        colWidth = 3+PrintOptions.getPadding();</span>
 <span class="nc" id="L3328">                        resultBuilder.append(String.format(&quot;%-&quot; + colWidth + &quot;s&quot;, StringUtils.center(&quot;...&quot;, colWidth)));</span>
 <span class="nc" id="L3329">                        colWidth = maxList.get(numCols-1)+PrintOptions.getPadding();</span>
@@ -3331,24 +3331,24 @@ public class Matrix extends RealMatrixBase implements
 <span class="nc" id="L3331">                        break;</span>
                     }
                     else {
-<span class="nc" id="L3334">                        colWidth = maxList.get(j)+PrintOptions.getPadding();</span>
+<span class="fc" id="L3334">                        colWidth = maxList.get(j)+PrintOptions.getPadding();</span>
 
-<span class="nc" id="L3336">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(</span>
-<span class="nc" id="L3337">                                CNumber.round(new CNumber(get(i, j)), PrintOptions.getPrecision()).toString(), colWidth))</span>
+<span class="fc" id="L3336">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(</span>
+<span class="fc" id="L3337">                                CNumber.round(new CNumber(get(i, j)), PrintOptions.getPrecision()).toString(), colWidth))</span>
                         );
                     }
                 }
-<span class="nc" id="L3341">                resultBuilder.append(&quot;]\n &quot;);</span>
+<span class="fc" id="L3341">                resultBuilder.append(&quot;]\n &quot;);</span>
             }
-<span class="nc" id="L3343">            result = resultBuilder.toString();</span>
+<span class="fc" id="L3343">            result = resultBuilder.toString();</span>
 
-<span class="nc" id="L3345">            result = result.substring(0, result.length()-2) + &quot; ]&quot;;</span>
-<span class="nc" id="L3346">        }</span>
+<span class="fc" id="L3345">            result = result.substring(0, result.length()-2) + &quot; ]&quot;;</span>
+<span class="fc" id="L3346">        }</span>
         else {
 <span class="nc" id="L3348">            result += &quot;[]]&quot;;</span>
         }
 
-<span class="nc" id="L3351">        return result;</span>
+<span class="fc" id="L3351">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

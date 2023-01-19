@@ -130,10 +130,10 @@ public final class ArrayUtils {
      * source array length or the destination array length.
      */
     public static void arraycopy(@NotNull CNumber[] src, int srcPos, @NotNull CNumber[] dest, int destPos, int length) {
-<span class="nc bnc" id="L133" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L134">            dest[i+destPos] = src[i+srcPos].copy();</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="fc" id="L134">            dest[i+destPos] = src[i+srcPos].copy();</span>
         }
-<span class="nc" id="L136">    }</span>
+<span class="fc" id="L136">    }</span>
 
 
 

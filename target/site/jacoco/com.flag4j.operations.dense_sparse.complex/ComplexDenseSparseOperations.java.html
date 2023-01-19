@@ -50,18 +50,18 @@ public class ComplexDenseSparseOperations {
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static CMatrix add(CMatrix src1, SparseCMatrix src2) {
-<span class="nc" id="L53">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L53">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
-<span class="nc" id="L56">        CMatrix dest = new CMatrix(src1);</span>
+<span class="fc" id="L56">        CMatrix dest = new CMatrix(src1);</span>
 
-<span class="nc bnc" id="L58" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L59">            row = src2.rowIndices[i];</span>
-<span class="nc" id="L60">            col = src2.colIndices[i];</span>
-<span class="nc" id="L61">            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L59">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L60">            col = src2.colIndices[i];</span>
+<span class="fc" id="L61">            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);</span>
         }
 
-<span class="nc" id="L64">        return dest;</span>
+<span class="fc" id="L64">        return dest;</span>
     }
 
 
@@ -73,18 +73,18 @@ public class ComplexDenseSparseOperations {
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static CMatrix sub(CMatrix src1, SparseCMatrix src2) {
-<span class="nc" id="L76">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L76">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
-<span class="nc" id="L79">        CMatrix dest = new CMatrix(src1);</span>
+<span class="fc" id="L79">        CMatrix dest = new CMatrix(src1);</span>
 
-<span class="nc bnc" id="L81" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L82">            row = src2.rowIndices[i];</span>
-<span class="nc" id="L83">            col = src2.colIndices[i];</span>
-<span class="nc" id="L84">            dest.entries[row*src1.numCols + col].subEq(src2.entries[i]);</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L82">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L83">            col = src2.colIndices[i];</span>
+<span class="fc" id="L84">            dest.entries[row*src1.numCols + col].subEq(src2.entries[i]);</span>
         }
 
-<span class="nc" id="L87">        return dest;</span>
+<span class="fc" id="L87">        return dest;</span>
     }
 
 

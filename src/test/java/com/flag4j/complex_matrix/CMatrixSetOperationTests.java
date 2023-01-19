@@ -1,7 +1,6 @@
 package com.flag4j.complex_matrix;
 
 import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -274,6 +273,83 @@ class CMatrixSetOperationTests {
 
 
     @Test
+    void setColumnITest() {
+        Integer[] values;
+        int col;
+
+        // -------------- Sub-case 1 --------------
+        values = new Integer[]{13, 35, -931};
+        col = 0;
+        entriesExp = new CNumber[][]{
+                {new CNumber(13), new CNumber(0, 45.6)},
+                {new CNumber(35), new CNumber(4, -13.1)},
+                {new CNumber(-931), new CNumber(-1334.5, 0.0043)}};
+        exp = new CMatrix(entriesExp);
+        entriesA = new CNumber[][]{
+                {new CNumber(0, 4), new CNumber(0, 45.6)},
+                {new CNumber(1, 66.712), new CNumber(4, -13.1)},
+                {new CNumber(1331.14, -92.23), new CNumber(-1334.5, 0.0043)}};
+        A = new CMatrix(entriesA);
+        A.setCol(values, col);
+
+        assertEquals(exp, A);
+
+        // -------------- Sub-case 2 --------------
+        values = new Integer[]{13, 35, -931};
+        col = 0;
+        entriesA = new CNumber[][]{
+                {new CNumber(5.212, -67.1), new CNumber(5.234, 1), new CNumber(66, 1)},
+                {new CNumber(-0.432, -82.24), new CNumber(6.2, 14678.324), new CNumber(0, 34)}};
+        A = new CMatrix(entriesA);
+
+        Integer[] finalValues = values;
+        int finalCol = col;
+        assertThrows(IllegalArgumentException.class, () -> A.setCol(finalValues, finalCol));
+
+        // -------------- Sub-case 3 --------------
+        values = new Integer[]{13, 35, -931};
+        col = 1;
+        entriesExp = new CNumber[][]{
+                {new CNumber(0, 4), new CNumber(13)},
+                {new CNumber(1, 66.712), new CNumber(35)},
+                {new CNumber(1331.14, -92.23), new CNumber(-931)}};
+        exp = new CMatrix(entriesExp);
+        entriesA = new CNumber[][]{
+                {new CNumber(0, 4), new CNumber(0, 45.6)},
+                {new CNumber(1, 66.712), new CNumber(4, -13.1)},
+                {new CNumber(1331.14, -92.23), new CNumber(-1334.5, 0.0043)}};
+        A = new CMatrix(entriesA);
+        A.setCol(values, col);
+
+        assertEquals(exp, A);
+
+        // -------------- Sub-case 4 --------------
+        values = new Integer[]{13, 35};
+        col = -1;
+        entriesA = new CNumber[][]{
+                {new CNumber(5.212, -67.1), new CNumber(5.234, 1), new CNumber(66, 1)},
+                {new CNumber(-0.432, -82.24), new CNumber(6.2, 14678.324), new CNumber(0, 34)}};
+        A = new CMatrix(entriesA);
+
+        Integer[] finalValues1 = values;
+        int finalCol1 = col;
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setCol(finalValues1, finalCol1));
+
+        // -------------- Sub-case 4 --------------
+        values = new Integer[]{13, 35};
+        col = 3;
+        entriesA = new CNumber[][]{
+                {new CNumber(5.212, -67.1), new CNumber(5.234, 1), new CNumber(66, 1)},
+                {new CNumber(-0.432, -82.24), new CNumber(6.2, 14678.324), new CNumber(0, 34)}};
+        A = new CMatrix(entriesA);
+
+        Integer[] finalValues2 = values;
+        int finalCol2 = col;
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setCol(finalValues2, finalCol2));
+    }
+
+
+    @Test
     void setRowdoubleTest() {
         double[] values;
         int row;
@@ -327,6 +403,71 @@ class CMatrixSetOperationTests {
         A = new CMatrix(entriesA);
 
         double[] finalValues2 = values;
+        int finalRow2 = row;
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setRow(finalValues2, finalRow2));
+    }
+
+
+    @Test
+    void setRowCNumberTest() {
+        CNumber[] values;
+        int row;
+
+        // -------------- Sub-case 1 --------------
+        values = new CNumber[]{new CNumber(34, -55.6), new CNumber(0.44, -0.23)};
+        row = 0;
+        entriesExp = new CNumber[][]{
+                {new CNumber(34, -55.6), new CNumber(0.44, -0.23)},
+                {new CNumber(1), new CNumber(4)},
+                {new CNumber(1331.14), new CNumber(-1334.5)}};
+        exp = new CMatrix(entriesExp);
+        entriesA = new CNumber[][]{{new CNumber(0), new CNumber(0)}, {new CNumber(1), new CNumber(4)}, {new CNumber(1331.14), new CNumber(-1334.5)}};
+        A = new CMatrix(entriesA);
+        A.setRow(values, row);
+
+        assertEquals(exp, A);
+
+        // -------------- Sub-case 2 --------------
+        values = new CNumber[]{new CNumber(34, -55.6), new CNumber(0.44, -0.23)};
+        row = 0;
+        entriesA = new CNumber[][]{{new CNumber(0), new CNumber(0), new CNumber(1)}, {new CNumber(1), new CNumber(4), new CNumber(2)}};
+        A = new CMatrix(entriesA);
+
+        CNumber[] finalValues = values;
+        int finalRow = row;
+        assertThrows(IllegalArgumentException.class, () -> A.setRow(finalValues, finalRow));
+
+        // -------------- Sub-case 3 --------------
+        values = new CNumber[]{new CNumber(34, -55.6), new CNumber(0.44, -0.23)};
+        row = 1;
+        entriesExp = new CNumber[][]{
+                {new CNumber(0), new CNumber(0)},
+                {new CNumber(34, -55.6), new CNumber(0.44, -0.23)},
+                {new CNumber(1331.14), new CNumber(-1334.5)}};
+        exp = new CMatrix(entriesExp);
+        entriesA = new CNumber[][]{{new CNumber(0), new CNumber(0)}, {new CNumber(1), new CNumber(4)}, {new CNumber(1331.14), new CNumber(-1334.5)}};
+        A = new CMatrix(entriesA);
+        A.setRow(values, row);
+
+        assertEquals(exp, A);
+
+        // -------------- Sub-case 4 --------------
+        values = new CNumber[]{new CNumber(34, -55.6), new CNumber(0.44, -0.23)};
+        row = -1;
+        entriesA = new CNumber[][]{{new CNumber(0), new CNumber(0)}, {new CNumber(1), new CNumber(4)}};
+        A = new CMatrix(entriesA);
+
+        CNumber[] finalValues1 = values;
+        int finalRow1 = row;
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setRow(finalValues1, finalRow1));
+
+        // -------------- Sub-case 4 --------------
+        values = new CNumber[]{new CNumber(34, -55.6), new CNumber(0.44, -0.23), new CNumber(9.234, -0.2334)};
+        row = 3;
+        entriesA = new CNumber[][]{{new CNumber(0), new CNumber(0), new CNumber(1)}, {new CNumber(1), new CNumber(4), new CNumber(2)}};
+        A = new CMatrix(entriesA);
+
+        CNumber[] finalValues2 = values;
         int finalRow2 = row;
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setRow(finalValues2, finalRow2));
     }
@@ -389,6 +530,66 @@ class CMatrixSetOperationTests {
         int finalRow2 = row;
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setRow(finalValues2, finalRow2));
     }
+
+
+    @Test
+    void setRowITest() {
+        Integer[] values;
+        int row;
+
+        // -------------- Sub-case 1 --------------
+        values = new Integer[]{1, 455};
+        row = 0;
+        entriesExp = new CNumber[][]{{new CNumber(1), new CNumber(455)}, {new CNumber(1), new CNumber(4)}, {new CNumber(1331.14), new CNumber(-1334.5)}};
+        exp = new CMatrix(entriesExp);
+        entriesA = new CNumber[][]{{new CNumber(0), new CNumber(0)}, {new CNumber(1), new CNumber(4)}, {new CNumber(1331.14), new CNumber(-1334.5)}};
+        A = new CMatrix(entriesA);
+        A.setRow(values, row);
+
+        assertEquals(exp, A);
+
+        // -------------- Sub-case 2 --------------
+        values = new Integer[]{1, 455};
+        row = 0;
+        entriesA = new CNumber[][]{{new CNumber(0), new CNumber(0), new CNumber(1)}, {new CNumber(1), new CNumber(4), new CNumber(2)}};
+        A = new CMatrix(entriesA);
+
+        Integer[] finalValues = values;
+        int finalRow = row;
+        assertThrows(IllegalArgumentException.class, () -> A.setRow(finalValues, finalRow));
+
+        // -------------- Sub-case 3 --------------
+        values = new Integer[]{1, 455};
+        row = 1;
+        entriesExp = new CNumber[][]{{new CNumber(0), new CNumber(0)}, {new CNumber(1), new CNumber(455)}, {new CNumber(1331.14), new CNumber(-1334.5)}};
+        exp = new CMatrix(entriesExp);
+        entriesA = new CNumber[][]{{new CNumber(0), new CNumber(0)}, {new CNumber(1), new CNumber(4)}, {new CNumber(1331.14), new CNumber(-1334.5)}};
+        A = new CMatrix(entriesA);
+        A.setRow(values, row);
+
+        assertEquals(exp, A);
+
+        // -------------- Sub-case 4 --------------
+        values = new Integer[]{1, 455};
+        row = -1;
+        entriesA = new CNumber[][]{{new CNumber(0), new CNumber(0)}, {new CNumber(1), new CNumber(4)}};
+        A = new CMatrix(entriesA);
+
+        Integer[] finalValues1 = values;
+        int finalRow1 = row;
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setRow(finalValues1, finalRow1));
+
+        // -------------- Sub-case 4 --------------
+        values = new Integer[]{1, 455, 9};
+        row = 3;
+        entriesA = new CNumber[][]{{new CNumber(0), new CNumber(0), new CNumber(1)}, {new CNumber(1), new CNumber(4), new CNumber(2)}};
+        A = new CMatrix(entriesA);
+
+        Integer[] finalValues2 = values;
+        int finalRow2 = row;
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setRow(finalValues2, finalRow2));
+    }
+
 
     @Test
     void setSliceMatrixTest() {
@@ -634,6 +835,194 @@ class CMatrixSetOperationTests {
         exp = new CMatrix(entriesExp);
 
         int[][] finalValues = values;
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setSliceCopy(finalValues, 1, 2));
+    }
+
+
+    @Test
+    void setSliceITest() {
+        Integer[][] values;
+        int row, col;
+
+        // -------------- Sub-case 1 --------------
+        values = new Integer[][]{{-71, 34}, {-99, -13}};
+        row = 0;
+        col = 0;
+        entriesA = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(2.2), new CNumber(83.1)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
+        A = new CMatrix(entriesA);
+        entriesExp = new CNumber[][]{{new CNumber(-71), new CNumber(34), new CNumber(2.2), new CNumber(83.1)}, {new CNumber(-99), new CNumber(-13), new CNumber(-7.13), new CNumber(0.00013)}};
+        exp = new CMatrix(entriesExp);
+
+        A.setSlice(values, row, col);
+        assertEquals(exp, A);
+
+        // -------------- Sub-case 2 --------------
+        values = new Integer[][]{{-71, 34}, {-99, -13}};
+        row = 0;
+        col = 2;
+        entriesA = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(2.2), new CNumber(83.1)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
+        A = new CMatrix(entriesA);
+        entriesExp = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(-71), new CNumber(34)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-99), new CNumber(-13)}};
+        exp = new CMatrix(entriesExp);
+
+        A.setSlice(values, row, col);
+
+        assertEquals(exp, A);
+
+        // -------------- Sub-case 3 --------------
+        values = new Integer[][]{{-71, 34}, {-99, -13}};
+        entriesA = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(2.2), new CNumber(83.1)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
+        A = new CMatrix(entriesA);
+        entriesExp = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(-71), new CNumber(34)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-99), new CNumber(-13)}};
+        exp = new CMatrix(entriesExp);
+
+        Integer[][] finalValues = values;
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setSlice(finalValues, 1, 2));
+    }
+
+
+    @Test
+    void setSliceCopyITest() {
+        Integer[][] values;
+        int row, col;
+
+        // -------------- Sub-case 1 --------------
+        values = new Integer[][]{{-7, 34}, {-99, -13}};
+        row = 0;
+        col = 0;
+        entriesA = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(2.2), new CNumber(83.1)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
+        A = new CMatrix(entriesA);
+        entriesExp = new CNumber[][]{{new CNumber(-7), new CNumber(34), new CNumber(2.2), new CNumber(83.1)}, {new CNumber(-99), new CNumber(-13), new CNumber(-7.13), new CNumber(0.00013)}};
+        exp = new CMatrix(entriesExp);
+
+        assertEquals(exp, A.setSliceCopy(values, row, col));
+
+        // -------------- Sub-case 2 --------------
+        values = new Integer[][]{{-7, 34}, {-99, -13}};
+        row = 0;
+        col = 2;
+        entriesA = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(2.2), new CNumber(83.1)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
+        A = new CMatrix(entriesA);
+        entriesExp = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(-7), new CNumber(34)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-99), new CNumber(-13)}};
+        exp = new CMatrix(entriesExp);
+
+        assertEquals(exp, A.setSliceCopy(values, row, col));
+
+        // -------------- Sub-case 3 --------------
+        values = new Integer[][]{{-7, 34}, {-99, -13}};
+        entriesA = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(2.2), new CNumber(83.1)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
+        A = new CMatrix(entriesA);
+        entriesExp = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(-71.33), new CNumber(34.61)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-99.24), new CNumber(-13.4)}};
+        exp = new CMatrix(entriesExp);
+
+        Integer[][] finalValues = values;
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setSliceCopy(finalValues, 1, 2));
+    }
+
+
+    @Test
+    void setSliceCNumberTest() {
+        CNumber[][] values;
+        int row, col;
+
+        // -------------- Sub-case 1 --------------
+        values = new CNumber[][]{
+                {new CNumber(0.234, -84.12), new CNumber(33, 441.435)},
+                {new CNumber(0, 442.4), new CNumber(24.88)}};
+        row = 0;
+        col = 0;
+        entriesA = new CNumber[][]{
+                {new CNumber(-99.234), new CNumber(132), new CNumber(2.2), new CNumber(83.1)},
+                {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
+        A = new CMatrix(entriesA);
+        entriesExp = new CNumber[][]{
+                {new CNumber(0.234, -84.12), new CNumber(33, 441.435), new CNumber(2.2), new CNumber(83.1)},
+                {new CNumber(0, 442.4), new CNumber(24.88), new CNumber(-7.13), new CNumber(0.00013)}};
+        exp = new CMatrix(entriesExp);
+
+        A.setSlice(values, row, col);
+        assertEquals(exp, A);
+
+        // -------------- Sub-case 2 --------------
+        values = new CNumber[][]{
+                {new CNumber(0.234, -84.12), new CNumber(33, 441.435)},
+                {new CNumber(0, 442.4), new CNumber(24.88)}};
+        row = 0;
+        col = 2;
+        entriesA = new CNumber[][]{
+                {new CNumber(-99.234), new CNumber(132), new CNumber(2.2), new CNumber(83.1)},
+                {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
+        A = new CMatrix(entriesA);
+        entriesExp = new CNumber[][]{
+                {new CNumber(-99.234), new CNumber(132), new CNumber(0.234, -84.12), new CNumber(33, 441.435)},
+                {new CNumber(11.346), new CNumber(124.6), new CNumber(0, 442.4), new CNumber(24.88)}};
+        exp = new CMatrix(entriesExp);
+
+        A.setSlice(values, row, col);
+
+        assertEquals(exp, A);
+
+        // -------------- Sub-case 3 --------------
+        values = new CNumber[][]{
+                {new CNumber(0.234, -84.12), new CNumber(33, 441.435)},
+                {new CNumber(0, 442.4), new CNumber(24.88)}};
+        entriesA = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(2.2), new CNumber(83.1)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
+        A = new CMatrix(entriesA);
+        entriesExp = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(-71), new CNumber(34)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-99), new CNumber(-13)}};
+        exp = new CMatrix(entriesExp);
+
+        CNumber[][] finalValues = values;
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setSlice(finalValues, 1, 2));
+    }
+
+
+    @Test
+    void setSliceCopyCNumberTest() {
+        CNumber[][] values;
+        int row, col;
+
+        // -------------- Sub-case 1 --------------
+        values = new CNumber[][]{
+                {new CNumber(0.234, -84.12), new CNumber(33, 441.435)},
+                {new CNumber(0, 442.4), new CNumber(24.88)}};
+        row = 0;
+        col = 0;
+        entriesA = new CNumber[][]{
+                {new CNumber(-99.234), new CNumber(132), new CNumber(2.2), new CNumber(83.1)},
+                {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
+        A = new CMatrix(entriesA);
+        entriesExp = new CNumber[][]{
+                {new CNumber(0.234, -84.12), new CNumber(33, 441.435), new CNumber(2.2), new CNumber(83.1)},
+                {new CNumber(0, 442.4), new CNumber(24.88), new CNumber(-7.13), new CNumber(0.00013)}};
+        exp = new CMatrix(entriesExp);
+
+        assertEquals(exp, A.setSliceCopy(values, row, col));
+
+        // -------------- Sub-case 2 --------------
+        values = new CNumber[][]{
+                {new CNumber(0.234, -84.12), new CNumber(33, 441.435)},
+                {new CNumber(0, 442.4), new CNumber(24.88)}};
+        row = 0;
+        col = 2;
+        entriesA = new CNumber[][]{
+                {new CNumber(-99.234), new CNumber(132), new CNumber(2.2), new CNumber(83.1)},
+                {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
+        A = new CMatrix(entriesA);
+        entriesExp = new CNumber[][]{
+                {new CNumber(-99.234), new CNumber(132), new CNumber(0.234, -84.12), new CNumber(33, 441.435)},
+                {new CNumber(11.346), new CNumber(124.6), new CNumber(0, 442.4), new CNumber(24.88)}};
+        exp = new CMatrix(entriesExp);
+
+        assertEquals(exp, A.setSliceCopy(values, row, col));
+
+        // -------------- Sub-case 3 --------------
+        values = new CNumber[][]{
+                {new CNumber(0.234, -84.12), new CNumber(33, 441.435)},
+                {new CNumber(0, 442.4), new CNumber(24.88)}};
+        entriesA = new CNumber[][]{{new CNumber(-99.234), new CNumber(132), new CNumber(2.2), new CNumber(83.1)}, {new CNumber(11.346), new CNumber(124.6), new CNumber(-7.13), new CNumber(0.00013)}};
+        A = new CMatrix(entriesA);
+
+        CNumber[][] finalValues = values;
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setSliceCopy(finalValues, 1, 2));
     }
 }

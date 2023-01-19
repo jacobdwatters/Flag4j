@@ -40,18 +40,6 @@ class CNumberRoundTest {
         expRound = new CNumber(9.3E10, 0);
         actRound = CNumber.round(n);
         Assertions.assertEquals(expRound, actRound);
-
-        // -------------- Sub-case 6 --------------
-        n = new CNumber(Double.POSITIVE_INFINITY);
-        Assertions.assertThrows(NumberFormatException.class, () -> CNumber.round(n));
-
-        // -------------- Sub-case 7 --------------
-        n = new CNumber(Double.NaN);
-        Assertions.assertThrows(NumberFormatException.class, () -> CNumber.round(n));
-
-        // -------------- Sub-case 8 --------------
-        n = new CNumber(Double.NaN);
-        Assertions.assertThrows(NumberFormatException.class, () -> CNumber.round(n));
     }
 
 
@@ -86,18 +74,6 @@ class CNumberRoundTest {
         expRound = new CNumber(9.3E10, 0.1993);
         actRound = CNumber.round(n, 4);
         Assertions.assertEquals(expRound, actRound);
-
-        // -------------- Sub-case 6 --------------
-        n = new CNumber(Double.POSITIVE_INFINITY);
-        Assertions.assertThrows(NumberFormatException.class, () -> CNumber.round(n));
-
-        // -------------- Sub-case 7 --------------
-        n = new CNumber(Double.NaN);
-        Assertions.assertThrows(NumberFormatException.class, () -> CNumber.round(n));
-
-        // -------------- Sub-case 8 --------------
-        n = new CNumber(Double.NaN);
-        Assertions.assertThrows(NumberFormatException.class, () -> CNumber.round(n));
 
         // -------------- Sub-case 9 --------------
         n = new CNumber(8234.5, 123.34);

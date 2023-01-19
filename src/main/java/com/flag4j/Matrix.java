@@ -3313,7 +3313,7 @@ public class Matrix extends RealMatrixBase implements
             }
 
             StringBuilder resultBuilder = new StringBuilder("[");
-            for(int i=0; i<numCols; i++) {
+            for(int i=0; i<numRows; i++) {
                 if(i >= PrintOptions.getMaxRows() && i < numCols-1) {
                     resultBuilder.append("  ...\n ");
                     i = numCols-1;

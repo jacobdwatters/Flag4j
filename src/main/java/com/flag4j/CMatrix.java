@@ -3398,8 +3398,7 @@ public class CMatrix extends ComplexMatrixBase implements
 
                 resultBuilder.append(" [");
 
-                for(int j = 0; j<numRows; j++) {
-
+                for(int j = 0; j<numCols; j++) {
                     if(j >= PrintOptions.getMaxColumns() && j < numRows-1) {
                         colWidth = 3+PrintOptions.getPadding();
                         resultBuilder.append(String.format("%-" + colWidth + "s", StringUtils.center("...", colWidth)));
