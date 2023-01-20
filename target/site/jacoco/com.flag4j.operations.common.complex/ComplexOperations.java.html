@@ -46,13 +46,13 @@ public class ComplexOperations {
      * @return The element-wise square root of the tensor.
      */
     public static CNumber[] sqrt(CNumber[] src) {
-<span class="nc" id="L49">        CNumber[] roots = new CNumber[src.length];</span>
+<span class="fc" id="L49">        CNumber[] roots = new CNumber[src.length];</span>
 
-<span class="nc bnc" id="L51" title="All 2 branches missed.">        for(int i=0; i&lt;roots.length; i++) {</span>
-<span class="nc" id="L52">            roots[i] = CNumber.sqrt(src[i]);</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        for(int i=0; i&lt;roots.length; i++) {</span>
+<span class="fc" id="L52">            roots[i] = CNumber.sqrt(src[i]);</span>
         }
 
-<span class="nc" id="L55">        return roots;</span>
+<span class="fc" id="L55">        return roots;</span>
     }
 
 
@@ -62,13 +62,13 @@ public class ComplexOperations {
      * @return The element-wise absolute value of the tensor.
      */
     public static CNumber[] abs(CNumber[] src) {
-<span class="nc" id="L65">        CNumber[] abs = new CNumber[src.length];</span>
+<span class="fc" id="L65">        CNumber[] abs = new CNumber[src.length];</span>
 
-<span class="nc bnc" id="L67" title="All 2 branches missed.">        for(int i=0; i&lt;abs.length; i++) {</span>
-<span class="nc" id="L68">            abs[i] = src[i].mag();</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        for(int i=0; i&lt;abs.length; i++) {</span>
+<span class="fc" id="L68">            abs[i] = src[i].mag();</span>
         }
 
-<span class="nc" id="L71">        return abs;</span>
+<span class="fc" id="L71">        return abs;</span>
     }
 
 
@@ -142,13 +142,13 @@ public class ComplexOperations {
      * @return The result of the scalar multiplication of a tensor.
      */
     public static CNumber[] scalMult(CNumber[] src, double factor) {
-<span class="nc" id="L145">        CNumber[] dest = new CNumber[src.length];</span>
+<span class="fc" id="L145">        CNumber[] dest = new CNumber[src.length];</span>
 
-<span class="nc bnc" id="L147" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="nc" id="L148">            dest[i] = src[i].mult(factor);</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L148">            dest[i] = src[i].mult(factor);</span>
         }
 
-<span class="nc" id="L151">        return dest;</span>
+<span class="fc" id="L151">        return dest;</span>
     }
 
 
@@ -159,13 +159,13 @@ public class ComplexOperations {
      * @return The result of the scalar multiplication of a tensor.
      */
     public static CNumber[] scalMult(CNumber[] src, CNumber factor) {
-<span class="nc" id="L162">        CNumber[] dest = new CNumber[src.length];</span>
+<span class="fc" id="L162">        CNumber[] dest = new CNumber[src.length];</span>
 
-<span class="nc bnc" id="L164" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="nc" id="L165">            dest[i] = src[i].mult(factor);</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L165">            dest[i] = src[i].mult(factor);</span>
         }
 
-<span class="nc" id="L168">        return dest;</span>
+<span class="fc" id="L168">        return dest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

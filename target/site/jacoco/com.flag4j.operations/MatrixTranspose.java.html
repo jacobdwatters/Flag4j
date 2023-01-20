@@ -94,15 +94,15 @@ public final class MatrixTranspose {
 
         CNumber[] dest;
 
-<span class="nc" id="L97">        Algorithm algorithm = chooseAlgorithm(src.shape);</span>
+<span class="fc" id="L97">        Algorithm algorithm = chooseAlgorithm(src.shape);</span>
 
-<span class="nc bnc" id="L99" title="All 2 branches missed.">        if(algorithm==Algorithm.BLOCKED) {</span>
-<span class="nc" id="L100">            dest = ComplexDenseTranspose.blockedMatrix(src.entries, src.numRows, src.numCols);</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if(algorithm==Algorithm.BLOCKED) {</span>
+<span class="fc" id="L100">            dest = ComplexDenseTranspose.blockedMatrix(src.entries, src.numRows, src.numCols);</span>
         } else {
 <span class="nc" id="L102">            dest = ComplexDenseTranspose.blockedMatrixConcurrent(src.entries, src.numRows, src.numCols);</span>
         }
 
-<span class="nc" id="L105">        return new CMatrix(src.numCols, src.numRows, dest);</span>
+<span class="fc" id="L105">        return new CMatrix(src.numCols, src.numRows, dest);</span>
     }
 
 
@@ -114,15 +114,15 @@ public final class MatrixTranspose {
     public static CMatrix dispatchHermation(CMatrix src) {
         CNumber[] dest;
 
-<span class="nc" id="L117">        Algorithm algorithm = chooseAlgorithmHermation(src.shape);</span>
+<span class="fc" id="L117">        Algorithm algorithm = chooseAlgorithmHermation(src.shape);</span>
 
-<span class="nc bnc" id="L119" title="All 2 branches missed.">        if(algorithm==Algorithm.BLOCKED) {</span>
-<span class="nc" id="L120">            dest = ComplexDenseTranspose.blockedMatrixHerm(src.entries, src.numRows, src.numCols);</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        if(algorithm==Algorithm.BLOCKED) {</span>
+<span class="fc" id="L120">            dest = ComplexDenseTranspose.blockedMatrixHerm(src.entries, src.numRows, src.numCols);</span>
         } else {
 <span class="nc" id="L122">            dest = ComplexDenseTranspose.blockedMatrixConcurrentHerm(src.entries, src.numRows, src.numCols);</span>
         }
 
-<span class="nc" id="L125">        return new CMatrix(src.numCols, src.numRows, dest);</span>
+<span class="fc" id="L125">        return new CMatrix(src.numCols, src.numRows, dest);</span>
     }
 
 
@@ -156,17 +156,17 @@ public final class MatrixTranspose {
     private static Algorithm chooseAlgorithmHermation(Shape shape) {
         Algorithm algorithm;
 
-<span class="nc" id="L159">        int numEntries = shape.totalEntries().intValue();</span>
+<span class="fc" id="L159">        int numEntries = shape.totalEntries().intValue();</span>
 
-<span class="nc bnc" id="L161" title="All 2 branches missed.">        if(numEntries &lt; HERMATION_BLOCKED_THRESHOLD) {</span>
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        if(numEntries &lt; HERMATION_BLOCKED_THRESHOLD) {</span>
             // Use blocked algorithm
-<span class="nc" id="L163">            algorithm = Algorithm.BLOCKED;</span>
+<span class="fc" id="L163">            algorithm = Algorithm.BLOCKED;</span>
         } else {
             // Use concurrent blocked implementation.
 <span class="nc" id="L166">            algorithm = Algorithm.CONCURRENT_BLOCKED;</span>
         }
 
-<span class="nc" id="L169">        return algorithm;</span>
+<span class="fc" id="L169">        return algorithm;</span>
     }
 
 

@@ -9,6 +9,7 @@ com\flag4j\matrix\MatrixVectorCheckTests.class
 com\flag4j\matrix\MatrixVectorTests.class
 com\flag4j\matrix\MatrixAddToEachRowTests.class
 com\flag4j\matrix\MatrixConstructorTests.class
+com\flag4j\complex_matrix\CMatrixUnaryOperationsTests.class
 com\flag4j\complex_matrix\CMatrixAddTests.class
 com\flag4j\complex_matrix\CMatrixConstructorTests.class
 com\flag4j\complex_matrix\CMatrixReshapeTests.class
@@ -38,3 +39,4 @@ com\flag4j\complex_matrix\CMatrixSetOperationTests.class
 com\flag4j\matrix\MatrixTransposeTests.class
 com\flag4j\matrix\MatrixPropertiesTests.class
 com\flag4j\matrix\MatrixElemMultTests.class
+com\flag4j\complex_matrix\CMatrixScaleOperationsTests.class

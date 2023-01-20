@@ -235,13 +235,13 @@ public final class ComplexDenseOperations {
      * @return The scalar division of the tensor.
      */
     public static CNumber[] scalDiv(CNumber[] entries, CNumber divisor) {
-<span class="nc" id="L238">        CNumber[] quotient = new CNumber[entries.length];</span>
+<span class="fc" id="L238">        CNumber[] quotient = new CNumber[entries.length];</span>
 
-<span class="nc bnc" id="L240" title="All 2 branches missed.">        for(int i=0; i&lt;quotient.length; i++) {</span>
-<span class="nc" id="L241">            quotient[i] = entries[i].div(divisor);</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
+<span class="fc" id="L241">            quotient[i] = entries[i].div(divisor);</span>
         }
 
-<span class="nc" id="L244">        return quotient;</span>
+<span class="fc" id="L244">        return quotient;</span>
     }
 
 
@@ -252,13 +252,13 @@ public final class ComplexDenseOperations {
      * @return The scalar multiplication of the tensor.
      */
     public static CNumber[] scalDiv(CNumber[] entries, double divisor) {
-<span class="nc" id="L255">        CNumber[] quotient = new CNumber[entries.length];</span>
+<span class="fc" id="L255">        CNumber[] quotient = new CNumber[entries.length];</span>
 
-<span class="nc bnc" id="L257" title="All 2 branches missed.">        for(int i=0; i&lt;quotient.length; i++) {</span>
-<span class="nc" id="L258">            quotient[i] = entries[i].div(divisor);</span>
+<span class="fc bfc" id="L257" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
+<span class="fc" id="L258">            quotient[i] = entries[i].div(divisor);</span>
         }
 
-<span class="nc" id="L261">        return quotient;</span>
+<span class="fc" id="L261">        return quotient;</span>
     }
 
 
@@ -268,13 +268,13 @@ public final class ComplexDenseOperations {
      * @return The element-wise reciprocals of the tensor.
      */
     public static CNumber[] recep(CNumber[] src) {
-<span class="nc" id="L271">        CNumber[] receps = new CNumber[src.length];</span>
+<span class="fc" id="L271">        CNumber[] receps = new CNumber[src.length];</span>
 
-<span class="nc bnc" id="L273" title="All 2 branches missed.">        for(int i=0; i&lt;receps.length; i++) {</span>
-<span class="nc" id="L274">            receps[i] = src[i].addInv();</span>
+<span class="fc bfc" id="L273" title="All 2 branches covered.">        for(int i=0; i&lt;receps.length; i++) {</span>
+<span class="fc" id="L274">            receps[i] = src[i].addInv();</span>
         }
 
-<span class="nc" id="L277">        return receps;</span>
+<span class="fc" id="L277">        return receps;</span>
     }
 
 

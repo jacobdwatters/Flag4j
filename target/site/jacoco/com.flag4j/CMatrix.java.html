@@ -1239,8 +1239,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix scalMult(double factor) {
-<span class="nc" id="L1242">        return new CMatrix(this.shape.copy(),</span>
-<span class="nc" id="L1243">                ComplexOperations.scalMult(this.entries, factor)</span>
+<span class="fc" id="L1242">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1243">                ComplexOperations.scalMult(this.entries, factor)</span>
         );
     }
 
@@ -1253,8 +1253,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix scalMult(CNumber factor) {
-<span class="nc" id="L1256">        return new CMatrix(this.shape.copy(),</span>
-<span class="nc" id="L1257">                ComplexOperations.scalMult(this.entries, factor)</span>
+<span class="fc" id="L1256">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1257">                ComplexOperations.scalMult(this.entries, factor)</span>
         );
     }
 
@@ -1268,8 +1268,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix scalDiv(double divisor) {
-<span class="nc" id="L1271">        return new CMatrix(this.shape.copy(),</span>
-<span class="nc" id="L1272">                ComplexDenseOperations.scalDiv(this.entries, divisor)</span>
+<span class="fc" id="L1271">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1272">                ComplexDenseOperations.scalDiv(this.entries, divisor)</span>
         );
     }
 
@@ -1283,8 +1283,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix scalDiv(CNumber divisor) {
-<span class="nc" id="L1286">        return new CMatrix(this.shape.copy(),</span>
-<span class="nc" id="L1287">                ComplexDenseOperations.scalDiv(this.entries, divisor)</span>
+<span class="fc" id="L1286">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1287">                ComplexDenseOperations.scalDiv(this.entries, divisor)</span>
         );
     }
 
@@ -1296,7 +1296,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber sum() {
-<span class="nc" id="L1299">        return AggregateComplex.sum(this.entries);</span>
+<span class="fc" id="L1299">        return AggregateComplex.sum(this.entries);</span>
     }
 
 
@@ -1308,7 +1308,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sqrt() {
-<span class="nc" id="L1311">        return new CMatrix(this.shape.copy(), ComplexOperations.sqrt(this.entries));</span>
+<span class="fc" id="L1311">        return new CMatrix(this.shape.copy(), ComplexOperations.sqrt(this.entries));</span>
     }
 
 
@@ -1320,7 +1320,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix abs() {
-<span class="nc" id="L1323">        return new CMatrix(this.shape.copy(), ComplexOperations.abs(this.entries));</span>
+<span class="fc" id="L1323">        return new CMatrix(this.shape.copy(), ComplexOperations.abs(this.entries));</span>
     }
 
 
@@ -1332,7 +1332,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix transpose() {
-<span class="nc" id="L1335">        return T();</span>
+<span class="fc" id="L1335">        return T();</span>
     }
 
 
@@ -1344,7 +1344,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix T() {
-<span class="nc" id="L1347">        return MatrixTranspose.dispatch(this);</span>
+<span class="fc" id="L1347">        return MatrixTranspose.dispatch(this);</span>
     }
 
 
@@ -1356,7 +1356,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix hermationTranspose() {
-<span class="nc" id="L1359">        return H();</span>
+<span class="fc" id="L1359">        return H();</span>
     }
 
 
@@ -1368,7 +1368,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix H() {
-<span class="nc" id="L1371">        return MatrixTranspose.dispatchHermation(this);</span>
+<span class="fc" id="L1371">        return MatrixTranspose.dispatchHermation(this);</span>
     }
 
 
@@ -1380,9 +1380,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix recep() {
-<span class="nc" id="L1383">        return new CMatrix(</span>
-<span class="nc" id="L1384">                shape.copy(),</span>
-<span class="nc" id="L1385">                ComplexDenseOperations.recep(entries)</span>
+<span class="fc" id="L1383">        return new CMatrix(</span>
+<span class="fc" id="L1384">                shape.copy(),</span>
+<span class="fc" id="L1385">                ComplexDenseOperations.recep(entries)</span>
         );
     }
 
