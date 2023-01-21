@@ -1498,6 +1498,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public CMatrix mult(SparseVector b) {
         // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
+        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);
         Shape shape = new Shape(this.numRows, 1);
         return new CMatrix(shape, entries);
@@ -1530,6 +1531,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public CMatrix mult(SparseCVector b) {
         // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
+        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = ComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);
         Shape shape = new Shape(this.numRows, 1);
         return new CMatrix(shape, entries);

@@ -29,6 +29,7 @@ import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.concurrency.Configurations;
 import com.flag4j.operations.concurrency.ThreadManager;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 
@@ -63,6 +64,7 @@ public class ComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fillZeros(dest);
 
         int row, col;
 
@@ -250,6 +252,7 @@ public class ComplexDenseSparseMatrixMultiplication {
         int bsize = Configurations.getBlockSize(); // Get the block size to use.
 
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fillZeros(dest);
         int k;
 
         // Blocked matrix-vector multiply
