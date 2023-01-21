@@ -289,14 +289,14 @@ public final class ComplexDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemMult(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="nc" id="L292">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
-<span class="nc" id="L293">        CNumber[] product = new CNumber[src1.length];</span>
+<span class="fc" id="L292">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L293">        CNumber[] product = new CNumber[src1.length];</span>
 
-<span class="nc bnc" id="L295" title="All 2 branches missed.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="nc" id="L296">            product[i] = src1[i].mult(src2[i]);</span>
+<span class="fc bfc" id="L295" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L296">            product[i] = src1[i].mult(src2[i]);</span>
         }
 
-<span class="nc" id="L299">        return product;</span>
+<span class="fc" id="L299">        return product;</span>
     }
 
 
