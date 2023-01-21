@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +25,17 @@
 package com.flag4j.operations.dense.real;
 
 
+import com.flag4j.util.ErrorMessages;
+
 /**
  * This class contains several low-level methods useful for computing aggregation operations on dense tensors.
  */
 public class AggregateDenseReal {
+
+    private AggregateDenseReal() {
+        // Hide default constructor for utility class.
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+    }
 
 
     /**

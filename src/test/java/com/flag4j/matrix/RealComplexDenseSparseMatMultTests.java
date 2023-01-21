@@ -2,9 +2,9 @@ package com.flag4j.matrix;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
-import static com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication.*;
 import org.junit.jupiter.api.Test;
 
+import static com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

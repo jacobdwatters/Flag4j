@@ -26,12 +26,14 @@ package com.flag4j.core;
 
 import com.flag4j.Shape;
 
+import java.io.Serializable;
+
 
 /**
  * The base class for all vectors.
  * @param &lt;T&gt; The type of entries for this matrix.
  */
-public abstract class VectorBase&lt;T&gt; extends TensorBase&lt;T&gt; {
+public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBase&lt;T&gt; {
 
     /**
      * The orientation of this vector.
@@ -49,10 +51,10 @@ public abstract class VectorBase&lt;T&gt; extends TensorBase&lt;T&gt; {
      * @param entries The non-zero entries of this sparse tensor.
      */
     public VectorBase(int size, VectorOrientation orientation, T entries) {
-<span class="fc" id="L52">        super(new Shape(size), entries);</span>
-<span class="fc" id="L53">        this.orientation = orientation;</span>
-<span class="fc" id="L54">        this.size = size;</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L54">        super(new Shape(size), entries);</span>
+<span class="fc" id="L55">        this.orientation = orientation;</span>
+<span class="fc" id="L56">        this.size = size;</span>
+<span class="fc" id="L57">    }</span>
 
 
     /**
@@ -60,7 +62,7 @@ public abstract class VectorBase&lt;T&gt; extends TensorBase&lt;T&gt; {
      * @return The size, i.e. number of entries, of this vector.
      */
     public int size() {
-<span class="fc" id="L63">        return size;</span>
+<span class="fc" id="L65">        return size;</span>
     }
 
 
@@ -75,13 +77,13 @@ public abstract class VectorBase&lt;T&gt; extends TensorBase&lt;T&gt; {
     public Shape getOrientedShape() {
         Shape orientedShape;
 
-<span class="nc bnc" id="L78" title="All 2 branches missed.">        if(this.orientation== VectorOrientation.ROW) {</span>
-<span class="nc" id="L79">            orientedShape = new Shape(1, this.size());</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if(this.orientation== VectorOrientation.ROW) {</span>
+<span class="nc" id="L81">            orientedShape = new Shape(1, this.size());</span>
         } else {
-<span class="nc" id="L81">            orientedShape = new Shape(this.size(), 1);</span>
+<span class="nc" id="L83">            orientedShape = new Shape(this.size(), 1);</span>
         }
 
-<span class="nc" id="L84">        return orientedShape;</span>
+<span class="nc" id="L86">        return orientedShape;</span>
     }
 
 
@@ -90,7 +92,7 @@ public abstract class VectorBase&lt;T&gt; extends TensorBase&lt;T&gt; {
      * @return The orientation of this vector.
      */
     public VectorOrientation getOrientation() {
-<span class="fc" id="L93">        return this.orientation;</span>
+<span class="fc" id="L95">        return this.orientation;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

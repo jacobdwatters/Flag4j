@@ -1,12 +1,14 @@
 package com.flag4j.matrix;
 
 import com.flag4j.Matrix;
+import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MatrixSetOperationTests {
     double[][] entriesA, entriesExp;
     Matrix A, exp;
+
 
     @Test
     void setValuesDTest() {

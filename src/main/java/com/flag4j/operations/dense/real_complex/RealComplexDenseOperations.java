@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -224,14 +224,14 @@ public final class RealComplexDenseOperations {
      */
     public static CNumber[] elemDiv(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
         ParameterChecks.assertEqualShape(shape1, shape2);
-        CNumber[] product = new CNumber[src1.length];
+        CNumber[] quotient = new CNumber[src1.length];
         double divisor;
 
-        for(int i=0; i<product.length; i++) {
+        for(int i=0; i<quotient.length; i++) {
             divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;
-            product[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);
+            quotient[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);
         }
 
-        return product;
+        return quotient;
     }
 }

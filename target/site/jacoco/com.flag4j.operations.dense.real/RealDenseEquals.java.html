@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealDenseEquals.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense.real</a> &gt; <span class="el_source">RealDenseEquals.java</span></div><h1>RealDenseEquals.java</h1><pre class="source lang-java linenums">/*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -25,6 +25,7 @@
 package com.flag4j.operations.dense.real;
 
 import com.flag4j.Matrix;
+import com.flag4j.Shape;
 import com.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -35,9 +36,9 @@ import java.util.Arrays;
  */
 public class RealDenseEquals {
 
-<span class="nc" id="L38">    private RealDenseEquals() {</span>
+<span class="nc" id="L39">    private RealDenseEquals() {</span>
         // Hide constructor.
-<span class="nc" id="L40">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L41">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -48,7 +49,20 @@ public class RealDenseEquals {
      * @return True if the two matrices are element-wise equivalent.
      */
     public static boolean matrixEquals(Matrix A, Matrix B) {
-<span class="fc bfc" id="L51" title="All 4 branches covered.">        return A.shape.equals(B.shape) &amp;&amp; Arrays.equals(A.entries, B.entries);</span>
+<span class="fc" id="L52">        return tensorEquals(A.entries, A.shape, B.entries, B.shape);</span>
+    }
+
+
+    /**
+     * Checks if two dense tensors are equal.
+     * @param src1 Entries of first tensor.
+     * @param shape1 Shape of first tensor.
+     * @param src2 Entries of second tensor.
+     * @param shape2 Shape of second tensor.
+     * @return True if the two tensors are numerically element-wise equivalent.
+     */
+    private static boolean tensorEquals(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="pc bpc" id="L65" title="1 of 4 branches missed.">        return shape1.equals(shape2) &amp;&amp; Arrays.equals(src1, src2);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

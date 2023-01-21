@@ -142,7 +142,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * be computed.
      * @return The result of applying an element-wise absolute value/magnitude to this tensor.
      */
-    Y abs();
+    T abs();
 
 
     /**

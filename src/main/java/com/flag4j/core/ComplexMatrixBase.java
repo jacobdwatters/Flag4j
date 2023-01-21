@@ -25,6 +25,7 @@
 package com.flag4j.core;
 
 
+import com.flag4j.CMatrix;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 
@@ -51,4 +52,22 @@ public abstract class ComplexMatrixBase extends MatrixBase<CNumber[]> {
      * @return A real matrix with equivalent real parts.
      */
     public abstract RealMatrixBase toReal();
+
+
+    /**
+     * Computes the hermation transpose (i.e. the conjugate transpose) of the matrix.
+     * Same as {@link #H()}.
+     * @return The conjugate transpose.
+     */
+    public abstract CMatrix hermationTranspose();
+
+
+    /**
+     * Computes the hermation transpose (i.e. the conjugate transpose) of the matrix.
+     * Same as {@link #hermationTranspose()}.
+     * @return The conjugate transpose.
+     */
+    public abstract CMatrix H();
+
+    public abstract void set(CNumber value, int... indices);
 }

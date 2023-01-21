@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,12 +26,16 @@ package com.flag4j.operations.dense.complex;
 
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
+import static com.flag4j.operations.common.complex.AggregateComplex.maxAbs;
+import static com.flag4j.operations.common.real.Aggregate.maxAbs;
+
 
 /**
- * This class provides methods for computing operations on dense complex tensors.
+ * This class provides low level methods for computing operations on dense complex tensors.
  */
 public final class ComplexDenseOperations {
 
@@ -221,5 +225,213 @@ public final class ComplexDenseOperations {
         }
 
         return product;
+    }
+
+
+    /**
+     * Computes the scalar division of a tensor.
+     * @param entries Entries of the tensor.
+     * @param divisor Scalar value to divide by.
+     * @return The scalar division of the tensor.
+     */
+    public static CNumber[] scalDiv(CNumber[] entries, CNumber divisor) {
+        CNumber[] quotient = new CNumber[entries.length];
+
+        for(int i=0; i<quotient.length; i++) {
+            quotient[i] = entries[i].div(divisor);
+        }
+
+        return quotient;
+    }
+
+
+    /**
+     * Computes the scalar multiplication of a tensor.
+     * @param entries Entries of the tensor.
+     * @param divisor Scalar value to multiply.
+     * @return The scalar multiplication of the tensor.
+     */
+    public static CNumber[] scalDiv(CNumber[] entries, double divisor) {
+        CNumber[] quotient = new CNumber[entries.length];
+
+        for(int i=0; i<quotient.length; i++) {
+            quotient[i] = entries[i].div(divisor);
+        }
+
+        return quotient;
+    }
+
+
+    /**
+     * Computes the reciprocals, element-wise, of a tensor.
+     * @param src Elements of the tensor.
+     * @return The element-wise reciprocals of the tensor.
+     */
+    public static CNumber[] recep(CNumber[] src) {
+        CNumber[] receps = new CNumber[src.length];
+
+        for(int i=0; i<receps.length; i++) {
+            receps[i] = src[i].addInv();
+        }
+
+        return receps;
+    }
+
+
+
+    /**
+     * Computes the element-wise multiplication of two tensors. Also called the Hadamard product.
+     * @param src1 First tensor in element-wise multiplication.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise multiplication.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise multiplication of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CNumber[] elemMult(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+        ParameterChecks.assertEqualShape(shape1, shape2);
+        CNumber[] product = new CNumber[src1.length];
+
+        for(int i=0; i<product.length; i++) {
+            product[i] = src1[i].mult(src2[i]);
+        }
+
+        return product;
+    }
+
+
+    /**
+     * Computes the element-wise division of two tensors.
+     * @param src1 First tensor in element-wise division.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise division.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise division of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+        ParameterChecks.assertEqualShape(shape1, shape2);
+        CNumber[] product = new CNumber[src1.length];
+
+        for(int i=0; i<product.length; i++) {
+            product[i] = src1[i].div(src2[i]);
+        }
+
+        return product;
+    }
+
+
+    /**
+     * Compute the L<sub>p, q</sub> norm of a matrix.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p First parameter in L<sub>p, q</sub> norm.
+     * @param q Second parameter in L<sub>p, q</sub> norm.
+     * @return The L<sub>p, q</sub> norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
+     */
+    public static double matrixNormLpq(CNumber[] src, Shape shape, double p, double q) {
+        ParameterChecks.assertGreaterEq(1, p, q);
+
+        double norm = 0;
+        double colSum;
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+
+        for(int j=0; j<cols; j++) {
+            colSum = 0;
+            for(int i=0; i<rows; i++) {
+                colSum += (Math.pow(src[i*cols + j].magAsDouble(), p));
+            }
+            norm += Math.pow(colSum, q/p);
+        }
+
+        return Math.pow(norm, 1/q);
+    }
+
+
+    /**
+     * Compute the L<sub>p</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link ComplexDenseOperations#matrixNormLpq(CNumber[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p Parameter in L<sub>p</sub> norm.
+     * @return The L<sub>p</sub> norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} is less than 1.
+     */
+    public static double matrixNormLp(CNumber[] src, Shape shape, double p) {
+        ParameterChecks.assertGreaterEq(1, p);
+
+        double norm = 0;
+        double colSum;
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+
+        for(int j=0; j<cols; j++) {
+            colSum=0;
+            for(int i=0; i<rows; i++) {
+                colSum += Math.pow(src[i*cols + j].magAsDouble(), p);
+            }
+
+            norm += Math.pow(colSum, 1.0/p);
+        }
+
+        return norm;
+    }
+
+
+    /**
+     * Compute the L<sub>2</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link ComplexDenseOperations#matrixNormLpq(CNumber[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return The L<sub>2</sub> norm of the matrix.
+     */
+    public static double matrixNormL2(CNumber[] src, Shape shape) {
+        double norm = 0;
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+
+        double colSum;
+
+        for(int j=0; j<cols; j++) {
+            colSum = 0;
+            for(int i=0; i<rows; i++) {
+                colSum += Math.pow(src[i*cols + j].magAsDouble(), 2);
+            }
+            norm += Math.sqrt(colSum);
+        }
+
+        return norm;
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
+     * @param src Entries of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    public static double matrixMaxNorm(CNumber[] src) {
+        return maxAbs(src).re;
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum absolute value in this matrix.
+     * @param src Entries of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    public static double matrixInfNorm(CNumber[] src, Shape shape) {
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+        double[] rowSums = new double[rows];
+
+        for(int i=0; i<rows; i++) {
+            for(int j=0; j<cols; j++) {
+                rowSums[i] += src[i*cols + j].magAsDouble();
+            }
+        }
+
+        return maxAbs(rowSums);
     }
 }

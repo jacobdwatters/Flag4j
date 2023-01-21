@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@
 package com.flag4j.operations.dense.real;
 
 import com.flag4j.Matrix;
+import com.flag4j.Shape;
 import com.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -48,6 +49,19 @@ public class RealDenseEquals {
      * @return True if the two matrices are element-wise equivalent.
      */
     public static boolean matrixEquals(Matrix A, Matrix B) {
-        return A.shape.equals(B.shape) && Arrays.equals(A.entries, B.entries);
+        return tensorEquals(A.entries, A.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Checks if two dense tensors are equal.
+     * @param src1 Entries of first tensor.
+     * @param shape1 Shape of first tensor.
+     * @param src2 Entries of second tensor.
+     * @param shape2 Shape of second tensor.
+     * @return True if the two tensors are numerically element-wise equivalent.
+     */
+    private static boolean tensorEquals(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+        return shape1.equals(shape2) && Arrays.equals(src1, src2);
     }
 }

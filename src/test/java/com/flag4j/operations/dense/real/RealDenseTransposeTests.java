@@ -1,9 +1,9 @@
 package com.flag4j.operations.dense.real;
 
-import static com.flag4j.operations.dense.real.RealDenseTranspose.*;
-
 import com.flag4j.Shape;
 import org.junit.jupiter.api.Test;
+
+import static com.flag4j.operations.dense.real.RealDenseTranspose.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

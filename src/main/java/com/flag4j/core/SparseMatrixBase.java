@@ -28,6 +28,7 @@ import com.flag4j.Shape;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -35,7 +36,7 @@ import java.math.RoundingMode;
 /**
  * Base class for all sparse matrices.
  */
-public abstract class SparseMatrixBase<T> extends MatrixBase<T> {
+public abstract class SparseMatrixBase<T extends Serializable> extends MatrixBase<T> {
 
     /**
      * Row indices.

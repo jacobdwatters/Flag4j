@@ -25,6 +25,7 @@
 package com.flag4j.core;
 
 
+import com.flag4j.CMatrix;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 
@@ -42,8 +43,8 @@ public abstract class ComplexMatrixBase extends MatrixBase&lt;CNumber[]&gt; {
      * @throws IllegalArgumentException If the shape parameter is not of rank 2.
      */
     public ComplexMatrixBase(Shape shape, CNumber[] entries) {
-<span class="fc" id="L45">        super(shape, entries);</span>
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L46">        super(shape, entries);</span>
+<span class="fc" id="L47">    }</span>
 
 
     /**
@@ -51,5 +52,23 @@ public abstract class ComplexMatrixBase extends MatrixBase&lt;CNumber[]&gt; {
      * @return A real matrix with equivalent real parts.
      */
     public abstract RealMatrixBase toReal();
+
+
+    /**
+     * Computes the hermation transpose (i.e. the conjugate transpose) of the matrix.
+     * Same as {@link #H()}.
+     * @return The conjugate transpose.
+     */
+    public abstract CMatrix hermationTranspose();
+
+
+    /**
+     * Computes the hermation transpose (i.e. the conjugate transpose) of the matrix.
+     * Same as {@link #hermationTranspose()}.
+     * @return The conjugate transpose.
+     */
+    public abstract CMatrix H();
+
+    public abstract void set(CNumber value, int... indices);
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

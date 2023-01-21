@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.common.real</a> &gt; <span class="el_source">RealOperations.java</span></div><h1>RealOperations.java</h1><pre class="source lang-java linenums">/*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -24,15 +24,10 @@
 
 package com.flag4j.operations.common.real;
 
-import com.flag4j.Shape;
-import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ParameterChecks;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
-import static com.flag4j.operations.common.real.Aggregate.maxAbs;
 
 /**
  * This class provides low level methods for computing operations on real tensors. These methods can be applied to
@@ -40,9 +35,9 @@ import static com.flag4j.operations.common.real.Aggregate.maxAbs;
  */
 public class RealOperations {
 
-<span class="nc" id="L43">    private RealOperations() {</span>
+<span class="nc" id="L38">    private RealOperations() {</span>
         // Hide default constructor for utility class.
-<span class="nc" id="L45">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L40">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
     /**
@@ -52,13 +47,13 @@ public class RealOperations {
      * @return The scalar multiplication of the tensor.
      */
     public static double[] scalMult(double[] src, double factor) {
-<span class="fc" id="L55">        double[] product = new double[src.length];</span>
+<span class="fc" id="L50">        double[] product = new double[src.length];</span>
 
-<span class="fc bfc" id="L57" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="fc" id="L58">            product[i] = src[i]*factor;</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L53">            product[i] = src[i]*factor;</span>
         }
 
-<span class="fc" id="L61">        return product;</span>
+<span class="fc" id="L56">        return product;</span>
     }
 
 
@@ -68,13 +63,13 @@ public class RealOperations {
      * @return The element-wise square root of the tensor.
      */
     public static double[] sqrt(double[] src) {
-<span class="fc" id="L71">        double[] roots = new double[src.length];</span>
+<span class="fc" id="L66">        double[] roots = new double[src.length];</span>
 
-<span class="fc bfc" id="L73" title="All 2 branches covered.">        for(int i=0; i&lt;roots.length; i++) {</span>
-<span class="fc" id="L74">            roots[i] = Math.sqrt(src[i]);</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        for(int i=0; i&lt;roots.length; i++) {</span>
+<span class="fc" id="L69">            roots[i] = Math.sqrt(src[i]);</span>
         }
 
-<span class="fc" id="L77">        return roots;</span>
+<span class="fc" id="L72">        return roots;</span>
     }
 
 
@@ -84,132 +79,13 @@ public class RealOperations {
      * @return The element-wise absolute value of the tensor.
      */
     public static double[] abs(double[] src) {
-<span class="fc" id="L87">        double[] abs = new double[src.length];</span>
+<span class="fc" id="L82">        double[] abs = new double[src.length];</span>
 
-<span class="fc bfc" id="L89" title="All 2 branches covered.">        for(int i=0; i&lt;abs.length; i++) {</span>
-<span class="fc" id="L90">            abs[i] = Math.abs(src[i]);</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        for(int i=0; i&lt;abs.length; i++) {</span>
+<span class="fc" id="L85">            abs[i] = Math.abs(src[i]);</span>
         }
 
-<span class="fc" id="L93">        return abs;</span>
-    }
-
-
-    /**
-     * Compute the L&lt;sub&gt;p, q&lt;/sub&gt; norm of a matrix.
-     * @param src Entries of the matrix.
-     * @param shape Shape of the matrix.
-     * @param p First parameter in L&lt;sub&gt;p, q&lt;/sub&gt; norm.
-     * @param q Second parameter in L&lt;sub&gt;p, q&lt;/sub&gt; norm.
-     * @return The L&lt;sub&gt;p, q&lt;/sub&gt; norm of the matrix.
-     * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
-     */
-    public static double matrixNorm(double[] src, Shape shape, double p, double q) {
-<span class="fc" id="L107">        ParameterChecks.assertGreaterEq(1, p, q);</span>
-
-<span class="fc" id="L109">        double norm = 0;</span>
-        double colSum;
-<span class="fc" id="L111">        int rows = shape.dims[Axis2D.row()];</span>
-<span class="fc" id="L112">        int cols = shape.dims[Axis2D.col()];</span>
-
-        // TODO: Is transposing first faster here?
-<span class="fc bfc" id="L115" title="All 2 branches covered.">        for(int j=0; j&lt;cols; j++) {</span>
-<span class="fc" id="L116">            colSum=0;</span>
-<span class="fc bfc" id="L117" title="All 2 branches covered.">            for(int i=0; i&lt;rows; i++) {</span>
-<span class="fc" id="L118">                colSum += Math.pow(Math.abs(src[i*cols + j]), p);</span>
-            }
-<span class="fc" id="L120">            norm += Math.pow(colSum, q/p);</span>
-        }
-
-<span class="fc" id="L123">        return Math.pow(norm, 1/q);</span>
-    }
-
-
-    /**
-     * Compute the L&lt;sub&gt;p&lt;/sub&gt; norm of a matrix. This is equivalent to passing {@code q=1} to
-     * {@link #matrixNorm(double[], Shape, double, double)}
-     * @param src Entries of the matrix.
-     * @param shape Shape of the matrix.
-     * @param p Parameter in L&lt;sub&gt;p&lt;/sub&gt; norm.
-     * @return The L&lt;sub&gt;p&lt;/sub&gt; norm of the matrix.
-     * @throws IllegalArgumentException If {@code p} is less than 1.
-     */
-    public static double matrixNorm(double[] src, Shape shape, double p) {
-<span class="fc" id="L137">        ParameterChecks.assertGreaterEq(1, p);</span>
-
-<span class="fc" id="L139">        double norm = 0;</span>
-        double colSum;
-<span class="fc" id="L141">        int rows = shape.dims[Axis2D.row()];</span>
-<span class="fc" id="L142">        int cols = shape.dims[Axis2D.col()];</span>
-
-        // TODO: Is transposing first faster here?
-<span class="fc bfc" id="L145" title="All 2 branches covered.">        for(int j=0; j&lt;cols; j++) {</span>
-<span class="fc" id="L146">            colSum=0;</span>
-<span class="fc bfc" id="L147" title="All 2 branches covered.">            for(int i=0; i&lt;rows; i++) {</span>
-<span class="fc" id="L148">                colSum += Math.pow(Math.abs(src[i*cols + j]), p);</span>
-            }
-
-<span class="fc" id="L151">            norm += Math.pow(colSum, 1.0/p);</span>
-        }
-
-<span class="fc" id="L154">        return norm;</span>
-    }
-
-
-    /**
-     * Compute the L&lt;sub&gt;2&lt;/sub&gt; norm of a matrix. This is equivalent to passing {@code q=1} to
-     * {@link #matrixNorm(double[], Shape, double, double)}
-     * @param src Entries of the matrix.
-     * @param shape Shape of the matrix.
-     * @return The L&lt;sub&gt;2&lt;/sub&gt; norm of the matrix.
-     */
-    public static double matrixNorm(double[] src, Shape shape) {
-<span class="fc" id="L166">        double norm = 0;</span>
-<span class="fc" id="L167">        int rows = shape.dims[Axis2D.row()];</span>
-<span class="fc" id="L168">        int cols = shape.dims[Axis2D.col()];</span>
-
-        double colSum;
-
-        // TODO: Is transposing first faster here?
-<span class="fc bfc" id="L173" title="All 2 branches covered.">        for(int j=0; j&lt;cols; j++) {</span>
-<span class="fc" id="L174">            colSum = 0;</span>
-<span class="fc bfc" id="L175" title="All 2 branches covered.">            for(int i=0; i&lt;rows; i++) {</span>
-<span class="fc" id="L176">                colSum += Math.pow(src[i*cols + j], 2);</span>
-            }
-<span class="fc" id="L178">            norm += Math.sqrt(colSum);</span>
-        }
-
-<span class="fc" id="L181">        return norm;</span>
-    }
-
-
-    /**
-     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
-     * @param src Entries of the matrix.
-     * @return The infinity norm of the matrix.
-     */
-    public static double matrixMaxNorm(double[] src) {
-<span class="fc" id="L191">        return maxAbs(src);</span>
-    }
-
-
-    /**
-     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
-     * @param src Entries of the matrix.
-     * @return The infinity norm of the matrix.
-     */
-    public static double matrixInfNorm(double[] src, Shape shape) {
-<span class="fc" id="L201">        int rows = shape.dims[Axis2D.row()];</span>
-<span class="fc" id="L202">        int cols = shape.dims[Axis2D.col()];</span>
-<span class="fc" id="L203">        double[] rowSums = new double[rows];</span>
-
-        // TODO: Is transposing first faster?
-<span class="fc bfc" id="L206" title="All 2 branches covered.">        for(int i=0; i&lt;rows; i++) {</span>
-<span class="fc bfc" id="L207" title="All 2 branches covered.">            for(int j=0; j&lt;cols; j++) {</span>
-<span class="fc" id="L208">                rowSums[i] += Math.abs(src[i*cols + j]);</span>
-            }
-        }
-
-<span class="fc" id="L212">        return maxAbs(rowSums);</span>
+<span class="fc" id="L88">        return abs;</span>
     }
 
 
@@ -220,13 +96,13 @@ public class RealOperations {
      * @throws IllegalArgumentException If {@code precision} is negative.
      */
     public static double[] round(double[] src) {
-<span class="fc" id="L223">        double[] dest = new double[src.length];</span>
+<span class="fc" id="L99">        double[] dest = new double[src.length];</span>
 
-<span class="fc bfc" id="L225" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="fc" id="L226">            dest[i] = Math.round(src[i]);</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L102">            dest[i] = Math.round(src[i]);</span>
         }
 
-<span class="fc" id="L229">        return dest;</span>
+<span class="fc" id="L105">        return dest;</span>
     }
 
 
@@ -239,20 +115,20 @@ public class RealOperations {
      * @throws IllegalArgumentException If {@code precision} is negative.
      */
     public static double[] round(double[] src, int precision) {
-<span class="fc bfc" id="L242" title="All 2 branches covered.">        if(precision&lt;0) {</span>
-<span class="fc" id="L243">            throw new IllegalArgumentException(ErrorMessages.negValueErr(precision));</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        if(precision&lt;0) {</span>
+<span class="fc" id="L119">            throw new IllegalArgumentException(ErrorMessages.negValueErr(precision));</span>
         }
 
         BigDecimal bd;
-<span class="fc" id="L247">        double[] dest = new double[src.length];</span>
+<span class="fc" id="L123">        double[] dest = new double[src.length];</span>
 
-<span class="fc bfc" id="L249" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="fc" id="L250">            bd = new BigDecimal(Double.toString(src[i]));</span>
-<span class="fc" id="L251">            bd = bd.setScale(precision, RoundingMode.HALF_UP);</span>
-<span class="fc" id="L252">            dest[i] = bd.doubleValue();</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc" id="L126">            bd = new BigDecimal(Double.toString(src[i]));</span>
+<span class="fc" id="L127">            bd = bd.setScale(precision, RoundingMode.HALF_UP);</span>
+<span class="fc" id="L128">            dest[i] = bd.doubleValue();</span>
         }
 
-<span class="fc" id="L255">        return dest;</span>
+<span class="fc" id="L131">        return dest;</span>
     }
 
 
@@ -265,21 +141,21 @@ public class RealOperations {
      * @throws IllegalArgumentException If {@code threshold} is negative.
      */
     public static double[] roundToZero(double[] src, double threshold) {
-<span class="fc bfc" id="L268" title="All 2 branches covered.">        if(threshold&lt;0) {</span>
-<span class="fc" id="L269">            throw new IllegalArgumentException(ErrorMessages.negValueErr(threshold));</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        if(threshold&lt;0) {</span>
+<span class="fc" id="L145">            throw new IllegalArgumentException(ErrorMessages.negValueErr(threshold));</span>
         }
 
-<span class="fc" id="L272">        double[] dest = new double[src.length];</span>
+<span class="fc" id="L148">        double[] dest = new double[src.length];</span>
 
-<span class="fc bfc" id="L274" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
-<span class="fc bfc" id="L275" title="All 2 branches covered.">            if(Math.abs(src[i]) &lt; threshold) {</span>
-<span class="fc" id="L276">                dest[i] = 0;</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        for(int i=0; i&lt;dest.length; i++) {</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">            if(Math.abs(src[i]) &lt; threshold) {</span>
+<span class="fc" id="L152">                dest[i] = 0;</span>
             } else {
-<span class="fc" id="L278">                dest[i] = src[i];</span>
+<span class="fc" id="L154">                dest[i] = src[i];</span>
             }
         }
 
-<span class="fc" id="L282">        return dest;</span>
+<span class="fc" id="L158">        return dest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

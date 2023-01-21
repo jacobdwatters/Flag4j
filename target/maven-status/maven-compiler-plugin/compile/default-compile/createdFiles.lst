@@ -1,0 +1,13 @@
+com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseOperations.class
+com\flag4j\operations\common\complex\ComplexOperations.class
+com\flag4j\linalg\decompositions\RealLUDecomposition.class
+com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatrixMultiplication.class
+com\flag4j\linalg\decompositions\LUDecomposition$Pivoting.class
+com\flag4j\operations\dense\real\RealDenseProperties.class
+com\flag4j\operations\dense\complex\AggregateDenseComplex.class
+com\flag4j\operations\common\complex\AggregateComplex.class
+com\flag4j\operations\dense\complex\ComplexDenseProperties.class
+com\flag4j\operations\dense\complex\ComplexDenseEquals.class
+com\flag4j\linalg\decompositions\Decomposition.class
+com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseEquals.class
+com\flag4j\linalg\decompositions\LUDecomposition.class

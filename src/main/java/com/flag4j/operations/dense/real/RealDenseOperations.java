@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,11 @@ package com.flag4j.operations.dense.real;
 
 import com.flag4j.Shape;
 import com.flag4j.operations.common.real.RealOperations;
+import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
+
+import static com.flag4j.operations.common.real.Aggregate.maxAbs;
 
 /**
  * This class provides low level methods for computing operations on real dense tensors.
@@ -203,5 +206,120 @@ public final class RealDenseOperations {
         }
 
         return product;
+    }
+
+
+    /**
+     * Compute the L<sub>p, q</sub> norm of a matrix.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p First parameter in L<sub>p, q</sub> norm.
+     * @param q Second parameter in L<sub>p, q</sub> norm.
+     * @return The L<sub>p, q</sub> norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
+     */
+    public static double matrixNormLpq(double[] src, Shape shape, double p, double q) {
+        ParameterChecks.assertGreaterEq(1, p, q);
+
+        double norm = 0;
+        double colSum;
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+
+        for(int j=0; j<cols; j++) {
+            colSum=0;
+            for(int i=0; i<rows; i++) {
+                colSum += Math.pow(Math.abs(src[i*cols + j]), p);
+            }
+            norm += Math.pow(colSum, q/p);
+        }
+
+        return Math.pow(norm, 1/q);
+    }
+
+
+    /**
+     * Compute the L<sub>p</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link RealDenseOperations#matrixNormLpq(double[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p Parameter in L<sub>p</sub> norm.
+     * @return The L<sub>p</sub> norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} is less than 1.
+     */
+    public static double matrixNormLp(double[] src, Shape shape, double p) {
+        ParameterChecks.assertGreaterEq(1, p);
+
+        double norm = 0;
+        double colSum;
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+
+        for(int j=0; j<cols; j++) {
+            colSum=0;
+            for(int i=0; i<rows; i++) {
+                colSum += Math.pow(Math.abs(src[i*cols + j]), p);
+            }
+
+            norm += Math.pow(colSum, 1.0/p);
+        }
+
+        return norm;
+    }
+
+
+    /**
+     * Compute the L<sub>2</sub> norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link RealDenseOperations#matrixNormLpq(double[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return The L<sub>2</sub> norm of the matrix.
+     */
+    public static double matrixNormL2(double[] src, Shape shape) {
+        double norm = 0;
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+
+        double colSum;
+
+        for(int j=0; j<cols; j++) {
+            colSum = 0;
+            for(int i=0; i<rows; i++) {
+                colSum += Math.pow(src[i*cols + j], 2);
+            }
+            norm += Math.sqrt(colSum);
+        }
+
+        return norm;
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
+     * @param src Entries of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    public static double matrixMaxNorm(double[] src) {
+        return maxAbs(src);
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
+     * @param src Entries of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    public static double matrixInfNorm(double[] src, Shape shape) {
+        int rows = shape.dims[Axis2D.row()];
+        int cols = shape.dims[Axis2D.col()];
+        double[] rowSums = new double[rows];
+
+        for(int i=0; i<rows; i++) {
+            for(int j=0; j<cols; j++) {
+                rowSums[i] += Math.abs(src[i*cols + j]);
+            }
+        }
+
+        return maxAbs(rowSums);
     }
 }

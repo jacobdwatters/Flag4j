@@ -135,4 +135,13 @@ public interface MatrixPropertiesMixin<T, U, V, W, Y, X extends Number> extends 
      * @return The max norm of this matrix.
      */
     double maxNorm();
+
+
+    /**
+     * Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
+     * Note that here, rank is <b>NOT</b> the same as a tensor rank.
+     *
+     * @return The matrix rank of this matrix.
+     */
+    int matrixRank();
 }

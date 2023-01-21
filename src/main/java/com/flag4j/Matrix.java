@@ -26,6 +26,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
+import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.MatrixMultiply;
 import com.flag4j.operations.MatrixTranspose;
 import com.flag4j.operations.common.real.Aggregate;
@@ -40,12 +41,11 @@ import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
-import com.flag4j.util.ArrayUtils;
-import com.flag4j.util.Axis2D;
-import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Real dense matrix. Stored in row major format. This class is mostly equivalent to a real dense tensor of rank 2.
@@ -56,6 +56,8 @@ public class Matrix extends RealMatrixBase implements
         MatrixOperationsMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double>,
         MatrixPropertiesMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double> {
 
+
+//    public static final double DEFAULT_ROUND_TO_ZERO_THRESHOLD = 1.0E-12;
 
     /**
      * Constructs a square real dense matrix of a specified size. The entries of the matrix will default to zero.
@@ -238,6 +240,25 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
+     * Converts this matrix to an equivalent complex tensor.
+     * @return A tensor which is equivalent to this matrix.
+     */
+    public Tensor toTensor() {
+        return new Tensor(this.shape.copy(), this.entries.clone());
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent vector. If this matrix is not shaped as a row/column vector,
+     * it will be flattened then converted to a vector.
+     * @return A vector equivalent to this matrix.
+     */
+    public Vector toVector() {
+        return new Vector(this.entries.clone());
+    }
+
+
+    /**
      * Checks if this matrix is the identity matrix. That is, checks if this matrix is square and contains
      * only ones along the principle diagonal and zeros everywhere else.
      *
@@ -274,13 +295,13 @@ public class Matrix extends RealMatrixBase implements
      * @param object Object to check equality with this matrix.
      * @return True if the two matrices are numerically equivalent and false otherwise.
      */
+    @Override
     public boolean equals(Object object) {
         boolean equal;
 
         if(object instanceof Matrix) {
             Matrix mat = (Matrix) object;
             equal = RealDenseEquals.matrixEquals(this, mat);
-
         } else if(object instanceof CMatrix) {
             CMatrix mat = (CMatrix) object;
             equal = RealComplexDenseEquals.matrixEquals(this, mat);
@@ -942,7 +963,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix roundToZero() {
-        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, 1.0E-12));
+        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD));
     }
 
 
@@ -1290,6 +1311,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(SparseMatrix B) {
+        // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
         ParameterChecks.assertMatMultShapes(this.shape, B.shape);
         double[] entries = RealDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
@@ -1325,6 +1347,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
+        // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
         ParameterChecks.assertMatMultShapes(this.shape, B.shape);
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
@@ -1581,9 +1604,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CNumber fib(CMatrix B) {
-        // TODO: Implement after implementing A.mult(B) where A is real dense, and B is complex dense.
-        //  Also implement C.trace() where C is complex dense.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).trace();
     }
 
 
@@ -1596,9 +1618,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CNumber fib(SparseCMatrix B) {
-        // TODO: Implement after implementing A.mult(B) where A is real dense, and B is complex sparse.
-        //  Also implement C.trace() where C is complex sparse.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).trace();
     }
 
 
@@ -1673,9 +1694,7 @@ public class Matrix extends RealMatrixBase implements
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
-            for(int j=0; j<B.numCols; j++) {
-                sum.entries[(i+numRows)*sum.numCols + (j+numCols)] = B.entries[i*B.numCols + j].copy();
-            }
+            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i+numRows)*sum.numCols+(numCols), B.numCols);
         }
 
         return sum;
@@ -2835,8 +2854,7 @@ public class Matrix extends RealMatrixBase implements
      * @return An identity matrix of specified size.
      * @throws IllegalArgumentException If the specified size is less than 1.
      */
-    @Override
-    public Matrix I(int size) {
+    public static Matrix I(int size) {
         return I(size, size);
     }
 
@@ -2850,8 +2868,7 @@ public class Matrix extends RealMatrixBase implements
      * @return An identity matrix of specified shape.
      * @throws IllegalArgumentException If the specified number of rows or columns is less than 1.
      */
-    @Override
-    public Matrix I(int numRows, int numCols) {
+    public static Matrix I(int numRows, int numCols) {
         ParameterChecks.assertGreaterEq(1, numRows, numCols);
         Matrix I = new Matrix(numRows, numCols);
         int stop = Math.min(numRows, numCols);
@@ -2872,8 +2889,7 @@ public class Matrix extends RealMatrixBase implements
      * @return An identity matrix of specified size.
      * @throws IllegalArgumentException If the specified shape is not rank 2.
      */
-    @Override
-    public Matrix I(Shape shape) {
+    public static Matrix I(Shape shape) {
         ParameterChecks.assertRank(2, shape);
         return I(shape.get(0), shape.get(1));
     }
@@ -3047,7 +3063,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double norm(double p, double q) {
-        return RealOperations.matrixNorm(entries, shape, p, q);
+        return RealDenseOperations.matrixNormLpq(entries, shape, p, q);
     }
 
 
@@ -3071,7 +3087,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isZeros() {
-        return RealDenseCheckOperations.isZeros(entries);
+        return ArrayUtils.isZeros(entries);
     }
 
 
@@ -3082,7 +3098,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isOnes() {
-        return RealDenseCheckOperations.isOnes(entries);
+        return RealDenseProperties.isOnes(entries);
     }
 
 
@@ -3178,13 +3194,57 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
+     * Swaps specified rows in the matrix.
+     * @param rowIndex1 Index of the first row to swap.
+     * @param rowIndex2 Index of the second row to swap.
+     * @throws ArrayIndexOutOfBoundsException If either index is outside the matrix bounds.
+     */
+    @Override
+    public void swapRows(int rowIndex1, int rowIndex2) {
+        ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);
+        ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);
+        ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);
+
+        double temp;
+        for(int j=0; j<numCols; j++) {
+            // Swap elements.
+            temp = entries[rowIndex1*numCols + j];
+            entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];
+            entries[rowIndex2*numCols + j] = temp;
+        }
+    }
+
+
+    /**
+     * Swaps specified columns in the matrix.
+     * @param colIndex1 Index of the first column to swap.
+     * @param colIndex2 Index of the second column to swap.
+     * @throws ArrayIndexOutOfBoundsException If either index is outside the matrix bounds.
+     */
+    @Override
+    public void swapCols(int colIndex1, int colIndex2) {
+        ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);
+        ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);
+        ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);
+
+        double temp;
+        for(int i=0; i<numRows; i++) {
+            // Swap elements.
+            temp = entries[i*numCols + colIndex1];
+            entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];
+            entries[i*numCols + colIndex2] = temp;
+        }
+    }
+
+
+    /**
      * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
      *
      * @return the 2-norm of this tensor.
      */
     @Override
     public double norm() {
-        return RealOperations.matrixNorm(entries, shape);
+        return RealDenseOperations.matrixNormL2(entries, shape);
     }
 
 
@@ -3198,7 +3258,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double norm(double p) {
-        return RealOperations.matrixNorm(entries, shape, p);
+        return RealDenseOperations.matrixNormLp(entries, shape, p);
     }
 
 
@@ -3209,7 +3269,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double infNorm() {
-        return RealOperations.matrixInfNorm(entries, shape);
+        return RealDenseOperations.matrixInfNorm(entries, shape);
     }
 
 
@@ -3220,6 +3280,74 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double maxNorm() {
-        return RealOperations.matrixMaxNorm(entries);
+        return RealDenseOperations.matrixMaxNorm(entries);
+    }
+
+
+    /**
+     * Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
+     * Note that here, rank is <b>NOT</b> the same as a tensor rank.
+     *
+     * @return The matrix rank of this matrix.
+     */
+    @Override
+    public int matrixRank() {
+        return 0;
+    }
+
+
+    /**
+     * Formats matrix contents as a string.
+     * @return Matrix as string
+     */
+    public String toString() {
+        String result = "[";
+
+        if(entries.length!=0) {
+            int colWidth;
+            List<Integer> maxList = new ArrayList<>();
+
+            for(int j=0; j<numCols; j++) {
+                // Get the maximum length string representation for each column.
+                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries));
+            }
+
+            StringBuilder resultBuilder = new StringBuilder("[");
+            for(int i=0; i<numRows; i++) {
+                if(i >= PrintOptions.getMaxRows() && i < numCols-1) {
+                    resultBuilder.append("  ...\n ");
+                    i = numCols-1;
+                }
+
+                resultBuilder.append(" [");
+
+                for(int j=0; j<numCols; j++) {
+
+                    if(j >= PrintOptions.getMaxColumns() && j < numCols-1) {
+                        colWidth = 3+PrintOptions.getPadding();
+                        resultBuilder.append(String.format("%-" + colWidth + "s", StringUtils.center("...", colWidth)));
+                        colWidth = maxList.get(numCols-1)+PrintOptions.getPadding();
+                        resultBuilder.append(String.format("%-" + (colWidth) + "s", StringUtils.center(get(i, numCols-1).toString(), colWidth)));
+                        break;
+                    }
+                    else {
+                        colWidth = maxList.get(j)+PrintOptions.getPadding();
+
+                        resultBuilder.append(String.format("%-" + (colWidth) + "s", StringUtils.center(
+                                CNumber.round(new CNumber(get(i, j)), PrintOptions.getPrecision()).toString(), colWidth))
+                        );
+                    }
+                }
+                resultBuilder.append("]\n ");
+            }
+            result = resultBuilder.toString();
+
+            result = result.substring(0, result.length()-2) + " ]";
+        }
+        else {
+            result += "[]]";
+        }
+
+        return result;
     }
 }

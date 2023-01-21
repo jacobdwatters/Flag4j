@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AggregateDenseReal.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense.real</a> &gt; <span class="el_source">AggregateDenseReal.java</span></div><h1>AggregateDenseReal.java</h1><pre class="source lang-java linenums">/*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -25,10 +25,17 @@
 package com.flag4j.operations.dense.real;
 
 
+import com.flag4j.util.ErrorMessages;
+
 /**
  * This class contains several low-level methods useful for computing aggregation operations on dense tensors.
  */
-<span class="nc" id="L31">public class AggregateDenseReal {</span>
+public class AggregateDenseReal {
+
+<span class="nc" id="L35">    private AggregateDenseReal() {</span>
+        // Hide default constructor for utility class.
+<span class="nc" id="L37">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
 
 
     /**
@@ -38,17 +45,17 @@ package com.flag4j.operations.dense.real;
      * @return The index of the minimum value in this tensor. If there are zero entries in the array, -1 is returned.
      */
     public static int argMin(double[] entries) {
-<span class="fc" id="L41">        double currMin = Double.MAX_VALUE;</span>
-<span class="fc" id="L42">        int currMinIndex = -1;</span>
+<span class="fc" id="L48">        double currMin = Double.MAX_VALUE;</span>
+<span class="fc" id="L49">        int currMinIndex = -1;</span>
 
-<span class="fc bfc" id="L44" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc bfc" id="L45" title="All 2 branches covered.">            if(entries[i] &lt; currMin) {</span>
-<span class="fc" id="L46">                currMin = entries[i]; // Update current minimum.</span>
-<span class="fc" id="L47">                currMinIndex = i;</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            if(entries[i] &lt; currMin) {</span>
+<span class="fc" id="L53">                currMin = entries[i]; // Update current minimum.</span>
+<span class="fc" id="L54">                currMinIndex = i;</span>
             }
         }
 
-<span class="fc" id="L51">        return currMinIndex;</span>
+<span class="fc" id="L58">        return currMinIndex;</span>
     }
 
 
@@ -59,17 +66,17 @@ package com.flag4j.operations.dense.real;
      * @return The index of the maximum value in this tensor. If there are zero entries in the array, -1 is returned.
      */
     public static int argMax(double[] entries) {
-<span class="fc" id="L62">        double currMax = Double.MIN_VALUE;</span>
-<span class="fc" id="L63">        int currMaxIndex = -1;</span>
+<span class="fc" id="L69">        double currMax = Double.MIN_VALUE;</span>
+<span class="fc" id="L70">        int currMaxIndex = -1;</span>
 
-<span class="fc bfc" id="L65" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc bfc" id="L66" title="All 2 branches covered.">            if(entries[i] &gt; currMax) {</span>
-<span class="fc" id="L67">                currMax = entries[i]; // Update current minimum.</span>
-<span class="fc" id="L68">                currMaxIndex = i;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">            if(entries[i] &gt; currMax) {</span>
+<span class="fc" id="L74">                currMax = entries[i]; // Update current minimum.</span>
+<span class="fc" id="L75">                currMaxIndex = i;</span>
             }
         }
 
-<span class="fc" id="L72">        return currMaxIndex;</span>
+<span class="fc" id="L79">        return currMaxIndex;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

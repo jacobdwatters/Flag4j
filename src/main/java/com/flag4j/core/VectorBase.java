@@ -26,12 +26,14 @@ package com.flag4j.core;
 
 import com.flag4j.Shape;
 
+import java.io.Serializable;
+
 
 /**
  * The base class for all vectors.
  * @param <T> The type of entries for this matrix.
  */
-public abstract class VectorBase<T> extends TensorBase<T> {
+public abstract class VectorBase<T extends Serializable> extends TensorBase<T> {
 
     /**
      * The orientation of this vector.
