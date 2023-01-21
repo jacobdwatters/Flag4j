@@ -454,7 +454,7 @@ public class CNumber extends Number {
     public CNumber div(CNumber b) {
         CNumber quotient;
 
-<span class="pc bpc" id="L457" title="1 of 4 branches missed.">        if (this.equals(ZERO) &amp;&amp; !b.equals(ZERO)) {</span>
+<span class="fc bfc" id="L457" title="All 4 branches covered.">        if (this.equals(ZERO) &amp;&amp; !b.equals(ZERO)) {</span>
 <span class="fc" id="L458">            quotient = new CNumber();</span>
         }
 <span class="fc bfc" id="L460" title="All 4 branches covered.">        else if(b.isReal() &amp;&amp; !b.equals(ZERO)) {</span>
@@ -481,7 +481,7 @@ public class CNumber extends Number {
     public CNumber div(double b) {
         CNumber quotient;
 
-<span class="pc bpc" id="L484" title="1 of 4 branches missed.">        if (this.equals(ZERO) &amp;&amp; b != 0) {</span>
+<span class="fc bfc" id="L484" title="All 4 branches covered.">        if (this.equals(ZERO) &amp;&amp; b != 0) {</span>
 <span class="fc" id="L485">            quotient = new CNumber();</span>
         }
         else {

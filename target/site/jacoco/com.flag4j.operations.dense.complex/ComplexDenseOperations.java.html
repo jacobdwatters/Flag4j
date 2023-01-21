@@ -310,14 +310,14 @@ public final class ComplexDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="nc" id="L313">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
-<span class="nc" id="L314">        CNumber[] product = new CNumber[src1.length];</span>
+<span class="fc" id="L313">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L314">        CNumber[] product = new CNumber[src1.length];</span>
 
-<span class="nc bnc" id="L316" title="All 2 branches missed.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="nc" id="L317">            product[i] = src1[i].div(src2[i]);</span>
+<span class="fc bfc" id="L316" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L317">            product[i] = src1[i].div(src2[i]);</span>
         }
 
-<span class="nc" id="L320">        return product;</span>
+<span class="fc" id="L320">        return product;</span>
     }
 
 

@@ -1744,7 +1744,7 @@ public class CMatrix extends ComplexMatrixBase implements
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
             for(int j=0; j<B.numCols; j++) {
-                sum.entries[(i+numRows)*numCols + j + numCols] = new CNumber(B.entries[i*B.numCols + j]);
+                sum.entries[(i+numRows)*sum.numCols + j + numCols] = new CNumber(B.entries[i*B.numCols + j]);
             }
         }
 

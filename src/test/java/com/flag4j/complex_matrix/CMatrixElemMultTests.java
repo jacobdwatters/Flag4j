@@ -1,8 +1,6 @@
 package com.flag4j.complex_matrix;
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 
 import org.junit.jupiter.api.Test;
@@ -101,6 +99,90 @@ class CMatrixElemMultTests {
         B = new CMatrix(bEntries);
 
         CMatrix finalB = B;
+        assertThrows(IllegalArgumentException.class, ()->A.elemMult(finalB));
+    }
+
+
+    @Test
+    void sparseRealTest() {
+        double[] bEntries;
+        SparseMatrix B;
+
+        // ------------------- Sub-case 1 -------------------
+        aEntries = new CNumber[][]{
+                {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
+                {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.1)},
+                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
+        A = new CMatrix(aEntries);
+        bEntries = new double[]{1.34, -994.1, 34.5};
+        rowIndices = new int[]{0, 2, 3};
+        colIndies = new int[]{1, 1, 0};
+        sparseShape = new Shape(A.shape);
+        B = new SparseMatrix(sparseShape, bEntries, rowIndices, colIndies);
+        expEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("60.568000000000005-0.04462200000000001i"), new CNumber("0.0")},
+                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
+                {new CNumber("0.0"), new CNumber("-0.0"), new CNumber("0.0")},
+                {new CNumber("108.38494654884786+108.38494654884786i"), new CNumber("0.0"), new CNumber("-0.0")}};
+        exp = new CMatrix(expEntries);
+
+        assertEquals(exp, A.elemMult(B));
+
+        // ------------------- Sub-case 2 -------------------
+        aEntries = new CNumber[][]{
+                {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
+                {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
+                {new CNumber(7617.445), new CNumber(0), new CNumber()}};
+        A = new CMatrix(aEntries);
+        bEntries = new double[]{1.34, -994.1, 34.5};
+        rowIndices = new int[]{0, 2, 3};
+        colIndies = new int[]{1, 1, 0};
+        sparseShape = new Shape(56, 191114);
+        B = new SparseMatrix(sparseShape, bEntries, rowIndices, colIndies);
+
+        SparseMatrix finalB = B;
+        assertThrows(IllegalArgumentException.class, ()->A.elemMult(finalB));
+    }
+
+
+    @Test
+    void sparseComplexTest() {
+        CNumber[] bEntries;
+        SparseCMatrix B;
+
+        // ------------------- Sub-case 1 -------------------
+        aEntries = new CNumber[][]{
+                {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
+                {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.1)},
+                {new CNumber(7617.445), new CNumber(0), new CNumber()},
+                {new CNumber(Math.PI, Math.PI), new CNumber(9.2146623235, 15.1), new CNumber(-4)}};
+        A = new CMatrix(aEntries);
+        bEntries = new CNumber[]{new CNumber(345.6, 94.1), new CNumber(-9.4, 34), new CNumber(4.4)};
+        rowIndices = new int[]{0, 2, 3};
+        colIndies = new int[]{1, 1, 0};
+        sparseShape = new Shape(A.shape);
+        B = new SparseCMatrix(sparseShape, bEntries, rowIndices, colIndies);
+        expEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("15624.253530000002+4241.811519999999i"), new CNumber("0.0")},
+                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
+                {new CNumber("0.0"), new CNumber("-0.0"), new CNumber("0.0")},
+                {new CNumber("13.823007675795091+13.823007675795091i"), new CNumber("0.0"), new CNumber("-0.0")}};
+        exp = new CMatrix(expEntries);
+
+        assertEquals(exp, A.elemMult(B));
+
+        // ------------------- Sub-case 2 -------------------
+        aEntries = new CNumber[][]{
+                {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
+                {new CNumber(1), new CNumber(0, -743.1), new CNumber(-34.5, -93.)},
+                {new CNumber(7617.445), new CNumber(0), new CNumber()}};
+        A = new CMatrix(aEntries);
+        bEntries = new CNumber[]{new CNumber(345.6, 94.1), new CNumber(-9.4, 34), new CNumber(4.4)};
+        rowIndices = new int[]{0, 2, 3};
+        colIndies = new int[]{1, 1, 0};
+        sparseShape = new Shape(56, 191114);
+        B = new SparseCMatrix(sparseShape, bEntries, rowIndices, colIndies);
+
+        SparseCMatrix finalB = B;
         assertThrows(IllegalArgumentException.class, ()->A.elemMult(finalB));
     }
 }

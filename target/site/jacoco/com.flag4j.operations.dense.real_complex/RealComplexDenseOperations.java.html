@@ -202,14 +202,14 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="nc" id="L205">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
-<span class="nc" id="L206">        CNumber[] product = new CNumber[src1.length];</span>
+<span class="fc" id="L205">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L206">        CNumber[] product = new CNumber[src1.length];</span>
 
-<span class="nc bnc" id="L208" title="All 2 branches missed.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="nc" id="L209">            product[i] = src1[i].div(src2[i]);</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L209">            product[i] = src1[i].div(src2[i]);</span>
         }
 
-<span class="nc" id="L212">        return product;</span>
+<span class="fc" id="L212">        return product;</span>
     }
 
 
