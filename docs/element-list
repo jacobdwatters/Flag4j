@@ -3,6 +3,7 @@ com.flag4j.complex_numbers
 com.flag4j.core
 com.flag4j.io
 com.flag4j.linalg
+com.flag4j.linalg.decompositions
 com.flag4j.operations
 com.flag4j.operations.common.complex
 com.flag4j.operations.common.real
