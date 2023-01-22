@@ -1,7 +1,6 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.VectorOrientation;
 
 import java.util.Arrays;
 
@@ -13,7 +12,6 @@ class CVectorConstructorTests {
     CNumber fillValue;
     double fillValueD;
     Shape expShape;
-    VectorOrientation expOrientation;
     CNumber[] expEntries;
     double[] entriesD;
     int[] entriesI;
@@ -24,7 +22,6 @@ class CVectorConstructorTests {
         // ----------- Sub-case 1 ------------
         expSize = 5;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.COL;
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber();
@@ -34,7 +31,6 @@ class CVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
         for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }
@@ -42,7 +38,6 @@ class CVectorConstructorTests {
         // ----------- Sub-case 2 ------------
         expSize = 0;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.COL;
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber();
@@ -52,7 +47,6 @@ class CVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
         for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }
@@ -68,7 +62,6 @@ class CVectorConstructorTests {
         expSize = 5;
         fillValue = new CNumber(-10.23423, 100.2);
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.COL;
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(fillValue);
@@ -78,7 +71,6 @@ class CVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
         for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }
@@ -87,7 +79,6 @@ class CVectorConstructorTests {
         expSize = 0;
         fillValue = new CNumber(-10.23423, 100.2);
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.COL;
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(fillValue);
@@ -97,7 +88,6 @@ class CVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
         for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }
@@ -115,7 +105,6 @@ class CVectorConstructorTests {
         expSize = 5;
         fillValueD = 10.234;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.COL;
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(fillValueD);
@@ -125,7 +114,6 @@ class CVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
         for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }
@@ -134,7 +122,6 @@ class CVectorConstructorTests {
         expSize = 0;
         fillValueD = -10.234;
         expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.COL;
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(fillValueD);
@@ -144,7 +131,6 @@ class CVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
         for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }
@@ -157,253 +143,10 @@ class CVectorConstructorTests {
 
 
     @Test
-    void sizeOrientationTest() {
-        // ----------- Sub-case 1 ------------
-        expSize = 5;
-        expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.COL;
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber();
-        }
-
-        a = new CVector(expSize, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 2 ------------
-        expSize = 0;
-        expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.COL;
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber();
-        }
-
-        a = new CVector(expSize, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 3 ------------
-        expSize = 5;
-        expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.ROW;
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber();
-        }
-
-        a = new CVector(expSize, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 4 ------------
-        expSize = 0;
-        expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.ROW;
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber();
-        }
-
-        a = new CVector(expSize, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 5 ------------
-        expSize = -1;
-        assertThrows(NegativeArraySizeException.class, () -> new CVector(expSize, expOrientation));
-    }
-
-
-    @Test
-    void sizeFillOrientationTest() {
-        // ----------- Sub-case 1 ------------
-        expSize = 5;
-        fillValue = new CNumber(-10.23423, 100.2);
-        expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.COL;
-        expEntries = new CNumber[expSize];
-        Arrays.fill(expEntries, fillValue);
-
-        a = new CVector(expSize, fillValue, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 2 ------------
-        expSize = 0;
-        fillValue = new CNumber(-10.23423, 100.2);
-        expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.COL;
-        expEntries = new CNumber[expSize];
-        Arrays.fill(expEntries, fillValue);
-
-        a = new CVector(expSize, fillValue, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 3 ------------
-        expSize = 5;
-        fillValue = new CNumber(-10.23423, -100.2);
-        expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.ROW;
-        expEntries = new CNumber[expSize];
-        Arrays.fill(expEntries, fillValue);
-
-        a = new CVector(expSize, fillValue, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 4 ------------
-        expSize = 0;
-        fillValue = new CNumber(10.23423, -100.2);
-        expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.ROW;
-        expEntries = new CNumber[expSize];
-        Arrays.fill(expEntries, fillValue);
-
-        a = new CVector(expSize, fillValue, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 5 ------------
-        expSize = -1;
-        assertThrows(NegativeArraySizeException.class,
-                () -> new CVector(expSize, fillValue, expOrientation));
-    }
-
-
-    @Test
-    void sizeFillDOrientationTest() {
-        // ----------- Sub-case 1 ------------
-        expSize = 5;
-        fillValueD = 1309.045;
-        expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.COL;
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(fillValueD);
-        }
-
-        a = new CVector(expSize, fillValueD, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 2 ------------
-        expSize = 0;
-        fillValueD = 1309.045;
-        expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.COL;
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(fillValueD);
-        }
-
-        a = new CVector(expSize, fillValueD, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 3 ------------
-        expSize = 5;
-        fillValueD = 1309.045;
-        expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.ROW;
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(fillValueD);
-        }
-
-        a = new CVector(expSize, fillValueD, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 4 ------------
-        expSize = 0;
-        fillValueD = 1309.045;
-        expShape = new Shape(new int[]{expSize});
-        expOrientation = VectorOrientation.ROW;
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(fillValueD);
-        }
-
-        a = new CVector(expSize, fillValueD, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 5 ------------
-        expSize = -1;
-        assertThrows(NegativeArraySizeException.class,
-                () -> new CVector(expSize, fillValue, expOrientation));
-    }
-
-
-    @Test
     void entriesTest() {
         // ----------- Sub-case 1 ------------
         entriesD = new double[]{1.0433, 2, -3, 4, 5, 6, 7, 100, -0.1231};
         expSize = entriesD.length;
-        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
@@ -414,7 +157,6 @@ class CVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
         for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }
@@ -422,7 +164,6 @@ class CVectorConstructorTests {
         // ----------- Sub-case 2 ------------
         entriesD = new double[]{-0.234974};
         expSize = entriesD.length;
-        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
@@ -433,87 +174,6 @@ class CVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-    }
-
-
-    @Test
-    void entriesOrientationTest() {
-        // ----------- Sub-case 1 ------------
-        entriesD = new double[]{1.0433, 2, -3, 4, 5, 6, 7, 100, -0.1231};
-        expSize = entriesD.length;
-        expOrientation = VectorOrientation.COL;
-        expShape = new Shape(expSize);
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(entriesD[i]);
-        }
-
-        a = new CVector(entriesD, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 2 ------------
-        entriesD = new double[]{-0.234974};
-        expSize = entriesD.length;
-        expOrientation = VectorOrientation.COL;
-        expShape = new Shape(expSize);
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(entriesD[i]);
-        }
-
-        a = new CVector(entriesD, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 3 ------------
-        entriesD = new double[]{1.0433, 2, -3, 4, 5, 6, 7, 100, -0.1231};
-        expSize = entriesD.length;
-        expOrientation = VectorOrientation.ROW;
-        expShape = new Shape(expSize);
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(entriesD[i]);
-        }
-
-        a = new CVector(entriesD, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 4 ------------
-        entriesD = new double[]{-0.234974};
-        expSize = entriesD.length;
-        expOrientation = VectorOrientation.ROW;
-        expShape = new Shape(expSize);
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(entriesD[i]);
-        }
-
-        a = new CVector(entriesD, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
         for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }
@@ -525,7 +185,6 @@ class CVectorConstructorTests {
         // ----------- Sub-case 1 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
         expSize = entriesI.length;
-        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
@@ -536,7 +195,6 @@ class CVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
         for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }
@@ -544,7 +202,6 @@ class CVectorConstructorTests {
         // ----------- Sub-case 2 ------------
         entriesI = new int[]{-22};
         expSize = entriesI.length;
-        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
@@ -555,88 +212,7 @@ class CVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
         for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-    }
-
-
-    @Test
-    void entriesIOrientationTest() {
-        // ----------- Sub-case 1 ------------
-        entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
-        expSize = entriesI.length;
-        expOrientation = VectorOrientation.COL;
-        expShape = new Shape(expSize);
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(entriesI[i]);
-        }
-
-        a = new CVector(entriesI, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 2 ------------
-        entriesI = new int[]{-22};
-        expSize = entriesI.length;
-        expOrientation = VectorOrientation.COL;
-        expShape = new Shape(expSize);
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(entriesI[i]);
-        }
-
-        a = new CVector(entriesI, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 3 ------------
-        entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
-        expSize = entriesI.length;
-        expOrientation = VectorOrientation.ROW;
-        expShape = new Shape(expSize);
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(entriesI[i]);
-        }
-
-        a = new CVector(entriesI, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 4 ------------
-        entriesI = new int[]{-22};
-        expSize = entriesI.length;
-        expOrientation = VectorOrientation.ROW;
-        expShape = new Shape(expSize);
-        expEntries = new CNumber[expSize];
-        for(int i=0; i<expEntries.length; i++) {
-            expEntries[i] = new CNumber(entriesI[i]);
-        }
-
-        a = new CVector(entriesI, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-                for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }
     }
@@ -648,14 +224,12 @@ class CVectorConstructorTests {
         expEntries = new CNumber[]{new CNumber(100, 234.13), new CNumber(-0.992, 113.3),
                 new CNumber(-0.0000000000001), new CNumber(0, -342.13)};
         expSize = expEntries.length;
-        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
 
         a = new CVector(expEntries);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
         for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }
@@ -663,80 +237,12 @@ class CVectorConstructorTests {
         // ----------- Sub-case 2 ------------
         expEntries = new CNumber[]{new CNumber(-22, -0.92)};
         expSize = expEntries.length;
-        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
 
         a = new CVector(expEntries);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-    }
-
-
-    @Test
-    void entriesCOrientationTest() {
-        // ----------- Sub-case 1 ------------
-        expEntries = new CNumber[]{new CNumber(100, 234.13), new CNumber(-0.992, 113.3),
-                new CNumber(-0.0000000000001), new CNumber(0, -342.13)};
-        expSize = expEntries.length;
-        expOrientation = VectorOrientation.COL;
-        expShape = new Shape(expSize);
-
-        a = new CVector(expEntries, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 2 ------------
-        expEntries = new CNumber[]{new CNumber(-22, -0.92)};
-        expSize = expEntries.length;
-        expOrientation = VectorOrientation.COL;
-        expShape = new Shape(expSize);
-
-        a = new CVector(expEntries, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 3 ------------
-        expEntries = new CNumber[]{new CNumber(100, 234.13), new CNumber(-0.992, 113.3),
-                new CNumber(-0.0000000000001), new CNumber(0, -342.13)};
-        expSize = expEntries.length;
-        expOrientation = VectorOrientation.ROW;
-        expShape = new Shape(expSize);
-
-        a = new CVector(expEntries, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
-        for(int i=0; i<expEntries.length; i++) {
-            assertEquals(expEntries[i], a.entries[i]);
-        }
-
-        // ----------- Sub-case 4 ------------
-        expEntries = new CNumber[]{new CNumber(-22, -0.92)};
-        expSize = expEntries.length;
-        expOrientation = VectorOrientation.ROW;
-        expShape = new Shape(expSize);
-
-        a = new CVector(expEntries, expOrientation);
-
-        assertEquals(expSize, a.size());
-        assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
         for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }
@@ -749,15 +255,13 @@ class CVectorConstructorTests {
         expEntries = new CNumber[]{new CNumber(100, 234.13), new CNumber(-0.992, 113.3),
                 new CNumber(-0.0000000000001), new CNumber(0, -342.13)};
         expSize = expEntries.length;
-        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
 
-        b = new CVector(expEntries, expOrientation);
+        b = new CVector(expEntries);
         a = new CVector(b);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
         for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }
@@ -765,19 +269,17 @@ class CVectorConstructorTests {
         // ----------- Sub-case 2 ------------
         entriesI = new int[]{-22};
         expSize = entriesI.length;
-        expOrientation = VectorOrientation.COL;
         expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(entriesI[i]);
         }
 
-        b = new CVector(entriesI, expOrientation);
+        b = new CVector(entriesI);
         a = new CVector(b);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
         for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }
@@ -785,19 +287,17 @@ class CVectorConstructorTests {
         // ----------- Sub-case 3 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
         expSize = entriesI.length;
-        expOrientation = VectorOrientation.ROW;
         expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(entriesI[i]);
         }
 
-        b = new CVector(entriesI, expOrientation);
+        b = new CVector(entriesI);
         a = new CVector(b);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
                 for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }
@@ -805,19 +305,17 @@ class CVectorConstructorTests {
         // ----------- Sub-case 4 ------------
         entriesI = new int[]{-22};
         expSize = entriesI.length;
-        expOrientation = VectorOrientation.ROW;
         expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(entriesI[i]);
         }
 
-        b = new CVector(entriesI, expOrientation);
+        b = new CVector(entriesI);
         a = new CVector(b);
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertEquals(expOrientation, a.getOrientation());
         for(int i=0; i<expEntries.length; i++) {
             assertEquals(expEntries[i], a.entries[i]);
         }

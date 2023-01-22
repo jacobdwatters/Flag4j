@@ -25,7 +25,6 @@
 package com.flag4j;
 
 import com.flag4j.core.SparseVectorBase;
-import com.flag4j.core.VectorOrientation;
 
 import java.util.Arrays;
 
@@ -40,7 +39,7 @@ public class SparseVector extends SparseVectorBase<double[]> {
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      */
     public SparseVector(int size) {
-        super(size, 0, VectorOrientation.COL, new double[0], new int[0]);
+        super(size, 0, new double[0], new int[0]);
     }
 
 
@@ -53,7 +52,7 @@ public class SparseVector extends SparseVectorBase<double[]> {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, int[] nonZeroEntries, int[] indices) {
-        super(size, nonZeroEntries.length, VectorOrientation.COL,
+        super(size, nonZeroEntries.length,
                 Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),
                 indices);
     }
@@ -68,7 +67,7 @@ public class SparseVector extends SparseVectorBase<double[]> {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, double[] nonZeroEntries, int[] indices) {
-        super(size, nonZeroEntries.length, VectorOrientation.COL, nonZeroEntries, indices);
+        super(size, nonZeroEntries.length, nonZeroEntries, indices);
     }
 
 
@@ -123,44 +122,6 @@ public class SparseVector extends SparseVectorBase<double[]> {
 //        super.setNonZeroEntries(super.entries.length);
 //    }
 
-
-    /**
-     * Creates a sparse column vector of specified size filled with zeros.
-     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
-     * @param orientation Orientation of the vector.
-     */
-    public SparseVector(int size, VectorOrientation orientation) {
-        super(size, 0, orientation, new double[0], new int[0]);
-    }
-
-
-    /**
-     * Creates a sparse column vector of specified size filled with zeros.
-     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
-     * @param nonZeroEntries The nonZero entries of this sparse vector.
-     * @param indices Indices of the nonZero entries.
-     * @param orientation Orientation of the vector.
-     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-     * the length of the nonZeroEntries array is greater than the size.
-     */
-    public SparseVector(int size, int[] nonZeroEntries, int[] indices, VectorOrientation orientation) {
-        super(size, nonZeroEntries.length, orientation,
-                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(), indices);
-    }
-
-
-    /**
-     * Creates a sparse column vector of specified size filled with zeros.
-     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
-     * @param nonZeroEntries The nonZero entries of this sparse vector.
-     * @param indices Indices of the nonZero entries.
-     * @param orientation Orientation of the vector.
-     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-     * the length of the nonZeroEntries array is greater than the size.
-     */
-    public SparseVector(int size, double[] nonZeroEntries, int[] indices, VectorOrientation orientation) {
-        super(size, nonZeroEntries.length, orientation, nonZeroEntries, indices);
-    }
 
 //
 //    /**
@@ -222,6 +183,6 @@ public class SparseVector extends SparseVectorBase<double[]> {
      * @param a Sparse vector to copy
      */
     public SparseVector(SparseVector a) {
-        super(a.size(), a.nonZeroEntries(), a.getOrientation(), a.entries.clone(), a.indices.clone());
+        super(a.size(), a.nonZeroEntries(), a.entries.clone(), a.indices.clone());
     }
 }

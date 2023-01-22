@@ -798,4 +798,6 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @throws IllegalArgumentException If this matrix is not square.
      */
     X tr();
+
+    T copy();
 }

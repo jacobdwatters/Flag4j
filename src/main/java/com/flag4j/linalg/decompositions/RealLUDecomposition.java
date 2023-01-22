@@ -28,9 +28,9 @@ import com.flag4j.Matrix;
 
 /**
  * <p>This class provides methods for computing the LU decomposition of a matrix.</p>
- * <p>The {@code LU} decomposition, decomposes a matrix {@code A} into </p>
+ * <p>The following decompositions are provided: {@code A=LU}, {@code PA=LU}, and {@code PAQ=LU}.</p>
  */
-public class RealLUDecomposition extends LUDecomposition<Matrix> {
+public final class RealLUDecomposition extends LUDecomposition<Matrix> {
 
 
     /**

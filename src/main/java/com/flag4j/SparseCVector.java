@@ -26,7 +26,6 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.SparseVectorBase;
-import com.flag4j.core.VectorOrientation;
 import com.flag4j.util.ArrayUtils;
 
 /**
@@ -40,7 +39,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      */
     public SparseCVector(int size) {
-        super(size, 0, VectorOrientation.COL, new CNumber[0], new int[0]);
+        super(size, 0, new CNumber[0], new int[0]);
     }
 
 
@@ -53,7 +52,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, int[] nonZeroEntries, int[] indices) {
-        super(size, nonZeroEntries.length, VectorOrientation.COL, new CNumber[nonZeroEntries.length], indices);
+        super(size, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
@@ -67,7 +66,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, double[] nonZeroEntries, int[] indices) {
-        super(size, nonZeroEntries.length, VectorOrientation.COL, new CNumber[nonZeroEntries.length], indices);
+        super(size, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
     }
 
@@ -81,7 +80,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, CNumber[] nonZeroEntries, int[] indices) {
-        super(size, nonZeroEntries.length, VectorOrientation.COL, nonZeroEntries, indices);
+        super(size, nonZeroEntries.length, nonZeroEntries, indices);
     }
 
 
@@ -170,60 +169,6 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
 //        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
 //        super.setNonZeroEntries(super.entries.length);
 //    }
-
-
-    /**
-     * Creates a sparse column vector of specified size filled with zeros.
-     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
-     * @param orientation Orientation of the vector.
-     */
-    public SparseCVector(int size, VectorOrientation orientation) {
-        super(size, 0, orientation, new CNumber[0], new int[0]);
-    }
-
-
-    /**
-     * Creates a sparse column vector of specified size filled with zeros.
-     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
-     * @param nonZeroEntries The nonZero entries of this sparse vector.
-     * @param indices Indices of the nonZero entries.
-     * @param orientation Orientation of the vector.
-     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-     * the length of the nonZeroEntries array is greater than the size.
-     */
-    public SparseCVector(int size, int[] nonZeroEntries, int[] indices, VectorOrientation orientation) {
-        super(size, nonZeroEntries.length, orientation, new CNumber[nonZeroEntries.length], indices);
-        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
-    }
-
-
-    /**
-     * Creates a sparse column vector of specified size filled with zeros.
-     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
-     * @param nonZeroEntries The nonZero entries of this sparse vector.
-     * @param indices Indices of the nonZero entries.
-     * @param orientation Orientation of the vector.
-     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-     * the length of the nonZeroEntries array is greater than the size.
-     */
-    public SparseCVector(int size, double[] nonZeroEntries, int[] indices, VectorOrientation orientation) {
-        super(size, nonZeroEntries.length, orientation, new CNumber[nonZeroEntries.length], indices);
-        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
-    }
-
-
-    /**
-     * Creates a sparse column vector of specified size filled with zeros.
-     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
-     * @param nonZeroEntries The nonZero entries of this sparse vector.
-     * @param indices Indices of the nonZero entries.
-     * @param orientation Orientation of the vector.
-     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-     * the length of the nonZeroEntries array is greater than the size.
-     */
-    public SparseCVector(int size, CNumber[] nonZeroEntries, int[] indices, VectorOrientation orientation) {
-        super(size, nonZeroEntries.length, orientation, nonZeroEntries, indices);
-    }
 
 
     // TODO: These methods (for all sparse tensor classes) will be moved into factory methods
@@ -323,7 +268,7 @@ public class SparseCVector extends SparseVectorBase<CNumber[]> {
      * @param a Vector to copy.
      */
     public SparseCVector(SparseCVector a) {
-        super(a.size(), a.nonZeroEntries(), a.getOrientation(), new CNumber[a.nonZeroEntries()], a.indices.clone());
+        super(a.size(), a.nonZeroEntries(), new CNumber[a.nonZeroEntries()], a.indices.clone());
         ArrayUtils.copy2CNumber(a.entries, super.entries);
     }
 }

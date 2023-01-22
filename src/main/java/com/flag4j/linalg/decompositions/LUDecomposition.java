@@ -27,8 +27,10 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.core.MatrixBase;
 
+// TODO: Implement LDU decomposition.
+
 /**
- * <p>This abstract class specified methods for computing the LU decomposition of a matrix.</p>
+ * <p>This abstract class specifies methods for computing the LU decomposition of a matrix.</p>
  * <p>The {@code LU} decomposition, decomposes a matrix {@code A} into a unit lower triangular matrix {@code L}
  * and an upper triangular matrix {@code U} such that {@code A=LU}.</p>
  * <p>If partial pivoting is used, the decomposition will also yield a permutation matrix {@code P} such that
@@ -49,6 +51,20 @@ public abstract class LUDecomposition<T extends MatrixBase> implements Decomposi
      * Tolerance for determining if pivot value is to be considered zero in LU decomposition with no pivoting.
      */
     double zeroPivotTol;
+
+    /**
+     * Storage for L and U matrices. Stored in a single matrix
+     */
+    protected T LU;
+    /**
+     * Permutation matrix to store row swaps if partial pivoting is used.
+     */
+    protected T P;
+    /**
+     * Permutation matrix to store row swaps if partial pivoting is used.
+     */
+    protected T Q;
+
 
 
     /**
@@ -71,20 +87,6 @@ public abstract class LUDecomposition<T extends MatrixBase> implements Decomposi
         pivotFlag = Pivoting.get(pivoting);
         this.zeroPivotTol = zeroPivotTol;
     }
-
-
-    /**
-     * Storage for L and U matrices. Stored in a single matrix
-     */
-    protected T LU;
-    /**
-     * Permutation matrix to store row swaps if partial pivoting is used.
-     */
-    protected T P;
-    /**
-     * Permutation matrix to store row swaps if partial pivoting is used.
-     */
-    protected T Q;
 
 
     /**

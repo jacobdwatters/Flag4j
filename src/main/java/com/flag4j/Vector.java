@@ -24,25 +24,33 @@
 
 package com.flag4j;
 
-import com.flag4j.core.VectorBase;
-import com.flag4j.core.VectorOrientation;
+import com.flag4j.core.*;
 
 import java.util.Arrays;
 
 
 /**
- * Real dense vector. Vectors may be oriented as row vectors, column vectors, or unoriented.
- * See {@link VectorOrientation} for orientations.
+ * Real dense vector. This class is mostly Equivalent
  */
-public class Vector extends VectorBase<double[]> {
+public class Vector extends VectorBase<double[]> implements 
+        VectorComparisonsMixin<Vector, Vector, SparseVector, CVector, Vector, Double>,
+        VectorManipulationsMixin<Vector, Vector, SparseVector, CVector, Vector, Double,
+            Matrix, Matrix, SparseMatrix, CMatrix> {
 
+
+//    VectorComparisonsMixin<Vector, Vector, SparseVector, CVector, Vector, Double>,
+//    VectorManipulationsMixin<Vector, Vector, SparseVector, CVector, Vector, Double,
+//            Matrix, Matrix, SparseMatrix, CMatrix>,
+//    VectorOperationsMixin<Vector, Vector, SparseVector, CVector, Vector, Double,
+//            Matrix, Matrix, SparseMatrix, CMatrix>,
+//    VectorPropertiesMixin<Vector, Vector, SparseVector, CVector, Vector, Double>
 
     /**
      * Creates a column vector of specified size filled with zeros.
      * @param size Size of the vector.
      */
     public Vector(int size) {
-        super(size, VectorOrientation.COL, new double[size]);
+        super(size, new double[size]);
     }
 
 
@@ -52,29 +60,7 @@ public class Vector extends VectorBase<double[]> {
      * @param fillValue Value to fill vector with.
      */
     public Vector(int size, double fillValue) {
-        super(size, VectorOrientation.COL, new double[size]);
-        Arrays.fill(super.entries, fillValue);
-    }
-
-
-    /**
-     * Creates a vector of specified size filled with zeros.
-     * @param size Size of the vector.
-     * @param orientation Orientation of the vector.
-     */
-    public Vector(int size, VectorOrientation orientation) {
-        super(size, orientation, new double[size]);
-    }
-
-
-    /**
-     * Creates a vector of specified size filled with zeros.
-     * @param size Size of the vector.
-     * @param fillValue Fills array with
-     * @param orientation Orientation of the vector.
-     */
-    public Vector(int size, double fillValue, VectorOrientation orientation) {
-        super(size, orientation, new double[size]);
+        super(size, new double[size]);
         Arrays.fill(super.entries, fillValue);
     }
 
@@ -84,16 +70,7 @@ public class Vector extends VectorBase<double[]> {
      * @param entries Entries for this column vector.
      */
     public Vector(double[] entries) {
-        super(entries.length, VectorOrientation.COL, entries.clone());
-    }
-
-    /**
-     * Creates a vector with specified entries and orientation.
-     * @param entries Entries for this column vector.
-     * @param orientation Orientation of the vector.
-     */
-    public Vector(double[] entries, VectorOrientation orientation) {
-        super(entries.length, orientation, entries.clone());
+        super(entries.length, entries.clone());
     }
 
 
@@ -102,20 +79,7 @@ public class Vector extends VectorBase<double[]> {
      * @param entries Entries for this column vector.
      */
     public Vector(int[] entries) {
-        super(entries.length, VectorOrientation.COL, new double[entries.length]);
-
-        for(int i=0; i<entries.length; i++) {
-            super.entries[i] = entries[i];
-        }
-    }
-
-    /**
-     * Creates a vector with specified entries and orientation.
-     * @param entries Entries for this column vector.
-     * @param orientation Orientation of the vector.
-     */
-    public Vector(int[] entries, VectorOrientation orientation) {
-        super(entries.length, orientation, new double[entries.length] );
+        super(entries.length, new double[entries.length]);
 
         for(int i=0; i<entries.length; i++) {
             super.entries[i] = entries[i];
@@ -128,6 +92,200 @@ public class Vector extends VectorBase<double[]> {
      * @param a Vector to make copy of.
      */
     public Vector(Vector a) {
-        super(a.entries.length, a.getOrientation(), a.entries.clone());
+        super(a.entries.length, a.entries.clone());
+    }
+
+
+    /**
+     * Checks if this tensor only contains zeros.
+     *
+     * @return True if this tensor only contains zeros. Otherwise, returns false.
+     */
+    @Override
+    public boolean isZeros() {
+        return false;
+    }
+
+
+    /**
+     * Checks if this tensor only contains ones.
+     *
+     * @return True if this tensor only contains ones. Otherwise, returns false.
+     */
+    @Override
+    public boolean isOnes() {
+        return false;
+    }
+
+
+    /**
+     * Checks if two vectors are equal (element-wise). This method <b>DOES</b> take into consideration the
+     * orientation of the vectors.
+     *
+     * @param b Second vector in the equality.
+     * @return True if this vector and vector b are equivalent element-wise. Otherwise, returns false.
+     */
+    @Override
+    public boolean equals(Vector b) {
+        return false;
+    }
+
+
+    /**
+     * Checks if two vectors are equal (element-wise). This method <b>DOES</b> take into consideration the
+     * orientation of the vectors.
+     *
+     * @param b Second vector in the equality.
+     * @return True if this vector and vector b are equivalent element-wise. Otherwise, returns false.
+     */
+    @Override
+    public boolean equals(SparseVector b) {
+        return false;
+    }
+
+
+    /**
+     * Checks if two vectors are equal (element-wise). This method <b>DOES</b> take into consideration the
+     * orientation of the vectors.
+     *
+     * @param b Second vector in the equality.
+     * @return True if this vector and vector b are equivalent element-wise. Otherwise, returns false.
+     */
+    @Override
+    public boolean equals(CVector b) {
+        return false;
+    }
+
+
+    /**
+     * Checks if two vectors are equal (element-wise). This method <b>DOES</b> take into consideration the
+     * orientation of the vectors.
+     *
+     * @param b Second vector in the equality.
+     * @return True if this vector and vector b are equivalent element-wise. Otherwise, returns false.
+     */
+    @Override
+    public boolean equals(SparseCVector b) {
+        return false;
+    }
+
+
+    /**
+     * Checks if two vectors have the same shape. This method <b>DOES</b> take the two vectors orientations into account.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if this vector and vector b have the same orientation and length. Otherwise, returns false.
+     */
+    @Override
+    public boolean sameShape(Vector b) {
+        return false;
+    }
+
+
+    /**
+     * Checks if two vectors have the same shape. This method <b>DOES</b> take the two vectors orientations into account.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if this vector and vector b have the same orientation and length. Otherwise, returns false.
+     */
+    @Override
+    public boolean sameShape(SparseVector b) {
+        return false;
+    }
+
+
+    /**
+     * Checks if two vectors have the same shape. This method <b>DOES</b> take the two vectors orientations into account.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if this vector and vector b have the same orientation and length. Otherwise, returns false.
+     */
+    @Override
+    public boolean sameShape(CVector b) {
+        return false;
+    }
+
+
+    /**
+     * Checks if two vectors have the same shape. This method <b>DOES</b> take the two vectors orientations into account.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if this vector and vector b have the same orientation and length. Otherwise, returns false.
+     */
+    @Override
+    public boolean sameShape(SparseCVector b) {
+        return false;
+    }
+
+
+    /**
+     * Checks if two vectors have the same length. This method <b>DOES NOT</b> take the two vectors orientations into account.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if this vector and vector b have the same length. Otherwise, returns false.
+     */
+    @Override
+    public boolean sameSize(Vector b) {
+        return false;
+    }
+
+
+    /**
+     * Checks if two vectors have the same length. This method <b>DOES NOT</b> take the two vectors orientations into account.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if this vector and vector b have the same length. Otherwise, returns false.
+     */
+    @Override
+    public boolean sameSize(SparseVector b) {
+        return false;
+    }
+
+
+    /**
+     * Checks if two vectors have the same length. This method <b>DOES NOT</b> take the two vectors orientations into account.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if this vector and vector b have the same length. Otherwise, returns false.
+     */
+    @Override
+    public boolean sameSize(CVector b) {
+        return false;
+    }
+
+
+    /**
+     * Checks if two vectors have the same length. This method <b>DOES NOT</b> take the two vectors orientations into account.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if this vector and vector b have the same length. Otherwise, returns false.
+     */
+    @Override
+    public boolean sameSize(SparseCVector b) {
+        return false;
+    }
+
+
+    /**
+     * Sets an index of this tensor to a specified value.
+     *
+     * @param value   Value to set.
+     * @param indices The indices of this tensor for which to set the value.
+     */
+    @Override
+    public void set(double value, int... indices) {
+
+    }
+
+
+    /**
+     * Extends a vector a specified number of times to a matrix.
+     *
+     * @param n The number of times to extend this vector.
+     * @return A matrix which is the result of extending a vector {@code n} times.
+     */
+    @Override
+    public Matrix extend(int n) {
+        return null;
     }
 }

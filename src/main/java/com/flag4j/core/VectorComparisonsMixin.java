@@ -117,7 +117,7 @@ public interface VectorComparisonsMixin<T, U, V, W, Y, X extends Number> extends
      * @param b Vector to compare to this vector.
      * @return True if this vector and vector b have the same length. Otherwise, returns false.
      */
-    boolean sameLength(Vector b);
+    boolean sameSize(Vector b);
 
 
     /**
@@ -125,7 +125,7 @@ public interface VectorComparisonsMixin<T, U, V, W, Y, X extends Number> extends
      * @param b Vector to compare to this vector.
      * @return True if this vector and vector b have the same length. Otherwise, returns false.
      */
-    boolean sameLength(SparseVector b);
+    boolean sameSize(SparseVector b);
 
 
     /**
@@ -133,7 +133,7 @@ public interface VectorComparisonsMixin<T, U, V, W, Y, X extends Number> extends
      * @param b Vector to compare to this vector.
      * @return True if this vector and vector b have the same length. Otherwise, returns false.
      */
-    boolean sameLength(CVector b);
+    boolean sameSize(CVector b);
 
 
     /**
@@ -141,5 +141,5 @@ public interface VectorComparisonsMixin<T, U, V, W, Y, X extends Number> extends
      * @param b Vector to compare to this vector.
      * @return True if this vector and vector b have the same length. Otherwise, returns false.
      */
-    boolean sameLength(SparseCVector b);
+    boolean sameSize(SparseCVector b);
 }

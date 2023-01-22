@@ -84,7 +84,6 @@ class CMatrixElemMultTests {
 
         assertEquals(exp, A.elemMult(B));
 
-
         // ------------------- Sub-case 2 -------------------
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},

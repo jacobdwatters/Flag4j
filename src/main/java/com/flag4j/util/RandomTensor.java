@@ -25,7 +25,6 @@
 package com.flag4j.util;
 
 import com.flag4j.*;
-import com.flag4j.core.VectorOrientation;
 
 import java.util.Random;
 
@@ -79,11 +78,10 @@ public class RandomTensor {
      * Gets a vector with random values. Values are normally distributed with mean of zero and standard deviation
      * of one.
      * @param size Size of the vector.
-     * @param orientation Orientation of the vector.
      * @return A random vector of specified size.
      */
-    public Vector getRandomVector(int size, VectorOrientation orientation) {
-        Vector randVec = new Vector(size, orientation);
+    public Vector getRandomVector(int size) {
+        Vector randVec = new Vector(size);
 
         for(int i=0; i<randVec.totalEntries().intValue(); i++) {
             randVec.entries[i] = rng.nextGaussian();

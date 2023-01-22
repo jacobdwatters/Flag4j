@@ -58,8 +58,8 @@ public abstract class SparseVectorBase<T extends Serializable> extends VectorBas
      * @param indices Indices of the non-zero entries of this tensor.
      * @throws IllegalArgumentException If the lengths of the entries and incicies arrays are not equal.
      */
-    public SparseVectorBase(int totalEntries, int nonZeroEntries, VectorOrientation orientation, T entries, int[] indices) {
-        super(totalEntries, orientation, entries);
+    public SparseVectorBase(int totalEntries, int nonZeroEntries, T entries, int[] indices) {
+        super(totalEntries, entries);
 
         if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) < 0) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));

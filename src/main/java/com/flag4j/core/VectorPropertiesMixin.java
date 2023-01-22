@@ -34,7 +34,7 @@ package com.flag4j.core;
  * @param <Y> Real Vector type.
  * @param <X> Vector entry type.
  */
-interface VectorPropertiesMixin<T, U, V, W, Y, X extends Number> extends TensorPropertiesMixin<T, U, V, W, Y, X> {
+public interface VectorPropertiesMixin<T, U, V, W, Y, X extends Number> extends TensorPropertiesMixin<T, U, V, W, Y, X> {
 
     /**
      * Gets the length of a vector.

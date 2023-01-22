@@ -39,14 +39,14 @@ package com.flag4j.core;
  * @param <VV> Sparse Matrix type equivalent.
  * @param <WW> Complex Matrix type equivalent.
  */
-interface VectorManipulationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW, YY> extends
-        TensorManipulationsMixin<T, U, V, W, Y, X> {
+public interface VectorManipulationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW>
+        extends TensorManipulationsMixin<T, U, V, W, Y, X> {
 
 
     /**
      * Extends a vector a specified number of times to a matrix.
      * @param n The number of times to extend this vector.
-     * @return A matrix which is the result of extending a vector 'n' times.
+     * @return A matrix which is the result of extending a vector {@code n} times.
      */
     TT extend(int n);
 }

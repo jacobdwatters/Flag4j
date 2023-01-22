@@ -111,6 +111,6 @@ public class Tensor extends TensorBase<double[]> {
      * @param A Vector to copy to tensor.
      */
     public Tensor(Vector A) {
-        super(A.getOrientedShape(), A.entries.clone());
+        super(A.shape.copy(), A.entries.clone());
     }
 }

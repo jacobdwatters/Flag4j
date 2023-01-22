@@ -2796,10 +2796,27 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
+     * Get the row of this matrix at the specified index.
+     *
+     * @param i Index of row to get.
+     * @return The specified row of this matrix as a vector.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} is less than zero or greater than/equal to
+     * the number of rows in this matrix.
+     */
+    public Vector getRowAsVector(int i) {
+        int start = i*numCols;
+        int stop = start+numCols;
+        return new Vector(Arrays.copyOfRange(this.entries, start, stop));
+    }
+
+
+    /**
      * Get the column of this matrix at the specified index.
      *
      * @param j Index of column to get.
      * @return The specified column of this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} is less than zero or greater than/equal to
+     * the number of columns in this matrix.
      */
     @Override
     public Matrix getCol(int j) {
@@ -2810,6 +2827,25 @@ public class Matrix extends RealMatrixBase implements
         }
 
         return new Matrix(new Shape(numRows, 1), col);
+    }
+
+
+    /**
+     * Get the column of this matrix at the specified index.
+     *
+     * @param j Index of column to get.
+     * @return The specified column of this matrix as a vector.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} is less than zero or greater than/equal to
+     * the number of rows in this matrix.
+     */
+    public Vector getColAsVector(int j) {
+        double[] col = new double[numRows];
+
+        for(int i=0; i<numRows; i++) {
+            col[i] = entries[i*numCols + j];
+        }
+
+        return new Vector(col);
     }
 
 
@@ -3294,6 +3330,17 @@ public class Matrix extends RealMatrixBase implements
     public int matrixRank() {
         return 0;
     }
+
+
+    /**
+     * Creates a deep copy of this matrix.
+     * @return A deep copy of this matrix.
+     */
+    @Override
+    public Matrix copy() {
+        return new Matrix(this);
+    }
+
 
 
     /**

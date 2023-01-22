@@ -2883,6 +2883,21 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
+     * Get the row of this matrix at the specified index.
+     *
+     * @param i Index of row to get.
+     * @return The specified row of this matrix as a vector.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} is less than zero or greater than/equal to
+     * the number of rows in this matrix.
+     */
+    public CVector getRowAsVector(int i) {
+        int start = i*numCols;
+        int stop = start+numCols;
+        return new CVector(ArrayUtils.copyOfRange(this.entries, start, stop));
+    }
+
+
+    /**
      * Get the column of this matrix at the specified index.
      *
      * @param j Index of column to get.
@@ -2897,6 +2912,25 @@ public class CMatrix extends ComplexMatrixBase implements
         }
 
         return new CMatrix(new Shape(numRows, 1), col);
+    }
+
+
+    /**
+     * Get the column of this matrix at the specified index.
+     *
+     * @param j Index of column to get.
+     * @return The specified column of this matrix as a vector.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} is less than zero or greater than/equal to
+     * the number of rows in this matrix.
+     */
+    public CVector getColAsVector(int j) {
+        CNumber[] col = new CNumber[numRows];
+
+        for(int i=0; i<numRows; i++) {
+            col[i] = entries[i*numCols + j].copy();
+        }
+
+        return new CVector(col);
     }
 
 
@@ -3365,6 +3399,15 @@ public class CMatrix extends ComplexMatrixBase implements
         return ComplexDenseOperations.matrixInfNorm(entries, shape);
     }
 
+
+    /**
+     * Creates a deep copy of this matrix.
+     * @return A deep copy of this matrix.
+     */
+    @Override
+    public CMatrix copy() {
+        return new CMatrix(this);
+    }
 
 
     /**
