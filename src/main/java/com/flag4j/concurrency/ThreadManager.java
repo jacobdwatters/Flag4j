@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.flag4j.operations.concurrency;
+package com.flag4j.concurrency;
 
 import com.flag4j.util.ErrorMessages;
 

@@ -203,4 +203,14 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * resulting matrix will have a single column.
      */
     UU toMatrix();
+
+
+    /**
+     * Converts a vector to an equivalent matrix representing either a row or column vector.
+     * @param columVector Flag for choosing whether to convert this vector to a matrix representing a row or column vector.
+     *                    <p>If true, the vector will be converted to a matrix representing a column vector.</p>
+     *                    <p>If false, The vector will be converted to a matrix representing a row vector.</p>
+     * @return A matrix equivalent to this vector.
+     */
+    Matrix toMatrix(boolean columVector);
 }

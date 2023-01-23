@@ -28,10 +28,7 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
 import com.flag4j.operations.common.real.Aggregate;
 import com.flag4j.operations.common.real.RealOperations;
-import com.flag4j.operations.dense.real.RealDenseEquals;
-import com.flag4j.operations.dense.real.RealDenseOperations;
-import com.flag4j.operations.dense.real.RealDenseProperties;
-import com.flag4j.operations.dense.real.RealDenseVectorOperations;
+import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
@@ -735,15 +732,33 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
-     * Converts a vector to an equivalent matrix.
+     * Converts a vector to an equivalent matrix representing the vector as a column.
      *
-     * @return A matrix equivalent to this vector. This method will respect the orientation of the vector. That is, if
-     * this vector is a row vector, then the resulting matrix will have a single row. If this vector is a column vector, then the
-     * resulting matrix will have a single column.
+     * @return A matrix equivalent to this vector.
      */
     @Override
     public Matrix toMatrix() {
-        return null;
+        return new Matrix(this.entries.length, 1, this.entries.clone());
+    }
+
+
+
+    /**
+     * Converts a vector to an equivalent matrix representing either a row or column vector.
+     * @param columVector Flag for choosing whether to convert this vector to a matrix representing a row or column vector.
+     *                    <p>If true, the vector will be converted to a matrix representing a column vector.</p>
+     *                    <p>If false, The vector will be converted to a matrix representing a row vector.</p>
+     * @return A matrix equivalent to this vector.
+     */
+    @Override
+    public Matrix toMatrix(boolean columVector) {
+        if(columVector) {
+            // Convert to column vector
+            return new Matrix(this.entries.length, 1, this.entries.clone());
+        } else {
+            // Convert to row vector.
+            return new Matrix(1, this.entries.length, this.entries.clone());
+        }
     }
 
 
@@ -754,7 +769,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Double min() {
-        return null;
+        return Aggregate.min(this.entries);
     }
 
 
@@ -765,7 +780,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Double max() {
-        return null;
+        return Aggregate.max(this.entries);
     }
 
 
@@ -777,7 +792,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Double minAbs() {
-        return null;
+        return Aggregate.minAbs(this.entries);
     }
 
 
@@ -789,7 +804,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Double maxAbs() {
-        return null;
+        return Aggregate.maxAbs(this.entries);
     }
 
 
@@ -801,7 +816,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public int[] argMin() {
-        return new int[0];
+        return new int[]{AggregateDenseReal.argMin(this.entries)};
     }
 
 
@@ -813,7 +828,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public int[] argMax() {
-        return new int[0];
+        return new int[]{AggregateDenseReal.argMax(this.entries)};
     }
 
 
@@ -824,7 +839,13 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public double norm() {
-        return 0;
+        double norm = 0;
+
+        for(int i=0; i<this.size; i++) {
+            norm += this.entries[i]*this.entries[i];
+        }
+
+        return Math.sqrt(norm);
     }
 
 
@@ -838,7 +859,17 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public double norm(double p) {
-        return 0;
+        if(Double.isInfinite(p)) {
+            return infNorm();
+        } else {
+            double norm = 0;
+
+            for(int i=0; i<this.size; i++) {
+                norm += Math.pow(Math.abs(this.entries[i]), p);
+            }
+
+            return Math.pow(norm, 1.0/p);
+        }
     }
 
 
@@ -849,17 +880,17 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public double infNorm() {
-        return 0;
+        return Aggregate.maxAbs(this.entries);
     }
 
 
     /**
-     * Gets the length of a vector.
+     * Gets the length of a vector. Same as {@link #size()}
      *
      * @return The length, i.e. the number of entries, in this vector.
      */
     @Override
     public int length() {
-        return 0;
+        return this.size;
     }
 }
