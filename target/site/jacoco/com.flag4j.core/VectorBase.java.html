@@ -31,14 +31,10 @@ import java.io.Serializable;
 
 /**
  * The base class for all vectors.
- * @param &lt;T&gt; The type of entries for this matrix.
+ * @param &lt;T&gt; The type of entries for this Vector.
  */
 public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBase&lt;T&gt; {
 
-    /**
-     * The orientation of this vector.
-     */
-    VectorOrientation orientation;
     /**
      * Size of the matrix.
      */
@@ -46,53 +42,24 @@ public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBas
 
     /**
      * Constructs a basic vector with the specified number of entries.
-     * @param size Number of entries in this vector.
+     *
+     * @param size        Number of entries in this vector.
      * @param orientation Orientation of this vector.
-     * @param entries The non-zero entries of this sparse tensor.
+     * @param entries     The non-zero entries of this sparse tensor.
      */
-    public VectorBase(int size, VectorOrientation orientation, T entries) {
-<span class="fc" id="L54">        super(new Shape(size), entries);</span>
-<span class="fc" id="L55">        this.orientation = orientation;</span>
-<span class="fc" id="L56">        this.size = size;</span>
-<span class="fc" id="L57">    }</span>
+    public VectorBase(int size, T entries) {
+<span class="fc" id="L51">        super(new Shape(size), entries);</span>
+<span class="fc" id="L52">        this.size = size;</span>
+<span class="fc" id="L53">    }</span>
 
 
     /**
      * Gets the size of this vector.
+     *
      * @return The size, i.e. number of entries, of this vector.
      */
     public int size() {
-<span class="fc" id="L65">        return size;</span>
-    }
-
-
-    /**
-     * Gets the oriented shape of this vector.
-     * @return The oriented shape of this vector. &lt;br&gt;
-     * If this vector is a {@link VectorOrientation#ROW row} vector, then
-     * the shape will be {@code (1, this.size())}. &lt;br&gt;
-     * If this vector is a {@link VectorOrientation#COL column} vector or an {@link VectorOrientation#UNORIENTED unoriented}
-     * vector then the shape will be {@code (1, this.size())}.
-     */
-    public Shape getOrientedShape() {
-        Shape orientedShape;
-
-<span class="nc bnc" id="L80" title="All 2 branches missed.">        if(this.orientation== VectorOrientation.ROW) {</span>
-<span class="nc" id="L81">            orientedShape = new Shape(1, this.size());</span>
-        } else {
-<span class="nc" id="L83">            orientedShape = new Shape(this.size(), 1);</span>
-        }
-
-<span class="nc" id="L86">        return orientedShape;</span>
-    }
-
-
-    /**
-     * Gets the orientation of this vector.
-     * @return The orientation of this vector.
-     */
-    public VectorOrientation getOrientation() {
-<span class="fc" id="L95">        return this.orientation;</span>
+<span class="fc" id="L62">        return size;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

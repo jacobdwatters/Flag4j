@@ -157,25 +157,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * @return The result of the vector cross product between this vector and b.
      * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
      */
-    U cross(SparseVector b);
-
-
-    /**
-     * Computes the vector cross product between two vectors.
-     * @param b Second vector in the cross product.
-     * @return The result of the vector cross product between this vector and b.
-     * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
-     */
     CVector cross(CVector b);
-
-
-    /**
-     * Computes the vector cross product between two vectors.
-     * @param b Second vector in the cross product.
-     * @return The result of the vector cross product between this vector and b.
-     * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
-     */
-    CVector cross(SparseCVector b);
 
 
     /**

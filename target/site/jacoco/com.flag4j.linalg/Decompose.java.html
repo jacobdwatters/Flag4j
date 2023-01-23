@@ -24,9 +24,37 @@
 
 package com.flag4j.linalg;
 
+import com.flag4j.Matrix;
+import com.flag4j.linalg.decompositions.RealLUDecomposition;
+import com.flag4j.util.ErrorMessages;
+
+
 /**
- * This class provides several matrix decompositions.
+ * This class provides methods for several matrix decompositions.
  */
-<span class="nc" id="L30">public class Decompose {</span>
+public class Decompose {
+
+    /**
+     * Object computing lu decomposition.
+     */
+<span class="nc" id="L40">    private static final RealLUDecomposition LU = new RealLUDecomposition();</span>
+
+
+<span class="nc" id="L43">    private Decompose() {</span>
+        // Hide default constructor in utility class.
+<span class="nc" id="L45">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * &lt;p&gt;Computes the LU decomposition of a matrix using partial pivoting. That is, decomposes an m-by-n matrix {@code A} into {@code PA=LU}
+     * where P is a permutation matrix, L is a unit lower triangular matrix, and U is an upper triangular matrix.&lt;/p&gt;
+     * @param A Matrix to decompose.
+     * @return Returns an array of matrices containing in order {@code {P, L, U}}.
+     */
+    public static Matrix[] LU(Matrix A) {
+<span class="nc" id="L56">        LU.decompose(A);</span>
+<span class="nc" id="L57">        return new Matrix[]{LU.getP(), LU.getL(), LU.getU()};</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

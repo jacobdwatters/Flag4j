@@ -46,7 +46,8 @@ public interface VectorManipulationsMixin<T, U, V, W, Y, X extends Number, TT, U
     /**
      * Extends a vector a specified number of times to a matrix.
      * @param n The number of times to extend this vector.
+     * @param axis
      * @return A matrix which is the result of extending a vector {@code n} times.
      */
-    TT extend(int n);
+    TT extend(int n, int axis);
 }

@@ -43,6 +43,18 @@ public class RealDenseEquals {
 
 
     /**
+     * Checks if two real dense vectors are equal.
+     * @param src1 Entries of first vector.
+     * @param src2 Entries of second vector.
+     * @return True if the two vectors are element-wise numerically equal. Otherwise, returns false.
+     */
+    public static boolean vectorEquals(double[] src1, double[] src2) {
+        return Arrays.equals(src1, src2);
+    }
+
+
+
+    /**
      * Checks if two real dense matrices are equal.
      * @param A First matrix.
      * @param B Second matrix.

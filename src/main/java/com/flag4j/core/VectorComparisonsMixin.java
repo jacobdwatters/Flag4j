@@ -42,41 +42,6 @@ import com.flag4j.Vector;
  */
 public interface VectorComparisonsMixin<T, U, V, W, Y, X extends Number> extends TensorComparisonsMixin<T, U, V, W, Y, X> {
 
-    /**
-     * Checks if two vectors are equal (element-wise). This method <b>DOES</b> take into consideration the
-     * orientation of the vectors.
-     * @param b Second vector in the equality.
-     * @return True if this vector and vector b are equivalent element-wise. Otherwise, returns false.
-     */
-    boolean equals(Vector b);
-
-
-    /**
-     * Checks if two vectors are equal (element-wise). This method <b>DOES</b> take into consideration the
-     * orientation of the vectors.
-     * @param b Second vector in the equality.
-     * @return True if this vector and vector b are equivalent element-wise. Otherwise, returns false.
-     */
-    boolean equals(SparseVector b);
-
-
-    /**
-     * Checks if two vectors are equal (element-wise). This method <b>DOES</b> take into consideration the
-     * orientation of the vectors.
-     * @param b Second vector in the equality.
-     * @return True if this vector and vector b are equivalent element-wise. Otherwise, returns false.
-     */
-    boolean equals(CVector b);
-
-
-    /**
-     * Checks if two vectors are equal (element-wise). This method <b>DOES</b> take into consideration the
-     * orientation of the vectors.
-     * @param b Second vector in the equality.
-     * @return True if this vector and vector b are equivalent element-wise. Otherwise, returns false.
-     */
-    boolean equals(SparseCVector b);
-
 
     /**
      * Checks if two vectors have the same shape. This method <b>DOES</b> take the two vectors orientations into account.
@@ -108,8 +73,6 @@ public interface VectorComparisonsMixin<T, U, V, W, Y, X extends Number> extends
      * @return True if this vector and vector b have the same orientation and length. Otherwise, returns false.
      */
     boolean sameShape(SparseCVector b);
-
-
 
 
     /**

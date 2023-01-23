@@ -46,6 +46,46 @@ public class RealComplexDenseSparseEquals {
 
 
     /**
+     * Checks if a real dense vector is equal to a complex sparse vector equals.
+     * @param src1 Entries of dense vector.
+     * @param src2 Non-zero Entries of sparse vector.
+     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param sparseSize Size of the sparse vector.
+     * @return True if the two matrices are equal. Returns false otherwise.
+     */
+    public static boolean vectorEquals(double[] src1, CNumber[] src2, int[] indices, int sparseSize) {
+        boolean equal = true;
+
+        if(src1.length==sparseSize) {
+            int index;
+            double[] src1Copy = Arrays.copyOf(src1, src1.length);
+
+            for(int i=0; i<sparseSize; i++) {
+                index = indices[i];
+
+                if(!src2[i].equals(src1[index])) {
+                    equal=false;
+                    break;
+
+                } else {
+                    src1Copy[index] = 0;
+                }
+            }
+
+            if(equal) {
+                // Now, if this vector is equal to the sparse vector, there should only be zeros left in the entriesStack
+                equal = ArrayUtils.isZeros(src1Copy);
+            }
+
+        } else {
+            equal = false;
+        }
+
+        return equal;
+    }
+
+
+    /**
      * Checks if a real dense matrix is equal to a sparse complex matrix.
      * @param A First matrix.
      * @param B Second matrix.
