@@ -76,4 +76,47 @@ public class RealComplexDenseVectorOperations {
 
         return innerProd;
     }
+
+
+
+    /**
+     * Computes the vector outer product between two real dense vectors.
+     * @param src1 Entries of first vector.
+     * @param src2 Entries of second vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static CNumber[] outerProduct(double[] src1, CNumber[] src2) {
+        int destIndex;
+        CNumber[] dest = new CNumber[src1.length*src2.length];
+
+        for(int i=0; i<src1.length; i++) {
+            destIndex = i*src2.length;
+            for(int j=0; j<src2.length; j++) {
+                dest[destIndex++] = src2[j].mult(src1[i]);
+            }
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Computes the vector outer product between two real dense vectors.
+     * @param src1 Entries of first vector.
+     * @param src2 Entries of second vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static CNumber[] outerProduct(CNumber[] src1, double[] src2) {
+        int destIndex;
+        CNumber[] dest = new CNumber[src1.length*src2.length];
+
+        for(int i=0; i<src1.length; i++) {
+            destIndex = i*src2.length;
+            for(int j=0; j<src2.length; j++) {
+                dest[destIndex++] = src1[j].mult(src2[i]);
+            }
+        }
+
+        return dest;
+    }
 }

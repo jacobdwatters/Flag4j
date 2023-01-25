@@ -38,7 +38,7 @@ import java.math.BigInteger;
 public abstract class TensorBase<T> implements Serializable {
 
     /**
-     * Entries of this tensor.
+     * Entry data for this tensor.
      */
     public final T entries;
     /**

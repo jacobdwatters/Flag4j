@@ -63,4 +63,27 @@ public class RealDenseSparseVectorOperations {
 
         return innerProd;
     }
+
+
+    /**
+     * Computes the vector outer product between a real dense vector and a real sparse vector.
+     * @param src1 Entries of the dense vector.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries of sparse vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static double[] outerProduct(double[] src1, double[] src2, int[] indices, int sparseSize) {
+        double[] dest = new double[src1.length*sparseSize];
+        int index;
+
+        for(int i=0; i<src1.length; i++) {
+            for(int j=0; j<src2.length; j++) {
+                index = indices[j];
+
+                dest[i*src2.length + index] = src1[i]*src2[j];
+            }
+        }
+
+        return dest;
+    }
 }

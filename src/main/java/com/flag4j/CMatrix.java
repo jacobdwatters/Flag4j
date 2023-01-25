@@ -67,10 +67,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     public CMatrix(int size) {
         super(new Shape(size, size), new CNumber[size*size]);
-
-        for(int i=0; i<entries.length; i++) {
-            super.entries[i] = new CNumber();
-        }
+        ArrayUtils.fillZeros(super.entries);
     }
 
 
@@ -112,10 +109,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     public CMatrix(int rows, int cols) {
         super(new Shape(rows, cols), new CNumber[rows*cols]);
-
-        for(int i=0; i<entries.length; i++) {
-            super.entries[i] = new CNumber();
-        }
+        ArrayUtils.fillZeros(super.entries);
     }
 
 
@@ -157,10 +151,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     public CMatrix(Shape shape) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
-
-        for(int i=0; i<entries.length; i++) {
-            super.entries[i] = new CNumber();
-        }
+        ArrayUtils.fillZeros(super.entries);
     }
 
 

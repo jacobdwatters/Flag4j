@@ -72,7 +72,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * the vector b.<br>
      * - If the vectors are not both row vectors or both column vectors.
      */
-    VV stack(SparseVector b);
+    TT stack(SparseVector b);
 
 
     /**
@@ -213,4 +213,6 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * @return A matrix equivalent to this vector.
      */
     Matrix toMatrix(boolean columVector);
+
+    Tensor toTensor();
 }

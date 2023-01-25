@@ -512,78 +512,98 @@ public class Vector extends VectorBase<double[]> implements
     // TODO: Stack methods should no longer take orientation into account
     //  stack(...) methods should stack on top, and join(...) methods should augment.
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(Matrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Stacks two vectors along columns.
      *
      * @param b Vector to stack to the bottom of this vector.
      * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
-     * @throws IllegalArgumentException <br>
-     *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector b.<br>
-     *                                  - If the vectors are not both row vectors or both column vectors.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of entries in
+     *                                  the vector b.
      */
     @Override
     public Matrix stack(Vector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+        Matrix stacked = new Matrix(2, this.size);
+
+        // Copy entries from each vector to the matrix.
+        System.arraycopy(this.entries, 0, stacked.entries, 0, this.size);
+        System.arraycopy(b.entries, 0, stacked.entries, this.size, b.size);
+
+        return stacked;
     }
 
 
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(SparseMatrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Stacks two vectors along columns.
      *
      * @param b Vector to stack to the bottom of this vector.
      * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
-     * @throws IllegalArgumentException <br>
-     *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector b.<br>
-     *                                  - If the vectors are not both row vectors or both column vectors.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of entries in
+     *                                  the vector b.
      */
     @Override
-    public SparseMatrix stack(SparseVector b) {
-        return null;
+    public Matrix stack(SparseVector b) {
+        ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+        Matrix stacked = new Matrix(2, this.size);
+
+        // Copy entries from dense vector to the matrix.
+        System.arraycopy(this.entries, 0, stacked.entries, 0, this.size);
+
+        // Copy entries from sparse vector to the matrix.
+        int index;
+        for(int i=0; i<b.entries.length; i++) {
+            index = b.indices[i];
+            stacked.entries[stacked.numCols + index] = b.entries[i];
+        }
+
+        return stacked;
     }
 
 
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(CMatrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Stacks two vectors along columns.
      *
      * @param b Vector to stack to the bottom of this vector.
      * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
-     * @throws IllegalArgumentException <br>
-     *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector b.<br>
-     *                                  - If the vectors are not both row vectors or both column vectors.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of entries in
+     *                                  the vector b.
      */
     @Override
     public CMatrix stack(CVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+        CNumber[] entries = new CNumber[this.size+b.size];
+
+        // Copy entries from each vector to the matrix.
+        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);
+        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);
+
+        return new CMatrix(2, this.size, entries);
     }
 
 
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(SparseCMatrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Stacks two vectors along columns.
      *
      * @param b Vector to stack to the bottom of this vector.
      * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
-     * @throws IllegalArgumentException <br>
-     *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector b.<br>
-     *                                  - If the vectors are not both row vectors or both column vectors.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of entries in
+     *                                  the vector b.
      */
     @Override
     public CMatrix stack(SparseCVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+        CMatrix stacked = new CMatrix(2, this.size);
+
+        // Copy entries from dense vector to the matrix.
+        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);
+
+        // Copy entries from sparse vector to the matrix.
+        int index;
+        for(int i=0; i<b.entries.length; i++) {
+            index = b.indices[i];
+            stacked.entries[stacked.numCols + index] = b.entries[i];
+        }
+
+        return stacked;
     }
 
 
@@ -688,7 +708,8 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Matrix outerProduct(Vector b) {
-        return null;
+        return new Matrix(this.size, b.size,
+                RealDenseVectorOperations.outerProduct(this.entries, b.entries));
     }
 
 
@@ -701,7 +722,8 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Matrix outerProduct(SparseVector b) {
-        return null;
+        return new Matrix(this.size, b.size,
+                RealDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));
     }
 
 
@@ -714,7 +736,8 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public CMatrix outerProduct(CVector b) {
-        return null;
+        return new CMatrix(this.size, b.size,
+                RealComplexDenseVectorOperations.outerProduct(this.entries, b.entries));
     }
 
 
@@ -727,7 +750,8 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public CMatrix outerProduct(SparseCVector b) {
-        return null;
+        return new CMatrix(this.size, b.size,
+                RealComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));
     }
 
 
@@ -740,7 +764,6 @@ public class Vector extends VectorBase<double[]> implements
     public Matrix toMatrix() {
         return new Matrix(this.entries.length, 1, this.entries.clone());
     }
-
 
 
     /**
@@ -759,6 +782,16 @@ public class Vector extends VectorBase<double[]> implements
             // Convert to row vector.
             return new Matrix(1, this.entries.length, this.entries.clone());
         }
+    }
+
+
+    /**
+     * Creates a rank 1 tensor which is equivalent to this vector.
+     * @return A rank 1 tensor equivalent to this vector.
+     */
+    @Override
+    public Tensor toTensor() {
+        return new Tensor(this.shape.copy(), this.entries.clone());
     }
 
 

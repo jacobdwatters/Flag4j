@@ -24,6 +24,7 @@
 
 package com.flag4j.operations.dense.real;
 
+import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -54,5 +55,26 @@ public class RealDenseVectorOperations {
         }
 
         return innerProd;
+    }
+
+
+    /**
+     * Computes the vector outer product between two real dense vectors.
+     * @param src1 Entries of first vector.
+     * @param src2 Entries of second vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static double[] outerProduct(double[] src1, double[] src2) {
+        int destIndex;
+        double[] dest = new double[src1.length*src2.length];
+
+        for(int i=0; i<src1.length; i++) {
+            destIndex = i*src2.length;
+            for(int j=0; j<src2.length; j++) {
+                dest[destIndex++] = src1[i]*src2[j];
+            }
+        }
+
+        return dest;
     }
 }

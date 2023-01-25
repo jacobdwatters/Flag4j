@@ -25,6 +25,7 @@
 package com.flag4j.operations.dense_sparse.real_complex;
 
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -85,5 +86,54 @@ public class RealComplexDenseSparseVectorOperations {
         }
 
         return innerProd;
+    }
+
+
+
+    /**
+     * Computes the vector outer product between a real dense vector and a complex sparse vector.
+     * @param src1 Entries of the dense vector.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries of sparse vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static CNumber[] outerProduct(double[] src1, CNumber[] src2, int[] indices, int sparseSize) {
+        CNumber[] dest = new CNumber[src1.length*sparseSize];
+        ArrayUtils.fillZeros(dest);
+        int index;
+
+        for(int i=0; i<src1.length; i++) {
+            for(int j=0; j<src2.length; j++) {
+                index = indices[j];
+
+                dest[i*src2.length + index] = src2[j].mult(src1[i]);
+            }
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Computes the vector outer product between a complex dense vector and a real sparse vector.
+     * @param src1 Entries of the dense vector.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries of sparse vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static CNumber[] outerProduct(CNumber[] src1, double[] src2, int[] indices, int sparseSize) {
+        CNumber[] dest = new CNumber[src1.length*sparseSize];
+        ArrayUtils.fillZeros(dest);
+        int index;
+
+        for(int i=0; i<src1.length; i++) {
+            for(int j=0; j<src2.length; j++) {
+                index = indices[j];
+
+                dest[i*src2.length + index] = src1[j].mult(src2[i]);
+            }
+        }
+
+        return dest;
     }
 }
