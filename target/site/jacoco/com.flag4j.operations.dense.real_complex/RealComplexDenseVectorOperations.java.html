@@ -76,5 +76,48 @@ public class RealComplexDenseVectorOperations {
 
 <span class="nc" id="L77">        return innerProd;</span>
     }
+
+
+
+    /**
+     * Computes the vector outer product between two real dense vectors.
+     * @param src1 Entries of first vector.
+     * @param src2 Entries of second vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static CNumber[] outerProduct(double[] src1, CNumber[] src2) {
+        int destIndex;
+<span class="nc" id="L90">        CNumber[] dest = new CNumber[src1.length*src2.length];</span>
+
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="nc" id="L93">            destIndex = i*src2.length;</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="nc" id="L95">                dest[destIndex++] = src2[j].mult(src1[i]);</span>
+            }
+        }
+
+<span class="nc" id="L99">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the vector outer product between two real dense vectors.
+     * @param src1 Entries of first vector.
+     * @param src2 Entries of second vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static CNumber[] outerProduct(CNumber[] src1, double[] src2) {
+        int destIndex;
+<span class="nc" id="L111">        CNumber[] dest = new CNumber[src1.length*src2.length];</span>
+
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="nc" id="L114">            destIndex = i*src2.length;</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="nc" id="L116">                dest[destIndex++] = src1[j].mult(src2[i]);</span>
+            }
+        }
+
+<span class="nc" id="L120">        return dest;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -24,6 +24,7 @@
 
 package com.flag4j.operations.dense.real;
 
+import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -33,9 +34,9 @@ import com.flag4j.util.ParameterChecks;
  */
 public class RealDenseVectorOperations {
 
-<span class="nc" id="L36">    private RealDenseVectorOperations() {</span>
+<span class="nc" id="L37">    private RealDenseVectorOperations() {</span>
         // Hide default constructor for utility class.
-<span class="nc" id="L38">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L39">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -46,14 +47,35 @@ public class RealDenseVectorOperations {
      * @return The inner product of the two vectors.
      */
     public static double innerProduct(double[] src1, double[] src2) {
-<span class="nc" id="L49">        ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);</span>
-<span class="nc" id="L50">        double innerProd=0;</span>
+<span class="nc" id="L50">        ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);</span>
+<span class="nc" id="L51">        double innerProd=0;</span>
 
-<span class="nc bnc" id="L52" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="nc" id="L53">            innerProd += src1[i]*src2[i];</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="nc" id="L54">            innerProd += src1[i]*src2[i];</span>
         }
 
-<span class="nc" id="L56">        return innerProd;</span>
+<span class="nc" id="L57">        return innerProd;</span>
+    }
+
+
+    /**
+     * Computes the vector outer product between two real dense vectors.
+     * @param src1 Entries of first vector.
+     * @param src2 Entries of second vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static double[] outerProduct(double[] src1, double[] src2) {
+        int destIndex;
+<span class="nc" id="L69">        double[] dest = new double[src1.length*src2.length];</span>
+
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="nc" id="L72">            destIndex = i*src2.length;</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="nc" id="L74">                dest[destIndex++] = src1[i]*src2[j];</span>
+            }
+        }
+
+<span class="nc" id="L78">        return dest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

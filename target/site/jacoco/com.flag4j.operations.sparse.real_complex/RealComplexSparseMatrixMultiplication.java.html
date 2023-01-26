@@ -26,7 +26,7 @@ package com.flag4j.operations.sparse.real_complex;
 
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.operations.concurrency.ThreadManager;
+import com.flag4j.concurrency.ThreadManager;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 
