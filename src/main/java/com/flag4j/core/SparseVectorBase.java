@@ -53,7 +53,6 @@ public abstract class SparseVectorBase<T extends Serializable> extends VectorBas
      * Creates a sparse vector with specified number of entries.
      * @param totalEntries Number of total entries in this sparse vector, including zeros.
      * @param nonZeroEntries Number of non-zero entries in this sparse vector.
-     * @param orientation Orientation of this sparse vector.
      * @param entries Non-zero entries of this sparse vector.
      * @param indices Indices of the non-zero entries of this tensor.
      * @throws IllegalArgumentException If the lengths of the entries and incicies arrays are not equal.

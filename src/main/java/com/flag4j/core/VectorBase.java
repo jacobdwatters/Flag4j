@@ -44,7 +44,6 @@ public abstract class VectorBase<T extends Serializable> extends TensorBase<T> {
      * Constructs a basic vector with the specified number of entries.
      *
      * @param size        Number of entries in this vector.
-     * @param orientation Orientation of this vector.
      * @param entries     The non-zero entries of this sparse tensor.
      */
     public VectorBase(int size, T entries) {
