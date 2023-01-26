@@ -509,8 +509,82 @@ public class Vector extends VectorBase<double[]> implements
     }
 
 
-    // TODO: Stack methods should no longer take orientation into account
-    //  stack(...) methods should stack on top, and join(...) methods should augment.
+    /**
+     * Joints specified vector with this vector.
+     *
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    @Override
+    public Vector join(Vector b) {
+        Vector joined = new Vector(this.size+b.size);
+        System.arraycopy(this.entries, 0, joined.entries, 0, this.size);
+        System.arraycopy(b.entries, 0, joined.entries, this.size, b.size);
+
+        return joined;
+    }
+
+
+    /**
+     * Joints specified vector with this vector.
+     *
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    @Override
+    public CVector join(CVector b) {
+        CNumber[] entries = new CNumber[this.size+b.size];
+        System.arraycopy(this.entries, 0, entries, 0, this.size);
+        System.arraycopy(b.entries, 0, entries, this.size, b.size);
+
+        return new CVector(entries);
+    }
+
+
+    /**
+     * Joints specified vector with this vector.
+     *
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    @Override
+    public Vector join(SparseVector b) {
+        Vector joined = new Vector(this.size+b.size);
+        System.arraycopy(this.entries, 0, joined.entries, 0, this.size);
+
+        // Copy entries from sparse vector.
+        int index;
+        for(int i=0; i<b.entries.length; i++) {
+            index = b.indices[i];
+            joined.entries[this.size+index] = b.entries[i];
+        }
+
+        return joined;
+    }
+
+
+    /**
+     * Joints specified vector with this vector.
+     *
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    @Override
+    public CVector join(SparseCVector b) {
+        CVector joined = new CVector(this.size+b.size);
+        ArrayUtils.arraycopy(this.entries, 0, joined.entries, 0, this.size);
+
+        // Copy entries from sparse vector.
+        int index;
+        for(int i=0; i<b.entries.length; i++) {
+            index = b.indices[i];
+            joined.entries[this.size+index] = b.entries[i].copy();
+        }
+
+        return joined;
+    }
+
+
     /**
      * Stacks two vectors along columns.
      *
@@ -600,7 +674,7 @@ public class Vector extends VectorBase<double[]> implements
         int index;
         for(int i=0; i<b.entries.length; i++) {
             index = b.indices[i];
-            stacked.entries[stacked.numCols + index] = b.entries[i];
+            stacked.entries[stacked.numCols + index] = b.entries[i].copy();
         }
 
         return stacked;
@@ -785,11 +859,7 @@ public class Vector extends VectorBase<double[]> implements
     }
 
 
-    /**
-     * Creates a rank 1 tensor which is equivalent to this vector.
-     * @return A rank 1 tensor equivalent to this vector.
-     */
-    @Override
+
     public Tensor toTensor() {
         return new Tensor(this.shape.copy(), this.entries.clone());
     }

@@ -43,6 +43,39 @@ import com.flag4j.complex_numbers.CNumber;
 public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW>
         extends TensorOperationsMixin<T, U, V, W, Y, X> {
 
+
+    /**
+     * Joints specified vector with this vector.
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    T join(Vector b);
+
+
+    /**
+     * Joints specified vector with this vector.
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    CVector join(CVector b);
+
+
+    /**
+     * Joints specified vector with this vector.
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    T join(SparseVector b);
+
+
+    /**
+     * Joints specified vector with this vector.
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    W join(SparseCVector b);
+
+
     /**
      * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(Matrix) stack} method for
      * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
@@ -212,7 +245,5 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      *                    <p>If false, The vector will be converted to a matrix representing a row vector.</p>
      * @return A matrix equivalent to this vector.
      */
-    Matrix toMatrix(boolean columVector);
-
-    Tensor toTensor();
+    TT toMatrix(boolean columVector);
 }

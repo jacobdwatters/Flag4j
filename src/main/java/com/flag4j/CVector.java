@@ -26,14 +26,18 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
-import com.flag4j.operations.MatrixTranspose;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.common.real.Aggregate;
+import com.flag4j.operations.dense.complex.AggregateDenseComplex;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
 import com.flag4j.operations.dense.complex.ComplexDenseProperties;
-import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import com.flag4j.operations.dense.complex.ComplexDenseVectorOperations;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseVectorOperations;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
 import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.Axis2D;
+import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
 /**
@@ -370,7 +374,8 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CNumber get(int... indices) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(1, indices.length);
+        return this.entries[indices[0]];
     }
 
 
@@ -381,7 +386,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CNumber min() {
-        return null;
+        return AggregateComplex.minAbs(this.entries);
     }
 
 
@@ -392,7 +397,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CNumber max() {
-        return null;
+        return AggregateComplex.maxAbs(this.entries);
     }
 
 
@@ -404,7 +409,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CNumber minAbs() {
-        return null;
+        return min();
     }
 
 
@@ -416,7 +421,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CNumber maxAbs() {
-        return null;
+        return max();
     }
 
 
@@ -428,7 +433,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public int[] argMin() {
-        return new int[0];
+        return new int[]{AggregateDenseComplex.argMin(this.entries)};
     }
 
 
@@ -440,7 +445,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public int[] argMax() {
-        return new int[0];
+        return new int[]{AggregateDenseComplex.argMax(this.entries)};
     }
 
 
@@ -451,7 +456,15 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public double norm() {
-        return 0;
+        double norm = 0;
+        double mag;
+
+        for(int i=0; i<this.size; i++) {
+            mag = this.entries[i].magAsDouble();
+            norm += mag*mag;
+        }
+
+        return Math.sqrt(norm);
     }
 
 
@@ -465,7 +478,17 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public double norm(double p) {
-        return 0;
+        if(Double.isInfinite(p)) {
+            return infNorm();
+        } else {
+            double norm = 0;
+
+            for(int i=0; i<this.size; i++) {
+                norm += Math.pow(this.entries[i].magAsDouble(), p);
+            }
+
+            return Math.pow(norm, 1.0/p);
+        }
     }
 
 
@@ -476,7 +499,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public double infNorm() {
-        return 0;
+        return maxAbs().re;
     }
 
 
@@ -488,7 +511,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public boolean sameShape(Vector b) {
-        return false;
+        return this.size==b.size;
     }
 
 
@@ -500,7 +523,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public boolean sameShape(SparseVector b) {
-        return false;
+        return this.size==b.size;
     }
 
 
@@ -512,7 +535,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public boolean sameShape(CVector b) {
-        return false;
+        return this.size==b.size;
     }
 
 
@@ -524,7 +547,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public boolean sameShape(SparseCVector b) {
-        return false;
+        return this.size==b.size;
     }
 
 
@@ -536,7 +559,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public boolean sameSize(Vector b) {
-        return false;
+        return this.size==b.size;
     }
 
 
@@ -548,7 +571,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public boolean sameSize(SparseVector b) {
-        return false;
+        return this.size==b.size;
     }
 
 
@@ -560,7 +583,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public boolean sameSize(CVector b) {
-        return false;
+        return this.size==b.size;
     }
 
 
@@ -572,7 +595,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public boolean sameSize(SparseCVector b) {
-        return false;
+        return this.size==b.size;
     }
 
 
@@ -585,7 +608,103 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CMatrix extend(int n, int axis) {
-        return null;
+        CMatrix extended;
+
+        if(axis==0) {
+            extended = new CMatrix(n, this.size);
+            for(int i=0; i<n; i++) {
+                ArrayUtils.arraycopy(this.entries, 0, extended.entries, i*extended.numCols, this.size);
+            }
+
+        } else if(axis==1) {
+            extended = new CMatrix(this.size, n);
+            CNumber[] row = new CNumber[n];
+
+            for(int i=0; i<this.size; i++) {
+                ArrayUtils.fill(row, this.entries[i]);
+                System.arraycopy(row, 0, extended.entries, i*extended.numCols, row.length);
+            }
+        } else {
+            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, Axis2D.allAxes()));
+        }
+
+        return extended;
+    }
+
+
+    /**
+     * Joints specified vector with this vector.
+     *
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    @Override
+    public CVector join(Vector b) {
+        CNumber[] entries = new CNumber[this.size+b.size];
+        System.arraycopy(this.entries, 0, entries, 0, this.size);
+        System.arraycopy(b.entries, 0, entries, this.size, b.size);
+
+        return new CVector(entries);
+    }
+
+
+    /**
+     * Joints specified vector with this vector.
+     *
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    @Override
+    public CVector join(CVector b) {
+        CNumber[] entries = new CNumber[this.size+b.size];
+        System.arraycopy(this.entries, 0, entries, 0, this.size);
+        System.arraycopy(b.entries, 0, entries, this.size, b.size);
+
+        return new CVector(entries);
+    }
+
+
+    /**
+     * Joints specified vector with this vector.
+     *
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    @Override
+    public CVector join(SparseVector b) {
+        CVector joined = new CVector(this.size+b.size);
+        ArrayUtils.arraycopy(this.entries, 0, joined.entries, 0, this.size);
+
+        // Copy entries from sparse vector.
+        int index;
+        for(int i=0; i<b.entries.length; i++) {
+            index = b.indices[i];
+            joined.entries[this.size+index] = new CNumber(b.entries[i]);
+        }
+
+        return joined;
+    }
+
+
+    /**
+     * Joints specified vector with this vector.
+     *
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    @Override
+    public CVector join(SparseCVector b) {
+        CVector joined = new CVector(this.size+b.size);
+        ArrayUtils.arraycopy(this.entries, 0, joined.entries, 0, this.size);
+
+        // Copy entries from sparse vector.
+        int index;
+        for(int i=0; i<b.entries.length; i++) {
+            index = b.indices[i];
+            joined.entries[this.size+index] = b.entries[i].copy();
+        }
+
+        return joined;
     }
 
 
@@ -604,7 +723,14 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CMatrix stack(Vector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+        CMatrix stacked = new CMatrix(2, this.size);
+
+        // Copy entries from each vector to the matrix.
+        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);
+        ArrayUtils.arraycopy(b.entries, 0, stacked.entries, this.size, b.size);
+
+        return stacked;
     }
 
 
@@ -623,7 +749,20 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CMatrix stack(SparseVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+        CMatrix stacked = new CMatrix(2, this.size);
+
+        // Copy entries from dense vector to the matrix.
+        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);
+
+        // Copy entries from sparse vector to the matrix.
+        int index;
+        for(int i=0; i<b.entries.length; i++) {
+            index = b.indices[i];
+            stacked.entries[stacked.numCols + index] = new CNumber(b.entries[i]);
+        }
+
+        return stacked;
     }
 
 
@@ -642,7 +781,14 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CMatrix stack(CVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+        CNumber[] entries = new CNumber[this.size+b.size];
+
+        // Copy entries from each vector to the matrix.
+        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);
+        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);
+
+        return new CMatrix(2, this.size, entries);
     }
 
 
@@ -661,7 +807,20 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CMatrix stack(SparseCVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+        CMatrix stacked = new CMatrix(2, this.size);
+
+        // Copy entries from dense vector to the matrix.
+        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);
+
+        // Copy entries from sparse vector to the matrix.
+        int index;
+        for(int i=0; i<b.entries.length; i++) {
+            index = b.indices[i];
+            stacked.entries[stacked.numCols + index] = b.entries[i].copy();
+        }
+
+        return stacked;
     }
 
 
@@ -674,7 +833,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CNumber innerProduct(Vector b) {
-        return null;
+        return RealComplexDenseVectorOperations.innerProduct(this.entries, b.entries);
     }
 
 
@@ -687,7 +846,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CNumber innerProduct(SparseVector b) {
-        return null;
+        return RealComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);
     }
 
 
@@ -700,7 +859,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CNumber innerProduct(CVector b) {
-        return null;
+        return ComplexDenseVectorOperations.innerProduct(this.entries, b.entries);
     }
 
 
@@ -713,7 +872,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CNumber innerProduct(SparseCVector b) {
-        return null;
+        return ComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);
     }
 
 
@@ -726,7 +885,14 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CVector cross(Vector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(3, b.size);
+        CNumber[] entries = new CNumber[3];
+
+        entries[0] = this.entries[1].mult(b.entries[2]).sub(this.entries[2].mult(b.entries[1]));
+        entries[1] = this.entries[2].mult(b.entries[0]).sub(this.entries[0].mult(b.entries[2]));
+        entries[2] = this.entries[0].mult(b.entries[1]).sub(this.entries[1].mult(b.entries[0]));
+
+        return new CVector(entries);
     }
 
 
@@ -739,7 +905,14 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CVector cross(CVector b) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(3, b.size);
+        CNumber[] entries = new CNumber[3];
+
+        entries[0] = this.entries[1].mult(b.entries[2]).sub(this.entries[2].mult(b.entries[1]));
+        entries[1] = this.entries[2].mult(b.entries[0]).sub(this.entries[0].mult(b.entries[2]));
+        entries[2] = this.entries[0].mult(b.entries[1]).sub(this.entries[1].mult(b.entries[0]));
+
+        return new CVector(entries);
     }
 
 
@@ -752,7 +925,8 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CMatrix outerProduct(Vector b) {
-        return null;
+        return new CMatrix(this.size, b.size,
+                RealComplexDenseVectorOperations.outerProduct(this.entries, b.entries));
     }
 
 
@@ -765,7 +939,8 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CMatrix outerProduct(SparseVector b) {
-        return null;
+        return new CMatrix(this.size, b.size,
+                RealComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));
     }
 
 
@@ -778,7 +953,8 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CMatrix outerProduct(CVector b) {
-        return null;
+        return new CMatrix(this.size, b.size,
+                ComplexDenseVectorOperations.outerProduct(this.entries, b.entries));
     }
 
 
@@ -791,7 +967,8 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CMatrix outerProduct(SparseCVector b) {
-        return null;
+        return new CMatrix(this.size, b.size,
+                ComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));
     }
 
 
@@ -804,7 +981,9 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CMatrix toMatrix() {
-        return null;
+        CNumber[] entries = new CNumber[this.size];
+        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);
+        return new CMatrix(this.entries.length, 1, entries);
     }
 
 
@@ -817,13 +996,27 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @return A matrix equivalent to this vector.
      */
     @Override
-    public Matrix toMatrix(boolean columVector) {
-        return null;
+    public CMatrix toMatrix(boolean columVector) {
+        if(columVector) {
+            return toMatrix();
+        } else {
+            // Convert to row vector.
+            CNumber[] entries = new CNumber[this.size];
+            ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);
+            return new CMatrix(1, this.entries.length, entries);
+        }
     }
 
-    @Override
-    public Tensor toTensor() {
-        return null;
+
+    /**
+     * Creates a rank 1 tensor which is equivalent to this vector.
+     * @return A rank 1 tensor equivalent to this vector.
+     */
+    public CTensor toTensor() {
+        CNumber[] entries = new CNumber[this.size];
+        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);
+
+        return new CTensor(this.shape.copy(), this.entries);
     }
 
 
@@ -834,6 +1027,6 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public int length() {
-        return 0;
+        return this.size;
     }
 }
