@@ -49,10 +49,10 @@ public abstract class QRDecomposition<T extends MatrixBase> implements Decomposi
     protected boolean fullQR;
 
     /**
-     * Constructs {@code QR} decomposer which computes the reduced {@code QR} decomposition.
+     * Constructs {@code QR} decomposer which computes the full {@code QR} decomposition.
      */
     public QRDecomposition() {
-        fullQR = false;
+        fullQR = true;
     }
 
     /**

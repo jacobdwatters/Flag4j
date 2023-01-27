@@ -602,8 +602,9 @@ public class CVector extends VectorBase<CNumber[]> implements
     /**
      * Extends a vector a specified number of times to a matrix.
      *
-     * @param n    The number of times to extend this vector.
-     * @param axis
+     * @param n The number of times to extend this vector.
+     * @param axis Axis along which to extend vector. If axis=0 this vector is treated as a row vector and extended along rows.
+     *             If axis=1 this vector is treated as a column vector and extended along the columns.
      * @return A matrix which is the result of extending a vector {@code n} times.
      */
     @Override

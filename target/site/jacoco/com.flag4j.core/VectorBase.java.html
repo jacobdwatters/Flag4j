@@ -44,13 +44,12 @@ public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBas
      * Constructs a basic vector with the specified number of entries.
      *
      * @param size        Number of entries in this vector.
-     * @param orientation Orientation of this vector.
      * @param entries     The non-zero entries of this sparse tensor.
      */
     public VectorBase(int size, T entries) {
-<span class="fc" id="L51">        super(new Shape(size), entries);</span>
-<span class="fc" id="L52">        this.size = size;</span>
-<span class="fc" id="L53">    }</span>
+<span class="fc" id="L50">        super(new Shape(size), entries);</span>
+<span class="fc" id="L51">        this.size = size;</span>
+<span class="fc" id="L52">    }</span>
 
 
     /**
@@ -59,7 +58,7 @@ public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBas
      * @return The size, i.e. number of entries, of this vector.
      */
     public int size() {
-<span class="fc" id="L62">        return size;</span>
+<span class="fc" id="L61">        return size;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

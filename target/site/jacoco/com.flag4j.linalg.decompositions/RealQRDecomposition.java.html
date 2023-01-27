@@ -26,11 +26,32 @@ package com.flag4j.linalg.decompositions;
 
 
 import com.flag4j.Matrix;
+import com.flag4j.Vector;
+
 
 /**
  * Computes the QR decomposition for a real matrix.
  */
-<span class="nc" id="L33">public class RealQRDecomposition extends QRDecomposition&lt;Matrix&gt; {</span>
+public final class RealQRDecomposition extends QRDecomposition&lt;Matrix&gt; {
+
+
+    /**
+     * Constructs a {@code QR} decomposer which computes the full {@code QR} decomposition.
+     */
+    public RealQRDecomposition() {
+<span class="nc" id="L42">        super();</span>
+<span class="nc" id="L43">    }</span>
+
+
+    /**
+     * Constructs a {@code QR} decomposer which computes either the full or reduced {@code QR} decomposition.
+     * @param fullQR Flag for determining if the full {@code QR} decomposition should be used.
+     *               If true, the full {@code QR} decomposition will be computed, if false,
+     *               the reduced {@code QR} decomposition will be computed.
+     */
+    public RealQRDecomposition(boolean fullQR) {
+<span class="nc" id="L53">        super(fullQR);</span>
+<span class="nc" id="L54">    }</span>
 
 
     /**
@@ -40,43 +61,53 @@ import com.flag4j.Matrix;
      */
     @Override
     public void decompose(Matrix src) {
-<span class="nc bnc" id="L43" title="All 2 branches missed.">        if(fullQR) {</span>
-<span class="nc" id="L44">            this.full(src.copy());</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if(fullQR) {</span>
+<span class="nc" id="L65">            this.full(src);</span>
         } else {
-<span class="nc" id="L46">            this.reduced(src.copy());</span>
+<span class="nc" id="L67">            this.reduced(src);</span>
         }
-<span class="nc" id="L48">    }</span>
+<span class="nc" id="L69">    }</span>
 
 
     /**
      * Computes the reduced QR decomposition on the src matrix.
-     * @param A The source matrix to decompose. Modified.
+     * @param A The source matrix to decompose.
      */
     private void reduced(Matrix A) {
-<span class="nc" id="L56">        int m = A.numRows, n = A.numCols;</span>
-<span class="nc" id="L57">        int stop = Math.min(n, m-1);</span>
-        Matrix H, x;
+<span class="nc" id="L77">        full(A); // First compute the full decomposition</span>
 
-        // Initialize Q to the identity matrix.
-<span class="nc" id="L61">        Q = Matrix.I(A.numRows);</span>
+<span class="nc" id="L79">        int k = Math.min(A.numRows, A.numCols);</span>
 
-<span class="nc bnc" id="L63" title="All 2 branches missed.">        for(int i=0; i&lt;stop; i++) {</span>
-<span class="nc" id="L64">            H = Matrix.I(m);</span>
-<span class="nc" id="L65">            H.setSlice(getHouseHolder(A.getCol(i)), i, i);</span>
-<span class="nc" id="L66">            Q = Q.mult(H); // Update Q</span>
-<span class="nc" id="L67">            A = A.mult(Q);</span>
-        }
-
-<span class="nc" id="L70">    }</span>
+<span class="nc" id="L81">        Q = Q.getSlice(0, A.numRows, 0, k);</span>
+<span class="nc" id="L82">        R = R.getSlice(0, k, 0, A.numCols);</span>
+<span class="nc" id="L83">    }</span>
 
 
     /**
      * Computes the full QR decomposition on the src matrix.
-     * @param A The source matrix to decompose. Modified.
+     * @param A The source matrix to decompose.
      */
     private void full(Matrix A) {
-        // TODO:
-<span class="nc" id="L79">    }</span>
+<span class="nc" id="L91">        R = new Matrix(A); // Initialize R to the values in A.</span>
+<span class="nc" id="L92">        int m = R.numRows, n = R.numCols;</span>
+<span class="nc" id="L93">        int stop = Math.min(n, m-1);</span>
+
+        Matrix H, col;
+
+        // Initialize Q to the identity matrix.
+<span class="nc" id="L98">        Q = Matrix.I(R.numRows);</span>
+
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        for(int i=0; i&lt;stop; i++) {</span>
+<span class="nc" id="L101">            H = Matrix.I(m);</span>
+<span class="nc" id="L102">            col = R.getColBelow(i, i);</span>
+
+<span class="nc bnc" id="L104" title="All 2 branches missed.">            if(!col.isZeros()) { // Then a householder transform must be applied</span>
+<span class="nc" id="L105">                H.setSlice(getHouseholder(col), i, i);</span>
+<span class="nc" id="L106">                Q = Q.mult(H); // Apply Householder reflector to Q</span>
+<span class="nc" id="L107">                R = H.mult(R); // Apply Householder reflector to R</span>
+            }
+        }
+<span class="nc" id="L110">    }</span>
 
 
     /**
@@ -84,10 +115,36 @@ import com.flag4j.Matrix;
      * @param col Column to compute Householder reflector for.
      * @return The Householder transformation matrix.
      */
-    private Matrix getHouseHolder(Matrix col) {
-<span class="nc" id="L88">        Matrix H = Matrix.I(col.numRows);</span>
-        // TODO: Compute rest of Householder reflector.
-<span class="nc" id="L90">        return H;</span>
+    private Matrix getHouseholder(Matrix col) {
+<span class="nc" id="L119">        Matrix H = Matrix.I(col.numRows);</span>
+<span class="nc" id="L120">        Vector v = col.toVector();</span>
+
+<span class="nc" id="L122">        double signedNorm = -Math.signum(v.entries[0])*v.norm();</span>
+<span class="nc" id="L123">        v = v.scalDiv(v.entries[0] + signedNorm);</span>
+<span class="nc" id="L124">        v.entries[0] = 1;</span>
+
+<span class="nc" id="L126">        Matrix P = v.outerProduct(v).scalMult(2/v.innerProduct(v)); // Create projection matrix</span>
+<span class="nc" id="L127">        H.subEq(P);</span>
+
+<span class="nc" id="L129">        return H;</span>
     }
+
+
+    // TODO: TEMPORARY. FOR DEVELOPMENT TESTING ONLY
+    public static void main(String[] args) {
+<span class="nc" id="L135">        double[][] aEntries =</span>
+                {{0, 1, 0, 0},
+                {0, 0, 1, 0},
+                {0, 0, 0, 1},
+                {1, 0, 0, 0}};
+<span class="nc" id="L140">        Matrix A = new Matrix(aEntries);</span>
+
+<span class="nc" id="L142">        RealQRDecomposition QR = new RealQRDecomposition();</span>
+<span class="nc" id="L143">        QR.decompose(A);</span>
+
+<span class="nc" id="L145">        System.out.println(&quot;A:\n&quot; + A + &quot;\n&quot;);</span>
+<span class="nc" id="L146">        System.out.println(&quot;Q:\n&quot; + QR.getQ() + &quot;\n&quot;);</span>
+<span class="nc" id="L147">        System.out.println(&quot;R:\n&quot; + QR.getR());</span>
+<span class="nc" id="L148">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

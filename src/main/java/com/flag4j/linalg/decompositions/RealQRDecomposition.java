@@ -26,11 +26,32 @@ package com.flag4j.linalg.decompositions;
 
 
 import com.flag4j.Matrix;
+import com.flag4j.Vector;
+
 
 /**
  * Computes the QR decomposition for a real matrix.
  */
-public class RealQRDecomposition extends QRDecomposition<Matrix> {
+public final class RealQRDecomposition extends QRDecomposition<Matrix> {
+
+
+    /**
+     * Constructs a {@code QR} decomposer which computes the full {@code QR} decomposition.
+     */
+    public RealQRDecomposition() {
+        super();
+    }
+
+
+    /**
+     * Constructs a {@code QR} decomposer which computes either the full or reduced {@code QR} decomposition.
+     * @param fullQR Flag for determining if the full {@code QR} decomposition should be used.
+     *               If true, the full {@code QR} decomposition will be computed, if false,
+     *               the reduced {@code QR} decomposition will be computed.
+     */
+    public RealQRDecomposition(boolean fullQR) {
+        super(fullQR);
+    }
 
 
     /**
@@ -41,41 +62,51 @@ public class RealQRDecomposition extends QRDecomposition<Matrix> {
     @Override
     public void decompose(Matrix src) {
         if(fullQR) {
-            this.full(src.copy());
+            this.full(src);
         } else {
-            this.reduced(src.copy());
+            this.reduced(src);
         }
     }
 
 
     /**
      * Computes the reduced QR decomposition on the src matrix.
-     * @param A The source matrix to decompose. Modified.
+     * @param A The source matrix to decompose.
      */
     private void reduced(Matrix A) {
-        int m = A.numRows, n = A.numCols;
-        int stop = Math.min(n, m-1);
-        Matrix H, x;
+        full(A); // First compute the full decomposition
 
-        // Initialize Q to the identity matrix.
-        Q = Matrix.I(A.numRows);
+        int k = Math.min(A.numRows, A.numCols);
 
-        for(int i=0; i<stop; i++) {
-            H = Matrix.I(m);
-            H.setSlice(getHouseHolder(A.getCol(i)), i, i);
-            Q = Q.mult(H); // Update Q
-            A = A.mult(Q);
-        }
-
+        Q = Q.getSlice(0, A.numRows, 0, k);
+        R = R.getSlice(0, k, 0, A.numCols);
     }
 
 
     /**
      * Computes the full QR decomposition on the src matrix.
-     * @param A The source matrix to decompose. Modified.
+     * @param A The source matrix to decompose.
      */
     private void full(Matrix A) {
-        // TODO:
+        R = new Matrix(A); // Initialize R to the values in A.
+        int m = R.numRows, n = R.numCols;
+        int stop = Math.min(n, m-1);
+
+        Matrix H, col;
+
+        // Initialize Q to the identity matrix.
+        Q = Matrix.I(R.numRows);
+
+        for(int i=0; i<stop; i++) {
+            H = Matrix.I(m);
+            col = R.getColBelow(i, i);
+
+            if(!col.isZeros()) { // Then a householder transform must be applied
+                H.setSlice(getHouseholder(col), i, i);
+                Q = Q.mult(H); // Apply Householder reflector to Q
+                R = H.mult(R); // Apply Householder reflector to R
+            }
+        }
     }
 
 
@@ -84,9 +115,17 @@ public class RealQRDecomposition extends QRDecomposition<Matrix> {
      * @param col Column to compute Householder reflector for.
      * @return The Householder transformation matrix.
      */
-    private Matrix getHouseHolder(Matrix col) {
+    private Matrix getHouseholder(Matrix col) {
         Matrix H = Matrix.I(col.numRows);
-        // TODO: Compute rest of Householder reflector.
+        Vector v = col.toVector();
+
+        double signedNorm = -Math.signum(v.entries[0])*v.norm();
+        v = v.scalDiv(v.entries[0] + signedNorm);
+        v.entries[0] = 1;
+
+        Matrix P = v.outerProduct(v).scalMult(2/v.innerProduct(v)); // Create projection matrix
+        H.subEq(P);
+
         return H;
     }
 }

@@ -595,6 +595,33 @@ public class Matrix extends RealMatrixBase implements
     }
 
 
+    // TODO: Add setSlice methods and pull up to matrix interface.
+
+
+    /**
+     * Gets a specified slice of this matrix.
+     *
+     * @param rowStart Starting row index of slice (inclusive).
+     * @param rowEnd Ending row index of slice (exclusive).
+     * @param colStart Starting column index of slice (inclusive).
+     * @param colEnd Ending row index of slice (exclusive).
+     * @return The specified slice of this matrix. This is a completely new matrix and <b>NOT</b> a view into the matrix.
+     * @throws ArrayIndexOutOfBoundsException If any of the indices are out of bounds of this matrix.
+     * @throws IllegalArgumentException If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
+     */
+    public Matrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
+        Matrix slice = new Matrix(rowEnd-rowStart, colEnd-colStart);
+
+        for(int i=0; i<slice.numRows; i++) {
+            for(int j=0; j<slice.numCols; j++) {
+                slice.entries[i*slice.numCols+j] = this.entries[(i+rowStart)*this.numCols+j+colStart];
+            }
+        }
+
+        return slice;
+    }
+
+
     /**
      * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
      * left index location of the slice to set within this matrix.
@@ -1065,6 +1092,9 @@ public class Matrix extends RealMatrixBase implements
         return RealComplexDenseSparseOperations.add(this, B);
     }
 
+    /* TODO: add the following methods for each matrix type:
+        addEq(...), subEq(...), multT(...), tMult(...).
+    */
 
     /**
      * Computes the element-wise subtraction of two tensors of the same rank.
@@ -1078,6 +1108,23 @@ public class Matrix extends RealMatrixBase implements
         return new Matrix(this.shape.copy(),
                 RealDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
         );
+    }
+
+
+    // TODO: Pull up to tensor operations interface.
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    public void subEq(Matrix B) {
+        // TODO: Refactor RealDenseOperations.sub so that the storage is also passed so it can be used in this method.
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+
+        for(int i=0; i<this.entries.length; i++) {
+            this.entries[i] -= B.entries[i];
+        }
     }
 
 
@@ -2815,7 +2862,7 @@ public class Matrix extends RealMatrixBase implements
      *
      * @param j Index of column to get.
      * @return The specified column of this matrix.
-     * @throws ArrayIndexOutOfBoundsException If {@code i} is less than zero or greater than/equal to
+     * @throws ArrayIndexOutOfBoundsException If {@code j} is less than zero or greater than/equal to
      * the number of columns in this matrix.
      */
     @Override
@@ -2830,12 +2877,34 @@ public class Matrix extends RealMatrixBase implements
     }
 
 
+    // TODO: Pull below methods up to matrix operations interface and add getRowBellow(int, int)
+
     /**
+     * Get a specified column of this matrix at and below a specified row.
+     *
+     * @param rowStart Index of the row to begin at.
+     * @param j Index of column to get.
+     * @return The specified column of this matrix beginning at the specified row.
+     * @throws NegativeArraySizeException If {@code i} is larger than the number of rows in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code j} is outside the bounds of this matrix.
+     */
+    public Matrix getColBelow(int rowStart, int j) {
+        double[] col = new double[numRows-rowStart];
+
+        for(int i=rowStart; i<numRows; i++) {
+            col[i-rowStart] = entries[i*numCols + j];
+        }
+
+        return new Matrix(new Shape(col.length, 1), col);
+    }
+
+
+        /**
      * Get the column of this matrix at the specified index.
      *
      * @param j Index of column to get.
      * @return The specified column of this matrix as a vector.
-     * @throws ArrayIndexOutOfBoundsException If {@code i} is less than zero or greater than/equal to
+     * @throws ArrayIndexOutOfBoundsException If {@code j} is less than zero or greater than/equal to
      * the number of rows in this matrix.
      */
     public Vector getColAsVector(int j) {
@@ -2847,6 +2916,7 @@ public class Matrix extends RealMatrixBase implements
 
         return new Vector(col);
     }
+
 
 
     /**
