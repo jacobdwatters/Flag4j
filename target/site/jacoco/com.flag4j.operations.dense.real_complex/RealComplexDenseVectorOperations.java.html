@@ -92,7 +92,7 @@ public class RealComplexDenseVectorOperations {
 <span class="nc bnc" id="L92" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
 <span class="nc" id="L93">            destIndex = i*src2.length;</span>
 <span class="nc bnc" id="L94" title="All 2 branches missed.">            for(int j=0; j&lt;src2.length; j++) {</span>
-<span class="nc" id="L95">                dest[destIndex++] = src2[j].mult(src1[i]);</span>
+<span class="nc" id="L95">                dest[destIndex++] = src2[j].conj().mult(src1[i]);</span>
             }
         }
 
