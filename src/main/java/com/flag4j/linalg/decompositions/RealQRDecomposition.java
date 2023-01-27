@@ -120,9 +120,6 @@ public final class RealQRDecomposition extends QRDecomposition<Matrix> {
         Vector v = col.toVector();
 
         double signedNorm = -Math.signum(v.entries[0])*v.norm();
-
-
-
         v = v.scalDiv(v.entries[0] + signedNorm);
         v.entries[0] = 1;
 
