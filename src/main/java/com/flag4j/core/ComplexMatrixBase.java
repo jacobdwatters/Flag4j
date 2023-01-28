@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ package com.flag4j.core;
 
 import com.flag4j.CMatrix;
 import com.flag4j.Shape;
+import com.flag4j.SparseCMatrix;
 import com.flag4j.complex_numbers.CNumber;
 
 /**
@@ -69,5 +70,25 @@ public abstract class ComplexMatrixBase extends MatrixBase<CNumber[]> {
      */
     public abstract CMatrix H();
 
+
+    /**
+     * Sets an index of this matrix to the specified value.
+     * @param value New value.
+     * @param indices Indices for new value.
+     */
     public abstract void set(CNumber value, int... indices);
+
+
+    /**
+     * Adds a complex sparse matrix to this matrix and stores the result in this matrix.
+     * @param B Complex sparse matrix to add to this matrix,
+     */
+    public abstract void addEq(SparseCMatrix B);
+
+
+    /**
+     * Subtracts a complex sparse matrix from this matrix and stores the result in this matrix.
+     * @param B Complex sparse matrix to subtract from this matrix,
+     */
+    public abstract void subEq(SparseCMatrix B);
 }

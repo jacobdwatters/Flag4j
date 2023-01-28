@@ -25,6 +25,9 @@
 package com.flag4j.operations.dense_sparse.complex;
 
 
+import com.flag4j.CVector;
+import com.flag4j.SparseCVector;
+import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
@@ -86,5 +89,66 @@ public class ComplexDenseSparseVectorOperations {
         }
 
         return dest;
+    }
+
+
+    /**
+     * Computes the element-wise addition between a dense complex vector and sparse complex vectors.
+     * @param src1 Dense vector.
+     * @param src2 Sparse vector.
+     * @return The result of the vector addition.
+     */
+    public static CVector add(CVector src1, SparseCVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CVector dest = new CVector(src1);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            dest.entries[src2.indices[i]].addEq(src2.entries[i]);
+        }
+
+        return dest;
+    }
+
+
+
+    /**
+     * Subtracts a complex sparse vector from a complex dense vector.
+     * @param src1 First vector.
+     * @param src2 Second vector.
+     * @return The result of the vector subtraction.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static CVector sub(CVector src1, SparseCVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        CVector dest = new CVector(src1.entries);
+        int index;
+
+        for(int i=0; i<src2.entries.length; i++) {
+            index = src2.indices[i];
+            dest.entries[index].subEq(src2.entries[i]);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Computes the element-wise multiplication of a complex dense vector with a complex sparse vector.
+     * @param src1 Dense vector.
+     * @param src2 Sparse vector.
+     * @return The result of the element-wise multiplication.
+     * @throws IllegalArgumentException If the two vectors are not the same size.
+     */
+    public static SparseCVector elemMult(CVector src1, SparseCVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        CNumber[] entries = new CNumber[src2.entries.length];
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            entries[i] = src1.entries[src2.indices[i]].mult(src2.entries[i]);
+        }
+
+        return new SparseCVector(src1.size, entries, src2.indices.clone());
     }
 }

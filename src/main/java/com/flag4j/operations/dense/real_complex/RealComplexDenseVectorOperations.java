@@ -119,4 +119,20 @@ public class RealComplexDenseVectorOperations {
 
         return dest;
     }
+
+    /**
+     * Adds a scalar value to all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The result of adding the scalar to each entry of the tensor.
+     */
+    public static CNumber[] add(double[] src1, CNumber a) {
+        CNumber[] sum = new CNumber[src1.length];
+
+        for(int i=0; i<sum.length; i++) {
+            sum[i] = a.add(src1[i]);
+        }
+
+        return sum;
+    }
 }

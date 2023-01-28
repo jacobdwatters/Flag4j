@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -86,6 +86,56 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @return The result of subtracting the specified value from each entry of this tensor.
      */
     W sub(CNumber a);
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    void addEq(T B);
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    void addEq(X b);
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    void addEq(Double b);
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    void subEq(T B);
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    void subEq(X b);
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    void subEq(Double b);
 
 
     /**
@@ -174,4 +224,10 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @throws IllegalArgumentException If the number of indices does not match the rank of this tensor.
      */
     X get(int... indices);
+
+    /**
+     * Creates a copy of this tensor.
+     * @return A copy of this tensor.
+     */
+    T copy();
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -138,6 +138,169 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * - If the vectors are not both row vectors or both column vectors.
      */
     WW stack(SparseCVector b);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    U add(Vector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    T add(SparseVector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    W add(CVector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    W add(SparseCVector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    U sub(Vector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    T sub(SparseVector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    W sub(CVector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    W sub(SparseCVector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    void addEq(SparseVector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    void addEq(Vector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    void subEq(Vector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    void subEq(SparseVector B);
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
+     * @param B Vector to element-wise multiply to this vector.
+     * @return The vector resulting from the element-wise multiplication.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    T elemMult(Vector B);
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
+     * @param B Vector to element-wise multiply to this vector.
+     * @return The vector resulting from the element-wise multiplication.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    V elemMult(SparseVector B);
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
+     * @param B Vector to element-wise multiply to this vector.
+     * @return The vector resulting from the element-wise multiplication.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    W elemMult(CVector B);
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
+     * @param B Vector to element-wise multiply to this vector.
+     * @return The vector resulting from the element-wise multiplication.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    SparseCVector elemMult(SparseCVector B);
+
+
+    /**
+     * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
+     * @param B Vector to element-wise divide this vector by.
+     * @return The vector resulting from the element-wise division.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    T elemDiv(Vector B);
+
+
+    /**
+     * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
+     * @param B Vector to element-wise divide this vector by.
+     * @return The vector resulting from the element-wise division.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    W elemDiv(CVector B);
+
 
     /**
      * Computes the inner product between two vectors.

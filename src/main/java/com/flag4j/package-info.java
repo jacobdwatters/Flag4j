@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,9 @@
  * SOFTWARE.
  */
 
-package com.flag4j.core;
 
 /**
- * This interface specifies methods which provide properties of a vector. All vectors should implement this interface.
- *
- * @param <T> Vector type.
- * @param <U> Dense Vector type.
- * @param <V> Sparse Vector type.
- * @param <W> Complex Vector type.
- * @param <Y> Real Vector type.
- * @param <X> Vector entry type.
+ * The base package of FLag4j which contains the main linear algebra objects. Specifically, real/complex sparse/dense
+ * vectors, matrices, and tensors.
  */
-public interface VectorPropertiesMixin<T, U, V, W, Y, X extends Number> extends TensorPropertiesMixin<T, U, V, W, Y, X> {
-
-    /**
-     * Gets the length of a vector.
-     * @return The length, i.e. the number of entries, in this vector.
-     */
-    int length();
-}
+package com.flag4j;

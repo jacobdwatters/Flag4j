@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@
 package com.flag4j.core;
 
 import com.flag4j.Shape;
+import com.flag4j.util.ParameterChecks;
 
 import java.io.Serializable;
 
@@ -49,6 +50,20 @@ public abstract class VectorBase<T extends Serializable> extends TensorBase<T> {
     public VectorBase(int size, T entries) {
         super(new Shape(size), entries);
         this.size = size;
+    }
+
+
+    /**
+     * Constructs a basic vector with the specified number of entries.
+     *
+     * @param shape        Number of entries in this vector.
+     * @param entries     The non-zero entries of this sparse tensor.
+     * @throws IllegalArgumentException If the rank of the shape is not 1.
+     */
+    public VectorBase(Shape shape, T entries) {
+        super(shape, entries);
+        ParameterChecks.assertRank(1, shape); // Ensure the shape is of rank 1.
+        this.size = shape.get(0);
     }
 
 

@@ -46,12 +46,12 @@ import java.util.Arrays;
 /**
  * Real dense vector. This class is mostly Equivalent
  */
-public class Vector extends VectorBase<double[]> implements 
+public class Vector extends VectorBase<double[]> implements
         VectorComparisonsMixin<Vector, Vector, SparseVector, CVector, Vector, Double>,
         VectorManipulationsMixin<Vector, Vector, SparseVector, CVector, Vector, Double,
-            Matrix, Matrix, SparseMatrix, CMatrix>,
+                    Matrix, Matrix, SparseMatrix, CMatrix>,
         VectorOperationsMixin<Vector, Vector, SparseVector, CVector, Vector, Double,
-            Matrix, Matrix, SparseMatrix, CMatrix>,
+                    Matrix, Matrix, SparseMatrix, CMatrix>,
         VectorPropertiesMixin<Vector, Vector, SparseVector, CVector, Vector, Double> {
     
 
@@ -71,6 +71,28 @@ public class Vector extends VectorBase<double[]> implements
      */
     public Vector(int size, double fillValue) {
         super(size, new double[size]);
+        Arrays.fill(super.entries, fillValue);
+    }
+
+
+    /**
+     * Creates a vector of the specified shape filled with zeros.
+     * @param shape Shape of this vector.
+     * @throws IllegalArgumentException If the shapes is not rank 1.
+     */
+    public Vector(Shape shape) {
+        super(shape, new double[shape.dims[0]]);
+    }
+
+
+    /**
+     * Creates a column vector of specified size filled with a specified value.
+     * @param shape Shape of the vector.
+     * @param fillValue Value to fill vector with.
+     * @throws IllegalArgumentException If the shapes is not rank 1.
+     */
+    public Vector(Shape shape, double fillValue) {
+        super(shape, new double[shape.dims[0]]);
         Arrays.fill(super.entries, fillValue);
     }
 
@@ -104,6 +126,7 @@ public class Vector extends VectorBase<double[]> implements
     public Vector(Vector a) {
         super(a.entries.length, a.entries.clone());
     }
+
 
 
     /**
@@ -315,6 +338,45 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     *
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public Vector add(SparseVector B) {
+        return RealDenseSparseVectorOperations.add(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     *
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public CVector add(CVector B) {
+        return new CVector(RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape));
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     *
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public CVector add(SparseCVector B) {
+        return RealComplexDenseSparseVectorOperations.add(this, B);
+    }
+
+
+    /**
      * Adds specified value to all entries of this tensor.
      *
      * @param a Value to add to all entries of this tensor.
@@ -322,7 +384,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Vector add(double a) {
-        return new Vector(RealDenseOperations.add(this.entries, a));
+        return new Vector(RealDenseVectorOperations.add(this.entries, a));
     }
 
 
@@ -334,7 +396,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public CVector add(CNumber a) {
-        return new CVector(RealComplexDenseOperations.add(this.entries, a));
+        return new CVector(RealComplexDenseVectorOperations.add(this.entries, a));
     }
 
 
@@ -348,6 +410,172 @@ public class Vector extends VectorBase<double[]> implements
     @Override
     public Vector sub(Vector B) {
         return new Vector(RealDenseOperations.sub(this.entries, this.shape, B.entries, B.shape));
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     *
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public Vector sub(SparseVector B) {
+        return RealDenseSparseVectorOperations.sub(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     *
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public CVector sub(CVector B) {
+        return new CVector(RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape));
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     *
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public CVector sub(SparseCVector B) {
+        return RealComplexDenseSparseVectorOperations.sub(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector. The result is stored in this
+     * vector.
+     *
+     * @param B Vector to add to this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public void addEq(SparseVector B) {
+        RealDenseSparseVectorOperations.addEq(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector. The result is stored in this
+     * vector.
+     * @param B Vector to add to this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public void addEq(Vector B) {
+        RealDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector. The result is stored in this
+     * vector.
+     * @param B Vector to add to this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public void subEq(Vector B) {
+        RealDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
+    }
+    
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector. The result is stored in this
+     * vector.
+     * @param B Vector to add to this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public void subEq(SparseVector B) {
+        RealDenseSparseVectorOperations.subEq(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
+     *
+     * @param B Vector to element-wise multiply to this vector.
+     * @return The vector resulting from the element-wise multiplication.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    @Override
+    public Vector elemMult(Vector B) {
+        return new Vector(RealDenseOperations.elemMult(this.entries, this.shape, B.entries, B.shape));
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
+     *
+     * @param B Vector to element-wise multiply to this vector.
+     * @return The vector resulting from the element-wise multiplication.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    @Override
+    public SparseVector elemMult(SparseVector B) {
+        return RealDenseSparseVectorOperations.elemMult(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
+     *
+     * @param B Vector to element-wise multiply to this vector.
+     * @return The vector resulting from the element-wise multiplication.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    @Override
+    public CVector elemMult(CVector B) {
+        return new CVector(RealComplexDenseOperations.elemMult(B.entries, B.shape, this.entries, this.shape));
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
+     *
+     * @param B Vector to element-wise multiply to this vector.
+     * @return The vector resulting from the element-wise multiplication.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    @Override
+    public SparseCVector elemMult(SparseCVector B) {
+        return RealComplexDenseSparseVectorOperations.elemMult(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
+     *
+     * @param B Vector to element-wise divide this vector by.
+     * @return The vector resulting from the element-wise division.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    @Override
+    public Vector elemDiv(Vector B) {
+        return new Vector(RealDenseOperations.elemDiv(this.entries, this.shape, B.entries, B.shape));
+    }
+
+
+    /**
+     * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
+     *
+     * @param B Vector to element-wise divide this vector by.
+     * @return The vector resulting from the element-wise division.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    @Override
+    public CVector elemDiv(CVector B) {
+        return new CVector(RealComplexDenseOperations.elemDiv(this.entries, this.shape, B.entries, B.shape));
     }
 
 
@@ -372,6 +600,28 @@ public class Vector extends VectorBase<double[]> implements
     @Override
     public CVector sub(CNumber a) {
         return new CVector(RealComplexDenseOperations.sub(this.entries, a));
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void addEq(Double b) {
+        RealDenseOperations.addEq(this.entries, b);
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void subEq(Double b) {
+        RealDenseOperations.subEq(this.entries, b);
     }
 
 
@@ -510,6 +760,17 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
+     * Creates a copy of this tensor.
+     *
+     * @return A copy of this tensor.
+     */
+    @Override
+    public Vector copy() {
+        return new Vector(this);
+    }
+
+
+    /**
      * Joints specified vector with this vector.
      *
      * @param b Vector to join with this vector.
@@ -534,8 +795,8 @@ public class Vector extends VectorBase<double[]> implements
     @Override
     public CVector join(CVector b) {
         CNumber[] entries = new CNumber[this.size+b.size];
-        System.arraycopy(this.entries, 0, entries, 0, this.size);
-        System.arraycopy(b.entries, 0, entries, this.size, b.size);
+        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);
+        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);
 
         return new CVector(entries);
     }

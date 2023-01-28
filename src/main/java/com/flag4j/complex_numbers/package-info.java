@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,13 @@
  * SOFTWARE.
  */
 
-package com.flag4j.core;
-
 /**
- * This interface specifies methods which provide properties of a vector. All vectors should implement this interface.
- *
- * @param <T> Vector type.
- * @param <U> Dense Vector type.
- * @param <V> Sparse Vector type.
- * @param <W> Complex Vector type.
- * @param <Y> Real Vector type.
- * @param <X> Vector entry type.
+ * <p>
+ *  This package contains the CNumber object which stores complex numbers in rectangular format and provides several
+ *  methods allowing for computation with and manipulation of the complex numbers.
+ * </p>
+ * <p>
+ *   This package also contains classes useful for parsing complex numbers represented as Strings.
+ * </p>
  */
-public interface VectorPropertiesMixin<T, U, V, W, Y, X extends Number> extends TensorPropertiesMixin<T, U, V, W, Y, X> {
-
-    /**
-     * Gets the length of a vector.
-     * @return The length, i.e. the number of entries, in this vector.
-     */
-    int length();
-}
+package com.flag4j.complex_numbers;

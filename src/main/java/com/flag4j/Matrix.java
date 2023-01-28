@@ -35,6 +35,7 @@ import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
@@ -595,9 +596,6 @@ public class Matrix extends RealMatrixBase implements
     }
 
 
-    // TODO: Add setSlice methods and pull up to matrix interface.
-
-
     /**
      * Gets a specified slice of this matrix.
      *
@@ -609,6 +607,7 @@ public class Matrix extends RealMatrixBase implements
      * @throws ArrayIndexOutOfBoundsException If any of the indices are out of bounds of this matrix.
      * @throws IllegalArgumentException If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
      */
+    @Override
     public Matrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
         Matrix slice = new Matrix(rowEnd-rowStart, colEnd-colStart);
 
@@ -1033,7 +1032,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public Matrix add(double a) {
         return new Matrix(this.shape.copy(),
-                RealDenseOperations.add(this.entries, a)
+                RealDenseVectorOperations.add(this.entries, a)
         );
     }
 
@@ -1047,7 +1046,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public CMatrix add(CNumber a) {
         return new CMatrix(this.shape.copy(),
-                RealComplexDenseOperations.add(this.entries, a)
+                RealComplexDenseVectorOperations.add(this.entries, a)
         );
     }
 
@@ -1092,9 +1091,6 @@ public class Matrix extends RealMatrixBase implements
         return RealComplexDenseSparseOperations.add(this, B);
     }
 
-    /* TODO: add the following methods for each matrix type:
-        addEq(...), subEq(...), multT(...), tMult(...).
-    */
 
     /**
      * Computes the element-wise subtraction of two tensors of the same rank.
@@ -1108,23 +1104,6 @@ public class Matrix extends RealMatrixBase implements
         return new Matrix(this.shape.copy(),
                 RealDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
         );
-    }
-
-
-    // TODO: Pull up to tensor operations interface.
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    public void subEq(Matrix B) {
-        // TODO: Refactor RealDenseOperations.sub so that the storage is also passed so it can be used in this method.
-        ParameterChecks.assertEqualShape(this.shape, B.shape);
-
-        for(int i=0; i<this.entries.length; i++) {
-            this.entries[i] -= B.entries[i];
-        }
     }
 
 
@@ -1153,6 +1132,76 @@ public class Matrix extends RealMatrixBase implements
         return new CMatrix(this.shape.copy(),
                 RealComplexDenseOperations.sub(this.entries, a)
         );
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void subEq(Matrix B) {
+        RealDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void subEq(SparseMatrix B) {
+        RealDenseSparseOperations.subEq(this, B);
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void subEq(Double b) {
+        RealDenseOperations.subEq(this.entries, b);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void addEq(Matrix B) {
+        RealDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void addEq(SparseMatrix B) {
+        RealDenseSparseOperations.subEq(this, B);
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void addEq(Double b) {
+        RealDenseOperations.addEq(this.entries, b);
     }
 
 

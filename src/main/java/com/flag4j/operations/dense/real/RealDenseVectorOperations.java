@@ -24,7 +24,6 @@
 
 package com.flag4j.operations.dense.real;
 
-import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -76,5 +75,21 @@ public class RealDenseVectorOperations {
         }
 
         return dest;
+    }
+
+    /**
+     * Adds a scalar to every element of a tensor.
+     * @param src src of tensor to add scalar to.
+     * @param b Scalar to add to tensor.
+     * @return The tensor scalar addition.
+     */
+    public static double[] add(double[] src, double b) {
+        double[] sum = new double[src.length];
+
+        for(int i=0; i<src.length; i++) {
+            sum[i] = src[i] + b;
+        }
+
+        return sum;
     }
 }

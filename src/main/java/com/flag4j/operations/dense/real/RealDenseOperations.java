@@ -65,23 +65,6 @@ public final class RealDenseOperations {
 
 
     /**
-     * Adds a scalar to every element of a tensor.
-     * @param src src of tensor to add scalar to.
-     * @param b Scalar to add to tensor.
-     * @return The tensor scalar addition.
-     */
-    public static double[] add(double[] src, double b) {
-        double[] sum = new double[src.length];
-
-        for(int i=0; i<src.length; i++) {
-            sum[i] = src[i] + b;
-        }
-
-        return sum;
-    }
-
-
-    /**
      * Computes the element-wise subtraction of two tensors.
      * @param src1 Entries of first tensor.
      * @param shape1 Shape of first tensor.
@@ -116,6 +99,64 @@ public final class RealDenseOperations {
         }
 
         return sum;
+    }
+
+
+    /**
+     * Computes element-wise subtraction between tensors and stores the result in the first tensor.
+     * @param src1 First tensor in subtraction. Also, where the result will be stored.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in the subtraction.
+     * @param shape2 Shape of the second tensor.
+     * @throws IllegalArgumentException If tensors are not the same shape.
+     */
+    public static void subEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+        ParameterChecks.assertEqualShape(shape1, shape2);
+
+        for(int i=0; i<src1.length; i++) {
+            src1[i] -= src2[i];
+        }
+    }
+
+
+    /**
+     * Subtracts a scalar from each entry of this tensor and stores the result in the tensor.
+     * @param src Tensor in subtraction. Also, where the result will be stored.
+     * @param b Scalar to subtract.
+     */
+    public static void subEq(double[] src, double b) {
+        for(int i=0; i<src.length; i++) {
+            src[i] -= b;
+        }
+    }
+
+
+    /**
+     * Computes element-wise addition between tensors and stores the result in the first tensor.
+     * @param src1 First tensor in addition. Also, where the result will be stored.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in the addition.
+     * @param shape2 Shape of the second tensor.
+     * @throws IllegalArgumentException If tensors are not the same shape.
+     */
+    public static void addEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+        ParameterChecks.assertEqualShape(shape1, shape2);
+
+        for(int i=0; i<src1.length; i++) {
+            src1[i] += src2[i];
+        }
+    }
+
+
+    /**
+     * Adds a scalar from each entry of this tensor and stores the result in the tensor.
+     * @param src Tensor in addition. Also, where the result will be stored.
+     * @param b Scalar to add.
+     */
+    public static void addEq(double[] src, double b) {
+        for(int i=0; i<src.length; i++) {
+            src[i] += b;
+        }
     }
 
 

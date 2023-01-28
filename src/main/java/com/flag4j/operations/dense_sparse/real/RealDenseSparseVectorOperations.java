@@ -25,6 +25,8 @@
 package com.flag4j.operations.dense_sparse.real;
 
 
+import com.flag4j.SparseVector;
+import com.flag4j.Vector;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -45,8 +47,8 @@ public class RealDenseSparseVectorOperations {
      * Computes the vector inner product between a real dense vector and a real sparse vector.
      * @param src1 Entries of the dense vector.
      * @param src2 Non-zero entries of the sparse vector.
-     * @param indices
-     * @param sparseSize
+     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param sparseSize The size of the sparse vector (including zero entries).
      * @return The inner product of the two vectors.
      * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
      */
@@ -82,6 +84,92 @@ public class RealDenseSparseVectorOperations {
 
                 dest[i*src2.length + index] = src1[i]*src2[j];
             }
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Subtracts a real sparse vector from a real dense vector.
+     * @param src1 Dense vector.
+     * @param src2 Sparse vector.
+     * @return The result of the vector addition.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static Vector sub(Vector src1, SparseVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        Vector dest = new Vector(src1);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            dest.entries[src2.indices[i]] -= src2.entries[i];
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Adds a real dense vector to a real sparse vector and stores the result in the first vector.
+     * @param src1 Dense vector. Also, where the result will be stored.
+     * @param src2 Sparse vector.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static void addEq(Vector src1, SparseVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            src1.entries[src2.indices[i]] += src2.entries[i];
+        }
+    }
+
+
+    /**
+     * Adds a real dense vector to a real sparse vector and stores the result in the first vector.
+     * @param src1 Dense vector. Also, where the result will be stored.
+     * @param src2 Sparse vector.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static void subEq(Vector src1, SparseVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            src1.entries[src2.indices[i]] -= src2.entries[i];
+        }
+    }
+
+
+    /**
+     * Computes the element-wise multiplication of a real dense vector with a real sparse vector.
+     * @param src1 Dense vector.
+     * @param src2 Sparse vector.
+     * @return The result of the element-wise multiplication.
+     * @throws IllegalArgumentException If the two vectors are not the same size.
+     */
+    public static SparseVector elemMult(Vector src1, SparseVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        double[] entries = new double[src2.entries.length];
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            entries[i] = src1.entries[src2.indices[i]]*src2.entries[i];
+        }
+
+        return new SparseVector(src1.size, entries, src2.indices.clone());
+    }
+
+
+    /**
+     * Adds a real dense vector to a real sparse vector.
+     * @return The result of the vector addition.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static Vector add(Vector src1, SparseVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        Vector dest = new Vector(src1);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            dest.entries[src2.indices[i]] += src2.entries[i];
         }
 
         return dest;

@@ -24,6 +24,8 @@
 
 package com.flag4j.operations.dense.complex;
 
+import com.flag4j.CVector;
+import com.flag4j.SparseCVector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -78,4 +80,7 @@ public class ComplexDenseVectorOperations {
 
         return dest;
     }
+
+
+
 }
