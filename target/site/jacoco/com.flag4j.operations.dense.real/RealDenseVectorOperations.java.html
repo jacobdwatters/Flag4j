@@ -24,7 +24,6 @@
 
 package com.flag4j.operations.dense.real;
 
-import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -34,9 +33,9 @@ import com.flag4j.util.ParameterChecks;
  */
 public class RealDenseVectorOperations {
 
-<span class="nc" id="L37">    private RealDenseVectorOperations() {</span>
+<span class="nc" id="L36">    private RealDenseVectorOperations() {</span>
         // Hide default constructor for utility class.
-<span class="nc" id="L39">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L38">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -47,14 +46,14 @@ public class RealDenseVectorOperations {
      * @return The inner product of the two vectors.
      */
     public static double innerProduct(double[] src1, double[] src2) {
-<span class="nc" id="L50">        ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);</span>
-<span class="nc" id="L51">        double innerProd=0;</span>
+<span class="nc" id="L49">        ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);</span>
+<span class="nc" id="L50">        double innerProd=0;</span>
 
-<span class="nc bnc" id="L53" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="nc" id="L54">            innerProd += src1[i]*src2[i];</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="nc" id="L53">            innerProd += src1[i]*src2[i];</span>
         }
 
-<span class="nc" id="L57">        return innerProd;</span>
+<span class="nc" id="L56">        return innerProd;</span>
     }
 
 
@@ -66,16 +65,32 @@ public class RealDenseVectorOperations {
      */
     public static double[] outerProduct(double[] src1, double[] src2) {
         int destIndex;
-<span class="nc" id="L69">        double[] dest = new double[src1.length*src2.length];</span>
+<span class="nc" id="L68">        double[] dest = new double[src1.length*src2.length];</span>
 
-<span class="nc bnc" id="L71" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="nc" id="L72">            destIndex = i*src2.length;</span>
-<span class="nc bnc" id="L73" title="All 2 branches missed.">            for(int j=0; j&lt;src2.length; j++) {</span>
-<span class="nc" id="L74">                dest[destIndex++] = src1[i]*src2[j];</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="nc" id="L71">            destIndex = i*src2.length;</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="nc" id="L73">                dest[destIndex++] = src1[i]*src2[j];</span>
             }
         }
 
-<span class="nc" id="L78">        return dest;</span>
+<span class="nc" id="L77">        return dest;</span>
+    }
+
+    /**
+     * Adds a scalar to every element of a tensor.
+     * @param src src of tensor to add scalar to.
+     * @param b Scalar to add to tensor.
+     * @return The tensor scalar addition.
+     */
+    public static double[] add(double[] src, double b) {
+<span class="fc" id="L87">        double[] sum = new double[src.length];</span>
+
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L90">            sum[i] = src[i] + b;</span>
+        }
+
+<span class="fc" id="L93">        return sum;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

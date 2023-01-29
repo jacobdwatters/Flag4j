@@ -128,23 +128,5 @@ public final class RealQRDecomposition extends QRDecomposition&lt;Matrix&gt; {
 
 <span class="nc" id="L129">        return H;</span>
     }
-
-
-    // TODO: TEMPORARY. FOR DEVELOPMENT TESTING ONLY
-    public static void main(String[] args) {
-<span class="nc" id="L135">        double[][] aEntries =</span>
-                {{0, 1, 0, 0},
-                {0, 0, 1, 0},
-                {0, 0, 0, 1},
-                {1, 0, 0, 0}};
-<span class="nc" id="L140">        Matrix A = new Matrix(aEntries);</span>
-
-<span class="nc" id="L142">        RealQRDecomposition QR = new RealQRDecomposition();</span>
-<span class="nc" id="L143">        QR.decompose(A);</span>
-
-<span class="nc" id="L145">        System.out.println(&quot;A:\n&quot; + A + &quot;\n&quot;);</span>
-<span class="nc" id="L146">        System.out.println(&quot;Q:\n&quot; + QR.getQ() + &quot;\n&quot;);</span>
-<span class="nc" id="L147">        System.out.println(&quot;R:\n&quot; + QR.getR());</span>
-<span class="nc" id="L148">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

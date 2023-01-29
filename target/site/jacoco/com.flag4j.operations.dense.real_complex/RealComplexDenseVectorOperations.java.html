@@ -119,5 +119,21 @@ public class RealComplexDenseVectorOperations {
 
 <span class="nc" id="L120">        return dest;</span>
     }
+
+    /**
+     * Adds a scalar value to all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The result of adding the scalar to each entry of the tensor.
+     */
+    public static CNumber[] add(double[] src1, CNumber a) {
+<span class="fc" id="L130">        CNumber[] sum = new CNumber[src1.length];</span>
+
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L133">            sum[i] = a.add(src1[i]);</span>
+        }
+
+<span class="fc" id="L136">        return sum;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

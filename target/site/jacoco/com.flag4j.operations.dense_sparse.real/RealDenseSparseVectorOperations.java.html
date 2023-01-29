@@ -25,6 +25,8 @@
 package com.flag4j.operations.dense_sparse.real;
 
 
+import com.flag4j.SparseVector;
+import com.flag4j.Vector;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -35,9 +37,9 @@ import com.flag4j.util.ParameterChecks;
 public class RealDenseSparseVectorOperations {
 
 
-<span class="nc" id="L38">    private RealDenseSparseVectorOperations() {</span>
+<span class="nc" id="L40">    private RealDenseSparseVectorOperations() {</span>
         // Hide default constructor in utility class.
-<span class="nc" id="L40">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L42">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -45,23 +47,23 @@ public class RealDenseSparseVectorOperations {
      * Computes the vector inner product between a real dense vector and a real sparse vector.
      * @param src1 Entries of the dense vector.
      * @param src2 Non-zero entries of the sparse vector.
-     * @param indices
-     * @param sparseSize
+     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param sparseSize The size of the sparse vector (including zero entries).
      * @return The inner product of the two vectors.
      * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
      */
     public static double innerProduct(double[] src1, double[] src2, int[] indices, int sparseSize) {
-<span class="nc" id="L54">        ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);</span>
-<span class="nc" id="L55">        double innerProd = 0;</span>
+<span class="nc" id="L56">        ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);</span>
+<span class="nc" id="L57">        double innerProd = 0;</span>
         int index;
 
-<span class="nc bnc" id="L58" title="All 2 branches missed.">        for(int i=0; i&lt;src2.length; i++) {</span>
-<span class="nc" id="L59">            index = indices[i];</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        for(int i=0; i&lt;src2.length; i++) {</span>
+<span class="nc" id="L61">            index = indices[i];</span>
 
-<span class="nc" id="L61">            innerProd += src1[index]*src2[i];</span>
+<span class="nc" id="L63">            innerProd += src1[index]*src2[i];</span>
         }
 
-<span class="nc" id="L64">        return innerProd;</span>
+<span class="nc" id="L66">        return innerProd;</span>
     }
 
 
@@ -73,18 +75,104 @@ public class RealDenseSparseVectorOperations {
      * @return The matrix resulting from the vector outer product.
      */
     public static double[] outerProduct(double[] src1, double[] src2, int[] indices, int sparseSize) {
-<span class="nc" id="L76">        double[] dest = new double[src1.length*sparseSize];</span>
+<span class="nc" id="L78">        double[] dest = new double[src1.length*sparseSize];</span>
         int index;
 
-<span class="nc bnc" id="L79" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="nc bnc" id="L80" title="All 2 branches missed.">            for(int j=0; j&lt;src2.length; j++) {</span>
-<span class="nc" id="L81">                index = indices[j];</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="nc" id="L83">                index = indices[j];</span>
 
-<span class="nc" id="L83">                dest[i*src2.length + index] = src1[i]*src2[j];</span>
+<span class="nc" id="L85">                dest[i*src2.length + index] = src1[i]*src2[j];</span>
             }
         }
 
-<span class="nc" id="L87">        return dest;</span>
+<span class="nc" id="L89">        return dest;</span>
+    }
+
+
+    /**
+     * Subtracts a real sparse vector from a real dense vector.
+     * @param src1 Dense vector.
+     * @param src2 Sparse vector.
+     * @return The result of the vector addition.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static Vector sub(Vector src1, SparseVector src2) {
+<span class="nc" id="L101">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="nc" id="L102">        Vector dest = new Vector(src1);</span>
+
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L105">            dest.entries[src2.indices[i]] -= src2.entries[i];</span>
+        }
+
+<span class="nc" id="L108">        return dest;</span>
+    }
+
+
+    /**
+     * Adds a real dense vector to a real sparse vector and stores the result in the first vector.
+     * @param src1 Dense vector. Also, where the result will be stored.
+     * @param src2 Sparse vector.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static void addEq(Vector src1, SparseVector src2) {
+<span class="nc" id="L119">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L122">            src1.entries[src2.indices[i]] += src2.entries[i];</span>
+        }
+<span class="nc" id="L124">    }</span>
+
+
+    /**
+     * Adds a real dense vector to a real sparse vector and stores the result in the first vector.
+     * @param src1 Dense vector. Also, where the result will be stored.
+     * @param src2 Sparse vector.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static void subEq(Vector src1, SparseVector src2) {
+<span class="nc" id="L134">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L137">            src1.entries[src2.indices[i]] -= src2.entries[i];</span>
+        }
+<span class="nc" id="L139">    }</span>
+
+
+    /**
+     * Computes the element-wise multiplication of a real dense vector with a real sparse vector.
+     * @param src1 Dense vector.
+     * @param src2 Sparse vector.
+     * @return The result of the element-wise multiplication.
+     * @throws IllegalArgumentException If the two vectors are not the same size.
+     */
+    public static SparseVector elemMult(Vector src1, SparseVector src2) {
+<span class="nc" id="L150">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="nc" id="L152">        double[] entries = new double[src2.entries.length];</span>
+
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L155">            entries[i] = src1.entries[src2.indices[i]]*src2.entries[i];</span>
+        }
+
+<span class="nc" id="L158">        return new SparseVector(src1.size, entries, src2.indices.clone());</span>
+    }
+
+
+    /**
+     * Adds a real dense vector to a real sparse vector.
+     * @return The result of the vector addition.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static Vector add(Vector src1, SparseVector src2) {
+<span class="nc" id="L168">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="nc" id="L169">        Vector dest = new Vector(src1);</span>
+
+<span class="nc bnc" id="L171" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L172">            dest.entries[src2.indices[i]] += src2.entries[i];</span>
+        }
+
+<span class="nc" id="L175">        return dest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

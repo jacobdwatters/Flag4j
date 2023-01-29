@@ -105,23 +105,57 @@ public class RealDenseSparseOperations {
 
 
     /**
+     * Adds a real dense matrix to a real sparse matrix and stores the result in the first matrix.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static void addEq(Matrix src1, SparseMatrix src2) {
+<span class="nc" id="L112">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int row, col;
+
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L117">            row = src2.rowIndices[i];</span>
+<span class="nc" id="L118">            col = src2.colIndices[i];</span>
+<span class="nc" id="L119">            src1.entries[row*src1.numCols + col] += src2.entries[i];</span>
+        }
+<span class="nc" id="L121">    }</span>
+
+
+    /**
+     * Subtracts a real sparse matrix from a real dense matrix and stores the result in the first matrix.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static void subEq(Matrix src1, SparseMatrix src2) {
+<span class="nc" id="L129">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int row, col;
+
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L134">            row = src2.rowIndices[i];</span>
+<span class="nc" id="L135">            col = src2.colIndices[i];</span>
+<span class="nc" id="L136">            src1.entries[row*src1.numCols + col] += src2.entries[i];</span>
+        }
+<span class="nc" id="L138">    }</span>
+
+
+    /**
      * Computes the element-wise multiplication between a real dense matrix and a real sparse matrix.
      * @return The result of element-wise multiplication.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static SparseMatrix elemMult(Matrix src1, SparseMatrix src2) {
-<span class="fc" id="L113">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L147">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
-<span class="fc" id="L116">        double[] destEntries = new double[src2.nonZeroEntries()];</span>
+<span class="fc" id="L150">        double[] destEntries = new double[src2.nonZeroEntries()];</span>
 
-<span class="fc bfc" id="L118" title="All 2 branches covered.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
-<span class="fc" id="L119">            row = src2.rowIndices[i];</span>
-<span class="fc" id="L120">            col = src2.colIndices[i];</span>
-<span class="fc" id="L121">            destEntries[i] = src1.entries[row*src1.numCols + col]*src2.entries[i];</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
+<span class="fc" id="L153">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L154">            col = src2.colIndices[i];</span>
+<span class="fc" id="L155">            destEntries[i] = src1.entries[row*src1.numCols + col]*src2.entries[i];</span>
         }
 
-<span class="fc" id="L124">        return new SparseMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);</span>
+<span class="fc" id="L158">        return new SparseMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

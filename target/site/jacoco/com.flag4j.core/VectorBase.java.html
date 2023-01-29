@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VectorBase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.core</a> &gt; <span class="el_source">VectorBase.java</span></div><h1>VectorBase.java</h1><pre class="source lang-java linenums">/*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -25,6 +25,7 @@
 package com.flag4j.core;
 
 import com.flag4j.Shape;
+import com.flag4j.util.ParameterChecks;
 
 import java.io.Serializable;
 
@@ -47,9 +48,23 @@ public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBas
      * @param entries     The non-zero entries of this sparse tensor.
      */
     public VectorBase(int size, T entries) {
-<span class="fc" id="L50">        super(new Shape(size), entries);</span>
-<span class="fc" id="L51">        this.size = size;</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L51">        super(new Shape(size), entries);</span>
+<span class="fc" id="L52">        this.size = size;</span>
+<span class="fc" id="L53">    }</span>
+
+
+    /**
+     * Constructs a basic vector with the specified number of entries.
+     *
+     * @param shape        Number of entries in this vector.
+     * @param entries     The non-zero entries of this sparse tensor.
+     * @throws IllegalArgumentException If the rank of the shape is not 1.
+     */
+    public VectorBase(Shape shape, T entries) {
+<span class="nc" id="L64">        super(shape, entries);</span>
+<span class="nc" id="L65">        ParameterChecks.assertRank(1, shape); // Ensure the shape is of rank 1.</span>
+<span class="nc" id="L66">        this.size = shape.get(0);</span>
+<span class="nc" id="L67">    }</span>
 
 
     /**
@@ -58,7 +73,7 @@ public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBas
      * @return The size, i.e. number of entries, of this vector.
      */
     public int size() {
-<span class="fc" id="L61">        return size;</span>
+<span class="fc" id="L76">        return size;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
