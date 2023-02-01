@@ -44,7 +44,7 @@ import java.util.Arrays;
 
 
 /**
- * Real dense vector. This class is mostly Equivalent
+ * Real dense vector. This class is mostly Equivalent to a real dense tensor with rank 1.
  */
 public class Vector extends VectorBase<double[]> implements
         VectorComparisonsMixin<Vector, Vector, SparseVector, CVector, Vector, Double>,

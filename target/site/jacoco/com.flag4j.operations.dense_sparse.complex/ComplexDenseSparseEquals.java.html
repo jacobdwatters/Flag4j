@@ -83,5 +83,46 @@ public class ComplexDenseSparseEquals {
 
 <span class="fc" id="L84">        return equal;</span>
     }
+
+
+    /**
+     * Checks if a complex dense vector is equal to a complex sparse vector.
+     * @param src1 Entries of dense vector.
+     * @param src2 Non-zero Entries of sparse vector.
+     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param sparseSize Size of the sparse vector.
+     * @return True if the two vectors are equal. Returns false otherwise.
+     */
+    public static boolean vectorEquals(CNumber[] src1, CNumber[] src2, int[] indices, int sparseSize) {
+<span class="nc" id="L97">        boolean equal = true;</span>
+
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        if(src1.length==sparseSize) {</span>
+            int index;
+<span class="nc" id="L101">            CNumber[] src1Copy = new CNumber[src1.length];</span>
+<span class="nc" id="L102">            ArrayUtils.copy2CNumber(src1, src1Copy);</span>
+
+<span class="nc bnc" id="L104" title="All 2 branches missed.">            for(int i=0; i&lt;sparseSize; i++) {</span>
+<span class="nc" id="L105">                index = indices[i];</span>
+
+<span class="nc bnc" id="L107" title="All 2 branches missed.">                if(!src1[index].equals(src2[i])) {</span>
+<span class="nc" id="L108">                    equal=false;</span>
+<span class="nc" id="L109">                    break;</span>
+
+                } else {
+<span class="nc" id="L112">                    src1Copy[index] = new CNumber();</span>
+                }
+            }
+
+<span class="nc bnc" id="L116" title="All 2 branches missed.">            if(equal) {</span>
+                // Now, if this vector is equal to the sparse vector, there should only be zeros left in the entriesStack
+<span class="nc" id="L118">                equal = ArrayUtils.isZeros(src1Copy);</span>
+            }
+
+<span class="nc" id="L121">        } else {</span>
+<span class="nc" id="L122">            equal = false;</span>
+        }
+
+<span class="nc" id="L125">        return equal;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

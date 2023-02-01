@@ -111,12 +111,12 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If tensors are not the same shape.
      */
     public static void subEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="nc" id="L114">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L114">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
 
-<span class="nc bnc" id="L116" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="nc" id="L117">            src1[i] -= src2[i];</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L117">            src1[i] -= src2[i];</span>
         }
-<span class="nc" id="L119">    }</span>
+<span class="fc" id="L119">    }</span>
 
 
     /**
@@ -125,10 +125,10 @@ public final class RealDenseOperations {
      * @param b Scalar to subtract.
      */
     public static void subEq(double[] src, double b) {
-<span class="nc bnc" id="L128" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="nc" id="L129">            src[i] -= b;</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L129">            src[i] -= b;</span>
         }
-<span class="nc" id="L131">    }</span>
+<span class="fc" id="L131">    }</span>
 
 
     /**
@@ -140,12 +140,12 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If tensors are not the same shape.
      */
     public static void addEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="nc" id="L143">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L143">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
 
-<span class="nc bnc" id="L145" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="nc" id="L146">            src1[i] += src2[i];</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L146">            src1[i] += src2[i];</span>
         }
-<span class="nc" id="L148">    }</span>
+<span class="fc" id="L148">    }</span>
 
 
     /**
@@ -154,10 +154,10 @@ public final class RealDenseOperations {
      * @param b Scalar to add.
      */
     public static void addEq(double[] src, double b) {
-<span class="nc bnc" id="L157" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="nc" id="L158">            src[i] += b;</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L158">            src[i] += b;</span>
         }
-<span class="nc" id="L160">    }</span>
+<span class="fc" id="L160">    }</span>
 
 
     /**

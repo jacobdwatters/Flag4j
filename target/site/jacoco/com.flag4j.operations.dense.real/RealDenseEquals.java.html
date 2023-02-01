@@ -49,7 +49,7 @@ public class RealDenseEquals {
      * @return True if the two vectors are element-wise numerically equal. Otherwise, returns false.
      */
     public static boolean vectorEquals(double[] src1, double[] src2) {
-<span class="nc" id="L52">        return Arrays.equals(src1, src2);</span>
+<span class="fc" id="L52">        return Arrays.equals(src1, src2);</span>
     }
 
 
@@ -74,7 +74,7 @@ public class RealDenseEquals {
      * @return True if the two tensors are numerically element-wise equivalent.
      */
     private static boolean tensorEquals(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="pc bpc" id="L77" title="2 of 4 branches missed.">        return shape1.equals(shape2) &amp;&amp; Arrays.equals(src1, src2);</span>
+<span class="fc bfc" id="L77" title="All 4 branches covered.">        return shape1.equals(shape2) &amp;&amp; Arrays.equals(src1, src2);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

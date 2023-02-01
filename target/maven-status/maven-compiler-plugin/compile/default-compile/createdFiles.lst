@@ -22,3 +22,4 @@ com\flag4j\operations\dense\complex\ComplexDenseVectorOperations.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseVectorOperations.class
 com\flag4j\linalg\decompositions\LUDecomposition.class
 com\flag4j\operations\dense_sparse\real\RealDenseSparseVectorOperations.class
+com\flag4j\operations\dense\real\RealDenseDeterminant.class

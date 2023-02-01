@@ -57,7 +57,7 @@ public class RealDenseSparseEquals {
             int index;
             double[] src1Copy = Arrays.copyOf(src1, src1.length);
 
-            for(int i=0; i<sparseSize; i++) {
+            for(int i=0; i<src2.length; i++) {
                 index = indices[i];
 
                 if(src1[index]!=src2[i]) {

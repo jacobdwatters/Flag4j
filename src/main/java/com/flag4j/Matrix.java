@@ -58,8 +58,6 @@ public class Matrix extends RealMatrixBase implements
         MatrixPropertiesMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double> {
 
 
-//    public static final double DEFAULT_ROUND_TO_ZERO_THRESHOLD = 1.0E-12;
-
     /**
      * Constructs a square real dense matrix of a specified size. The entries of the matrix will default to zero.
      * @param size Size of the square matrix.
@@ -335,14 +333,23 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
-     * Checks if matrices are inverses of each other.
+     * Checks if matrices are inverses of each other. This method rounds values near zero to zero when checking
+     * if the two matrices are inverses to account for floating point precision loss.
      *
      * @param B Second matrix.
      * @return True if matrix B is an inverse of this matrix. Otherwise, returns false. Otherwise, returns false.
      */
     @Override
     public boolean isInv(Matrix B) {
-        return this.mult(B).roundToZero().isI();
+        boolean result;
+
+        if(!this.isSquare() || !B.isSquare()) {
+            result = false;
+        } else {
+            result = this.mult(B).roundToZero().isI();
+        }
+
+        return result;
     }
 
 
@@ -1190,7 +1197,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void addEq(SparseMatrix B) {
-        RealDenseSparseOperations.subEq(this, B);
+        RealDenseSparseOperations.addEq(this, B);
     }
 
 
@@ -1658,8 +1665,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double det() {
-        // TODO: Implement using QR Factorization
-        return null;
+        return RealDenseDeterminant.det(this);
     }
 
 

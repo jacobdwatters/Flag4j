@@ -390,7 +390,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber get(int... indices) {
-<span class="nc" id="L393">        return this.entries[this.shape.entriesIndex(indices)];</span>
+<span class="fc" id="L393">        return this.entries[this.shape.entriesIndex(indices)];</span>
     }
 
 
@@ -3004,13 +3004,13 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix getCol(int j) {
-<span class="nc" id="L3007">        CNumber[] col = new CNumber[numRows];</span>
+<span class="fc" id="L3007">        CNumber[] col = new CNumber[numRows];</span>
 
-<span class="nc bnc" id="L3009" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="nc" id="L3010">            col[i] = entries[i*numCols + j].copy();</span>
+<span class="fc bfc" id="L3009" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L3010">            col[i] = entries[i*numCols + j].copy();</span>
         }
 
-<span class="nc" id="L3013">        return new CMatrix(new Shape(numRows, 1), col);</span>
+<span class="fc" id="L3013">        return new CMatrix(new Shape(numRows, 1), col);</span>
     }
 
 
@@ -3565,35 +3565,35 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return Matrix as string
      */
     public String toString() {
-<span class="nc" id="L3568">        String result = &quot;[&quot;;</span>
+<span class="fc" id="L3568">        String result = &quot;[&quot;;</span>
 
-<span class="nc bnc" id="L3570" title="All 2 branches missed.">        if(entries.length!=0) {</span>
-<span class="nc" id="L3571">            int max=0, colWidth;</span>
-<span class="nc" id="L3572">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L3570" title="1 of 2 branches missed.">        if(entries.length!=0) {</span>
+<span class="fc" id="L3571">            int max=0, colWidth;</span>
+<span class="fc" id="L3572">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;();</span>
 
-<span class="nc bnc" id="L3574" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) { // Get the maximum length string representation for each column.</span>
-<span class="nc" id="L3575">                List&lt;CNumber&gt; contents = Arrays.asList(this.getCol(j).entries);</span>
+<span class="fc bfc" id="L3574" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) { // Get the maximum length string representation for each column.</span>
+<span class="fc" id="L3575">                List&lt;CNumber&gt; contents = Arrays.asList(this.getCol(j).entries);</span>
 
-<span class="nc" id="L3577">                Optional&lt;Integer&gt; value = contents.stream().map(CNumber::length).max(Integer::compareTo);</span>
+<span class="fc" id="L3577">                Optional&lt;Integer&gt; value = contents.stream().map(CNumber::length).max(Integer::compareTo);</span>
 
-<span class="nc bnc" id="L3579" title="All 2 branches missed.">                if(value.isPresent()) {</span>
-<span class="nc" id="L3580">                    max = value.get();</span>
+<span class="pc bpc" id="L3579" title="1 of 2 branches missed.">                if(value.isPresent()) {</span>
+<span class="fc" id="L3580">                    max = value.get();</span>
                 }
 
-<span class="nc" id="L3583">                maxList.add(max);</span>
+<span class="fc" id="L3583">                maxList.add(max);</span>
             }
 
-<span class="nc" id="L3586">            StringBuilder resultBuilder = new StringBuilder(&quot;[&quot;);</span>
-<span class="nc bnc" id="L3587" title="All 2 branches missed.">            for(int i = 0; i&lt;numRows; i++) {</span>
-<span class="nc bnc" id="L3588" title="All 4 branches missed.">                if(i &gt;= PrintOptions.getMaxRows() &amp;&amp; i &lt; numRows-1) {</span>
+<span class="fc" id="L3586">            StringBuilder resultBuilder = new StringBuilder(&quot;[&quot;);</span>
+<span class="fc bfc" id="L3587" title="All 2 branches covered.">            for(int i = 0; i&lt;numRows; i++) {</span>
+<span class="pc bpc" id="L3588" title="3 of 4 branches missed.">                if(i &gt;= PrintOptions.getMaxRows() &amp;&amp; i &lt; numRows-1) {</span>
 <span class="nc" id="L3589">                    resultBuilder.append(&quot;  ...\n &quot;);</span>
 <span class="nc" id="L3590">                    i = numRows-1;</span>
                 }
 
-<span class="nc" id="L3593">                resultBuilder.append(&quot; [&quot;);</span>
+<span class="fc" id="L3593">                resultBuilder.append(&quot; [&quot;);</span>
 
-<span class="nc bnc" id="L3595" title="All 2 branches missed.">                for(int j = 0; j&lt;numCols; j++) {</span>
-<span class="nc bnc" id="L3596" title="All 4 branches missed.">                    if(j &gt;= PrintOptions.getMaxColumns() &amp;&amp; j &lt; numRows-1) {</span>
+<span class="fc bfc" id="L3595" title="All 2 branches covered.">                for(int j = 0; j&lt;numCols; j++) {</span>
+<span class="pc bpc" id="L3596" title="3 of 4 branches missed.">                    if(j &gt;= PrintOptions.getMaxColumns() &amp;&amp; j &lt; numRows-1) {</span>
 <span class="nc" id="L3597">                        colWidth = 3+PrintOptions.getPadding();</span>
 <span class="nc" id="L3598">                        resultBuilder.append(String.format(&quot;%-&quot; + colWidth + &quot;s&quot;, StringUtils.center(&quot;...&quot;, colWidth)));</span>
 <span class="nc" id="L3599">                        colWidth = maxList.get(numRows-1)+PrintOptions.getPadding();</span>
@@ -3601,23 +3601,23 @@ public class CMatrix extends ComplexMatrixBase implements
 <span class="nc" id="L3601">                        break;</span>
                     }
                     else {
-<span class="nc" id="L3604">                        colWidth = maxList.get(j)+PrintOptions.getPadding();</span>
-<span class="nc" id="L3605">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(</span>
-<span class="nc" id="L3606">                                CNumber.round(get(i, j), PrintOptions.getPrecision()).toString(), colWidth))</span>
+<span class="fc" id="L3604">                        colWidth = maxList.get(j)+PrintOptions.getPadding();</span>
+<span class="fc" id="L3605">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(</span>
+<span class="fc" id="L3606">                                CNumber.round(get(i, j), PrintOptions.getPrecision()).toString(), colWidth))</span>
                         );
                     }
                 }
-<span class="nc" id="L3610">                resultBuilder.append(&quot;]\n &quot;);</span>
+<span class="fc" id="L3610">                resultBuilder.append(&quot;]\n &quot;);</span>
             }
-<span class="nc" id="L3612">            result = resultBuilder.toString();</span>
+<span class="fc" id="L3612">            result = resultBuilder.toString();</span>
 
-<span class="nc" id="L3614">            result = result.substring(0, result.length()-2) + &quot; ]&quot;;</span>
-<span class="nc" id="L3615">        }</span>
+<span class="fc" id="L3614">            result = result.substring(0, result.length()-2) + &quot; ]&quot;;</span>
+<span class="fc" id="L3615">        }</span>
         else {
 <span class="nc" id="L3617">            result += &quot;[]]&quot;;</span>
         }
 
-<span class="nc" id="L3620">        return result;</span>
+<span class="fc" id="L3620">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

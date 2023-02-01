@@ -37,7 +37,7 @@ public class Decompose {
     /**
      * Object computing lu decomposition.
      */
-<span class="nc" id="L40">    private static final RealLUDecomposition LU = new RealLUDecomposition();</span>
+<span class="fc" id="L40">    private static final RealLUDecomposition LU = new RealLUDecomposition();</span>
 
 
 <span class="nc" id="L43">    private Decompose() {</span>
@@ -53,8 +53,8 @@ public class Decompose {
      * @return Returns an array of matrices containing in order {@code {P, L, U}}.
      */
     public static Matrix[] LU(Matrix A) {
-<span class="nc" id="L56">        LU.decompose(A);</span>
-<span class="nc" id="L57">        return new Matrix[]{LU.getP(), LU.getL(), LU.getU()};</span>
+<span class="fc" id="L56">        LU.decompose(A);</span>
+<span class="fc" id="L57">        return new Matrix[]{LU.getP(), LU.getL(), LU.getU()};</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

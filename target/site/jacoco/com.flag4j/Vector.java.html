@@ -44,7 +44,7 @@ import java.util.Arrays;
 
 
 /**
- * Real dense vector. This class is mostly Equivalent
+ * Real dense vector. This class is mostly Equivalent to a real dense tensor with rank 1.
  */
 public class Vector extends VectorBase&lt;double[]&gt; implements
         VectorComparisonsMixin&lt;Vector, Vector, SparseVector, CVector, Vector, Double&gt;,
@@ -136,7 +136,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public boolean isZeros() {
-<span class="nc" id="L139">        return ArrayUtils.isZeros(this.entries);</span>
+<span class="fc" id="L139">        return ArrayUtils.isZeros(this.entries);</span>
     }
 
 
@@ -147,7 +147,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public boolean isOnes() {
-<span class="nc" id="L150">        return RealDenseProperties.isOnes(this.entries);</span>
+<span class="fc" id="L150">        return RealDenseProperties.isOnes(this.entries);</span>
     }
 
 
@@ -160,23 +160,23 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public boolean equals(Object b) {
-<span class="nc" id="L163">        boolean equal = false;</span>
+<span class="fc" id="L163">        boolean equal = false;</span>
 
-<span class="nc bnc" id="L165" title="All 2 branches missed.">        if(b instanceof Vector) {</span>
-<span class="nc" id="L166">            Vector vec = (Vector) b;</span>
-<span class="nc" id="L167">            equal = RealDenseEquals.vectorEquals(this.entries, vec.entries);</span>
-<span class="nc bnc" id="L168" title="All 2 branches missed.">        } else if(b instanceof CVector) {</span>
-<span class="nc" id="L169">            CVector vec = (CVector) b;</span>
-<span class="nc" id="L170">            equal = ArrayUtils.equals(this.entries, vec.entries);</span>
-<span class="nc bnc" id="L171" title="All 2 branches missed.">        } else if(b instanceof SparseVector) {</span>
-<span class="nc" id="L172">            SparseVector vec = (SparseVector) b;</span>
-<span class="nc" id="L173">            equal = RealDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);</span>
-<span class="nc bnc" id="L174" title="All 2 branches missed.">        } else if(b instanceof SparseCVector) {</span>
-<span class="nc" id="L175">            SparseCVector vec = (SparseCVector) b;</span>
-<span class="nc" id="L176">            equal = RealComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">        if(b instanceof Vector) {</span>
+<span class="fc" id="L166">            Vector vec = (Vector) b;</span>
+<span class="fc" id="L167">            equal = RealDenseEquals.vectorEquals(this.entries, vec.entries);</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        } else if(b instanceof CVector) {</span>
+<span class="fc" id="L169">            CVector vec = (CVector) b;</span>
+<span class="fc" id="L170">            equal = ArrayUtils.equals(this.entries, vec.entries);</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        } else if(b instanceof SparseVector) {</span>
+<span class="fc" id="L172">            SparseVector vec = (SparseVector) b;</span>
+<span class="fc" id="L173">            equal = RealDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">        } else if(b instanceof SparseCVector) {</span>
+<span class="fc" id="L175">            SparseCVector vec = (SparseCVector) b;</span>
+<span class="fc" id="L176">            equal = RealComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);</span>
         }
 
-<span class="nc" id="L179">        return equal;</span>
+<span class="fc" id="L179">        return equal;</span>
     }
 
 

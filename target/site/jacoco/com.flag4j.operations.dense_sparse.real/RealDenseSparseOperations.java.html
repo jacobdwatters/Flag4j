@@ -109,16 +109,16 @@ public class RealDenseSparseOperations {
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static void addEq(Matrix src1, SparseMatrix src2) {
-<span class="nc" id="L112">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L112">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
 
-<span class="nc bnc" id="L116" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L117">            row = src2.rowIndices[i];</span>
-<span class="nc" id="L118">            col = src2.colIndices[i];</span>
-<span class="nc" id="L119">            src1.entries[row*src1.numCols + col] += src2.entries[i];</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L117">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L118">            col = src2.colIndices[i];</span>
+<span class="fc" id="L119">            src1.entries[row*src1.numCols + col] += src2.entries[i];</span>
         }
-<span class="nc" id="L121">    }</span>
+<span class="fc" id="L121">    }</span>
 
 
     /**
@@ -126,16 +126,16 @@ public class RealDenseSparseOperations {
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static void subEq(Matrix src1, SparseMatrix src2) {
-<span class="nc" id="L129">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L129">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
 
-<span class="nc bnc" id="L133" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L134">            row = src2.rowIndices[i];</span>
-<span class="nc" id="L135">            col = src2.colIndices[i];</span>
-<span class="nc" id="L136">            src1.entries[row*src1.numCols + col] += src2.entries[i];</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L134">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L135">            col = src2.colIndices[i];</span>
+<span class="fc" id="L136">            src1.entries[row*src1.numCols + col] -= src2.entries[i];</span>
         }
-<span class="nc" id="L138">    }</span>
+<span class="fc" id="L138">    }</span>
 
 
     /**

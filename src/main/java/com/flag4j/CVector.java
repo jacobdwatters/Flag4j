@@ -28,18 +28,21 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.dense.complex.AggregateDenseComplex;
-import com.flag4j.operations.dense.complex.ComplexDenseOperations;
-import com.flag4j.operations.dense.complex.ComplexDenseProperties;
-import com.flag4j.operations.dense.complex.ComplexDenseVectorOperations;
+import com.flag4j.operations.dense.complex.*;
+import com.flag4j.operations.dense.real.RealDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseVectorOperations;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
+
+import java.util.Arrays;
 
 /**
  * Complex dense vector. This class is mostly equivalent to a rank 1 complex tensor.
@@ -143,6 +146,35 @@ public class CVector extends VectorBase<CNumber[]> implements
     @Override
     public boolean isOnes() {
         return ComplexDenseProperties.isOnes(this.entries);
+    }
+
+
+    /**
+     * Checks if two this vector is numerically element-wise equal to another object. Objects which can be equal are, {@link Vector},
+     * {@link CVector}, {@link SparseVector}, {@link SparseCVector}.
+     *
+     * @param b Object to compare to this vector.
+     * @return True if this vector and object {@code b} are equivalent element-wise. Otherwise, returns false.
+     */
+    @Override
+    public boolean equals(Object b) {
+        boolean equal = false;
+
+        if(b instanceof Vector) {
+            Vector vec = (Vector) b;
+            equal = ArrayUtils.equals(vec.entries, this.entries);
+        } else if(b instanceof CVector) {
+            CVector vec = (CVector) b;
+            equal = Arrays.equals(this.entries, vec.entries);
+        } else if(b instanceof SparseVector) {
+            SparseVector vec = (SparseVector) b;
+            equal = RealComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);
+        } else if(b instanceof SparseCVector) {
+            SparseCVector vec = (SparseCVector) b;
+            equal = ComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);
+        }
+
+        return equal;
     }
 
 

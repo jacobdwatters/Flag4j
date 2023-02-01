@@ -28,18 +28,21 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.dense.complex.AggregateDenseComplex;
-import com.flag4j.operations.dense.complex.ComplexDenseOperations;
-import com.flag4j.operations.dense.complex.ComplexDenseProperties;
-import com.flag4j.operations.dense.complex.ComplexDenseVectorOperations;
+import com.flag4j.operations.dense.complex.*;
+import com.flag4j.operations.dense.real.RealDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseVectorOperations;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
+
+import java.util.Arrays;
 
 /**
  * Complex dense vector. This class is mostly equivalent to a rank 1 complex tensor.
@@ -58,9 +61,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @param size Size of the vector.
      */
     public CVector(int size) {
-<span class="fc" id="L61">        super(size, new CNumber[size]);</span>
-<span class="fc" id="L62">        ArrayUtils.fillZeros(super.entries);</span>
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L64">        super(size, new CNumber[size]);</span>
+<span class="fc" id="L65">        ArrayUtils.fillZeros(super.entries);</span>
+<span class="fc" id="L66">    }</span>
 
 
     /**
@@ -69,9 +72,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @param fillValue Value to fill vector with.
      */
     public CVector(int size, double fillValue) {
-<span class="fc" id="L72">        super(size, new CNumber[size]);</span>
-<span class="fc" id="L73">        ArrayUtils.fill(super.entries, fillValue);</span>
-<span class="fc" id="L74">    }</span>
+<span class="fc" id="L75">        super(size, new CNumber[size]);</span>
+<span class="fc" id="L76">        ArrayUtils.fill(super.entries, fillValue);</span>
+<span class="fc" id="L77">    }</span>
 
 
     /**
@@ -80,9 +83,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @param fillValue Value to fill vector with.
      */
     public CVector(int size, CNumber fillValue) {
-<span class="fc" id="L83">        super(size, new CNumber[size]);</span>
-<span class="fc" id="L84">        ArrayUtils.fill(super.entries, fillValue);</span>
-<span class="fc" id="L85">    }</span>
+<span class="fc" id="L86">        super(size, new CNumber[size]);</span>
+<span class="fc" id="L87">        ArrayUtils.fill(super.entries, fillValue);</span>
+<span class="fc" id="L88">    }</span>
 
 
     /**
@@ -90,9 +93,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @param entries Entries for this column vector.
      */
     public CVector(double[] entries) {
-<span class="fc" id="L93">        super(entries.length, new CNumber[entries.length]);</span>
-<span class="fc" id="L94">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
-<span class="fc" id="L95">    }</span>
+<span class="fc" id="L96">        super(entries.length, new CNumber[entries.length]);</span>
+<span class="fc" id="L97">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
+<span class="fc" id="L98">    }</span>
 
 
     /**
@@ -100,9 +103,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @param entries Entries for this column vector.
      */
     public CVector(int[] entries) {
-<span class="fc" id="L103">        super(entries.length, new CNumber[entries.length]);</span>
-<span class="fc" id="L104">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
-<span class="fc" id="L105">    }</span>
+<span class="fc" id="L106">        super(entries.length, new CNumber[entries.length]);</span>
+<span class="fc" id="L107">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
+<span class="fc" id="L108">    }</span>
 
 
     /**
@@ -110,8 +113,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @param entries Entries for this column vector.
      */
     public CVector(CNumber[] entries) {
-<span class="fc" id="L113">        super(entries.length, entries);</span>
-<span class="fc" id="L114">    }</span>
+<span class="fc" id="L116">        super(entries.length, entries);</span>
+<span class="fc" id="L117">    }</span>
 
 
     /**
@@ -119,9 +122,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @param a Complex vector to copy.
      */
     public CVector(CVector a) {
-<span class="fc" id="L122">        super(a.size(), new CNumber[a.totalEntries().intValue()]);</span>
-<span class="fc" id="L123">        ArrayUtils.copy2CNumber(a.entries, super.entries);</span>
-<span class="fc" id="L124">    }</span>
+<span class="fc" id="L125">        super(a.size(), new CNumber[a.totalEntries().intValue()]);</span>
+<span class="fc" id="L126">        ArrayUtils.copy2CNumber(a.entries, super.entries);</span>
+<span class="fc" id="L127">    }</span>
 
 
     /**
@@ -131,7 +134,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public boolean isZeros() {
-<span class="nc" id="L134">        return ArrayUtils.isZeros(this.entries);</span>
+<span class="nc" id="L137">        return ArrayUtils.isZeros(this.entries);</span>
     }
 
 
@@ -142,7 +145,36 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public boolean isOnes() {
-<span class="nc" id="L145">        return ComplexDenseProperties.isOnes(this.entries);</span>
+<span class="nc" id="L148">        return ComplexDenseProperties.isOnes(this.entries);</span>
+    }
+
+
+    /**
+     * Checks if two this vector is numerically element-wise equal to another object. Objects which can be equal are, {@link Vector},
+     * {@link CVector}, {@link SparseVector}, {@link SparseCVector}.
+     *
+     * @param b Object to compare to this vector.
+     * @return True if this vector and object {@code b} are equivalent element-wise. Otherwise, returns false.
+     */
+    @Override
+    public boolean equals(Object b) {
+<span class="fc" id="L161">        boolean equal = false;</span>
+
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">        if(b instanceof Vector) {</span>
+<span class="fc" id="L164">            Vector vec = (Vector) b;</span>
+<span class="fc" id="L165">            equal = ArrayUtils.equals(vec.entries, this.entries);</span>
+<span class="pc bnc" id="L166" title="All 2 branches missed.">        } else if(b instanceof CVector) {</span>
+<span class="nc" id="L167">            CVector vec = (CVector) b;</span>
+<span class="nc" id="L168">            equal = Arrays.equals(this.entries, vec.entries);</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">        } else if(b instanceof SparseVector) {</span>
+<span class="nc" id="L170">            SparseVector vec = (SparseVector) b;</span>
+<span class="nc" id="L171">            equal = RealComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">        } else if(b instanceof SparseCVector) {</span>
+<span class="nc" id="L173">            SparseCVector vec = (SparseCVector) b;</span>
+<span class="nc" id="L174">            equal = ComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);</span>
+        }
+
+<span class="fc" id="L177">        return equal;</span>
     }
 
 
@@ -154,9 +186,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public void set(double value, int... indices) {
-<span class="nc" id="L157">        ParameterChecks.assertArrayLengthsEq(1, indices.length);</span>
-<span class="nc" id="L158">        this.entries[indices[0]] = new CNumber(value);</span>
-<span class="nc" id="L159">    }</span>
+<span class="nc" id="L189">        ParameterChecks.assertArrayLengthsEq(1, indices.length);</span>
+<span class="nc" id="L190">        this.entries[indices[0]] = new CNumber(value);</span>
+<span class="nc" id="L191">    }</span>
 
 
     /**
@@ -166,9 +198,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @param indices The indices of this tensor for which to set the value.
      */
     public void set(CNumber value, int... indices) {
-<span class="nc" id="L169">        ParameterChecks.assertArrayLengthsEq(1, indices.length);</span>
-<span class="nc" id="L170">        this.entries[indices[0]] = value;</span>
-<span class="nc" id="L171">    }</span>
+<span class="nc" id="L201">        ParameterChecks.assertArrayLengthsEq(1, indices.length);</span>
+<span class="nc" id="L202">        this.entries[indices[0]] = value;</span>
+<span class="nc" id="L203">    }</span>
 
 
     /**
@@ -180,7 +212,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector add(CVector B) {
-<span class="nc" id="L183">        return new CVector(ComplexDenseOperations.add(this.entries, this.shape,</span>
+<span class="nc" id="L215">        return new CVector(ComplexDenseOperations.add(this.entries, this.shape,</span>
                 B.entries, B.shape));
     }
 
@@ -194,7 +226,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector add(SparseCVector B) {
-<span class="nc" id="L197">        return ComplexDenseSparseVectorOperations.add(this, B);</span>
+<span class="nc" id="L229">        return ComplexDenseSparseVectorOperations.add(this, B);</span>
     }
 
 
@@ -207,7 +239,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector sub(Vector B) {
-<span class="nc" id="L210">        return new CVector(RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape));</span>
+<span class="nc" id="L242">        return new CVector(RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape));</span>
     }
 
 
@@ -220,7 +252,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector sub(SparseVector B) {
-<span class="nc" id="L223">        return RealComplexDenseSparseVectorOperations.sub(this, B);</span>
+<span class="nc" id="L255">        return RealComplexDenseSparseVectorOperations.sub(this, B);</span>
     }
 
 
@@ -232,7 +264,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector add(double a) {
-<span class="nc" id="L235">        return new CVector(ComplexDenseOperations.add(this.entries, a));</span>
+<span class="nc" id="L267">        return new CVector(ComplexDenseOperations.add(this.entries, a));</span>
     }
 
 
@@ -244,7 +276,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector add(CNumber a) {
-<span class="nc" id="L247">        return new CVector(ComplexDenseOperations.add(this.entries, a));</span>
+<span class="nc" id="L279">        return new CVector(ComplexDenseOperations.add(this.entries, a));</span>
     }
 
 
@@ -257,7 +289,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector sub(CVector B) {
-<span class="nc" id="L260">        return new CVector(ComplexDenseOperations.sub(this.entries, this.shape,</span>
+<span class="nc" id="L292">        return new CVector(ComplexDenseOperations.sub(this.entries, this.shape,</span>
                 B.entries, B.shape));
     }
 
@@ -271,7 +303,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector sub(SparseCVector B) {
-<span class="nc" id="L274">        return ComplexDenseSparseVectorOperations.sub(this, B);</span>
+<span class="nc" id="L306">        return ComplexDenseSparseVectorOperations.sub(this, B);</span>
     }
 
 
@@ -283,8 +315,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public void addEq(SparseVector B) {
-<span class="nc" id="L286">        RealComplexDenseSparseVectorOperations.addEq(this, B);</span>
-<span class="nc" id="L287">    }</span>
+<span class="nc" id="L318">        RealComplexDenseSparseVectorOperations.addEq(this, B);</span>
+<span class="nc" id="L319">    }</span>
 
 
     /**
@@ -295,8 +327,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public void addEq(Vector B) {
-<span class="nc" id="L298">        RealComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);</span>
-<span class="nc" id="L299">    }</span>
+<span class="nc" id="L330">        RealComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);</span>
+<span class="nc" id="L331">    }</span>
 
 
     /**
@@ -307,8 +339,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public void subEq(Vector B) {
-<span class="nc" id="L310">        RealComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);</span>
-<span class="nc" id="L311">    }</span>
+<span class="nc" id="L342">        RealComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);</span>
+<span class="nc" id="L343">    }</span>
 
 
     /**
@@ -319,8 +351,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public void subEq(SparseVector B) {
-<span class="nc" id="L322">        RealComplexDenseSparseVectorOperations.subEq(this, B);</span>
-<span class="nc" id="L323">    }</span>
+<span class="nc" id="L354">        RealComplexDenseSparseVectorOperations.subEq(this, B);</span>
+<span class="nc" id="L355">    }</span>
 
 
     /**
@@ -332,7 +364,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector elemMult(Vector B) {
-<span class="nc" id="L335">        return new CVector(RealComplexDenseOperations.elemMult(this.entries, this.shape, B.entries, B.shape));</span>
+<span class="nc" id="L367">        return new CVector(RealComplexDenseOperations.elemMult(this.entries, this.shape, B.entries, B.shape));</span>
     }
 
 
@@ -345,7 +377,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public SparseCVector elemMult(SparseVector B) {
-<span class="nc" id="L348">        return RealComplexDenseSparseVectorOperations.elemMult(this, B);</span>
+<span class="nc" id="L380">        return RealComplexDenseSparseVectorOperations.elemMult(this, B);</span>
     }
 
 
@@ -358,7 +390,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector elemMult(CVector B) {
-<span class="nc" id="L361">        return new CVector(ComplexDenseOperations.elemMult(this.entries, this.shape, B.entries, B.shape));</span>
+<span class="nc" id="L393">        return new CVector(ComplexDenseOperations.elemMult(this.entries, this.shape, B.entries, B.shape));</span>
     }
 
 
@@ -371,7 +403,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public SparseCVector elemMult(SparseCVector B) {
-<span class="nc" id="L374">        return ComplexDenseSparseVectorOperations.elemMult(this, B);</span>
+<span class="nc" id="L406">        return ComplexDenseSparseVectorOperations.elemMult(this, B);</span>
     }
 
 
@@ -384,7 +416,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector elemDiv(Vector B) {
-<span class="nc" id="L387">        return new CVector(RealComplexDenseOperations.elemDiv(this.entries, this.shape, B.entries, B.shape));</span>
+<span class="nc" id="L419">        return new CVector(RealComplexDenseOperations.elemDiv(this.entries, this.shape, B.entries, B.shape));</span>
     }
 
 
@@ -397,7 +429,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector elemDiv(CVector B) {
-<span class="nc" id="L400">        return new CVector(ComplexDenseOperations.elemDiv(this.entries, this.shape, B.entries, B.shape));</span>
+<span class="nc" id="L432">        return new CVector(ComplexDenseOperations.elemDiv(this.entries, this.shape, B.entries, B.shape));</span>
     }
 
 
@@ -409,7 +441,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector sub(double a) {
-<span class="nc" id="L412">        return new CVector(ComplexDenseOperations.sub(this.entries, a));</span>
+<span class="nc" id="L444">        return new CVector(ComplexDenseOperations.sub(this.entries, a));</span>
     }
 
 
@@ -421,7 +453,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector sub(CNumber a) {
-<span class="nc" id="L424">        return new CVector(ComplexDenseOperations.sub(this.entries, a));</span>
+<span class="nc" id="L456">        return new CVector(ComplexDenseOperations.sub(this.entries, a));</span>
     }
 
 
@@ -433,8 +465,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public void addEq(CVector B) {
-<span class="nc" id="L436">        ComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);</span>
-<span class="nc" id="L437">    }</span>
+<span class="nc" id="L468">        ComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);</span>
+<span class="nc" id="L469">    }</span>
 
 
     /**
@@ -444,8 +476,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public void addEq(CNumber b) {
-<span class="nc" id="L447">        ComplexDenseOperations.addEq(this.entries, b);</span>
-<span class="nc" id="L448">    }</span>
+<span class="nc" id="L479">        ComplexDenseOperations.addEq(this.entries, b);</span>
+<span class="nc" id="L480">    }</span>
 
 
     /**
@@ -455,8 +487,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public void addEq(Double b) {
-<span class="nc" id="L458">        RealComplexDenseOperations.addEq(this.entries, b);</span>
-<span class="nc" id="L459">    }</span>
+<span class="nc" id="L490">        RealComplexDenseOperations.addEq(this.entries, b);</span>
+<span class="nc" id="L491">    }</span>
 
 
     /**
@@ -467,8 +499,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public void subEq(CVector B) {
-<span class="nc" id="L470">        ComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);</span>
-<span class="nc" id="L471">    }</span>
+<span class="nc" id="L502">        ComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);</span>
+<span class="nc" id="L503">    }</span>
 
 
     /**
@@ -478,8 +510,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public void subEq(CNumber b) {
-<span class="nc" id="L481">        ComplexDenseOperations.subEq(this.entries, b);</span>
-<span class="nc" id="L482">    }</span>
+<span class="nc" id="L513">        ComplexDenseOperations.subEq(this.entries, b);</span>
+<span class="nc" id="L514">    }</span>
 
 
     /**
@@ -489,8 +521,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public void subEq(Double b) {
-<span class="nc" id="L492">        RealComplexDenseOperations.addEq(this.entries, b);</span>
-<span class="nc" id="L493">    }</span>
+<span class="nc" id="L524">        RealComplexDenseOperations.addEq(this.entries, b);</span>
+<span class="nc" id="L525">    }</span>
 
 
     /**
@@ -501,7 +533,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector scalMult(double factor) {
-<span class="nc" id="L504">        return new CVector(ComplexDenseOperations.scalMult(this.entries, factor));</span>
+<span class="nc" id="L536">        return new CVector(ComplexDenseOperations.scalMult(this.entries, factor));</span>
     }
 
 
@@ -513,7 +545,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector scalMult(CNumber factor) {
-<span class="nc" id="L516">        return new CVector(ComplexDenseOperations.scalMult(this.entries, factor));</span>
+<span class="nc" id="L548">        return new CVector(ComplexDenseOperations.scalMult(this.entries, factor));</span>
     }
 
 
@@ -526,7 +558,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector scalDiv(double divisor) {
-<span class="nc" id="L529">        return new CVector(ComplexDenseOperations.scalDiv(this.entries, divisor));</span>
+<span class="nc" id="L561">        return new CVector(ComplexDenseOperations.scalDiv(this.entries, divisor));</span>
     }
 
 
@@ -539,7 +571,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector scalDiv(CNumber divisor) {
-<span class="nc" id="L542">        return new CVector(ComplexDenseOperations.scalDiv(this.entries, divisor));</span>
+<span class="nc" id="L574">        return new CVector(ComplexDenseOperations.scalDiv(this.entries, divisor));</span>
     }
 
 
@@ -550,7 +582,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CNumber sum() {
-<span class="nc" id="L553">        return AggregateComplex.sum(this.entries);</span>
+<span class="nc" id="L585">        return AggregateComplex.sum(this.entries);</span>
     }
 
 
@@ -562,7 +594,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector sqrt() {
-<span class="nc" id="L565">        return new CVector(ComplexOperations.sqrt(this.entries));</span>
+<span class="nc" id="L597">        return new CVector(ComplexOperations.sqrt(this.entries));</span>
     }
 
 
@@ -574,7 +606,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector abs() {
-<span class="nc" id="L577">        return new CVector(ComplexOperations.abs(this.entries));</span>
+<span class="nc" id="L609">        return new CVector(ComplexOperations.abs(this.entries));</span>
     }
 
 
@@ -585,7 +617,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector transpose() {
-<span class="nc" id="L588">        return T();</span>
+<span class="nc" id="L620">        return T();</span>
     }
 
 
@@ -596,7 +628,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector T() {
-<span class="nc" id="L599">        return new CVector(this);</span>
+<span class="nc" id="L631">        return new CVector(this);</span>
     }
 
 
@@ -608,7 +640,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector recep() {
-<span class="nc" id="L611">        return new CVector(ComplexDenseOperations.recep(this.entries));</span>
+<span class="nc" id="L643">        return new CVector(ComplexDenseOperations.recep(this.entries));</span>
     }
 
 
@@ -621,8 +653,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CNumber get(int... indices) {
-<span class="nc" id="L624">        ParameterChecks.assertArrayLengthsEq(1, indices.length);</span>
-<span class="nc" id="L625">        return this.entries[indices[0]];</span>
+<span class="nc" id="L656">        ParameterChecks.assertArrayLengthsEq(1, indices.length);</span>
+<span class="nc" id="L657">        return this.entries[indices[0]];</span>
     }
 
 
@@ -633,7 +665,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector copy() {
-<span class="nc" id="L636">        return new CVector(this);</span>
+<span class="nc" id="L668">        return new CVector(this);</span>
     }
 
 
@@ -644,7 +676,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CNumber min() {
-<span class="nc" id="L647">        return AggregateComplex.minAbs(this.entries);</span>
+<span class="nc" id="L679">        return AggregateComplex.minAbs(this.entries);</span>
     }
 
 
@@ -655,7 +687,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CNumber max() {
-<span class="nc" id="L658">        return AggregateComplex.maxAbs(this.entries);</span>
+<span class="nc" id="L690">        return AggregateComplex.maxAbs(this.entries);</span>
     }
 
 
@@ -667,7 +699,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CNumber minAbs() {
-<span class="nc" id="L670">        return min();</span>
+<span class="nc" id="L702">        return min();</span>
     }
 
 
@@ -679,7 +711,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CNumber maxAbs() {
-<span class="nc" id="L682">        return max();</span>
+<span class="nc" id="L714">        return max();</span>
     }
 
 
@@ -691,7 +723,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L694">        return new int[]{AggregateDenseComplex.argMin(this.entries)};</span>
+<span class="nc" id="L726">        return new int[]{AggregateDenseComplex.argMin(this.entries)};</span>
     }
 
 
@@ -703,7 +735,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L706">        return new int[]{AggregateDenseComplex.argMax(this.entries)};</span>
+<span class="nc" id="L738">        return new int[]{AggregateDenseComplex.argMax(this.entries)};</span>
     }
 
 
@@ -714,15 +746,15 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public double norm() {
-<span class="nc" id="L717">        double norm = 0;</span>
+<span class="nc" id="L749">        double norm = 0;</span>
         double mag;
 
-<span class="nc bnc" id="L720" title="All 2 branches missed.">        for(int i=0; i&lt;this.size; i++) {</span>
-<span class="nc" id="L721">            mag = this.entries[i].magAsDouble();</span>
-<span class="nc" id="L722">            norm += mag*mag;</span>
+<span class="nc bnc" id="L752" title="All 2 branches missed.">        for(int i=0; i&lt;this.size; i++) {</span>
+<span class="nc" id="L753">            mag = this.entries[i].magAsDouble();</span>
+<span class="nc" id="L754">            norm += mag*mag;</span>
         }
 
-<span class="nc" id="L725">        return Math.sqrt(norm);</span>
+<span class="nc" id="L757">        return Math.sqrt(norm);</span>
     }
 
 
@@ -736,16 +768,16 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public double norm(double p) {
-<span class="nc bnc" id="L739" title="All 2 branches missed.">        if(Double.isInfinite(p)) {</span>
-<span class="nc" id="L740">            return infNorm();</span>
+<span class="nc bnc" id="L771" title="All 2 branches missed.">        if(Double.isInfinite(p)) {</span>
+<span class="nc" id="L772">            return infNorm();</span>
         } else {
-<span class="nc" id="L742">            double norm = 0;</span>
+<span class="nc" id="L774">            double norm = 0;</span>
 
-<span class="nc bnc" id="L744" title="All 2 branches missed.">            for(int i=0; i&lt;this.size; i++) {</span>
-<span class="nc" id="L745">                norm += Math.pow(this.entries[i].magAsDouble(), p);</span>
+<span class="nc bnc" id="L776" title="All 2 branches missed.">            for(int i=0; i&lt;this.size; i++) {</span>
+<span class="nc" id="L777">                norm += Math.pow(this.entries[i].magAsDouble(), p);</span>
             }
 
-<span class="nc" id="L748">            return Math.pow(norm, 1.0/p);</span>
+<span class="nc" id="L780">            return Math.pow(norm, 1.0/p);</span>
         }
     }
 
@@ -757,7 +789,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L760">        return maxAbs().re;</span>
+<span class="nc" id="L792">        return maxAbs().re;</span>
     }
 
 
@@ -769,7 +801,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public boolean sameShape(Vector b) {
-<span class="nc bnc" id="L772" title="All 2 branches missed.">        return this.size==b.size;</span>
+<span class="nc bnc" id="L804" title="All 2 branches missed.">        return this.size==b.size;</span>
     }
 
 
@@ -781,7 +813,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public boolean sameShape(SparseVector b) {
-<span class="nc bnc" id="L784" title="All 2 branches missed.">        return this.size==b.size;</span>
+<span class="nc bnc" id="L816" title="All 2 branches missed.">        return this.size==b.size;</span>
     }
 
 
@@ -793,7 +825,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public boolean sameShape(CVector b) {
-<span class="nc bnc" id="L796" title="All 2 branches missed.">        return this.size==b.size;</span>
+<span class="nc bnc" id="L828" title="All 2 branches missed.">        return this.size==b.size;</span>
     }
 
 
@@ -805,7 +837,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public boolean sameShape(SparseCVector b) {
-<span class="nc bnc" id="L808" title="All 2 branches missed.">        return this.size==b.size;</span>
+<span class="nc bnc" id="L840" title="All 2 branches missed.">        return this.size==b.size;</span>
     }
 
 
@@ -817,7 +849,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public boolean sameSize(Vector b) {
-<span class="nc bnc" id="L820" title="All 2 branches missed.">        return this.size==b.size;</span>
+<span class="nc bnc" id="L852" title="All 2 branches missed.">        return this.size==b.size;</span>
     }
 
 
@@ -829,7 +861,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public boolean sameSize(SparseVector b) {
-<span class="nc bnc" id="L832" title="All 2 branches missed.">        return this.size==b.size;</span>
+<span class="nc bnc" id="L864" title="All 2 branches missed.">        return this.size==b.size;</span>
     }
 
 
@@ -841,7 +873,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public boolean sameSize(CVector b) {
-<span class="nc bnc" id="L844" title="All 2 branches missed.">        return this.size==b.size;</span>
+<span class="nc bnc" id="L876" title="All 2 branches missed.">        return this.size==b.size;</span>
     }
 
 
@@ -853,7 +885,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public boolean sameSize(SparseCVector b) {
-<span class="nc bnc" id="L856" title="All 2 branches missed.">        return this.size==b.size;</span>
+<span class="nc bnc" id="L888" title="All 2 branches missed.">        return this.size==b.size;</span>
     }
 
 
@@ -869,25 +901,25 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
     public CMatrix extend(int n, int axis) {
         CMatrix extended;
 
-<span class="nc bnc" id="L872" title="All 2 branches missed.">        if(axis==0) {</span>
-<span class="nc" id="L873">            extended = new CMatrix(n, this.size);</span>
-<span class="nc bnc" id="L874" title="All 2 branches missed.">            for(int i=0; i&lt;n; i++) {</span>
-<span class="nc" id="L875">                ArrayUtils.arraycopy(this.entries, 0, extended.entries, i*extended.numCols, this.size);</span>
+<span class="nc bnc" id="L904" title="All 2 branches missed.">        if(axis==0) {</span>
+<span class="nc" id="L905">            extended = new CMatrix(n, this.size);</span>
+<span class="nc bnc" id="L906" title="All 2 branches missed.">            for(int i=0; i&lt;n; i++) {</span>
+<span class="nc" id="L907">                ArrayUtils.arraycopy(this.entries, 0, extended.entries, i*extended.numCols, this.size);</span>
             }
 
-<span class="nc bnc" id="L878" title="All 2 branches missed.">        } else if(axis==1) {</span>
-<span class="nc" id="L879">            extended = new CMatrix(this.size, n);</span>
-<span class="nc" id="L880">            CNumber[] row = new CNumber[n];</span>
+<span class="nc bnc" id="L910" title="All 2 branches missed.">        } else if(axis==1) {</span>
+<span class="nc" id="L911">            extended = new CMatrix(this.size, n);</span>
+<span class="nc" id="L912">            CNumber[] row = new CNumber[n];</span>
 
-<span class="nc bnc" id="L882" title="All 2 branches missed.">            for(int i=0; i&lt;this.size; i++) {</span>
-<span class="nc" id="L883">                ArrayUtils.fill(row, this.entries[i]);</span>
-<span class="nc" id="L884">                System.arraycopy(row, 0, extended.entries, i*extended.numCols, row.length);</span>
+<span class="nc bnc" id="L914" title="All 2 branches missed.">            for(int i=0; i&lt;this.size; i++) {</span>
+<span class="nc" id="L915">                ArrayUtils.fill(row, this.entries[i]);</span>
+<span class="nc" id="L916">                System.arraycopy(row, 0, extended.entries, i*extended.numCols, row.length);</span>
             }
-<span class="nc" id="L886">        } else {</span>
-<span class="nc" id="L887">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, Axis2D.allAxes()));</span>
+<span class="nc" id="L918">        } else {</span>
+<span class="nc" id="L919">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, Axis2D.allAxes()));</span>
         }
 
-<span class="nc" id="L890">        return extended;</span>
+<span class="nc" id="L922">        return extended;</span>
     }
 
 
@@ -899,11 +931,11 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector join(Vector b) {
-<span class="nc" id="L902">        CNumber[] entries = new CNumber[this.size+b.size];</span>
-<span class="nc" id="L903">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
-<span class="nc" id="L904">        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);</span>
+<span class="nc" id="L934">        CNumber[] entries = new CNumber[this.size+b.size];</span>
+<span class="nc" id="L935">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
+<span class="nc" id="L936">        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);</span>
 
-<span class="nc" id="L906">        return new CVector(entries);</span>
+<span class="nc" id="L938">        return new CVector(entries);</span>
     }
 
 
@@ -915,11 +947,11 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector join(CVector b) {
-<span class="nc" id="L918">        CNumber[] entries = new CNumber[this.size+b.size];</span>
-<span class="nc" id="L919">        System.arraycopy(this.entries, 0, entries, 0, this.size);</span>
-<span class="nc" id="L920">        System.arraycopy(b.entries, 0, entries, this.size, b.size);</span>
+<span class="nc" id="L950">        CNumber[] entries = new CNumber[this.size+b.size];</span>
+<span class="nc" id="L951">        System.arraycopy(this.entries, 0, entries, 0, this.size);</span>
+<span class="nc" id="L952">        System.arraycopy(b.entries, 0, entries, this.size, b.size);</span>
 
-<span class="nc" id="L922">        return new CVector(entries);</span>
+<span class="nc" id="L954">        return new CVector(entries);</span>
     }
 
 
@@ -931,17 +963,17 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector join(SparseVector b) {
-<span class="nc" id="L934">        CVector joined = new CVector(this.size+b.size);</span>
-<span class="nc" id="L935">        ArrayUtils.arraycopy(this.entries, 0, joined.entries, 0, this.size);</span>
+<span class="nc" id="L966">        CVector joined = new CVector(this.size+b.size);</span>
+<span class="nc" id="L967">        ArrayUtils.arraycopy(this.entries, 0, joined.entries, 0, this.size);</span>
 
         // Copy entries from sparse vector.
         int index;
-<span class="nc bnc" id="L939" title="All 2 branches missed.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="nc" id="L940">            index = b.indices[i];</span>
-<span class="nc" id="L941">            joined.entries[this.size+index] = new CNumber(b.entries[i]);</span>
+<span class="nc bnc" id="L971" title="All 2 branches missed.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="nc" id="L972">            index = b.indices[i];</span>
+<span class="nc" id="L973">            joined.entries[this.size+index] = new CNumber(b.entries[i]);</span>
         }
 
-<span class="nc" id="L944">        return joined;</span>
+<span class="nc" id="L976">        return joined;</span>
     }
 
 
@@ -953,17 +985,17 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector join(SparseCVector b) {
-<span class="nc" id="L956">        CVector joined = new CVector(this.size+b.size);</span>
-<span class="nc" id="L957">        ArrayUtils.arraycopy(this.entries, 0, joined.entries, 0, this.size);</span>
+<span class="nc" id="L988">        CVector joined = new CVector(this.size+b.size);</span>
+<span class="nc" id="L989">        ArrayUtils.arraycopy(this.entries, 0, joined.entries, 0, this.size);</span>
 
         // Copy entries from sparse vector.
         int index;
-<span class="nc bnc" id="L961" title="All 2 branches missed.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="nc" id="L962">            index = b.indices[i];</span>
-<span class="nc" id="L963">            joined.entries[this.size+index] = b.entries[i].copy();</span>
+<span class="nc bnc" id="L993" title="All 2 branches missed.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="nc" id="L994">            index = b.indices[i];</span>
+<span class="nc" id="L995">            joined.entries[this.size+index] = b.entries[i].copy();</span>
         }
 
-<span class="nc" id="L966">        return joined;</span>
+<span class="nc" id="L998">        return joined;</span>
     }
 
 
@@ -982,14 +1014,14 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CMatrix stack(Vector b) {
-<span class="nc" id="L985">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
-<span class="nc" id="L986">        CMatrix stacked = new CMatrix(2, this.size);</span>
+<span class="nc" id="L1017">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="nc" id="L1018">        CMatrix stacked = new CMatrix(2, this.size);</span>
 
         // Copy entries from each vector to the matrix.
-<span class="nc" id="L989">        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);</span>
-<span class="nc" id="L990">        ArrayUtils.arraycopy(b.entries, 0, stacked.entries, this.size, b.size);</span>
+<span class="nc" id="L1021">        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);</span>
+<span class="nc" id="L1022">        ArrayUtils.arraycopy(b.entries, 0, stacked.entries, this.size, b.size);</span>
 
-<span class="nc" id="L992">        return stacked;</span>
+<span class="nc" id="L1024">        return stacked;</span>
     }
 
 
@@ -1008,20 +1040,20 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CMatrix stack(SparseVector b) {
-<span class="nc" id="L1011">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
-<span class="nc" id="L1012">        CMatrix stacked = new CMatrix(2, this.size);</span>
+<span class="nc" id="L1043">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="nc" id="L1044">        CMatrix stacked = new CMatrix(2, this.size);</span>
 
         // Copy entries from dense vector to the matrix.
-<span class="nc" id="L1015">        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);</span>
+<span class="nc" id="L1047">        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);</span>
 
         // Copy entries from sparse vector to the matrix.
         int index;
-<span class="nc bnc" id="L1019" title="All 2 branches missed.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="nc" id="L1020">            index = b.indices[i];</span>
-<span class="nc" id="L1021">            stacked.entries[stacked.numCols + index] = new CNumber(b.entries[i]);</span>
+<span class="nc bnc" id="L1051" title="All 2 branches missed.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="nc" id="L1052">            index = b.indices[i];</span>
+<span class="nc" id="L1053">            stacked.entries[stacked.numCols + index] = new CNumber(b.entries[i]);</span>
         }
 
-<span class="nc" id="L1024">        return stacked;</span>
+<span class="nc" id="L1056">        return stacked;</span>
     }
 
 
@@ -1040,14 +1072,14 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CMatrix stack(CVector b) {
-<span class="nc" id="L1043">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
-<span class="nc" id="L1044">        CNumber[] entries = new CNumber[this.size+b.size];</span>
+<span class="nc" id="L1075">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="nc" id="L1076">        CNumber[] entries = new CNumber[this.size+b.size];</span>
 
         // Copy entries from each vector to the matrix.
-<span class="nc" id="L1047">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
-<span class="nc" id="L1048">        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);</span>
+<span class="nc" id="L1079">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
+<span class="nc" id="L1080">        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);</span>
 
-<span class="nc" id="L1050">        return new CMatrix(2, this.size, entries);</span>
+<span class="nc" id="L1082">        return new CMatrix(2, this.size, entries);</span>
     }
 
 
@@ -1066,20 +1098,20 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CMatrix stack(SparseCVector b) {
-<span class="nc" id="L1069">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
-<span class="nc" id="L1070">        CMatrix stacked = new CMatrix(2, this.size);</span>
+<span class="nc" id="L1101">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="nc" id="L1102">        CMatrix stacked = new CMatrix(2, this.size);</span>
 
         // Copy entries from dense vector to the matrix.
-<span class="nc" id="L1073">        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);</span>
+<span class="nc" id="L1105">        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);</span>
 
         // Copy entries from sparse vector to the matrix.
         int index;
-<span class="nc bnc" id="L1077" title="All 2 branches missed.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="nc" id="L1078">            index = b.indices[i];</span>
-<span class="nc" id="L1079">            stacked.entries[stacked.numCols + index] = b.entries[i].copy();</span>
+<span class="nc bnc" id="L1109" title="All 2 branches missed.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="nc" id="L1110">            index = b.indices[i];</span>
+<span class="nc" id="L1111">            stacked.entries[stacked.numCols + index] = b.entries[i].copy();</span>
         }
 
-<span class="nc" id="L1082">        return stacked;</span>
+<span class="nc" id="L1114">        return stacked;</span>
     }
 
 
@@ -1092,7 +1124,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector add(Vector B) {
-<span class="nc" id="L1095">        return new CVector(RealComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape));</span>
+<span class="nc" id="L1127">        return new CVector(RealComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape));</span>
     }
 
 
@@ -1105,7 +1137,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector add(SparseVector B) {
-<span class="nc" id="L1108">        return new CVector(RealComplexDenseSparseVectorOperations.add(this, B));</span>
+<span class="nc" id="L1140">        return new CVector(RealComplexDenseSparseVectorOperations.add(this, B));</span>
     }
 
 
@@ -1118,7 +1150,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CNumber innerProduct(Vector b) {
-<span class="nc" id="L1121">        return RealComplexDenseVectorOperations.innerProduct(this.entries, b.entries);</span>
+<span class="nc" id="L1153">        return RealComplexDenseVectorOperations.innerProduct(this.entries, b.entries);</span>
     }
 
 
@@ -1131,7 +1163,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CNumber innerProduct(SparseVector b) {
-<span class="nc" id="L1134">        return RealComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);</span>
+<span class="nc" id="L1166">        return RealComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);</span>
     }
 
 
@@ -1144,7 +1176,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CNumber innerProduct(CVector b) {
-<span class="nc" id="L1147">        return ComplexDenseVectorOperations.innerProduct(this.entries, b.entries);</span>
+<span class="nc" id="L1179">        return ComplexDenseVectorOperations.innerProduct(this.entries, b.entries);</span>
     }
 
 
@@ -1157,7 +1189,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CNumber innerProduct(SparseCVector b) {
-<span class="nc" id="L1160">        return ComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);</span>
+<span class="nc" id="L1192">        return ComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);</span>
     }
 
 
@@ -1170,14 +1202,14 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector cross(Vector b) {
-<span class="nc" id="L1173">        ParameterChecks.assertArrayLengthsEq(3, b.size);</span>
-<span class="nc" id="L1174">        CNumber[] entries = new CNumber[3];</span>
+<span class="nc" id="L1205">        ParameterChecks.assertArrayLengthsEq(3, b.size);</span>
+<span class="nc" id="L1206">        CNumber[] entries = new CNumber[3];</span>
 
-<span class="nc" id="L1176">        entries[0] = this.entries[1].mult(b.entries[2]).sub(this.entries[2].mult(b.entries[1]));</span>
-<span class="nc" id="L1177">        entries[1] = this.entries[2].mult(b.entries[0]).sub(this.entries[0].mult(b.entries[2]));</span>
-<span class="nc" id="L1178">        entries[2] = this.entries[0].mult(b.entries[1]).sub(this.entries[1].mult(b.entries[0]));</span>
+<span class="nc" id="L1208">        entries[0] = this.entries[1].mult(b.entries[2]).sub(this.entries[2].mult(b.entries[1]));</span>
+<span class="nc" id="L1209">        entries[1] = this.entries[2].mult(b.entries[0]).sub(this.entries[0].mult(b.entries[2]));</span>
+<span class="nc" id="L1210">        entries[2] = this.entries[0].mult(b.entries[1]).sub(this.entries[1].mult(b.entries[0]));</span>
 
-<span class="nc" id="L1180">        return new CVector(entries);</span>
+<span class="nc" id="L1212">        return new CVector(entries);</span>
     }
 
 
@@ -1190,14 +1222,14 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector cross(CVector b) {
-<span class="nc" id="L1193">        ParameterChecks.assertArrayLengthsEq(3, b.size);</span>
-<span class="nc" id="L1194">        CNumber[] entries = new CNumber[3];</span>
+<span class="nc" id="L1225">        ParameterChecks.assertArrayLengthsEq(3, b.size);</span>
+<span class="nc" id="L1226">        CNumber[] entries = new CNumber[3];</span>
 
-<span class="nc" id="L1196">        entries[0] = this.entries[1].mult(b.entries[2]).sub(this.entries[2].mult(b.entries[1]));</span>
-<span class="nc" id="L1197">        entries[1] = this.entries[2].mult(b.entries[0]).sub(this.entries[0].mult(b.entries[2]));</span>
-<span class="nc" id="L1198">        entries[2] = this.entries[0].mult(b.entries[1]).sub(this.entries[1].mult(b.entries[0]));</span>
+<span class="nc" id="L1228">        entries[0] = this.entries[1].mult(b.entries[2]).sub(this.entries[2].mult(b.entries[1]));</span>
+<span class="nc" id="L1229">        entries[1] = this.entries[2].mult(b.entries[0]).sub(this.entries[0].mult(b.entries[2]));</span>
+<span class="nc" id="L1230">        entries[2] = this.entries[0].mult(b.entries[1]).sub(this.entries[1].mult(b.entries[0]));</span>
 
-<span class="nc" id="L1200">        return new CVector(entries);</span>
+<span class="nc" id="L1232">        return new CVector(entries);</span>
     }
 
 
@@ -1210,8 +1242,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CMatrix outerProduct(Vector b) {
-<span class="nc" id="L1213">        return new CMatrix(this.size, b.size,</span>
-<span class="nc" id="L1214">                RealComplexDenseVectorOperations.outerProduct(this.entries, b.entries));</span>
+<span class="nc" id="L1245">        return new CMatrix(this.size, b.size,</span>
+<span class="nc" id="L1246">                RealComplexDenseVectorOperations.outerProduct(this.entries, b.entries));</span>
     }
 
 
@@ -1224,8 +1256,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CMatrix outerProduct(SparseVector b) {
-<span class="nc" id="L1227">        return new CMatrix(this.size, b.size,</span>
-<span class="nc" id="L1228">                RealComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));</span>
+<span class="nc" id="L1259">        return new CMatrix(this.size, b.size,</span>
+<span class="nc" id="L1260">                RealComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));</span>
     }
 
 
@@ -1238,8 +1270,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CMatrix outerProduct(CVector b) {
-<span class="nc" id="L1241">        return new CMatrix(this.size, b.size,</span>
-<span class="nc" id="L1242">                ComplexDenseVectorOperations.outerProduct(this.entries, b.entries));</span>
+<span class="nc" id="L1273">        return new CMatrix(this.size, b.size,</span>
+<span class="nc" id="L1274">                ComplexDenseVectorOperations.outerProduct(this.entries, b.entries));</span>
     }
 
 
@@ -1252,8 +1284,8 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CMatrix outerProduct(SparseCVector b) {
-<span class="nc" id="L1255">        return new CMatrix(this.size, b.size,</span>
-<span class="nc" id="L1256">                ComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));</span>
+<span class="nc" id="L1287">        return new CMatrix(this.size, b.size,</span>
+<span class="nc" id="L1288">                ComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));</span>
     }
 
 
@@ -1266,9 +1298,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CMatrix toMatrix() {
-<span class="nc" id="L1269">        CNumber[] entries = new CNumber[this.size];</span>
-<span class="nc" id="L1270">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
-<span class="nc" id="L1271">        return new CMatrix(this.entries.length, 1, entries);</span>
+<span class="nc" id="L1301">        CNumber[] entries = new CNumber[this.size];</span>
+<span class="nc" id="L1302">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
+<span class="nc" id="L1303">        return new CMatrix(this.entries.length, 1, entries);</span>
     }
 
 
@@ -1282,13 +1314,13 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CMatrix toMatrix(boolean columVector) {
-<span class="nc bnc" id="L1285" title="All 2 branches missed.">        if(columVector) {</span>
-<span class="nc" id="L1286">            return toMatrix();</span>
+<span class="nc bnc" id="L1317" title="All 2 branches missed.">        if(columVector) {</span>
+<span class="nc" id="L1318">            return toMatrix();</span>
         } else {
             // Convert to row vector.
-<span class="nc" id="L1289">            CNumber[] entries = new CNumber[this.size];</span>
-<span class="nc" id="L1290">            ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
-<span class="nc" id="L1291">            return new CMatrix(1, this.entries.length, entries);</span>
+<span class="nc" id="L1321">            CNumber[] entries = new CNumber[this.size];</span>
+<span class="nc" id="L1322">            ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
+<span class="nc" id="L1323">            return new CMatrix(1, this.entries.length, entries);</span>
         }
     }
 
@@ -1298,10 +1330,10 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @return A rank 1 tensor equivalent to this vector.
      */
     public CTensor toTensor() {
-<span class="nc" id="L1301">        CNumber[] entries = new CNumber[this.size];</span>
-<span class="nc" id="L1302">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
+<span class="nc" id="L1333">        CNumber[] entries = new CNumber[this.size];</span>
+<span class="nc" id="L1334">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
 
-<span class="nc" id="L1304">        return new CTensor(this.shape.copy(), this.entries);</span>
+<span class="nc" id="L1336">        return new CTensor(this.shape.copy(), this.entries);</span>
     }
 
 
@@ -1312,7 +1344,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public int length() {
-<span class="nc" id="L1315">        return this.size;</span>
+<span class="nc" id="L1347">        return this.size;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

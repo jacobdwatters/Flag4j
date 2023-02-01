@@ -133,7 +133,7 @@ public class RealDenseSparseOperations {
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            src1.entries[row*src1.numCols + col] += src2.entries[i];
+            src1.entries[row*src1.numCols + col] -= src2.entries[i];
         }
     }
 
