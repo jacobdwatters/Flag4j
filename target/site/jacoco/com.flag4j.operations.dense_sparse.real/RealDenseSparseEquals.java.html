@@ -51,34 +51,34 @@ public class RealDenseSparseEquals {
      * @return True if the two matrices are equal. Returns false otherwise.
      */
     public static boolean vectorEquals(double[] src1, double[] src2, int[] indices, int sparseSize) {
-<span class="nc" id="L54">        boolean equal = true;</span>
+<span class="fc" id="L54">        boolean equal = true;</span>
 
-<span class="nc bnc" id="L56" title="All 2 branches missed.">        if(src1.length==sparseSize) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if(src1.length==sparseSize) {</span>
             int index;
-<span class="nc" id="L58">            double[] src1Copy = Arrays.copyOf(src1, src1.length);</span>
+<span class="fc" id="L58">            double[] src1Copy = Arrays.copyOf(src1, src1.length);</span>
 
-<span class="nc bnc" id="L60" title="All 2 branches missed.">            for(int i=0; i&lt;sparseSize; i++) {</span>
-<span class="nc" id="L61">                index = indices[i];</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">            for(int i=0; i&lt;src2.length; i++) {</span>
+<span class="fc" id="L61">                index = indices[i];</span>
 
-<span class="nc bnc" id="L63" title="All 2 branches missed.">                if(src1[index]!=src2[i]) {</span>
-<span class="nc" id="L64">                    equal=false;</span>
-<span class="nc" id="L65">                    break;</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">                if(src1[index]!=src2[i]) {</span>
+<span class="fc" id="L64">                    equal=false;</span>
+<span class="fc" id="L65">                    break;</span>
 
                 } else {
-<span class="nc" id="L68">                    src1Copy[index] = 0;</span>
+<span class="fc" id="L68">                    src1Copy[index] = 0;</span>
                 }
             }
 
-<span class="nc bnc" id="L72" title="All 2 branches missed.">            if(equal) {</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">            if(equal) {</span>
                 // Now, if this vector is equal to the sparse vector, there should only be zeros left in the entriesStack
-<span class="nc" id="L74">                equal = ArrayUtils.isZeros(src1Copy);</span>
+<span class="fc" id="L74">                equal = ArrayUtils.isZeros(src1Copy);</span>
             }
 
-<span class="nc" id="L77">        } else {</span>
-<span class="nc" id="L78">            equal = false;</span>
+<span class="fc" id="L77">        } else {</span>
+<span class="fc" id="L78">            equal = false;</span>
         }
 
-<span class="nc" id="L81">        return equal;</span>
+<span class="fc" id="L81">        return equal;</span>
     }
 
 
