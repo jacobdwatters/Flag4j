@@ -44,39 +44,39 @@ public interface VectorComparisonsMixin<T, U, V, W, Y, X extends Number> extends
 
 
     /**
-     * Checks if two vectors have the same shape. This method <b>DOES</b> take the two vectors orientations into account.
+     * Checks if two vectors have the same shape.
      * @param b Vector to compare to this vector.
-     * @return True if this vector and vector b have the same orientation and length. Otherwise, returns false.
+     * @return True if this vector and vector b have the same length. Otherwise, returns false.
      */
     boolean sameShape(Vector b);
 
 
     /**
-     * Checks if two vectors have the same shape. This method <b>DOES</b> take the two vectors orientations into account.
+     * Checks if two vectors have the same shape.
      * @param b Vector to compare to this vector.
-     * @return True if this vector and vector b have the same orientation and length. Otherwise, returns false.
+     * @return True if this vector and vector b have the same length. Otherwise, returns false.
      */
     boolean sameShape(SparseVector b);
 
 
     /**
-     * Checks if two vectors have the same shape. This method <b>DOES</b> take the two vectors orientations into account.
+     * Checks if two vectors have the same shape.
      * @param b Vector to compare to this vector.
-     * @return True if this vector and vector b have the same orientation and length. Otherwise, returns false.
+     * @return True if this vector and vector b have the same length. Otherwise, returns false.
      */
     boolean sameShape(CVector b);
 
 
     /**
-     * Checks if two vectors have the same shape. This method <b>DOES</b> take the two vectors orientations into account.
+     * Checks if two vectors have the same shape.
      * @param b Vector to compare to this vector.
-     * @return True if this vector and vector b have the same orientation and length. Otherwise, returns false.
+     * @return True if this vector and vector b have the same length. Otherwise, returns false.
      */
     boolean sameShape(SparseCVector b);
 
 
     /**
-     * Checks if two vectors have the same length. This method <b>DOES NOT</b> take the two vectors orientations into account.
+     * Checks if two vectors have the same length.
      * @param b Vector to compare to this vector.
      * @return True if this vector and vector b have the same length. Otherwise, returns false.
      */
@@ -84,7 +84,7 @@ public interface VectorComparisonsMixin<T, U, V, W, Y, X extends Number> extends
 
 
     /**
-     * Checks if two vectors have the same length. This method <b>DOES NOT</b> take the two vectors orientations into account.
+     * Checks if two vectors have the same length.
      * @param b Vector to compare to this vector.
      * @return True if this vector and vector b have the same length. Otherwise, returns false.
      */
@@ -92,7 +92,7 @@ public interface VectorComparisonsMixin<T, U, V, W, Y, X extends Number> extends
 
 
     /**
-     * Checks if two vectors have the same length. This method <b>DOES NOT</b> take the two vectors orientations into account.
+     * Checks if two vectors have the same length.
      * @param b Vector to compare to this vector.
      * @return True if this vector and vector b have the same length. Otherwise, returns false.
      */
@@ -100,7 +100,7 @@ public interface VectorComparisonsMixin<T, U, V, W, Y, X extends Number> extends
 
 
     /**
-     * Checks if two vectors have the same length. This method <b>DOES NOT</b> take the two vectors orientations into account.
+     * Checks if two vectors have the same length.
      * @param b Vector to compare to this vector.
      * @return True if this vector and vector b have the same length. Otherwise, returns false.
      */

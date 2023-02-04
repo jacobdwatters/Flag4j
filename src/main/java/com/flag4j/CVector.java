@@ -28,13 +28,14 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.dense.complex.*;
-import com.flag4j.operations.dense.real.RealDenseEquals;
+import com.flag4j.operations.dense.complex.AggregateDenseComplex;
+import com.flag4j.operations.dense.complex.ComplexDenseOperations;
+import com.flag4j.operations.dense.complex.ComplexDenseProperties;
+import com.flag4j.operations.dense.complex.ComplexDenseVectorOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseVectorOperations;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
 import com.flag4j.util.ArrayUtils;
@@ -1164,6 +1165,17 @@ public class CVector extends VectorBase<CNumber[]> implements
     @Override
     public CNumber innerProduct(SparseVector b) {
         return RealComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);
+    }
+
+
+    /**
+     * Computes a unit vector in the same direction as this vector.
+     *
+     * @return A unit vector with the same direction as this vector.
+     */
+    @Override
+    public CVector normalize() {
+        return this.scalDiv(this.norm());
     }
 
 

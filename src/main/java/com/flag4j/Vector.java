@@ -969,6 +969,17 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
+     * Computes a unit vector in the same direction as this vector.
+     *
+     * @return A unit vector with the same direction as this vector.
+     */
+    @Override
+    public Vector normalize() {
+        return this.scalDiv(this.norm());
+    }
+
+
+    /**
      * Computes the inner product between two vectors.
      *
      * @param b Second vector in the inner product.
@@ -1223,6 +1234,10 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public double norm(double p) {
+        if(p<1) {
+            throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(1, p));
+        }
+
         if(Double.isInfinite(p)) {
             return infNorm();
         } else {

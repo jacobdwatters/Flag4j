@@ -2,6 +2,7 @@ com\flag4j\linalg\decompositions\LUDecompositionTests.class
 com\flag4j\matrix\MatrixEqualsTests.class
 com\flag4j\matrix\MatrixElemDivTests.class
 com\flag4j\matrix\MatrixScalMultTests.class
+com\flag4j\vector\VectorElemMultDivTests.class
 com\flag4j\complex_matrix\CMatrixConversionTests.class
 com\flag4j\matrix\MatrixAggregationTests.class
 com\flag4j\complex_matrix\CMatrixSubTests.class
@@ -13,6 +14,7 @@ com\flag4j\complex_matrix\CMatrixUnaryOperationsTests.class
 com\flag4j\complex_matrix\CMatrixAddTests.class
 com\flag4j\complex_matrix\CMatrixConstructorTests.class
 com\flag4j\complex_matrix\CMatrixReshapeTests.class
+com\flag4j\vector\VectorShapeTests.class
 com\flag4j\matrix\MatrixZerosOnesTests.class
 com\flag4j\complex_matrix\CMatrixDirectSumTests.class
 com\flag4j\matrix\MatrixSumRowsColsTests.class
@@ -30,6 +32,7 @@ com\flag4j\complex_matrix\CMatrixZeroOnesTests.class
 com\flag4j\matrix\MatrixFibTests.class
 com\flag4j\matrix\MatrixDetTests.class
 com\flag4j\CustomAssertions.class
+com\flag4j\vector\VectorAddSubTests.class
 com\flag4j\complex_matrix\CMatrixPropertiesTests.class
 com\flag4j\operations\sparse\complex\ComplexSparseMatMultTests.class
 com\flag4j\complex_matrix\CMatrixElemMultTests.class
@@ -40,6 +43,7 @@ com\flag4j\matrix\MatrixTriangularTests.class
 com\flag4j\matrix\MatrixMultTests.class
 com\flag4j\complex_matrix\CMatrixRowColSumTests.class
 com\flag4j\matrix\MatrixElementScalarTests.class
+com\flag4j\vector\VectorAddSubEqTests.class
 com\flag4j\matrix\MatrixAddSubEqTests.class
 com\flag4j\operations\dense_sparse\real\RealDenseSparseMatMultTests.class
 com\flag4j\matrix\MatrixReshapeTests.class

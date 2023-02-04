@@ -28,6 +28,8 @@ package com.flag4j.linalg.decompositions;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 
+import java.util.Arrays;
+
 
 /**
  * Computes the QR decomposition for a real matrix.
@@ -103,6 +105,9 @@ public final class RealQRDecomposition extends QRDecomposition<Matrix> {
 
             if(!col.isZeros()) { // Then a householder transform must be applied
                 H.setSlice(getHouseholder(col), i, i);
+
+                System.out.println("H:\n" + H + "\n");
+
                 Q = Q.mult(H); // Apply Householder reflector to Q
                 R = H.mult(R); // Apply Householder reflector to R
             }
@@ -119,13 +124,35 @@ public final class RealQRDecomposition extends QRDecomposition<Matrix> {
         Matrix H = Matrix.I(col.numRows);
         Vector v = col.toVector();
 
-        double signedNorm = -Math.signum(v.entries[0])*v.norm();
+        double signedNorm = -Math.copySign(v.norm(), v.entries[0]);
         v = v.scalDiv(v.entries[0] + signedNorm);
         v.entries[0] = 1;
+
+        System.out.println("v: " + Arrays.toString(v.entries) + "\n");
 
         Matrix P = v.outerProduct(v).scalMult(2/v.innerProduct(v)); // Create projection matrix
         H.subEq(P);
 
         return H;
+    }
+
+
+    public static void main(String[] args) {
+        double[][] aEntries = {
+                {0, 0, 0},
+                {0, 0, -1},
+                {0, 1, 0}};
+        Matrix A = new Matrix(aEntries);
+
+        RealQRDecomposition QR = new RealQRDecomposition();
+        QR.decompose(A);
+
+        Matrix Q = QR.getQ();
+        Matrix R = QR.getR();
+
+        System.out.println("A:\n" + A + "\n");
+        System.out.println("Q:\n" + Q + "\n");
+        System.out.println("R:\n" + R + "\n");
+        System.out.println("QR:\n" + Q.mult(R));
     }
 }

@@ -321,6 +321,13 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
 
 
     /**
+     * Computes a unit vector in the same direction as this vector.
+     * @return A unit vector with the same direction as this vector.
+     */
+    T normalize();
+
+
+    /**
      * Computes the inner product between two vectors.
      * @param b Second vector in the inner product.
      * @return The inner product between this vector and the vector b.

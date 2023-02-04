@@ -98,14 +98,14 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static Vector sub(Vector src1, SparseVector src2) {
-<span class="nc" id="L101">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
-<span class="nc" id="L102">        Vector dest = new Vector(src1);</span>
+<span class="fc" id="L101">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L102">        Vector dest = new Vector(src1);</span>
 
-<span class="nc bnc" id="L104" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L105">            dest.entries[src2.indices[i]] -= src2.entries[i];</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L105">            dest.entries[src2.indices[i]] -= src2.entries[i];</span>
         }
 
-<span class="nc" id="L108">        return dest;</span>
+<span class="fc" id="L108">        return dest;</span>
     }
 
 
@@ -116,12 +116,12 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static void addEq(Vector src1, SparseVector src2) {
-<span class="nc" id="L119">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L119">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
-<span class="nc bnc" id="L121" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L122">            src1.entries[src2.indices[i]] += src2.entries[i];</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L122">            src1.entries[src2.indices[i]] += src2.entries[i];</span>
         }
-<span class="nc" id="L124">    }</span>
+<span class="fc" id="L124">    }</span>
 
 
     /**
@@ -131,12 +131,12 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static void subEq(Vector src1, SparseVector src2) {
-<span class="nc" id="L134">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L134">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
-<span class="nc bnc" id="L136" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L137">            src1.entries[src2.indices[i]] -= src2.entries[i];</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L137">            src1.entries[src2.indices[i]] -= src2.entries[i];</span>
         }
-<span class="nc" id="L139">    }</span>
+<span class="fc" id="L139">    }</span>
 
 
     /**
@@ -165,14 +165,14 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static Vector add(Vector src1, SparseVector src2) {
-<span class="nc" id="L168">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
-<span class="nc" id="L169">        Vector dest = new Vector(src1);</span>
+<span class="fc" id="L168">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L169">        Vector dest = new Vector(src1);</span>
 
-<span class="nc bnc" id="L171" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L172">            dest.entries[src2.indices[i]] += src2.entries[i];</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L172">            dest.entries[src2.indices[i]] += src2.entries[i];</span>
         }
 
-<span class="nc" id="L175">        return dest;</span>
+<span class="fc" id="L175">        return dest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

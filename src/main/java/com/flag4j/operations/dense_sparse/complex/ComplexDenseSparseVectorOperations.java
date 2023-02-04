@@ -27,7 +27,6 @@ package com.flag4j.operations.dense_sparse.complex;
 
 import com.flag4j.CVector;
 import com.flag4j.SparseCVector;
-import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;

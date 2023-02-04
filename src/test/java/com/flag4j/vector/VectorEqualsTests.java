@@ -166,6 +166,5 @@ class VectorEqualsTests {
         String BString = "hello";
 
         assertFalse(A.equals(BString));
-
     }
 }
