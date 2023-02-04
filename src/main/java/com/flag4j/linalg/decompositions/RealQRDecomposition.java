@@ -28,8 +28,6 @@ package com.flag4j.linalg.decompositions;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 
-import java.util.Arrays;
-
 
 /**
  * Computes the QR decomposition for a real matrix.
@@ -80,6 +78,7 @@ public final class RealQRDecomposition extends QRDecomposition<Matrix> {
 
         int k = Math.min(A.numRows, A.numCols);
 
+        // Now reduce the decomposition
         Q = Q.getSlice(0, A.numRows, 0, k);
         R = R.getSlice(0, k, 0, A.numCols);
     }
@@ -116,8 +115,8 @@ public final class RealQRDecomposition extends QRDecomposition<Matrix> {
 
 
     /**
-     * Computes the Householder reflector for the specified column.
-     * @param col Column to compute Householder reflector for.
+     * Computes the Householder reflector for the specified column vector.
+     * @param col Column vector to compute Householder reflector for.
      * @return The Householder transformation matrix.
      */
     private Matrix getHouseholder(Matrix col) {
@@ -128,31 +127,10 @@ public final class RealQRDecomposition extends QRDecomposition<Matrix> {
         v = v.scalDiv(v.entries[0] + signedNorm);
         v.entries[0] = 1;
 
-        System.out.println("v: " + Arrays.toString(v.entries) + "\n");
-
-        Matrix P = v.outerProduct(v).scalMult(2/v.innerProduct(v)); // Create projection matrix
+        // Create projection matrix
+        Matrix P = v.outerProduct(v).scalMult(2/v.innerProduct(v));
         H.subEq(P);
 
         return H;
-    }
-
-
-    public static void main(String[] args) {
-        double[][] aEntries = {
-                {0, 0, 0},
-                {0, 0, -1},
-                {0, 1, 0}};
-        Matrix A = new Matrix(aEntries);
-
-        RealQRDecomposition QR = new RealQRDecomposition();
-        QR.decompose(A);
-
-        Matrix Q = QR.getQ();
-        Matrix R = QR.getR();
-
-        System.out.println("A:\n" + A + "\n");
-        System.out.println("Q:\n" + Q + "\n");
-        System.out.println("R:\n" + R + "\n");
-        System.out.println("QR:\n" + Q.mult(R));
     }
 }
