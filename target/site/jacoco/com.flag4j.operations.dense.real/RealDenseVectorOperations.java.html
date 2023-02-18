@@ -46,14 +46,14 @@ public class RealDenseVectorOperations {
      * @return The inner product of the two vectors.
      */
     public static double innerProduct(double[] src1, double[] src2) {
-<span class="nc" id="L49">        ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);</span>
-<span class="nc" id="L50">        double innerProd=0;</span>
+<span class="fc" id="L49">        ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);</span>
+<span class="fc" id="L50">        double innerProd=0;</span>
 
-<span class="nc bnc" id="L52" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="nc" id="L53">            innerProd += src1[i]*src2[i];</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L53">            innerProd += src1[i]*src2[i];</span>
         }
 
-<span class="nc" id="L56">        return innerProd;</span>
+<span class="fc" id="L56">        return innerProd;</span>
     }
 
 
@@ -65,16 +65,16 @@ public class RealDenseVectorOperations {
      */
     public static double[] outerProduct(double[] src1, double[] src2) {
         int destIndex;
-<span class="nc" id="L68">        double[] dest = new double[src1.length*src2.length];</span>
+<span class="fc" id="L68">        double[] dest = new double[src1.length*src2.length];</span>
 
-<span class="nc bnc" id="L70" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="nc" id="L71">            destIndex = i*src2.length;</span>
-<span class="nc bnc" id="L72" title="All 2 branches missed.">            for(int j=0; j&lt;src2.length; j++) {</span>
-<span class="nc" id="L73">                dest[destIndex++] = src1[i]*src2[j];</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L71">            destIndex = i*src2.length;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="fc" id="L73">                dest[destIndex++] = src1[i]*src2[j];</span>
             }
         }
 
-<span class="nc" id="L77">        return dest;</span>
+<span class="fc" id="L77">        return dest;</span>
     }
 
     /**

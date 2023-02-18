@@ -2944,13 +2944,13 @@ public class Matrix extends RealMatrixBase implements
      * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code j} is outside the bounds of this matrix.
      */
     public Matrix getColBelow(int rowStart, int j) {
-<span class="nc" id="L2947">        double[] col = new double[numRows-rowStart];</span>
+<span class="fc" id="L2947">        double[] col = new double[numRows-rowStart];</span>
 
-<span class="nc bnc" id="L2949" title="All 2 branches missed.">        for(int i=rowStart; i&lt;numRows; i++) {</span>
-<span class="nc" id="L2950">            col[i-rowStart] = entries[i*numCols + j];</span>
+<span class="fc bfc" id="L2949" title="All 2 branches covered.">        for(int i=rowStart; i&lt;numRows; i++) {</span>
+<span class="fc" id="L2950">            col[i-rowStart] = entries[i*numCols + j];</span>
         }
 
-<span class="nc" id="L2953">        return new Matrix(new Shape(col.length, 1), col);</span>
+<span class="fc" id="L2953">        return new Matrix(new Shape(col.length, 1), col);</span>
     }
 
 

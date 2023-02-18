@@ -1302,6 +1302,56 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
+     * Checks if a vector is parallel to this vector.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
+     */
+    @Override
+    public boolean isParallel(Vector b) {
+        boolean result;
+
+        if(this.size!=b.size) {
+            result = false;
+        } else if(this.size==1) {
+            result = true;
+        } else {
+            result = true;
+            CNumber scal = this.entries[0].div(b.entries[0]);
+
+            for(int i=1; i<this.size; i++) {
+                if(this.entries[i].div(b.entries[i]) != scal) {
+                    result = false;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Checks if a vector is perpendicular to this vector.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if the vector {@code b} is perpendicular to this vector and the same size. Otherwise, returns false.
+     */
+    @Override
+    public boolean isPerp(Vector b) {
+        boolean result;
+
+        if(this.size!=b.size) {
+            result = false;
+        } else {
+            result = this.innerProduct(b).equals(CNumber.ZERO);
+        }
+
+        return result;
+    }
+
+
+    /**
      * Converts a vector to an equivalent matrix.
      *
      * @return A matrix equivalent to this vector. This method will respect the orientation of the vector. That is, if

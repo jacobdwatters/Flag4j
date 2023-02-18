@@ -105,8 +105,6 @@ public final class RealQRDecomposition extends QRDecomposition<Matrix> {
             if(!col.isZeros()) { // Then a householder transform must be applied
                 H.setSlice(getHouseholder(col), i, i);
 
-                System.out.println("H:\n" + H + "\n");
-
                 Q = Q.mult(H); // Apply Householder reflector to Q
                 R = H.mult(R); // Apply Householder reflector to R
             }

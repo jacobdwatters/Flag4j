@@ -56,7 +56,7 @@ public class Vector extends VectorBase<double[]> implements
     
 
     /**
-     * Creates a column vector of specified size filled with zeros.
+     * Creates a vector of specified size filled with zeros.
      * @param size Size of the vector.
      */
     public Vector(int size) {
@@ -65,7 +65,7 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
-     * Creates a column vector of specified size filled with a specified value.
+     * Creates a vector of specified size filled with a specified value.
      * @param size Size of the vector.
      * @param fillValue Value to fill vector with.
      */
@@ -86,7 +86,7 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
-     * Creates a column vector of specified size filled with a specified value.
+     * Creates a vector of specified size filled with a specified value.
      * @param shape Shape of the vector.
      * @param fillValue Value to fill vector with.
      * @throws IllegalArgumentException If the shapes is not rank 1.
@@ -98,7 +98,7 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
-     * Creates a column vector with specified entries.
+     * Creates a vector with specified entries.
      * @param entries Entries for this column vector.
      */
     public Vector(double[] entries) {
@@ -107,7 +107,7 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
-     * Creates a column vector with specified entries.
+     * Creates a vector with specified entries.
      * @param entries Entries for this column vector.
      */
     public Vector(int[] entries) {
@@ -1098,6 +1098,56 @@ public class Vector extends VectorBase<double[]> implements
     public CMatrix outerProduct(SparseCVector b) {
         return new CMatrix(this.size, b.size,
                 RealComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));
+    }
+
+
+    /**
+     * Checks if a vector is parallel to this vector.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
+     */
+    @Override
+    public boolean isParallel(Vector b) {
+        boolean result;
+
+        if(this.size!=b.size) {
+            result = false;
+        } else if(this.size==1) {
+            result = true;
+        } else {
+            result = true;
+            double scal = this.entries[0]/b.entries[0];
+
+            for(int i=1; i<this.size; i++) {
+                if(this.entries[i]/b.entries[i] != scal) {
+                    result = false;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Checks if a vector is perpendicular to this vector.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if the vector {@code b} is perpendicular to this vector and the same size. Otherwise, returns false.
+     */
+    @Override
+    public boolean isPerp(Vector b) {
+        boolean result;
+
+        if(this.size!=b.size) {
+            result = false;
+        } else {
+            result = this.innerProduct(b)==0;
+        }
+
+        return result;
     }
 
 

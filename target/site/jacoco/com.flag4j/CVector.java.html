@@ -1302,6 +1302,56 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
 
 
     /**
+     * Checks if a vector is parallel to this vector.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
+     */
+    @Override
+    public boolean isParallel(Vector b) {
+        boolean result;
+
+<span class="nc bnc" id="L1314" title="All 2 branches missed.">        if(this.size!=b.size) {</span>
+<span class="nc" id="L1315">            result = false;</span>
+<span class="nc bnc" id="L1316" title="All 2 branches missed.">        } else if(this.size==1) {</span>
+<span class="nc" id="L1317">            result = true;</span>
+        } else {
+<span class="nc" id="L1319">            result = true;</span>
+<span class="nc" id="L1320">            CNumber scal = this.entries[0].div(b.entries[0]);</span>
+
+<span class="nc bnc" id="L1322" title="All 2 branches missed.">            for(int i=1; i&lt;this.size; i++) {</span>
+<span class="nc bnc" id="L1323" title="All 2 branches missed.">                if(this.entries[i].div(b.entries[i]) != scal) {</span>
+<span class="nc" id="L1324">                    result = false;</span>
+<span class="nc" id="L1325">                    break;</span>
+                }
+            }
+        }
+
+<span class="nc" id="L1330">        return result;</span>
+    }
+
+
+    /**
+     * Checks if a vector is perpendicular to this vector.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if the vector {@code b} is perpendicular to this vector and the same size. Otherwise, returns false.
+     */
+    @Override
+    public boolean isPerp(Vector b) {
+        boolean result;
+
+<span class="nc bnc" id="L1344" title="All 2 branches missed.">        if(this.size!=b.size) {</span>
+<span class="nc" id="L1345">            result = false;</span>
+        } else {
+<span class="nc" id="L1347">            result = this.innerProduct(b).equals(CNumber.ZERO);</span>
+        }
+
+<span class="nc" id="L1350">        return result;</span>
+    }
+
+
+    /**
      * Converts a vector to an equivalent matrix.
      *
      * @return A matrix equivalent to this vector. This method will respect the orientation of the vector. That is, if
@@ -1310,9 +1360,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CMatrix toMatrix() {
-<span class="nc" id="L1313">        CNumber[] entries = new CNumber[this.size];</span>
-<span class="nc" id="L1314">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
-<span class="nc" id="L1315">        return new CMatrix(this.entries.length, 1, entries);</span>
+<span class="nc" id="L1363">        CNumber[] entries = new CNumber[this.size];</span>
+<span class="nc" id="L1364">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
+<span class="nc" id="L1365">        return new CMatrix(this.entries.length, 1, entries);</span>
     }
 
 
@@ -1326,13 +1376,13 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CMatrix toMatrix(boolean columVector) {
-<span class="nc bnc" id="L1329" title="All 2 branches missed.">        if(columVector) {</span>
-<span class="nc" id="L1330">            return toMatrix();</span>
+<span class="nc bnc" id="L1379" title="All 2 branches missed.">        if(columVector) {</span>
+<span class="nc" id="L1380">            return toMatrix();</span>
         } else {
             // Convert to row vector.
-<span class="nc" id="L1333">            CNumber[] entries = new CNumber[this.size];</span>
-<span class="nc" id="L1334">            ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
-<span class="nc" id="L1335">            return new CMatrix(1, this.entries.length, entries);</span>
+<span class="nc" id="L1383">            CNumber[] entries = new CNumber[this.size];</span>
+<span class="nc" id="L1384">            ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
+<span class="nc" id="L1385">            return new CMatrix(1, this.entries.length, entries);</span>
         }
     }
 
@@ -1342,10 +1392,10 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @return A rank 1 tensor equivalent to this vector.
      */
     public CTensor toTensor() {
-<span class="nc" id="L1345">        CNumber[] entries = new CNumber[this.size];</span>
-<span class="nc" id="L1346">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
+<span class="nc" id="L1395">        CNumber[] entries = new CNumber[this.size];</span>
+<span class="nc" id="L1396">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
 
-<span class="nc" id="L1348">        return new CTensor(this.shape.copy(), this.entries);</span>
+<span class="nc" id="L1398">        return new CTensor(this.shape.copy(), this.entries);</span>
     }
 
 
@@ -1356,7 +1406,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public int length() {
-<span class="nc" id="L1359">        return this.size;</span>
+<span class="nc" id="L1409">        return this.size;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

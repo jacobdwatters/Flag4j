@@ -227,8 +227,8 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If the specified shape does not have the expected rank.
      */
     public static void assertRank(int expRank, Shape shape) {
-<span class="pc bpc" id="L230" title="1 of 2 branches missed.">        if(shape.getRank() != expRank) {</span>
-<span class="nc" id="L231">            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), expRank));</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">        if(shape.getRank() != expRank) {</span>
+<span class="fc" id="L231">            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), expRank));</span>
         }
 <span class="fc" id="L233">    }</span>
 }

@@ -147,15 +147,15 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the two vectors are not the same size.
      */
     public static SparseVector elemMult(Vector src1, SparseVector src2) {
-<span class="nc" id="L150">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L150">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
-<span class="nc" id="L152">        double[] entries = new double[src2.entries.length];</span>
+<span class="fc" id="L152">        double[] entries = new double[src2.entries.length];</span>
 
-<span class="nc bnc" id="L154" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L155">            entries[i] = src1.entries[src2.indices[i]]*src2.entries[i];</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L155">            entries[i] = src1.entries[src2.indices[i]]*src2.entries[i];</span>
         }
 
-<span class="nc" id="L158">        return new SparseVector(src1.size, entries, src2.indices.clone());</span>
+<span class="fc" id="L158">        return new SparseVector(src1.size, entries, src2.indices.clone());</span>
     }
 
 

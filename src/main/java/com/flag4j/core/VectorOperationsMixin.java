@@ -399,6 +399,26 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
     CMatrix outerProduct(SparseCVector b);
 
 
+    // TODO: ADD isParallel(CVector b), isParallel(SparseVector b), and isParallel(sparseCVector)
+    /**
+     * Checks if a vector is parallel to this vector.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
+     */
+    boolean isParallel(Vector b);
+
+
+    // TODO: ADD isPerp(CVector b), isPerp(SparseVector b), and isPerp(sparseCVector)
+    /**
+     * Checks if a vector is perpendicular to this vector.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if the vector {@code b} is perpendicular to this vector and the same size. Otherwise, returns false.
+     */
+    boolean isPerp(Vector b);
+
+
     /**
      * Converts a vector to an equivalent matrix.
      * @return A matrix equivalent to this vector. This method will respect the orientation of the vector. That is, if

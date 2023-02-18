@@ -4,7 +4,7 @@ import com.flag4j.Matrix;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class LUDecompositionTests {
+class RealLUTests {
 
     double[][] aEntries, expLEntries, expUEntries, expPEntries, expQEntries;
     Matrix A, L, U, P, Q, expL, expU, expP, expQ;

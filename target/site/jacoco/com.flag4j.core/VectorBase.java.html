@@ -61,10 +61,10 @@ public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBas
      * @throws IllegalArgumentException If the rank of the shape is not 1.
      */
     public VectorBase(Shape shape, T entries) {
-<span class="nc" id="L64">        super(shape, entries);</span>
-<span class="nc" id="L65">        ParameterChecks.assertRank(1, shape); // Ensure the shape is of rank 1.</span>
-<span class="nc" id="L66">        this.size = shape.get(0);</span>
-<span class="nc" id="L67">    }</span>
+<span class="fc" id="L64">        super(shape, entries);</span>
+<span class="fc" id="L65">        ParameterChecks.assertRank(1, shape); // Ensure the shape is of rank 1.</span>
+<span class="fc" id="L66">        this.size = shape.get(0);</span>
+<span class="fc" id="L67">    }</span>
 
 
     /**
