@@ -10,6 +10,7 @@ com\flag4j\matrix\MatrixVectorCheckTests.class
 com\flag4j\matrix\MatrixVectorTests.class
 com\flag4j\matrix\MatrixAddToEachRowTests.class
 com\flag4j\matrix\MatrixConstructorTests.class
+com\flag4j\vector\VectorScaleMultDivTests.class
 com\flag4j\complex_matrix\CMatrixUnaryOperationsTests.class
 com\flag4j\complex_matrix\CMatrixAddTests.class
 com\flag4j\complex_matrix\CMatrixConstructorTests.class

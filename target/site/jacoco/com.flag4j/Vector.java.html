@@ -633,7 +633,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public Vector scalMult(double factor) {
-<span class="nc" id="L636">        return new Vector(RealOperations.scalMult(this.entries, factor));</span>
+<span class="fc" id="L636">        return new Vector(RealOperations.scalMult(this.entries, factor));</span>
     }
 
 
@@ -645,7 +645,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public CVector scalMult(CNumber factor) {
-<span class="nc" id="L648">        return new CVector(RealComplexDenseOperations.scalMult(this.entries, factor));</span>
+<span class="fc" id="L648">        return new CVector(RealComplexDenseOperations.scalMult(this.entries, factor));</span>
     }
 
 
@@ -671,7 +671,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public CVector scalDiv(CNumber divisor) {
-<span class="nc" id="L674">        return new CVector(RealComplexDenseOperations.scalDiv(this.entries, divisor));</span>
+<span class="fc" id="L674">        return new CVector(RealComplexDenseOperations.scalDiv(this.entries, divisor));</span>
     }
 
 

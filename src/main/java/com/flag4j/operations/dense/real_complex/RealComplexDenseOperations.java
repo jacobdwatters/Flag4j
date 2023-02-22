@@ -207,7 +207,23 @@ public final class RealComplexDenseOperations {
      * @return The scalar multiplication of the tensor.
      */
     public static CNumber[] scalDiv(double[] entries, CNumber divisor) {
-        return scalMult(entries, divisor.multInv());
+        CNumber[] quotient = new CNumber[entries.length];
+        double denom = divisor.re*divisor.re + divisor.im*divisor.im;
+
+        for(int i=0; i<quotient.length; i++) {
+
+            quotient[i] = new CNumber(
+                    entries[i]*divisor.re / denom,
+                    -entries[i]*divisor.im / denom
+                    );
+        }
+
+//        double divisor = b.re*b.re + b.im*b.im;
+//        quotient = new CNumber(
+//                (this.re*b.re + this.im*b.im) / denom,
+//                (this.im*b.re - this.re*b.im) / denom);
+
+        return quotient;
     }
 
 

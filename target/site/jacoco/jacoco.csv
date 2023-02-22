@@ -39,7 +39,7 @@ Flag4j,com.flag4j.operations.dense.real,RealDenseEquals,7,28,0,4,2,3,1,5,1,3
 Flag4j,com.flag4j.operations.dense.real,RealDenseVectorOperations,7,98,0,8,2,15,1,7,1,3
 Flag4j,com.flag4j.operations.dense.real,RealDenseMatrixMultiplication,7,1121,13,97,2,186,14,60,1,18
 Flag4j,com.flag4j.operations.sparse.complex,ComplexSparseMatrixMultiplication,7,260,0,20,2,50,1,16,1,6
-Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseOperations,73,264,8,16,16,40,9,17,5,9
+Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseOperations,73,308,8,18,16,44,9,18,5,9
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseVectorOperations,163,22,12,2,24,4,11,2,5,1
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseEquals,7,24,0,4,2,2,1,4,1,2
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseMatrixMultiplication,7,2288,26,194,2,396,27,120,1,36
@@ -67,7 +67,7 @@ Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseOpe
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseEquals,58,237,8,26,17,46,6,16,2,3
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseMatrixMultiplication,7,1276,8,76,2,218,9,64,1,30
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseVectorOperations,359,123,22,6,55,17,21,6,10,3
-Flag4j,com.flag4j,CVector,1545,114,55,3,199,29,115,9,87,8
+Flag4j,com.flag4j,CVector,1525,134,55,3,197,31,114,10,86,9
 Flag4j,com.flag4j,SparseTensor,0,70,0,2,0,10,0,5,0,4
 Flag4j,com.flag4j,Tensor,22,83,0,6,4,16,2,8,2,5
 Flag4j,com.flag4j,SparseCTensor,0,118,0,6,0,16,0,8,0,5
@@ -76,7 +76,7 @@ Flag4j,com.flag4j,SparseVector,0,44,0,0,0,9,0,4,0,4
 Flag4j,com.flag4j,Shape,35,408,6,34,5,66,6,31,2,15
 Flag4j,com.flag4j,Matrix,277,6171,15,379,37,719,26,357,15,171
 Flag4j,com.flag4j,SparseMatrix,0,189,0,0,0,20,0,10,0,10
-Flag4j,com.flag4j,Vector,978,623,28,36,114,96,56,66,42,48
+Flag4j,com.flag4j,Vector,951,650,28,36,111,99,53,69,39,51
 Flag4j,com.flag4j,CTensor,0,145,0,6,0,29,0,11,0,8
 Flag4j,com.flag4j,SparseCMatrix,0,288,0,0,0,35,0,13,0,13
 Flag4j,com.flag4j,SparseCVector,0,68,0,0,0,13,0,5,0,5

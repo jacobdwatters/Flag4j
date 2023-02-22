@@ -456,11 +456,11 @@ public class CNumber extends Number {
 
         if (this.equals(ZERO) && !b.equals(ZERO)) {
             quotient = new CNumber();
-        }
-        else if(b.isReal() && !b.equals(ZERO)) {
+
+        } else if(b.isReal() && !b.equals(ZERO)) {
             quotient = new CNumber(this.re/b.re, this.im/b.re);
-        }
-        else {
+
+        } else {
             double divisor = b.re*b.re + b.im*b.im;
 
             quotient = new CNumber(

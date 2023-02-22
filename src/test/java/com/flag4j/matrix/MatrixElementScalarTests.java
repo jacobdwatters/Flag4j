@@ -32,10 +32,10 @@ class MatrixElementScalarTests {
         // -------------- Sub-case 2 --------------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
-        scalarC = new CNumber(1.3245, -44.5);
-        expEntriesC = new CNumber[][]{{new CNumber("0.000891462747975438 + 0.029950994552591162i"),
-                new CNumber("-0.0015444892826992744 - 0.05189110840325988i"),
-                new CNumber("0.22340029733747294 + 7.505710254071383i")},
+        scalarC = new CNumber(1.3245, -42.5);
+        expEntriesC = new CNumber[][]{{new CNumber(1.334).div(scalarC),
+                new CNumber(-2.3112).div(scalarC),
+                new CNumber(334.3).div(scalarC)},
                 {new CNumber(4.13).div(scalarC),
                         new CNumber(-35.33).div(scalarC),
                         new CNumber(6).div(scalarC)}};

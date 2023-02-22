@@ -7,14 +7,11 @@ import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class VectorElemMultDivTests {
 
     int[] indices;
-    int size;
 
     double[] aEntries;
     Vector a;

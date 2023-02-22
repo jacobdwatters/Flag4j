@@ -207,7 +207,23 @@ public final class RealComplexDenseOperations {
      * @return The scalar multiplication of the tensor.
      */
     public static CNumber[] scalDiv(double[] entries, CNumber divisor) {
-<span class="fc" id="L210">        return scalMult(entries, divisor.multInv());</span>
+<span class="fc" id="L210">        CNumber[] quotient = new CNumber[entries.length];</span>
+<span class="fc" id="L211">        double denom = divisor.re*divisor.re + divisor.im*divisor.im;</span>
+
+<span class="fc bfc" id="L213" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
+
+<span class="fc" id="L215">            quotient[i] = new CNumber(</span>
+                    entries[i]*divisor.re / denom,
+                    -entries[i]*divisor.im / denom
+                    );
+        }
+
+//        double divisor = b.re*b.re + b.im*b.im;
+//        quotient = new CNumber(
+//                (this.re*b.re + this.im*b.im) / denom,
+//                (this.im*b.re - this.re*b.im) / denom);
+
+<span class="fc" id="L226">        return quotient;</span>
     }
 
 
@@ -221,14 +237,14 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemMult(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="fc" id="L224">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
-<span class="fc" id="L225">        CNumber[] product = new CNumber[src1.length];</span>
+<span class="fc" id="L240">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L241">        CNumber[] product = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L227" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="fc" id="L228">            product[i] = src1[i].mult(src2[i]);</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L244">            product[i] = src1[i].mult(src2[i]);</span>
         }
 
-<span class="fc" id="L231">        return product;</span>
+<span class="fc" id="L247">        return product;</span>
     }
 
 
@@ -242,14 +258,14 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="fc" id="L245">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
-<span class="fc" id="L246">        CNumber[] product = new CNumber[src1.length];</span>
+<span class="fc" id="L261">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L262">        CNumber[] product = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L248" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="fc" id="L249">            product[i] = src1[i].div(src2[i]);</span>
+<span class="fc bfc" id="L264" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L265">            product[i] = src1[i].div(src2[i]);</span>
         }
 
-<span class="fc" id="L252">        return product;</span>
+<span class="fc" id="L268">        return product;</span>
     }
 
 
@@ -263,16 +279,16 @@ public final class RealComplexDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemDiv(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L266">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
-<span class="fc" id="L267">        CNumber[] quotient = new CNumber[src1.length];</span>
+<span class="fc" id="L282">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L283">        CNumber[] quotient = new CNumber[src1.length];</span>
         double divisor;
 
-<span class="fc bfc" id="L270" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
-<span class="fc" id="L271">            divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;</span>
-<span class="fc" id="L272">            quotient[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);</span>
+<span class="fc bfc" id="L286" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
+<span class="fc" id="L287">            divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;</span>
+<span class="fc" id="L288">            quotient[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);</span>
         }
 
-<span class="fc" id="L275">        return quotient;</span>
+<span class="fc" id="L291">        return quotient;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
