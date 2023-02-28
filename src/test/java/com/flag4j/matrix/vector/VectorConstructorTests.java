@@ -1,4 +1,4 @@
-package com.flag4j.vector;
+package com.flag4j.matrix.vector;
 
 
 import java.util.Arrays;
