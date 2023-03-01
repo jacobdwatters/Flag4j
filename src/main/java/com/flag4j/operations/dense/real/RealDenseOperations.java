@@ -197,7 +197,7 @@ public final class RealDenseOperations {
      * @param src Elements of the tensor.
      * @return The element-wise reciprocals of the tensor.
      */
-    public static double[] recep(double[] src) {
+    public static double[] recip(double[] src) {
         double[] receps = new double[src.length];
 
         for(int i=0; i<receps.length; i++) {

@@ -214,7 +214,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @return A tensor containing the reciprocal elements of this tensor.
      * @throws ArithmeticException If this tensor contains any zeros.
      */
-    T recep();
+    T recip();
 
 
     /**

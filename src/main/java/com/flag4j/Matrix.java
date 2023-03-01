@@ -1339,10 +1339,10 @@ public class Matrix extends RealMatrixBase implements
      * @throws ArithmeticException If this tensor contains any zeros.
      */
     @Override
-    public Matrix recep() {
+    public Matrix recip() {
         return new Matrix(
                 shape.copy(),
-                RealDenseOperations.recep(entries)
+                RealDenseOperations.recip(entries)
         );
     }
 

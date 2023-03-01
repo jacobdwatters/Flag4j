@@ -4,7 +4,9 @@ import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MatrixElementScalarTests {
     double[][] aEntries, expEntries;
@@ -56,7 +58,7 @@ class MatrixElementScalarTests {
                 {1.0/4.13, 1.0/-35.33, 1.0/6}};
         expResult = new Matrix(expEntries);
 
-        assertArrayEquals(expResult.entries, A.recep().entries);
-        assertEquals(expResult.shape, A.recep().shape);
+        assertArrayEquals(expResult.entries, A.recip().entries);
+        assertEquals(expResult.shape, A.recip().shape);
     }
 }

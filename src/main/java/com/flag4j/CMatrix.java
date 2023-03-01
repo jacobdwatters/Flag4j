@@ -1434,7 +1434,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws ArithmeticException If this tensor contains any zeros.
      */
     @Override
-    public CMatrix recep() {
+    public CMatrix recip() {
         return new CMatrix(
                 shape.copy(),
                 ComplexDenseOperations.recep(entries)

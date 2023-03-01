@@ -117,7 +117,7 @@ public class RealDenseDeterminant {
      */
     public static double det2(Matrix A) {
         ParameterChecks.assertEqualShape(A.shape, new Shape(2, 2));
-        double det = (A.entries[0]*A.entries[3] - A.entries[1]*A.entries[2]);
+        double det = A.entries[0]*A.entries[3] - A.entries[1]*A.entries[2];
         return det;
     }
 

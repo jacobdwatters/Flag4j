@@ -640,7 +640,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @throws ArithmeticException If this tensor contains any zeros.
      */
     @Override
-    public CVector recep() {
+    public CVector recip() {
         return new CVector(ComplexDenseOperations.recep(this.entries));
     }
 

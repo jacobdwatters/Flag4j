@@ -740,8 +740,8 @@ public class Vector extends VectorBase<double[]> implements
      * @throws ArithmeticException If this tensor contains any zeros.
      */
     @Override
-    public Vector recep() {
-        return new Vector(RealDenseOperations.recep(this.entries));
+    public Vector recip() {
+        return new Vector(RealDenseOperations.recip(this.entries));
     }
 
 
