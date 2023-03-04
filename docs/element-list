@@ -1,10 +1,12 @@
 com.flag4j
+com.flag4j.complex_matrix
 com.flag4j.complex_numbers
 com.flag4j.concurrency
 com.flag4j.core
 com.flag4j.io
 com.flag4j.linalg
 com.flag4j.linalg.decompositions
+com.flag4j.matrix
 com.flag4j.operations
 com.flag4j.operations.common.complex
 com.flag4j.operations.common.real
@@ -18,3 +20,4 @@ com.flag4j.operations.sparse.complex
 com.flag4j.operations.sparse.real
 com.flag4j.operations.sparse.real_complex
 com.flag4j.util
+com.flag4j.vector
