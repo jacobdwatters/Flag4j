@@ -950,7 +950,7 @@ public class Vector extends VectorBase<double[]> implements
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
     @Override
-    public Double innerProduct(Vector b) {
+    public Double inner(Vector b) {
         return RealDenseVectorOperations.innerProduct(this.entries, b.entries);
     }
 
@@ -963,7 +963,7 @@ public class Vector extends VectorBase<double[]> implements
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
     @Override
-    public Double innerProduct(SparseVector b) {
+    public Double inner(SparseVector b) {
         return RealDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);
     }
 
@@ -987,7 +987,7 @@ public class Vector extends VectorBase<double[]> implements
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
     @Override
-    public CNumber innerProduct(CVector b) {
+    public CNumber inner(CVector b) {
         return RealComplexDenseVectorOperations.innerProduct(this.entries, b.entries);
     }
 
@@ -1000,7 +1000,7 @@ public class Vector extends VectorBase<double[]> implements
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
     @Override
-    public CNumber innerProduct(SparseCVector b) {
+    public CNumber inner(SparseCVector b) {
         return RealComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);
     }
 
@@ -1053,7 +1053,7 @@ public class Vector extends VectorBase<double[]> implements
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
     @Override
-    public Matrix outerProduct(Vector b) {
+    public Matrix outer(Vector b) {
         return new Matrix(this.size, b.size,
                 RealDenseVectorOperations.outerProduct(this.entries, b.entries));
     }
@@ -1067,7 +1067,7 @@ public class Vector extends VectorBase<double[]> implements
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
     @Override
-    public Matrix outerProduct(SparseVector b) {
+    public Matrix outer(SparseVector b) {
         return new Matrix(this.size, b.size,
                 RealDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));
     }
@@ -1081,7 +1081,7 @@ public class Vector extends VectorBase<double[]> implements
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
     @Override
-    public CMatrix outerProduct(CVector b) {
+    public CMatrix outer(CVector b) {
         return new CMatrix(this.size, b.size,
                 RealComplexDenseVectorOperations.outerProduct(this.entries, b.entries));
     }
@@ -1095,7 +1095,7 @@ public class Vector extends VectorBase<double[]> implements
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
     @Override
-    public CMatrix outerProduct(SparseCVector b) {
+    public CMatrix outer(SparseCVector b) {
         return new CMatrix(this.size, b.size,
                 RealComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));
     }
@@ -1115,12 +1115,23 @@ public class Vector extends VectorBase<double[]> implements
             result = false;
         } else if(this.size==1) {
             result = true;
+        } else if(this.isZeros() || b.isZeros()) {
+            result = true; // Any vector is parallel to zero vector.
         } else {
             result = true;
-            double scal = this.entries[0]/b.entries[0];
+            double scale = 0;
 
-            for(int i=1; i<this.size; i++) {
-                if(this.entries[i]/b.entries[i] != scal) {
+            // Find first non-zero entry of b to compute the scaling factor.
+            for(int i=0; i<b.size; i++) {
+                if(b.entries[i]!=0) {
+                    scale = this.entries[i]/b.entries[i];
+                    break;
+                }
+            }
+
+            // Ensure all entries of b are the same scalar multiple of the entries in this vector.
+            for(int i=0; i<this.size; i++) {
+                if(b.entries[i]*scale != this.entries[i]) {
                     result = false;
                     break;
                 }
@@ -1144,7 +1155,7 @@ public class Vector extends VectorBase<double[]> implements
         if(this.size!=b.size) {
             result = false;
         } else {
-            result = this.innerProduct(b)==0;
+            result = this.inner(b)==0;
         }
 
         return result;
@@ -1181,7 +1192,10 @@ public class Vector extends VectorBase<double[]> implements
     }
 
 
-
+    /**
+     * Converts this vector to an equivalent tensor.
+     * @return A tensor which is equivalent to this vector.
+     */
     public Tensor toTensor() {
         return new Tensor(this.shape.copy(), this.entries.clone());
     }

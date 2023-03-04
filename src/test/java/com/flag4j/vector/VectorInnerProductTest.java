@@ -27,7 +27,7 @@ class VectorInnerProductTest {
         b = new Vector(bEntries);
         exp = 153162.7946215;
 
-        assertEquals(exp, a.innerProduct(b));
+        assertEquals(exp, a.inner(b));
     }
 
 
@@ -44,7 +44,7 @@ class VectorInnerProductTest {
         b = new SparseVector(sparseSize, bEntries, indices);
         exp = -13.7209785;
 
-        assertEquals(exp, a.innerProduct(b));
+        assertEquals(exp, a.inner(b));
     }
 
 
@@ -60,7 +60,7 @@ class VectorInnerProductTest {
         b = new CVector(bEntries);
         exp = new CNumber("-21336.40357-10217.030400000001j");
 
-        assertEquals(exp, a.innerProduct(b));
+        assertEquals(exp, a.inner(b));
     }
 
 
@@ -77,7 +77,7 @@ class VectorInnerProductTest {
         b = new SparseCVector(sparseSize, bEntries, indices);
         exp = new CNumber("-21335.149999999998-9666.920000000002j");
 
-        assertEquals(exp, a.innerProduct(b));
+        assertEquals(exp, a.inner(b));
     }
 
 

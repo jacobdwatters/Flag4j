@@ -82,7 +82,7 @@ public class RealDenseSparseVectorOperations {
             for(int j=0; j<src2.length; j++) {
                 index = indices[j];
 
-                dest[i*src2.length + index] = src1[i]*src2[j];
+                dest[i*src1.length + index] = src1[i]*src2[j];
             }
         }
 

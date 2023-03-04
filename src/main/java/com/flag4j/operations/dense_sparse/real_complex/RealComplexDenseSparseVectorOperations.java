@@ -109,7 +109,7 @@ public class RealComplexDenseSparseVectorOperations {
             for(int j=0; j<src2.length; j++) {
                 index = indices[j];
 
-                dest[i*src2.length + index] = src2[j].mult(src1[i]);
+                dest[i*src1.length + index] = src2[j].conj().mult(src1[i]);
             }
         }
 

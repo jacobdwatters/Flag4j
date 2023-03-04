@@ -26,6 +26,8 @@ package com.flag4j.operations.dense_sparse.real;
 
 import com.flag4j.Matrix;
 import com.flag4j.SparseMatrix;
+import com.flag4j.SparseTensor;
+import com.flag4j.Tensor;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 
@@ -84,10 +86,10 @@ public class RealDenseSparseEquals {
 
 
     /**
-     * Checks if two real dense matrices are equal.
-     * @param A First matrix.
-     * @param B Second matrix.
-     * @return True if the two matrices are element-wise equivalent.
+     * Checks if a real dense matrix is equal to a real sparse matrix.
+     * @param A Real dense matrix.
+     * @param B Real sparse matrix.
+     * @return True if the two matrices are element-wise equivalent (as if both were dense).
      */
     public static boolean matrixEquals(Matrix A, SparseMatrix B) {
         boolean equal = true;
@@ -110,6 +112,45 @@ public class RealDenseSparseEquals {
                 }
 
                 entriesCopy[A.shape.entriesIndex(rowIndex, colIndex)] = 0;
+            }
+
+            if(equal) {
+                // Now, if this matrix is equal to the sparse matrix, there should only be zeros left in the entriesStack
+                equal = ArrayUtils.isZeros(entriesCopy);
+            }
+
+        } else {
+            equal = false;
+        }
+
+        return equal;
+    }
+
+
+    /**
+     * Checks if a real dense tensor is equal to a real sparse tensor.
+     * @param A Real dense tensor.
+     * @param B Real sparse tensor.
+     * @return True if the two matrices are element-wise equivalent.
+     */
+    public static boolean tensorEquals(Tensor A, SparseTensor B) {
+        boolean equal = true;
+
+        if(A.shape.equals(B.shape)) {
+            double[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);
+
+            int entriesIndex;
+
+            // Remove all nonZero entries from the entries of this matrix.
+            for(int i=0; i<B.nonZeroEntries(); i++) {
+                entriesIndex = A.shape.entriesIndex(B.indices[i]);
+
+                if(entriesCopy[entriesIndex] != B.entries[i]) {
+                    equal = false;
+                    break;
+                }
+
+                entriesCopy[A.shape.entriesIndex(B.indices[i])] = 0;
             }
 
             if(equal) {

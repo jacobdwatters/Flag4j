@@ -1150,7 +1150,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
     @Override
-    public CNumber innerProduct(Vector b) {
+    public CNumber inner(Vector b) {
         return RealComplexDenseVectorOperations.innerProduct(this.entries, b.entries);
     }
 
@@ -1163,7 +1163,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
     @Override
-    public CNumber innerProduct(SparseVector b) {
+    public CNumber inner(SparseVector b) {
         return RealComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);
     }
 
@@ -1187,7 +1187,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
     @Override
-    public CNumber innerProduct(CVector b) {
+    public CNumber inner(CVector b) {
         return ComplexDenseVectorOperations.innerProduct(this.entries, b.entries);
     }
 
@@ -1200,7 +1200,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
     @Override
-    public CNumber innerProduct(SparseCVector b) {
+    public CNumber inner(SparseCVector b) {
         return ComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);
     }
 
@@ -1253,7 +1253,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
     @Override
-    public CMatrix outerProduct(Vector b) {
+    public CMatrix outer(Vector b) {
         return new CMatrix(this.size, b.size,
                 RealComplexDenseVectorOperations.outerProduct(this.entries, b.entries));
     }
@@ -1267,7 +1267,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
     @Override
-    public CMatrix outerProduct(SparseVector b) {
+    public CMatrix outer(SparseVector b) {
         return new CMatrix(this.size, b.size,
                 RealComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));
     }
@@ -1281,7 +1281,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
     @Override
-    public CMatrix outerProduct(CVector b) {
+    public CMatrix outer(CVector b) {
         return new CMatrix(this.size, b.size,
                 ComplexDenseVectorOperations.outerProduct(this.entries, b.entries));
     }
@@ -1295,7 +1295,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
     @Override
-    public CMatrix outerProduct(SparseCVector b) {
+    public CMatrix outer(SparseCVector b) {
         return new CMatrix(this.size, b.size,
                 ComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));
     }
@@ -1315,12 +1315,23 @@ public class CVector extends VectorBase<CNumber[]> implements
             result = false;
         } else if(this.size==1) {
             result = true;
+        } else if(this.isZeros() || b.isZeros()) {
+            result = true; // Any vector is parallel to zero vector.
         } else {
             result = true;
-            CNumber scal = this.entries[0].div(b.entries[0]);
+            CNumber scale = new CNumber();
 
-            for(int i=1; i<this.size; i++) {
-                if(this.entries[i].div(b.entries[i]) != scal) {
+            // Find first non-zero entry of b to compute the scaling factor.
+            for(int i=0; i<b.size; i++) {
+                if(b.entries[i]!=0) {
+                    scale = this.entries[i].div(b.entries[i]);
+                    break;
+                }
+            }
+
+            // Ensure all entries of b are the same scalar multiple of the entries in this vector.
+            for(int i=0; i<this.size; i++) {
+                if(scale.mult(b.entries[i]) != this.entries[i]) {
                     result = false;
                     break;
                 }
@@ -1344,7 +1355,7 @@ public class CVector extends VectorBase<CNumber[]> implements
         if(this.size!=b.size) {
             result = false;
         } else {
-            result = this.innerProduct(b).equals(CNumber.ZERO);
+            result = this.inner(b).equals(CNumber.ZERO);
         }
 
         return result;

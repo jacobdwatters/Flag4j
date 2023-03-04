@@ -7,8 +7,8 @@ import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class VectorShapeTests {
 
@@ -18,6 +18,20 @@ class VectorShapeTests {
     double[] aEntries;
     Vector A;
 
+    @Test
+    void sizeTest() {
+        // --------------------- Sub-case 1 ---------------------
+        aEntries = new double[]{1.43543, 8.144, -9.234};
+        A = new Vector(aEntries);
+
+        assertEquals(aEntries.length, A.length());
+
+        // --------------------- Sub-case 2 ---------------------
+        aEntries = new double[]{1.43543, 8.144, -9.234, 20243234.235, 1119.234, 5.14, -8.234};
+        A = new Vector(aEntries);
+
+        assertEquals(aEntries.length, A.length());
+    }
 
     @Test
     void realDenseTest() {

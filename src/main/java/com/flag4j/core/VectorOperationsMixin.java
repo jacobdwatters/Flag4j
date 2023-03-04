@@ -308,7 +308,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    X innerProduct(Vector b);
+    X inner(Vector b);
 
 
     /**
@@ -317,7 +317,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    X innerProduct(SparseVector b);
+    X inner(SparseVector b);
 
 
     /**
@@ -333,7 +333,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    CNumber innerProduct(CVector b);
+    CNumber inner(CVector b);
 
 
     /**
@@ -342,7 +342,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    CNumber innerProduct(SparseCVector b);
+    CNumber inner(SparseCVector b);
 
 
     /**
@@ -369,7 +369,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * @return The result of the vector outer product between this vector and b.
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    UU outerProduct(Vector b);
+    UU outer(Vector b);
 
 
     /**
@@ -378,7 +378,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * @return The result of the vector outer product between this vector and b.
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    UU outerProduct(SparseVector b);
+    UU outer(SparseVector b);
 
 
     /**
@@ -387,7 +387,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * @return The result of the vector outer product between this vector and b.
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    CMatrix outerProduct(CVector b);
+    CMatrix outer(CVector b);
 
 
     /**
@@ -396,7 +396,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * @return The result of the vector outer product between this vector and b.
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    CMatrix outerProduct(SparseCVector b);
+    CMatrix outer(SparseCVector b);
 
 
     // TODO: ADD isParallel(CVector b), isParallel(SparseVector b), and isParallel(sparseCVector)
