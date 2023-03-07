@@ -16,6 +16,7 @@ ___
   - Real Dense Vector
   - Real Sparse Vector
   - Complex Dense Vector
+  - Complex Sparse Vector
 - Matrices
     - Real Dense Matrix
     - Real Sparse Matrix
