@@ -119,6 +119,16 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
+     * Constructs a complex vector whose entries and shape are specified by another real vector.
+     * @param a Real vector to copy.
+     */
+    public CVector(Vector a) {
+        super(a.size(), new CNumber[a.totalEntries().intValue()]);
+        ArrayUtils.copy2CNumber(a.entries, super.entries);
+    }
+
+
+    /**
      * Constructs a complex vector whose entries and shape are specified by another complex vector.
      * @param a Complex vector to copy.
      */
@@ -1331,7 +1341,7 @@ public class CVector extends VectorBase<CNumber[]> implements
 
             // Ensure all entries of b are the same scalar multiple of the entries in this vector.
             for(int i=0; i<this.size; i++) {
-                if(scale.mult(b.entries[i]) != this.entries[i]) {
+                if(!scale.mult(b.entries[i]).equals(this.entries[i])) {
                     result = false;
                     break;
                 }

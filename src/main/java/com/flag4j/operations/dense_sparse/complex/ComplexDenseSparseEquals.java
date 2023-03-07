@@ -101,11 +101,11 @@ public class ComplexDenseSparseEquals {
             CNumber[] src1Copy = new CNumber[src1.length];
             ArrayUtils.copy2CNumber(src1, src1Copy);
 
-            for(int i=0; i<sparseSize; i++) {
+            for(int i=0; i<src2.length; i++) {
                 index = indices[i];
 
                 if(!src1[index].equals(src2[i])) {
-                    equal=false;
+                    equal = false;
                     break;
 
                 } else {
@@ -114,7 +114,7 @@ public class ComplexDenseSparseEquals {
             }
 
             if(equal) {
-                // Now, if this vector is equal to the sparse vector, there should only be zeros left in the entriesStack
+                // Now, if this vector is equal to the sparse vector, there should only be zeros left in the copy
                 equal = ArrayUtils.isZeros(src1Copy);
             }
 

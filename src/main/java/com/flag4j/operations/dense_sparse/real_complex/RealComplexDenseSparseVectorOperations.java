@@ -151,7 +151,7 @@ public class RealComplexDenseSparseVectorOperations {
     public static CVector add(Vector src1, SparseCVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
-        CVector dest = new CVector(src1.entries);
+        CVector dest = new CVector(src1);
         int index;
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
@@ -173,11 +173,17 @@ public class RealComplexDenseSparseVectorOperations {
     public static CVector add(CVector src1, SparseVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
-        CVector dest = new CVector(src1.entries);
+        CVector dest = new CVector(src1);
         int index;
 
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
+        System.out.println("src2 size: " + src2.size);
+        System.out.println("src2 number of nonzero entries: " + src2.entries.length);
+
+        for(int i=0; i<src2.entries.length; i++) {
             index = src2.indices[i];
+
+            System.out.println("Found nonzero entry at index " + index + ": " + src2.entries[i]);
+
             dest.entries[index].addEq(src2.entries[i]);
         }
 
@@ -195,7 +201,7 @@ public class RealComplexDenseSparseVectorOperations {
     public static CVector sub(Vector src1, SparseCVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
-        CVector dest = new CVector(src1.entries);
+        CVector dest = new CVector(src1);
         int index;
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
@@ -237,7 +243,7 @@ public class RealComplexDenseSparseVectorOperations {
     public static CVector sub(CVector src1, SparseVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
-        CVector dest = new CVector(src1.entries);
+        CVector dest = new CVector(src1);
         int index;
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {

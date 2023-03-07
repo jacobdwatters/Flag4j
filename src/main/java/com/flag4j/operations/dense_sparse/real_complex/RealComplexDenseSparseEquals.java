@@ -93,12 +93,12 @@ public class RealComplexDenseSparseEquals {
     public static boolean vectorEquals(CNumber[] src1, double[] src2, int[] indices, int sparseSize) {
         boolean equal = true;
 
-        if(src1.length==sparseSize) {
+        if(src1.length == sparseSize) {
             int index;
             CNumber[] src1Copy = new CNumber[src1.length];
             ArrayUtils.copy2CNumber(src1, src1Copy);
 
-            for(int i=0; i<sparseSize; i++) {
+            for(int i=0; i<indices.length; i++) {
                 index = indices[i];
 
                 if(!src1[index].equals(src2[i])) {
