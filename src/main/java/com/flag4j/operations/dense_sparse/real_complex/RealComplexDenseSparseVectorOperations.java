@@ -176,14 +176,8 @@ public class RealComplexDenseSparseVectorOperations {
         CVector dest = new CVector(src1);
         int index;
 
-        System.out.println("src2 size: " + src2.size);
-        System.out.println("src2 number of nonzero entries: " + src2.entries.length);
-
         for(int i=0; i<src2.entries.length; i++) {
             index = src2.indices[i];
-
-            System.out.println("Found nonzero entry at index " + index + ": " + src2.entries[i]);
-
             dest.entries[index].addEq(src2.entries[i]);
         }
 

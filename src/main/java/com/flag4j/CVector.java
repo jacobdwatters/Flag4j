@@ -343,6 +343,18 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
+     * Computes the element-wise addition between this vector and the specified vector and stores the result
+     * in this vector.
+     *
+     * @param B Vector to add to this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    public void addEq(SparseCVector B) {
+        ComplexDenseSparseVectorOperations.addEq(this, B);
+    }
+
+
+    /**
      * Computes the element-wise addition between this vector and the specified vector.
      *
      * @param B Vector to add to this vector.
@@ -363,6 +375,18 @@ public class CVector extends VectorBase<CNumber[]> implements
     @Override
     public void subEq(SparseVector B) {
         RealComplexDenseSparseVectorOperations.subEq(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
+     * in this vector.
+     *
+     * @param B Vector to add to this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    public void subEq(SparseCVector B) {
+        ComplexDenseSparseVectorOperations.subEq(this, B);
     }
 
 
@@ -532,7 +556,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public void subEq(Double b) {
-        RealComplexDenseOperations.addEq(this.entries, b);
+        RealComplexDenseOperations.subEq(this.entries, b);
     }
 
 

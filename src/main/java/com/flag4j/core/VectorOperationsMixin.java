@@ -177,7 +177,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
 
 
     /**
-     * Computes the element-wise addition between this vector and the specified vector.
+     * Computes the element-wise subtraction between this vector and the specified vector.
      * @param B Vector to add to this vector.
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
@@ -186,7 +186,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
 
 
     /**
-     * Computes the element-wise addition between this vector and the specified vector.
+     * Computes the element-wise subtraction between this vector and the specified vector.
      * @param B Vector to add to this vector.
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
@@ -195,7 +195,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
 
 
     /**
-     * Computes the element-wise addition between this vector and the specified vector.
+     * Computes the element-wise subtraction between this vector and the specified vector.
      * @param B Vector to add to this vector.
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
@@ -204,7 +204,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
 
 
     /**
-     * Computes the element-wise addition between this vector and the specified vector.
+     * Computes the element-wise subtraction between this vector and the specified vector.
      * @param B Vector to add to this vector.
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
@@ -213,36 +213,36 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
 
 
     /**
-     * Computes the element-wise addition between this vector and the specified vector.
+     * Computes the element-wise addition between this vector and the specified vector and stores the result
+     * in this vector.
      * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     void addEq(SparseVector B);
 
 
     /**
-     * Computes the element-wise addition between this vector and the specified vector.
+     * Computes the element-wise addition between this vector and the specified vector and stores the result
+     * in this vector.
      * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     void addEq(Vector B);
 
 
     /**
-     * Computes the element-wise addition between this vector and the specified vector.
+     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
+     * in this vector.
      * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     void subEq(Vector B);
 
 
     /**
-     * Computes the element-wise addition between this vector and the specified vector.
+     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
+     * in this vector.
      * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     void subEq(SparseVector B);

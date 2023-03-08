@@ -109,6 +109,21 @@ public class ComplexDenseSparseVectorOperations {
     }
 
 
+    /**
+     * Computes the element-wise addition between a dense complex vector and sparse complex vectors.
+     * The result is stored in the first vector.
+     * @param src1 Dense vector. Modified.
+     * @param src2 Sparse vector.
+     */
+    public static void addEq(CVector src1, SparseCVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            src1.entries[src2.indices[i]].addEq(src2.entries[i]);
+        }
+    }
+
+
 
     /**
      * Subtracts a complex sparse vector from a complex dense vector.
@@ -120,7 +135,7 @@ public class ComplexDenseSparseVectorOperations {
     public static CVector sub(CVector src1, SparseCVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
-        CVector dest = new CVector(src1.entries);
+        CVector dest = src1.copy();
         int index;
 
         for(int i=0; i<src2.entries.length; i++) {
@@ -129,6 +144,21 @@ public class ComplexDenseSparseVectorOperations {
         }
 
         return dest;
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between a dense complex vector and sparse complex vectors.
+     * The result is stored in the first vector.
+     * @param src1 Dense vector. Modified.
+     * @param src2 Sparse vector.
+     */
+    public static void subEq(CVector src1, SparseCVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            src1.entries[src2.indices[i]].subEq(src2.entries[i]);
+        }
     }
 
 
