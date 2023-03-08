@@ -75,4 +75,24 @@ public abstract class VectorBase<T extends Serializable> extends TensorBase<T> {
     public int size() {
         return size;
     }
+
+
+    /**
+     * Checks if a vector has the same number of elements as this vector. Same as {@link #sameShape(VectorBase)}
+     * @param b Vector to compare to this vector.
+     * @return True if this vector and {@code b} have the same number of elements.
+     */
+    public boolean sameSize(VectorBase<?> b) {
+        return this.size==b.size;
+    }
+
+
+    /**
+     * Checks if a vector has the same number of elements as this vector. Same as {@link #sameSize(VectorBase)}
+     * @param b Vector to compare to this vector.
+     * @return True if this vector and {@code b} have the same number of elements.
+     */
+    public boolean sameShape(VectorBase<?> b) {
+        return this.size==b.size;
+    }
 }

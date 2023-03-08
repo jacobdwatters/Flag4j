@@ -24,12 +24,6 @@
 
 package com.flag4j.core;
 
-
-import com.flag4j.CVector;
-import com.flag4j.SparseCVector;
-import com.flag4j.SparseVector;
-import com.flag4j.Vector;
-
 /**
  * This interface specifies comparisons which all vectors should implement.
  *
@@ -41,68 +35,5 @@ import com.flag4j.Vector;
  * @param <X> Vector entry type.
  */
 public interface VectorComparisonsMixin<T, U, V, W, Y, X extends Number> extends TensorComparisonsMixin<T, U, V, W, Y, X> {
-
-
-    /**
-     * Checks if two vectors have the same shape.
-     * @param b Vector to compare to this vector.
-     * @return True if this vector and vector b have the same length. Otherwise, returns false.
-     */
-    boolean sameShape(Vector b);
-
-
-    /**
-     * Checks if two vectors have the same shape.
-     * @param b Vector to compare to this vector.
-     * @return True if this vector and vector b have the same length. Otherwise, returns false.
-     */
-    boolean sameShape(SparseVector b);
-
-
-    /**
-     * Checks if two vectors have the same shape.
-     * @param b Vector to compare to this vector.
-     * @return True if this vector and vector b have the same length. Otherwise, returns false.
-     */
-    boolean sameShape(CVector b);
-
-
-    /**
-     * Checks if two vectors have the same shape.
-     * @param b Vector to compare to this vector.
-     * @return True if this vector and vector b have the same length. Otherwise, returns false.
-     */
-    boolean sameShape(SparseCVector b);
-
-
-    /**
-     * Checks if two vectors have the same length.
-     * @param b Vector to compare to this vector.
-     * @return True if this vector and vector b have the same length. Otherwise, returns false.
-     */
-    boolean sameSize(Vector b);
-
-
-    /**
-     * Checks if two vectors have the same length.
-     * @param b Vector to compare to this vector.
-     * @return True if this vector and vector b have the same length. Otherwise, returns false.
-     */
-    boolean sameSize(SparseVector b);
-
-
-    /**
-     * Checks if two vectors have the same length.
-     * @param b Vector to compare to this vector.
-     * @return True if this vector and vector b have the same length. Otherwise, returns false.
-     */
-    boolean sameSize(CVector b);
-
-
-    /**
-     * Checks if two vectors have the same length.
-     * @param b Vector to compare to this vector.
-     * @return True if this vector and vector b have the same length. Otherwise, returns false.
-     */
-    boolean sameSize(SparseCVector b);
+    // TODO: Should this interface be removed?
 }
