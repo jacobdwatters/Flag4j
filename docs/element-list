@@ -1,6 +1,7 @@
 com.flag4j
 com.flag4j.complex_matrix
 com.flag4j.complex_numbers
+com.flag4j.complex_vector
 com.flag4j.concurrency
 com.flag4j.core
 com.flag4j.io
