@@ -1,14 +1,10 @@
 package com.flag4j.complex_vector;
 
 import com.flag4j.CVector;
-import com.flag4j.SparseCVector;
-import com.flag4j.SparseVector;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,10 +13,6 @@ class CVectorElemDivTests {
     static CVector a;
     CNumber[] expEntries;
     CVector exp;
-
-    int[] sparseIndices;
-    int sparseSize;
-
 
     @BeforeAll
     static void setup() {
