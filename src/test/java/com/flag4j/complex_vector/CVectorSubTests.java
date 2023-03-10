@@ -309,7 +309,6 @@ class CVectorSubTests {
         exp = new CVector(expEntries);
 
         CVector act = a.sub(b);
-        System.out.println();
 
         assertEquals(exp, act);
 
