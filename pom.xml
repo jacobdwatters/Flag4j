@@ -4,21 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.flag4j</groupId>
+    <groupId>io.github.jacobdwatters</groupId>
     <artifactId>Flag4j</artifactId>
     <version>v0.0.1-beta</version>
 
     <name>Flag4j</name>
     <description>Fast Linear Algebra library for Java.</description>
     <url>https://github.com/jacobdwatters/Flag4j</url>
-
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub jacobdwatters Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/jacobdwatters/Flag4j</url>
-        </repository>
-    </distributionManagement>
 
     <scm>
         <connection>scm:git:git://github.com/simpligility/ossrh-demo.git</connection>
@@ -30,7 +22,7 @@
         <developer>
             <name>Jacob Watters</name>
             <email>jacobdwatters@gmail.com</email>
-            <organization>Flag4j</organization>
+            <organization>com.github.jacobdwatters</organization>
             <organizationUrl>https://github.com/jacobdwatters</organizationUrl>
         </developer>
     </developers>
