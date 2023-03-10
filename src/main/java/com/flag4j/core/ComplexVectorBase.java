@@ -22,37 +22,36 @@
  * SOFTWARE.
  */
 
-package com.flag4j.operations.dense.complex;
+package com.flag4j.core;
 
+import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.util.ErrorMessages;
+
 
 /**
- * This class contains low-level implementations for operations which check if a complex tensor satisfies some property.
+ * The base class for all complex vectors.
  */
-public final class ComplexDenseProperties {
+public abstract class ComplexVectorBase extends VectorBase<CNumber[]> {
 
-    private ComplexDenseProperties() {
-        // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+    /**
+     * Constructs a basic vector with the specified number of entries.
+     *
+     * @param size    Number of entries in this vector.
+     * @param entries The non-zero entries of this sparse tensor.
+     */
+    public ComplexVectorBase(int size, CNumber[] entries) {
+        super(size, entries);
     }
 
 
     /**
-     * Checks if this tensor only contains ones.
-     * @param src Elements of the tensor.
-     * @return True if this tensor only contains ones. Otherwise, returns false.
+     * Constructs a basic vector with the specified number of entries.
+     *
+     * @param shape   Number of entries in this vector.
+     * @param entries The non-zero entries of this sparse tensor.
+     * @throws IllegalArgumentException If the rank of the shape is not 1.
      */
-    public static boolean isOnes(CNumber[] src) {
-        boolean allZeros = true;
-
-        for(CNumber value : src) {
-            if(!value.equals(CNumber.ONE)) {
-                allZeros = false;
-                break; // No need to look further.
-            }
-        }
-
-        return allZeros;
+    public ComplexVectorBase(Shape shape, CNumber[] entries) {
+        super(shape, entries);
     }
 }

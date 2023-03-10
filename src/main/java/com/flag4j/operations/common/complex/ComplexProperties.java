@@ -22,37 +22,58 @@
  * SOFTWARE.
  */
 
-package com.flag4j.operations.dense.complex;
+package com.flag4j.operations.common.complex;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
 
+
 /**
  * This class contains low-level implementations for operations which check if a complex tensor satisfies some property.
+ * Implementations are agnostic to whether the tensor is sparse or dense.
  */
-public final class ComplexDenseProperties {
+public final class ComplexProperties {
 
-    private ComplexDenseProperties() {
+    private ComplexProperties() {
         // Hide default constructor in utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 
     /**
-     * Checks if this tensor only contains ones.
-     * @param src Elements of the tensor.
-     * @return True if this tensor only contains ones. Otherwise, returns false.
+     * Checks whether a tensor contains only real values.
+     * @param entries Entries of dense tensor or non-zero entries of sparse tensor.
+     * @return True if the tensor only contains real values. Returns false otherwise.
      */
-    public static boolean isOnes(CNumber[] src) {
-        boolean allZeros = true;
+    public static boolean isReal(CNumber[] entries) {
+        boolean result = true;
 
-        for(CNumber value : src) {
-            if(!value.equals(CNumber.ONE)) {
-                allZeros = false;
-                break; // No need to look further.
+        for(int i=0; i<entries.length; i++) {
+            if(entries[i].im != 0) {
+                result = false;
+                break;
             }
         }
 
-        return allZeros;
+        return result;
+    }
+
+
+    /**
+     * Checks whether a tensor contains at least one non-real value.
+     * @param entries Entries of dense tensor or non-zero entries of sparse tensor.
+     * @return True if the tensor contains at least one non-real value. Returns false otherwise.
+     */
+    public static boolean isComplex(CNumber[] entries) {
+        boolean result = false;
+
+        for(int i=0; i<entries.length; i++) {
+            if(entries[i].im == 0) {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
     }
 }

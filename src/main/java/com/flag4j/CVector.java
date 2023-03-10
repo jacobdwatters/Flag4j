@@ -28,6 +28,7 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.operations.dense.complex.AggregateDenseComplex;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
 import com.flag4j.operations.dense.complex.ComplexDenseProperties;
@@ -49,12 +50,7 @@ import java.util.Arrays;
  * Complex dense vector. This class is mostly equivalent to a rank 1 complex tensor.
  */
 public class CVector extends VectorBase<CNumber[]> implements
-        VectorComparisonsMixin<CVector, CVector, SparseCVector, CVector, Vector, CNumber>,
-    VectorManipulationsMixin<CVector, CVector, SparseCVector, CVector, Vector, CNumber,
-            CMatrix, CMatrix, SparseCMatrix, CMatrix>,
-        VectorOperationsMixin<CVector, CVector, SparseCVector, CVector, Vector, CNumber,
-                    CMatrix, CMatrix, SparseCMatrix, CMatrix>,
-        VectorPropertiesMixin<CVector, CVector, SparseCVector, CVector, Vector, CNumber> {
+        ComplexVectorMixin<CVector, Vector> {
 
 
     /**
@@ -1550,5 +1546,49 @@ public class CVector extends VectorBase<CNumber[]> implements
     @Override
     public int length() {
         return this.size;
+    }
+
+
+    /**
+     * Checks if this tensor has only real valued entries.
+     *
+     * @return True if this tensor contains <b>NO</b> complex entries. Otherwise, returns false.
+     */
+    @Override
+    public boolean isReal() {
+        return ComplexProperties.isReal(this.entries);
+    }
+
+
+    /**
+     * Checks if this tensor contains at least one complex entry.
+     *
+     * @return True if this tensor contains at least one complex entry. Otherwise, returns false.
+     */
+    @Override
+    public boolean isComplex() {
+        return ComplexProperties.isComplex(this.entries);
+    }
+
+
+    /**
+     * Computes the complex conjugate of a tensor.
+     *
+     * @return The complex conjugate of this tensor.
+     */
+    @Override
+    public CVector conj() {
+        return new CVector(ComplexOperations.conj(this.entries));
+    }
+
+
+    /**
+     * Converts a complex tensor to a real matrix. The imaginary component of any complex value will be ignored.
+     *
+     * @return A tensor of the same size containing only the real components of this tensor.
+     */
+    @Override
+    public Vector toReal() {
+        return new Vector(ComplexOperations.toReal(this.entries));
     }
 }

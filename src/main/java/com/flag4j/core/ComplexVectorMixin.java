@@ -22,37 +22,23 @@
  * SOFTWARE.
  */
 
-package com.flag4j.operations.dense.complex;
+package com.flag4j.core;
 
+
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.util.ErrorMessages;
 
 /**
- * This class contains low-level implementations for operations which check if a complex tensor satisfies some property.
+ * This interface specifies methods which any complex vector should implement.
+ * @param <T> Vector type.
+ * @param <Y> Real vector type.
  */
-public final class ComplexDenseProperties {
-
-    private ComplexDenseProperties() {
-        // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
-    }
-
-
-    /**
-     * Checks if this tensor only contains ones.
-     * @param src Elements of the tensor.
-     * @return True if this tensor only contains ones. Otherwise, returns false.
-     */
-    public static boolean isOnes(CNumber[] src) {
-        boolean allZeros = true;
-
-        for(CNumber value : src) {
-            if(!value.equals(CNumber.ONE)) {
-                allZeros = false;
-                break; // No need to look further.
-            }
-        }
-
-        return allZeros;
-    }
+public interface ComplexVectorMixin<T, Y> extends
+        ComplexTensorMixin<T, Y>,
+        VectorComparisonsMixin<T, CVector, SparseCVector, CVector, Y, CNumber>,
+        VectorManipulationsMixin<T, CVector, SparseCVector, CVector, Y, CNumber,
+                CMatrix, CMatrix, SparseCMatrix, CMatrix>,
+        VectorOperationsMixin<T, CVector, SparseCVector, CVector, Y, CNumber,
+                CMatrix, CMatrix, SparseCMatrix, CMatrix>,
+        VectorPropertiesMixin<T, CVector, SparseCVector, CVector, Y, CNumber>{
 }

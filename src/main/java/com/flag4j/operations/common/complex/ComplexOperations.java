@@ -167,4 +167,36 @@ public class ComplexOperations {
 
         return dest;
     }
+
+
+    /**
+     * Computes the element-wise complex conjugate of a tensor.
+     * @param src Entries of the tensor.
+     * @return The element-wise complex conjugate of the tensor
+     */
+    public static CNumber[] conj(CNumber[] src) {
+        CNumber[] conjugate = new CNumber[src.length];
+
+        for(int i=0; i<src.length; i++) {
+            conjugate[i] = src[i].conj();
+        }
+
+        return conjugate;
+    }
+
+
+    /**
+     * Converts a complex tensor to a real tensor by copying the real component and discarding the imaginary component.
+     * @param src Entries of complex tensor.
+     * @return Equivalent real entries for complex tensor.
+     */
+    public static double[] toReal(CNumber[] src) {
+        double[] real = new double[src.length];
+
+        for(int i=0; i<src.length; i++) {
+            real[i] = src[i].re;
+        }
+
+        return real;
+    }
 }

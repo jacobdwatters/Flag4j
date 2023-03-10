@@ -31,6 +31,7 @@ import com.flag4j.operations.MatrixMultiply;
 import com.flag4j.operations.MatrixTranspose;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.operations.dense.complex.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
@@ -51,10 +52,7 @@ import java.util.Optional;
  * Complex dense matrix. Stored in row major format.
  */
 public class CMatrix extends ComplexMatrixBase implements
-        MatrixComparisonsMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber>,
-        MatrixManipulationsMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber>,
-        MatrixOperationsMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber>,
-        MatrixPropertiesMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber> {
+        ComplexMatrixMixin<CMatrix, Matrix> {
 
     /**
      * Constructs a square complex dense matrix of a specified size. The entries of the matrix will default to zero.
@@ -291,12 +289,45 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
+     * Checks if this tensor has only real valued entries.
+     *
+     * @return True if this tensor contains <b>NO</b> complex entries. Otherwise, returns false.
+     */
+    @Override
+    public boolean isReal() {
+        return ComplexProperties.isReal(this.entries);
+    }
+
+
+    /**
+     * Checks if this tensor contains at least one complex entry.
+     *
+     * @return True if this tensor contains at least one complex entry. Otherwise, returns false.
+     */
+    @Override
+    public boolean isComplex() {
+        return ComplexProperties.isComplex(this.entries);
+    }
+
+
+    /**
+     * Computes the complex conjugate of a tensor.
+     *
+     * @return The complex conjugate of this tensor.
+     */
+    @Override
+    public CMatrix conj() {
+        return new CMatrix(this.shape, ComplexOperations.conj(this.entries));
+    }
+
+
+    /**
      * Converts this matrix to an equivalent real matrix. Imaginary components are ignored.
      * @return A real matrix with equivalent real parts.
      */
     @Override
     public Matrix toReal() {
-        return new Matrix(this.shape.copy(), ArrayUtils.getReals(entries));
+        return new Matrix(this.shape.copy(), ComplexOperations.toReal(entries));
     }
 
 
@@ -621,6 +652,96 @@ public class CMatrix extends ComplexMatrixBase implements
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = values[i].copy();
         }
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values. Note that the orientation of the values
+     * vector is <b>NOT</b> taken into account.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public void setCol(CVector values, int colIndex) {
+        // TODO: Implementation
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values. Note that the orientation of the values
+     * vector is <b>NOT</b> taken into account.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the columns which is to be set.
+     * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public void setCol(SparseCVector values, int colIndex) {
+        // TODO: Implementation
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values. Note that the orientation of the values
+     * vector is <b>NOT</b> taken into account.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the row which is to be set.
+     * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public void setRows(CVector values, int rowIndex) {
+        // TODO: Implementation
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values. Note that the orientation of the values
+     * vector is <b>NOT</b> taken into account.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the row which is to be set.
+     * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public void setRows(SparseCVector values, int rowIndex) {
+        // TODO: Implementation
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public void setSlice(Matrix values, int rowStart, int colStart) {
+        // TODO: Implementation
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public void setSlice(SparseMatrix values, int rowStart, int colStart) {
+        // TODO: Implementation
     }
 
 
@@ -1404,26 +1525,74 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
-     * Computes the hermation transpose (i.e. the conjugate transpose) of the matrix.
-     * Same as {@link #H()}.
+     * Computes the complex conjugate transpose of a tensor.
+     * Same as {@link #hermTranspose()} and {@link #H()}.
      *
-     * @return The conjugate transpose.
+     * @return The complex conjugate transpose of this tensor.
      */
     @Override
-    public CMatrix hermationTranspose() {
+    public CMatrix conjT() {
+        return H();
+    }
+
+
+    /**
+     * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
+     * Same as {@link #conjT()} and {@link #H()}.
+     *
+     * @return he complex conjugate transpose (Hermitian transpose) of this tensor.
+     */
+    @Override
+    public CMatrix hermTranspose() {
         return H();
     }
 
 
     /**
      * Computes the hermation transpose (i.e. the conjugate transpose) of the matrix.
-     * Same as {@link #hermationTranspose()}.
+     * Same as {@link #hermTranspose()}.
      *
      * @return The conjugate transpose.
      */
     @Override
     public CMatrix H() {
         return MatrixTranspose.dispatchHermation(this);
+    }
+
+
+    /**
+     * Checks if a matrix is Hermitian. That is, if the matrix is equal to its conjugate transpose.
+     *
+     * @return True if this matrix is Hermitian. Otherwise, returns false.
+     */
+    @Override
+    public boolean isHermitian() {
+        // TODO: Implementation
+        return false;
+    }
+
+
+    /**
+     * Checks if a matrix is anti-Hermitian. That is, if the matrix is equal to the negative of its conjugate transpose.
+     *
+     * @return True if this matrix is anti-symmetric. Otherwise, returns false.
+     */
+    @Override
+    public boolean isAntiHermitian() {
+        // TODO: Implementation
+        return false;
+    }
+
+
+    /**
+     * Checks if this matrix is unitary. That is, if this matrices inverse is equal to its hermation transpose.
+     *
+     * @return True if this matrix it is unitary. Otherwise, returns false.
+     */
+    @Override
+    public boolean isUnitary() {
+        // TODO: Implementation
+        return false;
     }
 
 
