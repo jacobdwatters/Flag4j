@@ -1141,6 +1141,7 @@ public class CVector extends VectorBase<CNumber[]> implements
     @Override
     public CVector cross(Vector b) {
         ParameterChecks.assertArrayLengthsEq(3, b.size);
+        ParameterChecks.assertArrayLengthsEq(3, this.size);
         CNumber[] entries = new CNumber[3];
 
         entries[0] = this.entries[1].mult(b.entries[2]).sub(this.entries[2].mult(b.entries[1]));
@@ -1161,6 +1162,7 @@ public class CVector extends VectorBase<CNumber[]> implements
     @Override
     public CVector cross(CVector b) {
         ParameterChecks.assertArrayLengthsEq(3, b.size);
+        ParameterChecks.assertArrayLengthsEq(3, this.size);
         CNumber[] entries = new CNumber[3];
 
         entries[0] = this.entries[1].mult(b.entries[2]).sub(this.entries[2].mult(b.entries[1]));

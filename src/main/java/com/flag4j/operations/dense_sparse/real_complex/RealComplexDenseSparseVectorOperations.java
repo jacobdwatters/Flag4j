@@ -125,15 +125,14 @@ public class RealComplexDenseSparseVectorOperations {
      * @return The matrix resulting from the vector outer product.
      */
     public static CNumber[] outerProduct(CNumber[] src1, double[] src2, int[] indices, int sparseSize) {
-        CNumber[] dest = new CNumber[src1.length*sparseSize];
+        CNumber[] dest = new CNumber[sparseSize*src1.length];
         ArrayUtils.fillZeros(dest);
         int index;
 
         for(int i=0; i<src1.length; i++) {
             for(int j=0; j<src2.length; j++) {
                 index = indices[j];
-
-                dest[i*src2.length + index] = src1[j].mult(src2[i]);
+                dest[i*sparseSize + index] = src1[i].mult(src2[j]);
             }
         }
 

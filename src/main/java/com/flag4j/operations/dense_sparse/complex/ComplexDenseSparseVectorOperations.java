@@ -82,8 +82,7 @@ public class ComplexDenseSparseVectorOperations {
         for(int i=0; i<src1.length; i++) {
             for(int j=0; j<src2.length; j++) {
                 index = indices[j];
-
-                dest[i*src2.length + index] = src1[j].mult(src2[i]);
+                dest[i*sparseSize + index] = src1[i].mult(src2[j].conj());
             }
         }
 

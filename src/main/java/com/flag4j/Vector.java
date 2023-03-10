@@ -919,6 +919,7 @@ public class Vector extends VectorBase<double[]> implements
     @Override
     public Vector cross(Vector b) {
         ParameterChecks.assertArrayLengthsEq(3, b.size);
+        ParameterChecks.assertArrayLengthsEq(3, this.size);
         double[] entries = new double[3];
 
         entries[0] = this.entries[1]*b.entries[2]-this.entries[2]*b.entries[1];
@@ -939,6 +940,7 @@ public class Vector extends VectorBase<double[]> implements
     @Override
     public CVector cross(CVector b) {
         ParameterChecks.assertArrayLengthsEq(3, b.size);
+        ParameterChecks.assertArrayLengthsEq(3, this.size);
         CNumber[] entries = new CNumber[3];
 
         entries[0] = b.entries[2].mult(this.entries[1]).sub(b.entries[1].mult(this.entries[2]));
