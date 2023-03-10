@@ -60,7 +60,7 @@ public class ComplexDenseSparseVectorOperations {
 
         for(int i=0; i<src2.length; i++) {
             index = indices[i];
-            innerProd.addEq(src1[i].mult(src2[index]));
+            innerProd.addEq(src2[i].conj().mult(src1[index]));
         }
 
         return innerProd;

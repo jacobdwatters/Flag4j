@@ -86,7 +86,7 @@ public class RealComplexDenseSparseVectorOperations {
 
         for(int i=0; i<src2.length; i++) {
             index = indices[i];
-            innerProd.addEq(src1[i].mult(src2[index]));
+            innerProd.addEq(src1[index].mult(src2[i]));
         }
 
         return innerProd;
