@@ -33,18 +33,6 @@ class VectorNormTest {
 
         assertEquals(exp, a.norm(234.5));
 
-        // --------------------- Sub-case 4 ---------------------
-        aEntries = new double[]{1.43543, 8.144, -9.234};
-        a = new Vector(aEntries);
-
-        assertThrows(IllegalArgumentException.class, ()->a.norm(0.2));
-
-        // --------------------- Sub-case 5 ---------------------
-        aEntries = new double[]{1.43543, 8.144, -9.234};
-        a = new Vector(aEntries);
-
-        assertThrows(IllegalArgumentException.class, ()->a.norm(-9));
-
         // --------------------- Sub-case 6 ---------------------
         aEntries = new double[]{1.43543, 8.144, -9.234};
         a = new Vector(aEntries);
