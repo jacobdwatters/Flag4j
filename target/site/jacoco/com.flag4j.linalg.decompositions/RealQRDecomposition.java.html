@@ -126,7 +126,7 @@ public final class RealQRDecomposition extends QRDecomposition&lt;Matrix&gt; {
 <span class="fc" id="L126">        v.entries[0] = 1;</span>
 
         // Create projection matrix
-<span class="fc" id="L129">        Matrix P = v.outerProduct(v).scalMult(2/v.innerProduct(v));</span>
+<span class="fc" id="L129">        Matrix P = v.outer(v).scalMult(2/v.inner(v));</span>
 <span class="fc" id="L130">        H.subEq(P);</span>
 
 <span class="fc" id="L132">        return H;</span>

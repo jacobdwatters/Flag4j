@@ -62,12 +62,12 @@ public class AggregateComplex {
     public static CNumber minAbs(final CNumber[] entries) {
         CNumber currMin;
 
-<span class="nc bnc" id="L65" title="All 2 branches missed.">        if(entries.length!=0) {</span>
-<span class="nc" id="L66">            currMin = new CNumber(Double.MAX_VALUE);</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if(entries.length!=0) {</span>
+<span class="fc" id="L66">            currMin = new CNumber(Double.MAX_VALUE);</span>
 
-<span class="nc bnc" id="L68" title="All 2 branches missed.">            for(CNumber value : entries) {</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">                if(value.mag().re &lt; currMin.re) {</span>
-<span class="nc" id="L70">                    currMin = value.mag(); // Update current minimum.</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">            for(CNumber value : entries) {</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">                if(value.mag().re &lt; currMin.re) {</span>
+<span class="fc" id="L70">                    currMin = value.mag(); // Update current minimum.</span>
                 }
             }
 
@@ -75,7 +75,7 @@ public class AggregateComplex {
 <span class="nc" id="L75">            currMin = new CNumber();</span>
         }
 
-<span class="nc" id="L78">        return currMin;</span>
+<span class="fc" id="L78">        return currMin;</span>
     }
 
 
@@ -86,15 +86,15 @@ public class AggregateComplex {
      * @return The maximum absolute value in the tensor.
      */
     public static CNumber maxAbs(final CNumber[] entries) {
-<span class="nc" id="L89">        CNumber currMax = new CNumber();</span>
+<span class="fc" id="L89">        CNumber currMax = new CNumber();</span>
 
-<span class="nc bnc" id="L91" title="All 2 branches missed.">        for(CNumber value : entries) {</span>
-<span class="nc bnc" id="L92" title="All 2 branches missed.">            if(value.mag().re &gt; currMax.re) {</span>
-<span class="nc" id="L93">                currMax = value.mag(); // Update current maximum.</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        for(CNumber value : entries) {</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">            if(value.mag().re &gt; currMax.re) {</span>
+<span class="fc" id="L93">                currMax = value.mag(); // Update current maximum.</span>
             }
         }
 
-<span class="nc" id="L97">        return currMax;</span>
+<span class="fc" id="L97">        return currMax;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
