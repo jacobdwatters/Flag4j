@@ -76,66 +76,52 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
     W join(SparseCVector b);
 
 
+    // TODO: Add stack(vec, axis) methods so vectors can be stacked as if column vectors.
+
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(Matrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Stacks two vectors along columns as if they were row vectors.
      *
      * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @return The result of stacking this vector and vector {@code b}.
      * @throws IllegalArgumentException <br>
      * - If the number of entries in this vector is different from the number of entries in
-     * the vector b.<br>
-     * - If the vectors are not both row vectors or both column vectors.
+     * the vector {@code b}.
      */
     TT stack(Vector b);
 
 
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(SparseMatrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Stacks two vectors along columns as if they were row vectors.
      *
      * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @return The result of stacking this vector and vector {@code b}.
      * @throws IllegalArgumentException <br>
      * - If the number of entries in this vector is different from the number of entries in
-     * the vector b.<br>
-     * - If the vectors are not both row vectors or both column vectors.
+     * the vector {@code b}.
      */
     TT stack(SparseVector b);
 
 
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(CMatrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Stacks two vectors along columns as if they were row vectors.
      *
      * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @return The result of stacking this vector and vector {@code b}.
      * @throws IllegalArgumentException <br>
      * - If the number of entries in this vector is different from the number of entries in
-     * the vector b.<br>
-     * - If the vectors are not both row vectors or both column vectors.
+     * the vector {@code b}.
      */
     WW stack(CVector b);
 
 
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(SparseCMatrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Stacks two vectors along columns as if they were row vectors.
      *
      * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @return The result of stacking this vector and vector {@code b}.
      * @throws IllegalArgumentException <br>
      * - If the number of entries in this vector is different from the number of entries in
-     * the vector b.<br>
-     * - If the vectors are not both row vectors or both column vectors.
+     * the vector {@code b}.
      */
     WW stack(SparseCVector b);
 

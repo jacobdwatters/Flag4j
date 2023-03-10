@@ -751,7 +751,7 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
-     * Stacks two vectors along columns.
+     * Stacks two vectors along columns as if they were row vectors.
      *
      * @param b Vector to stack to the bottom of this vector.
      * @return The result of stacking this vector and vector b.<br>
