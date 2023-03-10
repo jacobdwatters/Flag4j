@@ -943,17 +943,13 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(Matrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Stacks two vectors along columns as if they are column vectors.
      *
      * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @return The result of stacking this vector and vector b.
      * @throws IllegalArgumentException <br>
      *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector b.<br>
-     *                                  - If the vectors are not both row vectors or both column vectors.
+     *                                  the vector b.
      */
     @Override
     public CMatrix stack(Vector b) {
@@ -969,17 +965,13 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(SparseMatrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Stacks two vectors along columns as if they are column vectors.
      *
      * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @return The result of stacking this vector and vector b.
      * @throws IllegalArgumentException <br>
      *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector b.<br>
-     *                                  - If the vectors are not both row vectors or both column vectors.
+     *                                  the vector b.
      */
     @Override
     public CMatrix stack(SparseVector b) {
@@ -1001,17 +993,13 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(CMatrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Stacks two vectors along columns as if they are column vectors.
      *
      * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @return The result of stacking this vector and vector b.
      * @throws IllegalArgumentException <br>
      *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector b.<br>
-     *                                  - If the vectors are not both row vectors or both column vectors.
+     *                                  the vector b.
      */
     @Override
     public CMatrix stack(CVector b) {
@@ -1027,17 +1015,13 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(SparseCMatrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Stacks two vectors along columns as if they are column vectors.
      *
      * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @return The result of stacking this vector and vector b.
      * @throws IllegalArgumentException <br>
      *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector b.<br>
-     *                                  - If the vectors are not both row vectors or both column vectors.
+     *                                  the vector b.
      */
     @Override
     public CMatrix stack(SparseCVector b) {
