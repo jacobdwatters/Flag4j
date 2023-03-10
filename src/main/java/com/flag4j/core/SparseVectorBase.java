@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -53,13 +53,12 @@ public abstract class SparseVectorBase<T extends Serializable> extends VectorBas
      * Creates a sparse vector with specified number of entries.
      * @param totalEntries Number of total entries in this sparse vector, including zeros.
      * @param nonZeroEntries Number of non-zero entries in this sparse vector.
-     * @param orientation Orientation of this sparse vector.
      * @param entries Non-zero entries of this sparse vector.
      * @param indices Indices of the non-zero entries of this tensor.
      * @throws IllegalArgumentException If the lengths of the entries and incicies arrays are not equal.
      */
-    public SparseVectorBase(int totalEntries, int nonZeroEntries, VectorOrientation orientation, T entries, int[] indices) {
-        super(totalEntries, orientation, entries);
+    public SparseVectorBase(int totalEntries, int nonZeroEntries, T entries, int[] indices) {
+        super(totalEntries, entries);
 
         if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) < 0) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));

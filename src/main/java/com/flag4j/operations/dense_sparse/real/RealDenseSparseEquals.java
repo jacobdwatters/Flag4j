@@ -26,6 +26,8 @@ package com.flag4j.operations.dense_sparse.real;
 
 import com.flag4j.Matrix;
 import com.flag4j.SparseMatrix;
+import com.flag4j.SparseTensor;
+import com.flag4j.Tensor;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 
@@ -43,10 +45,51 @@ public class RealDenseSparseEquals {
 
 
     /**
-     * Checks if two real dense matrices are equal.
-     * @param A First matrix.
-     * @param B Second matrix.
-     * @return True if the two matrices are element-wise equivalent.
+     * Checks if a real dense vector is equal to a sparse vector equals.
+     * @param src1 Entries of dense vector.
+     * @param src2 Non-zero Entries of sparse vector.
+     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param sparseSize Size of the sparse vector.
+     * @return True if the two matrices are equal. Returns false otherwise.
+     */
+    public static boolean vectorEquals(double[] src1, double[] src2, int[] indices, int sparseSize) {
+        boolean equal = true;
+
+        if(src1.length==sparseSize) {
+            int index;
+            double[] src1Copy = Arrays.copyOf(src1, src1.length);
+
+            for(int i=0; i<src2.length; i++) {
+                index = indices[i];
+
+                if(src1[index]!=src2[i]) {
+                    equal=false;
+                    break;
+
+                } else {
+                    src1Copy[index] = 0;
+                }
+            }
+
+            if(equal) {
+                // Now, if this vector is equal to the sparse vector, there should only be zeros left in the entriesStack
+                equal = ArrayUtils.isZeros(src1Copy);
+            }
+
+        } else {
+            equal = false;
+        }
+
+        return equal;
+    }
+
+
+
+    /**
+     * Checks if a real dense matrix is equal to a real sparse matrix.
+     * @param A Real dense matrix.
+     * @param B Real sparse matrix.
+     * @return True if the two matrices are element-wise equivalent (as if both were dense).
      */
     public static boolean matrixEquals(Matrix A, SparseMatrix B) {
         boolean equal = true;
@@ -69,6 +112,45 @@ public class RealDenseSparseEquals {
                 }
 
                 entriesCopy[A.shape.entriesIndex(rowIndex, colIndex)] = 0;
+            }
+
+            if(equal) {
+                // Now, if this matrix is equal to the sparse matrix, there should only be zeros left in the entriesStack
+                equal = ArrayUtils.isZeros(entriesCopy);
+            }
+
+        } else {
+            equal = false;
+        }
+
+        return equal;
+    }
+
+
+    /**
+     * Checks if a real dense tensor is equal to a real sparse tensor.
+     * @param A Real dense tensor.
+     * @param B Real sparse tensor.
+     * @return True if the two matrices are element-wise equivalent.
+     */
+    public static boolean tensorEquals(Tensor A, SparseTensor B) {
+        boolean equal = true;
+
+        if(A.shape.equals(B.shape)) {
+            double[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);
+
+            int entriesIndex;
+
+            // Remove all nonZero entries from the entries of this matrix.
+            for(int i=0; i<B.nonZeroEntries(); i++) {
+                entriesIndex = A.shape.entriesIndex(B.indices[i]);
+
+                if(entriesCopy[entriesIndex] != B.entries[i]) {
+                    equal = false;
+                    break;
+                }
+
+                entriesCopy[A.shape.entriesIndex(B.indices[i])] = 0;
             }
 
             if(equal) {

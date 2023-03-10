@@ -35,6 +35,7 @@ import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
@@ -56,8 +57,6 @@ public class Matrix extends RealMatrixBase implements
         MatrixOperationsMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double>,
         MatrixPropertiesMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double> {
 
-
-//    public static final double DEFAULT_ROUND_TO_ZERO_THRESHOLD = 1.0E-12;
 
     /**
      * Constructs a square real dense matrix of a specified size. The entries of the matrix will default to zero.
@@ -334,14 +333,23 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
-     * Checks if matrices are inverses of each other.
+     * Checks if matrices are inverses of each other. This method rounds values near zero to zero when checking
+     * if the two matrices are inverses to account for floating point precision loss.
      *
      * @param B Second matrix.
      * @return True if matrix B is an inverse of this matrix. Otherwise, returns false. Otherwise, returns false.
      */
     @Override
     public boolean isInv(Matrix B) {
-        return this.mult(B).roundToZero().isI();
+        boolean result;
+
+        if(!this.isSquare() || !B.isSquare()) {
+            result = false;
+        } else {
+            result = this.mult(B).roundToZero().isI();
+        }
+
+        return result;
     }
 
 
@@ -592,6 +600,31 @@ public class Matrix extends RealMatrixBase implements
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = values[i];
         }
+    }
+
+
+    /**
+     * Gets a specified slice of this matrix.
+     *
+     * @param rowStart Starting row index of slice (inclusive).
+     * @param rowEnd Ending row index of slice (exclusive).
+     * @param colStart Starting column index of slice (inclusive).
+     * @param colEnd Ending row index of slice (exclusive).
+     * @return The specified slice of this matrix. This is a completely new matrix and <b>NOT</b> a view into the matrix.
+     * @throws ArrayIndexOutOfBoundsException If any of the indices are out of bounds of this matrix.
+     * @throws IllegalArgumentException If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
+     */
+    @Override
+    public Matrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
+        Matrix slice = new Matrix(rowEnd-rowStart, colEnd-colStart);
+
+        for(int i=0; i<slice.numRows; i++) {
+            for(int j=0; j<slice.numCols; j++) {
+                slice.entries[i*slice.numCols+j] = this.entries[(i+rowStart)*this.numCols+j+colStart];
+            }
+        }
+
+        return slice;
     }
 
 
@@ -1006,7 +1039,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public Matrix add(double a) {
         return new Matrix(this.shape.copy(),
-                RealDenseOperations.add(this.entries, a)
+                RealDenseVectorOperations.add(this.entries, a)
         );
     }
 
@@ -1020,7 +1053,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public CMatrix add(CNumber a) {
         return new CMatrix(this.shape.copy(),
-                RealComplexDenseOperations.add(this.entries, a)
+                RealComplexDenseVectorOperations.add(this.entries, a)
         );
     }
 
@@ -1106,6 +1139,76 @@ public class Matrix extends RealMatrixBase implements
         return new CMatrix(this.shape.copy(),
                 RealComplexDenseOperations.sub(this.entries, a)
         );
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void subEq(Matrix B) {
+        RealDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void subEq(SparseMatrix B) {
+        RealDenseSparseOperations.subEq(this, B);
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void subEq(Double b) {
+        RealDenseOperations.subEq(this.entries, b);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void addEq(Matrix B) {
+        RealDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void addEq(SparseMatrix B) {
+        RealDenseSparseOperations.addEq(this, B);
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void addEq(Double b) {
+        RealDenseOperations.addEq(this.entries, b);
     }
 
 
@@ -1236,10 +1339,10 @@ public class Matrix extends RealMatrixBase implements
      * @throws ArithmeticException If this tensor contains any zeros.
      */
     @Override
-    public Matrix recep() {
+    public Matrix recip() {
         return new Matrix(
                 shape.copy(),
-                RealDenseOperations.recep(entries)
+                RealDenseOperations.recip(entries)
         );
     }
 
@@ -1562,8 +1665,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double det() {
-        // TODO: Implement using QR Factorization
-        return null;
+        return RealDenseDeterminant.det(this);
     }
 
 
@@ -2796,10 +2898,27 @@ public class Matrix extends RealMatrixBase implements
 
 
     /**
+     * Get the row of this matrix at the specified index.
+     *
+     * @param i Index of row to get.
+     * @return The specified row of this matrix as a vector.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} is less than zero or greater than/equal to
+     * the number of rows in this matrix.
+     */
+    public Vector getRowAsVector(int i) {
+        int start = i*numCols;
+        int stop = start+numCols;
+        return new Vector(Arrays.copyOfRange(this.entries, start, stop));
+    }
+
+
+    /**
      * Get the column of this matrix at the specified index.
      *
      * @param j Index of column to get.
      * @return The specified column of this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code j} is less than zero or greater than/equal to
+     * the number of columns in this matrix.
      */
     @Override
     public Matrix getCol(int j) {
@@ -2811,6 +2930,48 @@ public class Matrix extends RealMatrixBase implements
 
         return new Matrix(new Shape(numRows, 1), col);
     }
+
+
+    // TODO: Pull below methods up to matrix operations interface and add getRowBellow(int, int)
+
+    /**
+     * Get a specified column of this matrix at and below a specified row.
+     *
+     * @param rowStart Index of the row to begin at.
+     * @param j Index of column to get.
+     * @return The specified column of this matrix beginning at the specified row.
+     * @throws NegativeArraySizeException If {@code i} is larger than the number of rows in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code j} is outside the bounds of this matrix.
+     */
+    public Matrix getColBelow(int rowStart, int j) {
+        double[] col = new double[numRows-rowStart];
+
+        for(int i=rowStart; i<numRows; i++) {
+            col[i-rowStart] = entries[i*numCols + j];
+        }
+
+        return new Matrix(new Shape(col.length, 1), col);
+    }
+
+
+        /**
+     * Get the column of this matrix at the specified index.
+     *
+     * @param j Index of column to get.
+     * @return The specified column of this matrix as a vector.
+     * @throws ArrayIndexOutOfBoundsException If {@code j} is less than zero or greater than/equal to
+     * the number of rows in this matrix.
+     */
+    public Vector getColAsVector(int j) {
+        double[] col = new double[numRows];
+
+        for(int i=0; i<numRows; i++) {
+            col[i] = entries[i*numCols + j];
+        }
+
+        return new Vector(col);
+    }
+
 
 
     /**
@@ -3294,6 +3455,17 @@ public class Matrix extends RealMatrixBase implements
     public int matrixRank() {
         return 0;
     }
+
+
+    /**
+     * Creates a deep copy of this matrix.
+     * @return A deep copy of this matrix.
+     */
+    @Override
+    public Matrix copy() {
+        return new Matrix(this);
+    }
+
 
 
     /**

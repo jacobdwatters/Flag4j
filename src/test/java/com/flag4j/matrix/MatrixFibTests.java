@@ -1,9 +1,12 @@
 package com.flag4j.matrix;
+
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.SparseMatrix;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MatrixFibTests {
     double[][] aEntries, bEntries;

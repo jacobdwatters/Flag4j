@@ -28,17 +28,17 @@ import com.flag4j.Matrix;
 
 /**
  * &lt;p&gt;This class provides methods for computing the LU decomposition of a matrix.&lt;/p&gt;
- * &lt;p&gt;The {@code LU} decomposition, decomposes a matrix {@code A} into &lt;/p&gt;
+ * &lt;p&gt;The following decompositions are provided: {@code A=LU}, {@code PA=LU}, and {@code PAQ=LU}.&lt;/p&gt;
  */
-public class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
+public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
 
 
     /**
      * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
      */
     public RealLUDecomposition() {
-<span class="nc" id="L40">        super(Pivoting.PARTIAL.ordinal());</span>
-<span class="nc" id="L41">    }</span>
+<span class="fc" id="L40">        super(Pivoting.PARTIAL.ordinal());</span>
+<span class="fc" id="L41">    }</span>
 
 
     /**

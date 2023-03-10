@@ -25,6 +25,10 @@
 package com.flag4j;
 
 import com.flag4j.core.TensorBase;
+import com.flag4j.operations.dense.real.RealDenseEquals;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -111,6 +115,41 @@ public class Tensor extends TensorBase<double[]> {
      * @param A Vector to copy to tensor.
      */
     public Tensor(Vector A) {
-        super(A.getOrientedShape(), A.entries.clone());
+        super(A.shape.copy(), A.entries.clone());
+    }
+
+
+    /**
+     * Checks if an object is equal to this tensor object. Valid object types are: {@link Tensor}, {@link CTensor},
+     * {@link SparseTensor}, and {@link SparseCTensor}. These tensors are equal to this tensor if all entries are
+     * numerically equal to the corresponding element of this tensor. If the tensor is complex, then the imaginary
+     * component must be zero to be equal.
+     * @param object Object to check equality with this tensor.
+     * @return True if the two tensors are numerically equivalent and false otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        boolean equal;
+
+        if(object instanceof Tensor) {
+            Tensor mat = (Tensor) object;
+            equal = RealDenseEquals.tensorEquals(this, mat);
+        } else if(object instanceof CTensor) {
+            CTensor mat = (CTensor) object;
+            equal = RealComplexDenseEquals.tensorEquals(this, mat);
+
+        } else if(object instanceof SparseTensor) {
+            SparseTensor mat = (SparseTensor) object;
+            equal = RealDenseSparseEquals.tensorEquals(this, mat);
+
+        } else if(object instanceof SparseCTensor) {
+            SparseCTensor mat = (SparseCTensor) object;
+            equal = RealComplexDenseSparseEquals.tensorEquals(this, mat);
+
+        } else {
+            equal = false;
+        }
+
+        return equal;
     }
 }

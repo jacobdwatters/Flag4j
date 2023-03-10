@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +38,7 @@ import java.math.BigInteger;
 public abstract class TensorBase<T> implements Serializable {
 
     /**
-     * Entries of this tensor.
+     * Entry data for this tensor.
      */
     public final T entries;
     /**
@@ -68,7 +68,16 @@ public abstract class TensorBase<T> implements Serializable {
 
 
     /**
-     * Gets the rank of this tensor.
+     * <p>
+     * Gets the rank of this tensor. That is, number of indices needed to uniquely select an element of the tensor.
+     * </p>
+     *
+     * <p>
+     * Note, this method is distinct from the {@link MatrixPropertiesMixin#matrixRank()} method.
+     * This returns the number of dimensions (i.e. order or degree) of the tensor and indicates the number of indices
+     * needed to uniquely select an element of the tensor.
+     * </p>
+     *
      * @return The rank of this tensor.
      */
     public int getRank() {
@@ -111,10 +120,10 @@ public abstract class TensorBase<T> implements Serializable {
      * @param B Second tensor to compare.
      * @param axis The axis along which to compare the lengths of the two tensors.
      * @return True if tensor A and tensor B have the same length along the specified axis. Otherwise, returns false.
-     * @throws IllegalArgumentException If axis is negative or unspecified for the two tensors.
+     * @throws IllegalArgumentException If axis is negative or unspecified for either tensor.
      */
     public static boolean sameLength(TensorBase<?> A, TensorBase<?> B, int axis) {
-        if(axis < 0 || axis>=Math.max(A.shape.getRank(), B.shape.getRank())) {
+        if(axis < 0 || axis>=Math.min(A.shape.getRank(), B.shape.getRank())) {
             throw new IllegalArgumentException(
                     ErrorMessages.axisErr(axis)
             );

@@ -24,9 +24,7 @@
 
 package com.flag4j.operations.dense.real_complex;
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
@@ -49,6 +47,17 @@ public class RealComplexDenseEquals {
      * @return True if the two matrices are element-wise equivalent.
      */
     public static boolean matrixEquals(Matrix A, CMatrix B) {
+        return tensorEquals(A.entries, A.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Checks if two real dense tensors are equal.
+     * @param A First tensor in comparison.
+     * @param B Second tensor in comparison.
+     * @return True if the two tensors are numerically element-wise equivalent.
+     */
+    public static boolean tensorEquals(Tensor A, CTensor B) {
         return tensorEquals(A.entries, A.shape, B.entries, B.shape);
     }
 

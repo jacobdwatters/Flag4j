@@ -456,11 +456,11 @@ public class CNumber extends Number {
 
 <span class="fc bfc" id="L457" title="All 4 branches covered.">        if (this.equals(ZERO) &amp;&amp; !b.equals(ZERO)) {</span>
 <span class="fc" id="L458">            quotient = new CNumber();</span>
-        }
-<span class="fc bfc" id="L460" title="All 4 branches covered.">        else if(b.isReal() &amp;&amp; !b.equals(ZERO)) {</span>
+
+<span class="fc bfc" id="L460" title="All 4 branches covered.">        } else if(b.isReal() &amp;&amp; !b.equals(ZERO)) {</span>
 <span class="fc" id="L461">            quotient = new CNumber(this.re/b.re, this.im/b.re);</span>
-        }
-        else {
+
+        } else {
 <span class="fc" id="L464">            double divisor = b.re*b.re + b.im*b.im;</span>
 
 <span class="fc" id="L466">            quotient = new CNumber(</span>

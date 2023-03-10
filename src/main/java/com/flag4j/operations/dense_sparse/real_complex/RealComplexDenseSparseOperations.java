@@ -59,7 +59,7 @@ public class RealComplexDenseSparseOperations {
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col] = src2.entries[i].add(dest.entries[row*src1.numCols + col]);
+            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);
         }
 
         return dest;
@@ -156,6 +156,40 @@ public class RealComplexDenseSparseOperations {
         }
 
         return dest;
+    }
+
+
+    /**
+     * Adds a complex dense matrix to a real sparse matrix and stores the result in the first matrix.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static void addEq(CMatrix src1, SparseMatrix src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        int row, col;
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            row = src2.rowIndices[i];
+            col = src2.colIndices[i];
+            src1.entries[row*src1.numCols + col].addEq(src2.entries[i]);
+        }
+    }
+
+
+    /**
+     * Subtracts a real sparse matrix from a complex dense matrix and stores the result in the first matrix.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static void subEq(CMatrix src1, SparseMatrix src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        int row, col;
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            row = src2.rowIndices[i];
+            col = src2.colIndices[i];
+            src1.entries[row*src1.numCols + col].subEq(src2.entries[i]);
+        }
     }
 
 

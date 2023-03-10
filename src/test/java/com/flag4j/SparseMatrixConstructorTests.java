@@ -1,8 +1,9 @@
 package com.flag4j;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SparseMatrixConstructorTests {

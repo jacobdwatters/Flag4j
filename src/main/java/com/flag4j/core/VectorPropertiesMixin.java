@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ package com.flag4j.core;
  * @param <Y> Real Vector type.
  * @param <X> Vector entry type.
  */
-interface VectorPropertiesMixin<T, U, V, W, Y, X extends Number> extends TensorPropertiesMixin<T, U, V, W, Y, X> {
+public interface VectorPropertiesMixin<T, U, V, W, Y, X extends Number> extends TensorPropertiesMixin<T, U, V, W, Y, X> {
 
     /**
      * Gets the length of a vector.

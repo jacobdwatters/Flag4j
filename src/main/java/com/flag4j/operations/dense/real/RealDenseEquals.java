@@ -26,6 +26,7 @@ package com.flag4j.operations.dense.real;
 
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
+import com.flag4j.Tensor;
 import com.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -43,12 +44,35 @@ public class RealDenseEquals {
 
 
     /**
+     * Checks if two real dense vectors are equal.
+     * @param src1 Entries of first vector.
+     * @param src2 Entries of second vector.
+     * @return True if the two vectors are element-wise numerically equal. Otherwise, returns false.
+     */
+    public static boolean vectorEquals(double[] src1, double[] src2) {
+        return Arrays.equals(src1, src2);
+    }
+
+
+
+    /**
      * Checks if two real dense matrices are equal.
      * @param A First matrix.
      * @param B Second matrix.
      * @return True if the two matrices are element-wise equivalent.
      */
     public static boolean matrixEquals(Matrix A, Matrix B) {
+        return tensorEquals(A.entries, A.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Checks if two real dense tensors are equal.
+     * @param A First tensor in comparison.
+     * @param B Second tensor in comparison.
+     * @return True if the two tensors are numerically element-wise equivalent.
+     */
+    public static boolean tensorEquals(Tensor A, Tensor B) {
         return tensorEquals(A.entries, A.shape, B.entries, B.shape);
     }
 

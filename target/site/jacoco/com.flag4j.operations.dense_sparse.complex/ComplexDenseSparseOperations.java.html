@@ -89,23 +89,62 @@ public class ComplexDenseSparseOperations {
 
 
     /**
+     * Adds a complex dense matrix to a real sparse matrix and stores the result in the first matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static void addEq(CMatrix src1, SparseCMatrix src2) {
+<span class="nc" id="L98">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int row, col;
+
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L103">            row = src2.rowIndices[i];</span>
+<span class="nc" id="L104">            col = src2.colIndices[i];</span>
+<span class="nc" id="L105">            src1.entries[row*src1.numCols + col].addEq(src2.entries[i]);</span>
+        }
+<span class="nc" id="L107">    }</span>
+
+
+    /**
+     * Subtracts a complex sparse matrix from a complex dense matrix and stores the result in the dense matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static void subEq(CMatrix src1, SparseCMatrix src2) {
+<span class="nc" id="L117">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int row, col;
+
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L122">            row = src2.rowIndices[i];</span>
+<span class="nc" id="L123">            col = src2.colIndices[i];</span>
+<span class="nc" id="L124">            src1.entries[row*src1.numCols + col].subEq(src2.entries[i]);</span>
+        }
+<span class="nc" id="L126">    }</span>
+
+
+
+    /**
      * Computes the element-wise multiplication between a real dense matrix and a real sparse matrix.
      * @return The result of element-wise multiplication.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static SparseCMatrix elemMult(CMatrix src1, SparseCMatrix src2) {
-<span class="fc" id="L97">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L136">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
-<span class="fc" id="L100">        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];</span>
+<span class="fc" id="L139">        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];</span>
 
-<span class="fc bfc" id="L102" title="All 2 branches covered.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
-<span class="fc" id="L103">            row = src2.rowIndices[i];</span>
-<span class="fc" id="L104">            col = src2.colIndices[i];</span>
-<span class="fc" id="L105">            destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
+<span class="fc" id="L142">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L143">            col = src2.colIndices[i];</span>
+<span class="fc" id="L144">            destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);</span>
         }
 
-<span class="fc" id="L108">        return new SparseCMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);</span>
+<span class="fc" id="L147">        return new SparseCMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

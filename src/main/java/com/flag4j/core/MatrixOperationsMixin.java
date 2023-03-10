@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -110,6 +110,35 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     W sub(SparseCMatrix B);
+
+
+
+    /**
+     * Computes the element-wise addition of a matrix with a real dense matrix. The result is stored in this matrix.
+     * @param B The matrix to add to this matrix.
+     */
+    void addEq(Matrix B);
+
+
+    /**
+     * Computes the element-wise subtraction of this matrix with a real demse matrix. The result is stored in this matrix.
+     * @param B The matrix to subtract from this matrix.
+     */
+    void subEq(Matrix B);
+
+
+    /**
+     * Computes the element-wise addition of a matrix with a real sparse matrix. The result is stored in this matrix.
+     * @param B The sparse matrix to add to this matrix.
+     */
+    void addEq(SparseMatrix B);
+
+
+    /**
+     * Computes the element-wise subtraction of this matrix with a real sparse matrix. The result is stored in this matrix.
+     * @param B The sparse matrix to subtract from this matrix.
+     */
+    void subEq(SparseMatrix B);
 
 
     /**
@@ -780,6 +809,20 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @return The specified column of this matrix.
      */
     T getCol(int j);
+
+
+    /**
+     * Gets a specified slice of this matrix.
+     *
+     * @param rowStart Starting row index of slice (inclusive).
+     * @param rowEnd Ending row index of slice (exclusive).
+     * @param colStart Starting column index of slice (inclusive).
+     * @param colEnd Ending row index of slice (exclusive).
+     * @return The specified slice of this matrix. This is a completely new matrix and <b>NOT</b> a view into the matrix.
+     * @throws ArrayIndexOutOfBoundsException If any of the indices are out of bounds of this matrix.
+     * @throws IllegalArgumentException If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
+     */
+    T getSlice(int rowStart, int rowEnd, int colStart, int colEnd);
 
 
     /**

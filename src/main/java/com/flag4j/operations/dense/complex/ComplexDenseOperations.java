@@ -158,6 +158,62 @@ public final class ComplexDenseOperations {
 
 
     /**
+     * Computes element-wise subtraction between tensors and stores the result in the first tensor.
+     * @param src1 First tensor in subtraction. Also, where the result will be stored.
+     * @param shape1 Shape of first tensor.
+     * @param src2 Second tensor in the subtraction.
+     * @param shape2 Shape of second tensor.
+     */
+    public static void subEq(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+        ParameterChecks.assertEqualShape(shape1, shape2);
+
+        for(int i=0; i<src1.length; i++) {
+            src1[i].subEq(src2[i]);
+        }
+    }
+
+
+    /**
+     * Subtracts a scalar from each entry of this tensor and stores the result in the tensor.
+     * @param src Tensor in subtraction. Also, where the result will be stored.
+     * @param b Scalar to subtract.
+     */
+    public static void subEq(CNumber[] src, CNumber b) {
+        for(int i=0; i<src.length; i++) {
+            src[i].subEq(b);
+        }
+    }
+
+
+    /**
+     * Computes element-wise addition between tensors and stores the result in the first tensor.
+     * @param src1 First tensor in addition. Also, where the result will be stored.
+     * @param shape1 Shape of first tensor.
+     * @param src2 Second tensor in the addition.
+     * @param shape2 Shape of second tensor.
+     */
+    public static void addEq(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+        ParameterChecks.assertEqualShape(shape1, shape2);
+
+        for(int i=0; i<src1.length; i++) {
+            src1[i].addEq(src2[i]);
+        }
+    }
+
+
+    /**
+     * Adds a scalar from each entry of this tensor and stores the result in the tensor.
+     * @param src Tensor in addition. Also, where the result will be stored.
+     * @param b Scalar to add.
+     */
+    public static void addEq(CNumber[] src, CNumber b) {
+        for(int i=0; i<src.length; i++) {
+            src[i].addEq(b);
+        }
+    }
+
+
+    /**
      * Sums all entries in a tensor.
      * @param src Entries of tensor to sum.
      * @return The sum of all entries in the tensor.

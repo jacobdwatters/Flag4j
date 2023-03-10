@@ -2,7 +2,8 @@ package com.flag4j.operations.dense.real;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RealDenseSetOperationsTests {
     double[] dest, expDest;

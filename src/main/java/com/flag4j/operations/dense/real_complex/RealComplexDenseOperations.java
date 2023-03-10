@@ -65,24 +65,6 @@ public final class RealComplexDenseOperations {
 
 
     /**
-     * Adds a scalar value to all entries of a tensor.
-     * @param src1 Entries of first tensor.
-     * @param a Scalar to add to all entries of this tensor.
-     * @return The result of adding the scalar to each entry of the tensor.
-     */
-    public static CNumber[] add(double[] src1, CNumber a) {
-        CNumber[] sum = new CNumber[src1.length];
-
-        for(int i=0; i<sum.length; i++) {
-            sum[i] = a.add(src1[i]);
-        }
-
-        return sum;
-    }
-
-
-
-    /**
      * Computes the element-wise subtraction of two tensors.
      * @param src1 Entries of first tensor.
      * @param shape1 Shape of first tensor.
@@ -144,6 +126,64 @@ public final class RealComplexDenseOperations {
 
 
     /**
+     * Computes element-wise subtraction between tensors and stores the result in the first tensor.
+     * @param src1 First tensor in subtraction. Also, where the result will be stored.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in the subtraction.
+     * @param shape2 Shape of the second tensor.
+     * @throws IllegalArgumentException If tensors are not the same shape.
+     */
+    public static void subEq(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
+        ParameterChecks.assertEqualShape(shape1, shape2);
+
+        for(int i=0; i<src1.length; i++) {
+            src1[i].subEq(src2[i]);
+        }
+    }
+
+
+    /**
+     * Subtracts a scalar from each entry of this tensor and stores the result in the tensor.
+     * @param src Tensor in subtraction. Also, where the result will be stored.
+     * @param b Scalar to subtract.
+     */
+    public static void subEq(CNumber[] src, double b) {
+        for(int i=0; i<src.length; i++) {
+            src[i].subEq(b);
+        }
+    }
+
+
+    /**
+     * Computes element-wise addition between tensors and stores the result in the first tensor.
+     * @param src1 First tensor in addition. Also, where the result will be stored.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in the addition.
+     * @param shape2 Shape of the second tensor.
+     * @throws IllegalArgumentException If tensors are not the same shape.
+     */
+    public static void addEq(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
+        ParameterChecks.assertEqualShape(shape1, shape2);
+
+        for(int i=0; i<src1.length; i++) {
+            src1[i].addEq(src2[i]);
+        }
+    }
+
+
+    /**
+     * Adds a scalar from each entry of this tensor and stores the result in the tensor.
+     * @param src Tensor in addition. Also, where the result will be stored.
+     * @param b Scalar to add.
+     */
+    public static void addEq(CNumber[] src, double b) {
+        for(int i=0; i<src.length; i++) {
+            src[i].addEq(b);
+        }
+    }
+
+
+    /**
      * Computes the scalar multiplication of a tensor.
      * @param entries Entries of the tensor.
      * @param factor Scalar value to multiply.
@@ -167,7 +207,23 @@ public final class RealComplexDenseOperations {
      * @return The scalar multiplication of the tensor.
      */
     public static CNumber[] scalDiv(double[] entries, CNumber divisor) {
-        return scalMult(entries, divisor.multInv());
+        CNumber[] quotient = new CNumber[entries.length];
+        double denom = divisor.re*divisor.re + divisor.im*divisor.im;
+
+        for(int i=0; i<quotient.length; i++) {
+
+            quotient[i] = new CNumber(
+                    entries[i]*divisor.re / denom,
+                    -entries[i]*divisor.im / denom
+                    );
+        }
+
+//        double divisor = b.re*b.re + b.im*b.im;
+//        quotient = new CNumber(
+//                (this.re*b.re + this.im*b.im) / denom,
+//                (this.im*b.re - this.re*b.im) / denom);
+
+        return quotient;
     }
 
 

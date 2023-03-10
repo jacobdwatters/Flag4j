@@ -2,7 +2,8 @@ package com.flag4j.util;
 
 import com.flag4j.Shape;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ParameterChecksTests {
     Shape shape1, shape2;

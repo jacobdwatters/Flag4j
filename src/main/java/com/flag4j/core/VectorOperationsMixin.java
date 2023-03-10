@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,78 +40,261 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <VV> Sparse Matrix type equivalent.
  * @param <WW> Complex Matrix type equivalent.
  */
-interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW> extends TensorOperationsMixin<T, U, V, W, Y, X> {
+public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW>
+        extends TensorOperationsMixin<T, U, V, W, Y, X> {
+
 
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(Matrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Joints specified vector with this vector.
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    T join(Vector b);
+
+
+    /**
+     * Joints specified vector with this vector.
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    CVector join(CVector b);
+
+
+    /**
+     * Joints specified vector with this vector.
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    T join(SparseVector b);
+
+
+    /**
+     * Joints specified vector with this vector.
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    W join(SparseCVector b);
+
+
+    // TODO: Add stack(vec, axis) methods so vectors can be stacked as if column vectors.
+
+    /**
+     * Stacks two vectors along columns as if they were row vectors.
      *
      * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @return The result of stacking this vector and vector {@code b}.
      * @throws IllegalArgumentException <br>
      * - If the number of entries in this vector is different from the number of entries in
-     * the vector b.<br>
-     * - If the vectors are not both row vectors or both column vectors.
+     * the vector {@code b}.
      */
     TT stack(Vector b);
 
 
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(SparseMatrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Stacks two vectors along columns as if they were row vectors.
      *
      * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @return The result of stacking this vector and vector {@code b}.
      * @throws IllegalArgumentException <br>
      * - If the number of entries in this vector is different from the number of entries in
-     * the vector b.<br>
-     * - If the vectors are not both row vectors or both column vectors.
+     * the vector {@code b}.
      */
-    VV stack(SparseVector b);
+    TT stack(SparseVector b);
 
 
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(CMatrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Stacks two vectors along columns as if they were row vectors.
      *
      * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @return The result of stacking this vector and vector {@code b}.
      * @throws IllegalArgumentException <br>
      * - If the number of entries in this vector is different from the number of entries in
-     * the vector b.<br>
-     * - If the vectors are not both row vectors or both column vectors.
+     * the vector {@code b}.
      */
     WW stack(CVector b);
 
 
     /**
-     * Stacks two vectors along columns. Note, unlike the {@link MatrixOperationsMixin#stack(SparseCMatrix) stack} method for
-     * matrices, the orientation of the vectors <b>IS</b> taken into account (see return section for details).
+     * Stacks two vectors along columns as if they were row vectors.
      *
      * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector b.<br>
-     * - If both vectors are column vectors, then a matrix with 2 columns will be returned.<br>
-     * - If both vectors are row vectors, then a matrix with 2 rows will be returned.
+     * @return The result of stacking this vector and vector {@code b}.
      * @throws IllegalArgumentException <br>
      * - If the number of entries in this vector is different from the number of entries in
-     * the vector b.<br>
-     * - If the vectors are not both row vectors or both column vectors.
+     * the vector {@code b}.
      */
     WW stack(SparseCVector b);
 
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    U add(Vector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    T add(SparseVector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    W add(CVector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    W add(SparseCVector B);
+
+
+    /**
+     * Computes the element-wise subtraction between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    U sub(Vector B);
+
+
+    /**
+     * Computes the element-wise subtraction between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    T sub(SparseVector B);
+
+
+    /**
+     * Computes the element-wise subtraction between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    W sub(CVector B);
+
+
+    /**
+     * Computes the element-wise subtraction between this vector and the specified vector.
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    W sub(SparseCVector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector and stores the result
+     * in this vector.
+     * @param B Vector to add to this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    void addEq(SparseVector B);
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector and stores the result
+     * in this vector.
+     * @param B Vector to add to this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    void addEq(Vector B);
+
+
+    /**
+     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
+     * in this vector.
+     * @param B Vector to add to this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    void subEq(Vector B);
+
+
+    /**
+     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
+     * in this vector.
+     * @param B Vector to add to this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    void subEq(SparseVector B);
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
+     * @param B Vector to element-wise multiply to this vector.
+     * @return The vector resulting from the element-wise multiplication.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    T elemMult(Vector B);
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
+     * @param B Vector to element-wise multiply to this vector.
+     * @return The vector resulting from the element-wise multiplication.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    V elemMult(SparseVector B);
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
+     * @param B Vector to element-wise multiply to this vector.
+     * @return The vector resulting from the element-wise multiplication.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    W elemMult(CVector B);
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
+     * @param B Vector to element-wise multiply to this vector.
+     * @return The vector resulting from the element-wise multiplication.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    SparseCVector elemMult(SparseCVector B);
+
+
+    /**
+     * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
+     * @param B Vector to element-wise divide this vector by.
+     * @return The vector resulting from the element-wise division.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    T elemDiv(Vector B);
+
+
+    /**
+     * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
+     * @param B Vector to element-wise divide this vector by.
+     * @return The vector resulting from the element-wise division.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    W elemDiv(CVector B);
+
+
     /**
      * Computes the inner product between two vectors.
      * @param b Second vector in the inner product.
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    X innerProduct(Vector b);
+    X inner(Vector b);
 
 
     /**
@@ -120,7 +303,14 @@ interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW>
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    X innerProduct(SparseVector b);
+    X inner(SparseVector b);
+
+
+    /**
+     * Computes a unit vector in the same direction as this vector.
+     * @return A unit vector with the same direction as this vector.
+     */
+    T normalize();
 
 
     /**
@@ -129,7 +319,7 @@ interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW>
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    CNumber innerProduct(CVector b);
+    CNumber inner(CVector b);
 
 
     /**
@@ -138,7 +328,7 @@ interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW>
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
-    CNumber innerProduct(SparseCVector b);
+    CNumber inner(SparseCVector b);
 
 
     /**
@@ -156,25 +346,16 @@ interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW>
      * @return The result of the vector cross product between this vector and b.
      * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
      */
-    U cross(SparseVector b);
-
-
-    /**
-     * Computes the vector cross product between two vectors.
-     * @param b Second vector in the cross product.
-     * @return The result of the vector cross product between this vector and b.
-     * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
-     */
     CVector cross(CVector b);
 
 
     /**
-     * Computes the vector cross product between two vectors.
-     * @param b Second vector in the cross product.
-     * @return The result of the vector cross product between this vector and b.
-     * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
+     * Computes the outer product of two vectors.
+     * @param b Second vector in the outer product.
+     * @return The result of the vector outer product between this vector and b.
+     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    CVector cross(SparseCVector b);
+    UU outer(Vector b);
 
 
     /**
@@ -183,7 +364,7 @@ interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW>
      * @return The result of the vector outer product between this vector and b.
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    UU outerProduct(Vector b);
+    UU outer(SparseVector b);
 
 
     /**
@@ -192,7 +373,7 @@ interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW>
      * @return The result of the vector outer product between this vector and b.
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    UU outerProduct(SparseVector b);
+    CMatrix outer(CVector b);
 
 
     /**
@@ -201,16 +382,27 @@ interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW>
      * @return The result of the vector outer product between this vector and b.
      * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
      */
-    CMatrix outerProduct(CVector b);
+    CMatrix outer(SparseCVector b);
 
 
+    // TODO: ADD isParallel(CVector b), isParallel(SparseVector b), and isParallel(sparseCVector)
     /**
-     * Computes the outer product of two vectors.
-     * @param b Second vector in the outer product.
-     * @return The result of the vector outer product between this vector and b.
-     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     * Checks if a vector is parallel to this vector.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
      */
-    CMatrix outerProduct(SparseCVector b);
+    boolean isParallel(Vector b);
+
+
+    // TODO: ADD isPerp(CVector b), isPerp(SparseVector b), and isPerp(sparseCVector)
+    /**
+     * Checks if a vector is perpendicular to this vector.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if the vector {@code b} is perpendicular to this vector and the same size. Otherwise, returns false.
+     */
+    boolean isPerp(Vector b);
 
 
     /**
@@ -220,4 +412,14 @@ interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW>
      * resulting matrix will have a single column.
      */
     UU toMatrix();
+
+
+    /**
+     * Converts a vector to an equivalent matrix representing either a row or column vector.
+     * @param columVector Flag for choosing whether to convert this vector to a matrix representing a row or column vector.
+     *                    <p>If true, the vector will be converted to a matrix representing a column vector.</p>
+     *                    <p>If false, The vector will be converted to a matrix representing a row vector.</p>
+     * @return A matrix equivalent to this vector.
+     */
+    TT toMatrix(boolean columVector);
 }

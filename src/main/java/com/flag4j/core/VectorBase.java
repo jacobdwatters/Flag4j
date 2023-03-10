@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +25,17 @@
 package com.flag4j.core;
 
 import com.flag4j.Shape;
+import com.flag4j.util.ParameterChecks;
 
 import java.io.Serializable;
 
 
 /**
  * The base class for all vectors.
- * @param <T> The type of entries for this matrix.
+ * @param <T> The type of entries for this Vector.
  */
 public abstract class VectorBase<T extends Serializable> extends TensorBase<T> {
 
-    /**
-     * The orientation of this vector.
-     */
-    VectorOrientation orientation;
     /**
      * Size of the matrix.
      */
@@ -46,19 +43,33 @@ public abstract class VectorBase<T extends Serializable> extends TensorBase<T> {
 
     /**
      * Constructs a basic vector with the specified number of entries.
-     * @param size Number of entries in this vector.
-     * @param orientation Orientation of this vector.
-     * @param entries The non-zero entries of this sparse tensor.
+     *
+     * @param size        Number of entries in this vector.
+     * @param entries     The non-zero entries of this sparse tensor.
      */
-    public VectorBase(int size, VectorOrientation orientation, T entries) {
+    public VectorBase(int size, T entries) {
         super(new Shape(size), entries);
-        this.orientation = orientation;
         this.size = size;
     }
 
 
     /**
+     * Constructs a basic vector with the specified number of entries.
+     *
+     * @param shape        Number of entries in this vector.
+     * @param entries     The non-zero entries of this sparse tensor.
+     * @throws IllegalArgumentException If the rank of the shape is not 1.
+     */
+    public VectorBase(Shape shape, T entries) {
+        super(shape, entries);
+        ParameterChecks.assertRank(1, shape); // Ensure the shape is of rank 1.
+        this.size = shape.get(0);
+    }
+
+
+    /**
      * Gets the size of this vector.
+     *
      * @return The size, i.e. number of entries, of this vector.
      */
     public int size() {
@@ -67,31 +78,21 @@ public abstract class VectorBase<T extends Serializable> extends TensorBase<T> {
 
 
     /**
-     * Gets the oriented shape of this vector.
-     * @return The oriented shape of this vector. <br>
-     * If this vector is a {@link VectorOrientation#ROW row} vector, then
-     * the shape will be {@code (1, this.size())}. <br>
-     * If this vector is a {@link VectorOrientation#COL column} vector or an {@link VectorOrientation#UNORIENTED unoriented}
-     * vector then the shape will be {@code (1, this.size())}.
+     * Checks if a vector has the same number of elements as this vector. Same as {@link #sameShape(VectorBase)}
+     * @param b Vector to compare to this vector.
+     * @return True if this vector and {@code b} have the same number of elements.
      */
-    public Shape getOrientedShape() {
-        Shape orientedShape;
-
-        if(this.orientation== VectorOrientation.ROW) {
-            orientedShape = new Shape(1, this.size());
-        } else {
-            orientedShape = new Shape(this.size(), 1);
-        }
-
-        return orientedShape;
+    public boolean sameSize(VectorBase<?> b) {
+        return this.size==b.size;
     }
 
 
     /**
-     * Gets the orientation of this vector.
-     * @return The orientation of this vector.
+     * Checks if a vector has the same number of elements as this vector. Same as {@link #sameSize(VectorBase)}
+     * @param b Vector to compare to this vector.
+     * @return True if this vector and {@code b} have the same number of elements.
      */
-    public VectorOrientation getOrientation() {
-        return this.orientation;
+    public boolean sameShape(VectorBase<?> b) {
+        return this.size==b.size;
     }
 }

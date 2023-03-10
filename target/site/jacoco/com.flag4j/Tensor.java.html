@@ -111,7 +111,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; {
      * @param A Vector to copy to tensor.
      */
     public Tensor(Vector A) {
-<span class="nc" id="L114">        super(A.getOrientedShape(), A.entries.clone());</span>
+<span class="nc" id="L114">        super(A.shape.copy(), A.entries.clone());</span>
 <span class="nc" id="L115">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

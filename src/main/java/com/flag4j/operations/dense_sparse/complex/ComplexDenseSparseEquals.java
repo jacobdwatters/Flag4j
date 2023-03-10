@@ -83,4 +83,45 @@ public class ComplexDenseSparseEquals {
 
         return equal;
     }
+
+
+    /**
+     * Checks if a complex dense vector is equal to a complex sparse vector.
+     * @param src1 Entries of dense vector.
+     * @param src2 Non-zero Entries of sparse vector.
+     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param sparseSize Size of the sparse vector.
+     * @return True if the two vectors are equal. Returns false otherwise.
+     */
+    public static boolean vectorEquals(CNumber[] src1, CNumber[] src2, int[] indices, int sparseSize) {
+        boolean equal = true;
+
+        if(src1.length==sparseSize) {
+            int index;
+            CNumber[] src1Copy = new CNumber[src1.length];
+            ArrayUtils.copy2CNumber(src1, src1Copy);
+
+            for(int i=0; i<src2.length; i++) {
+                index = indices[i];
+
+                if(!src1[index].equals(src2[i])) {
+                    equal = false;
+                    break;
+
+                } else {
+                    src1Copy[index] = new CNumber();
+                }
+            }
+
+            if(equal) {
+                // Now, if this vector is equal to the sparse vector, there should only be zeros left in the copy
+                equal = ArrayUtils.isZeros(src1Copy);
+            }
+
+        } else {
+            equal = false;
+        }
+
+        return equal;
+    }
 }

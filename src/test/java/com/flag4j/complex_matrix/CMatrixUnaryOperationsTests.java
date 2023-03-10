@@ -3,7 +3,8 @@ package com.flag4j.complex_matrix;
 import com.flag4j.CMatrix;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CMatrixUnaryOperationsTests {
 
@@ -161,6 +162,6 @@ class CMatrixUnaryOperationsTests {
                 {new CNumber(-9841, -85.13).addInv(), new CNumber(0, 84.1).addInv(), new CNumber(-5.234, 234).addInv()}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, A.recep());
+        assertEquals(exp, A.recip());
     }
 }

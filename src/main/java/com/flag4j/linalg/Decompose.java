@@ -24,8 +24,36 @@
 
 package com.flag4j.linalg;
 
+import com.flag4j.Matrix;
+import com.flag4j.linalg.decompositions.RealLUDecomposition;
+import com.flag4j.util.ErrorMessages;
+
+
 /**
- * This class provides several matrix decompositions.
+ * This class provides methods for several matrix decompositions.
  */
 public class Decompose {
+
+    /**
+     * Object computing lu decomposition.
+     */
+    private static final RealLUDecomposition LU = new RealLUDecomposition();
+
+
+    private Decompose() {
+        // Hide default constructor in utility class.
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+    }
+
+
+    /**
+     * <p>Computes the LU decomposition of a matrix using partial pivoting. That is, decomposes an m-by-n matrix {@code A} into {@code PA=LU}
+     * where P is a permutation matrix, L is a unit lower triangular matrix, and U is an upper triangular matrix.</p>
+     * @param A Matrix to decompose.
+     * @return Returns an array of matrices containing in order {@code {P, L, U}}.
+     */
+    public static Matrix[] LU(Matrix A) {
+        LU.decompose(A);
+        return new Matrix[]{LU.getP(), LU.getL(), LU.getU()};
+    }
 }

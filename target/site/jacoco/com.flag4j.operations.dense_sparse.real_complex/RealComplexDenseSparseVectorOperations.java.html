@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealComplexDenseSparseVectorOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense_sparse.real_complex</a> &gt; <span class="el_source">RealComplexDenseSparseVectorOperations.java</span></div><h1>RealComplexDenseSparseVectorOperations.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense_sparse.real_complex;
+
+import com.flag4j.CVector;
+import com.flag4j.SparseCVector;
+import com.flag4j.SparseVector;
+import com.flag4j.Vector;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
+
+
+/**
+ * This class provides low level methods for computing operations between a real/complex dense/sparse vector and a
+ * complex/real sparse/dense vector.
+ */
+public class RealComplexDenseSparseVectorOperations {
+
+
+<span class="nc" id="L44">    private RealComplexDenseSparseVectorOperations() {</span>
+        // Hide default constructor in utility class.
+<span class="nc" id="L46">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Computes the vector inner product between a real dense vector and a complex sparse vector.
+     * @param src1 Entries of the dense vector.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param sparseSize The size of the sparse vector (including zero entries).
+     * @return The inner product of the two vectors.
+     * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
+     */
+    public static CNumber innerProduct(double[] src1, CNumber[] src2, int[] indices, int sparseSize) {
+<span class="nc" id="L60">        ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);</span>
+<span class="nc" id="L61">        CNumber innerProd = new CNumber();</span>
+        int index;
+
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        for(int i=0; i&lt;src2.length; i++) {</span>
+<span class="nc" id="L65">            index = indices[i];</span>
+<span class="nc" id="L66">            innerProd.addEq(src2[i].conj().mult(src1[index]));</span>
+        }
+
+<span class="nc" id="L69">        return innerProd;</span>
+    }
+
+
+    /**
+     * Computes the vector inner product between a complex dense vector and a real sparse vector.
+     * @param src1 Entries of the dense vector.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param sparseSize The size of the sparse vector (including zero entries).
+     * @return The inner product of the two vectors.
+     * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
+     */
+    public static CNumber innerProduct(CNumber[] src1, double[] src2, int[] indices, int sparseSize) {
+<span class="nc" id="L83">        ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);</span>
+<span class="nc" id="L84">        CNumber innerProd = new CNumber();</span>
+        int index;
+
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        for(int i=0; i&lt;src2.length; i++) {</span>
+<span class="nc" id="L88">            index = indices[i];</span>
+<span class="nc" id="L89">            innerProd.addEq(src1[i].mult(src2[index]));</span>
+        }
+
+<span class="nc" id="L92">        return innerProd;</span>
+    }
+
+
+    /**
+     * Computes the vector outer product between a real dense vector and a complex sparse vector.
+     * @param src1 Entries of the dense vector.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries of sparse vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static CNumber[] outerProduct(double[] src1, CNumber[] src2, int[] indices, int sparseSize) {
+<span class="nc" id="L104">        CNumber[] dest = new CNumber[src1.length*sparseSize];</span>
+<span class="nc" id="L105">        ArrayUtils.fillZeros(dest);</span>
+        int index;
+
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="nc" id="L110">                index = indices[j];</span>
+
+<span class="nc" id="L112">                dest[i*src2.length + index] = src2[j].mult(src1[i]);</span>
+            }
+        }
+
+<span class="nc" id="L116">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the vector outer product between a complex dense vector and a real sparse vector.
+     * @param src1 Entries of the dense vector.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries of sparse vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static CNumber[] outerProduct(CNumber[] src1, double[] src2, int[] indices, int sparseSize) {
+<span class="nc" id="L128">        CNumber[] dest = new CNumber[src1.length*sparseSize];</span>
+<span class="nc" id="L129">        ArrayUtils.fillZeros(dest);</span>
+        int index;
+
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="nc" id="L134">                index = indices[j];</span>
+
+<span class="nc" id="L136">                dest[i*src2.length + index] = src1[j].mult(src2[i]);</span>
+            }
+        }
+
+<span class="nc" id="L140">        return dest;</span>
+    }
+
+
+    /**
+     * Adds a real dense matrix to a complex sparse matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @return The result of the vector addition.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static CVector add(Vector src1, SparseCVector src2) {
+<span class="fc" id="L152">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc" id="L154">        CVector dest = new CVector(src1.entries);</span>
+        int index;
+
+<span class="fc bfc" id="L157" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L158">            index = src2.indices[i];</span>
+<span class="fc" id="L159">            dest.entries[index].addEq(src2.entries[i]);</span>
+        }
+
+<span class="fc" id="L162">        return dest;</span>
+    }
+
+
+    /**
+     * Adds a complex dense matrix to a real sparse matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @return The result of the vector addition.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static CVector add(CVector src1, SparseVector src2) {
+<span class="nc" id="L174">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="nc" id="L176">        CVector dest = new CVector(src1.entries);</span>
+        int index;
+
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L180">            index = src2.indices[i];</span>
+<span class="nc" id="L181">            dest.entries[index].addEq(src2.entries[i]);</span>
+        }
+
+<span class="nc" id="L184">        return dest;</span>
+    }
+
+
+    /**
+     * Subtracts a complex sparse vector from a real dense vector.
+     * @param src1 First vector.
+     * @param src2 Second vector.
+     * @return The result of the vector subtraction.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static CVector sub(Vector src1, SparseCVector src2) {
+<span class="fc" id="L196">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc" id="L198">        CVector dest = new CVector(src1.entries);</span>
+        int index;
+
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L202">            index = src2.indices[i];</span>
+<span class="fc" id="L203">            dest.entries[index].subEq(src2.entries[i]);</span>
+        }
+
+<span class="fc" id="L206">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication of a real dense vector with a complex sparse vector.
+     * @param src1 Dense vector.
+     * @param src2 Sparse vector.
+     * @return The result of the element-wise multiplication.
+     * @throws IllegalArgumentException If the two vectors are not the same size.
+     */
+    public static SparseCVector elemMult(Vector src1, SparseCVector src2) {
+<span class="fc" id="L218">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc" id="L220">        CNumber[] entries = new CNumber[src2.entries.length];</span>
+
+<span class="fc bfc" id="L222" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L223">            entries[i] = src2.entries[i].mult(src1.entries[src2.indices[i]]);</span>
+        }
+
+<span class="fc" id="L226">        return new SparseCVector(src1.size, entries, src2.indices.clone());</span>
+    }
+
+
+    /**
+     * Subtracts a real sparse vector from a complex dense vector.
+     * @param src1 First vector.
+     * @param src2 Second vector.
+     * @return The result of the vector subtraction.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static CVector sub(CVector src1, SparseVector src2) {
+<span class="nc" id="L238">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="nc" id="L240">        CVector dest = new CVector(src1.entries);</span>
+        int index;
+
+<span class="nc bnc" id="L243" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L244">            index = src2.indices[i];</span>
+<span class="nc" id="L245">            dest.entries[index].subEq(src2.entries[i]);</span>
+        }
+
+<span class="nc" id="L248">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the vector addition between a dense complex vector and a sparse real vector. The result is stored in
+     * the first vector.
+     * @param src1 First vector to add. Also, where the result is stored.
+     * @param src2 Second vector to add.
+     * @throws IllegalArgumentException If the vectors do not have the same size.
+     */
+    public static void addEq(CVector src1, SparseVector src2) {
+<span class="nc" id="L260">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int index;
+<span class="nc bnc" id="L263" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L264">            index = src2.indices[i];</span>
+<span class="nc" id="L265">            src1.entries[index].addEq(src2.entries[i]);</span>
+        }
+<span class="nc" id="L267">    }</span>
+
+
+    /**
+     * Computes the vector subtraction between a dense complex vector and a real sparse vector. The result is stored in
+     * the first vector.
+     * @param src1 First vector in subtraction.
+     * @param src2 Second vector in subtraction.
+     */
+    public static void subEq(CVector src1, SparseVector src2) {
+<span class="nc" id="L277">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int index;
+<span class="nc bnc" id="L280" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L281">            index = src2.indices[i];</span>
+<span class="nc" id="L282">            src1.entries[index].subEq(src2.entries[i]);</span>
+        }
+<span class="nc" id="L284">    }</span>
+
+
+    /**
+     * Computes the element-wise multiplication of a complex dense vector with a real sparse vector.
+     * @param src1 Dense vector.
+     * @param src2 Sparse vector.
+     * @return The result of the element-wise multiplication.
+     * @throws IllegalArgumentException If the two vectors are not the same size.
+     */
+    public static SparseCVector elemMult(CVector src1, SparseVector src2) {
+<span class="nc" id="L295">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="nc" id="L297">        CNumber[] entries = new CNumber[src2.entries.length];</span>
+
+<span class="nc bnc" id="L299" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L300">            entries[i] = src1.entries[src2.indices[i]].mult(src2.entries[i]);</span>
+        }
+
+<span class="nc" id="L303">        return new SparseCVector(src1.size, entries, src2.indices.clone());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

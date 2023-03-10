@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VectorBase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.core</a> &gt; <span class="el_source">VectorBase.java</span></div><h1>VectorBase.java</h1><pre class="source lang-java linenums">/*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -25,20 +25,17 @@
 package com.flag4j.core;
 
 import com.flag4j.Shape;
+import com.flag4j.util.ParameterChecks;
 
 import java.io.Serializable;
 
 
 /**
  * The base class for all vectors.
- * @param &lt;T&gt; The type of entries for this matrix.
+ * @param &lt;T&gt; The type of entries for this Vector.
  */
 public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBase&lt;T&gt; {
 
-    /**
-     * The orientation of this vector.
-     */
-    VectorOrientation orientation;
     /**
      * Size of the matrix.
      */
@@ -46,53 +43,37 @@ public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBas
 
     /**
      * Constructs a basic vector with the specified number of entries.
-     * @param size Number of entries in this vector.
-     * @param orientation Orientation of this vector.
-     * @param entries The non-zero entries of this sparse tensor.
+     *
+     * @param size        Number of entries in this vector.
+     * @param entries     The non-zero entries of this sparse tensor.
      */
-    public VectorBase(int size, VectorOrientation orientation, T entries) {
-<span class="fc" id="L54">        super(new Shape(size), entries);</span>
-<span class="fc" id="L55">        this.orientation = orientation;</span>
-<span class="fc" id="L56">        this.size = size;</span>
-<span class="fc" id="L57">    }</span>
+    public VectorBase(int size, T entries) {
+<span class="fc" id="L51">        super(new Shape(size), entries);</span>
+<span class="fc" id="L52">        this.size = size;</span>
+<span class="fc" id="L53">    }</span>
+
+
+    /**
+     * Constructs a basic vector with the specified number of entries.
+     *
+     * @param shape        Number of entries in this vector.
+     * @param entries     The non-zero entries of this sparse tensor.
+     * @throws IllegalArgumentException If the rank of the shape is not 1.
+     */
+    public VectorBase(Shape shape, T entries) {
+<span class="fc" id="L64">        super(shape, entries);</span>
+<span class="fc" id="L65">        ParameterChecks.assertRank(1, shape); // Ensure the shape is of rank 1.</span>
+<span class="fc" id="L66">        this.size = shape.get(0);</span>
+<span class="fc" id="L67">    }</span>
 
 
     /**
      * Gets the size of this vector.
+     *
      * @return The size, i.e. number of entries, of this vector.
      */
     public int size() {
-<span class="fc" id="L65">        return size;</span>
-    }
-
-
-    /**
-     * Gets the oriented shape of this vector.
-     * @return The oriented shape of this vector. &lt;br&gt;
-     * If this vector is a {@link VectorOrientation#ROW row} vector, then
-     * the shape will be {@code (1, this.size())}. &lt;br&gt;
-     * If this vector is a {@link VectorOrientation#COL column} vector or an {@link VectorOrientation#UNORIENTED unoriented}
-     * vector then the shape will be {@code (1, this.size())}.
-     */
-    public Shape getOrientedShape() {
-        Shape orientedShape;
-
-<span class="nc bnc" id="L80" title="All 2 branches missed.">        if(this.orientation== VectorOrientation.ROW) {</span>
-<span class="nc" id="L81">            orientedShape = new Shape(1, this.size());</span>
-        } else {
-<span class="nc" id="L83">            orientedShape = new Shape(this.size(), 1);</span>
-        }
-
-<span class="nc" id="L86">        return orientedShape;</span>
-    }
-
-
-    /**
-     * Gets the orientation of this vector.
-     * @return The orientation of this vector.
-     */
-    public VectorOrientation getOrientation() {
-<span class="fc" id="L95">        return this.orientation;</span>
+<span class="fc" id="L76">        return size;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

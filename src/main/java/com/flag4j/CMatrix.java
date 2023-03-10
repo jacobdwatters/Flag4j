@@ -25,11 +25,7 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.ComplexMatrixBase;
-import com.flag4j.core.MatrixComparisonsMixin;
-import com.flag4j.core.MatrixOperationsMixin;
-import com.flag4j.core.MatrixManipulationsMixin;
-import com.flag4j.core.MatrixPropertiesMixin;
+import com.flag4j.core.*;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.MatrixMultiply;
 import com.flag4j.operations.MatrixTranspose;
@@ -67,10 +63,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     public CMatrix(int size) {
         super(new Shape(size, size), new CNumber[size*size]);
-
-        for(int i=0; i<entries.length; i++) {
-            super.entries[i] = new CNumber();
-        }
+        ArrayUtils.fillZeros(super.entries);
     }
 
 
@@ -112,10 +105,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     public CMatrix(int rows, int cols) {
         super(new Shape(rows, cols), new CNumber[rows*cols]);
-
-        for(int i=0; i<entries.length; i++) {
-            super.entries[i] = new CNumber();
-        }
+        ArrayUtils.fillZeros(super.entries);
     }
 
 
@@ -157,10 +147,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     public CMatrix(Shape shape) {
         super(shape, new CNumber[shape.totalEntries().intValue()]);
-
-        for(int i=0; i<entries.length; i++) {
-            super.entries[i] = new CNumber();
-        }
+        ArrayUtils.fillZeros(super.entries);
     }
 
 
@@ -1232,6 +1219,74 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void addEq(CMatrix B) {
+        ComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void addEq(CNumber b) {
+        ComplexDenseOperations.addEq(this.entries, b);
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void addEq(Double b) {
+        RealComplexDenseOperations.addEq(this.entries, b);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void subEq(CMatrix B) {
+        ComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void subEq(CNumber b) {
+        ComplexDenseOperations.subEq(this.entries, b);
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void subEq(Double b) {
+        RealComplexDenseOperations.subEq(this.entries, b);
+    }
+
+
+    /**
      * Computes scalar multiplication of a tensor.
      *
      * @param factor Scalar value to multiply with tensor.
@@ -1379,7 +1434,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws ArithmeticException If this tensor contains any zeros.
      */
     @Override
-    public CMatrix recep() {
+    public CMatrix recip() {
         return new CMatrix(
                 shape.copy(),
                 ComplexDenseOperations.recep(entries)
@@ -1397,6 +1452,50 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public CMatrix sub(SparseCMatrix B) {
         return ComplexDenseSparseOperations.sub(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise addition of a matrix with a real dense matrix. The result is stored in this matrix.
+     *
+     * @param B The matrix to add to this matrix.
+     */
+    @Override
+    public void addEq(Matrix B) {
+        RealComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of this matrix with a real demse matrix. The result is stored in this matrix.
+     *
+     * @param B The matrix to subtract from this matrix.
+     */
+    @Override
+    public void subEq(Matrix B) {
+        RealComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Computes the element-wise addition of a matrix with a real sparse matrix. The result is stored in this matrix.
+     *
+     * @param B The sparse matrix to add to this matrix.
+     */
+    @Override
+    public void addEq(SparseMatrix B) {
+        RealComplexDenseSparseOperations.addEq(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of this matrix with a real sparse matrix. The result is stored in this matrix.
+     *
+     * @param B The sparse matrix to subtract from this matrix.
+     */
+    @Override
+    public void subEq(SparseMatrix B) {
+        RealComplexDenseSparseOperations.subEq(this, B);
     }
 
 
@@ -2883,6 +2982,21 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
+     * Get the row of this matrix at the specified index.
+     *
+     * @param i Index of row to get.
+     * @return The specified row of this matrix as a vector.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} is less than zero or greater than/equal to
+     * the number of rows in this matrix.
+     */
+    public CVector getRowAsVector(int i) {
+        int start = i*numCols;
+        int stop = start+numCols;
+        return new CVector(ArrayUtils.copyOfRange(this.entries, start, stop));
+    }
+
+
+    /**
      * Get the column of this matrix at the specified index.
      *
      * @param j Index of column to get.
@@ -2897,6 +3011,53 @@ public class CMatrix extends ComplexMatrixBase implements
         }
 
         return new CMatrix(new Shape(numRows, 1), col);
+    }
+
+
+    /**
+     * Get the column of this matrix at the specified index.
+     *
+     * @param j Index of column to get.
+     * @return The specified column of this matrix as a vector.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} is less than zero or greater than/equal to
+     * the number of rows in this matrix.
+     */
+    public CVector getColAsVector(int j) {
+        CNumber[] col = new CNumber[numRows];
+
+        for(int i=0; i<numRows; i++) {
+            col[i] = entries[i*numCols + j].copy();
+        }
+
+        return new CVector(col);
+    }
+
+
+    /**
+     * Gets a specified slice of this matrix.
+     *
+     * @param rowStart Starting row index of slice (inclusive).
+     * @param rowEnd Ending row index of slice (exclusive).
+     * @param colStart Starting column index of slice (inclusive).
+     * @param colEnd Ending row index of slice (exclusive).
+     * @return The specified slice of this matrix. This is a completely new matrix and <b>NOT</b> a view into the matrix.
+     * @throws ArrayIndexOutOfBoundsException If any of the indices are out of bounds of this matrix.
+     * @throws IllegalArgumentException If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
+     */
+    @Override
+    public CMatrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
+        int sliceRows = rowEnd-rowStart;
+        int sliceCols = colEnd-colStart;
+        int destPos = 0;
+        CNumber[] slice = new CNumber[sliceRows*sliceCols];
+
+        for(int i=rowStart; i<rowEnd; i++) {
+            for(int j=colStart; j<colEnd; j++) {
+                slice[destPos++] = this.entries[i*this.numCols + j];
+            }
+        }
+
+        return new CMatrix(sliceRows, sliceCols, slice);
     }
 
 
@@ -3217,6 +3378,28 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
+     * Adds a complex sparse matrix to this matrix and stores the result in this matrix.
+     *
+     * @param B Complex sparse matrix to add to this matrix,
+     */
+    @Override
+    public void addEq(SparseCMatrix B) {
+        ComplexDenseSparseOperations.addEq(this, B);
+    }
+
+
+    /**
+     * Subtracts a complex sparse matrix from this matrix and stores the result in this matrix.
+     *
+     * @param B Complex sparse matrix to subtract from this matrix,
+     */
+    @Override
+    public void subEq(SparseCMatrix B) {
+        ComplexDenseSparseOperations.subEq(this, B);
+    }
+
+
+    /**
      * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
      *
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
@@ -3365,6 +3548,15 @@ public class CMatrix extends ComplexMatrixBase implements
         return ComplexDenseOperations.matrixInfNorm(entries, shape);
     }
 
+
+    /**
+     * Creates a deep copy of this matrix.
+     * @return A deep copy of this matrix.
+     */
+    @Override
+    public CMatrix copy() {
+        return new CMatrix(this);
+    }
 
 
     /**

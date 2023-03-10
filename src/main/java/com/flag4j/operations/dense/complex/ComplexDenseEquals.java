@@ -42,6 +42,7 @@ public class ComplexDenseEquals {
     }
 
 
+
     /**
      * Checks if two real dense matrices are equal.
      * @param A First matrix.

@@ -42,6 +42,7 @@ public class ComplexDenseEquals {
     }
 
 
+
     /**
      * Checks if two real dense matrices are equal.
      * @param A First matrix.
@@ -49,7 +50,7 @@ public class ComplexDenseEquals {
      * @return True if the two matrices are element-wise equivalent.
      */
     public static boolean matrixEquals(CMatrix A, CMatrix B) {
-<span class="fc" id="L52">        return tensorEquals(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="fc" id="L53">        return tensorEquals(A.entries, A.shape, B.entries, B.shape);</span>
     }
 
 
@@ -62,7 +63,7 @@ public class ComplexDenseEquals {
      * @return True if the two tensors are numerically element-wise equivalent.
      */
     private static boolean tensorEquals(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc bfc" id="L65" title="All 4 branches covered.">        return shape1.equals(shape2) &amp;&amp; Arrays.equals(src1, src2);</span>
+<span class="fc bfc" id="L66" title="All 4 branches covered.">        return shape1.equals(shape2) &amp;&amp; Arrays.equals(src1, src2);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -53,7 +53,7 @@ class RealComplexDenseOperationsTests {
         aC = new CNumber(10.34, -9.331);
         expResult = new CNumber[]{new CNumber(10.34+1.1345, -9.331), new CNumber(10.34+2, -9.331),
                 new CNumber(10.34-3, -9.331), new CNumber(10.34+4.13, -9.331)};
-        assertArrayEquals(expResult, add(src2, aC));
+        assertArrayEquals(expResult, RealComplexDenseVectorOperations.add(src2, aC));
     }
 
 

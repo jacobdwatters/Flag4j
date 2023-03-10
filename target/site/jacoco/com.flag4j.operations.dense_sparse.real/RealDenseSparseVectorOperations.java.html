@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealDenseSparseVectorOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense_sparse.real</a> &gt; <span class="el_source">RealDenseSparseVectorOperations.java</span></div><h1>RealDenseSparseVectorOperations.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense_sparse.real;
+
+
+import com.flag4j.SparseVector;
+import com.flag4j.Vector;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
+
+/**
+ * This class provides low level methods for computing operations between a real dense/sparse vector and a
+ * real sparse/dense vector.
+ */
+public class RealDenseSparseVectorOperations {
+
+
+<span class="nc" id="L40">    private RealDenseSparseVectorOperations() {</span>
+        // Hide default constructor in utility class.
+<span class="nc" id="L42">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Computes the vector inner product between a real dense vector and a real sparse vector.
+     * @param src1 Entries of the dense vector.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param sparseSize The size of the sparse vector (including zero entries).
+     * @return The inner product of the two vectors.
+     * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
+     */
+    public static double innerProduct(double[] src1, double[] src2, int[] indices, int sparseSize) {
+<span class="nc" id="L56">        ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);</span>
+<span class="nc" id="L57">        double innerProd = 0;</span>
+        int index;
+
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        for(int i=0; i&lt;src2.length; i++) {</span>
+<span class="nc" id="L61">            index = indices[i];</span>
+
+<span class="nc" id="L63">            innerProd += src1[index]*src2[i];</span>
+        }
+
+<span class="nc" id="L66">        return innerProd;</span>
+    }
+
+
+    /**
+     * Computes the vector outer product between a real dense vector and a real sparse vector.
+     * @param src1 Entries of the dense vector.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries of sparse vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static double[] outerProduct(double[] src1, double[] src2, int[] indices, int sparseSize) {
+<span class="nc" id="L78">        double[] dest = new double[src1.length*sparseSize];</span>
+        int index;
+
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="nc" id="L83">                index = indices[j];</span>
+
+<span class="nc" id="L85">                dest[i*src2.length + index] = src1[i]*src2[j];</span>
+            }
+        }
+
+<span class="nc" id="L89">        return dest;</span>
+    }
+
+
+    /**
+     * Subtracts a real sparse vector from a real dense vector.
+     * @param src1 Dense vector.
+     * @param src2 Sparse vector.
+     * @return The result of the vector addition.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static Vector sub(Vector src1, SparseVector src2) {
+<span class="fc" id="L101">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L102">        Vector dest = new Vector(src1);</span>
+
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L105">            dest.entries[src2.indices[i]] -= src2.entries[i];</span>
+        }
+
+<span class="fc" id="L108">        return dest;</span>
+    }
+
+
+    /**
+     * Adds a real dense vector to a real sparse vector and stores the result in the first vector.
+     * @param src1 Dense vector. Also, where the result will be stored.
+     * @param src2 Sparse vector.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static void addEq(Vector src1, SparseVector src2) {
+<span class="fc" id="L119">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L122">            src1.entries[src2.indices[i]] += src2.entries[i];</span>
+        }
+<span class="fc" id="L124">    }</span>
+
+
+    /**
+     * Adds a real dense vector to a real sparse vector and stores the result in the first vector.
+     * @param src1 Dense vector. Also, where the result will be stored.
+     * @param src2 Sparse vector.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static void subEq(Vector src1, SparseVector src2) {
+<span class="fc" id="L134">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc bfc" id="L136" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L137">            src1.entries[src2.indices[i]] -= src2.entries[i];</span>
+        }
+<span class="fc" id="L139">    }</span>
+
+
+    /**
+     * Computes the element-wise multiplication of a real dense vector with a real sparse vector.
+     * @param src1 Dense vector.
+     * @param src2 Sparse vector.
+     * @return The result of the element-wise multiplication.
+     * @throws IllegalArgumentException If the two vectors are not the same size.
+     */
+    public static SparseVector elemMult(Vector src1, SparseVector src2) {
+<span class="fc" id="L150">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc" id="L152">        double[] entries = new double[src2.entries.length];</span>
+
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L155">            entries[i] = src1.entries[src2.indices[i]]*src2.entries[i];</span>
+        }
+
+<span class="fc" id="L158">        return new SparseVector(src1.size, entries, src2.indices.clone());</span>
+    }
+
+
+    /**
+     * Adds a real dense vector to a real sparse vector.
+     * @return The result of the vector addition.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static Vector add(Vector src1, SparseVector src2) {
+<span class="fc" id="L168">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L169">        Vector dest = new Vector(src1);</span>
+
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L172">            dest.entries[src2.indices[i]] += src2.entries[i];</span>
+        }
+
+<span class="fc" id="L175">        return dest;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

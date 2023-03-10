@@ -25,7 +25,6 @@
 package com.flag4j;
 
 import com.flag4j.core.SparseVectorBase;
-import com.flag4j.core.VectorOrientation;
 
 import java.util.Arrays;
 
@@ -40,8 +39,8 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      */
     public SparseVector(int size) {
-<span class="fc" id="L43">        super(size, 0, VectorOrientation.COL, new double[0], new int[0]);</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L42">        super(size, 0, new double[0], new int[0]);</span>
+<span class="fc" id="L43">    }</span>
 
 
     /**
@@ -53,10 +52,10 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, int[] nonZeroEntries, int[] indices) {
-<span class="fc" id="L56">        super(size, nonZeroEntries.length, VectorOrientation.COL,</span>
-<span class="fc" id="L57">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L55">        super(size, nonZeroEntries.length,</span>
+<span class="fc" id="L56">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
                 indices);
-<span class="fc" id="L59">    }</span>
+<span class="fc" id="L58">    }</span>
 
 
     /**
@@ -68,8 +67,8 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, double[] nonZeroEntries, int[] indices) {
-<span class="fc" id="L71">        super(size, nonZeroEntries.length, VectorOrientation.COL, nonZeroEntries, indices);</span>
-<span class="fc" id="L72">    }</span>
+<span class="fc" id="L70">        super(size, nonZeroEntries.length, nonZeroEntries, indices);</span>
+<span class="fc" id="L71">    }</span>
 
 
 //    /**
@@ -123,44 +122,6 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
 //        super.setNonZeroEntries(super.entries.length);
 //    }
 
-
-    /**
-     * Creates a sparse column vector of specified size filled with zeros.
-     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
-     * @param orientation Orientation of the vector.
-     */
-    public SparseVector(int size, VectorOrientation orientation) {
-<span class="fc" id="L133">        super(size, 0, orientation, new double[0], new int[0]);</span>
-<span class="fc" id="L134">    }</span>
-
-
-    /**
-     * Creates a sparse column vector of specified size filled with zeros.
-     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
-     * @param nonZeroEntries The nonZero entries of this sparse vector.
-     * @param indices Indices of the nonZero entries.
-     * @param orientation Orientation of the vector.
-     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-     * the length of the nonZeroEntries array is greater than the size.
-     */
-    public SparseVector(int size, int[] nonZeroEntries, int[] indices, VectorOrientation orientation) {
-<span class="fc" id="L147">        super(size, nonZeroEntries.length, orientation,</span>
-<span class="fc" id="L148">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(), indices);</span>
-<span class="fc" id="L149">    }</span>
-
-
-    /**
-     * Creates a sparse column vector of specified size filled with zeros.
-     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
-     * @param nonZeroEntries The nonZero entries of this sparse vector.
-     * @param indices Indices of the nonZero entries.
-     * @param orientation Orientation of the vector.
-     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-     * the length of the nonZeroEntries array is greater than the size.
-     */
-    public SparseVector(int size, double[] nonZeroEntries, int[] indices, VectorOrientation orientation) {
-<span class="fc" id="L162">        super(size, nonZeroEntries.length, orientation, nonZeroEntries, indices);</span>
-<span class="fc" id="L163">    }</span>
 
 //
 //    /**
@@ -222,7 +183,7 @@ public class SparseVector extends SparseVectorBase&lt;double[]&gt; {
      * @param a Sparse vector to copy
      */
     public SparseVector(SparseVector a) {
-<span class="fc" id="L225">        super(a.size(), a.nonZeroEntries(), a.getOrientation(), a.entries.clone(), a.indices.clone());</span>
-<span class="fc" id="L226">    }</span>
+<span class="fc" id="L186">        super(a.size(), a.nonZeroEntries(), a.entries.clone(), a.indices.clone());</span>
+<span class="fc" id="L187">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

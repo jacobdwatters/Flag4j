@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComplexDenseVectorOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense.complex</a> &gt; <span class="el_source">ComplexDenseVectorOperations.java</span></div><h1>ComplexDenseVectorOperations.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense.complex;
+
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
+
+
+/**
+ * This class provides low level implementations for vector operations with two complex dense vectors.
+ */
+public class ComplexDenseVectorOperations {
+
+<span class="nc" id="L37">    private ComplexDenseVectorOperations() {</span>
+        // Hide default constructor for utility class.
+<span class="nc" id="L39">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Computes the vector inner product for two complex vectors.
+     * @param src1 Entries of the first vector.
+     * @param src2 Entries of the second vector.
+     * @return The inner product of the two vectors.
+     */
+    public static CNumber innerProduct(CNumber[] src1, CNumber[] src2) {
+<span class="nc" id="L50">        ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);</span>
+<span class="nc" id="L51">        CNumber innerProd = new CNumber();</span>
+
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="nc" id="L54">            innerProd.addEq(src1[i].mult(src2[i].conj()));</span>
+        }
+
+<span class="nc" id="L57">        return innerProd;</span>
+    }
+
+
+
+    /**
+     * Computes the vector outer product between two real dense vectors.
+     * @param src1 Entries of first vector.
+     * @param src2 Entries of second vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static CNumber[] outerProduct(CNumber[] src1, CNumber[] src2) {
+        int destIndex;
+<span class="nc" id="L70">        CNumber[] dest = new CNumber[src1.length*src2.length];</span>
+
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="nc" id="L73">            destIndex = i*src2.length;</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="nc" id="L75">                dest[destIndex++] = src1[j].mult(src2[i].conj());</span>
+            }
+        }
+
+<span class="nc" id="L79">        return dest;</span>
+    }
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

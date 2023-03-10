@@ -105,6 +105,40 @@ public class RealDenseSparseOperations {
 
 
     /**
+     * Adds a real dense matrix to a real sparse matrix and stores the result in the first matrix.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static void addEq(Matrix src1, SparseMatrix src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        int row, col;
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            row = src2.rowIndices[i];
+            col = src2.colIndices[i];
+            src1.entries[row*src1.numCols + col] += src2.entries[i];
+        }
+    }
+
+
+    /**
+     * Subtracts a real sparse matrix from a real dense matrix and stores the result in the first matrix.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static void subEq(Matrix src1, SparseMatrix src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        int row, col;
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            row = src2.rowIndices[i];
+            col = src2.colIndices[i];
+            src1.entries[row*src1.numCols + col] -= src2.entries[i];
+        }
+    }
+
+
+    /**
      * Computes the element-wise multiplication between a real dense matrix and a real sparse matrix.
      * @return The result of element-wise multiplication.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
