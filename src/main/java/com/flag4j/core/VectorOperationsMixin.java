@@ -127,6 +127,110 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
 
 
     /**
+     * <p>
+     * Stacks two vectors along specified axis.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * </p>
+     *
+     * @param b Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     * entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    TT stack(Vector b, int axis);
+
+
+    /**
+     * <p>
+     * Stacks two vectors along specified axis.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * </p>
+     *
+     * @param b Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     * entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    TT stack(SparseVector b, int axis);
+
+
+    /**
+     * <p>
+     * Stacks two vectors along specified axis.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * </p>
+     *
+     * @param b Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     * entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    WW stack(CVector b, int axis);
+
+
+    /**
+     * <p>
+     * Stacks two vectors along specified axis.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * </p>
+     *
+     * @param b Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     * entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    WW stack(SparseCVector b, int axis);
+
+
+    /**
      * Computes the element-wise addition between this vector and the specified vector.
      * @param B Vector to add to this vector.
      * @return The result of the element-wise vector addition.

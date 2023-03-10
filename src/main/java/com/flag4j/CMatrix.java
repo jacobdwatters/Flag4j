@@ -495,7 +495,7 @@ public class CMatrix extends ComplexMatrixBase implements
             return reshape(new Shape(entries.length, 1));
         } else {
             // Unknown axis
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, Axis2D.allAxes()));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));
         }
     }
 
@@ -2400,7 +2400,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(B);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2428,7 +2428,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(B);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2456,7 +2456,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(B);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2484,7 +2484,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(B);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2746,7 +2746,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(b);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2776,7 +2776,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(b);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2806,7 +2806,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(b);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2836,7 +2836,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(b);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;

@@ -231,4 +231,15 @@ public final class ParameterChecks {
             throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), expRank));
         }
     }
+
+
+    /**
+     * Checks that an axis is a valid 2D axis. That is, either axis is 0 or 1.
+     * @param axis Axis to check.
+     */
+    public static void assertAxis2D(int axis) {
+        if(!(axis == 0 || axis==1)) {
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));
+        }
+    }
 }

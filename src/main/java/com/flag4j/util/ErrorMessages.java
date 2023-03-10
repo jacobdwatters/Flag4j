@@ -194,7 +194,7 @@ public abstract class ErrorMessages {
      * @param allowedAxes An array containing allowed axes.
      * @return An error message for a disallowed axis.
      */
-    public static String axisErr(int axis, int... allowedAxes) {
+    public static String getAxisErr(int axis, int... allowedAxes) {
         return String.format(AXIS_ERR_RANGE, axis, Arrays.toString(allowedAxes));
     }
 
@@ -204,7 +204,7 @@ public abstract class ErrorMessages {
      * @param axis Negative value.
      * @return An error message for a disallowed axis.
      */
-    public static String axisErr(int axis) {
+    public static String getAxisErr(int axis) {
         return String.format(AXIS_ERR, axis);
     }
 

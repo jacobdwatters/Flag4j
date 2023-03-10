@@ -859,7 +859,7 @@ public class CVector extends VectorBase<CNumber[]> implements
                 System.arraycopy(row, 0, extended.entries, i*extended.numCols, row.length);
             }
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, Axis2D.allAxes()));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));
         }
 
         return extended;
@@ -1036,6 +1036,210 @@ public class CVector extends VectorBase<CNumber[]> implements
         for(int i=0; i<b.entries.length; i++) {
             index = b.indices[i];
             stacked.entries[stacked.numCols + index] = b.entries[i].copy();
+        }
+
+        return stacked;
+    }
+
+
+    /**
+     * <p>
+     * Stacks two vectors along specified axis.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * </p>
+     *
+     * @param b    Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(Vector b, int axis) {
+        ParameterChecks.assertAxis2D(axis);
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = stack(b);
+        } else {
+            ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+            CNumber[] stackedEntries = new CNumber[2*this.size];
+
+            int count = 0;
+
+            for(int i=0; i<stackedEntries.length; i+=2) {
+                stackedEntries[i] = this.entries[count].copy();
+                stackedEntries[i+1] = new CNumber(b.entries[count++]);
+            }
+
+            stacked = new CMatrix(this.size, 2, stackedEntries);
+        }
+
+        return stacked;
+    }
+
+
+    /**
+     * <p>
+     * Stacks two vectors along specified axis.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * </p>
+     *
+     * @param b    Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(SparseVector b, int axis) {
+        ParameterChecks.assertAxis2D(axis);
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = stack(b);
+        } else {
+            ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+            CNumber[] stackedEntries = new CNumber[2*this.size];
+            ArrayUtils.fillZeros(stackedEntries);
+
+            // Copy dense values.
+            for(int i=0; i<this.size; i++) {
+                stackedEntries[i*this.size] = this.entries[i].copy();
+            }
+
+            // Copy sparse values.
+            int index;
+            for(int i=0; i<b.size; i++) {
+                index = b.indices[i];
+                stackedEntries[index*this.size + 1] = new CNumber(b.entries[i]);
+            }
+
+            stacked = new CMatrix(this.size, 2, stackedEntries);
+        }
+
+        return stacked;
+    }
+
+
+    /**
+     * <p>
+     * Stacks two vectors along specified axis.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * </p>
+     *
+     * @param b    Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(CVector b, int axis) {
+        ParameterChecks.assertAxis2D(axis);
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = stack(b);
+        } else {
+            ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+            CNumber[] stackedEntries = new CNumber[2*this.size];
+
+            int count = 0;
+
+            for(int i=0; i<stackedEntries.length; i+=2) {
+                stackedEntries[i] = this.entries[count].copy();
+                stackedEntries[i+1] = b.entries[count++].copy();
+            }
+
+            stacked = new CMatrix(this.size, 2, stackedEntries);
+        }
+
+        return stacked;
+    }
+
+
+    /**
+     * <p>
+     * Stacks two vectors along specified axis.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * </p>
+     *
+     * @param b    Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(SparseCVector b, int axis) {
+        ParameterChecks.assertAxis2D(axis);
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = stack(b);
+        } else {
+            ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+            CNumber[] stackedEntries = new CNumber[2*this.size];
+            ArrayUtils.fillZeros(stackedEntries);
+
+            // Copy dense values.
+            for(int i=0; i<this.size; i++) {
+                stackedEntries[i*this.size] = this.entries[i].copy();
+            }
+
+            // Copy sparse values.
+            int index;
+            for(int i=0; i<b.size; i++) {
+                index = b.indices[i];
+                stackedEntries[index*this.size + 1] = b.entries[i].copy();
+            }
+
+            stacked = new CMatrix(this.size, 2, stackedEntries);
         }
 
         return stacked;

@@ -37,7 +37,7 @@ import java.io.Serializable;
 public abstract class VectorBase<T extends Serializable> extends TensorBase<T> {
 
     /**
-     * Size of the matrix.
+     * Size of the vector.
      */
     public final int size;
 
