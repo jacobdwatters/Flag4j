@@ -794,17 +794,21 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
-     * Computes the p-norm of this tensor.
+     * Computes the p-norm of this tensor. Warning, if p is large in absolute value, overflow errors may occur.
      *
      * @param p The p value in the p-norm. <br>
-     *          - If p is inf, then this method computes the maximum/infinite norm.
+     *          - If p is {@link Double#POSITIVE_INFINITY}, then this method computes the maximum/infinite norm.
+     *          - If p is {@link Double#NEGATIVE_INFINITY}, then this method computes the minimum norm.
      * @return The p-norm of this tensor.
-     * @throws IllegalArgumentException If p is less than 1.
      */
     @Override
     public double norm(double p) {
         if(Double.isInfinite(p)) {
-            return infNorm();
+            if(p > 0) {
+                return maxAbs().re; // Maximum / infinite norm.
+            } else {
+                return minAbs().re; // Minimum norm.
+            }
         } else {
             double norm = 0;
 
