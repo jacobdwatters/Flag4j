@@ -125,7 +125,7 @@ public abstract class TensorBase&lt;T&gt; implements Serializable {
     public static boolean sameLength(TensorBase&lt;?&gt; A, TensorBase&lt;?&gt; B, int axis) {
 <span class="nc bnc" id="L126" title="All 4 branches missed.">        if(axis &lt; 0 || axis&gt;=Math.min(A.shape.getRank(), B.shape.getRank())) {</span>
 <span class="nc" id="L127">            throw new IllegalArgumentException(</span>
-<span class="nc" id="L128">                    ErrorMessages.axisErr(axis)</span>
+<span class="nc" id="L128">                    ErrorMessages.getAxisErr(axis)</span>
             );
         }
 

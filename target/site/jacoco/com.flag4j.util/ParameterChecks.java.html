@@ -231,5 +231,16 @@ public final class ParameterChecks {
 <span class="fc" id="L231">            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), expRank));</span>
         }
 <span class="fc" id="L233">    }</span>
+
+
+    /**
+     * Checks that an axis is a valid 2D axis. That is, either axis is 0 or 1.
+     * @param axis Axis to check.
+     */
+    public static void assertAxis2D(int axis) {
+<span class="pc bpc" id="L241" title="1 of 4 branches missed.">        if(!(axis == 0 || axis==1)) {</span>
+<span class="nc" id="L242">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));</span>
+        }
+<span class="fc" id="L244">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -495,7 +495,7 @@ public class CMatrix extends ComplexMatrixBase implements
 <span class="fc" id="L495">            return reshape(new Shape(entries.length, 1));</span>
         } else {
             // Unknown axis
-<span class="fc" id="L498">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, Axis2D.allAxes()));</span>
+<span class="fc" id="L498">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));</span>
         }
     }
 
@@ -2400,7 +2400,7 @@ public class CMatrix extends ComplexMatrixBase implements
 <span class="fc bfc" id="L2400" title="All 2 branches covered.">        } else if(axis==1) {</span>
 <span class="fc" id="L2401">            stacked = this.stack(B);</span>
         } else {
-<span class="fc" id="L2403">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+<span class="fc" id="L2403">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
 <span class="fc" id="L2406">        return stacked;</span>
@@ -2428,7 +2428,7 @@ public class CMatrix extends ComplexMatrixBase implements
 <span class="fc bfc" id="L2428" title="All 2 branches covered.">        } else if(axis==1) {</span>
 <span class="fc" id="L2429">            stacked = this.stack(B);</span>
         } else {
-<span class="fc" id="L2431">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+<span class="fc" id="L2431">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
 <span class="fc" id="L2434">        return stacked;</span>
@@ -2456,7 +2456,7 @@ public class CMatrix extends ComplexMatrixBase implements
 <span class="fc bfc" id="L2456" title="All 2 branches covered.">        } else if(axis==1) {</span>
 <span class="fc" id="L2457">            stacked = this.stack(B);</span>
         } else {
-<span class="fc" id="L2459">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+<span class="fc" id="L2459">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
 <span class="fc" id="L2462">        return stacked;</span>
@@ -2484,7 +2484,7 @@ public class CMatrix extends ComplexMatrixBase implements
 <span class="fc bfc" id="L2484" title="All 2 branches covered.">        } else if(axis==1) {</span>
 <span class="fc" id="L2485">            stacked = this.stack(B);</span>
         } else {
-<span class="fc" id="L2487">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+<span class="fc" id="L2487">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
 <span class="fc" id="L2490">        return stacked;</span>
@@ -2746,7 +2746,7 @@ public class CMatrix extends ComplexMatrixBase implements
 <span class="fc bfc" id="L2746" title="All 2 branches covered.">        } else if(axis==1) {</span>
 <span class="fc" id="L2747">            stacked = this.stack(b);</span>
         } else {
-<span class="fc" id="L2749">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+<span class="fc" id="L2749">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
 <span class="fc" id="L2752">        return stacked;</span>
@@ -2776,7 +2776,7 @@ public class CMatrix extends ComplexMatrixBase implements
 <span class="fc bfc" id="L2776" title="All 2 branches covered.">        } else if(axis==1) {</span>
 <span class="fc" id="L2777">            stacked = this.stack(b);</span>
         } else {
-<span class="fc" id="L2779">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+<span class="fc" id="L2779">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
 <span class="fc" id="L2782">        return stacked;</span>
@@ -2806,7 +2806,7 @@ public class CMatrix extends ComplexMatrixBase implements
 <span class="fc bfc" id="L2806" title="All 2 branches covered.">        } else if(axis==1) {</span>
 <span class="fc" id="L2807">            stacked = this.stack(b);</span>
         } else {
-<span class="fc" id="L2809">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+<span class="fc" id="L2809">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
 <span class="fc" id="L2812">        return stacked;</span>
@@ -2836,7 +2836,7 @@ public class CMatrix extends ComplexMatrixBase implements
 <span class="fc bfc" id="L2836" title="All 2 branches covered.">        } else if(axis==1) {</span>
 <span class="fc" id="L2837">            stacked = this.stack(b);</span>
         } else {
-<span class="fc" id="L2839">            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));</span>
+<span class="fc" id="L2839">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
 <span class="fc" id="L2842">        return stacked;</span>

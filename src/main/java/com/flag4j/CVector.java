@@ -1127,14 +1127,14 @@ public class CVector extends VectorBase<CNumber[]> implements
 
             // Copy dense values.
             for(int i=0; i<this.size; i++) {
-                stackedEntries[i*this.size] = this.entries[i].copy();
+                stackedEntries[i*2] = this.entries[i].copy();
             }
 
             // Copy sparse values.
             int index;
-            for(int i=0; i<b.size; i++) {
+            for(int i=0; i<b.entries.length; i++) {
                 index = b.indices[i];
-                stackedEntries[index*this.size + 1] = new CNumber(b.entries[i]);
+                stackedEntries[index*2 + 1] = new CNumber(b.entries[i]);
             }
 
             stacked = new CMatrix(this.size, 2, stackedEntries);
@@ -1229,14 +1229,14 @@ public class CVector extends VectorBase<CNumber[]> implements
 
             // Copy dense values.
             for(int i=0; i<this.size; i++) {
-                stackedEntries[i*this.size] = this.entries[i].copy();
+                stackedEntries[i*2] = this.entries[i].copy();
             }
 
             // Copy sparse values.
             int index;
-            for(int i=0; i<b.size; i++) {
+            for(int i=0; i<b.entries.length; i++) {
                 index = b.indices[i];
-                stackedEntries[index*this.size + 1] = b.entries[i].copy();
+                stackedEntries[index*2 + 1] = b.entries[i].copy();
             }
 
             stacked = new CMatrix(this.size, 2, stackedEntries);
