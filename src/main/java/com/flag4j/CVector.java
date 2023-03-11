@@ -26,6 +26,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
+import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.complex.ComplexProperties;
@@ -39,10 +40,7 @@ import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseVectorOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
-import com.flag4j.util.ArrayUtils;
-import com.flag4j.util.Axis2D;
-import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.*;
 
 import java.util.Arrays;
 
@@ -1590,5 +1588,43 @@ public class CVector extends VectorBase<CNumber[]> implements
     @Override
     public Vector toReal() {
         return new Vector(ComplexOperations.toReal(this.entries));
+    }
+
+
+    /**
+     * Converts this vector to a human-readable string format.
+     * @return A human-readable string representation of this vector.
+     */
+    public String toString() {
+        StringBuilder result =  new StringBuilder("[");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.size-1);
+        int width;
+        String value;
+
+        // Get entries up until the stopping point.
+        for(int i=0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(this.get(i), PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.getCenter() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(PrintOptions.getMaxColumns() < this.size-1) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.getCenter() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry now
+        value = StringUtils.ValueOfRound(this.get(this.size-1), PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + value.length();
+        value = PrintOptions.getCenter() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s", value));
+
+        result.append("]");
+
+        return result.toString();
     }
 }

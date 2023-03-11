@@ -24,6 +24,9 @@
 
 package com.flag4j.util;
 
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.io.PrintOptions;
+
 /**
  * A class which provides simple utility methods for {@link String strings}.
  */
@@ -64,5 +67,27 @@ public final class StringUtils {
         }
 
         return sb.toString();
+    }
+
+
+    /**
+     * Gets the string representation of a double rounded to the specified precision.
+     * @param value Value to convert to String.
+     * @param precision Precision to round value to.
+     * @return The string representation of a double rounded to the specified precision.
+     */
+    public static String ValueOfRound(double value, int precision) {
+        return String.valueOf(CNumber.round(new CNumber(value), PrintOptions.getPrecision()));
+    }
+
+
+    /**
+     * Gets the string representation of a {@link CNumber complex number} rounded to the specified precision.
+     * @param value Value to convert to String.
+     * @param precision Precision to round value to.
+     * @return The string representation of a {@link CNumber complex number} rounded to the specified precision.
+     */
+    public static String ValueOfRound(CNumber value, int precision) {
+        return String.valueOf(CNumber.round(value, PrintOptions.getPrecision()));
     }
 }

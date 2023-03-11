@@ -60,23 +60,36 @@ public abstract class PrintOptions {
     }
 
     /**
-     * Padding between each element of matrix.
-     * If negative, zero padding will be used.
-     * <br><br>
+     * <p>
+     * Padding to apply to each size of an element. Padding is divided up to either side of the element.
+     * For instance, if {@code padding=4} then two spaces will be placed on either side of each element.
+     * Further, since this is done per element, each element will have 4 spaces between them (in addition to any
+     * additional padding from column alignment within a matrix).
+     * </p>
      *
-     * Default Value: 2
+     * <p>
+     * If negative, zero padding will be used.
+     * </p>
+     *
+     * <p>
+     * Default Value: {@link #DEFAULT_PADDING}
+     * </p>
      */
     private static int padding = DEFAULT_PADDING;
 
 
     /**
+     * <p>
      * Maximum number of rows to print from a matrix.
      * If a matrix has more rows than this value, rows with
      * indices larger than this value, except for the last row,
      * will not be printed. If zero or negative all rows will be printed.
-     * The last row is always printed<br><br>
+     * The last row is always printed
+     * </p>
      *
-     * Default Value: 10
+     * <p>
+     * Default Value: {@link #DEFAULT_MAX_ROWS}
+     * </p>
      */
     private static int maxRows = DEFAULT_MAX_ROWS;
 
@@ -88,7 +101,7 @@ public abstract class PrintOptions {
      * will <b>not</b> be printed. If zero or negative all columns will be printed.
      * The last column is always printed.<br><br>
      *
-     * Default Value: 10
+     * Default Value: {@link #DEFAULT_MAX_COLS}
      */
     private static int maxColumns = DEFAULT_MAX_COLS;
 
@@ -97,7 +110,7 @@ public abstract class PrintOptions {
      * Precision of the printed matrix values. i.e. the number of decimal places printed.
      * If negative, max precision is used.
      * <br><br>
-     * Default Value: 8.
+     * Default Value: {@link #DEFAULT_PRECISION}.
      */
     private static int precision = DEFAULT_PRECISION;
 
@@ -105,7 +118,7 @@ public abstract class PrintOptions {
     /**
      * A flag which indicates if each value should be centered within its column.
      * <br><br>
-     * Default value: true.
+     * Default value: {@link #DEFAULT_PRECISION}.
      */
     private static boolean center = DEFAULT_CENTER;
 
