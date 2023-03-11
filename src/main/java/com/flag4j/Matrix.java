@@ -44,7 +44,6 @@ import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMat
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
 import com.flag4j.util.*;
 
-import javax.lang.model.type.PrimitiveType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -2933,7 +2932,7 @@ public class Matrix extends RealMatrixBase implements
     }
 
 
-    // TODO: Pull below methods up to matrix operations interface and add getRowBellow(int, int)
+    // TODO: Pull row/colAsVector methods up to matrix operations interface.
 
     /**
      * Get a specified column of this matrix at and below a specified row.
@@ -2941,9 +2940,10 @@ public class Matrix extends RealMatrixBase implements
      * @param rowStart Index of the row to begin at.
      * @param j Index of column to get.
      * @return The specified column of this matrix beginning at the specified row.
-     * @throws NegativeArraySizeException If {@code i} is larger than the number of rows in this matrix.
-     * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code j} is outside the bounds of this matrix.
+     * @throws NegativeArraySizeException If {@code rowStart} is larger than the number of rows in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
      */
+    @Override
     public Matrix getColBelow(int rowStart, int j) {
         double[] col = new double[numRows-rowStart];
 
@@ -2955,7 +2955,27 @@ public class Matrix extends RealMatrixBase implements
     }
 
 
-        /**
+    /**
+     * Get a specified row of this matrix at and after a specified column.
+     *
+     * @param colStart Index of the row to begin at.
+     * @param i Index of the row to get.
+     * @return The specified row of this matrix beginning at the specified column.
+     * @throws NegativeArraySizeException If {@code colStart} is larger than the number of columns in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
+     */
+    @Override
+    public Matrix getRowAfter(int colStart, int i) {
+        if(i > this.numRows || colStart > this.numCols) {
+            throw new ArrayIndexOutOfBoundsException(String.format("Index (%d, %d) not in matrix.", i, colStart));
+        }
+
+        double[] row = Arrays.copyOfRange(this.entries, i*this.numCols + colStart, (i+1)*this.numCols);
+        return new Matrix(new Shape(1, row.length), row);
+    }
+
+
+    /**
      * Get the column of this matrix at the specified index.
      *
      * @param j Index of column to get.

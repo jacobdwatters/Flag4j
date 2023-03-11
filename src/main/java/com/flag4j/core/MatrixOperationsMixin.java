@@ -802,7 +802,6 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      */
     T getRow(int i);
 
-
     /**
      * Get the column of this matrix at the specified index.
      * @param j Index of column to get.
@@ -823,6 +822,30 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
      * @throws IllegalArgumentException If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
      */
     T getSlice(int rowStart, int rowEnd, int colStart, int colEnd);
+
+
+    /**
+     * Get a specified column of this matrix at and below a specified row.
+     *
+     * @param rowStart Index of the row to begin at.
+     * @param j Index of column to get.
+     * @return The specified column of this matrix beginning at the specified row.
+     * @throws NegativeArraySizeException If {@code rowStart} is larger than the number of rows in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
+     */
+    T getColBelow(int rowStart, int j);
+
+
+    /**
+     * Get a specified row of this matrix at and after a specified column.
+     *
+     * @param colStart Index of the row to begin at.
+     * @param i Index of the row to get.
+     * @return The specified row of this matrix beginning at the specified column.
+     * @throws NegativeArraySizeException If {@code colStart} is larger than the number of columns in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
+     */
+    T getRowAfter(int colStart, int i);
 
 
     /**

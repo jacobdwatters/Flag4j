@@ -2873,8 +2873,8 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double get(int... indices) {
-<span class="fc" id="L2876">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
-<span class="fc" id="L2877">        return entries[shape.entriesIndex(indices)];</span>
+<span class="nc" id="L2876">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
+<span class="nc" id="L2877">        return entries[shape.entriesIndex(indices)];</span>
     }
 
 
@@ -2922,17 +2922,17 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix getCol(int j) {
-<span class="fc" id="L2925">        double[] col = new double[numRows];</span>
+<span class="nc" id="L2925">        double[] col = new double[numRows];</span>
 
-<span class="fc bfc" id="L2927" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc" id="L2928">            col[i] = entries[i*numCols + j];</span>
+<span class="nc bnc" id="L2927" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc" id="L2928">            col[i] = entries[i*numCols + j];</span>
         }
 
-<span class="fc" id="L2931">        return new Matrix(new Shape(numRows, 1), col);</span>
+<span class="nc" id="L2931">        return new Matrix(new Shape(numRows, 1), col);</span>
     }
 
 
-    // TODO: Pull below methods up to matrix operations interface and add getRowBellow(int, int)
+    // TODO: Pull row/colAsVector methods up to matrix operations interface.
 
     /**
      * Get a specified column of this matrix at and below a specified row.
@@ -2940,21 +2940,42 @@ public class Matrix extends RealMatrixBase implements
      * @param rowStart Index of the row to begin at.
      * @param j Index of column to get.
      * @return The specified column of this matrix beginning at the specified row.
-     * @throws NegativeArraySizeException If {@code i} is larger than the number of rows in this matrix.
-     * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code j} is outside the bounds of this matrix.
+     * @throws NegativeArraySizeException If {@code rowStart} is larger than the number of rows in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
      */
+    @Override
     public Matrix getColBelow(int rowStart, int j) {
-<span class="fc" id="L2947">        double[] col = new double[numRows-rowStart];</span>
+<span class="fc" id="L2948">        double[] col = new double[numRows-rowStart];</span>
 
-<span class="fc bfc" id="L2949" title="All 2 branches covered.">        for(int i=rowStart; i&lt;numRows; i++) {</span>
-<span class="fc" id="L2950">            col[i-rowStart] = entries[i*numCols + j];</span>
+<span class="fc bfc" id="L2950" title="All 2 branches covered.">        for(int i=rowStart; i&lt;numRows; i++) {</span>
+<span class="fc" id="L2951">            col[i-rowStart] = entries[i*numCols + j];</span>
         }
 
-<span class="fc" id="L2953">        return new Matrix(new Shape(col.length, 1), col);</span>
+<span class="fc" id="L2954">        return new Matrix(new Shape(col.length, 1), col);</span>
     }
 
 
-        /**
+    /**
+     * Get a specified row of this matrix at and after a specified column.
+     *
+     * @param colStart Index of the row to begin at.
+     * @param i Index of the row to get.
+     * @return The specified row of this matrix beginning at the specified column.
+     * @throws NegativeArraySizeException If {@code colStart} is larger than the number of columns in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
+     */
+    @Override
+    public Matrix getRowAfter(int colStart, int i) {
+<span class="nc bnc" id="L2969" title="All 4 branches missed.">        if(i &gt; this.numRows || colStart &gt; this.numCols) {</span>
+<span class="nc" id="L2970">            throw new ArrayIndexOutOfBoundsException(String.format(&quot;Index (%d, %d) not in matrix.&quot;, i, colStart));</span>
+        }
+
+<span class="nc" id="L2973">        double[] row = Arrays.copyOfRange(this.entries, i*this.numCols + colStart, (i+1)*this.numCols);</span>
+<span class="nc" id="L2974">        return new Matrix(new Shape(1, row.length), row);</span>
+    }
+
+
+    /**
      * Get the column of this matrix at the specified index.
      *
      * @param j Index of column to get.
@@ -2963,13 +2984,13 @@ public class Matrix extends RealMatrixBase implements
      * the number of rows in this matrix.
      */
     public Vector getColAsVector(int j) {
-<span class="nc" id="L2966">        double[] col = new double[numRows];</span>
+<span class="nc" id="L2987">        double[] col = new double[numRows];</span>
 
-<span class="nc bnc" id="L2968" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="nc" id="L2969">            col[i] = entries[i*numCols + j];</span>
+<span class="nc bnc" id="L2989" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc" id="L2990">            col[i] = entries[i*numCols + j];</span>
         }
 
-<span class="nc" id="L2972">        return new Vector(col);</span>
+<span class="nc" id="L2993">        return new Vector(col);</span>
     }
 
 
@@ -2983,15 +3004,15 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double trace() {
-<span class="fc" id="L2986">        ParameterChecks.assertSquare(this.shape);</span>
-<span class="fc" id="L2987">        double sum = 0;</span>
-<span class="fc" id="L2988">        int colsOffset = this.numCols+1;</span>
+<span class="fc" id="L3007">        ParameterChecks.assertSquare(this.shape);</span>
+<span class="fc" id="L3008">        double sum = 0;</span>
+<span class="fc" id="L3009">        int colsOffset = this.numCols+1;</span>
 
-<span class="fc bfc" id="L2990" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc" id="L2991">            sum += this.entries[i*colsOffset];</span>
+<span class="fc bfc" id="L3011" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L3012">            sum += this.entries[i*colsOffset];</span>
         }
 
-<span class="fc" id="L2994">        return sum;</span>
+<span class="fc" id="L3015">        return sum;</span>
     }
 
 
@@ -3004,7 +3025,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double tr() {
-<span class="nc" id="L3007">        return trace();</span>
+<span class="nc" id="L3028">        return trace();</span>
     }
 
 
@@ -3016,7 +3037,7 @@ public class Matrix extends RealMatrixBase implements
      * @throws IllegalArgumentException If the specified size is less than 1.
      */
     public static Matrix I(int size) {
-<span class="fc" id="L3019">        return I(size, size);</span>
+<span class="fc" id="L3040">        return I(size, size);</span>
     }
 
 
@@ -3030,15 +3051,15 @@ public class Matrix extends RealMatrixBase implements
      * @throws IllegalArgumentException If the specified number of rows or columns is less than 1.
      */
     public static Matrix I(int numRows, int numCols) {
-<span class="fc" id="L3033">        ParameterChecks.assertGreaterEq(1, numRows, numCols);</span>
-<span class="fc" id="L3034">        Matrix I = new Matrix(numRows, numCols);</span>
-<span class="fc" id="L3035">        int stop = Math.min(numRows, numCols);</span>
+<span class="fc" id="L3054">        ParameterChecks.assertGreaterEq(1, numRows, numCols);</span>
+<span class="fc" id="L3055">        Matrix I = new Matrix(numRows, numCols);</span>
+<span class="fc" id="L3056">        int stop = Math.min(numRows, numCols);</span>
 
-<span class="fc bfc" id="L3037" title="All 2 branches covered.">        for(int i=0; i&lt;stop; i++) {</span>
-<span class="fc" id="L3038">            I.entries[i*numCols+i] = 1;</span>
+<span class="fc bfc" id="L3058" title="All 2 branches covered.">        for(int i=0; i&lt;stop; i++) {</span>
+<span class="fc" id="L3059">            I.entries[i*numCols+i] = 1;</span>
         }
 
-<span class="fc" id="L3041">        return I;</span>
+<span class="fc" id="L3062">        return I;</span>
     }
 
 
@@ -3051,8 +3072,8 @@ public class Matrix extends RealMatrixBase implements
      * @throws IllegalArgumentException If the specified shape is not rank 2.
      */
     public static Matrix I(Shape shape) {
-<span class="fc" id="L3054">        ParameterChecks.assertRank(2, shape);</span>
-<span class="fc" id="L3055">        return I(shape.get(0), shape.get(1));</span>
+<span class="fc" id="L3075">        ParameterChecks.assertRank(2, shape);</span>
+<span class="fc" id="L3076">        return I(shape.get(0), shape.get(1));</span>
     }
 
 
@@ -3063,7 +3084,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isSquare() {
-<span class="fc bfc" id="L3066" title="All 2 branches covered.">        return numRows==numCols;</span>
+<span class="fc bfc" id="L3087" title="All 2 branches covered.">        return numRows==numCols;</span>
     }
 
 
@@ -3074,7 +3095,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isVector() {
-<span class="fc bfc" id="L3077" title="All 4 branches covered.">        return numRows&lt;=1 || numCols&lt;=1;</span>
+<span class="fc bfc" id="L3098" title="All 4 branches covered.">        return numRows&lt;=1 || numCols&lt;=1;</span>
     }
 
 
@@ -3090,21 +3111,21 @@ public class Matrix extends RealMatrixBase implements
     public int vectorType() {
         int type;
 
-<span class="fc bfc" id="L3093" title="All 4 branches covered.">        if(numRows==1 || numCols==1) {</span>
-<span class="fc bfc" id="L3094" title="All 4 branches covered.">            if(numRows==1 &amp;&amp; numCols==1) {</span>
-<span class="fc" id="L3095">                type = 0;</span>
-<span class="fc bfc" id="L3096" title="All 2 branches covered.">            } else if(numRows==1) {</span>
-<span class="fc" id="L3097">                type = 1;</span>
+<span class="fc bfc" id="L3114" title="All 4 branches covered.">        if(numRows==1 || numCols==1) {</span>
+<span class="fc bfc" id="L3115" title="All 4 branches covered.">            if(numRows==1 &amp;&amp; numCols==1) {</span>
+<span class="fc" id="L3116">                type = 0;</span>
+<span class="fc bfc" id="L3117" title="All 2 branches covered.">            } else if(numRows==1) {</span>
+<span class="fc" id="L3118">                type = 1;</span>
             } else {
                 // Then this matrix is equivalent to a column vector.
-<span class="fc" id="L3100">                type = 2;</span>
+<span class="fc" id="L3121">                type = 2;</span>
             }
         } else {
             // Then this matrix is not equivalent to any vector.
-<span class="fc" id="L3104">            type = -1;</span>
+<span class="fc" id="L3125">            type = -1;</span>
         }
 
-<span class="fc" id="L3107">        return type;</span>
+<span class="fc" id="L3128">        return type;</span>
     }
 
 
@@ -3115,7 +3136,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isTri() {
-<span class="fc bfc" id="L3118" title="All 4 branches covered.">        return isTriL() || isTriU();</span>
+<span class="fc bfc" id="L3139" title="All 4 branches covered.">        return isTriL() || isTriU();</span>
     }
 
 
@@ -3126,20 +3147,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isTriL() {
-<span class="fc" id="L3129">        boolean result = isSquare();</span>
+<span class="fc" id="L3150">        boolean result = isSquare();</span>
 
-<span class="fc bfc" id="L3131" title="All 2 branches covered.">        if(result) {</span>
+<span class="fc bfc" id="L3152" title="All 2 branches covered.">        if(result) {</span>
             // Ensure upper half is zeros.
-<span class="fc bfc" id="L3133" title="All 2 branches covered.">            for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L3134" title="All 2 branches covered.">                for(int j=i+1; j&lt;numCols; j++) {</span>
-<span class="fc bfc" id="L3135" title="All 2 branches covered.">                    if(entries[i*numCols + j] != 0) {</span>
-<span class="fc" id="L3136">                        return false; // No need to continue.</span>
+<span class="fc bfc" id="L3154" title="All 2 branches covered.">            for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L3155" title="All 2 branches covered.">                for(int j=i+1; j&lt;numCols; j++) {</span>
+<span class="fc bfc" id="L3156" title="All 2 branches covered.">                    if(entries[i*numCols + j] != 0) {</span>
+<span class="fc" id="L3157">                        return false; // No need to continue.</span>
                     }
                 }
             }
         }
 
-<span class="fc" id="L3142">        return result;</span>
+<span class="fc" id="L3163">        return result;</span>
     }
 
 
@@ -3150,20 +3171,20 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isTriU() {
-<span class="fc" id="L3153">        boolean result = isSquare();</span>
+<span class="fc" id="L3174">        boolean result = isSquare();</span>
 
-<span class="fc bfc" id="L3155" title="All 2 branches covered.">        if(result) {</span>
+<span class="fc bfc" id="L3176" title="All 2 branches covered.">        if(result) {</span>
             // Ensure lower half is zeros.
-<span class="fc bfc" id="L3157" title="All 2 branches covered.">            for(int i=1; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L3158" title="All 2 branches covered.">                for(int j=0; j&lt;i; j++) {</span>
-<span class="fc bfc" id="L3159" title="All 2 branches covered.">                    if(entries[i*numCols + j] != 0) {</span>
-<span class="fc" id="L3160">                        return false; // No need to continue.</span>
+<span class="fc bfc" id="L3178" title="All 2 branches covered.">            for(int i=1; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L3179" title="All 2 branches covered.">                for(int j=0; j&lt;i; j++) {</span>
+<span class="fc bfc" id="L3180" title="All 2 branches covered.">                    if(entries[i*numCols + j] != 0) {</span>
+<span class="fc" id="L3181">                        return false; // No need to continue.</span>
                     }
                 }
             }
         }
 
-<span class="fc" id="L3166">        return result;</span>
+<span class="fc" id="L3187">        return result;</span>
     }
 
 
@@ -3174,7 +3195,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isDiag() {
-<span class="fc bfc" id="L3177" title="All 4 branches covered.">        return isTriL() &amp;&amp; isTriU();</span>
+<span class="fc bfc" id="L3198" title="All 4 branches covered.">        return isTriL() &amp;&amp; isTriU();</span>
     }
 
 
@@ -3186,7 +3207,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public boolean isFullRank() {
         // TODO: Implementation
-<span class="nc" id="L3189">        return false;</span>
+<span class="nc" id="L3210">        return false;</span>
     }
 
 
@@ -3199,7 +3220,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public boolean isSingular() {
         // TODO: Implementation
-<span class="nc" id="L3202">        return false;</span>
+<span class="nc" id="L3223">        return false;</span>
     }
 
 
@@ -3211,7 +3232,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isInvertible() {
-<span class="nc bnc" id="L3214" title="All 2 branches missed.">        return !isSingular();</span>
+<span class="nc bnc" id="L3235" title="All 2 branches missed.">        return !isSingular();</span>
     }
 
 
@@ -3224,7 +3245,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double norm(double p, double q) {
-<span class="fc" id="L3227">        return RealDenseOperations.matrixNormLpq(entries, shape, p, q);</span>
+<span class="fc" id="L3248">        return RealDenseOperations.matrixNormLpq(entries, shape, p, q);</span>
     }
 
 
@@ -3237,7 +3258,7 @@ public class Matrix extends RealMatrixBase implements
     @Override
     public boolean isDiagonalizable() {
         // TODO: Implementation
-<span class="nc" id="L3240">        return false;</span>
+<span class="nc" id="L3261">        return false;</span>
     }
 
 
@@ -3248,7 +3269,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isZeros() {
-<span class="fc" id="L3251">        return ArrayUtils.isZeros(entries);</span>
+<span class="fc" id="L3272">        return ArrayUtils.isZeros(entries);</span>
     }
 
 
@@ -3259,7 +3280,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public boolean isOnes() {
-<span class="fc" id="L3262">        return RealDenseProperties.isOnes(entries);</span>
+<span class="fc" id="L3283">        return RealDenseProperties.isOnes(entries);</span>
     }
 
 
@@ -3272,9 +3293,9 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void set(double value, int... indices) {
-<span class="nc" id="L3275">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
-<span class="nc" id="L3276">        RealDenseSetOperations.set(entries, shape, value, indices);</span>
-<span class="nc" id="L3277">    }</span>
+<span class="nc" id="L3296">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
+<span class="nc" id="L3297">        RealDenseSetOperations.set(entries, shape, value, indices);</span>
+<span class="nc" id="L3298">    }</span>
 
 
     /**
@@ -3284,7 +3305,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double min() {
-<span class="fc" id="L3287">        return Aggregate.min(entries);</span>
+<span class="fc" id="L3308">        return Aggregate.min(entries);</span>
     }
 
 
@@ -3294,7 +3315,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double max() {
-<span class="fc" id="L3297">        return Aggregate.max(entries);</span>
+<span class="fc" id="L3318">        return Aggregate.max(entries);</span>
     }
 
 
@@ -3306,7 +3327,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double minAbs() {
-<span class="fc" id="L3309">        return Aggregate.minAbs(entries);</span>
+<span class="fc" id="L3330">        return Aggregate.minAbs(entries);</span>
     }
 
 
@@ -3318,7 +3339,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double maxAbs() {
-<span class="fc" id="L3321">        return Aggregate.maxAbs(entries);</span>
+<span class="fc" id="L3342">        return Aggregate.maxAbs(entries);</span>
     }
 
 
@@ -3330,10 +3351,10 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public int[] argMin() {
-<span class="fc bfc" id="L3333" title="All 2 branches covered.">        if(this.entries.length==0) {</span>
-<span class="fc" id="L3334">            return new int[]{};</span>
+<span class="fc bfc" id="L3354" title="All 2 branches covered.">        if(this.entries.length==0) {</span>
+<span class="fc" id="L3355">            return new int[]{};</span>
         } else {
-<span class="fc" id="L3336">            return shape.getIndices(AggregateDenseReal.argMin(entries));</span>
+<span class="fc" id="L3357">            return shape.getIndices(AggregateDenseReal.argMin(entries));</span>
         }
     }
 
@@ -3346,10 +3367,10 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public int[] argMax() {
-<span class="fc bfc" id="L3349" title="All 2 branches covered.">        if(this.entries.length==0) {</span>
-<span class="fc" id="L3350">            return new int[]{};</span>
+<span class="fc bfc" id="L3370" title="All 2 branches covered.">        if(this.entries.length==0) {</span>
+<span class="fc" id="L3371">            return new int[]{};</span>
         } else {
-<span class="fc" id="L3352">            return shape.getIndices(AggregateDenseReal.argMax(entries));</span>
+<span class="fc" id="L3373">            return shape.getIndices(AggregateDenseReal.argMax(entries));</span>
         }
     }
 
@@ -3362,18 +3383,18 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void swapRows(int rowIndex1, int rowIndex2) {
-<span class="fc" id="L3365">        ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);</span>
-<span class="fc" id="L3366">        ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);</span>
-<span class="fc" id="L3367">        ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);</span>
+<span class="fc" id="L3386">        ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);</span>
+<span class="fc" id="L3387">        ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);</span>
+<span class="fc" id="L3388">        ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);</span>
 
         double temp;
-<span class="fc bfc" id="L3370" title="All 2 branches covered.">        for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc bfc" id="L3391" title="All 2 branches covered.">        for(int j=0; j&lt;numCols; j++) {</span>
             // Swap elements.
-<span class="fc" id="L3372">            temp = entries[rowIndex1*numCols + j];</span>
-<span class="fc" id="L3373">            entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];</span>
-<span class="fc" id="L3374">            entries[rowIndex2*numCols + j] = temp;</span>
+<span class="fc" id="L3393">            temp = entries[rowIndex1*numCols + j];</span>
+<span class="fc" id="L3394">            entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];</span>
+<span class="fc" id="L3395">            entries[rowIndex2*numCols + j] = temp;</span>
         }
-<span class="fc" id="L3376">    }</span>
+<span class="fc" id="L3397">    }</span>
 
 
     /**
@@ -3384,18 +3405,18 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void swapCols(int colIndex1, int colIndex2) {
-<span class="fc" id="L3387">        ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);</span>
-<span class="fc" id="L3388">        ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);</span>
-<span class="fc" id="L3389">        ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);</span>
+<span class="fc" id="L3408">        ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);</span>
+<span class="fc" id="L3409">        ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);</span>
+<span class="fc" id="L3410">        ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);</span>
 
         double temp;
-<span class="fc bfc" id="L3392" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L3413" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
             // Swap elements.
-<span class="fc" id="L3394">            temp = entries[i*numCols + colIndex1];</span>
-<span class="fc" id="L3395">            entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];</span>
-<span class="fc" id="L3396">            entries[i*numCols + colIndex2] = temp;</span>
+<span class="fc" id="L3415">            temp = entries[i*numCols + colIndex1];</span>
+<span class="fc" id="L3416">            entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];</span>
+<span class="fc" id="L3417">            entries[i*numCols + colIndex2] = temp;</span>
         }
-<span class="fc" id="L3398">    }</span>
+<span class="fc" id="L3419">    }</span>
 
 
     /**
@@ -3405,7 +3426,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double norm() {
-<span class="fc" id="L3408">        return RealDenseOperations.matrixNormL2(entries, shape);</span>
+<span class="fc" id="L3429">        return RealDenseOperations.matrixNormL2(entries, shape);</span>
     }
 
 
@@ -3419,7 +3440,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double norm(double p) {
-<span class="fc" id="L3422">        return RealDenseOperations.matrixNormLp(entries, shape, p);</span>
+<span class="fc" id="L3443">        return RealDenseOperations.matrixNormLp(entries, shape, p);</span>
     }
 
 
@@ -3430,7 +3451,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double infNorm() {
-<span class="fc" id="L3433">        return RealDenseOperations.matrixInfNorm(entries, shape);</span>
+<span class="fc" id="L3454">        return RealDenseOperations.matrixInfNorm(entries, shape);</span>
     }
 
 
@@ -3441,7 +3462,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public double maxNorm() {
-<span class="fc" id="L3444">        return RealDenseOperations.matrixMaxNorm(entries);</span>
+<span class="fc" id="L3465">        return RealDenseOperations.matrixMaxNorm(entries);</span>
     }
 
 
@@ -3453,7 +3474,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public int matrixRank() {
-<span class="nc" id="L3456">        return 0;</span>
+<span class="nc" id="L3477">        return 0;</span>
     }
 
 
@@ -3463,64 +3484,104 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix copy() {
-<span class="nc" id="L3466">        return new Matrix(this);</span>
+<span class="nc" id="L3487">        return new Matrix(this);</span>
     }
 
 
-
     /**
-     * Formats matrix contents as a string.
-     * @return Matrix as string
+     * Gets row of matrix formatted as a human-readable String. Helper method for {@link #toString} method.
+     * @param i Index of row to get.
+     * @param colStopIndex Stopping index for printing columns.
+     * @param maxList List of maximum string representation lengths for each column of this matrix. This
+     *                is used to align columns when printing.
+     * @return A human-readable String representation of the specified row.
      */
-    public String toString() {
-<span class="fc" id="L3476">        String result = &quot;[&quot;;</span>
+    private String rowToString(int i, int colStopIndex, List&lt;Integer&gt; maxList) {
+        int width;
+        String value;
+<span class="nc" id="L3502">        StringBuilder result = new StringBuilder();</span>
+<span class="nc bnc" id="L3503" title="All 2 branches missed.">        result = (i&gt;0) ? result.append(&quot; [&quot;) : result.append(&quot;[&quot;);</span>
 
-<span class="pc bpc" id="L3478" title="1 of 2 branches missed.">        if(entries.length!=0) {</span>
-            int colWidth;
-<span class="fc" id="L3480">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;();</span>
-
-<span class="fc bfc" id="L3482" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-                // Get the maximum length string representation for each column.
-<span class="fc" id="L3484">                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries));</span>
-            }
-
-<span class="fc" id="L3487">            StringBuilder resultBuilder = new StringBuilder(&quot;[&quot;);</span>
-<span class="fc bfc" id="L3488" title="All 2 branches covered.">            for(int i=0; i&lt;numRows; i++) {</span>
-<span class="pc bpc" id="L3489" title="3 of 4 branches missed.">                if(i &gt;= PrintOptions.getMaxRows() &amp;&amp; i &lt; numCols-1) {</span>
-<span class="nc" id="L3490">                    resultBuilder.append(&quot;  ...\n &quot;);</span>
-<span class="nc" id="L3491">                    i = numCols-1;</span>
-                }
-
-<span class="fc" id="L3494">                resultBuilder.append(&quot; [&quot;);</span>
-
-<span class="fc bfc" id="L3496" title="All 2 branches covered.">                for(int j=0; j&lt;numCols; j++) {</span>
-
-<span class="pc bpc" id="L3498" title="3 of 4 branches missed.">                    if(j &gt;= PrintOptions.getMaxColumns() &amp;&amp; j &lt; numCols-1) {</span>
-<span class="nc" id="L3499">                        colWidth = 3+PrintOptions.getPadding();</span>
-<span class="nc" id="L3500">                        resultBuilder.append(String.format(&quot;%-&quot; + colWidth + &quot;s&quot;, StringUtils.center(&quot;...&quot;, colWidth)));</span>
-<span class="nc" id="L3501">                        colWidth = maxList.get(numCols-1)+PrintOptions.getPadding();</span>
-<span class="nc" id="L3502">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(get(i, numCols-1).toString(), colWidth)));</span>
-<span class="nc" id="L3503">                        break;</span>
-                    }
-                    else {
-<span class="fc" id="L3506">                        colWidth = maxList.get(j)+PrintOptions.getPadding();</span>
-
-<span class="fc" id="L3508">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(</span>
-<span class="fc" id="L3509">                                CNumber.round(new CNumber(get(i, j)), PrintOptions.getPrecision()).toString(), colWidth))</span>
-                        );
-                    }
-                }
-<span class="fc" id="L3513">                resultBuilder.append(&quot;]\n &quot;);</span>
-            }
-<span class="fc" id="L3515">            result = resultBuilder.toString();</span>
-
-<span class="fc" id="L3517">            result = result.substring(0, result.length()-2) + &quot; ]&quot;;</span>
-<span class="fc" id="L3518">        }</span>
-        else {
-<span class="nc" id="L3520">            result += &quot;[]]&quot;;</span>
+<span class="nc bnc" id="L3505" title="All 2 branches missed.">        for(int j=0; j&lt;colStopIndex; j++) {</span>
+<span class="nc" id="L3506">            value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());</span>
+<span class="nc" id="L3507">            width = PrintOptions.getPadding() + maxList.get(j);</span>
+<span class="nc bnc" id="L3508" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L3509">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="fc" id="L3523">        return result;</span>
+<span class="nc bnc" id="L3512" title="All 2 branches missed.">        if(PrintOptions.getMaxColumns() &lt; this.numCols) {</span>
+<span class="nc" id="L3513">            width = PrintOptions.getPadding() + 3;</span>
+<span class="nc" id="L3514">            value = &quot;...&quot;;</span>
+<span class="nc bnc" id="L3515" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L3516">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+        }
+
+        // Get last entry in the column now
+<span class="nc" id="L3520">        value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());</span>
+<span class="nc" id="L3521">        width = PrintOptions.getPadding() + maxList.get(maxList.size()-1);</span>
+<span class="nc bnc" id="L3522" title="All 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L3523">        result.append(String.format(&quot;%-&quot; + width + &quot;s]&quot;, value));</span>
+
+<span class="nc" id="L3525">        return result.toString();</span>
+    }
+
+
+    /**
+     * Formats matrix contents as a human-readable String.
+     * @return Matrix represented as a human-readable String
+     */
+    public String toString() {
+<span class="nc" id="L3534">        StringBuilder result  = new StringBuilder();</span>
+
+<span class="nc bnc" id="L3536" title="All 4 branches missed.">        if(PrintOptions.getMaxRows() &lt; this.numRows || PrintOptions.getMaxColumns() &lt; this.numCols) {</span>
+            // Then also get the full size of the matrix.
+<span class="nc" id="L3538">            result.append(String.format(&quot;Full Shape: %s\n&quot;, this.shape));</span>
+        }
+
+<span class="nc" id="L3541">        result.append(&quot;[&quot;);</span>
+
+<span class="nc" id="L3543">        int rowStopIndex = Math.min(PrintOptions.getMaxRows()-1, this.numRows-1);</span>
+<span class="nc" id="L3544">        int colStopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.numCols-1);</span>
+        int width;
+<span class="nc" id="L3546">        int totalRowLength = 0; // Total string length of each row (not including brackets)</span>
+        String value;
+
+        // Find maximum entry string width in each column so columns can be aligned.
+<span class="nc" id="L3550">        List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;(colStopIndex+1);</span>
+<span class="nc bnc" id="L3551" title="All 2 branches missed.">        for(int j=0; j&lt;colStopIndex; j++) {</span>
+<span class="nc" id="L3552">            maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));</span>
+<span class="nc" id="L3553">            totalRowLength += maxList.get(maxList.size()-1);</span>
+        }
+
+<span class="nc bnc" id="L3556" title="All 2 branches missed.">        if(colStopIndex &lt; this.numCols) {</span>
+<span class="nc" id="L3557">            maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols-1).entries));</span>
+<span class="nc" id="L3558">            totalRowLength += maxList.get(maxList.size()-1);</span>
+        }
+
+<span class="nc bnc" id="L3561" title="All 2 branches missed.">        if(colStopIndex &lt; this.numCols-1) {</span>
+<span class="nc" id="L3562">            totalRowLength += 3+PrintOptions.getPadding(); // Account for '...' element with padding in each column.</span>
+        }
+
+<span class="nc" id="L3565">        totalRowLength += maxList.size()*PrintOptions.getPadding(); // Account for column padding</span>
+
+        // Get each row as a string.
+<span class="nc bnc" id="L3568" title="All 2 branches missed.">        for(int i=0; i&lt;rowStopIndex; i++) {</span>
+<span class="nc" id="L3569">            result.append(rowToString(i, colStopIndex, maxList));</span>
+<span class="nc" id="L3570">            result.append(&quot;\n&quot;);</span>
+        }
+
+<span class="nc bnc" id="L3573" title="All 2 branches missed.">        if(PrintOptions.getMaxRows() &lt; this.numRows) {</span>
+<span class="nc" id="L3574">            width = totalRowLength;</span>
+<span class="nc" id="L3575">            value = &quot;...&quot;;</span>
+<span class="nc bnc" id="L3576" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L3577">            result.append(String.format(&quot; [%-&quot; + width + &quot;s]\n&quot;, value));</span>
+        }
+
+        // Get Last row as a string.
+<span class="nc" id="L3581">        result.append(rowToString(this.numRows-1, colStopIndex, maxList));</span>
+<span class="nc" id="L3582">        result.append(&quot;]&quot;);</span>
+
+<span class="nc" id="L3584">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

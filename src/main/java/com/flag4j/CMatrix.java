@@ -3231,6 +3231,47 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
+     * Get a specified column of this matrix at and below a specified row.
+     *
+     * @param rowStart Index of the row to begin at.
+     * @param j        Index of column to get.
+     * @return The specified column of this matrix beginning at the specified row.
+     * @throws NegativeArraySizeException     If {@code rowStart} is larger than the number of rows in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
+     */
+    @Override
+    public CMatrix getColBelow(int rowStart, int j) {
+        CNumber[] col = new CNumber[numRows-rowStart];
+
+        for(int i=rowStart; i<numRows; i++) {
+            col[i-rowStart] = entries[i*numCols + j].copy();
+        }
+
+        return new CMatrix(new Shape(col.length, 1), col);
+    }
+
+
+    /**
+     * Get a specified row of this matrix at and after a specified column.
+     *
+     * @param colStart Index of the row to begin at.
+     * @param i        Index of the row to get.
+     * @return The specified row of this matrix beginning at the specified column.
+     * @throws NegativeArraySizeException     If {@code colStart} is larger than the number of columns in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
+     */
+    @Override
+    public CMatrix getRowAfter(int colStart, int i) {
+        if(i > this.numRows || colStart > this.numCols) {
+            throw new ArrayIndexOutOfBoundsException(String.format("Index (%d, %d) not in matrix.", i, colStart));
+        }
+
+        CNumber[] row = ArrayUtils.copyOfRange(this.entries, i*this.numCols + colStart, (i+1)*this.numCols);
+        return new CMatrix(new Shape(1, row.length), row);
+    }
+
+
+    /**
      * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
      * Same as {@link #tr()}
      *

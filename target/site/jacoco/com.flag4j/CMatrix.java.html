@@ -3231,6 +3231,47 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
+     * Get a specified column of this matrix at and below a specified row.
+     *
+     * @param rowStart Index of the row to begin at.
+     * @param j        Index of column to get.
+     * @return The specified column of this matrix beginning at the specified row.
+     * @throws NegativeArraySizeException     If {@code rowStart} is larger than the number of rows in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
+     */
+    @Override
+    public CMatrix getColBelow(int rowStart, int j) {
+<span class="nc" id="L3244">        CNumber[] col = new CNumber[numRows-rowStart];</span>
+
+<span class="nc bnc" id="L3246" title="All 2 branches missed.">        for(int i=rowStart; i&lt;numRows; i++) {</span>
+<span class="nc" id="L3247">            col[i-rowStart] = entries[i*numCols + j].copy();</span>
+        }
+
+<span class="nc" id="L3250">        return new CMatrix(new Shape(col.length, 1), col);</span>
+    }
+
+
+    /**
+     * Get a specified row of this matrix at and after a specified column.
+     *
+     * @param colStart Index of the row to begin at.
+     * @param i        Index of the row to get.
+     * @return The specified row of this matrix beginning at the specified column.
+     * @throws NegativeArraySizeException     If {@code colStart} is larger than the number of columns in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
+     */
+    @Override
+    public CMatrix getRowAfter(int colStart, int i) {
+<span class="nc bnc" id="L3265" title="All 4 branches missed.">        if(i &gt; this.numRows || colStart &gt; this.numCols) {</span>
+<span class="nc" id="L3266">            throw new ArrayIndexOutOfBoundsException(String.format(&quot;Index (%d, %d) not in matrix.&quot;, i, colStart));</span>
+        }
+
+<span class="nc" id="L3269">        CNumber[] row = ArrayUtils.copyOfRange(this.entries, i*this.numCols + colStart, (i+1)*this.numCols);</span>
+<span class="nc" id="L3270">        return new CMatrix(new Shape(1, row.length), row);</span>
+    }
+
+
+    /**
      * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
      * Same as {@link #tr()}
      *
@@ -3239,15 +3280,15 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber trace() {
-<span class="nc" id="L3242">        ParameterChecks.assertSquare(this.shape);</span>
-<span class="nc" id="L3243">        CNumber sum = new CNumber();</span>
-<span class="nc" id="L3244">        int colsOffset = this.numCols+1;</span>
+<span class="nc" id="L3283">        ParameterChecks.assertSquare(this.shape);</span>
+<span class="nc" id="L3284">        CNumber sum = new CNumber();</span>
+<span class="nc" id="L3285">        int colsOffset = this.numCols+1;</span>
 
-<span class="nc bnc" id="L3246" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="nc" id="L3247">            sum.addEq(this.entries[i*colsOffset]);</span>
+<span class="nc bnc" id="L3287" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="nc" id="L3288">            sum.addEq(this.entries[i*colsOffset]);</span>
         }
 
-<span class="nc" id="L3250">        return sum;</span>
+<span class="nc" id="L3291">        return sum;</span>
     }
 
 
@@ -3260,7 +3301,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber tr() {
-<span class="nc" id="L3263">        return trace();</span>
+<span class="nc" id="L3304">        return trace();</span>
     }
 
 
@@ -3272,7 +3313,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws IllegalArgumentException If the specified size is less than 1.
      */
     public static CMatrix I(int size) {
-<span class="nc" id="L3275">        return I(size, size);</span>
+<span class="nc" id="L3316">        return I(size, size);</span>
     }
 
 
@@ -3286,15 +3327,15 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws IllegalArgumentException If the specified number of rows or columns is less than 1.
      */
     public static CMatrix I(int numRows, int numCols) {
-<span class="fc" id="L3289">        ParameterChecks.assertGreaterEq(1, numRows, numCols);</span>
-<span class="fc" id="L3290">        CMatrix I = new CMatrix(numRows, numCols);</span>
-<span class="fc" id="L3291">        int stop = Math.min(numRows, numCols);</span>
+<span class="fc" id="L3330">        ParameterChecks.assertGreaterEq(1, numRows, numCols);</span>
+<span class="fc" id="L3331">        CMatrix I = new CMatrix(numRows, numCols);</span>
+<span class="fc" id="L3332">        int stop = Math.min(numRows, numCols);</span>
 
-<span class="fc bfc" id="L3293" title="All 2 branches covered.">        for(int i=0; i&lt;stop; i++) {</span>
-<span class="fc" id="L3294">            I.entries[i*numCols+i] = CNumber.ONE.copy();</span>
+<span class="fc bfc" id="L3334" title="All 2 branches covered.">        for(int i=0; i&lt;stop; i++) {</span>
+<span class="fc" id="L3335">            I.entries[i*numCols+i] = CNumber.ONE.copy();</span>
         }
 
-<span class="fc" id="L3297">        return I;</span>
+<span class="fc" id="L3338">        return I;</span>
     }
 
 
@@ -3307,8 +3348,8 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws IllegalArgumentException If the specified shape is not rank 2.
      */
     public static CMatrix I(Shape shape) {
-<span class="fc" id="L3310">        ParameterChecks.assertRank(2, shape);</span>
-<span class="fc" id="L3311">        return I(shape.get(0), shape.get(1));</span>
+<span class="fc" id="L3351">        ParameterChecks.assertRank(2, shape);</span>
+<span class="fc" id="L3352">        return I(shape.get(0), shape.get(1));</span>
     }
 
 
@@ -3319,7 +3360,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isSquare() {
-<span class="fc bfc" id="L3322" title="All 2 branches covered.">        return numRows==numCols;</span>
+<span class="fc bfc" id="L3363" title="All 2 branches covered.">        return numRows==numCols;</span>
     }
 
 
@@ -3330,7 +3371,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isVector() {
-<span class="nc bnc" id="L3333" title="All 4 branches missed.">        return numRows&lt;=1 || numCols&lt;=1;</span>
+<span class="nc bnc" id="L3374" title="All 4 branches missed.">        return numRows&lt;=1 || numCols&lt;=1;</span>
     }
 
 
@@ -3346,21 +3387,21 @@ public class CMatrix extends ComplexMatrixBase implements
     public int vectorType() {
         int type;
 
-<span class="nc bnc" id="L3349" title="All 4 branches missed.">        if(numRows==1 || numCols==1) {</span>
-<span class="nc bnc" id="L3350" title="All 4 branches missed.">            if(numRows==1 &amp;&amp; numCols==1) {</span>
-<span class="nc" id="L3351">                type = 0;</span>
-<span class="nc bnc" id="L3352" title="All 2 branches missed.">            } else if(numRows==1) {</span>
-<span class="nc" id="L3353">                type = 1;</span>
+<span class="nc bnc" id="L3390" title="All 4 branches missed.">        if(numRows==1 || numCols==1) {</span>
+<span class="nc bnc" id="L3391" title="All 4 branches missed.">            if(numRows==1 &amp;&amp; numCols==1) {</span>
+<span class="nc" id="L3392">                type = 0;</span>
+<span class="nc bnc" id="L3393" title="All 2 branches missed.">            } else if(numRows==1) {</span>
+<span class="nc" id="L3394">                type = 1;</span>
             } else {
                 // Then this matrix is equivalent to a column vector.
-<span class="nc" id="L3356">                type = 2;</span>
+<span class="nc" id="L3397">                type = 2;</span>
             }
         } else {
             // Then this matrix is not equivalent to any vector.
-<span class="nc" id="L3360">            type = -1;</span>
+<span class="nc" id="L3401">            type = -1;</span>
         }
 
-<span class="nc" id="L3363">        return type;</span>
+<span class="nc" id="L3404">        return type;</span>
     }
 
 
@@ -3371,7 +3412,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isTri() {
-<span class="nc bnc" id="L3374" title="All 4 branches missed.">        return isTriL() || isTriU();</span>
+<span class="nc bnc" id="L3415" title="All 4 branches missed.">        return isTriL() || isTriU();</span>
     }
 
 
@@ -3382,20 +3423,20 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isTriL() {
-<span class="nc" id="L3385">        boolean result = isSquare();</span>
+<span class="nc" id="L3426">        boolean result = isSquare();</span>
 
-<span class="nc bnc" id="L3387" title="All 2 branches missed.">        if(result) {</span>
+<span class="nc bnc" id="L3428" title="All 2 branches missed.">        if(result) {</span>
             // Ensure upper half is zeros.
-<span class="nc bnc" id="L3389" title="All 2 branches missed.">            for(int i=0; i&lt;numRows; i++) {</span>
-<span class="nc bnc" id="L3390" title="All 2 branches missed.">                for(int j=i+1; j&lt;numCols; j++) {</span>
-<span class="nc bnc" id="L3391" title="All 2 branches missed.">                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {</span>
-<span class="nc" id="L3392">                        return false; // No need to continue.</span>
+<span class="nc bnc" id="L3430" title="All 2 branches missed.">            for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L3431" title="All 2 branches missed.">                for(int j=i+1; j&lt;numCols; j++) {</span>
+<span class="nc bnc" id="L3432" title="All 2 branches missed.">                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {</span>
+<span class="nc" id="L3433">                        return false; // No need to continue.</span>
                     }
                 }
             }
         }
 
-<span class="nc" id="L3398">        return result;</span>
+<span class="nc" id="L3439">        return result;</span>
     }
 
 
@@ -3406,20 +3447,20 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isTriU() {
-<span class="nc" id="L3409">        boolean result = isSquare();</span>
+<span class="nc" id="L3450">        boolean result = isSquare();</span>
 
-<span class="nc bnc" id="L3411" title="All 2 branches missed.">        if(result) {</span>
+<span class="nc bnc" id="L3452" title="All 2 branches missed.">        if(result) {</span>
             // Ensure lower half is zeros.
-<span class="nc bnc" id="L3413" title="All 2 branches missed.">            for(int i=1; i&lt;numRows; i++) {</span>
-<span class="nc bnc" id="L3414" title="All 2 branches missed.">                for(int j=0; j&lt;i; j++) {</span>
-<span class="nc bnc" id="L3415" title="All 2 branches missed.">                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {</span>
-<span class="nc" id="L3416">                        return false; // No need to continue.</span>
+<span class="nc bnc" id="L3454" title="All 2 branches missed.">            for(int i=1; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L3455" title="All 2 branches missed.">                for(int j=0; j&lt;i; j++) {</span>
+<span class="nc bnc" id="L3456" title="All 2 branches missed.">                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {</span>
+<span class="nc" id="L3457">                        return false; // No need to continue.</span>
                     }
                 }
             }
         }
 
-<span class="nc" id="L3422">        return result;</span>
+<span class="nc" id="L3463">        return result;</span>
     }
 
 
@@ -3430,7 +3471,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isDiag() {
-<span class="nc bnc" id="L3433" title="All 4 branches missed.">        return isTriL() &amp;&amp; isTriU();</span>
+<span class="nc bnc" id="L3474" title="All 4 branches missed.">        return isTriL() &amp;&amp; isTriU();</span>
     }
 
 
@@ -3442,7 +3483,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public boolean isFullRank() {
         // TODO: Implementation
-<span class="nc" id="L3445">        return false;</span>
+<span class="nc" id="L3486">        return false;</span>
     }
 
 
@@ -3455,7 +3496,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public boolean isSingular() {
         // TODO: Implementation
-<span class="nc" id="L3458">        return false;</span>
+<span class="nc" id="L3499">        return false;</span>
     }
 
 
@@ -3467,7 +3508,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isInvertible() {
-<span class="nc bnc" id="L3470" title="All 2 branches missed.">        return !isSingular();</span>
+<span class="nc bnc" id="L3511" title="All 2 branches missed.">        return !isSingular();</span>
     }
 
 
@@ -3480,7 +3521,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double norm(double p, double q) {
-<span class="nc" id="L3483">        return ComplexDenseOperations.matrixNormLpq(entries, shape, p, q);</span>
+<span class="nc" id="L3524">        return ComplexDenseOperations.matrixNormLpq(entries, shape, p, q);</span>
     }
 
 
@@ -3493,7 +3534,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public boolean isDiagonalizable() {
         // TODO: Implementation
-<span class="nc" id="L3496">        return false;</span>
+<span class="nc" id="L3537">        return false;</span>
     }
 
 
@@ -3504,7 +3545,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double maxNorm() {
-<span class="nc" id="L3507">        return ComplexDenseOperations.matrixMaxNorm(entries);</span>
+<span class="nc" id="L3548">        return ComplexDenseOperations.matrixMaxNorm(entries);</span>
     }
 
 
@@ -3516,7 +3557,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public int matrixRank() {
-<span class="nc" id="L3519">        return 0;</span>
+<span class="nc" id="L3560">        return 0;</span>
     }
 
 
@@ -3528,9 +3569,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void set(double value, int... indices) {
-<span class="nc" id="L3531">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
-<span class="nc" id="L3532">        ComplexDenseSetOperations.set(entries, shape, value, indices);</span>
-<span class="nc" id="L3533">    }</span>
+<span class="nc" id="L3572">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
+<span class="nc" id="L3573">        ComplexDenseSetOperations.set(entries, shape, value, indices);</span>
+<span class="nc" id="L3574">    }</span>
 
 
     /**
@@ -3541,9 +3582,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void set(CNumber value, int... indices) {
-<span class="fc" id="L3544">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
-<span class="fc" id="L3545">        ComplexDenseSetOperations.set(entries, shape, value, indices);</span>
-<span class="fc" id="L3546">    }</span>
+<span class="fc" id="L3585">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
+<span class="fc" id="L3586">        ComplexDenseSetOperations.set(entries, shape, value, indices);</span>
+<span class="fc" id="L3587">    }</span>
 
 
     /**
@@ -3553,8 +3594,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void addEq(SparseCMatrix B) {
-<span class="nc" id="L3556">        ComplexDenseSparseOperations.addEq(this, B);</span>
-<span class="nc" id="L3557">    }</span>
+<span class="nc" id="L3597">        ComplexDenseSparseOperations.addEq(this, B);</span>
+<span class="nc" id="L3598">    }</span>
 
 
     /**
@@ -3564,8 +3605,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void subEq(SparseCMatrix B) {
-<span class="nc" id="L3567">        ComplexDenseSparseOperations.subEq(this, B);</span>
-<span class="nc" id="L3568">    }</span>
+<span class="nc" id="L3608">        ComplexDenseSparseOperations.subEq(this, B);</span>
+<span class="nc" id="L3609">    }</span>
 
 
     /**
@@ -3575,7 +3616,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber min() {
-<span class="nc" id="L3578">        return minAbs();</span>
+<span class="nc" id="L3619">        return minAbs();</span>
     }
 
 
@@ -3586,7 +3627,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber max() {
-<span class="nc" id="L3589">        return maxAbs();</span>
+<span class="nc" id="L3630">        return maxAbs();</span>
     }
 
 
@@ -3598,7 +3639,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber minAbs() {
-<span class="nc" id="L3601">        return AggregateComplex.minAbs(this.entries);</span>
+<span class="nc" id="L3642">        return AggregateComplex.minAbs(this.entries);</span>
     }
 
 
@@ -3610,7 +3651,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber maxAbs() {
-<span class="nc" id="L3613">        return AggregateComplex.maxAbs(this.entries);</span>
+<span class="nc" id="L3654">        return AggregateComplex.maxAbs(this.entries);</span>
     }
 
 
@@ -3622,7 +3663,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L3625">        return shape.getIndices(AggregateDenseComplex.argMin(entries));</span>
+<span class="nc" id="L3666">        return shape.getIndices(AggregateDenseComplex.argMin(entries));</span>
     }
 
 
@@ -3634,7 +3675,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L3637">        return shape.getIndices(AggregateDenseComplex.argMax(entries));</span>
+<span class="nc" id="L3678">        return shape.getIndices(AggregateDenseComplex.argMax(entries));</span>
     }
 
 
@@ -3646,18 +3687,18 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void swapRows(int rowIndex1, int rowIndex2) {
-<span class="nc" id="L3649">        ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);</span>
-<span class="nc" id="L3650">        ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);</span>
-<span class="nc" id="L3651">        ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);</span>
+<span class="nc" id="L3690">        ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);</span>
+<span class="nc" id="L3691">        ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);</span>
+<span class="nc" id="L3692">        ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);</span>
 
         CNumber temp;
-<span class="nc bnc" id="L3654" title="All 2 branches missed.">        for(int j=0; j&lt;numCols; j++) {</span>
+<span class="nc bnc" id="L3695" title="All 2 branches missed.">        for(int j=0; j&lt;numCols; j++) {</span>
             // Swap elements.
-<span class="nc" id="L3656">            temp = entries[rowIndex1*numCols + j];</span>
-<span class="nc" id="L3657">            entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];</span>
-<span class="nc" id="L3658">            entries[rowIndex2*numCols + j] = temp;</span>
+<span class="nc" id="L3697">            temp = entries[rowIndex1*numCols + j];</span>
+<span class="nc" id="L3698">            entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];</span>
+<span class="nc" id="L3699">            entries[rowIndex2*numCols + j] = temp;</span>
         }
-<span class="nc" id="L3660">    }</span>
+<span class="nc" id="L3701">    }</span>
 
 
     /**
@@ -3668,18 +3709,18 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void swapCols(int colIndex1, int colIndex2) {
-<span class="nc" id="L3671">        ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);</span>
-<span class="nc" id="L3672">        ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);</span>
-<span class="nc" id="L3673">        ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);</span>
+<span class="nc" id="L3712">        ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);</span>
+<span class="nc" id="L3713">        ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);</span>
+<span class="nc" id="L3714">        ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);</span>
 
         CNumber temp;
-<span class="nc bnc" id="L3676" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L3717" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
             // Swap elements.
-<span class="nc" id="L3678">            temp = entries[i*numCols + colIndex1];</span>
-<span class="nc" id="L3679">            entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];</span>
-<span class="nc" id="L3680">            entries[i*numCols + colIndex2] = temp;</span>
+<span class="nc" id="L3719">            temp = entries[i*numCols + colIndex1];</span>
+<span class="nc" id="L3720">            entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];</span>
+<span class="nc" id="L3721">            entries[i*numCols + colIndex2] = temp;</span>
         }
-<span class="nc" id="L3682">    }</span>
+<span class="nc" id="L3723">    }</span>
 
 
     /**
@@ -3689,7 +3730,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double norm() {
-<span class="nc" id="L3692">        return ComplexDenseOperations.matrixNormL2(entries, shape);</span>
+<span class="nc" id="L3733">        return ComplexDenseOperations.matrixNormL2(entries, shape);</span>
     }
 
 
@@ -3703,7 +3744,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L3706">        return ComplexDenseOperations.matrixNormLp(entries, shape, p);</span>
+<span class="nc" id="L3747">        return ComplexDenseOperations.matrixNormLp(entries, shape, p);</span>
     }
 
 
@@ -3714,7 +3755,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L3717">        return ComplexDenseOperations.matrixInfNorm(entries, shape);</span>
+<span class="nc" id="L3758">        return ComplexDenseOperations.matrixInfNorm(entries, shape);</span>
     }
 
 
@@ -3724,69 +3765,104 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix copy() {
-<span class="nc" id="L3727">        return new CMatrix(this);</span>
+<span class="nc" id="L3768">        return new CMatrix(this);</span>
     }
 
 
     /**
-     * Formats matrix contents as a string.
-     *
-     * @return Matrix as string
+     * Gets row of matrix formatted as a human-readable String. Helper method for {@link #toString} method.
+     * @param i Index of row to get.
+     * @param colStopIndex Stopping index for printing columns.
+     * @param maxList List of maximum string representation lengths for each column of this matrix. This
+     *                is used to align columns when printing.
+     * @return A human-readable String representation of the specified row.
      */
-    public String toString() {
-<span class="nc" id="L3737">        String result = &quot;[&quot;;</span>
+    private String rowToString(int i, int colStopIndex, List&lt;Integer&gt; maxList) {
+        int width;
+        String value;
+<span class="nc" id="L3783">        StringBuilder result = new StringBuilder();</span>
+<span class="nc bnc" id="L3784" title="All 2 branches missed.">        result = (i&gt;0) ? result.append(&quot; [&quot;) : result.append(&quot;[&quot;);</span>
 
-<span class="nc bnc" id="L3739" title="All 2 branches missed.">        if(entries.length!=0) {</span>
-<span class="nc" id="L3740">            int max=0, colWidth;</span>
-<span class="nc" id="L3741">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;();</span>
-
-<span class="nc bnc" id="L3743" title="All 2 branches missed.">            for(int j=0; j&lt;numCols; j++) { // Get the maximum length string representation for each column.</span>
-<span class="nc" id="L3744">                List&lt;CNumber&gt; contents = Arrays.asList(this.getCol(j).entries);</span>
-
-<span class="nc" id="L3746">                Optional&lt;Integer&gt; value = contents.stream().map(CNumber::length).max(Integer::compareTo);</span>
-
-<span class="nc bnc" id="L3748" title="All 2 branches missed.">                if(value.isPresent()) {</span>
-<span class="nc" id="L3749">                    max = value.get();</span>
-                }
-
-<span class="nc" id="L3752">                maxList.add(max);</span>
-            }
-
-<span class="nc" id="L3755">            StringBuilder resultBuilder = new StringBuilder(&quot;[&quot;);</span>
-<span class="nc bnc" id="L3756" title="All 2 branches missed.">            for(int i = 0; i&lt;numRows; i++) {</span>
-<span class="nc bnc" id="L3757" title="All 4 branches missed.">                if(i &gt;= PrintOptions.getMaxRows() &amp;&amp; i &lt; numRows-1) {</span>
-<span class="nc" id="L3758">                    resultBuilder.append(&quot;  ...\n &quot;);</span>
-<span class="nc" id="L3759">                    i = numRows-1;</span>
-                }
-
-<span class="nc" id="L3762">                resultBuilder.append(&quot; [&quot;);</span>
-
-<span class="nc bnc" id="L3764" title="All 2 branches missed.">                for(int j = 0; j&lt;numCols; j++) {</span>
-<span class="nc bnc" id="L3765" title="All 4 branches missed.">                    if(j &gt;= PrintOptions.getMaxColumns() &amp;&amp; j &lt; numRows-1) {</span>
-<span class="nc" id="L3766">                        colWidth = 3+PrintOptions.getPadding();</span>
-<span class="nc" id="L3767">                        resultBuilder.append(String.format(&quot;%-&quot; + colWidth + &quot;s&quot;, StringUtils.center(&quot;...&quot;, colWidth)));</span>
-<span class="nc" id="L3768">                        colWidth = maxList.get(numRows-1)+PrintOptions.getPadding();</span>
-<span class="nc" id="L3769">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(get(i,numCols - 1).toString(), colWidth)));</span>
-<span class="nc" id="L3770">                        break;</span>
-                    }
-                    else {
-<span class="nc" id="L3773">                        colWidth = maxList.get(j)+PrintOptions.getPadding();</span>
-<span class="nc" id="L3774">                        resultBuilder.append(String.format(&quot;%-&quot; + (colWidth) + &quot;s&quot;, StringUtils.center(</span>
-<span class="nc" id="L3775">                                CNumber.round(get(i, j), PrintOptions.getPrecision()).toString(), colWidth))</span>
-                        );
-                    }
-                }
-<span class="nc" id="L3779">                resultBuilder.append(&quot;]\n &quot;);</span>
-            }
-<span class="nc" id="L3781">            result = resultBuilder.toString();</span>
-
-<span class="nc" id="L3783">            result = result.substring(0, result.length()-2) + &quot; ]&quot;;</span>
-<span class="nc" id="L3784">        }</span>
-        else {
-<span class="nc" id="L3786">            result += &quot;[]]&quot;;</span>
+<span class="nc bnc" id="L3786" title="All 2 branches missed.">        for(int j=0; j&lt;colStopIndex; j++) {</span>
+<span class="nc" id="L3787">            value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());</span>
+<span class="nc" id="L3788">            width = PrintOptions.getPadding() + maxList.get(j);</span>
+<span class="nc bnc" id="L3789" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L3790">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="nc" id="L3789">        return result;</span>
+<span class="nc bnc" id="L3793" title="All 2 branches missed.">        if(PrintOptions.getMaxColumns() &lt; this.numCols) {</span>
+<span class="nc" id="L3794">            width = PrintOptions.getPadding() + 3;</span>
+<span class="nc" id="L3795">            value = &quot;...&quot;;</span>
+<span class="nc bnc" id="L3796" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L3797">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+        }
+
+        // Get last entry in the column now
+<span class="nc" id="L3801">        value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());</span>
+<span class="nc" id="L3802">        width = PrintOptions.getPadding() + maxList.get(maxList.size()-1);</span>
+<span class="nc bnc" id="L3803" title="All 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L3804">        result.append(String.format(&quot;%-&quot; + width + &quot;s]&quot;, value));</span>
+
+<span class="nc" id="L3806">        return result.toString();</span>
+    }
+
+
+    /**
+     * Formats matrix contents as a human-readable String.
+     * @return Matrix represented as a human-readable String
+     */
+    public String toString() {
+<span class="nc" id="L3815">        StringBuilder result  = new StringBuilder();</span>
+
+<span class="nc bnc" id="L3817" title="All 4 branches missed.">        if(PrintOptions.getMaxRows() &lt; this.numRows || PrintOptions.getMaxColumns() &lt; this.numCols) {</span>
+            // Then also get the full size of the matrix.
+<span class="nc" id="L3819">            result.append(String.format(&quot;Full Shape: %s\n&quot;, this.shape));</span>
+        }
+
+<span class="nc" id="L3822">        result.append(&quot;[&quot;);</span>
+
+<span class="nc" id="L3824">        int rowStopIndex = Math.min(PrintOptions.getMaxRows()-1, this.numRows-1);</span>
+<span class="nc" id="L3825">        int colStopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.numCols-1);</span>
+        int width;
+<span class="nc" id="L3827">        int totalRowLength = 0; // Total string length of each row (not including brackets)</span>
+        String value;
+
+        // Find maximum entry string width in each column so columns can be aligned.
+<span class="nc" id="L3831">        List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;(colStopIndex+1);</span>
+<span class="nc bnc" id="L3832" title="All 2 branches missed.">        for(int j=0; j&lt;colStopIndex; j++) {</span>
+<span class="nc" id="L3833">            maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));</span>
+<span class="nc" id="L3834">            totalRowLength += maxList.get(maxList.size()-1);</span>
+        }
+
+<span class="nc bnc" id="L3837" title="All 2 branches missed.">        if(colStopIndex &lt; this.numCols) {</span>
+<span class="nc" id="L3838">            maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols-1).entries));</span>
+<span class="nc" id="L3839">            totalRowLength += maxList.get(maxList.size()-1);</span>
+        }
+
+<span class="nc bnc" id="L3842" title="All 2 branches missed.">        if(colStopIndex &lt; this.numCols-1) {</span>
+<span class="nc" id="L3843">            totalRowLength += 3+PrintOptions.getPadding(); // Account for '...' element with padding in each column.</span>
+        }
+
+<span class="nc" id="L3846">        totalRowLength += maxList.size()*PrintOptions.getPadding(); // Account for column padding</span>
+
+        // Get each row as a string.
+<span class="nc bnc" id="L3849" title="All 2 branches missed.">        for(int i=0; i&lt;rowStopIndex; i++) {</span>
+<span class="nc" id="L3850">            result.append(rowToString(i, colStopIndex, maxList));</span>
+<span class="nc" id="L3851">            result.append(&quot;\n&quot;);</span>
+        }
+
+<span class="nc bnc" id="L3854" title="All 2 branches missed.">        if(PrintOptions.getMaxRows() &lt; this.numRows) {</span>
+<span class="nc" id="L3855">            width = totalRowLength;</span>
+<span class="nc" id="L3856">            value = &quot;...&quot;;</span>
+<span class="nc bnc" id="L3857" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L3858">            result.append(String.format(&quot; [%-&quot; + width + &quot;s]\n&quot;, value));</span>
+        }
+
+        // Get Last row as a string.
+<span class="nc" id="L3862">        result.append(rowToString(this.numRows-1, colStopIndex, maxList));</span>
+<span class="nc" id="L3863">        result.append(&quot;]&quot;);</span>
+
+<span class="nc" id="L3865">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

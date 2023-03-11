@@ -509,13 +509,13 @@ public final class ArrayUtils {
      * @return An array containing the real components of the source array.
      */
     public static double[] getReals(CNumber[] src) {
-<span class="fc" id="L512">        double[] reals = new double[src.length];</span>
+<span class="nc" id="L512">        double[] reals = new double[src.length];</span>
 
-<span class="fc bfc" id="L514" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc" id="L515">            reals[i] = src[i].re;</span>
+<span class="nc bnc" id="L514" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="nc" id="L515">            reals[i] = src[i].re;</span>
         }
 
-<span class="fc" id="L518">        return reals;</span>
+<span class="nc" id="L518">        return reals;</span>
     }
 
 
@@ -525,19 +525,123 @@ public final class ArrayUtils {
      * @return The maximum length of the string representation of the doubles in the array.
      */
     public static int maxStringLength(double[] src) {
-<span class="fc" id="L528">        int maxLength = -1;</span>
+<span class="nc" id="L528">        int maxLength = -1;</span>
         int currLength;
 
-<span class="fc bfc" id="L531" title="All 2 branches covered.">        for(double value : src) {</span>
-<span class="fc" id="L532">            currLength = CNumber.round(new CNumber(value), PrintOptions.getPrecision()).toString().length();</span>
+<span class="nc bnc" id="L531" title="All 2 branches missed.">        for(double value : src) {</span>
+<span class="nc" id="L532">            currLength = CNumber.round(new CNumber(value), PrintOptions.getPrecision()).toString().length();</span>
 
-<span class="fc bfc" id="L534" title="All 2 branches covered.">            if(currLength&gt;maxLength) {</span>
+<span class="nc bnc" id="L534" title="All 2 branches missed.">            if(currLength&gt;maxLength) {</span>
                 // Then update the maximum length.
-<span class="fc" id="L536">                maxLength=currLength;</span>
+<span class="nc" id="L536">                maxLength=currLength;</span>
             }
         }
 
-<span class="fc" id="L540">        return maxLength;</span>
+<span class="nc" id="L540">        return maxLength;</span>
+    }
+
+
+    /**
+     * Computes the maximum length of the string representation of a double in an array of doubles.
+     * @param src Array for which to compute the max string representation length of a double in.
+     * @return The maximum length of the string representation of the doubles in the array.
+     */
+    public static int maxStringLength(CNumber[] src) {
+<span class="nc" id="L550">        int maxLength = -1;</span>
+        int currLength;
+
+<span class="nc bnc" id="L553" title="All 2 branches missed.">        for(CNumber value : src) {</span>
+<span class="nc" id="L554">            currLength = CNumber.round(value, PrintOptions.getPrecision()).toString().length();</span>
+
+<span class="nc bnc" id="L556" title="All 2 branches missed.">            if(currLength&gt;maxLength) {</span>
+                // Then update the maximum length.
+<span class="nc" id="L558">                maxLength=currLength;</span>
+            }
+        }
+
+<span class="nc" id="L562">        return maxLength;</span>
+    }
+
+
+    /**
+     * Computes the maximum length of the string representation of a double in an array of doubles up until stopping index.
+     * The length of the last element is always considered.
+     * @param src Array for which to compute the max string representation length of a double in.
+     * @param stopIndex Stopping index for finding max length.
+     * @return The maximum length of the string representation of the doubles in the array.
+     */
+    public static int maxStringLength(double[] src, int stopIndex) {
+<span class="nc" id="L574">        int maxLength = -1;</span>
+        int currLength;
+
+        // Ensure no index out of bound exceptions.
+<span class="nc" id="L578">        stopIndex = Math.min(stopIndex, src.length);</span>
+
+<span class="nc bnc" id="L580" title="All 2 branches missed.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="nc" id="L581">            currLength = CNumber.round(</span>
+                    new CNumber(src[i]),
+<span class="nc" id="L583">                    PrintOptions.getPrecision()).toString().length();</span>
+
+<span class="nc bnc" id="L585" title="All 2 branches missed.">            if(currLength&gt;maxLength) {</span>
+                // Then update the maximum length.
+<span class="nc" id="L587">                maxLength=currLength;</span>
+            }
+        }
+
+        // Always get last elements' length.
+<span class="nc bnc" id="L592" title="All 2 branches missed.">        if(stopIndex &lt; src.length) {</span>
+<span class="nc" id="L593">            currLength = CNumber.round(</span>
+                    new CNumber(src[src.length-1]),
+<span class="nc" id="L595">                    PrintOptions.getPrecision()).toString().length();</span>
+
+<span class="nc bnc" id="L597" title="All 2 branches missed.">            if(currLength&gt;maxLength) {</span>
+                // Then update the maximum length.
+<span class="nc" id="L599">                maxLength=currLength;</span>
+            }
+        }
+
+<span class="nc" id="L603">        return maxLength;</span>
+    }
+
+
+    /**
+     * Computes the maximum length of the string representation of a double in an array of doubles up until stopping index.
+     * The length of the last element is always considered.
+     * @param src Array for which to compute the max string representation length of a double in.
+     * @param stopIndex Stopping index for finding max length.
+     * @return The maximum length of the string representation of the doubles in the array.
+     */
+    public static int maxStringLength(CNumber[] src, int stopIndex) {
+<span class="nc" id="L615">        int maxLength = -1;</span>
+        int currLength;
+
+        // Ensure no index out of bound exceptions.
+<span class="nc" id="L619">        stopIndex = Math.min(stopIndex, src.length);</span>
+
+<span class="nc bnc" id="L621" title="All 2 branches missed.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="nc" id="L622">            currLength = CNumber.round(</span>
+                    src[i],
+<span class="nc" id="L624">                    PrintOptions.getPrecision()).toString().length();</span>
+
+<span class="nc bnc" id="L626" title="All 2 branches missed.">            if(currLength&gt;maxLength) {</span>
+                // Then update the maximum length.
+<span class="nc" id="L628">                maxLength=currLength;</span>
+            }
+        }
+
+        // Always get last elements' length.
+<span class="nc bnc" id="L633" title="All 2 branches missed.">        if(stopIndex &lt; src.length) {</span>
+<span class="nc" id="L634">            currLength = CNumber.round(</span>
+                    src[src.length-1],
+<span class="nc" id="L636">                    PrintOptions.getPrecision()).toString().length();</span>
+
+<span class="nc bnc" id="L638" title="All 2 branches missed.">            if(currLength&gt;maxLength) {</span>
+                // Then update the maximum length.
+<span class="nc" id="L640">                maxLength=currLength;</span>
+            }
+        }
+
+<span class="nc" id="L644">        return maxLength;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
