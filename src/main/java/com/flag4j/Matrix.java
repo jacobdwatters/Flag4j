@@ -44,6 +44,7 @@ import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMat
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
 import com.flag4j.util.*;
 
+import javax.lang.model.type.PrimitiveType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -3467,59 +3468,99 @@ public class Matrix extends RealMatrixBase implements
     }
 
 
+    /**
+     * Gets row of matrix formatted as a human-readable String. Helper method for {@link #toString} method.
+     * @param i Index of row to get.
+     * @param colStopIndex Stopping index for printing columns.
+     * @param maxList List of maximum string representation lengths for each column of this matrix. This
+     *                is used to align columns when printing.
+     * @return A human-readable String representation of the specified row.
+     */
+    private String rowToString(int i, int colStopIndex, List<Integer> maxList) {
+        int width;
+        String value;
+        StringBuilder result = new StringBuilder();
+        result = (i>0) ? result.append(" [") : result.append("[");
+
+        for(int j=0; j<colStopIndex; j++) {
+            value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + maxList.get(j);
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(PrintOptions.getMaxColumns() < this.numCols) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry in the column now
+        value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + maxList.get(maxList.size()-1);
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s]", value));
+
+        return result.toString();
+    }
+
 
     /**
-     * Formats matrix contents as a string.
-     * @return Matrix as string
+     * Formats matrix contents as a human-readable String.
+     * @return Matrix represented as a human-readable String
      */
     public String toString() {
-        String result = "[";
+        StringBuilder result  = new StringBuilder();
 
-        if(entries.length!=0) {
-            int colWidth;
-            List<Integer> maxList = new ArrayList<>();
-
-            for(int j=0; j<numCols; j++) {
-                // Get the maximum length string representation for each column.
-                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries));
-            }
-
-            StringBuilder resultBuilder = new StringBuilder("[");
-            for(int i=0; i<numRows; i++) {
-                if(i >= PrintOptions.getMaxRows() && i < numCols-1) {
-                    resultBuilder.append("  ...\n ");
-                    i = numCols-1;
-                }
-
-                resultBuilder.append(" [");
-
-                for(int j=0; j<numCols; j++) {
-
-                    if(j >= PrintOptions.getMaxColumns() && j < numCols-1) {
-                        colWidth = 3+PrintOptions.getPadding();
-                        resultBuilder.append(String.format("%-" + colWidth + "s", StringUtils.center("...", colWidth)));
-                        colWidth = maxList.get(numCols-1)+PrintOptions.getPadding();
-                        resultBuilder.append(String.format("%-" + (colWidth) + "s", StringUtils.center(get(i, numCols-1).toString(), colWidth)));
-                        break;
-                    }
-                    else {
-                        colWidth = maxList.get(j)+PrintOptions.getPadding();
-
-                        resultBuilder.append(String.format("%-" + (colWidth) + "s", StringUtils.center(
-                                CNumber.round(new CNumber(get(i, j)), PrintOptions.getPrecision()).toString(), colWidth))
-                        );
-                    }
-                }
-                resultBuilder.append("]\n ");
-            }
-            result = resultBuilder.toString();
-
-            result = result.substring(0, result.length()-2) + " ]";
-        }
-        else {
-            result += "[]]";
+        if(PrintOptions.getMaxRows() < this.numRows || PrintOptions.getMaxColumns() < this.numCols) {
+            // Then also get the full size of the matrix.
+            result.append(String.format("Full Shape: %s\n", this.shape));
         }
 
-        return result;
+        result.append("[");
+
+        int rowStopIndex = Math.min(PrintOptions.getMaxRows()-1, this.numRows-1);
+        int colStopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.numCols-1);
+        int width;
+        int totalRowLength = 0; // Total string length of each row (not including brackets)
+        String value;
+
+        // Find maximum entry string width in each column so columns can be aligned.
+        List<Integer> maxList = new ArrayList<>(colStopIndex+1);
+        for(int j=0; j<colStopIndex; j++) {
+            maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));
+            totalRowLength += maxList.get(maxList.size()-1);
+        }
+
+        if(colStopIndex < this.numCols) {
+            maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols-1).entries));
+            totalRowLength += maxList.get(maxList.size()-1);
+        }
+
+        if(colStopIndex < this.numCols-1) {
+            totalRowLength += 3+PrintOptions.getPadding(); // Account for '...' element with padding in each column.
+        }
+
+        totalRowLength += maxList.size()*PrintOptions.getPadding(); // Account for column padding
+
+        // Get each row as a string.
+        for(int i=0; i<rowStopIndex; i++) {
+            result.append(rowToString(i, colStopIndex, maxList));
+            result.append("\n");
+        }
+
+        if(PrintOptions.getMaxRows() < this.numRows) {
+            width = totalRowLength;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format(" [%-" + width + "s]\n", value));
+        }
+
+        // Get Last row as a string.
+        result.append(rowToString(this.numRows-1, colStopIndex, maxList));
+        result.append("]");
+
+        return result.toString();
     }
 }

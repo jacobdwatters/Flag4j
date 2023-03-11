@@ -1596,54 +1596,43 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @return A human-readable string representation of this vector.
      */
     public String toString() {
-<span class="nc" id="L1599">        StringBuilder result =  new StringBuilder(&quot;[&quot;);</span>
+<span class="nc" id="L1599">        StringBuilder result = new StringBuilder();</span>
 
-<span class="nc" id="L1601">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.size-1);</span>
+<span class="nc bnc" id="L1601" title="All 2 branches missed.">        if(PrintOptions.getMaxColumns()&lt;this.size) {</span>
+            // Then also get the full size of the vector.
+<span class="nc" id="L1603">            result.append(String.format(&quot;Full Size: %d\n&quot;, this.size));</span>
+        }
+
+<span class="nc" id="L1606">        result.append(&quot;[&quot;);</span>
+
+<span class="nc" id="L1608">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.size-1);</span>
         int width;
         String value;
 
         // Get entries up until the stopping point.
-<span class="nc bnc" id="L1606" title="All 2 branches missed.">        for(int i=0; i&lt;stopIndex; i++) {</span>
-<span class="nc" id="L1607">            value = StringUtils.ValueOfRound(this.get(i), PrintOptions.getPrecision());</span>
-<span class="nc" id="L1608">            width = PrintOptions.getPadding() + value.length();</span>
-<span class="nc bnc" id="L1609" title="All 2 branches missed.">            value = PrintOptions.getCenter() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L1610">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
-        }
-
-<span class="nc bnc" id="L1613" title="All 2 branches missed.">        if(PrintOptions.getMaxColumns() &lt; this.size-1) {</span>
-<span class="nc" id="L1614">            width = PrintOptions.getPadding() + 3;</span>
-<span class="nc" id="L1615">            value = &quot;...&quot;;</span>
-<span class="nc bnc" id="L1616" title="All 2 branches missed.">            value = PrintOptions.getCenter() ? StringUtils.center(value, width) : value;</span>
+<span class="nc bnc" id="L1613" title="All 2 branches missed.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="nc" id="L1614">            value = StringUtils.ValueOfRound(this.get(i), PrintOptions.getPrecision());</span>
+<span class="nc" id="L1615">            width = PrintOptions.getPadding() + value.length();</span>
+<span class="nc bnc" id="L1616" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
 <span class="nc" id="L1617">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
+<span class="nc bnc" id="L1620" title="All 2 branches missed.">        if(stopIndex &lt; this.size-1) {</span>
+<span class="nc" id="L1621">            width = PrintOptions.getPadding() + 3;</span>
+<span class="nc" id="L1622">            value = &quot;...&quot;;</span>
+<span class="nc bnc" id="L1623" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1624">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+        }
+
         // Get last entry now
-<span class="nc" id="L1621">        value = StringUtils.ValueOfRound(this.get(this.size-1), PrintOptions.getPrecision());</span>
-<span class="nc" id="L1622">        width = PrintOptions.getPadding() + value.length();</span>
-<span class="nc bnc" id="L1623" title="All 2 branches missed.">        value = PrintOptions.getCenter() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L1624">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc" id="L1628">        value = StringUtils.ValueOfRound(this.get(this.size-1), PrintOptions.getPrecision());</span>
+<span class="nc" id="L1629">        width = PrintOptions.getPadding() + value.length();</span>
+<span class="nc bnc" id="L1630" title="All 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1631">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
 
-<span class="nc" id="L1626">        result.append(&quot;]&quot;);</span>
+<span class="nc" id="L1633">        result.append(&quot;]&quot;);</span>
 
-<span class="nc" id="L1628">        return result.toString();</span>
+<span class="nc" id="L1635">        return result.toString();</span>
     }
-
-
-    // TODO: FOR DEVELOPMENT TESTING ONLY
-    public static void main(String args[]) {
-
-<span class="nc" id="L1635">        PrintOptions.setPrecision(2);</span>
-<span class="nc" id="L1636">        PrintOptions.setMaxColumns(4);</span>
-<span class="nc" id="L1637">        PrintOptions.setPadding(4);</span>
-
-<span class="nc" id="L1639">        CNumber[] aEntries = {</span>
-                new CNumber(2.445, -0.3453), new CNumber(0, 9.112465), new CNumber(-41.456331),
-        new CNumber(2.44556, 13.45), new CNumber(1, -1)};
-<span class="nc" id="L1642">        CVector a = new CVector(aEntries);</span>
-
-<span class="nc" id="L1644">        System.out.println(a);</span>
-<span class="nc" id="L1645">        PrintOptions.setCenter(false);</span>
-<span class="nc" id="L1646">        System.out.println(a);</span>
-<span class="nc" id="L1647">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

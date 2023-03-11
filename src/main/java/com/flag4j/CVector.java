@@ -1596,7 +1596,14 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @return A human-readable string representation of this vector.
      */
     public String toString() {
-        StringBuilder result =  new StringBuilder("[");
+        StringBuilder result = new StringBuilder();
+
+        if(PrintOptions.getMaxColumns()<this.size) {
+            // Then also get the full size of the vector.
+            result.append(String.format("Full Size: %d\n", this.size));
+        }
+
+        result.append("[");
 
         int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.size-1);
         int width;
@@ -1606,21 +1613,21 @@ public class CVector extends VectorBase<CNumber[]> implements
         for(int i=0; i<stopIndex; i++) {
             value = StringUtils.ValueOfRound(this.get(i), PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
-            value = PrintOptions.getCenter() ? StringUtils.center(value, width) : value;
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
-        if(PrintOptions.getMaxColumns() < this.size-1) {
+        if(stopIndex < this.size-1) {
             width = PrintOptions.getPadding() + 3;
             value = "...";
-            value = PrintOptions.getCenter() ? StringUtils.center(value, width) : value;
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
         // Get last entry now
         value = StringUtils.ValueOfRound(this.get(this.size-1), PrintOptions.getPrecision());
         width = PrintOptions.getPadding() + value.length();
-        value = PrintOptions.getCenter() ? StringUtils.center(value, width) : value;
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));
 
         result.append("]");

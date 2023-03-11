@@ -127,7 +127,7 @@ public abstract class PrintOptions {
      * Sets the centering flag.
      * @param center Flag for centering values within its column.
      */
-    public static void setCenter(boolean center) {
+    public static void setCentering(boolean center) {
         PrintOptions.center = center;
     }
 
@@ -136,7 +136,7 @@ public abstract class PrintOptions {
      * Gets the centering flag.
      * @return The current value of the center flag.
      */
-    public static boolean getCenter() {
+    public static boolean useCentering() {
         return center;
     }
 
@@ -217,7 +217,7 @@ public abstract class PrintOptions {
 
 
     /**
-     * Sets the padding amount for the columns.
+     * Sets the minimum padding amount for the columns.
      * @param padding New padding amount for the columns.
      */
     public static void setPadding(int padding) {
