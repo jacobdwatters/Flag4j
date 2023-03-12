@@ -24,7 +24,6 @@
 
 package com.flag4j.operations.dense_sparse.complex;
 
-
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.concurrency.Configurations;
@@ -48,7 +47,7 @@ public class ComplexDenseSparseMatrixMultiplication {
     // TODO: Investigate if blocked algorithms provide any speedup for multiplying a sparse/dense matrix to a dense/sparse matrix.
 
     /**
-     * Computes the matrix multiplication between a real dense matrix and a real sparse matrix using a standard algorithm.
+     * Computes the matrix multiplication between a complex dense matrix and a complex sparse matrix using a standard algorithm.
      * @param src1 Entries of the dense matrix.
      * @param shape1 Shape of the dense matrix.
      * @param src2 Non-zero entries of the sparse matrix.
@@ -83,7 +82,7 @@ public class ComplexDenseSparseMatrixMultiplication {
 
 
     /**
-     * Computes the matrix multiplication between a real sparse matrix and a real dense matrix using a standard algorithm.
+     * Computes the matrix multiplication between a complex sparse matrix and a complex dense matrix using a standard algorithm.
      *
      * @param src1 Non-zero entries of the sparse matrix.
      * @param rowIndices Row indices for non-zero entries of the sparse matrix.
@@ -99,6 +98,7 @@ public class ComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fillZeros(dest); // Initialize to zeros
 
         int row, col;
 
@@ -132,6 +132,7 @@ public class ComplexDenseSparseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fillZeros(dest); // Initialize to zeros
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             // Loop over non-zero entries of sparse matrix.
@@ -162,10 +163,10 @@ public class ComplexDenseSparseMatrixMultiplication {
     public static CNumber[] concurrentStandard(CNumber[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                               CNumber[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
+        ArrayUtils.fillZeros(dest); // Initialize to zeros
 
         ThreadManager.concurrentLoop(0, src1.length, (i) -> {
             int row = rowIndices[i];
@@ -196,6 +197,8 @@ public class ComplexDenseSparseMatrixMultiplication {
         int nonZeros = src2.length;
 
         CNumber[] dest = new CNumber[denseRows];
+        ArrayUtils.fillZeros(dest); // Initialize to zeros
+
         int k;
 
         for(int i=0; i<denseRows; i++) {
@@ -223,6 +226,8 @@ public class ComplexDenseSparseMatrixMultiplication {
                                           Shape shape1, CNumber[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fillZeros(dest); // Initialize to zeros
+
         int row, col;
 
         for(int i=0; i<src1.length; i++) {
@@ -286,6 +291,7 @@ public class ComplexDenseSparseMatrixMultiplication {
         int rows2 = src2.length;
 
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fillZeros(dest); // Initialize to zeros
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
             for(int j=0; j<rows2; j++) {
@@ -312,6 +318,7 @@ public class ComplexDenseSparseMatrixMultiplication {
                                                     Shape shape1, CNumber[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fillZeros(dest); // Initialize to zeros
 
         ThreadManager.concurrentLoop(0, src1.length, (i) -> {
             int row = rowIndices[i];
@@ -340,6 +347,7 @@ public class ComplexDenseSparseMatrixMultiplication {
         final int bsize = Configurations.getBlockSize(); // Get the block size to use.
 
         CNumber[] dest = new CNumber[rows1];
+        ArrayUtils.fillZeros(dest); // Initialize to zeros
 
         // Blocked matrix-vector multiply
         ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {
