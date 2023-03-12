@@ -644,8 +644,42 @@ public class Matrix extends RealMatrixBase implements
         for(int i=0; i<values.numRows; i++) {
             for(int j=0; j<values.numCols; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] =
-                        values.entries[i* values.numCols + j];
+                        values.entries[i*values.numCols + j];
             }
+        }
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public void setSlice(SparseMatrix values, int rowStart, int colStart) {
+        int rowEnd = rowStart + values.numRows;
+
+        // Fill slice with zeros.
+        for(int i=rowStart; i<rowEnd; i++) {
+            ArrayUtils.fillZerosRange(this.entries,
+                    rowStart*this.numCols+colStart,
+                    rowStart*this.numCols+colStart
+            );
+        }
+
+        // Copy sparse values
+        int rowIndex, colIndex;
+        for(int i=0; i<values.entries.length; i++) {
+            rowIndex = values.rowIndices[i];
+            colIndex = values.colIndices[i];
+
+            this.entries[(rowIndex+rowStart)*this.numCols + colIndex + colStart] = values.entries[i];
         }
     }
 
@@ -757,6 +791,25 @@ public class Matrix extends RealMatrixBase implements
         }
 
         return copy;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
+        // TODO: Implementation
+        return null;
     }
 
 
@@ -3500,7 +3553,12 @@ public class Matrix extends RealMatrixBase implements
         int width;
         String value;
         StringBuilder result = new StringBuilder();
-        result = (i>0) ? result.append(" [") : result.append("[");
+
+        if(i>0) {
+            result.append(" [");
+        }  else {
+            result.append("[");
+        }
 
         for(int j=0; j<colStopIndex; j++) {
             value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());

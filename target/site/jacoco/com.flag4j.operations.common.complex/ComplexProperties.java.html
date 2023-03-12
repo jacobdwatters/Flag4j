@@ -46,16 +46,16 @@ public final class ComplexProperties {
      * @return True if the tensor only contains real values. Returns false otherwise.
      */
     public static boolean isReal(CNumber[] entries) {
-<span class="nc" id="L49">        boolean result = true;</span>
+<span class="fc" id="L49">        boolean result = true;</span>
 
-<span class="nc bnc" id="L51" title="All 2 branches missed.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">            if(entries[i].im != 0) {</span>
-<span class="nc" id="L53">                result = false;</span>
-<span class="nc" id="L54">                break;</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            if(entries[i].im != 0) {</span>
+<span class="fc" id="L53">                result = false;</span>
+<span class="fc" id="L54">                break;</span>
             }
         }
 
-<span class="nc" id="L58">        return result;</span>
+<span class="fc" id="L58">        return result;</span>
     }
 
 
@@ -65,16 +65,16 @@ public final class ComplexProperties {
      * @return True if the tensor contains at least one non-real value. Returns false otherwise.
      */
     public static boolean isComplex(CNumber[] entries) {
-<span class="nc" id="L68">        boolean result = false;</span>
+<span class="fc" id="L68">        boolean result = false;</span>
 
-<span class="nc bnc" id="L70" title="All 2 branches missed.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="nc bnc" id="L71" title="All 2 branches missed.">            if(entries[i].im == 0) {</span>
-<span class="nc" id="L72">                result = true;</span>
-<span class="nc" id="L73">                break;</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">            if(entries[i].im != 0) {</span>
+<span class="fc" id="L72">                result = true;</span>
+<span class="fc" id="L73">                break;</span>
             }
         }
 
-<span class="nc" id="L77">        return result;</span>
+<span class="fc" id="L77">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -191,13 +191,38 @@ public final class ArrayUtils {
 
 
     /**
-     * Fills an array with complex numbers with zeros.
+     * Fills an array of complex numbers with zeros.
      * @param dest Array to fill with zeros.
      */
     public static void fillZeros(CNumber[] dest) {
         for(int i=0; i<dest.length; i++) {
             dest[i] = new CNumber();
         }
+    }
+
+
+    /**
+     * Fills a specified range of an array of complex numbers with zeros.
+     * @param start Starting index of range to fill (inclusive).
+     * @param end Ending index of range to fill (Exclusive).
+     * @param dest Array to fill specified range with zeros.
+     */
+    public static void fillZerosRange(CNumber[] dest, int start, int end) {
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = new CNumber();
+        }
+    }
+
+
+    /**
+     * Fills a specified range of an array with zeros.
+     * @param start Starting index of range to fill (inclusive).
+     * @param end Ending index of range to fill (Exclusive).
+     * @param dest Array to fill specified range with zeros.
+     */
+    public static void fillZerosRange(double[] dest, int start, int end) {
+        double[] zeros = new double[end-start];
+        System.arraycopy(zeros, 0, dest, start, zeros.length);
     }
 
 
@@ -245,7 +270,6 @@ public final class ArrayUtils {
      * @param fillValue Value to fill array with.
      */
     public static void fill(CNumber[] dest, double fillValue) {
-        // TODO: Investigate speed of using Arrays.setAll(...) and Arrays.parallelSetAll(...)
         for(int i=0; i<dest.length; i++) {
             dest[i] = new CNumber(fillValue);
         }

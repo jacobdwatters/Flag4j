@@ -147,7 +147,7 @@ public interface ComplexMatrixMixin<T, Y> extends
      * @param rowIndex The index of the row which is to be set.
      * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
      */
-    void setRows(CVector values, int rowIndex);
+    void setRow(CVector values, int rowIndex);
 
 
     /**
@@ -157,7 +157,7 @@ public interface ComplexMatrixMixin<T, Y> extends
      * @param rowIndex The index of the row which is to be set.
      * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
      */
-    void setRows(SparseCVector values, int rowIndex);
+    void setRow(SparseCVector values, int rowIndex);
 
 
     /**
@@ -170,18 +170,5 @@ public interface ComplexMatrixMixin<T, Y> extends
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    void setSlice(Matrix values, int rowStart, int colStart);
-
-
-    /**
-     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set.
-     * @param values New values for the specified slice.
-     * @param rowStart Starting row index for the slice (inclusive).
-     * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
-     * fit completely within this matrix.
-     */
-    void setSlice(SparseMatrix values, int rowStart, int colStart);
+    void setSlice(SparseCMatrix values, int rowStart, int colStart);
 }

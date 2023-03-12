@@ -25,7 +25,9 @@
 package com.flag4j.core;
 
 
+import com.flag4j.Matrix;
 import com.flag4j.Shape;
+import com.flag4j.SparseMatrix;
 
 /**
  * This interface specifies manipulations which all matrices should implement.
@@ -194,6 +196,32 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
+    void setSlice(Matrix values, int rowStart, int colStart);
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+     * fit completely within this matrix.
+     */
+    void setSlice(SparseMatrix values, int rowStart, int colStart);
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+     * fit completely within this matrix.
+     */
     void setSlice(X[][] values, int rowStart, int colStart);
 
 
@@ -304,6 +332,34 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * fit completely within this matrix.
      */
     T setSliceCopy(int[][] values, int rowStart, int colStart);
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+     * fit completely within this matrix.
+     */
+    T setSliceCopy(Matrix values, int rowStart, int colStart);
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+     * fit completely within this matrix.
+     */
+    T setSliceCopy(SparseMatrix values, int rowStart, int colStart);
 
 
     /**

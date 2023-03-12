@@ -68,7 +68,7 @@ public final class ComplexProperties {
         boolean result = false;
 
         for(int i=0; i<entries.length; i++) {
-            if(entries[i].im == 0) {
+            if(entries[i].im != 0) {
                 result = true;
                 break;
             }

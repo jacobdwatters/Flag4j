@@ -46,7 +46,6 @@ import com.flag4j.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Complex dense matrix. Stored in row major format.
@@ -656,8 +655,7 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
-     * Sets a column of this matrix at the given index to the specified values. Note that the orientation of the values
-     * vector is <b>NOT</b> taken into account.
+     * Sets a column of this matrix at the given index to the specified values.
      *
      * @param values   New values for the column.
      * @param colIndex The index of the column which is to be set.
@@ -665,13 +663,16 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setCol(CVector values, int colIndex) {
-        // TODO: Implementation
+        ParameterChecks.assertArrayLengthsEq(values.size, this.numRows);
+
+        for(int i=0; i<values.size; i++) {
+            super.entries[i*numCols + colIndex] = values.entries[i].copy();
+        }
     }
 
 
     /**
-     * Sets a column of this matrix at the given index to the specified values. Note that the orientation of the values
-     * vector is <b>NOT</b> taken into account.
+     * Sets a column of this matrix at the given index to the specified values.
      *
      * @param values   New values for the column.
      * @param colIndex The index of the columns which is to be set.
@@ -679,34 +680,72 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setCol(SparseCVector values, int colIndex) {
-        // TODO: Implementation
+        ParameterChecks.assertArrayLengthsEq(values.size, super.numRows);
+
+        // Zero-out column
+        for(int i=0; i<super.numRows; i++) {
+            super.entries[i*numCols + colIndex] = new CNumber();
+        }
+
+        // Copy sparse values
+        int index;
+        for(int i=0; i<values.entries.length; i++) {
+            index = values.indices[i];
+            super.entries[index*numCols + colIndex] = values.entries[i].copy();
+        }
     }
 
 
     /**
-     * Sets a row of this matrix at the given index to the specified values. Note that the orientation of the values
-     * vector is <b>NOT</b> taken into account.
+     * Sets a row of this matrix at the given index to the specified values.
      *
      * @param values   New values for the row.
      * @param rowIndex The index of the row which is to be set.
      * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
      */
     @Override
-    public void setRows(CVector values, int rowIndex) {
-        // TODO: Implementation
+    public void setRow(CVector values, int rowIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.size, super.numCols());
+
+        ArrayUtils.arraycopy(values.entries, 0, super.entries, rowIndex*numCols, this.numCols);
     }
 
 
     /**
-     * Sets a row of this matrix at the given index to the specified values. Note that the orientation of the values
-     * vector is <b>NOT</b> taken into account.
+     * Sets a row of this matrix at the given index to the specified values.
      *
      * @param values   New values for the row.
      * @param rowIndex The index of the row which is to be set.
      * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
      */
     @Override
-    public void setRows(SparseCVector values, int rowIndex) {
+    public void setRow(SparseCVector values, int rowIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.size, super.numCols());
+        int rowOffset = rowIndex*numCols;
+
+        // Fill row with zeros
+        ArrayUtils.fillZerosRange(super.entries, rowOffset, rowOffset+this.numCols);
+
+        // Copy sparse values
+        for(int i=0; i<values.size; i++) {
+            super.entries[rowOffset + i] = values.entries[i].copy();
+        }
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public void setSlice(SparseCMatrix values, int rowStart, int colStart) {
         // TODO: Implementation
     }
 
@@ -724,7 +763,12 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setSlice(Matrix values, int rowStart, int colStart) {
-        // TODO: Implementation
+        for(int i=0; i<values.numRows; i++) {
+            for(int j=0; j<values.numCols; j++) {
+                this.entries[(i+rowStart)*numCols + j+colStart] =
+                        new CNumber(values.entries[i* values.numCols + j]);
+            }
+        }
     }
 
 
@@ -1029,6 +1073,44 @@ public class CMatrix extends ComplexMatrixBase implements
         }
 
         return copy;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public CMatrix setSliceCopy(Matrix values, int rowStart, int colStart) {
+        // TODO: Implementation
+        return null;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public CMatrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
+        // TODO: Implementation
+        return null;
     }
 
 
@@ -1636,7 +1718,7 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
-     * Computes the element-wise subtraction of this matrix with a real demse matrix. The result is stored in this matrix.
+     * Computes the element-wise subtraction of this matrix with a real dense matrix. The result is stored in this matrix.
      *
      * @param B The matrix to subtract from this matrix.
      */
@@ -3781,7 +3863,12 @@ public class CMatrix extends ComplexMatrixBase implements
         int width;
         String value;
         StringBuilder result = new StringBuilder();
-        result = (i>0) ? result.append(" [") : result.append("[");
+
+        if(i>0) {
+            result.append(" [");
+        }  else {
+            result.append("[");
+        }
 
         for(int j=0; j<colStopIndex; j++) {
             value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());
