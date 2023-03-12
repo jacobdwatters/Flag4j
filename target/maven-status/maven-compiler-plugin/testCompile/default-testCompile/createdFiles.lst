@@ -47,6 +47,7 @@ com\flag4j\matrix\RealComplexDenseSparseMatMultTests.class
 com\flag4j\complex_matrix\CMatrixRemoveRowColTests.class
 com\flag4j\matrix\MatrixDirectSumTests.class
 com\flag4j\matrix\MatrixSetOperationTests.class
+com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatrixMultiplicationTests.class
 com\flag4j\complex_matrix\CMatrixSetOperationTests.class
 com\flag4j\complex_matrix\CMatrixMatVecMultTests.class
 com\flag4j\matrix\MatrixTransposeTests.class

@@ -1,10 +1,10 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-Flag4j,com.flag4j.util,ArrayUtils,335,614,44,58,66,102,32,52,10,23
+Flag4j,com.flag4j.util,ArrayUtils,257,692,34,68,48,120,26,58,8,25
 Flag4j,com.flag4j.util,Axis2D,0,34,0,0,0,6,0,4,0,4
 Flag4j,com.flag4j.util,RandomTensor,135,15,10,0,24,4,11,1,6,1
 Flag4j,com.flag4j.util,ErrorMessages,42,161,0,0,5,16,4,15,4,15
 Flag4j,com.flag4j.util,RandomCNumber,0,184,2,14,0,29,2,13,0,7
-Flag4j,com.flag4j.util,StringUtils,20,46,1,5,4,9,4,4,3,2
+Flag4j,com.flag4j.util,StringUtils,15,51,1,5,3,10,3,5,2,3
 Flag4j,com.flag4j.util,ParameterChecks,21,247,3,41,4,53,4,33,1,14
 Flag4j,com.flag4j.operations.dense.complex,ComplexDenseProperties,7,27,0,4,2,6,1,3,1,1
 Flag4j,com.flag4j.operations.dense.complex,ComplexDenseEquals,7,24,0,4,2,2,1,4,1,2
@@ -14,7 +14,7 @@ Flag4j,com.flag4j.operations.dense.complex,ComplexDenseMatrixMultiplication,7,10
 Flag4j,com.flag4j.operations.dense.complex,ComplexDenseOperations,255,406,18,38,43,76,16,37,7,18
 Flag4j,com.flag4j.operations.dense.complex,ComplexDenseVectorOperations,7,79,0,6,2,11,1,5,1,2
 Flag4j,com.flag4j.operations.dense.complex,AggregateDenseComplex,7,56,0,8,2,14,1,6,1,2
-Flag4j,com.flag4j.operations.dense_sparse.complex,ComplexDenseSparseMatrixMultiplication,473,151,28,14,80,24,29,8,14,2
+Flag4j,com.flag4j.operations.dense_sparse.complex,ComplexDenseSparseMatrixMultiplication,7,628,4,38,2,109,5,32,1,15
 Flag4j,com.flag4j.operations.dense_sparse.complex,ComplexDenseSparseEquals,7,143,0,16,2,31,1,10,1,2
 Flag4j,com.flag4j.operations.dense_sparse.complex,ComplexDenseSparseOperations,87,149,4,6,14,21,5,6,3,3
 Flag4j,com.flag4j.operations.dense_sparse.complex,ComplexDenseSparseVectorOperations,7,258,0,16,2,37,1,15,1,7
@@ -42,7 +42,7 @@ Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseVectorOperations
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseEquals,19,24,0,4,3,2,2,4,2,2
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseMatrixMultiplication,7,2288,26,194,2,396,27,120,1,36
 Flag4j,com.flag4j.operations.sparse.real_complex,RealComplexSparseMatrixMultiplication,541,0,40,0,98,0,33,0,13,0
-Flag4j,com.flag4j.concurrency,ThreadManager,22,67,2,2,8,12,3,6,1,6
+Flag4j,com.flag4j.concurrency,ThreadManager,17,72,2,2,5,15,3,6,1,6
 Flag4j,com.flag4j.concurrency,CheckConcurrent,54,0,14,0,13,0,11,0,4,0
 Flag4j,com.flag4j.concurrency,Configurations,49,10,0,0,16,4,8,2,8,2
 Flag4j,com.flag4j.operations,MatrixTranspose,78,104,11,5,18,21,11,5,2,5
@@ -56,7 +56,7 @@ Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseEquals,73,136,8,16
 Flag4j,com.flag4j.complex_numbers,CNumberLexer,32,295,10,60,5,76,11,31,1,6
 Flag4j,com.flag4j.complex_numbers,CNumberParser,8,166,2,14,2,37,3,7,1,1
 Flag4j,com.flag4j.complex_numbers,CNumberToken,12,55,1,7,4,12,2,10,1,7
-Flag4j,com.flag4j.complex_numbers,CNumber,150,1673,6,176,30,317,22,172,16,87
+Flag4j,com.flag4j.complex_numbers,CNumber,150,1673,5,177,30,317,21,173,16,87
 Flag4j,com.flag4j.operations.sparse.real,RealSparseMatrixMultiplication,282,0,20,0,50,0,17,0,7,0
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseOperations,154,298,6,12,22,42,7,12,4,6
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseEquals,83,289,10,34,16,61,7,21,2,4
@@ -66,7 +66,7 @@ Flag4j,com.flag4j,CVector,380,1792,33,51,62,248,31,110,14,85
 Flag4j,com.flag4j,SparseTensor,0,70,0,2,0,10,0,5,0,4
 Flag4j,com.flag4j,Tensor,57,96,7,7,14,21,6,9,2,6
 Flag4j,com.flag4j,SparseCTensor,0,118,0,6,0,16,0,8,0,5
-Flag4j,com.flag4j,CMatrix,1304,5617,89,327,194,625,116,305,71,142
+Flag4j,com.flag4j,CMatrix,978,5943,71,345,154,665,107,314,67,146
 Flag4j,com.flag4j,SparseVector,0,44,0,0,0,9,0,4,0,4
 Flag4j,com.flag4j,Shape,35,408,6,34,5,66,6,31,2,15
 Flag4j,com.flag4j,Matrix,668,5984,42,368,84,694,43,350,20,168
