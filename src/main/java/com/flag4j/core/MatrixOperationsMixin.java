@@ -121,7 +121,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
 
 
     /**
-     * Computes the element-wise subtraction of this matrix with a real demse matrix. The result is stored in this matrix.
+     * Computes the element-wise subtraction of this matrix with a real dense matrix. The result is stored in this matrix.
      * @param B The matrix to subtract from this matrix.
      */
     void subEq(Matrix B);

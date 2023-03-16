@@ -663,15 +663,14 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public void setSlice(SparseMatrix values, int rowStart, int colStart) {
-        int rowEnd = rowStart + values.numRows;
-
-        // Fill slice with zeros.
-        for(int i=rowStart; i<rowEnd; i++) {
-            ArrayUtils.fillZerosRange(this.entries,
-                    rowStart*this.numCols+colStart,
-                    rowStart*this.numCols+colStart
-            );
-        }
+        // TODO: Algorithm could be improved if we assume sparse indices are sorted.
+        // Fill slice with zeros
+        ArrayUtils.stridedFillZerosRange(
+                this.entries,
+                rowStart*this.numCols+colStart,
+                values.numCols,
+                this.numCols-values.numCols
+        );
 
         // Copy sparse values
         int rowIndex, colIndex;
@@ -808,8 +807,26 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
-        // TODO: Implementation
-        return null;
+        Matrix copy = this.copy();
+
+        // Fill slice with zeros
+        ArrayUtils.stridedFillZerosRange(
+                copy.entries,
+                rowStart*copy.numCols+colStart,
+                values.numCols,
+                copy.numCols-values.numCols
+        );
+
+        // Copy sparse values
+        int rowIndex, colIndex;
+        for(int i=0; i<values.entries.length; i++) {
+            rowIndex = values.rowIndices[i];
+            colIndex = values.colIndices[i];
+
+            copy.entries[(rowIndex+rowStart)*copy.numCols + colIndex + colStart] = values.entries[i];
+        }
+
+        return copy;
     }
 
 
@@ -952,7 +969,7 @@ public class Matrix extends RealMatrixBase implements
         int row = 0;
 
         for(int i=0; i<this.numRows; i++) {
-            if(!ArrayUtils.inArray(rowIndices, i)) {
+            if(ArrayUtils.notInArray(rowIndices, i)) {
                 System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }
@@ -1003,7 +1020,7 @@ public class Matrix extends RealMatrixBase implements
         for(int i=0; i<this.numRows; i++) {
             col = 0;
             for(int j=0; j<this.numCols; j++) {
-                if(!ArrayUtils.inArray(colIndices, j)) {
+                if(ArrayUtils.notInArray(colIndices, j)) {
                     copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];
                     col++;
                 }

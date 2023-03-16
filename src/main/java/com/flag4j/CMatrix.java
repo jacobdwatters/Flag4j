@@ -25,7 +25,8 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.*;
+import com.flag4j.core.ComplexMatrixBase;
+import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.MatrixMultiply;
 import com.flag4j.operations.MatrixTranspose;
@@ -746,7 +747,60 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setSlice(SparseCMatrix values, int rowStart, int colStart) {
-        // TODO: Implementation
+        // TODO: Algorithm could be improved if we assume sparse indices are sorted.
+        // Fill slice with zeros
+        ArrayUtils.stridedFillZerosRange(
+                this.entries,
+                rowStart*this.numCols+colStart,
+                values.numCols,
+                this.numCols-values.numCols
+        );
+
+        // Copy sparse values
+        int rowIndex, colIndex;
+        for(int i=0; i<values.entries.length; i++) {
+            rowIndex = values.rowIndices[i];
+            colIndex = values.colIndices[i];
+
+            this.entries[(rowIndex+rowStart)*this.numCols + colIndex + colStart] = values.entries[i].copy();
+        }
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public CMatrix setSliceCopy(SparseCMatrix values, int rowStart, int colStart) {
+        CMatrix copy = this.copy();
+
+        // Fill slice with zeros.
+        ArrayUtils.stridedFillZerosRange(
+                copy.entries,
+                rowStart*copy.numCols+colStart,
+                values.numCols,
+                copy.numCols-values.numCols
+        );
+
+        // Copy sparse values
+        int rowIndex, colIndex;
+        for(int i=0; i<values.entries.length; i++) {
+            rowIndex = values.rowIndices[i];
+            colIndex = values.colIndices[i];
+
+            copy.entries[(rowIndex+rowStart)*copy.numCols + colIndex + colStart] = new CNumber(values.entries[i]);
+        }
+
+        return copy;
     }
 
 
@@ -785,7 +839,23 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setSlice(SparseMatrix values, int rowStart, int colStart) {
-        // TODO: Implementation
+        // TODO: Algorithm could be improved if we assume sparse indices are sorted.
+        // Fill slice with zeros
+        ArrayUtils.stridedFillZerosRange(
+                this.entries,
+                rowStart*this.numCols+colStart,
+                values.numCols,
+                this.numCols-values.numCols
+        );
+
+        // Copy sparse values
+        int rowIndex, colIndex;
+        for(int i=0; i<values.entries.length; i++) {
+            rowIndex = values.rowIndices[i];
+            colIndex = values.colIndices[i];
+
+            this.entries[(rowIndex+rowStart)*this.numCols + colIndex + colStart] = new CNumber(values.entries[i]);
+        }
     }
 
 
@@ -1090,8 +1160,16 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix setSliceCopy(Matrix values, int rowStart, int colStart) {
-        // TODO: Implementation
-        return null;
+        CMatrix copy = new CMatrix(this);
+
+        for(int i=0; i<values.numRows; i++) {
+            for(int j=0; j<values.numCols; j++) {
+                copy.entries[(i+rowStart)*numCols + j+colStart] =
+                        new CNumber(values.entries[values.shape.entriesIndex(i, j)]);
+            }
+        }
+
+        return copy;
     }
 
 
@@ -1109,8 +1187,26 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
-        // TODO: Implementation
-        return null;
+        CMatrix copy = this.copy();
+
+        // Fill slice with zeros.
+        ArrayUtils.stridedFillZerosRange(
+                copy.entries,
+                rowStart*copy.numCols+colStart,
+                values.numCols,
+                copy.numCols-values.numCols
+        );
+
+        // Copy sparse values
+        int rowIndex, colIndex;
+        for(int i=0; i<values.entries.length; i++) {
+            rowIndex = values.rowIndices[i];
+            colIndex = values.colIndices[i];
+
+            copy.entries[(rowIndex+rowStart)*copy.numCols + colIndex + colStart] = new CNumber(values.entries[i]);
+        }
+
+        return copy;
     }
 
 
@@ -1150,7 +1246,7 @@ public class CMatrix extends ComplexMatrixBase implements
         int row = 0;
 
         for(int i=0; i<this.numRows; i++) {
-            if(!ArrayUtils.inArray(rowIndices, i)) {
+            if(ArrayUtils.notInArray(rowIndices, i)) {
                 ArrayUtils.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }
@@ -1201,7 +1297,7 @@ public class CMatrix extends ComplexMatrixBase implements
         for(int i=0; i<this.numRows; i++) {
             col = 0;
             for(int j=0; j<this.numCols; j++) {
-                if(!ArrayUtils.inArray(colIndices, j)) {
+                if(ArrayUtils.notInArray(colIndices, j)) {
                     copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];
                     col++;
                 }
@@ -1649,8 +1745,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isHermitian() {
-        // TODO: Implementation
-        return false;
+        return this.equals(this.H());
     }
 
 
@@ -1661,8 +1756,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isAntiHermitian() {
-        // TODO: Implementation
-        return false;
+        return this.equals(this.H().scalMult(-1));
     }
 
 

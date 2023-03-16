@@ -48,8 +48,8 @@ public final class ComplexProperties {
     public static boolean isReal(CNumber[] entries) {
         boolean result = true;
 
-        for(int i=0; i<entries.length; i++) {
-            if(entries[i].im != 0) {
+        for(CNumber entry : entries) {
+            if (entry.im != 0) {
                 result = false;
                 break;
             }
@@ -67,8 +67,8 @@ public final class ComplexProperties {
     public static boolean isComplex(CNumber[] entries) {
         boolean result = false;
 
-        for(int i=0; i<entries.length; i++) {
-            if(entries[i].im != 0) {
+        for(CNumber entry : entries) {
+            if(entry.im != 0) {
                 result = true;
                 break;
             }

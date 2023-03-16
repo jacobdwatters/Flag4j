@@ -111,7 +111,7 @@ public abstract class ErrorMessages {
     /**
      * Error message for parameters which are expected to be greater than or equal to some threshold.
      */
-    private static final String GREATER_EQ_ERR = "Expecting parameters to be greater than or equal to %d but got %d.";
+    private static final String GREATER_EQ_ERR = "Expecting parameters to be greater than or equal to %f but got %f.";
     /**
      * Error message for parameters which are expected to be square.
      */

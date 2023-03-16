@@ -38,7 +38,7 @@ import com.flag4j.core.MatrixBase;
  * <p>If full pivoting is used, the decomposition will yield an additional permutation matrix {@code Q} such that
  *  {@code PAQ=LU}.</p>
  */
-public abstract class LUDecomposition<T extends MatrixBase> implements Decomposition<T> {
+public abstract class LUDecomposition<T extends MatrixBase<?>> implements Decomposition<T> {
     /**
      * Flag indicating what pivoting to use.
      */
@@ -50,7 +50,7 @@ public abstract class LUDecomposition<T extends MatrixBase> implements Decomposi
     /**
      * Tolerance for determining if pivot value is to be considered zero in LU decomposition with no pivoting.
      */
-    double zeroPivotTol;
+    final double zeroPivotTol;
 
     /**
      * Storage for L and U matrices. Stored in a single matrix

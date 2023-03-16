@@ -92,7 +92,6 @@ public class RealDenseSparseMatrixMultiplication {
     public static double[] standard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                     double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
         int cols2 = shape2.dims[Axis2D.col()];
 
         double[] dest = new double[rows1*cols2];
@@ -159,7 +158,6 @@ public class RealDenseSparseMatrixMultiplication {
     public static double[] concurrentStandard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                     double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
         int cols2 = shape2.dims[Axis2D.col()];
 
         double[] dest = new double[rows1*cols2];

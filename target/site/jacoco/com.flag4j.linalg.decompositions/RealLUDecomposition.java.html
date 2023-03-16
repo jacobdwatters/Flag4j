@@ -233,12 +233,10 @@ public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
 <span class="fc" id="L233">                L.entries[i*L.numCols+i] = 1; // Set principle diagonal to be ones.</span>
             }
 
-<span class="fc bfc" id="L236" title="All 2 branches covered.">            for(int j=0; j&lt;i; j++) {</span>
-<span class="fc" id="L237">                L.entries[i*L.numCols+j] = LU.entries[i*LU.numCols+j];</span>
-            }
+<span class="fc" id="L236">            System.arraycopy(LU.entries, i*LU.numCols, L.entries, i*L.numCols, i);</span>
         }
 
-<span class="fc" id="L241">        return L;</span>
+<span class="fc" id="L239">        return L;</span>
     }
 
 
@@ -249,16 +247,15 @@ public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
      */
     @Override
     public Matrix getU() {
-<span class="fc" id="L252">        Matrix U = new Matrix(Math.min(LU.numRows, LU.numCols), LU.numCols);</span>
+<span class="fc" id="L250">        Matrix U = new Matrix(Math.min(LU.numRows, LU.numCols), LU.numCols);</span>
 
         // Copy U values from LU matrix.
-<span class="fc bfc" id="L255" title="All 2 branches covered.">        for(int i=0; i&lt;LU.numRows; i++) {</span>
-<span class="fc bfc" id="L256" title="All 2 branches covered.">            for(int j=i; j&lt;LU.numCols; j++) {</span>
-<span class="fc" id="L257">                U.entries[i*U.numCols+j] = LU.entries[i*LU.numCols+j];</span>
-            }
+<span class="fc bfc" id="L253" title="All 4 branches covered.">        for(int i=0; i&lt;LU.numRows &amp;&amp; i&lt;LU.numCols; i++) {</span>
+<span class="fc" id="L254">            System.arraycopy(LU.entries, i*(LU.numCols+1),</span>
+                    U.entries, i*(LU.numCols+1), LU.numCols-i);
         }
 
-<span class="fc" id="L261">        return U;</span>
+<span class="fc" id="L258">        return U;</span>
     }
 
 
@@ -268,7 +265,7 @@ public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
      */
     @Override
     public Matrix getP() {
-<span class="fc" id="L271">        return super.P;</span>
+<span class="fc" id="L268">        return super.P;</span>
     }
 
 
@@ -278,7 +275,7 @@ public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
      */
     @Override
     public Matrix getQ() {
-<span class="fc" id="L281">        return super.Q;</span>
+<span class="fc" id="L278">        return super.Q;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

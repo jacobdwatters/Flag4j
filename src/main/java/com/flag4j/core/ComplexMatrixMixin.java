@@ -24,7 +24,10 @@
 
 package com.flag4j.core;
 
-import com.flag4j.*;
+import com.flag4j.CMatrix;
+import com.flag4j.CVector;
+import com.flag4j.SparseCMatrix;
+import com.flag4j.SparseCVector;
 import com.flag4j.complex_numbers.CNumber;
 
 
@@ -171,4 +174,19 @@ public interface ComplexMatrixMixin<T, Y> extends
      * fit completely within this matrix.
      */
     void setSlice(SparseCMatrix values, int rowStart, int colStart);
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    CMatrix setSliceCopy(SparseCMatrix values, int rowStart, int colStart);
 }

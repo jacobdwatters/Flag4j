@@ -91,8 +91,9 @@ public class RealComplexDenseVectorOperations {
 
         for(int i=0; i<src1.length; i++) {
             destIndex = i*src2.length;
-            for(int j=0; j<src2.length; j++) {
-                dest[destIndex++] = src2[j].conj().mult(src1[i]);
+
+            for(CNumber cNumber : src2) {
+                dest[destIndex++] = cNumber.conj().mult(src1[i]);
             }
         }
 
@@ -112,8 +113,9 @@ public class RealComplexDenseVectorOperations {
 
         for(int i=0; i<src1.length; i++) {
             destIndex = i*src2.length;
-            for(int j=0; j<src2.length; j++) {
-                dest[destIndex++] = src1[i].mult(src2[j]);
+
+            for(double v : src2) {
+                dest[destIndex++] = src1[i].mult(v);
             }
         }
 

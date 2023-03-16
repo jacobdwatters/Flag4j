@@ -233,9 +233,7 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
                 L.entries[i*L.numCols+i] = 1; // Set principle diagonal to be ones.
             }
 
-            for(int j=0; j<i; j++) {
-                L.entries[i*L.numCols+j] = LU.entries[i*LU.numCols+j];
-            }
+            System.arraycopy(LU.entries, i*LU.numCols, L.entries, i*L.numCols, i);
         }
 
         return L;
@@ -252,10 +250,9 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
         Matrix U = new Matrix(Math.min(LU.numRows, LU.numCols), LU.numCols);
 
         // Copy U values from LU matrix.
-        for(int i=0; i<LU.numRows; i++) {
-            for(int j=i; j<LU.numCols; j++) {
-                U.entries[i*U.numCols+j] = LU.entries[i*LU.numCols+j];
-            }
+        for(int i=0; i<LU.numRows && i<LU.numCols; i++) {
+            System.arraycopy(LU.entries, i*(LU.numCols+1),
+                    U.entries, i*(LU.numCols+1), LU.numCols-i);
         }
 
         return U;

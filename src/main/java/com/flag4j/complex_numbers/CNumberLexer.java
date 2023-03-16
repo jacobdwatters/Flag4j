@@ -32,7 +32,7 @@ class CNumberLexer {
     /**
      * Error message for unexpected symbol.
      */
-    private final String errMsg = "Unexpected symbol while parsing CNumber: $s";
+    private static final String ERR_MSG = "Unexpected symbol while parsing CNumber: %s";
 
     /**
      * Content of the lexer.
@@ -96,21 +96,21 @@ class CNumberLexer {
         else {
             content = (char) sym + content;
         }
-
     }
 
 
     /**
-     * Produces next CNumberToken from complex number string. Also removes this
-     * CNumberToken from the string
+     * Produces next {@link CNumberToken} from complex number string. Also removes this
+     * CNumberToken from the string. This method implements a finite automata which describes the legal arrangement of
+     * tokens within a complex number.
      *
-     * @return Next CNumberToken in string
+     * @return Next {@link CNumberToken} in string.
+     * @throws RuntimeException If the string is not a valid representation of a complex number.
      */
     public CNumberToken getNextToken() {
-
-        int state = 1;  // state of FA
-        String data = "";  // specific info for the CNumberToken
+        int state = 1;  // State of Finite Automata
         boolean done = false;
+        StringBuilder dataBuilder = new StringBuilder(); // specific info for the CNumberToken
         int sym;  // holds current symbol
 
 
@@ -118,34 +118,32 @@ class CNumberLexer {
             sym = getNextSymbol(); // Will return -1 if there is no symbol to get
 
             if(state == 1) {
-                if(sym == 9 || sym == 10 || sym == 13 ||
-                        sym == 32) { // Whitespace
-                    state = 1;
-                }
-                else if(sym == 45) {
+                if(sym == 45) {
                     state = 2;
-                    data += (char) sym;
+                    dataBuilder.append((char) sym);
                 }
                 else if(sym == 43) {
                     state = 4;
-                    data += (char) sym;
+                    dataBuilder.append((char) sym);
                     done = true;
                 }
                 else if(digit(sym)) {
                     state = 3;
-                    data += (char) sym;
+                    dataBuilder.append((char) sym);
                 }
                 else if(sym == 'i' || sym == 'j') {
                     state = 6;
-                    data += (char) sym;
+                    dataBuilder.append((char) sym);
                     done = true;
                 }
                 else if(sym == -1) { // We have reached the end of the string
                     state = 5;
                     done = true;
                 }
-                else {
-                    error(String.format(errMsg, (char) sym));
+                else if(!(sym == 9 || sym == 10 || sym == 13 ||
+                        sym == 32)){
+                    // Otherwise, if it is not a whitespace character, we have encountered an unexpected symbol.
+                    error(String.format(ERR_MSG, (char) sym));
                 }
             }
 
@@ -157,7 +155,7 @@ class CNumberLexer {
                 }
                 else if(digit(sym)) {
                     state = 3;
-                    data += (char) sym;
+                    dataBuilder.append((char) sym);
                 }
                 else {
                     putBackSymbol(sym);
@@ -166,12 +164,12 @@ class CNumberLexer {
             }
             else if(state == 3) {
                 if(digit(sym)) {
-                    state = 3;
-                    data += (char) sym;
+                    // State does not need to change here.
+                    dataBuilder.append((char) sym);
                 }
                 else if(sym == '.') {
                     state = 7;
-                    data += (char) sym;
+                    dataBuilder.append((char) sym);
                 }
                 else {
                     putBackSymbol(sym);
@@ -181,16 +179,16 @@ class CNumberLexer {
             else if(state == 7) {
                 if(digit(sym)) {
                     state = 8;
-                    data += (char) sym;
+                    dataBuilder.append((char) sym);
                 }
                 else {
-                    error(String.format(errMsg, (char) sym));
+                    error(String.format(ERR_MSG, (char) sym));
                 }
             }
             else if(state == 8) {
                 if(digit(sym)) {
-                    state = 8;
-                    data += (char) sym;
+                    // State does not need to change here.
+                    dataBuilder.append((char) sym);
                 }
                 else {
                     putBackSymbol(sym);
@@ -201,19 +199,19 @@ class CNumberLexer {
         } while(!done);
 
         if(state == 2 || state == 4) { // we have an operator
-            return new CNumberToken("opp", data);
+            return new CNumberToken("opp", dataBuilder.toString());
         }
         else if(state == 3 || state == 8) { // we have a number
-            return new CNumberToken("num", data);
+            return new CNumberToken("num", dataBuilder.toString());
         }
         else if(state == 5) { // end of number
-            return new CNumberToken("eof", data);
+            return new CNumberToken("eof", dataBuilder.toString());
         }
         else if(state == 6) { // we have the imaginary unit
             return new CNumberToken("im","i");
         }
         else {
-            error("somehow Lexer FA halted in bad state " + state );
+            error("somehow Lexer FA halted in bad state " + state);
             return null;
         }
     }

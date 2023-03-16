@@ -33,7 +33,7 @@ import java.util.Arrays;
 
 
 /**
- * This class provides several methods useful for array manipulation.
+ * This class provides several methods useful for array manipulation and copying.
  */
 public final class ArrayUtils {
 
@@ -148,7 +148,7 @@ public final class ArrayUtils {
      * @throws ArrayIndexOutOfBoundsException If the destPos parameter plus the length parameter exceeds the length of the
      * source array length or the destination array length.
      */
-    public static void arraycopy(@NotNull double[] src, int srcPos, @NotNull CNumber[] dest, int destPos, int length) {
+    public static void arraycopy(double[] src, int srcPos, CNumber[] dest, int destPos, int length) {
         for(int i=0; i<length; i++) {
             dest[i+destPos] = new CNumber(src[i+srcPos]);
         }
@@ -174,6 +174,13 @@ public final class ArrayUtils {
 
         return dest;
     }
+
+
+    // TODO: Add the following methods:
+    //  stridedCopy(double[] src, int length, int stride);
+    //  stridedCopy(CNumber[] src, int length, int stride);
+    //  stridedCopyOfRange(double[] src, int start, int end, int length, int stride)
+    //  stridedCopyOfRange(CNumber[] src, int start, int end, int length, int stride)
 
 
     /**
@@ -221,8 +228,119 @@ public final class ArrayUtils {
      * @param dest Array to fill specified range with zeros.
      */
     public static void fillZerosRange(double[] dest, int start, int end) {
-        double[] zeros = new double[end-start];
-        System.arraycopy(zeros, 0, dest, start, zeros.length);
+        System.arraycopy(new double[end-start], 0, dest, start, end-start);
+    }
+
+
+    /**
+     * <p>
+     * Fills an array with zeros seperated by the given stride.
+     * </p>
+     *
+     * <p>
+     * If {@code stride=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}} then the result will be {@code {1, 0, 3, 4, 0, 6, 7, 0, 9}}.
+     * </p>
+     *
+     * @param dest Array to fill with strided zeros.
+     * @param start Staring point in array to apply strided zero fill.
+     * @param stride Number of elements between each value to set to zero within the destination array.
+     * @throws IllegalArgumentException If stride is less than 1.
+     * @throws IllegalArgumentException If start is less than 0.
+     */
+    public static void stridedFillZeros(double[] dest, int start, int stride) {
+        ParameterChecks.assertGreaterEq(1, stride);
+        ParameterChecks.assertGreaterEq(0, start);
+
+        for(int i=start; i<dest.length; i+=stride) {
+            dest[i] = 0;
+        }
+    }
+
+
+    /**
+     * <p>
+     * Fills an array with zeros seperated by the given stride.
+     * </p>
+     *
+     * <p>
+     * If {@code stride=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}} then the result will be {@code {1, 0, 3, 4, 0, 6, 7, 0, 9}}.
+     * </p>
+     *
+     * @param dest Array to fill with strided zeros.
+     * @param start Staring point in array to apply strided zero fill.
+     * @param stride Number of elements between each value to set to zero within the destination array.
+     * @throws IllegalArgumentException If stride is less than 1.
+     * @throws IllegalArgumentException If start is less than 0.
+     */
+    public static void stridedFillZeros(CNumber[] dest, int start, int stride) {
+        ParameterChecks.assertGreaterEq(1, stride);
+        ParameterChecks.assertGreaterEq(0, start);
+
+        for(int i=start; i<dest.length; i+=stride) {
+            dest[i] = new CNumber();
+        }
+    }
+
+
+    /**
+     * <p>
+     * Fills an array with a range of zeros, each seperated by the given stride. Specifically, the destination array will
+     * be filled with several sequential ranges of zeros of specified length. Each range of zeros will be seperated by
+     * the stride.
+     * </p>
+     *
+     * <p>
+     * If {@code stride=2}, {@code length=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}}
+     * then the result will be {1, 0, 0, 0, 5, 0, 0, 0, 9}.
+     * </p>
+     *
+     * @param dest Array to fill with strided zeros.
+     * @param start Starting point to apply strided zero fill.
+     * @param length Number of sequential zeros to fill per stride.
+     * @param stride Number of elements between each value to set to zero within the destination array.
+     * @throws IllegalArgumentException If stride or length is less than one.
+     * @throws IllegalArgumentException If start is less than zero.
+     */
+    public static void stridedFillZerosRange(CNumber[] dest, int start, int length, int stride) {
+        ParameterChecks.assertGreaterEq(1, stride, length);
+        ParameterChecks.assertGreaterEq(0, start);
+
+        for(int i=start; i<dest.length; i+=stride+length) {
+            for(int j=0; j<length; j++) {
+                dest[i+j] = new CNumber();
+            }
+        }
+    }
+
+
+    /**
+     * <p>
+     * Fills an array with a range of zeros, each seperated by the given stride. Specifically, the destination array will
+     * be filled with several sequential ranges of zeros of specified length. Each range of zeros will be seperated by
+     * the stride.
+     * </p>
+     *
+     * <p>
+     * If {@code stride=2}, {@code length=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}}
+     * then the result will be {1, 0, 0, 0, 5, 0, 0, 0, 9}.
+     * </p>
+     *
+     * @param dest Array to fill with strided zeros.
+     * @param start Starting point to apply strided zero fill.
+     * @param length Number of sequential zeros to fill per stride.
+     * @param stride Number of elements between each value to set to zero within the destination array.
+     * @throws IllegalArgumentException If stride or length is less than one.
+     * @throws IllegalArgumentException If start is less than zero.
+     */
+    public static void stridedFillZerosRange(double[] dest, int start, int length, int stride) {
+        ParameterChecks.assertGreaterEq(1, stride, length);
+        ParameterChecks.assertGreaterEq(0, start);
+
+        for(int i=start; i<dest.length; i+=stride+length) {
+            for(int j=0; j<length; j++) {
+                dest[i+j] = 0;
+            }
+        }
     }
 
 
@@ -451,12 +569,12 @@ public final class ArrayUtils {
      * @param value Values to check if they are in the source array.
      * @return A boolean describing if the specified value is in the array or not.
      */
-    public static boolean inArray(int[] src, int value) {
-        boolean result = false;
+    public static boolean notInArray(int[] src, int value) {
+        boolean result = true;
 
         for(double entry : src) {
-            if(entry==value) {
-                result=true;
+            if(entry == value) {
+                result = false;
                 break;
             }
         }

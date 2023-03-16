@@ -148,8 +148,8 @@ public final class RealComplexDenseOperations {
      * @param b Scalar to subtract.
      */
     public static void subEq(CNumber[] src, double b) {
-        for(int i=0; i<src.length; i++) {
-            src[i].subEq(b);
+        for(CNumber cNumber : src) {
+            cNumber.subEq(b);
         }
     }
 
@@ -177,8 +177,8 @@ public final class RealComplexDenseOperations {
      * @param b Scalar to add.
      */
     public static void addEq(CNumber[] src, double b) {
-        for(int i=0; i<src.length; i++) {
-            src[i].addEq(b);
+        for(CNumber cNumber : src) {
+            cNumber.addEq(b);
         }
     }
 
@@ -217,11 +217,6 @@ public final class RealComplexDenseOperations {
                     -entries[i]*divisor.im / denom
                     );
         }
-
-//        double divisor = b.re*b.re + b.im*b.im;
-//        quotient = new CNumber(
-//                (this.re*b.re + this.im*b.im) / denom,
-//                (this.im*b.re - this.re*b.im) / denom);
 
         return quotient;
     }

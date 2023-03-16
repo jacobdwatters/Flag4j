@@ -69,8 +69,9 @@ public class RealDenseVectorOperations {
 
         for(int i=0; i<src1.length; i++) {
             destIndex = i*src2.length;
-            for(int j=0; j<src2.length; j++) {
-                dest[destIndex++] = src1[i]*src2[j];
+
+            for(double v : src2) {
+                dest[destIndex++] = src1[i]*v;
             }
         }
 
