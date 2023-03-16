@@ -48,8 +48,8 @@ public final class ComplexProperties {
     public static boolean isReal(CNumber[] entries) {
 <span class="fc" id="L49">        boolean result = true;</span>
 
-<span class="fc bfc" id="L51" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc bfc" id="L52" title="All 2 branches covered.">            if(entries[i].im != 0) {</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        for(CNumber entry : entries) {</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            if (entry.im != 0) {</span>
 <span class="fc" id="L53">                result = false;</span>
 <span class="fc" id="L54">                break;</span>
             }
@@ -67,8 +67,8 @@ public final class ComplexProperties {
     public static boolean isComplex(CNumber[] entries) {
 <span class="fc" id="L68">        boolean result = false;</span>
 
-<span class="fc bfc" id="L70" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc bfc" id="L71" title="All 2 branches covered.">            if(entries[i].im != 0) {</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        for(CNumber entry : entries) {</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">            if(entry.im != 0) {</span>
 <span class="fc" id="L72">                result = true;</span>
 <span class="fc" id="L73">                break;</span>
             }

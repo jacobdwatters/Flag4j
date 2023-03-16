@@ -218,32 +218,30 @@ public class RealComplexDenseSparseEquals {
 
 <span class="nc bnc" id="L219" title="All 2 branches missed.">        if(A.shape.equals(B.shape)) {</span>
 <span class="nc" id="L220">            double[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);</span>
-
-            int rowIndex, colIndex;
             int entriesIndex;
 
             // Remove all nonZero entries from the entries of this matrix.
-<span class="nc bnc" id="L226" title="All 2 branches missed.">            for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L227">                entriesIndex = A.shape.entriesIndex(B.indices[i]);</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">            for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L225">                entriesIndex = A.shape.entriesIndex(B.indices[i]);</span>
 
-<span class="nc bnc" id="L229" title="All 4 branches missed.">                if(entriesCopy[entriesIndex] != B.entries[i].re || B.entries[i].im != 0) {</span>
-<span class="nc" id="L230">                    equal = false;</span>
-<span class="nc" id="L231">                    break;</span>
+<span class="nc bnc" id="L227" title="All 4 branches missed.">                if(entriesCopy[entriesIndex] != B.entries[i].re || B.entries[i].im != 0) {</span>
+<span class="nc" id="L228">                    equal = false;</span>
+<span class="nc" id="L229">                    break;</span>
                 }
 
-<span class="nc" id="L234">                entriesCopy[A.shape.entriesIndex(B.indices[i])] = 0;</span>
+<span class="nc" id="L232">                entriesCopy[A.shape.entriesIndex(B.indices[i])] = 0;</span>
             }
 
-<span class="nc bnc" id="L237" title="All 2 branches missed.">            if(equal) {</span>
+<span class="nc bnc" id="L235" title="All 2 branches missed.">            if(equal) {</span>
                 // Now, if this tensor is equal to the sparse tensor, there should only be zeros left in the entriesStack
-<span class="nc" id="L239">                equal = ArrayUtils.isZeros(entriesCopy);</span>
+<span class="nc" id="L237">                equal = ArrayUtils.isZeros(entriesCopy);</span>
             }
 
-<span class="nc" id="L242">        } else {</span>
-<span class="nc" id="L243">            equal = false;</span>
+<span class="nc" id="L240">        } else {</span>
+<span class="nc" id="L241">            equal = false;</span>
         }
 
-<span class="nc" id="L246">        return equal;</span>
+<span class="nc" id="L244">        return equal;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -91,12 +91,13 @@ public class RealComplexDenseVectorOperations {
 
 <span class="fc bfc" id="L92" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
 <span class="fc" id="L93">            destIndex = i*src2.length;</span>
-<span class="fc bfc" id="L94" title="All 2 branches covered.">            for(int j=0; j&lt;src2.length; j++) {</span>
-<span class="fc" id="L95">                dest[destIndex++] = src2[j].conj().mult(src1[i]);</span>
+
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            for(CNumber cNumber : src2) {</span>
+<span class="fc" id="L96">                dest[destIndex++] = cNumber.conj().mult(src1[i]);</span>
             }
         }
 
-<span class="fc" id="L99">        return dest;</span>
+<span class="fc" id="L100">        return dest;</span>
     }
 
 
@@ -108,16 +109,17 @@ public class RealComplexDenseVectorOperations {
      */
     public static CNumber[] outerProduct(CNumber[] src1, double[] src2) {
         int destIndex;
-<span class="fc" id="L111">        CNumber[] dest = new CNumber[src1.length*src2.length];</span>
+<span class="fc" id="L112">        CNumber[] dest = new CNumber[src1.length*src2.length];</span>
 
-<span class="fc bfc" id="L113" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="fc" id="L114">            destIndex = i*src2.length;</span>
-<span class="fc bfc" id="L115" title="All 2 branches covered.">            for(int j=0; j&lt;src2.length; j++) {</span>
-<span class="fc" id="L116">                dest[destIndex++] = src1[i].mult(src2[j]);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L115">            destIndex = i*src2.length;</span>
+
+<span class="fc bfc" id="L117" title="All 2 branches covered.">            for(double v : src2) {</span>
+<span class="fc" id="L118">                dest[destIndex++] = src1[i].mult(v);</span>
             }
         }
 
-<span class="fc" id="L120">        return dest;</span>
+<span class="fc" id="L122">        return dest;</span>
     }
 
     /**
@@ -127,13 +129,13 @@ public class RealComplexDenseVectorOperations {
      * @return The result of adding the scalar to each entry of the tensor.
      */
     public static CNumber[] add(double[] src1, CNumber a) {
-<span class="fc" id="L130">        CNumber[] sum = new CNumber[src1.length];</span>
+<span class="fc" id="L132">        CNumber[] sum = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L132" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
-<span class="fc" id="L133">            sum[i] = a.add(src1[i]);</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L135">            sum[i] = a.add(src1[i]);</span>
         }
 
-<span class="fc" id="L136">        return sum;</span>
+<span class="fc" id="L138">        return sum;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

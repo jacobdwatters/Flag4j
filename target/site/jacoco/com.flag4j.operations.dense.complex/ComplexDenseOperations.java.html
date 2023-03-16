@@ -179,8 +179,8 @@ public final class ComplexDenseOperations {
      * @param b Scalar to subtract.
      */
     public static void subEq(CNumber[] src, CNumber b) {
-<span class="fc bfc" id="L182" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc" id="L183">            src[i].subEq(b);</span>
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        for(CNumber cNumber : src) {</span>
+<span class="fc" id="L183">            cNumber.subEq(b);</span>
         }
 <span class="fc" id="L185">    }</span>
 
@@ -207,8 +207,8 @@ public final class ComplexDenseOperations {
      * @param b Scalar to add.
      */
     public static void addEq(CNumber[] src, CNumber b) {
-<span class="fc bfc" id="L210" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc" id="L211">            src[i].addEq(b);</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">        for (CNumber cNumber : src) {</span>
+<span class="fc" id="L211">            cNumber.addEq(b);</span>
         }
 <span class="fc" id="L213">    }</span>
 
