@@ -635,12 +635,16 @@ public class Matrix extends RealMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(Matrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.numRows; i++) {
             for(int j=0; j<values.numCols; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] =
@@ -657,12 +661,16 @@ public class Matrix extends RealMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(SparseMatrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         // TODO: Algorithm could be improved if we assume sparse indices are sorted.
         // Fill slice with zeros
         ArrayUtils.stridedFillZerosRange(
@@ -690,12 +698,16 @@ public class Matrix extends RealMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(Double[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
@@ -711,12 +723,16 @@ public class Matrix extends RealMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(Integer[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
@@ -732,12 +748,16 @@ public class Matrix extends RealMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(double[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
@@ -753,12 +773,16 @@ public class Matrix extends RealMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(int[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];

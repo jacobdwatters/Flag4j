@@ -209,15 +209,58 @@ public final class ParameterChecks {
 
 
     /**
+     * Checks if a set of values is greater than or equal to a specified threshold.
+     * @param threshold Threshold value.
+     * @param value Values to compare against threshold.
+     * @param name Name of parameter.
+     * @throws IllegalArgumentException If any of the values are less than the threshold.
+     */
+    public static void assertGreaterEq(double threshold, double value, String name) {
+<span class="nc bnc" id="L219" title="All 2 branches missed.">        if(value&lt;threshold) {</span>
+<span class="nc" id="L220">            throw new IllegalArgumentException(ErrorMessages.getNamedGreaterEqErr(threshold, value, name));</span>
+        }
+<span class="nc" id="L222">    }</span>
+
+
+    /**
+     * Checks if a set of values is less than or equal to a specified threshold.
+     * @param threshold Threshold value.
+     * @param values Values to compare against threshold.
+     * @throws IllegalArgumentException If any of the values are less than the threshold.
+     */
+    public static void assertLessEq(double threshold, double... values) {
+<span class="fc bfc" id="L232" title="All 2 branches covered.">        for(double value : values) {</span>
+<span class="fc bfc" id="L233" title="All 2 branches covered.">            if(value&gt;threshold) {</span>
+<span class="fc" id="L234">                throw new IllegalArgumentException(ErrorMessages.getLessEqErr(threshold, value));</span>
+            }
+        }
+<span class="fc" id="L237">    }</span>
+
+
+    /**
+     * Checks if a set of values is less than or equal to a specified threshold.
+     * @param threshold Threshold value.
+     * @param value Values to compare against threshold.
+     * @param name Name of parameter.
+     * @throws IllegalArgumentException If any of the values are less than the threshold.
+     */
+    public static void assertLessEq(double threshold, double value, String name) {
+<span class="nc bnc" id="L248" title="All 2 branches missed.">        if(value&gt;threshold) {</span>
+<span class="nc" id="L249">            throw new IllegalArgumentException(ErrorMessages.getNamedLessEqErr(threshold, value, name));</span>
+        }
+<span class="nc" id="L251">    }</span>
+
+
+    /**
      * Checks if a shape represents a square matrix.
      * @param shape Shape to check.
      * @throws IllegalArgumentException If the shape is not of rank 2 with equal rows and columns.
      */
     public static void assertSquare(Shape shape) {
-<span class="pc bpc" id="L217" title="1 of 4 branches missed.">        if(shape.getRank()!=2 || shape.get(0)!=shape.get(1)) {</span>
-<span class="fc" id="L218">            throw new IllegalArgumentException(ErrorMessages.getSquareShapeErr(shape));</span>
+<span class="pc bpc" id="L260" title="1 of 4 branches missed.">        if(shape.getRank()!=2 || shape.get(0)!=shape.get(1)) {</span>
+<span class="fc" id="L261">            throw new IllegalArgumentException(ErrorMessages.getSquareShapeErr(shape));</span>
         }
-<span class="fc" id="L220">    }</span>
+<span class="fc" id="L263">    }</span>
 
 
     /**
@@ -227,10 +270,10 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If the specified shape does not have the expected rank.
      */
     public static void assertRank(int expRank, Shape shape) {
-<span class="fc bfc" id="L230" title="All 2 branches covered.">        if(shape.getRank() != expRank) {</span>
-<span class="fc" id="L231">            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), expRank));</span>
+<span class="fc bfc" id="L273" title="All 2 branches covered.">        if(shape.getRank() != expRank) {</span>
+<span class="fc" id="L274">            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), expRank));</span>
         }
-<span class="fc" id="L233">    }</span>
+<span class="fc" id="L276">    }</span>
 
 
     /**
@@ -238,9 +281,9 @@ public final class ParameterChecks {
      * @param axis Axis to check.
      */
     public static void assertAxis2D(int axis) {
-<span class="pc bpc" id="L241" title="1 of 4 branches missed.">        if(!(axis == 0 || axis==1)) {</span>
-<span class="nc" id="L242">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));</span>
+<span class="pc bpc" id="L284" title="1 of 4 branches missed.">        if(!(axis == 0 || axis==1)) {</span>
+<span class="nc" id="L285">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));</span>
         }
-<span class="fc" id="L244">    }</span>
+<span class="fc" id="L287">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

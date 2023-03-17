@@ -32,7 +32,7 @@ class CNumberLexer {
     /**
      * Error message for unexpected symbol.
      */
-    private static final String errMsg = &quot;Unexpected symbol while parsing CNumber: %s&quot;;
+    private static final String ERR_MSG = &quot;Unexpected symbol while parsing CNumber: %s&quot;;
 
     /**
      * Content of the lexer.
@@ -143,7 +143,7 @@ class CNumberLexer {
 <span class="pc bpc" id="L143" title="3 of 8 branches missed.">                else if(!(sym == 9 || sym == 10 || sym == 13 ||</span>
                         sym == 32)){
                     // Otherwise, if it is not a whitespace character, we have encountered an unexpected symbol.
-<span class="nc" id="L146">                    error(String.format(errMsg, (char) sym));</span>
+<span class="nc" id="L146">                    error(String.format(ERR_MSG, (char) sym));</span>
                 }
             }
 
@@ -182,7 +182,7 @@ class CNumberLexer {
 <span class="fc" id="L182">                    dataBuilder.append((char) sym);</span>
                 }
                 else {
-<span class="nc" id="L185">                    error(String.format(errMsg, (char) sym));</span>
+<span class="nc" id="L185">                    error(String.format(ERR_MSG, (char) sym));</span>
                 }
             }
 <span class="pc bpc" id="L188" title="1 of 2 branches missed.">            else if(state == 8) {</span>

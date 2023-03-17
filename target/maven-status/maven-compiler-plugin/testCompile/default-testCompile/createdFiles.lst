@@ -1,6 +1,7 @@
 com\flag4j\matrix\MatrixEqualsTests.class
 com\flag4j\matrix\MatrixElemDivTests.class
 com\flag4j\matrix\MatrixScalMultTests.class
+com\flag4j\matrix\MatrixToStringTest.class
 com\flag4j\complex_matrix\CMatrixConversionTests.class
 com\flag4j\matrix\MatrixAggregationTests.class
 com\flag4j\complex_matrix\CMatrixSubTests.class
@@ -17,6 +18,7 @@ com\flag4j\complex_matrix\CMatrixDirectSumTests.class
 com\flag4j\matrix\MatrixSumRowsColsTests.class
 com\flag4j\complex_matrix\CMatrixElemDivTests.class
 com\flag4j\complex_matrix\CMatrixEqualsTest.class
+com\flag4j\complex_matrix\CMatrixToStringTests.class
 com\flag4j\matrix\MatrixAddToEachColTests.class
 com\flag4j\complex_matrix\CMatrixRoundTests.class
 com\flag4j\complex_matrix\CMatrixStackTests.class

@@ -215,7 +215,7 @@ public final class ArrayUtils {
      * @param dest Array to fill specified range with zeros.
      */
     public static void fillZerosRange(CNumber[] dest, int start, int end) {
-        for(int i=0; i<dest.length; i++) {
+        for(int i=start; i<end; i++) {
             dest[i] = new CNumber();
         }
     }

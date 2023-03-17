@@ -684,9 +684,7 @@ public class CMatrix extends ComplexMatrixBase implements
         ParameterChecks.assertArrayLengthsEq(values.size, super.numRows);
 
         // Zero-out column
-        for(int i=0; i<super.numRows; i++) {
-            super.entries[i*numCols + colIndex] = new CNumber();
-        }
+        ArrayUtils.stridedFillZerosRange(this.entries, colIndex, 1, this.numCols-1);
 
         // Copy sparse values
         int index;
@@ -721,14 +719,14 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void setRow(SparseCVector values, int rowIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.size, super.numCols());
+        ParameterChecks.assertArrayLengthsEq(values.size, super.numCols);
         int rowOffset = rowIndex*numCols;
 
         // Fill row with zeros
-        ArrayUtils.fillZerosRange(super.entries, rowOffset, rowOffset+this.numCols);
+        ArrayUtils.fillZerosRange(super.entries, rowOffset, rowOffset+super.numCols);
 
         // Copy sparse values
-        for(int i=0; i<values.size; i++) {
+        for(int i=0; i<values.entries.length; i++) {
             super.entries[rowOffset + i] = values.entries[i].copy();
         }
     }
@@ -741,12 +739,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(SparseCMatrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         // TODO: Algorithm could be improved if we assume sparse indices are sorted.
         // Fill slice with zeros
         ArrayUtils.stridedFillZerosRange(
@@ -775,12 +777,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
      * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public CMatrix setSliceCopy(SparseCMatrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         CMatrix copy = this.copy();
 
         // Fill slice with zeros.
@@ -811,12 +817,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(Matrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.numRows; i++) {
             for(int j=0; j<values.numCols; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] =
@@ -833,12 +843,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(SparseMatrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         // TODO: Algorithm could be improved if we assume sparse indices are sorted.
         // Fill slice with zeros
         ArrayUtils.stridedFillZerosRange(
@@ -917,12 +931,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(CMatrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.numRows; i++) {
             for(int j=0; j<values.numCols; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] =
@@ -939,12 +957,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(CNumber[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j].copy();
@@ -960,12 +982,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(Integer[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
@@ -981,12 +1007,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(double[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
@@ -1002,12 +1032,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(int[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
@@ -1024,12 +1058,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
      * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public CMatrix setSliceCopy(CMatrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.numRows; i++) {
@@ -1050,12 +1088,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
      * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public CMatrix setSliceCopy(CNumber[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.length; i++) {
@@ -1076,12 +1118,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
      * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public CMatrix setSliceCopy(Integer[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.length; i++) {
@@ -1102,12 +1148,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
      * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public CMatrix setSliceCopy(double[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.length; i++) {
@@ -1128,12 +1178,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
      * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public CMatrix setSliceCopy(int[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.length; i++) {
@@ -1154,12 +1208,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
      * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public CMatrix setSliceCopy(Matrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.numRows; i++) {
@@ -1181,12 +1239,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
      * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public CMatrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         CMatrix copy = this.copy();
 
         // Fill slice with zeros.

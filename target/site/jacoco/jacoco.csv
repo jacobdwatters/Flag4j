@@ -1,11 +1,11 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-Flag4j,com.flag4j.util,ArrayUtils,484,664,54,62,87,108,42,55,15,24
+Flag4j,com.flag4j.util,ArrayUtils,248,899,27,89,40,155,24,73,9,30
 Flag4j,com.flag4j.util,Axis2D,0,34,0,0,0,6,0,4,0,4
 Flag4j,com.flag4j.util,RandomTensor,135,15,10,0,24,4,11,1,6,1
-Flag4j,com.flag4j.util,ErrorMessages,27,176,0,0,4,17,3,16,3,16
+Flag4j,com.flag4j.util,ErrorMessages,65,191,0,0,6,18,5,17,5,17
 Flag4j,com.flag4j.util,RandomCNumber,0,184,2,14,0,29,2,13,0,7
 Flag4j,com.flag4j.util,StringUtils,7,59,1,5,2,11,2,6,1,4
-Flag4j,com.flag4j.util,ParameterChecks,14,254,3,41,3,54,4,33,1,14
+Flag4j,com.flag4j.util,ParameterChecks,40,282,7,45,9,58,8,36,3,15
 Flag4j,com.flag4j.operations.dense.complex,ComplexDenseProperties,7,27,0,4,2,6,1,3,1,1
 Flag4j,com.flag4j.operations.dense.complex,ComplexDenseEquals,7,24,0,4,2,2,1,4,1,2
 Flag4j,com.flag4j.operations.dense.complex,ComplexDenseSetOperations,17,371,0,28,4,51,2,25,2,11
@@ -66,10 +66,10 @@ Flag4j,com.flag4j,CVector,380,1792,33,51,62,248,31,110,14,85
 Flag4j,com.flag4j,SparseTensor,0,70,0,2,0,10,0,5,0,4
 Flag4j,com.flag4j,Tensor,57,96,7,7,14,21,6,9,2,6
 Flag4j,com.flag4j,SparseCTensor,0,118,0,6,0,16,0,8,0,5
-Flag4j,com.flag4j,CMatrix,1815,5637,113,327,243,628,129,308,72,145
+Flag4j,com.flag4j,CMatrix,887,7244,62,376,134,784,90,346,57,160
 Flag4j,com.flag4j,SparseVector,0,44,0,0,0,9,0,4,0,4
 Flag4j,com.flag4j,Shape,35,408,6,34,5,66,6,31,2,15
-Flag4j,com.flag4j,Matrix,730,6041,44,370,93,700,45,352,21,169
+Flag4j,com.flag4j,Matrix,253,6778,15,399,32,779,26,371,15,175
 Flag4j,com.flag4j,SparseMatrix,0,189,0,0,0,20,0,10,0,10
 Flag4j,com.flag4j,Vector,161,1885,14,74,22,256,9,122,1,86
 Flag4j,com.flag4j,CTensor,0,145,0,6,0,29,0,11,0,8
