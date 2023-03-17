@@ -111,11 +111,24 @@ public abstract class ErrorMessages {
     /**
      * Error message for parameters which are expected to be greater than or equal to some threshold.
      */
-    private static final String GREATER_EQ_ERR = "Expecting parameters to be greater than or equal to %d but got %d.";
+    private static final String GREATER_EQ_ERR = "Expecting parameters to be greater than or equal to %f but got %f.";
+    /**
+     * Error message for names parameter which is expected to be greater than or equal to some threshold.
+     */
+    private static final String NAMED_GREATER_EQ_ERR = "Expecting %s to be greater than or equal to %f but got %f.";
+    /**
+     * Error message for parameters which are expected to be less than or equal to some threshold.
+     */
+    private static final String LESS_EQ_ERR = "Expecting parameters to be less than or equal to %f but got %f.";
+    /**
+     * Error message for named parameter which is expected to be less than or equal to some threshold.
+     */
+    private static final String NAMED_LESS_EQ_ERR = "Expecting %s to be less than or equal to %f but got %f.";
     /**
      * Error message for parameters which are expected to be square.
      */
     private static final String SQUARE_SHAPE_ERR = "Expecting matrix to be square but got shape %s";
+
 
 
     /**
@@ -194,7 +207,7 @@ public abstract class ErrorMessages {
      * @param allowedAxes An array containing allowed axes.
      * @return An error message for a disallowed axis.
      */
-    public static String axisErr(int axis, int... allowedAxes) {
+    public static String getAxisErr(int axis, int... allowedAxes) {
         return String.format(AXIS_ERR_RANGE, axis, Arrays.toString(allowedAxes));
     }
 
@@ -204,7 +217,7 @@ public abstract class ErrorMessages {
      * @param axis Negative value.
      * @return An error message for a disallowed axis.
      */
-    public static String axisErr(int axis) {
+    public static String getAxisErr(int axis) {
         return String.format(AXIS_ERR, axis);
     }
 
@@ -291,6 +304,41 @@ public abstract class ErrorMessages {
      */
     public static String getGreaterEqErr(double threshold, double value) {
         return String.format(GREATER_EQ_ERR, threshold, value);
+    }
+
+
+    /**
+     * Gets an error message for a value which was expected to be greater than of equal to a specified threshold but wasn't.
+     * @param threshold Threshold value.
+     * @param value Value expected to be greater than or equal to the threshold value.
+     * @return An error message for a value which was expected to be greater than of equal to a
+     * specified threshold but wasn't.
+     */
+    public static String getNamedGreaterEqErr(double threshold, double value, String name) {
+        return String.format(GREATER_EQ_ERR, name, threshold, value);
+    }
+
+    /**
+     * Gets an error message for a value which was expected to be less than of equal to a specified threshold but wasn't.
+     * @param threshold Threshold value.
+     * @param value Value expected to be less than or equal to the threshold value.
+     * @return An error message for a value which was expected to be greater than of equal to a
+     * specified threshold but wasn't.
+     */
+    public static String getLessEqErr(double threshold, double value) {
+        return String.format(LESS_EQ_ERR, threshold, value);
+    }
+
+
+    /**
+     * Gets an error message for a value which was expected to be less than of equal to a specified threshold but wasn't.
+     * @param threshold Threshold value.
+     * @param value Value expected to be less than or equal to the threshold value.
+     * @return An error message for a value which was expected to be greater than of equal to a
+     * specified threshold but wasn't.
+     */
+    public static String getNamedLessEqErr(double threshold, double value, String name) {
+        return String.format(NAMED_LESS_EQ_ERR, name, threshold, value);
     }
 
 

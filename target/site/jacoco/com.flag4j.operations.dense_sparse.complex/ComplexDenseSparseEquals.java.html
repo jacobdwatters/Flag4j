@@ -94,35 +94,35 @@ public class ComplexDenseSparseEquals {
      * @return True if the two vectors are equal. Returns false otherwise.
      */
     public static boolean vectorEquals(CNumber[] src1, CNumber[] src2, int[] indices, int sparseSize) {
-<span class="nc" id="L97">        boolean equal = true;</span>
+<span class="fc" id="L97">        boolean equal = true;</span>
 
-<span class="nc bnc" id="L99" title="All 2 branches missed.">        if(src1.length==sparseSize) {</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        if(src1.length==sparseSize) {</span>
             int index;
-<span class="nc" id="L101">            CNumber[] src1Copy = new CNumber[src1.length];</span>
-<span class="nc" id="L102">            ArrayUtils.copy2CNumber(src1, src1Copy);</span>
+<span class="fc" id="L101">            CNumber[] src1Copy = new CNumber[src1.length];</span>
+<span class="fc" id="L102">            ArrayUtils.copy2CNumber(src1, src1Copy);</span>
 
-<span class="nc bnc" id="L104" title="All 2 branches missed.">            for(int i=0; i&lt;sparseSize; i++) {</span>
-<span class="nc" id="L105">                index = indices[i];</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">            for(int i=0; i&lt;src2.length; i++) {</span>
+<span class="fc" id="L105">                index = indices[i];</span>
 
-<span class="nc bnc" id="L107" title="All 2 branches missed.">                if(!src1[index].equals(src2[i])) {</span>
-<span class="nc" id="L108">                    equal=false;</span>
-<span class="nc" id="L109">                    break;</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">                if(!src1[index].equals(src2[i])) {</span>
+<span class="fc" id="L108">                    equal = false;</span>
+<span class="fc" id="L109">                    break;</span>
 
                 } else {
-<span class="nc" id="L112">                    src1Copy[index] = new CNumber();</span>
+<span class="fc" id="L112">                    src1Copy[index] = new CNumber();</span>
                 }
             }
 
-<span class="nc bnc" id="L116" title="All 2 branches missed.">            if(equal) {</span>
-                // Now, if this vector is equal to the sparse vector, there should only be zeros left in the entriesStack
-<span class="nc" id="L118">                equal = ArrayUtils.isZeros(src1Copy);</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">            if(equal) {</span>
+                // Now, if this vector is equal to the sparse vector, there should only be zeros left in the copy
+<span class="fc" id="L118">                equal = ArrayUtils.isZeros(src1Copy);</span>
             }
 
-<span class="nc" id="L121">        } else {</span>
-<span class="nc" id="L122">            equal = false;</span>
+<span class="fc" id="L121">        } else {</span>
+<span class="fc" id="L122">            equal = false;</span>
         }
 
-<span class="nc" id="L125">        return equal;</span>
+<span class="fc" id="L125">        return equal;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

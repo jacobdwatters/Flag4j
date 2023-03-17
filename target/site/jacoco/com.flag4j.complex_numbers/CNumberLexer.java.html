@@ -32,7 +32,7 @@ class CNumberLexer {
     /**
      * Error message for unexpected symbol.
      */
-<span class="fc" id="L35">    private final String errMsg = &quot;Unexpected symbol while parsing CNumber: $s&quot;;</span>
+    private static final String ERR_MSG = &quot;Unexpected symbol while parsing CNumber: %s&quot;;
 
     /**
      * Content of the lexer.
@@ -96,21 +96,21 @@ class CNumberLexer {
         else {
 <span class="fc" id="L97">            content = (char) sym + content;</span>
         }
-
-<span class="fc" id="L100">    }</span>
+<span class="fc" id="L99">    }</span>
 
 
     /**
-     * Produces next CNumberToken from complex number string. Also removes this
-     * CNumberToken from the string
+     * Produces next {@link CNumberToken} from complex number string. Also removes this
+     * CNumberToken from the string. This method implements a finite automata which describes the legal arrangement of
+     * tokens within a complex number.
      *
-     * @return Next CNumberToken in string
+     * @return Next {@link CNumberToken} in string.
+     * @throws RuntimeException If the string is not a valid representation of a complex number.
      */
     public CNumberToken getNextToken() {
-
-<span class="fc" id="L111">        int state = 1;  // state of FA</span>
-<span class="fc" id="L112">        String data = &quot;&quot;;  // specific info for the CNumberToken</span>
-<span class="fc" id="L113">        boolean done = false;</span>
+<span class="fc" id="L111">        int state = 1;  // State of Finite Automata</span>
+<span class="fc" id="L112">        boolean done = false;</span>
+<span class="fc" id="L113">        StringBuilder dataBuilder = new StringBuilder(); // specific info for the CNumberToken</span>
         int sym;  // holds current symbol
 
 
@@ -118,103 +118,101 @@ class CNumberLexer {
 <span class="fc" id="L118">            sym = getNextSymbol(); // Will return -1 if there is no symbol to get</span>
 
 <span class="fc bfc" id="L120" title="All 2 branches covered.">            if(state == 1) {</span>
-<span class="pc bpc" id="L121" title="3 of 8 branches missed.">                if(sym == 9 || sym == 10 || sym == 13 ||</span>
-                        sym == 32) { // Whitespace
-<span class="fc" id="L123">                    state = 1;</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">                if(sym == 45) {</span>
+<span class="fc" id="L122">                    state = 2;</span>
+<span class="fc" id="L123">                    dataBuilder.append((char) sym);</span>
                 }
-<span class="fc bfc" id="L125" title="All 2 branches covered.">                else if(sym == 45) {</span>
-<span class="fc" id="L126">                    state = 2;</span>
-<span class="fc" id="L127">                    data += (char) sym;</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">                else if(sym == 43) {</span>
+<span class="fc" id="L126">                    state = 4;</span>
+<span class="fc" id="L127">                    dataBuilder.append((char) sym);</span>
+<span class="fc" id="L128">                    done = true;</span>
                 }
-<span class="fc bfc" id="L129" title="All 2 branches covered.">                else if(sym == 43) {</span>
-<span class="fc" id="L130">                    state = 4;</span>
-<span class="fc" id="L131">                    data += (char) sym;</span>
-<span class="fc" id="L132">                    done = true;</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">                else if(digit(sym)) {</span>
+<span class="fc" id="L131">                    state = 3;</span>
+<span class="fc" id="L132">                    dataBuilder.append((char) sym);</span>
                 }
-<span class="fc bfc" id="L134" title="All 2 branches covered.">                else if(digit(sym)) {</span>
-<span class="fc" id="L135">                    state = 3;</span>
-<span class="fc" id="L136">                    data += (char) sym;</span>
+<span class="fc bfc" id="L134" title="All 4 branches covered.">                else if(sym == 'i' || sym == 'j') {</span>
+<span class="fc" id="L135">                    state = 6;</span>
+<span class="fc" id="L136">                    dataBuilder.append((char) sym);</span>
+<span class="fc" id="L137">                    done = true;</span>
                 }
-<span class="fc bfc" id="L138" title="All 4 branches covered.">                else if(sym == 'i' || sym == 'j') {</span>
-<span class="fc" id="L139">                    state = 6;</span>
-<span class="fc" id="L140">                    data += (char) sym;</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">                else if(sym == -1) { // We have reached the end of the string</span>
+<span class="fc" id="L140">                    state = 5;</span>
 <span class="fc" id="L141">                    done = true;</span>
                 }
-<span class="pc bpc" id="L143" title="1 of 2 branches missed.">                else if(sym == -1) { // We have reached the end of the string</span>
-<span class="fc" id="L144">                    state = 5;</span>
-<span class="fc" id="L145">                    done = true;</span>
-                }
-                else {
-<span class="nc" id="L148">                    error(String.format(errMsg, (char) sym));</span>
+<span class="pc bpc" id="L143" title="3 of 8 branches missed.">                else if(!(sym == 9 || sym == 10 || sym == 13 ||</span>
+                        sym == 32)){
+                    // Otherwise, if it is not a whitespace character, we have encountered an unexpected symbol.
+<span class="nc" id="L146">                    error(String.format(ERR_MSG, (char) sym));</span>
                 }
             }
 
-<span class="fc bfc" id="L152" title="All 2 branches covered.">            else if(state == 2) {</span>
-<span class="pc bpc" id="L153" title="3 of 8 branches missed.">                if(sym == 9 || sym == 10 || sym == 13 ||</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">            else if(state == 2) {</span>
+<span class="pc bpc" id="L151" title="3 of 8 branches missed.">                if(sym == 9 || sym == 10 || sym == 13 ||</span>
                         sym == 32) { // Whitespace
-<span class="fc" id="L155">                    putBackSymbol(sym);</span>
-<span class="fc" id="L156">                    done = true;</span>
+<span class="fc" id="L153">                    putBackSymbol(sym);</span>
+<span class="fc" id="L154">                    done = true;</span>
                 }
-<span class="fc bfc" id="L158" title="All 2 branches covered.">                else if(digit(sym)) {</span>
-<span class="fc" id="L159">                    state = 3;</span>
-<span class="fc" id="L160">                    data += (char) sym;</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">                else if(digit(sym)) {</span>
+<span class="fc" id="L157">                    state = 3;</span>
+<span class="fc" id="L158">                    dataBuilder.append((char) sym);</span>
                 }
                 else {
-<span class="fc" id="L163">                    putBackSymbol(sym);</span>
-<span class="fc" id="L164">                    done = true;</span>
+<span class="fc" id="L161">                    putBackSymbol(sym);</span>
+<span class="fc" id="L162">                    done = true;</span>
                 }
             }
-<span class="fc bfc" id="L167" title="All 2 branches covered.">            else if(state == 3) {</span>
-<span class="fc bfc" id="L168" title="All 2 branches covered.">                if(digit(sym)) {</span>
-<span class="fc" id="L169">                    state = 3;</span>
-<span class="fc" id="L170">                    data += (char) sym;</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">            else if(state == 3) {</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">                if(digit(sym)) {</span>
+                    // State does not need to change here.
+<span class="fc" id="L168">                    dataBuilder.append((char) sym);</span>
                 }
-<span class="fc bfc" id="L172" title="All 2 branches covered.">                else if(sym == '.') {</span>
-<span class="fc" id="L173">                    state = 7;</span>
-<span class="fc" id="L174">                    data += (char) sym;</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">                else if(sym == '.') {</span>
+<span class="fc" id="L171">                    state = 7;</span>
+<span class="fc" id="L172">                    dataBuilder.append((char) sym);</span>
                 }
                 else {
-<span class="fc" id="L177">                    putBackSymbol(sym);</span>
-<span class="fc" id="L178">                    done = true;</span>
+<span class="fc" id="L175">                    putBackSymbol(sym);</span>
+<span class="fc" id="L176">                    done = true;</span>
                 }
             }
-<span class="fc bfc" id="L181" title="All 2 branches covered.">            else if(state == 7) {</span>
-<span class="pc bpc" id="L182" title="1 of 2 branches missed.">                if(digit(sym)) {</span>
-<span class="fc" id="L183">                    state = 8;</span>
-<span class="fc" id="L184">                    data += (char) sym;</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            else if(state == 7) {</span>
+<span class="pc bpc" id="L180" title="1 of 2 branches missed.">                if(digit(sym)) {</span>
+<span class="fc" id="L181">                    state = 8;</span>
+<span class="fc" id="L182">                    dataBuilder.append((char) sym);</span>
                 }
                 else {
-<span class="nc" id="L187">                    error(String.format(errMsg, (char) sym));</span>
+<span class="nc" id="L185">                    error(String.format(ERR_MSG, (char) sym));</span>
                 }
             }
-<span class="pc bpc" id="L190" title="1 of 2 branches missed.">            else if(state == 8) {</span>
-<span class="fc bfc" id="L191" title="All 2 branches covered.">                if(digit(sym)) {</span>
-<span class="fc" id="L192">                    state = 8;</span>
-<span class="fc" id="L193">                    data += (char) sym;</span>
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">            else if(state == 8) {</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">                if(digit(sym)) {</span>
+                    // State does not need to change here.
+<span class="fc" id="L191">                    dataBuilder.append((char) sym);</span>
                 }
                 else {
-<span class="fc" id="L196">                    putBackSymbol(sym);</span>
-<span class="fc" id="L197">                    done = true;</span>
+<span class="fc" id="L194">                    putBackSymbol(sym);</span>
+<span class="fc" id="L195">                    done = true;</span>
                 }
             }
 
-<span class="fc bfc" id="L201" title="All 2 branches covered.">        } while(!done);</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        } while(!done);</span>
 
-<span class="fc bfc" id="L203" title="All 4 branches covered.">        if(state == 2 || state == 4) { // we have an operator</span>
-<span class="fc" id="L204">            return new CNumberToken(&quot;opp&quot;, data);</span>
+<span class="fc bfc" id="L201" title="All 4 branches covered.">        if(state == 2 || state == 4) { // we have an operator</span>
+<span class="fc" id="L202">            return new CNumberToken(&quot;opp&quot;, dataBuilder.toString());</span>
         }
-<span class="fc bfc" id="L206" title="All 4 branches covered.">        else if(state == 3 || state == 8) { // we have a number</span>
-<span class="fc" id="L207">            return new CNumberToken(&quot;num&quot;, data);</span>
+<span class="fc bfc" id="L204" title="All 4 branches covered.">        else if(state == 3 || state == 8) { // we have a number</span>
+<span class="fc" id="L205">            return new CNumberToken(&quot;num&quot;, dataBuilder.toString());</span>
         }
-<span class="fc bfc" id="L209" title="All 2 branches covered.">        else if(state == 5) { // end of number</span>
-<span class="fc" id="L210">            return new CNumberToken(&quot;eof&quot;, data);</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">        else if(state == 5) { // end of number</span>
+<span class="fc" id="L208">            return new CNumberToken(&quot;eof&quot;, dataBuilder.toString());</span>
         }
-<span class="pc bpc" id="L212" title="1 of 2 branches missed.">        else if(state == 6) { // we have the imaginary unit</span>
-<span class="fc" id="L213">            return new CNumberToken(&quot;im&quot;,&quot;i&quot;);</span>
+<span class="pc bpc" id="L210" title="1 of 2 branches missed.">        else if(state == 6) { // we have the imaginary unit</span>
+<span class="fc" id="L211">            return new CNumberToken(&quot;im&quot;,&quot;i&quot;);</span>
         }
         else {
-<span class="nc" id="L216">            error(&quot;somehow Lexer FA halted in bad state &quot; + state );</span>
-<span class="nc" id="L217">            return null;</span>
+<span class="nc" id="L214">            error(&quot;somehow Lexer FA halted in bad state &quot; + state);</span>
+<span class="nc" id="L215">            return null;</span>
         }
     }
 
@@ -224,7 +222,7 @@ class CNumberLexer {
      * @param message - error message to print
      */
     protected static void error( String message ) {
-<span class="fc" id="L227">        throw new RuntimeException(message);</span>
+<span class="fc" id="L225">        throw new RuntimeException(message);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

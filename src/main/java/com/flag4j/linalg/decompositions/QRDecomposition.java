@@ -32,7 +32,7 @@ import com.flag4j.core.MatrixBase;
  * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into an orthogonal matrix {@code Q}
  * and an upper triangular matrix {@code R} such that {@code A=QR}.</p>
  */
-public abstract class QRDecomposition<T extends MatrixBase> implements Decomposition<T> {
+public abstract class QRDecomposition<T extends MatrixBase<?>> implements Decomposition<T> {
 
     /**
      * Storage matrix for {@code Q}.
@@ -46,7 +46,7 @@ public abstract class QRDecomposition<T extends MatrixBase> implements Decomposi
      * Flag for determining if the full {@code QR} decomposition should be used. If true, the full {@code QR} decomposition will be computed,
      * if false, the reduced QR decomposition will be computed.
      */
-    protected boolean fullQR;
+    protected final boolean fullQR;
 
     /**
      * Constructs {@code QR} decomposer which computes the full {@code QR} decomposition.

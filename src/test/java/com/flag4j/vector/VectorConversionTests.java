@@ -5,7 +5,8 @@ import com.flag4j.Shape;
 import com.flag4j.Tensor;
 import com.flag4j.Vector;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class VectorConversionTests {
 

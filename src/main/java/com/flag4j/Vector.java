@@ -26,6 +26,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
+import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.real.Aggregate;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.dense.real.*;
@@ -35,10 +36,7 @@ import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
-import com.flag4j.util.ArrayUtils;
-import com.flag4j.util.Axis2D;
-import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.*;
 
 import java.util.Arrays;
 
@@ -221,7 +219,7 @@ public class Vector extends VectorBase<double[]> implements
                 System.arraycopy(row, 0, extended.entries, i*extended.numCols, row.length);
             }
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, Axis2D.allAxes()));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));
         }
 
         return extended;
@@ -847,6 +845,208 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
+     * <p>
+     * Stacks two vectors along specified axis.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * </p>
+     *
+     * @param b    Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public Matrix stack(Vector b, int axis) {
+        ParameterChecks.assertAxis2D(axis);
+        Matrix stacked;
+
+        if(axis==0) {
+            stacked = stack(b);
+        } else {
+            ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+            double[] stackedEntries = new double[2*this.size];
+
+            int count = 0;
+            for(int i=0; i<stackedEntries.length; i+=2) {
+                stackedEntries[i] = this.entries[count];
+                stackedEntries[i+1] = b.entries[count++];
+            }
+
+            stacked = new Matrix(this.size, 2, stackedEntries);
+        }
+
+        return stacked;
+    }
+
+
+    /**
+     * <p>
+     * Stacks two vectors along specified axis.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * </p>
+     *
+     * @param b    Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public Matrix stack(SparseVector b, int axis) {
+        ParameterChecks.assertAxis2D(axis);
+        Matrix stacked;
+
+        if(axis==0) {
+            stacked = stack(b);
+        } else {
+            ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+            double[] stackedEntries = new double[2*this.size];
+
+            // Copy dense values.
+            for(int i=0; i<this.size; i++) {
+                stackedEntries[i*2] = this.entries[i];
+            }
+
+            // Copy sparse values.
+            int index;
+            for(int i=0; i<b.entries.length; i++) {
+                index = b.indices[i];
+                stackedEntries[index*2 + 1] = b.entries[i];
+            }
+
+            stacked = new Matrix(this.size, 2, stackedEntries);
+        }
+
+        return stacked;
+    }
+
+
+    /**
+     * <p>
+     * Stacks two vectors along specified axis.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * </p>
+     *
+     * @param b    Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(CVector b, int axis) {
+        ParameterChecks.assertAxis2D(axis);
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = stack(b);
+        } else {
+            ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+            CNumber[] stackedEntries = new CNumber[2*this.size];
+
+            int count = 0;
+
+            for(int i=0; i<stackedEntries.length; i+=2) {
+                stackedEntries[i] = new CNumber(this.entries[count]);
+                stackedEntries[i+1] = b.entries[count++].copy();
+            }
+
+            stacked = new CMatrix(this.size, 2, stackedEntries);
+        }
+
+        return stacked;
+    }
+
+
+    /**
+     * <p>
+     * Stacks two vectors along specified axis.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * </p>
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * </p>
+     *
+     * @param b    Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(SparseCVector b, int axis) {
+        ParameterChecks.assertAxis2D(axis);
+        CMatrix stacked;
+
+        if(axis==0) {
+            stacked = stack(b);
+        } else {
+            ParameterChecks.assertArrayLengthsEq(this.size, b.size);
+            CNumber[] stackedEntries = new CNumber[2*this.size];
+            ArrayUtils.fillZeros(stackedEntries);
+
+            // Copy dense values.
+            for(int i=0; i<this.size; i++) {
+                stackedEntries[i*2] = new CNumber(this.entries[i]);
+            }
+
+            // Copy sparse values.
+            int index;
+            for(int i=0; i<b.entries.length; i++) {
+                index = b.indices[i];
+                stackedEntries[index*2 + 1] = b.entries[i].copy();
+            }
+
+            stacked = new CMatrix(this.size, 2, stackedEntries);
+        }
+
+        return stacked;
+    }
+
+
+    /**
      * Computes the inner product between two vectors.
      *
      * @param b Second vector in the inner product.
@@ -1242,5 +1442,51 @@ public class Vector extends VectorBase<double[]> implements
     @Override
     public int length() {
         return this.size;
+    }
+
+
+    /**
+     * Converts this vector to a human-readable string format. To specifiy the maximum number of entries to print, use
+     * {@link PrintOptions#setMaxColumns(int)}.
+     * @return A human-readable string representation of this vector.
+     */
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+
+        if(PrintOptions.getMaxColumns()<this.size) {
+            // Then also get the full size of the vector.
+            result.append(String.format("Full Size: %d\n", this.size));
+        }
+
+        result.append("[");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.size-1);
+        int width;
+        String value;
+
+        // Get entries up until the stopping point.
+        for(int i=0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(this.get(i), PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(stopIndex < this.size-1) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry now
+        value = StringUtils.ValueOfRound(this.get(this.size-1), PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + value.length();
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s", value));
+
+        result.append("]");
+
+        return result.toString();
     }
 }

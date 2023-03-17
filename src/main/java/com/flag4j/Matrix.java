@@ -413,7 +413,7 @@ public class Matrix extends RealMatrixBase implements
             return reshape(new Shape(entries.length, 1));
         } else {
             // Unknown axis
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, Axis2D.allAxes()));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));
         }
     }
 
@@ -635,16 +635,20 @@ public class Matrix extends RealMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(Matrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.numRows; i++) {
             for(int j=0; j<values.numCols; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] =
-                        values.entries[i* values.numCols + j];
+                        values.entries[i*values.numCols + j];
             }
         }
     }
@@ -657,12 +661,53 @@ public class Matrix extends RealMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public void setSlice(SparseMatrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
+        // TODO: Algorithm could be improved if we assume sparse indices are sorted.
+        // Fill slice with zeros
+        ArrayUtils.stridedFillZerosRange(
+                this.entries,
+                rowStart*this.numCols+colStart,
+                values.numCols,
+                this.numCols-values.numCols
+        );
+
+        // Copy sparse values
+        int rowIndex, colIndex;
+        for(int i=0; i<values.entries.length; i++) {
+            rowIndex = values.rowIndices[i];
+            colIndex = values.colIndices[i];
+
+            this.entries[(rowIndex+rowStart)*this.numCols + colIndex + colStart] = values.entries[i];
+        }
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(Double[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
@@ -678,12 +723,16 @@ public class Matrix extends RealMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(Integer[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
@@ -699,12 +748,16 @@ public class Matrix extends RealMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(double[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
@@ -720,12 +773,16 @@ public class Matrix extends RealMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(int[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
@@ -754,6 +811,43 @@ public class Matrix extends RealMatrixBase implements
             for(int j=0; j<values.numCols; j++) {
                 copy.entries[(i+rowStart)*numCols + j+colStart] = values.entries[values.shape.entriesIndex(i, j)];
             }
+        }
+
+        return copy;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
+        Matrix copy = this.copy();
+
+        // Fill slice with zeros
+        ArrayUtils.stridedFillZerosRange(
+                copy.entries,
+                rowStart*copy.numCols+colStart,
+                values.numCols,
+                copy.numCols-values.numCols
+        );
+
+        // Copy sparse values
+        int rowIndex, colIndex;
+        for(int i=0; i<values.entries.length; i++) {
+            rowIndex = values.rowIndices[i];
+            colIndex = values.colIndices[i];
+
+            copy.entries[(rowIndex+rowStart)*copy.numCols + colIndex + colStart] = values.entries[i];
         }
 
         return copy;
@@ -899,7 +993,7 @@ public class Matrix extends RealMatrixBase implements
         int row = 0;
 
         for(int i=0; i<this.numRows; i++) {
-            if(!ArrayUtils.inArray(rowIndices, i)) {
+            if(ArrayUtils.notInArray(rowIndices, i)) {
                 System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }
@@ -950,7 +1044,7 @@ public class Matrix extends RealMatrixBase implements
         for(int i=0; i<this.numRows; i++) {
             col = 0;
             for(int j=0; j<this.numCols; j++) {
-                if(!ArrayUtils.inArray(colIndices, j)) {
+                if(ArrayUtils.notInArray(colIndices, j)) {
                     copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];
                     col++;
                 }
@@ -2301,7 +2395,7 @@ public class Matrix extends RealMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(B);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2329,7 +2423,7 @@ public class Matrix extends RealMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(B);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2357,7 +2451,7 @@ public class Matrix extends RealMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(B);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2385,7 +2479,7 @@ public class Matrix extends RealMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(B);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2647,7 +2741,7 @@ public class Matrix extends RealMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(b);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2677,7 +2771,7 @@ public class Matrix extends RealMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(b);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2707,7 +2801,7 @@ public class Matrix extends RealMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(b);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2737,7 +2831,7 @@ public class Matrix extends RealMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(b);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2932,7 +3026,7 @@ public class Matrix extends RealMatrixBase implements
     }
 
 
-    // TODO: Pull below methods up to matrix operations interface and add getRowBellow(int, int)
+    // TODO: Pull row/colAsVector methods up to matrix operations interface.
 
     /**
      * Get a specified column of this matrix at and below a specified row.
@@ -2940,9 +3034,10 @@ public class Matrix extends RealMatrixBase implements
      * @param rowStart Index of the row to begin at.
      * @param j Index of column to get.
      * @return The specified column of this matrix beginning at the specified row.
-     * @throws NegativeArraySizeException If {@code i} is larger than the number of rows in this matrix.
-     * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code j} is outside the bounds of this matrix.
+     * @throws NegativeArraySizeException If {@code rowStart} is larger than the number of rows in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
      */
+    @Override
     public Matrix getColBelow(int rowStart, int j) {
         double[] col = new double[numRows-rowStart];
 
@@ -2954,7 +3049,27 @@ public class Matrix extends RealMatrixBase implements
     }
 
 
-        /**
+    /**
+     * Get a specified row of this matrix at and after a specified column.
+     *
+     * @param colStart Index of the row to begin at.
+     * @param i Index of the row to get.
+     * @return The specified row of this matrix beginning at the specified column.
+     * @throws NegativeArraySizeException If {@code colStart} is larger than the number of columns in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
+     */
+    @Override
+    public Matrix getRowAfter(int colStart, int i) {
+        if(i > this.numRows || colStart > this.numCols) {
+            throw new ArrayIndexOutOfBoundsException(String.format("Index (%d, %d) not in matrix.", i, colStart));
+        }
+
+        double[] row = Arrays.copyOfRange(this.entries, i*this.numCols + colStart, (i+1)*this.numCols);
+        return new Matrix(new Shape(1, row.length), row);
+    }
+
+
+    /**
      * Get the column of this matrix at the specified index.
      *
      * @param j Index of column to get.
@@ -3467,59 +3582,104 @@ public class Matrix extends RealMatrixBase implements
     }
 
 
+    /**
+     * Gets row of matrix formatted as a human-readable String. Helper method for {@link #toString} method.
+     * @param i Index of row to get.
+     * @param colStopIndex Stopping index for printing columns.
+     * @param maxList List of maximum string representation lengths for each column of this matrix. This
+     *                is used to align columns when printing.
+     * @return A human-readable String representation of the specified row.
+     */
+    private String rowToString(int i, int colStopIndex, List<Integer> maxList) {
+        int width;
+        String value;
+        StringBuilder result = new StringBuilder();
+
+        if(i>0) {
+            result.append(" [");
+        }  else {
+            result.append("[");
+        }
+
+        for(int j=0; j<colStopIndex; j++) {
+            value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + maxList.get(j);
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(PrintOptions.getMaxColumns() < this.numCols) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry in the column now
+        value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + maxList.get(maxList.size()-1);
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s]", value));
+
+        return result.toString();
+    }
+
 
     /**
-     * Formats matrix contents as a string.
-     * @return Matrix as string
+     * Formats matrix contents as a human-readable String.
+     * @return Matrix represented as a human-readable String
      */
     public String toString() {
-        String result = "[";
+        StringBuilder result  = new StringBuilder();
 
-        if(entries.length!=0) {
-            int colWidth;
-            List<Integer> maxList = new ArrayList<>();
-
-            for(int j=0; j<numCols; j++) {
-                // Get the maximum length string representation for each column.
-                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries));
-            }
-
-            StringBuilder resultBuilder = new StringBuilder("[");
-            for(int i=0; i<numRows; i++) {
-                if(i >= PrintOptions.getMaxRows() && i < numCols-1) {
-                    resultBuilder.append("  ...\n ");
-                    i = numCols-1;
-                }
-
-                resultBuilder.append(" [");
-
-                for(int j=0; j<numCols; j++) {
-
-                    if(j >= PrintOptions.getMaxColumns() && j < numCols-1) {
-                        colWidth = 3+PrintOptions.getPadding();
-                        resultBuilder.append(String.format("%-" + colWidth + "s", StringUtils.center("...", colWidth)));
-                        colWidth = maxList.get(numCols-1)+PrintOptions.getPadding();
-                        resultBuilder.append(String.format("%-" + (colWidth) + "s", StringUtils.center(get(i, numCols-1).toString(), colWidth)));
-                        break;
-                    }
-                    else {
-                        colWidth = maxList.get(j)+PrintOptions.getPadding();
-
-                        resultBuilder.append(String.format("%-" + (colWidth) + "s", StringUtils.center(
-                                CNumber.round(new CNumber(get(i, j)), PrintOptions.getPrecision()).toString(), colWidth))
-                        );
-                    }
-                }
-                resultBuilder.append("]\n ");
-            }
-            result = resultBuilder.toString();
-
-            result = result.substring(0, result.length()-2) + " ]";
-        }
-        else {
-            result += "[]]";
+        if(PrintOptions.getMaxRows() < this.numRows || PrintOptions.getMaxColumns() < this.numCols) {
+            // Then also get the full size of the matrix.
+            result.append(String.format("Full Shape: %s\n", this.shape));
         }
 
-        return result;
+        result.append("[");
+
+        int rowStopIndex = Math.min(PrintOptions.getMaxRows()-1, this.numRows-1);
+        int colStopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.numCols-1);
+        int width;
+        int totalRowLength = 0; // Total string length of each row (not including brackets)
+        String value;
+
+        // Find maximum entry string width in each column so columns can be aligned.
+        List<Integer> maxList = new ArrayList<>(colStopIndex+1);
+        for(int j=0; j<colStopIndex; j++) {
+            maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));
+            totalRowLength += maxList.get(maxList.size()-1);
+        }
+
+        if(colStopIndex < this.numCols) {
+            maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols-1).entries));
+            totalRowLength += maxList.get(maxList.size()-1);
+        }
+
+        if(colStopIndex < this.numCols-1) {
+            totalRowLength += 3+PrintOptions.getPadding(); // Account for '...' element with padding in each column.
+        }
+
+        totalRowLength += maxList.size()*PrintOptions.getPadding(); // Account for column padding
+
+        // Get each row as a string.
+        for(int i=0; i<rowStopIndex; i++) {
+            result.append(rowToString(i, colStopIndex, maxList));
+            result.append("\n");
+        }
+
+        if(PrintOptions.getMaxRows() < this.numRows) {
+            width = totalRowLength;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format(" [%-" + width + "s]\n", value));
+        }
+
+        // Get Last row as a string.
+        result.append(rowToString(this.numRows-1, colStopIndex, maxList));
+        result.append("]");
+
+        return result.toString();
     }
 }

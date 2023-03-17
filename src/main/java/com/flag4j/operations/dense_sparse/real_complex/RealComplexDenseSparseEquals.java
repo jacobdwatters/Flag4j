@@ -218,8 +218,6 @@ public class RealComplexDenseSparseEquals {
 
         if(A.shape.equals(B.shape)) {
             double[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);
-
-            int rowIndex, colIndex;
             int entriesIndex;
 
             // Remove all nonZero entries from the entries of this matrix.

@@ -84,12 +84,9 @@ public final class MatrixMultiply {
             case CONCURRENT_STANDARD_VECTOR:
                 dest = RealDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
                 break;
-            case CONCURRENT_BLOCKED_VECTOR:
+            default:
                 dest = RealDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);
                 break;
-            default:
-                // Default to the concurrent reordered implementation just in case.
-                dest = RealDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);
         }
 
         return dest;

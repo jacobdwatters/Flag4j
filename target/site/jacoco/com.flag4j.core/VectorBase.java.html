@@ -37,7 +37,7 @@ import java.io.Serializable;
 public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBase&lt;T&gt; {
 
     /**
-     * Size of the matrix.
+     * Size of the vector.
      */
     public final int size;
 
@@ -74,6 +74,26 @@ public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBas
      */
     public int size() {
 <span class="fc" id="L76">        return size;</span>
+    }
+
+
+    /**
+     * Checks if a vector has the same number of elements as this vector. Same as {@link #sameShape(VectorBase)}
+     * @param b Vector to compare to this vector.
+     * @return True if this vector and {@code b} have the same number of elements.
+     */
+    public boolean sameSize(VectorBase&lt;?&gt; b) {
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        return this.size==b.size;</span>
+    }
+
+
+    /**
+     * Checks if a vector has the same number of elements as this vector. Same as {@link #sameSize(VectorBase)}
+     * @param b Vector to compare to this vector.
+     * @return True if this vector and {@code b} have the same number of elements.
+     */
+    public boolean sameShape(VectorBase&lt;?&gt; b) {
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        return this.size==b.size;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

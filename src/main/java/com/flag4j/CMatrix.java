@@ -25,12 +25,14 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.*;
+import com.flag4j.core.ComplexMatrixBase;
+import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.MatrixMultiply;
 import com.flag4j.operations.MatrixTranspose;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.operations.dense.complex.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
@@ -45,16 +47,12 @@ import com.flag4j.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Complex dense matrix. Stored in row major format.
  */
 public class CMatrix extends ComplexMatrixBase implements
-        MatrixComparisonsMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber>,
-        MatrixManipulationsMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber>,
-        MatrixOperationsMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber>,
-        MatrixPropertiesMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber> {
+        ComplexMatrixMixin<CMatrix, Matrix> {
 
     /**
      * Constructs a square complex dense matrix of a specified size. The entries of the matrix will default to zero.
@@ -291,12 +289,45 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
+     * Checks if this tensor has only real valued entries.
+     *
+     * @return True if this tensor contains <b>NO</b> complex entries. Otherwise, returns false.
+     */
+    @Override
+    public boolean isReal() {
+        return ComplexProperties.isReal(this.entries);
+    }
+
+
+    /**
+     * Checks if this tensor contains at least one complex entry.
+     *
+     * @return True if this tensor contains at least one complex entry. Otherwise, returns false.
+     */
+    @Override
+    public boolean isComplex() {
+        return ComplexProperties.isComplex(this.entries);
+    }
+
+
+    /**
+     * Computes the complex conjugate of a tensor.
+     *
+     * @return The complex conjugate of this tensor.
+     */
+    @Override
+    public CMatrix conj() {
+        return new CMatrix(this.shape, ComplexOperations.conj(this.entries));
+    }
+
+
+    /**
      * Converts this matrix to an equivalent real matrix. Imaginary components are ignored.
      * @return A real matrix with equivalent real parts.
      */
     @Override
     public Matrix toReal() {
-        return new Matrix(this.shape.copy(), ArrayUtils.getReals(entries));
+        return new Matrix(this.shape.copy(), ComplexOperations.toReal(entries));
     }
 
 
@@ -495,7 +526,7 @@ public class CMatrix extends ComplexMatrixBase implements
             return reshape(new Shape(entries.length, 1));
         } else {
             // Unknown axis
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, Axis2D.allAxes()));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));
         }
     }
 
@@ -625,6 +656,224 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public void setCol(CVector values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.size, this.numRows);
+
+        for(int i=0; i<values.size; i++) {
+            super.entries[i*numCols + colIndex] = values.entries[i].copy();
+        }
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the columns which is to be set.
+     * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public void setCol(SparseCVector values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.size, super.numRows);
+
+        // Zero-out column
+        ArrayUtils.stridedFillZerosRange(this.entries, colIndex, 1, this.numCols-1);
+
+        // Copy sparse values
+        int index;
+        for(int i=0; i<values.entries.length; i++) {
+            index = values.indices[i];
+            super.entries[index*numCols + colIndex] = values.entries[i].copy();
+        }
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the row which is to be set.
+     * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public void setRow(CVector values, int rowIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.size, super.numCols());
+
+        ArrayUtils.arraycopy(values.entries, 0, super.entries, rowIndex*numCols, this.numCols);
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the row which is to be set.
+     * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public void setRow(SparseCVector values, int rowIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.size, super.numCols);
+        int rowOffset = rowIndex*numCols;
+
+        // Fill row with zeros
+        ArrayUtils.fillZerosRange(super.entries, rowOffset, rowOffset+super.numCols);
+
+        // Copy sparse values
+        for(int i=0; i<values.entries.length; i++) {
+            super.entries[rowOffset + i] = values.entries[i].copy();
+        }
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public void setSlice(SparseCMatrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
+        // TODO: Algorithm could be improved if we assume sparse indices are sorted.
+        // Fill slice with zeros
+        ArrayUtils.stridedFillZerosRange(
+                this.entries,
+                rowStart*this.numCols+colStart,
+                values.numCols,
+                this.numCols-values.numCols
+        );
+
+        // Copy sparse values
+        int rowIndex, colIndex;
+        for(int i=0; i<values.entries.length; i++) {
+            rowIndex = values.rowIndices[i];
+            colIndex = values.colIndices[i];
+
+            this.entries[(rowIndex+rowStart)*this.numCols + colIndex + colStart] = values.entries[i].copy();
+        }
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public CMatrix setSliceCopy(SparseCMatrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
+        CMatrix copy = this.copy();
+
+        // Fill slice with zeros.
+        ArrayUtils.stridedFillZerosRange(
+                copy.entries,
+                rowStart*copy.numCols+colStart,
+                values.numCols,
+                copy.numCols-values.numCols
+        );
+
+        // Copy sparse values
+        int rowIndex, colIndex;
+        for(int i=0; i<values.entries.length; i++) {
+            rowIndex = values.rowIndices[i];
+            colIndex = values.colIndices[i];
+
+            copy.entries[(rowIndex+rowStart)*copy.numCols + colIndex + colStart] = new CNumber(values.entries[i]);
+        }
+
+        return copy;
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public void setSlice(Matrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
+        for(int i=0; i<values.numRows; i++) {
+            for(int j=0; j<values.numCols; j++) {
+                this.entries[(i+rowStart)*numCols + j+colStart] =
+                        new CNumber(values.entries[i* values.numCols + j]);
+            }
+        }
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public void setSlice(SparseMatrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
+        // TODO: Algorithm could be improved if we assume sparse indices are sorted.
+        // Fill slice with zeros
+        ArrayUtils.stridedFillZerosRange(
+                this.entries,
+                rowStart*this.numCols+colStart,
+                values.numCols,
+                this.numCols-values.numCols
+        );
+
+        // Copy sparse values
+        int rowIndex, colIndex;
+        for(int i=0; i<values.entries.length; i++) {
+            rowIndex = values.rowIndices[i];
+            colIndex = values.colIndices[i];
+
+            this.entries[(rowIndex+rowStart)*this.numCols + colIndex + colStart] = new CNumber(values.entries[i]);
+        }
+    }
+
+
+    /**
      * Sets a row of this matrix at the given index to the specified values.
      *
      * @param values   New values for the row.
@@ -682,12 +931,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(CMatrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.numRows; i++) {
             for(int j=0; j<values.numCols; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] =
@@ -704,12 +957,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(CNumber[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j].copy();
@@ -725,12 +982,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(Integer[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
@@ -746,12 +1007,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(double[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
@@ -767,12 +1032,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public void setSlice(int[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
@@ -789,12 +1058,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
      * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public CMatrix setSliceCopy(CMatrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.numRows; i++) {
@@ -815,12 +1088,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
      * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public CMatrix setSliceCopy(CNumber[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.length; i++) {
@@ -841,12 +1118,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
      * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public CMatrix setSliceCopy(Integer[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.length; i++) {
@@ -867,12 +1148,16 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
      * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public CMatrix setSliceCopy(double[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.length; i++) {
@@ -893,18 +1178,94 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
      * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
     public CMatrix setSliceCopy(int[][] values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
         CMatrix copy = new CMatrix(this);
 
         for(int i=0; i<values.length; i++) {
             for(int j=0; j<values[0].length; j++) {
                 copy.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
             }
+        }
+
+        return copy;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public CMatrix setSliceCopy(Matrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
+        CMatrix copy = new CMatrix(this);
+
+        for(int i=0; i<values.numRows; i++) {
+            for(int j=0; j<values.numCols; j++) {
+                copy.entries[(i+rowStart)*numCols + j+colStart] =
+                        new CNumber(values.entries[values.shape.entriesIndex(i, j)]);
+            }
+        }
+
+        return copy;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public CMatrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
+        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
+        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
+        CMatrix copy = this.copy();
+
+        // Fill slice with zeros.
+        ArrayUtils.stridedFillZerosRange(
+                copy.entries,
+                rowStart*copy.numCols+colStart,
+                values.numCols,
+                copy.numCols-values.numCols
+        );
+
+        // Copy sparse values
+        int rowIndex, colIndex;
+        for(int i=0; i<values.entries.length; i++) {
+            rowIndex = values.rowIndices[i];
+            colIndex = values.colIndices[i];
+
+            copy.entries[(rowIndex+rowStart)*copy.numCols + colIndex + colStart] = new CNumber(values.entries[i]);
         }
 
         return copy;
@@ -947,7 +1308,7 @@ public class CMatrix extends ComplexMatrixBase implements
         int row = 0;
 
         for(int i=0; i<this.numRows; i++) {
-            if(!ArrayUtils.inArray(rowIndices, i)) {
+            if(ArrayUtils.notInArray(rowIndices, i)) {
                 ArrayUtils.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }
@@ -998,7 +1359,7 @@ public class CMatrix extends ComplexMatrixBase implements
         for(int i=0; i<this.numRows; i++) {
             col = 0;
             for(int j=0; j<this.numCols; j++) {
-                if(!ArrayUtils.inArray(colIndices, j)) {
+                if(ArrayUtils.notInArray(colIndices, j)) {
                     copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];
                     col++;
                 }
@@ -1404,26 +1765,72 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
-     * Computes the hermation transpose (i.e. the conjugate transpose) of the matrix.
-     * Same as {@link #H()}.
+     * Computes the complex conjugate transpose of a tensor.
+     * Same as {@link #hermTranspose()} and {@link #H()}.
      *
-     * @return The conjugate transpose.
+     * @return The complex conjugate transpose of this tensor.
      */
     @Override
-    public CMatrix hermationTranspose() {
+    public CMatrix conjT() {
+        return H();
+    }
+
+
+    /**
+     * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
+     * Same as {@link #conjT()} and {@link #H()}.
+     *
+     * @return he complex conjugate transpose (Hermitian transpose) of this tensor.
+     */
+    @Override
+    public CMatrix hermTranspose() {
         return H();
     }
 
 
     /**
      * Computes the hermation transpose (i.e. the conjugate transpose) of the matrix.
-     * Same as {@link #hermationTranspose()}.
+     * Same as {@link #hermTranspose()}.
      *
      * @return The conjugate transpose.
      */
     @Override
     public CMatrix H() {
         return MatrixTranspose.dispatchHermation(this);
+    }
+
+
+    /**
+     * Checks if a matrix is Hermitian. That is, if the matrix is equal to its conjugate transpose.
+     *
+     * @return True if this matrix is Hermitian. Otherwise, returns false.
+     */
+    @Override
+    public boolean isHermitian() {
+        return this.equals(this.H());
+    }
+
+
+    /**
+     * Checks if a matrix is anti-Hermitian. That is, if the matrix is equal to the negative of its conjugate transpose.
+     *
+     * @return True if this matrix is anti-symmetric. Otherwise, returns false.
+     */
+    @Override
+    public boolean isAntiHermitian() {
+        return this.equals(this.H().scalMult(-1));
+    }
+
+
+    /**
+     * Checks if this matrix is unitary. That is, if this matrices inverse is equal to its hermation transpose.
+     *
+     * @return True if this matrix it is unitary. Otherwise, returns false.
+     */
+    @Override
+    public boolean isUnitary() {
+        // TODO: Implementation
+        return false;
     }
 
 
@@ -1467,7 +1874,7 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
-     * Computes the element-wise subtraction of this matrix with a real demse matrix. The result is stored in this matrix.
+     * Computes the element-wise subtraction of this matrix with a real dense matrix. The result is stored in this matrix.
      *
      * @param B The matrix to subtract from this matrix.
      */
@@ -2400,7 +2807,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(B);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2428,7 +2835,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(B);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2456,7 +2863,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(B);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2484,7 +2891,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(B);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2746,7 +3153,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(b);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2776,7 +3183,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(b);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2806,7 +3213,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(b);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -2836,7 +3243,7 @@ public class CMatrix extends ComplexMatrixBase implements
         } else if(axis==1) {
             stacked = this.stack(b);
         } else {
-            throw new IllegalArgumentException(ErrorMessages.axisErr(axis, 0, 1));
+            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
         }
 
         return stacked;
@@ -3058,6 +3465,47 @@ public class CMatrix extends ComplexMatrixBase implements
         }
 
         return new CMatrix(sliceRows, sliceCols, slice);
+    }
+
+
+    /**
+     * Get a specified column of this matrix at and below a specified row.
+     *
+     * @param rowStart Index of the row to begin at.
+     * @param j        Index of column to get.
+     * @return The specified column of this matrix beginning at the specified row.
+     * @throws NegativeArraySizeException     If {@code rowStart} is larger than the number of rows in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
+     */
+    @Override
+    public CMatrix getColBelow(int rowStart, int j) {
+        CNumber[] col = new CNumber[numRows-rowStart];
+
+        for(int i=rowStart; i<numRows; i++) {
+            col[i-rowStart] = entries[i*numCols + j].copy();
+        }
+
+        return new CMatrix(new Shape(col.length, 1), col);
+    }
+
+
+    /**
+     * Get a specified row of this matrix at and after a specified column.
+     *
+     * @param colStart Index of the row to begin at.
+     * @param i        Index of the row to get.
+     * @return The specified row of this matrix beginning at the specified column.
+     * @throws NegativeArraySizeException     If {@code colStart} is larger than the number of columns in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
+     */
+    @Override
+    public CMatrix getRowAfter(int colStart, int i) {
+        if(i > this.numRows || colStart > this.numCols) {
+            throw new ArrayIndexOutOfBoundsException(String.format("Index (%d, %d) not in matrix.", i, colStart));
+        }
+
+        CNumber[] row = ArrayUtils.copyOfRange(this.entries, i*this.numCols + colStart, (i+1)*this.numCols);
+        return new CMatrix(new Shape(1, row.length), row);
     }
 
 
@@ -3560,63 +4008,103 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
-     * Formats matrix contents as a string.
-     *
-     * @return Matrix as string
+     * Gets row of matrix formatted as a human-readable String. Helper method for {@link #toString} method.
+     * @param i Index of row to get.
+     * @param colStopIndex Stopping index for printing columns.
+     * @param maxList List of maximum string representation lengths for each column of this matrix. This
+     *                is used to align columns when printing.
+     * @return A human-readable String representation of the specified row.
+     */
+    private String rowToString(int i, int colStopIndex, List<Integer> maxList) {
+        int width;
+        String value;
+        StringBuilder result = new StringBuilder();
+
+        if(i>0) {
+            result.append(" [");
+        }  else {
+            result.append("[");
+        }
+
+        for(int j=0; j<colStopIndex; j++) {
+            value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + maxList.get(j);
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(PrintOptions.getMaxColumns() < this.numCols) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry in the column now
+        value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + maxList.get(maxList.size()-1);
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s]", value));
+
+        return result.toString();
+    }
+
+
+    /**
+     * Formats matrix contents as a human-readable String.
+     * @return Matrix represented as a human-readable String
      */
     public String toString() {
-        String result = "[";
+        StringBuilder result  = new StringBuilder();
 
-        if(entries.length!=0) {
-            int max=0, colWidth;
-            List<Integer> maxList = new ArrayList<>();
-
-            for(int j=0; j<numCols; j++) { // Get the maximum length string representation for each column.
-                List<CNumber> contents = Arrays.asList(this.getCol(j).entries);
-
-                Optional<Integer> value = contents.stream().map(CNumber::length).max(Integer::compareTo);
-
-                if(value.isPresent()) {
-                    max = value.get();
-                }
-
-                maxList.add(max);
-            }
-
-            StringBuilder resultBuilder = new StringBuilder("[");
-            for(int i = 0; i<numRows; i++) {
-                if(i >= PrintOptions.getMaxRows() && i < numRows-1) {
-                    resultBuilder.append("  ...\n ");
-                    i = numRows-1;
-                }
-
-                resultBuilder.append(" [");
-
-                for(int j = 0; j<numCols; j++) {
-                    if(j >= PrintOptions.getMaxColumns() && j < numRows-1) {
-                        colWidth = 3+PrintOptions.getPadding();
-                        resultBuilder.append(String.format("%-" + colWidth + "s", StringUtils.center("...", colWidth)));
-                        colWidth = maxList.get(numRows-1)+PrintOptions.getPadding();
-                        resultBuilder.append(String.format("%-" + (colWidth) + "s", StringUtils.center(get(i,numCols - 1).toString(), colWidth)));
-                        break;
-                    }
-                    else {
-                        colWidth = maxList.get(j)+PrintOptions.getPadding();
-                        resultBuilder.append(String.format("%-" + (colWidth) + "s", StringUtils.center(
-                                CNumber.round(get(i, j), PrintOptions.getPrecision()).toString(), colWidth))
-                        );
-                    }
-                }
-                resultBuilder.append("]\n ");
-            }
-            result = resultBuilder.toString();
-
-            result = result.substring(0, result.length()-2) + " ]";
-        }
-        else {
-            result += "[]]";
+        if(PrintOptions.getMaxRows() < this.numRows || PrintOptions.getMaxColumns() < this.numCols) {
+            // Then also get the full size of the matrix.
+            result.append(String.format("Full Shape: %s\n", this.shape));
         }
 
-        return result;
+        result.append("[");
+
+        int rowStopIndex = Math.min(PrintOptions.getMaxRows()-1, this.numRows-1);
+        int colStopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.numCols-1);
+        int width;
+        int totalRowLength = 0; // Total string length of each row (not including brackets)
+        String value;
+
+        // Find maximum entry string width in each column so columns can be aligned.
+        List<Integer> maxList = new ArrayList<>(colStopIndex+1);
+        for(int j=0; j<colStopIndex; j++) {
+            maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));
+            totalRowLength += maxList.get(maxList.size()-1);
+        }
+
+        if(colStopIndex < this.numCols) {
+            maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols-1).entries));
+            totalRowLength += maxList.get(maxList.size()-1);
+        }
+
+        if(colStopIndex < this.numCols-1) {
+            totalRowLength += 3+PrintOptions.getPadding(); // Account for '...' element with padding in each column.
+        }
+
+        totalRowLength += maxList.size()*PrintOptions.getPadding(); // Account for column padding
+
+        // Get each row as a string.
+        for(int i=0; i<rowStopIndex; i++) {
+            result.append(rowToString(i, colStopIndex, maxList));
+            result.append("\n");
+        }
+
+        if(PrintOptions.getMaxRows() < this.numRows) {
+            width = totalRowLength;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format(" [%-" + width + "s]\n", value));
+        }
+
+        // Get Last row as a string.
+        result.append(rowToString(this.numRows-1, colStopIndex, maxList));
+        result.append("]");
+
+        return result.toString();
     }
 }

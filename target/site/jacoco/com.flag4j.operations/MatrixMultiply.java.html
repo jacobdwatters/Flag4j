@@ -74,7 +74,7 @@ public final class MatrixMultiply {
 
 <span class="fc" id="L75">        algorithm = chooseAlgorithmRealVector(A.shape);</span>
 
-<span class="pc bpc" id="L77" title="4 of 5 branches missed.">        switch(algorithm) {</span>
+<span class="pc bpc" id="L77" title="3 of 4 branches missed.">        switch(algorithm) {</span>
             case STANDARD_VECTOR:
 <span class="nc" id="L79">                dest = RealDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);</span>
 <span class="nc" id="L80">                break;</span>
@@ -84,15 +84,12 @@ public final class MatrixMultiply {
             case CONCURRENT_STANDARD_VECTOR:
 <span class="nc" id="L85">                dest = RealDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);</span>
 <span class="nc" id="L86">                break;</span>
-            case CONCURRENT_BLOCKED_VECTOR:
-<span class="nc" id="L88">                dest = RealDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);</span>
-<span class="nc" id="L89">                break;</span>
             default:
-                // Default to the concurrent reordered implementation just in case.
-<span class="nc" id="L92">                dest = RealDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);</span>
+<span class="nc" id="L88">                dest = RealDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);</span>
+                break;
         }
 
-<span class="fc" id="L95">        return dest;</span>
+<span class="fc" id="L92">        return dest;</span>
     }
 
 
@@ -103,30 +100,30 @@ public final class MatrixMultiply {
      * @return The result of the matrix-vector multiplication.
      */
     public static CNumber[] dispatch(Matrix A, CVector b) {
-<span class="nc" id="L106">        Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);</span>
-<span class="nc" id="L107">        assertMatMultShapes(A.shape, bMatShape);</span>
+<span class="nc" id="L103">        Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);</span>
+<span class="nc" id="L104">        assertMatMultShapes(A.shape, bMatShape);</span>
 
         Algorithm algorithm;
         CNumber[] dest;
 
-<span class="nc" id="L112">        algorithm = chooseAlgorithmRealComplexVector(A.shape);</span>
+<span class="nc" id="L109">        algorithm = chooseAlgorithmRealComplexVector(A.shape);</span>
 
-<span class="nc bnc" id="L114" title="All 4 branches missed.">        switch(algorithm) {</span>
+<span class="nc bnc" id="L111" title="All 4 branches missed.">        switch(algorithm) {</span>
             case STANDARD_VECTOR:
-<span class="nc" id="L116">                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);</span>
-<span class="nc" id="L117">                break;</span>
+<span class="nc" id="L113">                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);</span>
+<span class="nc" id="L114">                break;</span>
             case BLOCKED_VECTOR:
-<span class="nc" id="L119">                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);</span>
-<span class="nc" id="L120">                break;</span>
+<span class="nc" id="L116">                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);</span>
+<span class="nc" id="L117">                break;</span>
             case CONCURRENT_STANDARD_VECTOR:
-<span class="nc" id="L122">                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);</span>
-<span class="nc" id="L123">                break;</span>
+<span class="nc" id="L119">                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);</span>
+<span class="nc" id="L120">                break;</span>
             default:
-<span class="nc" id="L125">                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);</span>
+<span class="nc" id="L122">                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);</span>
                 break;
         }
 
-<span class="nc" id="L129">        return dest;</span>
+<span class="nc" id="L126">        return dest;</span>
     }
 
 
@@ -137,30 +134,30 @@ public final class MatrixMultiply {
      * @return The result of the matrix-vector multiplication.
      */
     public static CNumber[] dispatch(CMatrix A, Vector b) {
-<span class="fc" id="L140">        Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);</span>
-<span class="fc" id="L141">        assertMatMultShapes(A.shape, bMatShape);</span>
+<span class="fc" id="L137">        Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);</span>
+<span class="fc" id="L138">        assertMatMultShapes(A.shape, bMatShape);</span>
 
         Algorithm algorithm;
         CNumber[] dest;
 
-<span class="fc" id="L146">        algorithm = chooseAlgorithmRealComplexVector(A.shape);</span>
+<span class="fc" id="L143">        algorithm = chooseAlgorithmRealComplexVector(A.shape);</span>
 
-<span class="pc bpc" id="L148" title="3 of 4 branches missed.">        switch(algorithm) {</span>
+<span class="pc bpc" id="L145" title="3 of 4 branches missed.">        switch(algorithm) {</span>
             case STANDARD_VECTOR:
-<span class="fc" id="L150">                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);</span>
-<span class="fc" id="L151">                break;</span>
+<span class="fc" id="L147">                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);</span>
+<span class="fc" id="L148">                break;</span>
             case BLOCKED_VECTOR:
-<span class="nc" id="L153">                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);</span>
-<span class="nc" id="L154">                break;</span>
+<span class="nc" id="L150">                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);</span>
+<span class="nc" id="L151">                break;</span>
             case CONCURRENT_STANDARD_VECTOR:
-<span class="nc" id="L156">                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);</span>
-<span class="nc" id="L157">                break;</span>
+<span class="nc" id="L153">                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);</span>
+<span class="nc" id="L154">                break;</span>
             default:
-<span class="nc" id="L159">                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);</span>
+<span class="nc" id="L156">                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);</span>
                 break;
         }
 
-<span class="fc" id="L163">        return dest;</span>
+<span class="fc" id="L160">        return dest;</span>
     }
 
 
@@ -171,30 +168,30 @@ public final class MatrixMultiply {
      * @return The result of the matrix-vector multiplication.
      */
     public static CNumber[] dispatch(CMatrix A, CVector b) {
-<span class="fc" id="L174">        Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);</span>
-<span class="fc" id="L175">        assertMatMultShapes(A.shape, bMatShape);</span>
+<span class="fc" id="L171">        Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);</span>
+<span class="fc" id="L172">        assertMatMultShapes(A.shape, bMatShape);</span>
 
         Algorithm algorithm;
         CNumber[] dest;
 
-<span class="fc" id="L180">        algorithm = chooseAlgorithmRealComplexVector(A.shape);</span>
+<span class="fc" id="L177">        algorithm = chooseAlgorithmRealComplexVector(A.shape);</span>
 
-<span class="pc bpc" id="L182" title="3 of 4 branches missed.">        switch(algorithm) {</span>
+<span class="pc bpc" id="L179" title="3 of 4 branches missed.">        switch(algorithm) {</span>
             case STANDARD_VECTOR:
-<span class="fc" id="L184">                dest = ComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);</span>
-<span class="fc" id="L185">                break;</span>
+<span class="fc" id="L181">                dest = ComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, b.entries, bMatShape);</span>
+<span class="fc" id="L182">                break;</span>
             case BLOCKED_VECTOR:
-<span class="nc" id="L187">                dest = ComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);</span>
-<span class="nc" id="L188">                break;</span>
+<span class="nc" id="L184">                dest = ComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, b.entries, bMatShape);</span>
+<span class="nc" id="L185">                break;</span>
             case CONCURRENT_STANDARD_VECTOR:
-<span class="nc" id="L190">                dest = ComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);</span>
-<span class="nc" id="L191">                break;</span>
+<span class="nc" id="L187">                dest = ComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, b.entries, bMatShape);</span>
+<span class="nc" id="L188">                break;</span>
             default:
-<span class="nc" id="L193">                dest = ComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);</span>
+<span class="nc" id="L190">                dest = ComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, b.entries, bMatShape);</span>
                 break;
         }
 
-<span class="fc" id="L197">        return dest;</span>
+<span class="fc" id="L194">        return dest;</span>
     }
 
 
@@ -206,57 +203,57 @@ public final class MatrixMultiply {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static double[] dispatch(Matrix A, Matrix B) {
-<span class="fc" id="L209">        assertMatMultShapes(A.shape, B.shape);</span>
+<span class="fc" id="L206">        assertMatMultShapes(A.shape, B.shape);</span>
 
         Algorithm algorithm;
         double[] dest;
 
-<span class="pc bpc" id="L214" title="1 of 2 branches missed.">        if(B.numCols==1) {</span>
-<span class="nc" id="L215">            algorithm = chooseAlgorithmRealVector(A.shape);</span>
+<span class="pc bpc" id="L211" title="1 of 2 branches missed.">        if(B.numCols==1) {</span>
+<span class="nc" id="L212">            algorithm = chooseAlgorithmRealVector(A.shape);</span>
         } else {
-<span class="fc" id="L217">            algorithm = chooseAlgorithmReal(A.shape, B.shape);</span>
+<span class="fc" id="L214">            algorithm = chooseAlgorithmReal(A.shape, B.shape);</span>
         }
 
-<span class="pc bpc" id="L220" title="11 of 12 branches missed.">        switch(algorithm) {</span>
+<span class="pc bpc" id="L217" title="11 of 12 branches missed.">        switch(algorithm) {</span>
             case STANDARD:
-<span class="nc" id="L222">                dest = RealDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L223">                break;</span>
+<span class="nc" id="L219">                dest = RealDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L220">                break;</span>
             case REORDERED:
-<span class="fc" id="L225">                dest = RealDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="fc" id="L226">                break;</span>
+<span class="fc" id="L222">                dest = RealDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="fc" id="L223">                break;</span>
             case BLOCKED:
-<span class="nc" id="L228">                dest = RealDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L229">                break;</span>
+<span class="nc" id="L225">                dest = RealDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L226">                break;</span>
             case BLOCKED_REORDERED:
-<span class="nc" id="L231">                dest = RealDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L232">                break;</span>
+<span class="nc" id="L228">                dest = RealDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L229">                break;</span>
             case CONCURRENT_STANDARD:
-<span class="nc" id="L234">                dest = RealDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L235">                break;</span>
+<span class="nc" id="L231">                dest = RealDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L232">                break;</span>
             case CONCURRENT_REORDERED:
-<span class="nc" id="L237">                dest = RealDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L238">                break;</span>
+<span class="nc" id="L234">                dest = RealDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L235">                break;</span>
             case CONCURRENT_BLOCKED:
-<span class="nc" id="L240">                dest = RealDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L241">                break;</span>
+<span class="nc" id="L237">                dest = RealDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L238">                break;</span>
             case CONCURRENT_BLOCKED_REORDERED:
-<span class="nc" id="L243">                dest = RealDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L244">                break;</span>
+<span class="nc" id="L240">                dest = RealDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L241">                break;</span>
             case STANDARD_VECTOR:
-<span class="nc" id="L246">                dest = RealDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L247">                break;</span>
+<span class="nc" id="L243">                dest = RealDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L244">                break;</span>
             case BLOCKED_VECTOR:
-<span class="nc" id="L249">                dest = RealDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L250">                break;</span>
+<span class="nc" id="L246">                dest = RealDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L247">                break;</span>
             case CONCURRENT_STANDARD_VECTOR:
-<span class="nc" id="L252">                dest = RealDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L253">                break;</span>
+<span class="nc" id="L249">                dest = RealDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L250">                break;</span>
             default:
-<span class="nc" id="L255">                dest = RealDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L252">                dest = RealDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);</span>
                 break;
         }
 
-<span class="fc" id="L259">        return dest;</span>
+<span class="fc" id="L256">        return dest;</span>
     }
 
 
@@ -268,57 +265,57 @@ public final class MatrixMultiply {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static CNumber[] dispatch(CMatrix A, CMatrix B) {
-<span class="fc" id="L271">        assertMatMultShapes(A.shape, B.shape);</span>
+<span class="fc" id="L268">        assertMatMultShapes(A.shape, B.shape);</span>
 
         Algorithm algorithm;
         CNumber[] dest;
 
-<span class="pc bpc" id="L276" title="1 of 2 branches missed.">        if(B.numCols==1) {</span>
-<span class="nc" id="L277">            algorithm = chooseAlgorithmComplexVector(A.shape);</span>
+<span class="pc bpc" id="L273" title="1 of 2 branches missed.">        if(B.numCols==1) {</span>
+<span class="nc" id="L274">            algorithm = chooseAlgorithmComplexVector(A.shape);</span>
         } else {
-<span class="fc" id="L279">            algorithm = chooseAlgorithmComplex(A.shape, B.shape);</span>
+<span class="fc" id="L276">            algorithm = chooseAlgorithmComplex(A.shape, B.shape);</span>
         }
 
-<span class="pc bpc" id="L282" title="11 of 12 branches missed.">        switch(algorithm) {</span>
+<span class="pc bpc" id="L279" title="11 of 12 branches missed.">        switch(algorithm) {</span>
             case STANDARD:
-<span class="nc" id="L284">                dest = ComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L285">                break;</span>
+<span class="nc" id="L281">                dest = ComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L282">                break;</span>
             case REORDERED:
-<span class="fc" id="L287">                dest = ComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="fc" id="L288">                break;</span>
+<span class="fc" id="L284">                dest = ComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="fc" id="L285">                break;</span>
             case BLOCKED:
-<span class="nc" id="L290">                dest = ComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L291">                break;</span>
+<span class="nc" id="L287">                dest = ComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L288">                break;</span>
             case BLOCKED_REORDERED:
-<span class="nc" id="L293">                dest = ComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L294">                break;</span>
+<span class="nc" id="L290">                dest = ComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L291">                break;</span>
             case CONCURRENT_STANDARD:
-<span class="nc" id="L296">                dest = ComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L297">                break;</span>
+<span class="nc" id="L293">                dest = ComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L294">                break;</span>
             case CONCURRENT_REORDERED:
-<span class="nc" id="L299">                dest = ComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L300">                break;</span>
+<span class="nc" id="L296">                dest = ComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L297">                break;</span>
             case CONCURRENT_BLOCKED:
-<span class="nc" id="L302">                dest = ComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L303">                break;</span>
+<span class="nc" id="L299">                dest = ComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L300">                break;</span>
             case CONCURRENT_BLOCKED_REORDERED:
-<span class="nc" id="L305">                dest = ComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L306">                break;</span>
+<span class="nc" id="L302">                dest = ComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L303">                break;</span>
             case STANDARD_VECTOR:
-<span class="nc" id="L308">                dest = ComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L309">                break;</span>
+<span class="nc" id="L305">                dest = ComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L306">                break;</span>
             case BLOCKED_VECTOR:
-<span class="nc" id="L311">                dest = ComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L312">                break;</span>
+<span class="nc" id="L308">                dest = ComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L309">                break;</span>
             case CONCURRENT_STANDARD_VECTOR:
-<span class="nc" id="L314">                dest = ComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L315">                break;</span>
+<span class="nc" id="L311">                dest = ComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L312">                break;</span>
             default:
-<span class="nc" id="L317">                dest = ComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L314">                dest = ComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);</span>
                 break;
         }
 
-<span class="fc" id="L321">        return dest;</span>
+<span class="fc" id="L318">        return dest;</span>
     }
 
 
@@ -330,57 +327,57 @@ public final class MatrixMultiply {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static CNumber[] dispatch(Matrix A, CMatrix B) {
-<span class="fc" id="L333">        assertMatMultShapes(A.shape, B.shape);</span>
+<span class="fc" id="L330">        assertMatMultShapes(A.shape, B.shape);</span>
 
         Algorithm algorithm;
         CNumber[] dest;
 
-<span class="pc bpc" id="L338" title="1 of 2 branches missed.">        if(B.numCols==1) {</span>
-<span class="nc" id="L339">            algorithm = chooseAlgorithmRealComplexVector(A.shape);</span>
+<span class="pc bpc" id="L335" title="1 of 2 branches missed.">        if(B.numCols==1) {</span>
+<span class="nc" id="L336">            algorithm = chooseAlgorithmRealComplexVector(A.shape);</span>
         } else {
-<span class="fc" id="L341">            algorithm = chooseAlgorithmRealComplex(A.shape, B.shape);</span>
+<span class="fc" id="L338">            algorithm = chooseAlgorithmRealComplex(A.shape, B.shape);</span>
         }
 
-<span class="pc bpc" id="L344" title="11 of 12 branches missed.">        switch(algorithm) {</span>
+<span class="pc bpc" id="L341" title="11 of 12 branches missed.">        switch(algorithm) {</span>
             case STANDARD:
-<span class="nc" id="L346">                dest = RealComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L347">                break;</span>
+<span class="nc" id="L343">                dest = RealComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L344">                break;</span>
             case REORDERED:
-<span class="fc" id="L349">                dest = RealComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="fc" id="L350">                break;</span>
+<span class="fc" id="L346">                dest = RealComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="fc" id="L347">                break;</span>
             case BLOCKED:
-<span class="nc" id="L352">                dest = RealComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L353">                break;</span>
+<span class="nc" id="L349">                dest = RealComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L350">                break;</span>
             case BLOCKED_REORDERED:
-<span class="nc" id="L355">                dest = RealComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L356">                break;</span>
+<span class="nc" id="L352">                dest = RealComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L353">                break;</span>
             case CONCURRENT_STANDARD:
-<span class="nc" id="L358">                dest = RealComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L359">                break;</span>
+<span class="nc" id="L355">                dest = RealComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L356">                break;</span>
             case CONCURRENT_REORDERED:
-<span class="nc" id="L361">                dest = RealComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L362">                break;</span>
+<span class="nc" id="L358">                dest = RealComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L359">                break;</span>
             case CONCURRENT_BLOCKED:
-<span class="nc" id="L364">                dest = RealComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L365">                break;</span>
+<span class="nc" id="L361">                dest = RealComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L362">                break;</span>
             case CONCURRENT_BLOCKED_REORDERED:
-<span class="nc" id="L367">                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L368">                break;</span>
+<span class="nc" id="L364">                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L365">                break;</span>
             case STANDARD_VECTOR:
-<span class="nc" id="L370">                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L371">                break;</span>
+<span class="nc" id="L367">                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L368">                break;</span>
             case BLOCKED_VECTOR:
-<span class="nc" id="L373">                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L374">                break;</span>
+<span class="nc" id="L370">                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L371">                break;</span>
             case CONCURRENT_STANDARD_VECTOR:
-<span class="nc" id="L376">                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L377">                break;</span>
+<span class="nc" id="L373">                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L374">                break;</span>
             default:
-<span class="nc" id="L379">                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L376">                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);</span>
                 break;
         }
 
-<span class="fc" id="L383">        return dest;</span>
+<span class="fc" id="L380">        return dest;</span>
     }
 
 
@@ -392,57 +389,57 @@ public final class MatrixMultiply {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication.
      */
     public static CNumber[] dispatch(CMatrix A, Matrix B) {
-<span class="fc" id="L395">        assertMatMultShapes(A.shape, B.shape);</span>
+<span class="fc" id="L392">        assertMatMultShapes(A.shape, B.shape);</span>
 
         Algorithm algorithm;
         CNumber[] dest;
 
-<span class="pc bpc" id="L400" title="1 of 2 branches missed.">        if(B.numCols==1) {</span>
-<span class="nc" id="L401">            algorithm = chooseAlgorithmRealComplexVector(A.shape);</span>
+<span class="pc bpc" id="L397" title="1 of 2 branches missed.">        if(B.numCols==1) {</span>
+<span class="nc" id="L398">            algorithm = chooseAlgorithmRealComplexVector(A.shape);</span>
         } else {
-<span class="fc" id="L403">            algorithm = chooseAlgorithmRealComplex(A.shape, B.shape);</span>
+<span class="fc" id="L400">            algorithm = chooseAlgorithmRealComplex(A.shape, B.shape);</span>
         }
 
-<span class="pc bpc" id="L406" title="11 of 12 branches missed.">        switch(algorithm) {</span>
+<span class="pc bpc" id="L403" title="11 of 12 branches missed.">        switch(algorithm) {</span>
             case STANDARD:
-<span class="nc" id="L408">                dest = RealComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L409">                break;</span>
+<span class="nc" id="L405">                dest = RealComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L406">                break;</span>
             case REORDERED:
-<span class="fc" id="L411">                dest = RealComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="fc" id="L412">                break;</span>
+<span class="fc" id="L408">                dest = RealComplexDenseMatrixMultiplication.reordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="fc" id="L409">                break;</span>
             case BLOCKED:
-<span class="nc" id="L414">                dest = RealComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L415">                break;</span>
+<span class="nc" id="L411">                dest = RealComplexDenseMatrixMultiplication.blocked(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L412">                break;</span>
             case BLOCKED_REORDERED:
-<span class="nc" id="L417">                dest = RealComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L418">                break;</span>
+<span class="nc" id="L414">                dest = RealComplexDenseMatrixMultiplication.blockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L415">                break;</span>
             case CONCURRENT_STANDARD:
-<span class="nc" id="L420">                dest = RealComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L421">                break;</span>
+<span class="nc" id="L417">                dest = RealComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L418">                break;</span>
             case CONCURRENT_REORDERED:
-<span class="nc" id="L423">                dest = RealComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L424">                break;</span>
+<span class="nc" id="L420">                dest = RealComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L421">                break;</span>
             case CONCURRENT_BLOCKED:
-<span class="nc" id="L426">                dest = RealComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L427">                break;</span>
+<span class="nc" id="L423">                dest = RealComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L424">                break;</span>
             case CONCURRENT_BLOCKED_REORDERED:
-<span class="nc" id="L429">                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L430">                break;</span>
+<span class="nc" id="L426">                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L427">                break;</span>
             case STANDARD_VECTOR:
-<span class="nc" id="L432">                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L433">                break;</span>
+<span class="nc" id="L429">                dest = RealComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L430">                break;</span>
             case BLOCKED_VECTOR:
-<span class="nc" id="L435">                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L436">                break;</span>
+<span class="nc" id="L432">                dest = RealComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L433">                break;</span>
             case CONCURRENT_STANDARD_VECTOR:
-<span class="nc" id="L438">                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L439">                break;</span>
+<span class="nc" id="L435">                dest = RealComplexDenseMatrixMultiplication.concurrentStandardVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L436">                break;</span>
             default:
-<span class="nc" id="L441">                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L438">                dest = RealComplexDenseMatrixMultiplication.concurrentBlockedVector(A.entries, A.shape, B.entries, B.shape);</span>
                 break;
         }
 
-<span class="fc" id="L445">        return dest;</span>
+<span class="fc" id="L442">        return dest;</span>
     }
 
 
@@ -455,55 +452,55 @@ public final class MatrixMultiply {
     private static Algorithm chooseAlgorithmReal(Shape shape1, Shape shape2) {
         Algorithm algorithm;
 
-<span class="fc" id="L458">        int rows1 = shape1.get(Axis2D.row());</span>
-<span class="fc" id="L459">        int cols1 = shape1.get(Axis2D.col());</span>
+<span class="fc" id="L455">        int rows1 = shape1.get(Axis2D.row());</span>
+<span class="fc" id="L456">        int cols1 = shape1.get(Axis2D.col());</span>
 
         // TODO: Extract constants to final variables
-<span class="pc bpc" id="L462" title="1 of 2 branches missed.">        if(getRatio(shape1) &gt;= SQUARENESS_RATIO) {</span>
+<span class="pc bpc" id="L459" title="1 of 2 branches missed.">        if(getRatio(shape1) &gt;= SQUARENESS_RATIO) {</span>
             // Then the first matrix is approximately square.
-<span class="pc bpc" id="L464" title="1 of 2 branches missed.">            if(rows1&lt;SEQUENTIAL_SWAPPED_THRESHOLD) {</span>
-<span class="fc" id="L465">                algorithm = Algorithm.REORDERED;</span>
-<span class="nc bnc" id="L466" title="All 2 branches missed.">            } else if(rows1&lt;CONCURRENT_SWAPPED_THRESHOLD) {</span>
-<span class="nc" id="L467">                algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="pc bpc" id="L461" title="1 of 2 branches missed.">            if(rows1&lt;SEQUENTIAL_SWAPPED_THRESHOLD) {</span>
+<span class="fc" id="L462">                algorithm = Algorithm.REORDERED;</span>
+<span class="nc bnc" id="L463" title="All 2 branches missed.">            } else if(rows1&lt;CONCURRENT_SWAPPED_THRESHOLD) {</span>
+<span class="nc" id="L464">                algorithm = Algorithm.CONCURRENT_REORDERED;</span>
             } else {
             /* For large matrices, use a concurrent, blocked algorithm with the j-k loops swapped for
             better cache performance on modern systems */
-<span class="nc" id="L471">                algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
+<span class="nc" id="L468">                algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
             }
 
-<span class="nc bnc" id="L474" title="All 2 branches missed.">        } else if(rows1&gt;cols1) {</span>
+<span class="nc bnc" id="L471" title="All 2 branches missed.">        } else if(rows1&gt;cols1) {</span>
             // Then there are more rows than columns in the first matrix
-<span class="nc bnc" id="L476" title="All 4 branches missed.">            if(rows1&lt;=100 &amp;&amp; cols1&lt;=5) {</span>
-<span class="nc" id="L477">                algorithm = Algorithm.REORDERED;</span>
+<span class="nc bnc" id="L473" title="All 4 branches missed.">            if(rows1&lt;=100 &amp;&amp; cols1&lt;=5) {</span>
+<span class="nc" id="L474">                algorithm = Algorithm.REORDERED;</span>
             } else {
-<span class="nc" id="L479">                algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="nc" id="L476">                algorithm = Algorithm.CONCURRENT_REORDERED;</span>
             }
         } else {
             // Then there are more columns than rows in the first matrix
-<span class="nc bnc" id="L483" title="All 2 branches missed.">            if(cols1&lt;=100) {</span>
-<span class="nc bnc" id="L484" title="All 2 branches missed.">                if(rows1&lt;=20) {</span>
-<span class="nc" id="L485">                    algorithm = Algorithm.REORDERED;</span>
+<span class="nc bnc" id="L480" title="All 2 branches missed.">            if(cols1&lt;=100) {</span>
+<span class="nc bnc" id="L481" title="All 2 branches missed.">                if(rows1&lt;=20) {</span>
+<span class="nc" id="L482">                    algorithm = Algorithm.REORDERED;</span>
                 } else {
-<span class="nc" id="L487">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="nc" id="L484">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
                 }
-<span class="nc bnc" id="L489" title="All 2 branches missed.">            } else if(cols1&lt;=500) {</span>
-<span class="nc bnc" id="L490" title="All 2 branches missed.">                if(rows1&lt;=10) {</span>
-<span class="nc" id="L491">                    algorithm = Algorithm.REORDERED;</span>
+<span class="nc bnc" id="L486" title="All 2 branches missed.">            } else if(cols1&lt;=500) {</span>
+<span class="nc bnc" id="L487" title="All 2 branches missed.">                if(rows1&lt;=10) {</span>
+<span class="nc" id="L488">                    algorithm = Algorithm.REORDERED;</span>
                 } else {
-<span class="nc" id="L493">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="nc" id="L490">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
                 }
             } else {
-<span class="nc bnc" id="L496" title="All 2 branches missed.">                if(rows1&lt;=5) {</span>
-<span class="nc" id="L497">                    algorithm = Algorithm.REORDERED;</span>
-<span class="nc bnc" id="L498" title="All 2 branches missed.">                } else if(rows1&lt;=50){</span>
-<span class="nc" id="L499">                    algorithm = Algorithm.CONCURRENT_STANDARD;</span>
+<span class="nc bnc" id="L493" title="All 2 branches missed.">                if(rows1&lt;=5) {</span>
+<span class="nc" id="L494">                    algorithm = Algorithm.REORDERED;</span>
+<span class="nc bnc" id="L495" title="All 2 branches missed.">                } else if(rows1&lt;=50){</span>
+<span class="nc" id="L496">                    algorithm = Algorithm.CONCURRENT_STANDARD;</span>
                 } else {
-<span class="nc" id="L501">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="nc" id="L498">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
                 }
             }
         }
 
-<span class="fc" id="L506">        return algorithm;</span>
+<span class="fc" id="L503">        return algorithm;</span>
     }
 
 
@@ -515,17 +512,17 @@ public final class MatrixMultiply {
     public static Algorithm chooseAlgorithmRealVector(Shape shape) {
         Algorithm algorithm;
 
-<span class="fc" id="L518">        int rows = shape.get(Axis2D.row());</span>
+<span class="fc" id="L515">        int rows = shape.get(Axis2D.row());</span>
 
-<span class="pc bpc" id="L520" title="1 of 2 branches missed.">        if(rows&lt;=300) {</span>
-<span class="fc" id="L521">            algorithm = Algorithm.BLOCKED_VECTOR;</span>
-<span class="nc bnc" id="L522" title="All 2 branches missed.">        } else if(rows&lt;=2048) {</span>
-<span class="nc" id="L523">            algorithm = Algorithm.CONCURRENT_BLOCKED_VECTOR;</span>
+<span class="pc bpc" id="L517" title="1 of 2 branches missed.">        if(rows&lt;=300) {</span>
+<span class="fc" id="L518">            algorithm = Algorithm.BLOCKED_VECTOR;</span>
+<span class="nc bnc" id="L519" title="All 2 branches missed.">        } else if(rows&lt;=2048) {</span>
+<span class="nc" id="L520">            algorithm = Algorithm.CONCURRENT_BLOCKED_VECTOR;</span>
         } else {
-<span class="nc" id="L525">            algorithm = Algorithm.CONCURRENT_STANDARD_VECTOR;</span>
+<span class="nc" id="L522">            algorithm = Algorithm.CONCURRENT_STANDARD_VECTOR;</span>
         }
 
-<span class="fc" id="L528">        return algorithm;</span>
+<span class="fc" id="L525">        return algorithm;</span>
     }
 
 
@@ -538,59 +535,59 @@ public final class MatrixMultiply {
     public static Algorithm chooseAlgorithmComplex(Shape shape1, Shape shape2) {
         Algorithm algorithm;
 
-<span class="fc" id="L541">        int rows1 = shape1.get(Axis2D.row());</span>
-<span class="fc" id="L542">        int cols1 = shape1.get(Axis2D.col());</span>
+<span class="fc" id="L538">        int rows1 = shape1.get(Axis2D.row());</span>
+<span class="fc" id="L539">        int cols1 = shape1.get(Axis2D.col());</span>
 
         // TODO: Extract constants to final variables
-<span class="pc bpc" id="L545" title="1 of 2 branches missed.">        if(getRatio(shape1) &gt;= SQUARENESS_RATIO) {</span>
+<span class="pc bpc" id="L542" title="1 of 2 branches missed.">        if(getRatio(shape1) &gt;= SQUARENESS_RATIO) {</span>
             // Then the first matrix is approximately square.
-<span class="pc bpc" id="L547" title="1 of 2 branches missed.">            if(rows1&lt;=30) {</span>
-<span class="fc" id="L548">                algorithm = Algorithm.REORDERED;</span>
-<span class="nc bnc" id="L549" title="All 2 branches missed.">            } else if(rows1&lt;=250) {</span>
-<span class="nc" id="L550">                algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="pc bpc" id="L544" title="1 of 2 branches missed.">            if(rows1&lt;=30) {</span>
+<span class="fc" id="L545">                algorithm = Algorithm.REORDERED;</span>
+<span class="nc bnc" id="L546" title="All 2 branches missed.">            } else if(rows1&lt;=250) {</span>
+<span class="nc" id="L547">                algorithm = Algorithm.CONCURRENT_REORDERED;</span>
             } else {
             /* For large matrices, use a concurrent, blocked algorithm with the j-k loops swapped for
             better cache performance on modern systems */
-<span class="nc" id="L554">                algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
+<span class="nc" id="L551">                algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
             }
 
-<span class="nc bnc" id="L557" title="All 2 branches missed.">        } else if(rows1&gt;cols1) {</span>
+<span class="nc bnc" id="L554" title="All 2 branches missed.">        } else if(rows1&gt;cols1) {</span>
             // Then there are more rows than columns in the first matrix
-<span class="nc bnc" id="L559" title="All 2 branches missed.">            if(rows1&lt;=100) {</span>
-<span class="nc bnc" id="L560" title="All 2 branches missed.">                if(cols1&lt;=4) algorithm = Algorithm.REORDERED;</span>
-<span class="nc" id="L561">                else algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="nc bnc" id="L556" title="All 2 branches missed.">            if(rows1&lt;=100) {</span>
+<span class="nc bnc" id="L557" title="All 2 branches missed.">                if(cols1&lt;=4) algorithm = Algorithm.REORDERED;</span>
+<span class="nc" id="L558">                else algorithm = Algorithm.CONCURRENT_REORDERED;</span>
             } else {
-<span class="nc bnc" id="L563" title="All 2 branches missed.">                if(cols1&lt;=45) algorithm = Algorithm.CONCURRENT_REORDERED;</span>
-<span class="nc" id="L564">                else algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
+<span class="nc bnc" id="L560" title="All 2 branches missed.">                if(cols1&lt;=45) algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="nc" id="L561">                else algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
             }
         } else {
             // Then there are more columns than rows in the first matrix
-<span class="nc bnc" id="L568" title="All 2 branches missed.">            if(cols1&lt;=100) {</span>
-<span class="nc bnc" id="L569" title="All 2 branches missed.">                if(rows1&lt;=20) {</span>
-<span class="nc" id="L570">                    algorithm = Algorithm.REORDERED;</span>
+<span class="nc bnc" id="L565" title="All 2 branches missed.">            if(cols1&lt;=100) {</span>
+<span class="nc bnc" id="L566" title="All 2 branches missed.">                if(rows1&lt;=20) {</span>
+<span class="nc" id="L567">                    algorithm = Algorithm.REORDERED;</span>
                 } else {
-<span class="nc" id="L572">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="nc" id="L569">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
                 }
-<span class="nc bnc" id="L574" title="All 2 branches missed.">            } else if(cols1&lt;=500) {</span>
-<span class="nc bnc" id="L575" title="All 2 branches missed.">                if(rows1&lt;=10) {</span>
-<span class="nc" id="L576">                    algorithm = Algorithm.REORDERED;</span>
-<span class="nc bnc" id="L577" title="All 2 branches missed.">                } else if(rows1&lt;=200) {</span>
-<span class="nc" id="L578">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="nc bnc" id="L571" title="All 2 branches missed.">            } else if(cols1&lt;=500) {</span>
+<span class="nc bnc" id="L572" title="All 2 branches missed.">                if(rows1&lt;=10) {</span>
+<span class="nc" id="L573">                    algorithm = Algorithm.REORDERED;</span>
+<span class="nc bnc" id="L574" title="All 2 branches missed.">                } else if(rows1&lt;=200) {</span>
+<span class="nc" id="L575">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
                 } else {
-<span class="nc" id="L580">                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
+<span class="nc" id="L577">                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
                 }
             } else {
-<span class="nc bnc" id="L583" title="All 2 branches missed.">                if(rows1&lt;=5) {</span>
-<span class="nc" id="L584">                    algorithm = Algorithm.REORDERED;</span>
-<span class="nc bnc" id="L585" title="All 2 branches missed.">                } else if(rows1&lt;=15){</span>
-<span class="nc" id="L586">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="nc bnc" id="L580" title="All 2 branches missed.">                if(rows1&lt;=5) {</span>
+<span class="nc" id="L581">                    algorithm = Algorithm.REORDERED;</span>
+<span class="nc bnc" id="L582" title="All 2 branches missed.">                } else if(rows1&lt;=15){</span>
+<span class="nc" id="L583">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
                 } else {
-<span class="nc" id="L588">                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
+<span class="nc" id="L585">                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
                 }
             }
         }
 
-<span class="fc" id="L593">        return algorithm;</span>
+<span class="fc" id="L590">        return algorithm;</span>
     }
 
 
@@ -602,17 +599,17 @@ public final class MatrixMultiply {
     public static Algorithm chooseAlgorithmComplexVector(Shape shape) {
         Algorithm algorithm;
 
-<span class="nc" id="L605">        int rows = shape.get(Axis2D.row());</span>
+<span class="nc" id="L602">        int rows = shape.get(Axis2D.row());</span>
 
-<span class="nc bnc" id="L607" title="All 2 branches missed.">        if(rows&lt;=250) {</span>
-<span class="nc" id="L608">            algorithm = Algorithm.STANDARD_VECTOR;</span>
-<span class="nc bnc" id="L609" title="All 2 branches missed.">        } else if(rows&lt;=1024) {</span>
-<span class="nc" id="L610">            algorithm = Algorithm.CONCURRENT_BLOCKED_VECTOR;</span>
+<span class="nc bnc" id="L604" title="All 2 branches missed.">        if(rows&lt;=250) {</span>
+<span class="nc" id="L605">            algorithm = Algorithm.STANDARD_VECTOR;</span>
+<span class="nc bnc" id="L606" title="All 2 branches missed.">        } else if(rows&lt;=1024) {</span>
+<span class="nc" id="L607">            algorithm = Algorithm.CONCURRENT_BLOCKED_VECTOR;</span>
         } else {
-<span class="nc" id="L612">            algorithm = Algorithm.CONCURRENT_STANDARD_VECTOR;</span>
+<span class="nc" id="L609">            algorithm = Algorithm.CONCURRENT_STANDARD_VECTOR;</span>
         }
 
-<span class="nc" id="L615">        return algorithm;</span>
+<span class="nc" id="L612">        return algorithm;</span>
     }
 
 
@@ -625,61 +622,61 @@ public final class MatrixMultiply {
     public static Algorithm chooseAlgorithmRealComplex(Shape shape1, Shape shape2) {
         Algorithm algorithm;
 
-<span class="fc" id="L628">        int rows1 = shape1.get(Axis2D.row());</span>
-<span class="fc" id="L629">        int cols1 = shape1.get(Axis2D.col());</span>
+<span class="fc" id="L625">        int rows1 = shape1.get(Axis2D.row());</span>
+<span class="fc" id="L626">        int cols1 = shape1.get(Axis2D.col());</span>
 
         // TODO: Extract constants to final variables
-<span class="pc bpc" id="L632" title="1 of 2 branches missed.">        if(getRatio(shape1) &gt;= SQUARENESS_RATIO) {</span>
+<span class="pc bpc" id="L629" title="1 of 2 branches missed.">        if(getRatio(shape1) &gt;= SQUARENESS_RATIO) {</span>
             // Then the first matrix is approximately square.
-<span class="pc bpc" id="L634" title="1 of 2 branches missed.">            if(rows1&lt;=40) {</span>
-<span class="fc" id="L635">                algorithm = Algorithm.REORDERED;</span>
-<span class="nc bnc" id="L636" title="All 2 branches missed.">            } else if(rows1&lt;=225) {</span>
-<span class="nc" id="L637">                algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="pc bpc" id="L631" title="1 of 2 branches missed.">            if(rows1&lt;=40) {</span>
+<span class="fc" id="L632">                algorithm = Algorithm.REORDERED;</span>
+<span class="nc bnc" id="L633" title="All 2 branches missed.">            } else if(rows1&lt;=225) {</span>
+<span class="nc" id="L634">                algorithm = Algorithm.CONCURRENT_REORDERED;</span>
             } else {
             /* For large matrices, use a concurrent, blocked algorithm with the j-k loops swapped for
             better cache performance on modern systems */
-<span class="nc" id="L641">                algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
+<span class="nc" id="L638">                algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
             }
 
-<span class="nc bnc" id="L644" title="All 2 branches missed.">        } else if(rows1&gt;cols1) {</span>
+<span class="nc bnc" id="L641" title="All 2 branches missed.">        } else if(rows1&gt;cols1) {</span>
             // Then there are more rows than columns in the first matrix
-<span class="nc bnc" id="L646" title="All 2 branches missed.">            if(rows1&lt;=100) {</span>
-<span class="nc bnc" id="L647" title="All 2 branches missed.">                if(cols1&lt;=2) algorithm = Algorithm.REORDERED;</span>
-<span class="nc" id="L648">                else algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="nc bnc" id="L643" title="All 2 branches missed.">            if(rows1&lt;=100) {</span>
+<span class="nc bnc" id="L644" title="All 2 branches missed.">                if(cols1&lt;=2) algorithm = Algorithm.REORDERED;</span>
+<span class="nc" id="L645">                else algorithm = Algorithm.CONCURRENT_REORDERED;</span>
             } else {
-<span class="nc bnc" id="L650" title="All 2 branches missed.">                if(cols1&lt;=45) algorithm = Algorithm.CONCURRENT_REORDERED;</span>
-<span class="nc" id="L651">                else algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
+<span class="nc bnc" id="L647" title="All 2 branches missed.">                if(cols1&lt;=45) algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="nc" id="L648">                else algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
             }
         } else {
             // Then there are more columns than rows in the first matrix
-<span class="nc bnc" id="L655" title="All 2 branches missed.">            if(cols1&lt;=100) {</span>
-<span class="nc bnc" id="L656" title="All 2 branches missed.">                if(rows1&lt;=15) {</span>
-<span class="nc" id="L657">                    algorithm = Algorithm.REORDERED;</span>
+<span class="nc bnc" id="L652" title="All 2 branches missed.">            if(cols1&lt;=100) {</span>
+<span class="nc bnc" id="L653" title="All 2 branches missed.">                if(rows1&lt;=15) {</span>
+<span class="nc" id="L654">                    algorithm = Algorithm.REORDERED;</span>
                 } else {
-<span class="nc" id="L659">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="nc" id="L656">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
                 }
-<span class="nc bnc" id="L661" title="All 2 branches missed.">            } else if(cols1&lt;=500) {</span>
-<span class="nc bnc" id="L662" title="All 2 branches missed.">                if(rows1&lt;=15) {</span>
-<span class="nc" id="L663">                    algorithm = Algorithm.REORDERED;</span>
-<span class="nc bnc" id="L664" title="All 2 branches missed.">                } else if(rows1&lt;=100) {</span>
-<span class="nc" id="L665">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="nc bnc" id="L658" title="All 2 branches missed.">            } else if(cols1&lt;=500) {</span>
+<span class="nc bnc" id="L659" title="All 2 branches missed.">                if(rows1&lt;=15) {</span>
+<span class="nc" id="L660">                    algorithm = Algorithm.REORDERED;</span>
+<span class="nc bnc" id="L661" title="All 2 branches missed.">                } else if(rows1&lt;=100) {</span>
+<span class="nc" id="L662">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
                 } else {
-<span class="nc" id="L667">                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
+<span class="nc" id="L664">                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
                 }
             } else {
-<span class="nc bnc" id="L670" title="All 2 branches missed.">                if(rows1&lt;=2) {</span>
-<span class="nc" id="L671">                    algorithm = Algorithm.REORDERED;</span>
-<span class="nc bnc" id="L672" title="All 2 branches missed.">                } else if(rows1&lt;=15){</span>
-<span class="nc" id="L673">                    algorithm = Algorithm.BLOCKED_REORDERED;</span>
-<span class="nc bnc" id="L674" title="All 2 branches missed.">                } else if(rows1&lt;=150) {</span>
-<span class="nc" id="L675">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
+<span class="nc bnc" id="L667" title="All 2 branches missed.">                if(rows1&lt;=2) {</span>
+<span class="nc" id="L668">                    algorithm = Algorithm.REORDERED;</span>
+<span class="nc bnc" id="L669" title="All 2 branches missed.">                } else if(rows1&lt;=15){</span>
+<span class="nc" id="L670">                    algorithm = Algorithm.BLOCKED_REORDERED;</span>
+<span class="nc bnc" id="L671" title="All 2 branches missed.">                } else if(rows1&lt;=150) {</span>
+<span class="nc" id="L672">                    algorithm = Algorithm.CONCURRENT_REORDERED;</span>
                 } else {
-<span class="nc" id="L677">                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
+<span class="nc" id="L674">                    algorithm = Algorithm.CONCURRENT_BLOCKED_REORDERED;</span>
                 }
             }
         }
 
-<span class="fc" id="L682">        return algorithm;</span>
+<span class="fc" id="L679">        return algorithm;</span>
     }
 
 
@@ -691,15 +688,15 @@ public final class MatrixMultiply {
     public static Algorithm chooseAlgorithmRealComplexVector(Shape shape) {
         Algorithm algorithm;
 
-<span class="fc" id="L694">        int rows = shape.get(Axis2D.row());</span>
+<span class="fc" id="L691">        int rows = shape.get(Axis2D.row());</span>
 
-<span class="pc bpc" id="L696" title="1 of 2 branches missed.">        if(rows&lt;=600) {</span>
-<span class="fc" id="L697">            algorithm = Algorithm.STANDARD_VECTOR;</span>
+<span class="pc bpc" id="L693" title="1 of 2 branches missed.">        if(rows&lt;=600) {</span>
+<span class="fc" id="L694">            algorithm = Algorithm.STANDARD_VECTOR;</span>
         } else {
-<span class="nc" id="L699">            algorithm = Algorithm.CONCURRENT_BLOCKED_VECTOR;</span>
+<span class="nc" id="L696">            algorithm = Algorithm.CONCURRENT_BLOCKED_VECTOR;</span>
         }
 
-<span class="fc" id="L702">        return algorithm;</span>
+<span class="fc" id="L699">        return algorithm;</span>
     }
 
 
@@ -710,21 +707,21 @@ public final class MatrixMultiply {
      * @return The squareness ratio for the specified shape.
      */
     private static double getRatio(Shape shape) {
-<span class="fc" id="L713">        int numRows = shape.get(Axis2D.row());</span>
-<span class="fc" id="L714">        int numCols = shape.get(Axis2D.col());</span>
+<span class="fc" id="L710">        int numRows = shape.get(Axis2D.row());</span>
+<span class="fc" id="L711">        int numCols = shape.get(Axis2D.col());</span>
 
-<span class="fc" id="L716">        double ratio = Math.abs(numRows-numCols);</span>
-<span class="fc" id="L717">        return 1-ratio/Math.max(numRows, numCols);</span>
+<span class="fc" id="L713">        double ratio = Math.abs(numRows-numCols);</span>
+<span class="fc" id="L714">        return 1-ratio/Math.max(numRows, numCols);</span>
     }
 
 
     /**
      * Simple enum class containing all possible choices of matrix multiply algorithms.
      */
-<span class="fc" id="L724">    private enum Algorithm {</span>
-<span class="fc" id="L725">        STANDARD, REORDERED, BLOCKED, BLOCKED_REORDERED,</span>
-<span class="fc" id="L726">        CONCURRENT_STANDARD, CONCURRENT_REORDERED, CONCURRENT_BLOCKED, CONCURRENT_BLOCKED_REORDERED,</span>
-<span class="fc" id="L727">        STANDARD_VECTOR, BLOCKED_VECTOR, CONCURRENT_STANDARD_VECTOR, CONCURRENT_BLOCKED_VECTOR</span>
+<span class="fc" id="L721">    private enum Algorithm {</span>
+<span class="fc" id="L722">        STANDARD, REORDERED, BLOCKED, BLOCKED_REORDERED,</span>
+<span class="fc" id="L723">        CONCURRENT_STANDARD, CONCURRENT_REORDERED, CONCURRENT_BLOCKED, CONCURRENT_BLOCKED_REORDERED,</span>
+<span class="fc" id="L724">        STANDARD_VECTOR, BLOCKED_VECTOR, CONCURRENT_STANDARD_VECTOR, CONCURRENT_BLOCKED_VECTOR</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

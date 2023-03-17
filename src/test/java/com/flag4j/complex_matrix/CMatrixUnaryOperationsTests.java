@@ -11,7 +11,6 @@ class CMatrixUnaryOperationsTests {
     CNumber[][] aEntries, expEntries;
 
     CMatrix A, exp;
-    double expReal;
     CNumber expComplex;
 
 
@@ -119,7 +118,7 @@ class CMatrixUnaryOperationsTests {
                 {new CNumber(394728.1), new CNumber(-5.234, -234)}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, A.hermationTranspose());
+        assertEquals(exp, A.hermTranspose());
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new CNumber[][]{
@@ -133,7 +132,7 @@ class CMatrixUnaryOperationsTests {
                 {new CNumber(394728.1), new CNumber(-5.234, -234), new CNumber(234.7, 0.412)}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, A.hermationTranspose());
+        assertEquals(exp, A.hermTranspose());
 
         // -------------------- Sub-case 3 --------------------
         aEntries = new CNumber[][]{
@@ -146,7 +145,7 @@ class CMatrixUnaryOperationsTests {
                 {new CNumber(32.4), new CNumber(0, -84.1), new CNumber(0.43467, -5.2)}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, A.hermationTranspose());
+        assertEquals(exp, A.hermTranspose());
     }
 
 
@@ -163,5 +162,35 @@ class CMatrixUnaryOperationsTests {
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, A.recip());
+    }
+
+
+    @Test
+    void conjTest() {
+        // -------------------- Sub-case 1 --------------------
+        aEntries = new CNumber[][]{
+                {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
+                {new CNumber(-9841, -85.13), new CNumber(0, 84.1), new CNumber(-5.234, 234)}};
+        A = new CMatrix(aEntries);
+        expEntries = new CNumber[][]{
+                {new CNumber(234.66, 9923.1), new CNumber(32.4), new CNumber(394728.1)},
+                {new CNumber(-9841, 85.13), new CNumber(0, -84.1), new CNumber(-5.234, -234)}};
+        exp = new CMatrix(expEntries);
+
+        assertEquals(exp, A.conj());
+
+        // -------------------- Sub-case 2 --------------------
+        aEntries = new CNumber[][]{
+                {new CNumber(234.66, 9923.1), new CNumber(-9841, 85.13)},
+                {new CNumber(32.4), new CNumber(0, -84.1)},
+                {new CNumber(394728.1), new CNumber(-5.234, -234)}};
+        A = new CMatrix(aEntries);
+        expEntries = new CNumber[][]{
+                {new CNumber(234.66, -9923.1), new CNumber(-9841, -85.13)},
+                {new CNumber(32.4), new CNumber(0, 84.1)},
+                {new CNumber(394728.1), new CNumber(-5.234, 234)}};
+        exp = new CMatrix(expEntries);
+
+        assertEquals(exp, A.conj());
     }
 }

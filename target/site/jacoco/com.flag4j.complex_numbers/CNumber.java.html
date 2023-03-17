@@ -214,8 +214,7 @@ public class CNumber extends Number {
      * imaginary components. False, otherwise.
      */
     public boolean equals(double b) {
-<span class="fc bfc" id="L217" title="All 4 branches covered.">        boolean result = this.im==0 &amp;&amp; this.re==b;</span>
-<span class="fc" id="L218">        return result;</span>
+<span class="fc bfc" id="L217" title="All 4 branches covered.">        return this.im==0 &amp;&amp; this.re==b;</span>
     }
 
 
@@ -225,12 +224,12 @@ public class CNumber extends Number {
      */
     @Override
     public int hashCode() {
-<span class="fc" id="L228">        final int hashPrime1 = 7;</span>
-<span class="fc" id="L229">        final int hashPrime2 = 31;</span>
+<span class="fc" id="L227">        final int hashPrime1 = 7;</span>
+<span class="fc" id="L228">        final int hashPrime2 = 31;</span>
 
-<span class="fc" id="L231">        int hash = hashPrime2*hashPrime1 + Double.hashCode(this.re);</span>
-<span class="fc" id="L232">        hash = hashPrime2*hash + Double.hashCode(this.im);</span>
-<span class="fc" id="L233">        return hash;</span>
+<span class="fc" id="L230">        int hash = hashPrime2*hashPrime1 + Double.hashCode(this.re);</span>
+<span class="fc" id="L231">        hash = hashPrime2*hash + Double.hashCode(this.im);</span>
+<span class="fc" id="L232">        return hash;</span>
     }
 
 
@@ -243,7 +242,7 @@ public class CNumber extends Number {
      */
     @Override
     public int intValue() {
-<span class="fc" id="L246">        return (int) re;</span>
+<span class="fc" id="L245">        return (int) re;</span>
     }
 
 
@@ -256,7 +255,7 @@ public class CNumber extends Number {
      */
     @Override
     public long longValue() {
-<span class="fc" id="L259">        return (long) re;</span>
+<span class="fc" id="L258">        return (long) re;</span>
     }
 
 
@@ -269,7 +268,7 @@ public class CNumber extends Number {
      */
     @Override
     public float floatValue() {
-<span class="fc" id="L272">        return (float) re;</span>
+<span class="fc" id="L271">        return (float) re;</span>
     }
 
 
@@ -282,7 +281,7 @@ public class CNumber extends Number {
      */
     @Override
     public double doubleValue() {
-<span class="fc" id="L285">        return re;</span>
+<span class="fc" id="L284">        return re;</span>
     }
 
 
@@ -291,7 +290,7 @@ public class CNumber extends Number {
      * @return imaginary part of given Number as double
      */
     public double doubleImaginaryValue() {
-<span class="fc" id="L294">        return im;</span>
+<span class="fc" id="L293">        return im;</span>
     }
 
 
@@ -301,7 +300,7 @@ public class CNumber extends Number {
      * @return imaginary part of given Number as float
      */
     public float floatImaginaryValue() {
-<span class="fc" id="L304">        return (float) im;</span>
+<span class="fc" id="L303">        return (float) im;</span>
     }
 
     /**
@@ -310,7 +309,7 @@ public class CNumber extends Number {
      * @return imaginary part of given Number as int
      */
     public int intImaginaryValue() {
-<span class="fc" id="L313">        return (int) im;</span>
+<span class="fc" id="L312">        return (int) im;</span>
     }
 
 
@@ -320,7 +319,7 @@ public class CNumber extends Number {
      * @return imaginary part of given Number as long
      */
     public long longImaginaryValue() {
-<span class="fc" id="L323">        return (long) im;</span>
+<span class="fc" id="L322">        return (long) im;</span>
     }
 
 
@@ -330,7 +329,7 @@ public class CNumber extends Number {
      * @return The result of adding this complex number with b.
      */
     public CNumber add(CNumber b) {
-<span class="fc" id="L333">        return new CNumber(this.re + b.re, this.im + b.im);</span>
+<span class="fc" id="L332">        return new CNumber(this.re + b.re, this.im + b.im);</span>
     }
 
 
@@ -340,7 +339,7 @@ public class CNumber extends Number {
      * @return The result of adding b to this complex number.
      */
     public CNumber add(double b) {
-<span class="fc" id="L343">        return new CNumber(this.re + b, this.im);</span>
+<span class="fc" id="L342">        return new CNumber(this.re + b, this.im);</span>
     }
 
 
@@ -349,9 +348,9 @@ public class CNumber extends Number {
      * @param b The value to add to this complex number.
      */
     public void addEq(CNumber b) {
-<span class="fc" id="L352">        this.re += b.re;</span>
-<span class="fc" id="L353">        this.im += b.im;</span>
-<span class="fc" id="L354">    }</span>
+<span class="fc" id="L351">        this.re += b.re;</span>
+<span class="fc" id="L352">        this.im += b.im;</span>
+<span class="fc" id="L353">    }</span>
 
 
     /**
@@ -359,8 +358,8 @@ public class CNumber extends Number {
      * @param b The value to add to this complex number.
      */
     public void addEq(double b) {
-<span class="fc" id="L362">        this.re += b;</span>
-<span class="fc" id="L363">    }</span>
+<span class="fc" id="L361">        this.re += b;</span>
+<span class="fc" id="L362">    }</span>
 
 
     /**
@@ -368,9 +367,9 @@ public class CNumber extends Number {
      * @param b The value to add to this complex number.
      */
     public void subEq(CNumber b) {
-<span class="fc" id="L371">        this.re -= b.re;</span>
-<span class="fc" id="L372">        this.im -= b.im;</span>
-<span class="fc" id="L373">    }</span>
+<span class="fc" id="L370">        this.re -= b.re;</span>
+<span class="fc" id="L371">        this.im -= b.im;</span>
+<span class="fc" id="L372">    }</span>
 
 
     /**
@@ -378,8 +377,8 @@ public class CNumber extends Number {
      * @param b The value to add to this complex number.
      */
     public void subEq(double b) {
-<span class="fc" id="L381">        this.re -= b;</span>
-<span class="fc" id="L382">    }</span>
+<span class="fc" id="L380">        this.re -= b;</span>
+<span class="fc" id="L381">    }</span>
 
 
     /**
@@ -388,7 +387,7 @@ public class CNumber extends Number {
      * @return The result of subtracting b from this complex number.
      */
     public CNumber sub(CNumber b) {
-<span class="fc" id="L391">        return new CNumber(this.re - b.re, this.im - b.im);</span>
+<span class="fc" id="L390">        return new CNumber(this.re - b.re, this.im - b.im);</span>
     }
 
 
@@ -398,7 +397,7 @@ public class CNumber extends Number {
      * @return The result of subtracting b from this complex number.
      */
     public CNumber sub(double b) {
-<span class="fc" id="L401">        return new CNumber(this.re - b, this.im);</span>
+<span class="fc" id="L400">        return new CNumber(this.re - b, this.im);</span>
     }
 
 
@@ -408,15 +407,15 @@ public class CNumber extends Number {
      * @return The sum of all values in numbers.
      */
     public static CNumber sum(CNumber... numbers) {
-<span class="fc" id="L411">        double re = 0;</span>
-<span class="fc" id="L412">        double im = 0;</span>
+<span class="fc" id="L410">        double re = 0;</span>
+<span class="fc" id="L411">        double im = 0;</span>
 
-<span class="fc bfc" id="L414" title="All 2 branches covered.">        for(CNumber num : numbers) {</span>
-<span class="fc" id="L415">               re += num.re;</span>
-<span class="fc" id="L416">               im += num.im;</span>
+<span class="fc bfc" id="L413" title="All 2 branches covered.">        for(CNumber num : numbers) {</span>
+<span class="fc" id="L414">               re += num.re;</span>
+<span class="fc" id="L415">               im += num.im;</span>
         }
 
-<span class="fc" id="L419">        return new CNumber(re, im);</span>
+<span class="fc" id="L418">        return new CNumber(re, im);</span>
     }
 
 
@@ -427,7 +426,7 @@ public class CNumber extends Number {
      * @return Product of this complex number with b.
      */
     public CNumber mult(CNumber b) {
-<span class="fc" id="L430">        return new CNumber(</span>
+<span class="fc" id="L429">        return new CNumber(</span>
                 this.re*b.re - this.im*b.im,
                 this.re*b.im + this.im*b.re
         );
@@ -441,7 +440,7 @@ public class CNumber extends Number {
      * @return Product of this complex number with b.
      */
     public CNumber mult(double b) {
-<span class="fc" id="L444">        return new CNumber(this.re*b, this.im*b);</span>
+<span class="fc" id="L443">        return new CNumber(this.re*b, this.im*b);</span>
     }
 
 
@@ -454,21 +453,21 @@ public class CNumber extends Number {
     public CNumber div(CNumber b) {
         CNumber quotient;
 
-<span class="fc bfc" id="L457" title="All 4 branches covered.">        if (this.equals(ZERO) &amp;&amp; !b.equals(ZERO)) {</span>
-<span class="fc" id="L458">            quotient = new CNumber();</span>
+<span class="fc bfc" id="L456" title="All 4 branches covered.">        if (this.equals(ZERO) &amp;&amp; !b.equals(ZERO)) {</span>
+<span class="fc" id="L457">            quotient = new CNumber();</span>
 
-<span class="fc bfc" id="L460" title="All 4 branches covered.">        } else if(b.isReal() &amp;&amp; !b.equals(ZERO)) {</span>
-<span class="fc" id="L461">            quotient = new CNumber(this.re/b.re, this.im/b.re);</span>
+<span class="fc bfc" id="L459" title="All 4 branches covered.">        } else if(b.isReal() &amp;&amp; !b.equals(ZERO)) {</span>
+<span class="fc" id="L460">            quotient = new CNumber(this.re/b.re, this.im/b.re);</span>
 
         } else {
-<span class="fc" id="L464">            double divisor = b.re*b.re + b.im*b.im;</span>
+<span class="fc" id="L463">            double divisor = b.re*b.re + b.im*b.im;</span>
 
-<span class="fc" id="L466">            quotient = new CNumber(</span>
+<span class="fc" id="L465">            quotient = new CNumber(</span>
                     (this.re*b.re + this.im*b.im) / divisor,
                     (this.im*b.re - this.re*b.im) / divisor);
         }
 
-<span class="fc" id="L471">        return quotient;</span>
+<span class="fc" id="L470">        return quotient;</span>
     }
 
 
@@ -481,14 +480,14 @@ public class CNumber extends Number {
     public CNumber div(double b) {
         CNumber quotient;
 
-<span class="fc bfc" id="L484" title="All 4 branches covered.">        if (this.equals(ZERO) &amp;&amp; b != 0) {</span>
-<span class="fc" id="L485">            quotient = new CNumber();</span>
+<span class="fc bfc" id="L483" title="All 4 branches covered.">        if (this.equals(ZERO) &amp;&amp; b != 0) {</span>
+<span class="fc" id="L484">            quotient = new CNumber();</span>
         }
         else {
-<span class="fc" id="L488">            quotient = new CNumber(this.re/b, this.im/b);</span>
+<span class="fc" id="L487">            quotient = new CNumber(this.re/b, this.im/b);</span>
         }
 
-<span class="fc" id="L491">        return quotient;</span>
+<span class="fc" id="L490">        return quotient;</span>
     }
 
 
@@ -499,7 +498,7 @@ public class CNumber extends Number {
      * @return The absolute value/magnitude of this complex number.
      */
     public CNumber abs() {
-<span class="fc" id="L502">        return new CNumber(magAsDouble());</span>
+<span class="fc" id="L501">        return new CNumber(magAsDouble());</span>
     }
 
 
@@ -510,7 +509,7 @@ public class CNumber extends Number {
      * @return The absolute value/magnitude of this complex number.
      */
     public CNumber mag() {
-<span class="fc" id="L513">        return new CNumber(magAsDouble());</span>
+<span class="fc" id="L512">        return new CNumber(magAsDouble());</span>
     }
 
 
@@ -520,7 +519,7 @@ public class CNumber extends Number {
      * @return The absolute value/magnitude of this complex number as a double.
      */
     public double magAsDouble() {
-<span class="fc" id="L523">        return Math.sqrt(this.re* this.re + this.im* this.im);</span>
+<span class="fc" id="L522">        return Math.sqrt(this.re* this.re + this.im* this.im);</span>
     }
 
 
@@ -529,7 +528,7 @@ public class CNumber extends Number {
      * @return The additive inverse of this complex number.
      */
     public CNumber addInv() {
-<span class="fc" id="L532">        return new CNumber(-this.re, -this.im);</span>
+<span class="fc" id="L531">        return new CNumber(-this.re, -this.im);</span>
     }
 
 
@@ -538,7 +537,7 @@ public class CNumber extends Number {
      * @return The additive inverse of this complex number.
      */
     public CNumber multInv() {
-<span class="fc" id="L541">        return ONE.div(this);</span>
+<span class="fc" id="L540">        return ONE.div(this);</span>
     }
 
 
@@ -547,7 +546,7 @@ public class CNumber extends Number {
      * @return The complex conjugate of this complex number.
      */
     public CNumber conj() {
-<span class="fc" id="L550">        return new CNumber(this.re, -this.im);</span>
+<span class="fc" id="L549">        return new CNumber(this.re, -this.im);</span>
     }
 
 
@@ -559,7 +558,7 @@ public class CNumber extends Number {
      * @return a raised to the power of b.
      */
     public static CNumber pow(double a, double b) {
-<span class="fc" id="L562">        return new CNumber(Math.pow(a, b));</span>
+<span class="fc" id="L561">        return new CNumber(Math.pow(a, b));</span>
     }
 
 
@@ -573,16 +572,16 @@ public class CNumber extends Number {
     public static CNumber pow(double a, CNumber b) {
         CNumber result;
 
-<span class="fc bfc" id="L576" title="All 2 branches covered.">        if(b.isReal()) {</span>
-<span class="fc" id="L577">            result = CNumber.pow(a, b.re);</span>
+<span class="fc bfc" id="L575" title="All 2 branches covered.">        if(b.isReal()) {</span>
+<span class="fc" id="L576">            result = CNumber.pow(a, b.re);</span>
         } else {
             // Apply a change of base
-<span class="fc" id="L580">            double logA = Math.log(a);</span>
-<span class="fc" id="L581">            CNumber power = new CNumber(logA * b.re, logA * b.im);</span>
-<span class="fc" id="L582">            result = exp(power);</span>
+<span class="fc" id="L579">            double logA = Math.log(a);</span>
+<span class="fc" id="L580">            CNumber power = new CNumber(logA * b.re, logA * b.im);</span>
+<span class="fc" id="L581">            result = exp(power);</span>
         }
 
-<span class="fc" id="L585">        return result;</span>
+<span class="fc" id="L584">        return result;</span>
     }
 
 
@@ -596,17 +595,17 @@ public class CNumber extends Number {
     public static CNumber pow(CNumber a, CNumber b) {
         CNumber result;
 
-<span class="fc bfc" id="L599" title="All 2 branches covered.">        if(a.isReal()) {</span>
-<span class="fc bfc" id="L600" title="All 2 branches covered.">            if(b.isReal()) {</span>
-<span class="fc" id="L601">                result = CNumber.pow(a.re, b.re);</span>
+<span class="fc bfc" id="L598" title="All 2 branches covered.">        if(a.isReal()) {</span>
+<span class="fc bfc" id="L599" title="All 2 branches covered.">            if(b.isReal()) {</span>
+<span class="fc" id="L600">                result = CNumber.pow(a.re, b.re);</span>
             } else {
-<span class="fc" id="L603">                result = CNumber.pow(a.re, b);</span>
+<span class="fc" id="L602">                result = CNumber.pow(a.re, b);</span>
             }
         } else {
-<span class="fc" id="L606">            result = exp(b.mult(ln(a)));</span>
+<span class="fc" id="L605">            result = exp(b.mult(ln(a)));</span>
         }
 
-<span class="fc" id="L609">        return result;</span>
+<span class="fc" id="L608">        return result;</span>
     }
 
 
@@ -617,8 +616,8 @@ public class CNumber extends Number {
      * @return The output of the exponential function.
      */
     public static CNumber exp(double exponent) {
-<span class="fc" id="L620">        double re = Math.exp(exponent);</span>
-<span class="fc" id="L621">        return new CNumber(re);</span>
+<span class="fc" id="L619">        double re = Math.exp(exponent);</span>
+<span class="fc" id="L620">        return new CNumber(re);</span>
     }
 
 
@@ -628,11 +627,11 @@ public class CNumber extends Number {
      * @return The output of the exponential function.
      */
     public static CNumber exp(CNumber exponent) {
-<span class="fc" id="L631">        double expRe = Math.exp(exponent.re);</span>
-<span class="fc" id="L632">        double re = expRe*Math.cos(exponent.im);</span>
-<span class="fc" id="L633">        double im = expRe*Math.sin(exponent.im);</span>
+<span class="fc" id="L630">        double expRe = Math.exp(exponent.re);</span>
+<span class="fc" id="L631">        double re = expRe*Math.cos(exponent.im);</span>
+<span class="fc" id="L632">        double im = expRe*Math.sin(exponent.im);</span>
 
-<span class="fc" id="L635">        return new CNumber(re, im);</span>
+<span class="fc" id="L634">        return new CNumber(re, im);</span>
     }
 
 
@@ -645,13 +644,13 @@ public class CNumber extends Number {
     public static CNumber ln(double num) {
         CNumber result;
 
-<span class="fc bfc" id="L648" title="All 2 branches covered.">        if(num&lt;0) {</span>
-<span class="fc" id="L649">            result = CNumber.ln(new CNumber(num));</span>
+<span class="fc bfc" id="L647" title="All 2 branches covered.">        if(num&lt;0) {</span>
+<span class="fc" id="L648">            result = CNumber.ln(new CNumber(num));</span>
         } else {
-<span class="fc" id="L651">            result = new CNumber(Math.log(num));</span>
+<span class="fc" id="L650">            result = new CNumber(Math.log(num));</span>
         }
 
-<span class="fc" id="L654">        return result;</span>
+<span class="fc" id="L653">        return result;</span>
     }
 
 
@@ -664,17 +663,17 @@ public class CNumber extends Number {
     public static CNumber ln(CNumber num) {
         CNumber result;
 
-<span class="fc bfc" id="L667" title="All 4 branches covered.">        if(num.isReal() &amp;&amp; num.re &gt;=0) {</span>
-<span class="fc" id="L668">            result = new CNumber(Math.log(num.re));</span>
+<span class="fc bfc" id="L666" title="All 4 branches covered.">        if(num.isReal() &amp;&amp; num.re &gt;=0) {</span>
+<span class="fc" id="L667">            result = new CNumber(Math.log(num.re));</span>
 
         } else {
-<span class="fc" id="L671">            double re = Math.log(Math.sqrt(num.re*num.re + num.im*num.im));</span>
-<span class="fc" id="L672">            double im = Math.atan2(num.im, num.re);</span>
+<span class="fc" id="L670">            double re = Math.log(Math.sqrt(num.re*num.re + num.im*num.im));</span>
+<span class="fc" id="L671">            double im = Math.atan2(num.im, num.re);</span>
 
-<span class="fc" id="L674">            result = new CNumber(re, im);</span>
+<span class="fc" id="L673">            result = new CNumber(re, im);</span>
         }
 
-<span class="fc" id="L677">        return result;</span>
+<span class="fc" id="L676">        return result;</span>
     }
 
 
@@ -688,13 +687,13 @@ public class CNumber extends Number {
     public static CNumber log(double num) {
         CNumber result;
 
-<span class="fc bfc" id="L691" title="All 2 branches covered.">        if(num &lt;= 0) {</span>
-<span class="fc" id="L692">            result = CNumber.log(new CNumber(num));</span>
+<span class="fc bfc" id="L690" title="All 2 branches covered.">        if(num &lt;= 0) {</span>
+<span class="fc" id="L691">            result = CNumber.log(new CNumber(num));</span>
         } else {
-<span class="fc" id="L694">            result = new CNumber(Math.log10(num));</span>
+<span class="fc" id="L693">            result = new CNumber(Math.log10(num));</span>
         }
 
-<span class="fc" id="L697">        return result;</span>
+<span class="fc" id="L696">        return result;</span>
     }
 
 
@@ -708,17 +707,17 @@ public class CNumber extends Number {
     public static CNumber log(CNumber num) {
         CNumber result;
 
-<span class="fc bfc" id="L711" title="All 4 branches covered.">        if(num.isReal() &amp;&amp; num.re &gt;=0) {</span>
-<span class="fc" id="L712">            result = new CNumber(Math.log10(num.re));</span>
+<span class="fc bfc" id="L710" title="All 4 branches covered.">        if(num.isReal() &amp;&amp; num.re &gt;=0) {</span>
+<span class="fc" id="L711">            result = new CNumber(Math.log10(num.re));</span>
         } else {
             // Using the change of base formula
-<span class="fc" id="L715">            CNumber numerator = ln(num);</span>
-<span class="fc" id="L716">            CNumber denominator = new CNumber(Math.log(10));</span>
+<span class="fc" id="L714">            CNumber numerator = ln(num);</span>
+<span class="fc" id="L715">            CNumber denominator = new CNumber(Math.log(10));</span>
 
-<span class="fc" id="L718">            result = numerator.div(denominator);</span>
+<span class="fc" id="L717">            result = numerator.div(denominator);</span>
         }
 
-<span class="fc" id="L721">        return result;</span>
+<span class="fc" id="L720">        return result;</span>
     }
 
 
@@ -729,7 +728,7 @@ public class CNumber extends Number {
      * @return The principle value of the complex logarithm, with specified base, for the given input.
      */
     public static CNumber log(double base, double num) {
-<span class="fc" id="L732">        return CNumber.log(new CNumber(base), new CNumber(num));</span>
+<span class="fc" id="L731">        return CNumber.log(new CNumber(base), new CNumber(num));</span>
     }
 
 
@@ -740,7 +739,7 @@ public class CNumber extends Number {
      * @return The principle value of the complex logarithm, with specified base, for the given input.
      */
     public static CNumber log(double base, CNumber num) {
-<span class="fc" id="L743">        return CNumber.log(new CNumber(base), num);</span>
+<span class="fc" id="L742">        return CNumber.log(new CNumber(base), num);</span>
     }
 
 
@@ -752,56 +751,56 @@ public class CNumber extends Number {
      */
     public static CNumber log(CNumber base, CNumber num) {
         // Using the change of base formula
-<span class="fc" id="L755">        CNumber numerator = ln(num);</span>
-<span class="fc" id="L756">        CNumber denominator = ln(base);</span>
+<span class="fc" id="L754">        CNumber numerator = ln(num);</span>
+<span class="fc" id="L755">        CNumber denominator = ln(base);</span>
 
-<span class="fc" id="L758">        return numerator.div(denominator);</span>
+<span class="fc" id="L757">        return numerator.div(denominator);</span>
     }
 
 
     /**
      * Computes the principle square root of a number. This method wraps {@link Math#sqrt(double)} and returns a {@link CNumber}.
      * @param num Input to square root.
-     * @return The principle square root of a.
+     * @return The principle square root of {@code num}.
      */
     public static CNumber sqrt(double num) {
         CNumber result;
 
-<span class="fc bfc" id="L770" title="All 2 branches covered.">        if(num &gt;=0) {</span>
-<span class="fc" id="L771">            result = new CNumber(Math.sqrt(num));</span>
+<span class="fc bfc" id="L769" title="All 2 branches covered.">        if(num &gt;=0) {</span>
+<span class="fc" id="L770">            result = new CNumber(Math.sqrt(num));</span>
         } else {
-<span class="fc" id="L773">            result = new CNumber(0, Math.sqrt(-num));</span>
+<span class="fc" id="L772">            result = new CNumber(0, Math.sqrt(-num));</span>
         }
 
-<span class="fc" id="L776">        return result;</span>
+<span class="fc" id="L775">        return result;</span>
     }
 
 
     /**
      * Computes the principle square root of a number.
      * @param num Input to square root.
-     * @return The principle square root of a. That is, the square root of a with positive real part.
+     * @return The principle square root of {@code num}. That is, the square root of a with positive real part.
      */
     public static CNumber sqrt(CNumber num) {
         CNumber result;
 
-<span class="fc bfc" id="L788" title="All 4 branches covered.">        if(num.isReal() &amp;&amp; num.re&gt;=0) {</span>
-<span class="fc" id="L789">            result = new CNumber(Math.sqrt(num.re));</span>
+<span class="fc bfc" id="L787" title="All 4 branches covered.">        if(num.isReal() &amp;&amp; num.re&gt;=0) {</span>
+<span class="fc" id="L788">            result = new CNumber(Math.sqrt(num.re));</span>
 
-<span class="pc bpc" id="L791" title="1 of 4 branches missed.">        } else if(num.isReal() &amp;&amp; num.re&lt;0) {</span>
-<span class="fc" id="L792">            result = new CNumber(0, Math.sqrt(-num.re));</span>
+<span class="pc bpc" id="L790" title="1 of 4 branches missed.">        } else if(num.isReal() &amp;&amp; num.re&lt;0) {</span>
+<span class="fc" id="L791">            result = new CNumber(0, Math.sqrt(-num.re));</span>
 
         } else {
-<span class="fc" id="L795">            double mag = num.magAsDouble();</span>
-<span class="fc" id="L796">            double factor = num.im / Math.abs(num.im);</span>
+<span class="fc" id="L794">            double mag = num.magAsDouble();</span>
+<span class="fc" id="L795">            double factor = num.im / Math.abs(num.im);</span>
 
-<span class="fc" id="L798">            double re = Math.sqrt((mag + num.re)/2);</span>
-<span class="fc" id="L799">            double im = factor*Math.sqrt((mag - num.re)/2);</span>
+<span class="fc" id="L797">            double re = Math.sqrt((mag + num.re)/2);</span>
+<span class="fc" id="L798">            double im = factor*Math.sqrt((mag - num.re)/2);</span>
 
-<span class="fc" id="L801">            result = new CNumber(re, im);</span>
+<span class="fc" id="L800">            result = new CNumber(re, im);</span>
         }
 
-<span class="fc" id="L804">        return result;</span>
+<span class="fc" id="L803">        return result;</span>
     }
 
 
@@ -815,20 +814,20 @@ public class CNumber extends Number {
     public static CNumber sgn(CNumber value) {
         CNumber result;
 
-<span class="fc bfc" id="L818" title="All 2 branches covered.">        if(value.equals(CNumber.ZERO)) {</span>
-<span class="fc" id="L819">            return CNumber.ZERO;</span>
+<span class="fc bfc" id="L817" title="All 2 branches covered.">        if(value.equals(CNumber.ZERO)) {</span>
+<span class="fc" id="L818">            return CNumber.ZERO;</span>
 
-<span class="fc bfc" id="L821" title="All 2 branches covered.">        } else if(value.im == 0) {</span>
-<span class="fc bfc" id="L822" title="All 2 branches covered.">            if(value.re &gt; 0) {</span>
-<span class="fc" id="L823">                result = new CNumber(1);</span>
+<span class="fc bfc" id="L820" title="All 2 branches covered.">        } else if(value.im == 0) {</span>
+<span class="fc bfc" id="L821" title="All 2 branches covered.">            if(value.re &gt; 0) {</span>
+<span class="fc" id="L822">                result = new CNumber(1);</span>
             } else {
-<span class="fc" id="L825">                result = new CNumber(-1);</span>
+<span class="fc" id="L824">                result = new CNumber(-1);</span>
             }
         } else {
-<span class="fc" id="L828">            result = value.div(value.magAsDouble());</span>
+<span class="fc" id="L827">            result = value.div(value.magAsDouble());</span>
         }
 
-<span class="fc" id="L831">        return result;</span>
+<span class="fc" id="L830">        return result;</span>
     }
 
 
@@ -837,13 +836,13 @@ public class CNumber extends Number {
      * @return An array of length 2 containing in order, the radius and angle (in radians) if the complex number.
      */
     public double[] toPolar() {
-<span class="fc" id="L840">        double[] polar = new double[2];</span>
+<span class="fc" id="L839">        double[] polar = new double[2];</span>
 
         // Compute the magnitude and angle of the complex number.
-<span class="fc" id="L843">        polar[0] = this.magAsDouble();</span>
-<span class="fc" id="L844">        polar[1] = Math.atan2(this.im, this.re);</span>
+<span class="fc" id="L842">        polar[0] = this.magAsDouble();</span>
+<span class="fc" id="L843">        polar[1] = Math.atan2(this.im, this.re);</span>
 
-<span class="fc" id="L846">        return polar;</span>
+<span class="fc" id="L845">        return polar;</span>
     }
 
 
@@ -854,10 +853,10 @@ public class CNumber extends Number {
      * @return An equivalent complex number in rectangular form.
      */
     public static CNumber fromPolar(double r, double theta) {
-<span class="fc" id="L857">        double re = r*Math.cos(theta);</span>
-<span class="fc" id="L858">        double im = r*Math.sin(theta);</span>
+<span class="fc" id="L856">        double re = r*Math.cos(theta);</span>
+<span class="fc" id="L857">        double im = r*Math.sin(theta);</span>
 
-<span class="fc" id="L860">        return new CNumber(re, im);</span>
+<span class="fc" id="L859">        return new CNumber(re, im);</span>
     }
 
 
@@ -870,7 +869,7 @@ public class CNumber extends Number {
      * is returned.
      */
     public static double atan2(CNumber num) {
-<span class="nc" id="L873">        return Math.atan2(num.im, num.re);</span>
+<span class="nc" id="L872">        return Math.atan2(num.im, num.re);</span>
     }
 
 
@@ -883,20 +882,20 @@ public class CNumber extends Number {
      * is returned.
      */
     public static double arg(CNumber num) {
-<span class="nc" id="L886">        return atan2(num);</span>
+<span class="nc" id="L885">        return atan2(num);</span>
     }
 
 
     /**
      * Computes the complex argument function for a complex number.
      * is computed. This method wraps is equivalent to {@link CNumber#atan2AsCNumber(CNumber) CNumber}. &lt;br&gt;
-     * To get the result as an double see {@link CNumber#argAsCNumber(CNumber)}.
+     * To get the result as a double see {@link CNumber#arg(CNumber)}.
      * @param num The input to the atan2 function.
      * @return The output of the atan2 function given the specified input. If the complex number is zero, then {@link Double#NaN}
      * is returned.
      */
     public static CNumber argAsCNumber(CNumber num) {
-<span class="nc" id="L899">        return atan2AsCNumber(num);</span>
+<span class="nc" id="L898">        return atan2AsCNumber(num);</span>
     }
 
 
@@ -909,7 +908,7 @@ public class CNumber extends Number {
      * is returned.
      */
     public static CNumber atan2AsCNumber(CNumber num) {
-<span class="nc" id="L912">        return new CNumber(Math.atan2(num.im, num.re));</span>
+<span class="nc" id="L911">        return new CNumber(Math.atan2(num.im, num.re));</span>
     }
 
 
@@ -920,7 +919,7 @@ public class CNumber extends Number {
      * @return The trigonometric sine function evaluated at the specified value.
      */
     public static CNumber sin(double num) {
-<span class="fc" id="L923">        return new CNumber(Math.sin(num));</span>
+<span class="fc" id="L922">        return new CNumber(Math.sin(num));</span>
     }
 
 
@@ -930,10 +929,10 @@ public class CNumber extends Number {
      * @return The trigonometric sine function evaluated at the specified value.
      */
     public static CNumber sin(CNumber num) {
-<span class="fc" id="L933">        double re = Math.sin(num.re)*Math.cosh(num.im);</span>
-<span class="fc" id="L934">        double im = Math.cos(num.re)*Math.sinh(num.im);</span>
+<span class="fc" id="L932">        double re = Math.sin(num.re)*Math.cosh(num.im);</span>
+<span class="fc" id="L933">        double im = Math.cos(num.re)*Math.sinh(num.im);</span>
 
-<span class="fc" id="L936">        return new CNumber(re, im);</span>
+<span class="fc" id="L935">        return new CNumber(re, im);</span>
     }
 
 
@@ -944,7 +943,7 @@ public class CNumber extends Number {
      * @return The inverse sine of the input value. That is, the angle whose sine value is num.
      */
     public static CNumber asin(double num) {
-<span class="nc" id="L947">        return new CNumber(Math.asin(num));</span>
+<span class="nc" id="L946">        return new CNumber(Math.asin(num));</span>
     }
 
 
@@ -954,10 +953,10 @@ public class CNumber extends Number {
      * @return The inverse sine of the input value.
      */
     public static CNumber asin(CNumber num) {
-<span class="nc" id="L957">        CNumber diff = ONE.sub(num.mult(num));</span>
-<span class="nc" id="L958">        CNumber denominator = CNumber.sqrt(diff);</span>
+<span class="nc" id="L956">        CNumber diff = ONE.sub(num.mult(num));</span>
+<span class="nc" id="L957">        CNumber denominator = CNumber.sqrt(diff);</span>
 
-<span class="nc" id="L960">        return atan(num.div(denominator));</span>
+<span class="nc" id="L959">        return atan(num.div(denominator));</span>
     }
 
 
@@ -968,7 +967,7 @@ public class CNumber extends Number {
      * @return The hyperbolic sine of the input value.
      */
     public static CNumber sinh(double num) {
-<span class="nc" id="L971">        return new CNumber(Math.sinh(num));</span>
+<span class="nc" id="L970">        return new CNumber(Math.sinh(num));</span>
     }
 
 
@@ -978,10 +977,10 @@ public class CNumber extends Number {
      * @return The hyperbolic sine of the input value.
      */
     public static CNumber sinh(CNumber num) {
-<span class="nc" id="L981">        CNumber numerator = exp(num).add(exp(num.addInv()));</span>
-<span class="nc" id="L982">        CNumber denominator = new CNumber(2);</span>
+<span class="nc" id="L980">        CNumber numerator = exp(num).add(exp(num.addInv()));</span>
+<span class="nc" id="L981">        CNumber denominator = new CNumber(2);</span>
 
-<span class="nc" id="L984">        return numerator.div(denominator);</span>
+<span class="nc" id="L983">        return numerator.div(denominator);</span>
     }
 
 
@@ -992,7 +991,7 @@ public class CNumber extends Number {
      * @return The trigonometric cosine function evaluated at the specified value.
      */
     public static CNumber cos(double num) {
-<span class="fc" id="L995">        return new CNumber(Math.cos(num));</span>
+<span class="fc" id="L994">        return new CNumber(Math.cos(num));</span>
     }
 
 
@@ -1002,10 +1001,10 @@ public class CNumber extends Number {
      * @return The trigonometric cosine function evaluated at the specified value.
      */
     public static CNumber cos(CNumber num) {
-<span class="fc" id="L1005">        double re = Math.cos(num.re)*Math.cosh(num.im);</span>
-<span class="fc" id="L1006">        double im = Math.sin(num.re)*Math.sinh(num.im);</span>
+<span class="fc" id="L1004">        double re = Math.cos(num.re)*Math.cosh(num.im);</span>
+<span class="fc" id="L1005">        double im = Math.sin(num.re)*Math.sinh(num.im);</span>
 
-<span class="fc" id="L1008">        return new CNumber(re, im);</span>
+<span class="fc" id="L1007">        return new CNumber(re, im);</span>
     }
 
 
@@ -1016,7 +1015,7 @@ public class CNumber extends Number {
      * @return The inverse cosine of the input value. That is, the angle whose cosine value is num.
      */
     public static CNumber acos(double num) {
-<span class="nc" id="L1019">        return new CNumber(Math.acos(num));</span>
+<span class="nc" id="L1018">        return new CNumber(Math.acos(num));</span>
     }
 
 
@@ -1026,9 +1025,9 @@ public class CNumber extends Number {
      * @return The inverse cosine of the input value.
      */
     public static CNumber acos(CNumber num) {
-<span class="nc" id="L1029">        CNumber term = new CNumber(Math.PI/2);</span>
+<span class="nc" id="L1028">        CNumber term = new CNumber(Math.PI/2);</span>
 
-<span class="nc" id="L1031">        return term.sub(asin(num));</span>
+<span class="nc" id="L1030">        return term.sub(asin(num));</span>
     }
 
 
@@ -1039,7 +1038,7 @@ public class CNumber extends Number {
      * @return The hyperbolic cosine of the input value.
      */
     public static CNumber cosh(double num) {
-<span class="nc" id="L1042">        return new CNumber(Math.cosh(num));</span>
+<span class="nc" id="L1041">        return new CNumber(Math.cosh(num));</span>
     }
 
 
@@ -1049,10 +1048,10 @@ public class CNumber extends Number {
      * @return The hyperbolic cosine of the input value.
      */
     public static CNumber cosh(CNumber num) {
-<span class="nc" id="L1052">        CNumber numerator = exp(num).sub(exp(num.addInv()));</span>
-<span class="nc" id="L1053">        CNumber denominator = new CNumber(2);</span>
+<span class="nc" id="L1051">        CNumber numerator = exp(num).sub(exp(num.addInv()));</span>
+<span class="nc" id="L1052">        CNumber denominator = new CNumber(2);</span>
 
-<span class="nc" id="L1055">        return numerator.div(denominator);</span>
+<span class="nc" id="L1054">        return numerator.div(denominator);</span>
     }
 
 
@@ -1063,7 +1062,7 @@ public class CNumber extends Number {
      * @return The trigonometric tangent function evaluated at the specified value.
      */
     public static CNumber tan(double num) {
-<span class="fc" id="L1066">        return new CNumber(Math.tan(num));</span>
+<span class="fc" id="L1065">        return new CNumber(Math.tan(num));</span>
     }
 
 
@@ -1073,12 +1072,12 @@ public class CNumber extends Number {
      * @return The trigonometric tangent function evaluated at the specified value.
      */
     public static CNumber tan(CNumber num) {
-<span class="fc" id="L1076">        CNumber numerator = new CNumber(Math.tan(num.re),</span>
-<span class="fc" id="L1077">                Math.tanh(num.im));</span>
-<span class="fc" id="L1078">        CNumber denominator = new CNumber(1,</span>
-<span class="fc" id="L1079">                -Math.tan(num.re)*Math.tanh(num.im));</span>
+<span class="fc" id="L1075">        CNumber numerator = new CNumber(Math.tan(num.re),</span>
+<span class="fc" id="L1076">                Math.tanh(num.im));</span>
+<span class="fc" id="L1077">        CNumber denominator = new CNumber(1,</span>
+<span class="fc" id="L1078">                -Math.tan(num.re)*Math.tanh(num.im));</span>
 
-<span class="fc" id="L1081">        return numerator.div(denominator);</span>
+<span class="fc" id="L1080">        return numerator.div(denominator);</span>
     }
 
 
@@ -1089,7 +1088,7 @@ public class CNumber extends Number {
      * @return The inverse tangent of the input value. That is, the angle whose tangent value is num.
      */
     public static CNumber atan(double num) {
-<span class="nc" id="L1092">        return new CNumber(Math.atan(num));</span>
+<span class="nc" id="L1091">        return new CNumber(Math.atan(num));</span>
     }
 
 
@@ -1099,12 +1098,12 @@ public class CNumber extends Number {
      * @return The inverse tangent of the input value.
      */
     public static CNumber atan(CNumber num) {
-<span class="nc" id="L1102">        CNumber factor = TWO.multInv();</span>
-<span class="nc" id="L1103">        CNumber numerator = IMAGINARY_UNIT.sub(num);</span>
-<span class="nc" id="L1104">        CNumber denominator = IMAGINARY_UNIT.add(num);</span>
-<span class="nc" id="L1105">        CNumber log = CNumber.ln(numerator.div(denominator));</span>
+<span class="nc" id="L1101">        CNumber factor = TWO.multInv();</span>
+<span class="nc" id="L1102">        CNumber numerator = IMAGINARY_UNIT.sub(num);</span>
+<span class="nc" id="L1103">        CNumber denominator = IMAGINARY_UNIT.add(num);</span>
+<span class="nc" id="L1104">        CNumber log = CNumber.ln(numerator.div(denominator));</span>
 
-<span class="nc" id="L1107">        return factor.mult(log);</span>
+<span class="nc" id="L1106">        return factor.mult(log);</span>
     }
 
 
@@ -1115,7 +1114,7 @@ public class CNumber extends Number {
      * @return The hyperbolic tangent of the input value.
      */
     public static CNumber tanh(double num) {
-<span class="nc" id="L1118">        return new CNumber(Math.tanh(num));</span>
+<span class="nc" id="L1117">        return new CNumber(Math.tanh(num));</span>
     }
 
 
@@ -1125,11 +1124,11 @@ public class CNumber extends Number {
      * @return The hyperbolic tangent of the input value.
      */
     public static CNumber tanh(CNumber num) {
-<span class="nc" id="L1128">        CNumber exp = exp(TWO.mult(num));</span>
-<span class="nc" id="L1129">        CNumber numerator = exp.sub(ONE);</span>
-<span class="nc" id="L1130">        CNumber denominator = exp.add(ONE);</span>
+<span class="nc" id="L1127">        CNumber exp = exp(TWO.mult(num));</span>
+<span class="nc" id="L1128">        CNumber numerator = exp.sub(ONE);</span>
+<span class="nc" id="L1129">        CNumber denominator = exp.add(ONE);</span>
 
-<span class="nc" id="L1132">        return numerator.div(denominator);</span>
+<span class="nc" id="L1131">        return numerator.div(denominator);</span>
     }
 
 
@@ -1138,7 +1137,7 @@ public class CNumber extends Number {
      * @return True if this complex number has zero imaginary part. False otherwise.
      */
     public boolean isReal() {
-<span class="fc bfc" id="L1141" title="All 2 branches covered.">        return this.im == 0;</span>
+<span class="fc bfc" id="L1140" title="All 2 branches covered.">        return this.im == 0;</span>
     }
 
 
@@ -1147,7 +1146,7 @@ public class CNumber extends Number {
      * @return True if this complex number has zero real part. False otherwise.
      */
     public boolean isImaginary() {
-<span class="fc bfc" id="L1150" title="All 2 branches covered.">        return this.re == 0;</span>
+<span class="fc bfc" id="L1149" title="All 2 branches covered.">        return this.re == 0;</span>
     }
 
 
@@ -1156,7 +1155,7 @@ public class CNumber extends Number {
      * @return True if this complex number has non-zero imaginary part. False otherwise.
      */
     public boolean isComplex() {
-<span class="fc bfc" id="L1159" title="All 2 branches covered.">        return this.im != 0;</span>
+<span class="fc bfc" id="L1158" title="All 2 branches covered.">        return this.im != 0;</span>
     }
 
 
@@ -1169,7 +1168,7 @@ public class CNumber extends Number {
      * {@link Double#NEGATIVE_INFINITY}
      */
     public static CNumber round(CNumber n) {
-<span class="fc" id="L1172">        return round(n, 0);</span>
+<span class="fc" id="L1171">        return round(n, 0);</span>
     }
 
 
@@ -1186,25 +1185,25 @@ public class CNumber extends Number {
      * {@link Double#NEGATIVE_INFINITY}
      */
     public static CNumber round(CNumber n, int decimals) {
-<span class="fc bfc" id="L1189" title="All 2 branches covered.">        if (decimals &lt; 0) {</span>
-<span class="fc" id="L1190">            throw new IllegalArgumentException(ErrorMessages.negValueErr(decimals));</span>
+<span class="fc bfc" id="L1188" title="All 2 branches covered.">        if (decimals &lt; 0) {</span>
+<span class="fc" id="L1189">            throw new IllegalArgumentException(ErrorMessages.negValueErr(decimals));</span>
         }
 
         double real, imaginary;
 
-<span class="fc bfc" id="L1195" title="All 2 branches covered.">        if(Double.isFinite(n.re)) {</span>
-<span class="fc" id="L1196">            real = BigDecimal.valueOf(n.re).setScale(decimals, RoundingMode.HALF_UP).doubleValue();</span>
+<span class="fc bfc" id="L1194" title="All 2 branches covered.">        if(Double.isFinite(n.re)) {</span>
+<span class="fc" id="L1195">            real = BigDecimal.valueOf(n.re).setScale(decimals, RoundingMode.HALF_UP).doubleValue();</span>
         } else {
-<span class="fc" id="L1198">            real = n.re;</span>
+<span class="fc" id="L1197">            real = n.re;</span>
         }
 
-<span class="fc bfc" id="L1201" title="All 2 branches covered.">        if(Double.isFinite(n.im)) {</span>
-<span class="fc" id="L1202">            imaginary = BigDecimal.valueOf(n.im).setScale(decimals, RoundingMode.HALF_UP).doubleValue();</span>
+<span class="fc bfc" id="L1200" title="All 2 branches covered.">        if(Double.isFinite(n.im)) {</span>
+<span class="fc" id="L1201">            imaginary = BigDecimal.valueOf(n.im).setScale(decimals, RoundingMode.HALF_UP).doubleValue();</span>
         } else {
-<span class="fc" id="L1204">            imaginary = n.im;</span>
+<span class="fc" id="L1203">            imaginary = n.im;</span>
         }
 
-<span class="fc" id="L1207">        return new CNumber(real, imaginary);</span>
+<span class="fc" id="L1206">        return new CNumber(real, imaginary);</span>
     }
 
 
@@ -1215,10 +1214,10 @@ public class CNumber extends Number {
      * @return The
      */
     public static CNumber roundToZero(CNumber n, double tol) {
-<span class="fc bfc" id="L1218" title="All 2 branches covered.">        if(nearZero(n, tol)) {</span>
-<span class="fc" id="L1219">            return new CNumber();</span>
+<span class="fc bfc" id="L1217" title="All 2 branches covered.">        if(nearZero(n, tol)) {</span>
+<span class="fc" id="L1218">            return new CNumber();</span>
         } else {
-<span class="fc" id="L1221">            return n.copy();</span>
+<span class="fc" id="L1220">            return n.copy();</span>
         }
     }
 
@@ -1233,11 +1232,11 @@ public class CNumber extends Number {
      * @throws IllegalArgumentException If tol is less than 0.
      */
     public static boolean nearZero(CNumber n, double tol) {
-<span class="fc bfc" id="L1236" title="All 2 branches covered.">        if (tol &lt; 0) {</span>
-<span class="fc" id="L1237">            throw new IllegalArgumentException(ErrorMessages.negValueErr(tol));</span>
+<span class="fc bfc" id="L1235" title="All 2 branches covered.">        if (tol &lt; 0) {</span>
+<span class="fc" id="L1236">            throw new IllegalArgumentException(ErrorMessages.negValueErr(tol));</span>
         }
 
-<span class="fc bfc" id="L1240" title="All 2 branches covered.">        return n.magAsDouble() &lt;= tol;</span>
+<span class="fc bfc" id="L1239" title="All 2 branches covered.">        return n.magAsDouble() &lt;= tol;</span>
     }
 
 
@@ -1251,7 +1250,7 @@ public class CNumber extends Number {
      * - If the magnitude of this number is greater than that of &lt;code&gt;b&lt;/code&gt;, then this method will return a positive number.
      */
     public int compareTo(CNumber b) {
-<span class="fc" id="L1254">        return Double.compare(this.magAsDouble(), b.magAsDouble());</span>
+<span class="fc" id="L1253">        return Double.compare(this.magAsDouble(), b.magAsDouble());</span>
     }
 
 
@@ -1265,7 +1264,7 @@ public class CNumber extends Number {
      * - If the real value of this number is greater than that of &lt;code&gt;b&lt;/code&gt;, then this method will return a positive number.
      */
     public int compareToReal(CNumber b) {
-<span class="fc" id="L1268">        return compareToReal(b.re);</span>
+<span class="fc" id="L1267">        return compareToReal(b.re);</span>
     }
 
 
@@ -1280,7 +1279,7 @@ public class CNumber extends Number {
      * - If the real value of this number is greater than that of &lt;code&gt;b&lt;/code&gt;, then this method will return a positive number.
      */
     public int compareToReal(double b) {
-<span class="fc" id="L1283">        return Double.valueOf(this.re).compareTo(b);</span>
+<span class="fc" id="L1282">        return Double.compare(this.re, b);</span>
     }
 
 
@@ -1290,21 +1289,21 @@ public class CNumber extends Number {
      * @return The minimum magnitude from the values array. If the array has zero length, then -1 is returned.
      */
     public static CNumber min(CNumber... values) {
-<span class="fc" id="L1293">        double min = -1;</span>
+<span class="fc" id="L1292">        double min = -1;</span>
         double currMag;
 
-<span class="fc bfc" id="L1296" title="All 2 branches covered.">        if(values.length &gt; 0) {</span>
-<span class="fc" id="L1297">            min = values[0].magAsDouble();</span>
+<span class="fc bfc" id="L1295" title="All 2 branches covered.">        if(values.length &gt; 0) {</span>
+<span class="fc" id="L1296">            min = values[0].magAsDouble();</span>
         }
 
-<span class="fc bfc" id="L1300" title="All 2 branches covered.">        for(CNumber value : values) {</span>
-<span class="fc" id="L1301">            currMag = value.magAsDouble();</span>
-<span class="fc bfc" id="L1302" title="All 2 branches covered.">            if(currMag &lt; min) {</span>
-<span class="fc" id="L1303">                min = currMag;</span>
+<span class="fc bfc" id="L1299" title="All 2 branches covered.">        for(CNumber value : values) {</span>
+<span class="fc" id="L1300">            currMag = value.magAsDouble();</span>
+<span class="fc bfc" id="L1301" title="All 2 branches covered.">            if(currMag &lt; min) {</span>
+<span class="fc" id="L1302">                min = currMag;</span>
             }
         }
 
-<span class="fc" id="L1307">        return new CNumber(min);</span>
+<span class="fc" id="L1306">        return new CNumber(min);</span>
     }
 
 
@@ -1315,21 +1314,21 @@ public class CNumber extends Number {
      * returned.
      */
     public static CNumber minReal(CNumber... values) {
-<span class="fc" id="L1318">        double min = Double.MAX_VALUE;</span>
+<span class="fc" id="L1317">        double min = Double.MAX_VALUE;</span>
         double currMin;
 
-<span class="fc bfc" id="L1321" title="All 2 branches covered.">        if(values.length == 0) {</span>
-<span class="fc" id="L1322">            min = Double.NaN;</span>
+<span class="fc bfc" id="L1320" title="All 2 branches covered.">        if(values.length == 0) {</span>
+<span class="fc" id="L1321">            min = Double.NaN;</span>
         }
 
-<span class="fc bfc" id="L1325" title="All 2 branches covered.">        for(CNumber value : values) {</span>
-<span class="fc" id="L1326">            currMin = value.re;</span>
-<span class="fc bfc" id="L1327" title="All 2 branches covered.">            if(currMin &lt; min) {</span>
-<span class="fc" id="L1328">                min = currMin;</span>
+<span class="fc bfc" id="L1324" title="All 2 branches covered.">        for(CNumber value : values) {</span>
+<span class="fc" id="L1325">            currMin = value.re;</span>
+<span class="fc bfc" id="L1326" title="All 2 branches covered.">            if(currMin &lt; min) {</span>
+<span class="fc" id="L1327">                min = currMin;</span>
             }
         }
 
-<span class="fc" id="L1332">        return new CNumber(min);</span>
+<span class="fc" id="L1331">        return new CNumber(min);</span>
     }
 
 
@@ -1339,21 +1338,21 @@ public class CNumber extends Number {
      * @return The minimum magnitude from the values array. If the array has zero length, then -1 is returned.
      */
     public static CNumber max(CNumber... values) {
-<span class="fc" id="L1342">        double max = -1;</span>
+<span class="fc" id="L1341">        double max = -1;</span>
         double currMag;
 
-<span class="fc bfc" id="L1345" title="All 2 branches covered.">        if(values.length &gt; 0) {</span>
-<span class="fc" id="L1346">            max = values[0].magAsDouble();</span>
+<span class="fc bfc" id="L1344" title="All 2 branches covered.">        if(values.length &gt; 0) {</span>
+<span class="fc" id="L1345">            max = values[0].magAsDouble();</span>
         }
 
-<span class="fc bfc" id="L1349" title="All 2 branches covered.">        for(CNumber value : values) {</span>
-<span class="fc" id="L1350">            currMag = value.magAsDouble();</span>
-<span class="fc bfc" id="L1351" title="All 2 branches covered.">            if(currMag &gt; max) {</span>
-<span class="fc" id="L1352">                max = currMag;</span>
+<span class="fc bfc" id="L1348" title="All 2 branches covered.">        for(CNumber value : values) {</span>
+<span class="fc" id="L1349">            currMag = value.magAsDouble();</span>
+<span class="fc bfc" id="L1350" title="All 2 branches covered.">            if(currMag &gt; max) {</span>
+<span class="fc" id="L1351">                max = currMag;</span>
             }
         }
 
-<span class="fc" id="L1356">        return new CNumber(max);</span>
+<span class="fc" id="L1355">        return new CNumber(max);</span>
     }
 
 
@@ -1364,21 +1363,21 @@ public class CNumber extends Number {
      * returned.
      */
     public static CNumber maxReal(CNumber... values) {
-<span class="fc" id="L1367">        double max = Double.MIN_NORMAL;</span>
+<span class="fc" id="L1366">        double max = Double.MIN_NORMAL;</span>
         double currMax;
 
-<span class="fc bfc" id="L1370" title="All 2 branches covered.">        if(values.length == 0) {</span>
-<span class="fc" id="L1371">            max = Double.NaN;</span>
+<span class="fc bfc" id="L1369" title="All 2 branches covered.">        if(values.length == 0) {</span>
+<span class="fc" id="L1370">            max = Double.NaN;</span>
         }
 
-<span class="fc bfc" id="L1374" title="All 2 branches covered.">        for(CNumber value : values) {</span>
-<span class="fc" id="L1375">            currMax = value.re;</span>
-<span class="fc bfc" id="L1376" title="All 2 branches covered.">            if(currMax &gt; max) {</span>
-<span class="fc" id="L1377">                max = currMax;</span>
+<span class="fc bfc" id="L1373" title="All 2 branches covered.">        for(CNumber value : values) {</span>
+<span class="fc" id="L1374">            currMax = value.re;</span>
+<span class="fc bfc" id="L1375" title="All 2 branches covered.">            if(currMax &gt; max) {</span>
+<span class="fc" id="L1376">                max = currMax;</span>
             }
         }
 
-<span class="fc" id="L1381">        return new CNumber(max);</span>
+<span class="fc" id="L1380">        return new CNumber(max);</span>
     }
 
 
@@ -1388,23 +1387,23 @@ public class CNumber extends Number {
      * @return The index of the minimum magnitude from the values array. If the array has zero length, then -1 is returned.
      */
     public static int argMin(CNumber... values) {
-<span class="fc" id="L1391">        double min = -1;</span>
+<span class="fc" id="L1390">        double min = -1;</span>
         double currMag;
-<span class="fc" id="L1393">        int arg = -1;</span>
+<span class="fc" id="L1392">        int arg = -1;</span>
 
-<span class="fc bfc" id="L1395" title="All 2 branches covered.">        if(values.length &gt; 0) {</span>
-<span class="fc" id="L1396">            min = values[0].magAsDouble();</span>
+<span class="fc bfc" id="L1394" title="All 2 branches covered.">        if(values.length &gt; 0) {</span>
+<span class="fc" id="L1395">            min = values[0].magAsDouble();</span>
         }
 
-<span class="fc bfc" id="L1399" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L1400">            currMag = values[i].magAsDouble();</span>
-<span class="fc bfc" id="L1401" title="All 2 branches covered.">            if(currMag &lt; min) {</span>
-<span class="fc" id="L1402">                min = currMag;</span>
-<span class="fc" id="L1403">                arg = i;</span>
+<span class="fc bfc" id="L1398" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L1399">            currMag = values[i].magAsDouble();</span>
+<span class="fc bfc" id="L1400" title="All 2 branches covered.">            if(currMag &lt; min) {</span>
+<span class="fc" id="L1401">                min = currMag;</span>
+<span class="fc" id="L1402">                arg = i;</span>
             }
         }
 
-<span class="fc" id="L1407">        return arg;</span>
+<span class="fc" id="L1406">        return arg;</span>
     }
 
 
@@ -1414,23 +1413,23 @@ public class CNumber extends Number {
      * @return The index of the minimum magnitude from the values array. If the array has zero length, -1 is returned.
      */
     public static int argMinReal(CNumber... values) {
-<span class="fc" id="L1417">        double min = Double.MAX_VALUE;</span>
+<span class="fc" id="L1416">        double min = Double.MAX_VALUE;</span>
         double currMin;
-<span class="fc" id="L1419">        int arg = -1;</span>
+<span class="fc" id="L1418">        int arg = -1;</span>
 
-<span class="fc bfc" id="L1421" title="All 2 branches covered.">        if(values.length == 0) {</span>
-<span class="fc" id="L1422">            min = Double.NaN;</span>
+<span class="fc bfc" id="L1420" title="All 2 branches covered.">        if(values.length == 0) {</span>
+<span class="fc" id="L1421">            min = Double.NaN;</span>
         }
 
-<span class="fc bfc" id="L1425" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L1426">            currMin = values[i].re;</span>
-<span class="pc bpc" id="L1427" title="1 of 2 branches missed.">            if(currMin &lt; min) {</span>
-<span class="fc" id="L1428">                min = currMin;</span>
-<span class="fc" id="L1429">                arg = i;</span>
+<span class="fc bfc" id="L1424" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L1425">            currMin = values[i].re;</span>
+<span class="pc bpc" id="L1426" title="1 of 2 branches missed.">            if(currMin &lt; min) {</span>
+<span class="fc" id="L1427">                min = currMin;</span>
+<span class="fc" id="L1428">                arg = i;</span>
             }
         }
 
-<span class="fc" id="L1433">        return arg;</span>
+<span class="fc" id="L1432">        return arg;</span>
     }
 
 
@@ -1440,23 +1439,23 @@ public class CNumber extends Number {
      * @return The index of the minimum magnitude from the values array. If the array has zero length, then -1 is returned.
      */
     public static int argMax(CNumber... values) {
-<span class="fc" id="L1443">        double max = -1;</span>
+<span class="fc" id="L1442">        double max = -1;</span>
         double currMag;
-<span class="fc" id="L1445">        int arg = -1;</span>
+<span class="fc" id="L1444">        int arg = -1;</span>
 
-<span class="fc bfc" id="L1447" title="All 2 branches covered.">        if(values.length &gt; 0) {</span>
-<span class="fc" id="L1448">            max = values[0].magAsDouble();</span>
+<span class="fc bfc" id="L1446" title="All 2 branches covered.">        if(values.length &gt; 0) {</span>
+<span class="fc" id="L1447">            max = values[0].magAsDouble();</span>
         }
 
-<span class="fc bfc" id="L1451" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L1452">            currMag = values[i].magAsDouble();</span>
-<span class="fc bfc" id="L1453" title="All 2 branches covered.">            if(currMag &gt; max) {</span>
-<span class="fc" id="L1454">                max = currMag;</span>
-<span class="fc" id="L1455">                arg = i;</span>
+<span class="fc bfc" id="L1450" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L1451">            currMag = values[i].magAsDouble();</span>
+<span class="fc bfc" id="L1452" title="All 2 branches covered.">            if(currMag &gt; max) {</span>
+<span class="fc" id="L1453">                max = currMag;</span>
+<span class="fc" id="L1454">                arg = i;</span>
             }
         }
 
-<span class="fc" id="L1459">        return arg;</span>
+<span class="fc" id="L1458">        return arg;</span>
     }
 
 
@@ -1467,22 +1466,22 @@ public class CNumber extends Number {
      * returned.
      */
     public static int argMaxReal(CNumber... values) {
-<span class="fc" id="L1470">        double max = Double.MIN_NORMAL;</span>
+<span class="fc" id="L1469">        double max = Double.MIN_NORMAL;</span>
         double currMax;
-<span class="fc" id="L1472">        int arg = -1;</span>
+<span class="fc" id="L1471">        int arg = -1;</span>
 
-<span class="fc bfc" id="L1474" title="All 2 branches covered.">        if(values.length == 0) {</span>
-<span class="fc" id="L1475">            max = Double.NaN;</span>
+<span class="fc bfc" id="L1473" title="All 2 branches covered.">        if(values.length == 0) {</span>
+<span class="fc" id="L1474">            max = Double.NaN;</span>
         }
 
-<span class="fc bfc" id="L1478" title="All 2 branches covered.">        for (CNumber value : values) {</span>
-<span class="fc" id="L1479">            currMax = value.re;</span>
-<span class="fc bfc" id="L1480" title="All 2 branches covered.">            if (currMax &gt; max) {</span>
-<span class="fc" id="L1481">                max = currMax;</span>
+<span class="fc bfc" id="L1477" title="All 2 branches covered.">        for (CNumber value : values) {</span>
+<span class="fc" id="L1478">            currMax = value.re;</span>
+<span class="fc bfc" id="L1479" title="All 2 branches covered.">            if (currMax &gt; max) {</span>
+<span class="fc" id="L1480">                max = currMax;</span>
             }
         }
 
-<span class="fc" id="L1485">        return arg;</span>
+<span class="fc" id="L1484">        return arg;</span>
     }
 
 
@@ -1491,8 +1490,8 @@ public class CNumber extends Number {
      * @return True if the real component of this number is an integer and the complex component is zero. Otherwise, returns false.
      */
     public boolean isInt() {
-<span class="pc bpc" id="L1494" title="1 of 4 branches missed.">        boolean result = !(isInfinite() || isNaN());</span>
-<span class="fc bfc" id="L1495" title="All 6 branches covered.">        return Math.rint(re)==re &amp;&amp; im==0 &amp;&amp; result;</span>
+<span class="pc bpc" id="L1493" title="1 of 4 branches missed.">        boolean result = !(isInfinite() || isNaN());</span>
+<span class="fc bfc" id="L1494" title="All 6 branches covered.">        return Math.rint(re)==re &amp;&amp; im==0 &amp;&amp; result;</span>
     }
 
 
@@ -1501,7 +1500,7 @@ public class CNumber extends Number {
      * @return True if the complex component is zero. Otherwise, returns false.
      */
     public boolean isDouble() {
-<span class="fc bfc" id="L1504" title="All 2 branches covered.">        return im==0;</span>
+<span class="fc bfc" id="L1503" title="All 2 branches covered.">        return im==0;</span>
     }
 
 
@@ -1510,7 +1509,7 @@ public class CNumber extends Number {
      * @return True if either component is NaN. Otherwise, returns false.
      */
     public boolean isNaN() {
-<span class="fc bfc" id="L1513" title="All 4 branches covered.">        return Double.isNaN(re) || Double.isNaN(im);</span>
+<span class="fc bfc" id="L1512" title="All 4 branches covered.">        return Double.isNaN(re) || Double.isNaN(im);</span>
     }
 
 
@@ -1519,7 +1518,7 @@ public class CNumber extends Number {
      * @return True if both components are finite. Otherwise, returns false (including NaN).
      */
     public boolean isFinite() {
-<span class="fc bfc" id="L1522" title="All 4 branches covered.">        return Double.isFinite(re) &amp;&amp; Double.isFinite(im);</span>
+<span class="fc bfc" id="L1521" title="All 4 branches covered.">        return Double.isFinite(re) &amp;&amp; Double.isFinite(im);</span>
     }
 
 
@@ -1528,7 +1527,7 @@ public class CNumber extends Number {
      * @return True if either components are infinite. Otherwise, returns false.
      */
     public boolean isInfinite() {
-<span class="fc bfc" id="L1531" title="All 4 branches covered.">        return Double.isInfinite(re) || Double.isInfinite(im);</span>
+<span class="fc bfc" id="L1530" title="All 4 branches covered.">        return Double.isInfinite(re) || Double.isInfinite(im);</span>
     }
 
 
@@ -1538,7 +1537,7 @@ public class CNumber extends Number {
      * @return The real component of this complex number.
      */
     public double getReal() {
-<span class="fc" id="L1541">        return re;</span>
+<span class="fc" id="L1540">        return re;</span>
     }
 
 
@@ -1547,7 +1546,7 @@ public class CNumber extends Number {
      * @return The imaginary component of this complex number.
      */
     public double getImaginary() {
-<span class="fc" id="L1550">        return im;</span>
+<span class="fc" id="L1549">        return im;</span>
     }
 
 
@@ -1557,7 +1556,7 @@ public class CNumber extends Number {
      * @return The length of the string representation of the number.
      */
     public static int length(CNumber a) {
-<span class="fc" id="L1560">        return a.toString().length();</span>
+<span class="fc" id="L1559">        return a.toString().length();</span>
     }
 
 
@@ -1566,46 +1565,46 @@ public class CNumber extends Number {
      * @return A string representation of the complex number.
      */
     public String toString() {
-<span class="fc" id="L1569">        String result = &quot;&quot;;</span>
+<span class="fc" id="L1568">        String result = &quot;&quot;;</span>
 
-<span class="fc" id="L1571">        double real = this.re, imaginary = this.im;</span>
+<span class="fc" id="L1570">        double real = this.re, imaginary = this.im;</span>
 
-<span class="fc bfc" id="L1573" title="All 2 branches covered.">        if (real != 0) {</span>
-<span class="fc bfc" id="L1574" title="All 2 branches covered.">            if (real % 1 == 0) {</span>
-<span class="fc" id="L1575">                result += (int) real;</span>
+<span class="fc bfc" id="L1572" title="All 2 branches covered.">        if (real != 0) {</span>
+<span class="fc bfc" id="L1573" title="All 2 branches covered.">            if (real % 1 == 0) {</span>
+<span class="fc" id="L1574">                result += (int) real;</span>
             } else {
-<span class="fc" id="L1577">                result += real;</span>
+<span class="fc" id="L1576">                result += real;</span>
             }
         }
 
-<span class="fc bfc" id="L1581" title="All 2 branches covered.">        if (imaginary != 0) {</span>
-<span class="fc bfc" id="L1582" title="All 4 branches covered.">            if (imaginary &lt; 0 &amp;&amp; real != 0) {</span>
-<span class="fc" id="L1583">                result += &quot; - &quot;;</span>
-<span class="fc" id="L1584">                imaginary = -imaginary;</span>
-<span class="fc bfc" id="L1585" title="All 2 branches covered.">            } else if (real != 0) {</span>
-<span class="fc" id="L1586">                result += &quot; + &quot;;</span>
+<span class="fc bfc" id="L1580" title="All 2 branches covered.">        if (imaginary != 0) {</span>
+<span class="fc bfc" id="L1581" title="All 4 branches covered.">            if (imaginary &lt; 0 &amp;&amp; real != 0) {</span>
+<span class="fc" id="L1582">                result += &quot; - &quot;;</span>
+<span class="fc" id="L1583">                imaginary = -imaginary;</span>
+<span class="fc bfc" id="L1584" title="All 2 branches covered.">            } else if (real != 0) {</span>
+<span class="fc" id="L1585">                result += &quot; + &quot;;</span>
             }
 
-<span class="fc bfc" id="L1589" title="All 2 branches covered.">            if (imaginary % 1 == 0) {</span>
-<span class="fc bfc" id="L1590" title="All 2 branches covered.">                if(imaginary != 1) {</span>
-<span class="fc bfc" id="L1591" title="All 2 branches covered.">                    if(imaginary == -1) {</span>
-<span class="fc" id="L1592">                        result += '-';</span>
+<span class="fc bfc" id="L1588" title="All 2 branches covered.">            if (imaginary % 1 == 0) {</span>
+<span class="fc bfc" id="L1589" title="All 2 branches covered.">                if(imaginary != 1) {</span>
+<span class="fc bfc" id="L1590" title="All 2 branches covered.">                    if(imaginary == -1) {</span>
+<span class="fc" id="L1591">                        result += '-';</span>
                     } else {
-<span class="fc" id="L1594">                        result += (int) imaginary;</span>
+<span class="fc" id="L1593">                        result += (int) imaginary;</span>
                     }
                 }
             } else {
-<span class="fc" id="L1598">                result += imaginary;</span>
+<span class="fc" id="L1597">                result += imaginary;</span>
             }
 
-<span class="fc" id="L1601">            result += &quot;i&quot;;</span>
+<span class="fc" id="L1600">            result += &quot;i&quot;;</span>
         }
 
-<span class="fc bfc" id="L1604" title="All 4 branches covered.">        if (real == 0 &amp;&amp; imaginary == 0) {</span>
-<span class="fc" id="L1605">            result = &quot;0&quot;;</span>
+<span class="fc bfc" id="L1603" title="All 4 branches covered.">        if (real == 0 &amp;&amp; imaginary == 0) {</span>
+<span class="fc" id="L1604">            result = &quot;0&quot;;</span>
         }
 
-<span class="fc" id="L1608">        return result;</span>
+<span class="fc" id="L1607">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

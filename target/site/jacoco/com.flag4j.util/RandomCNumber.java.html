@@ -79,7 +79,7 @@ public class RandomCNumber {
 
 
     /**
-     * Generates a random real or complex number a, or a+bi where a and b are
+     * Generates a random real or complex number {@code a}, or {@code a+bi} where {@code a} and {@code b} are
      * normally distributed pseudorandom numbers with a mean of zero and standard deviation of one.
      *
      * @param complex Selects if a real or complex number should be selected.

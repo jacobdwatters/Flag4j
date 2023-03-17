@@ -3,7 +3,9 @@ package com.flag4j.complex_vector;
 import com.flag4j.CVector;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CVectorSetTests {
     CNumber[] aEntries, expEntries;

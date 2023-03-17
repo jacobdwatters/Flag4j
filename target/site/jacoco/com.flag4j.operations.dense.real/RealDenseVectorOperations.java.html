@@ -69,12 +69,13 @@ public class RealDenseVectorOperations {
 
 <span class="fc bfc" id="L70" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
 <span class="fc" id="L71">            destIndex = i*src2.length;</span>
-<span class="fc bfc" id="L72" title="All 2 branches covered.">            for(int j=0; j&lt;src2.length; j++) {</span>
-<span class="fc" id="L73">                dest[destIndex++] = src1[i]*src2[j];</span>
+
+<span class="fc bfc" id="L73" title="All 2 branches covered.">            for(double v : src2) {</span>
+<span class="fc" id="L74">                dest[destIndex++] = src1[i]*v;</span>
             }
         }
 
-<span class="fc" id="L77">        return dest;</span>
+<span class="fc" id="L78">        return dest;</span>
     }
 
     /**
@@ -84,13 +85,13 @@ public class RealDenseVectorOperations {
      * @return The tensor scalar addition.
      */
     public static double[] add(double[] src, double b) {
-<span class="fc" id="L87">        double[] sum = new double[src.length];</span>
+<span class="fc" id="L88">        double[] sum = new double[src.length];</span>
 
-<span class="fc bfc" id="L89" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc" id="L90">            sum[i] = src[i] + b;</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L91">            sum[i] = src[i] + b;</span>
         }
 
-<span class="fc" id="L93">        return sum;</span>
+<span class="fc" id="L94">        return sum;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

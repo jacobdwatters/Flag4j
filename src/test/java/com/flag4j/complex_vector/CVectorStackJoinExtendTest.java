@@ -5,7 +5,8 @@ import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CVectorStackJoinExtendTest {
 
@@ -130,6 +131,45 @@ class CVectorStackJoinExtendTest {
 
         Vector finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
+
+        // ---------------------- Sub-case 3 ----------------------
+        bEntries = new double[]{5.46, -973.4, 0.0034, 15.6, 0};
+        b = new Vector(bEntries);
+        expEntries = new CNumber[][]{
+                {new CNumber(1.455, 6126.347), new CNumber(-9.234, 5.0),
+                        new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257)},
+                {new CNumber(5.46), new CNumber(-973.4), new CNumber(0.0034), new CNumber(15.6), new CNumber()}
+        };
+        exp = new CMatrix(expEntries);
+
+        assertEquals(exp, a.stack(b, 0));
+
+        // ---------------------- Sub-case 4 ----------------------
+        bEntries = new double[]{5.46, -973.4, 0.0034, 15.6, 0, 8255.6668, 0.0009245};
+        b = new Vector(bEntries);
+
+        Vector finalB2 = b;
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB2, 0));
+
+        // ---------------------- Sub-case 5 ----------------------
+        bEntries = new double[]{5.46, -973.4, 0.0034, 15.6, 0};
+        b = new Vector(bEntries);
+        expEntries = new CNumber[][]{
+                {new CNumber(1.455, 6126.347), new CNumber(5.46)},
+                        {new CNumber(-9.234, 5.0), new CNumber(-973.4)},
+                        {new CNumber(9.245, -56.2345), new CNumber(0.0034)},
+                        {new CNumber(0, 14.5), new CNumber(15.6)},
+                        {new CNumber(-0.009257), new CNumber()}};
+        exp = new CMatrix(expEntries);
+
+        assertEquals(exp, a.stack(b, 1));
+
+        // ---------------------- Sub-case 6 ----------------------
+        bEntries = new double[]{5.46, -973.4, 0.0034, 15.6, 0, 8255.6668, 0.0009245};
+        b = new Vector(bEntries);
+
+        Vector finalB3 = b;
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB3, 1));
     }
 
 
@@ -163,6 +203,53 @@ class CVectorStackJoinExtendTest {
 
         SparseVector finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
+
+        // ---------------------- Sub-case 3 ----------------------
+        bEntries = new double[]{-78.336, 0.00234};
+        sparseSize = 5;
+        sparseIndices = new int[]{1, 4};
+        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        expEntries = new CNumber[][]{
+                {new CNumber(1.455, 6126.347), new CNumber(-9.234, 5.0),
+                        new CNumber(9.245, -56.2345), new CNumber(0, 14.5), new CNumber(-0.009257)},
+                {new CNumber(), new CNumber(-78.336), new CNumber(), new CNumber(), new CNumber(0.00234)}
+        };
+        exp = new CMatrix(expEntries);
+
+        assertEquals(exp, a.stack(b, 0));
+
+        // ---------------------- Sub-case 4 ----------------------
+        bEntries = new double[]{-78.336, 0.00234};
+        sparseSize = 355615;
+        sparseIndices = new int[]{1, 4};
+        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+
+        SparseVector finalB2 = b;
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB2, 0));
+
+        // ---------------------- Sub-case 5 ----------------------
+        bEntries = new double[]{-78.336, 0.00234};
+        sparseSize = 5;
+        sparseIndices = new int[]{1, 4};
+        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+        expEntries = new CNumber[][]{
+                {new CNumber(1.455, 6126.347), new CNumber()},
+                {new CNumber(-9.234, 5.0), new CNumber(-78.336)},
+                {new CNumber(9.245, -56.2345), new CNumber()},
+                {new CNumber(0, 14.5), new CNumber()},
+                {new CNumber(-0.009257), new CNumber(0.00234)}};
+        exp = new CMatrix(expEntries);
+
+        assertEquals(exp, a.stack(b, 1));
+
+        // ---------------------- Sub-case 6 ----------------------
+        bEntries = new double[]{-78.336, 0.00234};
+        sparseSize = 355615;
+        sparseIndices = new int[]{1, 4};
+        b = new SparseVector(sparseSize, bEntries, sparseIndices);
+
+        SparseVector finalB3 = b;
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB3, 1));
     }
 
 
@@ -187,6 +274,7 @@ class CVectorStackJoinExtendTest {
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, a.stack(b));
+        assertEquals(exp, a.stack(b, 0));
 
         // ---------------------- Sub-case 2 ----------------------
         bEntries = new CNumber[]{new CNumber(2.4656, 9.24), new CNumber(-0.9924, -0.01),
@@ -195,6 +283,29 @@ class CVectorStackJoinExtendTest {
 
         CVector finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, 0));
+
+        // ---------------------- Sub-case 3 ----------------------
+        bEntries = new CNumber[]{new CNumber(2.4656, 9.24), new CNumber(-0.9924, -0.01),
+                new CNumber(0, 1405.24), new CNumber(9.356), new CNumber(0.245, -8824.5)};
+        b = new CVector(bEntries);
+        expEntries = new CNumber[][]{
+                {new CNumber(1.455, 6126.347), new CNumber(2.4656, 9.24)},
+                {new CNumber(-9.234, 5.0), new CNumber(-0.9924, -0.01)},
+                {new CNumber(9.245, -56.2345), new CNumber(0, 1405.24)},
+                {new CNumber(0, 14.5), new CNumber(9.356)},
+                {new CNumber(-0.009257),new CNumber(0.245, -8824.5) }};
+        exp = new CMatrix(expEntries);
+
+        assertEquals(exp, a.stack(b, 1));
+
+        // ---------------------- Sub-case 4 ----------------------
+        bEntries = new CNumber[]{new CNumber(2.4656, 9.24), new CNumber(-0.9924, -0.01),
+                new CNumber(0, 1405.24)};
+        b = new CVector(bEntries);
+
+        CVector finalB2 = b;
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB2, 1));
     }
 
 
@@ -219,6 +330,7 @@ class CVectorStackJoinExtendTest {
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, a.stack(b));
+        assertEquals(exp, a.stack(b, 0));
 
         // ---------------------- Sub-case 2 ----------------------
         bEntries = new CNumber[]{new CNumber(2.4656, 9.24)};
@@ -228,6 +340,31 @@ class CVectorStackJoinExtendTest {
 
         SparseCVector finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, 0));
+
+        // ---------------------- Sub-case 3 ----------------------
+        bEntries = new CNumber[]{new CNumber(2.4656, 9.24)};
+        sparseIndices = new int[]{2};
+        sparseSize = 5;
+        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+        expEntries = new CNumber[][]{
+                {new CNumber(1.455, 6126.347), new CNumber()},
+                {new CNumber(-9.234, 5.0), new CNumber()},
+                {new CNumber(9.245, -56.2345), new CNumber(2.4656, 9.24)},
+                {new CNumber(0, 14.5), new CNumber()},
+                {new CNumber(-0.009257), new CNumber()}};
+        exp = new CMatrix(expEntries);
+
+        assertEquals(exp, a.stack(b, 1));
+
+        // ---------------------- Sub-case 4 ----------------------
+        bEntries = new CNumber[]{new CNumber(2.4656, 9.24)};
+        sparseIndices = new int[]{2};
+        sparseSize = 42;
+        b = new SparseCVector(sparseSize, bEntries, sparseIndices);
+
+        SparseCVector finalB2 = b;
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB2, 1));
     }
 
 

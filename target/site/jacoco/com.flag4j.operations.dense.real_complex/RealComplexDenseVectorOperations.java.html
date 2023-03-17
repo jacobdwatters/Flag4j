@@ -48,14 +48,14 @@ public class RealComplexDenseVectorOperations {
      * @return The inner product of the two vectors.
      */
     public static CNumber innerProduct(double[] src1, CNumber[] src2) {
-<span class="nc" id="L51">        ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);</span>
-<span class="nc" id="L52">        CNumber innerProd = new CNumber();</span>
+<span class="fc" id="L51">        ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);</span>
+<span class="fc" id="L52">        CNumber innerProd = new CNumber();</span>
 
-<span class="nc bnc" id="L54" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="nc" id="L55">            innerProd.addEq(src2[i].conj().mult(src1[i]));</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L55">            innerProd.addEq(src2[i].conj().mult(src1[i]));</span>
         }
 
-<span class="nc" id="L58">        return innerProd;</span>
+<span class="fc" id="L58">        return innerProd;</span>
     }
 
 
@@ -67,14 +67,14 @@ public class RealComplexDenseVectorOperations {
      * @return The inner product of the two vectors.
      */
     public static CNumber innerProduct(CNumber[] src1, double[] src2) {
-<span class="nc" id="L70">        ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);</span>
-<span class="nc" id="L71">        CNumber innerProd = new CNumber();</span>
+<span class="fc" id="L70">        ParameterChecks.assertArrayLengthsEq(src1.length, src2.length);</span>
+<span class="fc" id="L71">        CNumber innerProd = new CNumber();</span>
 
-<span class="nc bnc" id="L73" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="nc" id="L74">            innerProd.addEq(src1[i].mult(src2[i]));</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L74">            innerProd.addEq(src1[i].mult(src2[i]));</span>
         }
 
-<span class="nc" id="L77">        return innerProd;</span>
+<span class="fc" id="L77">        return innerProd;</span>
     }
 
 
@@ -87,16 +87,17 @@ public class RealComplexDenseVectorOperations {
      */
     public static CNumber[] outerProduct(double[] src1, CNumber[] src2) {
         int destIndex;
-<span class="nc" id="L90">        CNumber[] dest = new CNumber[src1.length*src2.length];</span>
+<span class="fc" id="L90">        CNumber[] dest = new CNumber[src1.length*src2.length];</span>
 
-<span class="nc bnc" id="L92" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="nc" id="L93">            destIndex = i*src2.length;</span>
-<span class="nc bnc" id="L94" title="All 2 branches missed.">            for(int j=0; j&lt;src2.length; j++) {</span>
-<span class="nc" id="L95">                dest[destIndex++] = src2[j].conj().mult(src1[i]);</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L93">            destIndex = i*src2.length;</span>
+
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            for(CNumber cNumber : src2) {</span>
+<span class="fc" id="L96">                dest[destIndex++] = cNumber.conj().mult(src1[i]);</span>
             }
         }
 
-<span class="nc" id="L99">        return dest;</span>
+<span class="fc" id="L100">        return dest;</span>
     }
 
 
@@ -108,16 +109,17 @@ public class RealComplexDenseVectorOperations {
      */
     public static CNumber[] outerProduct(CNumber[] src1, double[] src2) {
         int destIndex;
-<span class="nc" id="L111">        CNumber[] dest = new CNumber[src1.length*src2.length];</span>
+<span class="fc" id="L112">        CNumber[] dest = new CNumber[src1.length*src2.length];</span>
 
-<span class="nc bnc" id="L113" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="nc" id="L114">            destIndex = i*src2.length;</span>
-<span class="nc bnc" id="L115" title="All 2 branches missed.">            for(int j=0; j&lt;src2.length; j++) {</span>
-<span class="nc" id="L116">                dest[destIndex++] = src1[j].mult(src2[i]);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L115">            destIndex = i*src2.length;</span>
+
+<span class="fc bfc" id="L117" title="All 2 branches covered.">            for(double v : src2) {</span>
+<span class="fc" id="L118">                dest[destIndex++] = src1[i].mult(v);</span>
             }
         }
 
-<span class="nc" id="L120">        return dest;</span>
+<span class="fc" id="L122">        return dest;</span>
     }
 
     /**
@@ -127,13 +129,13 @@ public class RealComplexDenseVectorOperations {
      * @return The result of adding the scalar to each entry of the tensor.
      */
     public static CNumber[] add(double[] src1, CNumber a) {
-<span class="fc" id="L130">        CNumber[] sum = new CNumber[src1.length];</span>
+<span class="fc" id="L132">        CNumber[] sum = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L132" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
-<span class="fc" id="L133">            sum[i] = a.add(src1[i]);</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L135">            sum[i] = a.add(src1[i]);</span>
         }
 
-<span class="fc" id="L136">        return sum;</span>
+<span class="fc" id="L138">        return sum;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -33,7 +33,7 @@ import java.util.Arrays;
 
 
 /**
- * This class provides several methods useful for array manipulation.
+ * This class provides several methods useful for array manipulation and copying.
  */
 public final class ArrayUtils {
 
@@ -148,7 +148,7 @@ public final class ArrayUtils {
      * @throws ArrayIndexOutOfBoundsException If the destPos parameter plus the length parameter exceeds the length of the
      * source array length or the destination array length.
      */
-    public static void arraycopy(@NotNull double[] src, int srcPos, @NotNull CNumber[] dest, int destPos, int length) {
+    public static void arraycopy(double[] src, int srcPos, CNumber[] dest, int destPos, int length) {
         for(int i=0; i<length; i++) {
             dest[i+destPos] = new CNumber(src[i+srcPos]);
         }
@@ -176,6 +176,13 @@ public final class ArrayUtils {
     }
 
 
+    // TODO: Add the following methods:
+    //  stridedCopy(double[] src, int length, int stride);
+    //  stridedCopy(CNumber[] src, int length, int stride);
+    //  stridedCopyOfRange(double[] src, int start, int end, int length, int stride)
+    //  stridedCopyOfRange(CNumber[] src, int start, int end, int length, int stride)
+
+
     /**
      * Converts array to an array of {@link CNumber complex numbers}.
      * @param src Source array to convert.
@@ -191,12 +198,148 @@ public final class ArrayUtils {
 
 
     /**
-     * Fills an array with complex numbers with zeros.
+     * Fills an array of complex numbers with zeros.
      * @param dest Array to fill with zeros.
      */
     public static void fillZeros(CNumber[] dest) {
         for(int i=0; i<dest.length; i++) {
             dest[i] = new CNumber();
+        }
+    }
+
+
+    /**
+     * Fills a specified range of an array of complex numbers with zeros.
+     * @param start Starting index of range to fill (inclusive).
+     * @param end Ending index of range to fill (Exclusive).
+     * @param dest Array to fill specified range with zeros.
+     */
+    public static void fillZerosRange(CNumber[] dest, int start, int end) {
+        for(int i=start; i<end; i++) {
+            dest[i] = new CNumber();
+        }
+    }
+
+
+    /**
+     * Fills a specified range of an array with zeros.
+     * @param start Starting index of range to fill (inclusive).
+     * @param end Ending index of range to fill (Exclusive).
+     * @param dest Array to fill specified range with zeros.
+     */
+    public static void fillZerosRange(double[] dest, int start, int end) {
+        System.arraycopy(new double[end-start], 0, dest, start, end-start);
+    }
+
+
+    /**
+     * <p>
+     * Fills an array with zeros seperated by the given stride.
+     * </p>
+     *
+     * <p>
+     * If {@code stride=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}} then the result will be {@code {1, 0, 3, 4, 0, 6, 7, 0, 9}}.
+     * </p>
+     *
+     * @param dest Array to fill with strided zeros.
+     * @param start Staring point in array to apply strided zero fill.
+     * @param stride Number of elements between each value to set to zero within the destination array.
+     * @throws IllegalArgumentException If stride is less than 1.
+     * @throws IllegalArgumentException If start is less than 0.
+     */
+    public static void stridedFillZeros(double[] dest, int start, int stride) {
+        ParameterChecks.assertGreaterEq(1, stride);
+        ParameterChecks.assertGreaterEq(0, start);
+
+        for(int i=start; i<dest.length; i+=stride) {
+            dest[i] = 0;
+        }
+    }
+
+
+    /**
+     * <p>
+     * Fills an array with zeros seperated by the given stride.
+     * </p>
+     *
+     * <p>
+     * If {@code stride=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}} then the result will be {@code {1, 0, 3, 4, 0, 6, 7, 0, 9}}.
+     * </p>
+     *
+     * @param dest Array to fill with strided zeros.
+     * @param start Staring point in array to apply strided zero fill.
+     * @param stride Number of elements between each value to set to zero within the destination array.
+     * @throws IllegalArgumentException If stride is less than 1.
+     * @throws IllegalArgumentException If start is less than 0.
+     */
+    public static void stridedFillZeros(CNumber[] dest, int start, int stride) {
+        ParameterChecks.assertGreaterEq(1, stride);
+        ParameterChecks.assertGreaterEq(0, start);
+
+        for(int i=start; i<dest.length; i+=stride) {
+            dest[i] = new CNumber();
+        }
+    }
+
+
+    /**
+     * <p>
+     * Fills an array with a range of zeros, each seperated by the given stride. Specifically, the destination array will
+     * be filled with several sequential ranges of zeros of specified length. Each range of zeros will be seperated by
+     * the stride.
+     * </p>
+     *
+     * <p>
+     * If {@code stride=2}, {@code length=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}}
+     * then the result will be {1, 0, 0, 0, 5, 0, 0, 0, 9}.
+     * </p>
+     *
+     * @param dest Array to fill with strided zeros.
+     * @param start Starting point to apply strided zero fill.
+     * @param length Number of sequential zeros to fill per stride.
+     * @param stride Number of elements between each value to set to zero within the destination array.
+     * @throws IllegalArgumentException If stride or length is less than one.
+     * @throws IllegalArgumentException If start is less than zero.
+     */
+    public static void stridedFillZerosRange(CNumber[] dest, int start, int length, int stride) {
+        ParameterChecks.assertGreaterEq(1, stride, length);
+        ParameterChecks.assertGreaterEq(0, start);
+
+        for(int i=start; i<dest.length; i+=stride+length) {
+            for(int j=0; j<length; j++) {
+                dest[i+j] = new CNumber();
+            }
+        }
+    }
+
+
+    /**
+     * <p>
+     * Fills an array with a range of zeros, each seperated by the given stride. Specifically, the destination array will
+     * be filled with several sequential ranges of zeros of specified length. Each range of zeros will be seperated by
+     * the stride.
+     * </p>
+     *
+     * <p>
+     * If {@code stride=2}, {@code length=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}}
+     * then the result will be {1, 0, 0, 0, 5, 0, 0, 0, 9}.
+     * </p>
+     *
+     * @param dest Array to fill with strided zeros.
+     * @param start Starting point to apply strided zero fill.
+     * @param length Number of sequential zeros to fill per stride.
+     * @param stride Number of elements between each value to set to zero within the destination array.
+     * @throws IllegalArgumentException If stride or length is less than one.
+     * @throws IllegalArgumentException If start is less than zero.
+     */
+    public static void stridedFillZerosRange(double[] dest, int start, int length, int stride) {
+        ParameterChecks.assertGreaterEq(1, stride, length);
+        ParameterChecks.assertGreaterEq(0, start);
+
+        for(int i=start; i<dest.length; i+=stride+length) {
+            for(int j=0; j<length; j++) {
+                dest[i+j] = 0;
+            }
         }
     }
 
@@ -245,7 +388,6 @@ public final class ArrayUtils {
      * @param fillValue Value to fill array with.
      */
     public static void fill(CNumber[] dest, double fillValue) {
-        // TODO: Investigate speed of using Arrays.setAll(...) and Arrays.parallelSetAll(...)
         for(int i=0; i<dest.length; i++) {
             dest[i] = new CNumber(fillValue);
         }
@@ -427,12 +569,12 @@ public final class ArrayUtils {
      * @param value Values to check if they are in the source array.
      * @return A boolean describing if the specified value is in the array or not.
      */
-    public static boolean inArray(int[] src, int value) {
-        boolean result = false;
+    public static boolean notInArray(int[] src, int value) {
+        boolean result = true;
 
         for(double entry : src) {
-            if(entry==value) {
-                result=true;
+            if(entry == value) {
+                result = false;
                 break;
             }
         }
@@ -530,6 +672,110 @@ public final class ArrayUtils {
 
         for(double value : src) {
             currLength = CNumber.round(new CNumber(value), PrintOptions.getPrecision()).toString().length();
+
+            if(currLength>maxLength) {
+                // Then update the maximum length.
+                maxLength=currLength;
+            }
+        }
+
+        return maxLength;
+    }
+
+
+    /**
+     * Computes the maximum length of the string representation of a double in an array of doubles.
+     * @param src Array for which to compute the max string representation length of a double in.
+     * @return The maximum length of the string representation of the doubles in the array.
+     */
+    public static int maxStringLength(CNumber[] src) {
+        int maxLength = -1;
+        int currLength;
+
+        for(CNumber value : src) {
+            currLength = CNumber.round(value, PrintOptions.getPrecision()).toString().length();
+
+            if(currLength>maxLength) {
+                // Then update the maximum length.
+                maxLength=currLength;
+            }
+        }
+
+        return maxLength;
+    }
+
+
+    /**
+     * Computes the maximum length of the string representation of a double in an array of doubles up until stopping index.
+     * The length of the last element is always considered.
+     * @param src Array for which to compute the max string representation length of a double in.
+     * @param stopIndex Stopping index for finding max length.
+     * @return The maximum length of the string representation of the doubles in the array.
+     */
+    public static int maxStringLength(double[] src, int stopIndex) {
+        int maxLength = -1;
+        int currLength;
+
+        // Ensure no index out of bound exceptions.
+        stopIndex = Math.min(stopIndex, src.length);
+
+        for(int i=0; i<stopIndex; i++) {
+            currLength = CNumber.round(
+                    new CNumber(src[i]),
+                    PrintOptions.getPrecision()).toString().length();
+
+            if(currLength>maxLength) {
+                // Then update the maximum length.
+                maxLength=currLength;
+            }
+        }
+
+        // Always get last elements' length.
+        if(stopIndex < src.length) {
+            currLength = CNumber.round(
+                    new CNumber(src[src.length-1]),
+                    PrintOptions.getPrecision()).toString().length();
+
+            if(currLength>maxLength) {
+                // Then update the maximum length.
+                maxLength=currLength;
+            }
+        }
+
+        return maxLength;
+    }
+
+
+    /**
+     * Computes the maximum length of the string representation of a double in an array of doubles up until stopping index.
+     * The length of the last element is always considered.
+     * @param src Array for which to compute the max string representation length of a double in.
+     * @param stopIndex Stopping index for finding max length.
+     * @return The maximum length of the string representation of the doubles in the array.
+     */
+    public static int maxStringLength(CNumber[] src, int stopIndex) {
+        int maxLength = -1;
+        int currLength;
+
+        // Ensure no index out of bound exceptions.
+        stopIndex = Math.min(stopIndex, src.length);
+
+        for(int i=0; i<stopIndex; i++) {
+            currLength = CNumber.round(
+                    src[i],
+                    PrintOptions.getPrecision()).toString().length();
+
+            if(currLength>maxLength) {
+                // Then update the maximum length.
+                maxLength=currLength;
+            }
+        }
+
+        // Always get last elements' length.
+        if(stopIndex < src.length) {
+            currLength = CNumber.round(
+                    src[src.length-1],
+                    PrintOptions.getPrecision()).toString().length();
 
             if(currLength>maxLength) {
                 // Then update the maximum length.

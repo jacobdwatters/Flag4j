@@ -32,7 +32,7 @@ public class CNumberParser {
     /**
      * Parses a complex number in the form of a string into its real and imaginary parts.
      * For example, the string <code>"2+3i"</code> would be parsed into real and imaginary parts
-     * <code>2</code> and <code>3</code> respectivly
+     * <code>2</code> and <code>3</code> respectively.
      *
      * @param num - complex number in one of three forms: <code>a + bi, a,</code> or <code>bi</code> where a and b are
      * 				real numbers and i is the imaginary unit sqrt(-1)

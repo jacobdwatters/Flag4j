@@ -117,8 +117,7 @@ public class RealDenseDeterminant {
      */
     public static double det2(Matrix A) {
 <span class="fc" id="L119">        ParameterChecks.assertEqualShape(A.shape, new Shape(2, 2));</span>
-<span class="fc" id="L120">        double det = (A.entries[0]*A.entries[3] - A.entries[1]*A.entries[2]);</span>
-<span class="fc" id="L121">        return det;</span>
+<span class="fc" id="L120">        return A.entries[0]*A.entries[3] - A.entries[1]*A.entries[2];</span>
     }
 
 
@@ -128,8 +127,8 @@ public class RealDenseDeterminant {
      * @return The determinant of the 1x1 matrix.
      */
     public static double det1(Matrix A) {
-<span class="fc" id="L131">        ParameterChecks.assertEqualShape(A.shape, new Shape(1, 1));</span>
-<span class="fc" id="L132">        return A.entries[0];</span>
+<span class="fc" id="L130">        ParameterChecks.assertEqualShape(A.shape, new Shape(1, 1));</span>
+<span class="fc" id="L131">        return A.entries[0];</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

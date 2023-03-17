@@ -214,8 +214,7 @@ public class CNumber extends Number {
      * imaginary components. False, otherwise.
      */
     public boolean equals(double b) {
-        boolean result = this.im==0 && this.re==b;
-        return result;
+        return this.im==0 && this.re==b;
     }
 
 
@@ -762,7 +761,7 @@ public class CNumber extends Number {
     /**
      * Computes the principle square root of a number. This method wraps {@link Math#sqrt(double)} and returns a {@link CNumber}.
      * @param num Input to square root.
-     * @return The principle square root of a.
+     * @return The principle square root of {@code num}.
      */
     public static CNumber sqrt(double num) {
         CNumber result;
@@ -780,7 +779,7 @@ public class CNumber extends Number {
     /**
      * Computes the principle square root of a number.
      * @param num Input to square root.
-     * @return The principle square root of a. That is, the square root of a with positive real part.
+     * @return The principle square root of {@code num}. That is, the square root of a with positive real part.
      */
     public static CNumber sqrt(CNumber num) {
         CNumber result;
@@ -890,7 +889,7 @@ public class CNumber extends Number {
     /**
      * Computes the complex argument function for a complex number.
      * is computed. This method wraps is equivalent to {@link CNumber#atan2AsCNumber(CNumber) CNumber}. <br>
-     * To get the result as an double see {@link CNumber#argAsCNumber(CNumber)}.
+     * To get the result as a double see {@link CNumber#arg(CNumber)}.
      * @param num The input to the atan2 function.
      * @return The output of the atan2 function given the specified input. If the complex number is zero, then {@link Double#NaN}
      * is returned.
@@ -1280,7 +1279,7 @@ public class CNumber extends Number {
      * - If the real value of this number is greater than that of <code>b</code>, then this method will return a positive number.
      */
     public int compareToReal(double b) {
-        return Double.valueOf(this.re).compareTo(b);
+        return Double.compare(this.re, b);
     }
 
 

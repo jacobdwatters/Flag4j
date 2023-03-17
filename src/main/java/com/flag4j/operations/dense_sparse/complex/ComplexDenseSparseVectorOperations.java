@@ -48,8 +48,8 @@ public class ComplexDenseSparseVectorOperations {
      * Computes the vector inner product between a complex dense vector and a complex sparse vector.
      * @param src1 Entries of the dense vector.
      * @param src2 Non-zero entries of the sparse vector.
-     * @param indices
-     * @param sparseSize
+     * @param indices Indices of nonzero values in sparse vector.
+     * @param sparseSize Full size of the sparse vector (i.e. total number of entries including zeros).
      * @return The inner product of the two vectors.
      * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
      */

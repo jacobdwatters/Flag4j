@@ -4,7 +4,8 @@ import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class VectorOuterProductTests {
 

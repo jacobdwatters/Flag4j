@@ -55,7 +55,7 @@ public abstract class SparseVectorBase<T extends Serializable> extends VectorBas
      * @param nonZeroEntries Number of non-zero entries in this sparse vector.
      * @param entries Non-zero entries of this sparse vector.
      * @param indices Indices of the non-zero entries of this tensor.
-     * @throws IllegalArgumentException If the lengths of the entries and incicies arrays are not equal.
+     * @throws IllegalArgumentException If the lengths of the entries and indices arrays are not equal.
      */
     public SparseVectorBase(int totalEntries, int nonZeroEntries, T entries, int[] indices) {
         super(totalEntries, entries);

@@ -45,17 +45,17 @@ public class AggregateDenseComplex {
      * @return The index of the minimum value by magnitude in this tensor. If there are zero entries in the array, -1 is returned.
      */
     public static int argMin(CNumber[] entries) {
-<span class="nc" id="L48">        double currMin = Double.MAX_VALUE;</span>
-<span class="nc" id="L49">        int currMinIndex = -1;</span>
+<span class="fc" id="L48">        double currMin = Double.MAX_VALUE;</span>
+<span class="fc" id="L49">        int currMinIndex = -1;</span>
 
-<span class="nc bnc" id="L51" title="All 2 branches missed.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">            if(entries[i].magAsDouble() &lt; currMin) {</span>
-<span class="nc" id="L53">                currMin = entries[i].magAsDouble(); // Update current minimum.</span>
-<span class="nc" id="L54">                currMinIndex = i;</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            if(entries[i].magAsDouble() &lt; currMin) {</span>
+<span class="fc" id="L53">                currMin = entries[i].magAsDouble(); // Update current minimum.</span>
+<span class="fc" id="L54">                currMinIndex = i;</span>
             }
         }
 
-<span class="nc" id="L58">        return currMinIndex;</span>
+<span class="fc" id="L58">        return currMinIndex;</span>
     }
 
 
@@ -66,17 +66,17 @@ public class AggregateDenseComplex {
      * @return The index of the maximum value by magnitude in this tensor. If there are zero entries in the array, -1 is returned.
      */
     public static int argMax(CNumber[] entries) {
-<span class="nc" id="L69">        double currMax = Double.MIN_VALUE;</span>
-<span class="nc" id="L70">        int currMaxIndex = -1;</span>
+<span class="fc" id="L69">        double currMax = Double.MIN_VALUE;</span>
+<span class="fc" id="L70">        int currMaxIndex = -1;</span>
 
-<span class="nc bnc" id="L72" title="All 2 branches missed.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="nc bnc" id="L73" title="All 2 branches missed.">            if(entries[i].magAsDouble() &gt; currMax) {</span>
-<span class="nc" id="L74">                currMax = entries[i].magAsDouble(); // Update current minimum.</span>
-<span class="nc" id="L75">                currMaxIndex = i;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">            if(entries[i].magAsDouble() &gt; currMax) {</span>
+<span class="fc" id="L74">                currMax = entries[i].magAsDouble(); // Update current minimum.</span>
+<span class="fc" id="L75">                currMaxIndex = i;</span>
             }
         }
 
-<span class="nc" id="L79">        return currMaxIndex;</span>
+<span class="fc" id="L79">        return currMaxIndex;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

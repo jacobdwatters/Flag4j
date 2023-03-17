@@ -125,7 +125,7 @@ public abstract class TensorBase<T> implements Serializable {
     public static boolean sameLength(TensorBase<?> A, TensorBase<?> B, int axis) {
         if(axis < 0 || axis>=Math.min(A.shape.getRank(), B.shape.getRank())) {
             throw new IllegalArgumentException(
-                    ErrorMessages.axisErr(axis)
+                    ErrorMessages.getAxisErr(axis)
             );
         }
 

@@ -1,6 +1,8 @@
 package com.flag4j.matrix;
 
 import com.flag4j.Matrix;
+import com.flag4j.Shape;
+import com.flag4j.SparseMatrix;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -620,8 +622,63 @@ class MatrixSetOperationTests {
         exp = new Matrix(entriesExp);
 
         Matrix finalValues = values;
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setSlice(finalValues, 1, 2));
+        assertThrows(IllegalArgumentException.class, ()->A.setSlice(finalValues, 1, 2));
     }
+
+
+    @Test
+    void setSliceSparseMatrixTest() {
+        double[] valueEntries;
+        SparseMatrix values;
+        int row, col;
+        Shape sparseShape;
+        int[][] indices;
+
+        // ------------------ Sub-case 1 ------------------
+        valueEntries = new double[]{1.345, -0.002345};
+        indices = new int[][]{{0, 1}, {0, 0}};
+        sparseShape = new Shape(2, 2);
+        values = new SparseMatrix(sparseShape, valueEntries, indices[0], indices[1]);
+        row = 0;
+        col = 0;
+        entriesA = new double[][]{{-99.234, 132, 2.2, 83.1}, {11.346, 124.6, -7.13, 0.00013}};
+        A = new Matrix(entriesA);
+        entriesExp = new double[][]{
+                {1.345, 0, 2.2, 83.1},
+                {-0.002345, 0, -7.13, 0.00013}};
+        exp = new Matrix(entriesExp);
+
+        A.setSlice(values, row, col);
+        assertEquals(exp, A);
+    }
+
+
+    @Test
+    void setSliceCopySparseMatrixTest() {
+        double[] valueEntries;
+        SparseMatrix values;
+        int row, col;
+        Shape sparseShape;
+        int[][] indices;
+
+        // -------------- Sub-case 1 --------------
+        valueEntries = new double[]{1.345, -0.002345};
+        indices = new int[][]{{0, 1}, {0, 0}};
+        sparseShape = new Shape(2, 2);
+        values = new SparseMatrix(sparseShape, valueEntries, indices[0], indices[1]);
+        row = 0;
+        col = 0;
+        entriesA = new double[][]{{-99.234, 132, 2.2, 83.1}, {11.346, 124.6, -7.13, 0.00013}};
+        A = new Matrix(entriesA);
+        entriesExp = new double[][]{
+                {1.345, 0, 2.2, 83.1},
+                {-0.002345, 0, -7.13, 0.00013}};
+        exp = new Matrix(entriesExp);
+
+        Matrix B = A.setSliceCopy(values, row, col);
+        assertEquals(exp, B);
+    }
+
 
     @Test
     void setSliceCopyMatrixTest() {
@@ -703,7 +760,7 @@ class MatrixSetOperationTests {
         exp = new Matrix(entriesExp);
 
         Double[][] finalValues = values;
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setSlice(finalValues, 1, 2));
+        assertThrows(IllegalArgumentException.class, ()->A.setSlice(finalValues, 1, 2));
     }
 
     @Test
@@ -783,7 +840,7 @@ class MatrixSetOperationTests {
         exp = new Matrix(entriesExp);
 
         double[][] finalValues = values;
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setSlice(finalValues, 1, 2));
+        assertThrows(IllegalArgumentException.class, ()->A.setSlice(finalValues, 1, 2));
     }
 
     @Test
@@ -862,7 +919,7 @@ class MatrixSetOperationTests {
         exp = new Matrix(entriesExp);
 
         Integer[][] finalValues = values;
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setSlice(finalValues, 1, 2));
+        assertThrows(IllegalArgumentException.class, ()->A.setSlice(finalValues, 1, 2));
     }
 
     @Test
@@ -941,7 +998,7 @@ class MatrixSetOperationTests {
         exp = new Matrix(entriesExp);
 
         int[][] finalValues = values;
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.setSlice(finalValues, 1, 2));
+        assertThrows(IllegalArgumentException.class, ()->A.setSlice(finalValues, 1, 2));
     }
 
     @Test
