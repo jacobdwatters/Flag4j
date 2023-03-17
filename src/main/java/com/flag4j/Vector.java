@@ -1446,7 +1446,8 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
-     * Converts this vector to a human-readable string format.
+     * Converts this vector to a human-readable string format. To specifiy the maximum number of entries to print, use
+     * {@link PrintOptions#setMaxColumns(int)}.
      * @return A human-readable string representation of this vector.
      */
     public String toString() {
