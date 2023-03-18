@@ -29,7 +29,8 @@ import com.flag4j.core.*;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.MatrixMultiply;
 import com.flag4j.operations.MatrixTranspose;
-import com.flag4j.operations.common.real.Aggregate;
+import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
@@ -51,11 +52,7 @@ import java.util.List;
 /**
  * Real dense matrix. Stored in row major format. This class is mostly equivalent to a real dense tensor of rank 2.
  */
-public class Matrix extends RealMatrixBase implements
-        MatrixComparisonsMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double>,
-        MatrixManipulationsMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double>,
-        MatrixOperationsMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double>,
-        MatrixPropertiesMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double> {
+public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CMatrix> {
 
 
     /**
@@ -226,6 +223,28 @@ public class Matrix extends RealMatrixBase implements
         super(new Shape(numRows, numCols), entries);
     }
 
+
+    /**
+     * Checks if this tensor contains only non-negative values.
+     *
+     * @return True if this tensor only contains non-negative values. Otherwise, returns false.
+     */
+    @Override
+    public boolean isPos() {
+        // TODO: Implementation
+        return false;
+    }
+
+    /**
+     * Checks if this tensor contains only non-positive values.
+     *
+     * @return trie if this tensor only contains non-positive values. Otherwise, returns false.
+     */
+    @Override
+    public boolean isNeg() {
+        // TODO: Implementation
+        return false;
+    }
 
     /**
      * Converts this matrix to an equivalent complex matrix.
@@ -1371,7 +1390,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double sum() {
-        return Aggregate.sum(entries);
+        return AggregateReal.sum(entries);
     }
 
 
@@ -1508,7 +1527,6 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Matrix mult(SparseMatrix B) {
-        // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
         ParameterChecks.assertMatMultShapes(this.shape, B.shape);
         double[] entries = RealDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
@@ -1544,7 +1562,6 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
-        // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
         ParameterChecks.assertMatMultShapes(this.shape, B.shape);
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
@@ -3026,8 +3043,6 @@ public class Matrix extends RealMatrixBase implements
     }
 
 
-    // TODO: Pull row/colAsVector methods up to matrix operations interface.
-
     /**
      * Get a specified column of this matrix at and below a specified row.
      *
@@ -3069,6 +3084,7 @@ public class Matrix extends RealMatrixBase implements
     }
 
 
+    // TODO: Pull row/colAsVector methods up to matrix operations interface.
     /**
      * Get the column of this matrix at the specified index.
      *
@@ -3399,7 +3415,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double min() {
-        return Aggregate.min(entries);
+        return AggregateReal.min(entries);
     }
 
 
@@ -3409,7 +3425,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double max() {
-        return Aggregate.max(entries);
+        return AggregateReal.max(entries);
     }
 
 
@@ -3421,7 +3437,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double minAbs() {
-        return Aggregate.minAbs(entries);
+        return AggregateReal.minAbs(entries);
     }
 
 
@@ -3433,7 +3449,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public Double maxAbs() {
-        return Aggregate.maxAbs(entries);
+        return AggregateReal.maxAbs(entries);
     }
 
 
@@ -3568,6 +3584,7 @@ public class Matrix extends RealMatrixBase implements
      */
     @Override
     public int matrixRank() {
+        // TODO: Implementation
         return 0;
     }
 
@@ -3623,6 +3640,57 @@ public class Matrix extends RealMatrixBase implements
 
         return result.toString();
     }
+
+
+    /**
+     * Checks if a matrix is symmetric. That is, if the matrix is square and equal to its transpose.
+     * @return True if this matrix is symmetric. Otherwise, returns false.
+     */
+    @Override
+    public boolean isSymmetric() {
+        return RealDenseProperties.isSymmetric(entries, shape);
+    }
+
+
+    /**
+     * Checks if a matrix is anti-symmetric. That is, if the matrix is equal to the negative of its transpose.
+     *
+     * @return True if this matrix is anti-symmetric. Otherwise, returns false.
+     */
+    @Override
+    public boolean isAntiSymmetric() {
+        return RealDenseProperties.isAntiSymmetric(entries, shape);
+    }
+
+
+    /**
+     * Checks if this matrix is orthogonal. That is, if the inverse of this matrix is equal to its transpose.
+     *
+     * @return True if this matrix it is orthogonal. Otherwise, returns false.
+     */
+    @Override
+    public boolean isOrthogonal() {
+        // TODO: Add approxEq(Object A, double threshold) method to check for approximate equivalence.
+        if(isSquare()) {
+            return this.mult(this.T()).equals(I(numRows));
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * Computes the complex element-wise square root of a tensor. That is, ff this tensor contains negative values, the
+     * resulting root will be complex rather then {@link Double#NaN}.
+     *
+     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
+     * the principle square root i.e. the square root with positive real part.
+     */
+    @Override
+    public CMatrix sqrtComplex() {
+        return new CMatrix(shape, ComplexOperations.sqrt(entries));
+    }
+
 
 
     /**

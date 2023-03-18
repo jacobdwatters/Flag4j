@@ -30,7 +30,7 @@ import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
-import static com.flag4j.operations.common.real.Aggregate.maxAbs;
+import static com.flag4j.operations.common.real.AggregateReal.maxAbs;
 
 /**
  * This class provides low level methods for computing operations on real dense tensors.

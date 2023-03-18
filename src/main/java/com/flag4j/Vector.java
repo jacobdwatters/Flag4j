@@ -27,7 +27,7 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
 import com.flag4j.io.PrintOptions;
-import com.flag4j.operations.common.real.Aggregate;
+import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
@@ -584,7 +584,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Double sum() {
-        return Aggregate.sum(this.entries);
+        return AggregateReal.sum(this.entries);
     }
 
 
@@ -1314,7 +1314,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Double min() {
-        return Aggregate.min(this.entries);
+        return AggregateReal.min(this.entries);
     }
 
 
@@ -1325,7 +1325,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Double max() {
-        return Aggregate.max(this.entries);
+        return AggregateReal.max(this.entries);
     }
 
 
@@ -1337,7 +1337,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Double minAbs() {
-        return Aggregate.minAbs(this.entries);
+        return AggregateReal.minAbs(this.entries);
     }
 
 
@@ -1349,7 +1349,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Double maxAbs() {
-        return Aggregate.maxAbs(this.entries);
+        return AggregateReal.maxAbs(this.entries);
     }
 
 
@@ -1430,7 +1430,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public double infNorm() {
-        return Aggregate.maxAbs(this.entries);
+        return AggregateReal.maxAbs(this.entries);
     }
 
 

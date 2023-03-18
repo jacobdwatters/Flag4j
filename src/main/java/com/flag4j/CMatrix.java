@@ -1807,6 +1807,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isHermitian() {
+
         return this.equals(this.H());
     }
 
@@ -1829,8 +1830,12 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isUnitary() {
-        // TODO: Implementation
-        return false;
+        // TODO: Add approxEq(Object A, double threshold) method to check for approximate equivalence.
+        if(isSquare()) {
+            return this.mult(this.H()).equals(I(numRows));
+        } else {
+            return false;
+        }
     }
 
 
@@ -1931,7 +1936,6 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseMatrix B) {
-        // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
         ParameterChecks.assertMatMultShapes(this.shape, B.shape);
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
@@ -1967,7 +1971,6 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
-        // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
         ParameterChecks.assertMatMultShapes(this.shape, B.shape);
         CNumber[] entries = ComplexDenseSparseMatrixMultiplication.standard(
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
@@ -2003,7 +2006,6 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseVector b) {
-        // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);
         Shape shape = new Shape(this.numRows, 1);
@@ -2036,7 +2038,6 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCVector b) {
-        // TODO: Investigate if this matrix multiplication needs a matrix multiply dispatch method.
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = ComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);
         Shape shape = new Shape(this.numRows, 1);

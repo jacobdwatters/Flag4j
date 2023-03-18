@@ -110,6 +110,28 @@ public class RandomTensor {
 
 
     /**
+     * Gets a symmetric matrix with random values.
+     * Values are normally distributed with mean of zero and standard deviation of one.
+     * @param size Number of rows and columns in the resulting matrix.
+     * @return A random matrix with specified size.
+     */
+    public Matrix getRandomSymmetricMatrix(int size) {
+        Matrix randMat = new Matrix(size);
+
+        for(int i=0; i<size; i++) {
+            for(int j=0; j<i; j++) {
+                randMat.entries[i*size+j] = rng.nextGaussian();
+                randMat.entries[j*size+i] = randMat.entries[i*size+j];
+            }
+
+            randMat.entries[i*(size+1)] = rng.nextGaussian(); // Diagonal entry
+        }
+
+        return randMat;
+    }
+
+
+    /**
      * Gets a complex tensor with random values. Values are normally distributed with mean of zero and standard deviation
      * of one.
      * @param shape Shape of the tensor.
