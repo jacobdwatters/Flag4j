@@ -26,6 +26,7 @@ package com.flag4j.operations.dense.complex;
 
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -39,9 +40,9 @@ import static com.flag4j.operations.common.real.AggregateReal.maxAbs;
  */
 public final class ComplexDenseOperations {
 
-<span class="nc" id="L42">    private ComplexDenseOperations() {</span>
+<span class="nc" id="L43">    private ComplexDenseOperations() {</span>
         // Hide constructor
-<span class="nc" id="L44">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L45">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -55,15 +56,15 @@ public final class ComplexDenseOperations {
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static CNumber[] add(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L58">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L59">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
 
-<span class="fc" id="L60">        CNumber[] sum = new CNumber[src1.length];</span>
+<span class="fc" id="L61">        CNumber[] sum = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L62" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
-<span class="fc" id="L63">            sum[i] = src1[i].add(src2[i]);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L64">            sum[i] = src1[i].add(src2[i]);</span>
         }
 
-<span class="fc" id="L66">        return sum;</span>
+<span class="fc" id="L67">        return sum;</span>
     }
 
 
@@ -74,13 +75,13 @@ public final class ComplexDenseOperations {
      * @return The result of adding the scalar value to all entries of the source tensor.
      */
     public static CNumber[] add(CNumber[] src1, double a) {
-<span class="fc" id="L77">        CNumber[] sum = new CNumber[src1.length];</span>
+<span class="fc" id="L78">        CNumber[] sum = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L79" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
-<span class="fc" id="L80">            sum[i] = src1[i].add(a);</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L81">            sum[i] = src1[i].add(a);</span>
         }
 
-<span class="fc" id="L83">        return sum;</span>
+<span class="fc" id="L84">        return sum;</span>
     }
 
 
@@ -91,13 +92,49 @@ public final class ComplexDenseOperations {
      * @return The tensor-scalar addition of the two parameters.
      */
     public static CNumber[] add(CNumber[] src1, CNumber a) {
-<span class="fc" id="L94">        CNumber[] sum = new CNumber[src1.length];</span>
+<span class="fc" id="L95">        CNumber[] sum = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L96" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
-<span class="fc" id="L97">            sum[i] = src1[i].add(a);</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L98">            sum[i] = src1[i].add(a);</span>
         }
 
-<span class="fc" id="L100">        return sum;</span>
+<span class="fc" id="L101">        return sum;</span>
+    }
+
+
+    /**
+     * Adds a scalar value to all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The tensor-scalar addition of the two parameters.
+     */
+    public static CNumber[] add(double[] src1, CNumber a) {
+<span class="nc" id="L112">        CNumber[] sum = new CNumber[src1.length];</span>
+
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="nc" id="L115">            sum[i] = a.add(src1[i]);</span>
+        }
+
+<span class="nc" id="L118">        return sum;</span>
+    }
+
+
+    /**
+     * Adds a scalar value to all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The tensor-scalar addition of the two parameters.
+     */
+    public static CNumber[] sub(double[] src1, CNumber a) {
+<span class="nc" id="L129">        CNumber[] sum = new CNumber[src1.length];</span>
+<span class="nc" id="L130">        ArrayUtils.fillZeros(sum);</span>
+
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="nc" id="L133">            sum[i].re = src1[i]-a.re;</span>
+<span class="nc" id="L134">            sum[i].im = a.im;</span>
+        }
+
+<span class="nc" id="L137">        return sum;</span>
     }
 
 
@@ -111,15 +148,15 @@ public final class ComplexDenseOperations {
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static CNumber[] sub(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L114">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L151">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
 
-<span class="fc" id="L116">        CNumber[] diff = new CNumber[src1.length];</span>
+<span class="fc" id="L153">        CNumber[] diff = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L118" title="All 2 branches covered.">        for(int i=0; i&lt;diff.length; i++) {</span>
-<span class="fc" id="L119">            diff[i] = src1[i].sub(src2[i]);</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        for(int i=0; i&lt;diff.length; i++) {</span>
+<span class="fc" id="L156">            diff[i] = src1[i].sub(src2[i]);</span>
         }
 
-<span class="fc" id="L122">        return diff;</span>
+<span class="fc" id="L159">        return diff;</span>
     }
 
 
@@ -130,13 +167,13 @@ public final class ComplexDenseOperations {
      * @return The tensor-scalar subtraction of the two parameters.
      */
     public static CNumber[] sub(CNumber[] src1, double a) {
-<span class="fc" id="L133">        CNumber[] sum = new CNumber[src1.length];</span>
+<span class="fc" id="L170">        CNumber[] sum = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L135" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
-<span class="fc" id="L136">            sum[i] = src1[i].sub(a);</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L173">            sum[i] = src1[i].sub(a);</span>
         }
 
-<span class="fc" id="L139">        return sum;</span>
+<span class="fc" id="L176">        return sum;</span>
     }
 
 
@@ -147,13 +184,13 @@ public final class ComplexDenseOperations {
      * @return The tensor-scalar subtraction of the two parameters.
      */
     public static CNumber[] sub(CNumber[] src1, CNumber a) {
-<span class="fc" id="L150">        CNumber[] sum = new CNumber[src1.length];</span>
+<span class="fc" id="L187">        CNumber[] sum = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L152" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
-<span class="fc" id="L153">            sum[i] = src1[i].sub(a);</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L190">            sum[i] = src1[i].sub(a);</span>
         }
 
-<span class="fc" id="L156">        return sum;</span>
+<span class="fc" id="L193">        return sum;</span>
     }
 
 
@@ -165,12 +202,12 @@ public final class ComplexDenseOperations {
      * @param shape2 Shape of second tensor.
      */
     public static void subEq(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L168">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L205">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
 
-<span class="fc bfc" id="L170" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="fc" id="L171">            src1[i].subEq(src2[i]);</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L208">            src1[i].subEq(src2[i]);</span>
         }
-<span class="fc" id="L173">    }</span>
+<span class="fc" id="L210">    }</span>
 
 
     /**
@@ -179,10 +216,10 @@ public final class ComplexDenseOperations {
      * @param b Scalar to subtract.
      */
     public static void subEq(CNumber[] src, CNumber b) {
-<span class="fc bfc" id="L182" title="All 2 branches covered.">        for(CNumber cNumber : src) {</span>
-<span class="fc" id="L183">            cNumber.subEq(b);</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">        for(CNumber cNumber : src) {</span>
+<span class="fc" id="L220">            cNumber.subEq(b);</span>
         }
-<span class="fc" id="L185">    }</span>
+<span class="fc" id="L222">    }</span>
 
 
     /**
@@ -193,12 +230,12 @@ public final class ComplexDenseOperations {
      * @param shape2 Shape of second tensor.
      */
     public static void addEq(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L196">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L233">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
 
-<span class="fc bfc" id="L198" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="fc" id="L199">            src1[i].addEq(src2[i]);</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L236">            src1[i].addEq(src2[i]);</span>
         }
-<span class="fc" id="L201">    }</span>
+<span class="fc" id="L238">    }</span>
 
 
     /**
@@ -207,10 +244,10 @@ public final class ComplexDenseOperations {
      * @param b Scalar to add.
      */
     public static void addEq(CNumber[] src, CNumber b) {
-<span class="fc bfc" id="L210" title="All 2 branches covered.">        for (CNumber cNumber : src) {</span>
-<span class="fc" id="L211">            cNumber.addEq(b);</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">        for (CNumber cNumber : src) {</span>
+<span class="fc" id="L248">            cNumber.addEq(b);</span>
         }
-<span class="fc" id="L213">    }</span>
+<span class="fc" id="L250">    }</span>
 
 
     /**
@@ -219,13 +256,13 @@ public final class ComplexDenseOperations {
      * @return The sum of all entries in the tensor.
      */
     public static CNumber sum(CNumber[] src) {
-<span class="nc" id="L222">        CNumber sum = new CNumber();</span>
+<span class="nc" id="L259">        CNumber sum = new CNumber();</span>
 
-<span class="nc bnc" id="L224" title="All 2 branches missed.">        for(CNumber value : src) {</span>
-<span class="nc" id="L225">           sum = sum.add(value);</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        for(CNumber value : src) {</span>
+<span class="nc" id="L262">           sum = sum.add(value);</span>
         }
 
-<span class="nc" id="L228">        return sum;</span>
+<span class="nc" id="L265">        return sum;</span>
     }
 
 
@@ -237,16 +274,16 @@ public final class ComplexDenseOperations {
     public static CNumber prod(CNumber[] src) {
         CNumber product;
 
-<span class="fc bfc" id="L240" title="All 2 branches covered.">        if(src.length&gt;0) {</span>
-<span class="fc" id="L241">            product = new CNumber(1);</span>
-<span class="fc bfc" id="L242" title="All 2 branches covered.">            for(CNumber value : src) {</span>
-<span class="fc" id="L243">               product = product.mult(value);</span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">        if(src.length&gt;0) {</span>
+<span class="fc" id="L278">            product = new CNumber(1);</span>
+<span class="fc bfc" id="L279" title="All 2 branches covered.">            for(CNumber value : src) {</span>
+<span class="fc" id="L280">               product = product.mult(value);</span>
             }
         } else {
-<span class="fc" id="L246">            product = new CNumber();</span>
+<span class="fc" id="L283">            product = new CNumber();</span>
         }
 
-<span class="fc" id="L249">        return product;</span>
+<span class="fc" id="L286">        return product;</span>
     }
 
 
@@ -257,13 +294,13 @@ public final class ComplexDenseOperations {
      * @return The scalar multiplication of the tensor.
      */
     public static CNumber[] scalMult(CNumber[] entries, CNumber a) {
-<span class="fc" id="L260">        CNumber[] product = new CNumber[entries.length];</span>
+<span class="fc" id="L297">        CNumber[] product = new CNumber[entries.length];</span>
 
-<span class="fc bfc" id="L262" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="fc" id="L263">            product[i] = entries[i].mult(a);</span>
+<span class="fc bfc" id="L299" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L300">            product[i] = entries[i].mult(a);</span>
         }
 
-<span class="fc" id="L266">        return product;</span>
+<span class="fc" id="L303">        return product;</span>
     }
 
 
@@ -274,13 +311,13 @@ public final class ComplexDenseOperations {
      * @return The scalar multiplication of the tensor.
      */
     public static CNumber[] scalMult(CNumber[] entries, double a) {
-<span class="fc" id="L277">        CNumber[] product = new CNumber[entries.length];</span>
+<span class="fc" id="L314">        CNumber[] product = new CNumber[entries.length];</span>
 
-<span class="fc bfc" id="L279" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="fc" id="L280">            product[i] = entries[i].mult(a);</span>
+<span class="fc bfc" id="L316" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L317">            product[i] = entries[i].mult(a);</span>
         }
 
-<span class="fc" id="L283">        return product;</span>
+<span class="fc" id="L320">        return product;</span>
     }
 
 
@@ -291,13 +328,13 @@ public final class ComplexDenseOperations {
      * @return The scalar division of the tensor.
      */
     public static CNumber[] scalDiv(CNumber[] entries, CNumber divisor) {
-<span class="fc" id="L294">        CNumber[] quotient = new CNumber[entries.length];</span>
+<span class="fc" id="L331">        CNumber[] quotient = new CNumber[entries.length];</span>
 
-<span class="fc bfc" id="L296" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
-<span class="fc" id="L297">            quotient[i] = entries[i].div(divisor);</span>
+<span class="fc bfc" id="L333" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
+<span class="fc" id="L334">            quotient[i] = entries[i].div(divisor);</span>
         }
 
-<span class="fc" id="L300">        return quotient;</span>
+<span class="fc" id="L337">        return quotient;</span>
     }
 
 
@@ -308,13 +345,13 @@ public final class ComplexDenseOperations {
      * @return The scalar multiplication of the tensor.
      */
     public static CNumber[] scalDiv(CNumber[] entries, double divisor) {
-<span class="fc" id="L311">        CNumber[] quotient = new CNumber[entries.length];</span>
+<span class="fc" id="L348">        CNumber[] quotient = new CNumber[entries.length];</span>
 
-<span class="fc bfc" id="L313" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
-<span class="fc" id="L314">            quotient[i] = entries[i].div(divisor);</span>
+<span class="fc bfc" id="L350" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
+<span class="fc" id="L351">            quotient[i] = entries[i].div(divisor);</span>
         }
 
-<span class="fc" id="L317">        return quotient;</span>
+<span class="fc" id="L354">        return quotient;</span>
     }
 
 
@@ -324,13 +361,13 @@ public final class ComplexDenseOperations {
      * @return The element-wise reciprocals of the tensor.
      */
     public static CNumber[] recep(CNumber[] src) {
-<span class="fc" id="L327">        CNumber[] receps = new CNumber[src.length];</span>
+<span class="fc" id="L364">        CNumber[] receps = new CNumber[src.length];</span>
 
-<span class="fc bfc" id="L329" title="All 2 branches covered.">        for(int i=0; i&lt;receps.length; i++) {</span>
-<span class="fc" id="L330">            receps[i] = src[i].addInv();</span>
+<span class="fc bfc" id="L366" title="All 2 branches covered.">        for(int i=0; i&lt;receps.length; i++) {</span>
+<span class="fc" id="L367">            receps[i] = src[i].addInv();</span>
         }
 
-<span class="fc" id="L333">        return receps;</span>
+<span class="fc" id="L370">        return receps;</span>
     }
 
 
@@ -345,14 +382,14 @@ public final class ComplexDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemMult(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L348">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
-<span class="fc" id="L349">        CNumber[] product = new CNumber[src1.length];</span>
+<span class="fc" id="L385">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L386">        CNumber[] product = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L351" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="fc" id="L352">            product[i] = src1[i].mult(src2[i]);</span>
+<span class="fc bfc" id="L388" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L389">            product[i] = src1[i].mult(src2[i]);</span>
         }
 
-<span class="fc" id="L355">        return product;</span>
+<span class="fc" id="L392">        return product;</span>
     }
 
 
@@ -366,14 +403,14 @@ public final class ComplexDenseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L369">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
-<span class="fc" id="L370">        CNumber[] product = new CNumber[src1.length];</span>
+<span class="fc" id="L406">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L407">        CNumber[] product = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L372" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="fc" id="L373">            product[i] = src1[i].div(src2[i]);</span>
+<span class="fc bfc" id="L409" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L410">            product[i] = src1[i].div(src2[i]);</span>
         }
 
-<span class="fc" id="L376">        return product;</span>
+<span class="fc" id="L413">        return product;</span>
     }
 
 
@@ -387,22 +424,22 @@ public final class ComplexDenseOperations {
      * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
      */
     public static double matrixNormLpq(CNumber[] src, Shape shape, double p, double q) {
-<span class="nc" id="L390">        ParameterChecks.assertGreaterEq(1, p, q);</span>
+<span class="nc" id="L427">        ParameterChecks.assertGreaterEq(1, p, q);</span>
 
-<span class="nc" id="L392">        double norm = 0;</span>
+<span class="nc" id="L429">        double norm = 0;</span>
         double colSum;
-<span class="nc" id="L394">        int rows = shape.dims[Axis2D.row()];</span>
-<span class="nc" id="L395">        int cols = shape.dims[Axis2D.col()];</span>
+<span class="nc" id="L431">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="nc" id="L432">        int cols = shape.dims[Axis2D.col()];</span>
 
-<span class="nc bnc" id="L397" title="All 2 branches missed.">        for(int j=0; j&lt;cols; j++) {</span>
-<span class="nc" id="L398">            colSum = 0;</span>
-<span class="nc bnc" id="L399" title="All 2 branches missed.">            for(int i=0; i&lt;rows; i++) {</span>
-<span class="nc" id="L400">                colSum += (Math.pow(src[i*cols + j].magAsDouble(), p));</span>
+<span class="nc bnc" id="L434" title="All 2 branches missed.">        for(int j=0; j&lt;cols; j++) {</span>
+<span class="nc" id="L435">            colSum = 0;</span>
+<span class="nc bnc" id="L436" title="All 2 branches missed.">            for(int i=0; i&lt;rows; i++) {</span>
+<span class="nc" id="L437">                colSum += (Math.pow(src[i*cols + j].magAsDouble(), p));</span>
             }
-<span class="nc" id="L402">            norm += Math.pow(colSum, q/p);</span>
+<span class="nc" id="L439">            norm += Math.pow(colSum, q/p);</span>
         }
 
-<span class="nc" id="L405">        return Math.pow(norm, 1/q);</span>
+<span class="nc" id="L442">        return Math.pow(norm, 1/q);</span>
     }
 
 
@@ -416,23 +453,23 @@ public final class ComplexDenseOperations {
      * @throws IllegalArgumentException If {@code p} is less than 1.
      */
     public static double matrixNormLp(CNumber[] src, Shape shape, double p) {
-<span class="nc" id="L419">        ParameterChecks.assertGreaterEq(1, p);</span>
+<span class="nc" id="L456">        ParameterChecks.assertGreaterEq(1, p);</span>
 
-<span class="nc" id="L421">        double norm = 0;</span>
+<span class="nc" id="L458">        double norm = 0;</span>
         double colSum;
-<span class="nc" id="L423">        int rows = shape.dims[Axis2D.row()];</span>
-<span class="nc" id="L424">        int cols = shape.dims[Axis2D.col()];</span>
+<span class="nc" id="L460">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="nc" id="L461">        int cols = shape.dims[Axis2D.col()];</span>
 
-<span class="nc bnc" id="L426" title="All 2 branches missed.">        for(int j=0; j&lt;cols; j++) {</span>
-<span class="nc" id="L427">            colSum=0;</span>
-<span class="nc bnc" id="L428" title="All 2 branches missed.">            for(int i=0; i&lt;rows; i++) {</span>
-<span class="nc" id="L429">                colSum += Math.pow(src[i*cols + j].magAsDouble(), p);</span>
+<span class="nc bnc" id="L463" title="All 2 branches missed.">        for(int j=0; j&lt;cols; j++) {</span>
+<span class="nc" id="L464">            colSum=0;</span>
+<span class="nc bnc" id="L465" title="All 2 branches missed.">            for(int i=0; i&lt;rows; i++) {</span>
+<span class="nc" id="L466">                colSum += Math.pow(src[i*cols + j].magAsDouble(), p);</span>
             }
 
-<span class="nc" id="L432">            norm += Math.pow(colSum, 1.0/p);</span>
+<span class="nc" id="L469">            norm += Math.pow(colSum, 1.0/p);</span>
         }
 
-<span class="nc" id="L435">        return norm;</span>
+<span class="nc" id="L472">        return norm;</span>
     }
 
 
@@ -444,21 +481,21 @@ public final class ComplexDenseOperations {
      * @return The L&lt;sub&gt;2&lt;/sub&gt; norm of the matrix.
      */
     public static double matrixNormL2(CNumber[] src, Shape shape) {
-<span class="nc" id="L447">        double norm = 0;</span>
-<span class="nc" id="L448">        int rows = shape.dims[Axis2D.row()];</span>
-<span class="nc" id="L449">        int cols = shape.dims[Axis2D.col()];</span>
+<span class="nc" id="L484">        double norm = 0;</span>
+<span class="nc" id="L485">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="nc" id="L486">        int cols = shape.dims[Axis2D.col()];</span>
 
         double colSum;
 
-<span class="nc bnc" id="L453" title="All 2 branches missed.">        for(int j=0; j&lt;cols; j++) {</span>
-<span class="nc" id="L454">            colSum = 0;</span>
-<span class="nc bnc" id="L455" title="All 2 branches missed.">            for(int i=0; i&lt;rows; i++) {</span>
-<span class="nc" id="L456">                colSum += Math.pow(src[i*cols + j].magAsDouble(), 2);</span>
+<span class="nc bnc" id="L490" title="All 2 branches missed.">        for(int j=0; j&lt;cols; j++) {</span>
+<span class="nc" id="L491">            colSum = 0;</span>
+<span class="nc bnc" id="L492" title="All 2 branches missed.">            for(int i=0; i&lt;rows; i++) {</span>
+<span class="nc" id="L493">                colSum += Math.pow(src[i*cols + j].magAsDouble(), 2);</span>
             }
-<span class="nc" id="L458">            norm += Math.sqrt(colSum);</span>
+<span class="nc" id="L495">            norm += Math.sqrt(colSum);</span>
         }
 
-<span class="nc" id="L461">        return norm;</span>
+<span class="nc" id="L498">        return norm;</span>
     }
 
 
@@ -468,7 +505,7 @@ public final class ComplexDenseOperations {
      * @return The infinity norm of the matrix.
      */
     public static double matrixMaxNorm(CNumber[] src) {
-<span class="nc" id="L471">        return maxAbs(src).re;</span>
+<span class="nc" id="L508">        return maxAbs(src).re;</span>
     }
 
 
@@ -478,17 +515,17 @@ public final class ComplexDenseOperations {
      * @return The infinity norm of the matrix.
      */
     public static double matrixInfNorm(CNumber[] src, Shape shape) {
-<span class="nc" id="L481">        int rows = shape.dims[Axis2D.row()];</span>
-<span class="nc" id="L482">        int cols = shape.dims[Axis2D.col()];</span>
-<span class="nc" id="L483">        double[] rowSums = new double[rows];</span>
+<span class="nc" id="L518">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="nc" id="L519">        int cols = shape.dims[Axis2D.col()];</span>
+<span class="nc" id="L520">        double[] rowSums = new double[rows];</span>
 
-<span class="nc bnc" id="L485" title="All 2 branches missed.">        for(int i=0; i&lt;rows; i++) {</span>
-<span class="nc bnc" id="L486" title="All 2 branches missed.">            for(int j=0; j&lt;cols; j++) {</span>
-<span class="nc" id="L487">                rowSums[i] += src[i*cols + j].magAsDouble();</span>
+<span class="nc bnc" id="L522" title="All 2 branches missed.">        for(int i=0; i&lt;rows; i++) {</span>
+<span class="nc bnc" id="L523" title="All 2 branches missed.">            for(int j=0; j&lt;cols; j++) {</span>
+<span class="nc" id="L524">                rowSums[i] += src[i*cols + j].magAsDouble();</span>
             }
         }
 
-<span class="nc" id="L491">        return maxAbs(rowSums);</span>
+<span class="nc" id="L528">        return maxAbs(rowSums);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

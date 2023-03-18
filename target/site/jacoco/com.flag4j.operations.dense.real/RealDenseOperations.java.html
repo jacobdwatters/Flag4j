@@ -363,5 +363,22 @@ public final class RealDenseOperations {
 
 <span class="fc" id="L364">        return maxAbs(rowSums);</span>
     }
+
+
+    /**
+     * Adds a scalar to every element of a tensor.
+     * @param src src of tensor to add scalar to.
+     * @param b Scalar to add to tensor.
+     * @return The tensor scalar addition.
+     */
+    public static double[] add(double[] src, double b) {
+<span class="fc" id="L375">        double[] sum = new double[src.length];</span>
+
+<span class="fc bfc" id="L377" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L378">            sum[i] = src[i] + b;</span>
+        }
+
+<span class="fc" id="L381">        return sum;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

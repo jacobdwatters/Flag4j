@@ -32,6 +32,7 @@ import com.flag4j.operations.MatrixTranspose;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
+import com.flag4j.operations.common.real.RealProperties;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
@@ -61,8 +62,8 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @throws IllegalArgumentException if size negative.
      */
     public Matrix(int size) {
-<span class="fc" id="L64">        super(new Shape(size, size), new double[size*size]);</span>
-<span class="fc" id="L65">    }</span>
+<span class="fc" id="L65">        super(new Shape(size, size), new double[size*size]);</span>
+<span class="fc" id="L66">    }</span>
 
 
     /**
@@ -72,9 +73,9 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @throws IllegalArgumentException if size negative.
      */
     public Matrix(int size, double value) {
-<span class="fc" id="L75">        super(new Shape(size, size), new double[size*size]);</span>
-<span class="fc" id="L76">        Arrays.fill(super.entries, value);</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L76">        super(new Shape(size, size), new double[size*size]);</span>
+<span class="fc" id="L77">        Arrays.fill(super.entries, value);</span>
+<span class="fc" id="L78">    }</span>
 
 
     /**
@@ -84,8 +85,8 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @throws IllegalArgumentException if either m or n is negative.
      */
     public Matrix(int rows, int cols) {
-<span class="fc" id="L87">        super(new Shape(rows, cols), new double[rows*cols]);</span>
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L88">        super(new Shape(rows, cols), new double[rows*cols]);</span>
+<span class="fc" id="L89">    }</span>
 
 
     /**
@@ -96,9 +97,9 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @throws IllegalArgumentException if either m or n is negative.
      */
     public Matrix(int rows, int cols, double value) {
-<span class="fc" id="L99">        super(new Shape(rows, cols), new double[rows*cols]);</span>
-<span class="fc" id="L100">        Arrays.fill(super.entries, value);</span>
-<span class="fc" id="L101">    }</span>
+<span class="fc" id="L100">        super(new Shape(rows, cols), new double[rows*cols]);</span>
+<span class="fc" id="L101">        Arrays.fill(super.entries, value);</span>
+<span class="fc" id="L102">    }</span>
 
 
     /**
@@ -106,17 +107,17 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(Double[][] entries) {
-<span class="fc" id="L109">        super(new Shape(entries.length, entries[0].length),</span>
+<span class="fc" id="L110">        super(new Shape(entries.length, entries[0].length),</span>
                 new double[entries.length*entries[0].length]);
 
-<span class="fc" id="L112">        int index = 0;</span>
+<span class="fc" id="L113">        int index = 0;</span>
 
-<span class="fc bfc" id="L114" title="All 2 branches covered.">        for(Double[] row : entries) {</span>
-<span class="fc bfc" id="L115" title="All 2 branches covered.">            for(Double value : row) {</span>
-<span class="fc" id="L116">                super.entries[index++] = value;</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        for(Double[] row : entries) {</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">            for(Double value : row) {</span>
+<span class="fc" id="L117">                super.entries[index++] = value;</span>
             }
         }
-<span class="fc" id="L119">    }</span>
+<span class="fc" id="L120">    }</span>
 
 
     /**
@@ -124,17 +125,17 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(Integer[][] entries) {
-<span class="fc" id="L127">        super(new Shape(entries.length, entries[0].length),</span>
+<span class="fc" id="L128">        super(new Shape(entries.length, entries[0].length),</span>
                 new double[entries.length*entries[0].length]);
 
-<span class="fc" id="L130">        int index = 0;</span>
+<span class="fc" id="L131">        int index = 0;</span>
 
-<span class="fc bfc" id="L132" title="All 2 branches covered.">        for(Integer[] row : entries) {</span>
-<span class="fc bfc" id="L133" title="All 2 branches covered.">            for(Integer value : row) {</span>
-<span class="fc" id="L134">                super.entries[index++] = value;</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        for(Integer[] row : entries) {</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">            for(Integer value : row) {</span>
+<span class="fc" id="L135">                super.entries[index++] = value;</span>
             }
         }
-<span class="fc" id="L137">    }</span>
+<span class="fc" id="L138">    }</span>
 
 
     /**
@@ -142,17 +143,17 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(double[][] entries) {
-<span class="fc" id="L145">        super(new Shape(entries.length, entries[0].length),</span>
+<span class="fc" id="L146">        super(new Shape(entries.length, entries[0].length),</span>
                 new double[entries.length*entries[0].length]);
 
-<span class="fc" id="L148">        int index = 0;</span>
+<span class="fc" id="L149">        int index = 0;</span>
 
-<span class="fc bfc" id="L150" title="All 2 branches covered.">        for(double[] row : entries) {</span>
-<span class="fc bfc" id="L151" title="All 2 branches covered.">            for(double value : row) {</span>
-<span class="fc" id="L152">                super.entries[index++] = value;</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        for(double[] row : entries) {</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">            for(double value : row) {</span>
+<span class="fc" id="L153">                super.entries[index++] = value;</span>
             }
         }
-<span class="fc" id="L155">    }</span>
+<span class="fc" id="L156">    }</span>
 
 
     /**
@@ -160,16 +161,16 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(int[][] entries) {
-<span class="fc" id="L163">        super(new Shape(entries.length, entries[0].length), new double[entries.length*entries[0].length]);</span>
+<span class="fc" id="L164">        super(new Shape(entries.length, entries[0].length), new double[entries.length*entries[0].length]);</span>
 
         // Copy the int array
-<span class="fc" id="L166">        int index=0;</span>
-<span class="fc bfc" id="L167" title="All 2 branches covered.">        for(int[] row : entries) {</span>
-<span class="fc bfc" id="L168" title="All 2 branches covered.">            for(int value : row) {</span>
-<span class="fc" id="L169">                super.entries[index++] = value;</span>
+<span class="fc" id="L167">        int index=0;</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        for(int[] row : entries) {</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">            for(int value : row) {</span>
+<span class="fc" id="L170">                super.entries[index++] = value;</span>
             }
         }
-<span class="fc" id="L172">    }</span>
+<span class="fc" id="L173">    }</span>
 
 
     /**
@@ -177,8 +178,8 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @param A The matrix defining the entries for this matrix.
      */
     public Matrix(Matrix A) {
-<span class="fc" id="L180">        super(A.shape.copy(), A.entries.clone());</span>
-<span class="fc" id="L181">    }</span>
+<span class="fc" id="L181">        super(A.shape.copy(), A.entries.clone());</span>
+<span class="fc" id="L182">    }</span>
 
 
     /**
@@ -186,8 +187,8 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @param shape Shape of matrix.
      */
     public Matrix(Shape shape) {
-<span class="fc" id="L189">        super(shape, new double[shape.totalEntries().intValue()]);</span>
-<span class="fc" id="L190">    }</span>
+<span class="fc" id="L190">        super(shape, new double[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L191">    }</span>
 
 
     /**
@@ -196,9 +197,9 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @param value Value to fill matrix with.
      */
     public Matrix(Shape shape, double value) {
-<span class="fc" id="L199">        super(shape, new double[shape.totalEntries().intValue()]);</span>
-<span class="fc" id="L200">        Arrays.fill(super.entries, value);</span>
-<span class="fc" id="L201">    }</span>
+<span class="fc" id="L200">        super(shape, new double[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L201">        Arrays.fill(super.entries, value);</span>
+<span class="fc" id="L202">    }</span>
 
 
     /**
@@ -208,8 +209,8 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @param entries Entries of the matrix.
      */
     public Matrix(Shape shape, double[] entries) {
-<span class="fc" id="L211">        super(shape, entries);</span>
-<span class="fc" id="L212">    }</span>
+<span class="fc" id="L212">        super(shape, entries);</span>
+<span class="fc" id="L213">    }</span>
 
 
     /**
@@ -220,8 +221,8 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @param entries Entries of the matrix.
      */
     public Matrix(int numRows, int numCols, double[] entries) {
-<span class="fc" id="L223">        super(new Shape(numRows, numCols), entries);</span>
-<span class="fc" id="L224">    }</span>
+<span class="fc" id="L224">        super(new Shape(numRows, numCols), entries);</span>
+<span class="fc" id="L225">    }</span>
 
 
     /**
@@ -231,8 +232,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      */
     @Override
     public boolean isPos() {
-        // TODO: Implementation
-<span class="nc" id="L235">        return false;</span>
+<span class="nc" id="L235">        return RealProperties.isPos(entries);</span>
     }
 
     /**
@@ -242,9 +242,9 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      */
     @Override
     public boolean isNeg() {
-        // TODO: Implementation
-<span class="nc" id="L246">        return false;</span>
+<span class="nc" id="L245">        return RealProperties.isNeg(entries);</span>
     }
+
 
     /**
      * Converts this matrix to an equivalent complex matrix.
@@ -1152,7 +1152,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
     @Override
     public Matrix add(double a) {
 <span class="fc" id="L1154">        return new Matrix(this.shape.copy(),</span>
-<span class="fc" id="L1155">                RealDenseVectorOperations.add(this.entries, a)</span>
+<span class="fc" id="L1155">                RealDenseOperations.add(this.entries, a)</span>
         );
     }
 
@@ -1348,7 +1348,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
     @Override
     public CMatrix scalMult(CNumber factor) {
 <span class="fc" id="L1350">        return new CMatrix(this.shape.copy(),</span>
-<span class="fc" id="L1351">                RealComplexDenseOperations.scalMult(this.entries, factor)</span>
+<span class="fc" id="L1351">                ComplexOperations.scalMult(this.entries, factor)</span>
         );
     }
 
