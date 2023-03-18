@@ -33,7 +33,6 @@ import com.flag4j.SparseMatrix;
  * @param <W> Complex matrix type.
  */
 public interface RealMatrixMixin<T, W> extends
-        RealTensorMixin<T, W>,
         MatrixPropertiesMixin<T, Matrix, SparseMatrix, W, T, Double>,
         MatrixOperationsMixin<T, Matrix, SparseMatrix, W, T, Double>,
         MatrixComparisonsMixin<T, Matrix, SparseMatrix, W, T, Double>,
@@ -67,4 +66,26 @@ public interface RealMatrixMixin<T, W> extends
      * the principle square root i.e. the square root with positive real part.
      */
     W sqrtComplex();
+
+
+    /**
+     * Checks if this tensor contains only non-negative values.
+     * @return True if this tensor only contains non-negative values. Otherwise, returns false.
+     */
+    boolean isPos();
+
+
+    /**
+     * Checks if this tensor contains only non-positive values.
+     * @return trie if this tensor only contains non-positive values. Otherwise, returns false.
+     */
+    boolean isNeg();
+
+
+    /**
+     * Converts this tensor to an equivalent complex tensor. That is, the entries of the resultant matrix will be exactly
+     * the same value but will have type {@link com.flag4j.complex_numbers.CNumber CNumber} rather than {@link Double}.
+     * @return A complex matrix which is equivalent to this matrix.
+     */
+    W toComplex();
 }

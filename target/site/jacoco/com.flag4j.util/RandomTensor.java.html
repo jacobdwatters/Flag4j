@@ -110,19 +110,41 @@ public class RandomTensor {
 
 
     /**
+     * Gets a symmetric matrix with random values.
+     * Values are normally distributed with mean of zero and standard deviation of one.
+     * @param size Number of rows and columns in the resulting matrix.
+     * @return A random matrix with specified size.
+     */
+    public Matrix getRandomSymmetricMatrix(int size) {
+<span class="nc" id="L119">        Matrix randMat = new Matrix(size);</span>
+
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        for(int i=0; i&lt;size; i++) {</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">            for(int j=0; j&lt;i; j++) {</span>
+<span class="nc" id="L123">                randMat.entries[i*size+j] = rng.nextGaussian();</span>
+<span class="nc" id="L124">                randMat.entries[j*size+i] = randMat.entries[i*size+j];</span>
+            }
+
+<span class="nc" id="L127">            randMat.entries[i*(size+1)] = rng.nextGaussian(); // Diagonal entry</span>
+        }
+
+<span class="nc" id="L130">        return randMat;</span>
+    }
+
+
+    /**
      * Gets a complex tensor with random values. Values are normally distributed with mean of zero and standard deviation
      * of one.
      * @param shape Shape of the tensor.
      * @return A random vector of specified size.
      */
     public CTensor getRandomCTensor(Shape shape) {
-<span class="nc" id="L119">        CTensor randTensor = new CTensor(shape);</span>
+<span class="nc" id="L141">        CTensor randTensor = new CTensor(shape);</span>
 
-<span class="nc bnc" id="L121" title="All 2 branches missed.">        for(int i=0; i&lt;randTensor.totalEntries().intValue(); i++) {</span>
-<span class="nc" id="L122">            randTensor.entries[i] = complex_rng.randn();</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        for(int i=0; i&lt;randTensor.totalEntries().intValue(); i++) {</span>
+<span class="nc" id="L144">            randTensor.entries[i] = complex_rng.randn();</span>
         }
 
-<span class="nc" id="L125">        return randTensor;</span>
+<span class="nc" id="L147">        return randTensor;</span>
     }
 
 
@@ -134,13 +156,13 @@ public class RandomTensor {
      * @return A random matrix with specified size.
      */
     public CMatrix getRandomCMatrix(int rows, int cols) {
-<span class="nc" id="L137">        CMatrix randMat = new CMatrix(rows, cols);</span>
+<span class="nc" id="L159">        CMatrix randMat = new CMatrix(rows, cols);</span>
 
-<span class="nc bnc" id="L139" title="All 2 branches missed.">        for(int i=0; i&lt;randMat.totalEntries().intValue(); i++) {</span>
-<span class="nc" id="L140">            randMat.entries[i] = complex_rng.randn();</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">        for(int i=0; i&lt;randMat.totalEntries().intValue(); i++) {</span>
+<span class="nc" id="L162">            randMat.entries[i] = complex_rng.randn();</span>
         }
 
-<span class="nc" id="L143">        return randMat;</span>
+<span class="nc" id="L165">        return randMat;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

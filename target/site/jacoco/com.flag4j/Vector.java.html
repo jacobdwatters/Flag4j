@@ -27,7 +27,7 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
 import com.flag4j.io.PrintOptions;
-import com.flag4j.operations.common.real.Aggregate;
+import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
@@ -584,7 +584,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public Double sum() {
-<span class="fc" id="L587">        return Aggregate.sum(this.entries);</span>
+<span class="fc" id="L587">        return AggregateReal.sum(this.entries);</span>
     }
 
 
@@ -1314,7 +1314,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public Double min() {
-<span class="fc" id="L1317">        return Aggregate.min(this.entries);</span>
+<span class="fc" id="L1317">        return AggregateReal.min(this.entries);</span>
     }
 
 
@@ -1325,7 +1325,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public Double max() {
-<span class="fc" id="L1328">        return Aggregate.max(this.entries);</span>
+<span class="fc" id="L1328">        return AggregateReal.max(this.entries);</span>
     }
 
 
@@ -1337,7 +1337,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public Double minAbs() {
-<span class="fc" id="L1340">        return Aggregate.minAbs(this.entries);</span>
+<span class="fc" id="L1340">        return AggregateReal.minAbs(this.entries);</span>
     }
 
 
@@ -1349,7 +1349,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public Double maxAbs() {
-<span class="fc" id="L1352">        return Aggregate.maxAbs(this.entries);</span>
+<span class="fc" id="L1352">        return AggregateReal.maxAbs(this.entries);</span>
     }
 
 
@@ -1430,7 +1430,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public double infNorm() {
-<span class="fc" id="L1433">        return Aggregate.maxAbs(this.entries);</span>
+<span class="fc" id="L1433">        return AggregateReal.maxAbs(this.entries);</span>
     }
 
 
@@ -1446,47 +1446,48 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
 
 
     /**
-     * Converts this vector to a human-readable string format.
+     * Converts this vector to a human-readable string format. To specifiy the maximum number of entries to print, use
+     * {@link PrintOptions#setMaxColumns(int)}.
      * @return A human-readable string representation of this vector.
      */
     public String toString() {
-<span class="nc" id="L1453">        StringBuilder result = new StringBuilder();</span>
+<span class="nc" id="L1454">        StringBuilder result = new StringBuilder();</span>
 
-<span class="nc bnc" id="L1455" title="All 2 branches missed.">        if(PrintOptions.getMaxColumns()&lt;this.size) {</span>
+<span class="nc bnc" id="L1456" title="All 2 branches missed.">        if(PrintOptions.getMaxColumns()&lt;this.size) {</span>
             // Then also get the full size of the vector.
-<span class="nc" id="L1457">            result.append(String.format(&quot;Full Size: %d\n&quot;, this.size));</span>
+<span class="nc" id="L1458">            result.append(String.format(&quot;Full Size: %d\n&quot;, this.size));</span>
         }
 
-<span class="nc" id="L1460">        result.append(&quot;[&quot;);</span>
+<span class="nc" id="L1461">        result.append(&quot;[&quot;);</span>
 
-<span class="nc" id="L1462">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.size-1);</span>
+<span class="nc" id="L1463">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.size-1);</span>
         int width;
         String value;
 
         // Get entries up until the stopping point.
-<span class="nc bnc" id="L1467" title="All 2 branches missed.">        for(int i=0; i&lt;stopIndex; i++) {</span>
-<span class="nc" id="L1468">            value = StringUtils.ValueOfRound(this.get(i), PrintOptions.getPrecision());</span>
-<span class="nc" id="L1469">            width = PrintOptions.getPadding() + value.length();</span>
-<span class="nc bnc" id="L1470" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L1471">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc bnc" id="L1468" title="All 2 branches missed.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="nc" id="L1469">            value = StringUtils.ValueOfRound(this.get(i), PrintOptions.getPrecision());</span>
+<span class="nc" id="L1470">            width = PrintOptions.getPadding() + value.length();</span>
+<span class="nc bnc" id="L1471" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1472">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="nc bnc" id="L1474" title="All 2 branches missed.">        if(stopIndex &lt; this.size-1) {</span>
-<span class="nc" id="L1475">            width = PrintOptions.getPadding() + 3;</span>
-<span class="nc" id="L1476">            value = &quot;...&quot;;</span>
-<span class="nc bnc" id="L1477" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L1478">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc bnc" id="L1475" title="All 2 branches missed.">        if(stopIndex &lt; this.size-1) {</span>
+<span class="nc" id="L1476">            width = PrintOptions.getPadding() + 3;</span>
+<span class="nc" id="L1477">            value = &quot;...&quot;;</span>
+<span class="nc bnc" id="L1478" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1479">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
         // Get last entry now
-<span class="nc" id="L1482">        value = StringUtils.ValueOfRound(this.get(this.size-1), PrintOptions.getPrecision());</span>
-<span class="nc" id="L1483">        width = PrintOptions.getPadding() + value.length();</span>
-<span class="nc bnc" id="L1484" title="All 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L1485">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc" id="L1483">        value = StringUtils.ValueOfRound(this.get(this.size-1), PrintOptions.getPrecision());</span>
+<span class="nc" id="L1484">        width = PrintOptions.getPadding() + value.length();</span>
+<span class="nc bnc" id="L1485" title="All 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1486">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
 
-<span class="nc" id="L1487">        result.append(&quot;]&quot;);</span>
+<span class="nc" id="L1488">        result.append(&quot;]&quot;);</span>
 
-<span class="nc" id="L1489">        return result.toString();</span>
+<span class="nc" id="L1490">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

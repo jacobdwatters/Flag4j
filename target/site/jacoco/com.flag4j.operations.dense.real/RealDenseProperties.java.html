@@ -24,6 +24,7 @@
 
 package com.flag4j.operations.dense.real;
 
+import com.flag4j.Shape;
 import com.flag4j.util.ErrorMessages;
 
 /**
@@ -31,9 +32,9 @@ import com.flag4j.util.ErrorMessages;
  */
 public class RealDenseProperties {
 
-<span class="nc" id="L34">    private RealDenseProperties() {</span>
+<span class="nc" id="L35">    private RealDenseProperties() {</span>
         // Hide default constructor.
-<span class="nc" id="L36">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L37">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -43,16 +44,78 @@ public class RealDenseProperties {
      * @return True if this tensor only contains ones. Otherwise, returns false.
      */
     public static boolean isOnes(double[] src) {
-<span class="fc" id="L46">        boolean allZeros = true;</span>
+<span class="fc" id="L47">        boolean allZeros = true;</span>
 
-<span class="fc bfc" id="L48" title="All 2 branches covered.">        for(double value : src) {</span>
-<span class="fc bfc" id="L49" title="All 2 branches covered.">            if(value != 1) {</span>
-<span class="fc" id="L50">                allZeros = false;</span>
-<span class="fc" id="L51">                break; // No need to look further.</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for(double value : src) {</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if(value != 1) {</span>
+<span class="fc" id="L51">                allZeros = false;</span>
+<span class="fc" id="L52">                break; // No need to look further.</span>
             }
         }
 
-<span class="fc" id="L55">        return allZeros;</span>
+<span class="fc" id="L56">        return allZeros;</span>
+    }
+
+
+    /**
+     * Checks if a real dense matrix is symmetric. That is, if the and equal to its transpose.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return True if this matrix is symmetric
+     */
+    public static boolean isSymmetric(double[] src, Shape shape) {
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if(shape.dims[0]!=shape.dims[1]) {</span>
+<span class="nc" id="L68">            return false;</span>
+        }
+
+        int count1, count2, stop;
+
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        for(int i=0; i&lt;shape.dims[0]; i++) {</span>
+<span class="nc" id="L74">            count1 = i*shape.dims[1];</span>
+<span class="nc" id="L75">            count2 = i;</span>
+<span class="nc" id="L76">            stop = count1 + i;</span>
+
+<span class="nc bnc" id="L78" title="All 2 branches missed.">            while(count1 &lt; stop) {</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">                if(src[count1++] != src[count2]) {</span>
+<span class="nc" id="L80">                    return false;</span>
+                }
+
+<span class="nc" id="L83">                count2+=shape.dims[1];</span>
+            }
+        }
+
+<span class="nc" id="L87">        return true;</span>
+    }
+
+
+    /**
+     * Checks if a real dense matrix is anti-symmetric. That is, if the and equal to its negative transpose.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return True if this matrix is anti-symmetric
+     */
+    public static boolean isAntiSymmetric(double[] src, Shape shape) {
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        if(shape.dims[0]!=shape.dims[1]) {</span>
+<span class="nc" id="L99">            return false;</span>
+        }
+
+        int count1, count2, stop;
+
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        for(int i=0; i&lt;shape.dims[0]; i++) {</span>
+<span class="nc" id="L105">            count1 = i*shape.dims[1];</span>
+<span class="nc" id="L106">            count2 = i;</span>
+<span class="nc" id="L107">            stop = count1 + i;</span>
+
+<span class="nc bnc" id="L109" title="All 2 branches missed.">            while(count1 &lt; stop) {</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">                if(src[count1++] != -src[count2]) {</span>
+<span class="nc" id="L111">                    return false;</span>
+                }
+
+<span class="nc" id="L114">                count2+=shape.dims[1];</span>
+            }
+        }
+
+<span class="nc" id="L118">        return true;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
