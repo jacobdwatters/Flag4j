@@ -2027,6 +2027,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public boolean isSquare() {
+        // TODO: Auto-generated method stub. Need to implement.
         return false;
     }
 
@@ -2038,6 +2039,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public boolean isVector() {
+        // TODO: Auto-generated method stub. Need to implement.
         return false;
     }
 
@@ -2052,6 +2054,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public int vectorType() {
+        // TODO: Auto-generated method stub. Need to implement.
         return 0;
     }
 
@@ -2063,6 +2066,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public boolean isTri() {
+        // TODO: Auto-generated method stub. Need to implement.
         return false;
     }
 
@@ -2074,6 +2078,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public boolean isTriL() {
+        // TODO: Auto-generated method stub. Need to implement.
         return false;
     }
 
@@ -2085,6 +2090,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public boolean isTriU() {
+        // TODO: Auto-generated method stub. Need to implement.
         return false;
     }
 
@@ -2096,6 +2102,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public boolean isDiag() {
+        // TODO: Auto-generated method stub. Need to implement.
         return false;
     }
 
@@ -2107,6 +2114,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public boolean isFullRank() {
+        // TODO: Auto-generated method stub. Need to implement.
         return false;
     }
 
@@ -2119,6 +2127,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public boolean isSingular() {
+        // TODO: Auto-generated method stub. Need to implement.
         return false;
     }
 
@@ -2131,6 +2140,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public boolean isInvertible() {
+        // TODO: Auto-generated method stub. Need to implement.
         return false;
     }
 
@@ -2144,6 +2154,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public double norm(double p, double q) {
+        // TODO: Auto-generated method stub. Need to implement.
         return 0;
     }
 
@@ -2156,6 +2167,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public boolean isDiagonalizable() {
+        // TODO: Auto-generated method stub. Need to implement.
         return false;
     }
 
@@ -2167,6 +2179,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public double maxNorm() {
+        // TODO: Auto-generated method stub. Need to implement.
         return 0;
     }
 
@@ -2179,6 +2192,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public int matrixRank() {
+        // TODO: Auto-generated method stub. Need to implement.
         return 0;
     }
 
@@ -2190,6 +2204,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public boolean isSymmetric() {
+        // TODO: Auto-generated method stub. Need to implement.
         return false;
     }
 
@@ -2201,6 +2216,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public boolean isAntiSymmetric() {
+        // TODO: Auto-generated method stub. Need to implement.
         return false;
     }
 
@@ -2212,6 +2228,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public boolean isOrthogonal() {
+        // TODO: Auto-generated method stub. Need to implement.
         return false;
     }
 
@@ -2236,6 +2253,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public boolean isPos() {
+        // TODO: Auto-generated method stub. Need to implement.
         return false;
     }
 
@@ -2247,6 +2265,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public boolean isNeg() {
+        // TODO: Auto-generated method stub. Need to implement.
         return false;
     }
 
@@ -2638,6 +2657,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public double norm() {
+        // TODO: Auto-generated method stub. Need to implement.
         return 0;
     }
 
@@ -2652,6 +2672,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public double norm(double p) {
+        // TODO: Auto-generated method stub. Need to implement.
         return 0;
     }
 
@@ -2663,6 +2684,7 @@ public class Tensor extends TensorBase<double[]> implements RealMatrixMixin<Tens
      */
     @Override
     public double infNorm() {
+        // TODO: Auto-generated method stub. Need to implement.
         return 0;
     }
 }

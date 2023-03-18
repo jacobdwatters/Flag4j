@@ -77,6 +77,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; {
 <span class="fc" id="L77">    }</span>
 
 
+
     /**
      * Constructs a tensor with given shape filled with specified values.
      * @param shape Shape of the tensor.
@@ -84,12 +85,54 @@ public class Tensor extends TensorBase&lt;double[]&gt; {
      * @throws IllegalArgumentException If the shape does not match the number of entries.
      */
     public Tensor(Shape shape, int[] entries) {
-<span class="fc" id="L87">        super(shape, Arrays.stream(entries).asDoubleStream().toArray());</span>
+<span class="fc" id="L88">        super(shape, Arrays.stream(entries).asDoubleStream().toArray());</span>
 
-<span class="fc bfc" id="L89" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
-<span class="fc" id="L90">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="fc" id="L91">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
         }
-<span class="fc" id="L92">    }</span>
+<span class="fc" id="L93">    }</span>
+
+
+    /**
+     * Constructs a tensor with given shape filled with specified values.
+     * @param shape Shape of the tensor.
+     * @param entries Entries of the vector.
+     * @throws IllegalArgumentException If the shape does not match the number of entries.
+     */
+    public Tensor(Shape shape, Double[] entries) {
+<span class="nc" id="L103">        super(shape, new double[entries.length]);</span>
+
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="nc" id="L106">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+        }
+
+        // Copy entries to tensor.
+<span class="nc" id="L110">        int index = 0;</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        for(Double value : entries) {</span>
+<span class="nc" id="L112">            entries[index++] = value;</span>
+        }
+<span class="nc" id="L114">    }</span>
+
+
+    /**
+     * Constructs a tensor with given shape filled with specified values.
+     * @param shape Shape of the tensor.
+     * @param entries Entries of the vector.
+     * @throws IllegalArgumentException If the shape does not match the number of entries.
+     */
+    public Tensor(Shape shape, Integer[] entries) {
+<span class="nc" id="L124">        super(shape, new double[entries.length]);</span>
+
+<span class="nc bnc" id="L126" title="All 2 branches missed.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="nc" id="L127">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+        }
+
+        // Copy entries to tensor.
+<span class="nc" id="L131">        int index = 0;</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        for(Integer value : entries) {</span>
+<span class="nc" id="L133">            entries[index++] = value;</span>
+        }
+<span class="nc" id="L135">    }</span>
 
 
     /**
@@ -97,8 +140,8 @@ public class Tensor extends TensorBase&lt;double[]&gt; {
      * @param A tensor to copy.
      */
     public Tensor(Tensor A) {
-<span class="fc" id="L100">        super(A.shape.copy(), A.entries.clone());</span>
-<span class="fc" id="L101">    }</span>
+<span class="fc" id="L143">        super(A.shape.copy(), A.entries.clone());</span>
+<span class="fc" id="L144">    }</span>
 
 
     /**
@@ -106,8 +149,8 @@ public class Tensor extends TensorBase&lt;double[]&gt; {
      * @param A Matrix to copy to tensor.
      */
     public Tensor(Matrix A) {
-<span class="nc" id="L109">        super(A.shape.copy(), A.entries.clone());</span>
-<span class="nc" id="L110">    }</span>
+<span class="nc" id="L152">        super(A.shape.copy(), A.entries.clone());</span>
+<span class="nc" id="L153">    }</span>
 
 
     /**
@@ -115,8 +158,8 @@ public class Tensor extends TensorBase&lt;double[]&gt; {
      * @param A Vector to copy to tensor.
      */
     public Tensor(Vector A) {
-<span class="nc" id="L118">        super(A.shape.copy(), A.entries.clone());</span>
-<span class="nc" id="L119">    }</span>
+<span class="nc" id="L161">        super(A.shape.copy(), A.entries.clone());</span>
+<span class="nc" id="L162">    }</span>
 
 
     /**
@@ -131,26 +174,26 @@ public class Tensor extends TensorBase&lt;double[]&gt; {
     public boolean equals(Object object) {
         boolean equal;
 
-<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if(object instanceof Tensor) {</span>
-<span class="fc" id="L135">            Tensor mat = (Tensor) object;</span>
-<span class="fc" id="L136">            equal = RealDenseEquals.tensorEquals(this, mat);</span>
-<span class="pc bnc" id="L137" title="All 2 branches missed.">        } else if(object instanceof CTensor) {</span>
-<span class="nc" id="L138">            CTensor mat = (CTensor) object;</span>
-<span class="nc" id="L139">            equal = RealComplexDenseEquals.tensorEquals(this, mat);</span>
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        if(object instanceof Tensor) {</span>
+<span class="fc" id="L178">            Tensor tensor = (Tensor) object;</span>
+<span class="fc" id="L179">            equal = RealDenseEquals.tensorEquals(this, tensor);</span>
+<span class="pc bnc" id="L180" title="All 2 branches missed.">        } else if(object instanceof CTensor) {</span>
+<span class="nc" id="L181">            CTensor tensor = (CTensor) object;</span>
+<span class="nc" id="L182">            equal = RealComplexDenseEquals.tensorEquals(this, tensor);</span>
 
-<span class="nc bnc" id="L141" title="All 2 branches missed.">        } else if(object instanceof SparseTensor) {</span>
-<span class="nc" id="L142">            SparseTensor mat = (SparseTensor) object;</span>
-<span class="nc" id="L143">            equal = RealDenseSparseEquals.tensorEquals(this, mat);</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">        } else if(object instanceof SparseTensor) {</span>
+<span class="nc" id="L185">            SparseTensor tensor = (SparseTensor) object;</span>
+<span class="nc" id="L186">            equal = RealDenseSparseEquals.tensorEquals(this, tensor);</span>
 
-<span class="nc bnc" id="L145" title="All 2 branches missed.">        } else if(object instanceof SparseCTensor) {</span>
-<span class="nc" id="L146">            SparseCTensor mat = (SparseCTensor) object;</span>
-<span class="nc" id="L147">            equal = RealComplexDenseSparseEquals.tensorEquals(this, mat);</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        } else if(object instanceof SparseCTensor) {</span>
+<span class="nc" id="L189">            SparseCTensor tensor = (SparseCTensor) object;</span>
+<span class="nc" id="L190">            equal = RealComplexDenseSparseEquals.tensorEquals(this, tensor);</span>
 
-<span class="nc" id="L149">        } else {</span>
-<span class="nc" id="L150">            equal = false;</span>
+<span class="nc" id="L192">        } else {</span>
+<span class="nc" id="L193">            equal = false;</span>
         }
 
-<span class="fc" id="L153">        return equal;</span>
+<span class="fc" id="L196">        return equal;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
