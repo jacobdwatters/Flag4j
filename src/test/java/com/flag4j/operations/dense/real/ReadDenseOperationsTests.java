@@ -55,7 +55,7 @@ class ReadDenseOperationsTests {
         expResult = new double[]{1+a, 0.98332+a, 134.556+a,
                 -9.13+a, -100.234+a, 0.0000000004+a};
 
-        assertArrayEquals(expResult, RealDenseVectorOperations.add(src1, a));
+        assertArrayEquals(expResult, add(src1, a));
     }
 
 

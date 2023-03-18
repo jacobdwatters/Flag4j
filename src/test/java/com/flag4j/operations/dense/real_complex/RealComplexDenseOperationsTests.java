@@ -3,6 +3,7 @@ package com.flag4j.operations.dense.real_complex;
 
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.operations.common.complex.ComplexOperations;
 import org.junit.jupiter.api.Test;
 
 import static com.flag4j.operations.dense.real_complex.RealComplexDenseOperations.*;
@@ -134,6 +135,6 @@ class RealComplexDenseOperationsTests {
         aC = new CNumber(10.34, -9.331);
         expResult = new CNumber[]{aC.mult(1.1345), aC.mult(2),
                 aC.mult(-3), aC.mult(4.13)};
-        assertArrayEquals(expResult, scalMult(src2, aC));
+        assertArrayEquals(expResult, ComplexOperations.scalMult(src2, aC));
     }
 }

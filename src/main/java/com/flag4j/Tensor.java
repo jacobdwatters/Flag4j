@@ -27,11 +27,19 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealTensorMixin;
 import com.flag4j.core.TensorBase;
-import com.flag4j.operations.dense.real.RealDenseEquals;
+import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.common.real.AggregateReal;
+import com.flag4j.operations.common.real.RealOperations;
+import com.flag4j.operations.common.real.RealProperties;
+import com.flag4j.operations.dense.complex.ComplexDenseOperations;
+import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
 
@@ -172,8 +180,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public boolean isZeros() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return false;
+        return ArrayUtils.isZeros(entries);
     }
 
 
@@ -184,8 +191,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public boolean isOnes() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return false;
+        return RealDenseProperties.isOnes(entries);
     }
 
 
@@ -231,8 +237,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public boolean isPos() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return false;
+        return RealProperties.isPos(entries);
     }
 
 
@@ -243,8 +248,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public boolean isNeg() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return false;
+        return RealProperties.isNeg(entries);
     }
 
 
@@ -256,8 +260,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public CTensor toComplex() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return new CTensor(this);
     }
 
 
@@ -269,7 +272,8 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public void set(double value, int... indices) {
-        // TODO: Auto-generated method stub. Implementation needed.
+        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
+        RealDenseSetOperations.set(entries, shape, value, indices);
     }
 
 
@@ -282,8 +286,10 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Tensor add(Tensor B) {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return new Tensor(
+                shape.copy(),
+                RealDenseOperations.add(entries, shape, B.entries, B.shape)
+        );
     }
 
 
@@ -295,8 +301,10 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Tensor add(double a) {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return new Tensor(
+                shape.copy(),
+                RealDenseOperations.add(entries, a)
+        );
     }
 
 
@@ -308,8 +316,10 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public CTensor add(CNumber a) {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return new CTensor(
+                shape.copy(),
+                ComplexDenseOperations.add(entries, a)
+        );
     }
 
 
@@ -322,8 +332,10 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Tensor sub(Tensor B) {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return new Tensor(
+                shape.copy(),
+                RealDenseOperations.sub(entries, shape, B.entries, B.shape)
+        );
     }
 
 
@@ -335,8 +347,10 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Tensor sub(double a) {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return new Tensor(
+                shape.copy(),
+                RealDenseOperations.sub(entries, a)
+        );
     }
 
 
@@ -348,8 +362,10 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public CTensor sub(CNumber a) {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return new CTensor(
+                shape.copy(),
+                ComplexDenseOperations.sub(entries, a)
+        );
     }
 
 
@@ -361,7 +377,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public void addEq(Tensor B) {
-        // TODO: Auto-generated method stub. Implementation needed.
+        RealDenseOperations.addEq(entries, shape, B.entries, B.shape);
     }
 
 
@@ -372,7 +388,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public void addEq(Double b) {
-        // TODO: Auto-generated method stub. Implementation needed.
+        RealDenseOperations.addEq(entries, b);
     }
 
 
@@ -384,7 +400,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public void subEq(Tensor B) {
-        // TODO: Auto-generated method stub. Implementation needed.
+        RealDenseOperations.subEq(entries, shape, B.entries, B.shape);
     }
 
 
@@ -395,7 +411,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public void subEq(Double b) {
-        // TODO: Auto-generated method stub. Implementation needed.
+        RealDenseOperations.addEq(entries, b);
     }
 
 
@@ -407,8 +423,9 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Tensor scalMult(double factor) {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return new Tensor(shape.copy(),
+                RealOperations.scalMult(entries, factor)
+        );
     }
 
 
@@ -420,8 +437,9 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public CTensor scalMult(CNumber factor) {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return new CTensor(shape.copy(),
+                ComplexOperations.scalMult(entries, factor)
+        );
     }
 
 
@@ -434,8 +452,10 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Tensor scalDiv(double divisor) {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return new Tensor(
+                shape.copy(),
+                RealDenseOperations.scalDiv(entries, divisor)
+        );
     }
 
 
@@ -448,8 +468,9 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public CTensor scalDiv(CNumber divisor) {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return new CTensor(shape.copy(),
+                RealComplexDenseOperations.scalDiv(entries, divisor)
+        );
     }
 
 
@@ -460,8 +481,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Double sum() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return AggregateReal.sum(entries);
     }
 
 
@@ -473,8 +493,10 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Tensor sqrt() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return new Tensor(
+                shape.copy(),
+                RealOperations.sqrt(entries)
+        );
     }
 
 
@@ -486,13 +508,16 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Tensor abs() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return new Tensor(
+                shape.copy(),
+                RealOperations.abs(entries)
+        );
     }
 
 
     /**
      * Computes the transpose of a tensor. Same as {@link #T()}.
+     * In the context of a tensor, this exchanges the first and last axis of the tensor.
      *
      * @return The transpose of this tensor.
      */
@@ -505,6 +530,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
 
     /**
      * Computes the transpose of a tensor. Same as {@link #transpose()}.
+     * In the context of a tensor, this exchanges the first and last axis of the tensor.
      *
      * @return The transpose of this tensor.
      */
@@ -523,8 +549,10 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Tensor recip() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return new Tensor(
+                shape.copy(),
+                RealDenseOperations.recip(entries)
+        );
     }
 
 
@@ -537,8 +565,8 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Double get(int... indices) {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
+        return entries[shape.entriesIndex(indices)];
     }
 
 
@@ -549,8 +577,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Tensor copy() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return new Tensor(this);
     }
 
 
@@ -561,8 +588,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Double min() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return AggregateReal.min(entries);
     }
 
 
@@ -573,8 +599,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Double max() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return AggregateReal.max(entries);
     }
 
 
@@ -586,8 +611,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Double minAbs() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return AggregateReal.minAbs(entries);
     }
 
 
@@ -599,8 +623,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Double maxAbs() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return AggregateReal.maxAbs(entries);
     }
 
 
@@ -612,7 +635,11 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public int[] argMin() {
-        return new int[0];
+        if(this.entries.length==0) {
+            return new int[]{};
+        } else {
+            return shape.getIndices(AggregateDenseReal.argMin(entries));
+        }
     }
 
 
@@ -624,7 +651,11 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public int[] argMax() {
-        return new int[0];
+        if(this.entries.length==0) {
+            return new int[]{};
+        } else {
+            return shape.getIndices(AggregateDenseReal.argMax(entries));
+        }
     }
 
 

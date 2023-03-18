@@ -363,4 +363,21 @@ public final class RealDenseOperations {
 
         return maxAbs(rowSums);
     }
+
+
+    /**
+     * Adds a scalar to every element of a tensor.
+     * @param src src of tensor to add scalar to.
+     * @param b Scalar to add to tensor.
+     * @return The tensor scalar addition.
+     */
+    public static double[] add(double[] src, double b) {
+        double[] sum = new double[src.length];
+
+        for(int i=0; i<src.length; i++) {
+            sum[i] = src[i] + b;
+        }
+
+        return sum;
+    }
 }

@@ -26,6 +26,7 @@ package com.flag4j.operations.dense.complex;
 
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -95,6 +96,42 @@ public final class ComplexDenseOperations {
 
         for(int i=0; i<sum.length; i++) {
             sum[i] = src1[i].add(a);
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Adds a scalar value to all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The tensor-scalar addition of the two parameters.
+     */
+    public static CNumber[] add(double[] src1, CNumber a) {
+        CNumber[] sum = new CNumber[src1.length];
+
+        for(int i=0; i<sum.length; i++) {
+            sum[i] = a.add(src1[i]);
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Adds a scalar value to all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The tensor-scalar addition of the two parameters.
+     */
+    public static CNumber[] sub(double[] src1, CNumber a) {
+        CNumber[] sum = new CNumber[src1.length];
+        ArrayUtils.fillZeros(sum);
+
+        for(int i=0; i<sum.length; i++) {
+            sum[i].re = src1[i]-a.re;
+            sum[i].im = a.im;
         }
 
         return sum;

@@ -187,6 +187,23 @@ public class ComplexOperations {
 
 
     /**
+     * Computes the scalar multiplication of a tensor.
+     * @param entries Entries of the tensor.
+     * @param factor Scalar value to multiply.
+     * @return The scalar multiplication of the tensor.
+     */
+    public static CNumber[] scalMult(double[] entries, CNumber factor) {
+        CNumber[] product = new CNumber[entries.length];
+
+        for(int i=0; i<product.length; i++) {
+            product[i] = factor.mult(entries[i]);
+        }
+
+        return product;
+    }
+
+
+    /**
      * Computes the element-wise complex conjugate of a tensor.
      * @param src Entries of the tensor.
      * @return The element-wise complex conjugate of the tensor

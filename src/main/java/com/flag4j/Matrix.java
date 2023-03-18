@@ -32,6 +32,7 @@ import com.flag4j.operations.MatrixTranspose;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
+import com.flag4j.operations.common.real.RealProperties;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
@@ -231,8 +232,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      */
     @Override
     public boolean isPos() {
-        // TODO: Implementation
-        return false;
+        return RealProperties.isPos(entries);
     }
 
     /**
@@ -242,9 +242,9 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      */
     @Override
     public boolean isNeg() {
-        // TODO: Implementation
-        return false;
+        return RealProperties.isNeg(entries);
     }
+
 
     /**
      * Converts this matrix to an equivalent complex matrix.
@@ -1152,7 +1152,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
     @Override
     public Matrix add(double a) {
         return new Matrix(this.shape.copy(),
-                RealDenseVectorOperations.add(this.entries, a)
+                RealDenseOperations.add(this.entries, a)
         );
     }
 
@@ -1348,7 +1348,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
     @Override
     public CMatrix scalMult(CNumber factor) {
         return new CMatrix(this.shape.copy(),
-                RealComplexDenseOperations.scalMult(this.entries, factor)
+                ComplexOperations.scalMult(this.entries, factor)
         );
     }
 

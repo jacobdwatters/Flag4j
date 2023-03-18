@@ -27,6 +27,7 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
 import com.flag4j.io.PrintOptions;
+import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.dense.real.*;
@@ -286,7 +287,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Vector add(double a) {
-        return new Vector(RealDenseVectorOperations.add(this.entries, a));
+        return new Vector(RealDenseOperations.add(this.entries, a));
     }
 
 
@@ -547,7 +548,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public CVector scalMult(CNumber factor) {
-        return new CVector(RealComplexDenseOperations.scalMult(this.entries, factor));
+        return new CVector(ComplexOperations.scalMult(this.entries, factor));
     }
 
 
