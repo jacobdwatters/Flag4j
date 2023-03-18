@@ -199,7 +199,22 @@ public final class MatrixTranspose {
      * Simple enum class containing available algorithms for computing a matrix transpose.
      */
 <span class="fc" id="L201">    private enum Algorithm {</span>
-<span class="fc" id="L202">        STANDARD, BLOCKED, CONCURRENT_STANDARD, CONCURRENT_BLOCKED</span>
+        /**
+         * Standard transpose algorithm
+         */
+<span class="fc" id="L205">        STANDARD,</span>
+        /**
+         * Blocked transpose algorithm
+         */
+<span class="fc" id="L209">        BLOCKED,</span>
+        /**
+         * A concurrent implementation of the standard algorithm
+         */
+<span class="fc" id="L213">        CONCURRENT_STANDARD,</span>
+        /**
+         * A concurrent implementation of the blocked algorithm
+         */
+<span class="fc" id="L217">        CONCURRENT_BLOCKED</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

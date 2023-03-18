@@ -42,120 +42,132 @@ public class RealDenseSparseOperations {
 
     /**
      * Adds a real dense matrix to a real sparse matrix.
+     * @param src1 First matrix in sum.
+     * @param src2 Second matrix in sum.
      * @return The result of the matrix addition.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static Matrix add(Matrix src1, SparseMatrix src2) {
-<span class="fc" id="L49">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L51">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
-<span class="fc" id="L52">        Matrix dest = new Matrix(src1);</span>
+<span class="fc" id="L54">        Matrix dest = new Matrix(src1);</span>
 
-<span class="fc bfc" id="L54" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L55">            row = src2.rowIndices[i];</span>
-<span class="fc" id="L56">            col = src2.colIndices[i];</span>
-<span class="fc" id="L57">            dest.entries[row*src1.numCols + col] += src2.entries[i];</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L57">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L58">            col = src2.colIndices[i];</span>
+<span class="fc" id="L59">            dest.entries[row*src1.numCols + col] += src2.entries[i];</span>
         }
 
-<span class="fc" id="L60">        return dest;</span>
+<span class="fc" id="L62">        return dest;</span>
     }
 
 
     /**
      * Subtracts a real sparse matrix from a real dense matrix.
+     * @param src1 First matrix in difference.
+     * @param src2 Second matrix in difference.
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static Matrix sub(Matrix src1, SparseMatrix src2) {
-<span class="fc" id="L70">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L74">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
-<span class="fc" id="L73">        Matrix dest = new Matrix(src1);</span>
+<span class="fc" id="L77">        Matrix dest = new Matrix(src1);</span>
 
-<span class="fc bfc" id="L75" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L76">            row = src2.rowIndices[i];</span>
-<span class="fc" id="L77">            col = src2.colIndices[i];</span>
-<span class="fc" id="L78">            dest.entries[row*src1.numCols + col] -= src2.entries[i];</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L80">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L81">            col = src2.colIndices[i];</span>
+<span class="fc" id="L82">            dest.entries[row*src1.numCols + col] -= src2.entries[i];</span>
         }
 
-<span class="fc" id="L81">        return dest;</span>
+<span class="fc" id="L85">        return dest;</span>
     }
 
 
     /**
      * Subtracts a real sparse matrix from a real dense matrix.
+     * @param src1 Entries of first matrix in difference.
+     * @param src2 Entries of second matrix in the difference.
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static Matrix sub(SparseMatrix src2, Matrix src1) {
-<span class="nc" id="L91">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="nc" id="L97">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
-<span class="nc" id="L94">        Matrix dest = new Matrix(src1);</span>
+<span class="nc" id="L100">        Matrix dest = new Matrix(src1);</span>
 
-<span class="nc bnc" id="L96" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L97">            row = src2.rowIndices[i];</span>
-<span class="nc" id="L98">            col = src2.colIndices[i];</span>
-<span class="nc" id="L99">            dest.entries[row*src1.numCols + col] *= -1;</span>
-<span class="nc" id="L100">            dest.entries[row*src1.numCols + col] += src2.entries[i];</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L103">            row = src2.rowIndices[i];</span>
+<span class="nc" id="L104">            col = src2.colIndices[i];</span>
+<span class="nc" id="L105">            dest.entries[row*src1.numCols + col] *= -1;</span>
+<span class="nc" id="L106">            dest.entries[row*src1.numCols + col] += src2.entries[i];</span>
         }
 
-<span class="nc" id="L103">        return dest;</span>
+<span class="nc" id="L109">        return dest;</span>
     }
 
 
     /**
      * Adds a real dense matrix to a real sparse matrix and stores the result in the first matrix.
+     * @param src1 Entries of first matrix in the sum. Also, storage for the result.
+     * @param src2 Entries of second matrix in the sum.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static void addEq(Matrix src1, SparseMatrix src2) {
-<span class="fc" id="L112">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L120">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
 
-<span class="fc bfc" id="L116" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L117">            row = src2.rowIndices[i];</span>
-<span class="fc" id="L118">            col = src2.colIndices[i];</span>
-<span class="fc" id="L119">            src1.entries[row*src1.numCols + col] += src2.entries[i];</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L125">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L126">            col = src2.colIndices[i];</span>
+<span class="fc" id="L127">            src1.entries[row*src1.numCols + col] += src2.entries[i];</span>
         }
-<span class="fc" id="L121">    }</span>
+<span class="fc" id="L129">    }</span>
 
 
     /**
      * Subtracts a real sparse matrix from a real dense matrix and stores the result in the first matrix.
+     * @param src1 Entries of first matrix in difference.
+     * @param src2 Entries of second matrix in difference.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static void subEq(Matrix src1, SparseMatrix src2) {
-<span class="fc" id="L129">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L139">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
 
-<span class="fc bfc" id="L133" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L134">            row = src2.rowIndices[i];</span>
-<span class="fc" id="L135">            col = src2.colIndices[i];</span>
-<span class="fc" id="L136">            src1.entries[row*src1.numCols + col] -= src2.entries[i];</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L144">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L145">            col = src2.colIndices[i];</span>
+<span class="fc" id="L146">            src1.entries[row*src1.numCols + col] -= src2.entries[i];</span>
         }
-<span class="fc" id="L138">    }</span>
+<span class="fc" id="L148">    }</span>
 
 
     /**
      * Computes the element-wise multiplication between a real dense matrix and a real sparse matrix.
      * @return The result of element-wise multiplication.
+     * @param src1 Entries of first matrix in element-wise product.
+     * @param src2 Entries of second matrix in element-wise product.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static SparseMatrix elemMult(Matrix src1, SparseMatrix src2) {
-<span class="fc" id="L147">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L159">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int row, col;
-<span class="fc" id="L150">        double[] destEntries = new double[src2.nonZeroEntries()];</span>
+<span class="fc" id="L162">        double[] destEntries = new double[src2.nonZeroEntries()];</span>
 
-<span class="fc bfc" id="L152" title="All 2 branches covered.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
-<span class="fc" id="L153">            row = src2.rowIndices[i];</span>
-<span class="fc" id="L154">            col = src2.colIndices[i];</span>
-<span class="fc" id="L155">            destEntries[i] = src1.entries[row*src1.numCols + col]*src2.entries[i];</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
+<span class="fc" id="L165">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L166">            col = src2.colIndices[i];</span>
+<span class="fc" id="L167">            destEntries[i] = src1.entries[row*src1.numCols + col]*src2.entries[i];</span>
         }
 
-<span class="fc" id="L158">        return new SparseMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);</span>
+<span class="fc" id="L170">        return new SparseMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
