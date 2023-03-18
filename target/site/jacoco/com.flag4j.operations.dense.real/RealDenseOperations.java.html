@@ -348,20 +348,21 @@ public final class RealDenseOperations {
     /**
      * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
      * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
      * @return The infinity norm of the matrix.
      */
     public static double matrixInfNorm(double[] src, Shape shape) {
-<span class="fc" id="L354">        int rows = shape.dims[Axis2D.row()];</span>
-<span class="fc" id="L355">        int cols = shape.dims[Axis2D.col()];</span>
-<span class="fc" id="L356">        double[] rowSums = new double[rows];</span>
+<span class="fc" id="L355">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="fc" id="L356">        int cols = shape.dims[Axis2D.col()];</span>
+<span class="fc" id="L357">        double[] rowSums = new double[rows];</span>
 
-<span class="fc bfc" id="L358" title="All 2 branches covered.">        for(int i=0; i&lt;rows; i++) {</span>
-<span class="fc bfc" id="L359" title="All 2 branches covered.">            for(int j=0; j&lt;cols; j++) {</span>
-<span class="fc" id="L360">                rowSums[i] += Math.abs(src[i*cols + j]);</span>
+<span class="fc bfc" id="L359" title="All 2 branches covered.">        for(int i=0; i&lt;rows; i++) {</span>
+<span class="fc bfc" id="L360" title="All 2 branches covered.">            for(int j=0; j&lt;cols; j++) {</span>
+<span class="fc" id="L361">                rowSums[i] += Math.abs(src[i*cols + j]);</span>
             }
         }
 
-<span class="fc" id="L364">        return maxAbs(rowSums);</span>
+<span class="fc" id="L365">        return maxAbs(rowSums);</span>
     }
 
 
@@ -372,13 +373,13 @@ public final class RealDenseOperations {
      * @return The tensor scalar addition.
      */
     public static double[] add(double[] src, double b) {
-<span class="fc" id="L375">        double[] sum = new double[src.length];</span>
+<span class="fc" id="L376">        double[] sum = new double[src.length];</span>
 
-<span class="fc bfc" id="L377" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc" id="L378">            sum[i] = src[i] + b;</span>
+<span class="fc bfc" id="L378" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L379">            sum[i] = src[i] + b;</span>
         }
 
-<span class="fc" id="L381">        return sum;</span>
+<span class="fc" id="L382">        return sum;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

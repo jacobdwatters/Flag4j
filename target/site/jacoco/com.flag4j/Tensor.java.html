@@ -88,7 +88,6 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
 <span class="fc" id="L88">    }</span>
 
 
-
     /**
      * Constructs a tensor with given shape filled with specified values.
      * @param shape Shape of the tensor.
@@ -96,12 +95,12 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      * @throws IllegalArgumentException If the shape does not match the number of entries.
      */
     public Tensor(Shape shape, int[] entries) {
-<span class="fc" id="L99">        super(shape, Arrays.stream(entries).asDoubleStream().toArray());</span>
+<span class="fc" id="L98">        super(shape, Arrays.stream(entries).asDoubleStream().toArray());</span>
 
-<span class="fc bfc" id="L101" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
-<span class="fc" id="L102">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="fc" id="L101">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
         }
-<span class="fc" id="L104">    }</span>
+<span class="fc" id="L103">    }</span>
 
 
     /**
@@ -111,18 +110,18 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      * @throws IllegalArgumentException If the shape does not match the number of entries.
      */
     public Tensor(Shape shape, Double[] entries) {
-<span class="nc" id="L114">        super(shape, new double[entries.length]);</span>
+<span class="nc" id="L113">        super(shape, new double[entries.length]);</span>
 
-<span class="nc bnc" id="L116" title="All 2 branches missed.">        if(entries.length != super.totalEntries().intValue()) {</span>
-<span class="nc" id="L117">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="nc" id="L116">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
         }
 
         // Copy entries to tensor.
-<span class="nc" id="L121">        int index = 0;</span>
-<span class="nc bnc" id="L122" title="All 2 branches missed.">        for(Double value : entries) {</span>
-<span class="nc" id="L123">            entries[index++] = value;</span>
+<span class="nc" id="L120">        int index = 0;</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        for(Double value : entries) {</span>
+<span class="nc" id="L122">            entries[index++] = value;</span>
         }
-<span class="nc" id="L125">    }</span>
+<span class="nc" id="L124">    }</span>
 
 
     /**
@@ -132,18 +131,18 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      * @throws IllegalArgumentException If the shape does not match the number of entries.
      */
     public Tensor(Shape shape, Integer[] entries) {
-<span class="nc" id="L135">        super(shape, new double[entries.length]);</span>
+<span class="nc" id="L134">        super(shape, new double[entries.length]);</span>
 
-<span class="nc bnc" id="L137" title="All 2 branches missed.">        if(entries.length != super.totalEntries().intValue()) {</span>
-<span class="nc" id="L138">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="nc" id="L137">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
         }
 
         // Copy entries to tensor.
-<span class="nc" id="L142">        int index = 0;</span>
-<span class="nc bnc" id="L143" title="All 2 branches missed.">        for(Integer value : entries) {</span>
-<span class="nc" id="L144">            entries[index++] = value;</span>
+<span class="nc" id="L141">        int index = 0;</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        for(Integer value : entries) {</span>
+<span class="nc" id="L143">            entries[index++] = value;</span>
         }
-<span class="nc" id="L146">    }</span>
+<span class="nc" id="L145">    }</span>
 
 
     /**
@@ -151,8 +150,8 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      * @param A tensor to copy.
      */
     public Tensor(Tensor A) {
-<span class="fc" id="L154">        super(A.shape.copy(), A.entries.clone());</span>
-<span class="fc" id="L155">    }</span>
+<span class="fc" id="L153">        super(A.shape.copy(), A.entries.clone());</span>
+<span class="fc" id="L154">    }</span>
 
 
     /**
@@ -160,8 +159,8 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      * @param A Matrix to copy to tensor.
      */
     public Tensor(Matrix A) {
-<span class="nc" id="L163">        super(A.shape.copy(), A.entries.clone());</span>
-<span class="nc" id="L164">    }</span>
+<span class="nc" id="L162">        super(A.shape.copy(), A.entries.clone());</span>
+<span class="nc" id="L163">    }</span>
 
 
     /**
@@ -169,8 +168,8 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      * @param A Vector to copy to tensor.
      */
     public Tensor(Vector A) {
-<span class="nc" id="L172">        super(A.shape.copy(), A.entries.clone());</span>
-<span class="nc" id="L173">    }</span>
+<span class="nc" id="L171">        super(A.shape.copy(), A.entries.clone());</span>
+<span class="nc" id="L172">    }</span>
 
 
     /**
@@ -180,7 +179,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public boolean isZeros() {
-<span class="nc" id="L183">        return ArrayUtils.isZeros(entries);</span>
+<span class="nc" id="L182">        return ArrayUtils.isZeros(entries);</span>
     }
 
 
@@ -191,7 +190,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public boolean isOnes() {
-<span class="nc" id="L194">        return RealDenseProperties.isOnes(entries);</span>
+<span class="nc" id="L193">        return RealDenseProperties.isOnes(entries);</span>
     }
 
 
@@ -207,26 +206,26 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
     public boolean equals(Object object) {
         boolean equal;
 
-<span class="pc bpc" id="L210" title="1 of 2 branches missed.">        if(object instanceof Tensor) {</span>
-<span class="fc" id="L211">            Tensor tensor = (Tensor) object;</span>
-<span class="fc" id="L212">            equal = RealDenseEquals.tensorEquals(this, tensor);</span>
-<span class="pc bnc" id="L213" title="All 2 branches missed.">        } else if(object instanceof CTensor) {</span>
-<span class="nc" id="L214">            CTensor tensor = (CTensor) object;</span>
-<span class="nc" id="L215">            equal = RealComplexDenseEquals.tensorEquals(this, tensor);</span>
+<span class="pc bpc" id="L209" title="1 of 2 branches missed.">        if(object instanceof Tensor) {</span>
+<span class="fc" id="L210">            Tensor tensor = (Tensor) object;</span>
+<span class="fc" id="L211">            equal = RealDenseEquals.tensorEquals(this, tensor);</span>
+<span class="pc bnc" id="L212" title="All 2 branches missed.">        } else if(object instanceof CTensor) {</span>
+<span class="nc" id="L213">            CTensor tensor = (CTensor) object;</span>
+<span class="nc" id="L214">            equal = RealComplexDenseEquals.tensorEquals(this, tensor);</span>
 
-<span class="nc bnc" id="L217" title="All 2 branches missed.">        } else if(object instanceof SparseTensor) {</span>
-<span class="nc" id="L218">            SparseTensor tensor = (SparseTensor) object;</span>
-<span class="nc" id="L219">            equal = RealDenseSparseEquals.tensorEquals(this, tensor);</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">        } else if(object instanceof SparseTensor) {</span>
+<span class="nc" id="L217">            SparseTensor tensor = (SparseTensor) object;</span>
+<span class="nc" id="L218">            equal = RealDenseSparseEquals.tensorEquals(this, tensor);</span>
 
-<span class="nc bnc" id="L221" title="All 2 branches missed.">        } else if(object instanceof SparseCTensor) {</span>
-<span class="nc" id="L222">            SparseCTensor tensor = (SparseCTensor) object;</span>
-<span class="nc" id="L223">            equal = RealComplexDenseSparseEquals.tensorEquals(this, tensor);</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">        } else if(object instanceof SparseCTensor) {</span>
+<span class="nc" id="L221">            SparseCTensor tensor = (SparseCTensor) object;</span>
+<span class="nc" id="L222">            equal = RealComplexDenseSparseEquals.tensorEquals(this, tensor);</span>
 
-<span class="nc" id="L225">        } else {</span>
-<span class="nc" id="L226">            equal = false;</span>
+<span class="nc" id="L224">        } else {</span>
+<span class="nc" id="L225">            equal = false;</span>
         }
 
-<span class="fc" id="L229">        return equal;</span>
+<span class="fc" id="L228">        return equal;</span>
     }
 
 
@@ -237,7 +236,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public boolean isPos() {
-<span class="nc" id="L240">        return RealProperties.isPos(entries);</span>
+<span class="nc" id="L239">        return RealProperties.isPos(entries);</span>
     }
 
 
@@ -248,7 +247,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public boolean isNeg() {
-<span class="nc" id="L251">        return RealProperties.isNeg(entries);</span>
+<span class="nc" id="L250">        return RealProperties.isNeg(entries);</span>
     }
 
 
@@ -260,7 +259,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public CTensor toComplex() {
-<span class="nc" id="L263">        return new CTensor(this);</span>
+<span class="nc" id="L262">        return new CTensor(this);</span>
     }
 
 
@@ -272,9 +271,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public void set(double value, int... indices) {
-<span class="nc" id="L275">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
-<span class="nc" id="L276">        RealDenseSetOperations.set(entries, shape, value, indices);</span>
-<span class="nc" id="L277">    }</span>
+<span class="nc" id="L274">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
+<span class="nc" id="L275">        RealDenseSetOperations.set(entries, shape, value, indices);</span>
+<span class="nc" id="L276">    }</span>
 
 
     /**
@@ -286,9 +285,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Tensor add(Tensor B) {
-<span class="nc" id="L289">        return new Tensor(</span>
-<span class="nc" id="L290">                shape.copy(),</span>
-<span class="nc" id="L291">                RealDenseOperations.add(entries, shape, B.entries, B.shape)</span>
+<span class="nc" id="L288">        return new Tensor(</span>
+<span class="nc" id="L289">                shape.copy(),</span>
+<span class="nc" id="L290">                RealDenseOperations.add(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -301,9 +300,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Tensor add(double a) {
-<span class="nc" id="L304">        return new Tensor(</span>
-<span class="nc" id="L305">                shape.copy(),</span>
-<span class="nc" id="L306">                RealDenseOperations.add(entries, a)</span>
+<span class="nc" id="L303">        return new Tensor(</span>
+<span class="nc" id="L304">                shape.copy(),</span>
+<span class="nc" id="L305">                RealDenseOperations.add(entries, a)</span>
         );
     }
 
@@ -316,9 +315,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public CTensor add(CNumber a) {
-<span class="nc" id="L319">        return new CTensor(</span>
-<span class="nc" id="L320">                shape.copy(),</span>
-<span class="nc" id="L321">                ComplexDenseOperations.add(entries, a)</span>
+<span class="nc" id="L318">        return new CTensor(</span>
+<span class="nc" id="L319">                shape.copy(),</span>
+<span class="nc" id="L320">                ComplexDenseOperations.add(entries, a)</span>
         );
     }
 
@@ -332,9 +331,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Tensor sub(Tensor B) {
-<span class="nc" id="L335">        return new Tensor(</span>
-<span class="nc" id="L336">                shape.copy(),</span>
-<span class="nc" id="L337">                RealDenseOperations.sub(entries, shape, B.entries, B.shape)</span>
+<span class="nc" id="L334">        return new Tensor(</span>
+<span class="nc" id="L335">                shape.copy(),</span>
+<span class="nc" id="L336">                RealDenseOperations.sub(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -347,9 +346,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Tensor sub(double a) {
-<span class="nc" id="L350">        return new Tensor(</span>
-<span class="nc" id="L351">                shape.copy(),</span>
-<span class="nc" id="L352">                RealDenseOperations.sub(entries, a)</span>
+<span class="nc" id="L349">        return new Tensor(</span>
+<span class="nc" id="L350">                shape.copy(),</span>
+<span class="nc" id="L351">                RealDenseOperations.sub(entries, a)</span>
         );
     }
 
@@ -362,9 +361,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public CTensor sub(CNumber a) {
-<span class="nc" id="L365">        return new CTensor(</span>
-<span class="nc" id="L366">                shape.copy(),</span>
-<span class="nc" id="L367">                ComplexDenseOperations.sub(entries, a)</span>
+<span class="nc" id="L364">        return new CTensor(</span>
+<span class="nc" id="L365">                shape.copy(),</span>
+<span class="nc" id="L366">                ComplexDenseOperations.sub(entries, a)</span>
         );
     }
 
@@ -377,8 +376,8 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public void addEq(Tensor B) {
-<span class="nc" id="L380">        RealDenseOperations.addEq(entries, shape, B.entries, B.shape);</span>
-<span class="nc" id="L381">    }</span>
+<span class="nc" id="L379">        RealDenseOperations.addEq(entries, shape, B.entries, B.shape);</span>
+<span class="nc" id="L380">    }</span>
 
 
     /**
@@ -388,8 +387,8 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public void addEq(Double b) {
-<span class="nc" id="L391">        RealDenseOperations.addEq(entries, b);</span>
-<span class="nc" id="L392">    }</span>
+<span class="nc" id="L390">        RealDenseOperations.addEq(entries, b);</span>
+<span class="nc" id="L391">    }</span>
 
 
     /**
@@ -400,8 +399,8 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public void subEq(Tensor B) {
-<span class="nc" id="L403">        RealDenseOperations.subEq(entries, shape, B.entries, B.shape);</span>
-<span class="nc" id="L404">    }</span>
+<span class="nc" id="L402">        RealDenseOperations.subEq(entries, shape, B.entries, B.shape);</span>
+<span class="nc" id="L403">    }</span>
 
 
     /**
@@ -411,8 +410,8 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public void subEq(Double b) {
-<span class="nc" id="L414">        RealDenseOperations.addEq(entries, b);</span>
-<span class="nc" id="L415">    }</span>
+<span class="nc" id="L413">        RealDenseOperations.addEq(entries, b);</span>
+<span class="nc" id="L414">    }</span>
 
 
     /**
@@ -423,8 +422,8 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Tensor scalMult(double factor) {
-<span class="nc" id="L426">        return new Tensor(shape.copy(),</span>
-<span class="nc" id="L427">                RealOperations.scalMult(entries, factor)</span>
+<span class="nc" id="L425">        return new Tensor(shape.copy(),</span>
+<span class="nc" id="L426">                RealOperations.scalMult(entries, factor)</span>
         );
     }
 
@@ -437,8 +436,8 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public CTensor scalMult(CNumber factor) {
-<span class="nc" id="L440">        return new CTensor(shape.copy(),</span>
-<span class="nc" id="L441">                ComplexOperations.scalMult(entries, factor)</span>
+<span class="nc" id="L439">        return new CTensor(shape.copy(),</span>
+<span class="nc" id="L440">                ComplexOperations.scalMult(entries, factor)</span>
         );
     }
 
@@ -452,9 +451,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Tensor scalDiv(double divisor) {
-<span class="nc" id="L455">        return new Tensor(</span>
-<span class="nc" id="L456">                shape.copy(),</span>
-<span class="nc" id="L457">                RealDenseOperations.scalDiv(entries, divisor)</span>
+<span class="nc" id="L454">        return new Tensor(</span>
+<span class="nc" id="L455">                shape.copy(),</span>
+<span class="nc" id="L456">                RealDenseOperations.scalDiv(entries, divisor)</span>
         );
     }
 
@@ -468,8 +467,8 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public CTensor scalDiv(CNumber divisor) {
-<span class="nc" id="L471">        return new CTensor(shape.copy(),</span>
-<span class="nc" id="L472">                RealComplexDenseOperations.scalDiv(entries, divisor)</span>
+<span class="nc" id="L470">        return new CTensor(shape.copy(),</span>
+<span class="nc" id="L471">                RealComplexDenseOperations.scalDiv(entries, divisor)</span>
         );
     }
 
@@ -481,7 +480,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Double sum() {
-<span class="nc" id="L484">        return AggregateReal.sum(entries);</span>
+<span class="nc" id="L483">        return AggregateReal.sum(entries);</span>
     }
 
 
@@ -493,9 +492,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Tensor sqrt() {
-<span class="nc" id="L496">        return new Tensor(</span>
-<span class="nc" id="L497">                shape.copy(),</span>
-<span class="nc" id="L498">                RealOperations.sqrt(entries)</span>
+<span class="nc" id="L495">        return new Tensor(</span>
+<span class="nc" id="L496">                shape.copy(),</span>
+<span class="nc" id="L497">                RealOperations.sqrt(entries)</span>
         );
     }
 
@@ -508,9 +507,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Tensor abs() {
-<span class="nc" id="L511">        return new Tensor(</span>
-<span class="nc" id="L512">                shape.copy(),</span>
-<span class="nc" id="L513">                RealOperations.abs(entries)</span>
+<span class="nc" id="L510">        return new Tensor(</span>
+<span class="nc" id="L511">                shape.copy(),</span>
+<span class="nc" id="L512">                RealOperations.abs(entries)</span>
         );
     }
 
@@ -518,26 +517,62 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
     /**
      * Computes the transpose of a tensor. Same as {@link #T()}.
      * In the context of a tensor, this exchanges the first and last axis of the tensor.
+     * Also see {@link #transpose(int, int)} and {@link #T(int, int)}.
      *
      * @return The transpose of this tensor.
      */
     @Override
     public Tensor transpose() {
-        // TODO: Auto-generated method stub. Implementation needed.
-<span class="nc" id="L527">        return null;</span>
+<span class="nc" id="L526">        return T();</span>
     }
 
 
     /**
      * Computes the transpose of a tensor. Same as {@link #transpose()}.
      * In the context of a tensor, this exchanges the first and last axis of the tensor.
+     * Also see {@link #transpose(int, int)} and {@link #T(int, int)}.
      *
      * @return The transpose of this tensor.
      */
     @Override
     public Tensor T() {
-        // TODO: Auto-generated method stub. Implementation needed.
-<span class="nc" id="L540">        return null;</span>
+        // TODO: Add dispatch method to choose between concurrent and standard algorithms.
+<span class="nc" id="L540">        return new Tensor(</span>
+<span class="nc" id="L541">                shape.copy().swapAxes(0, shape.getRank()-1),</span>
+<span class="nc" id="L542">                RealDenseTranspose.standardConcurrent(entries, shape, 0, shape.getRank()-1)</span>
+        );
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #T(int, int)}.
+     * In the context of a tensor, this exchanges the specified axes.
+     * Also see {@link #transpose()} and {@link #T()} to exchange first and last axes.
+     *
+     * @param axis1 First axis to exchange.
+     * @param axis2 Second axis to exchange.
+     * @return The transpose of this tensor.
+     */
+    public Tensor transpose(int axis1, int axis2) {
+<span class="nc" id="L557">        return T(axis1, axis2);</span>
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #transpose(int, int)}.
+     * In the context of a tensor, this exchanges the specified axes.
+     * Also see {@link #transpose()} and {@link #T()} to exchange first and last axes.
+     *
+     * @param axis1 First axis to exchange.
+     * @param axis2 Second axis to exchange.
+     * @return The transpose of this tensor.
+     */
+    public Tensor T(int axis1, int axis2) {
+        // TODO: Add dispatch method to choose between concurrent and standard algorithms.
+<span class="nc" id="L572">        return new Tensor(</span>
+<span class="nc" id="L573">                shape.copy().swapAxes(0, shape.getRank()-1),</span>
+<span class="nc" id="L574">                RealDenseTranspose.standardConcurrent(entries, shape, axis1, axis2)</span>
+        );
     }
 
 
@@ -549,9 +584,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Tensor recip() {
-<span class="nc" id="L552">        return new Tensor(</span>
-<span class="nc" id="L553">                shape.copy(),</span>
-<span class="nc" id="L554">                RealDenseOperations.recip(entries)</span>
+<span class="nc" id="L587">        return new Tensor(</span>
+<span class="nc" id="L588">                shape.copy(),</span>
+<span class="nc" id="L589">                RealDenseOperations.recip(entries)</span>
         );
     }
 
@@ -565,8 +600,8 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Double get(int... indices) {
-<span class="nc" id="L568">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
-<span class="nc" id="L569">        return entries[shape.entriesIndex(indices)];</span>
+<span class="nc" id="L603">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
+<span class="nc" id="L604">        return entries[shape.entriesIndex(indices)];</span>
     }
 
 
@@ -577,7 +612,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Tensor copy() {
-<span class="nc" id="L580">        return new Tensor(this);</span>
+<span class="nc" id="L615">        return new Tensor(this);</span>
     }
 
 
@@ -588,7 +623,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Double min() {
-<span class="nc" id="L591">        return AggregateReal.min(entries);</span>
+<span class="nc" id="L626">        return AggregateReal.min(entries);</span>
     }
 
 
@@ -599,7 +634,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Double max() {
-<span class="nc" id="L602">        return AggregateReal.max(entries);</span>
+<span class="nc" id="L637">        return AggregateReal.max(entries);</span>
     }
 
 
@@ -611,7 +646,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Double minAbs() {
-<span class="nc" id="L614">        return AggregateReal.minAbs(entries);</span>
+<span class="nc" id="L649">        return AggregateReal.minAbs(entries);</span>
     }
 
 
@@ -623,7 +658,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public Double maxAbs() {
-<span class="nc" id="L626">        return AggregateReal.maxAbs(entries);</span>
+<span class="nc" id="L661">        return AggregateReal.maxAbs(entries);</span>
     }
 
 
@@ -635,10 +670,10 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public int[] argMin() {
-<span class="nc bnc" id="L638" title="All 2 branches missed.">        if(this.entries.length==0) {</span>
-<span class="nc" id="L639">            return new int[]{};</span>
+<span class="nc bnc" id="L673" title="All 2 branches missed.">        if(this.entries.length==0) {</span>
+<span class="nc" id="L674">            return new int[]{};</span>
         } else {
-<span class="nc" id="L641">            return shape.getIndices(AggregateDenseReal.argMin(entries));</span>
+<span class="nc" id="L676">            return shape.getIndices(AggregateDenseReal.argMin(entries));</span>
         }
     }
 
@@ -651,10 +686,10 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      */
     @Override
     public int[] argMax() {
-<span class="nc bnc" id="L654" title="All 2 branches missed.">        if(this.entries.length==0) {</span>
-<span class="nc" id="L655">            return new int[]{};</span>
+<span class="nc bnc" id="L689" title="All 2 branches missed.">        if(this.entries.length==0) {</span>
+<span class="nc" id="L690">            return new int[]{};</span>
         } else {
-<span class="nc" id="L657">            return shape.getIndices(AggregateDenseReal.argMax(entries));</span>
+<span class="nc" id="L692">            return shape.getIndices(AggregateDenseReal.argMax(entries));</span>
         }
     }
 
@@ -667,7 +702,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
     @Override
     public double norm() {
         // TODO: Auto-generated method stub. Implementation needed.
-<span class="nc" id="L670">        return 0;</span>
+<span class="nc" id="L705">        return 0;</span>
     }
 
 
@@ -682,7 +717,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
     @Override
     public double norm(double p) {
         // TODO: Auto-generated method stub. Implementation needed.
-<span class="nc" id="L685">        return 0;</span>
+<span class="nc" id="L720">        return 0;</span>
     }
 
 
@@ -694,7 +729,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
     @Override
     public double infNorm() {
         // TODO: Auto-generated method stub. Implementation needed.
-<span class="nc" id="L697">        return 0;</span>
+<span class="nc" id="L732">        return 0;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

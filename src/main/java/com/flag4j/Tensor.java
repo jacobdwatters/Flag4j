@@ -553,7 +553,6 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      * @param axis2 Second axis to exchange.
      * @return The transpose of this tensor.
      */
-    @Override
     public Tensor transpose(int axis1, int axis2) {
         return T(axis1, axis2);
     }
@@ -568,7 +567,6 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      * @param axis2 Second axis to exchange.
      * @return The transpose of this tensor.
      */
-    @Override
     public Tensor T(int axis1, int axis2) {
         // TODO: Add dispatch method to choose between concurrent and standard algorithms.
         return new Tensor(
