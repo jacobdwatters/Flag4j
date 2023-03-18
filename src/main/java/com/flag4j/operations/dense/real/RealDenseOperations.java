@@ -348,6 +348,7 @@ public final class RealDenseOperations {
     /**
      * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
      * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
      * @return The infinity norm of the matrix.
      */
     public static double matrixInfNorm(double[] src, Shape shape) {

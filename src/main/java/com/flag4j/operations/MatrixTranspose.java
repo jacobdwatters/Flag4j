@@ -199,6 +199,21 @@ public final class MatrixTranspose {
      * Simple enum class containing available algorithms for computing a matrix transpose.
      */
     private enum Algorithm {
-        STANDARD, BLOCKED, CONCURRENT_STANDARD, CONCURRENT_BLOCKED
+        /**
+         * Standard transpose algorithm
+         */
+        STANDARD,
+        /**
+         * Blocked transpose algorithm
+         */
+        BLOCKED,
+        /**
+         * A concurrent implementation of the standard algorithm
+         */
+        CONCURRENT_STANDARD,
+        /**
+         * A concurrent implementation of the blocked algorithm
+         */
+        CONCURRENT_BLOCKED
     }
 }

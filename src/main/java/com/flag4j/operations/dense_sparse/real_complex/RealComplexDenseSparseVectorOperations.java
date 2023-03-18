@@ -98,6 +98,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @param src1 Entries of the dense vector.
      * @param src2 Non-zero entries of the sparse vector.
      * @param indices Indices of non-zero entries of sparse vector.
+     * @param sparseSize Full size of the sparse vector including zero entries.
      * @return The matrix resulting from the vector outer product.
      */
     public static CNumber[] outerProduct(double[] src1, CNumber[] src2, int[] indices, int sparseSize) {
@@ -122,6 +123,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @param src1 Entries of the dense vector.
      * @param src2 Non-zero entries of the sparse vector.
      * @param indices Indices of non-zero entries of sparse vector.
+     * @param sparseSize Full size of the sparse vector including zero entries.
      * @return The matrix resulting from the vector outer product.
      */
     public static CNumber[] outerProduct(CNumber[] src1, double[] src2, int[] indices, int sparseSize) {

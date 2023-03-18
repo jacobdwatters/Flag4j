@@ -131,4 +131,26 @@ public abstract class TensorBase<T> implements Serializable {
 
         return A.shape.dims[axis]==B.shape.dims[axis];
     }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #T(int, int)}.
+     * In the context of a tensor, this exchanges the specified axes.
+     *
+     * @param axis1 First axis to exchange.
+     * @param axis2 Second axis to exchange.
+     * @return The transpose of this tensor.
+     */
+    public abstract TensorBase<T> transpose(int axis1, int axis2);
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #transpose(int, int)}.
+     * In the context of a tensor, this exchanges the specified axes.
+     *
+     * @param axis1 First axis to exchange.
+     * @param axis2 Second axis to exchange.
+     * @return The transpose of this tensor.
+     */
+    public abstract TensorBase<T> T(int axis1, int axis2);
 }

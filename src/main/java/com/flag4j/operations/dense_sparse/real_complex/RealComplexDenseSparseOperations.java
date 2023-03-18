@@ -161,6 +161,8 @@ public class RealComplexDenseSparseOperations {
 
     /**
      * Adds a complex dense matrix to a real sparse matrix and stores the result in the first matrix.
+     * @param src1 Entries of first matrix in the sum. Also, the storage for the result.
+     * @param src2 Entries of second matrix in the sum.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static void addEq(CMatrix src1, SparseMatrix src2) {
@@ -178,6 +180,8 @@ public class RealComplexDenseSparseOperations {
 
     /**
      * Subtracts a real sparse matrix from a complex dense matrix and stores the result in the first matrix.
+     * @param src1 Entries of first matrix in the sum. Also, the storage for the result.
+     * @param src2 Entries of second matrix in the sum.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static void subEq(CMatrix src1, SparseMatrix src2) {

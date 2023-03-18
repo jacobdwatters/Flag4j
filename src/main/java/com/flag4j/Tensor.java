@@ -88,7 +88,6 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
     }
 
 
-
     /**
      * Constructs a tensor with given shape filled with specified values.
      * @param shape Shape of the tensor.
@@ -518,26 +517,64 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
     /**
      * Computes the transpose of a tensor. Same as {@link #T()}.
      * In the context of a tensor, this exchanges the first and last axis of the tensor.
+     * Also see {@link #transpose(int, int)} and {@link #T(int, int)}.
      *
      * @return The transpose of this tensor.
      */
     @Override
     public Tensor transpose() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        return T();
     }
 
 
     /**
      * Computes the transpose of a tensor. Same as {@link #transpose()}.
      * In the context of a tensor, this exchanges the first and last axis of the tensor.
+     * Also see {@link #transpose(int, int)} and {@link #T(int, int)}.
      *
      * @return The transpose of this tensor.
      */
     @Override
     public Tensor T() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return null;
+        // TODO: Add dispatch method to choose between concurrent and standard algorithms.
+        return new Tensor(
+                shape.copy().swapAxes(0, shape.getRank()-1),
+                RealDenseTranspose.standardConcurrent(entries, shape, 0, shape.getRank()-1)
+        );
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #T(int, int)}.
+     * In the context of a tensor, this exchanges the specified axes.
+     * Also see {@link #transpose()} and {@link #T()} to exchange first and last axes.
+     *
+     * @param axis1 First axis to exchange.
+     * @param axis2 Second axis to exchange.
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public Tensor transpose(int axis1, int axis2) {
+        return T(axis1, axis2);
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #transpose(int, int)}.
+     * In the context of a tensor, this exchanges the specified axes.
+     * Also see {@link #transpose()} and {@link #T()} to exchange first and last axes.
+     *
+     * @param axis1 First axis to exchange.
+     * @param axis2 Second axis to exchange.
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public Tensor T(int axis1, int axis2) {
+        // TODO: Add dispatch method to choose between concurrent and standard algorithms.
+        return new Tensor(
+                shape.copy().swapAxes(0, shape.getRank()-1),
+                RealDenseTranspose.standardConcurrent(entries, shape, axis1, axis2)
+        );
     }
 
 

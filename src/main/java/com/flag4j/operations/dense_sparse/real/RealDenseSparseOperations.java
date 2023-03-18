@@ -42,6 +42,8 @@ public class RealDenseSparseOperations {
 
     /**
      * Adds a real dense matrix to a real sparse matrix.
+     * @param src1 First matrix in sum.
+     * @param src2 Second matrix in sum.
      * @return The result of the matrix addition.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
@@ -63,6 +65,8 @@ public class RealDenseSparseOperations {
 
     /**
      * Subtracts a real sparse matrix from a real dense matrix.
+     * @param src1 First matrix in difference.
+     * @param src2 Second matrix in difference.
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
@@ -84,6 +88,8 @@ public class RealDenseSparseOperations {
 
     /**
      * Subtracts a real sparse matrix from a real dense matrix.
+     * @param src1 Entries of first matrix in difference.
+     * @param src2 Entries of second matrix in the difference.
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
@@ -106,6 +112,8 @@ public class RealDenseSparseOperations {
 
     /**
      * Adds a real dense matrix to a real sparse matrix and stores the result in the first matrix.
+     * @param src1 Entries of first matrix in the sum. Also, storage for the result.
+     * @param src2 Entries of second matrix in the sum.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static void addEq(Matrix src1, SparseMatrix src2) {
@@ -123,6 +131,8 @@ public class RealDenseSparseOperations {
 
     /**
      * Subtracts a real sparse matrix from a real dense matrix and stores the result in the first matrix.
+     * @param src1 Entries of first matrix in difference.
+     * @param src2 Entries of second matrix in difference.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static void subEq(Matrix src1, SparseMatrix src2) {
@@ -141,6 +151,8 @@ public class RealDenseSparseOperations {
     /**
      * Computes the element-wise multiplication between a real dense matrix and a real sparse matrix.
      * @return The result of element-wise multiplication.
+     * @param src1 Entries of first matrix in element-wise product.
+     * @param src2 Entries of second matrix in element-wise product.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
     public static SparseMatrix elemMult(Matrix src1, SparseMatrix src2) {

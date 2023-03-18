@@ -72,6 +72,7 @@ public class RealDenseSparseVectorOperations {
      * @param src1 Entries of the dense vector.
      * @param src2 Non-zero entries of the sparse vector.
      * @param indices Indices of non-zero entries of sparse vector.
+     * @param sparseSize Full size of the sparse vector including zero entries.
      * @return The matrix resulting from the vector outer product.
      */
     public static double[] outerProduct(double[] src1, double[] src2, int[] indices, int sparseSize) {
@@ -162,6 +163,8 @@ public class RealDenseSparseVectorOperations {
     /**
      * Adds a real dense vector to a real sparse vector.
      * @return The result of the vector addition.
+     * @param src1 Entries of first vector in the sum.
+     * @param src2 Entries of second vector in the sum.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static Vector add(Vector src1, SparseVector src2) {
