@@ -110,18 +110,18 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      * @throws IllegalArgumentException If the shape does not match the number of entries.
      */
     public Tensor(Shape shape, Double[] entries) {
-<span class="nc" id="L113">        super(shape, new double[entries.length]);</span>
+<span class="fc" id="L113">        super(shape, new double[entries.length]);</span>
 
-<span class="nc bnc" id="L115" title="All 2 branches missed.">        if(entries.length != super.totalEntries().intValue()) {</span>
-<span class="nc" id="L116">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="fc" id="L116">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
         }
 
         // Copy entries to tensor.
-<span class="nc" id="L120">        int index = 0;</span>
-<span class="nc bnc" id="L121" title="All 2 branches missed.">        for(Double value : entries) {</span>
-<span class="nc" id="L122">            entries[index++] = value;</span>
+<span class="fc" id="L120">        int index = 0;</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        for(Double value : entries) {</span>
+<span class="fc" id="L122">            super.entries[index++] = value;</span>
         }
-<span class="nc" id="L124">    }</span>
+<span class="fc" id="L124">    }</span>
 
 
     /**
@@ -131,18 +131,18 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements RealTensorMixi
      * @throws IllegalArgumentException If the shape does not match the number of entries.
      */
     public Tensor(Shape shape, Integer[] entries) {
-<span class="nc" id="L134">        super(shape, new double[entries.length]);</span>
+<span class="fc" id="L134">        super(shape, new double[entries.length]);</span>
 
-<span class="nc bnc" id="L136" title="All 2 branches missed.">        if(entries.length != super.totalEntries().intValue()) {</span>
-<span class="nc" id="L137">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="fc" id="L137">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
         }
 
         // Copy entries to tensor.
-<span class="nc" id="L141">        int index = 0;</span>
-<span class="nc bnc" id="L142" title="All 2 branches missed.">        for(Integer value : entries) {</span>
-<span class="nc" id="L143">            entries[index++] = value;</span>
+<span class="fc" id="L141">        int index = 0;</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        for(Integer value : entries) {</span>
+<span class="fc" id="L143">            super.entries[index++] = value;</span>
         }
-<span class="nc" id="L145">    }</span>
+<span class="fc" id="L145">    }</span>
 
 
     /**

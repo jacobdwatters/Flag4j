@@ -119,7 +119,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
         // Copy entries to tensor.
         int index = 0;
         for(Double value : entries) {
-            entries[index++] = value;
+            super.entries[index++] = value;
         }
     }
 
@@ -140,7 +140,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
         // Copy entries to tensor.
         int index = 0;
         for(Integer value : entries) {
-            entries[index++] = value;
+            super.entries[index++] = value;
         }
     }
 

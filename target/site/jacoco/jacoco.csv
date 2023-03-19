@@ -64,7 +64,7 @@ Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseMat
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseVectorOperations,7,469,0,28,2,70,1,26,1,12
 Flag4j,com.flag4j,CVector,380,1792,33,51,62,248,31,110,14,85
 Flag4j,com.flag4j,SparseTensor,0,70,0,2,0,10,0,5,0,4
-Flag4j,com.flag4j,Tensor,549,96,19,7,105,21,53,9,43,6
+Flag4j,com.flag4j,Tensor,461,191,11,15,91,35,47,15,41,8
 Flag4j,com.flag4j,SparseCTensor,0,118,0,6,0,16,0,8,0,5
 Flag4j,com.flag4j,CMatrix,899,7244,64,376,136,784,91,346,57,160
 Flag4j,com.flag4j,SparseVector,0,44,0,0,0,9,0,4,0,4
