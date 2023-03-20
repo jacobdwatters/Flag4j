@@ -37,7 +37,7 @@ public class ComplexDenseElemDiv {
     /**
      * Minimum number of entries in each tensor to apply concurrent algorithm.
      */
-    private static final int CONCURRENT_THRESHOLD = 0;
+    private static final int CONCURRENT_THRESHOLD = 1250;
 
 
 <span class="nc" id="L43">    private ComplexDenseElemDiv() {</span>
@@ -97,8 +97,8 @@ public class ComplexDenseElemDiv {
      * @return The element-wise division of the two tensors.
      */
     public static CNumber[] dispatch(CNumber[] src1, Shape shape1,CNumber[] src2, Shape shape2) {
-<span class="nc bnc" id="L100" title="All 2 branches missed.">        if(src1.length &lt; CONCURRENT_THRESHOLD) {</span>
-<span class="nc" id="L101">            return elemDiv(src1, shape1, src2, shape2);</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if(src1.length &lt; CONCURRENT_THRESHOLD) {</span>
+<span class="fc" id="L101">            return elemDiv(src1, shape1, src2, shape2);</span>
         } else {
 <span class="nc" id="L103">            return elemDivConcurrent(src1, shape1, src2, shape2);</span>
         }

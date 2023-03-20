@@ -458,7 +458,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector elemDiv(CVector B) {
-<span class="fc" id="L461">        return new CVector(ComplexDenseElemDiv.elemDiv(this.entries, this.shape, B.entries, B.shape));</span>
+<span class="fc" id="L461">        return new CVector(ComplexDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));</span>
     }
 
 

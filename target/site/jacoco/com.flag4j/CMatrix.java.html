@@ -2162,7 +2162,7 @@ public class CMatrix extends ComplexMatrixBase implements
     public CMatrix elemDiv(CMatrix B) {
 <span class="fc" id="L2163">        return new CMatrix(</span>
 <span class="fc" id="L2164">                shape.copy(),</span>
-<span class="fc" id="L2165">                ComplexDenseElemDiv.elemDiv(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L2165">                ComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)</span>
         );
     }
 
