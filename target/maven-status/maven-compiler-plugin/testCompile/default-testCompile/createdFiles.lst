@@ -24,6 +24,7 @@ com\flag4j\complex_matrix\CMatrixRoundTests.class
 com\flag4j\complex_matrix\CMatrixStackTests.class
 com\flag4j\matrix\MatrixConversionTests.class
 com\flag4j\linalg\decompositions\RealLUTests.class
+com\flag4j\matrix\TransposeDispatcherTests.class
 com\flag4j\matrix\MatrixGetTests.class
 com\flag4j\matrix\MatrixSubTests.class
 com\flag4j\complex_matrix\CMatrixMultTests.class
@@ -52,7 +53,6 @@ com\flag4j\matrix\MatrixSetOperationTests.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatrixMultiplicationTests.class
 com\flag4j\complex_matrix\CMatrixSetOperationTests.class
 com\flag4j\complex_matrix\CMatrixMatVecMultTests.class
-com\flag4j\matrix\MatrixTransposeTests.class
 com\flag4j\matrix\MatrixPropertiesTests.class
 com\flag4j\matrix\MatrixElemMultTests.class
 com\flag4j\complex_matrix\CMatrixScaleOperationsTests.class

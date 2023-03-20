@@ -6,6 +6,7 @@ com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseVectorOper
 com\flag4j\operations\common\complex\ComplexOperations.class
 com\flag4j\operations\common\complex\ComplexProperties.class
 com\flag4j\operations\common\real\RealProperties.class
+com\flag4j\operations\TransposeDispatcher$Algorithm.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseVectorOperations.class
 com\flag4j\linalg\decompositions\RealLUDecomposition.class
 com\flag4j\operations\dense\complex\ComplexDenseElemDiv.class
@@ -16,6 +17,7 @@ com\flag4j\operations\dense\real_complex\RealComplexDenseElemDiv.class
 com\flag4j\core\ComplexVectorMixin.class
 com\flag4j\concurrency\CheckConcurrent.class
 com\flag4j\operations\dense\real\RealDenseProperties.class
+com\flag4j\operations\TransposeDispatcher.class
 com\flag4j\operations\dense\real\RealDenseElemDiv.class
 com\flag4j\core\ComplexVectorBase.class
 com\flag4j\operations\dense\complex\AggregateDenseComplex.class
@@ -28,6 +30,7 @@ com\flag4j\operations\dense\complex\ComplexDenseEquals.class
 com\flag4j\linalg\decompositions\Decomposition.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseEquals.class
 com\flag4j\operations\common\real\AggregateReal.class
+com\flag4j\operations\TransposeDispatcher$1.class
 com\flag4j\operations\dense\real\RealDenseVectorOperations.class
 com\flag4j\operations\dense\complex\ComplexDenseVectorOperations.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseVectorOperations.class

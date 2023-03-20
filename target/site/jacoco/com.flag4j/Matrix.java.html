@@ -28,7 +28,7 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.MatrixMultiply;
-import com.flag4j.operations.MatrixTranspose;
+import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
@@ -1427,7 +1427,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      */
     @Override
     public Matrix transpose() {
-<span class="fc" id="L1430">        return MatrixTranspose.dispatch(this);</span>
+<span class="fc" id="L1430">        return TransposeDispatcher.dispatch(this);</span>
     }
 
 
