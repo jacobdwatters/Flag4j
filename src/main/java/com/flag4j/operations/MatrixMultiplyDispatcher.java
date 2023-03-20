@@ -38,9 +38,9 @@ import static com.flag4j.util.ParameterChecks.assertMatMultShapes;
 /**
  * Dispatches matrix multiplication to the appropriate algorithm based on the size of the matrices to be multiplied.
  */
-public final class MatrixMultiply {
+public final class MatrixMultiplyDispatcher {
 
-    private MatrixMultiply() {
+    private MatrixMultiplyDispatcher() {
         // Hide default constructor.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }

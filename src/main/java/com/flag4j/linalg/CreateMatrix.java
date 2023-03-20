@@ -25,7 +25,8 @@
 package com.flag4j.linalg;
 
 /**
- * This class provides several methods, which are not provided as constructors, that are useful for creating matrices.
+ * This class provides several useful factory methods for matrices, which are not provided as constructors or
+ * factory methods within the {@link com.flag4j.Matrix Matrix} class itself.
  */
 public class CreateMatrix {
 

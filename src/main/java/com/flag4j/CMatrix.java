@@ -28,7 +28,7 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexMatrixBase;
 import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.io.PrintOptions;
-import com.flag4j.operations.MatrixMultiply;
+import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
@@ -1922,7 +1922,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(Matrix B) {
-        CNumber[] entries = MatrixMultiply.dispatch(this, B);
+        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, B);
         Shape shape = new Shape(this.numRows, B.numCols);
 
         return new CMatrix(shape, entries);
@@ -1957,7 +1957,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(CMatrix B) {
-        CNumber[] entries = MatrixMultiply.dispatch(this, B);
+        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, B);
         Shape shape = new Shape(this.numRows, B.numCols);
 
         return new CMatrix(shape, entries);
@@ -1992,7 +1992,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(Vector b) {
-        CNumber[] entries = MatrixMultiply.dispatch(this, b);
+        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
         Shape shape = new Shape(this.numRows, 1);
 
         return new CMatrix(shape, entries);
@@ -2024,7 +2024,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(CVector b) {
-        CNumber[] entries = MatrixMultiply.dispatch(this, b);
+        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
         Shape shape = new Shape(this.numRows, 1);
 
         return new CMatrix(shape, entries);

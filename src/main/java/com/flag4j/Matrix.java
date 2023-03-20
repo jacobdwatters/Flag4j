@@ -27,7 +27,7 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
 import com.flag4j.io.PrintOptions;
-import com.flag4j.operations.MatrixMultiply;
+import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
@@ -1508,7 +1508,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      */
     @Override
     public Matrix mult(Matrix B) {
-        double[] entries = MatrixMultiply.dispatch(this, B);
+        double[] entries = MatrixMultiplyDispatcher.dispatch(this, B);
         Shape shape = new Shape(this.numRows, B.numCols);
 
         return new Matrix(shape, entries);
@@ -1543,7 +1543,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      */
     @Override
     public CMatrix mult(CMatrix B) {
-        CNumber[] entries = MatrixMultiply.dispatch(this, B);
+        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, B);
         Shape shape = new Shape(this.numRows, B.numCols);
 
         return new CMatrix(shape, entries);
@@ -1579,7 +1579,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
     @Override
     public Matrix mult(Vector b) {
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
-        double[] entries = MatrixMultiply.dispatch(this, b);
+        double[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
         Shape shape = new Shape(this.numRows, 1);
 
         return new Matrix(shape, entries);
