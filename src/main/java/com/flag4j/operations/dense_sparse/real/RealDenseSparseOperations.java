@@ -26,6 +26,9 @@ package com.flag4j.operations.dense_sparse.real;
 
 import com.flag4j.Matrix;
 import com.flag4j.SparseMatrix;
+import com.flag4j.SparseTensor;
+import com.flag4j.Tensor;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -167,6 +170,30 @@ public class RealDenseSparseOperations {
             destEntries[i] = src1.entries[row*src1.numCols + col]*src2.entries[i];
         }
 
-        return new SparseMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);
+        return new SparseMatrix(src2.shape.copy(), destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between a real dense tensor and a real sparse tensor.
+     * @param src1 Real dense tensor.
+     * @param src2 Real sparse tensor.
+     * @return The result ofm element-wise multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static SparseTensor elemMult(Tensor src1, SparseTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        int index;
+        double[] destEntries = new double[src2.nonZeroEntries()];
+        int[][] destIndices = new int[src2.indices.length][src2.indices[0].length];
+        ArrayUtils.deepCopy(src2.indices, destIndices);
+
+        for(int i=0; i<destEntries.length; i++) {
+            index = src2.shape.entriesIndex(src2.indices[i]); // Get index of non-zero entry.
+            destEntries[i] = src1.entries[index]*src2.entries[i];
+        }
+
+        return new SparseTensor(src2.shape.copy(), destEntries, destIndices);
     }
 }

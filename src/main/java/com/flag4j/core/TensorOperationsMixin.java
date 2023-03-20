@@ -23,6 +23,7 @@
  */
 
 package com.flag4j.core;
+import com.flag4j.Tensor;
 import com.flag4j.complex_numbers.CNumber;
 
 /**
@@ -225,9 +226,28 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      */
     X get(int... indices);
 
+
     /**
      * Creates a copy of this tensor.
      * @return A copy of this tensor.
      */
     T copy();
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
+     */
+    T elemMult(T B);
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     * @param B Tensor to element-wise divide with this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
+     */
+    T elemDiv(T B);
 }

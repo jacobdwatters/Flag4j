@@ -17,6 +17,7 @@ com\flag4j\core\ComplexVectorBase.class
 com\flag4j\operations\dense\complex\AggregateDenseComplex.class
 com\flag4j\operations\common\complex\AggregateComplex.class
 com\flag4j\operations\dense\complex\ComplexDenseProperties.class
+com\flag4j\operations\dense\real\RealDenseElemMult.class
 com\flag4j\concurrency\Configurations.class
 com\flag4j\operations\dense\complex\ComplexDenseEquals.class
 com\flag4j\linalg\decompositions\Decomposition.class

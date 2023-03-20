@@ -44,6 +44,22 @@ public final class ArrayUtils {
 
 
     /**
+     * Creates a deep copy of a 2D array.
+     * @param src Source array to copy.
+     * @param dest Destination array of copy.
+     * @throws IllegalArgumentException If the two arrays are not the same shape.
+     */
+    public static void deepCopy(int[][] src, int[][] dest) {
+        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        ParameterChecks.assertArrayLengthsEq(src[0].length, dest[0].length);
+
+        for(int i=0; i<src.length; i++) {
+            System.arraycopy(src[i], 0, dest[i], 0, src.length);
+        }
+    }
+
+
+    /**
      * Converts array to an array of {@link CNumber complex numbers}.
      * @param src Array to convert.
      * @param dest Destination array.

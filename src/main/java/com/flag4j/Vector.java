@@ -413,7 +413,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Vector elemMult(Vector B) {
-        return new Vector(RealDenseOperations.elemMult(this.entries, this.shape, B.entries, B.shape));
+        return new Vector(RealDenseElemMult.dispatch(this.entries, this.shape, B.entries, B.shape));
     }
 
 
@@ -465,7 +465,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Vector elemDiv(Vector B) {
-        return new Vector(RealDenseOperations.elemDiv(this.entries, this.shape, B.entries, B.shape));
+        return new Vector(RealDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));
     }
 
 

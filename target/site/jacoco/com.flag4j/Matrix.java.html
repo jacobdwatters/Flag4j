@@ -1687,7 +1687,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
     public Matrix elemMult(Matrix B) {
 <span class="fc" id="L1688">        return new Matrix(</span>
 <span class="fc" id="L1689">                shape.copy(),</span>
-<span class="fc" id="L1690">                RealDenseOperations.elemMult(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L1690">                RealDenseElemMult.elemMult(entries, shape, B.entries, B.shape)</span>
         );
     }
 

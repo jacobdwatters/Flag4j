@@ -36,6 +36,7 @@ import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
@@ -731,4 +732,82 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
         // TODO: Auto-generated method stub. Implementation needed.
         return 0;
     }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public Tensor elemMult(Tensor B) {
+        return new Tensor(
+                shape.copy(),
+                RealDenseElemMult.dispatch(entries, shape, B.entries, B.shape)
+        );
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public SparseTensor elemMult(SparseTensor B) {
+        return RealDenseSparseOperations.elemMult(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public CTensor elemMult(CTensor B) {
+        // TODO: Implementation
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public SparseCTensor elemMult(SparseCTensor B) {
+        // TODO: Implementation
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     * @param B Tensor to element-wise divide with this tensor.
+     * @return The result of the element-wise tensor division.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public Tensor elemDiv(Tensor B) {
+        return new Tensor(
+                shape.copy(),
+                RealDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape)
+        );
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     * @param B Tensor to element-wise divide with this tensor.
+     * @return The result of the element-wise tensor division.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public CTensor elemDiv(CTensor B) {
+        // TODO: Implementation
+        return null;
+    }
+
 }

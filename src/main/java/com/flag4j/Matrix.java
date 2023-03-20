@@ -1687,7 +1687,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
     public Matrix elemMult(Matrix B) {
         return new Matrix(
                 shape.copy(),
-                RealDenseOperations.elemMult(entries, shape, B.entries, B.shape)
+                RealDenseElemMult.dispatch(entries, shape, B.entries, B.shape)
         );
     }
 
@@ -1746,7 +1746,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
     public Matrix elemDiv(Matrix B) {
         return new Matrix(
                 shape.copy(),
-                RealDenseOperations.elemDiv(entries, shape, B.entries, B.shape)
+                RealDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
     }
 

@@ -413,7 +413,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public Vector elemMult(Vector B) {
-<span class="fc" id="L416">        return new Vector(RealDenseOperations.elemMult(this.entries, this.shape, B.entries, B.shape));</span>
+<span class="fc" id="L416">        return new Vector(RealDenseElemMult.elemMult(this.entries, this.shape, B.entries, B.shape));</span>
     }
 
 

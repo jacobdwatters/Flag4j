@@ -144,6 +144,6 @@ public class ComplexDenseSparseOperations {
             destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);
         }
 
-        return new SparseCMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);
+        return new SparseCMatrix(src2.shape.copy(), destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 }
