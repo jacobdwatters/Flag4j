@@ -27,6 +27,7 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealTensorMixin;
 import com.flag4j.core.TensorBase;
+import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
@@ -540,11 +541,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public Tensor T() {
-        // TODO: Add dispatch method to choose between concurrent and standard algorithms.
-        return new Tensor(
-                shape.copy().swapAxes(0, shape.getRank()-1),
-                RealDenseTranspose.standardConcurrent(entries, shape, 0, shape.getRank()-1)
-        );
+        return TransposeDispatcher.dispatchTensor(this, 0, shape.getRank()-1);
     }
 
 
@@ -572,11 +569,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      * @return The transpose of this tensor.
      */
     public Tensor T(int axis1, int axis2) {
-        // TODO: Add dispatch method to choose between concurrent and standard algorithms.
-        return new Tensor(
-                shape.copy().swapAxes(0, shape.getRank()-1),
-                RealDenseTranspose.standardConcurrent(entries, shape, axis1, axis2)
-        );
+        return TransposeDispatcher.dispatchTensor(this, axis1, axis2);
     }
 
 
@@ -705,8 +698,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public double norm() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return 0;
+        return RealDenseOperations.tensorNormL2(entries);
     }
 
 
@@ -720,8 +712,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public double norm(double p) {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return 0;
+        return RealDenseOperations.tensorNormLp(entries, p);
     }
 
 
@@ -732,8 +723,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      */
     @Override
     public double infNorm() {
-        // TODO: Auto-generated method stub. Implementation needed.
-        return 0;
+        return AggregateReal.max(entries);
     }
 
 

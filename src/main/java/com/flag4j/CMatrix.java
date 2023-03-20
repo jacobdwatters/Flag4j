@@ -29,7 +29,7 @@ import com.flag4j.core.ComplexMatrixBase;
 import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.MatrixMultiply;
-import com.flag4j.operations.MatrixTranspose;
+import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.complex.ComplexProperties;
@@ -1762,7 +1762,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix T() {
-        return MatrixTranspose.dispatch(this);
+        return TransposeDispatcher.dispatch(this);
     }
 
 
@@ -1798,7 +1798,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix H() {
-        return MatrixTranspose.dispatchHermation(this);
+        return TransposeDispatcher.dispatchHermation(this);
     }
 
 

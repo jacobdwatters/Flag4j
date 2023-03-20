@@ -294,6 +294,39 @@ public final class RealDenseOperations {
 
 
     /**
+     * Computes the L<sub>2</sub> norm of a tensor (i.e. the Frobenius norm).
+     * @param src Entries of the tensor.
+     * @return The L<sub>2</sub> norm of the tensor.
+     */
+    public static double tensorNormL2(double[] src) {
+        double norm = 0;
+
+        for(int i=0; i<src.length; i++) {
+            norm += Math.pow(src[i], 2);
+        }
+
+        return Math.sqrt(norm);
+    }
+
+
+    /**
+     * Computes the L<sub>p</sub> norm of a tensor (i.e. the Frobenius norm).
+     * @param src Entries of the tensor.
+     * @param p The {@code p} parameter of the L<sub>p</sub> norm.
+     * @return The L<sub>p</sub> norm of the tensor.
+     */
+    public static double tensorNormLp(double[] src, double p) {
+        double norm = 0;
+
+        for(int i=0; i<src.length; i++) {
+            norm += Math.pow(src[i], p);
+        }
+
+        return Math.pow(norm, 1.0/p);
+    }
+
+
+    /**
      * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
      * @param src Entries of the matrix.
      * @return The infinity norm of the matrix.
