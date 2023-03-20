@@ -31,10 +31,9 @@ import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.complex.ComplexProperties;
-import com.flag4j.operations.dense.complex.AggregateDenseComplex;
-import com.flag4j.operations.dense.complex.ComplexDenseOperations;
-import com.flag4j.operations.dense.complex.ComplexDenseProperties;
-import com.flag4j.operations.dense.complex.ComplexDenseVectorOperations;
+import com.flag4j.operations.dense.complex.*;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
@@ -394,7 +393,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CVector elemMult(Vector B) {
-        return new CVector(RealComplexDenseOperations.elemMult(this.entries, this.shape, B.entries, B.shape));
+        return new CVector(RealComplexDenseElemMult.dispatch(this.entries, this.shape, B.entries, B.shape));
     }
 
 
@@ -420,7 +419,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CVector elemMult(CVector B) {
-        return new CVector(ComplexDenseOperations.elemMult(this.entries, this.shape, B.entries, B.shape));
+        return new CVector(ComplexDenseElemMult.dispatch(this.entries, this.shape, B.entries, B.shape));
     }
 
 
@@ -446,7 +445,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CVector elemDiv(Vector B) {
-        return new CVector(RealComplexDenseOperations.elemDiv(this.entries, this.shape, B.entries, B.shape));
+        return new CVector(RealComplexDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));
     }
 
 
@@ -459,7 +458,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CVector elemDiv(CVector B) {
-        return new CVector(ComplexDenseOperations.elemDiv(this.entries, this.shape, B.entries, B.shape));
+        return new CVector(ComplexDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));
     }
 
 

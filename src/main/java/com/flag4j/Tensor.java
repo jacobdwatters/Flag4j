@@ -33,11 +33,14 @@ import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.common.real.RealProperties;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
 import com.flag4j.operations.dense.real.*;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -767,8 +770,10 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public CTensor elemMult(CTensor B) {
-        // TODO: Implementation
-        return null;
+        return new CTensor(
+                this.shape.copy(),
+                RealComplexDenseElemMult.dispatch(B.entries, B.shape, this.entries, this.shape)
+        );
     }
 
 
@@ -779,8 +784,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public SparseCTensor elemMult(SparseCTensor B) {
-        // TODO: Implementation
-        return null;
+        return RealComplexDenseSparseOperations.elemMult(this, B);
     }
 
 
@@ -806,8 +810,10 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public CTensor elemDiv(CTensor B) {
-        // TODO: Implementation
-        return null;
+        return new CTensor(
+                shape.copy(),
+                RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
+        );
     }
 
 }

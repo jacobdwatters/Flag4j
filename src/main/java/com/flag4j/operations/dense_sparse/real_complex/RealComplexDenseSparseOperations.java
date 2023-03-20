@@ -24,11 +24,9 @@
 
 package com.flag4j.operations.dense_sparse.real_complex;
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
-import com.flag4j.SparseCMatrix;
-import com.flag4j.SparseMatrix;
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -216,7 +214,7 @@ public class RealComplexDenseSparseOperations {
             destEntries[i] = src2.entries[i].mult(src1.entries[row*src1.numCols + col]);
         }
 
-        return new SparseCMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);
+        return new SparseCMatrix(src2.shape.copy(), destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 
@@ -239,6 +237,30 @@ public class RealComplexDenseSparseOperations {
             destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);
         }
 
-        return new SparseCMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);
+        return new SparseCMatrix(src2.shape.copy(), destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between a real dense tensor and a complex sparse tensor.
+     * @param src1 Real dense tensor.
+     * @param src2 Complex sparse tensor.
+     * @return The result of element-wise multiplication between the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static SparseCTensor elemMult(Tensor src1, SparseCTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        int index;
+        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];
+        int[][] destIndices = new int[src2.indices.length][src2.indices[0].length];
+        ArrayUtils.deepCopy(src2.indices, destIndices);
+
+        for(int i=0; i<destEntries.length; i++) {
+            index = src2.shape.entriesIndex(src2.indices[i]); // Get index of non-zero entry.
+            destEntries[i] = src2.entries[i].mult(src1.entries[index]);
+        }
+
+        return new SparseCTensor(src2.shape.copy(), destEntries, destIndices);
     }
 }

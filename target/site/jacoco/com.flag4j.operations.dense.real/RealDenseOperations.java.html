@@ -25,7 +25,6 @@
 package com.flag4j.operations.dense.real;
 
 import com.flag4j.Shape;
-import com.flag4j.concurrency.ThreadManager;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
@@ -38,9 +37,9 @@ import static com.flag4j.operations.common.real.AggregateReal.maxAbs;
  */
 public final class RealDenseOperations {
 
-<span class="nc" id="L41">    private RealDenseOperations() {</span>
+<span class="nc" id="L40">    private RealDenseOperations() {</span>
         // Hide constructor
-<span class="nc" id="L43">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L42">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -54,14 +53,14 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static double[] add(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="fc" id="L57">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
-<span class="fc" id="L58">        double[] sum = new double[src1.length];</span>
+<span class="fc" id="L56">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L57">        double[] sum = new double[src1.length];</span>
 
-<span class="fc bfc" id="L60" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
-<span class="fc" id="L61">            sum[i] = src1[i] + src2[i];</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L60">            sum[i] = src1[i] + src2[i];</span>
         }
 
-<span class="fc" id="L64">        return sum;</span>
+<span class="fc" id="L63">        return sum;</span>
     }
 
 
@@ -75,14 +74,14 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static double[] sub(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="fc" id="L78">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
-<span class="fc" id="L79">        double[] sum = new double[src1.length];</span>
+<span class="fc" id="L77">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L78">        double[] sum = new double[src1.length];</span>
 
-<span class="fc bfc" id="L81" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
-<span class="fc" id="L82">            sum[i] = src1[i] - src2[i];</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L81">            sum[i] = src1[i] - src2[i];</span>
         }
 
-<span class="fc" id="L85">        return sum;</span>
+<span class="fc" id="L84">        return sum;</span>
     }
 
 
@@ -93,13 +92,13 @@ public final class RealDenseOperations {
      * @return The tensor scalar subtraction.
      */
     public static double[] sub(double[] src, double b) {
-<span class="fc" id="L96">        double[] sum = new double[src.length];</span>
+<span class="fc" id="L95">        double[] sum = new double[src.length];</span>
 
-<span class="fc bfc" id="L98" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc" id="L99">            sum[i] = src[i] - b;</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L98">            sum[i] = src[i] - b;</span>
         }
 
-<span class="fc" id="L102">        return sum;</span>
+<span class="fc" id="L101">        return sum;</span>
     }
 
 
@@ -112,12 +111,12 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If tensors are not the same shape.
      */
     public static void subEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="fc" id="L115">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L114">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
 
-<span class="fc bfc" id="L117" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="fc" id="L118">            src1[i] -= src2[i];</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L117">            src1[i] -= src2[i];</span>
         }
-<span class="fc" id="L120">    }</span>
+<span class="fc" id="L119">    }</span>
 
 
     /**
@@ -126,10 +125,10 @@ public final class RealDenseOperations {
      * @param b Scalar to subtract.
      */
     public static void subEq(double[] src, double b) {
-<span class="fc bfc" id="L129" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc" id="L130">            src[i] -= b;</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L129">            src[i] -= b;</span>
         }
-<span class="fc" id="L132">    }</span>
+<span class="fc" id="L131">    }</span>
 
 
     /**
@@ -141,12 +140,12 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If tensors are not the same shape.
      */
     public static void addEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="fc" id="L144">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L143">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
 
-<span class="fc bfc" id="L146" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="fc" id="L147">            src1[i] += src2[i];</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L146">            src1[i] += src2[i];</span>
         }
-<span class="fc" id="L149">    }</span>
+<span class="fc" id="L148">    }</span>
 
 
     /**
@@ -155,10 +154,10 @@ public final class RealDenseOperations {
      * @param b Scalar to add.
      */
     public static void addEq(double[] src, double b) {
-<span class="fc bfc" id="L158" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc" id="L159">            src[i] += b;</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L158">            src[i] += b;</span>
         }
-<span class="fc" id="L161">    }</span>
+<span class="fc" id="L160">    }</span>
 
 
     /**
@@ -169,16 +168,16 @@ public final class RealDenseOperations {
     public static double prod(double[] src) {
         double product;
 
-<span class="fc bfc" id="L172" title="All 2 branches covered.">        if(src.length &gt; 0) {</span>
-<span class="fc" id="L173">            product=1;</span>
-<span class="fc bfc" id="L174" title="All 2 branches covered.">            for(double value : src) {</span>
-<span class="fc" id="L175">                product *= value;</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        if(src.length &gt; 0) {</span>
+<span class="fc" id="L172">            product=1;</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">            for(double value : src) {</span>
+<span class="fc" id="L174">                product *= value;</span>
             }
         } else {
-<span class="fc" id="L178">            product=0;</span>
+<span class="fc" id="L177">            product=0;</span>
         }
 
-<span class="fc" id="L181">        return product;</span>
+<span class="fc" id="L180">        return product;</span>
     }
 
 
@@ -189,7 +188,7 @@ public final class RealDenseOperations {
      * @return The scalar division of the tensor.
      */
     public static double[] scalDiv(double[] src, double divisor) {
-<span class="fc" id="L192">        return RealOperations.scalMult(src, 1/divisor);</span>
+<span class="fc" id="L191">        return RealOperations.scalMult(src, 1/divisor);</span>
     }
 
 
@@ -199,55 +198,13 @@ public final class RealDenseOperations {
      * @return The element-wise reciprocals of the tensor.
      */
     public static double[] recip(double[] src) {
-<span class="fc" id="L202">        double[] receps = new double[src.length];</span>
+<span class="fc" id="L201">        double[] receps = new double[src.length];</span>
 
-<span class="fc bfc" id="L204" title="All 2 branches covered.">        for(int i=0; i&lt;receps.length; i++) {</span>
-<span class="fc" id="L205">            receps[i] = 1/src[i];</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">        for(int i=0; i&lt;receps.length; i++) {</span>
+<span class="fc" id="L204">            receps[i] = 1/src[i];</span>
         }
 
-<span class="fc" id="L208">        return receps;</span>
-    }
-
-
-    /**
-     * Computes the element-wise division of two tensors.
-     * @param src1 First tensor in element-wise division.
-     * @param shape1 Shape of the first tensor.
-     * @param src2 Second tensor in element-wise division.
-     * @param shape2 Shape of the second tensor.
-     * @return The element-wise division of the two tensors.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    public static double[] elemDiv(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="fc" id="L222">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
-<span class="fc" id="L223">        double[] product = new double[src1.length];</span>
-
-<span class="fc bfc" id="L225" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="fc" id="L226">            product[i] = src1[i]/src2[i];</span>
-        }
-
-<span class="fc" id="L229">        return product;</span>
-    }
-
-
-    /**
-     * Computes the element-wise division of two tensors using a concurrent algorithm.
-     * @param src1 First tensor in element-wise division.
-     * @param shape1 Shape of the first tensor.
-     * @param src2 Second tensor in element-wise division.
-     * @param shape2 Shape of the second tensor.
-     * @return The element-wise division of the two tensors.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    public static double[] elemDivConcurrent(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="nc" id="L243">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
-<span class="nc" id="L244">        double[] product = new double[src1.length];</span>
-
-<span class="nc" id="L246">        ThreadManager.concurrentLoop(0, product.length,</span>
-<span class="nc" id="L247">                (i) -&gt; product[i] = src1[i]/src2[i]</span>
-        );
-
-<span class="nc" id="L250">        return product;</span>
+<span class="fc" id="L207">        return receps;</span>
     }
 
 
@@ -261,22 +218,22 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
      */
     public static double matrixNormLpq(double[] src, Shape shape, double p, double q) {
-<span class="fc" id="L264">        ParameterChecks.assertGreaterEq(1, p, q);</span>
+<span class="fc" id="L221">        ParameterChecks.assertGreaterEq(1, p, q);</span>
 
-<span class="fc" id="L266">        double norm = 0;</span>
+<span class="fc" id="L223">        double norm = 0;</span>
         double colSum;
-<span class="fc" id="L268">        int rows = shape.dims[Axis2D.row()];</span>
-<span class="fc" id="L269">        int cols = shape.dims[Axis2D.col()];</span>
+<span class="fc" id="L225">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="fc" id="L226">        int cols = shape.dims[Axis2D.col()];</span>
 
-<span class="fc bfc" id="L271" title="All 2 branches covered.">        for(int j=0; j&lt;cols; j++) {</span>
-<span class="fc" id="L272">            colSum=0;</span>
-<span class="fc bfc" id="L273" title="All 2 branches covered.">            for(int i=0; i&lt;rows; i++) {</span>
-<span class="fc" id="L274">                colSum += Math.pow(Math.abs(src[i*cols + j]), p);</span>
+<span class="fc bfc" id="L228" title="All 2 branches covered.">        for(int j=0; j&lt;cols; j++) {</span>
+<span class="fc" id="L229">            colSum=0;</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">            for(int i=0; i&lt;rows; i++) {</span>
+<span class="fc" id="L231">                colSum += Math.pow(Math.abs(src[i*cols + j]), p);</span>
             }
-<span class="fc" id="L276">            norm += Math.pow(colSum, q/p);</span>
+<span class="fc" id="L233">            norm += Math.pow(colSum, q/p);</span>
         }
 
-<span class="fc" id="L279">        return Math.pow(norm, 1/q);</span>
+<span class="fc" id="L236">        return Math.pow(norm, 1/q);</span>
     }
 
 
@@ -290,23 +247,23 @@ public final class RealDenseOperations {
      * @throws IllegalArgumentException If {@code p} is less than 1.
      */
     public static double matrixNormLp(double[] src, Shape shape, double p) {
-<span class="fc" id="L293">        ParameterChecks.assertGreaterEq(1, p);</span>
+<span class="fc" id="L250">        ParameterChecks.assertGreaterEq(1, p);</span>
 
-<span class="fc" id="L295">        double norm = 0;</span>
+<span class="fc" id="L252">        double norm = 0;</span>
         double colSum;
-<span class="fc" id="L297">        int rows = shape.dims[Axis2D.row()];</span>
-<span class="fc" id="L298">        int cols = shape.dims[Axis2D.col()];</span>
+<span class="fc" id="L254">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="fc" id="L255">        int cols = shape.dims[Axis2D.col()];</span>
 
-<span class="fc bfc" id="L300" title="All 2 branches covered.">        for(int j=0; j&lt;cols; j++) {</span>
-<span class="fc" id="L301">            colSum=0;</span>
-<span class="fc bfc" id="L302" title="All 2 branches covered.">            for(int i=0; i&lt;rows; i++) {</span>
-<span class="fc" id="L303">                colSum += Math.pow(Math.abs(src[i*cols + j]), p);</span>
+<span class="fc bfc" id="L257" title="All 2 branches covered.">        for(int j=0; j&lt;cols; j++) {</span>
+<span class="fc" id="L258">            colSum=0;</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">            for(int i=0; i&lt;rows; i++) {</span>
+<span class="fc" id="L260">                colSum += Math.pow(Math.abs(src[i*cols + j]), p);</span>
             }
 
-<span class="fc" id="L306">            norm += Math.pow(colSum, 1.0/p);</span>
+<span class="fc" id="L263">            norm += Math.pow(colSum, 1.0/p);</span>
         }
 
-<span class="fc" id="L309">        return norm;</span>
+<span class="fc" id="L266">        return norm;</span>
     }
 
 
@@ -318,21 +275,21 @@ public final class RealDenseOperations {
      * @return The L&lt;sub&gt;2&lt;/sub&gt; norm of the matrix.
      */
     public static double matrixNormL2(double[] src, Shape shape) {
-<span class="fc" id="L321">        double norm = 0;</span>
-<span class="fc" id="L322">        int rows = shape.dims[Axis2D.row()];</span>
-<span class="fc" id="L323">        int cols = shape.dims[Axis2D.col()];</span>
+<span class="fc" id="L278">        double norm = 0;</span>
+<span class="fc" id="L279">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="fc" id="L280">        int cols = shape.dims[Axis2D.col()];</span>
 
         double colSum;
 
-<span class="fc bfc" id="L327" title="All 2 branches covered.">        for(int j=0; j&lt;cols; j++) {</span>
-<span class="fc" id="L328">            colSum = 0;</span>
-<span class="fc bfc" id="L329" title="All 2 branches covered.">            for(int i=0; i&lt;rows; i++) {</span>
-<span class="fc" id="L330">                colSum += Math.pow(src[i*cols + j], 2);</span>
+<span class="fc bfc" id="L284" title="All 2 branches covered.">        for(int j=0; j&lt;cols; j++) {</span>
+<span class="fc" id="L285">            colSum = 0;</span>
+<span class="fc bfc" id="L286" title="All 2 branches covered.">            for(int i=0; i&lt;rows; i++) {</span>
+<span class="fc" id="L287">                colSum += Math.pow(src[i*cols + j], 2);</span>
             }
-<span class="fc" id="L332">            norm += Math.sqrt(colSum);</span>
+<span class="fc" id="L289">            norm += Math.sqrt(colSum);</span>
         }
 
-<span class="fc" id="L335">        return norm;</span>
+<span class="fc" id="L292">        return norm;</span>
     }
 
 
@@ -342,7 +299,7 @@ public final class RealDenseOperations {
      * @return The infinity norm of the matrix.
      */
     public static double matrixMaxNorm(double[] src) {
-<span class="fc" id="L345">        return maxAbs(src);</span>
+<span class="fc" id="L302">        return maxAbs(src);</span>
     }
 
 
@@ -353,17 +310,17 @@ public final class RealDenseOperations {
      * @return The infinity norm of the matrix.
      */
     public static double matrixInfNorm(double[] src, Shape shape) {
-<span class="fc" id="L356">        int rows = shape.dims[Axis2D.row()];</span>
-<span class="fc" id="L357">        int cols = shape.dims[Axis2D.col()];</span>
-<span class="fc" id="L358">        double[] rowSums = new double[rows];</span>
+<span class="fc" id="L313">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="fc" id="L314">        int cols = shape.dims[Axis2D.col()];</span>
+<span class="fc" id="L315">        double[] rowSums = new double[rows];</span>
 
-<span class="fc bfc" id="L360" title="All 2 branches covered.">        for(int i=0; i&lt;rows; i++) {</span>
-<span class="fc bfc" id="L361" title="All 2 branches covered.">            for(int j=0; j&lt;cols; j++) {</span>
-<span class="fc" id="L362">                rowSums[i] += Math.abs(src[i*cols + j]);</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">        for(int i=0; i&lt;rows; i++) {</span>
+<span class="fc bfc" id="L318" title="All 2 branches covered.">            for(int j=0; j&lt;cols; j++) {</span>
+<span class="fc" id="L319">                rowSums[i] += Math.abs(src[i*cols + j]);</span>
             }
         }
 
-<span class="fc" id="L366">        return maxAbs(rowSums);</span>
+<span class="fc" id="L323">        return maxAbs(rowSums);</span>
     }
 
 
@@ -374,13 +331,13 @@ public final class RealDenseOperations {
      * @return The tensor scalar addition.
      */
     public static double[] add(double[] src, double b) {
-<span class="fc" id="L377">        double[] sum = new double[src.length];</span>
+<span class="fc" id="L334">        double[] sum = new double[src.length];</span>
 
-<span class="fc bfc" id="L379" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc" id="L380">            sum[i] = src[i] + b;</span>
+<span class="fc bfc" id="L336" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L337">            sum[i] = src[i] + b;</span>
         }
 
-<span class="fc" id="L383">        return sum;</span>
+<span class="fc" id="L340">        return sum;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

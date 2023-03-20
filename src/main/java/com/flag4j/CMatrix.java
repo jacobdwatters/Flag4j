@@ -34,6 +34,8 @@ import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.operations.dense.complex.*;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
@@ -2084,7 +2086,7 @@ public class CMatrix extends ComplexMatrixBase implements
     public CMatrix elemMult(Matrix B) {
         return new CMatrix(
                 shape.copy(),
-                RealComplexDenseOperations.elemMult(entries, shape, B.entries, B.shape)
+                RealComplexDenseElemMult.dispatch(entries, shape, B.entries, B.shape)
         );
     }
 
@@ -2113,7 +2115,7 @@ public class CMatrix extends ComplexMatrixBase implements
     public CMatrix elemMult(CMatrix B) {
         return new CMatrix(
                 shape.copy(),
-                ComplexDenseOperations.elemMult(entries, shape, B.entries, B.shape)
+                ComplexDenseElemMult.dispatch(entries, shape, B.entries, B.shape)
         );
     }
 
@@ -2143,7 +2145,7 @@ public class CMatrix extends ComplexMatrixBase implements
     public CMatrix elemDiv(Matrix B) {
         return new CMatrix(
                 shape.copy(),
-                RealComplexDenseOperations.elemDiv(entries, shape, B.entries, B.shape)
+                RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
     }
 
@@ -2160,7 +2162,7 @@ public class CMatrix extends ComplexMatrixBase implements
     public CMatrix elemDiv(CMatrix B) {
         return new CMatrix(
                 shape.copy(),
-                ComplexDenseOperations.elemDiv(entries, shape, B.entries, B.shape)
+                ComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
     }
 

@@ -31,7 +31,7 @@ import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
 /**
- * This class contains low level implementations of element-wise multiplications algorithms for tensors.
+ * This class contains low level implementations of element-wise multiplications algorithms for real dense tensors.
  */
 public class RealDenseElemMult {
 
@@ -89,7 +89,7 @@ public class RealDenseElemMult {
 
 
     /**
-     * Dynamically chooses an applies element-wise multiplication algorithm to use based on the number of entries in the tensors.
+     * Dynamically chooses and applies element-wise multiplication algorithm to use based on the number of entries in the tensors.
      * @param src1 Entries of first tensor.
      * @param shape1 Shape of first tensor.
      * @param src2 Entries of second tensor.
@@ -97,8 +97,8 @@ public class RealDenseElemMult {
      * @return The element-wise multiplication of the two tensors.
      */
     public static double[] dispatch(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-<span class="nc bnc" id="L100" title="All 2 branches missed.">        if(src1.length &lt; CONCURRENT_THRESHOLD) {</span>
-<span class="nc" id="L101">            return elemMult(src1, shape1, src2, shape2);</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if(src1.length &lt; CONCURRENT_THRESHOLD) {</span>
+<span class="fc" id="L101">            return elemMult(src1, shape1, src2, shape2);</span>
         } else {
 <span class="nc" id="L103">            return elemMultConcurrent(src1, shape1, src2, shape2);</span>
         }

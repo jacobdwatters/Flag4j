@@ -34,10 +34,7 @@ import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.common.real.RealProperties;
 import com.flag4j.operations.dense.real.*;
-import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
-import com.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
-import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import com.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
+import com.flag4j.operations.dense.real_complex.*;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
@@ -1716,7 +1713,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
     public CMatrix elemMult(CMatrix B) {
         return new CMatrix(
                 shape.copy(),
-                RealComplexDenseOperations.elemMult(B.entries, B.shape, entries, shape)
+                RealComplexDenseElemMult.dispatch(B.entries, B.shape, entries, shape)
         );
     }
 
@@ -1763,7 +1760,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
     public CMatrix elemDiv(CMatrix B) {
         return new CMatrix(
                 shape.copy(),
-                RealComplexDenseOperations.elemDiv(entries, shape, B.entries, B.shape)
+                RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
     }
 

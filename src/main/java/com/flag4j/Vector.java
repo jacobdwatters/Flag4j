@@ -31,6 +31,8 @@ import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.dense.real.*;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
@@ -439,7 +441,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public CVector elemMult(CVector B) {
-        return new CVector(RealComplexDenseOperations.elemMult(B.entries, B.shape, this.entries, this.shape));
+        return new CVector(RealComplexDenseElemMult.dispatch(B.entries, B.shape, this.entries, this.shape));
     }
 
 
@@ -478,7 +480,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public CVector elemDiv(CVector B) {
-        return new CVector(RealComplexDenseOperations.elemDiv(this.entries, this.shape, B.entries, B.shape));
+        return new CVector(RealComplexDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));
     }
 
 

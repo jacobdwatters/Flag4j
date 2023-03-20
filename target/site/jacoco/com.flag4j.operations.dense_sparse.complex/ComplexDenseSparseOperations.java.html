@@ -144,7 +144,7 @@ public class ComplexDenseSparseOperations {
 <span class="fc" id="L144">            destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);</span>
         }
 
-<span class="fc" id="L147">        return new SparseCMatrix(src2.shape, destEntries, src2.rowIndices, src2.colIndices);</span>
+<span class="fc" id="L147">        return new SparseCMatrix(src2.shape.copy(), destEntries, src2.rowIndices.clone(), src2.colIndices.clone());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
