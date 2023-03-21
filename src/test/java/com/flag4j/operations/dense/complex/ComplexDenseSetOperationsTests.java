@@ -1,6 +1,7 @@
 package com.flag4j.operations.dense.complex;
 
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.operations.dense.complex.ComplexDenseSetOperations;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;

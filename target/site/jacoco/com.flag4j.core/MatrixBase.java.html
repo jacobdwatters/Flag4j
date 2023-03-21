@@ -32,11 +32,16 @@ import java.io.Serializable;
 
 
 /**
- * The base class for all matrices.
- * @param &lt;T&gt; The type of entries for this matrix.
+ * &lt;p&gt;
+ *     The base class for all matrices. A matrix is equivalent to a {@link TensorBase tensor} of rank 2.
+ * &lt;/p&gt;
+ *
+ * @param &lt;T&gt; Type of the storage data structure for the matrix.
+ *           This common use case will be an array or list-like data structure.
  */
 public abstract class MatrixBase&lt;T extends Serializable&gt; extends TensorBase&lt;T&gt; {
 
+    // TODO: Move DEFAULT_ROUND_TO_ZERO_THRESHOLD somewhere else and use for all tensors.
     /**
      * Default value for rounding to zero.
      */
@@ -58,15 +63,15 @@ public abstract class MatrixBase&lt;T extends Serializable&gt; extends TensorBas
      * @throws IllegalArgumentException If the shape parameter is not of rank 2.
      */
     public MatrixBase(Shape shape, T entries) {
-<span class="fc" id="L61">        super(shape, entries);</span>
+<span class="fc" id="L66">        super(shape, entries);</span>
 
-<span class="fc" id="L63">        numRows = shape.dims[Axis2D.row()];</span>
-<span class="fc" id="L64">        numCols = shape.dims[Axis2D.col()];</span>
+<span class="fc" id="L68">        numRows = shape.dims[Axis2D.row()];</span>
+<span class="fc" id="L69">        numCols = shape.dims[Axis2D.col()];</span>
 
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if(shape.getRank() != 2) {</span>
-<span class="nc" id="L67">            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), 2));</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if(shape.getRank() != 2) {</span>
+<span class="nc" id="L72">            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), 2));</span>
         }
-<span class="fc" id="L69">    }</span>
+<span class="fc" id="L74">    }</span>
 
 
     /**
@@ -74,7 +79,7 @@ public abstract class MatrixBase&lt;T extends Serializable&gt; extends TensorBas
      * @return The number of rows in this matrix.
      */
     public int numRows() {
-<span class="fc" id="L77">        return numRows;</span>
+<span class="fc" id="L82">        return numRows;</span>
     }
 
 
@@ -83,7 +88,7 @@ public abstract class MatrixBase&lt;T extends Serializable&gt; extends TensorBas
      * @return The number of columns in this matrix.
      */
     public int numCols() {
-<span class="fc" id="L86">        return numCols;</span>
+<span class="fc" id="L91">        return numCols;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

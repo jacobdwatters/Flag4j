@@ -27,6 +27,7 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealTensorMixin;
 import com.flag4j.core.TensorBase;
+import com.flag4j.core.TensorExclusiveMixin;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
@@ -52,7 +53,8 @@ import java.util.Arrays;
 /**
  * Real Dense Tensor. May have any rank (that is, may have any number of unique axes/dimensions).
  */
-public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tensor, CTensor> {
+public class Tensor extends TensorBase<double[]> implements
+        RealTensorMixin<Tensor, CTensor>, TensorExclusiveMixin {
 
 
     /**
@@ -138,7 +140,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
     public Tensor(Shape shape, Integer[] entries) {
         super(shape, new double[entries.length]);
 
-        if(entries.length != super.totalEntries().intValue()) {
+        if(entries.length != super.totalEntries().intValueExact()) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
         }
 
@@ -256,6 +258,9 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
     }
 
 
+    // TODO: Add reshape(), reshapeCopy(), flatten(), flattenCopy().
+
+
     /**
      * Converts this tensor to an equivalent complex tensor. That is, the entries of the resultant matrix will be exactly
      * the same value but will have type {@link CNumber CNumber} rather than {@link Double}.
@@ -273,6 +278,8 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      *
      * @param value   Value to set.
      * @param indices The indices of this tensor for which to set the value.
+     * @throws IllegalArgumentException If the number of indices provided does not match the rank of this tensor.
+     * @throws IllegalArgumentException If any of the indices are outside the tensor for that respective axis.
      */
     @Override
     public void set(double value, int... indices) {
@@ -554,6 +561,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      * @param axis2 Second axis to exchange.
      * @return The transpose of this tensor.
      */
+    @Override
     public Tensor transpose(int axis1, int axis2) {
         return T(axis1, axis2);
     }
@@ -568,6 +576,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      * @param axis2 Second axis to exchange.
      * @return The transpose of this tensor.
      */
+    @Override
     public Tensor T(int axis1, int axis2) {
         return TransposeDispatcher.dispatchTensor(this, axis1, axis2);
     }
@@ -748,6 +757,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
+    @Override
     public SparseTensor elemMult(SparseTensor B) {
         return RealDenseSparseOperations.elemMult(this, B);
     }
@@ -759,6 +769,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
+    @Override
     public CTensor elemMult(CTensor B) {
         return new CTensor(
                 this.shape.copy(),
@@ -773,6 +784,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
+    @Override
     public SparseCTensor elemMult(SparseCTensor B) {
         return RealComplexDenseSparseOperations.elemMult(this, B);
     }
@@ -799,6 +811,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      * @return The result of the element-wise tensor division.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
+    @Override
     public CTensor elemDiv(CTensor B) {
         return new CTensor(
                 shape.copy(),

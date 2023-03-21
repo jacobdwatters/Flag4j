@@ -17,6 +17,7 @@ com\flag4j\complex_matrix\CMatrixReshapeTests.class
 com\flag4j\matrix\MatrixZerosOnesTests.class
 com\flag4j\complex_matrix\CMatrixDirectSumTests.class
 com\flag4j\matrix\MatrixSumRowsColsTests.class
+com\flag4j\tensor\TensorEqualsTests.class
 com\flag4j\complex_matrix\CMatrixElemDivTests.class
 com\flag4j\complex_matrix\CMatrixEqualsTest.class
 com\flag4j\tensor\TensorAggregateTests.class
@@ -35,6 +36,7 @@ com\flag4j\matrix\MatrixFibTests.class
 com\flag4j\matrix\MatrixDetTests.class
 com\flag4j\CustomAssertions.class
 com\flag4j\complex_matrix\CMatrixPropertiesTests.class
+com\flag4j\tensor\TensorSetTests.class
 com\flag4j\linalg\decompositions\RealQRTests.class
 com\flag4j\tensor\TensorPropertiesTests.class
 com\flag4j\operations\sparse\complex\ComplexSparseMatMultTests.class
@@ -52,7 +54,9 @@ com\flag4j\matrix\RealComplexDenseSparseMatMultTests.class
 com\flag4j\complex_matrix\CMatrixRemoveRowColTests.class
 com\flag4j\matrix\MatrixDirectSumTests.class
 com\flag4j\matrix\MatrixSetOperationTests.class
+com\flag4j\tensor\TensorConversionTests.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatrixMultiplicationTests.class
+com\flag4j\tensor\TensorAddTests.class
 com\flag4j\complex_matrix\CMatrixSetOperationTests.class
 com\flag4j\complex_matrix\CMatrixMatVecMultTests.class
 com\flag4j\matrix\MatrixTransposeTests.class

@@ -1,4 +1,5 @@
 com\flag4j\concurrency\ThreadManager.class
+com\flag4j\core\TensorExclusiveMixin.class
 com\flag4j\linalg\decompositions\RealQRDecomposition.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseElemMult.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseOperations.class

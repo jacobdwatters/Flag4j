@@ -31,13 +31,18 @@ import java.io.Serializable;
 
 
 /**
- * The base class for all vectors.
- * @param <T> The type of entries for this Vector.
+ * <p>
+ *     The base class for all vectors. A vector is equivalent to a {@link TensorBase tensor} of rank 1. Vectors do not
+ *     have an orientation (that is, row/column vector). However, several methods assume or allow the user to specify the
+ *     orientation of the vector.
+ * </p>
+ * @param <T> Type of the storage data structure for the vector.
+ *           This common use case will be an array or list-like data structure.
  */
 public abstract class VectorBase<T extends Serializable> extends TensorBase<T> {
 
     /**
-     * Size of the vector.
+     * Size of the vector. This includes zero-entries if the vector is sparse.
      */
     public final int size;
 

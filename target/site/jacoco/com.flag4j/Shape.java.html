@@ -133,22 +133,22 @@ public class Shape implements Serializable {
      * @param indices Indices of tensor with this shape.
      * @return The index of the element at the specified indices in the 1D data array of a dense tensor.
      * @throws IllegalArgumentException If the number of indices does not match the rank of this shape.
-     * @throws ArrayIndexOutOfBoundsException If any index does not fit within a tensor with this shape.
+     * @throws IndexOutOfBoundsException If any index does not fit within a tensor with this shape.
      */
     public int entriesIndex(int... indices) {
 <span class="fc bfc" id="L139" title="All 2 branches covered.">        if(indices.length != dims.length) {</span>
 <span class="fc" id="L140">            throw new IllegalArgumentException(ErrorMessages.getIndicesRankErr(indices.length, dims.length));</span>
         }
 <span class="pc bpc" id="L142" title="1 of 4 branches missed.">        if(indices.length&gt;0 &amp;&amp; indices[indices.length-1] &gt;= dims[dims.length-1]) {</span>
-<span class="fc" id="L143">            throw new ArrayIndexOutOfBoundsException(&quot;Index &quot; + indices[indices.length-1] + &quot; out of bounds for axis &quot; +</span>
+<span class="fc" id="L143">            throw new IndexOutOfBoundsException(&quot;Index &quot; + indices[indices.length-1] + &quot; out of bounds for axis &quot; +</span>
                     (indices.length-1) + &quot; of tensor with shape &quot; + this);
         }
 
 <span class="fc" id="L147">        int index = 0;</span>
 
 <span class="fc bfc" id="L149" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length-1; i++) {</span>
-<span class="pc bpc" id="L150" title="1 of 4 branches missed.">            if(indices[i] &lt; 0 || indices[i] &gt;= dims[i]) {</span>
-<span class="fc" id="L151">                throw new ArrayIndexOutOfBoundsException(&quot;Index &quot; + indices[i] + &quot; out of bounds for axis &quot; + i +</span>
+<span class="fc bfc" id="L150" title="All 4 branches covered.">            if(indices[i] &lt; 0 || indices[i] &gt;= dims[i]) {</span>
+<span class="fc" id="L151">                throw new IndexOutOfBoundsException(&quot;Index &quot; + indices[i] + &quot; out of bounds for axis &quot; + i +</span>
                         &quot; of tensor with shape &quot; + this);
             }
 

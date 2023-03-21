@@ -369,6 +369,11 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
     }
 
 
+    // TODO: pull reshape up to tensor manipulations mixin interface.
+    //  Add reshapeCopy(), and flattenCopy() to replace current methods. Then change
+    //  current methods to reshape the instanced they are called with.
+
+
     /**
      * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
      * in the reshaped matrix.

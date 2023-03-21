@@ -26,6 +26,12 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.TensorBase;
+import com.flag4j.operations.dense.complex.ComplexDenseEquals;
+import com.flag4j.operations.dense.real.RealDenseEquals;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 
@@ -134,5 +140,39 @@ public class CTensor extends TensorBase<CNumber[]> {
     public CTensor(CTensor A) {
         super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);
         ArrayUtils.copy2CNumber(A.entries, super.entries);
+    }
+
+
+    /**
+     * Checks if an object is equal to this tensor object. Valid object types are: {@link Tensor}, {@link CTensor},
+     * {@link SparseTensor}, and {@link SparseCTensor}. These tensors are equal to this tensor if all entries are
+     * numerically equal to the corresponding element of this tensor.
+     * @param object Object to check equality with this tensor.
+     * @return True if the two tensors are numerically equivalent and false otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        boolean equal;
+
+        if(object instanceof Tensor) {
+            Tensor tensor = (Tensor) object;
+            equal = RealComplexDenseEquals.tensorEquals(tensor, this);
+        } else if(object instanceof CTensor) {
+            CTensor tensor = (CTensor) object;
+            equal = ComplexDenseEquals.tensorEquals(entries, shape, tensor.entries, tensor.shape);
+
+        } else if(object instanceof SparseTensor) {
+            SparseTensor tensor = (SparseTensor) object;
+            equal = RealComplexDenseSparseEquals.tensorEquals(this, tensor);
+
+        } else if(object instanceof SparseCTensor) {
+            SparseCTensor tensor = (SparseCTensor) object;
+            equal = ComplexDenseSparseEquals.tensorEquals(this, tensor);
+
+        } else {
+            equal = false;
+        }
+
+        return equal;
     }
 }

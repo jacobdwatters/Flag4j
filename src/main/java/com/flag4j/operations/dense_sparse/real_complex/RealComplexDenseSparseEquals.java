@@ -243,4 +243,43 @@ public class RealComplexDenseSparseEquals {
 
         return equal;
     }
+
+
+    /**
+     * Checks if a complex dense tensor is equal to a real sparse tensor.
+     * @param A Complex dense tensor.
+     * @param B Real sparse tensor.
+     * @return True if the two tensors are element-wise equivalent.
+     */
+    public static boolean tensorEquals(CTensor A, SparseTensor B) {
+        boolean equal = true;
+
+        if(A.shape.equals(B.shape)) {
+            CNumber[] entriesCopy = new CNumber[A.entries.length];
+            ArrayUtils.copy2CNumber(entriesCopy, A.entries);
+            int entriesIndex;
+
+            // Remove all nonZero entries from the entries of this matrix.
+            for(int i=0; i<B.nonZeroEntries(); i++) {
+                entriesIndex = A.shape.entriesIndex(B.indices[i]);
+
+                if(entriesCopy[entriesIndex].re != B.entries[i] || entriesCopy[entriesIndex].im != 0) {
+                    equal = false;
+                    break;
+                }
+
+                entriesCopy[A.shape.entriesIndex(B.indices[i])] = new CNumber();
+            }
+
+            if(equal) {
+                // Now, if this tensor is equal to the sparse tensor, there should only be zeros left in the entriesStack
+                equal = ArrayUtils.isZeros(entriesCopy);
+            }
+
+        } else {
+            equal = false;
+        }
+
+        return equal;
+    }
 }

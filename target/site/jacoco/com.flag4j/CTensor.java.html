@@ -26,6 +26,12 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.TensorBase;
+import com.flag4j.operations.dense.complex.ComplexDenseEquals;
+import com.flag4j.operations.dense.real.RealDenseEquals;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 
@@ -40,9 +46,9 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @param shape Shape of the tensor.
      */
     public CTensor(Shape shape) {
-<span class="fc" id="L43">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
-<span class="fc" id="L44">        ArrayUtils.fillZeros(super.entries);</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L49">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L50">        ArrayUtils.fillZeros(super.entries);</span>
+<span class="fc" id="L51">    }</span>
 
 
     /**
@@ -51,9 +57,9 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @param fillValue Value to fill tensor with.
      */
     public CTensor(Shape shape, double fillValue) {
-<span class="fc" id="L54">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
-<span class="fc" id="L55">        ArrayUtils.fill(super.entries, fillValue);</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L60">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L61">        ArrayUtils.fill(super.entries, fillValue);</span>
+<span class="fc" id="L62">    }</span>
 
 
     /**
@@ -62,9 +68,9 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @param fillValue Value to fill tensor with.
      */
     public CTensor(Shape shape, CNumber fillValue) {
-<span class="fc" id="L65">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
-<span class="fc" id="L66">        ArrayUtils.fill(super.entries, fillValue);</span>
-<span class="fc" id="L67">    }</span>
+<span class="fc" id="L71">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L72">        ArrayUtils.fill(super.entries, fillValue);</span>
+<span class="fc" id="L73">    }</span>
 
 
     /**
@@ -74,14 +80,14 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @throws IllegalArgumentException If the shape does not match the number of entries.
      */
     public CTensor(Shape shape, double[] entries) {
-<span class="fc" id="L77">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L83">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
 
-<span class="fc bfc" id="L79" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
-<span class="fc" id="L80">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="fc" id="L86">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
         }
 
-<span class="fc" id="L83">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
-<span class="fc" id="L84">    }</span>
+<span class="fc" id="L89">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
+<span class="fc" id="L90">    }</span>
 
 
     /**
@@ -91,14 +97,14 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @throws IllegalArgumentException If the shape does not match the number of entries.
      */
     public CTensor(Shape shape, int[] entries) {
-<span class="fc" id="L94">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L100">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
 
-<span class="fc bfc" id="L96" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
-<span class="fc" id="L97">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="fc" id="L103">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
         }
 
-<span class="fc" id="L100">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
-<span class="fc" id="L101">    }</span>
+<span class="fc" id="L106">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
+<span class="fc" id="L107">    }</span>
 
 
     /**
@@ -109,12 +115,12 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @throws IllegalArgumentException If the shape does not match the number of entries.
      */
     public CTensor(Shape shape, CNumber[] entries) {
-<span class="fc" id="L112">        super(shape, entries);</span>
+<span class="fc" id="L118">        super(shape, entries);</span>
 
-<span class="fc bfc" id="L114" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
-<span class="fc" id="L115">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="fc" id="L121">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
         }
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L123">    }</span>
 
 
     /**
@@ -122,9 +128,9 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @param A Tensor specifying shape and entries.
      */
     public CTensor(Tensor A) {
-<span class="fc" id="L125">        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);</span>
-<span class="fc" id="L126">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
-<span class="fc" id="L127">    }</span>
+<span class="fc" id="L131">        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);</span>
+<span class="fc" id="L132">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
+<span class="fc" id="L133">    }</span>
 
 
     /**
@@ -132,8 +138,42 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; {
      * @param A Tensor specifying shape and entries.
      */
     public CTensor(CTensor A) {
-<span class="fc" id="L135">        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);</span>
-<span class="fc" id="L136">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
-<span class="fc" id="L137">    }</span>
+<span class="fc" id="L141">        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);</span>
+<span class="fc" id="L142">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
+<span class="fc" id="L143">    }</span>
+
+
+    /**
+     * Checks if an object is equal to this tensor object. Valid object types are: {@link Tensor}, {@link CTensor},
+     * {@link SparseTensor}, and {@link SparseCTensor}. These tensors are equal to this tensor if all entries are
+     * numerically equal to the corresponding element of this tensor.
+     * @param object Object to check equality with this tensor.
+     * @return True if the two tensors are numerically equivalent and false otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        boolean equal;
+
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">        if(object instanceof Tensor) {</span>
+<span class="nc" id="L158">            Tensor tensor = (Tensor) object;</span>
+<span class="nc" id="L159">            equal = RealComplexDenseEquals.tensorEquals(tensor, this);</span>
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">        } else if(object instanceof CTensor) {</span>
+<span class="fc" id="L161">            CTensor tensor = (CTensor) object;</span>
+<span class="fc" id="L162">            equal = ComplexDenseEquals.tensorEquals(entries, shape, tensor.entries, tensor.shape);</span>
+
+<span class="pc bnc" id="L164" title="All 2 branches missed.">        } else if(object instanceof SparseTensor) {</span>
+<span class="nc" id="L165">            SparseTensor tensor = (SparseTensor) object;</span>
+<span class="nc" id="L166">            equal = RealComplexDenseSparseEquals.tensorEquals(this, tensor);</span>
+
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        } else if(object instanceof SparseCTensor) {</span>
+<span class="nc" id="L169">            SparseCTensor tensor = (SparseCTensor) object;</span>
+<span class="nc" id="L170">            equal = ComplexDenseSparseEquals.tensorEquals(this, tensor);</span>
+
+<span class="nc" id="L172">        } else {</span>
+<span class="nc" id="L173">            equal = false;</span>
+        }
+
+<span class="fc" id="L176">        return equal;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

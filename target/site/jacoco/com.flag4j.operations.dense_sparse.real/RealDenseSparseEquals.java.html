@@ -134,35 +134,35 @@ public class RealDenseSparseEquals {
      * @return True if the two matrices are element-wise equivalent.
      */
     public static boolean tensorEquals(Tensor A, SparseTensor B) {
-<span class="nc" id="L137">        boolean equal = true;</span>
+<span class="fc" id="L137">        boolean equal = true;</span>
 
-<span class="nc bnc" id="L139" title="All 2 branches missed.">        if(A.shape.equals(B.shape)) {</span>
-<span class="nc" id="L140">            double[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        if(A.shape.equals(B.shape)) {</span>
+<span class="fc" id="L140">            double[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);</span>
 
             int entriesIndex;
 
             // Remove all nonZero entries from the entries of this matrix.
-<span class="nc bnc" id="L145" title="All 2 branches missed.">            for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L146">                entriesIndex = A.shape.entriesIndex(B.indices[i]);</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">            for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L146">                entriesIndex = A.shape.entriesIndex(B.indices[i]);</span>
 
-<span class="nc bnc" id="L148" title="All 2 branches missed.">                if(entriesCopy[entriesIndex] != B.entries[i]) {</span>
-<span class="nc" id="L149">                    equal = false;</span>
-<span class="nc" id="L150">                    break;</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">                if(entriesCopy[entriesIndex] != B.entries[i]) {</span>
+<span class="fc" id="L149">                    equal = false;</span>
+<span class="fc" id="L150">                    break;</span>
                 }
 
-<span class="nc" id="L153">                entriesCopy[A.shape.entriesIndex(B.indices[i])] = 0;</span>
+<span class="fc" id="L153">                entriesCopy[A.shape.entriesIndex(B.indices[i])] = 0;</span>
             }
 
-<span class="nc bnc" id="L156" title="All 2 branches missed.">            if(equal) {</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">            if(equal) {</span>
                 // Now, if this matrix is equal to the sparse matrix, there should only be zeros left in the entriesStack
-<span class="nc" id="L158">                equal = ArrayUtils.isZeros(entriesCopy);</span>
+<span class="fc" id="L158">                equal = ArrayUtils.isZeros(entriesCopy);</span>
             }
 
-<span class="nc" id="L161">        } else {</span>
-<span class="nc" id="L162">            equal = false;</span>
+<span class="fc" id="L161">        } else {</span>
+<span class="fc" id="L162">            equal = false;</span>
         }
 
-<span class="nc" id="L165">        return equal;</span>
+<span class="fc" id="L165">        return equal;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

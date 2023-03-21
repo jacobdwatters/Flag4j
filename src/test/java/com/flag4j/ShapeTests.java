@@ -170,12 +170,12 @@ class ShapeTests {
         // -------------- Sub-case 5 --------------
         shape1 = new Shape(15, 2, 3, 9);
         indices = new int[]{11, 2, 1, 5};
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> shape1.entriesIndex(indices));
+        assertThrows(IndexOutOfBoundsException.class, () -> shape1.entriesIndex(indices));
 
         // -------------- Sub-case 6 --------------
         shape1 = new Shape(15, 2, 3, 9);
         indices = new int[]{11, 1, 1, 101};
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> shape1.entriesIndex(indices));
+        assertThrows(IndexOutOfBoundsException.class, () -> shape1.entriesIndex(indices));
     }
 
 
