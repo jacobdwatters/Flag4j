@@ -3,6 +3,7 @@ com\flag4j\matrix\MatrixElemDivTests.class
 com\flag4j\matrix\MatrixScalMultTests.class
 com\flag4j\matrix\MatrixToStringTest.class
 com\flag4j\complex_matrix\CMatrixConversionTests.class
+com\flag4j\tensor\TensorConstructorTests.class
 com\flag4j\matrix\MatrixAggregationTests.class
 com\flag4j\complex_matrix\CMatrixSubTests.class
 com\flag4j\matrix\MatrixVectorCheckTests.class
@@ -18,13 +19,13 @@ com\flag4j\complex_matrix\CMatrixDirectSumTests.class
 com\flag4j\matrix\MatrixSumRowsColsTests.class
 com\flag4j\complex_matrix\CMatrixElemDivTests.class
 com\flag4j\complex_matrix\CMatrixEqualsTest.class
+com\flag4j\tensor\TensorAggregateTests.class
 com\flag4j\complex_matrix\CMatrixToStringTests.class
 com\flag4j\matrix\MatrixAddToEachColTests.class
 com\flag4j\complex_matrix\CMatrixRoundTests.class
 com\flag4j\complex_matrix\CMatrixStackTests.class
 com\flag4j\matrix\MatrixConversionTests.class
 com\flag4j\linalg\decompositions\RealLUTests.class
-com\flag4j\matrix\TransposeDispatcherTests.class
 com\flag4j\matrix\MatrixGetTests.class
 com\flag4j\matrix\MatrixSubTests.class
 com\flag4j\complex_matrix\CMatrixMultTests.class
@@ -35,6 +36,7 @@ com\flag4j\matrix\MatrixDetTests.class
 com\flag4j\CustomAssertions.class
 com\flag4j\complex_matrix\CMatrixPropertiesTests.class
 com\flag4j\linalg\decompositions\RealQRTests.class
+com\flag4j\tensor\TensorPropertiesTests.class
 com\flag4j\operations\sparse\complex\ComplexSparseMatMultTests.class
 com\flag4j\complex_matrix\CMatrixElemMultTests.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseMatMultTests.class
@@ -53,6 +55,7 @@ com\flag4j\matrix\MatrixSetOperationTests.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatrixMultiplicationTests.class
 com\flag4j\complex_matrix\CMatrixSetOperationTests.class
 com\flag4j\complex_matrix\CMatrixMatVecMultTests.class
+com\flag4j\matrix\MatrixTransposeTests.class
 com\flag4j\matrix\MatrixPropertiesTests.class
 com\flag4j\matrix\MatrixElemMultTests.class
 com\flag4j\complex_matrix\CMatrixScaleOperationsTests.class

@@ -50,7 +50,7 @@ import java.util.Arrays;
 
 
 /**
- * Real Dense Tensor. Can be any rank.
+ * Real Dense Tensor. May have any rank (that is, may have any number of unique axes/dimensions).
  */
 public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tensor, CTensor> {
 
@@ -60,7 +60,7 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
      * @param shape Shape of the tensor.
      */
     public Tensor(Shape shape) {
-        super(shape, new double[shape.totalEntries().intValue()]);
+        super(shape, new double[shape.totalEntries().intValueExact()]);
     }
 
 
@@ -805,5 +805,4 @@ public class Tensor extends TensorBase<double[]> implements RealTensorMixin<Tens
                 RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
     }
-
 }

@@ -28,7 +28,7 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexMatrixBase;
 import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.io.PrintOptions;
-import com.flag4j.operations.MatrixMultiply;
+import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
@@ -1922,7 +1922,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(Matrix B) {
-<span class="fc" id="L1925">        CNumber[] entries = MatrixMultiply.dispatch(this, B);</span>
+<span class="fc" id="L1925">        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, B);</span>
 <span class="fc" id="L1926">        Shape shape = new Shape(this.numRows, B.numCols);</span>
 
 <span class="fc" id="L1928">        return new CMatrix(shape, entries);</span>
@@ -1957,7 +1957,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(CMatrix B) {
-<span class="fc" id="L1960">        CNumber[] entries = MatrixMultiply.dispatch(this, B);</span>
+<span class="fc" id="L1960">        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, B);</span>
 <span class="fc" id="L1961">        Shape shape = new Shape(this.numRows, B.numCols);</span>
 
 <span class="fc" id="L1963">        return new CMatrix(shape, entries);</span>
@@ -1992,7 +1992,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(Vector b) {
-<span class="fc" id="L1995">        CNumber[] entries = MatrixMultiply.dispatch(this, b);</span>
+<span class="fc" id="L1995">        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, b);</span>
 <span class="fc" id="L1996">        Shape shape = new Shape(this.numRows, 1);</span>
 
 <span class="fc" id="L1998">        return new CMatrix(shape, entries);</span>
@@ -2024,7 +2024,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(CVector b) {
-<span class="fc" id="L2027">        CNumber[] entries = MatrixMultiply.dispatch(this, b);</span>
+<span class="fc" id="L2027">        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, b);</span>
 <span class="fc" id="L2028">        Shape shape = new Shape(this.numRows, 1);</span>
 
 <span class="fc" id="L2030">        return new CMatrix(shape, entries);</span>

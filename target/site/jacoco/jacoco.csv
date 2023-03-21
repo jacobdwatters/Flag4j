@@ -51,9 +51,11 @@ Flag4j,com.flag4j.operations.sparse.real_complex,RealComplexSparseMatrixMultipli
 Flag4j,com.flag4j.concurrency,ThreadManager,17,72,2,2,5,15,3,6,1,6
 Flag4j,com.flag4j.concurrency,CheckConcurrent,54,0,14,0,13,0,11,0,4,0
 Flag4j,com.flag4j.concurrency,Configurations,49,10,0,0,16,4,8,2,8,2
+Flag4j,com.flag4j.operations,MatrixMultiplyDispatcher,1030,379,145,19,198,79,109,13,3,13
 Flag4j,com.flag4j.operations,MatrixTranspose,78,104,11,5,18,21,11,5,2,5
 Flag4j,com.flag4j.operations,MatrixMultiply.Algorithm,0,75,0,0,0,4,0,1,0,1
 Flag4j,com.flag4j.operations,TransposeDispatcher,134,104,15,5,28,21,15,5,4,5
+Flag4j,com.flag4j.operations,MatrixMultiplyDispatcher.Algorithm,0,75,0,0,0,4,0,1,0,1
 Flag4j,com.flag4j.operations,TransposeDispatcher.Algorithm,0,27,0,0,0,5,0,1,0,1
 Flag4j,com.flag4j.operations,MatrixMultiply,1030,379,145,19,198,79,109,13,3,13
 Flag4j,com.flag4j.operations,MatrixTranspose.Algorithm,0,27,0,0,0,5,0,1,0,1
@@ -72,7 +74,7 @@ Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseMat
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseVectorOperations,7,469,0,28,2,70,1,26,1,12
 Flag4j,com.flag4j,CVector,380,1792,33,51,62,248,31,110,14,85
 Flag4j,com.flag4j,SparseTensor,0,70,0,2,0,10,0,5,0,4
-Flag4j,com.flag4j,Tensor,517,191,11,15,101,35,53,15,47,8
+Flag4j,com.flag4j,Tensor,413,295,7,19,82,54,38,30,34,21
 Flag4j,com.flag4j,SparseCTensor,0,118,0,6,0,16,0,8,0,5
 Flag4j,com.flag4j,CMatrix,899,7244,64,376,136,784,91,346,57,160
 Flag4j,com.flag4j,SparseVector,0,44,0,0,0,9,0,4,0,4
@@ -97,7 +99,7 @@ Flag4j,com.flag4j.io,TensorReader,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.io,TensorWriter,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.io,PrintOptions,7,83,0,8,2,34,1,16,1,12
 Flag4j,com.flag4j.operations.common.real,AggregateReal,7,150,0,24,2,30,1,17,1,5
-Flag4j,com.flag4j.operations.common.real,RealProperties,61,0,8,0,14,0,7,0,3,0
+Flag4j,com.flag4j.operations.common.real,RealProperties,7,54,0,8,2,12,1,6,1,2
 Flag4j,com.flag4j.operations.common.real,Aggregate,7,150,0,24,2,30,1,17,1,5
 Flag4j,com.flag4j.operations.common.real,RealOperations,7,169,0,18,2,32,1,15,1,6
 Flag4j,com.flag4j.linalg.decompositions,RealQRDecomposition,39,131,1,5,8,25,3,6,2,4

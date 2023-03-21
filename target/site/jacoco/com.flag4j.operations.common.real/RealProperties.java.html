@@ -44,16 +44,16 @@ public class RealProperties {
      * @return True if the tensor contains only positive values. Otherwise, returns false.
      */
     public static boolean isPos(double[] entries) {
-<span class="nc" id="L47">        boolean result = true;</span>
+<span class="fc" id="L47">        boolean result = true;</span>
 
-<span class="nc bnc" id="L49" title="All 2 branches missed.">        for(double value : entries) {</span>
-<span class="nc bnc" id="L50" title="All 2 branches missed.">            if(value&lt;=0) {</span>
-<span class="nc" id="L51">                result = false;</span>
-<span class="nc" id="L52">                break;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for(double value : entries) {</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if(value&lt;=0) {</span>
+<span class="fc" id="L51">                result = false;</span>
+<span class="fc" id="L52">                break;</span>
             }
         }
 
-<span class="nc" id="L56">        return result;</span>
+<span class="fc" id="L56">        return result;</span>
     }
 
 
@@ -63,16 +63,16 @@ public class RealProperties {
      * @return True if the tensor contains only negative values. Otherwise, returns false.
      */
     public static boolean isNeg(double[] entries) {
-<span class="nc" id="L66">        boolean result = true;</span>
+<span class="fc" id="L66">        boolean result = true;</span>
 
-<span class="nc bnc" id="L68" title="All 2 branches missed.">        for(double value : entries) {</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">            if(value&gt;=0) {</span>
-<span class="nc" id="L70">                result = false;</span>
-<span class="nc" id="L71">                break;</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        for(double value : entries) {</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">            if(value&gt;=0) {</span>
+<span class="fc" id="L70">                result = false;</span>
+<span class="fc" id="L71">                break;</span>
             }
         }
 
-<span class="nc" id="L75">        return result;</span>
+<span class="fc" id="L75">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
