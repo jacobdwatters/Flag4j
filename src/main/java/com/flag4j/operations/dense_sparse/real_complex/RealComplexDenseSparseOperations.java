@@ -263,4 +263,44 @@ public class RealComplexDenseSparseOperations {
 
         return new SparseCTensor(src2.shape.copy(), destEntries, destIndices);
     }
+
+
+    /**
+     * Adds a real dense tensor to a sparse complex tensor.
+     * @param src1 First tensor in the sum.
+     * @param src2 Second tensor in the sum.
+     * @return The result of the tensor addition.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.t
+     */
+    public static CTensor add(Tensor src1, SparseCTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        CTensor dest = new CTensor(src1);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            dest.entries[dest.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Subtracts a sparse complex tensor from a real dense tensor.
+     * @param src1 First tensor in the sum.
+     * @param src2 Second tensor in the sum.
+     * @return The result of the tensor addition.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.t
+     */
+    public static CTensor sub(Tensor src1, SparseCTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        CTensor dest = new CTensor(src1);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            dest.entries[dest.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);
+        }
+
+        return dest;
+    }
 }

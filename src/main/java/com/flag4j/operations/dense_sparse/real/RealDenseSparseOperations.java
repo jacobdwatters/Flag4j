@@ -24,10 +24,8 @@
 
 package com.flag4j.operations.dense_sparse.real;
 
-import com.flag4j.Matrix;
-import com.flag4j.SparseMatrix;
-import com.flag4j.SparseTensor;
-import com.flag4j.Tensor;
+import com.flag4j.*;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -60,6 +58,28 @@ public class RealDenseSparseOperations {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
             dest.entries[row*src1.numCols + col] += src2.entries[i];
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Adds a real dense tensor to a real sparse tensor.
+     * @param src1 First tensor in sum.
+     * @param src2 Second tensor in sum.
+     * @return The result of the tensor addition.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static Tensor add(Tensor src1, SparseTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        int[] indices;
+        Tensor dest = new Tensor(src1);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            indices = src2.indices[i];
+            dest.entries[dest.shape.entriesIndex(indices)] += src2.entries[i];
         }
 
         return dest;
@@ -195,5 +215,25 @@ public class RealDenseSparseOperations {
         }
 
         return new SparseTensor(src2.shape.copy(), destEntries, destIndices);
+    }
+
+
+    /**
+     * Subtracts a real sparse tensor from a real dense tensor.
+     * @param src1 First tensor in the sum.
+     * @param src2 Second tensor in the sum.
+     * @return The result of the tensor addition.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.t
+     */
+    public static Tensor sub(Tensor src1, SparseTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        Tensor dest = new Tensor(src1);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            dest.entries[dest.shape.entriesIndex(src2.indices[i])] -= src2.entries[i];
+        }
+
+        return dest;
     }
 }

@@ -583,6 +583,90 @@ public class Tensor extends TensorBase<double[]> implements
 
 
     /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public Tensor add(SparseTensor B) {
+        return RealDenseSparseOperations.add(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor add(CTensor B) {
+        return new CTensor(
+                shape.copy(),
+                RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape)
+        );
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor add(SparseCTensor B) {
+        return RealComplexDenseSparseOperations.add(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between two tensors of the same rank.
+     *
+     * @param B Second tensor in element-wise subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public Tensor sub(SparseTensor B) {
+        return RealDenseSparseOperations.sub(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between two tensors of the same rank.
+     *
+     * @param B Second tensor in element-wise subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor sub(CTensor B) {
+        return new CTensor(
+                shape.copy(),
+                RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
+        );
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between two tensors of the same rank.
+     *
+     * @param B Second tensor in element-wise subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor sub(SparseCTensor B) {
+        return RealComplexDenseSparseOperations.sub(this, B);
+    }
+
+
+    /**
      * Computes the reciprocals, element-wise, of a tensor.
      *
      * @return A tensor containing the reciprocal elements of this tensor.
