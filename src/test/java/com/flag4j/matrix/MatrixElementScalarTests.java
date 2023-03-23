@@ -24,8 +24,8 @@ class MatrixElementScalarTests {
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
         scalar = 1.44;
-        expEntries = new double[][]{{1.334/1.44, -2.3112/1.44, 232.15277777777777},
-                {2.8680555555555554, -35.33/1.44, 4.166666666666666}};
+        expEntries = new double[][]{{1.334/1.44, -2.3112/1.44, 334.3/1.44},
+                {4.13/1.44, -35.33/1.44, 6/1.44}};
         expResult = new Matrix(expEntries);
 
         assertArrayEquals(expResult.entries, A.scalDiv(scalar).entries);

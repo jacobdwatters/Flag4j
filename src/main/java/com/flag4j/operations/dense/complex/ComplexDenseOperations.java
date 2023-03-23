@@ -120,7 +120,7 @@ public final class ComplexDenseOperations {
 
 
     /**
-     * Adds a scalar value to all entries of a tensor.
+     * Subtracts a scalar value to all entries of a tensor.
      * @param src1 Entries of first tensor.
      * @param a Scalar to add to all entries of this tensor.
      * @return The tensor-scalar addition of the two parameters.
@@ -131,7 +131,7 @@ public final class ComplexDenseOperations {
 
         for(int i=0; i<sum.length; i++) {
             sum[i].re = src1[i]-a.re;
-            sum[i].im = a.im;
+            sum[i].im = -a.im;
         }
 
         return sum;

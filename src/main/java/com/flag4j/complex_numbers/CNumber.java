@@ -534,7 +534,7 @@ public class CNumber extends Number {
 
     /**
      * Computes the multiplicative inverse of this complex number.
-     * @return The additive inverse of this complex number.
+     * @return The multiplicative inverse of this complex number.
      */
     public CNumber multInv() {
         return ONE.div(this);

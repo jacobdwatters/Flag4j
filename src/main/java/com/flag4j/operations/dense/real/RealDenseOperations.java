@@ -188,7 +188,7 @@ public final class RealDenseOperations {
      * @return The scalar division of the tensor.
      */
     public static double[] scalDiv(double[] src, double divisor) {
-        return RealOperations.scalMult(src, 1/divisor);
+        return RealOperations.scalDiv(src, divisor);
     }
 
 

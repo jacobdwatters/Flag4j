@@ -131,33 +131,30 @@ public class RealDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static double[] blocked(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+        // TODO: Investigate issue with blocked matrix multiplication algorithms when both matrices are larger than the block size.
+        //  This method should be correct but that should also be verified.
+
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
+        int cols1 = shape1.dims[Axis2D.col()];
 
-        double[] dest = new double[rows1*cols2];
-        int bsize = Configurations.getBlockSize();
-        int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
+        double[] dest = new double[rows1 * cols2];
+        int blockSize = Configurations.getBlockSize();
+        int iBound, jBound, kBound;
 
-        // Blocked matrix multiply
-        for(int ii=0; ii<rows1; ii += bsize) {
-            for(int jj=0; jj<cols2; jj += bsize) {
-                for(int kk=0; kk<rows2; kk += bsize) {
-                    // Multiply the current blocks
-                    for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                        src1IndexStart = i*cols1;
-                        destIndexStart = i*cols2;
+        for(int ii=0; ii<rows1; ii+=blockSize) {
+            iBound = Math.min(ii + blockSize, rows1);
 
-                        for(int j=jj; j<jj+bsize && j<cols2; j++) {
-                            src2Index = j;
-                            src1Index = src1IndexStart;
-                            destIndex = destIndexStart + j;
-                            end = src1Index + Math.min(bsize, rows2);
+            for(int jj = 0; jj<cols2; jj+=blockSize) {
+                jBound = Math.min(jj + blockSize, cols2);
 
-                            while(src1Index<end) {
-                                dest[destIndex] += src1[src1Index++]*src2[src2Index];
-                                src2Index += cols2;
+                for(int kk = 0; kk<cols1; kk+=blockSize) {
+                    kBound = Math.min(kk + blockSize, cols1);
+
+                    for(int i=ii; i<iBound; i++) {
+                        for (int j=jj; j<jBound; j++) {
+                            for (int k=kk; k<kBound; k++) {
+                                dest[i*cols2 + j] += src1[i*cols1 + k] * src2[k*cols2 + j];
                             }
                         }
                     }
@@ -324,7 +321,6 @@ public class RealDenseMatrixMultiplication {
                             int src2Index = j;
                             int src1Index = src1IndexStart;
                             int destIndex = destIndexStart + j;
-                            // TODO: This is not correct. Should be: end = Math.min(src1Index + bsize, rows2)
                             int end = src1Index + Math.min(bsize, rows2);
 
                             while(src1Index<end) {

@@ -58,6 +58,23 @@ public class RealOperations {
 
 
     /**
+     * Computes the scalar division of a tensor.
+     * @param src Entries of the tensor.
+     * @param divisor Scalar value to divide.
+     * @return The scalar division of the tensor.
+     */
+    public static double[] scalDiv(double[] src, double divisor) {
+        double[] quotient = new double[src.length];
+
+        for(int i=0; i<quotient.length; i++) {
+            quotient[i] = src[i]/divisor;
+        }
+
+        return quotient;
+    }
+
+
+    /**
      * Computes the element-wise square root of a tensor.
      * @param src Elements of the tensor.
      * @return The element-wise square root of the tensor.

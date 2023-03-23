@@ -125,6 +125,23 @@ public interface TensorExclusiveMixin {
     CTensor sub(SparseCTensor B);
 
 
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    void addEq(SparseTensor B);
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    void subEq(SparseTensor B);
+
 
     /**
      * Computes the element-wise multiplication between two tensors.

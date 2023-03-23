@@ -335,6 +335,41 @@ public class Tensor extends TensorBase<double[]> implements
 
 
     /**
+     * Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the addition.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    @Override
+    public void addEq(Tensor B) {
+        RealDenseOperations.addEq(entries, shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the addition.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    @Override
+    public void addEq(SparseTensor B) {
+        RealDenseSparseOperations.addEq(this, B);
+    }
+
+
+    /**
+     * Adds a specified value to all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to add to all entries of this tensor.
+     */
+    @Override
+    public void addEq(Double b) {
+        RealDenseOperations.addEq(entries, b);
+    }
+
+
+    /**
      * Computes the element-wise subtraction between two tensors of the same rank.
      *
      * @param B Second tensor in element-wise subtraction.
@@ -387,29 +422,6 @@ public class Tensor extends TensorBase<double[]> implements
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public void addEq(Tensor B) {
-        RealDenseOperations.addEq(entries, shape, B.entries, B.shape);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void addEq(Double b) {
-        RealDenseOperations.addEq(entries, b);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
     public void subEq(Tensor B) {
         RealDenseOperations.subEq(entries, shape, B.entries, B.shape);
     }
@@ -422,7 +434,7 @@ public class Tensor extends TensorBase<double[]> implements
      */
     @Override
     public void subEq(Double b) {
-        RealDenseOperations.addEq(entries, b);
+        RealDenseOperations.subEq(entries, b);
     }
 
 
@@ -663,6 +675,18 @@ public class Tensor extends TensorBase<double[]> implements
     @Override
     public CTensor sub(SparseCTensor B) {
         return RealComplexDenseSparseOperations.sub(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void subEq(SparseTensor B) {
+        RealDenseSparseOperations.subEq(this, B);
     }
 
 

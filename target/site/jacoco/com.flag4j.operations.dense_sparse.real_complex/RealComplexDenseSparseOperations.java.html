@@ -263,5 +263,45 @@ public class RealComplexDenseSparseOperations {
 
 <span class="nc" id="L264">        return new SparseCTensor(src2.shape.copy(), destEntries, destIndices);</span>
     }
+
+
+    /**
+     * Adds a real dense tensor to a sparse complex tensor.
+     * @param src1 First tensor in the sum.
+     * @param src2 Second tensor in the sum.
+     * @return The result of the tensor addition.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.t
+     */
+    public static CTensor add(Tensor src1, SparseCTensor src2) {
+<span class="fc" id="L276">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc" id="L278">        CTensor dest = new CTensor(src1);</span>
+
+<span class="fc bfc" id="L280" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L281">            dest.entries[dest.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);</span>
+        }
+
+<span class="fc" id="L284">        return dest;</span>
+    }
+
+
+    /**
+     * Subtracts a sparse complex tensor from a real dense tensor.
+     * @param src1 First tensor in the sum.
+     * @param src2 Second tensor in the sum.
+     * @return The result of the tensor addition.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.t
+     */
+    public static CTensor sub(Tensor src1, SparseCTensor src2) {
+<span class="fc" id="L296">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc" id="L298">        CTensor dest = new CTensor(src1);</span>
+
+<span class="fc bfc" id="L300" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L301">            dest.entries[dest.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);</span>
+        }
+
+<span class="fc" id="L304">        return dest;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

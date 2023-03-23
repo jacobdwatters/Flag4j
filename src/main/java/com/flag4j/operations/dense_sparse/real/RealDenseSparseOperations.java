@@ -30,6 +30,8 @@ import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
+import java.util.Arrays;
+
 /**
  * This class contains methods to apply common binary operations to a real dense matrix and to a real sparse matrix.
  */
@@ -77,7 +79,7 @@ public class RealDenseSparseOperations {
         int[] indices;
         Tensor dest = new Tensor(src1);
 
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
+        for(int i=0; i<src2.entries.length; i++) {
             indices = src2.indices[i];
             dest.entries[dest.shape.entriesIndex(indices)] += src2.entries[i];
         }
@@ -235,5 +237,37 @@ public class RealDenseSparseOperations {
         }
 
         return dest;
+    }
+
+
+    /**
+     * Adds a real dense tensor to a real sparse tensor and stores the result in the first tensor.
+     * @param src1 First tensor in sum. Also, storage of result.
+     * @param src2 Second tensor in sum.
+     * @return The result of the tensor addition.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static void addEq(Tensor src1, SparseTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            src1.entries[src1.shape.entriesIndex(src2.indices[i])] += src2.entries[i];
+        }
+    }
+
+
+    /**
+     * Subtracts a real sparse tensor from a real dense tensor and stores the result in the dense tensor.
+     * @param src1 First tensor in difference. Also, storage of result.
+     * @param src2 Second tensor in difference.
+     * @return The result of the tensor subtraction.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static void subEq(Tensor src1, SparseTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            src1.entries[src1.shape.entriesIndex(src2.indices[i])] -= src2.entries[i];
+        }
     }
 }
