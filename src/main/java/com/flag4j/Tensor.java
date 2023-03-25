@@ -237,6 +237,17 @@ public class Tensor extends TensorBase<double[]> implements
 
 
     /**
+     * Creates a hashcode for this matrix. Note, method adds {@link Arrays#hashCode(double[])} applied on the
+     * underlying data array and the underlying shape array.
+     * @return The hashcode for this matrix.
+     */
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);
+    }
+
+
+    /**
      * Checks if this tensor contains only non-negative values.
      *
      * @return True if this tensor only contains non-negative values. Otherwise, returns false.

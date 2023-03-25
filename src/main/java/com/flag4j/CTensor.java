@@ -35,6 +35,8 @@ import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEqu
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 
+import java.util.Arrays;
+
 /**
  * Complex dense tensor.
  */
@@ -175,4 +177,16 @@ public class CTensor extends TensorBase<CNumber[]> {
 
         return equal;
     }
+
+
+    /**
+     * Creates a hashcode for this matrix. Note, method adds {@link Arrays#hashCode(double[])} applied on the
+     * underlying data array and the underlying shape array.
+     * @return The hashcode for this matrix.
+     */
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);
+    }
+
 }
