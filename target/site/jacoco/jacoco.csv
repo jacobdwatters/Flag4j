@@ -44,7 +44,7 @@ Flag4j,com.flag4j.operations.sparse.complex,ComplexSparseMatrixMultiplication,7,
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseOperations,7,246,0,18,2,38,1,18,1,9
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseVectorOperations,7,190,0,14,2,26,1,12,1,5
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseEquals,7,36,0,4,2,3,1,5,1,3
-Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseMatrixMultiplication,7,2288,26,194,2,396,27,120,1,36
+Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseMatrixMultiplication,7,2302,0,168,2,440,1,120,1,36
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseElemDiv,114,116,3,7,16,16,8,7,5,5
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseElemMult,41,37,1,3,8,7,4,3,3,2
 Flag4j,com.flag4j.operations.sparse.real_complex,RealComplexSparseMatrixMultiplication,541,0,40,0,98,0,33,0,13,0

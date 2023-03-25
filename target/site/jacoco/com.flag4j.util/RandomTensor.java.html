@@ -101,7 +101,7 @@ public class RandomTensor {
     public Matrix getRandomMatrix(int rows, int cols) {
 <span class="nc" id="L102">        Matrix randMat = new Matrix(rows, cols);</span>
 
-<span class="nc bnc" id="L104" title="All 2 branches missed.">        for(int i=0; i&lt;randMat.totalEntries().intValue(); i++) {</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        for(int i=0; i&lt;randMat.entries.length; i++) {</span>
 <span class="nc" id="L105">            randMat.entries[i] = rng.nextGaussian();</span>
         }
 
