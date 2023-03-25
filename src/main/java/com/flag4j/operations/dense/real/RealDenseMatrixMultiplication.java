@@ -53,16 +53,14 @@ public class RealDenseMatrixMultiplication {
      */
     public static double[] standard(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
         int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
 
         double[] dest = new double[rows1*cols2];
-
         int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
 
         for(int i=0; i<rows1; i++) {
-            src1IndexStart = i*cols1;
+            src1IndexStart = i*rows2;
             destIndexStart = i*cols2;
 
             for(int j=0; j<cols2; j++) {
@@ -274,14 +272,13 @@ public class RealDenseMatrixMultiplication {
      */
     public static double[] concurrentReordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
         int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
 
         double[] dest = new double[rows1*cols2];
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
-            int src1IndexStart = i*cols1;
+            int src1IndexStart = i*rows2;
             int destIndexStart = i*cols2;
 
             for(int k=0; k<rows2; k++) {
@@ -415,13 +412,14 @@ public class RealDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         double[] dest = new double[rows1];
-        int src1Index;
+        int src1Index, src2Index;
 
         for(int i=0; i<rows1; i++) {
             src1Index = i*cols1;
+            src2Index = 0;
 
-            for(int k=0; k<rows2; k++) {
-                dest[i] += src1[src1Index + k]*src2[k];
+            while(src2Index<rows2) {
+                dest[i] += src1[src1Index++]*src2[src2Index++];
             }
         }
 
@@ -443,15 +441,24 @@ public class RealDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         double[] dest = new double[rows1];
-        int bsize = Configurations.getBlockSize();
+        int blockSize = Configurations.getBlockSize();
+        int iBound, kBound;
+        int src1Index, src2Index;
 
         // Blocked matrix-vector multiply
-        for(int ii=0; ii<rows1; ii += bsize) {
-            for(int kk=0; kk<rows2; kk += bsize) {
+        for(int ii=0; ii<rows1; ii+=blockSize) {
+            iBound = Math.min(ii+blockSize, rows1);
+
+            for(int kk=0; kk<rows2; kk+=blockSize) {
+                kBound = Math.min(kk+blockSize, rows2);
+
                 // Multiply the current blocks
-                for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                    for(int k=kk; k<kk+bsize && k<rows2; k++) {
-                        dest[i] += src1[i*cols1 + k]*src2[k];
+                for(int i=ii; i<iBound; i++) {
+                    src1Index = i*cols1 + kk;
+                    src2Index = kk;
+
+                    while(src2Index<kBound) {
+                        dest[i] += src1[src1Index++]*src2[src2Index++];
                     }
                 }
             }
@@ -478,8 +485,11 @@ public class RealDenseMatrixMultiplication {
         double[] dest = new double[rows1];
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
-            for(int k=0; k<rows2; k++) {
-                dest[i] += src1[i*cols1 + k]*src2[k];
+            int src1Index = i*cols1;
+            int src2Index = 0;
+
+            while(src2Index<rows2) {
+                dest[i] += src1[src1Index++]*src2[src2Index++];
             }
         });
 
@@ -502,15 +512,21 @@ public class RealDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         double[] dest = new double[rows1];
-        int bsize = Configurations.getBlockSize();
+        int blockSize = Configurations.getBlockSize();
 
-        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {
-            // Blocked matrix-vector multiply
-            for(int kk=0; kk<rows2; kk += bsize) {
+        ThreadManager.concurrentLoop(0, rows1, blockSize, (ii) -> {
+            int iBound = Math.min(ii+blockSize, rows1);
+
+            for(int kk=0; kk<rows2; kk+=blockSize) {
+                int kBound = Math.min(kk+blockSize, rows2);
+
                 // Multiply the current blocks
-                for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                    for(int k=kk; k<kk+bsize && k<rows2; k++) {
-                        dest[i] += src1[i*cols1 + k]*src2[k];
+                for(int i=ii; i<iBound; i++) {
+                    int src1Index = i*cols1 + kk;
+                    int src2Index = kk;
+
+                    while(src2Index<kBound) {
+                        dest[i] += src1[src1Index++]*src2[src2Index++];
                     }
                 }
             }
