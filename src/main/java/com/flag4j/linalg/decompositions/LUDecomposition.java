@@ -61,7 +61,7 @@ public abstract class LUDecomposition<T extends MatrixBase<?>> implements Decomp
      */
     protected T P;
     /**
-     * Permutation matrix to store row swaps if partial pivoting is used.
+     * Permutation matrix to store column swaps if full pivoting is used.
      */
     protected T Q;
 
