@@ -130,9 +130,6 @@ public class RealDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static double[] blocked(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        // TODO: Investigate issue with blocked matrix multiplication algorithms when both matrices are larger than the block size.
-        //  This method should be correct but that should also be verified.
-
         int rows1 = shape1.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
         int cols1 = shape1.dims[Axis2D.col()];
