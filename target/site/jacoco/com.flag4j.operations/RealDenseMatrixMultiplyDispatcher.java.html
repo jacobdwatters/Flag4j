@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealDenseMatrixMultiplyDispatcher.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations</a> &gt; <span class="el_source">RealDenseMatrixMultiplyDispatcher.java</span></div><h1>RealDenseMatrixMultiplyDispatcher.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations;
+
+import com.flag4j.Matrix;
+import com.flag4j.Shape;
+import com.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
+import com.flag4j.util.Axis2D;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.flag4j.util.ParameterChecks.assertMatMultShapes;
+
+
+/**
+ * Singleton class which stores a map of all viable real dense matrix multiply algorithms and uses that map to dispatch
+ * a real dense matrix multiply problem to the appropriate algorithm.
+ */
+public final class RealDenseMatrixMultiplyDispatcher {
+
+    /**
+     * Singleton instance of this class.
+     */
+<span class="fc" id="L47">    private static RealDenseMatrixMultiplyDispatcher singletonInstance = null;</span>
+    /**
+     * Map for storing all real dense matrix multiply algorithms
+     */
+    private final Map&lt;AlgorithmNames, RealDenseTensorBinaryOperation&gt; algorithmMap;
+    /**
+     * Array of all real dense matrix multiply algorithms.
+     */
+<span class="fc" id="L55">    private final RealDenseTensorBinaryOperation[] algorithms = {</span>
+            RealDenseMatrixMultiplication::standard,
+            RealDenseMatrixMultiplication::reordered,
+            RealDenseMatrixMultiplication::blocked,
+            RealDenseMatrixMultiplication::blockedReordered,
+            RealDenseMatrixMultiplication::concurrentStandard,
+            RealDenseMatrixMultiplication::concurrentReordered,
+            RealDenseMatrixMultiplication::concurrentBlocked,
+            RealDenseMatrixMultiplication::concurrentBlockedReordered,
+            RealDenseMatrixMultiplication::standardVector,
+            RealDenseMatrixMultiplication::blockedVector,
+            RealDenseMatrixMultiplication::concurrentStandardVector,
+            RealDenseMatrixMultiplication::concurrentBlockedVector
+    };
+
+    /**
+     * Ration measuring squareness. the closer to one, the more square the matrix is.
+     */
+    private static final double SQUARENESS_RATIO = 0.75;
+    /**
+     * Threshold for small matrices which should be multiplied using the standard ikj algorithm.
+     */
+    private static final int SEQUENTIAL_SWAPPED_THRESHOLD = 40;
+    /**
+     * Threshold for matrices to use the concurrent ikj algorithm.
+     */
+    private static final int CONCURRENT_SWAPPED_THRESHOLD = 3072;
+
+
+    /**
+     * Creates an instance containing a map of all viable real dense matrix multiply algorithms.
+     */
+<span class="fc" id="L87">    private RealDenseMatrixMultiplyDispatcher() {</span>
+<span class="fc" id="L88">        AlgorithmNames[] names = AlgorithmNames.values();</span>
+<span class="fc" id="L89">        algorithmMap = new HashMap&lt;&gt;();</span>
+
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        for(int i=0; i&lt;algorithms.length; i++) {</span>
+<span class="fc" id="L92">            algorithmMap.put(names[i], algorithms[i]);</span>
+        }
+<span class="fc" id="L94">    }</span>
+
+
+    /**
+     * Gets the singleton instance of this class. If this class has not been instanced, a new instance will be created.
+     * @return The singleton instance of this class.
+     */
+    public static synchronized RealDenseMatrixMultiplyDispatcher getInstance()  {
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        return (singletonInstance == null) ? new RealDenseMatrixMultiplyDispatcher() : singletonInstance;</span>
+    }
+
+
+    /**
+     * Dispatches a matrix multiply problem to the appropriate algorithm based on the size of the matrices.
+     * @return The result of the matrix multiplication.
+     */
+    public static double[] dispatch(Matrix A, Matrix B) {
+<span class="fc" id="L111">        assertMatMultShapes(A.shape, B.shape); // Ensure matrix shapes are conducive to matrix multiplication.</span>
+
+<span class="fc" id="L113">        RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();</span>
+<span class="fc" id="L114">        AlgorithmNames name = chooseAlgorithmReal(A.shape, B.shape);</span>
+<span class="fc" id="L115">        return dispatcher.algorithmMap.get(name).apply(A.entries, A.shape, B.entries, B.shape);</span>
+    }
+
+
+    /**
+     * Dynamically chooses matrix multiply algorithm based on the shapes of the two matrices to multiply.
+     * @param shape1 The shape of the first matrix.
+     * @param shape2 The shape fo the second matrix.
+     * @return The algorithm to use in the matrix multiplication.
+     */
+    private static AlgorithmNames chooseAlgorithmReal(Shape shape1, Shape shape2) {
+        AlgorithmNames names;
+
+<span class="fc" id="L128">        int rows1 = shape1.get(Axis2D.row());</span>
+<span class="fc" id="L129">        int cols1 = shape1.get(Axis2D.col());</span>
+
+        // Determine the matrix shape.
+        int matrixShape;
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (getRatio(shape1) &gt;= SQUARENESS_RATIO) {</span>
+<span class="fc" id="L134">            matrixShape = 0; // Approximately Square</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        } else if (rows1 &gt; cols1) {</span>
+<span class="nc" id="L136">            matrixShape = 1; // More rows than columns</span>
+        } else {
+<span class="nc" id="L138">            matrixShape = 2; // More columns than rows</span>
+        }
+
+        // Determine the algorithm name based on the matrix shape and size.
+<span class="pc bpc" id="L142" title="3 of 4 branches missed.">        switch (matrixShape) {</span>
+            case 0: // Square
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">                if (rows1 &lt; SEQUENTIAL_SWAPPED_THRESHOLD) {</span>
+<span class="fc" id="L145">                    names = AlgorithmNames.REORDERED;</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                } else if (rows1 &lt; CONCURRENT_SWAPPED_THRESHOLD) {</span>
+<span class="nc" id="L147">                    names = AlgorithmNames.CONCURRENT_REORDERED;</span>
+                } else {
+<span class="nc" id="L149">                    names = AlgorithmNames.CONCURRENT_BLOCKED_REORDERED;</span>
+                }
+<span class="nc" id="L151">                break;</span>
+
+            case 1: // More rows than columns
+<span class="nc bnc" id="L154" title="All 4 branches missed.">                if (rows1 &lt;= 100 &amp;&amp; cols1 &lt;= 5) {</span>
+<span class="nc" id="L155">                    names = AlgorithmNames.REORDERED;</span>
+                } else {
+<span class="nc" id="L157">                    names = AlgorithmNames.CONCURRENT_REORDERED;</span>
+                }
+<span class="nc" id="L159">                break;</span>
+
+            case 2: // More columns than rows
+<span class="nc bnc" id="L162" title="All 2 branches missed.">                if (cols1 &lt;= 100) {</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">                    names = (rows1 &lt;= 20) ? AlgorithmNames.REORDERED : AlgorithmNames.CONCURRENT_REORDERED;</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">                } else if (cols1 &lt;= 500) {</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">                    names = (rows1 &lt;= 10) ? AlgorithmNames.REORDERED : AlgorithmNames.CONCURRENT_REORDERED;</span>
+                } else {
+<span class="nc bnc" id="L167" title="All 2 branches missed.">                    if (rows1 &lt;= 5) {</span>
+<span class="nc" id="L168">                        names = AlgorithmNames.REORDERED;</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">                    } else if (rows1 &lt;= 50) {</span>
+<span class="nc" id="L170">                        names = AlgorithmNames.CONCURRENT_STANDARD;</span>
+                    } else {
+<span class="nc" id="L172">                        names = AlgorithmNames.CONCURRENT_REORDERED;</span>
+                    }
+                }
+<span class="nc" id="L175">                break;</span>
+            default:
+<span class="nc" id="L177">                names = AlgorithmNames.BLOCKED_REORDERED; // Default to blocked reordered algorithm.</span>
+        }
+
+<span class="fc" id="L180">        return names;</span>
+    }
+
+
+    /**
+     * Computes the squareness ratio of a matrix. This is a value between 0 and 1 with 1 being perfectly
+     * square and 0 being a row/column vector.
+     * @param shape Shape of the matrix to compute the squareness ratio of.
+     * @return The squareness ratio for the specified shape.
+     */
+    private static double getRatio(Shape shape) {
+<span class="fc" id="L191">        int numRows = shape.get(Axis2D.row());</span>
+<span class="fc" id="L192">        int numCols = shape.get(Axis2D.col());</span>
+
+<span class="fc" id="L194">        double ratio = Math.abs(numRows-numCols);</span>
+<span class="fc" id="L195">        return 1-ratio/Math.max(numRows, numCols);</span>
+    }
+
+
+    /**
+     * Simple enum class containing all possible choices of real dense matrix multiply algorithms.
+     */
+<span class="fc" id="L202">    private enum AlgorithmNames {</span>
+<span class="fc" id="L203">        STANDARD, REORDERED, BLOCKED, BLOCKED_REORDERED,</span>
+<span class="fc" id="L204">        CONCURRENT_STANDARD, CONCURRENT_REORDERED, CONCURRENT_BLOCKED, CONCURRENT_BLOCKED_REORDERED,</span>
+<span class="fc" id="L205">        STANDARD_VECTOR, BLOCKED_VECTOR, CONCURRENT_STANDARD_VECTOR, CONCURRENT_BLOCKED_VECTOR</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
