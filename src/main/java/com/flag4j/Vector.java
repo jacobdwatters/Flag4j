@@ -195,6 +195,45 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
+     * Since vectors are rank 1 tensors, this method simply copies the vector.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public Vector reshape(Shape shape) {
+        ParameterChecks.assertBroadcastable(this.shape, shape);
+        return this.copy();
+    }
+
+
+    /**
+     * Since vectors are rank 1 tensors, this method simply copies the vector.
+     *
+     * @return The flattened tensor.
+     */
+    @Override
+    public Vector flatten() {
+        ParameterChecks.assertBroadcastable(this.shape, shape);
+        return this.copy();
+    }
+
+
+    /**
+     * Since vectors are rank 1 tensors, this method simply copies the vector.
+     *
+     * @param axis Axis along which to flatten.
+     * @return A flattened version of this tensor.
+     */
+    @Override
+    public Vector flatten(int axis) {
+        ParameterChecks.assertBroadcastable(this.shape, shape);
+        return this.copy();
+    }
+
+
+    /**
      * Extends a vector a specified number of times to a matrix.
      *
      * @param n The number of times to extend this vector.

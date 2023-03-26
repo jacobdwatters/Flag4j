@@ -269,9 +269,6 @@ public class Tensor extends TensorBase<double[]> implements
     }
 
 
-    // TODO: Add reshape(), reshapeCopy(), flatten(), flattenCopy().
-
-
     /**
      * Converts this tensor to an equivalent complex tensor. That is, the entries of the resultant matrix will be exactly
      * the same value but will have type {@link CNumber CNumber} rather than {@link Double}.
@@ -296,6 +293,50 @@ public class Tensor extends TensorBase<double[]> implements
     public void set(double value, int... indices) {
         ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
         RealDenseSetOperations.set(entries, shape, value, indices);
+    }
+
+
+    /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public Tensor reshape(Shape shape) {
+        ParameterChecks.assertBroadcastable(this.shape, shape);
+        return new Tensor(shape, entries.clone());
+    }
+
+
+    /**
+     * Flattens tensor to single dimension. To flatten tensor along a single axis see
+     * {@link #flatten(int)}.
+     *
+     * @return The flattened tensor.
+     */
+    @Override
+    public Tensor flatten() {
+        return new Tensor(new Shape(entries.length), entries.clone());
+    }
+
+
+    /**
+     * Flattens a tensor along a specified axis. This preserves the rank of the tensor.
+     * Also see {@link #flatten()}.
+     *
+     * @param axis Axis along which to flatten.
+     * @return A flattened version of this tensor.
+     * @throws ArrayIndexOutOfBoundsException If axis equal to or larger than the rank of this tensor.
+     */
+    @Override
+    public Tensor flatten(int axis) {
+        int[] dims = new int[this.getRank()];
+        Arrays.fill(dims, 1);
+        dims[axis] = this.entries.length;
+        return new Tensor(new Shape(dims), entries.clone());
     }
 
 

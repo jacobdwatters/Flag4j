@@ -25,6 +25,8 @@
 package com.flag4j.core;
 
 
+import com.flag4j.Shape;
+
 /**
  * This interface specifies manipulations which all tensors (i.e. matrices and vectors) should implement.
  *
@@ -43,4 +45,30 @@ interface TensorManipulationsMixin<T, U, V, W, Y, X extends Number> {
      * @param indices The indices of this tensor for which to set the value.
      */
     void set(double value, int... indices);
+
+    /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    T reshape(Shape shape);
+
+
+    /**
+     * Flattens tensor to single dimension. To flatten tensor along a single axis see
+     * {@link #flatten(int)}.
+     * @return The flattened tensor.
+     */
+    T flatten();
+
+
+    /**
+     * Flattens a tensor along a specified axis. This preserves the rank of the tensor.
+     * Also see {@link #flatten()}.
+     * @param axis Axis along which to flatten.
+     * @return A flattened version of this tensor.
+     */
+    T flatten(int axis);
 }

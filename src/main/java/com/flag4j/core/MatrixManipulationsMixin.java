@@ -26,7 +26,6 @@ package com.flag4j.core;
 
 
 import com.flag4j.Matrix;
-import com.flag4j.Shape;
 import com.flag4j.SparseMatrix;
 
 /**
@@ -41,18 +40,6 @@ import com.flag4j.SparseMatrix;
  */
 public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> extends TensorManipulationsMixin<T, U, V, W, Y, X> {
 
-    /**
-     * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
-     * in the reshaped matrix.
-     * @param shape An array of length 2 containing, in order, the number of rows and the number of columns for the
-     *              reshaped matrix.
-     * @return A matrix which is equivalent to this matrix but with the specified dimensions.
-     * @throws IllegalArgumentException If either,<br>
-     * - The shape array contains negative indices.<br>
-     * - This matrix cannot be reshaped to the specified dimensions.
-     */
-    T reshape(Shape shape);
-
 
     /**
      * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
@@ -62,22 +49,6 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * @return A matrix which is equivalent to this matrix but with the specified dimensions.
      */
     T reshape(int numRows, int numCols);
-
-
-    /**
-     * Flattens a matrix to have a single row. To flatten matrix to a single column, see {@link #flatten(int)}.
-     * @return The flat version of this matrix.
-     */
-    T flatten();
-
-
-    /**
-     * Flattens a matrix along a specified axis. Also see {@link #flatten()}.
-     * @param axis - If axis=0, flattens to a row vector.<br>
-     *             - If axis=1, flattens to a column vector.
-     * @return The flat version of this matrix.
-     */
-    T flatten(int axis);
 
 
     /**
