@@ -26,7 +26,7 @@ class MatrixScalMultTests {
                 {-0.221*-1.66623, 81.346*-1.66623, 90.234*-1.66623}};
         exp = new Matrix(expEntries);
 
-        assertEquals(exp, A.scalMult(a));
+        assertEquals(exp, A.mult(a));
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3.3434}, {-0.221, 81.346, 90.234}};
@@ -36,7 +36,7 @@ class MatrixScalMultTests {
         expEntries[1][0] = -0.0;
         exp = new Matrix(expEntries);
 
-        assertEquals(exp, A.scalMult(a));
+        assertEquals(exp, A.mult(a));
     }
 
 
@@ -51,7 +51,7 @@ class MatrixScalMultTests {
                 {new CNumber(-0.221).mult(aC), new CNumber(81.346).mult(aC), new CNumber(90.234).mult(aC)}};
         expC = new CMatrix(expCEntries);
 
-        assertEquals(expC, A.scalMult(aC));
+        assertEquals(expC, A.mult(aC));
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3.3434}, {-0.221, 81.346, 90.234}};
@@ -62,6 +62,6 @@ class MatrixScalMultTests {
                 {new CNumber(-0.221).mult(aC), new CNumber(81.346).mult(aC), new CNumber(90.234).mult(aC)}};
         expC = new CMatrix(expCEntries);
 
-        assertEquals(expC, A.scalMult(aC));
+        assertEquals(expC, A.mult(aC));
     }
 }

@@ -576,7 +576,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public Vector scalMult(double factor) {
+    public Vector mult(double factor) {
 <span class="fc" id="L580">        return new Vector(RealOperations.scalMult(this.entries, factor));</span>
     }
 
@@ -588,7 +588,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public CVector scalMult(CNumber factor) {
+    public CVector mult(CNumber factor) {
 <span class="fc" id="L592">        return new CVector(ComplexOperations.scalMult(this.entries, factor));</span>
     }
 

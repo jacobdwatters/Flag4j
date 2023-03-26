@@ -1656,7 +1656,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public CMatrix scalMult(double factor) {
+    public CMatrix mult(double factor) {
         return new CMatrix(this.shape.copy(),
                 ComplexOperations.scalMult(this.entries, factor)
         );
@@ -1670,7 +1670,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public CMatrix scalMult(CNumber factor) {
+    public CMatrix mult(CNumber factor) {
         return new CMatrix(this.shape.copy(),
                 ComplexOperations.scalMult(this.entries, factor)
         );
@@ -1821,7 +1821,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isAntiHermitian() {
-        return this.equals(this.H().scalMult(-1));
+        return this.equals(this.H().mult(-1));
     }
 
 

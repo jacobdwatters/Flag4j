@@ -25,7 +25,7 @@ public class VectorScaleMultDivTests {
         expEntries = new double[]{aEntries[0]*b, aEntries[1]*b, aEntries[2]*b};
         exp = new Vector(expEntries);
 
-        assertEquals(exp, a.scalMult(b));
+        assertEquals(exp, a.mult(b));
     }
 
 
@@ -42,7 +42,7 @@ public class VectorScaleMultDivTests {
         expEntries = new CNumber[]{b.mult(aEntries[0]), b.mult(aEntries[1]), b.mult(aEntries[2])};
         exp = new CVector(expEntries);
 
-        assertEquals(exp, a.scalMult(b));
+        assertEquals(exp, a.mult(b));
     }
 
 

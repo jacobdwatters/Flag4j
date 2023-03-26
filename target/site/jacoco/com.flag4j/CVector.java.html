@@ -561,7 +561,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public CVector scalMult(double factor) {
+    public CVector mult(double factor) {
 <span class="fc" id="L565">        return new CVector(ComplexDenseOperations.scalMult(this.entries, factor));</span>
     }
 
@@ -573,7 +573,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public CVector scalMult(CNumber factor) {
+    public CVector mult(CNumber factor) {
 <span class="fc" id="L577">        return new CVector(ComplexDenseOperations.scalMult(this.entries, factor));</span>
     }
 
@@ -791,7 +791,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * Computes the p-norm of this tensor. Warning, if p is large in absolute value, overflow errors may occur.
      *
      * @param p The p value in the p-norm. &lt;br&gt;
-     *          - If p is {@link Double#POSITIVE_INFINITY}, then this method computes the maximum/infinite norm.
+     *          - If p is {@link Double#POSITIVE_INFINITY}, then this method computes the maximum/infinite norm.&lt;br&gt;
      *          - If p is {@link Double#NEGATIVE_INFINITY}, then this method computes the minimum norm.
      * @return The p-norm of this tensor.
      */

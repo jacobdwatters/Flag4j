@@ -26,7 +26,7 @@ class CMatrixScaleOperationsTests {
                 {new CNumber(-9841, -85.13).mult(scal), new CNumber(0, 84.1).mult(scal), new CNumber(-5.234, 234).mult(scal)}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, A.scalMult(scal));
+        assertEquals(exp, A.mult(scal));
 
         // ---------------------- Sub-case 2 ----------------------
         scal = -2179.3419;
@@ -39,7 +39,7 @@ class CMatrixScaleOperationsTests {
                 {new CNumber(-9841, -85.13).mult(scal), new CNumber(0, 84.1).mult(scal), new CNumber(-5.234, 234).mult(scal)}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, A.scalMult(scal));
+        assertEquals(exp, A.mult(scal));
     }
 
 
@@ -58,7 +58,7 @@ class CMatrixScaleOperationsTests {
                 {new CNumber(-9841, -85.13).mult(scal), new CNumber(0, 84.1).mult(scal), new CNumber(-5.234, 234).mult(scal)}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, A.scalMult(scal));
+        assertEquals(exp, A.mult(scal));
 
         // ---------------------- Sub-case 2 ----------------------
         scal = new CNumber(-0.000234, -923.1);
@@ -71,7 +71,7 @@ class CMatrixScaleOperationsTests {
                 {new CNumber(-9841, -85.13).mult(scal), new CNumber(0, 84.1).mult(scal), new CNumber(-5.234, 234).mult(scal)}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, A.scalMult(scal));
+        assertEquals(exp, A.mult(scal));
     }
 
 

@@ -1335,7 +1335,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public Matrix scalMult(double factor) {
+    public Matrix mult(double factor) {
 <span class="fc" id="L1339">        return new Matrix(this.shape.copy(),</span>
 <span class="fc" id="L1340">                RealOperations.scalMult(this.entries, factor)</span>
         );
@@ -1349,7 +1349,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public CMatrix scalMult(CNumber factor) {
+    public CMatrix mult(CNumber factor) {
 <span class="fc" id="L1353">        return new CMatrix(this.shape.copy(),</span>
 <span class="fc" id="L1354">                ComplexOperations.scalMult(this.entries, factor)</span>
         );

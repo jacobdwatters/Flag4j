@@ -497,7 +497,7 @@ public class Tensor extends TensorBase<double[]> implements
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public Tensor scalMult(double factor) {
+    public Tensor mult(double factor) {
         return new Tensor(shape.copy(),
                 RealOperations.scalMult(entries, factor)
         );
@@ -511,7 +511,7 @@ public class Tensor extends TensorBase<double[]> implements
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public CTensor scalMult(CNumber factor) {
+    public CTensor mult(CNumber factor) {
         return new CTensor(shape.copy(),
                 ComplexOperations.scalMult(entries, factor)
         );

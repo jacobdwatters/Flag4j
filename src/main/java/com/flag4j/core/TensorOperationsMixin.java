@@ -23,7 +23,6 @@
  */
 
 package com.flag4j.core;
-import com.flag4j.Tensor;
 import com.flag4j.complex_numbers.CNumber;
 
 /**
@@ -37,7 +36,6 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <X> Tensor entry type.
  */
 interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
-
 
     /**
      * Computes the element-wise addition between two tensors of the same rank.
@@ -144,7 +142,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @param factor Scalar value to multiply with tensor.
      * @return The result of multiplying this tensor by the specified scalar.
      */
-    T scalMult(double factor);
+    T mult(double factor);
 
 
     /**
@@ -152,7 +150,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @param factor Scalar value to multiply with tensor.
      * @return The result of multiplying this tensor by the specified scalar.
      */
-    W scalMult(CNumber factor);
+    W mult(CNumber factor);
 
 
     /**

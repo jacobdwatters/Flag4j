@@ -561,7 +561,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public CVector scalMult(double factor) {
+    public CVector mult(double factor) {
         return new CVector(ComplexDenseOperations.scalMult(this.entries, factor));
     }
 
@@ -573,7 +573,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public CVector scalMult(CNumber factor) {
+    public CVector mult(CNumber factor) {
         return new CVector(ComplexDenseOperations.scalMult(this.entries, factor));
     }
 

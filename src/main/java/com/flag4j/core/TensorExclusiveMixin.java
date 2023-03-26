@@ -38,6 +38,8 @@ import com.flag4j.Tensor;
  */
 public interface TensorExclusiveMixin {
 
+    // TODO: Add tensor contraction methods (i.e.) tensorDot(...).
+
     /**
      * Computes the transpose of a tensor. Same as {@link #T(int, int)}.
      * In the context of a tensor, this exchanges the specified axes.

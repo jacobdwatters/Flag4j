@@ -7,8 +7,6 @@ import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class TensorScalMultDivTests {
@@ -42,7 +40,7 @@ class TensorScalMultDivTests {
         expShape = new Shape(2, 3, 2);
         exp = new Tensor(expShape, expEntries);
 
-        assertEquals(exp, A.scalMult(b));
+        assertEquals(exp, A.mult(b));
     }
 
 
@@ -60,7 +58,7 @@ class TensorScalMultDivTests {
         expShape = new Shape(2, 3, 2);
         exp = new CTensor(expShape, expEntries);
 
-        assertEquals(exp, A.scalMult(b));
+        assertEquals(exp, A.mult(b));
     }
 
 

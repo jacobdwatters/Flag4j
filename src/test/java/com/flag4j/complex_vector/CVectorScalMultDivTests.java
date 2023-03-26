@@ -33,14 +33,14 @@ class CVectorScalMultDivTests {
         expEntries = new CNumber[]{aEntries[0].mult(b), aEntries[1].mult(b), aEntries[2].mult(b), aEntries[3].mult(b)};
         exp = new CVector(expEntries);
 
-        assertEquals(exp, a.scalMult(b));
+        assertEquals(exp, a.mult(b));
 
         // ------------------- Sub-case 2 -------------------
         b = -9.12354;
         expEntries = new CNumber[]{aEntries[0].mult(b), aEntries[1].mult(b), aEntries[2].mult(b), aEntries[3].mult(b)};
         exp = new CVector(expEntries);
 
-        assertEquals(exp, a.scalMult(b));
+        assertEquals(exp, a.mult(b));
     }
 
 
@@ -53,14 +53,14 @@ class CVectorScalMultDivTests {
         expEntries = new CNumber[]{aEntries[0].mult(b), aEntries[1].mult(b), aEntries[2].mult(b), aEntries[3].mult(b)};
         exp = new CVector(expEntries);
 
-        assertEquals(exp, a.scalMult(b));
+        assertEquals(exp, a.mult(b));
 
         // ------------------- Sub-case 2 -------------------
         b = new CNumber(9.234000014, -56.1);
         expEntries = new CNumber[]{aEntries[0].mult(b), aEntries[1].mult(b), aEntries[2].mult(b), aEntries[3].mult(b)};
         exp = new CVector(expEntries);
 
-        assertEquals(exp, a.scalMult(b));
+        assertEquals(exp, a.mult(b));
     }
 
 
