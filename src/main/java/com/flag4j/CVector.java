@@ -1592,6 +1592,43 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
+     * Since vectors are rank 1 tensors, this method simply copies the vector.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public CVector reshape(Shape shape) {
+        ParameterChecks.assertBroadcastable(this.shape, shape);
+        return this.copy();
+    }
+
+
+    /**
+     * Since vectors are rank 1 tensors, this method simply copies the vector.
+     *
+     * @return The flattened tensor.
+     */
+    @Override
+    public CVector flatten() {
+        return this.copy();
+    }
+
+
+    /**
+     * Since vectors are rank 1 tensors, this method simply copies the vector.
+     *
+     * @param axis Axis along which to flatten.
+     * @return A flattened version of this tensor.
+     */
+    @Override
+    public CVector flatten(int axis) {
+        return this.copy();
+    }
+
+
+    /**
      * Converts this vector to a human-readable string format.
      * @return A human-readable string representation of this vector.
      */

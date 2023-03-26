@@ -24,6 +24,7 @@
 
 package com.flag4j.core;
 
+import com.flag4j.CVector;
 import com.flag4j.Shape;
 import com.flag4j.util.ParameterChecks;
 

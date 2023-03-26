@@ -46,7 +46,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      */
 <span class="fc" id="L47">    private static RealDenseMatrixMultiplyDispatcher singletonInstance = null;</span>
     /**
-     * Map for storing all real dense matrix multiply algorithms
+     * lookup table for all real dense matrix multiply algorithms.
      */
     private final Map&lt;AlgorithmNames, RealDenseTensorBinaryOperation&gt; algorithmMap;
     /**
@@ -111,7 +111,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
 <span class="fc" id="L111">        assertMatMultShapes(A.shape, B.shape); // Ensure matrix shapes are conducive to matrix multiplication.</span>
 
 <span class="fc" id="L113">        RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();</span>
-<span class="fc" id="L114">        AlgorithmNames name = chooseAlgorithmReal(A.shape, B.shape);</span>
+<span class="fc" id="L114">        AlgorithmNames name = selectAlgorithm(A.shape, B.shape);</span>
 <span class="fc" id="L115">        return dispatcher.algorithmMap.get(name).apply(A.entries, A.shape, B.entries, B.shape);</span>
     }
 
@@ -122,7 +122,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @param shape2 The shape fo the second matrix.
      * @return The algorithm to use in the matrix multiplication.
      */
-    private static AlgorithmNames chooseAlgorithmReal(Shape shape1, Shape shape2) {
+    private static AlgorithmNames selectAlgorithm(Shape shape1, Shape shape2) {
         AlgorithmNames names;
 
 <span class="fc" id="L128">        int rows1 = shape1.get(Axis2D.row());</span>
@@ -141,7 +141,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
         // Determine the algorithm name based on the matrix shape and size.
 <span class="pc bpc" id="L142" title="3 of 4 branches missed.">        switch (matrixShape) {</span>
             case 0: // Square
-<span class="pc bpc" id="L144" title="1 of 2 branches missed.">                if (rows1 &lt; SEQUENTIAL_SWAPPED_THRESHOLD) {</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">                if(rows1 &lt; SEQUENTIAL_SWAPPED_THRESHOLD) {</span>
 <span class="fc" id="L145">                    names = AlgorithmNames.REORDERED;</span>
 <span class="nc bnc" id="L146" title="All 2 branches missed.">                } else if (rows1 &lt; CONCURRENT_SWAPPED_THRESHOLD) {</span>
 <span class="nc" id="L147">                    names = AlgorithmNames.CONCURRENT_REORDERED;</span>
@@ -151,7 +151,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
 <span class="nc" id="L151">                break;</span>
 
             case 1: // More rows than columns
-<span class="nc bnc" id="L154" title="All 4 branches missed.">                if (rows1 &lt;= 100 &amp;&amp; cols1 &lt;= 5) {</span>
+<span class="nc bnc" id="L154" title="All 4 branches missed.">                if(rows1 &lt;= 100 &amp;&amp; cols1 &lt;= 5) {</span>
 <span class="nc" id="L155">                    names = AlgorithmNames.REORDERED;</span>
                 } else {
 <span class="nc" id="L157">                    names = AlgorithmNames.CONCURRENT_REORDERED;</span>
@@ -159,14 +159,14 @@ public final class RealDenseMatrixMultiplyDispatcher {
 <span class="nc" id="L159">                break;</span>
 
             case 2: // More columns than rows
-<span class="nc bnc" id="L162" title="All 2 branches missed.">                if (cols1 &lt;= 100) {</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">                if(cols1 &lt;= 100) {</span>
 <span class="nc bnc" id="L163" title="All 2 branches missed.">                    names = (rows1 &lt;= 20) ? AlgorithmNames.REORDERED : AlgorithmNames.CONCURRENT_REORDERED;</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">                } else if (cols1 &lt;= 500) {</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">                } else if(cols1 &lt;= 500) {</span>
 <span class="nc bnc" id="L165" title="All 2 branches missed.">                    names = (rows1 &lt;= 10) ? AlgorithmNames.REORDERED : AlgorithmNames.CONCURRENT_REORDERED;</span>
                 } else {
-<span class="nc bnc" id="L167" title="All 2 branches missed.">                    if (rows1 &lt;= 5) {</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">                    if(rows1 &lt;= 5) {</span>
 <span class="nc" id="L168">                        names = AlgorithmNames.REORDERED;</span>
-<span class="nc bnc" id="L169" title="All 2 branches missed.">                    } else if (rows1 &lt;= 50) {</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">                    } else if(rows1 &lt;= 50) {</span>
 <span class="nc" id="L170">                        names = AlgorithmNames.CONCURRENT_STANDARD;</span>
                     } else {
 <span class="nc" id="L172">                        names = AlgorithmNames.CONCURRENT_REORDERED;</span>
