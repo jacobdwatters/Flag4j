@@ -1592,47 +1592,84 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
 
 
     /**
+     * Since vectors are rank 1 tensors, this method simply copies the vector.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public CVector reshape(Shape shape) {
+<span class="nc" id="L1603">        ParameterChecks.assertBroadcastable(this.shape, shape);</span>
+<span class="nc" id="L1604">        return this.copy();</span>
+    }
+
+
+    /**
+     * Since vectors are rank 1 tensors, this method simply copies the vector.
+     *
+     * @return The flattened tensor.
+     */
+    @Override
+    public CVector flatten() {
+<span class="nc" id="L1615">        return this.copy();</span>
+    }
+
+
+    /**
+     * Since vectors are rank 1 tensors, this method simply copies the vector.
+     *
+     * @param axis Axis along which to flatten.
+     * @return A flattened version of this tensor.
+     */
+    @Override
+    public CVector flatten(int axis) {
+<span class="nc" id="L1627">        return this.copy();</span>
+    }
+
+
+    /**
      * Converts this vector to a human-readable string format.
      * @return A human-readable string representation of this vector.
      */
     public String toString() {
-<span class="nc" id="L1599">        StringBuilder result = new StringBuilder();</span>
+<span class="nc" id="L1636">        StringBuilder result = new StringBuilder();</span>
 
-<span class="nc bnc" id="L1601" title="All 2 branches missed.">        if(PrintOptions.getMaxColumns()&lt;this.size) {</span>
+<span class="nc bnc" id="L1638" title="All 2 branches missed.">        if(PrintOptions.getMaxColumns()&lt;this.size) {</span>
             // Then also get the full size of the vector.
-<span class="nc" id="L1603">            result.append(String.format(&quot;Full Size: %d\n&quot;, this.size));</span>
+<span class="nc" id="L1640">            result.append(String.format(&quot;Full Size: %d\n&quot;, this.size));</span>
         }
 
-<span class="nc" id="L1606">        result.append(&quot;[&quot;);</span>
+<span class="nc" id="L1643">        result.append(&quot;[&quot;);</span>
 
-<span class="nc" id="L1608">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.size-1);</span>
+<span class="nc" id="L1645">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.size-1);</span>
         int width;
         String value;
 
         // Get entries up until the stopping point.
-<span class="nc bnc" id="L1613" title="All 2 branches missed.">        for(int i=0; i&lt;stopIndex; i++) {</span>
-<span class="nc" id="L1614">            value = StringUtils.ValueOfRound(this.get(i), PrintOptions.getPrecision());</span>
-<span class="nc" id="L1615">            width = PrintOptions.getPadding() + value.length();</span>
-<span class="nc bnc" id="L1616" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L1617">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc bnc" id="L1650" title="All 2 branches missed.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="nc" id="L1651">            value = StringUtils.ValueOfRound(this.get(i), PrintOptions.getPrecision());</span>
+<span class="nc" id="L1652">            width = PrintOptions.getPadding() + value.length();</span>
+<span class="nc bnc" id="L1653" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1654">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="nc bnc" id="L1620" title="All 2 branches missed.">        if(stopIndex &lt; this.size-1) {</span>
-<span class="nc" id="L1621">            width = PrintOptions.getPadding() + 3;</span>
-<span class="nc" id="L1622">            value = &quot;...&quot;;</span>
-<span class="nc bnc" id="L1623" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L1624">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc bnc" id="L1657" title="All 2 branches missed.">        if(stopIndex &lt; this.size-1) {</span>
+<span class="nc" id="L1658">            width = PrintOptions.getPadding() + 3;</span>
+<span class="nc" id="L1659">            value = &quot;...&quot;;</span>
+<span class="nc bnc" id="L1660" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1661">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
         // Get last entry now
-<span class="nc" id="L1628">        value = StringUtils.ValueOfRound(this.get(this.size-1), PrintOptions.getPrecision());</span>
-<span class="nc" id="L1629">        width = PrintOptions.getPadding() + value.length();</span>
-<span class="nc bnc" id="L1630" title="All 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L1631">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc" id="L1665">        value = StringUtils.ValueOfRound(this.get(this.size-1), PrintOptions.getPrecision());</span>
+<span class="nc" id="L1666">        width = PrintOptions.getPadding() + value.length();</span>
+<span class="nc bnc" id="L1667" title="All 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1668">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
 
-<span class="nc" id="L1633">        result.append(&quot;]&quot;);</span>
+<span class="nc" id="L1670">        result.append(&quot;]&quot;);</span>
 
-<span class="nc" id="L1635">        return result.toString();</span>
+<span class="nc" id="L1672">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

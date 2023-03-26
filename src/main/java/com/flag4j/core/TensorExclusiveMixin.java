@@ -32,9 +32,9 @@ import com.flag4j.Tensor;
 
 /**
  * This interface contains several methods which should be implemented by any class extending {@link TensorBase} but
- * does not need to be implemented by a class which extends either {@link MatrixBase} or {@link VectorBase}. This is either
- * because an equivalent method with a different name is for {@link MatrixBase matrices} and
- * {@link VectorBase vectors} is already defined or the methods do not apply to rank 1/2 tensors.
+ * does <b>not</b> extend either {@link MatrixBase} or {@link VectorBase}. This is either
+ * because an equivalent method with a different name is already defined for {@link MatrixBase matrices} and/or
+ * {@link VectorBase vectors} or the methods do not apply to rank 1 and/or 2 tensors.
  */
 public interface TensorExclusiveMixin {
 
