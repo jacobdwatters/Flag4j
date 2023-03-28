@@ -319,5 +319,11 @@ public class SparseCMatrix extends SparseMatrixBase&lt;CNumber[]&gt; {
 <span class="fc" id="L319">        super(A.shape.copy(), A.nonZeroEntries(), new CNumber[A.nonZeroEntries()], A.rowIndices.clone(), A.colIndices.clone());</span>
 <span class="fc" id="L320">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
 <span class="fc" id="L321">    }</span>
+
+
+    @Override
+    public SparseCMatrix flatten(int axis) {
+<span class="nc" id="L326">        return null;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

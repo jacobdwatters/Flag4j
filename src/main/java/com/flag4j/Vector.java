@@ -221,19 +221,6 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
-     * Since vectors are rank 1 tensors, this method simply copies the vector.
-     *
-     * @param axis Axis along which to flatten.
-     * @return A flattened version of this tensor.
-     */
-    @Override
-    public Vector flatten(int axis) {
-        ParameterChecks.assertBroadcastable(this.shape, shape);
-        return this.copy();
-    }
-
-
-    /**
      * Extends a vector a specified number of times to a matrix.
      *
      * @param n The number of times to extend this vector.

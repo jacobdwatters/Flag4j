@@ -90,4 +90,7 @@ public abstract class MatrixBase<T extends Serializable> extends TensorBase<T> {
     public int numCols() {
         return numCols;
     }
+
+
+    public abstract MatrixBase<T> flatten(int axis);
 }

@@ -307,36 +307,18 @@ public class Tensor extends TensorBase<double[]> implements
     @Override
     public Tensor reshape(Shape shape) {
         ParameterChecks.assertBroadcastable(this.shape, shape);
-        return new Tensor(shape, entries.clone());
+        return new Tensor(shape, this.entries.clone());
     }
 
 
     /**
-     * Flattens tensor to single dimension. To flatten tensor along a single axis see
-     * {@link #flatten(int)}.
+     * Flattens tensor to single dimension.
      *
      * @return The flattened tensor.
      */
     @Override
     public Tensor flatten() {
-        return new Tensor(new Shape(entries.length), entries.clone());
-    }
-
-
-    /**
-     * Flattens a tensor along a specified axis. This preserves the rank of the tensor.
-     * Also see {@link #flatten()}.
-     *
-     * @param axis Axis along which to flatten.
-     * @return A flattened version of this tensor.
-     * @throws ArrayIndexOutOfBoundsException If axis equal to or larger than the rank of this tensor.
-     */
-    @Override
-    public Tensor flatten(int axis) {
-        int[] dims = new int[this.getRank()];
-        Arrays.fill(dims, 1);
-        dims[axis] = this.entries.length;
-        return new Tensor(new Shape(dims), entries.clone());
+        return new Tensor(new Shape(entries.length), this.entries.clone());
     }
 
 

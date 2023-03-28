@@ -1617,18 +1617,6 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
-     * Since vectors are rank 1 tensors, this method simply copies the vector.
-     *
-     * @param axis Axis along which to flatten.
-     * @return A flattened version of this tensor.
-     */
-    @Override
-    public CVector flatten(int axis) {
-        return this.copy();
-    }
-
-
-    /**
      * Converts this vector to a human-readable string format.
      * @return A human-readable string representation of this vector.
      */

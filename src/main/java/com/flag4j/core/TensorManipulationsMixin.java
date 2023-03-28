@@ -57,18 +57,8 @@ interface TensorManipulationsMixin<T, U, V, W, Y, X extends Number> {
 
 
     /**
-     * Flattens tensor to single dimension. To flatten tensor along a single axis see
-     * {@link #flatten(int)}.
+     * Flattens tensor to single dimension. To flatten tensor along a single axis.
      * @return The flattened tensor.
      */
     T flatten();
-
-
-    /**
-     * Flattens a tensor along a specified axis. This preserves the rank of the tensor.
-     * Also see {@link #flatten()}.
-     * @param axis Axis along which to flatten.
-     * @return A flattened version of this tensor.
-     */
-    T flatten(int axis);
 }
