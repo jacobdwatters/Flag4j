@@ -45,9 +45,9 @@ class TensorUnitaryOperationTests {
     void absTest() {
         // --------------------- Sub-case 1 ---------------------
         expEntries = new double[]{
-                1/(0.000123), 1/(5.23523), 1/(-834513.36), 1/(235.6),
-                1/(934), 1/(13.5), 1/(-0.0), 1/(0.1),
-                1/(345), 1/(8345.6), 1/(1.00015), 1/(Double.POSITIVE_INFINITY)};
+                Math.abs(0.000123), Math.abs(5.23523), Math.abs(-834513.36), Math.abs(235.6),
+                Math.abs(934), Math.abs(13.5), Math.abs(-0.0), Math.abs(0.1),
+                Math.abs(345), Math.abs(8345.6), Math.abs(1.00015), Math.abs(Double.POSITIVE_INFINITY)};
         expShape = aShape.copy();
         exp = new Tensor(expShape, expEntries);
 

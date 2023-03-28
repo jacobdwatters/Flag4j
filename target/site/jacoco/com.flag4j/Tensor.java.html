@@ -732,9 +732,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      */
     @Override
     public Tensor recip() {
-<span class="nc" id="L735">        return new Tensor(</span>
-<span class="nc" id="L736">                shape.copy(),</span>
-<span class="nc" id="L737">                RealDenseOperations.recip(entries)</span>
+<span class="fc" id="L735">        return new Tensor(</span>
+<span class="fc" id="L736">                shape.copy(),</span>
+<span class="fc" id="L737">                RealDenseOperations.recip(entries)</span>
         );
     }
 
