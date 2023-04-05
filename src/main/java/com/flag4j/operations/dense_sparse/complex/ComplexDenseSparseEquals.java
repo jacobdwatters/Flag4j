@@ -24,7 +24,10 @@
 
 package com.flag4j.operations.dense_sparse.complex;
 
-import com.flag4j.*;
+import com.flag4j.CMatrix;
+import com.flag4j.CTensor;
+import com.flag4j.SparseCMatrix;
+import com.flag4j.SparseCTensor;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
