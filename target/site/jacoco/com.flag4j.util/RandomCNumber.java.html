@@ -30,13 +30,13 @@ import java.util.Random;
 
 
 /**
- * This class contains methods for generating random complex numbers. Wraps {@link Random} class.
+ * An instance of this class is used to generate a stream of random {@link CNumber complex numbers}. Wraps {@link Random} class.
  */
 public class RandomCNumber {
     /**
      * Random number generator.
      */
-    private final Random rng;
+    protected final Random rng;
 
 
     /**
@@ -66,7 +66,7 @@ public class RandomCNumber {
      * @return A pseudorandom complex number with a magnitude uniformly distributed in {@code [0.0, 1.0)}.
      */
     public CNumber random() {
-<span class="nc" id="L69">        return new CNumber(rng.nextDouble());</span>
+<span class="nc" id="L69">        return random(rng.nextDouble());</span>
     }
 
 
@@ -87,7 +87,7 @@ public class RandomCNumber {
         // Compute imaginary component using Pythagorean theorem.
 <span class="nc" id="L88">        double imaginary = Math.sqrt(Math.pow(mag, 2) - Math.pow(real, 2));</span>
 
-        // Choose complex plane quadrant of number (i.e. signs of each component).
+        // Choose complex plane quadrant (i.e. signs of each component).
 <span class="nc bnc" id="L91" title="All 2 branches missed.">        real = rng.nextBoolean() ? real : -real;</span>
 <span class="nc bnc" id="L92" title="All 2 branches missed.">        imaginary = rng.nextBoolean() ? imaginary : -imaginary;</span>
 
@@ -100,7 +100,7 @@ public class RandomCNumber {
      *
      * @param min Minimum value for random number. Must be non-negative.
      * @param max Maximum value for random number. Must be larger than or equal to min.
-     * @return random real or complex number between min and max.
+     * @return A pseudorandom complex number with magnitude uniformly distributed in {@code [min, max)}.
      * @throws IllegalArgumentException If {@code min} is not positive or if {@code max} is less than {@code min}.
      */
     public CNumber random(double min, double max) {
@@ -113,7 +113,94 @@ public class RandomCNumber {
                     min + &quot; and max=&quot; + max + &quot;.&quot;);
         }
 
-<span class="nc" id="L116">        return new CNumber(rng.nextDouble()*(max-min) + min);</span>
+<span class="nc" id="L116">        return random(rng.nextDouble()*(max-min) + min);</span>
+    }
+
+
+    /**
+     * Generates a pseudorandom complex number with normally distributed magnitude with a mean of 0.0 and standard
+     * deviation of 1.0.
+     * @return A pseudorandom complex number with normally distributed magnitude with a mean of 0.0 and standard
+     * deviation of 1.0.
+     */
+    public CNumber randn() {
+<span class="nc" id="L127">        return random(rng.nextGaussian());</span>
+    }
+
+
+    /**
+     * Generates a pseudorandom complex number with normally distributed magnitude with a specified mean and standard
+     * deviation.
+     * @param mean Mean of normal distribution to sample magnitude from.
+     * @param std Standard deviation of normal distribution to sample magnitude from.
+     * @return A pseudorandom complex number with normally distributed magnitude with a specified mean and
+     * standard deviation.
+     * @throws IllegalArgumentException If standard deviation is negative.
+     */
+    public CNumber randn(double mean, double std) {
+<span class="nc" id="L141">        ParameterChecks.assertGreaterEq(std, 0);</span>
+<span class="nc" id="L142">        return random(rng.nextGaussian()*std + mean);</span>
+    }
+
+
+    /**
+     * Generates a pseudorandom complex number with a real component uniformly distributed in {@code [0.0, 1.0)}
+     * and an imaginary component of zero.
+     * @return A pseudorandom complex number with a real component uniformly distributed in {@code [0.0, 1.0)}
+     *      * and an imaginary component of zero.
+     */
+    public CNumber randomReal() {
+<span class="nc" id="L153">        return new CNumber(rng.nextDouble());</span>
+    }
+
+
+    /**
+     * Generates a pseudorandom complex number with real component uniformly distributed in {@code [min, max)} and
+     *      * an imaginary component of zero.
+     *
+     * @param min Minimum value for real component. Must be non-negative.
+     * @param max Maximum value for real component. Must be larger than or equal to min.
+     * @return A pseudorandom complex number with real component uniformly distributed in {@code [min, max)} and
+     * an imaginary component of zero.
+     * @throws IllegalArgumentException If {@code min} is not positive or if {@code max} is less than {@code min}.
+     */
+    public CNumber randomReal(double min, double max) {
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        if(min &lt; 0) {</span>
+<span class="nc" id="L169">            throw new IllegalArgumentException(&quot;Min value must be non-negative but got &quot; + min + &quot;.&quot;);</span>
+        }
+
+<span class="nc bnc" id="L172" title="All 2 branches missed.">        if(min &gt; max) {</span>
+<span class="nc" id="L173">            throw new IllegalArgumentException(&quot;Max value must be greater than or equal to min but got min=&quot; +</span>
+                    min + &quot; and max=&quot; + max + &quot;.&quot;);
+        }
+
+<span class="nc" id="L177">        return new CNumber(rng.nextDouble()*(max-min) + min);</span>
+    }
+
+
+    /**
+     * Generates a pseudorandom complex number with a normally distributed real component with a mean of 0.0 and standard
+     * deviation of 1.0. The imaginary component will be zero.
+     * @return A pseudorandom complex number with a normally distributed real component with a mean of 0.0 and standard
+     * deviation of 1.0. The imaginary component will be zero.
+     */
+    public CNumber randnReal() {
+<span class="nc" id="L188">        return new CNumber(rng.nextGaussian());</span>
+    }
+
+
+    /**
+     * Generates a pseudorandom complex number with normally distributed real component with a specified mean and standard
+     * deviation and an imaginary component of zero.
+     * @param mean Mean of normal distribution to sample magnitude from.
+     * @param std Standard deviation of normal distribution to sample magnitude from.
+     * @return A pseudorandom complex number with normally distributed real component with a specified mean and standard
+     * deviation and an imaginary component of zero.
+     * @throws IllegalArgumentException If standard deviation is negative.
+     */
+    public CNumber randnReal(double mean, double std) {
+<span class="nc" id="L202">        ParameterChecks.assertGreaterEq(std, 0);</span>
+<span class="nc" id="L203">        return new CNumber(rng.nextGaussian()*std + mean);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

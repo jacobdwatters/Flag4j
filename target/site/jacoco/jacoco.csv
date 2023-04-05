@@ -1,9 +1,9 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 Flag4j,com.flag4j.util,ArrayUtils,298,899,30,88,45,155,27,72,10,30
 Flag4j,com.flag4j.util,Axis2D,0,34,0,0,0,6,0,4,0,4
-Flag4j,com.flag4j.util,RandomTensor,297,15,20,0,49,4,25,1,15,1
+Flag4j,com.flag4j.util,RandomTensor,621,9,24,0,88,3,57,1,45,1
 Flag4j,com.flag4j.util,ErrorMessages,65,191,0,0,6,18,5,17,5,17
-Flag4j,com.flag4j.util,RandomCNumber,90,17,10,0,13,6,8,2,3,2
+Flag4j,com.flag4j.util,RandomCNumber,179,17,14,0,25,6,16,2,9,2
 Flag4j,com.flag4j.util,StringUtils,7,59,1,5,2,11,2,6,1,4
 Flag4j,com.flag4j.util,ParameterChecks,40,282,7,45,9,58,8,36,3,15
 Flag4j,com.flag4j.operations.dense.complex,ComplexDenseElemMult,41,37,1,3,8,7,4,3,3,2
@@ -97,7 +97,9 @@ Flag4j,com.flag4j.linalg,CreateMatrix,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.operations.common.complex,ComplexProperties,7,56,0,8,2,12,1,6,1,2
 Flag4j,com.flag4j.operations.common.complex,AggregateComplex,11,94,1,11,3,15,2,8,1,3
 Flag4j,com.flag4j.operations.common.complex,ComplexOperations,41,221,4,22,8,42,5,20,2,10
-Flag4j,com.flag4j.io,TensorReader,3,0,0,0,1,0,1,0,1,0
+Flag4j,com.flag4j.io,TensorInputStream,42,0,0,0,11,0,6,0,6,0
+Flag4j,com.flag4j.io,TensorReader,88,0,0,0,16,0,2,0,2,0
+Flag4j,com.flag4j.io,TensorOutputStream,33,0,0,0,11,0,4,0,4,0
 Flag4j,com.flag4j.io,TensorWriter,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.io,PrintOptions,7,83,0,8,2,34,1,16,1,12
 Flag4j,com.flag4j.operations.common.real,AggregateReal,7,150,0,24,2,30,1,17,1,5

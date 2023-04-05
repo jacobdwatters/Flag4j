@@ -26,6 +26,7 @@ com\flag4j\operations\TransposeDispatcher.class
 com\flag4j\operations\dense\real\RealDenseElemDiv.class
 com\flag4j\operations\MatrixMultiplyDispatcher$1.class
 com\flag4j\core\ComplexVectorBase.class
+com\flag4j\io\TensorOutputStream.class
 com\flag4j\operations\MatrixMultiplyDispatcher.class
 com\flag4j\operations\dense\complex\AggregateDenseComplex.class
 com\flag4j\operations\common\complex\AggregateComplex.class
@@ -36,6 +37,7 @@ com\flag4j\concurrency\Configurations.class
 com\flag4j\operations\dense\complex\ComplexDenseEquals.class
 com\flag4j\linalg\decompositions\Decomposition.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseEquals.class
+com\flag4j\io\TensorInputStream.class
 com\flag4j\operations\common\real\AggregateReal.class
 com\flag4j\operations\TransposeDispatcher$1.class
 com\flag4j\operations\dense\real\RealDenseVectorOperations.class

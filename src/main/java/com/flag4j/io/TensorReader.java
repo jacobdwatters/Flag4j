@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,9 @@ package com.flag4j.io;
 
 
 /**
- * A class for reading tensors from a file stored in various formats.
+ * The TensorReader class provides several static methods for reading serialized
+ * tensors, matrices, and vectors from a file.
  */
 public class TensorReader {
+    // TODO: Implementations
 }

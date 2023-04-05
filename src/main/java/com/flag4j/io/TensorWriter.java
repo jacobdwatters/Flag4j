@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,9 @@ package com.flag4j.io;
 
 
 /**
- * A class for writing tensors to a file in various formats.
+ * The TensorWriter class provides several static methods for writing serialized
+ * tensors, matrices, and vectors to a file.
  */
 public class TensorWriter {
+    // TODO: Implementations
 }

@@ -28,256 +28,683 @@ import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.Decompose;
 
-import java.util.Random;
-
 /**
- * This class contains methods for generating pseudorandom tensors, matrices, and vectors.
+ * An instance of this class is used for generating streams of pseudorandom tensors, matrices, and vectors.
  */
 public class RandomTensor {
     /**
-     * Pseudorandom number generator.
-     */
-    private final Random rng;
-    /**
      * Complex pseudorandom number generator.
      */
-    private final RandomCNumber complex_rng;
+    private final RandomCNumber complexRng;
 
     /**
-     * Constructs a new random tensor generator with a seed which is unlikely to be the same as other
+     * Constructs a new pseudorandom tensor generator with a seed which is unlikely to be the same as other
      * from any other invocation of this constructor.
      */
-<span class="nc" id="L50">    public RandomTensor() {</span>
-<span class="nc" id="L51">        rng = new Random();</span>
-<span class="nc" id="L52">        complex_rng = new RandomCNumber();</span>
-<span class="nc" id="L53">    }</span>
+<span class="nc" id="L44">    public RandomTensor() {</span>
+<span class="nc" id="L45">        complexRng = new RandomCNumber();</span>
+<span class="nc" id="L46">    }</span>
 
     /**
-     * Constructs a random tensor generator with a specified seed. Use this constructor for reproducible results.
-     * @param seed Seed of the random tensor generator.
+     * Constructs a pseudorandom tensor generator with a specified seed. Use this constructor for reproducible results.
+     * @param seed Seed of the pseudorandom tensor generator.
      */
-<span class="fc" id="L59">    public RandomTensor(long seed) {</span>
-<span class="fc" id="L60">        rng = new Random(seed);</span>
-<span class="fc" id="L61">        complex_rng = new RandomCNumber(seed);</span>
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L52">    public RandomTensor(long seed) {</span>
+<span class="fc" id="L53">        complexRng = new RandomCNumber(seed);</span>
+<span class="fc" id="L54">    }</span>
 
 
     /**
-     * Gets a tensor filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
+     * Generates a tensor filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
      * @param shape Shape of the tensor.
      * @return A tensor filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
      */
-    public Tensor getRandomTensor(Shape shape) {
-<span class="nc" id="L71">        return new Tensor(shape, genUniformRealArray(shape.totalEntries().intValueExact()));</span>
+    public Tensor randomTensor(Shape shape) {
+<span class="nc" id="L63">        return new Tensor(shape, genUniformRealArray(shape.totalEntries().intValueExact()));</span>
     }
 
 
     /**
-     * Gets a vector filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
-     * @param size Size of the vector.
+     * Generates a tensor filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * @param shape Shape of the tensor.
+     * @param min Minimum value for the uniform distribution.
+     * @param max Maximum value for the uniform distribution.
+     * @return A tensor filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * @throws IllegalArgumentException If {@code max} is less than {@code min}.
+     */
+    public Tensor randomTensor(Shape shape, double min, double max) {
+<span class="nc" id="L76">        return new Tensor(shape, genUniformRealArray(</span>
+<span class="nc" id="L77">                shape.totalEntries().intValueExact(),</span>
+                min,
+                max)
+        );
+    }
+
+
+    /**
+     * Generates a tensor filled with pseudorandom values sampled from a normal distribution with
+     * mean of 0.0 and standard deviation of 1.0.
+     * @param shape Shape of the tensor.
+     * @return A tensor filled with pseudorandom values sampled from a normal distribution with
+     * mean of 0.0 and standard deviation of 1.0.
+     */
+    public Tensor randnTensor(Shape shape) {
+<span class="nc" id="L92">        return new Tensor(shape, genNormalRealArray(shape.totalEntries().intValueExact()));</span>
+    }
+
+
+    /**
+     * Generates a tensor filled with pseudorandom values sampled from a normal distribution with
+     * specified mean and standard deviation.
+     * @param shape Shape of the tensor.
+     * @param mean Mean of the normal distribution to sample from.
+     * @param std Standard deviation of normal distribution to sample from.
+     * @return A tensor filled with pseudorandom values sampled from a normal distribution with
+     * specified mean and standard deviation.
+     * @throws IllegalArgumentException If standard deviation is negative.
+     */
+    public Tensor randnTensor(Shape shape, double mean, double std) {
+<span class="nc" id="L107">        return new Tensor(shape, genNormalRealArray(</span>
+<span class="nc" id="L108">                shape.totalEntries().intValueExact(),</span>
+                mean,
+                std)
+        );
+    }
+
+
+    /**
+     * Generates a tensor filled with pseudorandom complex values with magnitudes
+     * uniformly distributed in {@code [0, 1)}.
+     * @param shape Shape of the tensor.
+     * @return A tensor filled with pseudorandom complex values with magnitudes
+     * uniformly distributed in {@code [0, 1)}.
+     */
+    public CTensor randomCTensor(Shape shape) {
+<span class="nc" id="L123">        return new CTensor(shape, genUniformComplexArray(shape.totalEntries().intValueExact()));</span>
+    }
+
+
+    /**
+     * Generates a tensor filled with pseudorandom values with magnitudes uniformly distributed in {@code [min, max)}.
+     * @param shape Shape of the tensor.
+     * @param min Minimum value for the uniform distribution from which to sample magnitude.
+     * @param max Maximum value for the uniform distribution from which to sample magnitude.
+     * @return A tensor filled with pseudorandom values with magnitudes uniformly distributed in {@code [min, max)}
+     * @throws IllegalArgumentException If {@code min} is negative or if {@code max} is less than {@code min}.
+     */
+    public CTensor randomCTensor(Shape shape, double min, double max) {
+<span class="nc" id="L136">        return new CTensor(shape, genUniformComplexArray(</span>
+<span class="nc" id="L137">                shape.totalEntries().intValueExact(),</span>
+                min,
+                max)
+        );
+    }
+
+
+    /**
+     * Generates a tensor filled with pseudorandom values sampled from a normal distribution with
+     * mean of 0.0 and standard deviation of 1.0.
+     * @param shape Shape of the tensor.
+     * @return A tensor filled with pseudorandom values sampled from a normal distribution with
+     * mean of 0.0 and standard deviation of 1.0.
+     */
+    public CTensor randnCTensor(Shape shape) {
+<span class="nc" id="L152">        return new CTensor(shape, genNormalComplexArray(shape.totalEntries().intValueExact()));</span>
+    }
+
+
+    /**
+     * Generates a tensor filled with pseudorandom values sampled from a normal distribution with
+     * specified mean and standard deviation.
+     * @param shape Shape of the tensor.
+     * @param mean Mean of the normal distribution to sample from.
+     * @param std Standard deviation of normal distribution to sample from.
+     * @return A tensor filled with pseudorandom values sampled from a normal distribution with
+     * specified mean and standard deviation.
+     * @throws IllegalArgumentException If standard deviation is negative.
+     */
+    public CTensor randnCTensor(Shape shape, double mean, double std) {
+<span class="nc" id="L167">        return new CTensor(shape, genNormalComplexArray(</span>
+<span class="nc" id="L168">                shape.totalEntries().intValueExact(),</span>
+                mean,
+                std)
+        );
+    }
+
+
+    /**
+     * Generates a vector filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
+     * @param size Size of the vector to generate.
      * @return A vector filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
      */
-    public Vector getRandomVector(int size) {
-<span class="nc" id="L81">        return new Vector(genUniformRealArray(size));</span>
+    public Vector randomVector(int size) {
+<span class="nc" id="L181">        return new Vector(genUniformRealArray(size));</span>
+    }
+
+
+
+    /**
+     * Generates a vector filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * @param size Size of the vector to generate.
+     * @return A vector filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * @throws IllegalArgumentException If {@code max} is less than {@code min}.
+     */
+    public Vector randomVector(int size, double min, double max) {
+<span class="nc" id="L193">        return new Vector(genUniformRealArray(size, min, max));</span>
     }
 
 
     /**
-     * Gets a matrix filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
+     * Generates a vector filled with pseudorandom values sampled from a normal distribution with a mean of 0.0 and
+     * a standard deviation of 1.0.
+     * @param size Size of the vector to generate.
+     * @return A vector filled with pseudorandom values sampled from a normal distribution with a mean of 0.0 and
+     * a standard deviation of 1.0.
+     */
+    public Vector randnVector(int size) {
+<span class="nc" id="L205">        return new Vector(genNormalRealArray(size));</span>
+    }
+
+
+    /**
+     * Generates a vector filled with pseudorandom values sampled from a normal distribution with specified mean
+     * and standard deviation.
+     * @param size Size of the vector to generate.
+     * @return A vector filled with pseudorandom values sampled from a normal distribution with specified mean
+     * and standard deviation.
+     * @throws IllegalArgumentException If the standard deviation is negative.
+     */
+    public Vector randnVector(int size, double mean, double std) {
+<span class="nc" id="L218">        return new Vector(genNormalRealArray(size));</span>
+    }
+
+
+
+    /**
+     * Generates a vector filled with pseudorandom complex values with magnitudes uniformly distributed in {@code [0, 1)}.
+     * @param size Size of the vector to generate.
+     * @return A vector filled with pseudorandom complex values with magnitudes uniformly distributed in {@code [0, 1)}.
+     */
+    public CVector randomCVector(int size) {
+<span class="nc" id="L229">        return new CVector(genUniformComplexArray(size));</span>
+    }
+
+
+
+    /**
+     * Generates a vector filled with pseudorandom values with magnitudes uniformly distributed in {@code [min, max)}.
+     * @param size Size of the vector to generate.
+     * @return A vector filled with pseudorandom values with magnitudes uniformly distributed in {@code [min, max)}.
+     * @throws IllegalArgumentException If {@code min} is negative or if {@code max} is less than {@code min}.
+     */
+    public CVector randomCVector(int size, double min, double max) {
+<span class="nc" id="L241">        return new CVector(genUniformComplexArray(size, min, max));</span>
+    }
+
+
+    /**
+     * Generates a vector filled with pseudorandom values with magnitudes sampled from a normal distribution with a
+     * mean of 0.0 and a standard deviation of 1.0.
+     * @param size Size of the vector to generate.
+     * @return A vector filled with pseudorandom values with magnitudes sampled from a normal distribution with a
+     * mean of 0.0 and a standard deviation of 1.0.
+     */
+    public CVector randnCVector(int size) {
+<span class="nc" id="L253">        return new CVector(genNormalComplexArray(size));</span>
+    }
+
+
+    /**
+     * Generates a vector filled with pseudorandom values with magnitudes sampled from a normal distribution with specified mean
+     * and standard deviation.
+     * @param size Size of the vector to generate.
+     * @return A vector filled with pseudorandom values with magnitudes sampled from a normal distribution with specified mean
+     *      * and standard deviation.
+     * @throws IllegalArgumentException If the standard deviation is negative.
+     */
+    public CVector randnCVector(int size, double mean, double std) {
+<span class="nc" id="L266">        return new CVector(genNormalComplexArray(size, mean, std));</span>
+    }
+
+
+    /**
+     * Generates a matrix filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
      * @param rows Number of rows in the resulting matrix.
      * @param cols Number of columns in the resulting matrix.
      * @return A matrix filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
      */
-    public Matrix getRandomMatrix(int rows, int cols) {
-<span class="nc" id="L92">        return new Matrix(rows, cols, genUniformRealArray(rows*cols));</span>
+    public Matrix randomMatrix(int rows, int cols) {
+<span class="nc" id="L277">        return new Matrix(rows, cols, genUniformRealArray(rows*cols));</span>
     }
 
 
     /**
-     * Gets a symmetric matrix filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
-     * @param size Number of rows and columns in the resulting matrix.
+     * Generates a matrix filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
+     * @param shape Shape of the resulting matrix. Must be of rank 2.
+     * @return A matrix filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
+     * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
+     */
+    public Matrix randomMatrix(Shape shape) {
+<span class="nc" id="L288">        return randomMatrix(shape.get(0), shape.get(1));</span>
+    }
+
+
+    /**
+     * Generates a matrix filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * @param rows Number of rows in the resulting matrix.
+     * @param cols Number of columns in the resulting matrix.
+     * @param min Minimum value of uniform distribution to sample from (inclusive).
+     * @param max Maximum value of uniform distribution to sample from (exclusive).
+     * @return A matrix filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * @throws IllegalArgumentException If {@code max} is less than {@code min}.
+     */
+    public Matrix randomMatrix(int rows, int cols, double min, double max) {
+<span class="nc" id="L302">        return new Matrix(rows, cols, genUniformRealArray(rows*cols, min, max));</span>
+    }
+
+
+    /**
+     * Generates a matrix filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * @param shape Shape of the resulting matrix. Must be of rank 2.
+     * @param min Minimum value of uniform distribution to sample from (inclusive).
+     * @param max Maximum value of uniform distribution to sample from (exclusive).
+     * @return A matrix filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * @throws IllegalArgumentException If {@code max} is less than {@code min}.
+     * @throws IllegalArgumentException If {@code shape} is not of rank 2.
+     */
+    public Matrix randomMatrix(Shape shape, double min, double max) {
+<span class="nc" id="L316">        return randomMatrix(shape.get(0), shape.get(1), min, max);</span>
+    }
+
+
+    /**
+     * Generates a matrix filled with pseudorandom values sampled from a normal distribution with a mean of 0.0 and
+     * a standard deviation of 1.0.
+     * @param rows The number of rows in the resulting matrix.
+     * @param cols The number of columns in the resulting matrix.
+     * @return A matrix filled with pseudorandom values sampled from a normal distribution with a mean of 0.0 and
+     * a standard deviation of 1.0.
+     */
+    public Matrix randnMatrix(int rows, int cols) {
+<span class="nc" id="L329">        return new Matrix(rows, cols, genNormalRealArray(rows*cols));</span>
+    }
+
+
+    /**
+     * Generates a matrix filled with pseudorandom values sampled from a normal distribution with a mean of 0.0 and
+     * a standard deviation of 1.0.
+     * @param shape Shape of the resulting matrix.
+     * @return A matrix filled with pseudorandom values sampled from a normal distribution with a mean of 0.0 and
+     * a standard deviation of 1.0.
+     */
+    public Matrix randnMatrix(Shape shape) {
+<span class="nc" id="L341">        return randnMatrix(shape.get(0), shape.get(1));</span>
+    }
+
+
+    /**
+     * Generates a matrix filled with pseudorandom values sampled from a normal distribution with a specified mean
+     * and standard deviation.
+     * @param rows The number of rows in the resulting matrix.
+     * @param cols The number of columns in the resulting matrix.
+     * @param mean Mean of the normal distribution from which values are sampled.
+     * @param std Standard deviation of the normal distribution from which values are sampled.
+     * @return A matrix filled with pseudorandom values sampled from a normal distribution with a specified mean
+     * and standard deviation.
+     * @throws IllegalArgumentException If the standard deviation is negative.
+     */
+    public Matrix randnMatrix(int rows, int cols, double mean, double std) {
+<span class="nc" id="L357">        return new Matrix(rows, cols, genNormalRealArray(rows*cols, mean, std));</span>
+    }
+
+
+    /**
+     * Generates a matrix filled with pseudorandom values sampled from a normal distribution with a specified mean
+     * and standard deviation.
+     * @param shape Shape of the resulting matrix.
+     * @param mean Mean of the normal distribution from which values are sampled.
+     * @param std Standard deviation of the normal distribution from which values are sampled.
+     * @return A matrix filled with pseudorandom values sampled from a normal distribution with a specified mean
+     * and standard deviation.
+     * @throws IllegalArgumentException If the standard deviation is negative.
+     */
+    public Matrix randnMatrix(Shape shape, double mean, double std) {
+<span class="nc" id="L372">        return randnMatrix(shape.get(0), shape.get(1), mean, std);</span>
+    }
+
+
+    /**
+     * Generates a symmetric matrix filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
+     * @param size Number of rows and columns in the resulting matrix (the result will be a square matrix).
      * @return A symmetric matrix filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
      */
     public Matrix getRandomSymmetricMatrix(int size) {
-<span class="nc" id="L102">        Matrix randMat = new Matrix(size);</span>
+<span class="nc" id="L382">        Matrix randMat = new Matrix(size);</span>
 
-<span class="nc bnc" id="L104" title="All 2 branches missed.">        for(int i=0; i&lt;size; i++) {</span>
-<span class="nc bnc" id="L105" title="All 2 branches missed.">            for(int j=0; j&lt;i; j++) {</span>
-<span class="nc" id="L106">                randMat.entries[i*size+j] = rng.nextDouble();</span>
-<span class="nc" id="L107">                randMat.entries[j*size+i] = randMat.entries[i*size+j];</span>
+<span class="nc bnc" id="L384" title="All 2 branches missed.">        for(int i=0; i&lt;size; i++) {</span>
+<span class="nc bnc" id="L385" title="All 2 branches missed.">            for(int j=0; j&lt;i; j++) {</span>
+<span class="nc" id="L386">                randMat.entries[i*size+j] = complexRng.rng.nextDouble();</span>
+<span class="nc" id="L387">                randMat.entries[j*size+i] = randMat.entries[i*size+j];</span>
             }
 
-<span class="nc" id="L110">            randMat.entries[i*(size+1)] = rng.nextDouble(); // Diagonal entry</span>
+<span class="nc" id="L390">            randMat.entries[i*(size+1)] = complexRng.rng.nextDouble(); // Diagonal entry</span>
         }
 
-<span class="nc" id="L113">        return randMat;</span>
+<span class="nc" id="L393">        return randMat;</span>
     }
 
 
     /**
-     * Gets a pseudorandom orthogonal matrix. From an implementation point of view, a random matrix is generated
-     * as if by {@link #getRandomMatrix(int, int) getRandomMatrix(size, size)} then a {@link Decompose#QR(Matrix) QR}
-     * decomposition is computed on this random matrix and the {@code Q} matrix from this decomposition is returned.
+     * Gets a pseudorandom orthogonal matrix. From an implementation point of view, a pseudorandom matrix is generated
+     * as if by {@link #randomMatrix(int, int) getRandomMatrix(size, size)}. Then, a {@link Decompose#QR(Matrix) QR}
+     * decomposition is computed on this pseudorandom matrix and the {@code Q} matrix from this decomposition is returned.
      * @param size Size of the orthogonal matrix (i.e. the number rows and columns for the square matrix).
      * @return A pseudorandom orthogonal matrix.
      */
-    public Matrix getRandomOrthogonalMatrix(int size) {
-<span class="nc" id="L125">        Matrix randMat = new Matrix(size, size, genUniformRealArray(size));</span>
-<span class="nc" id="L126">        return Decompose.QR(randMat)[0];</span>
+    public Matrix randomOrthogonalMatrix(int size) {
+<span class="nc" id="L405">        Matrix randMat = new Matrix(size, size, genUniformRealArray(size));</span>
+<span class="nc" id="L406">        return Decompose.QR(randMat)[0];</span>
     }
 
 
     /**
-     * Gets a complex tensor with random values. Values are normally distributed with mean of zero and standard deviation
-     * of one.
-     * @param shape Shape of the tensor.
-     * @return A random vector of specified size.
-     */
-    public CTensor getRandomCTensor(Shape shape) {
-<span class="nc" id="L137">        CTensor randTensor = new CTensor(shape);</span>
-
-<span class="nc bnc" id="L139" title="All 2 branches missed.">        for(int i=0; i&lt;randTensor.totalEntries().intValue(); i++) {</span>
-<span class="nc" id="L140">            randTensor.entries[i] = complex_rng.random();</span>
-        }
-
-<span class="nc" id="L143">        return randTensor;</span>
-    }
-
-
-    /**
-     * Generates a complex matrix of specified size filled with pseudorandom complex values with magnitudes uniformly
-     * distributed in {@code (0.0, 1.0]}.
+     * Generates a matrix filled with pseudorandom complex values with magnitudes uniformly
+     * distributed in {@code [0, 1)}.
      * @param rows Number of rows in the resulting matrix.
      * @param cols Number of columns in the resulting matrix.
-     * @return A random matrix with specified size.
+     * @return A matrix filled with pseudorandom complex values with magnitudes uniformly
+     * distributed in {@code [0, 1)}.
      */
-    public CMatrix getRandomCMatrix(int rows, int cols) {
-<span class="nc" id="L155">        return new CMatrix(rows, cols, genUniformComplexArray(rows*cols));</span>
+    public CMatrix randomCMatrix(int rows, int cols) {
+<span class="nc" id="L419">        return new CMatrix(rows, cols, genUniformComplexArray(rows*cols));</span>
     }
 
+
+    /**
+     * Generates a matrix filled with pseudorandom complex values with magnitudes uniformly
+     * distributed in {@code [0, 1)}.
+     * @param shape Shape of the resulting matrix. Must be of rank 2.
+     * @return A matrix filled with pseudorandom complex values with magnitudes uniformly
+     * distributed in {@code [0, 1)}.
+     * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
+     */
+    public CMatrix randomCMatrix(Shape shape) {
+<span class="nc" id="L432">        return randomCMatrix(shape.get(0), shape.get(1));</span>
+    }
+
+
+    /**
+     * Generates a matrix filled with pseudorandom complex values with magnitudes
+     * uniformly distributed in {@code [min, max)}.
+     * @param rows Number of rows in the resulting matrix.
+     * @param cols Number of columns in the resulting matrix.
+     * @param min Minimum value of uniform distribution to sample from (inclusive).
+     * @param max Maximum value of uniform distribution to sample from (exclusive).
+     * @return A matrix filled with pseudorandom complex values with magnitudes
+     * uniformly distributed in {@code [min, max)}.
+     * @throws IllegalArgumentException If {@code max} is less than {@code min}.
+     */
+    public CMatrix randomCMatrix(int rows, int cols, double min, double max) {
+<span class="nc" id="L448">        return new CMatrix(rows, cols, genUniformComplexArray(rows*cols, min, max));</span>
+    }
+
+
+    /**
+     * Generates a matrix filled with pseudorandom complex values with magnitudes
+     * uniformly distributed in {@code [min, max)}.
+     * @param shape Shape of the resulting matrix. Must be of rank 2.
+     * @param min Minimum value of uniform distribution to sample from (inclusive).
+     * @param max Maximum value of uniform distribution to sample from (exclusive).
+     * @return A matrix filled with pseudorandom complex values with magnitudes
+     * uniformly distributed in {@code [min, max)}.
+     * @throws IllegalArgumentException If {@code max} is less than {@code min}.
+     * @throws IllegalArgumentException If {@code shape} is not of rank 2.
+     */
+    public CMatrix randomCMatrix(Shape shape, double min, double max) {
+<span class="nc" id="L464">        return randomCMatrix(shape.get(0), shape.get(1), min, max);</span>
+    }
+
+
+    /**
+     * Generates a matrix filled with pseudorandom complex values with magnitudes sampled from a normal distribution with a mean of 0.0 and
+     * a standard deviation of 1.0.
+     * @param rows The number of rows in the resulting matrix.
+     * @param cols The number of columns in the resulting matrix.
+     * @return A matrix filled with pseudorandom complex values with magnitudes sampled from a normal distribution with a mean of 0.0 and
+     * a standard deviation of 1.0.
+     */
+    public CMatrix randnCMatrix(int rows, int cols) {
+<span class="nc" id="L477">        return new CMatrix(rows, cols, genNormalComplexArray(rows*cols));</span>
+    }
+
+
+    /**
+     * Generates a matrix filled with pseudorandom complex values with magnitudes sampled from a normal distribution with a mean of 0.0 and
+     * a standard deviation of 1.0.
+     * @param shape Shape of the resulting matrix.
+     * @return A matrix filled with pseudorandom complex values with magnitudes sampled from a normal distribution with a mean of 0.0 and
+     * a standard deviation of 1.0.
+     */
+    public CMatrix randnCMatrix(Shape shape) {
+<span class="nc" id="L489">        return randnCMatrix(shape.get(0), shape.get(1));</span>
+    }
+
+
+    /**
+     * Generates a matrix filled with pseudorandom complex values with magnitudes sampled from a normal
+     * distribution with a specified mean and standard deviation.
+     * @param rows The number of rows in the resulting matrix.
+     * @param cols The number of columns in the resulting matrix.
+     * @param mean Mean of the normal distribution from which values are sampled.
+     * @param std Standard deviation of the normal distribution from which values are sampled.
+     * @return A matrix filled with pseudorandom complex values with magnitudes sampled from a normal
+     * distribution with a specified mean and standard deviation.
+     * @throws IllegalArgumentException If the standard deviation is negative.
+     */
+    public CMatrix randnCMatrix(int rows, int cols, double mean, double std) {
+<span class="nc" id="L505">        return new CMatrix(rows, cols, genNormalComplexArray(rows*cols, mean, std));</span>
+    }
+
+
+    /**
+     * Generates a matrix filled with pseudorandom values sampled from a normal distribution with a specified mean
+     * and standard deviation.
+     * @param shape Shape of the resulting matrix.
+     * @param mean Mean of the normal distribution from which values are sampled.
+     * @param std Standard deviation of the normal distribution from which values are sampled.
+     * @return A matrix filled with pseudorandom values sampled from a normal distribution with a specified mean
+     * and standard deviation.
+     * @throws IllegalArgumentException If the standard deviation is negative.
+     */
+    public CMatrix randnCMatrix(Shape shape, double mean, double std) {
+<span class="nc" id="L520">        return randnCMatrix(shape.get(0), shape.get(1), mean, std);</span>
+    }
+
+    // TODO: Once the QR decomposition is implemented for complex matrices, add randomUnitaryMatrix(int size) method.
 
     /**
      * Generates an array of doubles filled with uniformly distributed pseudorandom values in {@code [0.0, 1.0)}.
      * To generate uniformly distributed values in a specified range see {@link #genUniformRealArray(int, double, double)}.
-     * @param length Length of random array to generate.
+     * @param length Length of pseudorandom array to generate.
      * @return An array of doubles with specified length filled with uniformly distributed values in {@code [0.0, 1.0)}.
      */
     private double[] genUniformRealArray(int length) {
-<span class="nc" id="L166">        double[] values = new double[length];</span>
+<span class="nc" id="L532">        double[] values = new double[length];</span>
 
-<span class="nc bnc" id="L168" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L169">            values[i] = rng.nextDouble();</span>
+<span class="nc bnc" id="L534" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L535">            values[i] = complexRng.rng.nextDouble();</span>
         }
 
-<span class="nc" id="L172">        return values;</span>
+<span class="nc" id="L538">        return values;</span>
     }
 
 
     /**
-     * Generates an array of doubles filled with uniformly distributed pseudorandom values in {@code [lowerBound, upperBound)}.
-     * @param length Length of random array to generate.
-     * @param lowerBound Lower bound of uniform range (inclusive).
-     * @param upperBound Upper bound of uniform range (Exclusive).
-     * @return An array of doubles with specified length filled with uniformly distributed values in {@code [lowerBound, upperBound)}.
+     * Generates an array of doubles filled with uniformly distributed pseudorandom values in {@code [min, max)}.
+     * @param length Length of pseudorandom array to generate.
+     * @param min Lower bound of uniform range (inclusive).
+     * @param max Upper bound of uniform range (Exclusive).
+     * @return An array of doubles with specified length filled with uniformly distributed values in {@code [min, max)}.
      */
-    private double[] genUniformRealArray(int length, double lowerBound, double upperBound) {
-<span class="nc" id="L184">        double[] values = new double[length];</span>
+    private double[] genUniformRealArray(int length, double min, double max) {
+<span class="nc" id="L550">        double[] values = new double[length];</span>
 
-<span class="nc bnc" id="L186" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L187">            values[i] = rng.nextDouble()*(upperBound - lowerBound) + lowerBound;</span>
+<span class="nc bnc" id="L552" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L553">            values[i] = complexRng.rng.nextDouble()*(max - min) + min;</span>
         }
 
-<span class="nc" id="L190">        return values;</span>
+<span class="nc" id="L556">        return values;</span>
     }
 
 
     /**
      * Generates an array of integers filled with uniformly distributed pseudorandom values in {@code [0, 1)}.
      * To generate uniformly distributed values in a specified range see {@link #genUniformRealIntArray(int, int, int)}.
-     * @param length Length of random array to generate.
+     * @param length Length of pseudorandom array to generate.
      * @return An array of integers with specified length filled with uniformly distributed values in {@code [0, 1)}.
      */
     private double[] genUniformRealIntArray(int length) {
-<span class="nc" id="L201">        double[] values = new double[length];</span>
+<span class="nc" id="L567">        double[] values = new double[length];</span>
 
-<span class="nc bnc" id="L203" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L204">            values[i] = rng.nextInt();</span>
+<span class="nc bnc" id="L569" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L570">            values[i] = complexRng.rng.nextInt();</span>
         }
 
-<span class="nc" id="L207">        return values;</span>
+<span class="nc" id="L573">        return values;</span>
     }
 
 
     /**
      * Generates an array of integers filled with uniformly distributed pseudorandom values in {@code [min, max)}.
-     * @param length Length of random array to generate.
+     * @param length Length of pseudorandom array to generate.
      * @param min Lower bound of uniform range (inclusive).
      * @param max Upper bound of uniform range (Exclusive).
      * @return An array of integers with specified length filled with uniformly distributed values in {@code [min, max)}.
      */
     private double[] genUniformRealIntArray(int length, int min, int max) {
-<span class="nc" id="L219">        double[] values = new double[length];</span>
+<span class="nc" id="L585">        double[] values = new double[length];</span>
 
-<span class="nc bnc" id="L221" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L222">            values[i] = rng.nextInt()*(max - min) + min;</span>
+<span class="nc bnc" id="L587" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L588">            values[i] = complexRng.rng.nextInt()*(max - min) + min;</span>
         }
 
-<span class="nc" id="L225">        return values;</span>
+<span class="nc" id="L591">        return values;</span>
     }
 
 
     /**
      * Generates an array of doubles filled with normally pseudorandom values with a mean of 0 and standard deviation
      * of 1.
-     * @param length Length of random array to generate.
+     * @param length Length of pseudorandom array to generate.
      * @return An array of doubles with specified length filled with normally pseudorandom values with a mean of 0 and
      * standard deviation of 1.
      */
     private double[] genNormalRealArray(int length) {
-<span class="nc" id="L237">        double[] values = new double[length];</span>
+<span class="nc" id="L603">        double[] values = new double[length];</span>
 
-<span class="nc bnc" id="L239" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L240">            values[i] = rng.nextGaussian();</span>
+<span class="nc bnc" id="L605" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L606">            values[i] = complexRng.rng.nextGaussian();</span>
         }
 
-<span class="nc" id="L243">        return values;</span>
+<span class="nc" id="L609">        return values;</span>
     }
 
 
     /**
      * Generates an array of doubles filled with normally distributed pseudorandom values with a specified mean and standard deviation.
-     * @param length Length of random array to generate.
+     * @param length Length of pseudorandom array to generate.
      * @param mean Mean of normal distribution.
      * @param std Standard deviation of normal distribution.
      * @return An array of doubles with specified length filled with normally pseudorandom values specified mean and
      * standard deviation.
+     * @throws IllegalArgumentException If standard deviation is negative.
      */
     private double[] genNormalRealArray(int length, double mean, double std) {
-<span class="nc" id="L256">        double[] values = new double[length];</span>
+<span class="nc" id="L623">        double[] values = new double[length];</span>
 
-<span class="nc bnc" id="L258" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L259">            values[i] = rng.nextGaussian()*mean + std;</span>
+<span class="nc bnc" id="L625" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L626">            values[i] = complexRng.rng.nextGaussian()*mean + std;</span>
         }
 
-<span class="nc" id="L262">        return values;</span>
+<span class="nc" id="L629">        return values;</span>
     }
 
 
     /**
      * Generates an array of {@link CNumber complex numbers} with pseudorandom uniformly distributed magnitudes
      * in {@code [0.0, 1.0)}.
-     * @param length Length of the random array to generate.
+     * @param length Length of the pseudorandom array to generate.
      * @return An array of {@link CNumber complex numbers} with pseudorandom uniformly distributed magnitudes
      * in {@code [0.0, 1.0)}.
      */
     private CNumber[] genUniformComplexArray(int length) {
-<span class="nc" id="L274">        CNumber[] values = new CNumber[length];</span>
+<span class="nc" id="L641">        CNumber[] values = new CNumber[length];</span>
 
-<span class="nc bnc" id="L276" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L277">            values[i] = complex_rng.random();</span>
+<span class="nc bnc" id="L643" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L644">            values[i] = complexRng.random();</span>
         }
 
-<span class="nc" id="L280">        return values;</span>
+<span class="nc" id="L647">        return values;</span>
+    }
+
+
+    /**
+     * Generates an array of pseudorandom {@link CNumber complex numbers} with uniformly distributed magnitudes
+     * in {@code [min, max)}.
+     * @param length Length of the pseudorandom array to generate.
+     * @param min Minimum value of uniform distribution from which the magnitudes are sampled (inclusive).
+     * @param max Maximum value of uniform distribution from which the magnitudes are sampled (exclusive).
+     * @return An array of {@link CNumber complex numbers} with pseudorandom {@link CNumber complex numbers} with
+     * uniformly distributed magnitudes in {@code [min, max)}.
+     * @throws IllegalArgumentException If {@code min} is negative or if {@code max} is less than {@code min}.
+     */
+    private CNumber[] genUniformComplexArray(int length, double min, double max) {
+<span class="nc" id="L662">        CNumber[] values = new CNumber[length];</span>
+
+<span class="nc bnc" id="L664" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L665">            values[i] = complexRng.random(min, max);</span>
+        }
+
+<span class="nc" id="L668">        return values;</span>
+    }
+
+
+    /**
+     * Generates an array of {@link CNumber complex numbers} with pseudorandom normally distributed magnitudes
+     * with a mean of 0.0 and a magnitude of 1.0.
+     * @param length Length of the pseudorandom array to generate.
+     * @return An array of {@link CNumber complex numbers} with pseudorandom normally distributed magnitudes
+     * with a mean of 0.0 and a magnitude of 1.0.
+     */
+    private CNumber[] genNormalComplexArray(int length) {
+<span class="nc" id="L680">        CNumber[] values = new CNumber[length];</span>
+
+<span class="nc bnc" id="L682" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L683">            values[i] = complexRng.randn();</span>
+        }
+
+<span class="nc" id="L686">        return values;</span>
+    }
+
+
+    /**
+     * Generates an array of {@link CNumber complex numbers} with pseudorandom normally distributed magnitudes
+     * with specified mean and standard deviation.
+     * @param length Length of the pseudorandom array to generate.
+     * @param mean Mean of the normal distribution from which to sample magnitudes.
+     * @param std Standard deviation of the normal distribution from which to sample magnitudes.
+     * @return An array of {@link CNumber complex numbers} with pseudorandom normally distributed magnitudes
+     * with specified mean and standard deviation.
+     * @throws IllegalArgumentException If standard deviation is negative.
+     */
+    private CNumber[] genNormalComplexArray(int length, double mean, double std) {
+<span class="nc" id="L701">        CNumber[] values = new CNumber[length];</span>
+
+<span class="nc bnc" id="L703" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L704">            values[i] = complexRng.randn(mean, std);</span>
+        }
+
+<span class="nc" id="L707">        return values;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

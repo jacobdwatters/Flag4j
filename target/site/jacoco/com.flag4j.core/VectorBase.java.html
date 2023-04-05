@@ -24,7 +24,6 @@
 
 package com.flag4j.core;
 
-import com.flag4j.CVector;
 import com.flag4j.Shape;
 import com.flag4j.util.ParameterChecks;
 
@@ -54,9 +53,9 @@ public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBas
      * @param entries     The non-zero entries of this sparse tensor.
      */
     public VectorBase(int size, T entries) {
-<span class="fc" id="L57">        super(new Shape(size), entries);</span>
-<span class="fc" id="L58">        this.size = size;</span>
-<span class="fc" id="L59">    }</span>
+<span class="fc" id="L56">        super(new Shape(size), entries);</span>
+<span class="fc" id="L57">        this.size = size;</span>
+<span class="fc" id="L58">    }</span>
 
 
     /**
@@ -67,10 +66,10 @@ public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBas
      * @throws IllegalArgumentException If the rank of the shape is not 1.
      */
     public VectorBase(Shape shape, T entries) {
-<span class="fc" id="L70">        super(shape, entries);</span>
-<span class="fc" id="L71">        ParameterChecks.assertRank(1, shape); // Ensure the shape is of rank 1.</span>
-<span class="fc" id="L72">        this.size = shape.get(0);</span>
-<span class="fc" id="L73">    }</span>
+<span class="fc" id="L69">        super(shape, entries);</span>
+<span class="fc" id="L70">        ParameterChecks.assertRank(1, shape); // Ensure the shape is of rank 1.</span>
+<span class="fc" id="L71">        this.size = shape.get(0);</span>
+<span class="fc" id="L72">    }</span>
 
 
     /**
@@ -79,7 +78,7 @@ public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBas
      * @return The size, i.e. number of entries, of this vector.
      */
     public int size() {
-<span class="fc" id="L82">        return size;</span>
+<span class="fc" id="L81">        return size;</span>
     }
 
 
@@ -89,7 +88,7 @@ public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBas
      * @return True if this vector and {@code b} have the same number of elements.
      */
     public boolean sameSize(VectorBase&lt;?&gt; b) {
-<span class="fc bfc" id="L92" title="All 2 branches covered.">        return this.size==b.size;</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        return this.size==b.size;</span>
     }
 
 
@@ -99,7 +98,7 @@ public abstract class VectorBase&lt;T extends Serializable&gt; extends TensorBas
      * @return True if this vector and {@code b} have the same number of elements.
      */
     public boolean sameShape(VectorBase&lt;?&gt; b) {
-<span class="fc bfc" id="L102" title="All 2 branches covered.">        return this.size==b.size;</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        return this.size==b.size;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
