@@ -29,7 +29,7 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.Decompose;
 
 /**
- * This class contains methods for generating pseudorandom tensors, matrices, and vectors.
+ * This class contains methods for generating streams of pseudorandom tensors, matrices, and vectors. TGhis
  */
 public class RandomTensor {
     /**
