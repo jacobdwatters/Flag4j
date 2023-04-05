@@ -30,13 +30,13 @@ import java.util.Random;
 
 
 /**
- * This class contains methods for generating random complex numbers. Wraps {@link Random} class.
+ * An instance of this class is used to generate a stream of random {@link CNumber complex numbers}. Wraps {@link Random} class.
  */
 public class RandomCNumber {
     /**
      * Random number generator.
      */
-    private final Random rng;
+    protected final Random rng;
 
 
     /**
@@ -58,109 +58,148 @@ public class RandomCNumber {
     }
 
 
-    /**
-     * Generates a random real number which is a
-     * normally distributed pseudorandom number with a mean of zero and standard deviation of one.
-     *
-     * @return A random real number from a standard normal distribution.
-     */
-    public CNumber randn() {
-        return randn(false);
-    }
-
+    // TODO: Change random() to generate random values with magnitudes uniformly in [0, 1).
+    //  Add randomReal(...) methods.
 
     /**
-     * Generates a random real number.
-     * @return random real number
+     * Generates a pseudorandom complex number with a magnitude uniformly distributed in {@code [0.0, 1.0)}.
+     * @return A pseudorandom complex number with a magnitude uniformly distributed in {@code [0.0, 1.0)}.
      */
     public CNumber random() {
-        return new CNumber(Math.random());
+        return random(rng.nextDouble());
     }
 
 
     /**
-     * Generates a random real or complex number {@code a}, or {@code a+bi} where {@code a} and {@code b} are
-     * normally distributed pseudorandom numbers with a mean of zero and standard deviation of one.
-     *
-     * @param complex Selects if a real or complex number should be selected.
-     * @return If <code>complex</code> false, a random real number is returned. If <code>complex</code> true, a random real and imaginary component are chosen
-     * and a complex number is returned.
-     */
-    public  CNumber randn(boolean complex) {
-        double real = rng.nextGaussian();
-        double imaginary;
-
-        if(complex) {
-            imaginary = rng.nextGaussian();
-            return new CNumber(real, imaginary);
-        } else {
-            return new CNumber(real);
-        }
-    }
-
-
-    /**
-     * Generates a random complex number with given magnitude.
-     * Note: the magnitude must be a non-negative real number.
-     * @param mag Magnitude
+     * Generates a uniformly distributed pseudorandom complex number with given magnitude.
+     * @param mag Magnitude of the complex number. Must be non-negative.
      * @return random complex number with specified magnitude.
+     * @throws IllegalArgumentException If the magnitude is negative.
      */
     public CNumber random(double mag) {
-
         if(mag < 0) {
-            throw new IllegalArgumentException("Magnitude must be non-negative.");
+            throw new IllegalArgumentException("Magnitude must be non-negative but got " + mag);
         }
 
-        // By Pythagorean theorem, this will result in a complex number with specified magnitude
+        // Generate real component.
         double real = rng.nextDouble()*mag;
+
+        // Compute imaginary component using Pythagorean theorem.
         double imaginary = Math.sqrt(Math.pow(mag, 2) - Math.pow(real, 2));
 
-        CNumber[] result_list = {new CNumber(real, imaginary),  // 1st quadrant result
-                new CNumber(-real, imaginary),  // 2nd quadrant result
-                new CNumber(-real, -imaginary),  // 3rd quadrant result
-                new CNumber(real, -imaginary)}; // 4th quadrant result
+        // Choose complex plane quadrant (i.e. signs of each component).
+        real = rng.nextBoolean() ? real : -real;
+        imaginary = rng.nextBoolean() ? imaginary : -imaginary;
 
-        return result_list[rng.nextInt(4)]; // Choose value randomly from one quadrant.
+        return new CNumber(real, imaginary);
     }
 
 
     /**
-     * Generates a random number between min and max.
+     * Generates a pseudorandom complex number with magnitude uniformly distributed in {@code [min, max)}.
      *
-     * If magnitude_flag is passed a true, then a random complex number with magnitude
-     * between min and max (where min and max are non-negative values) is generated.
-     *
-     * If magnitude_flag is passed a false, then a random real value between min and max is
-     * generated.
-     *
-     * If no magnitude_flag is passed, then it is treated as false.
-     *
-     * @param min Minimum value for random number
-     * @param max Maximum value for random number
-     * @param magnitude_flag Optional flag to indicate if the Number should be real or complex.
-     * @return random real or complex number between min and max.
+     * @param min Minimum value for random number. Must be non-negative.
+     * @param max Maximum value for random number. Must be larger than or equal to min.
+     * @return A pseudorandom complex number with magnitude uniformly distributed in {@code [min, max)}.
+     * @throws IllegalArgumentException If {@code min} is not positive or if {@code max} is less than {@code min}.
      */
-    public CNumber random(double min, double max, boolean... magnitude_flag) {
-        if(magnitude_flag.length > 1) {
-            throw new IllegalArgumentException("Can have at most one optional flag but got " + magnitude_flag.length);
+    public CNumber random(double min, double max) {
+        if(min < 0) {
+            throw new IllegalArgumentException("Min value must be non-negative but got " + min + ".");
         }
 
         if(min > max) {
-            throw new IllegalArgumentException("min must be less than or equal to max but received "
-                    + "min: " + min + " and max: " + max);
+            throw new IllegalArgumentException("Max value must be greater than or equal to min but got min=" +
+                    min + " and max=" + max + ".");
         }
 
-        if (magnitude_flag.length > 0 && magnitude_flag[0]) {
-            if(min < 0 || max < 0) {
-                throw new IllegalArgumentException("For complex numbers, min and max must be non-negative values but received "
-                        + "min: " + min + " and max: " + max);
-            }
+        return random(rng.nextDouble()*(max-min) + min);
+    }
 
-            double mag = Math.random()*(max - min) + min;
-            return random(mag);
 
-        } else {
-            return new CNumber(Math.random()*(max - min) + min);
+    /**
+     * Generates a pseudorandom complex number with normally distributed magnitude with a mean of 0.0 and standard
+     * deviation of 1.0.
+     * @return A pseudorandom complex number with normally distributed magnitude with a mean of 0.0 and standard
+     * deviation of 1.0.
+     */
+    public CNumber randn() {
+        return random(rng.nextGaussian());
+    }
+
+
+    /**
+     * Generates a pseudorandom complex number with normally distributed magnitude with a specified mean and standard
+     * deviation.
+     * @param mean Mean of normal distribution to sample magnitude from.
+     * @param std Standard deviation of normal distribution to sample magnitude from.
+     * @return A pseudorandom complex number with normally distributed magnitude with a specified mean and
+     * standard deviation.
+     * @throws IllegalArgumentException If standard deviation is negative.
+     */
+    public CNumber randn(double mean, double std) {
+        ParameterChecks.assertGreaterEq(std, 0);
+        return random(rng.nextGaussian()*std + mean);
+    }
+
+
+    /**
+     * Generates a pseudorandom complex number with a real component uniformly distributed in {@code [0.0, 1.0)}
+     * and an imaginary component of zero.
+     * @return A pseudorandom complex number with a real component uniformly distributed in {@code [0.0, 1.0)}
+     *      * and an imaginary component of zero.
+     */
+    public CNumber randomReal() {
+        return new CNumber(rng.nextDouble());
+    }
+
+
+    /**
+     * Generates a pseudorandom complex number with real component uniformly distributed in {@code [min, max)} and
+     *      * an imaginary component of zero.
+     *
+     * @param min Minimum value for real component. Must be non-negative.
+     * @param max Maximum value for real component. Must be larger than or equal to min.
+     * @return A pseudorandom complex number with real component uniformly distributed in {@code [min, max)} and
+     * an imaginary component of zero.
+     * @throws IllegalArgumentException If {@code min} is not positive or if {@code max} is less than {@code min}.
+     */
+    public CNumber randomReal(double min, double max) {
+        if(min < 0) {
+            throw new IllegalArgumentException("Min value must be non-negative but got " + min + ".");
         }
+
+        if(min > max) {
+            throw new IllegalArgumentException("Max value must be greater than or equal to min but got min=" +
+                    min + " and max=" + max + ".");
+        }
+
+        return new CNumber(rng.nextDouble()*(max-min) + min);
+    }
+
+
+    /**
+     * Generates a pseudorandom complex number with a normally distributed real component with a mean of 0.0 and standard
+     * deviation of 1.0. The imaginary component will be zero.
+     * @return A pseudorandom complex number with a normally distributed real component with a mean of 0.0 and standard
+     * deviation of 1.0. The imaginary component will be zero.
+     */
+    public CNumber randnReal() {
+        return new CNumber(rng.nextGaussian());
+    }
+
+
+    /**
+     * Generates a pseudorandom complex number with normally distributed real component with a specified mean and standard
+     * deviation and an imaginary component of zero.
+     * @param mean Mean of normal distribution to sample magnitude from.
+     * @param std Standard deviation of normal distribution to sample magnitude from.
+     * @return A pseudorandom complex number with normally distributed real component with a specified mean and standard
+     * deviation and an imaginary component of zero.
+     * @throws IllegalArgumentException If standard deviation is negative.
+     */
+    public CNumber randnReal(double mean, double std) {
+        ParameterChecks.assertGreaterEq(std, 0);
+        return new CNumber(rng.nextGaussian()*std + mean);
     }
 }
