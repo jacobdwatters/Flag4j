@@ -585,7 +585,7 @@ public class RandomTensor {
         double[] values = new double[length];
 
         for(int i=0; i<length; i++) {
-            values[i] = complexRng.rng.nextInt()*(max - min) + min;
+            values[i] = complexRng.rng.nextInt()*((double) (max - min)) + min;
         }
 
         return values;
