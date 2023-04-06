@@ -24,7 +24,6 @@
 
 package com.flag4j.io;
 
-import com.flag4j.Matrix;
 import com.flag4j.core.TensorBase;
 
 import java.io.*;

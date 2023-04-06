@@ -25,10 +25,42 @@
 package com.flag4j.io;
 
 
+import com.flag4j.Matrix;
+import com.flag4j.util.ErrorMessages;
+
+import java.io.IOException;
+
 /**
  * The TensorReader class provides several static methods for reading serialized
  * tensors, matrices, and vectors from a file.
  */
 public class TensorReader {
-    // TODO: Implementations
+
+    private TensorReader() {
+        // Hide default constructor in utility class.
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+    }
+
+
+    /**
+     * Reads a serialized matrix from a specified file using a {@link TensorInputStream}. If an exception is thrown while reading,
+     * the result will be null.
+     * @param fileName File name, including extension, of the file containing the serialized matrix.
+     * @return The deserialized matrix from the specified file. If an exception is thrown while reading,
+     * the result will be null.
+     */
+    public static Matrix readMatrix(String fileName) {
+        Matrix A;
+
+        try {
+            TensorInputStream in = new TensorInputStream(fileName);
+            A = in.readMatrix();
+            in.close();
+
+        } catch (IOException | ClassNotFoundException e) {
+            A = null;
+        }
+
+        return A;
+    }
 }
