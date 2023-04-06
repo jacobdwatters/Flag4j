@@ -25,10 +25,41 @@
 package com.flag4j.io;
 
 
+import com.flag4j.core.TensorBase;
+import com.flag4j.util.ErrorMessages;
+
+import java.io.IOException;
+
 /**
  * The TensorWriter class provides several static methods for writing serialized
  * tensors, matrices, and vectors to a file.
  */
 public class TensorWriter {
-    // TODO: Implementations
+
+    private TensorWriter() {
+        // Hide default constructor in utility class.
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+    }
+
+
+    /**
+     * Writes a tensor to a file using a {@link TensorOutputStream}. If the write operation fails it will
+     * terminate but no exception will be thrown. To determine if the write was successful, see the return value: if
+     * the write was successful, true is returned; if the write fails,then false is returned.
+     * is returned.
+     * @param fileName File name, including extension, of the file to write the serialized matrix to.
+     * @param src Source object to write to the specified file.
+     * @return True if the write was successful. False if the write failed.
+     */
+    public static boolean write(String fileName, TensorBase<?> src) {
+        boolean successfulWrite = true;
+
+        try (TensorOutputStream out = new TensorOutputStream(fileName)) {
+            out.write(src);
+        } catch (IOException e) {
+            successfulWrite = false;
+        }
+
+        return successfulWrite;
+    }
 }
