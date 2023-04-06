@@ -26,6 +26,7 @@ package com.flag4j.operations.dense.complex;
 
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.concurrency.ThreadManager;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -40,9 +41,9 @@ public class ComplexDenseElemDiv {
     private static final int CONCURRENT_THRESHOLD = 1250;
 
 
-<span class="nc" id="L43">    private ComplexDenseElemDiv() {</span>
+<span class="nc" id="L44">    private ComplexDenseElemDiv() {</span>
         // Hide default constructor for utility class.
-<span class="nc" id="L45">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L46">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -56,14 +57,14 @@ public class ComplexDenseElemDiv {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L59">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
-<span class="fc" id="L60">        CNumber[] product = new CNumber[src1.length];</span>
+<span class="fc" id="L60">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L61">        CNumber[] product = new CNumber[src1.length];</span>
 
-<span class="fc bfc" id="L62" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="fc" id="L63">            product[i] = src1[i].div(src2[i]);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L64">            product[i] = src1[i].div(src2[i]);</span>
         }
 
-<span class="fc" id="L66">        return product;</span>
+<span class="fc" id="L67">        return product;</span>
     }
 
 
@@ -77,12 +78,11 @@ public class ComplexDenseElemDiv {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static CNumber[] elemDivConcurrent(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="nc" id="L80">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
-<span class="nc" id="L81">        CNumber[] product = new CNumber[src1.length];</span>
+<span class="nc" id="L81">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="nc" id="L82">        CNumber[] product = new CNumber[src1.length];</span>
 
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="nc" id="L84">            product[i] = src1[i].div(src2[i]);</span>
-        }
+<span class="nc" id="L84">        ThreadManager.concurrentLoop(0, product.length,</span>
+<span class="nc" id="L85">                (i)-&gt;product[i] = src1[i].div(src2[i]));</span>
 
 <span class="nc" id="L87">        return product;</span>
     }

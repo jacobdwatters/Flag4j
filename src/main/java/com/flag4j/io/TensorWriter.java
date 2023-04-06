@@ -57,6 +57,7 @@ public class TensorWriter {
         try (TensorOutputStream out = new TensorOutputStream(fileName)) {
             out.write(src);
         } catch (IOException e) {
+            // Some exception was thrown.
             successfulWrite = false;
         }
 

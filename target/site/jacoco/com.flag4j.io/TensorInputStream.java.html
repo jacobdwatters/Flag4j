@@ -64,7 +64,7 @@ public class TensorInputStream extends InputStream {
      * @return The deserialized {@link Tensor tensor object} stored in the specified file.
      */
     public Tensor readTensor() throws IOException, ClassNotFoundException {
-        // Deserialize matrix.
+        // Deserialize tensor.
 <span class="nc" id="L68">        return (Tensor) objectIn.readObject();</span>
     }
 

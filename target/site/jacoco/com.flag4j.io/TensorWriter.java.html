@@ -25,10 +25,43 @@
 package com.flag4j.io;
 
 
+import com.flag4j.core.TensorBase;
+import com.flag4j.util.ErrorMessages;
+
+import java.io.IOException;
+
 /**
  * The TensorWriter class provides several static methods for writing serialized
  * tensors, matrices, and vectors to a file.
  */
-<span class="nc" id="L32">public class TensorWriter {</span>
+public class TensorWriter {
+
+<span class="nc" id="L39">    private TensorWriter() {</span>
+        // Hide default constructor in utility class.
+<span class="nc" id="L41">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Writes a tensor to a file using a {@link TensorOutputStream}. If the write operation fails it will
+     * terminate but no exception will be thrown. To determine if the write was successful, see the return value: if
+     * the write was successful, true is returned; if the write fails,then false is returned.
+     * is returned.
+     * @param fileName File name, including extension, of the file to write the serialized matrix to.
+     * @param src Source object to write to the specified file.
+     * @return True if the write was successful. False if the write failed.
+     */
+    public static boolean write(String fileName, TensorBase&lt;?&gt; src) {
+<span class="nc" id="L55">        boolean successfulWrite = true;</span>
+
+<span class="nc" id="L57">        try (TensorOutputStream out = new TensorOutputStream(fileName)) {</span>
+<span class="nc" id="L58">            out.write(src);</span>
+<span class="nc" id="L59">        } catch (IOException e) {</span>
+            // Some exception was thrown.
+<span class="nc" id="L61">            successfulWrite = false;</span>
+<span class="nc" id="L62">        }</span>
+
+<span class="nc" id="L64">        return successfulWrite;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

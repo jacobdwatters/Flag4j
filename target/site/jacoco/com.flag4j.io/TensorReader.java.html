@@ -26,39 +26,84 @@ package com.flag4j.io;
 
 
 import com.flag4j.Matrix;
-import com.flag4j.util.RandomTensor;
+import com.flag4j.Tensor;
+import com.flag4j.Vector;
+import com.flag4j.util.ErrorMessages;
 
 import java.io.IOException;
-
 
 /**
  * The TensorReader class provides several static methods for reading serialized
  * tensors, matrices, and vectors from a file.
  */
-<span class="nc" id="L38">public class TensorReader {</span>
+public class TensorReader {
+
+<span class="nc" id="L41">    private TensorReader() {</span>
+        // Hide default constructor in utility class.
+<span class="nc" id="L43">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
 
 
-    // TODO: Remove, this is temporary for testing.
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-<span class="nc" id="L43">        RandomTensor rng = new RandomTensor();</span>
-<span class="nc" id="L44">        Matrix A = rng.randnMatrix(1500, 698);</span>
+    /**
+     * Reads a serialized {@link Tensor tensor} from a specified file using a {@link TensorInputStream}. If an exception is
+     * thrown while reading, the result will be null.
+     * @param fileName File name, including extension, of the file containing the serialized tensor.
+     * @return The deserialized tensor from the specified file. If an exception is thrown while reading,
+     * the result will be null.
+     */
+    public static Tensor readTensor(String fileName) {
+        Tensor tensor;
 
-<span class="nc" id="L46">        TensorOutputStream out = new TensorOutputStream(&quot;testOutput.ser&quot;);</span>
-<span class="nc" id="L47">        out.write(A);</span>
-<span class="nc" id="L48">        out.close();</span>
+<span class="nc" id="L57">        try (TensorInputStream in = new TensorInputStream(fileName)) {</span>
+<span class="nc" id="L58">            tensor = in.readTensor();</span>
+<span class="nc" id="L59">        } catch (IOException | ClassNotFoundException e) {</span>
+            // An Exception was thrown.
+<span class="nc" id="L61">            tensor = null;</span>
+<span class="nc" id="L62">        }</span>
 
-<span class="nc" id="L50">        TensorInputStream in = new TensorInputStream(&quot;testOutput.ser&quot;);</span>
-<span class="nc" id="L51">        Matrix B = in.readMatrix();</span>
+<span class="nc" id="L64">        return tensor;</span>
+    }
 
-<span class="nc" id="L53">        System.out.printf(&quot;A %s:\n%s\n\n&quot;, A.shape, A);</span>
-<span class="nc" id="L54">        System.out.printf(&quot;B %s:\n%s\n\n&quot;, B.shape, B);</span>
 
-<span class="nc" id="L56">        long start = System.nanoTime();</span>
-<span class="nc" id="L57">        A.equals(B);</span>
-<span class="nc" id="L58">        long end = System.nanoTime();</span>
-<span class="nc" id="L59">        double total = ((double) end - (double) start)*1e-6;</span>
-<span class="nc" id="L60">        System.out.printf(&quot;Time: %f ms\n&quot;, total);</span>
+    /**
+     * Reads a serialized {@link Matrix matrix} from a specified file using a {@link TensorInputStream}. If an exception is thrown while reading,
+     * the result will be null.
+     * @param fileName File name, including extension, of the file containing the serialized matrix.
+     * @return The deserialized matrix from the specified file. If an exception is thrown while reading,
+     * the result will be null.
+     */
+    public static Matrix readMatrix(String fileName) {
+        Matrix matrix;
 
-<span class="nc" id="L62">    }</span>
+<span class="nc" id="L78">        try (TensorInputStream in = new TensorInputStream(fileName)) {</span>
+<span class="nc" id="L79">            matrix = in.readMatrix();</span>
+<span class="nc" id="L80">        } catch (IOException | ClassNotFoundException e) {</span>
+            // An Exception was thrown.
+<span class="nc" id="L82">            matrix = null;</span>
+<span class="nc" id="L83">        }</span>
+
+<span class="nc" id="L85">        return matrix;</span>
+    }
+
+
+    /**
+     * Reads a serialized {@link Vector vector} from a specified file using a {@link TensorInputStream}. If an exception is
+     * thrown while reading, the result will be null.
+     * @param fileName File name, including extension, of the file containing the serialized vector.
+     * @return The deserialized vector from the specified file. If an exception is thrown while reading,
+     * the result will be null.
+     */
+    public static Vector readVector(String fileName) {
+        Vector vector;
+
+<span class="nc" id="L99">        try (TensorInputStream in = new TensorInputStream(fileName)) {</span>
+<span class="nc" id="L100">            vector = in.readVector();</span>
+<span class="nc" id="L101">        } catch (IOException | ClassNotFoundException e) {</span>
+            // An Exception was thrown.
+<span class="nc" id="L103">            vector = null;</span>
+<span class="nc" id="L104">        }</span>
+
+<span class="nc" id="L106">        return vector;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

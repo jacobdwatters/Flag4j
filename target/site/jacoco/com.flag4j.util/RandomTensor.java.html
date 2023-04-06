@@ -585,7 +585,7 @@ public class RandomTensor {
 <span class="nc" id="L585">        double[] values = new double[length];</span>
 
 <span class="nc bnc" id="L587" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L588">            values[i] = complexRng.rng.nextInt()*(max - min) + min;</span>
+<span class="nc" id="L588">            values[i] = complexRng.rng.nextInt()*((double) (max - min)) + min;</span>
         }
 
 <span class="nc" id="L591">        return values;</span>

@@ -24,7 +24,6 @@
 
 package com.flag4j.io;
 
-import com.flag4j.Matrix;
 import com.flag4j.core.TensorBase;
 
 import java.io.*;
@@ -51,10 +50,10 @@ public class TensorOutputStream extends OutputStream {
      * @param fileName File name, including extension, of file to write data to.
      * @throws IOException If an I/O error occurs while reading the stream header.
      */
-<span class="nc" id="L54">    public TensorOutputStream(String fileName) throws IOException {</span>
-<span class="nc" id="L55">        fileOut = new FileOutputStream(fileName);</span>
-<span class="nc" id="L56">        objectOut = new ObjectOutputStream(fileOut);</span>
-<span class="nc" id="L57">    }</span>
+<span class="nc" id="L53">    public TensorOutputStream(String fileName) throws IOException {</span>
+<span class="nc" id="L54">        fileOut = new FileOutputStream(fileName);</span>
+<span class="nc" id="L55">        objectOut = new ObjectOutputStream(fileOut);</span>
+<span class="nc" id="L56">    }</span>
 
 
     /**
@@ -62,8 +61,8 @@ public class TensorOutputStream extends OutputStream {
      * @param A Object to write to file. This may be a real/complex dense or sparse tensor, matrix, or vector.
      */
     public void write(TensorBase&lt;?&gt; A) throws IOException {
-<span class="nc" id="L65">        objectOut.writeObject(A);</span>
-<span class="nc" id="L66">    }</span>
+<span class="nc" id="L64">        objectOut.writeObject(A);</span>
+<span class="nc" id="L65">    }</span>
 
 
     /**
@@ -76,8 +75,8 @@ public class TensorOutputStream extends OutputStream {
      */
     @Override
     public void write(int b) throws IOException {
-<span class="nc" id="L79">        objectOut.write(b);</span>
-<span class="nc" id="L80">    }</span>
+<span class="nc" id="L78">        objectOut.write(b);</span>
+<span class="nc" id="L79">    }</span>
 
 
     /**
@@ -86,8 +85,8 @@ public class TensorOutputStream extends OutputStream {
      */
     @Override
     public void close() throws IOException {
-<span class="nc" id="L89">        objectOut.close();</span>
-<span class="nc" id="L90">        fileOut.close();</span>
-<span class="nc" id="L91">    }</span>
+<span class="nc" id="L88">        objectOut.close();</span>
+<span class="nc" id="L89">        fileOut.close();</span>
+<span class="nc" id="L90">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
