@@ -52,12 +52,10 @@ public class TensorReader {
     public static Matrix readMatrix(String fileName) {
         Matrix A;
 
-        try {
-            TensorInputStream in = new TensorInputStream(fileName);
+        try (TensorInputStream in = new TensorInputStream(fileName)) {
             A = in.readMatrix();
-            in.close();
-
         } catch (IOException | ClassNotFoundException e) {
+            // An Exception was thrown.
             A = null;
         }
 
