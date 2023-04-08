@@ -24,10 +24,7 @@
 
 package com.flag4j.operations;
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
-import com.flag4j.Tensor;
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.dense.complex.ComplexDenseTranspose;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
@@ -56,9 +53,10 @@ public final class TransposeDispatcher {
      */
     private static final int CONCURRENT_THRESHOLD = 125_000;
 
-<span class="nc" id="L59">    private TransposeDispatcher() {</span>
+
+<span class="nc" id="L57">    private TransposeDispatcher() {</span>
         // Hide default constructor.
-<span class="nc" id="L61">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L59">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -71,24 +69,24 @@ public final class TransposeDispatcher {
 
         double[] dest;
 
-<span class="fc" id="L74">        Algorithm algorithm = chooseAlgorithm(src.shape);</span>
+<span class="fc" id="L72">        Algorithm algorithm = chooseAlgorithm(src.shape);</span>
 
-<span class="pc bpc" id="L76" title="3 of 4 branches missed.">        switch(algorithm) {</span>
+<span class="pc bpc" id="L74" title="3 of 4 branches missed.">        switch(algorithm) {</span>
             case STANDARD:
-<span class="nc" id="L78">                dest = RealDenseTranspose.standardMatrix(src.entries, src.numRows, src.numCols);</span>
-<span class="nc" id="L79">                break;</span>
+<span class="nc" id="L76">                dest = RealDenseTranspose.standardMatrix(src.entries, src.numRows, src.numCols);</span>
+<span class="nc" id="L77">                break;</span>
             case BLOCKED:
-<span class="fc" id="L81">                dest = RealDenseTranspose.blockedMatrix(src.entries, src.numRows, src.numCols);</span>
-<span class="fc" id="L82">                break;</span>
+<span class="fc" id="L79">                dest = RealDenseTranspose.blockedMatrix(src.entries, src.numRows, src.numCols);</span>
+<span class="fc" id="L80">                break;</span>
             case CONCURRENT_STANDARD:
-<span class="nc" id="L84">                dest = RealDenseTranspose.standardMatrixConcurrent(src.entries, src.numRows, src.numCols);</span>
-<span class="nc" id="L85">                break;</span>
+<span class="nc" id="L82">                dest = RealDenseTranspose.standardMatrixConcurrent(src.entries, src.numRows, src.numCols);</span>
+<span class="nc" id="L83">                break;</span>
             default:
-<span class="nc" id="L87">                dest = RealDenseTranspose.blockedMatrixConcurrent(src.entries, src.numRows, src.numCols);</span>
+<span class="nc" id="L85">                dest = RealDenseTranspose.blockedMatrixConcurrent(src.entries, src.numRows, src.numCols);</span>
                 break;
         }
 
-<span class="fc" id="L91">        return new Matrix(src.numCols, src.numRows, dest);</span>
+<span class="fc" id="L89">        return new Matrix(src.numCols, src.numRows, dest);</span>
     }
 
 
@@ -101,15 +99,15 @@ public final class TransposeDispatcher {
 
         CNumber[] dest;
 
-<span class="fc" id="L104">        Algorithm algorithm = chooseAlgorithm(src.shape);</span>
+<span class="fc" id="L102">        Algorithm algorithm = chooseAlgorithm(src.shape);</span>
 
-<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        if(algorithm==Algorithm.BLOCKED) {</span>
-<span class="fc" id="L107">            dest = ComplexDenseTranspose.blockedMatrix(src.entries, src.numRows, src.numCols);</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if(algorithm==Algorithm.BLOCKED) {</span>
+<span class="fc" id="L105">            dest = ComplexDenseTranspose.blockedMatrix(src.entries, src.numRows, src.numCols);</span>
         } else {
-<span class="nc" id="L109">            dest = ComplexDenseTranspose.blockedMatrixConcurrent(src.entries, src.numRows, src.numCols);</span>
+<span class="nc" id="L107">            dest = ComplexDenseTranspose.blockedMatrixConcurrent(src.entries, src.numRows, src.numCols);</span>
         }
 
-<span class="fc" id="L112">        return new CMatrix(src.numCols, src.numRows, dest);</span>
+<span class="fc" id="L110">        return new CMatrix(src.numCols, src.numRows, dest);</span>
     }
 
 
@@ -121,15 +119,15 @@ public final class TransposeDispatcher {
     public static CMatrix dispatchHermation(CMatrix src) {
         CNumber[] dest;
 
-<span class="fc" id="L124">        Algorithm algorithm = chooseAlgorithmHermation(src.shape);</span>
+<span class="fc" id="L122">        Algorithm algorithm = chooseAlgorithmHermation(src.shape);</span>
 
-<span class="pc bpc" id="L126" title="1 of 2 branches missed.">        if(algorithm==Algorithm.BLOCKED) {</span>
-<span class="fc" id="L127">            dest = ComplexDenseTranspose.blockedMatrixHerm(src.entries, src.numRows, src.numCols);</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        if(algorithm==Algorithm.BLOCKED) {</span>
+<span class="fc" id="L125">            dest = ComplexDenseTranspose.blockedMatrixHerm(src.entries, src.numRows, src.numCols);</span>
         } else {
-<span class="nc" id="L129">            dest = ComplexDenseTranspose.blockedMatrixConcurrentHerm(src.entries, src.numRows, src.numCols);</span>
+<span class="nc" id="L127">            dest = ComplexDenseTranspose.blockedMatrixConcurrentHerm(src.entries, src.numRows, src.numCols);</span>
         }
 
-<span class="fc" id="L132">        return new CMatrix(src.numCols, src.numRows, dest);</span>
+<span class="fc" id="L130">        return new CMatrix(src.numCols, src.numRows, dest);</span>
     }
 
 
@@ -142,13 +140,32 @@ public final class TransposeDispatcher {
      */
     public static Tensor dispatchTensor(Tensor src, int axis1, int axis2) {
         double[] dest;
-<span class="nc" id="L145">        Algorithm algorithm = chooseAlgorithmTensor(src.shape.get(axis1), src.shape.get(axis2));</span>
+<span class="nc" id="L143">        Algorithm algorithm = chooseAlgorithmTensor(src.shape.get(axis1), src.shape.get(axis2));</span>
 
-<span class="nc bnc" id="L147" title="All 2 branches missed.">        dest = algorithm == Algorithm.STANDARD ?</span>
-<span class="nc" id="L148">                RealDenseTranspose.standard(src.entries, src.shape, axis1, axis2):</span>
-<span class="nc" id="L149">                RealDenseTranspose.standardConcurrent(src.entries, src.shape, axis1, axis2);</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        dest = algorithm == Algorithm.STANDARD ?</span>
+<span class="nc" id="L146">                RealDenseTranspose.standard(src.entries, src.shape, axis1, axis2):</span>
+<span class="nc" id="L147">                RealDenseTranspose.standardConcurrent(src.entries, src.shape, axis1, axis2);</span>
 
-<span class="nc" id="L151">        return new Tensor(src.shape.copy().swapAxes(axis1, axis2), dest);</span>
+<span class="nc" id="L149">        return new Tensor(src.shape.copy().swapAxes(axis1, axis2), dest);</span>
+    }
+
+
+    /**
+     * Dispatches a tensor transpose problem to the appropriate algorithm based on its shape and size.
+     * @param src Tensor to transpose.
+     * @param axis1 First axis in tensor transpose.
+     * @param axis2 Second axis in tensor transpose.
+     * @return
+     */
+    public static CTensor dispatchTensor(CTensor src, int axis1, int axis2) {
+        CNumber[] dest;
+<span class="nc" id="L162">        Algorithm algorithm = chooseAlgorithmTensor(src.shape.get(axis1), src.shape.get(axis2));</span>
+
+<span class="nc bnc" id="L164" title="All 2 branches missed.">        dest = algorithm == Algorithm.STANDARD ?</span>
+<span class="nc" id="L165">                ComplexDenseTranspose.standard(src.entries, src.shape, axis1, axis2):</span>
+<span class="nc" id="L166">                ComplexDenseTranspose.standardConcurrent(src.entries, src.shape, axis1, axis2);</span>
+
+<span class="nc" id="L168">        return new CTensor(src.shape.copy().swapAxes(axis1, axis2), dest);</span>
     }
 
 
@@ -161,17 +178,17 @@ public final class TransposeDispatcher {
     private static Algorithm chooseAlgorithmTensor(int length1, int length2) {
         Algorithm algorithm;
 
-<span class="nc" id="L164">        int numEntries = length1*length2; // Number of entries involved in transpose.</span>
+<span class="nc" id="L181">        int numEntries = length1*length2; // Number of entries involved in transpose.</span>
 
-<span class="nc bnc" id="L166" title="All 2 branches missed.">        if(numEntries &lt; CONCURRENT_THRESHOLD) {</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        if(numEntries &lt; CONCURRENT_THRESHOLD) {</span>
             // Use standard algorithm.
-<span class="nc" id="L168">            algorithm = Algorithm.STANDARD;</span>
+<span class="nc" id="L185">            algorithm = Algorithm.STANDARD;</span>
         } else {
             // Use concurrent standard algorithm
-<span class="nc" id="L171">            algorithm = Algorithm.CONCURRENT_STANDARD;</span>
+<span class="nc" id="L188">            algorithm = Algorithm.CONCURRENT_STANDARD;</span>
         }
 
-<span class="nc" id="L174">        return algorithm;</span>
+<span class="nc" id="L191">        return algorithm;</span>
     }
 
 
@@ -184,17 +201,17 @@ public final class TransposeDispatcher {
     private static Algorithm chooseAlgorithm(Shape shape) {
         Algorithm algorithm;
 
-<span class="fc" id="L187">        int numEntries = shape.totalEntries().intValue();</span>
+<span class="fc" id="L204">        int numEntries = shape.totalEntries().intValue();</span>
 
-<span class="pc bpc" id="L189" title="1 of 2 branches missed.">        if(numEntries &lt; COMPLEX_BLOCKED_THRESHOLD) {</span>
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">        if(numEntries &lt; COMPLEX_BLOCKED_THRESHOLD) {</span>
             // Use blocked algorithm
-<span class="fc" id="L191">            algorithm = Algorithm.BLOCKED;</span>
+<span class="fc" id="L208">            algorithm = Algorithm.BLOCKED;</span>
         } else {
             // Use concurrent blocked implementation.
-<span class="nc" id="L194">            algorithm = Algorithm.CONCURRENT_BLOCKED;</span>
+<span class="nc" id="L211">            algorithm = Algorithm.CONCURRENT_BLOCKED;</span>
         }
 
-<span class="fc" id="L197">        return algorithm;</span>
+<span class="fc" id="L214">        return algorithm;</span>
     }
 
 
@@ -206,17 +223,17 @@ public final class TransposeDispatcher {
     private static Algorithm chooseAlgorithmHermation(Shape shape) {
         Algorithm algorithm;
 
-<span class="fc" id="L209">        int numEntries = shape.totalEntries().intValue();</span>
+<span class="fc" id="L226">        int numEntries = shape.totalEntries().intValue();</span>
 
-<span class="pc bpc" id="L211" title="1 of 2 branches missed.">        if(numEntries &lt; HERMATION_BLOCKED_THRESHOLD) {</span>
+<span class="pc bpc" id="L228" title="1 of 2 branches missed.">        if(numEntries &lt; HERMATION_BLOCKED_THRESHOLD) {</span>
             // Use blocked algorithm
-<span class="fc" id="L213">            algorithm = Algorithm.BLOCKED;</span>
+<span class="fc" id="L230">            algorithm = Algorithm.BLOCKED;</span>
         } else {
             // Use concurrent blocked implementation.
-<span class="nc" id="L216">            algorithm = Algorithm.CONCURRENT_BLOCKED;</span>
+<span class="nc" id="L233">            algorithm = Algorithm.CONCURRENT_BLOCKED;</span>
         }
 
-<span class="fc" id="L219">        return algorithm;</span>
+<span class="fc" id="L236">        return algorithm;</span>
     }
 
 
@@ -228,43 +245,43 @@ public final class TransposeDispatcher {
     private static Algorithm chooseAlgorithmComplex(Shape shape) {
         Algorithm algorithm;
 
-<span class="nc" id="L231">        int numEntries = shape.totalEntries().intValue();</span>
+<span class="nc" id="L248">        int numEntries = shape.totalEntries().intValue();</span>
 
-<span class="nc bnc" id="L233" title="All 2 branches missed.">        if(numEntries &lt; STANDARD_THRESHOLD) {</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">        if(numEntries &lt; STANDARD_THRESHOLD) {</span>
             // Use standard algorithm.
-<span class="nc" id="L235">            algorithm = Algorithm.STANDARD;</span>
-<span class="nc bnc" id="L236" title="All 2 branches missed.">        } else if(numEntries &lt; CONCURRENT_THRESHOLD) {</span>
+<span class="nc" id="L252">            algorithm = Algorithm.STANDARD;</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">        } else if(numEntries &lt; CONCURRENT_THRESHOLD) {</span>
             // Use blocked algorithm
-<span class="nc" id="L238">            algorithm = Algorithm.BLOCKED;</span>
+<span class="nc" id="L255">            algorithm = Algorithm.BLOCKED;</span>
         } else {
             // Use concurrent blocked implementation.
-<span class="nc" id="L241">            algorithm = Algorithm.CONCURRENT_BLOCKED;</span>
+<span class="nc" id="L258">            algorithm = Algorithm.CONCURRENT_BLOCKED;</span>
         }
 
-<span class="nc" id="L244">        return algorithm;</span>
+<span class="nc" id="L261">        return algorithm;</span>
     }
 
 
     /**
      * Simple enum class containing available algorithms for computing a matrix transpose.
      */
-<span class="fc" id="L251">    private enum Algorithm {</span>
+<span class="fc" id="L268">    private enum Algorithm {</span>
         /**
          * Standard transpose algorithm
          */
-<span class="fc" id="L255">        STANDARD,</span>
+<span class="fc" id="L272">        STANDARD,</span>
         /**
          * Blocked transpose algorithm
          */
-<span class="fc" id="L259">        BLOCKED,</span>
+<span class="fc" id="L276">        BLOCKED,</span>
         /**
          * A concurrent implementation of the standard algorithm
          */
-<span class="fc" id="L263">        CONCURRENT_STANDARD,</span>
+<span class="fc" id="L280">        CONCURRENT_STANDARD,</span>
         /**
          * A concurrent implementation of the blocked algorithm
          */
-<span class="fc" id="L267">        CONCURRENT_BLOCKED</span>
+<span class="fc" id="L284">        CONCURRENT_BLOCKED</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

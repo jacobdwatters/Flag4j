@@ -269,7 +269,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector add(double a) {
-<span class="fc" id="L272">        return new CVector(ComplexDenseOperations.add(this.entries, a));</span>
+<span class="fc" id="L272">        return new CVector(RealComplexDenseOperations.add(this.entries, a));</span>
     }
 
 
@@ -470,7 +470,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector sub(double a) {
-<span class="fc" id="L473">        return new CVector(ComplexDenseOperations.sub(this.entries, a));</span>
+<span class="fc" id="L473">        return new CVector(RealComplexDenseOperations.sub(this.entries, a));</span>
     }
 
 
@@ -587,7 +587,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public CVector scalDiv(double divisor) {
-<span class="fc" id="L590">        return new CVector(ComplexDenseOperations.scalDiv(this.entries, divisor));</span>
+<span class="fc" id="L590">        return new CVector(RealComplexDenseOperations.scalDiv(this.entries, divisor));</span>
     }
 
 
