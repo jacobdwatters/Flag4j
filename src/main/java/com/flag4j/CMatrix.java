@@ -1491,7 +1491,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public CMatrix add(double a) {
         return new CMatrix(this.shape.copy(),
-                ComplexDenseOperations.add(this.entries, a)
+                RealComplexDenseOperations.add(this.entries, a)
         );
     }
 
@@ -1562,7 +1562,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public CMatrix sub(double a) {
         return new CMatrix(this.shape.copy(),
-                ComplexDenseOperations.sub(this.entries, a)
+                RealComplexDenseOperations.sub(this.entries, a)
         );
     }
 
@@ -1687,7 +1687,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public CMatrix scalDiv(double divisor) {
         return new CMatrix(this.shape.copy(),
-                ComplexDenseOperations.scalDiv(this.entries, divisor)
+                RealComplexDenseOperations.scalDiv(this.entries, divisor)
         );
     }
 

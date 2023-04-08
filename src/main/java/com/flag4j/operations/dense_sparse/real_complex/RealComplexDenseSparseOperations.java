@@ -303,4 +303,93 @@ public class RealComplexDenseSparseOperations {
 
         return dest;
     }
+
+
+    /**
+     * Adds a dense complex tensor to a real sparse tensor.
+     * @param src1 Complex dense tensor.
+     * @param src2 Real sparse tensor.
+     * @return The result of the tensor addition.
+     */
+    public static CTensor add(CTensor src1, SparseTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CTensor dest = new CTensor(src1);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            dest.entries[dest.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Adds a dense complex tensor to a real sparse tensor.
+     * @param src1 Complex dense tensor.
+     * @param src2 Real sparse tensor.
+     * @return The result of the tensor addition.
+     */
+    public static CTensor sub(CTensor src1, SparseTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CTensor dest = new CTensor(src1);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            dest.entries[dest.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Computes element-wise addition between a complex dense tensor and a real sparse tensor. The result is stored
+     * in the complex dense tensor.
+     * @param src1 The complex dense tensor. Also, the storage for the computation.
+     * @param src2 The real sparse tensor.
+     */
+    public static void addEq(CTensor src1, SparseTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            src1.entries[src2.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);
+        }
+    }
+
+
+    /**
+     * Computes element-wise subtraction between a complex dense tensor and a real sparse tensor. The result is stored
+     * in the complex dense tensor.
+     * @param src1 The complex dense tensor. Also, the storage for the computation.
+     * @param src2 The real sparse tensor.
+     */
+    public static void subEq(CTensor src1, SparseTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            src1.entries[src2.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);
+        }
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between a complex dense tensor and a real sparse matrix.
+     * @param src1 First tensor in the element-wise multiplication.
+     * @param src2 Second tensor in the element-wise multiplication.
+     * @return The result of element-wise multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static SparseCTensor elemMult(CTensor src1, SparseTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];
+
+        int[][] indices = new int[src2.indices.length][src2.indices[0].length];
+        ArrayUtils.deepCopy( src2.indices, indices);
+
+        for(int i=0; i<destEntries.length; i++) {
+            destEntries[i] = src1.entries[src2.shape.entriesIndex(src2.indices[i])].mult(src2.entries[i]);
+        }
+
+        return new SparseCTensor(src2.shape.copy(), destEntries, indices);
+    }
 }

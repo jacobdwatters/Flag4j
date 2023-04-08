@@ -25,10 +25,7 @@
 package com.flag4j.core;
 
 
-import com.flag4j.CMatrix;
-import com.flag4j.CVector;
-import com.flag4j.SparseCMatrix;
-import com.flag4j.SparseCVector;
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 
 /**
@@ -37,11 +34,17 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <Y> Real vector type.
  */
 public interface ComplexVectorMixin<T, Y> extends
-        ComplexTensorMixin<T, Y>,
         VectorComparisonsMixin<T, CVector, SparseCVector, CVector, Y, CNumber>,
         VectorManipulationsMixin<T, CVector, SparseCVector, CVector, Y, CNumber,
                 CMatrix, CMatrix, SparseCMatrix, CMatrix>,
         VectorOperationsMixin<T, CVector, SparseCVector, CVector, Y, CNumber,
                 CMatrix, CMatrix, SparseCMatrix, CMatrix>,
         VectorPropertiesMixin<T, CVector, SparseCVector, CVector, Y, CNumber>{
+    boolean isReal();
+
+    boolean isComplex();
+
+    CVector conj();
+
+    Vector toReal();
 }

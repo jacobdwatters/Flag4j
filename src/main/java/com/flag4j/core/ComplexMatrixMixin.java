@@ -37,7 +37,6 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <Y> Real matrix type.
  */
 public interface ComplexMatrixMixin<T, Y> extends
-        ComplexTensorMixin<T, Y>,
         MatrixPropertiesMixin<T, CMatrix, SparseCMatrix, T, Y, CNumber>,
         MatrixOperationsMixin<T, CMatrix, SparseCMatrix, T, Y, CNumber>,
         MatrixComparisonsMixin<T, CMatrix, SparseCMatrix, CMatrix, Y, CNumber>,
@@ -87,6 +86,30 @@ public interface ComplexMatrixMixin<T, Y> extends
      * @return True if this matrix it is unitary. Otherwise, returns false.
      */
     boolean isUnitary();
+
+
+    /**
+     * Checks if this tensor has only real valued entries.
+     *
+     * @return True if this tensor contains <b>NO</b> complex entries. Otherwise, returns false.
+     */
+    boolean isReal();
+
+
+    /**
+     * Checks if this tensor contains at least one complex entry.
+     *
+     * @return True if this tensor contains at least one complex entry. Otherwise, returns false.
+     */
+    boolean isComplex();
+
+
+    /**
+     * Computes the complex conjugate of a tensor.
+     *
+     * @return The complex conjugate of this tensor.
+     */
+    CMatrix conj();
 
 
     /**

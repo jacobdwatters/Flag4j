@@ -205,4 +205,53 @@ public final class RealComplexDenseOperations {
     }
 
 
+
+    /**
+     * Adds a scalar value to all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The result of adding the scalar value to all entries of the source tensor.
+     */
+    public static CNumber[] add(CNumber[] src1, double a) {
+        CNumber[] sum = new CNumber[src1.length];
+
+        for(int i=0; i<sum.length; i++) {
+            sum[i] = src1[i].add(a);
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Subtracts a scalar value from all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The tensor-scalar subtraction of the two parameters.
+     */
+    public static CNumber[] sub(CNumber[] src1, double a) {
+        CNumber[] sum = new CNumber[src1.length];
+
+        for(int i=0; i<sum.length; i++) {
+            sum[i] = src1[i].sub(a);
+        }
+
+        return sum;
+    }
+
+    /**
+     * Computes the scalar multiplication of a tensor.
+     * @param entries Entries of the tensor.
+     * @param divisor Scalar value to multiply.
+     * @return The scalar multiplication of the tensor.
+     */
+    public static CNumber[] scalDiv(CNumber[] entries, double divisor) {
+        CNumber[] quotient = new CNumber[entries.length];
+
+        for(int i=0; i<quotient.length; i++) {
+            quotient[i] = entries[i].div(divisor);
+        }
+
+        return quotient;
+    }
 }

@@ -610,6 +610,25 @@ public class CNumber extends Number {
 
 
     /**
+     * Computes {@code a} raised to the power of {@code b}.
+     * @param a The base.
+     * @param b The exponent.
+     * @return {@code a} raised to the power of {@code b}.
+     */
+    public static CNumber pow(CNumber a, double b) {
+        CNumber result;
+
+        if(a.isReal()) {
+            result = CNumber.pow(a.re, b);
+        } else {
+            result = exp(ln(a).mult(b));
+        }
+
+        return result;
+    }
+
+
+    /**
      * Computes the exponential function with the given input. This method simply wraps the {@link Math#exp(double)}
      * method and returns a {@link CNumber}.
      * @param exponent Input to the exponential function.

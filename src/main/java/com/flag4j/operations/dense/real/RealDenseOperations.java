@@ -301,8 +301,8 @@ public final class RealDenseOperations {
     public static double tensorNormL2(double[] src) {
         double norm = 0;
 
-        for(int i=0; i<src.length; i++) {
-            norm += Math.pow(src[i], 2);
+        for(double value : src) {
+            norm += Math.pow(value, 2);
         }
 
         return Math.sqrt(norm);
@@ -318,8 +318,8 @@ public final class RealDenseOperations {
     public static double tensorNormLp(double[] src, double p) {
         double norm = 0;
 
-        for(int i=0; i<src.length; i++) {
-            norm += Math.pow(src[i], p);
+        for(double value : src) {
+            norm += Math.pow(value, p);
         }
 
         return Math.pow(norm, 1.0/p);

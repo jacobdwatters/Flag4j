@@ -27,7 +27,6 @@ package com.flag4j.core;
 import com.flag4j.CTensor;
 import com.flag4j.SparseCTensor;
 import com.flag4j.SparseTensor;
-import com.flag4j.Tensor;
 
 
 /**
@@ -35,10 +34,26 @@ import com.flag4j.Tensor;
  * does <b>not</b> extend either {@link MatrixBase} or {@link VectorBase}. This is either
  * because an equivalent method with a different name is already defined for {@link MatrixBase matrices} and/or
  * {@link VectorBase vectors} or the methods do not apply to rank 1 and/or 2 tensors.
+ *
+ * @param <T> Tensor type.
+ * @param <U> Dense Tensor type.
+ * @param <V> Sparse Tensor type.
  */
-public interface TensorExclusiveMixin {
+public interface TensorExclusiveMixin<T, U, V> {
 
-    // TODO: Add tensor contraction methods (i.e.) tensorDot(...).
+    // TODO: Add tensor contraction methods (i.e.) tensorDot(...),
+    //      Also add transpose(int[] axes) where axes is a permutation of [0, 1, ..., N] where
+    //      the tensor is rank N.
+
+//    /**
+//     * Computes the tensor contraction of this tensor with a specified tensor over the specified axes.
+//     * @param src2 Tensor to contract with this tensor.
+//     * @param aAxis
+//     * @param bAxis
+//     * @return
+//     */
+//    Tensor tensorDot(Tensor src2, int aAxis, int bAxis);
+
 
     /**
      * Computes the transpose of a tensor. Same as {@link #T(int, int)}.
@@ -50,7 +65,7 @@ public interface TensorExclusiveMixin {
      * @param axis2 Second axis to exchange.
      * @return The transpose of this tensor.
      */
-    Tensor transpose(int axis1, int axis2);
+    T transpose(int axis1, int axis2);
 
 
     /**
@@ -63,7 +78,7 @@ public interface TensorExclusiveMixin {
      * @param axis2 Second axis to exchange.
      * @return The transpose of this tensor.
      */
-    Tensor T(int axis1, int axis2);
+    T T(int axis1, int axis2);
 
 
     /**
@@ -73,7 +88,7 @@ public interface TensorExclusiveMixin {
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    Tensor add(SparseTensor B);
+    U add(SparseTensor B);
 
 
     /**
@@ -103,7 +118,7 @@ public interface TensorExclusiveMixin {
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    Tensor sub(SparseTensor B);
+    U sub(SparseTensor B);
 
 
     /**
@@ -150,7 +165,7 @@ public interface TensorExclusiveMixin {
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    SparseTensor elemMult(SparseTensor B);
+    V elemMult(SparseTensor B);
 
 
     /**

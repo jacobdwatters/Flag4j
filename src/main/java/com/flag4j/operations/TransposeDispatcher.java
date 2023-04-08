@@ -24,10 +24,7 @@
 
 package com.flag4j.operations;
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
-import com.flag4j.Tensor;
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.dense.complex.ComplexDenseTranspose;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
@@ -55,6 +52,7 @@ public final class TransposeDispatcher {
      * Threshold for number of elements in matrix to use concurrent implementation.
      */
     private static final int CONCURRENT_THRESHOLD = 125_000;
+
 
     private TransposeDispatcher() {
         // Hide default constructor.
@@ -149,6 +147,25 @@ public final class TransposeDispatcher {
                 RealDenseTranspose.standardConcurrent(src.entries, src.shape, axis1, axis2);
 
         return new Tensor(src.shape.copy().swapAxes(axis1, axis2), dest);
+    }
+
+
+    /**
+     * Dispatches a tensor transpose problem to the appropriate algorithm based on its shape and size.
+     * @param src Tensor to transpose.
+     * @param axis1 First axis in tensor transpose.
+     * @param axis2 Second axis in tensor transpose.
+     * @return
+     */
+    public static CTensor dispatchTensor(CTensor src, int axis1, int axis2) {
+        CNumber[] dest;
+        Algorithm algorithm = chooseAlgorithmTensor(src.shape.get(axis1), src.shape.get(axis2));
+
+        dest = algorithm == Algorithm.STANDARD ?
+                ComplexDenseTranspose.standard(src.entries, src.shape, axis1, axis2):
+                ComplexDenseTranspose.standardConcurrent(src.entries, src.shape, axis1, axis2);
+
+        return new CTensor(src.shape.copy().swapAxes(axis1, axis2), dest);
     }
 
 

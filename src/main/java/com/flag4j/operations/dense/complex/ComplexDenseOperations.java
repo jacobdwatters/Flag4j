@@ -72,23 +72,6 @@ public final class ComplexDenseOperations {
      * Adds a scalar value to all entries of a tensor.
      * @param src1 Entries of first tensor.
      * @param a Scalar to add to all entries of this tensor.
-     * @return The result of adding the scalar value to all entries of the source tensor.
-     */
-    public static CNumber[] add(CNumber[] src1, double a) {
-        CNumber[] sum = new CNumber[src1.length];
-
-        for(int i=0; i<sum.length; i++) {
-            sum[i] = src1[i].add(a);
-        }
-
-        return sum;
-    }
-
-
-    /**
-     * Adds a scalar value to all entries of a tensor.
-     * @param src1 Entries of first tensor.
-     * @param a Scalar to add to all entries of this tensor.
      * @return The tensor-scalar addition of the two parameters.
      */
     public static CNumber[] add(CNumber[] src1, CNumber a) {
@@ -157,23 +140,6 @@ public final class ComplexDenseOperations {
         }
 
         return diff;
-    }
-
-
-    /**
-     * Subtracts a scalar value from all entries of a tensor.
-     * @param src1 Entries of first tensor.
-     * @param a Scalar to add to all entries of this tensor.
-     * @return The tensor-scalar subtraction of the two parameters.
-     */
-    public static CNumber[] sub(CNumber[] src1, double a) {
-        CNumber[] sum = new CNumber[src1.length];
-
-        for(int i=0; i<sum.length; i++) {
-            sum[i] = src1[i].sub(a);
-        }
-
-        return sum;
     }
 
 
@@ -339,23 +305,6 @@ public final class ComplexDenseOperations {
 
 
     /**
-     * Computes the scalar multiplication of a tensor.
-     * @param entries Entries of the tensor.
-     * @param divisor Scalar value to multiply.
-     * @return The scalar multiplication of the tensor.
-     */
-    public static CNumber[] scalDiv(CNumber[] entries, double divisor) {
-        CNumber[] quotient = new CNumber[entries.length];
-
-        for(int i=0; i<quotient.length; i++) {
-            quotient[i] = entries[i].div(divisor);
-        }
-
-        return quotient;
-    }
-
-
-    /**
      * Computes the reciprocals, element-wise, of a tensor.
      * @param src Elements of the tensor.
      * @return The element-wise reciprocals of the tensor.
@@ -483,5 +432,38 @@ public final class ComplexDenseOperations {
         }
 
         return maxAbs(rowSums);
+    }
+
+
+    /**
+     * Computes the L<sub>2</sub> norm of a tensor (i.e. the Frobenius norm).
+     * @param src Entries of the tensor.
+     * @return The L<sub>2</sub> norm of the tensor.
+     */
+    public static double tensorNormL2(CNumber[] src) {
+        double norm = 0;
+
+        for(CNumber cNumber : src) {
+            norm += CNumber.pow(cNumber, 2).magAsDouble();
+        }
+
+        return Math.sqrt(norm);
+    }
+
+
+    /**
+     * Computes the L<sub>p</sub> norm of a tensor (i.e. the Frobenius norm).
+     * @param src Entries of the tensor.
+     * @param p The {@code p} parameter of the L<sub>p</sub> norm.
+     * @return The L<sub>p</sub> norm of the tensor.
+     */
+    public static double tensorNormLp(CNumber[] src, double p) {
+        double norm = 0;
+
+        for(CNumber cNumber : src) {
+            norm += CNumber.pow(cNumber, p).magAsDouble();
+        }
+
+        return Math.pow(norm, 1.0/p);
     }
 }

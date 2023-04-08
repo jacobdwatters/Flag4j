@@ -54,7 +54,7 @@ import java.util.Arrays;
  * Real Dense Tensor. May have any rank (that is, may have any number of unique axes/dimensions).
  */
 public class Tensor extends TensorBase<double[]> implements
-        RealTensorMixin<Tensor, CTensor>, TensorExclusiveMixin {
+        RealTensorMixin<Tensor, CTensor>, TensorExclusiveMixin<Tensor, Tensor, SparseTensor> {
 
 
     /**
@@ -596,6 +596,7 @@ public class Tensor extends TensorBase<double[]> implements
     public Tensor T() {
         return TransposeDispatcher.dispatchTensor(this, 0, shape.getRank()-1);
     }
+
 
 
     /**
