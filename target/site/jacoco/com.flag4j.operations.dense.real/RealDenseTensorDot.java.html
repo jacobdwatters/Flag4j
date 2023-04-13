@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealDenseTensorDot.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense.real</a> &gt; <span class="el_source">RealDenseTensorDot.java</span></div><h1>RealDenseTensorDot.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense.real;
+
+import com.flag4j.Matrix;
+import com.flag4j.Shape;
+import com.flag4j.Tensor;
+import com.flag4j.operations.MatrixMultiplyDispatcher;
+import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
+import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
+
+import java.util.Arrays;
+
+
+/**
+ * This class contains methods for computing a tensor dot product between two real dense tensors.
+ */
+public final class RealDenseTensorDot {
+
+<span class="nc" id="L44">    private RealDenseTensorDot() {</span>
+        // Hide utility class constructor.
+<span class="nc" id="L46">        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Computes the tensor dot product along the first tensors last axis and the second tensors second-to-last axis.
+     * @param src1 First tensor in the tensor product.
+     * @param src2 Second tensor in the tensor product.
+     * @return The tensor dot product along the first tensors last axis and the second tensors second-to-last axis.
+     * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
+     * along the second-to-last axis.
+     */
+    public static Tensor dot(Tensor src1, Tensor src2) {
+<span class="nc" id="L59">        int src1Dim = src1.getRank(); // Rank of first tensor.</span>
+<span class="nc" id="L60">        int src2Dim = src2.getRank(); // Rank of second tensor.</span>
+
+        // Ensure tensors have same length along last axis.
+<span class="nc" id="L63">        ParameterChecks.assertEquals(src1.shape.get(src1Dim-1), src2.shape.get(src2Dim-2));</span>
+
+<span class="nc" id="L65">        int axisLength = src1.shape.get(src1Dim-1); // Length of axis along which to compute dot product.</span>
+<span class="nc" id="L66">        Tensor src2Swap = src2.T(src2Dim-1, src2Dim-2);</span>
+
+<span class="nc" id="L68">        int iStop = src1.totalEntries().intValueExact()/src1.shape.get(src1Dim-1);</span>
+<span class="nc" id="L69">        int jStop = src2.totalEntries().intValueExact()/src2.shape.get(src2Dim-2);</span>
+<span class="nc" id="L70">        int[] dims = new int[src1Dim+src2Dim-2];</span>
+<span class="nc" id="L71">        int idx = 0;</span>
+
+        // Copy shape dimensions from each tensor.
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        for(int i=0; i&lt;src1Dim-1; i++) {</span>
+<span class="nc" id="L75">            dims[idx++] = src1.shape.dims[i];</span>
+        }
+
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        for(int i=0; i&lt;src2Dim-1; i++) {</span>
+<span class="nc" id="L79">            dims[idx++] = src2Swap.shape.dims[i];</span>
+        }
+
+<span class="nc" id="L82">        Shape destShape = new Shape(dims);</span>
+<span class="nc" id="L83">        double[] dest = new double[destShape.totalEntries().intValueExact()];</span>
+        int src1_start, src2_start;
+
+<span class="nc" id="L86">        idx = 0;</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        for(int i=0; i&lt;iStop; i++) {</span>
+<span class="nc" id="L88">            src1_start = i*axisLength;</span>
+
+<span class="nc bnc" id="L90" title="All 2 branches missed.">            for(int j=0; j&lt;jStop; j++) {</span>
+<span class="nc" id="L91">                src2_start = j*axisLength;</span>
+
+<span class="nc bnc" id="L93" title="All 2 branches missed.">                for(int k=0; k&lt;axisLength; k++) {</span>
+<span class="nc" id="L94">                    dest[idx] += src1.entries[src1_start + k]*src2Swap.entries[src2_start + k];</span>
+                }
+
+<span class="nc" id="L97">                idx++;</span>
+            }
+        }
+
+<span class="nc" id="L101">        return new Tensor(destShape, dest);</span>
+    }
+
+
+
+    /**
+     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
+     * computes the sum of products between the two tensors along the specified set of axes.
+     * @param src1 First tensor in the contraction.
+     * @param src2 Second tensor in the contraction.
+     * @param src1Axes Axes along which to compute products for {@code src1} tensor.
+     * @param src2Axes Axes along which to compute products for {@code src2} tensor.
+     * @return The tensor dot product over the specified axes.
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
+     * {@code aAxes} and {@code bAxes}.
+     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
+     * are out of bounds for the corresponding tensor.
+     */
+    public static Tensor tensorDot(Tensor src1, Tensor src2, int[] src1Axes, int[] src2Axes) {
+        // TODO: Add parameter checks.
+
+        int[] notin;
+        int n1;
+        int n2;
+        int pos;
+
+        // ---- Compute new axes and shapes for first tensor. ----
+<span class="nc" id="L128">        notin = notin(src1Axes, src1.getRank());</span>
+<span class="nc" id="L129">        int[] src1NewAxes = ArrayUtils.join(notin, src1Axes);</span>
+
+<span class="nc" id="L131">        n2 = 1;</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        for(int axis : src1Axes) {</span>
+<span class="nc" id="L133">            n2 *= src1.shape.get(axis);</span>
+        }
+
+<span class="nc" id="L136">        n1 = 1;</span>
+<span class="nc" id="L137">        int[] src1OldDims = new int[notin.length];</span>
+<span class="nc" id="L138">        pos = 0;</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">        for(int axis : notin) {</span>
+<span class="nc" id="L140">            n1 *= src1.shape.get(axis);</span>
+<span class="nc" id="L141">            src1OldDims[pos++] = src1.shape.get(axis);</span>
+        }
+
+<span class="nc" id="L144">        Shape src1NewShape = new Shape(n1, n2);</span>
+        // -----------------------------------------------------
+
+        // ---- Compute new axes and shapes for second tensor. ----
+<span class="nc" id="L148">        notin = notin(src2Axes, src2.getRank());</span>
+<span class="nc" id="L149">        int[] src2NewAxes = ArrayUtils.join(src2Axes, notin);</span>
+
+<span class="nc" id="L151">        n2 = 1;</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        for(int axis : src2Axes) {</span>
+<span class="nc" id="L153">            n2 *= src2.shape.get(axis);</span>
+        }
+
+<span class="nc" id="L156">        n1 = 1;</span>
+<span class="nc" id="L157">        pos = 0;</span>
+<span class="nc" id="L158">        int[] src2OldDims = new int[notin.length];</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">        for(int axis : notin) {</span>
+<span class="nc" id="L160">            n1 *= src2.shape.get(axis);</span>
+<span class="nc" id="L161">            src2OldDims[pos++] = src2.shape.get(axis);</span>
+        }
+
+<span class="nc" id="L164">        Shape src2NewShape = new Shape(n2, n1);</span>
+        // -----------------------------------------------------
+
+        // Reform problem as a matrix multiplication problem.
+<span class="nc" id="L168">        Matrix at = new Matrix(src1NewShape, RealDenseTranspose.standard(src1.entries, src1.shape, src1NewAxes));</span>
+<span class="nc" id="L169">        Matrix bt = new Matrix(src2NewShape, RealDenseTranspose.standard(src2.entries, src2.shape, src2NewAxes));</span>
+
+<span class="nc" id="L171">        double[] destEntries = RealDenseMatrixMultiplyDispatcher.dispatch(at, bt);</span>
+<span class="nc" id="L172">        Shape destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));</span>
+
+<span class="nc" id="L174">        return new Tensor(destShape, destEntries);</span>
+    }
+
+
+    /**
+     * Given a list of integers, {@code srcAxes} which is a subset of {@code { 0, 1, 2, ...., dim-1}}
+     * in no particular order, compute the integers which are in {@code {0, 1, 2, ...., dim-1}} but not in
+     * {@code srcAxes}.
+     * @param srcAxes Source axes which contains a subset of {@code {0, 1, 2, ...., dim-1}} in no particular order.
+     * @param dim Dimension of space which contains the axes of interest.
+     * @return An array containing the set subtraction {@code {0, 1, 2, ...., dim-1}} - srcAxes.
+     */
+    private static int[] notin(int[] srcAxes, int dim) {
+<span class="nc" id="L187">        int[] notin = new int[dim-srcAxes.length];</span>
+
+        // Copy and sort array.
+<span class="nc" id="L190">        int[] srcAxesCopy = srcAxes.clone();</span>
+<span class="nc" id="L191">        Arrays.sort(srcAxesCopy);</span>
+
+<span class="nc" id="L193">        int srcIndex = 0;</span>
+<span class="nc" id="L194">        int notinIndex = 0;</span>
+
+<span class="nc bnc" id="L196" title="All 2 branches missed.">        for(int i=0; i&lt;dim; i++) {</span>
+<span class="nc bnc" id="L197" title="All 4 branches missed.">            if(srcIndex&lt;srcAxesCopy.length &amp;&amp; srcAxesCopy[srcIndex]==i) {</span>
+<span class="nc" id="L198">                srcIndex++;</span>
+            } else {
+<span class="nc" id="L200">                notin[notinIndex++] = i;</span>
+            }
+        }
+
+<span class="nc" id="L204">        return notin;</span>
+    }
+
+
+    public static void main(String[] args) {
+<span class="nc" id="L209">        double[] aEntries = {0.3745401188473625, 0.9507143064099162, 0.7319939418114051, 0.5986584841970366, 0.15601864044243652, 0.15599452033620265, 0.05808361216819946, 0.8661761457749352, 0.6011150117432088, 0.7080725777960455, 0.020584494295802447, 0.9699098521619943, 0.8324426408004217, 0.21233911067827616, 0.18182496720710062};</span>
+<span class="nc" id="L210">        double[] bEntries = {0.18340450985343382, 0.3042422429595377, 0.5247564316322378, 0.43194501864211576, 0.2912291401980419, 0.6118528947223795, 0.13949386065204183, 0.29214464853521815, 0.3663618432936917, 0.45606998421703593, 0.7851759613930136, 0.19967378215835974, 0.5142344384136116, 0.5924145688620425, 0.046450412719997725, 0.6075448519014384, 0.17052412368729153, 0.06505159298527952, 0.9488855372533332, 0.9656320330745594, 0.8083973481164611, 0.3046137691733707, 0.09767211400638387, 0.6842330265121569, 0.4401524937396013, 0.12203823484477883, 0.4951769101112702, 0.034388521115218396, 0.9093204020787821, 0.2587799816000169};</span>
+<span class="nc" id="L211">        double[] cExpEntries = {3.516342802930239, 2.9700898388124166};</span>
+
+<span class="nc" id="L213">        Shape aShape = new Shape(1, 5, 3);</span>
+<span class="nc" id="L214">        Shape bShape = new Shape(3, 2, 5);</span>
+<span class="nc" id="L215">        Shape cExpShape = new Shape(1, 2);</span>
+
+<span class="nc" id="L217">        Tensor A = new Tensor(aShape, aEntries);</span>
+<span class="nc" id="L218">        Tensor B = new Tensor(bShape, bEntries);</span>
+<span class="nc" id="L219">        Tensor C_Exp = new Tensor(cExpShape, cExpEntries);</span>
+
+<span class="nc" id="L221">        int[] aAxes = {1, 2};</span>
+<span class="nc" id="L222">        int[] bAxes = {2, 0};</span>
+
+<span class="nc" id="L224">        Tensor C_Act = tensorDot(A, B, aAxes, bAxes);</span>
+
+<span class="nc" id="L226">        System.out.println(&quot;Exp: &quot; + Arrays.toString(C_Exp.entries));</span>
+<span class="nc" id="L227">        System.out.println(&quot;Act: &quot; + Arrays.toString(C_Act.entries));</span>
+<span class="nc" id="L228">        System.out.println(&quot;Equal: &quot; + C_Act.equals(C_Exp));</span>
+<span class="nc" id="L229">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
