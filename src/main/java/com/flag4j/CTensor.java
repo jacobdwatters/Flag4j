@@ -30,9 +30,7 @@ import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.complex.ComplexProperties;
-import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.dense.complex.*;
-import com.flag4j.operations.dense.real.RealDenseOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
@@ -295,6 +293,91 @@ public class CTensor extends TensorBase<CNumber[]> implements
     @Override
     public CTensor T(int axis1, int axis2) {
         return TransposeDispatcher.dispatchTensor(this, axis1, axis2);
+    }
+
+    /**
+     * Computes the transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
+     * the specified axes permutation. Same as {@link #T(int[])}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
+     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     */
+    @Override
+    public CTensor transpose(int... axes) {
+        return T();
+    }
+
+    /**
+     * Computes the transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
+     * the specified axes permutation. Same as {@link #transpose(int[])}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
+     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     */
+    @Override
+    public CTensor T(int... axes) {
+        // TODO: Add dispatcher for this method to choose between concurrent and sequential implementations.
+        return new CTensor(
+                this.shape.copy().swapAxes(axes),
+                ComplexDenseTranspose.standardConcurrent(this.entries, this.shape, axes)
+        );
+    }
+
+
+    /**
+     * Computes the tensor contraction of this tensor with a specified tensor over the specified axes. That is,
+     * computes the sum of products between the two tensors along the specified axes.
+     *
+     * @param src2  Tensor to contract with this tensor.
+     * @param aAxis Axis along which to compute products for this tensor.
+     * @param bAxis Axis along which to compute products for {@code src2} tensor.
+     * @return The tensor dot product over the specified axes.
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes {@code aAxis}
+     *                                  and {@code bAxis}.
+     * @throws IllegalArgumentException If either axis is out of bounds of the corresponding tensor.
+     */
+    @Override
+    public CTensor tensorDot(CTensor src2, int aAxis, int bAxis) {
+        return ComplexDenseTensorDot.tensorDot(this, src2, new int[]{aAxis}, new int[]{aAxis});
+    }
+
+
+    /**
+     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
+     * computes the sum of products between the two tensors along the specified set of axes.
+     *
+     * @param src2  Tensor to contract with this tensor.
+     * @param aAxes Axes along which to compute products for this tensor.
+     * @param bAxes Axes along which to compute products for {@code src2} tensor.
+     * @return The tensor dot product over the specified axes.
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
+     *                                  {@code aAxes} and {@code bAxes}.
+     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
+     *                                  are out of bounds for the corresponding tensor.
+     */
+    @Override
+    public CTensor tensorDot(CTensor src2, int[] aAxes, int[] bAxes) {
+        return ComplexDenseTensorDot.tensorDot(this, src2, aAxes, aAxes);
+    }
+
+
+    /**
+     * Computes the tensor dot product of this tensor with a second tensor. That is, sums the product of two tensor
+     * elements over the last axis of this tensor and the second-to-last axis of {@code src2}. If both tensors are
+     * rank 2, this is equivalent to matrix multiplication.
+     *
+     * @param src2 Tensor to compute dot product with this tensor.
+     * @return The tensor dot product over the last axis of this tensor and the second to last axis of {@code src2}.
+     * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
+     *                                  along the second-to-last axis.
+     */
+    @Override
+    public CTensor dot(CTensor src2) {
+        return ComplexDenseTensorDot.dot(this, src2);
     }
 
 

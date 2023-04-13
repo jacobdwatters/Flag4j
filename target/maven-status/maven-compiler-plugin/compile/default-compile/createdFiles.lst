@@ -25,6 +25,7 @@ com\flag4j\operations\TransposeDispatcher.class
 com\flag4j\operations\dense\real\RealDenseElemDiv.class
 com\flag4j\operations\MatrixMultiplyDispatcher$1.class
 com\flag4j\core\ComplexVectorBase.class
+com\flag4j\operations\dense\real\RealDenseTensorDot.class
 com\flag4j\io\TensorOutputStream.class
 com\flag4j\operations\MatrixMultiplyDispatcher.class
 com\flag4j\operations\dense\complex\AggregateDenseComplex.class

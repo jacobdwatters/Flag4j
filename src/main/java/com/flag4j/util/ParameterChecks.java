@@ -27,6 +27,8 @@ package com.flag4j.util;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 
+import java.util.Arrays;
+
 /**
  * This class contains several methods for checking properties of shapes and arrays.
  */
@@ -194,12 +196,51 @@ public final class ParameterChecks {
 
 
     /**
+     * Checks if a set of values are all equal.
+     * @param values Values to check if they are equal.
+     * @throws IllegalArgumentException If any of the specified values are not equal.
+     */
+    public static void assertEquals(double... values) {
+        if(values.length > 0) {
+            boolean equal = true;
+            double base = values[0];
+
+            for(double v : values) {
+                if(v != base) {
+                    equal = false;
+                    break;
+                }
+            }
+
+            if(!equal) {
+                throw new IllegalArgumentException("Expecting values to be equal but got: " + Arrays.toString(values));
+            }
+        }
+    }
+
+
+    /**
      * Checks if a set of values is greater than or equal to a specified threshold.
      * @param threshold Threshold value.
      * @param values Values to compare against threshold.
      * @throws IllegalArgumentException If any of the values are less than the threshold.
      */
     public static void assertGreaterEq(double threshold, double... values) {
+        for(double value : values) {
+            if(value<threshold) {
+                throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));
+            }
+        }
+    }
+
+
+    /**
+     * Checks if a set of values is greater than or equal to a specified threshold.
+     * @param threshold Threshold value.
+     * @param values Values to compare against threshold.
+     * @throws IllegalArgumentException If any of the values are less than the threshold.
+     */
+    public static void assertGreaterEq(int threshold, int... values) {
         for(double value : values) {
             if(value<threshold) {
                 throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));
@@ -229,6 +270,21 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If any of the values are less than the threshold.
      */
     public static void assertLessEq(double threshold, double... values) {
+        for(double value : values) {
+            if(value>threshold) {
+                throw new IllegalArgumentException(ErrorMessages.getLessEqErr(threshold, value));
+            }
+        }
+    }
+
+
+    /**
+     * Checks if a set of values is less than or equal to a specified threshold.
+     * @param threshold Threshold value.
+     * @param values Values to compare against threshold.
+     * @throws IllegalArgumentException If any of the values are less than the threshold.
+     */
+    public static void assertLessEq(int threshold, int... values) {
         for(double value : values) {
             if(value>threshold) {
                 throw new IllegalArgumentException(ErrorMessages.getLessEqErr(threshold, value));
@@ -279,10 +335,30 @@ public final class ParameterChecks {
     /**
      * Checks that an axis is a valid 2D axis. That is, either axis is 0 or 1.
      * @param axis Axis to check.
+     * @throws IllegalArgumentException If the axis is not a valid 2D axis.
      */
     public static void assertAxis2D(int axis) {
         if(!(axis == 0 || axis==1)) {
             throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));
+        }
+    }
+
+
+    /**
+     * Checks that a list of {@code N} axis are a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @param axes List of axes of interest.
+     * @throws IllegalArgumentException If {@code axis} is not a permutation of {@code {0, 1, 2, ..., N-1}}.
+     */
+    public static void assertPermutation(int... axes) {
+        int[] axesCopy = axes.clone();
+
+        Arrays.sort(axesCopy);
+
+        for(int i=0; i<axesCopy.length; i++) {
+            if(axesCopy[i]!=i) {
+                throw new IllegalArgumentException("Array is not a permutation of integers 0 through " + axes.length + ".\n" +
+                        "Got " + Arrays.toString(axes));
+            }
         }
     }
 }

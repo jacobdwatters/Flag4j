@@ -25,6 +25,7 @@
 package com.flag4j;
 
 import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -191,6 +192,31 @@ public class Shape implements Serializable {
         dims[axis1] = dims[axis2];
         dims[axis2] = temp;
 
+        this.strides = this.createNewStrides();
+
+        return this;
+    }
+
+
+    /**
+     * Permutes the axes of this shape.
+     * @param axes New axes permutation for the shape. This must be a permutation of {@code {1, 2, 3, ... N}} where
+     *             {@code N} is the rank of this shape.
+     * @return Returns this shape.
+     * @throws ArrayIndexOutOfBoundsException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N}}.
+     */
+    public Shape swapAxes(int... axes) {
+        ParameterChecks.assertPermutation(axes);
+
+        int[] tempDims = new int[dims.length];
+        int i=0;
+
+        // Permute axes.
+        for(int axis : axes) {
+            tempDims[i++] = dims[axis];
+        }
+
+        this.dims = tempDims;
         this.strides = this.createNewStrides();
 
         return this;

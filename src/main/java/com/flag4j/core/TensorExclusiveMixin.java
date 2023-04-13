@@ -41,19 +41,51 @@ import com.flag4j.SparseTensor;
  */
 public interface TensorExclusiveMixin<T, U, V> {
 
+    // TODO: add toVector() and toMatrix() methods.
+
     // TODO: Add tensor contraction methods (i.e.) tensorDot(...),
-    //      Also add transpose(int[] axes) where axes is a permutation of [0, 1, ..., N] where
+    //      Also add transpose(int[] axes) where axes is a permutation of [0, 1, ..., N-1] where
     //      the tensor is rank N.
 
-//    /**
-//     * Computes the tensor contraction of this tensor with a specified tensor over the specified axes.
-//     * @param src2 Tensor to contract with this tensor.
-//     * @param aAxis
-//     * @param bAxis
-//     * @return
-//     */
-//    Tensor tensorDot(Tensor src2, int aAxis, int bAxis);
+    /**
+     * Computes the tensor contraction of this tensor with a specified tensor over the specified axes. That is,
+     * computes the sum of products between the two tensors along the specified axes.
+     * @param src2 Tensor to contract with this tensor.
+     * @param aAxis Axis along which to compute products for this tensor.
+     * @param bAxis Axis along which to compute products for {@code src2} tensor.
+     * @return The tensor dot product over the specified axes.
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes {@code aAxis}
+     * and {@code bAxis}.
+     * @throws IllegalArgumentException If either axis is out of bounds of the corresponding tensor.
+     */
+    T tensorDot(T src2, int aAxis, int bAxis);
 
+
+    /**
+     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
+     * computes the sum of products between the two tensors along the specified set of axes.
+     * @param src2 Tensor to contract with this tensor.
+     * @param aAxes Axes along which to compute products for this tensor.
+     * @param bAxes Axes along which to compute products for {@code src2} tensor.
+     * @return The tensor dot product over the specified axes.
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
+     * {@code aAxes} and {@code bAxes}.
+     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
+     * are out of bounds for the corresponding tensor.
+     */
+    T tensorDot(T src2, int[] aAxes, int[] bAxes);
+
+
+    /**
+     * Computes the tensor dot product of this tensor with a second tensor. That is, sums the product of two tensor
+     * elements over the last axis of this tensor and the second-to-last axis of {@code src2}. If both tensors are
+     * rank 2, this is equivalent to matrix multiplication.
+     * @param src2 Tensor to compute dot product with this tensor.
+     * @return The tensor dot product over the last axis of this tensor and the second to last axis of {@code src2}.
+     * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
+     * along the second-to-last axis.
+     */
+    T dot(T src2);
 
     /**
      * Computes the transpose of a tensor. Same as {@link #T(int, int)}.
@@ -79,6 +111,28 @@ public interface TensorExclusiveMixin<T, U, V> {
      * @return The transpose of this tensor.
      */
     T T(int axis1, int axis2);
+
+
+    /**
+     * Computes the transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
+     * the specified axes permutation. Same as {@link #T(int[])}.
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
+     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     */
+    T transpose(int... axes);
+
+
+    /**
+     * Computes the transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
+     * the specified axes permutation. Same as {@link #transpose(int[])}.
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
+     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     */
+    T T(int... axes);
 
 
     /**

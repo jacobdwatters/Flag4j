@@ -1617,7 +1617,7 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
-     * Converts this vector to a human-readable string format.
+     * Generates a human-readable string representation of this vector.
      * @return A human-readable string representation of this vector.
      */
     public String toString() {

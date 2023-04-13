@@ -465,6 +465,27 @@ public final class ArrayUtils {
     }
 
 
+    /**
+     * Swaps elements in an array according to a specified permutation.
+     * @param src Array to swap elements within.
+     * @param indices Array containing indices of the permutation. If the {@code src} array has length {@code N}, then
+     *                the array must be a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return An array containing the elements of {@code src} ordered according to the {@code indices} array.
+     * @throws IllegalArgumentException If {@code indices} is not a permutation of {@code {0, 1, 2, ..., N-1}}.
+     */
+    public static void swap(int[] src, int[] indices) {
+        ParameterChecks.assertPermutation(indices);
+
+        int[] swapped = new int[src.length];
+        int i=0;
+
+        for(int value : indices) {
+            swapped[i++] = src[value];
+        }
+
+        System.arraycopy(swapped, 0, src, 0, swapped.length);
+    }
+
 
     /**
      * Swaps to elements in an array. This is done in place.
@@ -800,5 +821,65 @@ public final class ArrayUtils {
         }
 
         return maxLength;
+    }
+
+
+    /**
+     * Joins two arrays together.
+     * @param src1 First array to join.
+     * @param src2 Second array to join.
+     * @return A single array of length {@code src1.length + src2.length} containing the elements of {@code src1}
+     * followed by the elements of {@code src2}.
+     */
+    public static double[] join(double[] src1, double[] src2) {
+        double[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);
+        System.arraycopy(src2, 0, concatenate, src1.length, src2.length);
+
+        return concatenate;
+    }
+
+
+    /**
+     * Joins two arrays together.
+     * @param src1 First array to join.
+     * @param src2 Second array to join.
+     * @return A single array of length {@code src1.length + src2.length} containing the elements of {@code src1}
+     * followed by the elements of {@code src2}.
+     */
+    public static int[] join(int[] src1, int[] src2) {
+        int[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);
+        System.arraycopy(src2, 0, concatenate, src1.length, src2.length);
+
+        return concatenate;
+    }
+
+
+    /**
+     * Given a list of integers, {@code srcAxes}, which is a subset of {@code {0, 1, 2, ...., dim-1}}
+     * in no particular order, compute the integers which are in {@code {0, 1, 2, ...., dim-1}} but not in
+     * {@code srcAxes}.
+     * @param srcAxes Source axes which contains a subset of {@code {0, 1, 2, ...., dim-1}} in no particular order.
+     * @param dim Dimension of space which contains the axes of interest.
+     * @return An array containing the set subtraction {@code {0, 1, 2, ...., dim-1}} - srcAxes.
+     */
+    public static int[] notinAxes(int[] srcAxes, int dim) {
+        int[] notin = new int[dim-srcAxes.length];
+
+        // Copy and sort array.
+        int[] srcAxesCopy = srcAxes.clone();
+        Arrays.sort(srcAxesCopy);
+
+        int srcIndex = 0;
+        int notinIndex = 0;
+
+        for(int i=0; i<dim; i++) {
+            if(srcIndex<srcAxesCopy.length && srcAxesCopy[srcIndex]==i) {
+                srcIndex++;
+            } else {
+                notin[notinIndex++] = i;
+            }
+        }
+
+        return notin;
     }
 }
