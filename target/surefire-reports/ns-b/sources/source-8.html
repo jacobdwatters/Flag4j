@@ -1,0 +1,343 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ComplexDenseSetOperations</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j.operations.dense.complex</a>
+</div>
+
+<h1>Coverage Summary for Class: ComplexDenseSetOperations (com.flag4j.operations.dense.complex)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ComplexDenseSetOperations</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84.6%
+  </span>
+  <span class="absValue">
+    (11/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93%
+  </span>
+  <span class="absValue">
+    (40/43)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;/*
+<i class="no-highlight">2</i>&nbsp; * MIT License
+<i class="no-highlight">3</i>&nbsp; *
+<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2022-2023 Jacob Watters
+<i class="no-highlight">5</i>&nbsp; *
+<i class="no-highlight">6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i class="no-highlight">7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i class="no-highlight">8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i class="no-highlight">9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i class="no-highlight">10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i class="no-highlight">11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i class="no-highlight">12</i>&nbsp; *
+<i class="no-highlight">13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i class="no-highlight">14</i>&nbsp; * copies or substantial portions of the Software.
+<i class="no-highlight">15</i>&nbsp; *
+<i class="no-highlight">16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i class="no-highlight">17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i class="no-highlight">18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i class="no-highlight">19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i class="no-highlight">20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i class="no-highlight">21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i class="no-highlight">22</i>&nbsp; * SOFTWARE.
+<i class="no-highlight">23</i>&nbsp; */
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;package com.flag4j.operations.dense.complex;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;import com.flag4j.Shape;
+<i class="no-highlight">28</i>&nbsp;import com.flag4j.complex_numbers.CNumber;
+<i class="no-highlight">29</i>&nbsp;import com.flag4j.util.ErrorMessages;
+<i class="no-highlight">30</i>&nbsp;import com.flag4j.util.ParameterChecks;
+<i class="no-highlight">31</i>&nbsp;
+<i class="no-highlight">32</i>&nbsp;/**
+<i class="no-highlight">33</i>&nbsp; * This class contains low-level implementations of setting operations for complex dense tensors.
+<i class="no-highlight">34</i>&nbsp; */
+<i class="no-highlight">35</i>&nbsp;public class ComplexDenseSetOperations {
+<i class="no-highlight">36</i>&nbsp;
+<b class="nc"><i class="no-highlight">37</i>&nbsp;    private ComplexDenseSetOperations() {</b>
+<i class="no-highlight">38</i>&nbsp;        // Hide constructor.
+<b class="nc"><i class="no-highlight">39</i>&nbsp;        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());</b>
+<i class="no-highlight">40</i>&nbsp;    }
+<i class="no-highlight">41</i>&nbsp;
+<i class="no-highlight">42</i>&nbsp;    /**
+<i class="no-highlight">43</i>&nbsp;     * Sets the value of this matrix using a 2D array.
+<i class="no-highlight">44</i>&nbsp;     *
+<i class="no-highlight">45</i>&nbsp;     * @param src New values of the matrix.
+<i class="no-highlight">46</i>&nbsp;     * @param dest Destination array for values.
+<i class="no-highlight">47</i>&nbsp;     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+<i class="no-highlight">48</i>&nbsp;     */
+<i class="no-highlight">49</i>&nbsp;    public static void setValues(CNumber[] src, final CNumber[] dest) {
+<b class="fc"><i class="no-highlight">50</i>&nbsp;        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</b>
+<b class="fc"><i class="no-highlight">51</i>&nbsp;        System.arraycopy(src, 0, dest, 0, src.length);</b>
+<i class="no-highlight">52</i>&nbsp;    }
+<i class="no-highlight">53</i>&nbsp;
+<i class="no-highlight">54</i>&nbsp;
+<i class="no-highlight">55</i>&nbsp;
+<i class="no-highlight">56</i>&nbsp;    /**
+<i class="no-highlight">57</i>&nbsp;     * Sets the value of this matrix using a 2D array.
+<i class="no-highlight">58</i>&nbsp;     *
+<i class="no-highlight">59</i>&nbsp;     * @param src New values of the matrix.
+<i class="no-highlight">60</i>&nbsp;     * @param dest Destination array for values.
+<i class="no-highlight">61</i>&nbsp;     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+<i class="no-highlight">62</i>&nbsp;     */
+<i class="no-highlight">63</i>&nbsp;    public static void setValues(Double[] src, final CNumber[] dest) {
+<b class="fc"><i class="no-highlight">64</i>&nbsp;        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</b>
+<i class="no-highlight">65</i>&nbsp;
+<b class="fc"><i class="no-highlight">66</i>&nbsp;        for(int i=0; i&lt;src.length; i++) {</b>
+<b class="fc"><i class="no-highlight">67</i>&nbsp;            dest[i] = new CNumber(src[i]);</b>
+<i class="no-highlight">68</i>&nbsp;        }
+<i class="no-highlight">69</i>&nbsp;    }
+<i class="no-highlight">70</i>&nbsp;
+<i class="no-highlight">71</i>&nbsp;
+<i class="no-highlight">72</i>&nbsp;    /**
+<i class="no-highlight">73</i>&nbsp;     * Sets the value of this matrix using a 2D array.
+<i class="no-highlight">74</i>&nbsp;     *
+<i class="no-highlight">75</i>&nbsp;     * @param src New values of the matrix.
+<i class="no-highlight">76</i>&nbsp;     * @param dest Destination array for values.
+<i class="no-highlight">77</i>&nbsp;     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+<i class="no-highlight">78</i>&nbsp;     */
+<i class="no-highlight">79</i>&nbsp;    public static void setValues(Integer[] src, final CNumber[] dest) {
+<b class="fc"><i class="no-highlight">80</i>&nbsp;        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</b>
+<i class="no-highlight">81</i>&nbsp;
+<b class="fc"><i class="no-highlight">82</i>&nbsp;        for(int i=0; i&lt;src.length; i++) {</b>
+<b class="fc"><i class="no-highlight">83</i>&nbsp;            dest[i] = new CNumber(src[i]);</b>
+<i class="no-highlight">84</i>&nbsp;        }
+<i class="no-highlight">85</i>&nbsp;    }
+<i class="no-highlight">86</i>&nbsp;
+<i class="no-highlight">87</i>&nbsp;
+<i class="no-highlight">88</i>&nbsp;    /**
+<i class="no-highlight">89</i>&nbsp;     * Sets the value of this matrix using a 2D array.
+<i class="no-highlight">90</i>&nbsp;     *
+<i class="no-highlight">91</i>&nbsp;     * @param src New values of the matrix.
+<i class="no-highlight">92</i>&nbsp;     * @param dest Destination array for values.
+<i class="no-highlight">93</i>&nbsp;     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+<i class="no-highlight">94</i>&nbsp;     */
+<i class="no-highlight">95</i>&nbsp;    public static void setValues(double[] src, final CNumber[] dest) {
+<b class="fc"><i class="no-highlight">96</i>&nbsp;        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</b>
+<i class="no-highlight">97</i>&nbsp;
+<b class="fc"><i class="no-highlight">98</i>&nbsp;        for(int i=0; i&lt;src.length; i++) {</b>
+<b class="fc"><i class="no-highlight">99</i>&nbsp;            dest[i] = new CNumber(src[i]);</b>
+<i class="no-highlight">100</i>&nbsp;        }
+<i class="no-highlight">101</i>&nbsp;    }
+<i class="no-highlight">102</i>&nbsp;
+<i class="no-highlight">103</i>&nbsp;
+<i class="no-highlight">104</i>&nbsp;    /**
+<i class="no-highlight">105</i>&nbsp;     * Sets the value of this matrix using a 2D array.
+<i class="no-highlight">106</i>&nbsp;     *
+<i class="no-highlight">107</i>&nbsp;     * @param src New values of the matrix.
+<i class="no-highlight">108</i>&nbsp;     * @param dest Destination array for values.
+<i class="no-highlight">109</i>&nbsp;     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+<i class="no-highlight">110</i>&nbsp;     */
+<i class="no-highlight">111</i>&nbsp;    public static void setValues(int[] src, final CNumber[] dest) {
+<b class="fc"><i class="no-highlight">112</i>&nbsp;        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</b>
+<i class="no-highlight">113</i>&nbsp;
+<b class="fc"><i class="no-highlight">114</i>&nbsp;        for(int i=0; i&lt;src.length; i++) {</b>
+<b class="fc"><i class="no-highlight">115</i>&nbsp;            dest[i] = new CNumber(src[i]);</b>
+<i class="no-highlight">116</i>&nbsp;        }
+<i class="no-highlight">117</i>&nbsp;    }
+<i class="no-highlight">118</i>&nbsp;
+<i class="no-highlight">119</i>&nbsp;
+<i class="no-highlight">120</i>&nbsp;    /**
+<i class="no-highlight">121</i>&nbsp;     * Sets the value of this matrix using a 2D array.
+<i class="no-highlight">122</i>&nbsp;     *
+<i class="no-highlight">123</i>&nbsp;     * @param src New values of the matrix.
+<i class="no-highlight">124</i>&nbsp;     * @param dest Destination array for values.
+<i class="no-highlight">125</i>&nbsp;     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+<i class="no-highlight">126</i>&nbsp;     */
+<i class="no-highlight">127</i>&nbsp;    public static void setValues(CNumber[][] src, final CNumber[] dest) {
+<b class="fc"><i class="no-highlight">128</i>&nbsp;        ParameterChecks.assertTotalEntriesEq(src, dest);</b>
+<b class="fc"><i class="no-highlight">129</i>&nbsp;        int count = 0;</b>
+<i class="no-highlight">130</i>&nbsp;
+<b class="fc"><i class="no-highlight">131</i>&nbsp;        for(CNumber[] cNumbers : src) {</b>
+<b class="fc"><i class="no-highlight">132</i>&nbsp;            for(int j = 0; j &lt; src[0].length; j++) {</b>
+<b class="fc"><i class="no-highlight">133</i>&nbsp;                dest[count++] = cNumbers[j].copy();</b>
+<i class="no-highlight">134</i>&nbsp;            }
+<i class="no-highlight">135</i>&nbsp;        }
+<i class="no-highlight">136</i>&nbsp;    }
+<i class="no-highlight">137</i>&nbsp;
+<i class="no-highlight">138</i>&nbsp;
+<i class="no-highlight">139</i>&nbsp;
+<i class="no-highlight">140</i>&nbsp;    /**
+<i class="no-highlight">141</i>&nbsp;     * Sets the value of this matrix using a 2D array.
+<i class="no-highlight">142</i>&nbsp;     *
+<i class="no-highlight">143</i>&nbsp;     * @param src New values of the matrix.
+<i class="no-highlight">144</i>&nbsp;     * @param dest Destination array for values.
+<i class="no-highlight">145</i>&nbsp;     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+<i class="no-highlight">146</i>&nbsp;     */
+<i class="no-highlight">147</i>&nbsp;    public static void setValues(Double[][] src, final CNumber[] dest) {
+<b class="fc"><i class="no-highlight">148</i>&nbsp;        ParameterChecks.assertTotalEntriesEq(src, dest);</b>
+<b class="fc"><i class="no-highlight">149</i>&nbsp;        int count = 0;</b>
+<i class="no-highlight">150</i>&nbsp;
+<b class="fc"><i class="no-highlight">151</i>&nbsp;        for(Double[] doubles : src) {</b>
+<b class="fc"><i class="no-highlight">152</i>&nbsp;            for(int j = 0; j &lt; src[0].length; j++) {</b>
+<b class="fc"><i class="no-highlight">153</i>&nbsp;                dest[count++] = new CNumber(doubles[j]);</b>
+<i class="no-highlight">154</i>&nbsp;            }
+<i class="no-highlight">155</i>&nbsp;        }
+<i class="no-highlight">156</i>&nbsp;    }
+<i class="no-highlight">157</i>&nbsp;
+<i class="no-highlight">158</i>&nbsp;
+<i class="no-highlight">159</i>&nbsp;    /**
+<i class="no-highlight">160</i>&nbsp;     * Sets the value of this matrix using a 2D array.
+<i class="no-highlight">161</i>&nbsp;     *
+<i class="no-highlight">162</i>&nbsp;     * @param src New values of the matrix.
+<i class="no-highlight">163</i>&nbsp;     * @param dest Destination array for values.
+<i class="no-highlight">164</i>&nbsp;     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+<i class="no-highlight">165</i>&nbsp;     */
+<i class="no-highlight">166</i>&nbsp;    public static void setValues(Integer[][] src, final CNumber[] dest) {
+<b class="fc"><i class="no-highlight">167</i>&nbsp;        ParameterChecks.assertTotalEntriesEq(src, dest);</b>
+<b class="fc"><i class="no-highlight">168</i>&nbsp;        int count = 0;</b>
+<i class="no-highlight">169</i>&nbsp;
+<b class="fc"><i class="no-highlight">170</i>&nbsp;        for(Integer[] integers : src) {</b>
+<b class="fc"><i class="no-highlight">171</i>&nbsp;            for(int j = 0; j &lt; src[0].length; j++) {</b>
+<b class="fc"><i class="no-highlight">172</i>&nbsp;                dest[count++] = new CNumber(integers[j]);</b>
+<i class="no-highlight">173</i>&nbsp;            }
+<i class="no-highlight">174</i>&nbsp;        }
+<i class="no-highlight">175</i>&nbsp;    }
+<i class="no-highlight">176</i>&nbsp;
+<i class="no-highlight">177</i>&nbsp;
+<i class="no-highlight">178</i>&nbsp;    /**
+<i class="no-highlight">179</i>&nbsp;     * Sets the value of this matrix using a 2D array.
+<i class="no-highlight">180</i>&nbsp;     *
+<i class="no-highlight">181</i>&nbsp;     * @param src New values of the matrix.
+<i class="no-highlight">182</i>&nbsp;     * @param dest Destination array for values.
+<i class="no-highlight">183</i>&nbsp;     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+<i class="no-highlight">184</i>&nbsp;     */
+<i class="no-highlight">185</i>&nbsp;    public static void setValues(double[][] src, final CNumber[] dest) {
+<b class="fc"><i class="no-highlight">186</i>&nbsp;        ParameterChecks.assertTotalEntriesEq(src, dest);</b>
+<b class="fc"><i class="no-highlight">187</i>&nbsp;        int count = 0;</b>
+<i class="no-highlight">188</i>&nbsp;
+<b class="fc"><i class="no-highlight">189</i>&nbsp;        for(double[] doubles : src) {</b>
+<b class="fc"><i class="no-highlight">190</i>&nbsp;            for(int j = 0; j &lt; src[0].length; j++) {</b>
+<b class="fc"><i class="no-highlight">191</i>&nbsp;                dest[count++] = new CNumber(doubles[j]);</b>
+<i class="no-highlight">192</i>&nbsp;            }
+<i class="no-highlight">193</i>&nbsp;        }
+<i class="no-highlight">194</i>&nbsp;    }
+<i class="no-highlight">195</i>&nbsp;
+<i class="no-highlight">196</i>&nbsp;
+<i class="no-highlight">197</i>&nbsp;    /**
+<i class="no-highlight">198</i>&nbsp;     * Sets the value of this matrix using a 2D array.
+<i class="no-highlight">199</i>&nbsp;     *
+<i class="no-highlight">200</i>&nbsp;     * @param src New values of the matrix.
+<i class="no-highlight">201</i>&nbsp;     * @param dest Destination array for values.
+<i class="no-highlight">202</i>&nbsp;     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+<i class="no-highlight">203</i>&nbsp;     */
+<i class="no-highlight">204</i>&nbsp;    public static void setValues(int[][] src, final CNumber[] dest) {
+<b class="fc"><i class="no-highlight">205</i>&nbsp;        ParameterChecks.assertTotalEntriesEq(src, dest);</b>
+<b class="fc"><i class="no-highlight">206</i>&nbsp;        int count = 0;</b>
+<i class="no-highlight">207</i>&nbsp;
+<b class="fc"><i class="no-highlight">208</i>&nbsp;        for(int[] ints : src) {</b>
+<b class="fc"><i class="no-highlight">209</i>&nbsp;            for(int j = 0; j &lt; src[0].length; j++) {</b>
+<b class="fc"><i class="no-highlight">210</i>&nbsp;                dest[count++] = new CNumber(ints[j]);</b>
+<i class="no-highlight">211</i>&nbsp;            }
+<i class="no-highlight">212</i>&nbsp;        }
+<i class="no-highlight">213</i>&nbsp;    }
+<i class="no-highlight">214</i>&nbsp;
+<i class="no-highlight">215</i>&nbsp;
+<i class="no-highlight">216</i>&nbsp;    /**
+<i class="no-highlight">217</i>&nbsp;     * Sets an element of a tensor to the specified value.
+<i class="no-highlight">218</i>&nbsp;     * @param src Elements of the tensor. This will be modified.
+<i class="no-highlight">219</i>&nbsp;     * @param shape Shape of the tensor.
+<i class="no-highlight">220</i>&nbsp;     * @param value Value to set specified index to.
+<i class="no-highlight">221</i>&nbsp;     * @param indices Indices of tensor value to be set.
+<i class="no-highlight">222</i>&nbsp;     */
+<i class="no-highlight">223</i>&nbsp;    public static void set(CNumber[] src, Shape shape, double value, int... indices) {
+<b class="nc"><i class="no-highlight">224</i>&nbsp;        src[shape.entriesIndex(indices)] = new CNumber(value);</b>
+<i class="no-highlight">225</i>&nbsp;    }
+<i class="no-highlight">226</i>&nbsp;
+<i class="no-highlight">227</i>&nbsp;
+<i class="no-highlight">228</i>&nbsp;    /**
+<i class="no-highlight">229</i>&nbsp;     * Sets an element of a tensor to the specified value.
+<i class="no-highlight">230</i>&nbsp;     * @param src Elements of the tensor. This will be modified.
+<i class="no-highlight">231</i>&nbsp;     * @param shape Shape of the tensor.
+<i class="no-highlight">232</i>&nbsp;     * @param value Value to set specified index to.
+<i class="no-highlight">233</i>&nbsp;     * @param indices Indices of tensor value to be set.
+<i class="no-highlight">234</i>&nbsp;     */
+<i class="no-highlight">235</i>&nbsp;    public static void set(CNumber[] src, Shape shape, CNumber value, int... indices) {
+<b class="fc"><i class="no-highlight">236</i>&nbsp;        src[shape.entriesIndex(indices)] = new CNumber(value);</b>
+<i class="no-highlight">237</i>&nbsp;    }
+<i class="no-highlight">238</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-14 12:37</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,353 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > SparseCTensor</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j</a>
+</div>
+
+<h1>Coverage Summary for Class: SparseCTensor (com.flag4j)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SparseCTensor</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (11/11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;/*
+<i class="no-highlight">2</i>&nbsp; * MIT License
+<i class="no-highlight">3</i>&nbsp; *
+<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2022 Jacob Watters
+<i class="no-highlight">5</i>&nbsp; *
+<i class="no-highlight">6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i class="no-highlight">7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i class="no-highlight">8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i class="no-highlight">9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i class="no-highlight">10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i class="no-highlight">11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i class="no-highlight">12</i>&nbsp; *
+<i class="no-highlight">13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i class="no-highlight">14</i>&nbsp; * copies or substantial portions of the Software.
+<i class="no-highlight">15</i>&nbsp; *
+<i class="no-highlight">16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i class="no-highlight">17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i class="no-highlight">18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i class="no-highlight">19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i class="no-highlight">20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i class="no-highlight">21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i class="no-highlight">22</i>&nbsp; * SOFTWARE.
+<i class="no-highlight">23</i>&nbsp; */
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;package com.flag4j;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;import com.flag4j.complex_numbers.CNumber;
+<i class="no-highlight">28</i>&nbsp;import com.flag4j.core.SparseTensorBase;
+<i class="no-highlight">29</i>&nbsp;
+<i class="no-highlight">30</i>&nbsp;
+<i class="no-highlight">31</i>&nbsp;/**
+<i class="no-highlight">32</i>&nbsp; * Complex sparse tensor.
+<i class="no-highlight">33</i>&nbsp; */
+<i class="no-highlight">34</i>&nbsp;public class SparseCTensor extends SparseTensorBase&lt;CNumber[]&gt; {
+<i class="no-highlight">35</i>&nbsp;
+<i class="no-highlight">36</i>&nbsp;
+<i class="no-highlight">37</i>&nbsp;    /**
+<i class="no-highlight">38</i>&nbsp;     * Creates a sparse tensor with specified shape filled with zeros.
+<i class="no-highlight">39</i>&nbsp;     * @param shape Shape of the tensor.
+<i class="no-highlight">40</i>&nbsp;     */
+<i class="no-highlight">41</i>&nbsp;    public SparseCTensor(Shape shape) {
+<b class="fc"><i class="no-highlight">42</i>&nbsp;        super(shape, 0, new CNumber[0], new int[0][0]);</b>
+<i class="no-highlight">43</i>&nbsp;    }
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;
+<i class="no-highlight">46</i>&nbsp;    /**
+<i class="no-highlight">47</i>&nbsp;     * Creates a sparse tensor with specified shape filled with zeros.
+<i class="no-highlight">48</i>&nbsp;     * @param shape Shape of the tensor.
+<i class="no-highlight">49</i>&nbsp;     * @param nonZeroEntries Non-zero entries of the tensor.
+<i class="no-highlight">50</i>&nbsp;     * @param indices Indices of the non-zero entries of the tensor.
+<i class="no-highlight">51</i>&nbsp;     */
+<i class="no-highlight">52</i>&nbsp;    public SparseCTensor(Shape shape, double[] nonZeroEntries, int[][] indices) {
+<b class="fc"><i class="no-highlight">53</i>&nbsp;        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</b>
+<i class="no-highlight">54</i>&nbsp;
+<b class="fc"><i class="no-highlight">55</i>&nbsp;        for(int i=0; i&lt;indices.length; i++) {</b>
+<b class="fc"><i class="no-highlight">56</i>&nbsp;            super.entries[i] = new CNumber(nonZeroEntries[i]);</b>
+<i class="no-highlight">57</i>&nbsp;        }
+<i class="no-highlight">58</i>&nbsp;    }
+<i class="no-highlight">59</i>&nbsp;
+<i class="no-highlight">60</i>&nbsp;
+<i class="no-highlight">61</i>&nbsp;    /**
+<i class="no-highlight">62</i>&nbsp;     * Creates a sparse tensor with specified shape filled with zeros.
+<i class="no-highlight">63</i>&nbsp;     * @param shape Shape of the tensor.
+<i class="no-highlight">64</i>&nbsp;     * @param nonZeroEntries Non-zero entries of the tensor.
+<i class="no-highlight">65</i>&nbsp;     * @param indices Indices of the non-zero entries of the tensor.
+<i class="no-highlight">66</i>&nbsp;     */
+<i class="no-highlight">67</i>&nbsp;    public SparseCTensor(Shape shape, int[] nonZeroEntries, int[][] indices) {
+<b class="fc"><i class="no-highlight">68</i>&nbsp;        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</b>
+<i class="no-highlight">69</i>&nbsp;
+<b class="fc"><i class="no-highlight">70</i>&nbsp;        for(int i=0; i&lt;indices.length; i++) {</b>
+<b class="fc"><i class="no-highlight">71</i>&nbsp;            super.entries[i] = new CNumber(nonZeroEntries[i]);</b>
+<i class="no-highlight">72</i>&nbsp;        }
+<i class="no-highlight">73</i>&nbsp;    }
+<i class="no-highlight">74</i>&nbsp;
+<i class="no-highlight">75</i>&nbsp;
+<i class="no-highlight">76</i>&nbsp;    /**
+<i class="no-highlight">77</i>&nbsp;     * Creates a sparse tensor with specified shape filled with zeros.
+<i class="no-highlight">78</i>&nbsp;     * @param shape Shape of the tensor.
+<i class="no-highlight">79</i>&nbsp;     * @param nonZeroEntries Non-zero entries of the tensor.
+<i class="no-highlight">80</i>&nbsp;     * @param indices Indices of the non-zero entries of the tensor.
+<i class="no-highlight">81</i>&nbsp;     */
+<i class="no-highlight">82</i>&nbsp;    public SparseCTensor(Shape shape, CNumber[] nonZeroEntries, int[][] indices) {
+<b class="fc"><i class="no-highlight">83</i>&nbsp;        super(shape, nonZeroEntries.length, nonZeroEntries, indices);</b>
+<i class="no-highlight">84</i>&nbsp;    }
+<i class="no-highlight">85</i>&nbsp;
+<i class="no-highlight">86</i>&nbsp;
+<i class="no-highlight">87</i>&nbsp;//    /**
+<i class="no-highlight">88</i>&nbsp;//     * Create a sparse tensor from the dense entries of another tensor. This is not the recommended method for
+<i class="no-highlight">89</i>&nbsp;//     * constructing sparse tensors. Use {@link #SparseCTensor(Shape, double[], int[][])} if the coordinate information
+<i class="no-highlight">90</i>&nbsp;//     * is already known.
+<i class="no-highlight">91</i>&nbsp;//     * @param shape Shape of the sparse tensor.
+<i class="no-highlight">92</i>&nbsp;//     * @param entries Dense entries from which to construct sparse tensor.
+<i class="no-highlight">93</i>&nbsp;//     */
+<i class="no-highlight">94</i>&nbsp;//    public SparseCTensor(Shape shape, double[] entries) {
+<i class="no-highlight">95</i>&nbsp;//        super(shape);
+<i class="no-highlight">96</i>&nbsp;//
+<i class="no-highlight">97</i>&nbsp;//        if(entries.length != shape.totalEntries()) {
+<i class="no-highlight">98</i>&nbsp;//            throw new IllegalArgumentException(
+<i class="no-highlight">99</i>&nbsp;//                    ErrorMessages.shapeEntriesError(shape, entries.length)
+<i class="no-highlight">100</i>&nbsp;//            );
+<i class="no-highlight">101</i>&nbsp;//        }
+<i class="no-highlight">102</i>&nbsp;//
+<i class="no-highlight">103</i>&nbsp;//        ArrayList&lt;Double&gt; nonZeroEntries = new ArrayList&lt;&gt;(entries.length/2);
+<i class="no-highlight">104</i>&nbsp;//        ArrayList&lt;int[]&gt; indices = new ArrayList&lt;&gt;(entries.length/2);
+<i class="no-highlight">105</i>&nbsp;//        int[] entryIndices = new int[super.getRank()];
+<i class="no-highlight">106</i>&nbsp;//
+<i class="no-highlight">107</i>&nbsp;//        int prod;
+<i class="no-highlight">108</i>&nbsp;//
+<i class="no-highlight">109</i>&nbsp;//        for(int i=0; i&lt;entries.length; i++) {
+<i class="no-highlight">110</i>&nbsp;//
+<i class="no-highlight">111</i>&nbsp;//            if(entries[i]!=0) {
+<i class="no-highlight">112</i>&nbsp;//                nonZeroEntries.add(entries[i]);
+<i class="no-highlight">113</i>&nbsp;//                indices.add(entryIndices.copy());
+<i class="no-highlight">114</i>&nbsp;//            }
+<i class="no-highlight">115</i>&nbsp;//
+<i class="no-highlight">116</i>&nbsp;//            // Compute the indices for next entry based on the shape of the tensor.
+<i class="no-highlight">117</i>&nbsp;//            prod = super.shape.totalEntries();
+<i class="no-highlight">118</i>&nbsp;//            for(int j=0; j&lt;entryIndices.length; j++) {
+<i class="no-highlight">119</i>&nbsp;//                prod/=super.shape.dims[j];
+<i class="no-highlight">120</i>&nbsp;//                if((i+1)%prod==0) {
+<i class="no-highlight">121</i>&nbsp;//                    entryIndices[j] = (entryIndices[j]+1) % super.shape.dims[j];
+<i class="no-highlight">122</i>&nbsp;//                }
+<i class="no-highlight">123</i>&nbsp;//            }
+<i class="no-highlight">124</i>&nbsp;//        }
+<i class="no-highlight">125</i>&nbsp;//
+<i class="no-highlight">126</i>&nbsp;//        super.setNonZeroEntries(nonZeroEntries.size());
+<i class="no-highlight">127</i>&nbsp;//        super.entries = new CNumber[super.nonZeroEntries()];
+<i class="no-highlight">128</i>&nbsp;//        super.indices = new int[super.nonZeroEntries()][super.getRank()];
+<i class="no-highlight">129</i>&nbsp;//
+<i class="no-highlight">130</i>&nbsp;//        for(int i=0; i&lt;nonZeroEntries.size(); i++) {
+<i class="no-highlight">131</i>&nbsp;//            super.entries[i] = new CNumber(nonZeroEntries.get(i));
+<i class="no-highlight">132</i>&nbsp;//            super.indices[i] = indices.get(i);
+<i class="no-highlight">133</i>&nbsp;//        }
+<i class="no-highlight">134</i>&nbsp;//    }
+<i class="no-highlight">135</i>&nbsp;//
+<i class="no-highlight">136</i>&nbsp;//
+<i class="no-highlight">137</i>&nbsp;//    /**
+<i class="no-highlight">138</i>&nbsp;//     * Create a sparse tensor from the dense entries of another tensor. This is not the recommended method for
+<i class="no-highlight">139</i>&nbsp;//     * constructing sparse tensors. Use {@link #SparseCTensor(Shape, double[], int[][])} if the coordinate information
+<i class="no-highlight">140</i>&nbsp;//     * is already known.
+<i class="no-highlight">141</i>&nbsp;//     * @param shape Shape of the sparse tensor.
+<i class="no-highlight">142</i>&nbsp;//     * @param entries Dense entries from which to construct sparse tensor.
+<i class="no-highlight">143</i>&nbsp;//     */
+<i class="no-highlight">144</i>&nbsp;//    public SparseCTensor(Shape shape, int[] entries) {
+<i class="no-highlight">145</i>&nbsp;//        super(shape);
+<i class="no-highlight">146</i>&nbsp;//
+<i class="no-highlight">147</i>&nbsp;//        if(entries.length != shape.totalEntries()) {
+<i class="no-highlight">148</i>&nbsp;//            throw new IllegalArgumentException(
+<i class="no-highlight">149</i>&nbsp;//                    ErrorMessages.shapeEntriesError(shape, entries.length)
+<i class="no-highlight">150</i>&nbsp;//            );
+<i class="no-highlight">151</i>&nbsp;//        }
+<i class="no-highlight">152</i>&nbsp;//
+<i class="no-highlight">153</i>&nbsp;//        ArrayList&lt;Integer&gt; nonZeroEntries = new ArrayList&lt;&gt;(entries.length/2);
+<i class="no-highlight">154</i>&nbsp;//        ArrayList&lt;int[]&gt; indices = new ArrayList&lt;&gt;(entries.length/2);
+<i class="no-highlight">155</i>&nbsp;//        int[] entryIndices = new int[super.getRank()];
+<i class="no-highlight">156</i>&nbsp;//
+<i class="no-highlight">157</i>&nbsp;//        int prod;
+<i class="no-highlight">158</i>&nbsp;//
+<i class="no-highlight">159</i>&nbsp;//        for(int i=0; i&lt;entries.length; i++) {
+<i class="no-highlight">160</i>&nbsp;//
+<i class="no-highlight">161</i>&nbsp;//            if(entries[i]!=0) {
+<i class="no-highlight">162</i>&nbsp;//                nonZeroEntries.add(entries[i]);
+<i class="no-highlight">163</i>&nbsp;//                indices.add(entryIndices.copy());
+<i class="no-highlight">164</i>&nbsp;//            }
+<i class="no-highlight">165</i>&nbsp;//
+<i class="no-highlight">166</i>&nbsp;//            // Compute the indices for next entry based on the shape of the tensor.
+<i class="no-highlight">167</i>&nbsp;//            prod = super.shape.totalEntries();
+<i class="no-highlight">168</i>&nbsp;//            for(int j=0; j&lt;entryIndices.length; j++) {
+<i class="no-highlight">169</i>&nbsp;//                prod/=super.shape.dims[j];
+<i class="no-highlight">170</i>&nbsp;//                if((i+1)%prod==0) {
+<i class="no-highlight">171</i>&nbsp;//                    entryIndices[j] = (entryIndices[j]+1) % super.shape.dims[j];
+<i class="no-highlight">172</i>&nbsp;//                }
+<i class="no-highlight">173</i>&nbsp;//            }
+<i class="no-highlight">174</i>&nbsp;//        }
+<i class="no-highlight">175</i>&nbsp;//
+<i class="no-highlight">176</i>&nbsp;//        super.setNonZeroEntries(nonZeroEntries.size());
+<i class="no-highlight">177</i>&nbsp;//        super.entries = new CNumber[super.nonZeroEntries()];
+<i class="no-highlight">178</i>&nbsp;//        super.indices = new int[super.nonZeroEntries()][super.getRank()];
+<i class="no-highlight">179</i>&nbsp;//
+<i class="no-highlight">180</i>&nbsp;//        for(int i=0; i&lt;nonZeroEntries.size(); i++) {
+<i class="no-highlight">181</i>&nbsp;//            super.entries[i] = new CNumber(nonZeroEntries.get(i));
+<i class="no-highlight">182</i>&nbsp;//            super.indices[i] = indices.get(i);
+<i class="no-highlight">183</i>&nbsp;//        }
+<i class="no-highlight">184</i>&nbsp;//    }
+<i class="no-highlight">185</i>&nbsp;//
+<i class="no-highlight">186</i>&nbsp;//
+<i class="no-highlight">187</i>&nbsp;//    /**
+<i class="no-highlight">188</i>&nbsp;//     * Create a sparse tensor from the dense entries of another tensor. This is not the recommended method for
+<i class="no-highlight">189</i>&nbsp;//     * constructing sparse tensors. Use {@link #SparseCTensor(Shape, double[], int[][])} if the coordinate information
+<i class="no-highlight">190</i>&nbsp;//     * is already known.
+<i class="no-highlight">191</i>&nbsp;//     * @param shape Shape of the sparse tensor.
+<i class="no-highlight">192</i>&nbsp;//     * @param entries Dense entries from which to construct sparse tensor.
+<i class="no-highlight">193</i>&nbsp;//     */
+<i class="no-highlight">194</i>&nbsp;//    public SparseCTensor(Shape shape, CNumber[] entries) {
+<i class="no-highlight">195</i>&nbsp;//        super(shape);
+<i class="no-highlight">196</i>&nbsp;//
+<i class="no-highlight">197</i>&nbsp;//        if(entries.length != shape.totalEntries()) {
+<i class="no-highlight">198</i>&nbsp;//            throw new IllegalArgumentException(
+<i class="no-highlight">199</i>&nbsp;//                    ErrorMessages.shapeEntriesError(shape, entries.length)
+<i class="no-highlight">200</i>&nbsp;//            );
+<i class="no-highlight">201</i>&nbsp;//        }
+<i class="no-highlight">202</i>&nbsp;//
+<i class="no-highlight">203</i>&nbsp;//        ArrayList&lt;CNumber&gt; nonZeroEntries = new ArrayList&lt;&gt;(entries.length/2);
+<i class="no-highlight">204</i>&nbsp;//        ArrayList&lt;int[]&gt; indices = new ArrayList&lt;&gt;(entries.length/2);
+<i class="no-highlight">205</i>&nbsp;//        int[] entryIndices = new int[super.getRank()];
+<i class="no-highlight">206</i>&nbsp;//
+<i class="no-highlight">207</i>&nbsp;//        int prod;
+<i class="no-highlight">208</i>&nbsp;//
+<i class="no-highlight">209</i>&nbsp;//        for(int i=0; i&lt;entries.length; i++) {
+<i class="no-highlight">210</i>&nbsp;//
+<i class="no-highlight">211</i>&nbsp;//            if(entries[i].re!=0 || entries[i].im!=0) {
+<i class="no-highlight">212</i>&nbsp;//                nonZeroEntries.add(entries[i]);
+<i class="no-highlight">213</i>&nbsp;//                indices.add(entryIndices.copy());
+<i class="no-highlight">214</i>&nbsp;//            }
+<i class="no-highlight">215</i>&nbsp;//
+<i class="no-highlight">216</i>&nbsp;//            // Compute the indices for next entry based on the shape of the tensor.
+<i class="no-highlight">217</i>&nbsp;//            prod = super.shape.totalEntries();
+<i class="no-highlight">218</i>&nbsp;//            for(int j=0; j&lt;entryIndices.length; j++) {
+<i class="no-highlight">219</i>&nbsp;//                prod/=super.shape.dims[j];
+<i class="no-highlight">220</i>&nbsp;//                if((i+1)%prod==0) {
+<i class="no-highlight">221</i>&nbsp;//                    entryIndices[j] = (entryIndices[j]+1) % super.shape.dims[j];
+<i class="no-highlight">222</i>&nbsp;//                }
+<i class="no-highlight">223</i>&nbsp;//            }
+<i class="no-highlight">224</i>&nbsp;//        }
+<i class="no-highlight">225</i>&nbsp;//
+<i class="no-highlight">226</i>&nbsp;//        super.setNonZeroEntries(nonZeroEntries.size());
+<i class="no-highlight">227</i>&nbsp;//        super.entries = new CNumber[super.nonZeroEntries()];
+<i class="no-highlight">228</i>&nbsp;//        super.indices = new int[super.nonZeroEntries()][super.getRank()];
+<i class="no-highlight">229</i>&nbsp;//
+<i class="no-highlight">230</i>&nbsp;//        for(int i=0; i&lt;nonZeroEntries.size(); i++) {
+<i class="no-highlight">231</i>&nbsp;//            super.entries[i] = nonZeroEntries.get(i).copy();
+<i class="no-highlight">232</i>&nbsp;//            super.indices[i] = indices.get(i);
+<i class="no-highlight">233</i>&nbsp;//        }
+<i class="no-highlight">234</i>&nbsp;//    }
+<i class="no-highlight">235</i>&nbsp;
+<i class="no-highlight">236</i>&nbsp;
+<i class="no-highlight">237</i>&nbsp;    /**
+<i class="no-highlight">238</i>&nbsp;     * Constructs a sparse complex tensor whose non-zero values, indices, and shape are specified by another sparse complex
+<i class="no-highlight">239</i>&nbsp;     * tensor.
+<i class="no-highlight">240</i>&nbsp;     * @param A The sparse complex tensor to construct a copy of.
+<i class="no-highlight">241</i>&nbsp;     */
+<i class="no-highlight">242</i>&nbsp;    public SparseCTensor(SparseCTensor A) {
+<b class="fc"><i class="no-highlight">243</i>&nbsp;        super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);</b>
+<b class="fc"><i class="no-highlight">244</i>&nbsp;        for(int i=0; i&lt;indices.length; i++) {</b>
+<b class="fc"><i class="no-highlight">245</i>&nbsp;            super.indices[i] = A.indices[i].clone();</b>
+<i class="no-highlight">246</i>&nbsp;        }
+<i class="no-highlight">247</i>&nbsp;    }
+<i class="no-highlight">248</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-14 12:37</div>
+</div>
+</body>
+</html>
