@@ -42,6 +42,7 @@ import com.flag4j.SparseTensor;
 public interface TensorExclusiveMixin<T, U, V> {
 
     // TODO: add toVector() and toMatrix() methods.
+    // TODO: Add tensorDot(...) methods for Tensor, CTensor, SparseTensor, SparseCTensor.
 
     /**
      * Computes the tensor contraction of this tensor with a specified tensor over the specified axes. That is,
