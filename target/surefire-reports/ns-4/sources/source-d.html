@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > VectorManipulationsMixin</title>
+  <title>Coverage Report > ComplexVectorMixin</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,14 +20,14 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.flag4j.core</a>
 </div>
 
-<h1>Coverage Summary for Class: VectorManipulationsMixin (com.flag4j.core)</h1>
+<h1>Coverage Summary for Class: ComplexVectorMixin (com.flag4j.core)</h1>
 
 <table class="coverageStats">
 <tr>
   <th class="name">Class</th>
 </tr>
 <tr>
-  <td class="name">VectorManipulationsMixin</td>
+  <td class="name">ComplexVectorMixin</td>
 </tr>
 
 </table>
@@ -40,7 +40,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;/*
 <i class="no-highlight">2</i>&nbsp; * MIT License
 <i class="no-highlight">3</i>&nbsp; *
-<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2022-2023 Jacob Watters
+<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2023 Jacob Watters
 <i class="no-highlight">5</i>&nbsp; *
 <i class="no-highlight">6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
 <i class="no-highlight">7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -64,32 +64,29 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">25</i>&nbsp;package com.flag4j.core;
 <i class="no-highlight">26</i>&nbsp;
 <i class="no-highlight">27</i>&nbsp;
-<i class="no-highlight">28</i>&nbsp;/**
-<i class="no-highlight">29</i>&nbsp; * This interface specifies manipulations which all vectors should implement.
-<i class="no-highlight">30</i>&nbsp; *
-<i class="no-highlight">31</i>&nbsp; * @param &lt;T&gt; Vectors type.
-<i class="no-highlight">32</i>&nbsp; * @param &lt;U&gt; Dense vectors type.
-<i class="no-highlight">33</i>&nbsp; * @param &lt;V&gt; Sparse vectors type.
-<i class="no-highlight">34</i>&nbsp; * @param &lt;W&gt; Complex vectors type.
-<i class="no-highlight">35</i>&nbsp; * @param &lt;Y&gt; Real vectors type.
-<i class="no-highlight">36</i>&nbsp; * @param &lt;X&gt; Vectors entry type.
-<i class="no-highlight">37</i>&nbsp; * @param &lt;TT&gt; Matrix type equivalent.
-<i class="no-highlight">38</i>&nbsp; * @param &lt;UU&gt; Dense Matrix type equivalent.
-<i class="no-highlight">39</i>&nbsp; * @param &lt;VV&gt; Sparse Matrix type equivalent.
-<i class="no-highlight">40</i>&nbsp; * @param &lt;WW&gt; Complex Matrix type equivalent.
-<i class="no-highlight">41</i>&nbsp; */
-<i class="no-highlight">42</i>&nbsp;public interface VectorManipulationsMixin&lt;T, U, V, W, Y, X extends Number, TT, UU, VV, WW&gt;
-<i class="no-highlight">43</i>&nbsp;        extends TensorManipulationsMixin&lt;T, U, V, W, Y, X&gt; {
+<i class="no-highlight">28</i>&nbsp;import com.flag4j.*;
+<i class="no-highlight">29</i>&nbsp;import com.flag4j.complex_numbers.CNumber;
+<i class="no-highlight">30</i>&nbsp;
+<i class="no-highlight">31</i>&nbsp;/**
+<i class="no-highlight">32</i>&nbsp; * This interface specifies methods which any complex vector should implement.
+<i class="no-highlight">33</i>&nbsp; * @param &lt;T&gt; Vector type.
+<i class="no-highlight">34</i>&nbsp; * @param &lt;Y&gt; Real vector type.
+<i class="no-highlight">35</i>&nbsp; */
+<i class="no-highlight">36</i>&nbsp;public interface ComplexVectorMixin&lt;T, Y&gt; extends
+<i class="no-highlight">37</i>&nbsp;        VectorComparisonsMixin&lt;T, CVector, SparseCVector, CVector, Y, CNumber&gt;,
+<i class="no-highlight">38</i>&nbsp;        VectorManipulationsMixin&lt;T, CVector, SparseCVector, CVector, Y, CNumber,
+<i class="no-highlight">39</i>&nbsp;                CMatrix, CMatrix, SparseCMatrix, CMatrix&gt;,
+<i class="no-highlight">40</i>&nbsp;        VectorOperationsMixin&lt;T, CVector, SparseCVector, CVector, Y, CNumber,
+<i class="no-highlight">41</i>&nbsp;                CMatrix, CMatrix, SparseCMatrix, CMatrix&gt;,
+<i class="no-highlight">42</i>&nbsp;        VectorPropertiesMixin&lt;T, CVector, SparseCVector, CVector, Y, CNumber&gt;{
+<i class="no-highlight">43</i>&nbsp;    boolean isReal();
 <i class="no-highlight">44</i>&nbsp;
-<i class="no-highlight">45</i>&nbsp;
-<i class="no-highlight">46</i>&nbsp;    /**
-<i class="no-highlight">47</i>&nbsp;     * Extends a vector a specified number of times to a matrix.
-<i class="no-highlight">48</i>&nbsp;     * @param n The number of times to extend this vector.
-<i class="no-highlight">49</i>&nbsp;     * @param axis Axis along which to extend vector.
-<i class="no-highlight">50</i>&nbsp;     * @return A matrix which is the result of extending a vector {@code n} times.
-<i class="no-highlight">51</i>&nbsp;     */
-<i class="no-highlight">52</i>&nbsp;    TT extend(int n, int axis);
-<i class="no-highlight">53</i>&nbsp;}
+<i class="no-highlight">45</i>&nbsp;    boolean isComplex();
+<i class="no-highlight">46</i>&nbsp;
+<i class="no-highlight">47</i>&nbsp;    CVector conj();
+<i class="no-highlight">48</i>&nbsp;
+<i class="no-highlight">49</i>&nbsp;    Vector toReal();
+<i class="no-highlight">50</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -116,7 +113,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-04-14 12:48</div>
+    <div style="float:right;">generated on 2023-04-14 13:06</div>
 </div>
 </body>
 </html>
