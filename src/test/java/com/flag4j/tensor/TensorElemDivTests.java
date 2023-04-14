@@ -95,13 +95,6 @@ class TensorElemDivTests {
         };
         expShape = new Shape(2, 3, 2);
         exp = new CTensor(expShape, expEntries);
-
-        CTensor act = new CTensor(A.elemDiv(B));
-        System.out.println("Act: " + Arrays.toString(act.entries));
-        System.out.println("Exp: " + Arrays.toString(exp.entries));
-
-        System.out.println(Arrays.equals(act.entries, exp.entries));
-
         assertEquals(exp, A.elemDiv(B));
 
         // ----------------------- Sub-case 2 -----------------------
