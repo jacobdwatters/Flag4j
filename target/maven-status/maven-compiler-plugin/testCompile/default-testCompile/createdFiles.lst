@@ -30,6 +30,7 @@ com\flag4j\complex_matrix\CMatrixRoundTests.class
 com\flag4j\complex_matrix\CMatrixStackTests.class
 com\flag4j\matrix\MatrixConversionTests.class
 com\flag4j\linalg\decompositions\RealLUTests.class
+com\flag4j\tensor\TensorElemMultTests.class
 com\flag4j\matrix\MatrixGetTests.class
 com\flag4j\matrix\MatrixSubTests.class
 com\flag4j\tensor\TensorScalMultDivTests.class
@@ -66,6 +67,7 @@ com\flag4j\tensor\TensorAddTests.class
 com\flag4j\complex_matrix\CMatrixSetOperationTests.class
 com\flag4j\complex_matrix\CMatrixMatVecMultTests.class
 com\flag4j\matrix\MatrixTransposeTests.class
+com\flag4j\tensor\TensorElemDivTests.class
 com\flag4j\matrix\MatrixPropertiesTests.class
 com\flag4j\matrix\MatrixElemMultTests.class
 com\flag4j\complex_matrix\CMatrixScaleOperationsTests.class

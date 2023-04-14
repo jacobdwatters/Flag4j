@@ -50,13 +50,13 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If the two arrays are not the same shape.
      */
     public static void deepCopy(int[][] src, int[][] dest) {
-<span class="nc" id="L53">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
-<span class="nc" id="L54">        ParameterChecks.assertArrayLengthsEq(src[0].length, dest[0].length);</span>
+<span class="fc" id="L53">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
+<span class="fc" id="L54">        ParameterChecks.assertArrayLengthsEq(src[0].length, dest[0].length);</span>
 
-<span class="nc bnc" id="L56" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="nc" id="L57">            System.arraycopy(src[i], 0, dest[i], 0, src.length);</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L57">            System.arraycopy(src[i], 0, dest[i], 0, src[i].length);</span>
         }
-<span class="nc" id="L59">    }</span>
+<span class="fc" id="L59">    }</span>
 
 
     /**
@@ -761,7 +761,7 @@ public final class ArrayUtils {
                     new CNumber(src[i]),
 <span class="fc" id="L762">                    PrintOptions.getPrecision()).toString().length();</span>
 
-<span class="pc bpc" id="L764" title="1 of 2 branches missed.">            if(currLength&gt;maxLength) {</span>
+<span class="fc bfc" id="L764" title="All 2 branches covered.">            if(currLength&gt;maxLength) {</span>
                 // Then update the maximum length.
 <span class="fc" id="L766">                maxLength=currLength;</span>
             }

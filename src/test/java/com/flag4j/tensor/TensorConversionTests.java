@@ -1,8 +1,6 @@
 package com.flag4j.tensor;
 
-import com.flag4j.CTensor;
-import com.flag4j.Shape;
-import com.flag4j.Tensor;
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -37,5 +35,44 @@ class TensorConversionTests {
         exp = new CTensor(shape.copy(), expEntries);
 
         assertEquals(exp, A.toComplex());
+    }
+
+
+    @Test
+    void toMatrixTest() {
+        Tensor B;
+
+        double[] expEntries;
+        Shape expShape;
+        Matrix exp;
+
+        // ----------------------- Sub-case 1 -----------------------
+        expEntries = aEntries.clone();
+        expShape = new Shape(1, aEntries.length);
+        exp = new Matrix(expShape, expEntries);
+
+        assertEquals(exp, A.toMatrix());
+
+        // ----------------------- Sub-case 2 -----------------------
+        expEntries = aEntries.clone();
+        expShape = new Shape(4, 3);
+        B = A.reshape(expShape);
+        exp = new Matrix(expShape, expEntries);
+
+        assertEquals(exp, B.toMatrix());
+    }
+
+
+    @Test
+    void toVectorTest() {
+        double[] expEntries;
+        Shape expShape;
+        Vector exp;
+
+        // ----------------------- Sub-case 1 -----------------------
+        expEntries = aEntries.clone();
+        exp = new Vector(expEntries);
+
+        assertEquals(exp, A.toVector());
     }
 }

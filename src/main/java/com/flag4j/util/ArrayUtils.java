@@ -54,7 +54,7 @@ public final class ArrayUtils {
         ParameterChecks.assertArrayLengthsEq(src[0].length, dest[0].length);
 
         for(int i=0; i<src.length; i++) {
-            System.arraycopy(src[i], 0, dest[i], 0, src.length);
+            System.arraycopy(src[i], 0, dest[i], 0, src[i].length);
         }
     }
 

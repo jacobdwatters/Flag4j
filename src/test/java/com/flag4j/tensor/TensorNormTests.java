@@ -35,4 +35,16 @@ public class TensorNormTests {
         exp = 13429.354528384523;
         assertEquals(exp, A.norm());
     }
+
+
+    @Test
+    void pnormTestCase() {
+        // ------------------------- Sub-case 1 -------------------------
+        exp = 13429.354528384523;
+        assertEquals(exp, A.norm(2));
+
+        // ------------------------- Sub-case 2 -------------------------
+        exp = 13384.105704217562;
+        assertEquals(exp, A.norm(4));
+    }
 }

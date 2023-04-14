@@ -307,7 +307,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
     @Override
     public Tensor reshape(Shape shape) {
 <span class="fc" id="L309">        ParameterChecks.assertBroadcastable(this.shape, shape);</span>
-<span class="fc" id="L310">        return new Tensor(shape, this.entries.clone());</span>
+<span class="fc" id="L310">        return new Tensor(shape.copy(), this.entries.clone());</span>
     }
 
 
@@ -950,7 +950,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L953">        return RealDenseOperations.tensorNormLp(entries, p);</span>
+<span class="fc" id="L953">        return RealDenseOperations.tensorNormLp(entries, p);</span>
     }
 
 
@@ -973,9 +973,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      */
     @Override
     public Tensor elemMult(Tensor B) {
-<span class="nc" id="L976">        return new Tensor(</span>
-<span class="nc" id="L977">                shape.copy(),</span>
-<span class="nc" id="L978">                RealDenseElemMult.dispatch(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L976">        return new Tensor(</span>
+<span class="fc" id="L977">                shape.copy(),</span>
+<span class="fc" id="L978">                RealDenseElemMult.dispatch(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -988,7 +988,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      */
     @Override
     public SparseTensor elemMult(SparseTensor B) {
-<span class="nc" id="L991">        return RealDenseSparseOperations.elemMult(this, B);</span>
+<span class="fc" id="L991">        return RealDenseSparseOperations.elemMult(this, B);</span>
     }
 
 
@@ -1000,9 +1000,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      */
     @Override
     public CTensor elemMult(CTensor B) {
-<span class="nc" id="L1003">        return new CTensor(</span>
-<span class="nc" id="L1004">                this.shape.copy(),</span>
-<span class="nc" id="L1005">                RealComplexDenseElemMult.dispatch(B.entries, B.shape, this.entries, this.shape)</span>
+<span class="fc" id="L1003">        return new CTensor(</span>
+<span class="fc" id="L1004">                this.shape.copy(),</span>
+<span class="fc" id="L1005">                RealComplexDenseElemMult.dispatch(B.entries, B.shape, this.entries, this.shape)</span>
         );
     }
 
@@ -1015,7 +1015,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      */
     @Override
     public SparseCTensor elemMult(SparseCTensor B) {
-<span class="nc" id="L1018">        return RealComplexDenseSparseOperations.elemMult(this, B);</span>
+<span class="fc" id="L1018">        return RealComplexDenseSparseOperations.elemMult(this, B);</span>
     }
 
 
@@ -1027,9 +1027,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      */
     @Override
     public Tensor elemDiv(Tensor B) {
-<span class="nc" id="L1030">        return new Tensor(</span>
-<span class="nc" id="L1031">                shape.copy(),</span>
-<span class="nc" id="L1032">                RealDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape)</span>
+<span class="fc" id="L1030">        return new Tensor(</span>
+<span class="fc" id="L1031">                shape.copy(),</span>
+<span class="fc" id="L1032">                RealDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1042,9 +1042,9 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      */
     @Override
     public CTensor elemDiv(CTensor B) {
-<span class="nc" id="L1045">        return new CTensor(</span>
-<span class="nc" id="L1046">                shape.copy(),</span>
-<span class="nc" id="L1047">                RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L1045">        return new CTensor(</span>
+<span class="fc" id="L1046">                shape.copy(),</span>
+<span class="fc" id="L1047">                RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1054,7 +1054,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      * @return A vector equivalent of this tensor.
      */
     public Vector toVector() {
-<span class="nc" id="L1057">        return new Vector(this.entries.clone());</span>
+<span class="fc" id="L1057">        return new Vector(this.entries.clone());</span>
     }
 
 
@@ -1067,13 +1067,13 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
     public Matrix toMatrix() {
         Matrix mat;
 
-<span class="nc bnc" id="L1070" title="All 2 branches missed.">        if(this.getRank()==2) {</span>
-<span class="nc" id="L1071">            mat = new Matrix(this.shape.copy(), this.entries.clone());</span>
+<span class="fc bfc" id="L1070" title="All 2 branches covered.">        if(this.getRank()==2) {</span>
+<span class="fc" id="L1071">            mat = new Matrix(this.shape.copy(), this.entries.clone());</span>
         } else {
-<span class="nc" id="L1073">            mat = new Matrix(1, this.entries.length, this.entries.clone());</span>
+<span class="fc" id="L1073">            mat = new Matrix(1, this.entries.length, this.entries.clone());</span>
         }
 
-<span class="nc" id="L1076">        return mat;</span>
+<span class="fc" id="L1076">        return mat;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

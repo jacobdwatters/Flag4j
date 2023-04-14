@@ -445,6 +445,28 @@ public class CNumber extends Number {
 
 
     /**
+     * Multiplies this complex number with another complex number and stores the result in this {@link CNumber}.
+     *
+     * @param b Second complex number in the product.
+     */
+    public void multEq(CNumber b) {
+        this.re = this.re*b.re - this.im*b.im;
+        this.im = this.re*b.im + this.im*b.re;
+    }
+
+
+    /**
+     * Multiplies this complex number with another complex number and stores the result in this {@link CNumber}.
+     *
+     * @param b Second complex number in the product.
+     */
+    public void multEq(double b) {
+        this.re *= b;
+        this.im *= b;
+    }
+
+
+    /**
      * Computes the division of two complex numbers.
      * @param b The divisor for the complex division.
      * @return The quotient of this complex number with b. If b is equivalent to {@link CNumber#ZERO} then

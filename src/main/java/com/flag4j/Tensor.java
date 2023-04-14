@@ -307,7 +307,7 @@ public class Tensor extends TensorBase<double[]> implements
     @Override
     public Tensor reshape(Shape shape) {
         ParameterChecks.assertBroadcastable(this.shape, shape);
-        return new Tensor(shape, this.entries.clone());
+        return new Tensor(shape.copy(), this.entries.clone());
     }
 
 

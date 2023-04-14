@@ -139,7 +139,7 @@ public class ComplexDenseSparseEquals {
 
         if(A.shape.equals(B.shape)) {
             CNumber[] entriesCopy = new CNumber[A.entries.length];
-            ArrayUtils.copy2CNumber(entriesCopy, A.entries);
+            ArrayUtils.copy2CNumber(A.entries, entriesCopy);
             int entriesIndex;
 
             // Remove all nonZero entries from the entries of this matrix.

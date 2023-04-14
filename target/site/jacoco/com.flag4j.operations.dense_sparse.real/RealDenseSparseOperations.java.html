@@ -204,19 +204,19 @@ public class RealDenseSparseOperations {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static SparseTensor elemMult(Tensor src1, SparseTensor src2) {
-<span class="nc" id="L207">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L207">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
         int index;
-<span class="nc" id="L210">        double[] destEntries = new double[src2.nonZeroEntries()];</span>
-<span class="nc" id="L211">        int[][] destIndices = new int[src2.indices.length][src2.indices[0].length];</span>
-<span class="nc" id="L212">        ArrayUtils.deepCopy(src2.indices, destIndices);</span>
+<span class="fc" id="L210">        double[] destEntries = new double[src2.nonZeroEntries()];</span>
+<span class="fc" id="L211">        int[][] destIndices = new int[src2.indices.length][src2.indices[0].length];</span>
+<span class="fc" id="L212">        ArrayUtils.deepCopy(src2.indices, destIndices);</span>
 
-<span class="nc bnc" id="L214" title="All 2 branches missed.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
-<span class="nc" id="L215">            index = src2.shape.entriesIndex(src2.indices[i]); // Get index of non-zero entry.</span>
-<span class="nc" id="L216">            destEntries[i] = src1.entries[index]*src2.entries[i];</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
+<span class="fc" id="L215">            index = src2.shape.entriesIndex(src2.indices[i]); // Get index of non-zero entry.</span>
+<span class="fc" id="L216">            destEntries[i] = src1.entries[index]*src2.entries[i];</span>
         }
 
-<span class="nc" id="L219">        return new SparseTensor(src2.shape.copy(), destEntries, destIndices);</span>
+<span class="fc" id="L219">        return new SparseTensor(src2.shape.copy(), destEntries, destIndices);</span>
     }
 
 
