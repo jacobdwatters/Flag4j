@@ -24,6 +24,8 @@ com\flag4j\complex_matrix\CMatrixEqualsTest.class
 com\flag4j\tensor\TensorAggregateTests.class
 com\flag4j\complex_matrix\CMatrixToStringTests.class
 com\flag4j\matrix\MatrixAddToEachColTests.class
+com\flag4j\tensor\TensorGetSetTests.class
+com\flag4j\tensor\TensorNormTests.class
 com\flag4j\complex_matrix\CMatrixRoundTests.class
 com\flag4j\complex_matrix\CMatrixStackTests.class
 com\flag4j\matrix\MatrixConversionTests.class
@@ -38,7 +40,6 @@ com\flag4j\matrix\MatrixFibTests.class
 com\flag4j\matrix\MatrixDetTests.class
 com\flag4j\CustomAssertions.class
 com\flag4j\complex_matrix\CMatrixPropertiesTests.class
-com\flag4j\tensor\TensorSetTests.class
 com\flag4j\linalg\decompositions\RealQRTests.class
 com\flag4j\tensor\TensorPropertiesTests.class
 com\flag4j\operations\sparse\complex\ComplexSparseMatMultTests.class

@@ -835,8 +835,8 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      */
     @Override
     public Double get(int... indices) {
-<span class="nc" id="L838">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
-<span class="nc" id="L839">        return entries[shape.entriesIndex(indices)];</span>
+<span class="fc" id="L838">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
+<span class="fc" id="L839">        return entries[shape.entriesIndex(indices)];</span>
     }
 
 
@@ -847,7 +847,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      */
     @Override
     public Tensor copy() {
-<span class="nc" id="L850">        return new Tensor(this);</span>
+<span class="fc" id="L850">        return new Tensor(this);</span>
     }
 
 
@@ -936,7 +936,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      */
     @Override
     public double norm() {
-<span class="nc" id="L939">        return RealDenseOperations.tensorNormL2(entries);</span>
+<span class="fc" id="L939">        return RealDenseOperations.tensorNormL2(entries);</span>
     }
 
 
@@ -961,7 +961,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L964">        return AggregateReal.max(entries);</span>
+<span class="fc" id="L964">        return AggregateReal.max(entries);</span>
     }
 
 

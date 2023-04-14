@@ -11,33 +11,6 @@ class CMatrixMultiplyTests {
     CNumber[] exp, act;
 
 
-    private void printNP(CNumber[][] entries) {
-        System.out.print("[");
-        for(int i=0; i<entries.length; i++) {
-            System.out.print("[");
-            for(int j=0; j<entries[0].length; j++) {
-                System.out.print(entries[i][j].re);
-
-                if(entries[i][j].im < 0) {
-                    System.out.print(" - " + Math.abs(entries[i][j].im) + "j");
-                } else if(entries[i][j].im > 0) {
-                    System.out.print(" + " + Math.abs(entries[i][j].im) + "j");
-                }
-
-                if(j < entries[0].length-1) {
-                    System.out.print(", ");
-                }
-            }
-            System.out.print("]");
-
-            if(i < entries.length-1) {
-                System.out.println(",");
-            }
-        }
-        System.out.print("]");
-    }
-
-
     @Test
     void squareTestCase() {
         entriesA = new CNumber[][]{

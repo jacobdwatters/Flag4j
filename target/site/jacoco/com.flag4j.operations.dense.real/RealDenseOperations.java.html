@@ -299,13 +299,13 @@ public final class RealDenseOperations {
      * @return The L&lt;sub&gt;2&lt;/sub&gt; norm of the tensor.
      */
     public static double tensorNormL2(double[] src) {
-<span class="nc" id="L302">        double norm = 0;</span>
+<span class="fc" id="L302">        double norm = 0;</span>
 
-<span class="nc bnc" id="L304" title="All 2 branches missed.">        for(double value : src) {</span>
-<span class="nc" id="L305">            norm += Math.pow(value, 2);</span>
+<span class="fc bfc" id="L304" title="All 2 branches covered.">        for(double value : src) {</span>
+<span class="fc" id="L305">            norm += Math.pow(value, 2);</span>
         }
 
-<span class="nc" id="L308">        return Math.sqrt(norm);</span>
+<span class="fc" id="L308">        return Math.sqrt(norm);</span>
     }
 
 

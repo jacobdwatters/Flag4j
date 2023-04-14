@@ -440,4 +440,18 @@ class TensorConstructorTests {
         assertEquals(vec.shape, A.shape);
         assertArrayEquals(vec.entries, A.entries);
     }
+
+
+    @Test
+    void copyTest() {
+        // -------------- Sub-case 1 --------------
+        expShape = new Shape(2, 3, 1, 2);
+        expEntries = new double[]{1, -1.4133, 113.4, 0.4, 11.3, 445, 133.445, 9.8, 13384, -993.44, 11, 12};
+        A = new Tensor(expShape, expEntries);
+
+        B = A.copy();
+
+        assertEquals(A, B);
+    }
+
 }
