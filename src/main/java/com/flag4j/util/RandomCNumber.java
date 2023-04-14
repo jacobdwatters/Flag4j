@@ -58,9 +58,6 @@ public class RandomCNumber {
     }
 
 
-    // TODO: Change random() to generate random values with magnitudes uniformly in [0, 1).
-    //  Add randomReal(...) methods.
-
     /**
      * Generates a pseudorandom complex number with a magnitude uniformly distributed in {@code [0.0, 1.0)}.
      * @return A pseudorandom complex number with a magnitude uniformly distributed in {@code [0.0, 1.0)}.
