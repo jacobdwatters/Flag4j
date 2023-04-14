@@ -58,15 +58,12 @@ public class RandomCNumber {
 <span class="fc" id="L58">    }</span>
 
 
-    // TODO: Change random() to generate random values with magnitudes uniformly in [0, 1).
-    //  Add randomReal(...) methods.
-
     /**
      * Generates a pseudorandom complex number with a magnitude uniformly distributed in {@code [0.0, 1.0)}.
      * @return A pseudorandom complex number with a magnitude uniformly distributed in {@code [0.0, 1.0)}.
      */
     public CNumber random() {
-<span class="nc" id="L69">        return random(rng.nextDouble());</span>
+<span class="nc" id="L66">        return random(rng.nextDouble());</span>
     }
 
 
@@ -77,21 +74,21 @@ public class RandomCNumber {
      * @throws IllegalArgumentException If the magnitude is negative.
      */
     public CNumber random(double mag) {
-<span class="nc bnc" id="L80" title="All 2 branches missed.">        if(mag &lt; 0) {</span>
-<span class="nc" id="L81">            throw new IllegalArgumentException(&quot;Magnitude must be non-negative but got &quot; + mag);</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if(mag &lt; 0) {</span>
+<span class="nc" id="L78">            throw new IllegalArgumentException(&quot;Magnitude must be non-negative but got &quot; + mag);</span>
         }
 
         // Generate real component.
-<span class="nc" id="L85">        double real = rng.nextDouble()*mag;</span>
+<span class="nc" id="L82">        double real = rng.nextDouble()*mag;</span>
 
         // Compute imaginary component using Pythagorean theorem.
-<span class="nc" id="L88">        double imaginary = Math.sqrt(Math.pow(mag, 2) - Math.pow(real, 2));</span>
+<span class="nc" id="L85">        double imaginary = Math.sqrt(Math.pow(mag, 2) - Math.pow(real, 2));</span>
 
         // Choose complex plane quadrant (i.e. signs of each component).
-<span class="nc bnc" id="L91" title="All 2 branches missed.">        real = rng.nextBoolean() ? real : -real;</span>
-<span class="nc bnc" id="L92" title="All 2 branches missed.">        imaginary = rng.nextBoolean() ? imaginary : -imaginary;</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        real = rng.nextBoolean() ? real : -real;</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        imaginary = rng.nextBoolean() ? imaginary : -imaginary;</span>
 
-<span class="nc" id="L94">        return new CNumber(real, imaginary);</span>
+<span class="nc" id="L91">        return new CNumber(real, imaginary);</span>
     }
 
 
@@ -104,16 +101,16 @@ public class RandomCNumber {
      * @throws IllegalArgumentException If {@code min} is not positive or if {@code max} is less than {@code min}.
      */
     public CNumber random(double min, double max) {
-<span class="nc bnc" id="L107" title="All 2 branches missed.">        if(min &lt; 0) {</span>
-<span class="nc" id="L108">            throw new IllegalArgumentException(&quot;Min value must be non-negative but got &quot; + min + &quot;.&quot;);</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        if(min &lt; 0) {</span>
+<span class="nc" id="L105">            throw new IllegalArgumentException(&quot;Min value must be non-negative but got &quot; + min + &quot;.&quot;);</span>
         }
 
-<span class="nc bnc" id="L111" title="All 2 branches missed.">        if(min &gt; max) {</span>
-<span class="nc" id="L112">            throw new IllegalArgumentException(&quot;Max value must be greater than or equal to min but got min=&quot; +</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if(min &gt; max) {</span>
+<span class="nc" id="L109">            throw new IllegalArgumentException(&quot;Max value must be greater than or equal to min but got min=&quot; +</span>
                     min + &quot; and max=&quot; + max + &quot;.&quot;);
         }
 
-<span class="nc" id="L116">        return random(rng.nextDouble()*(max-min) + min);</span>
+<span class="nc" id="L113">        return random(rng.nextDouble()*(max-min) + min);</span>
     }
 
 
@@ -124,7 +121,7 @@ public class RandomCNumber {
      * deviation of 1.0.
      */
     public CNumber randn() {
-<span class="nc" id="L127">        return random(rng.nextGaussian());</span>
+<span class="nc" id="L124">        return random(rng.nextGaussian());</span>
     }
 
 
@@ -138,8 +135,8 @@ public class RandomCNumber {
      * @throws IllegalArgumentException If standard deviation is negative.
      */
     public CNumber randn(double mean, double std) {
-<span class="nc" id="L141">        ParameterChecks.assertGreaterEq(std, 0);</span>
-<span class="nc" id="L142">        return random(rng.nextGaussian()*std + mean);</span>
+<span class="nc" id="L138">        ParameterChecks.assertGreaterEq(std, 0);</span>
+<span class="nc" id="L139">        return random(rng.nextGaussian()*std + mean);</span>
     }
 
 
@@ -150,7 +147,7 @@ public class RandomCNumber {
      *      * and an imaginary component of zero.
      */
     public CNumber randomReal() {
-<span class="nc" id="L153">        return new CNumber(rng.nextDouble());</span>
+<span class="nc" id="L150">        return new CNumber(rng.nextDouble());</span>
     }
 
 
@@ -165,16 +162,16 @@ public class RandomCNumber {
      * @throws IllegalArgumentException If {@code min} is not positive or if {@code max} is less than {@code min}.
      */
     public CNumber randomReal(double min, double max) {
-<span class="nc bnc" id="L168" title="All 2 branches missed.">        if(min &lt; 0) {</span>
-<span class="nc" id="L169">            throw new IllegalArgumentException(&quot;Min value must be non-negative but got &quot; + min + &quot;.&quot;);</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        if(min &lt; 0) {</span>
+<span class="nc" id="L166">            throw new IllegalArgumentException(&quot;Min value must be non-negative but got &quot; + min + &quot;.&quot;);</span>
         }
 
-<span class="nc bnc" id="L172" title="All 2 branches missed.">        if(min &gt; max) {</span>
-<span class="nc" id="L173">            throw new IllegalArgumentException(&quot;Max value must be greater than or equal to min but got min=&quot; +</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">        if(min &gt; max) {</span>
+<span class="nc" id="L170">            throw new IllegalArgumentException(&quot;Max value must be greater than or equal to min but got min=&quot; +</span>
                     min + &quot; and max=&quot; + max + &quot;.&quot;);
         }
 
-<span class="nc" id="L177">        return new CNumber(rng.nextDouble()*(max-min) + min);</span>
+<span class="nc" id="L174">        return new CNumber(rng.nextDouble()*(max-min) + min);</span>
     }
 
 
@@ -185,7 +182,7 @@ public class RandomCNumber {
      * deviation of 1.0. The imaginary component will be zero.
      */
     public CNumber randnReal() {
-<span class="nc" id="L188">        return new CNumber(rng.nextGaussian());</span>
+<span class="nc" id="L185">        return new CNumber(rng.nextGaussian());</span>
     }
 
 
@@ -199,8 +196,8 @@ public class RandomCNumber {
      * @throws IllegalArgumentException If standard deviation is negative.
      */
     public CNumber randnReal(double mean, double std) {
-<span class="nc" id="L202">        ParameterChecks.assertGreaterEq(std, 0);</span>
-<span class="nc" id="L203">        return new CNumber(rng.nextGaussian()*std + mean);</span>
+<span class="nc" id="L199">        ParameterChecks.assertGreaterEq(std, 0);</span>
+<span class="nc" id="L200">        return new CNumber(rng.nextGaussian()*std + mean);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
