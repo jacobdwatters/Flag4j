@@ -24,7 +24,7 @@
 
 
 /**
- * The base package of FLag4j which contains the main linear algebra objects. Specifically, real/complex sparse/dense
+ * The base package of Flag4j which contains the main linear algebra objects. Specifically, real/complex sparse/dense
  * vectors, matrices, and tensors.
  */
 package com.flag4j;
