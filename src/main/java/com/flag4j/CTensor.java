@@ -962,4 +962,38 @@ public class CTensor extends TensorBase<CNumber[]> implements
     public double infNorm() {
         return AggregateComplex.maxAbs(entries).re;
     }
+
+
+    /**
+     * Converts this tensor to an equivalent vector. If this tensor is not rank 1, then it will be flattened.
+     * @return A vector equivalent of this tensor.
+     */
+    public CVector toVector() {
+        CNumber[] entries = new CNumber[this.entries.length];
+        ArrayUtils.copy2CNumber(this.entries, entries);
+
+        return new CVector(entries);
+    }
+
+
+    /**
+     * Converts this tensor to an equivalent matrix.
+     * @return If this tensor is rank 2, then the equivalent matrix will be returned.
+     * If the tensor is rank 1, then a matrix with a single row will be returned. If the rank is larger than 2, it will
+     * be flattened to a single row.
+     */
+    public CMatrix toMatrix() {
+        CMatrix mat;
+
+        CNumber[] entries = new CNumber[this.entries.length];
+        ArrayUtils.copy2CNumber(this.entries, entries);
+
+        if(this.getRank()==2) {
+            mat = new CMatrix(this.shape.copy(), entries);
+        } else {
+            mat = new CMatrix(1, this.entries.length, entries);
+        }
+
+        return mat;
+    }
 }

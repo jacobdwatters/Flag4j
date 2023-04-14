@@ -27,23 +27,20 @@ package com.flag4j.operations.dense.real;
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.Tensor;
-import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
-import java.util.Arrays;
-
 
 /**
- * This class contains methods for computing a tensor dot product between two real dense tensors.
+ * This class contains methods for computing a tensor dot product, i.e. tensor contraction, between two real dense tensors.
  */
 public final class RealDenseTensorDot {
 
-<span class="nc" id="L44">    private RealDenseTensorDot() {</span>
+<span class="nc" id="L41">    private RealDenseTensorDot() {</span>
         // Hide utility class constructor.
-<span class="nc" id="L46">        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L43">        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -56,51 +53,50 @@ public final class RealDenseTensorDot {
      * along the second-to-last axis.
      */
     public static Tensor dot(Tensor src1, Tensor src2) {
-<span class="nc" id="L59">        int src1Dim = src1.getRank(); // Rank of first tensor.</span>
-<span class="nc" id="L60">        int src2Dim = src2.getRank(); // Rank of second tensor.</span>
+<span class="nc" id="L56">        int src1Dim = src1.getRank(); // Rank of first tensor.</span>
+<span class="nc" id="L57">        int src2Dim = src2.getRank(); // Rank of second tensor.</span>
 
         // Ensure tensors have same length along last axis.
-<span class="nc" id="L63">        ParameterChecks.assertEquals(src1.shape.get(src1Dim-1), src2.shape.get(src2Dim-2));</span>
+<span class="nc" id="L60">        ParameterChecks.assertEquals(src1.shape.get(src1Dim-1), src2.shape.get(src2Dim-2));</span>
 
-<span class="nc" id="L65">        int axisLength = src1.shape.get(src1Dim-1); // Length of axis along which to compute dot product.</span>
-<span class="nc" id="L66">        Tensor src2Swap = src2.T(src2Dim-1, src2Dim-2);</span>
+<span class="nc" id="L62">        int axisLength = src1.shape.get(src1Dim-1); // Length of axis along which to compute dot product.</span>
+<span class="nc" id="L63">        Tensor src2Swap = src2.T(src2Dim-1, src2Dim-2);</span>
 
-<span class="nc" id="L68">        int iStop = src1.totalEntries().intValueExact()/src1.shape.get(src1Dim-1);</span>
-<span class="nc" id="L69">        int jStop = src2.totalEntries().intValueExact()/src2.shape.get(src2Dim-2);</span>
-<span class="nc" id="L70">        int[] dims = new int[src1Dim+src2Dim-2];</span>
-<span class="nc" id="L71">        int idx = 0;</span>
+<span class="nc" id="L65">        int iStop = src1.totalEntries().intValueExact()/src1.shape.get(src1Dim-1);</span>
+<span class="nc" id="L66">        int jStop = src2.totalEntries().intValueExact()/src2.shape.get(src2Dim-2);</span>
+<span class="nc" id="L67">        int[] dims = new int[src1Dim+src2Dim-2];</span>
+<span class="nc" id="L68">        int idx = 0;</span>
 
         // Copy shape dimensions from each tensor.
-<span class="nc bnc" id="L74" title="All 2 branches missed.">        for(int i=0; i&lt;src1Dim-1; i++) {</span>
-<span class="nc" id="L75">            dims[idx++] = src1.shape.dims[i];</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        for(int i=0; i&lt;src1Dim-1; i++) {</span>
+<span class="nc" id="L72">            dims[idx++] = src1.shape.dims[i];</span>
         }
 
-<span class="nc bnc" id="L78" title="All 2 branches missed.">        for(int i=0; i&lt;src2Dim-1; i++) {</span>
-<span class="nc" id="L79">            dims[idx++] = src2Swap.shape.dims[i];</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        for(int i=0; i&lt;src2Dim-1; i++) {</span>
+<span class="nc" id="L76">            dims[idx++] = src2Swap.shape.dims[i];</span>
         }
 
-<span class="nc" id="L82">        Shape destShape = new Shape(dims);</span>
-<span class="nc" id="L83">        double[] dest = new double[destShape.totalEntries().intValueExact()];</span>
+<span class="nc" id="L79">        Shape destShape = new Shape(dims);</span>
+<span class="nc" id="L80">        double[] dest = new double[destShape.totalEntries().intValueExact()];</span>
         int src1_start, src2_start;
 
-<span class="nc" id="L86">        idx = 0;</span>
-<span class="nc bnc" id="L87" title="All 2 branches missed.">        for(int i=0; i&lt;iStop; i++) {</span>
-<span class="nc" id="L88">            src1_start = i*axisLength;</span>
+<span class="nc" id="L83">        idx = 0;</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        for(int i=0; i&lt;iStop; i++) {</span>
+<span class="nc" id="L85">            src1_start = i*axisLength;</span>
 
-<span class="nc bnc" id="L90" title="All 2 branches missed.">            for(int j=0; j&lt;jStop; j++) {</span>
-<span class="nc" id="L91">                src2_start = j*axisLength;</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">            for(int j=0; j&lt;jStop; j++) {</span>
+<span class="nc" id="L88">                src2_start = j*axisLength;</span>
 
-<span class="nc bnc" id="L93" title="All 2 branches missed.">                for(int k=0; k&lt;axisLength; k++) {</span>
-<span class="nc" id="L94">                    dest[idx] += src1.entries[src1_start + k]*src2Swap.entries[src2_start + k];</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">                for(int k=0; k&lt;axisLength; k++) {</span>
+<span class="nc" id="L91">                    dest[idx] += src1.entries[src1_start + k]*src2Swap.entries[src2_start + k];</span>
                 }
 
-<span class="nc" id="L97">                idx++;</span>
+<span class="nc" id="L94">                idx++;</span>
             }
         }
 
-<span class="nc" id="L101">        return new Tensor(destShape, dest);</span>
+<span class="nc" id="L98">        return new Tensor(destShape, dest);</span>
     }
-
 
 
     /**
@@ -117,7 +113,14 @@ public final class RealDenseTensorDot {
      * are out of bounds for the corresponding tensor.
      */
     public static Tensor tensorDot(Tensor src1, Tensor src2, int[] src1Axes, int[] src2Axes) {
-        // TODO: Add parameter checks.
+        // Each array must specify the same number of axes.
+<span class="nc" id="L117">        ParameterChecks.assertEquals(src1Axes.length, src2Axes.length);</span>
+
+        // Axis values must be less than the rank of the tensor and non-negative
+<span class="nc" id="L120">        ParameterChecks.assertLessEq(src1.getRank()-1, src1Axes);</span>
+<span class="nc" id="L121">        ParameterChecks.assertGreaterEq(0, src1Axes);</span>
+<span class="nc" id="L122">        ParameterChecks.assertLessEq(src2.getRank()-1, src2Axes);</span>
+<span class="nc" id="L123">        ParameterChecks.assertGreaterEq(0, src2Axes);</span>
 
         int[] notin;
         int n1;
@@ -125,107 +128,59 @@ public final class RealDenseTensorDot {
         int pos;
 
         // ---- Compute new axes and shapes for first tensor. ----
-<span class="nc" id="L128">        notin = notin(src1Axes, src1.getRank());</span>
-<span class="nc" id="L129">        int[] src1NewAxes = ArrayUtils.join(notin, src1Axes);</span>
+<span class="nc" id="L131">        notin = ArrayUtils.notinAxes(src1Axes, src1.getRank());</span>
+<span class="nc" id="L132">        int[] src1NewAxes = ArrayUtils.join(notin, src1Axes);</span>
 
-<span class="nc" id="L131">        n2 = 1;</span>
-<span class="nc bnc" id="L132" title="All 2 branches missed.">        for(int axis : src1Axes) {</span>
-<span class="nc" id="L133">            n2 *= src1.shape.get(axis);</span>
+<span class="nc" id="L134">        n2 = 1;</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        for(int axis : src1Axes) {</span>
+<span class="nc" id="L136">            n2 *= src1.shape.get(axis);</span>
         }
 
-<span class="nc" id="L136">        n1 = 1;</span>
-<span class="nc" id="L137">        int[] src1OldDims = new int[notin.length];</span>
-<span class="nc" id="L138">        pos = 0;</span>
-<span class="nc bnc" id="L139" title="All 2 branches missed.">        for(int axis : notin) {</span>
-<span class="nc" id="L140">            n1 *= src1.shape.get(axis);</span>
-<span class="nc" id="L141">            src1OldDims[pos++] = src1.shape.get(axis);</span>
+<span class="nc" id="L139">        n1 = 1;</span>
+<span class="nc" id="L140">        int[] src1OldDims = new int[notin.length];</span>
+<span class="nc" id="L141">        pos = 0;</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        for(int axis : notin) {</span>
+<span class="nc" id="L143">            n1 *= src1.shape.get(axis);</span>
+<span class="nc" id="L144">            src1OldDims[pos++] = src1.shape.get(axis);</span>
         }
 
-<span class="nc" id="L144">        Shape src1NewShape = new Shape(n1, n2);</span>
+<span class="nc" id="L147">        Shape src1NewShape = new Shape(n1, n2);</span>
         // -----------------------------------------------------
 
         // ---- Compute new axes and shapes for second tensor. ----
-<span class="nc" id="L148">        notin = notin(src2Axes, src2.getRank());</span>
-<span class="nc" id="L149">        int[] src2NewAxes = ArrayUtils.join(src2Axes, notin);</span>
+<span class="nc" id="L151">        notin = ArrayUtils.notinAxes(src2Axes, src2.getRank());</span>
+<span class="nc" id="L152">        int[] src2NewAxes = ArrayUtils.join(src2Axes, notin);</span>
 
-<span class="nc" id="L151">        n2 = 1;</span>
-<span class="nc bnc" id="L152" title="All 2 branches missed.">        for(int axis : src2Axes) {</span>
-<span class="nc" id="L153">            n2 *= src2.shape.get(axis);</span>
+<span class="nc" id="L154">        n2 = 1;</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        for(int axis : src2Axes) {</span>
+<span class="nc" id="L156">            n2 *= src2.shape.get(axis);</span>
         }
 
-<span class="nc" id="L156">        n1 = 1;</span>
-<span class="nc" id="L157">        pos = 0;</span>
-<span class="nc" id="L158">        int[] src2OldDims = new int[notin.length];</span>
-<span class="nc bnc" id="L159" title="All 2 branches missed.">        for(int axis : notin) {</span>
-<span class="nc" id="L160">            n1 *= src2.shape.get(axis);</span>
-<span class="nc" id="L161">            src2OldDims[pos++] = src2.shape.get(axis);</span>
+<span class="nc" id="L159">        n1 = 1;</span>
+<span class="nc" id="L160">        pos = 0;</span>
+<span class="nc" id="L161">        int[] src2OldDims = new int[notin.length];</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">        for(int axis : notin) {</span>
+<span class="nc" id="L163">            n1 *= src2.shape.get(axis);</span>
+<span class="nc" id="L164">            src2OldDims[pos++] = src2.shape.get(axis);</span>
         }
 
-<span class="nc" id="L164">        Shape src2NewShape = new Shape(n2, n1);</span>
+<span class="nc" id="L167">        Shape src2NewShape = new Shape(n2, n1);</span>
         // -----------------------------------------------------
 
         // Reform problem as a matrix multiplication problem.
-<span class="nc" id="L168">        Matrix at = new Matrix(src1NewShape, RealDenseTranspose.standard(src1.entries, src1.shape, src1NewAxes));</span>
-<span class="nc" id="L169">        Matrix bt = new Matrix(src2NewShape, RealDenseTranspose.standard(src2.entries, src2.shape, src2NewAxes));</span>
+<span class="nc" id="L171">        Matrix at = new Matrix(</span>
+                src1NewShape,
+<span class="nc" id="L173">                RealDenseTranspose.standardConcurrent(src1.entries, src1.shape, src1NewAxes)</span>
+        );
+<span class="nc" id="L175">        Matrix bt = new Matrix(</span>
+                src2NewShape,
+<span class="nc" id="L177">                RealDenseTranspose.standardConcurrent(src2.entries, src2.shape, src2NewAxes)</span>
+        );
 
-<span class="nc" id="L171">        double[] destEntries = RealDenseMatrixMultiplyDispatcher.dispatch(at, bt);</span>
-<span class="nc" id="L172">        Shape destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));</span>
+<span class="nc" id="L180">        double[] destEntries = RealDenseMatrixMultiplyDispatcher.dispatch(at, bt);</span>
+<span class="nc" id="L181">        Shape destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));</span>
 
-<span class="nc" id="L174">        return new Tensor(destShape, destEntries);</span>
+<span class="nc" id="L183">        return new Tensor(destShape, destEntries);</span>
     }
-
-
-    /**
-     * Given a list of integers, {@code srcAxes} which is a subset of {@code { 0, 1, 2, ...., dim-1}}
-     * in no particular order, compute the integers which are in {@code {0, 1, 2, ...., dim-1}} but not in
-     * {@code srcAxes}.
-     * @param srcAxes Source axes which contains a subset of {@code {0, 1, 2, ...., dim-1}} in no particular order.
-     * @param dim Dimension of space which contains the axes of interest.
-     * @return An array containing the set subtraction {@code {0, 1, 2, ...., dim-1}} - srcAxes.
-     */
-    private static int[] notin(int[] srcAxes, int dim) {
-<span class="nc" id="L187">        int[] notin = new int[dim-srcAxes.length];</span>
-
-        // Copy and sort array.
-<span class="nc" id="L190">        int[] srcAxesCopy = srcAxes.clone();</span>
-<span class="nc" id="L191">        Arrays.sort(srcAxesCopy);</span>
-
-<span class="nc" id="L193">        int srcIndex = 0;</span>
-<span class="nc" id="L194">        int notinIndex = 0;</span>
-
-<span class="nc bnc" id="L196" title="All 2 branches missed.">        for(int i=0; i&lt;dim; i++) {</span>
-<span class="nc bnc" id="L197" title="All 4 branches missed.">            if(srcIndex&lt;srcAxesCopy.length &amp;&amp; srcAxesCopy[srcIndex]==i) {</span>
-<span class="nc" id="L198">                srcIndex++;</span>
-            } else {
-<span class="nc" id="L200">                notin[notinIndex++] = i;</span>
-            }
-        }
-
-<span class="nc" id="L204">        return notin;</span>
-    }
-
-
-    public static void main(String[] args) {
-<span class="nc" id="L209">        double[] aEntries = {0.3745401188473625, 0.9507143064099162, 0.7319939418114051, 0.5986584841970366, 0.15601864044243652, 0.15599452033620265, 0.05808361216819946, 0.8661761457749352, 0.6011150117432088, 0.7080725777960455, 0.020584494295802447, 0.9699098521619943, 0.8324426408004217, 0.21233911067827616, 0.18182496720710062};</span>
-<span class="nc" id="L210">        double[] bEntries = {0.18340450985343382, 0.3042422429595377, 0.5247564316322378, 0.43194501864211576, 0.2912291401980419, 0.6118528947223795, 0.13949386065204183, 0.29214464853521815, 0.3663618432936917, 0.45606998421703593, 0.7851759613930136, 0.19967378215835974, 0.5142344384136116, 0.5924145688620425, 0.046450412719997725, 0.6075448519014384, 0.17052412368729153, 0.06505159298527952, 0.9488855372533332, 0.9656320330745594, 0.8083973481164611, 0.3046137691733707, 0.09767211400638387, 0.6842330265121569, 0.4401524937396013, 0.12203823484477883, 0.4951769101112702, 0.034388521115218396, 0.9093204020787821, 0.2587799816000169};</span>
-<span class="nc" id="L211">        double[] cExpEntries = {3.516342802930239, 2.9700898388124166};</span>
-
-<span class="nc" id="L213">        Shape aShape = new Shape(1, 5, 3);</span>
-<span class="nc" id="L214">        Shape bShape = new Shape(3, 2, 5);</span>
-<span class="nc" id="L215">        Shape cExpShape = new Shape(1, 2);</span>
-
-<span class="nc" id="L217">        Tensor A = new Tensor(aShape, aEntries);</span>
-<span class="nc" id="L218">        Tensor B = new Tensor(bShape, bEntries);</span>
-<span class="nc" id="L219">        Tensor C_Exp = new Tensor(cExpShape, cExpEntries);</span>
-
-<span class="nc" id="L221">        int[] aAxes = {1, 2};</span>
-<span class="nc" id="L222">        int[] bAxes = {2, 0};</span>
-
-<span class="nc" id="L224">        Tensor C_Act = tensorDot(A, B, aAxes, bAxes);</span>
-
-<span class="nc" id="L226">        System.out.println(&quot;Exp: &quot; + Arrays.toString(C_Exp.entries));</span>
-<span class="nc" id="L227">        System.out.println(&quot;Act: &quot; + Arrays.toString(C_Act.entries));</span>
-<span class="nc" id="L228">        System.out.println(&quot;Equal: &quot; + C_Act.equals(C_Exp));</span>
-<span class="nc" id="L229">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -43,10 +43,6 @@ public interface TensorExclusiveMixin<T, U, V> {
 
     // TODO: add toVector() and toMatrix() methods.
 
-    // TODO: Add tensor contraction methods (i.e.) tensorDot(...),
-    //      Also add transpose(int[] axes) where axes is a permutation of [0, 1, ..., N-1] where
-    //      the tensor is rank N.
-
     /**
      * Computes the tensor contraction of this tensor with a specified tensor over the specified axes. That is,
      * computes the sum of products between the two tensors along the specified axes.

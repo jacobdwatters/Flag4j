@@ -56,6 +56,7 @@ com\flag4j\matrix\MatrixReshapeTests.class
 com\flag4j\matrix\RealComplexDenseSparseMatMultTests.class
 com\flag4j\tensor\ReshapeTests.class
 com\flag4j\complex_matrix\CMatrixRemoveRowColTests.class
+com\flag4j\operations\dense\complex\CMatrixMultiplyTests.class
 com\flag4j\matrix\MatrixDirectSumTests.class
 com\flag4j\matrix\MatrixSetOperationTests.class
 com\flag4j\tensor\TensorConversionTests.class

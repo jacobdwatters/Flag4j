@@ -1047,4 +1047,32 @@ public class Tensor extends TensorBase<double[]> implements
                 RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
     }
+
+
+    /**
+     * Converts this tensor to an equivalent vector. If this tensor is not rank 1, then it will be flattened.
+     * @return A vector equivalent of this tensor.
+     */
+    public Vector toVector() {
+        return new Vector(this.entries.clone());
+    }
+
+
+    /**
+     * Converts this tensor to an equivalent matrix.
+     * @return If this tensor is rank 2, then the equivalent matrix will be returned.
+     * If the tensor is rank 1, then a matrix with a single row will be returned. If the rank is larger than 2, it will
+     * be flattened to a single row.
+     */
+    public Matrix toMatrix() {
+        Matrix mat;
+
+        if(this.getRank()==2) {
+            mat = new Matrix(this.shape.copy(), this.entries.clone());
+        } else {
+            mat = new Matrix(1, this.entries.length, this.entries.clone());
+        }
+
+        return mat;
+    }
 }
