@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComplexDenseOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense.complex</a> &gt; <span class="el_source">ComplexDenseOperations.java</span></div><h1>ComplexDenseOperations.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022-2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense.complex;
+
+import com.flag4j.Shape;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.Axis2D;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
+
+import static com.flag4j.operations.common.complex.AggregateComplex.maxAbs;
+import static com.flag4j.operations.common.real.AggregateReal.maxAbs;
+
+
+/**
+ * This class provides low level methods for computing operations on dense complex tensors.
+ */
+public final class ComplexDenseOperations {
+
+<span class="nc" id="L43">    private ComplexDenseOperations() {</span>
+        // Hide constructor
+<span class="nc" id="L45">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition of two tensors.
+     * @param src1 Entries of first tensor.
+     * @param shape1 Shape of first tensor.
+     * @param src2 Entries of second tensor.
+     * @param shape2 Shape of second tensor.
+     * @return The element wise addition of two tensors.
+     * @throws IllegalArgumentException If entry arrays are not the same size.
+     */
+    public static CNumber[] add(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="fc" id="L59">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+
+<span class="fc" id="L61">        CNumber[] sum = new CNumber[src1.length];</span>
+
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L64">            sum[i] = src1[i].add(src2[i]);</span>
+        }
+
+<span class="fc" id="L67">        return sum;</span>
+    }
+
+
+    /**
+     * Adds a scalar value to all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The tensor-scalar addition of the two parameters.
+     */
+    public static CNumber[] add(CNumber[] src1, CNumber a) {
+<span class="fc" id="L78">        CNumber[] sum = new CNumber[src1.length];</span>
+
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L81">            sum[i] = src1[i].add(a);</span>
+        }
+
+<span class="fc" id="L84">        return sum;</span>
+    }
+
+
+    /**
+     * Adds a scalar value to all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The tensor-scalar addition of the two parameters.
+     */
+    public static CNumber[] add(double[] src1, CNumber a) {
+<span class="fc" id="L95">        CNumber[] sum = new CNumber[src1.length];</span>
+
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L98">            sum[i] = a.add(src1[i]);</span>
+        }
+
+<span class="fc" id="L101">        return sum;</span>
+    }
+
+
+    /**
+     * Subtracts a scalar value to all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The tensor-scalar addition of the two parameters.
+     */
+    public static CNumber[] sub(double[] src1, CNumber a) {
+<span class="fc" id="L112">        CNumber[] sum = new CNumber[src1.length];</span>
+<span class="fc" id="L113">        ArrayUtils.fillZeros(sum);</span>
+
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L116">            sum[i].re = src1[i]-a.re;</span>
+<span class="fc" id="L117">            sum[i].im = -a.im;</span>
+        }
+
+<span class="fc" id="L120">        return sum;</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors.
+     * @param src1 Entries of first tensor.
+     * @param shape1 Shape of first tensor.
+     * @param src2 Entries of second tensor.
+     * @param shape2 Shape of second tensor.
+     * @return The element wise subtraction of two tensors.
+     * @throws IllegalArgumentException If entry arrays are not the same size.
+     */
+    public static CNumber[] sub(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="fc" id="L134">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+
+<span class="fc" id="L136">        CNumber[] diff = new CNumber[src1.length];</span>
+
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        for(int i=0; i&lt;diff.length; i++) {</span>
+<span class="fc" id="L139">            diff[i] = src1[i].sub(src2[i]);</span>
+        }
+
+<span class="fc" id="L142">        return diff;</span>
+    }
+
+
+    /**
+     * Subtracts a scalar value from all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The tensor-scalar subtraction of the two parameters.
+     */
+    public static CNumber[] sub(CNumber[] src1, CNumber a) {
+<span class="fc" id="L153">        CNumber[] sum = new CNumber[src1.length];</span>
+
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L156">            sum[i] = src1[i].sub(a);</span>
+        }
+
+<span class="fc" id="L159">        return sum;</span>
+    }
+
+
+    /**
+     * Computes element-wise subtraction between tensors and stores the result in the first tensor.
+     * @param src1 First tensor in subtraction. Also, where the result will be stored.
+     * @param shape1 Shape of first tensor.
+     * @param src2 Second tensor in the subtraction.
+     * @param shape2 Shape of second tensor.
+     */
+    public static void subEq(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="fc" id="L171">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L174">            src1[i].subEq(src2[i]);</span>
+        }
+<span class="fc" id="L176">    }</span>
+
+
+    /**
+     * Subtracts a scalar from each entry of this tensor and stores the result in the tensor.
+     * @param src Tensor in subtraction. Also, where the result will be stored.
+     * @param b Scalar to subtract.
+     */
+    public static void subEq(CNumber[] src, CNumber b) {
+<span class="fc bfc" id="L185" title="All 2 branches covered.">        for(CNumber cNumber : src) {</span>
+<span class="fc" id="L186">            cNumber.subEq(b);</span>
+        }
+<span class="fc" id="L188">    }</span>
+
+
+    /**
+     * Computes element-wise addition between tensors and stores the result in the first tensor.
+     * @param src1 First tensor in addition. Also, where the result will be stored.
+     * @param shape1 Shape of first tensor.
+     * @param src2 Second tensor in the addition.
+     * @param shape2 Shape of second tensor.
+     */
+    public static void addEq(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="fc" id="L199">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L202">            src1[i].addEq(src2[i]);</span>
+        }
+<span class="fc" id="L204">    }</span>
+
+
+    /**
+     * Adds a scalar from each entry of this tensor and stores the result in the tensor.
+     * @param src Tensor in addition. Also, where the result will be stored.
+     * @param b Scalar to add.
+     */
+    public static void addEq(CNumber[] src, CNumber b) {
+<span class="fc bfc" id="L213" title="All 2 branches covered.">        for (CNumber cNumber : src) {</span>
+<span class="fc" id="L214">            cNumber.addEq(b);</span>
+        }
+<span class="fc" id="L216">    }</span>
+
+
+    /**
+     * Sums all entries in a tensor.
+     * @param src Entries of tensor to sum.
+     * @return The sum of all entries in the tensor.
+     */
+    public static CNumber sum(CNumber[] src) {
+<span class="nc" id="L225">        CNumber sum = new CNumber();</span>
+
+<span class="nc bnc" id="L227" title="All 2 branches missed.">        for(CNumber value : src) {</span>
+<span class="nc" id="L228">           sum = sum.add(value);</span>
+        }
+
+<span class="nc" id="L231">        return sum;</span>
+    }
+
+
+    /**
+     * Multiplies all entries in a tensor.
+     * @param src Entries of tensor to compute product of.
+     * @return The product of all src in the tensor.
+     */
+    public static CNumber prod(CNumber[] src) {
+        CNumber product;
+
+<span class="fc bfc" id="L243" title="All 2 branches covered.">        if(src.length&gt;0) {</span>
+<span class="fc" id="L244">            product = new CNumber(1);</span>
+<span class="fc bfc" id="L245" title="All 2 branches covered.">            for(CNumber value : src) {</span>
+<span class="fc" id="L246">               product = product.mult(value);</span>
+            }
+        } else {
+<span class="fc" id="L249">            product = new CNumber();</span>
+        }
+
+<span class="fc" id="L252">        return product;</span>
+    }
+
+
+    /**
+     * Computes the scalar multiplication of a tensor.
+     * @param entries Entries of the tensor.
+     * @param a Scalar value to multiply.
+     * @return The scalar multiplication of the tensor.
+     */
+    public static CNumber[] scalMult(CNumber[] entries, CNumber a) {
+<span class="fc" id="L263">        CNumber[] product = new CNumber[entries.length];</span>
+
+<span class="fc bfc" id="L265" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L266">            product[i] = entries[i].mult(a);</span>
+        }
+
+<span class="fc" id="L269">        return product;</span>
+    }
+
+
+    /**
+     * Computes the scalar multiplication of a tensor.
+     * @param entries Entries of the tensor.
+     * @param a Scalar value to multiply.
+     * @return The scalar multiplication of the tensor.
+     */
+    public static CNumber[] scalMult(CNumber[] entries, double a) {
+<span class="fc" id="L280">        CNumber[] product = new CNumber[entries.length];</span>
+
+<span class="fc bfc" id="L282" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L283">            product[i] = entries[i].mult(a);</span>
+        }
+
+<span class="fc" id="L286">        return product;</span>
+    }
+
+
+    /**
+     * Computes the scalar division of a tensor.
+     * @param entries Entries of the tensor.
+     * @param divisor Scalar value to divide by.
+     * @return The scalar division of the tensor.
+     */
+    public static CNumber[] scalDiv(CNumber[] entries, CNumber divisor) {
+<span class="fc" id="L297">        CNumber[] quotient = new CNumber[entries.length];</span>
+
+<span class="fc bfc" id="L299" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
+<span class="fc" id="L300">            quotient[i] = entries[i].div(divisor);</span>
+        }
+
+<span class="fc" id="L303">        return quotient;</span>
+    }
+
+
+    /**
+     * Computes the reciprocals, element-wise, of a tensor.
+     * @param src Elements of the tensor.
+     * @return The element-wise reciprocals of the tensor.
+     */
+    public static CNumber[] recep(CNumber[] src) {
+<span class="fc" id="L313">        CNumber[] receps = new CNumber[src.length];</span>
+
+<span class="fc bfc" id="L315" title="All 2 branches covered.">        for(int i=0; i&lt;receps.length; i++) {</span>
+<span class="fc" id="L316">            receps[i] = src[i].addInv();</span>
+        }
+
+<span class="fc" id="L319">        return receps;</span>
+    }
+
+
+    /**
+     * Compute the L&lt;sub&gt;p, q&lt;/sub&gt; norm of a matrix.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p First parameter in L&lt;sub&gt;p, q&lt;/sub&gt; norm.
+     * @param q Second parameter in L&lt;sub&gt;p, q&lt;/sub&gt; norm.
+     * @return The L&lt;sub&gt;p, q&lt;/sub&gt; norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
+     */
+    public static double matrixNormLpq(CNumber[] src, Shape shape, double p, double q) {
+<span class="nc" id="L333">        ParameterChecks.assertGreaterEq(1, p, q);</span>
+
+<span class="nc" id="L335">        double norm = 0;</span>
+        double colSum;
+<span class="nc" id="L337">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="nc" id="L338">        int cols = shape.dims[Axis2D.col()];</span>
+
+<span class="nc bnc" id="L340" title="All 2 branches missed.">        for(int j=0; j&lt;cols; j++) {</span>
+<span class="nc" id="L341">            colSum = 0;</span>
+<span class="nc bnc" id="L342" title="All 2 branches missed.">            for(int i=0; i&lt;rows; i++) {</span>
+<span class="nc" id="L343">                colSum += (Math.pow(src[i*cols + j].magAsDouble(), p));</span>
+            }
+<span class="nc" id="L345">            norm += Math.pow(colSum, q/p);</span>
+        }
+
+<span class="nc" id="L348">        return Math.pow(norm, 1/q);</span>
+    }
+
+
+    /**
+     * Compute the L&lt;sub&gt;p&lt;/sub&gt; norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link ComplexDenseOperations#matrixNormLpq(CNumber[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p Parameter in L&lt;sub&gt;p&lt;/sub&gt; norm.
+     * @return The L&lt;sub&gt;p&lt;/sub&gt; norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} is less than 1.
+     */
+    public static double matrixNormLp(CNumber[] src, Shape shape, double p) {
+<span class="nc" id="L362">        ParameterChecks.assertGreaterEq(1, p);</span>
+
+<span class="nc" id="L364">        double norm = 0;</span>
+        double colSum;
+<span class="nc" id="L366">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="nc" id="L367">        int cols = shape.dims[Axis2D.col()];</span>
+
+<span class="nc bnc" id="L369" title="All 2 branches missed.">        for(int j=0; j&lt;cols; j++) {</span>
+<span class="nc" id="L370">            colSum=0;</span>
+<span class="nc bnc" id="L371" title="All 2 branches missed.">            for(int i=0; i&lt;rows; i++) {</span>
+<span class="nc" id="L372">                colSum += Math.pow(src[i*cols + j].magAsDouble(), p);</span>
+            }
+
+<span class="nc" id="L375">            norm += Math.pow(colSum, 1.0/p);</span>
+        }
+
+<span class="nc" id="L378">        return norm;</span>
+    }
+
+
+    /**
+     * Compute the L&lt;sub&gt;2&lt;/sub&gt; norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link ComplexDenseOperations#matrixNormLpq(CNumber[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return The L&lt;sub&gt;2&lt;/sub&gt; norm of the matrix.
+     */
+    public static double matrixNormL2(CNumber[] src, Shape shape) {
+<span class="nc" id="L390">        double norm = 0;</span>
+<span class="nc" id="L391">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="nc" id="L392">        int cols = shape.dims[Axis2D.col()];</span>
+
+        double colSum;
+
+<span class="nc bnc" id="L396" title="All 2 branches missed.">        for(int j=0; j&lt;cols; j++) {</span>
+<span class="nc" id="L397">            colSum = 0;</span>
+<span class="nc bnc" id="L398" title="All 2 branches missed.">            for(int i=0; i&lt;rows; i++) {</span>
+<span class="nc" id="L399">                colSum += Math.pow(src[i*cols + j].magAsDouble(), 2);</span>
+            }
+<span class="nc" id="L401">            norm += Math.sqrt(colSum);</span>
+        }
+
+<span class="nc" id="L404">        return norm;</span>
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
+     * @param src Entries of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    public static double matrixMaxNorm(CNumber[] src) {
+<span class="nc" id="L414">        return maxAbs(src).re;</span>
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum absolute value in this matrix.
+     * @param src Entries of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    public static double matrixInfNorm(CNumber[] src, Shape shape) {
+<span class="nc" id="L424">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="nc" id="L425">        int cols = shape.dims[Axis2D.col()];</span>
+<span class="nc" id="L426">        double[] rowSums = new double[rows];</span>
+
+<span class="nc bnc" id="L428" title="All 2 branches missed.">        for(int i=0; i&lt;rows; i++) {</span>
+<span class="nc bnc" id="L429" title="All 2 branches missed.">            for(int j=0; j&lt;cols; j++) {</span>
+<span class="nc" id="L430">                rowSums[i] += src[i*cols + j].magAsDouble();</span>
+            }
+        }
+
+<span class="nc" id="L434">        return maxAbs(rowSums);</span>
+    }
+
+
+    /**
+     * Computes the L&lt;sub&gt;2&lt;/sub&gt; norm of a tensor (i.e. the Frobenius norm).
+     * @param src Entries of the tensor.
+     * @return The L&lt;sub&gt;2&lt;/sub&gt; norm of the tensor.
+     */
+    public static double tensorNormL2(CNumber[] src) {
+<span class="nc" id="L444">        double norm = 0;</span>
+
+<span class="nc bnc" id="L446" title="All 2 branches missed.">        for(CNumber cNumber : src) {</span>
+<span class="nc" id="L447">            norm += CNumber.pow(cNumber, 2).magAsDouble();</span>
+        }
+
+<span class="nc" id="L450">        return Math.sqrt(norm);</span>
+    }
+
+
+    /**
+     * Computes the L&lt;sub&gt;p&lt;/sub&gt; norm of a tensor (i.e. the Frobenius norm).
+     * @param src Entries of the tensor.
+     * @param p The {@code p} parameter of the L&lt;sub&gt;p&lt;/sub&gt; norm.
+     * @return The L&lt;sub&gt;p&lt;/sub&gt; norm of the tensor.
+     */
+    public static double tensorNormLp(CNumber[] src, double p) {
+<span class="nc" id="L461">        double norm = 0;</span>
+
+<span class="nc bnc" id="L463" title="All 2 branches missed.">        for(CNumber cNumber : src) {</span>
+<span class="nc" id="L464">            norm += CNumber.pow(cNumber, p).magAsDouble();</span>
+        }
+
+<span class="nc" id="L467">        return Math.pow(norm, 1.0/p);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

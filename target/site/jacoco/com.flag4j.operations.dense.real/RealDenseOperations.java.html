@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealDenseOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense.real</a> &gt; <span class="el_source">RealDenseOperations.java</span></div><h1>RealDenseOperations.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022-2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense.real;
+
+import com.flag4j.Shape;
+import com.flag4j.operations.common.real.RealOperations;
+import com.flag4j.util.Axis2D;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
+
+import static com.flag4j.operations.common.real.AggregateReal.maxAbs;
+
+/**
+ * This class provides low level methods for computing operations on real dense tensors.
+ */
+public final class RealDenseOperations {
+
+<span class="nc" id="L40">    private RealDenseOperations() {</span>
+        // Hide constructor
+<span class="nc" id="L42">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition of two tensors.
+     * @param src1 Entries of first Tensor of the addition.
+     * @param shape1 Shape of first tensor.
+     * @param src2 Entries of second Tensor of the addition.
+     * @param shape2 Shape of second tensor.
+     * @return The element wise addition of two tensors.
+     * @throws IllegalArgumentException If entry arrays are not the same size.
+     */
+    public static double[] add(final double[] src1, final Shape shape1,
+                               final double[] src2, final Shape shape2) {
+<span class="fc" id="L57">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L58">        int length = src1.length;</span>
+<span class="fc" id="L59">        double[] sum = new double[length];</span>
+
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="fc" id="L62">            sum[i] = src1[i] + src2[i];</span>
+        }
+
+<span class="fc" id="L65">        return sum;</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors.
+     * @param src1 Entries of first tensor.
+     * @param shape1 Shape of first tensor.
+     * @param src2 Entries of second tensor.
+     * @param shape2 Shape of second tensor.
+     * @return The element wise subtraction of two tensors.
+     * @throws IllegalArgumentException If entry arrays are not the same size.
+     */
+    public static double[] sub(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L79">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L80">        double[] sum = new double[src1.length];</span>
+
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        for(int i=0; i&lt;sum.length; i++) {</span>
+<span class="fc" id="L83">            sum[i] = src1[i] - src2[i];</span>
+        }
+
+<span class="fc" id="L86">        return sum;</span>
+    }
+
+
+    /**
+     * Subtracts a scalar from every element of a tensor.
+     * @param src Entries of tensor to add scalar to.
+     * @param b Scalar to subtract from tensor.
+     * @return The tensor scalar subtraction.
+     */
+    public static double[] sub(double[] src, double b) {
+<span class="fc" id="L97">        double[] sum = new double[src.length];</span>
+
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L100">            sum[i] = src[i] - b;</span>
+        }
+
+<span class="fc" id="L103">        return sum;</span>
+    }
+
+
+    /**
+     * Computes element-wise subtraction between tensors and stores the result in the first tensor.
+     * @param src1 First tensor in subtraction. Also, where the result will be stored.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in the subtraction.
+     * @param shape2 Shape of the second tensor.
+     * @throws IllegalArgumentException If tensors are not the same shape.
+     */
+    public static void subEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L116">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L119">            src1[i] -= src2[i];</span>
+        }
+<span class="fc" id="L121">    }</span>
+
+
+    /**
+     * Subtracts a scalar from each entry of this tensor and stores the result in the tensor.
+     * @param src Tensor in subtraction. Also, where the result will be stored.
+     * @param b Scalar to subtract.
+     */
+    public static void subEq(double[] src, double b) {
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L131">            src[i] -= b;</span>
+        }
+<span class="fc" id="L133">    }</span>
+
+
+    /**
+     * Computes element-wise addition between tensors and stores the result in the first tensor.
+     * @param src1 First tensor in addition. Also, where the result will be stored.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in the addition.
+     * @param shape2 Shape of the second tensor.
+     * @throws IllegalArgumentException If tensors are not the same shape.
+     */
+    public static void addEq(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L145">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L148">            src1[i] += src2[i];</span>
+        }
+<span class="fc" id="L150">    }</span>
+
+
+    /**
+     * Adds a scalar from each entry of this tensor and stores the result in the tensor.
+     * @param src Tensor in addition. Also, where the result will be stored.
+     * @param b Scalar to add.
+     */
+    public static void addEq(double[] src, double b) {
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L160">            src[i] += b;</span>
+        }
+<span class="fc" id="L162">    }</span>
+
+
+    /**
+     * Multiplies all entries in a tensor.
+     * @param src The entries of the tensor.
+     * @return The product of all entries in the tensor.
+     */
+    public static double prod(double[] src) {
+        double product;
+
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        if(src.length &gt; 0) {</span>
+<span class="fc" id="L174">            product=1;</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">            for(double value : src) {</span>
+<span class="fc" id="L176">                product *= value;</span>
+            }
+        } else {
+<span class="fc" id="L179">            product=0;</span>
+        }
+
+<span class="fc" id="L182">        return product;</span>
+    }
+
+
+    /**
+     * Computes the scalar division of a tensor.
+     * @param src Entries of the tensor.
+     * @param divisor Scalar to divide by.
+     * @return The scalar division of the tensor.
+     */
+    public static double[] scalDiv(double[] src, double divisor) {
+<span class="fc" id="L193">        return RealOperations.scalDiv(src, divisor);</span>
+    }
+
+
+    /**
+     * Computes the reciprocals, element-wise, of a tensor.
+     * @param src Elements of the tensor.
+     * @return The element-wise reciprocals of the tensor.
+     */
+    public static double[] recip(double[] src) {
+<span class="fc" id="L203">        double[] receps = new double[src.length];</span>
+
+<span class="fc bfc" id="L205" title="All 2 branches covered.">        for(int i=0; i&lt;receps.length; i++) {</span>
+<span class="fc" id="L206">            receps[i] = 1/src[i];</span>
+        }
+
+<span class="fc" id="L209">        return receps;</span>
+    }
+
+
+    /**
+     * Compute the L&lt;sub&gt;p, q&lt;/sub&gt; norm of a matrix.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p First parameter in L&lt;sub&gt;p, q&lt;/sub&gt; norm.
+     * @param q Second parameter in L&lt;sub&gt;p, q&lt;/sub&gt; norm.
+     * @return The L&lt;sub&gt;p, q&lt;/sub&gt; norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} or {@code q} is less than 1.
+     */
+    public static double matrixNormLpq(double[] src, Shape shape, double p, double q) {
+<span class="fc" id="L223">        ParameterChecks.assertGreaterEq(1, p, q);</span>
+
+<span class="fc" id="L225">        double norm = 0;</span>
+        double colSum;
+<span class="fc" id="L227">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="fc" id="L228">        int cols = shape.dims[Axis2D.col()];</span>
+
+<span class="fc bfc" id="L230" title="All 2 branches covered.">        for(int j=0; j&lt;cols; j++) {</span>
+<span class="fc" id="L231">            colSum=0;</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">            for(int i=0; i&lt;rows; i++) {</span>
+<span class="fc" id="L233">                colSum += Math.pow(Math.abs(src[i*cols + j]), p);</span>
+            }
+<span class="fc" id="L235">            norm += Math.pow(colSum, q/p);</span>
+        }
+
+<span class="fc" id="L238">        return Math.pow(norm, 1/q);</span>
+    }
+
+
+    /**
+     * Compute the L&lt;sub&gt;p&lt;/sub&gt; norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link RealDenseOperations#matrixNormLpq(double[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @param p Parameter in L&lt;sub&gt;p&lt;/sub&gt; norm.
+     * @return The L&lt;sub&gt;p&lt;/sub&gt; norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} is less than 1.
+     */
+    public static double matrixNormLp(double[] src, Shape shape, double p) {
+<span class="fc" id="L252">        ParameterChecks.assertGreaterEq(1, p);</span>
+
+<span class="fc" id="L254">        double norm = 0;</span>
+        double colSum;
+<span class="fc" id="L256">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="fc" id="L257">        int cols = shape.dims[Axis2D.col()];</span>
+
+<span class="fc bfc" id="L259" title="All 2 branches covered.">        for(int j=0; j&lt;cols; j++) {</span>
+<span class="fc" id="L260">            colSum=0;</span>
+<span class="fc bfc" id="L261" title="All 2 branches covered.">            for(int i=0; i&lt;rows; i++) {</span>
+<span class="fc" id="L262">                colSum += Math.pow(Math.abs(src[i*cols + j]), p);</span>
+            }
+
+<span class="fc" id="L265">            norm += Math.pow(colSum, 1.0/p);</span>
+        }
+
+<span class="fc" id="L268">        return norm;</span>
+    }
+
+
+    /**
+     * Compute the L&lt;sub&gt;2&lt;/sub&gt; norm of a matrix. This is equivalent to passing {@code q=1} to
+     * {@link RealDenseOperations#matrixNormLpq(double[], Shape, double, double)}
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return The L&lt;sub&gt;2&lt;/sub&gt; norm of the matrix.
+     */
+    public static double matrixNormL2(double[] src, Shape shape) {
+<span class="fc" id="L280">        double norm = 0;</span>
+<span class="fc" id="L281">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="fc" id="L282">        int cols = shape.dims[Axis2D.col()];</span>
+
+        double colSum;
+
+<span class="fc bfc" id="L286" title="All 2 branches covered.">        for(int j=0; j&lt;cols; j++) {</span>
+<span class="fc" id="L287">            colSum = 0;</span>
+<span class="fc bfc" id="L288" title="All 2 branches covered.">            for(int i=0; i&lt;rows; i++) {</span>
+<span class="fc" id="L289">                colSum += Math.pow(src[i*cols + j], 2);</span>
+            }
+<span class="fc" id="L291">            norm += Math.sqrt(colSum);</span>
+        }
+
+<span class="fc" id="L294">        return norm;</span>
+    }
+
+
+    /**
+     * Computes the L&lt;sub&gt;2&lt;/sub&gt; norm of a tensor (i.e. the Frobenius norm).
+     * @param src Entries of the tensor.
+     * @return The L&lt;sub&gt;2&lt;/sub&gt; norm of the tensor.
+     */
+    public static double tensorNormL2(double[] src) {
+<span class="fc" id="L304">        double norm = 0;</span>
+
+<span class="fc bfc" id="L306" title="All 2 branches covered.">        for(double value : src) {</span>
+<span class="fc" id="L307">            norm += Math.pow(value, 2);</span>
+        }
+
+<span class="fc" id="L310">        return Math.sqrt(norm);</span>
+    }
+
+
+    /**
+     * Computes the L&lt;sub&gt;p&lt;/sub&gt; norm of a tensor (i.e. the Frobenius norm).
+     * @param src Entries of the tensor.
+     * @param p The {@code p} parameter of the L&lt;sub&gt;p&lt;/sub&gt; norm.
+     * @return The L&lt;sub&gt;p&lt;/sub&gt; norm of the tensor.
+     */
+    public static double tensorNormLp(double[] src, double p) {
+<span class="fc" id="L321">        double norm = 0;</span>
+
+<span class="fc bfc" id="L323" title="All 2 branches covered.">        for(double value : src) {</span>
+<span class="fc" id="L324">            norm += Math.pow(value, p);</span>
+        }
+
+<span class="fc" id="L327">        return Math.pow(norm, 1.0/p);</span>
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
+     * @param src Entries of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    public static double matrixMaxNorm(double[] src) {
+<span class="fc" id="L337">        return maxAbs(src);</span>
+    }
+
+
+    /**
+     * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return The infinity norm of the matrix.
+     */
+    public static double matrixInfNorm(double[] src, Shape shape) {
+<span class="fc" id="L348">        int rows = shape.dims[Axis2D.row()];</span>
+<span class="fc" id="L349">        int cols = shape.dims[Axis2D.col()];</span>
+<span class="fc" id="L350">        double[] rowSums = new double[rows];</span>
+
+<span class="fc bfc" id="L352" title="All 2 branches covered.">        for(int i=0; i&lt;rows; i++) {</span>
+<span class="fc bfc" id="L353" title="All 2 branches covered.">            for(int j=0; j&lt;cols; j++) {</span>
+<span class="fc" id="L354">                rowSums[i] += Math.abs(src[i*cols + j]);</span>
+            }
+        }
+
+<span class="fc" id="L358">        return maxAbs(rowSums);</span>
+    }
+
+
+    /**
+     * Adds a scalar to every element of a tensor.
+     * @param src src of tensor to add scalar to.
+     * @param b Scalar to add to tensor.
+     * @return The tensor scalar addition.
+     */
+    public static double[] add(double[] src, double b) {
+<span class="fc" id="L369">        double[] sum = new double[src.length];</span>
+
+<span class="fc bfc" id="L371" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L372">            sum[i] = src[i] + b;</span>
+        }
+
+<span class="fc" id="L375">        return sum;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

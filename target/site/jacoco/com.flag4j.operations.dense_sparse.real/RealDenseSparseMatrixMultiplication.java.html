@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealDenseSparseMatrixMultiplication.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense_sparse.real</a> &gt; <span class="el_source">RealDenseSparseMatrixMultiplication.java</span></div><h1>RealDenseSparseMatrixMultiplication.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense_sparse.real;
+
+import com.flag4j.Shape;
+import com.flag4j.concurrency.Configurations;
+import com.flag4j.concurrency.ThreadManager;
+import com.flag4j.util.Axis2D;
+import com.flag4j.util.ErrorMessages;
+
+/**
+ * This class contains low level methods for computing the matrix multiplication (and matrix vector multiplication) between
+ * a real dense/sparse matrix and a real sparse/dense matrix or vector.
+ */
+public class RealDenseSparseMatrixMultiplication {
+
+<span class="nc" id="L39">    private RealDenseSparseMatrixMultiplication() {</span>
+        // Hide default constructor.
+<span class="nc" id="L41">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    // TODO: Investigate if blocked algorithms provide any speedup for multiplying a sparse/dense matrix to a dense/sparse matrix.
+
+    /**
+     * Computes the matrix multiplication between a real dense matrix and a real sparse matrix using a standard algorithm.
+     * @param src1 Entries of the dense matrix.
+     * @param shape1 Shape of the dense matrix.
+     * @param src2 Non-zero entries of the sparse matrix.
+     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param shape2 Shape of the sparse matrix.
+     * @return The result of the matrix multiplication.
+     */
+    public static double[] standard(double[] src1, Shape shape1, double[] src2,
+                                    int[] rowIndices, int[] colIndices, Shape shape2) {
+<span class="fc" id="L59">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L60">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L61">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L63">        double[] dest = new double[rows1*cols2];</span>
+
+        int row, col;
+
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        for(int i=0; i&lt;rows1; i++) {</span>
+            // Loop over non-zero entries of sparse matrix.
+<span class="fc bfc" id="L69" title="All 2 branches covered.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="fc" id="L70">                row = rowIndices[j];</span>
+<span class="fc" id="L71">                col = colIndices[j];</span>
+
+<span class="fc" id="L73">                dest[i*cols2 + col] += src1[i*cols1 + row]*src2[j];</span>
+            }
+        }
+
+<span class="fc" id="L77">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between a real sparse matrix and a real dense matrix using a standard algorithm.
+     *
+     * @param src1 Non-zero entries of the sparse matrix.
+     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param shape1 Shape of the sparse matrix.
+     * @param src2 Entries of the dense matrix.
+     * @param shape2 Shape of the dense matrix.
+     * @return The result of the matrix multiplication.
+     */
+    public static double[] standard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
+                                    double[] src2, Shape shape2) {
+<span class="fc" id="L94">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L95">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L97">        double[] dest = new double[rows1*cols2];</span>
+
+        int row, col;
+
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L102">            row = rowIndices[i];</span>
+<span class="fc" id="L103">            col = colIndices[i];</span>
+
+<span class="fc bfc" id="L105" title="All 2 branches covered.">            for(int j=0; j&lt;cols2; j++) {</span>
+<span class="fc" id="L106">                dest[row*cols2 + j] += src1[i]*src2[col*cols2 + j];</span>
+            }
+        }
+
+<span class="fc" id="L110">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between a real dense matrix and a real sparse matrix using a concurrent standard algorithm.
+     * @param src1 Entries of the dense matrix.
+     * @param shape1 Shape of the dense matrix.
+     * @param src2 Non-zero entries of the sparse matrix.
+     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param shape2 Shape of the sparse matrix.
+     * @return The result of the matrix multiplication.
+     */
+    public static double[] concurrentStandard(double[] src1, Shape shape1, double[] src2,
+                                    int[] rowIndices, int[] colIndices, Shape shape2) {
+<span class="fc" id="L126">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L127">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L128">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L130">        double[] dest = new double[rows1*cols2];</span>
+
+<span class="fc" id="L132">        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</span>
+            // Loop over non-zero entries of sparse matrix.
+<span class="fc bfc" id="L134" title="All 2 branches covered.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="fc" id="L135">                int row = rowIndices[j];</span>
+<span class="fc" id="L136">                int col = colIndices[j];</span>
+
+<span class="fc" id="L138">                dest[i*cols2 + col] += src1[i*cols1 + row]*src2[j];</span>
+            }
+<span class="fc" id="L140">        });</span>
+
+<span class="fc" id="L142">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between a real sparse matrix and a real dense matrix
+     * using a concurrent standard algorithm.
+     *
+     * @param src1 Non-zero entries of the sparse matrix.
+     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param shape1 Shape of the sparse matrix.
+     * @param src2 Entries of the dense matrix.
+     * @param shape2 Shape of the dense matrix.
+     * @return The result of the matrix multiplication.
+     */
+    public static double[] concurrentStandard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
+                                    double[] src2, Shape shape2) {
+<span class="fc" id="L160">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L161">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L163">        double[] dest = new double[rows1*cols2];</span>
+
+<span class="fc" id="L165">        ThreadManager.concurrentLoop(0, src1.length, (i) -&gt; {</span>
+<span class="fc" id="L166">            int row = rowIndices[i];</span>
+<span class="fc" id="L167">            int col = colIndices[i];</span>
+
+<span class="fc bfc" id="L169" title="All 2 branches covered.">            for(int j=0; j&lt;cols2; j++) {</span>
+<span class="fc" id="L170">                dest[row*cols2 + j] += src1[i]*src2[col*cols2 + j];</span>
+            }
+<span class="fc" id="L172">        });</span>
+
+<span class="fc" id="L174">        return dest;</span>
+    }
+
+
+    // -------------------- Below are the matrix-vector multiplication algorithms --------------------
+
+    /**
+     * Computes the dense matrix sparse vector multiplication using a standard algorithm.
+     * @param src1 Entries of the dense matrix.
+     * @param shape1 Shape of the dense matrix.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries in sparse vector.
+     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+     */
+    public static double[] standardVector(double[] src1, Shape shape1, double[] src2, int[] indices) {
+<span class="fc" id="L189">        int denseRows = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L190">        int denseCols = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L191">        int nonZeros = src2.length;</span>
+
+<span class="fc" id="L193">        double[] dest = new double[denseRows];</span>
+        int k;
+
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        for(int i=0; i&lt;denseRows; i++) {</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">            for(int j=0; j&lt;nonZeros; j++) {</span>
+<span class="fc" id="L198">                k = indices[j];</span>
+<span class="fc" id="L199">                dest[i] += src1[i*denseCols + k]*src2[j];</span>
+            }
+        }
+
+<span class="fc" id="L203">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the sparse matrix dense vector multiplication using a standard algorithm.
+     * @param src1 Entries of the sparse matrix.
+     * @param rowIndices Row indices of non-zero entries in sparse matrix.
+     * @param colIndices Column indices of non-zero entries in sparse matrix.
+     * @param shape1 Shape of the sparse matrix.
+     * @param src2 Entries of the dense vector.
+     * @param shape2 Shape of the dense vector.
+     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+     */
+    public static double[] standardVector(double[] src1, int[] rowIndices, int[] colIndices,
+                                          Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L219">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L220">        double[] dest = new double[rows1];</span>
+        int row, col;
+
+<span class="fc bfc" id="L223" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L224">            row = rowIndices[i];</span>
+<span class="fc" id="L225">            col = colIndices[i];</span>
+
+<span class="fc" id="L227">            dest[row] += src1[i]*src2[col];</span>
+        }
+
+<span class="fc" id="L230">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the dense matrix sparse vector multiplication using a blocked algorithm.
+     * @param src1 Entries of the dense matrix.
+     * @param shape1 Shape of the dense matrix.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries in sparse vector.
+     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+     */
+    public static double[] blockedVector(double[] src1, Shape shape1, double[] src2, int[] indices) {
+<span class="fc" id="L243">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L244">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L245">        int rows2 = src2.length;</span>
+
+<span class="fc" id="L247">        int bsize = Configurations.getBlockSize(); // Get the block size to use.</span>
+
+<span class="fc" id="L249">        double[] dest = new double[rows1];</span>
+        int k;
+
+        // Blocked matrix-vector multiply
+<span class="fc bfc" id="L253" title="All 2 branches covered.">        for(int ii=0; ii&lt;rows1; ii += bsize) {</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">            for(int jj=0; jj&lt;rows2; jj += bsize) {</span>
+                // Multiply the current blocks
+<span class="pc bpc" id="L256" title="1 of 4 branches missed.">                for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
+<span class="pc bpc" id="L257" title="1 of 4 branches missed.">                    for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;rows2; j++) {</span>
+<span class="fc" id="L258">                        k = indices[j];</span>
+<span class="fc" id="L259">                        dest[i] += src1[i*cols1 + k]*src2[j];</span>
+                    }
+                }
+            }
+        }
+
+<span class="fc" id="L265">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the dense matrix sparse vector multiplication using a concurrent standard algorithm.
+     * @param src1 Entries of the dense matrix.
+     * @param shape1 Shape of the dense matrix.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries in sparse vector.
+     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+     */
+    public static double[] concurrentStandardVector(double[] src1, Shape shape1, double[] src2, int[] indices) {
+<span class="fc" id="L278">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L279">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L280">        int rows2 = src2.length;</span>
+
+<span class="fc" id="L282">        double[] dest = new double[rows1];</span>
+
+<span class="fc" id="L284">        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</span>
+<span class="fc bfc" id="L285" title="All 2 branches covered.">            for(int j=0; j&lt;rows2; j++) {</span>
+<span class="fc" id="L286">                int k = indices[j];</span>
+<span class="fc" id="L287">                dest[i] += src1[i*cols1 + k]*src2[j];</span>
+            }
+<span class="fc" id="L289">        });</span>
+
+<span class="fc" id="L291">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the sparse matrix dense vector multiplication using a concurrent standard algorithm.
+     * @param src1 Entries of the sparse matrix.
+     * @param rowIndices Row indices of non-zero entries in sparse matrix.
+     * @param colIndices Column indices of non-zero entries in sparse matrix.
+     * @param shape1 Shape of the sparse matrix.
+     * @param src2 Entries of the dense vector.
+     * @param shape2 Shape of the dense vector.
+     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+     */
+    public static double[] concurrentStandardVector(double[] src1, int[] rowIndices, int[] colIndices,
+                                          Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L307">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L308">        double[] dest = new double[rows1];</span>
+
+<span class="fc" id="L310">        ThreadManager.concurrentLoop(0, src1.length, (i) -&gt; {</span>
+<span class="fc" id="L311">            int row = rowIndices[i];</span>
+<span class="fc" id="L312">            int col = colIndices[i];</span>
+
+<span class="fc" id="L314">            dest[row] += src1[i]*src2[col];</span>
+<span class="fc" id="L315">        });</span>
+
+<span class="fc" id="L317">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the dense matrix sparse vector multiplication using a blocked algorithm.
+     * @param src1 Entries of the dense matrix.
+     * @param shape1 Shape of the dense matrix.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries in sparse vector.
+     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+     */
+    public static double[] concurrentBlockedVector(double[] src1, Shape shape1, double[] src2, int[] indices) {
+<span class="fc" id="L330">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L331">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L332">        int rows2 = src2.length;</span>
+
+<span class="fc" id="L334">        final int bsize = Configurations.getBlockSize(); // Get the block size to use.</span>
+
+<span class="fc" id="L336">        double[] dest = new double[rows1];</span>
+
+        // Blocked matrix-vector multiply
+<span class="fc" id="L339">        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -&gt; {</span>
+<span class="fc bfc" id="L340" title="All 2 branches covered.">            for(int jj=0; jj&lt;rows2; jj += bsize) {</span>
+                // Multiply the current blocks
+<span class="pc bpc" id="L342" title="1 of 4 branches missed.">                for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
+<span class="pc bpc" id="L343" title="1 of 4 branches missed.">                    for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;rows2; j++) {</span>
+<span class="fc" id="L344">                        int k = indices[j];</span>
+<span class="fc" id="L345">                        dest[i] += src1[i*cols1 + k]*src2[j];</span>
+                    }
+                }
+            }
+<span class="fc" id="L349">        });</span>
+
+<span class="fc" id="L351">        return dest;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

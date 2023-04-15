@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrintOptions.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.io</a> &gt; <span class="el_source">PrintOptions.java</span></div><h1>PrintOptions.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.io;
+
+import com.flag4j.util.ErrorMessages;
+
+/**
+ * Print options for matrices and vectors
+ */
+public abstract class PrintOptions {
+
+    /**
+     * Default padding between elements when printing.
+     */
+    public static final int DEFAULT_PADDING = 2;
+    /**
+     * Default maximum number of rows to print.
+     */
+    public static final int DEFAULT_MAX_ROWS = 10;
+    /**
+     * Default maximum number of columns to print.
+     */
+    public static final int DEFAULT_MAX_COLS = 10;
+    /**
+     * Default precision (i.e. number of decimals) to use when printing.
+     */
+    public static final int DEFAULT_PRECISION = 8;
+    /**
+     * Default flag for centering elements when printing.
+     */
+    public static final boolean DEFAULT_CENTER = true;
+
+    /**
+     * Hide default constructor.
+     */
+<span class="nc" id="L58">    private PrintOptions() {</span>
+<span class="nc" id="L59">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+    /**
+     * &lt;p&gt;
+     * Padding to apply to each size of an element. Padding is divided up to either side of the element.
+     * For instance, if {@code padding=4} then two spaces will be placed on either side of each element.
+     * Further, since this is done per element, each element will have 4 spaces between them (in addition to any
+     * additional padding from column alignment within a matrix).
+     * &lt;/p&gt;
+     *
+     * &lt;p&gt;
+     * If negative, zero padding will be used.
+     * &lt;/p&gt;
+     *
+     * &lt;p&gt;
+     * Default Value: {@link #DEFAULT_PADDING}
+     * &lt;/p&gt;
+     */
+<span class="fc" id="L78">    private static int padding = DEFAULT_PADDING;</span>
+
+
+    /**
+     * &lt;p&gt;
+     * Maximum number of rows to print from a matrix.
+     * If a matrix has more rows than this value, rows with
+     * indices larger than this value, except for the last row,
+     * will not be printed. If zero or negative all rows will be printed.
+     * The last row is always printed
+     * &lt;/p&gt;
+     *
+     * &lt;p&gt;
+     * Default Value: {@link #DEFAULT_MAX_ROWS}
+     * &lt;/p&gt;
+     */
+<span class="fc" id="L94">    private static int maxRows = DEFAULT_MAX_ROWS;</span>
+
+
+    /**
+     * Maximum number of columns to print from a matrix/vector.
+     * If a matrix has more columns than this value, columns with
+     * indices equal to or larger than this value, except for the last column,
+     * will &lt;b&gt;not&lt;/b&gt; be printed. If zero or negative all columns will be printed.
+     * The last column is always printed.&lt;br&gt;&lt;br&gt;
+     *
+     * Default Value: {@link #DEFAULT_MAX_COLS}
+     */
+<span class="fc" id="L106">    private static int maxColumns = DEFAULT_MAX_COLS;</span>
+
+
+    /**
+     * Precision of the printed matrix values. i.e. the number of decimal places printed.
+     * If negative, max precision is used.
+     * &lt;br&gt;&lt;br&gt;
+     * Default Value: {@link #DEFAULT_PRECISION}.
+     */
+<span class="fc" id="L115">    private static int precision = DEFAULT_PRECISION;</span>
+
+
+    /**
+     * A flag which indicates if each value should be centered within its column.
+     * &lt;br&gt;&lt;br&gt;
+     * Default value: {@link #DEFAULT_PRECISION}.
+     */
+<span class="fc" id="L123">    private static boolean center = DEFAULT_CENTER;</span>
+
+
+    /**
+     * Sets the centering flag.
+     * @param center Flag for centering values within its column.
+     */
+    public static void setCentering(boolean center) {
+<span class="fc" id="L131">        PrintOptions.center = center;</span>
+<span class="fc" id="L132">    }</span>
+
+
+    /**
+     * Gets the centering flag.
+     * @return The current value of the center flag.
+     */
+    public static boolean useCentering() {
+<span class="fc" id="L140">        return center;</span>
+    }
+
+
+    /**
+     * Sets the printing precision for which values in a matrix/vector
+     * @param precision The precision to use.
+     */
+    public static void setPrecision(int precision) {
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        if(precision &lt; 0) {</span>
+<span class="fc" id="L150">            throw new IllegalArgumentException(ErrorMessages.negValueErr(precision));</span>
+        }
+
+<span class="fc" id="L153">        PrintOptions.precision = precision;</span>
+<span class="fc" id="L154">    }</span>
+
+
+    /**
+     * Gets the current printing precision.
+     * @return The current printing precision.
+     */
+    public static int getPrecision() {
+<span class="fc" id="L162">        return precision;</span>
+    }
+
+
+    /**
+     * Gets the current maximum number of columns to print.
+     * @return The current maximum number of columns to print.
+     */
+    public static int getMaxColumns() {
+<span class="fc" id="L171">        return maxColumns;</span>
+    }
+
+
+    /**
+     * Sets the maximum number of columns to print.
+     * @param maxColumns Maximum number of columns to print.
+     */
+    public static void setMaxColumns(int maxColumns) {
+<span class="fc bfc" id="L180" title="All 2 branches covered.">        if(maxColumns &lt; 0) {</span>
+<span class="fc" id="L181">            throw new IllegalArgumentException(ErrorMessages.negValueErr(maxColumns));</span>
+        }
+
+<span class="fc" id="L184">        PrintOptions.maxColumns = maxColumns;</span>
+<span class="fc" id="L185">    }</span>
+
+
+    /**
+     * Gets the maximum number of rows to print.
+     * @return The maximum number of rows to print.
+     */
+    public static int getMaxRows() {
+<span class="fc" id="L193">        return maxRows;</span>
+    }
+
+
+    /**
+     * Set the maximum number of rows to print.
+     * @param maxRows The new maximum number of rows to print.
+     */
+    public static void setMaxRows(int maxRows) {
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        if(maxRows &lt; 0) {</span>
+<span class="fc" id="L203">            throw new IllegalArgumentException(ErrorMessages.negValueErr(maxRows));</span>
+        }
+
+<span class="fc" id="L206">        PrintOptions.maxRows = maxRows;</span>
+<span class="fc" id="L207">    }</span>
+
+
+    /**
+     * Gets the current padding amount for columns.
+     * @return The current padding amount for columns.
+     */
+    public static int getPadding() {
+<span class="fc" id="L215">        return padding;</span>
+    }
+
+
+    /**
+     * Sets the minimum padding amount for the columns.
+     * @param padding New padding amount for the columns.
+     */
+    public static void setPadding(int padding) {
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        if(padding &lt; 0) {</span>
+<span class="fc" id="L225">            throw new IllegalArgumentException(ErrorMessages.negValueErr(padding));</span>
+        }
+
+<span class="fc" id="L228">        PrintOptions.padding = padding;</span>
+<span class="fc" id="L229">    }</span>
+
+
+    /**
+     * Resets all print options to their default values.
+     */
+    public static void resetAll() {
+<span class="fc" id="L236">        padding = DEFAULT_PADDING;</span>
+<span class="fc" id="L237">        maxColumns = DEFAULT_MAX_COLS;</span>
+<span class="fc" id="L238">        maxRows = DEFAULT_MAX_ROWS;</span>
+<span class="fc" id="L239">        precision = DEFAULT_PRECISION;</span>
+<span class="fc" id="L240">        center = DEFAULT_CENTER;</span>
+<span class="fc" id="L241">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
