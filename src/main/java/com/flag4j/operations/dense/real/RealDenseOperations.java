@@ -52,11 +52,13 @@ public final class RealDenseOperations {
      * @return The element wise addition of two tensors.
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
-    public static double[] add(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static double[] add(final double[] src1, final Shape shape1,
+                               final double[] src2, final Shape shape2) {
         ParameterChecks.assertEqualShape(shape1, shape2);
-        double[] sum = new double[src1.length];
+        int length = src1.length;
+        double[] sum = new double[length];
 
-        for(int i=0; i<sum.length; i++) {
+        for(int i=0; i<length; i++) {
             sum[i] = src1[i] + src2[i];
         }
 
