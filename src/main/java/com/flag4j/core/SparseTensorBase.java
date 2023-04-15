@@ -32,7 +32,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.util.Arrays;
 
 /**
  * Base class for all sparse tensor.

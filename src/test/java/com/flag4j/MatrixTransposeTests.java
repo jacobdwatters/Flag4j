@@ -1,6 +1,5 @@
 package com.flag4j;
 
-import com.flag4j.Matrix;
 import com.flag4j.util.RandomTensor;
 import org.junit.jupiter.api.Test;
 

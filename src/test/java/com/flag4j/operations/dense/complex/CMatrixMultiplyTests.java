@@ -3,7 +3,8 @@ package com.flag4j.operations.dense.complex;
 import com.flag4j.CMatrix;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class CMatrixMultiplyTests {
     CNumber[][] entriesA, entriesB;

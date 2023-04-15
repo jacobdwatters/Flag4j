@@ -1,10 +1,9 @@
 package com.flag4j;
 
-import com.flag4j.Shape;
-import com.flag4j.Tensor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TensorNormTests {
 

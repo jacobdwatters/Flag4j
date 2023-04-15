@@ -1,8 +1,5 @@
 package com.flag4j;
 
-import com.flag4j.CMatrix;
-import com.flag4j.CustomAssertions;
-import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 

@@ -2,7 +2,6 @@ package com.flag4j.operations.dense.complex;
 
 import com.flag4j.CMatrix;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.operations.dense.complex.ComplexDenseMatrixMultiplication;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;

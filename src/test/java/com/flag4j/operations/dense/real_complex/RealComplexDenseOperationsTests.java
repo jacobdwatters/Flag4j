@@ -4,11 +4,11 @@ package com.flag4j.operations.dense.real_complex;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static com.flag4j.operations.dense.real_complex.RealComplexDenseOperations.*;
+import static com.flag4j.operations.dense.real_complex.RealComplexDenseOperations.add;
+import static com.flag4j.operations.dense.real_complex.RealComplexDenseOperations.sub;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

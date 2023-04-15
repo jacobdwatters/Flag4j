@@ -31,8 +31,6 @@ import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
-import java.util.Arrays;
-
 
 /**
  * This class contains several low-level algorithms for computing the transpose of real dense tensors.

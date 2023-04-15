@@ -1,6 +1,5 @@
 package com.flag4j;
 
-import com.flag4j.Vector;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
