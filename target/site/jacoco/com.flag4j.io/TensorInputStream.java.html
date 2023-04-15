@@ -23,11 +23,15 @@
  */
 
 package com.flag4j.io;
-import com.flag4j.Tensor;
+
 import com.flag4j.Matrix;
+import com.flag4j.Tensor;
 import com.flag4j.Vector;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 
 
 /**
@@ -53,10 +57,10 @@ public class TensorInputStream extends InputStream {
      * @param fileName File name, including extension, of tensor, matrix, or vector to read.
      * @throws IOException If an I/O error occurs while reading the stream header.
      */
-<span class="nc" id="L56">    public TensorInputStream(String fileName) throws IOException {</span>
-<span class="nc" id="L57">        fileIn = new FileInputStream(fileName);</span>
-<span class="nc" id="L58">        objectIn = new ObjectInputStream(fileIn);</span>
-<span class="nc" id="L59">    }</span>
+<span class="nc" id="L60">    public TensorInputStream(String fileName) throws IOException {</span>
+<span class="nc" id="L61">        fileIn = new FileInputStream(fileName);</span>
+<span class="nc" id="L62">        objectIn = new ObjectInputStream(fileIn);</span>
+<span class="nc" id="L63">    }</span>
 
 
     /**
@@ -65,7 +69,7 @@ public class TensorInputStream extends InputStream {
      */
     public Tensor readTensor() throws IOException, ClassNotFoundException {
         // Deserialize tensor.
-<span class="nc" id="L68">        return (Tensor) objectIn.readObject();</span>
+<span class="nc" id="L72">        return (Tensor) objectIn.readObject();</span>
     }
 
 
@@ -75,7 +79,7 @@ public class TensorInputStream extends InputStream {
      */
     public Matrix readMatrix() throws IOException, ClassNotFoundException {
         // Deserialize matrix.
-<span class="nc" id="L78">        return (Matrix) objectIn.readObject();</span>
+<span class="nc" id="L82">        return (Matrix) objectIn.readObject();</span>
     }
 
 
@@ -85,7 +89,7 @@ public class TensorInputStream extends InputStream {
      */
     public Vector readVector() throws IOException, ClassNotFoundException {
         // Deserialize vector.
-<span class="nc" id="L88">        return (Vector) objectIn.readObject();</span>
+<span class="nc" id="L92">        return (Vector) objectIn.readObject();</span>
     }
 
 
@@ -99,7 +103,7 @@ public class TensorInputStream extends InputStream {
      */
     @Override
     public int read() throws IOException {
-<span class="nc" id="L102">        return objectIn.read();</span>
+<span class="nc" id="L106">        return objectIn.read();</span>
     }
 
 
@@ -109,8 +113,8 @@ public class TensorInputStream extends InputStream {
      */
     @Override
     public void close() throws IOException {
-<span class="nc" id="L112">        objectIn.close();</span>
-<span class="nc" id="L113">        fileIn.close();</span>
-<span class="nc" id="L114">    }</span>
+<span class="nc" id="L116">        objectIn.close();</span>
+<span class="nc" id="L117">        fileIn.close();</span>
+<span class="nc" id="L118">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -32,7 +32,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.util.Arrays;
 
 /**
  * Base class for all sparse tensor.
@@ -62,19 +61,19 @@ public abstract class SparseTensorBase&lt;T extends Serializable&gt; extends Ten
      * tensor.
      */
     public SparseTensorBase(Shape shape, int nonZeroEntries, T entries, int[][] indices) {
-<span class="fc" id="L65">        super(shape, entries);</span>
+<span class="fc" id="L64">        super(shape, entries);</span>
 
-<span class="fc bfc" id="L67" title="All 2 branches covered.">        if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) &lt; 0) {</span>
-<span class="fc" id="L68">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) &lt; 0) {</span>
+<span class="fc" id="L67">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));</span>
         }
-<span class="fc" id="L70">        ParameterChecks.assertArrayLengthsEq(nonZeroEntries, indices.length);</span>
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (indices.length &gt; 0) {</span>
-<span class="fc" id="L72">            ParameterChecks.assertArrayLengthsEq(super.getRank(), indices[0].length);</span>
+<span class="fc" id="L69">        ParameterChecks.assertArrayLengthsEq(nonZeroEntries, indices.length);</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (indices.length &gt; 0) {</span>
+<span class="fc" id="L71">            ParameterChecks.assertArrayLengthsEq(super.getRank(), indices[0].length);</span>
         }
 
-<span class="fc" id="L75">        this.nonZeroEntries = nonZeroEntries;</span>
-<span class="fc" id="L76">        this.indices = indices;</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L74">        this.nonZeroEntries = nonZeroEntries;</span>
+<span class="fc" id="L75">        this.indices = indices;</span>
+<span class="fc" id="L76">    }</span>
 
 
     /**
@@ -82,7 +81,7 @@ public abstract class SparseTensorBase&lt;T extends Serializable&gt; extends Ten
      * @return The number of non-zero entries in this sparse tensor.
      */
     public int nonZeroEntries() {
-<span class="fc" id="L85">        return nonZeroEntries;</span>
+<span class="fc" id="L84">        return nonZeroEntries;</span>
     }
 
 
@@ -91,10 +90,10 @@ public abstract class SparseTensorBase&lt;T extends Serializable&gt; extends Ten
      * @return The sparsity of this tensor.
      */
     public double sparsity() {
-<span class="nc" id="L94">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
-<span class="nc" id="L95">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
+<span class="nc" id="L93">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
+<span class="nc" id="L94">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
 
-<span class="nc" id="L97">        return sparsity.doubleValue();</span>
+<span class="nc" id="L96">        return sparsity.doubleValue();</span>
     }
 
 
@@ -103,11 +102,11 @@ public abstract class SparseTensorBase&lt;T extends Serializable&gt; extends Ten
      * @return The density of this tensor.
      */
     public double density() {
-<span class="nc" id="L106">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
-<span class="nc" id="L107">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP</span>
+<span class="nc" id="L105">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
+<span class="nc" id="L106">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP</span>
         );
 
-<span class="nc" id="L110">        return density.doubleValue();</span>
+<span class="nc" id="L109">        return density.doubleValue();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

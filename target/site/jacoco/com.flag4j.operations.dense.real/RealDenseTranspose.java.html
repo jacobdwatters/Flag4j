@@ -31,17 +31,15 @@ import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
-import java.util.Arrays;
-
 
 /**
  * This class contains several low-level algorithms for computing the transpose of real dense tensors.
  */
 public final class RealDenseTranspose {
 
-<span class="nc" id="L42">    private RealDenseTranspose() {</span>
+<span class="nc" id="L40">    private RealDenseTranspose() {</span>
         // Hide constructor
-<span class="nc" id="L44">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L42">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -55,22 +53,22 @@ public final class RealDenseTranspose {
      * @return The transpose of the tensor along the specified axes.
      */
     public static double[] standard(final double[] src, final Shape shape, final int axis1, final int axis2) {
-<span class="fc bfc" id="L58" title="All 2 branches covered.">        if(shape.getRank() &lt; 2) { // Can't transpose tensor with less than 2 axes.</span>
-<span class="fc" id="L59">            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if(shape.getRank() &lt; 2) { // Can't transpose tensor with less than 2 axes.</span>
+<span class="fc" id="L57">            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</span>
                     &quot; tensor.&quot;);
         }
 
-<span class="fc" id="L63">        double[] dest = new double[shape.totalEntries().intValue()];</span>
-<span class="fc" id="L64">        Shape destShape = shape.copy().swapAxes(axis1, axis2);</span>
+<span class="fc" id="L61">        double[] dest = new double[shape.totalEntries().intValue()];</span>
+<span class="fc" id="L62">        Shape destShape = shape.copy().swapAxes(axis1, axis2);</span>
         int[] destIndices;
 
-<span class="fc bfc" id="L67" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc" id="L68">            destIndices = shape.getIndices(i);</span>
-<span class="fc" id="L69">            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.</span>
-<span class="fc" id="L70">            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L66">            destIndices = shape.getIndices(i);</span>
+<span class="fc" id="L67">            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.</span>
+<span class="fc" id="L68">            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element</span>
         }
 
-<span class="fc" id="L73">        return dest;</span>
+<span class="fc" id="L71">        return dest;</span>
     }
 
 
@@ -86,24 +84,24 @@ public final class RealDenseTranspose {
      * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
      */
     public static double[] standard(final double[] src, final Shape shape, final int[] axes) {
-<span class="nc" id="L89">        ParameterChecks.assertPermutation(axes);</span>
-<span class="nc" id="L90">        ParameterChecks.assertEquals(shape.getRank(), axes.length);</span>
-<span class="nc bnc" id="L91" title="All 2 branches missed.">        if(shape.getRank() &lt; 2) { // Can't transpose tensor with less than 2 axes.</span>
-<span class="nc" id="L92">            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</span>
+<span class="nc" id="L87">        ParameterChecks.assertPermutation(axes);</span>
+<span class="nc" id="L88">        ParameterChecks.assertEquals(shape.getRank(), axes.length);</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        if(shape.getRank() &lt; 2) { // Can't transpose tensor with less than 2 axes.</span>
+<span class="nc" id="L90">            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</span>
                     &quot; tensor.&quot;);
         }
 
-<span class="nc" id="L96">        double[] dest = new double[shape.totalEntries().intValue()];</span>
-<span class="nc" id="L97">        Shape destShape = shape.copy().swapAxes(axes);</span>
+<span class="nc" id="L94">        double[] dest = new double[shape.totalEntries().intValue()];</span>
+<span class="nc" id="L95">        Shape destShape = shape.copy().swapAxes(axes);</span>
         int[] destIndices;
 
-<span class="nc bnc" id="L100" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="nc" id="L101">            destIndices = shape.getIndices(i);</span>
-<span class="nc" id="L102">            ArrayUtils.swap(destIndices, axes); // Compute destination indices.</span>
-<span class="nc" id="L103">            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="nc" id="L99">            destIndices = shape.getIndices(i);</span>
+<span class="nc" id="L100">            ArrayUtils.swap(destIndices, axes); // Compute destination indices.</span>
+<span class="nc" id="L101">            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element</span>
         }
 
-<span class="nc" id="L106">        return dest;</span>
+<span class="nc" id="L104">        return dest;</span>
     }
 
 
@@ -119,23 +117,23 @@ public final class RealDenseTranspose {
      * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
      */
     public static double[] standardConcurrent(final double[] src, final Shape shape, final int[] axes) {
-<span class="fc" id="L122">        ParameterChecks.assertPermutation(axes);</span>
-<span class="fc" id="L123">        ParameterChecks.assertEquals(shape.getRank(), axes.length);</span>
-<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        if(shape.getRank() &lt; 2) { // Can't transpose tensor with less than 2 axes.</span>
-<span class="nc" id="L125">            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</span>
+<span class="fc" id="L120">        ParameterChecks.assertPermutation(axes);</span>
+<span class="fc" id="L121">        ParameterChecks.assertEquals(shape.getRank(), axes.length);</span>
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">        if(shape.getRank() &lt; 2) { // Can't transpose tensor with less than 2 axes.</span>
+<span class="nc" id="L123">            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</span>
                     &quot; tensor.&quot;);
         }
 
-<span class="fc" id="L129">        double[] dest = new double[shape.totalEntries().intValue()];</span>
-<span class="fc" id="L130">        Shape destShape = shape.copy().swapAxes(axes);</span>
+<span class="fc" id="L127">        double[] dest = new double[shape.totalEntries().intValue()];</span>
+<span class="fc" id="L128">        Shape destShape = shape.copy().swapAxes(axes);</span>
 
-<span class="fc" id="L132">        ThreadManager.concurrentLoop(0, src.length, (i) -&gt; {</span>
-<span class="fc" id="L133">            int[] destIndices = shape.getIndices(i);</span>
-<span class="fc" id="L134">            ArrayUtils.swap(destIndices, axes); // Compute destination indices.</span>
-<span class="fc" id="L135">            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element</span>
-<span class="fc" id="L136">        });</span>
+<span class="fc" id="L130">        ThreadManager.concurrentLoop(0, src.length, (i) -&gt; {</span>
+<span class="fc" id="L131">            int[] destIndices = shape.getIndices(i);</span>
+<span class="fc" id="L132">            ArrayUtils.swap(destIndices, axes); // Compute destination indices.</span>
+<span class="fc" id="L133">            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element</span>
+<span class="fc" id="L134">        });</span>
 
-<span class="fc" id="L138">        return dest;</span>
+<span class="fc" id="L136">        return dest;</span>
     }
 
 
@@ -149,22 +147,22 @@ public final class RealDenseTranspose {
      * @return The transpose of the tensor along the specified axes.
      */
     public static double[] standardConcurrent(final double[] src, final Shape shape, final int axis1, final int axis2) {
-<span class="fc bfc" id="L152" title="All 2 branches covered.">        if(shape.getRank() &lt; 2) { // Can't transpose tensor with less than 2 axes.</span>
-<span class="fc" id="L153">            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        if(shape.getRank() &lt; 2) { // Can't transpose tensor with less than 2 axes.</span>
+<span class="fc" id="L151">            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</span>
                     &quot; tensor.&quot;);
         }
 
-<span class="fc" id="L157">        double[] dest = new double[shape.totalEntries().intValue()];</span>
-<span class="fc" id="L158">        Shape destShape = shape.copy().swapAxes(axis1, axis2);</span>
+<span class="fc" id="L155">        double[] dest = new double[shape.totalEntries().intValue()];</span>
+<span class="fc" id="L156">        Shape destShape = shape.copy().swapAxes(axis1, axis2);</span>
 
         // Compute transpose concurrently
-<span class="fc" id="L161">        ThreadManager.concurrentLoop(0, src.length, (i) -&gt; {</span>
-<span class="fc" id="L162">            int[] destIndices = shape.getIndices(i);</span>
-<span class="fc" id="L163">            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.</span>
-<span class="fc" id="L164">            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element</span>
-<span class="fc" id="L165">        });</span>
+<span class="fc" id="L159">        ThreadManager.concurrentLoop(0, src.length, (i) -&gt; {</span>
+<span class="fc" id="L160">            int[] destIndices = shape.getIndices(i);</span>
+<span class="fc" id="L161">            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.</span>
+<span class="fc" id="L162">            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element</span>
+<span class="fc" id="L163">        });</span>
 
-<span class="fc" id="L167">        return dest;</span>
+<span class="fc" id="L165">        return dest;</span>
     }
 
 
@@ -176,22 +174,22 @@ public final class RealDenseTranspose {
      * @return The transpose of the matrix.
      */
     public static double[] standardMatrix(final double[] src, final int numRows, final int numCols) {
-<span class="fc" id="L179">        double[] dest = new double[numRows*numCols];</span>
+<span class="fc" id="L177">        double[] dest = new double[numRows*numCols];</span>
 
         int destIndex, srcIndex, end;
 
-<span class="fc bfc" id="L183" title="All 2 branches covered.">        for (int i=0; i&lt;numCols; i++) {</span>
-<span class="fc" id="L184">            srcIndex = i;</span>
-<span class="fc" id="L185">            destIndex = i*numRows;</span>
-<span class="fc" id="L186">            end = destIndex + numRows;</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        for (int i=0; i&lt;numCols; i++) {</span>
+<span class="fc" id="L182">            srcIndex = i;</span>
+<span class="fc" id="L183">            destIndex = i*numRows;</span>
+<span class="fc" id="L184">            end = destIndex + numRows;</span>
 
-<span class="fc bfc" id="L188" title="All 2 branches covered.">            while (destIndex &lt; end) {</span>
-<span class="fc" id="L189">                dest[destIndex++] = src[srcIndex];</span>
-<span class="fc" id="L190">                srcIndex += numCols;</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">            while (destIndex &lt; end) {</span>
+<span class="fc" id="L187">                dest[destIndex++] = src[srcIndex];</span>
+<span class="fc" id="L188">                srcIndex += numCols;</span>
             }
         }
 
-<span class="fc" id="L194">        return dest;</span>
+<span class="fc" id="L192">        return dest;</span>
     }
 
 
@@ -204,32 +202,32 @@ public final class RealDenseTranspose {
      * @return The transpose of this tensor along specified axes
      */
     public static double[] blockedMatrix(final double[] src, final int numRows, final int numCols) {
-<span class="fc" id="L207">        double[] dest = new double[numRows*numCols];</span>
-<span class="fc" id="L208">        final int blockSize = Configurations.getBlockSize();</span>
+<span class="fc" id="L205">        double[] dest = new double[numRows*numCols];</span>
+<span class="fc" id="L206">        final int blockSize = Configurations.getBlockSize();</span>
         int blockRowEnd;
         int blockColEnd;
         int srcIndex, destIndex, end;
 
-<span class="fc bfc" id="L213" title="All 2 branches covered.">        for(int i=0; i&lt;numCols; i+=blockSize) {</span>
-<span class="fc bfc" id="L214" title="All 2 branches covered.">            for(int j=0; j&lt;numRows; j+=blockSize) {</span>
-<span class="fc" id="L215">                blockRowEnd = Math.min(blockSize, numRows);</span>
-<span class="fc" id="L216">                blockColEnd = Math.min(i+blockSize, numCols);</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        for(int i=0; i&lt;numCols; i+=blockSize) {</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">            for(int j=0; j&lt;numRows; j+=blockSize) {</span>
+<span class="fc" id="L213">                blockRowEnd = Math.min(blockSize, numRows);</span>
+<span class="fc" id="L214">                blockColEnd = Math.min(i+blockSize, numCols);</span>
 
                 // Transpose the block beginning at (i, j)
-<span class="fc bfc" id="L219" title="All 2 branches covered.">                for(int blockI=i; blockI&lt;blockColEnd; blockI++) {</span>
-<span class="fc" id="L220">                    srcIndex = blockI;</span>
-<span class="fc" id="L221">                    destIndex = blockI*numRows;</span>
-<span class="fc" id="L222">                    end = destIndex + blockRowEnd;</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">                for(int blockI=i; blockI&lt;blockColEnd; blockI++) {</span>
+<span class="fc" id="L218">                    srcIndex = blockI;</span>
+<span class="fc" id="L219">                    destIndex = blockI*numRows;</span>
+<span class="fc" id="L220">                    end = destIndex + blockRowEnd;</span>
 
-<span class="fc bfc" id="L224" title="All 2 branches covered.">                    while (destIndex &lt; end) {</span>
-<span class="fc" id="L225">                        dest[destIndex++] = src[srcIndex];</span>
-<span class="fc" id="L226">                        srcIndex += numCols;</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">                    while (destIndex &lt; end) {</span>
+<span class="fc" id="L223">                        dest[destIndex++] = src[srcIndex];</span>
+<span class="fc" id="L224">                        srcIndex += numCols;</span>
                     }
                 }
             }
         }
 
-<span class="fc" id="L232">        return dest;</span>
+<span class="fc" id="L230">        return dest;</span>
     }
 
 
@@ -241,21 +239,21 @@ public final class RealDenseTranspose {
      * @return The transpose of the source matrix.
      */
     public static double[] standardMatrixConcurrent(final double[] src, final int numRows, final int numCols) {
-<span class="fc" id="L244">        double[] dest = new double[src.length];</span>
+<span class="fc" id="L242">        double[] dest = new double[src.length];</span>
 
         // Compute transpose concurrently.
-<span class="fc" id="L247">        ThreadManager.concurrentLoop(0, numCols, (i) -&gt; {</span>
-<span class="fc" id="L248">            int srcIndex = i;</span>
-<span class="fc" id="L249">            int destIndex = i*numRows;</span>
-<span class="fc" id="L250">            int end = destIndex + numRows;</span>
+<span class="fc" id="L245">        ThreadManager.concurrentLoop(0, numCols, (i) -&gt; {</span>
+<span class="fc" id="L246">            int srcIndex = i;</span>
+<span class="fc" id="L247">            int destIndex = i*numRows;</span>
+<span class="fc" id="L248">            int end = destIndex + numRows;</span>
 
-<span class="fc bfc" id="L252" title="All 2 branches covered.">            while (destIndex &lt; end) {</span>
-<span class="fc" id="L253">                dest[destIndex++] = src[srcIndex];</span>
-<span class="fc" id="L254">                srcIndex += numCols;</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">            while (destIndex &lt; end) {</span>
+<span class="fc" id="L251">                dest[destIndex++] = src[srcIndex];</span>
+<span class="fc" id="L252">                srcIndex += numCols;</span>
             }
-<span class="fc" id="L256">        });</span>
+<span class="fc" id="L254">        });</span>
 
-<span class="fc" id="L258">        return dest;</span>
+<span class="fc" id="L256">        return dest;</span>
     }
 
 
@@ -267,30 +265,30 @@ public final class RealDenseTranspose {
      * @return The transpose of the source matrix.
      */
     public static double[] blockedMatrixConcurrent(final double[] src, final int numRows, final int numCols) {
-<span class="fc" id="L270">        double[] dest = new double[src.length];</span>
-<span class="fc" id="L271">        final int blockSize = Configurations.getBlockSize();</span>
+<span class="fc" id="L268">        double[] dest = new double[src.length];</span>
+<span class="fc" id="L269">        final int blockSize = Configurations.getBlockSize();</span>
 
         // Compute transpose concurrently.
-<span class="fc" id="L274">        ThreadManager.concurrentLoop(0, numCols, blockSize, (i) -&gt; {</span>
-<span class="fc bfc" id="L275" title="All 2 branches covered.">            for(int j=0; j&lt;numRows; j+=blockSize) {</span>
-<span class="fc" id="L276">                int blockRowEnd = Math.min(blockSize, numRows);</span>
-<span class="fc" id="L277">                int blockColEnd = Math.min(i+blockSize, numCols);</span>
+<span class="fc" id="L272">        ThreadManager.concurrentLoop(0, numCols, blockSize, (i) -&gt; {</span>
+<span class="fc bfc" id="L273" title="All 2 branches covered.">            for(int j=0; j&lt;numRows; j+=blockSize) {</span>
+<span class="fc" id="L274">                int blockRowEnd = Math.min(blockSize, numRows);</span>
+<span class="fc" id="L275">                int blockColEnd = Math.min(i+blockSize, numCols);</span>
 
                 // Transpose the block beginning at (i, j)
-<span class="fc bfc" id="L280" title="All 2 branches covered.">                for(int blockI=i; blockI&lt;blockColEnd; blockI++) {</span>
-<span class="fc" id="L281">                    int srcIndex = blockI;</span>
-<span class="fc" id="L282">                    int destIndex = blockI*numRows;</span>
-<span class="fc" id="L283">                    int end = destIndex + blockRowEnd;</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">                for(int blockI=i; blockI&lt;blockColEnd; blockI++) {</span>
+<span class="fc" id="L279">                    int srcIndex = blockI;</span>
+<span class="fc" id="L280">                    int destIndex = blockI*numRows;</span>
+<span class="fc" id="L281">                    int end = destIndex + blockRowEnd;</span>
 
-<span class="fc bfc" id="L285" title="All 2 branches covered.">                    while (destIndex &lt; end) {</span>
-<span class="fc" id="L286">                        dest[destIndex++] = src[srcIndex];</span>
-<span class="fc" id="L287">                        srcIndex += numCols;</span>
+<span class="fc bfc" id="L283" title="All 2 branches covered.">                    while (destIndex &lt; end) {</span>
+<span class="fc" id="L284">                        dest[destIndex++] = src[srcIndex];</span>
+<span class="fc" id="L285">                        srcIndex += numCols;</span>
                     }
                 }
             }
-<span class="fc" id="L291">        });</span>
+<span class="fc" id="L289">        });</span>
 
-<span class="fc" id="L293">        return dest;</span>
+<span class="fc" id="L291">        return dest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
