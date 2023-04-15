@@ -25,7 +25,9 @@
 package com.flag4j.operations.dense_sparse.complex;
 
 import com.flag4j.CMatrix;
+import com.flag4j.CTensor;
 import com.flag4j.SparseCMatrix;
+import com.flag4j.SparseCTensor;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
@@ -116,6 +118,45 @@ public class ComplexDenseSparseEquals {
             if(equal) {
                 // Now, if this vector is equal to the sparse vector, there should only be zeros left in the copy
                 equal = ArrayUtils.isZeros(src1Copy);
+            }
+
+        } else {
+            equal = false;
+        }
+
+        return equal;
+    }
+
+
+    /**
+     * Checks if a complex dense tensor is equal to a complex sparse tensor.
+     * @param A Complex dense tensor.
+     * @param B Complex sparse tensor.
+     * @return True if the two tensors are element-wise equivalent.
+     */
+    public static boolean tensorEquals(CTensor A, SparseCTensor B) {
+        boolean equal = true;
+
+        if(A.shape.equals(B.shape)) {
+            CNumber[] entriesCopy = new CNumber[A.entries.length];
+            ArrayUtils.copy2CNumber(A.entries, entriesCopy);
+            int entriesIndex;
+
+            // Remove all nonZero entries from the entries of this matrix.
+            for(int i=0; i<B.nonZeroEntries(); i++) {
+                entriesIndex = A.shape.entriesIndex(B.indices[i]);
+
+                if(!entriesCopy[entriesIndex].equals(B.entries[i])) {
+                    equal = false;
+                    break;
+                }
+
+                entriesCopy[A.shape.entriesIndex(B.indices[i])] = new CNumber();
+            }
+
+            if(equal) {
+                // Now, if this tensor is equal to the sparse tensor, there should only be zeros left in the entriesStack
+                equal = ArrayUtils.isZeros(entriesCopy);
             }
 
         } else {

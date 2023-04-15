@@ -30,7 +30,7 @@ import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
-import static com.flag4j.operations.common.real.Aggregate.maxAbs;
+import static com.flag4j.operations.common.real.AggregateReal.maxAbs;
 
 /**
  * This class provides low level methods for computing operations on real dense tensors.
@@ -52,11 +52,13 @@ public final class RealDenseOperations {
      * @return The element wise addition of two tensors.
      * @throws IllegalArgumentException If entry arrays are not the same size.
      */
-    public static double[] add(double[] src1, Shape shape1, double[] src2, Shape shape2) {
+    public static double[] add(final double[] src1, final Shape shape1,
+                               final double[] src2, final Shape shape2) {
         ParameterChecks.assertEqualShape(shape1, shape2);
-        double[] sum = new double[src1.length];
+        int length = src1.length;
+        double[] sum = new double[length];
 
-        for(int i=0; i<sum.length; i++) {
+        for(int i=0; i<length; i++) {
             sum[i] = src1[i] + src2[i];
         }
 
@@ -188,7 +190,7 @@ public final class RealDenseOperations {
      * @return The scalar division of the tensor.
      */
     public static double[] scalDiv(double[] src, double divisor) {
-        return RealOperations.scalMult(src, 1/divisor);
+        return RealOperations.scalDiv(src, divisor);
     }
 
 
@@ -205,48 +207,6 @@ public final class RealDenseOperations {
         }
 
         return receps;
-    }
-
-
-    /**
-     * Computes the element-wise multiplication of two tensors. Also called the Hadamard product.
-     * @param src1 First tensor in element-wise multiplication.
-     * @param shape1 Shape of the first tensor.
-     * @param src2 Second tensor in element-wise multiplication.
-     * @param shape2 Shape of the second tensor.
-     * @return The element-wise multiplication of the two tensors.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    public static double[] elemMult(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
-        double[] product = new double[src1.length];
-
-        for(int i=0; i<product.length; i++) {
-            product[i] = src1[i]*src2[i];
-        }
-
-        return product;
-    }
-
-
-    /**
-     * Computes the element-wise division of two tensors.
-     * @param src1 First tensor in element-wise division.
-     * @param shape1 Shape of the first tensor.
-     * @param src2 Second tensor in element-wise division.
-     * @param shape2 Shape of the second tensor.
-     * @return The element-wise division of the two tensors.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    public static double[] elemDiv(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
-        double[] product = new double[src1.length];
-
-        for(int i=0; i<product.length; i++) {
-            product[i] = src1[i]/src2[i];
-        }
-
-        return product;
     }
 
 
@@ -336,6 +296,39 @@ public final class RealDenseOperations {
 
 
     /**
+     * Computes the L<sub>2</sub> norm of a tensor (i.e. the Frobenius norm).
+     * @param src Entries of the tensor.
+     * @return The L<sub>2</sub> norm of the tensor.
+     */
+    public static double tensorNormL2(double[] src) {
+        double norm = 0;
+
+        for(double value : src) {
+            norm += Math.pow(value, 2);
+        }
+
+        return Math.sqrt(norm);
+    }
+
+
+    /**
+     * Computes the L<sub>p</sub> norm of a tensor (i.e. the Frobenius norm).
+     * @param src Entries of the tensor.
+     * @param p The {@code p} parameter of the L<sub>p</sub> norm.
+     * @return The L<sub>p</sub> norm of the tensor.
+     */
+    public static double tensorNormLp(double[] src, double p) {
+        double norm = 0;
+
+        for(double value : src) {
+            norm += Math.pow(value, p);
+        }
+
+        return Math.pow(norm, 1.0/p);
+    }
+
+
+    /**
      * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
      * @param src Entries of the matrix.
      * @return The infinity norm of the matrix.
@@ -348,6 +341,7 @@ public final class RealDenseOperations {
     /**
      * Computes the infinity/maximum norm of a matrix. That is, the maximum value in this matrix.
      * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
      * @return The infinity norm of the matrix.
      */
     public static double matrixInfNorm(double[] src, Shape shape) {
@@ -362,5 +356,22 @@ public final class RealDenseOperations {
         }
 
         return maxAbs(rowSums);
+    }
+
+
+    /**
+     * Adds a scalar to every element of a tensor.
+     * @param src src of tensor to add scalar to.
+     * @param b Scalar to add to tensor.
+     * @return The tensor scalar addition.
+     */
+    public static double[] add(double[] src, double b) {
+        double[] sum = new double[src.length];
+
+        for(int i=0; i<src.length; i++) {
+            sum[i] = src[i] + b;
+        }
+
+        return sum;
     }
 }

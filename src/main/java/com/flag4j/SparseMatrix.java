@@ -209,4 +209,10 @@ public class SparseMatrix extends SparseMatrixBase<double[]> {
     public SparseMatrix(SparseMatrix A) {
         super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), A.rowIndices.clone(), A.colIndices.clone());
     }
+
+
+    @Override
+    public SparseMatrix flatten(int axis) {
+        return null;
+    }
 }

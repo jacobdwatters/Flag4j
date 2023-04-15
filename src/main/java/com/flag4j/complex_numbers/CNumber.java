@@ -445,6 +445,28 @@ public class CNumber extends Number {
 
 
     /**
+     * Multiplies this complex number with another complex number and stores the result in this {@link CNumber}.
+     *
+     * @param b Second complex number in the product.
+     */
+    public void multEq(CNumber b) {
+        this.re = this.re*b.re - this.im*b.im;
+        this.im = this.re*b.im + this.im*b.re;
+    }
+
+
+    /**
+     * Multiplies this complex number with another complex number and stores the result in this {@link CNumber}.
+     *
+     * @param b Second complex number in the product.
+     */
+    public void multEq(double b) {
+        this.re *= b;
+        this.im *= b;
+    }
+
+
+    /**
      * Computes the division of two complex numbers.
      * @param b The divisor for the complex division.
      * @return The quotient of this complex number with b. If b is equivalent to {@link CNumber#ZERO} then
@@ -534,7 +556,7 @@ public class CNumber extends Number {
 
     /**
      * Computes the multiplicative inverse of this complex number.
-     * @return The additive inverse of this complex number.
+     * @return The multiplicative inverse of this complex number.
      */
     public CNumber multInv() {
         return ONE.div(this);
@@ -603,6 +625,25 @@ public class CNumber extends Number {
             }
         } else {
             result = exp(b.mult(ln(a)));
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Computes {@code a} raised to the power of {@code b}.
+     * @param a The base.
+     * @param b The exponent.
+     * @return {@code a} raised to the power of {@code b}.
+     */
+    public static CNumber pow(CNumber a, double b) {
+        CNumber result;
+
+        if(a.isReal()) {
+            result = CNumber.pow(a.re, b);
+        } else {
+            result = exp(ln(a).mult(b));
         }
 
         return result;

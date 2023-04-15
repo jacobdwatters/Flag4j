@@ -32,8 +32,10 @@ import java.math.BigInteger;
 
 
 /**
- * A tensor with typed entries.
- * @param <T> Type of the entries of this tensor.
+ * The base class for all tensors. A tensor is an algebraic object equivalent to a multidimensional array with a single
+ * data type.
+ * @param <T> Type of the storage data structure for the tensor.
+ *           This common use case will be an array or list-like data structure.
  */
 public abstract class TensorBase<T> implements Serializable {
 
@@ -99,7 +101,7 @@ public abstract class TensorBase<T> implements Serializable {
      * @return The total number of entries in this tensor.
      */
     public BigInteger totalEntries() {
-        // Use the shape to compute the number of entries. This ensures the result is also correct for sparse tensors.
+        // Using the shape to compute the total number of entries ensures the correct result for sparse tensors.
         return shape.totalEntries();
     }
 

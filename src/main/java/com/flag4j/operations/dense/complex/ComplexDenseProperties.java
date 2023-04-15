@@ -24,6 +24,7 @@
 
 package com.flag4j.operations.dense.complex;
 
+import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
 
@@ -54,5 +55,67 @@ public final class ComplexDenseProperties {
         }
 
         return allZeros;
+    }
+
+
+    /**
+     * Checks if a complex dense matrix is hermation. That is, if the and equal to its conjugate transpose.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return True if this matrix is hermation. Otherwise, returns false.
+     */
+    public static boolean isHermation(CNumber[] src, Shape shape) {
+        if(shape.dims[0]!=shape.dims[1]) {
+            return false;
+        }
+
+        int count1, count2, stop;
+
+        for(int i=0; i<shape.dims[0]; i++) {
+            count1 = i*shape.dims[1];
+            count2 = i;
+            stop = count1 + i;
+
+            while(count1 < stop) {
+                if(src[count1++].equals(src[count2].conj())) {
+                    return false;
+                }
+
+                count2+=shape.dims[1];
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Checks if a real dense matrix is anti-hermation. That is, if the and equal to its negative conjugate transpose.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return True if this matrix is anti-hermation. Otherwise, returns false.
+     */
+    public static boolean isAntiHermation(CNumber[] src, Shape shape) {
+        if(shape.dims[0]!=shape.dims[1]) {
+            return false;
+        }
+
+        int count1, count2, stop;
+
+        for(int i=0; i<shape.dims[0]; i++) {
+            count1 = i*shape.dims[1];
+            count2 = i;
+            stop = count1 + i;
+
+            while(count1 < stop) {
+                if(src[count1++].equals(src[count2].addInv().conj())) {
+                    return false;
+                }
+
+                count2+=shape.dims[1];
+            }
+        }
+
+        return true;
     }
 }

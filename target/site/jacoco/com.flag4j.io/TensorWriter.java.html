@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TensorWriter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.io</a> &gt; <span class="el_source">TensorWriter.java</span></div><h1>TensorWriter.java</h1><pre class="source lang-java linenums">/*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -25,9 +25,43 @@
 package com.flag4j.io;
 
 
+import com.flag4j.core.TensorBase;
+import com.flag4j.util.ErrorMessages;
+
+import java.io.IOException;
+
 /**
- * A class for writing tensors to a file in various formats.
+ * The TensorWriter class provides several static methods for writing serialized
+ * tensors, matrices, and vectors to a file.
  */
-<span class="nc" id="L31">public class TensorWriter {</span>
+public class TensorWriter {
+
+<span class="nc" id="L39">    private TensorWriter() {</span>
+        // Hide default constructor in utility class.
+<span class="nc" id="L41">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Writes a tensor to a file using a {@link TensorOutputStream}. If the write operation fails it will
+     * terminate but no exception will be thrown. To determine if the write was successful, see the return value: if
+     * the write was successful, true is returned; if the write fails,then false is returned.
+     * is returned.
+     * @param fileName File name, including extension, of the file to write the serialized matrix to.
+     * @param src Source object to write to the specified file.
+     * @return True if the write was successful. False if the write failed.
+     */
+    public static boolean write(String fileName, TensorBase&lt;?&gt; src) {
+<span class="nc" id="L55">        boolean successfulWrite = true;</span>
+
+<span class="nc" id="L57">        try (TensorOutputStream out = new TensorOutputStream(fileName)) {</span>
+<span class="nc" id="L58">            out.write(src);</span>
+<span class="nc" id="L59">        } catch (IOException e) {</span>
+            // Some exception was thrown.
+<span class="nc" id="L61">            successfulWrite = false;</span>
+<span class="nc" id="L62">        }</span>
+
+<span class="nc" id="L64">        return successfulWrite;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

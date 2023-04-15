@@ -43,7 +43,7 @@ public class RealDenseMatrixMultiplication {
     }
 
 
-    /**
+/**
      * Computes the matrix multiplication between two real dense matrices using the standard algorithm.
      * @param src1 Entries of the first matrix.
      * @param shape1 Shape of the first matrix.
@@ -53,16 +53,14 @@ public class RealDenseMatrixMultiplication {
      */
     public static double[] standard(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
         int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
 
         double[] dest = new double[rows1*cols2];
-
         int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
 
         for(int i=0; i<rows1; i++) {
-            src1IndexStart = i*cols1;
+            src1IndexStart = i*rows2;
             destIndexStart = i*cols2;
 
             for(int j=0; j<cols2; j++) {
@@ -94,26 +92,25 @@ public class RealDenseMatrixMultiplication {
     public static double[] reordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
         int cols1 = shape1.dims[Axis2D.col()];
-        int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
 
         double[] dest = new double[rows1*cols2];
 
-        int src2Index, destIndex, src1IndexStart, destIndexStart, end;
-        double src1Value;
+        int src2Index, destIndex, src1Start, destIndexStart, end;
+        int src1Index;
 
         for(int i=0; i<rows1; i++) {
-            src1IndexStart = i*cols1;
+            src1Start = i*cols1;
             destIndexStart = i*cols2;
 
-            for(int k=0; k<rows2; k++) {
+            for(int k=0; k<cols1; k++) {
+                src1Index = src1Start+k;
                 src2Index = k*cols2;
-                src1Value = src1[src1IndexStart + k];
                 destIndex = destIndexStart;
                 end = src2Index + cols2;
 
                 while(src2Index<end) {
-                    dest[destIndex++] += src1Value*src2[src2Index++];
+                    dest[destIndex++] += src1[src1Index]*src2[src2Index++];
                 }
             }
         }
@@ -132,32 +129,36 @@ public class RealDenseMatrixMultiplication {
      */
     public static double[] blocked(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
+        int cols1 = shape1.dims[Axis2D.col()];
 
-        double[] dest = new double[rows1*cols2];
-        int bsize = Configurations.getBlockSize();
-        int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
+        double[] dest = new double[rows1 * cols2];
+        int blockSize = Configurations.getBlockSize();
+        int iBound, jBound, kBound;
+        int src1Start, destStart, stopIndex;
+        int destIndex, src1Index, src2Index;
 
-        // Blocked matrix multiply
-        for(int ii=0; ii<rows1; ii += bsize) {
-            for(int jj=0; jj<cols2; jj += bsize) {
-                for(int kk=0; kk<rows2; kk += bsize) {
-                    // Multiply the current blocks
-                    for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                        src1IndexStart = i*cols1;
-                        destIndexStart = i*cols2;
+        for(int ii=0; ii<rows1; ii+=blockSize) {
+            iBound = Math.min(ii + blockSize, rows1);
+            for(int jj = 0; jj<cols2; jj+=blockSize) {
+                jBound = Math.min(jj + blockSize, cols2);
+                for(int kk = 0; kk<cols1; kk+=blockSize) {
+                    kBound = Math.min(kk + blockSize, cols1);
 
-                        for(int j=jj; j<jj+bsize && j<cols2; j++) {
-                            src2Index = j;
-                            src1Index = src1IndexStart;
-                            destIndex = destIndexStart + j;
-                            end = src1Index + Math.min(bsize, rows2);
+                    // Multiply current blocks.
+                    for(int i=ii; i<iBound; i++) {
+                        src1Start = i*cols1 + kk;
+                        stopIndex = src1Start+(kBound-kk);
+                        destStart = i*cols2;
 
-                            while(src1Index<end) {
-                                dest[destIndex] += src1[src1Index++]*src2[src2Index];
-                                src2Index += cols2;
+                        for (int j=jj; j<jBound; j++) {
+                            destIndex = destStart + j;
+                            src1Index = src1Start;
+                            src2Index = kk*cols2 + j;
+
+                            while(src1Index < stopIndex) {
+                                dest[destIndex] += src1[src1Index++] * src2[src2Index];
+                                src2Index+=cols2;
                             }
                         }
                     }
@@ -180,34 +181,38 @@ public class RealDenseMatrixMultiplication {
      */
     public static double[] blockedReordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
-        int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
+        int cols1 = shape1.dims[Axis2D.col()];
 
         double[] dest = new double[rows1*cols2];
-        int bsize = Configurations.getBlockSize();
+        int blockSize = Configurations.getBlockSize();
+        int iBound, jBound, kBound;
+        int destStart, src1Start, stopIndex;
+        int destIndex, src1Index, src2Index;
 
-        int src2Index, destIndex, src1IndexStart, destIndexStart, end;
-        double src1Value;
+        for(int ii=0; ii<rows1; ii+=blockSize) {
+            iBound = Math.min(ii + blockSize, rows1);
 
-        // Blocked matrix multiply
-        for(int ii=0; ii<rows1; ii += bsize) {
-            for(int kk=0; kk<rows2; kk += bsize) {
-                for(int jj=0; jj<cols2; jj += bsize) {
-                    // Multiply the current blocks
-                    for(int i=ii; i<ii+bsize && i<rows1; i++) {
+            for(int kk = 0; kk<cols1; kk+=blockSize) {
+                kBound = Math.min(kk + blockSize, cols1);
 
-                        src1IndexStart = i*cols1;
-                        destIndexStart = i*cols2;
+                for(int jj = 0; jj<cols2; jj+=blockSize) {
+                    jBound = Math.min(jj + blockSize, cols2);
 
-                        for(int k=kk; k<kk+bsize && k<rows2; k++) {
-                            src2Index = k*cols2;
-                            src1Value = src1[src1IndexStart + k];
-                            destIndex = destIndexStart;
-                            end = src2Index + Math.min(bsize, cols2);
+                    // Multiply current blocks.
+                    for(int i=ii; i<iBound; i++) {
+                        destStart = i*cols2;
+                        src1Start = i*cols1;
+                        stopIndex = destStart+jBound;
 
-                            while(src2Index<end) {
-                                dest[destIndex++] += src1Value*src2[src2Index++];
+                        for (int k=kk; k<kBound; k++) {
+                            destIndex = destStart + jj;
+                            src1Index = src1Start + k;
+                            src2Index = k*cols2 + jj;
+
+                            while(destIndex<stopIndex) {
+                                dest[destIndex++] += src1[src1Index] * src2[src2Index];
+                                src2Index++;
                             }
                         }
                     }
@@ -231,7 +236,6 @@ public class RealDenseMatrixMultiplication {
     public static double[] concurrentStandard(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
         int cols1 = shape1.dims[Axis2D.col()];
-        int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
 
         double[] dest = new double[rows1*cols2];
@@ -245,7 +249,7 @@ public class RealDenseMatrixMultiplication {
                 int src1Index = src1IndexStart;
                 int destIndex = destIndexStart + j;
 
-                for(int k=0; k<rows2; k++) {
+                for(int k=0; k<cols1; k++) {
                     dest[destIndex] += src1[src1Index++]*src2[src2Index];
                     src2Index += cols2;
                 }
@@ -254,6 +258,7 @@ public class RealDenseMatrixMultiplication {
 
         return dest;
     }
+
 
 
     /**
@@ -267,24 +272,22 @@ public class RealDenseMatrixMultiplication {
      */
     public static double[] concurrentReordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols1 = shape1.dims[Axis2D.col()];
         int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
 
         double[] dest = new double[rows1*cols2];
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
-            int src1IndexStart = i*cols1;
+            int src1IndexStart = i*rows2;
             int destIndexStart = i*cols2;
 
             for(int k=0; k<rows2; k++) {
                 int src2Index = k*cols2;
-                double src1Value = src1[src1IndexStart + k];
                 int destIndex = destIndexStart;
                 int end = src2Index + cols2;
 
                 while(src2Index<end) {
-                    dest[destIndex++] += src1Value*src2[src2Index++];
+                    dest[destIndex++] += src1[src1IndexStart + k]*src2[src2Index++];
                 }
             }
         });
@@ -305,31 +308,34 @@ public class RealDenseMatrixMultiplication {
     public static double[] concurrentBlocked(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
         int cols1 = shape1.dims[Axis2D.col()];
-        int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
 
         double[] dest = new double[rows1*cols2];
-        int bsize = Configurations.getBlockSize();
+        int blockSize = Configurations.getBlockSize();
 
-        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {
-            // Blocked matrix multiply
-            for(int jj=0; jj<cols2; jj += bsize) {
-                for(int kk=0; kk<rows2; kk += bsize) {
-                    // Multiply the current blocks
-                    for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                        int src1IndexStart = i*cols1;
-                        int destIndexStart = i*cols2;
+        ThreadManager.concurrentLoop(0, rows1, blockSize, (ii) -> {
+            int iBound = Math.min(ii + blockSize, rows1);
 
-                        for(int j=jj; j<jj+bsize && j<cols2; j++) {
-                            int src2Index = j;
-                            int src1Index = src1IndexStart;
-                            int destIndex = destIndexStart + j;
-                            // TODO: This is not correct. Should be: end = Math.min(src1Index + bsize, rows2)
-                            int end = src1Index + Math.min(bsize, rows2);
+            for(int jj = 0; jj<cols2; jj+=blockSize) {
+                int jBound = Math.min(jj + blockSize, cols2);
 
-                            while(src1Index<end) {
-                                dest[destIndex] += src1[src1Index++]*src2[src2Index];
-                                src2Index += cols2;
+                for(int kk = 0; kk<cols1; kk+=blockSize) {
+                    int kBound = Math.min(kk + blockSize, cols1);
+
+                    // Multiply current blocks.
+                    for(int i=ii; i<iBound; i++) {
+                        int src1Start = i*cols1 + kk;
+                        int stopIndex = src1Start+(kBound-kk);
+                        int destStart = i*cols2;
+
+                        for (int j=jj; j<jBound; j++) {
+                            int destIndex = destStart + j;
+                            int src1Index = src1Start;
+                            int src2Index = kk*cols2 + j;
+
+                            while(src1Index < stopIndex) {
+                                dest[destIndex] += src1[src1Index++] * src2[src2Index];
+                                src2Index+=cols2;
                             }
                         }
                     }
@@ -353,21 +359,34 @@ public class RealDenseMatrixMultiplication {
     public static double[] concurrentBlockedReordered(double[] src1, Shape shape1, double[] src2, Shape shape2) {
         int rows1 = shape1.dims[Axis2D.row()];
         int cols1 = shape1.dims[Axis2D.col()];
-        int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
 
         double[] dest = new double[rows1*cols2];
-        int bsize = Configurations.getBlockSize();
+        int blockSize = Configurations.getBlockSize();
 
-        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {
-            // Blocked matrix multiply
-            for(int kk=0; kk<rows2; kk += bsize) {
-                for(int jj=0; jj<cols2; jj += bsize) {
-                    // Multiply the current blocks
-                    for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                        for(int k=kk; k<kk+bsize && k<rows2; k++) {
-                            for(int j=jj; j<jj+bsize && j<cols2; j++) {
-                                dest[i*cols2 + j] += src1[i*cols1 + k]*src2[k*cols2 + j];
+        ThreadManager.concurrentLoop(0, rows1, blockSize, (ii) -> {
+            int iBound = Math.min(ii + blockSize, rows1);
+
+            for(int kk = 0; kk<cols1; kk+=blockSize) {
+                int kBound = Math.min(kk + blockSize, cols1);
+
+                for(int jj = 0; jj<cols2; jj+=blockSize) {
+                    int jBound = Math.min(jj + blockSize, cols2);
+
+                    // Multiply current blocks.
+                    for(int i=ii; i<iBound; i++) {
+                        int destStart = i*cols2;
+                        int src1Start = i*cols1;
+                        int stopIndex = destStart+jBound;
+
+                        for (int k=kk; k<kBound; k++) {
+                            int destIndex = destStart + jj;
+                            int src1Index = src1Start + k;
+                            int src2Index = k*cols2 + jj;
+
+                            while(destIndex<stopIndex) {
+                                dest[destIndex++] += src1[src1Index] * src2[src2Index];
+                                src2Index++;
                             }
                         }
                     }
@@ -393,13 +412,14 @@ public class RealDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         double[] dest = new double[rows1];
-        int src1Index;
+        int src1Index, src2Index;
 
         for(int i=0; i<rows1; i++) {
             src1Index = i*cols1;
+            src2Index = 0;
 
-            for(int k=0; k<rows2; k++) {
-                dest[i] += src1[src1Index + k]*src2[k];
+            while(src2Index<rows2) {
+                dest[i] += src1[src1Index++]*src2[src2Index++];
             }
         }
 
@@ -421,15 +441,24 @@ public class RealDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         double[] dest = new double[rows1];
-        int bsize = Configurations.getBlockSize();
+        int blockSize = Configurations.getBlockSize();
+        int iBound, kBound;
+        int src1Index, src2Index;
 
         // Blocked matrix-vector multiply
-        for(int ii=0; ii<rows1; ii += bsize) {
-            for(int kk=0; kk<rows2; kk += bsize) {
+        for(int ii=0; ii<rows1; ii+=blockSize) {
+            iBound = Math.min(ii+blockSize, rows1);
+
+            for(int kk=0; kk<rows2; kk+=blockSize) {
+                kBound = Math.min(kk+blockSize, rows2);
+
                 // Multiply the current blocks
-                for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                    for(int k=kk; k<kk+bsize && k<rows2; k++) {
-                        dest[i] += src1[i*cols1 + k]*src2[k];
+                for(int i=ii; i<iBound; i++) {
+                    src1Index = i*cols1 + kk;
+                    src2Index = kk;
+
+                    while(src2Index<kBound) {
+                        dest[i] += src1[src1Index++]*src2[src2Index++];
                     }
                 }
             }
@@ -456,8 +485,11 @@ public class RealDenseMatrixMultiplication {
         double[] dest = new double[rows1];
 
         ThreadManager.concurrentLoop(0, rows1, (i) -> {
-            for(int k=0; k<rows2; k++) {
-                dest[i] += src1[i*cols1 + k]*src2[k];
+            int src1Index = i*cols1;
+            int src2Index = 0;
+
+            while(src2Index<rows2) {
+                dest[i] += src1[src1Index++]*src2[src2Index++];
             }
         });
 
@@ -480,15 +512,21 @@ public class RealDenseMatrixMultiplication {
         int rows2 = shape2.dims[Axis2D.row()];
 
         double[] dest = new double[rows1];
-        int bsize = Configurations.getBlockSize();
+        int blockSize = Configurations.getBlockSize();
 
-        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -> {
-            // Blocked matrix-vector multiply
-            for(int kk=0; kk<rows2; kk += bsize) {
+        ThreadManager.concurrentLoop(0, rows1, blockSize, (ii) -> {
+            int iBound = Math.min(ii+blockSize, rows1);
+
+            for(int kk=0; kk<rows2; kk+=blockSize) {
+                int kBound = Math.min(kk+blockSize, rows2);
+
                 // Multiply the current blocks
-                for(int i=ii; i<ii+bsize && i<rows1; i++) {
-                    for(int k=kk; k<kk+bsize && k<rows2; k++) {
-                        dest[i] += src1[i*cols1 + k]*src2[k];
+                for(int i=ii; i<iBound; i++) {
+                    int src1Index = i*cols1 + kk;
+                    int src2Index = kk;
+
+                    while(src2Index<kBound) {
+                        dest[i] += src1[src1Index++]*src2[src2Index++];
                     }
                 }
             }

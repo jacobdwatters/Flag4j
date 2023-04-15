@@ -24,6 +24,7 @@
 
 package com.flag4j.operations.dense.real;
 
+import com.flag4j.Shape;
 import com.flag4j.util.ErrorMessages;
 
 /**
@@ -53,5 +54,67 @@ public class RealDenseProperties {
         }
 
         return allZeros;
+    }
+
+
+    /**
+     * Checks if a real dense matrix is symmetric. That is, if the and equal to its transpose.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return True if this matrix is symmetric
+     */
+    public static boolean isSymmetric(double[] src, Shape shape) {
+        if(shape.dims[0]!=shape.dims[1]) {
+            return false;
+        }
+
+        int count1, count2, stop;
+
+        for(int i=0; i<shape.dims[0]; i++) {
+            count1 = i*shape.dims[1];
+            count2 = i;
+            stop = count1 + i;
+
+            while(count1 < stop) {
+                if(src[count1++] != src[count2]) {
+                    return false;
+                }
+
+                count2+=shape.dims[1];
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Checks if a real dense matrix is anti-symmetric. That is, if the and equal to its negative transpose.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return True if this matrix is anti-symmetric
+     */
+    public static boolean isAntiSymmetric(double[] src, Shape shape) {
+        if(shape.dims[0]!=shape.dims[1]) {
+            return false;
+        }
+
+        int count1, count2, stop;
+
+        for(int i=0; i<shape.dims[0]; i++) {
+            count1 = i*shape.dims[1];
+            count2 = i;
+            stop = count1 + i;
+
+            while(count1 < stop) {
+                if(src[count1++] != -src[count2]) {
+                    return false;
+                }
+
+                count2+=shape.dims[1];
+            }
+        }
+
+        return true;
     }
 }

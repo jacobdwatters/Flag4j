@@ -1,0 +1,289 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ComplexDenseTensorDot</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j.operations.dense.complex</a>
+</div>
+
+<h1>Coverage Summary for Class: ComplexDenseTensorDot (com.flag4j.operations.dense.complex)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ComplexDenseTensorDot</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/62)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;/*
+<i class="no-highlight">2</i>&nbsp; * MIT License
+<i class="no-highlight">3</i>&nbsp; *
+<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2023 Jacob Watters
+<i class="no-highlight">5</i>&nbsp; *
+<i class="no-highlight">6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i class="no-highlight">7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i class="no-highlight">8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i class="no-highlight">9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i class="no-highlight">10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i class="no-highlight">11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i class="no-highlight">12</i>&nbsp; *
+<i class="no-highlight">13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i class="no-highlight">14</i>&nbsp; * copies or substantial portions of the Software.
+<i class="no-highlight">15</i>&nbsp; *
+<i class="no-highlight">16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i class="no-highlight">17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i class="no-highlight">18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i class="no-highlight">19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i class="no-highlight">20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i class="no-highlight">21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i class="no-highlight">22</i>&nbsp; * SOFTWARE.
+<i class="no-highlight">23</i>&nbsp; */
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;package com.flag4j.operations.dense.complex;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;
+<i class="no-highlight">28</i>&nbsp;import com.flag4j.*;
+<i class="no-highlight">29</i>&nbsp;import com.flag4j.complex_numbers.CNumber;
+<i class="no-highlight">30</i>&nbsp;import com.flag4j.operations.MatrixMultiplyDispatcher;
+<i class="no-highlight">31</i>&nbsp;import com.flag4j.util.ArrayUtils;
+<i class="no-highlight">32</i>&nbsp;import com.flag4j.util.ErrorMessages;
+<i class="no-highlight">33</i>&nbsp;import com.flag4j.util.ParameterChecks;
+<i class="no-highlight">34</i>&nbsp;
+<i class="no-highlight">35</i>&nbsp;/**
+<i class="no-highlight">36</i>&nbsp; * This class contains methods for computing a tensor dot product, i.e. tensor contraction, between two complex dense tensors.
+<i class="no-highlight">37</i>&nbsp; */
+<i class="no-highlight">38</i>&nbsp;public class ComplexDenseTensorDot {
+<i class="no-highlight">39</i>&nbsp;
+<b class="nc"><i class="no-highlight">40</i>&nbsp;    private ComplexDenseTensorDot() {</b>
+<i class="no-highlight">41</i>&nbsp;        // Hide utility class constructor.
+<b class="nc"><i class="no-highlight">42</i>&nbsp;        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());</b>
+<i class="no-highlight">43</i>&nbsp;    }
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;
+<i class="no-highlight">46</i>&nbsp;    /**
+<i class="no-highlight">47</i>&nbsp;     * Computes the tensor dot product along the first tensors last axis and the second tensors second-to-last axis.
+<i class="no-highlight">48</i>&nbsp;     * @param src1 First tensor in the tensor product.
+<i class="no-highlight">49</i>&nbsp;     * @param src2 Second tensor in the tensor product.
+<i class="no-highlight">50</i>&nbsp;     * @return The tensor dot product along the first tensors last axis and the second tensors second-to-last axis.
+<i class="no-highlight">51</i>&nbsp;     * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
+<i class="no-highlight">52</i>&nbsp;     * along the second-to-last axis.
+<i class="no-highlight">53</i>&nbsp;     */
+<i class="no-highlight">54</i>&nbsp;    public static CTensor dot(CTensor src1, CTensor src2) {
+<b class="nc"><i class="no-highlight">55</i>&nbsp;        int src1Dim = src1.getRank(); // Rank of first tensor.</b>
+<b class="nc"><i class="no-highlight">56</i>&nbsp;        int src2Dim = src2.getRank(); // Rank of second tensor.</b>
+<i class="no-highlight">57</i>&nbsp;
+<i class="no-highlight">58</i>&nbsp;        // Ensure tensors have same length along last axis.
+<b class="nc"><i class="no-highlight">59</i>&nbsp;        ParameterChecks.assertEquals(src1.shape.get(src1Dim-1), src2.shape.get(src2Dim-2));</b>
+<i class="no-highlight">60</i>&nbsp;
+<b class="nc"><i class="no-highlight">61</i>&nbsp;        int axisLength = src1.shape.get(src1Dim-1); // Length of axis along which to compute dot product.</b>
+<b class="nc"><i class="no-highlight">62</i>&nbsp;        CTensor src2Swap = src2.T(src2Dim-1, src2Dim-2);</b>
+<i class="no-highlight">63</i>&nbsp;
+<b class="nc"><i class="no-highlight">64</i>&nbsp;        int iStop = src1.totalEntries().intValueExact()/src1.shape.get(src1Dim-1);</b>
+<b class="nc"><i class="no-highlight">65</i>&nbsp;        int jStop = src2.totalEntries().intValueExact()/src2.shape.get(src2Dim-2);</b>
+<b class="nc"><i class="no-highlight">66</i>&nbsp;        int[] dims = new int[src1Dim+src2Dim-2];</b>
+<b class="nc"><i class="no-highlight">67</i>&nbsp;        int idx = 0;</b>
+<i class="no-highlight">68</i>&nbsp;
+<i class="no-highlight">69</i>&nbsp;        // Copy shape dimensions from each tensor.
+<b class="nc"><i class="no-highlight">70</i>&nbsp;        for(int i=0; i&lt;src1Dim-1; i++) {</b>
+<b class="nc"><i class="no-highlight">71</i>&nbsp;            dims[idx++] = src1.shape.dims[i];</b>
+<i class="no-highlight">72</i>&nbsp;        }
+<i class="no-highlight">73</i>&nbsp;
+<b class="nc"><i class="no-highlight">74</i>&nbsp;        for(int i=0; i&lt;src2Dim-1; i++) {</b>
+<b class="nc"><i class="no-highlight">75</i>&nbsp;            dims[idx++] = src2Swap.shape.dims[i];</b>
+<i class="no-highlight">76</i>&nbsp;        }
+<i class="no-highlight">77</i>&nbsp;
+<b class="nc"><i class="no-highlight">78</i>&nbsp;        Shape destShape = new Shape(dims);</b>
+<b class="nc"><i class="no-highlight">79</i>&nbsp;        CNumber[] dest = new CNumber[destShape.totalEntries().intValueExact()];</b>
+<i class="no-highlight">80</i>&nbsp;        int src1_start, src2_start;
+<i class="no-highlight">81</i>&nbsp;
+<b class="nc"><i class="no-highlight">82</i>&nbsp;        idx = 0;</b>
+<b class="nc"><i class="no-highlight">83</i>&nbsp;        for(int i=0; i&lt;iStop; i++) {</b>
+<b class="nc"><i class="no-highlight">84</i>&nbsp;            src1_start = i*axisLength;</b>
+<i class="no-highlight">85</i>&nbsp;
+<b class="nc"><i class="no-highlight">86</i>&nbsp;            for(int j=0; j&lt;jStop; j++) {</b>
+<b class="nc"><i class="no-highlight">87</i>&nbsp;                src2_start = j*axisLength;</b>
+<i class="no-highlight">88</i>&nbsp;
+<b class="nc"><i class="no-highlight">89</i>&nbsp;                for(int k=0; k&lt;axisLength; k++) {</b>
+<b class="nc"><i class="no-highlight">90</i>&nbsp;                    dest[idx].addEq(src1.entries[src1_start + k].mult(src2Swap.entries[src2_start + k]));</b>
+<i class="no-highlight">91</i>&nbsp;                }
+<i class="no-highlight">92</i>&nbsp;
+<b class="nc"><i class="no-highlight">93</i>&nbsp;                idx++;</b>
+<i class="no-highlight">94</i>&nbsp;            }
+<i class="no-highlight">95</i>&nbsp;        }
+<i class="no-highlight">96</i>&nbsp;
+<b class="nc"><i class="no-highlight">97</i>&nbsp;        return new CTensor(destShape, dest);</b>
+<i class="no-highlight">98</i>&nbsp;    }
+<i class="no-highlight">99</i>&nbsp;
+<i class="no-highlight">100</i>&nbsp;
+<i class="no-highlight">101</i>&nbsp;    /**
+<i class="no-highlight">102</i>&nbsp;     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
+<i class="no-highlight">103</i>&nbsp;     * computes the sum of products between the two tensors along the specified set of axes.
+<i class="no-highlight">104</i>&nbsp;     * @param src1 First tensor in the contraction.
+<i class="no-highlight">105</i>&nbsp;     * @param src2 Second tensor in the contraction.
+<i class="no-highlight">106</i>&nbsp;     * @param src1Axes Axes along which to compute products for {@code src1} tensor.
+<i class="no-highlight">107</i>&nbsp;     * @param src2Axes Axes along which to compute products for {@code src2} tensor.
+<i class="no-highlight">108</i>&nbsp;     * @return The tensor dot product over the specified axes.
+<i class="no-highlight">109</i>&nbsp;     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
+<i class="no-highlight">110</i>&nbsp;     * {@code aAxes} and {@code bAxes}.
+<i class="no-highlight">111</i>&nbsp;     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
+<i class="no-highlight">112</i>&nbsp;     * are out of bounds for the corresponding tensor.
+<i class="no-highlight">113</i>&nbsp;     */
+<i class="no-highlight">114</i>&nbsp;    public static CTensor tensorDot(CTensor src1, CTensor src2, int[] src1Axes, int[] src2Axes) {
+<i class="no-highlight">115</i>&nbsp;        // Each array must specify the same number of axes.
+<b class="nc"><i class="no-highlight">116</i>&nbsp;        ParameterChecks.assertEquals(src1Axes.length, src2Axes.length);</b>
+<i class="no-highlight">117</i>&nbsp;
+<i class="no-highlight">118</i>&nbsp;        // Axis values must be less than the rank of the tensor and non-negative
+<b class="nc"><i class="no-highlight">119</i>&nbsp;        ParameterChecks.assertLessEq(src1.getRank()-1, src1Axes);</b>
+<b class="nc"><i class="no-highlight">120</i>&nbsp;        ParameterChecks.assertGreaterEq(0, src1Axes);</b>
+<b class="nc"><i class="no-highlight">121</i>&nbsp;        ParameterChecks.assertLessEq(src2.getRank()-1, src2Axes);</b>
+<b class="nc"><i class="no-highlight">122</i>&nbsp;        ParameterChecks.assertGreaterEq(0, src2Axes);</b>
+<i class="no-highlight">123</i>&nbsp;
+<i class="no-highlight">124</i>&nbsp;        int[] notin;
+<i class="no-highlight">125</i>&nbsp;        int n1;
+<i class="no-highlight">126</i>&nbsp;        int n2;
+<i class="no-highlight">127</i>&nbsp;        int pos;
+<i class="no-highlight">128</i>&nbsp;
+<i class="no-highlight">129</i>&nbsp;        // ---- Compute new axes and shapes for first tensor. ----
+<b class="nc"><i class="no-highlight">130</i>&nbsp;        notin = ArrayUtils.notinAxes(src1Axes, src1.getRank());</b>
+<b class="nc"><i class="no-highlight">131</i>&nbsp;        int[] src1NewAxes = ArrayUtils.join(notin, src1Axes);</b>
+<i class="no-highlight">132</i>&nbsp;
+<b class="nc"><i class="no-highlight">133</i>&nbsp;        n2 = 1;</b>
+<b class="nc"><i class="no-highlight">134</i>&nbsp;        for(int axis : src1Axes) {</b>
+<b class="nc"><i class="no-highlight">135</i>&nbsp;            n2 *= src1.shape.get(axis);</b>
+<i class="no-highlight">136</i>&nbsp;        }
+<i class="no-highlight">137</i>&nbsp;
+<b class="nc"><i class="no-highlight">138</i>&nbsp;        n1 = 1;</b>
+<b class="nc"><i class="no-highlight">139</i>&nbsp;        int[] src1OldDims = new int[notin.length];</b>
+<b class="nc"><i class="no-highlight">140</i>&nbsp;        pos = 0;</b>
+<b class="nc"><i class="no-highlight">141</i>&nbsp;        for(int axis : notin) {</b>
+<b class="nc"><i class="no-highlight">142</i>&nbsp;            n1 *= src1.shape.get(axis);</b>
+<b class="nc"><i class="no-highlight">143</i>&nbsp;            src1OldDims[pos++] = src1.shape.get(axis);</b>
+<i class="no-highlight">144</i>&nbsp;        }
+<i class="no-highlight">145</i>&nbsp;
+<b class="nc"><i class="no-highlight">146</i>&nbsp;        Shape src1NewShape = new Shape(n1, n2);</b>
+<i class="no-highlight">147</i>&nbsp;        // -----------------------------------------------------
+<i class="no-highlight">148</i>&nbsp;
+<i class="no-highlight">149</i>&nbsp;        // ---- Compute new axes and shapes for second tensor. ----
+<b class="nc"><i class="no-highlight">150</i>&nbsp;        notin = ArrayUtils.notinAxes(src2Axes, src2.getRank());</b>
+<b class="nc"><i class="no-highlight">151</i>&nbsp;        int[] src2NewAxes = ArrayUtils.join(src2Axes, notin);</b>
+<i class="no-highlight">152</i>&nbsp;
+<b class="nc"><i class="no-highlight">153</i>&nbsp;        n2 = 1;</b>
+<b class="nc"><i class="no-highlight">154</i>&nbsp;        for(int axis : src2Axes) {</b>
+<b class="nc"><i class="no-highlight">155</i>&nbsp;            n2 *= src2.shape.get(axis);</b>
+<i class="no-highlight">156</i>&nbsp;        }
+<i class="no-highlight">157</i>&nbsp;
+<b class="nc"><i class="no-highlight">158</i>&nbsp;        n1 = 1;</b>
+<b class="nc"><i class="no-highlight">159</i>&nbsp;        pos = 0;</b>
+<b class="nc"><i class="no-highlight">160</i>&nbsp;        int[] src2OldDims = new int[notin.length];</b>
+<b class="nc"><i class="no-highlight">161</i>&nbsp;        for(int axis : notin) {</b>
+<b class="nc"><i class="no-highlight">162</i>&nbsp;            n1 *= src2.shape.get(axis);</b>
+<b class="nc"><i class="no-highlight">163</i>&nbsp;            src2OldDims[pos++] = src2.shape.get(axis);</b>
+<i class="no-highlight">164</i>&nbsp;        }
+<i class="no-highlight">165</i>&nbsp;
+<b class="nc"><i class="no-highlight">166</i>&nbsp;        Shape src2NewShape = new Shape(n2, n1);</b>
+<i class="no-highlight">167</i>&nbsp;        // -----------------------------------------------------
+<i class="no-highlight">168</i>&nbsp;
+<i class="no-highlight">169</i>&nbsp;        // Reform problem as a matrix multiplication problem.
+<b class="nc"><i class="no-highlight">170</i>&nbsp;        CMatrix at = new CMatrix(</b>
+<i class="no-highlight">171</i>&nbsp;                src1NewShape,
+<b class="nc"><i class="no-highlight">172</i>&nbsp;                ComplexDenseTranspose.standardConcurrent(src1.entries, src1.shape, src1NewAxes)</b>
+<i class="no-highlight">173</i>&nbsp;        );
+<b class="nc"><i class="no-highlight">174</i>&nbsp;        CMatrix bt = new CMatrix(</b>
+<i class="no-highlight">175</i>&nbsp;                src2NewShape,
+<b class="nc"><i class="no-highlight">176</i>&nbsp;                ComplexDenseTranspose.standardConcurrent(src2.entries, src2.shape, src2NewAxes)</b>
+<i class="no-highlight">177</i>&nbsp;        );
+<i class="no-highlight">178</i>&nbsp;
+<b class="nc"><i class="no-highlight">179</i>&nbsp;        CNumber[] destEntries = MatrixMultiplyDispatcher.dispatch(at, bt);</b>
+<b class="nc"><i class="no-highlight">180</i>&nbsp;        Shape destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));</b>
+<i class="no-highlight">181</i>&nbsp;
+<b class="nc"><i class="no-highlight">182</i>&nbsp;        return new CTensor(destShape, destEntries);</b>
+<i class="no-highlight">183</i>&nbsp;    }
+<i class="no-highlight">184</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-15 14:02</div>
+</div>
+</body>
+</html>

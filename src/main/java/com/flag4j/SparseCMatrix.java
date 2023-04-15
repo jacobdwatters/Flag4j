@@ -319,4 +319,10 @@ public class SparseCMatrix extends SparseMatrixBase<CNumber[]> {
         super(A.shape.copy(), A.nonZeroEntries(), new CNumber[A.nonZeroEntries()], A.rowIndices.clone(), A.colIndices.clone());
         ArrayUtils.copy2CNumber(A.entries, super.entries);
     }
+
+
+    @Override
+    public SparseCMatrix flatten(int axis) {
+        return null;
+    }
 }

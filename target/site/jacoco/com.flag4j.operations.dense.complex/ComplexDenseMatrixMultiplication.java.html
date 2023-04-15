@@ -56,22 +56,32 @@ public class ComplexDenseMatrixMultiplication {
      */
     public static CNumber[] standard(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
 <span class="fc" id="L58">        int rows1 = shape1.dims[Axis2D.row()];</span>
-<span class="fc" id="L59">        int cols1 = shape1.dims[Axis2D.col()];</span>
-<span class="fc" id="L60">        int rows2 = shape2.dims[Axis2D.row()];</span>
-<span class="fc" id="L61">        int cols2 = shape2.dims[Axis2D.col()];</span>
+<span class="fc" id="L59">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L60">        int cols2 = shape2.dims[Axis2D.col()];</span>
 
-<span class="fc" id="L63">        CNumber[] dest = new CNumber[rows1*cols2];</span>
-<span class="fc" id="L64">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
+<span class="fc" id="L62">        CNumber[] dest = new CNumber[rows1*cols2];</span>
+<span class="fc" id="L63">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
 
-<span class="fc bfc" id="L66" title="All 2 branches covered.">        for(int i=0; i&lt;rows1; i++) {</span>
-<span class="fc bfc" id="L67" title="All 2 branches covered.">            for(int j=0; j&lt;cols2; j++) {</span>
-<span class="fc bfc" id="L68" title="All 2 branches covered.">                for(int k=0; k&lt;rows2; k++) {</span>
-<span class="fc" id="L69">                    dest[i*cols2 + j].addEq(src1[i*cols1 + k].mult(src2[k*cols2 + j]));</span>
+        int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
+
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        for(int i=0; i&lt;rows1; i++) {</span>
+<span class="fc" id="L68">            src1IndexStart = i*rows2;</span>
+<span class="fc" id="L69">            destIndexStart = i*cols2;</span>
+
+<span class="fc bfc" id="L71" title="All 2 branches covered.">            for(int j=0; j&lt;cols2; j++) {</span>
+<span class="fc" id="L72">                src2Index = j;</span>
+<span class="fc" id="L73">                src1Index = src1IndexStart;</span>
+<span class="fc" id="L74">                destIndex = destIndexStart + j;</span>
+<span class="fc" id="L75">                end = src1Index + rows2;</span>
+
+<span class="fc bfc" id="L77" title="All 2 branches covered.">                while(src1Index&lt;end) {</span>
+<span class="fc" id="L78">                    dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index]));</span>
+<span class="fc" id="L79">                    src2Index += cols2;</span>
                 }
             }
         }
 
-<span class="fc" id="L74">        return dest;</span>
+<span class="fc" id="L84">        return dest;</span>
     }
 
 
@@ -85,23 +95,33 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] reordered(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L88">        int rows1 = shape1.dims[Axis2D.row()];</span>
-<span class="fc" id="L89">        int cols1 = shape1.dims[Axis2D.col()];</span>
-<span class="fc" id="L90">        int rows2 = shape2.dims[Axis2D.row()];</span>
-<span class="fc" id="L91">        int cols2 = shape2.dims[Axis2D.col()];</span>
+<span class="fc" id="L98">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L99">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L100">        int cols2 = shape2.dims[Axis2D.col()];</span>
 
-<span class="fc" id="L93">        CNumber[] dest = new CNumber[rows1*cols2];</span>
-<span class="fc" id="L94">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
+<span class="fc" id="L102">        CNumber[] dest = new CNumber[rows1*cols2];</span>
+<span class="fc" id="L103">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
 
-<span class="fc bfc" id="L96" title="All 2 branches covered.">        for(int i=0; i&lt;rows1; i++) {</span>
-<span class="fc bfc" id="L97" title="All 2 branches covered.">            for(int k=0; k&lt;rows2; k++) {</span>
-<span class="fc bfc" id="L98" title="All 2 branches covered.">                for(int j=0; j&lt;cols2; j++) {</span>
-<span class="fc" id="L99">                    dest[i*cols2 + j].addEq(src1[i*cols1 + k].mult(src2[k*cols2 + j]));</span>
+        int src2Index, destIndex, src1Start, destIndexStart, end;
+        int src1Index;
+
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        for(int i=0; i&lt;rows1; i++) {</span>
+<span class="fc" id="L109">            src1Start = i*cols1;</span>
+<span class="fc" id="L110">            destIndexStart = i*cols2;</span>
+
+<span class="fc bfc" id="L112" title="All 2 branches covered.">            for(int k=0; k&lt;cols1; k++) {</span>
+<span class="fc" id="L113">                src1Index = src1Start+k;</span>
+<span class="fc" id="L114">                src2Index = k*cols2;</span>
+<span class="fc" id="L115">                destIndex = destIndexStart;</span>
+<span class="fc" id="L116">                end = src2Index + cols2;</span>
+
+<span class="fc bfc" id="L118" title="All 2 branches covered.">                while(src2Index&lt;end) {</span>
+<span class="fc" id="L119">                    dest[destIndex++].addEq(src1[src1Index].mult(src2[src2Index++]));</span>
                 }
             }
         }
 
-<span class="fc" id="L104">        return dest;</span>
+<span class="fc" id="L124">        return dest;</span>
     }
 
 
@@ -114,24 +134,39 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] blocked(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L117">        int rows1 = shape1.dims[Axis2D.row()];</span>
-<span class="fc" id="L118">        int cols1 = shape1.dims[Axis2D.col()];</span>
-<span class="fc" id="L119">        int rows2 = shape2.dims[Axis2D.row()];</span>
-<span class="fc" id="L120">        int cols2 = shape2.dims[Axis2D.col()];</span>
+<span class="fc" id="L137">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L138">        int cols2 = shape2.dims[Axis2D.col()];</span>
+<span class="fc" id="L139">        int cols1 = shape1.dims[Axis2D.col()];</span>
 
-<span class="fc" id="L122">        CNumber[] dest = new CNumber[rows1*cols2];</span>
-<span class="fc" id="L123">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
-<span class="fc" id="L124">        int bsize = Configurations.getBlockSize()/2;</span>
+<span class="fc" id="L141">        CNumber[] dest = new CNumber[rows1 * cols2];</span>
+<span class="fc" id="L142">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
 
-        // Blocked matrix multiply
-<span class="fc bfc" id="L127" title="All 2 branches covered.">        for(int ii=0; ii&lt;rows1; ii += bsize) {</span>
-<span class="fc bfc" id="L128" title="All 2 branches covered.">            for(int jj=0; jj&lt;cols2; jj += bsize) {</span>
-<span class="fc bfc" id="L129" title="All 2 branches covered.">                for(int kk=0; kk&lt;rows2; kk += bsize) {</span>
-                    // Multiply the current blocks
-<span class="pc bpc" id="L131" title="1 of 4 branches missed.">                    for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
-<span class="pc bpc" id="L132" title="1 of 4 branches missed.">                        for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;cols2; j++) {</span>
-<span class="pc bpc" id="L133" title="1 of 4 branches missed.">                            for(int k=kk; k&lt;kk+bsize &amp;&amp; k&lt;rows2; k++) {</span>
-<span class="fc" id="L134">                                dest[i*cols2 + j].addEq(src1[i*cols1 + k].mult(src2[k*cols2 + j]));</span>
+<span class="fc" id="L144">        int blockSize = Configurations.getBlockSize();</span>
+        int iBound, jBound, kBound;
+        int src1Start, destStart, stopIndex;
+        int destIndex, src1Index, src2Index;
+
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        for(int ii=0; ii&lt;rows1; ii+=blockSize) {</span>
+<span class="fc" id="L150">            iBound = Math.min(ii + blockSize, rows1);</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">            for(int jj = 0; jj&lt;cols2; jj+=blockSize) {</span>
+<span class="fc" id="L152">                jBound = Math.min(jj + blockSize, cols2);</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">                for(int kk = 0; kk&lt;cols1; kk+=blockSize) {</span>
+<span class="fc" id="L154">                    kBound = Math.min(kk + blockSize, cols1);</span>
+
+                    // Multiply current blocks.
+<span class="fc bfc" id="L157" title="All 2 branches covered.">                    for(int i=ii; i&lt;iBound; i++) {</span>
+<span class="fc" id="L158">                        src1Start = i*cols1 + kk;</span>
+<span class="fc" id="L159">                        stopIndex = src1Start+(kBound-kk);</span>
+<span class="fc" id="L160">                        destStart = i*cols2;</span>
+
+<span class="fc bfc" id="L162" title="All 2 branches covered.">                        for (int j=jj; j&lt;jBound; j++) {</span>
+<span class="fc" id="L163">                            destIndex = destStart + j;</span>
+<span class="fc" id="L164">                            src1Index = src1Start;</span>
+<span class="fc" id="L165">                            src2Index = kk*cols2 + j;</span>
+
+<span class="fc bfc" id="L167" title="All 2 branches covered.">                            while(src1Index &lt; stopIndex) {</span>
+<span class="fc" id="L168">                                dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index]));</span>
+<span class="fc" id="L169">                                src2Index+=cols2;</span>
                             }
                         }
                     }
@@ -139,7 +174,7 @@ public class ComplexDenseMatrixMultiplication {
             }
         }
 
-<span class="fc" id="L142">        return dest;</span>
+<span class="fc" id="L177">        return dest;</span>
     }
 
 
@@ -153,24 +188,41 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] blockedReordered(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L156">        int rows1 = shape1.dims[Axis2D.row()];</span>
-<span class="fc" id="L157">        int cols1 = shape1.dims[Axis2D.col()];</span>
-<span class="fc" id="L158">        int rows2 = shape2.dims[Axis2D.row()];</span>
-<span class="fc" id="L159">        int cols2 = shape2.dims[Axis2D.col()];</span>
+<span class="fc" id="L191">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L192">        int cols2 = shape2.dims[Axis2D.col()];</span>
+<span class="fc" id="L193">        int cols1 = shape1.dims[Axis2D.col()];</span>
 
-<span class="fc" id="L161">        CNumber[] dest = new CNumber[rows1*cols2];</span>
-<span class="fc" id="L162">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
-<span class="fc" id="L163">        int bsize = Configurations.getBlockSize()/2;</span>
+<span class="fc" id="L195">        CNumber[] dest = new CNumber[rows1*cols2];</span>
+<span class="fc" id="L196">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
 
-        // Blocked matrix multiply
-<span class="fc bfc" id="L166" title="All 2 branches covered.">        for(int ii=0; ii&lt;rows1; ii += bsize) {</span>
-<span class="fc bfc" id="L167" title="All 2 branches covered.">            for(int kk=0; kk&lt;rows2; kk += bsize) {</span>
-<span class="fc bfc" id="L168" title="All 2 branches covered.">                for(int jj=0; jj&lt;cols2; jj += bsize) {</span>
-                    // Multiply the current blocks
-<span class="pc bpc" id="L170" title="1 of 4 branches missed.">                    for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
-<span class="pc bpc" id="L171" title="1 of 4 branches missed.">                        for(int k=kk; k&lt;kk+bsize &amp;&amp; k&lt;rows2; k++) {</span>
-<span class="pc bpc" id="L172" title="1 of 4 branches missed.">                            for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;cols2; j++) {</span>
-<span class="fc" id="L173">                                dest[i*cols2 + j].addEq(src1[i*cols1 + k].mult(src2[k*cols2 + j]));</span>
+<span class="fc" id="L198">        int blockSize = Configurations.getBlockSize();</span>
+        int iBound, jBound, kBound;
+        int destStart, src1Start, stopIndex;
+        int destIndex, src1Index, src2Index;
+
+<span class="fc bfc" id="L203" title="All 2 branches covered.">        for(int ii=0; ii&lt;rows1; ii+=blockSize) {</span>
+<span class="fc" id="L204">            iBound = Math.min(ii + blockSize, rows1);</span>
+
+<span class="fc bfc" id="L206" title="All 2 branches covered.">            for(int kk = 0; kk&lt;cols1; kk+=blockSize) {</span>
+<span class="fc" id="L207">                kBound = Math.min(kk + blockSize, cols1);</span>
+
+<span class="fc bfc" id="L209" title="All 2 branches covered.">                for(int jj = 0; jj&lt;cols2; jj+=blockSize) {</span>
+<span class="fc" id="L210">                    jBound = Math.min(jj + blockSize, cols2);</span>
+
+                    // Multiply current blocks.
+<span class="fc bfc" id="L213" title="All 2 branches covered.">                    for(int i=ii; i&lt;iBound; i++) {</span>
+<span class="fc" id="L214">                        destStart = i*cols2;</span>
+<span class="fc" id="L215">                        src1Start = i*cols1;</span>
+<span class="fc" id="L216">                        stopIndex = destStart+jBound;</span>
+
+<span class="fc bfc" id="L218" title="All 2 branches covered.">                        for (int k=kk; k&lt;kBound; k++) {</span>
+<span class="fc" id="L219">                            destIndex = destStart + jj;</span>
+<span class="fc" id="L220">                            src1Index = src1Start + k;</span>
+<span class="fc" id="L221">                            src2Index = k*cols2 + jj;</span>
+
+<span class="fc bfc" id="L223" title="All 2 branches covered.">                            while(destIndex&lt;stopIndex) {</span>
+<span class="fc" id="L224">                                dest[destIndex++].addEq(src1[src1Index].mult(src2[src2Index]));</span>
+<span class="fc" id="L225">                                src2Index++;</span>
                             }
                         }
                     }
@@ -178,7 +230,7 @@ public class ComplexDenseMatrixMultiplication {
             }
         }
 
-<span class="fc" id="L181">        return dest;</span>
+<span class="fc" id="L233">        return dest;</span>
     }
 
 
@@ -192,23 +244,30 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] concurrentStandard(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L195">        int rows1 = shape1.dims[Axis2D.row()];</span>
-<span class="fc" id="L196">        int cols1 = shape1.dims[Axis2D.col()];</span>
-<span class="fc" id="L197">        int rows2 = shape2.dims[Axis2D.row()];</span>
-<span class="fc" id="L198">        int cols2 = shape2.dims[Axis2D.col()];</span>
+<span class="fc" id="L247">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L248">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L249">        int cols2 = shape2.dims[Axis2D.col()];</span>
 
-<span class="fc" id="L200">        CNumber[] dest = new CNumber[rows1*cols2];</span>
-<span class="fc" id="L201">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
+<span class="fc" id="L251">        CNumber[] dest = new CNumber[rows1*cols2];</span>
+<span class="fc" id="L252">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
 
-<span class="fc" id="L203">        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</span>
-<span class="fc bfc" id="L204" title="All 2 branches covered.">            for(int j=0; j&lt;cols2; j++) {</span>
-<span class="fc bfc" id="L205" title="All 2 branches covered.">                for(int k=0; k&lt;rows2; k++) {</span>
-<span class="fc" id="L206">                    dest[i*cols2 + j].addEq(src1[i*cols1 + k].mult(src2[k*cols2 + j]));</span>
+<span class="fc" id="L254">        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</span>
+<span class="fc" id="L255">            int src1IndexStart = i*cols1;</span>
+<span class="fc" id="L256">            int destIndexStart = i*cols2;</span>
+
+<span class="fc bfc" id="L258" title="All 2 branches covered.">            for(int j=0; j&lt;cols2; j++) {</span>
+<span class="fc" id="L259">                int src2Index = j;</span>
+<span class="fc" id="L260">                int src1Index = src1IndexStart;</span>
+<span class="fc" id="L261">                int destIndex = destIndexStart + j;</span>
+
+<span class="fc bfc" id="L263" title="All 2 branches covered.">                for(int k=0; k&lt;cols1; k++) {</span>
+<span class="fc" id="L264">                    dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index]));</span>
+<span class="fc" id="L265">                    src2Index += cols2;</span>
                 }
             }
-<span class="fc" id="L209">        });</span>
+<span class="fc" id="L268">        });</span>
 
-<span class="fc" id="L211">        return dest;</span>
+<span class="fc" id="L270">        return dest;</span>
     }
 
 
@@ -222,23 +281,29 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] concurrentReordered(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L225">        int rows1 = shape1.dims[Axis2D.row()];</span>
-<span class="fc" id="L226">        int cols1 = shape1.dims[Axis2D.col()];</span>
-<span class="fc" id="L227">        int rows2 = shape2.dims[Axis2D.row()];</span>
-<span class="fc" id="L228">        int cols2 = shape2.dims[Axis2D.col()];</span>
+<span class="fc" id="L284">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L285">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L286">        int cols2 = shape2.dims[Axis2D.col()];</span>
 
-<span class="fc" id="L230">        CNumber[] dest = new CNumber[rows1*cols2];</span>
-<span class="fc" id="L231">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
+<span class="fc" id="L288">        CNumber[] dest = new CNumber[rows1*cols2];</span>
+<span class="fc" id="L289">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
 
-<span class="fc" id="L233">        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</span>
-<span class="fc bfc" id="L234" title="All 2 branches covered.">            for(int k=0; k&lt;rows2; k++) {</span>
-<span class="fc bfc" id="L235" title="All 2 branches covered.">                for(int j=0; j&lt;cols2; j++) {</span>
-<span class="fc" id="L236">                    dest[i*cols2 + j].addEq(src1[i*cols1 + k].mult(src2[k*cols2 + j]));</span>
+<span class="fc" id="L291">        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</span>
+<span class="fc" id="L292">            int src1IndexStart = i*rows2;</span>
+<span class="fc" id="L293">            int destIndexStart = i*cols2;</span>
+
+<span class="fc bfc" id="L295" title="All 2 branches covered.">            for(int k=0; k&lt;rows2; k++) {</span>
+<span class="fc" id="L296">                int src2Index = k*cols2;</span>
+<span class="fc" id="L297">                int destIndex = destIndexStart;</span>
+<span class="fc" id="L298">                int end = src2Index + cols2;</span>
+
+<span class="fc bfc" id="L300" title="All 2 branches covered.">                while(src2Index&lt;end) {</span>
+<span class="fc" id="L301">                    dest[destIndex++].addEq(src1[src1IndexStart + k].mult(src2[src2Index++]));</span>
                 }
             }
-<span class="fc" id="L239">        });</span>
+<span class="fc" id="L304">        });</span>
 
-<span class="fc" id="L241">        return dest;</span>
+<span class="fc" id="L306">        return dest;</span>
     }
 
 
@@ -252,32 +317,45 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] concurrentBlocked(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L255">        int rows1 = shape1.dims[Axis2D.row()];</span>
-<span class="fc" id="L256">        int cols1 = shape1.dims[Axis2D.col()];</span>
-<span class="fc" id="L257">        int rows2 = shape2.dims[Axis2D.row()];</span>
-<span class="fc" id="L258">        int cols2 = shape2.dims[Axis2D.col()];</span>
+<span class="fc" id="L320">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L321">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L322">        int cols2 = shape2.dims[Axis2D.col()];</span>
 
-<span class="fc" id="L260">        CNumber[] dest = new CNumber[rows1*cols2];</span>
-<span class="fc" id="L261">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
-<span class="fc" id="L262">        int bsize = Configurations.getBlockSize()/2;</span>
+<span class="fc" id="L324">        CNumber[] dest = new CNumber[rows1*cols2];</span>
+<span class="fc" id="L325">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
+<span class="fc" id="L326">        int blockSize = Configurations.getBlockSize();</span>
 
-<span class="fc" id="L264">        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -&gt; {</span>
-            // Blocked matrix multiply
-<span class="fc bfc" id="L266" title="All 2 branches covered.">            for(int jj=0; jj&lt;cols2; jj += bsize) {</span>
-<span class="fc bfc" id="L267" title="All 2 branches covered.">                for(int kk=0; kk&lt;rows2; kk += bsize) {</span>
-                    // Multiply the current blocks
-<span class="pc bpc" id="L269" title="1 of 4 branches missed.">                    for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
-<span class="pc bpc" id="L270" title="1 of 4 branches missed.">                        for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;cols2; j++) {</span>
-<span class="pc bpc" id="L271" title="1 of 4 branches missed.">                            for(int k=kk; k&lt;kk+bsize &amp;&amp; k&lt;rows2; k++) {</span>
-<span class="fc" id="L272">                                dest[i*cols2 + j].addEq(src1[i*cols1 + k].mult(src2[k*cols2 + j]));</span>
+<span class="fc" id="L328">        ThreadManager.concurrentLoop(0, rows1, blockSize, (ii) -&gt; {</span>
+<span class="fc" id="L329">            int iBound = Math.min(ii + blockSize, rows1);</span>
+
+<span class="fc bfc" id="L331" title="All 2 branches covered.">            for(int jj = 0; jj&lt;cols2; jj+=blockSize) {</span>
+<span class="fc" id="L332">                int jBound = Math.min(jj + blockSize, cols2);</span>
+
+<span class="fc bfc" id="L334" title="All 2 branches covered.">                for(int kk = 0; kk&lt;cols1; kk+=blockSize) {</span>
+<span class="fc" id="L335">                    int kBound = Math.min(kk + blockSize, cols1);</span>
+
+                    // Multiply current blocks.
+<span class="fc bfc" id="L338" title="All 2 branches covered.">                    for(int i=ii; i&lt;iBound; i++) {</span>
+<span class="fc" id="L339">                        int src1Start = i*cols1 + kk;</span>
+<span class="fc" id="L340">                        int stopIndex = src1Start+(kBound-kk);</span>
+<span class="fc" id="L341">                        int destStart = i*cols2;</span>
+
+<span class="fc bfc" id="L343" title="All 2 branches covered.">                        for (int j=jj; j&lt;jBound; j++) {</span>
+<span class="fc" id="L344">                            int destIndex = destStart + j;</span>
+<span class="fc" id="L345">                            int src1Index = src1Start;</span>
+<span class="fc" id="L346">                            int src2Index = kk*cols2 + j;</span>
+
+<span class="fc bfc" id="L348" title="All 2 branches covered.">                            while(src1Index &lt; stopIndex) {</span>
+<span class="fc" id="L349">                                dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index]));</span>
+<span class="fc" id="L350">                                src2Index+=cols2;</span>
                             }
                         }
                     }
                 }
             }
-<span class="fc" id="L278">        });</span>
+<span class="fc" id="L356">        });</span>
 
-<span class="fc" id="L280">        return dest;</span>
+<span class="fc" id="L358">        return dest;</span>
     }
 
 
@@ -291,32 +369,45 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] concurrentBlockedReordered(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L294">        int rows1 = shape1.dims[Axis2D.row()];</span>
-<span class="fc" id="L295">        int cols1 = shape1.dims[Axis2D.col()];</span>
-<span class="fc" id="L296">        int rows2 = shape2.dims[Axis2D.row()];</span>
-<span class="fc" id="L297">        int cols2 = shape2.dims[Axis2D.col()];</span>
+<span class="fc" id="L372">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L373">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L374">        int cols2 = shape2.dims[Axis2D.col()];</span>
 
-<span class="fc" id="L299">        CNumber[] dest = new CNumber[rows1*cols2];</span>
-<span class="fc" id="L300">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
-<span class="fc" id="L301">        int bsize = Configurations.getBlockSize()/2;</span>
+<span class="fc" id="L376">        CNumber[] dest = new CNumber[rows1*cols2];</span>
+<span class="fc" id="L377">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
+<span class="fc" id="L378">        int blockSize = Configurations.getBlockSize();</span>
 
-<span class="fc" id="L303">        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -&gt; {</span>
-            // Blocked matrix multiply
-<span class="fc bfc" id="L305" title="All 2 branches covered.">            for(int kk=0; kk&lt;rows2; kk += bsize) {</span>
-<span class="fc bfc" id="L306" title="All 2 branches covered.">                for(int jj=0; jj&lt;cols2; jj += bsize) {</span>
-                    // Multiply the current blocks
-<span class="pc bpc" id="L308" title="1 of 4 branches missed.">                    for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
-<span class="pc bpc" id="L309" title="1 of 4 branches missed.">                        for(int k=kk; k&lt;kk+bsize &amp;&amp; k&lt;rows2; k++) {</span>
-<span class="pc bpc" id="L310" title="1 of 4 branches missed.">                            for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;cols2; j++) {</span>
-<span class="fc" id="L311">                                dest[i*cols2 + j].addEq(src1[i*cols1 + k].mult(src2[k*cols2 + j]));</span>
+<span class="fc" id="L380">        ThreadManager.concurrentLoop(0, rows1, blockSize, (ii) -&gt; {</span>
+<span class="fc" id="L381">            int iBound = Math.min(ii + blockSize, rows1);</span>
+
+<span class="fc bfc" id="L383" title="All 2 branches covered.">            for(int kk = 0; kk&lt;cols1; kk+=blockSize) {</span>
+<span class="fc" id="L384">                int kBound = Math.min(kk + blockSize, cols1);</span>
+
+<span class="fc bfc" id="L386" title="All 2 branches covered.">                for(int jj = 0; jj&lt;cols2; jj+=blockSize) {</span>
+<span class="fc" id="L387">                    int jBound = Math.min(jj + blockSize, cols2);</span>
+
+                    // Multiply current blocks.
+<span class="fc bfc" id="L390" title="All 2 branches covered.">                    for(int i=ii; i&lt;iBound; i++) {</span>
+<span class="fc" id="L391">                        int destStart = i*cols2;</span>
+<span class="fc" id="L392">                        int src1Start = i*cols1;</span>
+<span class="fc" id="L393">                        int stopIndex = destStart+jBound;</span>
+
+<span class="fc bfc" id="L395" title="All 2 branches covered.">                        for (int k=kk; k&lt;kBound; k++) {</span>
+<span class="fc" id="L396">                            int destIndex = destStart + jj;</span>
+<span class="fc" id="L397">                            int src1Index = src1Start + k;</span>
+<span class="fc" id="L398">                            int src2Index = k*cols2 + jj;</span>
+
+<span class="fc bfc" id="L400" title="All 2 branches covered.">                            while(destIndex&lt;stopIndex) {</span>
+<span class="fc" id="L401">                                dest[destIndex++].addEq(src1[src1Index].mult(src2[src2Index]));</span>
+<span class="fc" id="L402">                                src2Index++;</span>
                             }
                         }
                     }
                 }
             }
-<span class="fc" id="L317">        });</span>
+<span class="fc" id="L408">        });</span>
 
-<span class="fc" id="L319">        return dest;</span>
+<span class="fc" id="L410">        return dest;</span>
     }
 
 
@@ -329,20 +420,24 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] standardVector(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L332">        int rows1 = shape1.dims[Axis2D.row()];</span>
-<span class="fc" id="L333">        int cols1 = shape1.dims[Axis2D.col()];</span>
-<span class="fc" id="L334">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L423">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L424">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L425">        int rows2 = shape2.dims[Axis2D.row()];</span>
 
-<span class="fc" id="L336">        CNumber[] dest = new CNumber[rows1];</span>
-<span class="fc" id="L337">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
+<span class="fc" id="L427">        CNumber[] dest = new CNumber[rows1];</span>
+<span class="fc" id="L428">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
+        int src1Index, src2Index;
 
-<span class="fc bfc" id="L339" title="All 2 branches covered.">        for(int i=0; i&lt;rows1; i++) {</span>
-<span class="fc bfc" id="L340" title="All 2 branches covered.">            for(int k=0; k&lt;rows2; k++) {</span>
-<span class="fc" id="L341">                dest[i].addEq(src1[i*cols1 + k].mult(src2[k]));</span>
+<span class="fc bfc" id="L431" title="All 2 branches covered.">        for(int i=0; i&lt;rows1; i++) {</span>
+<span class="fc" id="L432">            src1Index = i*cols1;</span>
+<span class="fc" id="L433">            src2Index = 0;</span>
+
+<span class="fc bfc" id="L435" title="All 2 branches covered.">            while(src2Index&lt;rows2) {</span>
+<span class="fc" id="L436">                dest[i].addEq(src1[src1Index++].mult(src2[src2Index++]));</span>
             }
         }
 
-<span class="fc" id="L345">        return dest;</span>
+<span class="fc" id="L440">        return dest;</span>
     }
 
 
@@ -355,27 +450,36 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] blockedVector(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L358">        int rows1 = shape1.dims[Axis2D.row()];</span>
-<span class="fc" id="L359">        int cols1 = shape1.dims[Axis2D.col()];</span>
-<span class="fc" id="L360">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L453">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L454">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L455">        int rows2 = shape2.dims[Axis2D.row()];</span>
 
-<span class="fc" id="L362">        CNumber[] dest = new CNumber[rows1];</span>
-<span class="fc" id="L363">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
-<span class="fc" id="L364">        int bsize = Configurations.getBlockSize()/2;</span>
+<span class="fc" id="L457">        CNumber[] dest = new CNumber[rows1];</span>
+<span class="fc" id="L458">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
+<span class="fc" id="L459">        int blockSize = Configurations.getBlockSize();</span>
+        int iBound, kBound;
+        int src1Index, src2Index;
 
         // Blocked matrix-vector multiply
-<span class="fc bfc" id="L367" title="All 2 branches covered.">        for(int ii=0; ii&lt;rows1; ii += bsize) {</span>
-<span class="fc bfc" id="L368" title="All 2 branches covered.">            for(int kk=0; kk&lt;rows2; kk += bsize) {</span>
+<span class="fc bfc" id="L464" title="All 2 branches covered.">        for(int ii=0; ii&lt;rows1; ii+=blockSize) {</span>
+<span class="fc" id="L465">            iBound = Math.min(ii+blockSize, rows1);</span>
+
+<span class="fc bfc" id="L467" title="All 2 branches covered.">            for(int kk=0; kk&lt;rows2; kk+=blockSize) {</span>
+<span class="fc" id="L468">                kBound = Math.min(kk+blockSize, rows2);</span>
+
                 // Multiply the current blocks
-<span class="pc bpc" id="L370" title="1 of 4 branches missed.">                for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
-<span class="pc bpc" id="L371" title="1 of 4 branches missed.">                    for(int k=kk; k&lt;kk+bsize &amp;&amp; k&lt;rows2; k++) {</span>
-<span class="fc" id="L372">                        dest[i].addEq(src1[i*cols1 + k].mult(src2[k]));</span>
+<span class="fc bfc" id="L471" title="All 2 branches covered.">                for(int i=ii; i&lt;iBound; i++) {</span>
+<span class="fc" id="L472">                    src1Index = i*cols1 + kk;</span>
+<span class="fc" id="L473">                    src2Index = kk;</span>
+
+<span class="fc bfc" id="L475" title="All 2 branches covered.">                    while(src2Index&lt;kBound) {</span>
+<span class="fc" id="L476">                        dest[i].addEq(src1[src1Index++].mult(src2[src2Index++]));</span>
                     }
                 }
             }
         }
 
-<span class="fc" id="L378">        return dest;</span>
+<span class="fc" id="L482">        return dest;</span>
     }
 
 
@@ -389,20 +493,23 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] concurrentStandardVector(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L392">        int rows1 = shape1.dims[Axis2D.row()];</span>
-<span class="fc" id="L393">        int cols1 = shape1.dims[Axis2D.col()];</span>
-<span class="fc" id="L394">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L496">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L497">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L498">        int rows2 = shape2.dims[Axis2D.row()];</span>
 
-<span class="fc" id="L396">        CNumber[] dest = new CNumber[rows1];</span>
-<span class="fc" id="L397">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
+<span class="fc" id="L500">        CNumber[] dest = new CNumber[rows1];</span>
+<span class="fc" id="L501">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
 
-<span class="fc" id="L399">        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</span>
-<span class="fc bfc" id="L400" title="All 2 branches covered.">            for(int k=0; k&lt;rows2; k++) {</span>
-<span class="fc" id="L401">                dest[i].addEq(src1[i*cols1 + k].mult(src2[k]));</span>
+<span class="fc" id="L503">        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</span>
+<span class="fc" id="L504">            int src1Index = i*cols1;</span>
+<span class="fc" id="L505">            int src2Index = 0;</span>
+
+<span class="fc bfc" id="L507" title="All 2 branches covered.">            while(src2Index&lt;rows2) {</span>
+<span class="fc" id="L508">                dest[i].addEq(src1[src1Index++].mult(src2[src2Index++]));</span>
             }
-<span class="fc" id="L403">        });</span>
+<span class="fc" id="L510">        });</span>
 
-<span class="fc" id="L405">        return dest;</span>
+<span class="fc" id="L512">        return dest;</span>
     }
 
 
@@ -416,27 +523,33 @@ public class ComplexDenseMatrixMultiplication {
      * @return The result of matrix multiplying the two matrices.
      */
     public static CNumber[] concurrentBlockedVector(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="fc" id="L419">        int rows1 = shape1.dims[Axis2D.row()];</span>
-<span class="fc" id="L420">        int cols1 = shape1.dims[Axis2D.col()];</span>
-<span class="fc" id="L421">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="fc" id="L526">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L527">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L528">        int rows2 = shape2.dims[Axis2D.row()];</span>
 
-<span class="fc" id="L423">        CNumber[] dest = new CNumber[rows1];</span>
-<span class="fc" id="L424">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
-<span class="fc" id="L425">        int bsize = Configurations.getBlockSize()/2;</span>
+<span class="fc" id="L530">        CNumber[] dest = new CNumber[rows1];</span>
+<span class="fc" id="L531">        ArrayUtils.fill(dest, CNumber.ZERO);</span>
+<span class="fc" id="L532">        int blockSize = Configurations.getBlockSize();</span>
 
-<span class="fc" id="L427">        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -&gt; {</span>
-            // Blocked matrix-vector multiply
-<span class="fc bfc" id="L429" title="All 2 branches covered.">            for(int kk=0; kk&lt;rows2; kk += bsize) {</span>
+<span class="fc" id="L534">        ThreadManager.concurrentLoop(0, rows1, blockSize, (ii) -&gt; {</span>
+<span class="fc" id="L535">            int iBound = Math.min(ii+blockSize, rows1);</span>
+
+<span class="fc bfc" id="L537" title="All 2 branches covered.">            for(int kk=0; kk&lt;rows2; kk+=blockSize) {</span>
+<span class="fc" id="L538">                int kBound = Math.min(kk+blockSize, rows2);</span>
+
                 // Multiply the current blocks
-<span class="pc bpc" id="L431" title="1 of 4 branches missed.">                for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
-<span class="pc bpc" id="L432" title="1 of 4 branches missed.">                    for(int k=kk; k&lt;kk+bsize &amp;&amp; k&lt;rows2; k++) {</span>
-<span class="fc" id="L433">                        dest[i].addEq(src1[i*cols1 + k].mult(src2[k]));</span>
+<span class="fc bfc" id="L541" title="All 2 branches covered.">                for(int i=ii; i&lt;iBound; i++) {</span>
+<span class="fc" id="L542">                    int src1Index = i*cols1 + kk;</span>
+<span class="fc" id="L543">                    int src2Index = kk;</span>
+
+<span class="fc bfc" id="L545" title="All 2 branches covered.">                    while(src2Index&lt;kBound) {</span>
+<span class="fc" id="L546">                        dest[i].addEq(src1[src1Index++].mult(src2[src2Index++]));</span>
                     }
                 }
             }
-<span class="fc" id="L437">        });</span>
+<span class="fc" id="L550">        });</span>
 
-<span class="fc" id="L439">        return dest;</span>
+<span class="fc" id="L552">        return dest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

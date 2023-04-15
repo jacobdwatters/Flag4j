@@ -78,20 +78,5 @@ public class RealDenseVectorOperations {
 <span class="fc" id="L78">        return dest;</span>
     }
 
-    /**
-     * Adds a scalar to every element of a tensor.
-     * @param src src of tensor to add scalar to.
-     * @param b Scalar to add to tensor.
-     * @return The tensor scalar addition.
-     */
-    public static double[] add(double[] src, double b) {
-<span class="fc" id="L88">        double[] sum = new double[src.length];</span>
-
-<span class="fc bfc" id="L90" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc" id="L91">            sum[i] = src[i] + b;</span>
-        }
-
-<span class="fc" id="L94">        return sum;</span>
-    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

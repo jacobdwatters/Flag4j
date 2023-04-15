@@ -25,6 +25,7 @@
 package com.flag4j;
 
 import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -133,14 +134,14 @@ public class Shape implements Serializable {
      * @param indices Indices of tensor with this shape.
      * @return The index of the element at the specified indices in the 1D data array of a dense tensor.
      * @throws IllegalArgumentException If the number of indices does not match the rank of this shape.
-     * @throws ArrayIndexOutOfBoundsException If any index does not fit within a tensor with this shape.
+     * @throws IndexOutOfBoundsException If any index does not fit within a tensor with this shape.
      */
     public int entriesIndex(int... indices) {
         if(indices.length != dims.length) {
             throw new IllegalArgumentException(ErrorMessages.getIndicesRankErr(indices.length, dims.length));
         }
         if(indices.length>0 && indices[indices.length-1] >= dims[dims.length-1]) {
-            throw new ArrayIndexOutOfBoundsException("Index " + indices[indices.length-1] + " out of bounds for axis " +
+            throw new IndexOutOfBoundsException("Index " + indices[indices.length-1] + " out of bounds for axis " +
                     (indices.length-1) + " of tensor with shape " + this);
         }
 
@@ -148,7 +149,7 @@ public class Shape implements Serializable {
 
         for(int i=0; i<indices.length-1; i++) {
             if(indices[i] < 0 || indices[i] >= dims[i]) {
-                throw new ArrayIndexOutOfBoundsException("Index " + indices[i] + " out of bounds for axis " + i +
+                throw new IndexOutOfBoundsException("Index " + indices[i] + " out of bounds for axis " + i +
                         " of tensor with shape " + this);
             }
 
@@ -191,6 +192,32 @@ public class Shape implements Serializable {
         dims[axis1] = dims[axis2];
         dims[axis2] = temp;
 
+        this.strides = this.createNewStrides();
+
+        return this;
+    }
+
+
+    /**
+     * Permutes the axes of this shape.
+     * @param axes New axes permutation for the shape. This must be a permutation of {@code {1, 2, 3, ... N}} where
+     *             {@code N} is the rank of this shape.
+     * @return Returns this shape.
+     * @throws ArrayIndexOutOfBoundsException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N}}.
+     */
+    public Shape swapAxes(int... axes) {
+        ParameterChecks.assertEquals(getRank(), axes.length);
+        ParameterChecks.assertPermutation(axes);
+
+        int[] tempDims = new int[dims.length];
+        int i=0;
+
+        // Permute axes.
+        for(int axis : axes) {
+            tempDims[i++] = dims[axis];
+        }
+
+        this.dims = tempDims;
         this.strides = this.createNewStrides();
 
         return this;

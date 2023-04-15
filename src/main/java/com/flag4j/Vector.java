@@ -27,9 +27,12 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.*;
 import com.flag4j.io.PrintOptions;
-import com.flag4j.operations.common.real.Aggregate;
+import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.dense.real.*;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
@@ -192,6 +195,32 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
+     * Since vectors are rank 1 tensors, this method simply copies the vector.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public Vector reshape(Shape shape) {
+        ParameterChecks.assertBroadcastable(this.shape, shape);
+        return this.copy();
+    }
+
+
+    /**
+     * Since vectors are rank 1 tensors, this method simply copies the vector.
+     *
+     * @return The flattened tensor.
+     */
+    @Override
+    public Vector flatten() {
+        ParameterChecks.assertBroadcastable(this.shape, shape);
+        return this.copy();
+    }
+
+
+    /**
      * Extends a vector a specified number of times to a matrix.
      *
      * @param n The number of times to extend this vector.
@@ -286,7 +315,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Vector add(double a) {
-        return new Vector(RealDenseVectorOperations.add(this.entries, a));
+        return new Vector(RealDenseOperations.add(this.entries, a));
     }
 
 
@@ -412,7 +441,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Vector elemMult(Vector B) {
-        return new Vector(RealDenseOperations.elemMult(this.entries, this.shape, B.entries, B.shape));
+        return new Vector(RealDenseElemMult.dispatch(this.entries, this.shape, B.entries, B.shape));
     }
 
 
@@ -438,7 +467,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public CVector elemMult(CVector B) {
-        return new CVector(RealComplexDenseOperations.elemMult(B.entries, B.shape, this.entries, this.shape));
+        return new CVector(RealComplexDenseElemMult.dispatch(B.entries, B.shape, this.entries, this.shape));
     }
 
 
@@ -464,7 +493,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Vector elemDiv(Vector B) {
-        return new Vector(RealDenseOperations.elemDiv(this.entries, this.shape, B.entries, B.shape));
+        return new Vector(RealDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));
     }
 
 
@@ -477,7 +506,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public CVector elemDiv(CVector B) {
-        return new CVector(RealComplexDenseOperations.elemDiv(this.entries, this.shape, B.entries, B.shape));
+        return new CVector(RealComplexDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));
     }
 
 
@@ -534,7 +563,7 @@ public class Vector extends VectorBase<double[]> implements
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public Vector scalMult(double factor) {
+    public Vector mult(double factor) {
         return new Vector(RealOperations.scalMult(this.entries, factor));
     }
 
@@ -546,8 +575,8 @@ public class Vector extends VectorBase<double[]> implements
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public CVector scalMult(CNumber factor) {
-        return new CVector(RealComplexDenseOperations.scalMult(this.entries, factor));
+    public CVector mult(CNumber factor) {
+        return new CVector(ComplexOperations.scalMult(this.entries, factor));
     }
 
 
@@ -584,7 +613,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Double sum() {
-        return Aggregate.sum(this.entries);
+        return AggregateReal.sum(this.entries);
     }
 
 
@@ -1314,7 +1343,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Double min() {
-        return Aggregate.min(this.entries);
+        return AggregateReal.min(this.entries);
     }
 
 
@@ -1325,7 +1354,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Double max() {
-        return Aggregate.max(this.entries);
+        return AggregateReal.max(this.entries);
     }
 
 
@@ -1337,7 +1366,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Double minAbs() {
-        return Aggregate.minAbs(this.entries);
+        return AggregateReal.minAbs(this.entries);
     }
 
 
@@ -1349,7 +1378,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Double maxAbs() {
-        return Aggregate.maxAbs(this.entries);
+        return AggregateReal.maxAbs(this.entries);
     }
 
 
@@ -1430,7 +1459,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public double infNorm() {
-        return Aggregate.maxAbs(this.entries);
+        return AggregateReal.maxAbs(this.entries);
     }
 
 
@@ -1446,33 +1475,33 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
-     * Converts this vector to a human-readable string format. To specifiy the maximum number of entries to print, use
+     * Converts this vector to a human-readable string format. To specify the maximum number of entries to print, use
      * {@link PrintOptions#setMaxColumns(int)}.
      * @return A human-readable string representation of this vector.
      */
     public String toString() {
         StringBuilder result = new StringBuilder();
 
-        if(PrintOptions.getMaxColumns()<this.size) {
+        if(PrintOptions.getMaxColumns()<size) {
             // Then also get the full size of the vector.
-            result.append(String.format("Full Size: %d\n", this.size));
+            result.append(String.format("Full Size: %d\n", size));
         }
 
         result.append("[");
 
-        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.size-1);
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
         int width;
         String value;
 
         // Get entries up until the stopping point.
         for(int i=0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound(this.get(i), PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
-        if(stopIndex < this.size-1) {
+        if(stopIndex < size-1) {
             width = PrintOptions.getPadding() + 3;
             value = "...";
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
@@ -1480,7 +1509,7 @@ public class Vector extends VectorBase<double[]> implements
         }
 
         // Get last entry now
-        value = StringUtils.ValueOfRound(this.get(this.size-1), PrintOptions.getPrecision());
+        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
         width = PrintOptions.getPadding() + value.length();
         value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));

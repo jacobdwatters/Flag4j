@@ -26,12 +26,13 @@ package com.flag4j.operations.dense.complex;
 
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
 import static com.flag4j.operations.common.complex.AggregateComplex.maxAbs;
-import static com.flag4j.operations.common.real.Aggregate.maxAbs;
+import static com.flag4j.operations.common.real.AggregateReal.maxAbs;
 
 
 /**
@@ -71,9 +72,9 @@ public final class ComplexDenseOperations {
      * Adds a scalar value to all entries of a tensor.
      * @param src1 Entries of first tensor.
      * @param a Scalar to add to all entries of this tensor.
-     * @return The result of adding the scalar value to all entries of the source tensor.
+     * @return The tensor-scalar addition of the two parameters.
      */
-    public static CNumber[] add(CNumber[] src1, double a) {
+    public static CNumber[] add(CNumber[] src1, CNumber a) {
         CNumber[] sum = new CNumber[src1.length];
 
         for(int i=0; i<sum.length; i++) {
@@ -90,11 +91,30 @@ public final class ComplexDenseOperations {
      * @param a Scalar to add to all entries of this tensor.
      * @return The tensor-scalar addition of the two parameters.
      */
-    public static CNumber[] add(CNumber[] src1, CNumber a) {
+    public static CNumber[] add(double[] src1, CNumber a) {
         CNumber[] sum = new CNumber[src1.length];
 
         for(int i=0; i<sum.length; i++) {
-            sum[i] = src1[i].add(a);
+            sum[i] = a.add(src1[i]);
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Subtracts a scalar value to all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The tensor-scalar addition of the two parameters.
+     */
+    public static CNumber[] sub(double[] src1, CNumber a) {
+        CNumber[] sum = new CNumber[src1.length];
+        ArrayUtils.fillZeros(sum);
+
+        for(int i=0; i<sum.length; i++) {
+            sum[i].re = src1[i]-a.re;
+            sum[i].im = -a.im;
         }
 
         return sum;
@@ -120,23 +140,6 @@ public final class ComplexDenseOperations {
         }
 
         return diff;
-    }
-
-
-    /**
-     * Subtracts a scalar value from all entries of a tensor.
-     * @param src1 Entries of first tensor.
-     * @param a Scalar to add to all entries of this tensor.
-     * @return The tensor-scalar subtraction of the two parameters.
-     */
-    public static CNumber[] sub(CNumber[] src1, double a) {
-        CNumber[] sum = new CNumber[src1.length];
-
-        for(int i=0; i<sum.length; i++) {
-            sum[i] = src1[i].sub(a);
-        }
-
-        return sum;
     }
 
 
@@ -302,23 +305,6 @@ public final class ComplexDenseOperations {
 
 
     /**
-     * Computes the scalar multiplication of a tensor.
-     * @param entries Entries of the tensor.
-     * @param divisor Scalar value to multiply.
-     * @return The scalar multiplication of the tensor.
-     */
-    public static CNumber[] scalDiv(CNumber[] entries, double divisor) {
-        CNumber[] quotient = new CNumber[entries.length];
-
-        for(int i=0; i<quotient.length; i++) {
-            quotient[i] = entries[i].div(divisor);
-        }
-
-        return quotient;
-    }
-
-
-    /**
      * Computes the reciprocals, element-wise, of a tensor.
      * @param src Elements of the tensor.
      * @return The element-wise reciprocals of the tensor.
@@ -331,49 +317,6 @@ public final class ComplexDenseOperations {
         }
 
         return receps;
-    }
-
-
-
-    /**
-     * Computes the element-wise multiplication of two tensors. Also called the Hadamard product.
-     * @param src1 First tensor in element-wise multiplication.
-     * @param shape1 Shape of the first tensor.
-     * @param src2 Second tensor in element-wise multiplication.
-     * @param shape2 Shape of the second tensor.
-     * @return The element-wise multiplication of the two tensors.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    public static CNumber[] elemMult(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
-        CNumber[] product = new CNumber[src1.length];
-
-        for(int i=0; i<product.length; i++) {
-            product[i] = src1[i].mult(src2[i]);
-        }
-
-        return product;
-    }
-
-
-    /**
-     * Computes the element-wise division of two tensors.
-     * @param src1 First tensor in element-wise division.
-     * @param shape1 Shape of the first tensor.
-     * @param src2 Second tensor in element-wise division.
-     * @param shape2 Shape of the second tensor.
-     * @return The element-wise division of the two tensors.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
-        CNumber[] product = new CNumber[src1.length];
-
-        for(int i=0; i<product.length; i++) {
-            product[i] = src1[i].div(src2[i]);
-        }
-
-        return product;
     }
 
 
@@ -489,5 +432,38 @@ public final class ComplexDenseOperations {
         }
 
         return maxAbs(rowSums);
+    }
+
+
+    /**
+     * Computes the L<sub>2</sub> norm of a tensor (i.e. the Frobenius norm).
+     * @param src Entries of the tensor.
+     * @return The L<sub>2</sub> norm of the tensor.
+     */
+    public static double tensorNormL2(CNumber[] src) {
+        double norm = 0;
+
+        for(CNumber cNumber : src) {
+            norm += CNumber.pow(cNumber, 2).magAsDouble();
+        }
+
+        return Math.sqrt(norm);
+    }
+
+
+    /**
+     * Computes the L<sub>p</sub> norm of a tensor (i.e. the Frobenius norm).
+     * @param src Entries of the tensor.
+     * @param p The {@code p} parameter of the L<sub>p</sub> norm.
+     * @return The L<sub>p</sub> norm of the tensor.
+     */
+    public static double tensorNormLp(CNumber[] src, double p) {
+        double norm = 0;
+
+        for(CNumber cNumber : src) {
+            norm += CNumber.pow(cNumber, p).magAsDouble();
+        }
+
+        return Math.pow(norm, 1.0/p);
     }
 }

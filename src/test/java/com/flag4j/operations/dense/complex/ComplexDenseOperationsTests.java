@@ -2,6 +2,7 @@ package com.flag4j.operations.dense.complex;
 
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import org.junit.jupiter.api.Test;
 
 import static com.flag4j.operations.common.complex.AggregateComplex.sum;
@@ -58,7 +59,7 @@ class ComplexDenseOperationsTests {
         a = 933.1334;
         expResult = new CNumber[]{new CNumber(9+a, -1), new CNumber(-0.99+a, 13.445),
                 new CNumber(0.9133+a), new CNumber(0+a, 10.3)};
-        assertArrayEquals(expResult, add(src1, a));
+        assertArrayEquals(expResult, RealComplexDenseOperations.add(src1, a));
     }
 
 
@@ -115,7 +116,7 @@ class ComplexDenseOperationsTests {
         a = 933.1334;
         expResult = new CNumber[]{new CNumber(9-a, -1), new CNumber(-0.99-a, 13.445),
                 new CNumber(0.9133-a), new CNumber(0-a, 10.3)};
-        assertArrayEquals(expResult, sub(src1, a));
+        assertArrayEquals(expResult, RealComplexDenseOperations.sub(src1, a));
     }
 
 

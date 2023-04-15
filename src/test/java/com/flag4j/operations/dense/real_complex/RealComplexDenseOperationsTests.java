@@ -3,9 +3,12 @@ package com.flag4j.operations.dense.real_complex;
 
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.operations.common.complex.ComplexOperations;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static com.flag4j.operations.dense.real_complex.RealComplexDenseOperations.*;
+import static com.flag4j.operations.dense.real_complex.RealComplexDenseOperations.add;
+import static com.flag4j.operations.dense.real_complex.RealComplexDenseOperations.sub;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -53,7 +56,7 @@ class RealComplexDenseOperationsTests {
         aC = new CNumber(10.34, -9.331);
         expResult = new CNumber[]{new CNumber(10.34+1.1345, -9.331), new CNumber(10.34+2, -9.331),
                 new CNumber(10.34-3, -9.331), new CNumber(10.34+4.13, -9.331)};
-        assertArrayEquals(expResult, RealComplexDenseVectorOperations.add(src2, aC));
+        Assertions.assertArrayEquals(expResult, RealComplexDenseVectorOperations.add(src2, aC));
     }
 
 
@@ -134,6 +137,6 @@ class RealComplexDenseOperationsTests {
         aC = new CNumber(10.34, -9.331);
         expResult = new CNumber[]{aC.mult(1.1345), aC.mult(2),
                 aC.mult(-3), aC.mult(4.13)};
-        assertArrayEquals(expResult, scalMult(src2, aC));
+        assertArrayEquals(expResult, ComplexOperations.scalMult(src2, aC));
     }
 }

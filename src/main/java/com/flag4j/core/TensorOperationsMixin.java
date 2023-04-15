@@ -37,7 +37,6 @@ import com.flag4j.complex_numbers.CNumber;
  */
 interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
 
-
     /**
      * Computes the element-wise addition between two tensors of the same rank.
      * @param B Second tensor in the addition.
@@ -143,7 +142,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @param factor Scalar value to multiply with tensor.
      * @return The result of multiplying this tensor by the specified scalar.
      */
-    T scalMult(double factor);
+    T mult(double factor);
 
 
     /**
@@ -151,7 +150,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @param factor Scalar value to multiply with tensor.
      * @return The result of multiplying this tensor by the specified scalar.
      */
-    W scalMult(CNumber factor);
+    W mult(CNumber factor);
 
 
     /**
@@ -225,9 +224,28 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      */
     X get(int... indices);
 
+
     /**
      * Creates a copy of this tensor.
      * @return A copy of this tensor.
      */
     T copy();
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
+     */
+    T elemMult(T B);
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     * @param B Tensor to element-wise divide with this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
+     */
+    T elemDiv(T B);
 }

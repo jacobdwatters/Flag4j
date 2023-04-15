@@ -209,5 +209,11 @@ public class SparseMatrix extends SparseMatrixBase&lt;double[]&gt; {
     public SparseMatrix(SparseMatrix A) {
 <span class="fc" id="L210">        super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), A.rowIndices.clone(), A.colIndices.clone());</span>
 <span class="fc" id="L211">    }</span>
+
+
+    @Override
+    public SparseMatrix flatten(int axis) {
+<span class="nc" id="L216">        return null;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

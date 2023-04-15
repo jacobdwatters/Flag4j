@@ -24,6 +24,7 @@
 
 package com.flag4j.operations.dense.complex;
 
+import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
 
@@ -32,9 +33,9 @@ import com.flag4j.util.ErrorMessages;
  */
 public final class ComplexDenseProperties {
 
-<span class="nc" id="L35">    private ComplexDenseProperties() {</span>
+<span class="nc" id="L36">    private ComplexDenseProperties() {</span>
         // Hide default constructor in utility class.
-<span class="nc" id="L37">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L38">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -44,16 +45,78 @@ public final class ComplexDenseProperties {
      * @return True if this tensor only contains ones. Otherwise, returns false.
      */
     public static boolean isOnes(CNumber[] src) {
-<span class="fc" id="L47">        boolean allZeros = true;</span>
+<span class="fc" id="L48">        boolean allZeros = true;</span>
 
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        for(CNumber value : src) {</span>
-<span class="fc bfc" id="L50" title="All 2 branches covered.">            if(!value.equals(CNumber.ONE)) {</span>
-<span class="fc" id="L51">                allZeros = false;</span>
-<span class="fc" id="L52">                break; // No need to look further.</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        for(CNumber value : src) {</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">            if(!value.equals(CNumber.ONE)) {</span>
+<span class="fc" id="L52">                allZeros = false;</span>
+<span class="fc" id="L53">                break; // No need to look further.</span>
             }
         }
 
-<span class="fc" id="L56">        return allZeros;</span>
+<span class="fc" id="L57">        return allZeros;</span>
+    }
+
+
+    /**
+     * Checks if a complex dense matrix is hermation. That is, if the and equal to its conjugate transpose.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return True if this matrix is hermation. Otherwise, returns false.
+     */
+    public static boolean isHermation(CNumber[] src, Shape shape) {
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if(shape.dims[0]!=shape.dims[1]) {</span>
+<span class="nc" id="L69">            return false;</span>
+        }
+
+        int count1, count2, stop;
+
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        for(int i=0; i&lt;shape.dims[0]; i++) {</span>
+<span class="nc" id="L75">            count1 = i*shape.dims[1];</span>
+<span class="nc" id="L76">            count2 = i;</span>
+<span class="nc" id="L77">            stop = count1 + i;</span>
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            while(count1 &lt; stop) {</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">                if(src[count1++].equals(src[count2].conj())) {</span>
+<span class="nc" id="L81">                    return false;</span>
+                }
+
+<span class="nc" id="L84">                count2+=shape.dims[1];</span>
+            }
+        }
+
+<span class="nc" id="L88">        return true;</span>
+    }
+
+
+    /**
+     * Checks if a real dense matrix is anti-hermation. That is, if the and equal to its negative conjugate transpose.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return True if this matrix is anti-hermation. Otherwise, returns false.
+     */
+    public static boolean isAntiHermation(CNumber[] src, Shape shape) {
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        if(shape.dims[0]!=shape.dims[1]) {</span>
+<span class="nc" id="L100">            return false;</span>
+        }
+
+        int count1, count2, stop;
+
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        for(int i=0; i&lt;shape.dims[0]; i++) {</span>
+<span class="nc" id="L106">            count1 = i*shape.dims[1];</span>
+<span class="nc" id="L107">            count2 = i;</span>
+<span class="nc" id="L108">            stop = count1 + i;</span>
+
+<span class="nc bnc" id="L110" title="All 2 branches missed.">            while(count1 &lt; stop) {</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">                if(src[count1++].equals(src[count2].addInv().conj())) {</span>
+<span class="nc" id="L112">                    return false;</span>
+                }
+
+<span class="nc" id="L115">                count2+=shape.dims[1];</span>
+            }
+        }
+
+<span class="nc" id="L119">        return true;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

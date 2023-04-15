@@ -186,23 +186,6 @@ public final class RealComplexDenseOperations {
     /**
      * Computes the scalar multiplication of a tensor.
      * @param entries Entries of the tensor.
-     * @param factor Scalar value to multiply.
-     * @return The scalar multiplication of the tensor.
-     */
-    public static CNumber[] scalMult(double[] entries, CNumber factor) {
-        CNumber[] product = new CNumber[entries.length];
-
-        for(int i=0; i<product.length; i++) {
-            product[i] = factor.mult(entries[i]);
-        }
-
-        return product;
-    }
-
-
-    /**
-     * Computes the scalar multiplication of a tensor.
-     * @param entries Entries of the tensor.
      * @param divisor Scalar value to multiply.
      * @return The scalar multiplication of the tensor.
      */
@@ -222,65 +205,51 @@ public final class RealComplexDenseOperations {
     }
 
 
-    /**
-     * Computes the element-wise multiplication of two tensors. Also called the Hadamard product.
-     * @param src1 First tensor in element-wise multiplication.
-     * @param shape1 Shape of the first tensor.
-     * @param src2 Second tensor in element-wise multiplication.
-     * @param shape2 Shape of the second tensor.
-     * @return The element-wise multiplication of the two tensors.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    public static CNumber[] elemMult(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
-        CNumber[] product = new CNumber[src1.length];
 
-        for(int i=0; i<product.length; i++) {
-            product[i] = src1[i].mult(src2[i]);
+    /**
+     * Adds a scalar value to all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The result of adding the scalar value to all entries of the source tensor.
+     */
+    public static CNumber[] add(CNumber[] src1, double a) {
+        CNumber[] sum = new CNumber[src1.length];
+
+        for(int i=0; i<sum.length; i++) {
+            sum[i] = src1[i].add(a);
         }
 
-        return product;
+        return sum;
     }
 
 
     /**
-     * Computes the element-wise division of two tensors.
-     * @param src1 First tensor in element-wise division.
-     * @param shape1 Shape of the first tensor.
-     * @param src2 Second tensor in element-wise division.
-     * @param shape2 Shape of the second tensor.
-     * @return The element-wise division of the two tensors.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     * Subtracts a scalar value from all entries of a tensor.
+     * @param src1 Entries of first tensor.
+     * @param a Scalar to add to all entries of this tensor.
+     * @return The tensor-scalar subtraction of the two parameters.
      */
-    public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
-        CNumber[] product = new CNumber[src1.length];
+    public static CNumber[] sub(CNumber[] src1, double a) {
+        CNumber[] sum = new CNumber[src1.length];
 
-        for(int i=0; i<product.length; i++) {
-            product[i] = src1[i].div(src2[i]);
+        for(int i=0; i<sum.length; i++) {
+            sum[i] = src1[i].sub(a);
         }
 
-        return product;
+        return sum;
     }
 
-
     /**
-     * Computes the element-wise division of two tensors.
-     * @param src1 First tensor in element-wise division.
-     * @param shape1 Shape of the first tensor.
-     * @param src2 Second tensor in element-wise division.
-     * @param shape2 Shape of the second tensor.
-     * @return The element-wise division of the two tensors.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     * Computes the scalar multiplication of a tensor.
+     * @param entries Entries of the tensor.
+     * @param divisor Scalar value to multiply.
+     * @return The scalar multiplication of the tensor.
      */
-    public static CNumber[] elemDiv(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-        ParameterChecks.assertEqualShape(shape1, shape2);
-        CNumber[] quotient = new CNumber[src1.length];
-        double divisor;
+    public static CNumber[] scalDiv(CNumber[] entries, double divisor) {
+        CNumber[] quotient = new CNumber[entries.length];
 
         for(int i=0; i<quotient.length; i++) {
-            divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;
-            quotient[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);
+            quotient[i] = entries[i].div(divisor);
         }
 
         return quotient;

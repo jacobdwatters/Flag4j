@@ -32,11 +32,16 @@ import java.io.Serializable;
 
 
 /**
- * The base class for all matrices.
- * @param <T> The type of entries for this matrix.
+ * <p>
+ *     The base class for all matrices. A matrix is equivalent to a {@link TensorBase tensor} of rank 2.
+ * </p>
+ *
+ * @param <T> Type of the storage data structure for the matrix.
+ *           This common use case will be an array or list-like data structure.
  */
 public abstract class MatrixBase<T extends Serializable> extends TensorBase<T> {
 
+    // TODO: Move DEFAULT_ROUND_TO_ZERO_THRESHOLD somewhere else and use for all tensors.
     /**
      * Default value for rounding to zero.
      */
@@ -85,4 +90,7 @@ public abstract class MatrixBase<T extends Serializable> extends TensorBase<T> {
     public int numCols() {
         return numCols;
     }
+
+
+    public abstract MatrixBase<T> flatten(int axis);
 }

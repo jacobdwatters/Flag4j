@@ -31,10 +31,9 @@ import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.complex.ComplexProperties;
-import com.flag4j.operations.dense.complex.AggregateDenseComplex;
-import com.flag4j.operations.dense.complex.ComplexDenseOperations;
-import com.flag4j.operations.dense.complex.ComplexDenseProperties;
-import com.flag4j.operations.dense.complex.ComplexDenseVectorOperations;
+import com.flag4j.operations.dense.complex.*;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
@@ -270,7 +269,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CVector add(double a) {
-        return new CVector(ComplexDenseOperations.add(this.entries, a));
+        return new CVector(RealComplexDenseOperations.add(this.entries, a));
     }
 
 
@@ -394,7 +393,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CVector elemMult(Vector B) {
-        return new CVector(RealComplexDenseOperations.elemMult(this.entries, this.shape, B.entries, B.shape));
+        return new CVector(RealComplexDenseElemMult.dispatch(this.entries, this.shape, B.entries, B.shape));
     }
 
 
@@ -420,7 +419,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CVector elemMult(CVector B) {
-        return new CVector(ComplexDenseOperations.elemMult(this.entries, this.shape, B.entries, B.shape));
+        return new CVector(ComplexDenseElemMult.dispatch(this.entries, this.shape, B.entries, B.shape));
     }
 
 
@@ -446,7 +445,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CVector elemDiv(Vector B) {
-        return new CVector(RealComplexDenseOperations.elemDiv(this.entries, this.shape, B.entries, B.shape));
+        return new CVector(RealComplexDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));
     }
 
 
@@ -459,7 +458,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CVector elemDiv(CVector B) {
-        return new CVector(ComplexDenseOperations.elemDiv(this.entries, this.shape, B.entries, B.shape));
+        return new CVector(ComplexDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));
     }
 
 
@@ -471,7 +470,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CVector sub(double a) {
-        return new CVector(ComplexDenseOperations.sub(this.entries, a));
+        return new CVector(RealComplexDenseOperations.sub(this.entries, a));
     }
 
 
@@ -562,7 +561,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public CVector scalMult(double factor) {
+    public CVector mult(double factor) {
         return new CVector(ComplexDenseOperations.scalMult(this.entries, factor));
     }
 
@@ -574,7 +573,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public CVector scalMult(CNumber factor) {
+    public CVector mult(CNumber factor) {
         return new CVector(ComplexDenseOperations.scalMult(this.entries, factor));
     }
 
@@ -588,7 +587,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CVector scalDiv(double divisor) {
-        return new CVector(ComplexDenseOperations.scalDiv(this.entries, divisor));
+        return new CVector(RealComplexDenseOperations.scalDiv(this.entries, divisor));
     }
 
 
@@ -792,7 +791,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * Computes the p-norm of this tensor. Warning, if p is large in absolute value, overflow errors may occur.
      *
      * @param p The p value in the p-norm. <br>
-     *          - If p is {@link Double#POSITIVE_INFINITY}, then this method computes the maximum/infinite norm.
+     *          - If p is {@link Double#POSITIVE_INFINITY}, then this method computes the maximum/infinite norm.<br>
      *          - If p is {@link Double#NEGATIVE_INFINITY}, then this method computes the minimum norm.
      * @return The p-norm of this tensor.
      */
@@ -1593,32 +1592,57 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
-     * Converts this vector to a human-readable string format.
+     * Since vectors are rank 1 tensors, this method simply copies the vector.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public CVector reshape(Shape shape) {
+        ParameterChecks.assertBroadcastable(this.shape, shape);
+        return this.copy();
+    }
+
+
+    /**
+     * Since vectors are rank 1 tensors, this method simply copies the vector.
+     *
+     * @return The flattened tensor.
+     */
+    @Override
+    public CVector flatten() {
+        return this.copy();
+    }
+
+
+    /**
+     * Generates a human-readable string representation of this vector.
      * @return A human-readable string representation of this vector.
      */
     public String toString() {
         StringBuilder result = new StringBuilder();
 
-        if(PrintOptions.getMaxColumns()<this.size) {
+        if(PrintOptions.getMaxColumns()<size) {
             // Then also get the full size of the vector.
-            result.append(String.format("Full Size: %d\n", this.size));
+            result.append(String.format("Full Size: %d\n", size));
         }
 
         result.append("[");
 
-        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.size-1);
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
         int width;
         String value;
 
         // Get entries up until the stopping point.
         for(int i=0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound(this.get(i), PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
-        if(stopIndex < this.size-1) {
+        if(stopIndex < size-1) {
             width = PrintOptions.getPadding() + 3;
             value = "...";
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
@@ -1626,7 +1650,7 @@ public class CVector extends VectorBase<CNumber[]> implements
         }
 
         // Get last entry now
-        value = StringUtils.ValueOfRound(this.get(this.size-1), PrintOptions.getPrecision());
+        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
         width = PrintOptions.getPadding() + value.length();
         value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));

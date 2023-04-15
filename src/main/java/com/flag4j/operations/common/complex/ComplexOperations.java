@@ -56,6 +56,23 @@ public class ComplexOperations {
     }
 
 
+
+    /**
+     * Computes the element-wise square root of a tensor.
+     * @param src Elements of the tensor.
+     * @return The element-wise square root of the tensor.
+     */
+    public static CNumber[] sqrt(double[] src) {
+        CNumber[] roots = new CNumber[src.length];
+
+        for(int i=0; i<roots.length; i++) {
+            roots[i] = CNumber.sqrt(src[i]);
+        }
+
+        return roots;
+    }
+
+
     /**
      * Computes the element-wise absolute value of a tensor.
      * @param src Elements of the tensor.
@@ -166,6 +183,23 @@ public class ComplexOperations {
         }
 
         return dest;
+    }
+
+
+    /**
+     * Computes the scalar multiplication of a tensor.
+     * @param entries Entries of the tensor.
+     * @param factor Scalar value to multiply.
+     * @return The scalar multiplication of the tensor.
+     */
+    public static CNumber[] scalMult(double[] entries, CNumber factor) {
+        CNumber[] product = new CNumber[entries.length];
+
+        for(int i=0; i<product.length; i++) {
+            product[i] = factor.mult(entries[i]);
+        }
+
+        return product;
     }
 
 

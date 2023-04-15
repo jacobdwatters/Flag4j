@@ -24,7 +24,6 @@
 
 package com.flag4j.linalg.decompositions;
 
-
 import com.flag4j.core.MatrixBase;
 
 // TODO: Implement LDU decomposition.
@@ -61,7 +60,7 @@ public abstract class LUDecomposition<T extends MatrixBase<?>> implements Decomp
      */
     protected T P;
     /**
-     * Permutation matrix to store row swaps if partial pivoting is used.
+     * Permutation matrix to store column swaps if full pivoting is used.
      */
     protected T Q;
 
@@ -82,6 +81,8 @@ public abstract class LUDecomposition<T extends MatrixBase<?>> implements Decomp
      * Constructs a LU decomposer to decompose the specified matrix.
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
+     * @param zeroPivotTol Tolerance for considering a pivot to be zero. If a pivot is less than the tolerance in absolute value,
+     *                     then it will be considered zero.
      */
     public LUDecomposition(int pivoting, double zeroPivotTol) {
         pivotFlag = Pivoting.get(pivoting);

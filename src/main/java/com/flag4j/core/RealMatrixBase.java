@@ -53,6 +53,7 @@ public abstract class RealMatrixBase extends MatrixBase<double[]> {
      */
     public abstract ComplexMatrixBase toComplex();
 
+
     /**
      * Sets the value of this matrix using a 2D array.
      *

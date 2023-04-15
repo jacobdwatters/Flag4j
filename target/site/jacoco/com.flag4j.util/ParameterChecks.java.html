@@ -27,14 +27,16 @@ package com.flag4j.util;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 
+import java.util.Arrays;
+
 /**
  * This class contains several methods for checking properties of shapes and arrays.
  */
 public final class ParameterChecks {
 
     // Hide constructor
-<span class="nc" id="L36">    private ParameterChecks() {</span>
-<span class="nc" id="L37">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L38">    private ParameterChecks() {</span>
+<span class="nc" id="L39">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -45,12 +47,12 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If shapes are not equivalent.
      */
     public static void assertEqualShape(Shape shape1, Shape shape2) {
-<span class="fc bfc" id="L48" title="All 2 branches covered.">        if(!shape1.equals(shape2)) {</span>
-<span class="fc" id="L49">            throw new IllegalArgumentException(</span>
-<span class="fc" id="L50">                    ErrorMessages.equalShapeErrMsg(shape1, shape2)</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if(!shape1.equals(shape2)) {</span>
+<span class="fc" id="L51">            throw new IllegalArgumentException(</span>
+<span class="fc" id="L52">                    ErrorMessages.equalShapeErrMsg(shape1, shape2)</span>
             );
         }
-<span class="fc" id="L53">    }</span>
+<span class="fc" id="L55">    }</span>
 
 
     /**
@@ -60,25 +62,25 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If shapes do not satisfy the requirements of matrix multiplication.
      */
     public static void assertMatMultShapes(Shape shape1, Shape shape2) {
-<span class="fc" id="L63">        boolean pass = true;</span>
+<span class="fc" id="L65">        boolean pass = true;</span>
 
         // If the shapes are not of rank 2 then they are not matrices.
-<span class="pc bpc" id="L66" title="1 of 4 branches missed.">        if(shape1.getRank()==2 &amp;&amp; shape2.getRank()==2) {</span>
+<span class="pc bpc" id="L68" title="1 of 4 branches missed.">        if(shape1.getRank()==2 &amp;&amp; shape2.getRank()==2) {</span>
             // Ensure the number of columns in matrix one is equal to the number of rows in matrix 2.
-<span class="fc bfc" id="L68" title="All 2 branches covered.">            if(shape1.dims[Axis2D.col()] != shape2.dims[Axis2D.row()]) {</span>
-<span class="fc" id="L69">                pass = false;</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">            if(shape1.dims[Axis2D.col()] != shape2.dims[Axis2D.row()]) {</span>
+<span class="fc" id="L71">                pass = false;</span>
             }
 
         } else {
-<span class="fc" id="L73">            pass = false;</span>
+<span class="fc" id="L75">            pass = false;</span>
         }
 
-<span class="fc bfc" id="L76" title="All 2 branches covered.">        if(!pass) { // Check if the shapes pass the test.</span>
-<span class="fc" id="L77">            throw new IllegalArgumentException(</span>
-<span class="fc" id="L78">                    ErrorMessages.matMultShapeErrMsg(shape1, shape2)</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if(!pass) { // Check if the shapes pass the test.</span>
+<span class="fc" id="L79">            throw new IllegalArgumentException(</span>
+<span class="fc" id="L80">                    ErrorMessages.matMultShapeErrMsg(shape1, shape2)</span>
             );
         }
-<span class="fc" id="L81">    }</span>
+<span class="fc" id="L83">    }</span>
 
 
     /**
@@ -87,19 +89,19 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If all lengths are not equal.
      */
     public static void assertArrayLengthsEq(int... lengths) {
-<span class="fc" id="L90">        boolean allEqual = true;</span>
+<span class="fc" id="L92">        boolean allEqual = true;</span>
 
-<span class="fc bfc" id="L92" title="All 2 branches covered.">        for(int i=0; i&lt;lengths.length-1; i++) {</span>
-<span class="fc bfc" id="L93" title="All 2 branches covered.">            if(lengths[i]!=lengths[i+1]) {</span>
-<span class="fc" id="L94">                allEqual=false;</span>
-<span class="fc" id="L95">                break;</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        for(int i=0; i&lt;lengths.length-1; i++) {</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            if(lengths[i]!=lengths[i+1]) {</span>
+<span class="fc" id="L96">                allEqual=false;</span>
+<span class="fc" id="L97">                break;</span>
             }
         }
 
-<span class="fc bfc" id="L99" title="All 2 branches covered.">        if(!allEqual) {</span>
-<span class="fc" id="L100">            throw new IllegalArgumentException(ErrorMessages.getArrayLengthsMismatchErr(lengths));</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if(!allEqual) {</span>
+<span class="fc" id="L102">            throw new IllegalArgumentException(ErrorMessages.getArrayLengthsMismatchErr(lengths));</span>
         }
-<span class="fc" id="L102">    }</span>
+<span class="fc" id="L104">    }</span>
 
 
     /**
@@ -109,10 +111,10 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If the two shapes do not have the same total number of entries.
      */
     public static void assertBroadcastable(Shape shape1, Shape shape2) {
-<span class="fc bfc" id="L112" title="All 2 branches covered.">        if(!shape1.totalEntries().equals(shape2.totalEntries())) {</span>
-<span class="fc" id="L113">            throw new IllegalArgumentException(ErrorMessages.getShapeBroadcastErr(shape1, shape2));</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if(!shape1.totalEntries().equals(shape2.totalEntries())) {</span>
+<span class="fc" id="L115">            throw new IllegalArgumentException(ErrorMessages.getShapeBroadcastErr(shape1, shape2));</span>
         }
-<span class="fc" id="L115">    }</span>
+<span class="fc" id="L117">    }</span>
 
 
     /**
@@ -122,10 +124,10 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If arrays do not have the same number of total entries.
      */
     public static void assertTotalEntriesEq(Object[][] arr1, double[] arr2) {
-<span class="fc bfc" id="L125" title="All 2 branches covered.">        if(arr1.length*arr1[0].length != arr2.length) {</span>
-<span class="fc" id="L126">            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        if(arr1.length*arr1[0].length != arr2.length) {</span>
+<span class="fc" id="L128">            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());</span>
         }
-<span class="fc" id="L128">    }</span>
+<span class="fc" id="L130">    }</span>
 
 
     /**
@@ -135,10 +137,10 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If arrays do not have the same number of total entries.
      */
     public static void assertTotalEntriesEq(double[][] arr1, double[] arr2) {
-<span class="fc bfc" id="L138" title="All 2 branches covered.">        if(arr1.length*arr1[0].length != arr2.length) {</span>
-<span class="fc" id="L139">            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        if(arr1.length*arr1[0].length != arr2.length) {</span>
+<span class="fc" id="L141">            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());</span>
         }
-<span class="fc" id="L141">    }</span>
+<span class="fc" id="L143">    }</span>
 
 
     /**
@@ -148,10 +150,10 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If arrays do not have the same number of total entries.
      */
     public static void assertTotalEntriesEq(int[][] arr1, double[] arr2) {
-<span class="fc bfc" id="L151" title="All 2 branches covered.">        if(arr1.length*arr1[0].length != arr2.length) {</span>
-<span class="fc" id="L152">            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">        if(arr1.length*arr1[0].length != arr2.length) {</span>
+<span class="fc" id="L154">            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());</span>
         }
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L156">    }</span>
 
 
     /**
@@ -161,10 +163,10 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If arrays do not have the same number of total entries.
      */
     public static void assertTotalEntriesEq(Object[][] arr1, CNumber[] arr2) {
-<span class="fc bfc" id="L164" title="All 2 branches covered.">        if(arr1.length*arr1[0].length != arr2.length) {</span>
-<span class="fc" id="L165">            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        if(arr1.length*arr1[0].length != arr2.length) {</span>
+<span class="fc" id="L167">            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());</span>
         }
-<span class="fc" id="L167">    }</span>
+<span class="fc" id="L169">    }</span>
 
 
     /**
@@ -174,10 +176,10 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If arrays do not have the same number of total entries.
      */
     public static void assertTotalEntriesEq(double[][] arr1, CNumber[] arr2) {
-<span class="fc bfc" id="L177" title="All 2 branches covered.">        if(arr1.length*arr1[0].length != arr2.length) {</span>
-<span class="fc" id="L178">            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        if(arr1.length*arr1[0].length != arr2.length) {</span>
+<span class="fc" id="L180">            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());</span>
         }
-<span class="fc" id="L180">    }</span>
+<span class="fc" id="L182">    }</span>
 
 
     /**
@@ -187,10 +189,34 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If arrays do not have the same number of total entries.
      */
     public static void assertTotalEntriesEq(int[][] arr1, CNumber[] arr2) {
-<span class="fc bfc" id="L190" title="All 2 branches covered.">        if(arr1.length*arr1[0].length != arr2.length) {</span>
-<span class="fc" id="L191">            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        if(arr1.length*arr1[0].length != arr2.length) {</span>
+<span class="fc" id="L193">            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());</span>
         }
-<span class="fc" id="L193">    }</span>
+<span class="fc" id="L195">    }</span>
+
+
+    /**
+     * Checks if a set of values are all equal.
+     * @param values Values to check if they are equal.
+     * @throws IllegalArgumentException If any of the specified values are not equal.
+     */
+    public static void assertEquals(double... values) {
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">        if(values.length &gt; 0) {</span>
+<span class="fc" id="L205">            boolean equal = true;</span>
+<span class="fc" id="L206">            double base = values[0];</span>
+
+<span class="fc bfc" id="L208" title="All 2 branches covered.">            for(double v : values) {</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">                if(v != base) {</span>
+<span class="fc" id="L210">                    equal = false;</span>
+<span class="fc" id="L211">                    break;</span>
+                }
+            }
+
+<span class="fc bfc" id="L215" title="All 2 branches covered.">            if(!equal) {</span>
+<span class="fc" id="L216">                throw new IllegalArgumentException(&quot;Expecting values to be equal but got: &quot; + Arrays.toString(values));</span>
+            }
+        }
+<span class="fc" id="L219">    }</span>
 
 
     /**
@@ -200,12 +226,27 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If any of the values are less than the threshold.
      */
     public static void assertGreaterEq(double threshold, double... values) {
-<span class="fc bfc" id="L203" title="All 2 branches covered.">        for(double value : values) {</span>
-<span class="fc bfc" id="L204" title="All 2 branches covered.">            if(value&lt;threshold) {</span>
-<span class="fc" id="L205">                throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));</span>
+<span class="fc bfc" id="L229" title="All 2 branches covered.">        for(double value : values) {</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">            if(value&lt;threshold) {</span>
+<span class="fc" id="L231">                throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));</span>
             }
         }
-<span class="fc" id="L208">    }</span>
+<span class="fc" id="L234">    }</span>
+
+
+    /**
+     * Checks if a set of values is greater than or equal to a specified threshold.
+     * @param threshold Threshold value.
+     * @param values Values to compare against threshold.
+     * @throws IllegalArgumentException If any of the values are less than the threshold.
+     */
+    public static void assertGreaterEq(int threshold, int... values) {
+<span class="fc bfc" id="L244" title="All 2 branches covered.">        for(double value : values) {</span>
+<span class="fc bfc" id="L245" title="All 2 branches covered.">            if(value&lt;threshold) {</span>
+<span class="fc" id="L246">                throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));</span>
+            }
+        }
+<span class="fc" id="L249">    }</span>
 
 
     /**
@@ -216,10 +257,10 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If any of the values are less than the threshold.
      */
     public static void assertGreaterEq(double threshold, double value, String name) {
-<span class="nc bnc" id="L219" title="All 2 branches missed.">        if(value&lt;threshold) {</span>
-<span class="nc" id="L220">            throw new IllegalArgumentException(ErrorMessages.getNamedGreaterEqErr(threshold, value, name));</span>
+<span class="nc bnc" id="L260" title="All 2 branches missed.">        if(value&lt;threshold) {</span>
+<span class="nc" id="L261">            throw new IllegalArgumentException(ErrorMessages.getNamedGreaterEqErr(threshold, value, name));</span>
         }
-<span class="nc" id="L222">    }</span>
+<span class="nc" id="L263">    }</span>
 
 
     /**
@@ -229,12 +270,27 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If any of the values are less than the threshold.
      */
     public static void assertLessEq(double threshold, double... values) {
-<span class="fc bfc" id="L232" title="All 2 branches covered.">        for(double value : values) {</span>
-<span class="fc bfc" id="L233" title="All 2 branches covered.">            if(value&gt;threshold) {</span>
-<span class="fc" id="L234">                throw new IllegalArgumentException(ErrorMessages.getLessEqErr(threshold, value));</span>
+<span class="nc bnc" id="L273" title="All 2 branches missed.">        for(double value : values) {</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">            if(value&gt;threshold) {</span>
+<span class="nc" id="L275">                throw new IllegalArgumentException(ErrorMessages.getLessEqErr(threshold, value));</span>
             }
         }
-<span class="fc" id="L237">    }</span>
+<span class="nc" id="L278">    }</span>
+
+
+    /**
+     * Checks if a set of values is less than or equal to a specified threshold.
+     * @param threshold Threshold value.
+     * @param values Values to compare against threshold.
+     * @throws IllegalArgumentException If any of the values are less than the threshold.
+     */
+    public static void assertLessEq(int threshold, int... values) {
+<span class="fc bfc" id="L288" title="All 2 branches covered.">        for(double value : values) {</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">            if(value&gt;threshold) {</span>
+<span class="fc" id="L290">                throw new IllegalArgumentException(ErrorMessages.getLessEqErr(threshold, value));</span>
+            }
+        }
+<span class="fc" id="L293">    }</span>
 
 
     /**
@@ -245,10 +301,10 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If any of the values are less than the threshold.
      */
     public static void assertLessEq(double threshold, double value, String name) {
-<span class="nc bnc" id="L248" title="All 2 branches missed.">        if(value&gt;threshold) {</span>
-<span class="nc" id="L249">            throw new IllegalArgumentException(ErrorMessages.getNamedLessEqErr(threshold, value, name));</span>
+<span class="nc bnc" id="L304" title="All 2 branches missed.">        if(value&gt;threshold) {</span>
+<span class="nc" id="L305">            throw new IllegalArgumentException(ErrorMessages.getNamedLessEqErr(threshold, value, name));</span>
         }
-<span class="nc" id="L251">    }</span>
+<span class="nc" id="L307">    }</span>
 
 
     /**
@@ -257,10 +313,10 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If the shape is not of rank 2 with equal rows and columns.
      */
     public static void assertSquare(Shape shape) {
-<span class="pc bpc" id="L260" title="1 of 4 branches missed.">        if(shape.getRank()!=2 || shape.get(0)!=shape.get(1)) {</span>
-<span class="fc" id="L261">            throw new IllegalArgumentException(ErrorMessages.getSquareShapeErr(shape));</span>
+<span class="pc bpc" id="L316" title="1 of 4 branches missed.">        if(shape.getRank()!=2 || shape.get(0)!=shape.get(1)) {</span>
+<span class="fc" id="L317">            throw new IllegalArgumentException(ErrorMessages.getSquareShapeErr(shape));</span>
         }
-<span class="fc" id="L263">    }</span>
+<span class="fc" id="L319">    }</span>
 
 
     /**
@@ -270,20 +326,40 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If the specified shape does not have the expected rank.
      */
     public static void assertRank(int expRank, Shape shape) {
-<span class="fc bfc" id="L273" title="All 2 branches covered.">        if(shape.getRank() != expRank) {</span>
-<span class="fc" id="L274">            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), expRank));</span>
+<span class="fc bfc" id="L329" title="All 2 branches covered.">        if(shape.getRank() != expRank) {</span>
+<span class="fc" id="L330">            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), expRank));</span>
         }
-<span class="fc" id="L276">    }</span>
+<span class="fc" id="L332">    }</span>
 
 
     /**
      * Checks that an axis is a valid 2D axis. That is, either axis is 0 or 1.
      * @param axis Axis to check.
+     * @throws IllegalArgumentException If the axis is not a valid 2D axis.
      */
     public static void assertAxis2D(int axis) {
-<span class="pc bpc" id="L284" title="1 of 4 branches missed.">        if(!(axis == 0 || axis==1)) {</span>
-<span class="nc" id="L285">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));</span>
+<span class="pc bpc" id="L341" title="1 of 4 branches missed.">        if(!(axis == 0 || axis==1)) {</span>
+<span class="nc" id="L342">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));</span>
         }
-<span class="fc" id="L287">    }</span>
+<span class="fc" id="L344">    }</span>
+
+
+    /**
+     * Checks that a list of {@code N} axis are a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @param axes List of axes of interest.
+     * @throws IllegalArgumentException If {@code axis} is not a permutation of {@code {0, 1, 2, ..., N-1}}.
+     */
+    public static void assertPermutation(int... axes) {
+<span class="fc" id="L353">        int[] axesCopy = axes.clone();</span>
+
+<span class="fc" id="L355">        Arrays.sort(axesCopy);</span>
+
+<span class="fc bfc" id="L357" title="All 2 branches covered.">        for(int i=0; i&lt;axesCopy.length; i++) {</span>
+<span class="fc bfc" id="L358" title="All 2 branches covered.">            if(axesCopy[i]!=i) {</span>
+<span class="fc" id="L359">                throw new IllegalArgumentException(&quot;Array is not a permutation of integers 0 through &quot; + axes.length + &quot;.\n&quot; +</span>
+<span class="fc" id="L360">                        &quot;Got &quot; + Arrays.toString(axes));</span>
+            }
+        }
+<span class="fc" id="L363">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
