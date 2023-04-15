@@ -62,7 +62,7 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
-     * Creates a column vector of specified size filled with a specified value.
+     * Creates a vector of specified size filled with a specified value.
      * @param size Size of the vector.
      * @param fillValue Value to fill vector with.
      */
@@ -73,7 +73,7 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
-     * Creates a column vector of specified size filled with a specified value.
+     * Creates a vector of specified size filled with a specified value.
      * @param size Size of the vector.
      * @param fillValue Value to fill vector with.
      */
@@ -84,7 +84,7 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
-     * Creates a column vector with specified entries.
+     * Creates a vector with specified entries.
      * @param entries Entries for this column vector.
      */
     public CVector(double[] entries) {
@@ -94,7 +94,7 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
-     * Creates a column vector with specified entries.
+     * Creates a vector with specified entries.
      * @param entries Entries for this column vector.
      */
     public CVector(int[] entries) {
@@ -104,7 +104,7 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
-     * Creates a column vector with specified entries.
+     * Creates a vector with specified entries.
      * @param entries Entries for this column vector.
      */
     public CVector(CNumber[] entries) {
