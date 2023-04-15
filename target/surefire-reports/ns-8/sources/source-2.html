@@ -47,10 +47,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    52.2%
+    60.9%
   </span>
   <span class="absValue">
-    (24/46)
+    (28/46)
   </span>
 </td>
 </tr>
@@ -85,10 +85,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    56%
+    64%
   </span>
   <span class="absValue">
-    (28/50)
+    (32/50)
   </span>
 </td>
 </tr>
@@ -233,10 +233,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">132</i>&nbsp;        int matrixShape;
 <b class="fc"><i class="no-highlight">133</i>&nbsp;        if (getRatio(shape1) &gt;= SQUARENESS_RATIO) {</b>
 <b class="fc"><i class="no-highlight">134</i>&nbsp;            matrixShape = 0; // Approximately Square</b>
-<b class="nc"><i class="no-highlight">135</i>&nbsp;        } else if (rows1 &gt; cols1) {</b>
+<b class="fc"><i class="no-highlight">135</i>&nbsp;        } else if (rows1 &gt; cols1) {</b>
 <b class="nc"><i class="no-highlight">136</i>&nbsp;            matrixShape = 1; // More rows than columns</b>
 <i class="no-highlight">137</i>&nbsp;        } else {
-<b class="nc"><i class="no-highlight">138</i>&nbsp;            matrixShape = 2; // More columns than rows</b>
+<b class="fc"><i class="no-highlight">138</i>&nbsp;            matrixShape = 2; // More columns than rows</b>
 <i class="no-highlight">139</i>&nbsp;        }
 <i class="no-highlight">140</i>&nbsp;
 <i class="no-highlight">141</i>&nbsp;        // Determine the algorithm name based on the matrix shape and size.
@@ -260,8 +260,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc"><i class="no-highlight">159</i>&nbsp;                break;</b>
 <i class="no-highlight">160</i>&nbsp;
 <i class="no-highlight">161</i>&nbsp;            case 2: // More columns than rows
-<b class="nc"><i class="no-highlight">162</i>&nbsp;                if(cols1 &lt;= 100) {</b>
-<b class="nc"><i class="no-highlight">163</i>&nbsp;                    names = (rows1 &lt;= 20) ? AlgorithmNames.REORDERED : AlgorithmNames.CONCURRENT_REORDERED;</b>
+<b class="fc"><i class="no-highlight">162</i>&nbsp;                if(cols1 &lt;= 100) {</b>
+<b class="fc"><i class="no-highlight">163</i>&nbsp;                    names = (rows1 &lt;= 20) ? AlgorithmNames.REORDERED : AlgorithmNames.CONCURRENT_REORDERED;</b>
 <b class="nc"><i class="no-highlight">164</i>&nbsp;                } else if(cols1 &lt;= 500) {</b>
 <b class="nc"><i class="no-highlight">165</i>&nbsp;                    names = (rows1 &lt;= 10) ? AlgorithmNames.REORDERED : AlgorithmNames.CONCURRENT_REORDERED;</b>
 <i class="no-highlight">166</i>&nbsp;                } else {
@@ -332,7 +332,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-04-14 13:06</div>
+    <div style="float:right;">generated on 2023-04-15 14:02</div>
 </div>
 </body>
 </html>

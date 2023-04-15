@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > ComplexTensorMixin</title>
+  <title>Coverage Report > VectorPropertiesMixin</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,14 +20,14 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.flag4j.core</a>
 </div>
 
-<h1>Coverage Summary for Class: ComplexTensorMixin (com.flag4j.core)</h1>
+<h1>Coverage Summary for Class: VectorPropertiesMixin (com.flag4j.core)</h1>
 
 <table class="coverageStats">
 <tr>
   <th class="name">Class</th>
 </tr>
 <tr>
-  <td class="name">ComplexTensorMixin</td>
+  <td class="name">VectorPropertiesMixin</td>
 </tr>
 
 </table>
@@ -63,50 +63,24 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">24</i>&nbsp;
 <i class="no-highlight">25</i>&nbsp;package com.flag4j.core;
 <i class="no-highlight">26</i>&nbsp;
-<i class="no-highlight">27</i>&nbsp;import com.flag4j.CTensor;
-<i class="no-highlight">28</i>&nbsp;import com.flag4j.SparseCTensor;
-<i class="no-highlight">29</i>&nbsp;import com.flag4j.SparseTensor;
-<i class="no-highlight">30</i>&nbsp;import com.flag4j.Tensor;
-<i class="no-highlight">31</i>&nbsp;import com.flag4j.complex_numbers.CNumber;
-<i class="no-highlight">32</i>&nbsp;
-<i class="no-highlight">33</i>&nbsp;/**
-<i class="no-highlight">34</i>&nbsp; * This interface specifies methods which any complex tensor should implement.
-<i class="no-highlight">35</i>&nbsp; * @param &lt;T&gt; Tensor type.
-<i class="no-highlight">36</i>&nbsp; * @param &lt;Y&gt; Real tensor type.
-<i class="no-highlight">37</i>&nbsp; */
-<i class="no-highlight">38</i>&nbsp;public interface ComplexTensorMixin&lt;T, Y&gt; extends
-<i class="no-highlight">39</i>&nbsp;        TensorComparisonsMixin&lt;T, CTensor, SparseCTensor, T, Y, CNumber&gt;,
-<i class="no-highlight">40</i>&nbsp;        TensorManipulationsMixin&lt;T, CTensor, SparseCTensor, T, Y, CNumber&gt;,
-<i class="no-highlight">41</i>&nbsp;        TensorOperationsMixin&lt;T, CTensor, SparseCTensor, T, Y, CNumber&gt;,
-<i class="no-highlight">42</i>&nbsp;        TensorPropertiesMixin&lt;T, CTensor, SparseCTensor, T, Y, CNumber&gt; {
-<i class="no-highlight">43</i>&nbsp;
-<i class="no-highlight">44</i>&nbsp;    /**
-<i class="no-highlight">45</i>&nbsp;     * Checks if this tensor has only real valued entries.
-<i class="no-highlight">46</i>&nbsp;     * @return True if this tensor contains &lt;b&gt;NO&lt;/b&gt; complex entries. Otherwise, returns false.
-<i class="no-highlight">47</i>&nbsp;     */
-<i class="no-highlight">48</i>&nbsp;    boolean isReal();
-<i class="no-highlight">49</i>&nbsp;
-<i class="no-highlight">50</i>&nbsp;
-<i class="no-highlight">51</i>&nbsp;    /**
-<i class="no-highlight">52</i>&nbsp;     * Checks if this tensor contains at least one complex entry.
-<i class="no-highlight">53</i>&nbsp;     * @return True if this tensor contains at least one complex entry. Otherwise, returns false.
-<i class="no-highlight">54</i>&nbsp;     */
-<i class="no-highlight">55</i>&nbsp;    boolean isComplex();
-<i class="no-highlight">56</i>&nbsp;
-<i class="no-highlight">57</i>&nbsp;
-<i class="no-highlight">58</i>&nbsp;    /**
-<i class="no-highlight">59</i>&nbsp;     * Computes the complex conjugate of a tensor.
-<i class="no-highlight">60</i>&nbsp;     * @return The complex conjugate of this tensor.
-<i class="no-highlight">61</i>&nbsp;     */
-<i class="no-highlight">62</i>&nbsp;    T conj();
-<i class="no-highlight">63</i>&nbsp;
-<i class="no-highlight">64</i>&nbsp;
-<i class="no-highlight">65</i>&nbsp;    /**
-<i class="no-highlight">66</i>&nbsp;     * Converts a complex tensor to a real matrix. The imaginary component of any complex value will be ignored.
-<i class="no-highlight">67</i>&nbsp;     * @return A tensor of the same size containing only the real components of this tensor.
-<i class="no-highlight">68</i>&nbsp;     */
-<i class="no-highlight">69</i>&nbsp;    Y toReal();
-<i class="no-highlight">70</i>&nbsp;}
+<i class="no-highlight">27</i>&nbsp;/**
+<i class="no-highlight">28</i>&nbsp; * This interface specifies methods which provide properties of a vector. All vectors should implement this interface.
+<i class="no-highlight">29</i>&nbsp; *
+<i class="no-highlight">30</i>&nbsp; * @param &lt;T&gt; Vector type.
+<i class="no-highlight">31</i>&nbsp; * @param &lt;U&gt; Dense Vector type.
+<i class="no-highlight">32</i>&nbsp; * @param &lt;V&gt; Sparse Vector type.
+<i class="no-highlight">33</i>&nbsp; * @param &lt;W&gt; Complex Vector type.
+<i class="no-highlight">34</i>&nbsp; * @param &lt;Y&gt; Real Vector type.
+<i class="no-highlight">35</i>&nbsp; * @param &lt;X&gt; Vector entry type.
+<i class="no-highlight">36</i>&nbsp; */
+<i class="no-highlight">37</i>&nbsp;public interface VectorPropertiesMixin&lt;T, U, V, W, Y, X extends Number&gt; extends TensorPropertiesMixin&lt;T, U, V, W, Y, X&gt; {
+<i class="no-highlight">38</i>&nbsp;
+<i class="no-highlight">39</i>&nbsp;    /**
+<i class="no-highlight">40</i>&nbsp;     * Gets the length of a vector.
+<i class="no-highlight">41</i>&nbsp;     * @return The length, i.e. the number of entries, in this vector.
+<i class="no-highlight">42</i>&nbsp;     */
+<i class="no-highlight">43</i>&nbsp;    int length();
+<i class="no-highlight">44</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -133,7 +107,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-04-14 13:06</div>
+    <div style="float:right;">generated on 2023-04-15 14:02</div>
 </div>
 </body>
 </html>

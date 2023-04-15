@@ -470,21 +470,20 @@ public final class ArrayUtils {
      * @param src Array to swap elements within.
      * @param indices Array containing indices of the permutation. If the {@code src} array has length {@code N}, then
      *                the array must be a permutation of {@code {0, 1, 2, ..., N-1}}.
-     * @return An array containing the elements of {@code src} ordered according to the {@code indices} array.
      * @throws IllegalArgumentException If {@code indices} is not a permutation of {@code {0, 1, 2, ..., N-1}}.
      */
     public static void swap(int[] src, int[] indices) {
-<span class="nc" id="L477">        ParameterChecks.assertPermutation(indices);</span>
+<span class="fc" id="L476">        ParameterChecks.assertPermutation(indices);</span>
 
-<span class="nc" id="L479">        int[] swapped = new int[src.length];</span>
-<span class="nc" id="L480">        int i=0;</span>
+<span class="fc" id="L478">        int[] swapped = new int[src.length];</span>
+<span class="fc" id="L479">        int i=0;</span>
 
-<span class="nc bnc" id="L482" title="All 2 branches missed.">        for(int value : indices) {</span>
-<span class="nc" id="L483">            swapped[i++] = src[value];</span>
+<span class="fc bfc" id="L481" title="All 2 branches covered.">        for(int value : indices) {</span>
+<span class="fc" id="L482">            swapped[i++] = src[value];</span>
         }
 
-<span class="nc" id="L486">        System.arraycopy(swapped, 0, src, 0, swapped.length);</span>
-<span class="nc" id="L487">    }</span>
+<span class="fc" id="L485">        System.arraycopy(swapped, 0, src, 0, swapped.length);</span>
+<span class="fc" id="L486">    }</span>
 
 
     /**
@@ -495,10 +494,10 @@ public final class ArrayUtils {
      * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
      */
     public static void swap(double[] arr, int i, int j) {
-<span class="fc" id="L498">        double temp = arr[i];</span>
-<span class="fc" id="L499">        arr[i] = arr[j];</span>
-<span class="fc" id="L500">        arr[j] = temp;</span>
-<span class="fc" id="L501">    }</span>
+<span class="fc" id="L497">        double temp = arr[i];</span>
+<span class="fc" id="L498">        arr[i] = arr[j];</span>
+<span class="fc" id="L499">        arr[j] = temp;</span>
+<span class="fc" id="L500">    }</span>
 
 
     /**
@@ -509,10 +508,10 @@ public final class ArrayUtils {
      * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
      */
     public static void swap(Object[] arr, int i, int j) {
-<span class="fc" id="L512">        Object temp = arr[i];</span>
-<span class="fc" id="L513">        arr[i] = arr[j];</span>
-<span class="fc" id="L514">        arr[j] = temp;</span>
-<span class="fc" id="L515">    }</span>
+<span class="fc" id="L511">        Object temp = arr[i];</span>
+<span class="fc" id="L512">        arr[i] = arr[j];</span>
+<span class="fc" id="L513">        arr[j] = temp;</span>
+<span class="fc" id="L514">    }</span>
 
 
     /**
@@ -522,14 +521,14 @@ public final class ArrayUtils {
      * @return An array containing the integer range {@code [start, end)}.
      */
     public static double[] range(int start, int end) {
-<span class="fc" id="L525">        double[] rangeArr = new double[end-start];</span>
+<span class="fc" id="L524">        double[] rangeArr = new double[end-start];</span>
 
-<span class="fc" id="L527">        int j=0;</span>
-<span class="fc bfc" id="L528" title="All 2 branches covered.">        for(int i=start; i&lt;end; i++) {</span>
-<span class="fc" id="L529">            rangeArr[j++]=i;</span>
+<span class="fc" id="L526">        int j=0;</span>
+<span class="fc bfc" id="L527" title="All 2 branches covered.">        for(int i=start; i&lt;end; i++) {</span>
+<span class="fc" id="L528">            rangeArr[j++]=i;</span>
         }
 
-<span class="fc" id="L532">        return rangeArr;</span>
+<span class="fc" id="L531">        return rangeArr;</span>
     }
 
 
@@ -541,20 +540,20 @@ public final class ArrayUtils {
      * corresponding entry in {@code src1}. Otherwise, returns false.
      */
     public static boolean equals(double[] src1, CNumber[] src2) {
-<span class="fc" id="L544">        boolean equal = true;</span>
+<span class="fc" id="L543">        boolean equal = true;</span>
 
-<span class="fc bfc" id="L546" title="All 2 branches covered.">        if(src1.length != src2.length) {</span>
-<span class="fc" id="L547">            equal = false;</span>
+<span class="fc bfc" id="L545" title="All 2 branches covered.">        if(src1.length != src2.length) {</span>
+<span class="fc" id="L546">            equal = false;</span>
         } else {
-<span class="fc bfc" id="L549" title="All 2 branches covered.">            for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="fc bfc" id="L550" title="All 4 branches covered.">                if(src1[i]!=src2[i].re || src2[i].im != 0) {</span>
-<span class="fc" id="L551">                    equal = false;</span>
-<span class="fc" id="L552">                    break; // No need to continue.</span>
+<span class="fc bfc" id="L548" title="All 2 branches covered.">            for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc bfc" id="L549" title="All 4 branches covered.">                if(src1[i]!=src2[i].re || src2[i].im != 0) {</span>
+<span class="fc" id="L550">                    equal = false;</span>
+<span class="fc" id="L551">                    break; // No need to continue.</span>
                 }
             }
         }
 
-<span class="fc" id="L557">        return equal;</span>
+<span class="fc" id="L556">        return equal;</span>
     }
 
 
@@ -566,17 +565,17 @@ public final class ArrayUtils {
      * array.
      */
     public static boolean[] inArray(double[] src, double... values) {
-<span class="nc" id="L569">        boolean[] result = new boolean[values.length];</span>
+<span class="nc" id="L568">        boolean[] result = new boolean[values.length];</span>
 
-<span class="nc bnc" id="L571" title="All 2 branches missed.">        for(double entry : src) {</span>
-<span class="nc bnc" id="L572" title="All 2 branches missed.">            for(int i=0; i&lt;values.length; i++) {</span>
-<span class="nc bnc" id="L573" title="All 2 branches missed.">                if(entry==values[i]) {</span>
-<span class="nc" id="L574">                    result[i]=true;</span>
+<span class="nc bnc" id="L570" title="All 2 branches missed.">        for(double entry : src) {</span>
+<span class="nc bnc" id="L571" title="All 2 branches missed.">            for(int i=0; i&lt;values.length; i++) {</span>
+<span class="nc bnc" id="L572" title="All 2 branches missed.">                if(entry==values[i]) {</span>
+<span class="nc" id="L573">                    result[i]=true;</span>
                 }
             }
         }
 
-<span class="nc" id="L579">        return result;</span>
+<span class="nc" id="L578">        return result;</span>
     }
 
 
@@ -587,16 +586,16 @@ public final class ArrayUtils {
      * @return A boolean describing if the specified value is in the array or not.
      */
     public static boolean inArray(double[] src, double value) {
-<span class="nc" id="L590">        boolean result = false;</span>
+<span class="nc" id="L589">        boolean result = false;</span>
 
-<span class="nc bnc" id="L592" title="All 2 branches missed.">        for(double entry : src) {</span>
-<span class="nc bnc" id="L593" title="All 2 branches missed.">            if(entry==value) {</span>
-<span class="nc" id="L594">                result=true;</span>
-<span class="nc" id="L595">                break;</span>
+<span class="nc bnc" id="L591" title="All 2 branches missed.">        for(double entry : src) {</span>
+<span class="nc bnc" id="L592" title="All 2 branches missed.">            if(entry==value) {</span>
+<span class="nc" id="L593">                result=true;</span>
+<span class="nc" id="L594">                break;</span>
             }
         }
 
-<span class="nc" id="L599">        return result;</span>
+<span class="nc" id="L598">        return result;</span>
     }
 
 
@@ -607,16 +606,16 @@ public final class ArrayUtils {
      * @return A boolean describing if the specified value is in the array or not.
      */
     public static boolean notInArray(int[] src, int value) {
-<span class="fc" id="L610">        boolean result = true;</span>
+<span class="fc" id="L609">        boolean result = true;</span>
 
-<span class="fc bfc" id="L612" title="All 2 branches covered.">        for(double entry : src) {</span>
-<span class="fc bfc" id="L613" title="All 2 branches covered.">            if(entry == value) {</span>
-<span class="fc" id="L614">                result = false;</span>
-<span class="fc" id="L615">                break;</span>
+<span class="fc bfc" id="L611" title="All 2 branches covered.">        for(double entry : src) {</span>
+<span class="fc bfc" id="L612" title="All 2 branches covered.">            if(entry == value) {</span>
+<span class="fc" id="L613">                result = false;</span>
+<span class="fc" id="L614">                break;</span>
             }
         }
 
-<span class="fc" id="L619">        return result;</span>
+<span class="fc" id="L618">        return result;</span>
     }
 
 
@@ -628,17 +627,17 @@ public final class ArrayUtils {
      * array.
      */
     public static boolean[] inArray(int[] src, int... values) {
-<span class="nc" id="L631">        boolean[] result = new boolean[values.length];</span>
+<span class="nc" id="L630">        boolean[] result = new boolean[values.length];</span>
 
-<span class="nc bnc" id="L633" title="All 2 branches missed.">        for(double entry : src) {</span>
-<span class="nc bnc" id="L634" title="All 2 branches missed.">            for(int i=0; i&lt;values.length; i++) {</span>
-<span class="nc bnc" id="L635" title="All 2 branches missed.">                if(entry==values[i]) {</span>
-<span class="nc" id="L636">                    result[i]=true;</span>
+<span class="nc bnc" id="L632" title="All 2 branches missed.">        for(double entry : src) {</span>
+<span class="nc bnc" id="L633" title="All 2 branches missed.">            for(int i=0; i&lt;values.length; i++) {</span>
+<span class="nc bnc" id="L634" title="All 2 branches missed.">                if(entry==values[i]) {</span>
+<span class="nc" id="L635">                    result[i]=true;</span>
                 }
             }
         }
 
-<span class="nc" id="L641">        return result;</span>
+<span class="nc" id="L640">        return result;</span>
     }
 
 
@@ -648,17 +647,17 @@ public final class ArrayUtils {
      * @return The flattened array.
      */
     public static double[] flatten(double[][] src) {
-<span class="fc" id="L651">        double[] flat = new double[src.length*src[0].length];</span>
+<span class="fc" id="L650">        double[] flat = new double[src.length*src[0].length];</span>
 
         // Copy 2D array to 1D array.
-<span class="fc" id="L654">        int i=0;</span>
-<span class="fc bfc" id="L655" title="All 2 branches covered.">        for(double[] row : src) {</span>
-<span class="fc bfc" id="L656" title="All 2 branches covered.">            for(double value : row) {</span>
-<span class="fc" id="L657">                flat[i++] = value;</span>
+<span class="fc" id="L653">        int i=0;</span>
+<span class="fc bfc" id="L654" title="All 2 branches covered.">        for(double[] row : src) {</span>
+<span class="fc bfc" id="L655" title="All 2 branches covered.">            for(double value : row) {</span>
+<span class="fc" id="L656">                flat[i++] = value;</span>
             }
         }
 
-<span class="fc" id="L661">        return flat;</span>
+<span class="fc" id="L660">        return flat;</span>
     }
 
 
@@ -668,17 +667,17 @@ public final class ArrayUtils {
      * @return The flattened array.
      */
     public static CNumber[] flatten(CNumber[][] src) {
-<span class="fc" id="L671">        CNumber[] flat = new CNumber[src.length*src[0].length];</span>
+<span class="fc" id="L670">        CNumber[] flat = new CNumber[src.length*src[0].length];</span>
 
         // Copy 2D array to 1D array.
-<span class="fc" id="L674">        int i=0;</span>
-<span class="fc bfc" id="L675" title="All 2 branches covered.">        for(CNumber[] row : src) {</span>
-<span class="fc bfc" id="L676" title="All 2 branches covered.">            for(CNumber value : row) {</span>
-<span class="fc" id="L677">                flat[i++] = value.copy();</span>
+<span class="fc" id="L673">        int i=0;</span>
+<span class="fc bfc" id="L674" title="All 2 branches covered.">        for(CNumber[] row : src) {</span>
+<span class="fc bfc" id="L675" title="All 2 branches covered.">            for(CNumber value : row) {</span>
+<span class="fc" id="L676">                flat[i++] = value.copy();</span>
             }
         }
 
-<span class="fc" id="L681">        return flat;</span>
+<span class="fc" id="L680">        return flat;</span>
     }
 
 
@@ -688,13 +687,13 @@ public final class ArrayUtils {
      * @return An array containing the real components of the source array.
      */
     public static double[] getReals(CNumber[] src) {
-<span class="nc" id="L691">        double[] reals = new double[src.length];</span>
+<span class="nc" id="L690">        double[] reals = new double[src.length];</span>
 
-<span class="nc bnc" id="L693" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="nc" id="L694">            reals[i] = src[i].re;</span>
+<span class="nc bnc" id="L692" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="nc" id="L693">            reals[i] = src[i].re;</span>
         }
 
-<span class="nc" id="L697">        return reals;</span>
+<span class="nc" id="L696">        return reals;</span>
     }
 
 
@@ -704,19 +703,19 @@ public final class ArrayUtils {
      * @return The maximum length of the string representation of the doubles in the array.
      */
     public static int maxStringLength(double[] src) {
-<span class="fc" id="L707">        int maxLength = -1;</span>
+<span class="fc" id="L706">        int maxLength = -1;</span>
         int currLength;
 
-<span class="fc bfc" id="L710" title="All 2 branches covered.">        for(double value : src) {</span>
-<span class="fc" id="L711">            currLength = CNumber.round(new CNumber(value), PrintOptions.getPrecision()).toString().length();</span>
+<span class="fc bfc" id="L709" title="All 2 branches covered.">        for(double value : src) {</span>
+<span class="fc" id="L710">            currLength = CNumber.round(new CNumber(value), PrintOptions.getPrecision()).toString().length();</span>
 
-<span class="fc bfc" id="L713" title="All 2 branches covered.">            if(currLength&gt;maxLength) {</span>
+<span class="fc bfc" id="L712" title="All 2 branches covered.">            if(currLength&gt;maxLength) {</span>
                 // Then update the maximum length.
-<span class="fc" id="L715">                maxLength=currLength;</span>
+<span class="fc" id="L714">                maxLength=currLength;</span>
             }
         }
 
-<span class="fc" id="L719">        return maxLength;</span>
+<span class="fc" id="L718">        return maxLength;</span>
     }
 
 
@@ -726,19 +725,19 @@ public final class ArrayUtils {
      * @return The maximum length of the string representation of the doubles in the array.
      */
     public static int maxStringLength(CNumber[] src) {
-<span class="fc" id="L729">        int maxLength = -1;</span>
+<span class="fc" id="L728">        int maxLength = -1;</span>
         int currLength;
 
-<span class="fc bfc" id="L732" title="All 2 branches covered.">        for(CNumber value : src) {</span>
-<span class="fc" id="L733">            currLength = CNumber.round(value, PrintOptions.getPrecision()).toString().length();</span>
+<span class="fc bfc" id="L731" title="All 2 branches covered.">        for(CNumber value : src) {</span>
+<span class="fc" id="L732">            currLength = CNumber.round(value, PrintOptions.getPrecision()).toString().length();</span>
 
-<span class="pc bpc" id="L735" title="1 of 2 branches missed.">            if(currLength&gt;maxLength) {</span>
+<span class="pc bpc" id="L734" title="1 of 2 branches missed.">            if(currLength&gt;maxLength) {</span>
                 // Then update the maximum length.
-<span class="fc" id="L737">                maxLength=currLength;</span>
+<span class="fc" id="L736">                maxLength=currLength;</span>
             }
         }
 
-<span class="fc" id="L741">        return maxLength;</span>
+<span class="fc" id="L740">        return maxLength;</span>
     }
 
 
@@ -750,36 +749,36 @@ public final class ArrayUtils {
      * @return The maximum length of the string representation of the doubles in the array.
      */
     public static int maxStringLength(double[] src, int stopIndex) {
-<span class="fc" id="L753">        int maxLength = -1;</span>
+<span class="fc" id="L752">        int maxLength = -1;</span>
         int currLength;
 
         // Ensure no index out of bound exceptions.
-<span class="fc" id="L757">        stopIndex = Math.min(stopIndex, src.length);</span>
+<span class="fc" id="L756">        stopIndex = Math.min(stopIndex, src.length);</span>
 
-<span class="fc bfc" id="L759" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
-<span class="fc" id="L760">            currLength = CNumber.round(</span>
+<span class="fc bfc" id="L758" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="fc" id="L759">            currLength = CNumber.round(</span>
                     new CNumber(src[i]),
-<span class="fc" id="L762">                    PrintOptions.getPrecision()).toString().length();</span>
+<span class="fc" id="L761">                    PrintOptions.getPrecision()).toString().length();</span>
 
-<span class="fc bfc" id="L764" title="All 2 branches covered.">            if(currLength&gt;maxLength) {</span>
+<span class="pc bpc" id="L763" title="1 of 2 branches missed.">            if(currLength&gt;maxLength) {</span>
                 // Then update the maximum length.
-<span class="fc" id="L766">                maxLength=currLength;</span>
+<span class="fc" id="L765">                maxLength=currLength;</span>
             }
         }
 
         // Always get last elements' length.
-<span class="pc bpc" id="L771" title="1 of 2 branches missed.">        if(stopIndex &lt; src.length) {</span>
-<span class="fc" id="L772">            currLength = CNumber.round(</span>
+<span class="pc bpc" id="L770" title="1 of 2 branches missed.">        if(stopIndex &lt; src.length) {</span>
+<span class="fc" id="L771">            currLength = CNumber.round(</span>
                     new CNumber(src[src.length-1]),
-<span class="fc" id="L774">                    PrintOptions.getPrecision()).toString().length();</span>
+<span class="fc" id="L773">                    PrintOptions.getPrecision()).toString().length();</span>
 
-<span class="fc bfc" id="L776" title="All 2 branches covered.">            if(currLength&gt;maxLength) {</span>
+<span class="fc bfc" id="L775" title="All 2 branches covered.">            if(currLength&gt;maxLength) {</span>
                 // Then update the maximum length.
-<span class="fc" id="L778">                maxLength=currLength;</span>
+<span class="fc" id="L777">                maxLength=currLength;</span>
             }
         }
 
-<span class="fc" id="L782">        return maxLength;</span>
+<span class="fc" id="L781">        return maxLength;</span>
     }
 
 
@@ -791,36 +790,36 @@ public final class ArrayUtils {
      * @return The maximum length of the string representation of the doubles in the array.
      */
     public static int maxStringLength(CNumber[] src, int stopIndex) {
-<span class="fc" id="L794">        int maxLength = -1;</span>
+<span class="fc" id="L793">        int maxLength = -1;</span>
         int currLength;
 
         // Ensure no index out of bound exceptions.
-<span class="fc" id="L798">        stopIndex = Math.min(stopIndex, src.length);</span>
+<span class="fc" id="L797">        stopIndex = Math.min(stopIndex, src.length);</span>
 
-<span class="fc bfc" id="L800" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
-<span class="fc" id="L801">            currLength = CNumber.round(</span>
+<span class="fc bfc" id="L799" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="fc" id="L800">            currLength = CNumber.round(</span>
                     src[i],
-<span class="fc" id="L803">                    PrintOptions.getPrecision()).toString().length();</span>
+<span class="fc" id="L802">                    PrintOptions.getPrecision()).toString().length();</span>
 
-<span class="pc bpc" id="L805" title="1 of 2 branches missed.">            if(currLength&gt;maxLength) {</span>
+<span class="pc bpc" id="L804" title="1 of 2 branches missed.">            if(currLength&gt;maxLength) {</span>
                 // Then update the maximum length.
-<span class="fc" id="L807">                maxLength=currLength;</span>
+<span class="fc" id="L806">                maxLength=currLength;</span>
             }
         }
 
         // Always get last elements' length.
-<span class="pc bpc" id="L812" title="1 of 2 branches missed.">        if(stopIndex &lt; src.length) {</span>
-<span class="fc" id="L813">            currLength = CNumber.round(</span>
+<span class="pc bpc" id="L811" title="1 of 2 branches missed.">        if(stopIndex &lt; src.length) {</span>
+<span class="fc" id="L812">            currLength = CNumber.round(</span>
                     src[src.length-1],
-<span class="fc" id="L815">                    PrintOptions.getPrecision()).toString().length();</span>
+<span class="fc" id="L814">                    PrintOptions.getPrecision()).toString().length();</span>
 
-<span class="fc bfc" id="L817" title="All 2 branches covered.">            if(currLength&gt;maxLength) {</span>
+<span class="fc bfc" id="L816" title="All 2 branches covered.">            if(currLength&gt;maxLength) {</span>
                 // Then update the maximum length.
-<span class="fc" id="L819">                maxLength=currLength;</span>
+<span class="fc" id="L818">                maxLength=currLength;</span>
             }
         }
 
-<span class="fc" id="L823">        return maxLength;</span>
+<span class="fc" id="L822">        return maxLength;</span>
     }
 
 
@@ -832,10 +831,10 @@ public final class ArrayUtils {
      * followed by the elements of {@code src2}.
      */
     public static double[] join(double[] src1, double[] src2) {
-<span class="nc" id="L835">        double[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);</span>
-<span class="nc" id="L836">        System.arraycopy(src2, 0, concatenate, src1.length, src2.length);</span>
+<span class="nc" id="L834">        double[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);</span>
+<span class="nc" id="L835">        System.arraycopy(src2, 0, concatenate, src1.length, src2.length);</span>
 
-<span class="nc" id="L838">        return concatenate;</span>
+<span class="nc" id="L837">        return concatenate;</span>
     }
 
 
@@ -847,10 +846,10 @@ public final class ArrayUtils {
      * followed by the elements of {@code src2}.
      */
     public static int[] join(int[] src1, int[] src2) {
-<span class="nc" id="L850">        int[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);</span>
-<span class="nc" id="L851">        System.arraycopy(src2, 0, concatenate, src1.length, src2.length);</span>
+<span class="fc" id="L849">        int[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);</span>
+<span class="fc" id="L850">        System.arraycopy(src2, 0, concatenate, src1.length, src2.length);</span>
 
-<span class="nc" id="L853">        return concatenate;</span>
+<span class="fc" id="L852">        return concatenate;</span>
     }
 
 
@@ -863,24 +862,24 @@ public final class ArrayUtils {
      * @return An array containing the set subtraction {@code {0, 1, 2, ...., dim-1}} - srcAxes.
      */
     public static int[] notinAxes(int[] srcAxes, int dim) {
-<span class="nc" id="L866">        int[] notin = new int[dim-srcAxes.length];</span>
+<span class="fc" id="L865">        int[] notin = new int[dim-srcAxes.length];</span>
 
         // Copy and sort array.
-<span class="nc" id="L869">        int[] srcAxesCopy = srcAxes.clone();</span>
-<span class="nc" id="L870">        Arrays.sort(srcAxesCopy);</span>
+<span class="fc" id="L868">        int[] srcAxesCopy = srcAxes.clone();</span>
+<span class="fc" id="L869">        Arrays.sort(srcAxesCopy);</span>
 
-<span class="nc" id="L872">        int srcIndex = 0;</span>
-<span class="nc" id="L873">        int notinIndex = 0;</span>
+<span class="fc" id="L871">        int srcIndex = 0;</span>
+<span class="fc" id="L872">        int notinIndex = 0;</span>
 
-<span class="nc bnc" id="L875" title="All 2 branches missed.">        for(int i=0; i&lt;dim; i++) {</span>
-<span class="nc bnc" id="L876" title="All 4 branches missed.">            if(srcIndex&lt;srcAxesCopy.length &amp;&amp; srcAxesCopy[srcIndex]==i) {</span>
-<span class="nc" id="L877">                srcIndex++;</span>
+<span class="fc bfc" id="L874" title="All 2 branches covered.">        for(int i=0; i&lt;dim; i++) {</span>
+<span class="fc bfc" id="L875" title="All 4 branches covered.">            if(srcIndex&lt;srcAxesCopy.length &amp;&amp; srcAxesCopy[srcIndex]==i) {</span>
+<span class="fc" id="L876">                srcIndex++;</span>
             } else {
-<span class="nc" id="L879">                notin[notinIndex++] = i;</span>
+<span class="fc" id="L878">                notin[notinIndex++] = i;</span>
             }
         }
 
-<span class="nc" id="L883">        return notin;</span>
+<span class="fc" id="L882">        return notin;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -130,16 +130,16 @@ public final class RealDenseMatrixMultiplyDispatcher {
 
         // Determine the matrix shape.
         int matrixShape;
-<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (getRatio(shape1) &gt;= SQUARENESS_RATIO) {</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        if (getRatio(shape1) &gt;= SQUARENESS_RATIO) {</span>
 <span class="fc" id="L134">            matrixShape = 0; // Approximately Square</span>
-<span class="nc bnc" id="L135" title="All 2 branches missed.">        } else if (rows1 &gt; cols1) {</span>
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">        } else if (rows1 &gt; cols1) {</span>
 <span class="nc" id="L136">            matrixShape = 1; // More rows than columns</span>
         } else {
-<span class="nc" id="L138">            matrixShape = 2; // More columns than rows</span>
+<span class="fc" id="L138">            matrixShape = 2; // More columns than rows</span>
         }
 
         // Determine the algorithm name based on the matrix shape and size.
-<span class="pc bpc" id="L142" title="3 of 4 branches missed.">        switch (matrixShape) {</span>
+<span class="pc bpc" id="L142" title="2 of 4 branches missed.">        switch (matrixShape) {</span>
             case 0: // Square
 <span class="pc bpc" id="L144" title="1 of 2 branches missed.">                if(rows1 &lt; SEQUENTIAL_SWAPPED_THRESHOLD) {</span>
 <span class="fc" id="L145">                    names = AlgorithmNames.REORDERED;</span>
@@ -159,8 +159,8 @@ public final class RealDenseMatrixMultiplyDispatcher {
 <span class="nc" id="L159">                break;</span>
 
             case 2: // More columns than rows
-<span class="nc bnc" id="L162" title="All 2 branches missed.">                if(cols1 &lt;= 100) {</span>
-<span class="nc bnc" id="L163" title="All 2 branches missed.">                    names = (rows1 &lt;= 20) ? AlgorithmNames.REORDERED : AlgorithmNames.CONCURRENT_REORDERED;</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">                if(cols1 &lt;= 100) {</span>
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">                    names = (rows1 &lt;= 20) ? AlgorithmNames.REORDERED : AlgorithmNames.CONCURRENT_REORDERED;</span>
 <span class="nc bnc" id="L164" title="All 2 branches missed.">                } else if(cols1 &lt;= 500) {</span>
 <span class="nc bnc" id="L165" title="All 2 branches missed.">                    names = (rows1 &lt;= 10) ? AlgorithmNames.REORDERED : AlgorithmNames.CONCURRENT_REORDERED;</span>
                 } else {

@@ -167,7 +167,7 @@ public final class RealDenseTensorDot {
         Shape src2NewShape = new Shape(n2, n1);
         // -----------------------------------------------------
 
-        // Reform problem as a matrix multiplication problem.
+        // Reform tensor dot product problem as a matrix multiplication problem.
         Matrix at = new Matrix(
                 src1NewShape,
                 RealDenseTranspose.standardConcurrent(src1.entries, src1.shape, src1NewAxes)

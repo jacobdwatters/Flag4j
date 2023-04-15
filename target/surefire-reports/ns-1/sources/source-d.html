@@ -1557,26 +1557,26 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">1482</i>&nbsp;    public String toString() {
 <b class="nc"><i class="no-highlight">1483</i>&nbsp;        StringBuilder result = new StringBuilder();</b>
 <i class="no-highlight">1484</i>&nbsp;
-<b class="nc"><i class="no-highlight">1485</i>&nbsp;        if(PrintOptions.getMaxColumns()&lt;this.size) {</b>
+<b class="nc"><i class="no-highlight">1485</i>&nbsp;        if(PrintOptions.getMaxColumns()&lt;size) {</b>
 <i class="no-highlight">1486</i>&nbsp;            // Then also get the full size of the vector.
-<b class="nc"><i class="no-highlight">1487</i>&nbsp;            result.append(String.format(&quot;Full Size: %d\n&quot;, this.size));</b>
+<b class="nc"><i class="no-highlight">1487</i>&nbsp;            result.append(String.format(&quot;Full Size: %d\n&quot;, size));</b>
 <i class="no-highlight">1488</i>&nbsp;        }
 <i class="no-highlight">1489</i>&nbsp;
 <b class="nc"><i class="no-highlight">1490</i>&nbsp;        result.append(&quot;[&quot;);</b>
 <i class="no-highlight">1491</i>&nbsp;
-<b class="nc"><i class="no-highlight">1492</i>&nbsp;        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.size-1);</b>
+<b class="nc"><i class="no-highlight">1492</i>&nbsp;        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</b>
 <i class="no-highlight">1493</i>&nbsp;        int width;
 <i class="no-highlight">1494</i>&nbsp;        String value;
 <i class="no-highlight">1495</i>&nbsp;
 <i class="no-highlight">1496</i>&nbsp;        // Get entries up until the stopping point.
 <b class="nc"><i class="no-highlight">1497</i>&nbsp;        for(int i=0; i&lt;stopIndex; i++) {</b>
-<b class="nc"><i class="no-highlight">1498</i>&nbsp;            value = StringUtils.ValueOfRound(this.get(i), PrintOptions.getPrecision());</b>
+<b class="nc"><i class="no-highlight">1498</i>&nbsp;            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</b>
 <b class="nc"><i class="no-highlight">1499</i>&nbsp;            width = PrintOptions.getPadding() + value.length();</b>
 <b class="nc"><i class="no-highlight">1500</i>&nbsp;            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</b>
 <b class="nc"><i class="no-highlight">1501</i>&nbsp;            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</b>
 <i class="no-highlight">1502</i>&nbsp;        }
 <i class="no-highlight">1503</i>&nbsp;
-<b class="nc"><i class="no-highlight">1504</i>&nbsp;        if(stopIndex &lt; this.size-1) {</b>
+<b class="nc"><i class="no-highlight">1504</i>&nbsp;        if(stopIndex &lt; size-1) {</b>
 <b class="nc"><i class="no-highlight">1505</i>&nbsp;            width = PrintOptions.getPadding() + 3;</b>
 <b class="nc"><i class="no-highlight">1506</i>&nbsp;            value = &quot;...&quot;;</b>
 <b class="nc"><i class="no-highlight">1507</i>&nbsp;            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</b>
@@ -1584,7 +1584,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">1509</i>&nbsp;        }
 <i class="no-highlight">1510</i>&nbsp;
 <i class="no-highlight">1511</i>&nbsp;        // Get last entry now
-<b class="nc"><i class="no-highlight">1512</i>&nbsp;        value = StringUtils.ValueOfRound(this.get(this.size-1), PrintOptions.getPrecision());</b>
+<b class="nc"><i class="no-highlight">1512</i>&nbsp;        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</b>
 <b class="nc"><i class="no-highlight">1513</i>&nbsp;        width = PrintOptions.getPadding() + value.length();</b>
 <b class="nc"><i class="no-highlight">1514</i>&nbsp;        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</b>
 <b class="nc"><i class="no-highlight">1515</i>&nbsp;        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</b>
@@ -1620,7 +1620,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-04-14 13:06</div>
+    <div style="float:right;">generated on 2023-04-15 14:02</div>
 </div>
 </body>
 </html>

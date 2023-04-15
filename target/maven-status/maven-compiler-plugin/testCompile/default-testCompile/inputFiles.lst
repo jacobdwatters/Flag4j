@@ -3,6 +3,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixAddSubE
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberConstructorTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixMultTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixElemMultTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_tensor\CTensorDotTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\decompositions\RealLUTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense_sparse\real\RealDenseSparseMatMultTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixVectorCheckTests.java
@@ -58,6 +59,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixZerosOn
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\sparse\complex\ComplexSparseMatMultTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_matrix\CMatrixRemoveRowColTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\vector\VectorScaleMultDivTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_tensor\CTensorTransposeTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberSqrtTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_vector\CVectorSubTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\vector\VectorPerpParallelTests.java
@@ -94,6 +96,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_matrix\CMatr
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_matrix\CMatrixStackTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberConversionTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseTensorConstructorTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\tensor\TensorTransposeTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixAddToEachRowTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixEqualsTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseCTensorConstructorTests.java
@@ -136,6 +139,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNum
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\tensor\TensorConversionTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberBinaryOperationsTest.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\tensor\TensorDotTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\complex\CMatrixMultiplyTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CVectorConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\tensor\TensorPropertiesTests.java

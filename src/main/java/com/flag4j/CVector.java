@@ -1623,26 +1623,26 @@ public class CVector extends VectorBase<CNumber[]> implements
     public String toString() {
         StringBuilder result = new StringBuilder();
 
-        if(PrintOptions.getMaxColumns()<this.size) {
+        if(PrintOptions.getMaxColumns()<size) {
             // Then also get the full size of the vector.
-            result.append(String.format("Full Size: %d\n", this.size));
+            result.append(String.format("Full Size: %d\n", size));
         }
 
         result.append("[");
 
-        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.size-1);
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
         int width;
         String value;
 
         // Get entries up until the stopping point.
         for(int i=0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound(this.get(i), PrintOptions.getPrecision());
+            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
-        if(stopIndex < this.size-1) {
+        if(stopIndex < size-1) {
             width = PrintOptions.getPadding() + 3;
             value = "...";
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
@@ -1650,7 +1650,7 @@ public class CVector extends VectorBase<CNumber[]> implements
         }
 
         // Get last entry now
-        value = StringUtils.ValueOfRound(this.get(this.size-1), PrintOptions.getPrecision());
+        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
         width = PrintOptions.getPadding() + value.length();
         value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));

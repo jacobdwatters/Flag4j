@@ -53,22 +53,22 @@ public class ComplexDenseTranspose {
      * @return The transpose of the tensor along the specified axes.
      */
     public static CNumber[] standard(final CNumber[] src, final Shape shape, final int axis1, final int axis2) {
-<span class="nc bnc" id="L56" title="All 2 branches missed.">        if(shape.getRank() &lt; 2) { // Can't transpose tensor with less than 2 axes.</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if(shape.getRank() &lt; 2) { // Can't transpose tensor with less than 2 axes.</span>
 <span class="nc" id="L57">            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</span>
                     &quot; tensor.&quot;);
         }
 
-<span class="nc" id="L61">        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];</span>
-<span class="nc" id="L62">        Shape destShape = shape.copy().swapAxes(axis1, axis2);</span>
+<span class="fc" id="L61">        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];</span>
+<span class="fc" id="L62">        Shape destShape = shape.copy().swapAxes(axis1, axis2);</span>
         int[] destIndices;
 
-<span class="nc bnc" id="L65" title="All 2 branches missed.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="nc" id="L66">            destIndices = shape.getIndices(i);</span>
-<span class="nc" id="L67">            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.</span>
-<span class="nc" id="L68">            dest[destShape.entriesIndex(destIndices)] = src[i].copy(); // Apply transpose for the element</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L66">            destIndices = shape.getIndices(i);</span>
+<span class="fc" id="L67">            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.</span>
+<span class="fc" id="L68">            dest[destShape.entriesIndex(destIndices)] = src[i].copy(); // Apply transpose for the element</span>
         }
 
-<span class="nc" id="L71">        return dest;</span>
+<span class="fc" id="L71">        return dest;</span>
     }
 
 
@@ -144,21 +144,21 @@ public class ComplexDenseTranspose {
      * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
      */
     public static CNumber[] standardConcurrent(final CNumber[] src, final Shape shape, final int[] axes) {
-<span class="nc bnc" id="L147" title="All 2 branches missed.">        if(shape.getRank() &lt; 2) { // Can't transpose tensor with less than 2 axes.</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if(shape.getRank() &lt; 2) { // Can't transpose tensor with less than 2 axes.</span>
 <span class="nc" id="L148">            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</span>
                     &quot; tensor.&quot;);
         }
 
-<span class="nc" id="L152">        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];</span>
-<span class="nc" id="L153">        Shape destShape = shape.copy().swapAxes(axes);</span>
+<span class="fc" id="L152">        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];</span>
+<span class="fc" id="L153">        Shape destShape = shape.copy().swapAxes(axes);</span>
 
-<span class="nc" id="L155">        ThreadManager.concurrentLoop(0, src.length, (i) -&gt; {</span>
-<span class="nc" id="L156">            int[] destIndices = shape.getIndices(i);</span>
-<span class="nc" id="L157">            ArrayUtils.swap(destIndices, axes); // Compute destination indices.</span>
-<span class="nc" id="L158">            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element</span>
-<span class="nc" id="L159">        });</span>
+<span class="fc" id="L155">        ThreadManager.concurrentLoop(0, src.length, (i) -&gt; {</span>
+<span class="fc" id="L156">            int[] destIndices = shape.getIndices(i);</span>
+<span class="fc" id="L157">            ArrayUtils.swap(destIndices, axes); // Compute destination indices.</span>
+<span class="fc" id="L158">            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element</span>
+<span class="fc" id="L159">        });</span>
 
-<span class="nc" id="L161">        return dest;</span>
+<span class="fc" id="L161">        return dest;</span>
     }
 
 

@@ -50,18 +50,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    70.5%
+    77.3%
   </span>
   <span class="absValue">
-    (31/44)
+    (34/44)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    70.5%
+    80%
   </span>
   <span class="absValue">
-    (141/200)
+    (160/200)
   </span>
 </td>
 </tr>
@@ -549,16 +549,16 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">474</i>&nbsp;     * @throws IllegalArgumentException If {@code indices} is not a permutation of {@code {0, 1, 2, ..., N-1}}.
 <i class="no-highlight">475</i>&nbsp;     */
 <i class="no-highlight">476</i>&nbsp;    public static void swap(int[] src, int[] indices) {
-<b class="nc"><i class="no-highlight">477</i>&nbsp;        ParameterChecks.assertPermutation(indices);</b>
+<b class="fc"><i class="no-highlight">477</i>&nbsp;        ParameterChecks.assertPermutation(indices);</b>
 <i class="no-highlight">478</i>&nbsp;
-<b class="nc"><i class="no-highlight">479</i>&nbsp;        int[] swapped = new int[src.length];</b>
-<b class="nc"><i class="no-highlight">480</i>&nbsp;        int i=0;</b>
+<b class="fc"><i class="no-highlight">479</i>&nbsp;        int[] swapped = new int[src.length];</b>
+<b class="fc"><i class="no-highlight">480</i>&nbsp;        int i=0;</b>
 <i class="no-highlight">481</i>&nbsp;
-<b class="nc"><i class="no-highlight">482</i>&nbsp;        for(int value : indices) {</b>
-<b class="nc"><i class="no-highlight">483</i>&nbsp;            swapped[i++] = src[value];</b>
+<b class="fc"><i class="no-highlight">482</i>&nbsp;        for(int value : indices) {</b>
+<b class="fc"><i class="no-highlight">483</i>&nbsp;            swapped[i++] = src[value];</b>
 <i class="no-highlight">484</i>&nbsp;        }
 <i class="no-highlight">485</i>&nbsp;
-<b class="nc"><i class="no-highlight">486</i>&nbsp;        System.arraycopy(swapped, 0, src, 0, swapped.length);</b>
+<b class="fc"><i class="no-highlight">486</i>&nbsp;        System.arraycopy(swapped, 0, src, 0, swapped.length);</b>
 <i class="no-highlight">487</i>&nbsp;    }
 <i class="no-highlight">488</i>&nbsp;
 <i class="no-highlight">489</i>&nbsp;
@@ -922,10 +922,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">847</i>&nbsp;     * followed by the elements of {@code src2}.
 <i class="no-highlight">848</i>&nbsp;     */
 <i class="no-highlight">849</i>&nbsp;    public static int[] join(int[] src1, int[] src2) {
-<b class="nc"><i class="no-highlight">850</i>&nbsp;        int[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);</b>
-<b class="nc"><i class="no-highlight">851</i>&nbsp;        System.arraycopy(src2, 0, concatenate, src1.length, src2.length);</b>
+<b class="fc"><i class="no-highlight">850</i>&nbsp;        int[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);</b>
+<b class="fc"><i class="no-highlight">851</i>&nbsp;        System.arraycopy(src2, 0, concatenate, src1.length, src2.length);</b>
 <i class="no-highlight">852</i>&nbsp;
-<b class="nc"><i class="no-highlight">853</i>&nbsp;        return concatenate;</b>
+<b class="fc"><i class="no-highlight">853</i>&nbsp;        return concatenate;</b>
 <i class="no-highlight">854</i>&nbsp;    }
 <i class="no-highlight">855</i>&nbsp;
 <i class="no-highlight">856</i>&nbsp;
@@ -938,24 +938,24 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">863</i>&nbsp;     * @return An array containing the set subtraction {@code {0, 1, 2, ...., dim-1}} - srcAxes.
 <i class="no-highlight">864</i>&nbsp;     */
 <i class="no-highlight">865</i>&nbsp;    public static int[] notinAxes(int[] srcAxes, int dim) {
-<b class="nc"><i class="no-highlight">866</i>&nbsp;        int[] notin = new int[dim-srcAxes.length];</b>
+<b class="fc"><i class="no-highlight">866</i>&nbsp;        int[] notin = new int[dim-srcAxes.length];</b>
 <i class="no-highlight">867</i>&nbsp;
 <i class="no-highlight">868</i>&nbsp;        // Copy and sort array.
-<b class="nc"><i class="no-highlight">869</i>&nbsp;        int[] srcAxesCopy = srcAxes.clone();</b>
-<b class="nc"><i class="no-highlight">870</i>&nbsp;        Arrays.sort(srcAxesCopy);</b>
+<b class="fc"><i class="no-highlight">869</i>&nbsp;        int[] srcAxesCopy = srcAxes.clone();</b>
+<b class="fc"><i class="no-highlight">870</i>&nbsp;        Arrays.sort(srcAxesCopy);</b>
 <i class="no-highlight">871</i>&nbsp;
-<b class="nc"><i class="no-highlight">872</i>&nbsp;        int srcIndex = 0;</b>
-<b class="nc"><i class="no-highlight">873</i>&nbsp;        int notinIndex = 0;</b>
+<b class="fc"><i class="no-highlight">872</i>&nbsp;        int srcIndex = 0;</b>
+<b class="fc"><i class="no-highlight">873</i>&nbsp;        int notinIndex = 0;</b>
 <i class="no-highlight">874</i>&nbsp;
-<b class="nc"><i class="no-highlight">875</i>&nbsp;        for(int i=0; i&lt;dim; i++) {</b>
-<b class="nc"><i class="no-highlight">876</i>&nbsp;            if(srcIndex&lt;srcAxesCopy.length &amp;&amp; srcAxesCopy[srcIndex]==i) {</b>
-<b class="nc"><i class="no-highlight">877</i>&nbsp;                srcIndex++;</b>
+<b class="fc"><i class="no-highlight">875</i>&nbsp;        for(int i=0; i&lt;dim; i++) {</b>
+<b class="fc"><i class="no-highlight">876</i>&nbsp;            if(srcIndex&lt;srcAxesCopy.length &amp;&amp; srcAxesCopy[srcIndex]==i) {</b>
+<b class="fc"><i class="no-highlight">877</i>&nbsp;                srcIndex++;</b>
 <i class="no-highlight">878</i>&nbsp;            } else {
-<b class="nc"><i class="no-highlight">879</i>&nbsp;                notin[notinIndex++] = i;</b>
+<b class="fc"><i class="no-highlight">879</i>&nbsp;                notin[notinIndex++] = i;</b>
 <i class="no-highlight">880</i>&nbsp;            }
 <i class="no-highlight">881</i>&nbsp;        }
 <i class="no-highlight">882</i>&nbsp;
-<b class="nc"><i class="no-highlight">883</i>&nbsp;        return notin;</b>
+<b class="fc"><i class="no-highlight">883</i>&nbsp;        return notin;</b>
 <i class="no-highlight">884</i>&nbsp;    }
 <i class="no-highlight">885</i>&nbsp;}
 </div>
@@ -984,7 +984,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-04-14 13:06</div>
+    <div style="float:right;">generated on 2023-04-15 14:02</div>
 </div>
 </body>
 </html>

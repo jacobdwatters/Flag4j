@@ -84,6 +84,7 @@ public interface TensorExclusiveMixin<T, U, V> {
      */
     T dot(T src2);
 
+
     /**
      * Computes the transpose of a tensor. Same as {@link #T(int, int)}.
      * In the context of a tensor, this exchanges the specified axes.
@@ -244,4 +245,14 @@ public interface TensorExclusiveMixin<T, U, V> {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     CTensor elemDiv(CTensor B);
+
+
+    /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    T reshape(int... shape);
 }

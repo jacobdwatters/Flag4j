@@ -265,6 +265,100 @@ public class CTensor extends TensorBase<CNumber[]> implements
 
 
     /**
+     * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
+     * and takes the complex conjugate of the elements along these axes. Same as {@link #H}.
+     *
+     * @return The complex transpose of this tensor.
+     */
+    @Override
+    public CTensor hermTranspose() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
+     * and takes the complex conjugate of the elements along these axes. Same as {@link #hermTranspose()}.
+     *
+     * @return The complex transpose of this tensor.
+     */
+    @Override
+    public CTensor H() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the conjugate transpose of a tensor. Same as {@link #H(int, int)}.
+     * In the context of a tensor, this exchanges the specified axes and takes the complex conjugate of elements along
+     * those axes.
+     * Also see {@link #hermTranspose() hermTranspose()} and
+     * {@link #H() H()} to conjugate transpose first and last axes.
+     *
+     * @param axis1 First axis to exchange and apply complex conjugate.
+     * @param axis2 Second axis to exchange and apply complex conjugate.
+     * @return The conjugate transpose of this tensor.
+     */
+    @Override
+    public CTensor hermTranspose(int axis1, int axis2) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #hermTranspose(int, int)}.
+     * In the context of a tensor, this exchanges the specified axes and takes the complex conjugate of elements along
+     * those axes.
+     * Also see {@link #hermTranspose()} and
+     * {@link #H()} to conjugate transpose first and last axes.
+     *
+     * @param axis1 First axis to exchange and apply complex conjugate.
+     * @param axis2 Second axis to exchange and apply complex conjugate.
+     * @return The conjugate transpose of this tensor.
+     */
+    @Override
+    public CTensor H(int axis1, int axis2) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the conjugate transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
+     * the specified axes permutation and takes the complex conjugate of the elements of these axes. Same as {@link #H(int[])}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
+     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     */
+    @Override
+    public CTensor hermTranspose(int... axes) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the conjugate transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
+     * the specified axes permutation and takes the complex conjugate of the elements of these axes. Same as {@link #hermTranspose(int[])}}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
+     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     */
+    @Override
+    public CTensor H(int... axes) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
      * Computes the transpose of a tensor. Same as {@link #T(int, int)}.
      * In the context of a tensor, this exchanges the specified axes.
      * Also see {@link #transpose() transpose()} and
@@ -306,7 +400,7 @@ public class CTensor extends TensorBase<CNumber[]> implements
      */
     @Override
     public CTensor transpose(int... axes) {
-        return T();
+        return T(axes);
     }
 
     /**
@@ -342,7 +436,7 @@ public class CTensor extends TensorBase<CNumber[]> implements
      */
     @Override
     public CTensor tensorDot(CTensor src2, int aAxis, int bAxis) {
-        return ComplexDenseTensorDot.tensorDot(this, src2, new int[]{aAxis}, new int[]{aAxis});
+        return ComplexDenseTensorDot.tensorDot(this, src2, new int[]{aAxis}, new int[]{bAxis});
     }
 
 
@@ -361,7 +455,7 @@ public class CTensor extends TensorBase<CNumber[]> implements
      */
     @Override
     public CTensor tensorDot(CTensor src2, int[] aAxes, int[] bAxes) {
-        return ComplexDenseTensorDot.tensorDot(this, src2, aAxes, aAxes);
+        return ComplexDenseTensorDot.tensorDot(this, src2, aAxes, bAxes);
     }
 
 
@@ -816,6 +910,20 @@ public class CTensor extends TensorBase<CNumber[]> implements
                 shape.copy(),
                 ComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
+    }
+
+
+    /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public CTensor reshape(int... shape) {
+        return reshape(new Shape(shape));
     }
 
 

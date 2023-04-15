@@ -50,18 +50,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    72.7%
+    81.8%
   </span>
   <span class="absValue">
-    (16/22)
+    (18/22)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    64.8%
+    85.9%
   </span>
   <span class="absValue">
-    (46/71)
+    (61/71)
   </span>
 </td>
 </tr>
@@ -276,19 +276,19 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">201</i>&nbsp;     * @throws IllegalArgumentException If any of the specified values are not equal.
 <i class="no-highlight">202</i>&nbsp;     */
 <i class="no-highlight">203</i>&nbsp;    public static void assertEquals(double... values) {
-<b class="nc"><i class="no-highlight">204</i>&nbsp;        if(values.length &gt; 0) {</b>
-<b class="nc"><i class="no-highlight">205</i>&nbsp;            boolean equal = true;</b>
-<b class="nc"><i class="no-highlight">206</i>&nbsp;            double base = values[0];</b>
+<b class="fc"><i class="no-highlight">204</i>&nbsp;        if(values.length &gt; 0) {</b>
+<b class="fc"><i class="no-highlight">205</i>&nbsp;            boolean equal = true;</b>
+<b class="fc"><i class="no-highlight">206</i>&nbsp;            double base = values[0];</b>
 <i class="no-highlight">207</i>&nbsp;
-<b class="nc"><i class="no-highlight">208</i>&nbsp;            for(double v : values) {</b>
-<b class="nc"><i class="no-highlight">209</i>&nbsp;                if(v != base) {</b>
-<b class="nc"><i class="no-highlight">210</i>&nbsp;                    equal = false;</b>
-<b class="nc"><i class="no-highlight">211</i>&nbsp;                    break;</b>
+<b class="fc"><i class="no-highlight">208</i>&nbsp;            for(double v : values) {</b>
+<b class="fc"><i class="no-highlight">209</i>&nbsp;                if(v != base) {</b>
+<b class="fc"><i class="no-highlight">210</i>&nbsp;                    equal = false;</b>
+<b class="fc"><i class="no-highlight">211</i>&nbsp;                    break;</b>
 <i class="no-highlight">212</i>&nbsp;                }
 <i class="no-highlight">213</i>&nbsp;            }
 <i class="no-highlight">214</i>&nbsp;
-<b class="nc"><i class="no-highlight">215</i>&nbsp;            if(!equal) {</b>
-<b class="nc"><i class="no-highlight">216</i>&nbsp;                throw new IllegalArgumentException(&quot;Expecting values to be equal but got: &quot; + Arrays.toString(values));</b>
+<b class="fc"><i class="no-highlight">215</i>&nbsp;            if(!equal) {</b>
+<b class="fc"><i class="no-highlight">216</i>&nbsp;                throw new IllegalArgumentException(&quot;Expecting values to be equal but got: &quot; + Arrays.toString(values));</b>
 <i class="no-highlight">217</i>&nbsp;            }
 <i class="no-highlight">218</i>&nbsp;        }
 <i class="no-highlight">219</i>&nbsp;    }
@@ -425,14 +425,14 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">350</i>&nbsp;     * @throws IllegalArgumentException If {@code axis} is not a permutation of {@code {0, 1, 2, ..., N-1}}.
 <i class="no-highlight">351</i>&nbsp;     */
 <i class="no-highlight">352</i>&nbsp;    public static void assertPermutation(int... axes) {
-<b class="nc"><i class="no-highlight">353</i>&nbsp;        int[] axesCopy = axes.clone();</b>
+<b class="fc"><i class="no-highlight">353</i>&nbsp;        int[] axesCopy = axes.clone();</b>
 <i class="no-highlight">354</i>&nbsp;
-<b class="nc"><i class="no-highlight">355</i>&nbsp;        Arrays.sort(axesCopy);</b>
+<b class="fc"><i class="no-highlight">355</i>&nbsp;        Arrays.sort(axesCopy);</b>
 <i class="no-highlight">356</i>&nbsp;
-<b class="nc"><i class="no-highlight">357</i>&nbsp;        for(int i=0; i&lt;axesCopy.length; i++) {</b>
-<b class="nc"><i class="no-highlight">358</i>&nbsp;            if(axesCopy[i]!=i) {</b>
-<b class="nc"><i class="no-highlight">359</i>&nbsp;                throw new IllegalArgumentException(&quot;Array is not a permutation of integers 0 through &quot; + axes.length + &quot;.\n&quot; +</b>
-<b class="nc"><i class="no-highlight">360</i>&nbsp;                        &quot;Got &quot; + Arrays.toString(axes));</b>
+<b class="fc"><i class="no-highlight">357</i>&nbsp;        for(int i=0; i&lt;axesCopy.length; i++) {</b>
+<b class="fc"><i class="no-highlight">358</i>&nbsp;            if(axesCopy[i]!=i) {</b>
+<b class="fc"><i class="no-highlight">359</i>&nbsp;                throw new IllegalArgumentException(&quot;Array is not a permutation of integers 0 through &quot; + axes.length + &quot;.\n&quot; +</b>
+<b class="fc"><i class="no-highlight">360</i>&nbsp;                        &quot;Got &quot; + Arrays.toString(axes));</b>
 <i class="no-highlight">361</i>&nbsp;            }
 <i class="no-highlight">362</i>&nbsp;        }
 <i class="no-highlight">363</i>&nbsp;    }
@@ -463,7 +463,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-04-14 13:06</div>
+    <div style="float:right;">generated on 2023-04-15 14:02</div>
 </div>
 </body>
 </html>

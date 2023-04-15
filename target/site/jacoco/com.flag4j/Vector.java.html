@@ -1482,26 +1482,26 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
     public String toString() {
 <span class="nc" id="L1483">        StringBuilder result = new StringBuilder();</span>
 
-<span class="nc bnc" id="L1485" title="All 2 branches missed.">        if(PrintOptions.getMaxColumns()&lt;this.size) {</span>
+<span class="nc bnc" id="L1485" title="All 2 branches missed.">        if(PrintOptions.getMaxColumns()&lt;size) {</span>
             // Then also get the full size of the vector.
-<span class="nc" id="L1487">            result.append(String.format(&quot;Full Size: %d\n&quot;, this.size));</span>
+<span class="nc" id="L1487">            result.append(String.format(&quot;Full Size: %d\n&quot;, size));</span>
         }
 
 <span class="nc" id="L1490">        result.append(&quot;[&quot;);</span>
 
-<span class="nc" id="L1492">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.size-1);</span>
+<span class="nc" id="L1492">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
         int width;
         String value;
 
         // Get entries up until the stopping point.
 <span class="nc bnc" id="L1497" title="All 2 branches missed.">        for(int i=0; i&lt;stopIndex; i++) {</span>
-<span class="nc" id="L1498">            value = StringUtils.ValueOfRound(this.get(i), PrintOptions.getPrecision());</span>
+<span class="nc" id="L1498">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
 <span class="nc" id="L1499">            width = PrintOptions.getPadding() + value.length();</span>
 <span class="nc bnc" id="L1500" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
 <span class="nc" id="L1501">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="nc bnc" id="L1504" title="All 2 branches missed.">        if(stopIndex &lt; this.size-1) {</span>
+<span class="nc bnc" id="L1504" title="All 2 branches missed.">        if(stopIndex &lt; size-1) {</span>
 <span class="nc" id="L1505">            width = PrintOptions.getPadding() + 3;</span>
 <span class="nc" id="L1506">            value = &quot;...&quot;;</span>
 <span class="nc bnc" id="L1507" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
@@ -1509,7 +1509,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
         }
 
         // Get last entry now
-<span class="nc" id="L1512">        value = StringUtils.ValueOfRound(this.get(this.size-1), PrintOptions.getPrecision());</span>
+<span class="nc" id="L1512">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
 <span class="nc" id="L1513">        width = PrintOptions.getPadding() + value.length();</span>
 <span class="nc bnc" id="L1514" title="All 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
 <span class="nc" id="L1515">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>

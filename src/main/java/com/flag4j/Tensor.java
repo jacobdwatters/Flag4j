@@ -28,6 +28,7 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealTensorMixin;
 import com.flag4j.core.TensorBase;
 import com.flag4j.core.TensorExclusiveMixin;
+import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
@@ -46,6 +47,7 @@ import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOpe
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.StringUtils;
 
 import java.util.Arrays;
 
@@ -308,6 +310,20 @@ public class Tensor extends TensorBase<double[]> implements
     public Tensor reshape(Shape shape) {
         ParameterChecks.assertBroadcastable(this.shape, shape);
         return new Tensor(shape.copy(), this.entries.clone());
+    }
+
+
+    /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public Tensor reshape(int... shape) {
+        return reshape(new Shape(shape));
     }
 
 
@@ -612,7 +628,7 @@ public class Tensor extends TensorBase<double[]> implements
      */
     @Override
     public Tensor tensorDot(Tensor src2, int aAxis, int bAxis) {
-        return RealDenseTensorDot.tensorDot(this, src2, new int[]{aAxis}, new int[]{aAxis});
+        return RealDenseTensorDot.tensorDot(this, src2, new int[]{aAxis}, new int[]{bAxis});
     }
 
 
@@ -631,7 +647,7 @@ public class Tensor extends TensorBase<double[]> implements
      */
     @Override
     public Tensor tensorDot(Tensor src2, int[] aAxes, int[] bAxes) {
-        return RealDenseTensorDot.tensorDot(this, src2, aAxes, aAxes);
+        return RealDenseTensorDot.tensorDot(this, src2, aAxes, bAxes);
     }
 
 
@@ -1074,5 +1090,46 @@ public class Tensor extends TensorBase<double[]> implements
         }
 
         return mat;
+    }
+
+
+    /**
+     * Formats this tensor as a human-readable string. Specifically, a string containing the
+     * shape and flatten entries of this tensor.
+     * @return A human-readable string representing this tensor.
+     */
+    public String toString() {
+        int size = shape.totalEntries().intValueExact();
+        StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
+        result.append("[");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        // Get entries up until the stopping point.
+        for(int i=0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(stopIndex < size-1) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry now
+        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + value.length();
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s", value));
+
+        result.append("]");
+
+        return result.toString();
     }
 }

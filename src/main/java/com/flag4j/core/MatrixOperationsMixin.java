@@ -213,6 +213,55 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends 
     CMatrix mult(SparseCVector b);
 
 
+    // TODO: Implement these methods.
+//    /**
+//     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+//     * {@code this.}{@link #mult(Matrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+//     * For large matrices, this method may
+//     * be significantly faster than directly computing the transpose followed by the multiplication as
+//     * {@code this.mult(B.T())}.
+//     * @param B The second matrix in the multiplication and the matrix to transpose/
+//     * @return The result of multiplying this matrix with the transpose of {@code B}.
+//     */
+//    U multTranspose(Matrix B);
+//
+//
+//    /**
+//     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+//     * {@code this.}{@link #mult(SparseMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+//     * For large matrices, this method may
+//     * be significantly faster than directly computing the transpose followed by the multiplication as
+//     * {@code this.mult(B.T())}.
+//     * @param B The second matrix in the multiplication and the matrix to transpose/
+//     * @return The result of multiplying this matrix with the transpose of {@code B}.
+//     */
+//    U multTranspose(SparseMatrix B);
+//
+//
+//    /**
+//     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+//     * {@code this.}{@link #mult(CMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+//     * For large matrices, this method may
+//     * be significantly faster than directly computing the transpose followed by the multiplication as
+//     * {@code this.mult(B.T())}.
+//     * @param B The second matrix in the multiplication and the matrix to transpose/
+//     * @return The result of multiplying this matrix with the transpose of {@code B}.
+//     */
+//    CMatrix multTranspose(CMatrix B);
+//
+//
+//    /**
+//     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+//     * {@code this.}{@link #mult(SparseCMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+//     * For large matrices, this method may
+//     * be significantly faster than directly computing the transpose followed by the multiplication as
+//     * {@code this.mult(B.T())}.
+//     * @param B The second matrix in the multiplication and the matrix to transpose/
+//     * @return The result of multiplying this matrix with the transpose of {@code B}.
+//     */
+//    CMatrix multTranspose(SparseCMatrix B);
+
+
     /**
      * Computes the matrix power with a given exponent. This is equivalent to multiplying a matrix to itself 'exponent'
      * times. Note, this method is preferred over repeated multiplication of a matrix as this method will be significantly

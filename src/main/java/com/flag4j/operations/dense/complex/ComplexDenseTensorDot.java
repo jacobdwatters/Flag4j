@@ -77,6 +77,7 @@ public class ComplexDenseTensorDot {
 
         Shape destShape = new Shape(dims);
         CNumber[] dest = new CNumber[destShape.totalEntries().intValueExact()];
+        ArrayUtils.fillZeros(dest);
         int src1_start, src2_start;
 
         idx = 0;

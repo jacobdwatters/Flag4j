@@ -29,6 +29,7 @@ import com.flag4j.concurrency.Configurations;
 import com.flag4j.concurrency.ThreadManager;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
 
@@ -85,6 +86,8 @@ public final class RealDenseTranspose {
      * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
      */
     public static double[] standard(final double[] src, final Shape shape, final int[] axes) {
+        ParameterChecks.assertPermutation(axes);
+        ParameterChecks.assertEquals(shape.getRank(), axes.length);
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
             throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
@@ -116,6 +119,8 @@ public final class RealDenseTranspose {
      * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
      */
     public static double[] standardConcurrent(final double[] src, final Shape shape, final int[] axes) {
+        ParameterChecks.assertPermutation(axes);
+        ParameterChecks.assertEquals(shape.getRank(), axes.length);
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
             throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");

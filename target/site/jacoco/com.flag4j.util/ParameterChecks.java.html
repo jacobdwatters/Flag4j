@@ -201,22 +201,22 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If any of the specified values are not equal.
      */
     public static void assertEquals(double... values) {
-<span class="nc bnc" id="L204" title="All 2 branches missed.">        if(values.length &gt; 0) {</span>
-<span class="nc" id="L205">            boolean equal = true;</span>
-<span class="nc" id="L206">            double base = values[0];</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">        if(values.length &gt; 0) {</span>
+<span class="fc" id="L205">            boolean equal = true;</span>
+<span class="fc" id="L206">            double base = values[0];</span>
 
-<span class="nc bnc" id="L208" title="All 2 branches missed.">            for(double v : values) {</span>
-<span class="nc bnc" id="L209" title="All 2 branches missed.">                if(v != base) {</span>
-<span class="nc" id="L210">                    equal = false;</span>
-<span class="nc" id="L211">                    break;</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">            for(double v : values) {</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">                if(v != base) {</span>
+<span class="fc" id="L210">                    equal = false;</span>
+<span class="fc" id="L211">                    break;</span>
                 }
             }
 
-<span class="nc bnc" id="L215" title="All 2 branches missed.">            if(!equal) {</span>
-<span class="nc" id="L216">                throw new IllegalArgumentException(&quot;Expecting values to be equal but got: &quot; + Arrays.toString(values));</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">            if(!equal) {</span>
+<span class="fc" id="L216">                throw new IllegalArgumentException(&quot;Expecting values to be equal but got: &quot; + Arrays.toString(values));</span>
             }
         }
-<span class="nc" id="L219">    }</span>
+<span class="fc" id="L219">    }</span>
 
 
     /**
@@ -350,16 +350,16 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If {@code axis} is not a permutation of {@code {0, 1, 2, ..., N-1}}.
      */
     public static void assertPermutation(int... axes) {
-<span class="nc" id="L353">        int[] axesCopy = axes.clone();</span>
+<span class="fc" id="L353">        int[] axesCopy = axes.clone();</span>
 
-<span class="nc" id="L355">        Arrays.sort(axesCopy);</span>
+<span class="fc" id="L355">        Arrays.sort(axesCopy);</span>
 
-<span class="nc bnc" id="L357" title="All 2 branches missed.">        for(int i=0; i&lt;axesCopy.length; i++) {</span>
-<span class="nc bnc" id="L358" title="All 2 branches missed.">            if(axesCopy[i]!=i) {</span>
-<span class="nc" id="L359">                throw new IllegalArgumentException(&quot;Array is not a permutation of integers 0 through &quot; + axes.length + &quot;.\n&quot; +</span>
-<span class="nc" id="L360">                        &quot;Got &quot; + Arrays.toString(axes));</span>
+<span class="fc bfc" id="L357" title="All 2 branches covered.">        for(int i=0; i&lt;axesCopy.length; i++) {</span>
+<span class="fc bfc" id="L358" title="All 2 branches covered.">            if(axesCopy[i]!=i) {</span>
+<span class="fc" id="L359">                throw new IllegalArgumentException(&quot;Array is not a permutation of integers 0 through &quot; + axes.length + &quot;.\n&quot; +</span>
+<span class="fc" id="L360">                        &quot;Got &quot; + Arrays.toString(axes));</span>
             }
         }
-<span class="nc" id="L363">    }</span>
+<span class="fc" id="L363">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

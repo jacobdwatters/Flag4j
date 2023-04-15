@@ -206,6 +206,7 @@ public class Shape implements Serializable {
      * @throws ArrayIndexOutOfBoundsException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N}}.
      */
     public Shape swapAxes(int... axes) {
+        ParameterChecks.assertEquals(getRank(), axes.length);
         ParameterChecks.assertPermutation(axes);
 
         int[] tempDims = new int[dims.length];

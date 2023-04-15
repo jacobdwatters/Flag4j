@@ -470,7 +470,6 @@ public final class ArrayUtils {
      * @param src Array to swap elements within.
      * @param indices Array containing indices of the permutation. If the {@code src} array has length {@code N}, then
      *                the array must be a permutation of {@code {0, 1, 2, ..., N-1}}.
-     * @return An array containing the elements of {@code src} ordered according to the {@code indices} array.
      * @throws IllegalArgumentException If {@code indices} is not a permutation of {@code {0, 1, 2, ..., N-1}}.
      */
     public static void swap(int[] src, int[] indices) {

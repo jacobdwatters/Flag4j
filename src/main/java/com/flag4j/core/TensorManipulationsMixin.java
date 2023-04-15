@@ -46,6 +46,7 @@ interface TensorManipulationsMixin<T, U, V, W, Y, X extends Number> {
      */
     void set(double value, int... indices);
 
+
     /**
      * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
      * in the reshaped tensor.

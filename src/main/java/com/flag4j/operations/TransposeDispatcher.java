@@ -136,7 +136,8 @@ public final class TransposeDispatcher {
      * @param src Tensor to transpose.
      * @param axis1 First axis in tensor transpose.
      * @param axis2 Second axis in tensor transpose.
-     * @return
+     * @return The result of the tensor transpose.
+     * @throws ArrayIndexOutOfBoundsException If either axis is not within the {@code src} tensor.
      */
     public static Tensor dispatchTensor(Tensor src, int axis1, int axis2) {
         double[] dest;

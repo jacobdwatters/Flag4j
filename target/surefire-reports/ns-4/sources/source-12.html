@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > VectorManipulationsMixin</title>
+  <title>Coverage Report > TensorManipulationsMixin</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,14 +20,14 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.flag4j.core</a>
 </div>
 
-<h1>Coverage Summary for Class: VectorManipulationsMixin (com.flag4j.core)</h1>
+<h1>Coverage Summary for Class: TensorManipulationsMixin (com.flag4j.core)</h1>
 
 <table class="coverageStats">
 <tr>
   <th class="name">Class</th>
 </tr>
 <tr>
-  <td class="name">VectorManipulationsMixin</td>
+  <td class="name">TensorManipulationsMixin</td>
 </tr>
 
 </table>
@@ -64,32 +64,44 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">25</i>&nbsp;package com.flag4j.core;
 <i class="no-highlight">26</i>&nbsp;
 <i class="no-highlight">27</i>&nbsp;
-<i class="no-highlight">28</i>&nbsp;/**
-<i class="no-highlight">29</i>&nbsp; * This interface specifies manipulations which all vectors should implement.
-<i class="no-highlight">30</i>&nbsp; *
-<i class="no-highlight">31</i>&nbsp; * @param &lt;T&gt; Vectors type.
-<i class="no-highlight">32</i>&nbsp; * @param &lt;U&gt; Dense vectors type.
-<i class="no-highlight">33</i>&nbsp; * @param &lt;V&gt; Sparse vectors type.
-<i class="no-highlight">34</i>&nbsp; * @param &lt;W&gt; Complex vectors type.
-<i class="no-highlight">35</i>&nbsp; * @param &lt;Y&gt; Real vectors type.
-<i class="no-highlight">36</i>&nbsp; * @param &lt;X&gt; Vectors entry type.
-<i class="no-highlight">37</i>&nbsp; * @param &lt;TT&gt; Matrix type equivalent.
-<i class="no-highlight">38</i>&nbsp; * @param &lt;UU&gt; Dense Matrix type equivalent.
-<i class="no-highlight">39</i>&nbsp; * @param &lt;VV&gt; Sparse Matrix type equivalent.
-<i class="no-highlight">40</i>&nbsp; * @param &lt;WW&gt; Complex Matrix type equivalent.
-<i class="no-highlight">41</i>&nbsp; */
-<i class="no-highlight">42</i>&nbsp;public interface VectorManipulationsMixin&lt;T, U, V, W, Y, X extends Number, TT, UU, VV, WW&gt;
-<i class="no-highlight">43</i>&nbsp;        extends TensorManipulationsMixin&lt;T, U, V, W, Y, X&gt; {
-<i class="no-highlight">44</i>&nbsp;
-<i class="no-highlight">45</i>&nbsp;
-<i class="no-highlight">46</i>&nbsp;    /**
-<i class="no-highlight">47</i>&nbsp;     * Extends a vector a specified number of times to a matrix.
-<i class="no-highlight">48</i>&nbsp;     * @param n The number of times to extend this vector.
-<i class="no-highlight">49</i>&nbsp;     * @param axis Axis along which to extend vector.
-<i class="no-highlight">50</i>&nbsp;     * @return A matrix which is the result of extending a vector {@code n} times.
-<i class="no-highlight">51</i>&nbsp;     */
-<i class="no-highlight">52</i>&nbsp;    TT extend(int n, int axis);
-<i class="no-highlight">53</i>&nbsp;}
+<i class="no-highlight">28</i>&nbsp;import com.flag4j.Shape;
+<i class="no-highlight">29</i>&nbsp;
+<i class="no-highlight">30</i>&nbsp;/**
+<i class="no-highlight">31</i>&nbsp; * This interface specifies manipulations which all tensors (i.e. matrices and vectors) should implement.
+<i class="no-highlight">32</i>&nbsp; *
+<i class="no-highlight">33</i>&nbsp; * @param &lt;T&gt; Tensor type.
+<i class="no-highlight">34</i>&nbsp; * @param &lt;U&gt; Dense Tensor type.
+<i class="no-highlight">35</i>&nbsp; * @param &lt;V&gt; Sparse Tensor type.
+<i class="no-highlight">36</i>&nbsp; * @param &lt;W&gt; Complex Tensor type.
+<i class="no-highlight">37</i>&nbsp; * @param &lt;Y&gt; Real Tensor type.
+<i class="no-highlight">38</i>&nbsp; * @param &lt;X&gt; Tensor entry type.
+<i class="no-highlight">39</i>&nbsp; */
+<i class="no-highlight">40</i>&nbsp;interface TensorManipulationsMixin&lt;T, U, V, W, Y, X extends Number&gt; {
+<i class="no-highlight">41</i>&nbsp;
+<i class="no-highlight">42</i>&nbsp;    /**
+<i class="no-highlight">43</i>&nbsp;     * Sets an index of this tensor to a specified value.
+<i class="no-highlight">44</i>&nbsp;     * @param value Value to set.
+<i class="no-highlight">45</i>&nbsp;     * @param indices The indices of this tensor for which to set the value.
+<i class="no-highlight">46</i>&nbsp;     */
+<i class="no-highlight">47</i>&nbsp;    void set(double value, int... indices);
+<i class="no-highlight">48</i>&nbsp;
+<i class="no-highlight">49</i>&nbsp;
+<i class="no-highlight">50</i>&nbsp;    /**
+<i class="no-highlight">51</i>&nbsp;     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+<i class="no-highlight">52</i>&nbsp;     * in the reshaped tensor.
+<i class="no-highlight">53</i>&nbsp;     * @param shape Shape of the new tensor.
+<i class="no-highlight">54</i>&nbsp;     * @return A tensor which is equivalent to this tensor but with the specified shape.
+<i class="no-highlight">55</i>&nbsp;     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+<i class="no-highlight">56</i>&nbsp;     */
+<i class="no-highlight">57</i>&nbsp;    T reshape(Shape shape);
+<i class="no-highlight">58</i>&nbsp;
+<i class="no-highlight">59</i>&nbsp;
+<i class="no-highlight">60</i>&nbsp;    /**
+<i class="no-highlight">61</i>&nbsp;     * Flattens tensor to single dimension. To flatten tensor along a single axis.
+<i class="no-highlight">62</i>&nbsp;     * @return The flattened tensor.
+<i class="no-highlight">63</i>&nbsp;     */
+<i class="no-highlight">64</i>&nbsp;    T flatten();
+<i class="no-highlight">65</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -116,7 +128,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-04-14 13:06</div>
+    <div style="float:right;">generated on 2023-04-15 14:02</div>
 </div>
 </body>
 </html>

@@ -421,7 +421,7 @@ public final class MatrixMultiplyDispatcher {
 <span class="fc" id="L421">        int cols1 = shape1.get(Axis2D.col());</span>
 
         // TODO: Extract constants to final variables
-<span class="pc bpc" id="L424" title="1 of 2 branches missed.">        if(getRatio(shape1) &gt;= SQUARENESS_RATIO) {</span>
+<span class="fc bfc" id="L424" title="All 2 branches covered.">        if(getRatio(shape1) &gt;= SQUARENESS_RATIO) {</span>
             // Then the first matrix is approximately square.
 <span class="pc bpc" id="L426" title="1 of 2 branches missed.">            if(rows1&lt;=30) {</span>
 <span class="fc" id="L427">                algorithm = AlgorithmNames.REORDERED;</span>
@@ -433,7 +433,7 @@ public final class MatrixMultiplyDispatcher {
 <span class="nc" id="L433">                algorithm = AlgorithmNames.CONCURRENT_BLOCKED_REORDERED;</span>
             }
 
-<span class="nc bnc" id="L436" title="All 2 branches missed.">        } else if(rows1&gt;cols1) {</span>
+<span class="pc bpc" id="L436" title="1 of 2 branches missed.">        } else if(rows1&gt;cols1) {</span>
             // Then there are more rows than columns in the first matrix
 <span class="nc bnc" id="L438" title="All 2 branches missed.">            if(rows1&lt;=100) {</span>
 <span class="nc bnc" id="L439" title="All 2 branches missed.">                if(cols1&lt;=4) algorithm = AlgorithmNames.REORDERED;</span>
@@ -444,9 +444,9 @@ public final class MatrixMultiplyDispatcher {
             }
         } else {
             // Then there are more columns than rows in the first matrix
-<span class="nc bnc" id="L447" title="All 2 branches missed.">            if(cols1&lt;=100) {</span>
-<span class="nc bnc" id="L448" title="All 2 branches missed.">                if(rows1&lt;=20) {</span>
-<span class="nc" id="L449">                    algorithm = AlgorithmNames.REORDERED;</span>
+<span class="pc bpc" id="L447" title="1 of 2 branches missed.">            if(cols1&lt;=100) {</span>
+<span class="pc bpc" id="L448" title="1 of 2 branches missed.">                if(rows1&lt;=20) {</span>
+<span class="fc" id="L449">                    algorithm = AlgorithmNames.REORDERED;</span>
                 } else {
 <span class="nc" id="L451">                    algorithm = AlgorithmNames.CONCURRENT_REORDERED;</span>
                 }
