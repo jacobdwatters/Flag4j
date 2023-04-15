@@ -82,7 +82,7 @@ class CNumberToken {
      * @return True if token matches kind and details, otherwise false.
      */
     protected boolean matches( String k, String d ) {
-<span class="fc bfc" id="L85" title="All 4 branches covered.">        return kind.equals(k) &amp;&amp; details.equals(d);</span>
+<span class="pc bpc" id="L85" title="1 of 4 branches missed.">        return kind.equals(k) &amp;&amp; details.equals(d);</span>
     }
 
 
@@ -93,8 +93,8 @@ class CNumberToken {
      * @param d token details
      */
     protected void errorCheck(String k, String d) {
-<span class="fc bfc" id="L96" title="All 2 branches covered.">        if(!this.matches(k, d)) {</span>
-<span class="fc" id="L97">            System.out.println(&quot;Expecting token [&quot; + k + &quot;,&quot; + d + &quot;] but got &quot; + this);</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if(!this.matches(k, d)) {</span>
+<span class="nc" id="L97">            System.out.println(&quot;Expecting token [&quot; + k + &quot;,&quot; + d + &quot;] but got &quot; + this);</span>
 <span class="nc" id="L98">            System.exit(1);</span>
         }
 <span class="fc" id="L100">    }</span>
@@ -118,7 +118,7 @@ class CNumberToken {
      * @return A string representing of this token.
      */
     public String toString() {
-<span class="fc" id="L121">        return &quot;[&quot; + this.kind + &quot;,&quot; + this.details + &quot;]&quot;;</span>
+<span class="nc" id="L121">        return &quot;[&quot; + this.kind + &quot;,&quot; + this.details + &quot;]&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

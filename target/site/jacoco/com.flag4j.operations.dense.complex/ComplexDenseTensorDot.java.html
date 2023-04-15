@@ -25,7 +25,9 @@
 package com.flag4j.operations.dense.complex;
 
 
-import com.flag4j.*;
+import com.flag4j.CMatrix;
+import com.flag4j.CTensor;
+import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.util.ArrayUtils;
@@ -37,9 +39,9 @@ import com.flag4j.util.ParameterChecks;
  */
 public class ComplexDenseTensorDot {
 
-<span class="nc" id="L40">    private ComplexDenseTensorDot() {</span>
+<span class="nc" id="L42">    private ComplexDenseTensorDot() {</span>
         // Hide utility class constructor.
-<span class="nc" id="L42">        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L44">        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -52,50 +54,50 @@ public class ComplexDenseTensorDot {
      * along the second-to-last axis.
      */
     public static CTensor dot(CTensor src1, CTensor src2) {
-<span class="fc" id="L55">        int src1Dim = src1.getRank(); // Rank of first tensor.</span>
-<span class="fc" id="L56">        int src2Dim = src2.getRank(); // Rank of second tensor.</span>
+<span class="fc" id="L57">        int src1Dim = src1.getRank(); // Rank of first tensor.</span>
+<span class="fc" id="L58">        int src2Dim = src2.getRank(); // Rank of second tensor.</span>
 
         // Ensure tensors have same length along last axis.
-<span class="fc" id="L59">        ParameterChecks.assertEquals(src1.shape.get(src1Dim-1), src2.shape.get(src2Dim-2));</span>
+<span class="fc" id="L61">        ParameterChecks.assertEquals(src1.shape.get(src1Dim-1), src2.shape.get(src2Dim-2));</span>
 
-<span class="fc" id="L61">        int axisLength = src1.shape.get(src1Dim-1); // Length of axis along which to compute dot product.</span>
-<span class="fc" id="L62">        CTensor src2Swap = src2.T(src2Dim-1, src2Dim-2);</span>
+<span class="fc" id="L63">        int axisLength = src1.shape.get(src1Dim-1); // Length of axis along which to compute dot product.</span>
+<span class="fc" id="L64">        CTensor src2Swap = src2.T(src2Dim-1, src2Dim-2);</span>
 
-<span class="fc" id="L64">        int iStop = src1.totalEntries().intValueExact()/src1.shape.get(src1Dim-1);</span>
-<span class="fc" id="L65">        int jStop = src2.totalEntries().intValueExact()/src2.shape.get(src2Dim-2);</span>
-<span class="fc" id="L66">        int[] dims = new int[src1Dim+src2Dim-2];</span>
-<span class="fc" id="L67">        int idx = 0;</span>
+<span class="fc" id="L66">        int iStop = src1.totalEntries().intValueExact()/src1.shape.get(src1Dim-1);</span>
+<span class="fc" id="L67">        int jStop = src2.totalEntries().intValueExact()/src2.shape.get(src2Dim-2);</span>
+<span class="fc" id="L68">        int[] dims = new int[src1Dim+src2Dim-2];</span>
+<span class="fc" id="L69">        int idx = 0;</span>
 
         // Copy shape dimensions from each tensor.
-<span class="fc bfc" id="L70" title="All 2 branches covered.">        for(int i=0; i&lt;src1Dim-1; i++) {</span>
-<span class="fc" id="L71">            dims[idx++] = src1.shape.dims[i];</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        for(int i=0; i&lt;src1Dim-1; i++) {</span>
+<span class="fc" id="L73">            dims[idx++] = src1.shape.dims[i];</span>
         }
 
-<span class="fc bfc" id="L74" title="All 2 branches covered.">        for(int i=0; i&lt;src2Dim-1; i++) {</span>
-<span class="fc" id="L75">            dims[idx++] = src2Swap.shape.dims[i];</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        for(int i=0; i&lt;src2Dim-1; i++) {</span>
+<span class="fc" id="L77">            dims[idx++] = src2Swap.shape.dims[i];</span>
         }
 
-<span class="fc" id="L78">        Shape destShape = new Shape(dims);</span>
-<span class="fc" id="L79">        CNumber[] dest = new CNumber[destShape.totalEntries().intValueExact()];</span>
-<span class="fc" id="L80">        ArrayUtils.fillZeros(dest);</span>
+<span class="fc" id="L80">        Shape destShape = new Shape(dims);</span>
+<span class="fc" id="L81">        CNumber[] dest = new CNumber[destShape.totalEntries().intValueExact()];</span>
+<span class="fc" id="L82">        ArrayUtils.fillZeros(dest);</span>
         int src1_start, src2_start;
 
-<span class="fc" id="L83">        idx = 0;</span>
-<span class="fc bfc" id="L84" title="All 2 branches covered.">        for(int i=0; i&lt;iStop; i++) {</span>
-<span class="fc" id="L85">            src1_start = i*axisLength;</span>
+<span class="fc" id="L85">        idx = 0;</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        for(int i=0; i&lt;iStop; i++) {</span>
+<span class="fc" id="L87">            src1_start = i*axisLength;</span>
 
-<span class="fc bfc" id="L87" title="All 2 branches covered.">            for(int j=0; j&lt;jStop; j++) {</span>
-<span class="fc" id="L88">                src2_start = j*axisLength;</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">            for(int j=0; j&lt;jStop; j++) {</span>
+<span class="fc" id="L90">                src2_start = j*axisLength;</span>
 
-<span class="fc bfc" id="L90" title="All 2 branches covered.">                for(int k=0; k&lt;axisLength; k++) {</span>
-<span class="fc" id="L91">                    dest[idx].addEq(src1.entries[src1_start + k].mult(src2Swap.entries[src2_start + k]));</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">                for(int k=0; k&lt;axisLength; k++) {</span>
+<span class="fc" id="L93">                    dest[idx].addEq(src1.entries[src1_start + k].mult(src2Swap.entries[src2_start + k]));</span>
                 }
 
-<span class="fc" id="L94">                idx++;</span>
+<span class="fc" id="L96">                idx++;</span>
             }
         }
 
-<span class="fc" id="L98">        return new CTensor(destShape, dest);</span>
+<span class="fc" id="L100">        return new CTensor(destShape, dest);</span>
     }
 
 
@@ -114,13 +116,13 @@ public class ComplexDenseTensorDot {
      */
     public static CTensor tensorDot(CTensor src1, CTensor src2, int[] src1Axes, int[] src2Axes) {
         // Each array must specify the same number of axes.
-<span class="fc" id="L117">        ParameterChecks.assertEquals(src1Axes.length, src2Axes.length);</span>
+<span class="fc" id="L119">        ParameterChecks.assertEquals(src1Axes.length, src2Axes.length);</span>
 
         // Axis values must be less than the rank of the tensor and non-negative
-<span class="fc" id="L120">        ParameterChecks.assertLessEq(src1.getRank()-1, src1Axes);</span>
-<span class="fc" id="L121">        ParameterChecks.assertGreaterEq(0, src1Axes);</span>
-<span class="fc" id="L122">        ParameterChecks.assertLessEq(src2.getRank()-1, src2Axes);</span>
-<span class="fc" id="L123">        ParameterChecks.assertGreaterEq(0, src2Axes);</span>
+<span class="fc" id="L122">        ParameterChecks.assertLessEq(src1.getRank()-1, src1Axes);</span>
+<span class="fc" id="L123">        ParameterChecks.assertGreaterEq(0, src1Axes);</span>
+<span class="fc" id="L124">        ParameterChecks.assertLessEq(src2.getRank()-1, src2Axes);</span>
+<span class="fc" id="L125">        ParameterChecks.assertGreaterEq(0, src2Axes);</span>
 
         int[] notin;
         int n1;
@@ -128,59 +130,59 @@ public class ComplexDenseTensorDot {
         int pos;
 
         // ---- Compute new axes and shapes for first tensor. ----
-<span class="fc" id="L131">        notin = ArrayUtils.notinAxes(src1Axes, src1.getRank());</span>
-<span class="fc" id="L132">        int[] src1NewAxes = ArrayUtils.join(notin, src1Axes);</span>
+<span class="fc" id="L133">        notin = ArrayUtils.notinAxes(src1Axes, src1.getRank());</span>
+<span class="fc" id="L134">        int[] src1NewAxes = ArrayUtils.join(notin, src1Axes);</span>
 
-<span class="fc" id="L134">        n2 = 1;</span>
-<span class="fc bfc" id="L135" title="All 2 branches covered.">        for(int axis : src1Axes) {</span>
-<span class="fc" id="L136">            n2 *= src1.shape.get(axis);</span>
+<span class="fc" id="L136">        n2 = 1;</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        for(int axis : src1Axes) {</span>
+<span class="fc" id="L138">            n2 *= src1.shape.get(axis);</span>
         }
 
-<span class="fc" id="L139">        n1 = 1;</span>
-<span class="fc" id="L140">        int[] src1OldDims = new int[notin.length];</span>
-<span class="fc" id="L141">        pos = 0;</span>
-<span class="fc bfc" id="L142" title="All 2 branches covered.">        for(int axis : notin) {</span>
-<span class="fc" id="L143">            n1 *= src1.shape.get(axis);</span>
-<span class="fc" id="L144">            src1OldDims[pos++] = src1.shape.get(axis);</span>
+<span class="fc" id="L141">        n1 = 1;</span>
+<span class="fc" id="L142">        int[] src1OldDims = new int[notin.length];</span>
+<span class="fc" id="L143">        pos = 0;</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        for(int axis : notin) {</span>
+<span class="fc" id="L145">            n1 *= src1.shape.get(axis);</span>
+<span class="fc" id="L146">            src1OldDims[pos++] = src1.shape.get(axis);</span>
         }
 
-<span class="fc" id="L147">        Shape src1NewShape = new Shape(n1, n2);</span>
+<span class="fc" id="L149">        Shape src1NewShape = new Shape(n1, n2);</span>
         // -----------------------------------------------------
 
         // ---- Compute new axes and shapes for second tensor. ----
-<span class="fc" id="L151">        notin = ArrayUtils.notinAxes(src2Axes, src2.getRank());</span>
-<span class="fc" id="L152">        int[] src2NewAxes = ArrayUtils.join(src2Axes, notin);</span>
+<span class="fc" id="L153">        notin = ArrayUtils.notinAxes(src2Axes, src2.getRank());</span>
+<span class="fc" id="L154">        int[] src2NewAxes = ArrayUtils.join(src2Axes, notin);</span>
 
-<span class="fc" id="L154">        n2 = 1;</span>
-<span class="fc bfc" id="L155" title="All 2 branches covered.">        for(int axis : src2Axes) {</span>
-<span class="fc" id="L156">            n2 *= src2.shape.get(axis);</span>
+<span class="fc" id="L156">        n2 = 1;</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">        for(int axis : src2Axes) {</span>
+<span class="fc" id="L158">            n2 *= src2.shape.get(axis);</span>
         }
 
-<span class="fc" id="L159">        n1 = 1;</span>
-<span class="fc" id="L160">        pos = 0;</span>
-<span class="fc" id="L161">        int[] src2OldDims = new int[notin.length];</span>
-<span class="fc bfc" id="L162" title="All 2 branches covered.">        for(int axis : notin) {</span>
-<span class="fc" id="L163">            n1 *= src2.shape.get(axis);</span>
-<span class="fc" id="L164">            src2OldDims[pos++] = src2.shape.get(axis);</span>
+<span class="fc" id="L161">        n1 = 1;</span>
+<span class="fc" id="L162">        pos = 0;</span>
+<span class="fc" id="L163">        int[] src2OldDims = new int[notin.length];</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        for(int axis : notin) {</span>
+<span class="fc" id="L165">            n1 *= src2.shape.get(axis);</span>
+<span class="fc" id="L166">            src2OldDims[pos++] = src2.shape.get(axis);</span>
         }
 
-<span class="fc" id="L167">        Shape src2NewShape = new Shape(n2, n1);</span>
+<span class="fc" id="L169">        Shape src2NewShape = new Shape(n2, n1);</span>
         // -----------------------------------------------------
 
         // Reform problem as a matrix multiplication problem.
-<span class="fc" id="L171">        CMatrix at = new CMatrix(</span>
+<span class="fc" id="L173">        CMatrix at = new CMatrix(</span>
                 src1NewShape,
-<span class="fc" id="L173">                ComplexDenseTranspose.standardConcurrent(src1.entries, src1.shape, src1NewAxes)</span>
+<span class="fc" id="L175">                ComplexDenseTranspose.standardConcurrent(src1.entries, src1.shape, src1NewAxes)</span>
         );
-<span class="fc" id="L175">        CMatrix bt = new CMatrix(</span>
+<span class="fc" id="L177">        CMatrix bt = new CMatrix(</span>
                 src2NewShape,
-<span class="fc" id="L177">                ComplexDenseTranspose.standardConcurrent(src2.entries, src2.shape, src2NewAxes)</span>
+<span class="fc" id="L179">                ComplexDenseTranspose.standardConcurrent(src2.entries, src2.shape, src2NewAxes)</span>
         );
 
-<span class="fc" id="L180">        CNumber[] destEntries = MatrixMultiplyDispatcher.dispatch(at, bt);</span>
-<span class="fc" id="L181">        Shape destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));</span>
+<span class="fc" id="L182">        CNumber[] destEntries = MatrixMultiplyDispatcher.dispatch(at, bt);</span>
+<span class="fc" id="L183">        Shape destShape = new Shape(ArrayUtils.join(src1OldDims, src2OldDims));</span>
 
-<span class="fc" id="L183">        return new CTensor(destShape, destEntries);</span>
+<span class="fc" id="L185">        return new CTensor(destShape, destEntries);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

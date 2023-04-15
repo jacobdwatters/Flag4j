@@ -146,15 +146,15 @@ public class ComplexDenseSparseEquals {
 <span class="fc bfc" id="L146" title="All 2 branches covered.">            for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
 <span class="fc" id="L147">                entriesIndex = A.shape.entriesIndex(B.indices[i]);</span>
 
-<span class="fc bfc" id="L149" title="All 2 branches covered.">                if(!entriesCopy[entriesIndex].equals(B.entries[i])) {</span>
-<span class="fc" id="L150">                    equal = false;</span>
-<span class="fc" id="L151">                    break;</span>
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">                if(!entriesCopy[entriesIndex].equals(B.entries[i])) {</span>
+<span class="nc" id="L150">                    equal = false;</span>
+<span class="nc" id="L151">                    break;</span>
                 }
 
 <span class="fc" id="L154">                entriesCopy[A.shape.entriesIndex(B.indices[i])] = new CNumber();</span>
             }
 
-<span class="fc bfc" id="L157" title="All 2 branches covered.">            if(equal) {</span>
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">            if(equal) {</span>
                 // Now, if this tensor is equal to the sparse tensor, there should only be zeros left in the entriesStack
 <span class="fc" id="L159">                equal = ArrayUtils.isZeros(entriesCopy);</span>
             }
