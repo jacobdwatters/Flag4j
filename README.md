@@ -80,5 +80,3 @@ ___
 
 ### I/O
 - Read/Write tensors, matrices, and vectors to/from a file.
-
-<span style="color:blue">some *blue* text</span>
