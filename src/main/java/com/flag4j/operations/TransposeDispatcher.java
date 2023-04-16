@@ -36,6 +36,8 @@ import com.flag4j.util.ErrorMessages;
  */
 public final class TransposeDispatcher {
 
+    // TODO: These thresholds need to be updated. Perform some benchmarks to get empirical values.
+
     /**
      * Threshold for using complex blocked algorithm.
      */
@@ -51,7 +53,7 @@ public final class TransposeDispatcher {
     /**
      * Threshold for number of elements in matrix to use concurrent implementation.
      */
-    private static final int CONCURRENT_THRESHOLD = 125_000;
+    private static final int CONCURRENT_THRESHOLD = 4_250_000;
 
 
     private TransposeDispatcher() {
@@ -189,7 +191,7 @@ public final class TransposeDispatcher {
      */
     private static Algorithm chooseAlgorithm(Shape shape) {
         int numEntries = shape.totalEntries().intValueExact();
-        return numEntries < COMPLEX_BLOCKED_THRESHOLD ? Algorithm.BLOCKED : Algorithm.CONCURRENT_BLOCKED;
+        return numEntries < CONCURRENT_THRESHOLD ? Algorithm.BLOCKED : Algorithm.CONCURRENT_BLOCKED;
     }
 
 

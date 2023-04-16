@@ -273,27 +273,7 @@ public final class RealDenseTranspose {
         double[] dest = new double[src.length];
         final int blockSize = Configurations.getBlockSize();
 
-//        // Compute transpose concurrently.
-//        ThreadManager.concurrentLoop(0, numCols, blockSize, (ii) -> {
-//            int iBound = Math.min(ii + blockSize, numCols);
-//
-//            for(int jj=0; jj<numRows; jj+=blockSize) {
-//                int jBound = Math.min(jj + blockSize, numRows);
-//
-//                // Transpose the block beginning at (ii, jj)
-//                for(int i=ii; i<iBound; i++) {
-//                    int srcIndex = i;
-//                    int destIndex = i*numRows;
-//                    int end = destIndex + jBound;
-//
-//                    while (destIndex < end) {
-//                        dest[destIndex++] = src[srcIndex];
-//                        srcIndex += numCols;
-//                    }
-//                }
-//            }
-//        });
-
+        // Compute transpose concurrently.
         ThreadManager.concurrentLoop(0, numRows, blockSize, (ii)->{
             int blockHeight = Math.min(ii+blockSize, numRows) - ii;
             int srcIndexStart = ii*numCols;

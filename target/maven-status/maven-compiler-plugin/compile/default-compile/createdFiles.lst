@@ -5,6 +5,7 @@ com\flag4j\util\StringUtils.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseMatrixMultiplication.class
 com\flag4j\operations\dense\complex\ComplexDenseTensorDot.class
 com\flag4j\core\MatrixBase.class
+com\flag4j\operations\dense\real\RealDenseMatrixMultTranspose.class
 com\flag4j\concurrency\ThreadManager.class
 com\flag4j\linalg\Hessenburg.class
 com\flag4j\core\TensorExclusiveMixin.class
