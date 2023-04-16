@@ -31,8 +31,7 @@ import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 
 /**
- * This class contains several low level methods for computing matrix-matrix multiplications. This includes transpose
- * multiplications. <br>
+ * This class contains several low level methods for computing matrix-matrix multiplications. <br>
  * <b>WARNING:</b> These methods do not perform any sanity checks.
  */
 public class RealDenseMatrixMultiplication {
