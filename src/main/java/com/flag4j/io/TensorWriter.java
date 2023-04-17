@@ -36,11 +36,12 @@ import java.io.IOException;
  */
 public class TensorWriter {
 
+    // TODO: Add options for matrix market format and csv format.
+
     private TensorWriter() {
         // Hide default constructor in utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
-
 
     /**
      * Writes a tensor to a file using a {@link TensorOutputStream}. If the write operation fails it will

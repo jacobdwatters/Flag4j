@@ -108,14 +108,18 @@ public abstract class LUDecomposition<T extends MatrixBase<?>> implements Decomp
      * Gets the row permutation matrix of the decomposition.
      * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
      */
-    public abstract T getP();
+    public T getP() {
+        return P;
+    }
 
 
     /**
      * Gets the column permutation matrix of the decomposition.
      * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
      */
-    public abstract T getQ();
+    public T getQ() {
+        return Q;
+    }
 
 
     /**

@@ -34,14 +34,15 @@ import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.operations.dense.complex.*;
-import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
-import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
-import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
-import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import com.flag4j.operations.dense.real.RealDenseMatrixMultTranspose;
+import com.flag4j.operations.dense.real_complex.*;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultTranspose;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultTranspose;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultTranspose;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
 import com.flag4j.util.*;
@@ -2044,6 +2045,106 @@ public class CMatrix extends ComplexMatrixBase implements
         CNumber[] entries = ComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);
         Shape shape = new Shape(this.numRows, 1);
         return new CMatrix(shape, entries);
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.}{@link #mult(Matrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public CMatrix multTranspose(Matrix B) {
+        // Ensure this matrix can be multiplied to the transpose of B.
+        ParameterChecks.assertEquals(this.numCols, B.numCols);
+
+        // TODO: Add dispatcher for various methods in RealComplexDenseMatrixMultTranspose.
+        return new CMatrix(
+                new Shape(this.numRows, B.numRows),
+                RealComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(
+                        this.entries, this.shape, B.entries, B.shape
+                )
+        );
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.}{@link #mult(SparseMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public CMatrix multTranspose(SparseMatrix B) {
+        // Ensure this matrix can be multiplied to the transpose of B.
+        ParameterChecks.assertEquals(this.numCols, B.numCols);
+
+        // TODO: Add dispatcher for various methods in RealComplexDenseSparseMatrixMultTranspose
+        return new CMatrix(
+                new Shape(this.numRows, B.numRows),
+                RealComplexDenseSparseMatrixMultTranspose.multTranspose(
+                        this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
+                )
+        );
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.}{@link #mult(CMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public CMatrix multTranspose(CMatrix B) {
+        // Ensure this matrix can be multiplied to the transpose of B.
+        ParameterChecks.assertEquals(this.numCols, B.numCols);
+
+        // TODO: Add dispatcher for various methods in ComplexDenseMatrixMultTranspose.
+        return new CMatrix(
+                new Shape(this.numRows, B.numRows),
+                ComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(
+                        this.entries, this.shape, B.entries, B.shape
+                )
+        );
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.}{@link #mult(SparseCMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public CMatrix multTranspose(SparseCMatrix B) {
+        // Ensure this matrix can be multiplied to the transpose of B.
+        ParameterChecks.assertEquals(this.numCols, B.numCols);
+
+        // TODO: Add dispatcher for various methods in RealComplexDenseSparseMatrixMultTranspose
+        return new CMatrix(
+                new Shape(this.numRows, B.numRows),
+                ComplexDenseSparseMatrixMultTranspose.multTranspose(
+                        this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
+                )
+        );
     }
 
 

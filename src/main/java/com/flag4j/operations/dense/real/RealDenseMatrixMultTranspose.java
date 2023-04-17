@@ -24,17 +24,15 @@
 
 package com.flag4j.operations.dense.real;
 
-import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.concurrency.Configurations;
 import com.flag4j.concurrency.ThreadManager;
-import com.flag4j.io.PrintOptions;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.RandomTensor;
 
 /**
- * This class contains several low level methods for computing matrix-matrix multiplications with a transpose. <br>
+ * This class contains several low level methods for computing matrix-matrix multiplications with a transpose for
+ * two real dense matrices. <br>
  * <b>WARNING:</b> These methods do not perform any sanity checks.
  */
 public class RealDenseMatrixMultTranspose {

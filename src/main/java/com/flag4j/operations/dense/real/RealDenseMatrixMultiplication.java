@@ -210,7 +210,7 @@ public class RealDenseMatrixMultiplication {
                             src2Index = k*cols2 + jj;
 
                             while(destIndex<stopIndex) {
-                                dest[destIndex++] += src1[src1Index] * src2[src2Index];
+                                dest[destIndex++] += src1[src1Index]*src2[src2Index];
                                 src2Index++;
                             }
                         }

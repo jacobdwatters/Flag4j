@@ -7,6 +7,7 @@ com\flag4j\operations\dense\complex\ComplexDenseTensorDot.class
 com\flag4j\core\MatrixBase.class
 com\flag4j\operations\dense\real\RealDenseMatrixMultTranspose.class
 com\flag4j\concurrency\ThreadManager.class
+com\flag4j\operations\dense\complex\ComplexDenseMatrixMultTranspose.class
 com\flag4j\linalg\Hessenburg.class
 com\flag4j\core\TensorExclusiveMixin.class
 com\flag4j\operations\MatrixMultiplyDispatcher$AlgorithmNames.class
@@ -38,6 +39,7 @@ com\flag4j\CTensor.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatrixMultiplication.class
 com\flag4j\core\MatrixManipulationsMixin.class
 com\flag4j\core\TensorManipulationsMixin.class
+com\flag4j\operations\dense\real_complex\RealComplexDenseMatrixMultTranspose.class
 com\flag4j\linalg\decompositions\QRDecomposition.class
 com\flag4j\Matrix.class
 com\flag4j\linalg\decompositions\LUDecomposition$Pivoting.class
@@ -57,6 +59,7 @@ com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseOperations
 com\flag4j\operations\MatrixMultiplyDispatcher$1.class
 com\flag4j\core\ComplexVectorBase.class
 com\flag4j\operations\dense\complex\ComplexDenseSetOperations.class
+com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseMatrixMultTranspose.class
 com\flag4j\operations\dense\real\RealDenseTensorDot.class
 com\flag4j\operations\dense_sparse\real\RealDenseSparseOperations.class
 com\flag4j\operations\dense\real\RealDenseMatrixMultiplication.class
@@ -74,6 +77,7 @@ com\flag4j\SparseCMatrix.class
 com\flag4j\operations\dense\complex\ComplexDenseProperties.class
 com\flag4j\complex_numbers\CNumberToken.class
 com\flag4j\core\SparseMatrixBase.class
+com\flag4j\operations\dense_sparse\real\RealDenseSparseMatrixMultTranspose.class
 com\flag4j\SparseTensor.class
 com\flag4j\operations\dense\complex\ComplexDenseTranspose.class
 com\flag4j\operations\dense\real\AggregateDenseReal.class
@@ -89,6 +93,7 @@ com\flag4j\core\MatrixComparisonsMixin.class
 com\flag4j\io\PrintOptions.class
 com\flag4j\SparseVector.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseEquals.class
+com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatrixMultTranspose.class
 com\flag4j\util\Axis2D.class
 com\flag4j\io\TensorInputStream.class
 com\flag4j\core\RealTensorMixin.class

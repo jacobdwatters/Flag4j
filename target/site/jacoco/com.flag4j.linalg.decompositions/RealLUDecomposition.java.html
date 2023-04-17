@@ -67,13 +67,13 @@ public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
 
 
     /**
-     * Applies decomposition to the source matrix using the pivoting specified in the constructor.
+     * Applies {@code LU} decomposition to the source matrix using the pivoting specified in the constructor.
      *
-     * @param A The source matrix to decompose.
+     * @param src The source matrix to decompose. Not modified.
      */
     @Override
-    public void decompose(Matrix A) {
-<span class="fc" id="L76">        LU = new Matrix(A);</span>
+    public void decompose(Matrix src) {
+<span class="fc" id="L76">        LU = new Matrix(src);</span>
 
 <span class="fc bfc" id="L78" title="All 2 branches covered.">        if(super.pivotFlag==Pivoting.NONE) {</span>
 <span class="fc" id="L79">            noPivot(); // Compute with no pivoting.</span>
@@ -103,54 +103,57 @@ public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
 <span class="fc" id="L103">    }</span>
 
 
+
+
+
     /**
      * Computes the LU decomposition using partial pivoting (i.e. row swapping).
      */
     private void partialPivot() {
-<span class="fc" id="L110">        P = Matrix.I(LU.numRows);</span>
-<span class="fc" id="L111">        Q = null; // Q is not used here.</span>
+<span class="fc" id="L113">        P = Matrix.I(LU.numRows);</span>
+<span class="fc" id="L114">        Q = null; // Q is not used here.</span>
         int maxIndex;
 
         // Using Gaussian elimination with row pivoting.
-<span class="fc bfc" id="L115" title="All 2 branches covered.">        for(int j=0; j&lt;LU.numCols; j++) {</span>
-<span class="fc" id="L116">            maxIndex = maxColIndex(j); // Find row index of max value (in absolute value) in column j so that the index &gt;= j.</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        for(int j=0; j&lt;LU.numCols; j++) {</span>
+<span class="fc" id="L119">            maxIndex = maxColIndex(j); // Find row index of max value (in absolute value) in column j so that the index &gt;= j.</span>
 
             // Make the appropriate swaps in LU and P (This is the partial pivoting step).
-<span class="fc bfc" id="L119" title="All 4 branches covered.">            if(j!=maxIndex &amp;&amp; maxIndex&gt;=0) {</span>
-<span class="fc" id="L120">                LU.swapRows(j, maxIndex);</span>
-<span class="fc" id="L121">                P.swapRows(j, maxIndex);</span>
+<span class="fc bfc" id="L122" title="All 4 branches covered.">            if(j!=maxIndex &amp;&amp; maxIndex&gt;=0) {</span>
+<span class="fc" id="L123">                LU.swapRows(j, maxIndex);</span>
+<span class="fc" id="L124">                P.swapRows(j, maxIndex);</span>
             }
 
-<span class="fc" id="L124">            computeRows(j);</span>
+<span class="fc" id="L127">            computeRows(j);</span>
         }
-<span class="fc" id="L126">    }</span>
+<span class="fc" id="L129">    }</span>
 
 
     /**
      * Computes the LU decomposition using full/rook pivoting (i.e. row and column swapping).
      */
     private void fullPivot() {
-<span class="fc" id="L133">        P = Matrix.I(LU.numRows);</span>
-<span class="fc" id="L134">        Q = Matrix.I(LU.numRows);</span>
+<span class="fc" id="L136">        P = Matrix.I(LU.numRows);</span>
+<span class="fc" id="L137">        Q = Matrix.I(LU.numRows);</span>
         int[] maxIndex;
 
         // Using Gaussian elimination with row and column (rook) pivoting.
-<span class="fc bfc" id="L138" title="All 2 branches covered.">        for(int j=0; j&lt;LU.numCols; j++) {</span>
-<span class="fc" id="L139">            maxIndex = maxIndex(j);</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        for(int j=0; j&lt;LU.numCols; j++) {</span>
+<span class="fc" id="L142">            maxIndex = maxIndex(j);</span>
 
             // Make the appropriate swaps in LU, P and Q (This is the full pivoting step).
-<span class="fc bfc" id="L142" title="All 2 branches covered.">            if(j!=maxIndex[0]) {</span>
-<span class="fc" id="L143">                LU.swapRows(j, maxIndex[0]);</span>
-<span class="fc" id="L144">                P.swapRows(j, maxIndex[0]);</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">            if(j!=maxIndex[0]) {</span>
+<span class="fc" id="L146">                LU.swapRows(j, maxIndex[0]);</span>
+<span class="fc" id="L147">                P.swapRows(j, maxIndex[0]);</span>
             }
-<span class="fc bfc" id="L146" title="All 2 branches covered.">            if(j!=maxIndex[1]) {</span>
-<span class="fc" id="L147">                LU.swapCols(j, maxIndex[1]);</span>
-<span class="fc" id="L148">                Q.swapCols(j, maxIndex[1]);</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">            if(j!=maxIndex[1]) {</span>
+<span class="fc" id="L150">                LU.swapCols(j, maxIndex[1]);</span>
+<span class="fc" id="L151">                Q.swapCols(j, maxIndex[1]);</span>
             }
 
-<span class="fc" id="L151">            computeRows(j);</span>
+<span class="fc" id="L154">            computeRows(j);</span>
         }
-<span class="fc" id="L153">    }</span>
+<span class="fc" id="L156">    }</span>
 
 
     /**
@@ -160,15 +163,15 @@ public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
     private void computeRows(int j) {
         double m;
 
-<span class="fc bfc" id="L163" title="All 2 branches covered.">        for(int i=j+1; i&lt;LU.numRows; i++) {</span>
-<span class="fc" id="L164">            m = LU.entries[i*LU.numCols + j]/LU.entries[j*LU.numCols + j];</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        for(int i=j+1; i&lt;LU.numRows; i++) {</span>
+<span class="fc" id="L167">            m = LU.entries[i*LU.numCols + j]/LU.entries[j*LU.numCols + j];</span>
 
-<span class="fc bfc" id="L166" title="All 2 branches covered.">            for(int k=j; k&lt;LU.numCols; k++) {</span>
-<span class="fc" id="L167">                LU.entries[i*LU.numCols + k] = LU.entries[i*LU.numCols + k] - m*LU.entries[j*LU.numCols + k];</span>
-<span class="fc" id="L168">                LU.entries[i*LU.numCols + j] = m;</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">            for(int k=j; k&lt;LU.numCols; k++) {</span>
+<span class="fc" id="L170">                LU.entries[i*LU.numCols + k] = LU.entries[i*LU.numCols + k] - m*LU.entries[j*LU.numCols + k];</span>
+<span class="fc" id="L171">                LU.entries[i*LU.numCols + j] = m;</span>
             }
         }
-<span class="fc" id="L171">    }</span>
+<span class="fc" id="L174">    }</span>
 
 
     /**
@@ -177,19 +180,19 @@ public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
      * @return The index of the maximum absolute value in the specified column such that the row is &gt;= j.
      */
     private int maxColIndex(int j) {
-<span class="fc" id="L180">        int maxIndex = -1;</span>
-<span class="fc" id="L181">        double currentMax = -1;</span>
+<span class="fc" id="L183">        int maxIndex = -1;</span>
+<span class="fc" id="L184">        double currentMax = -1;</span>
         double value;
 
-<span class="fc bfc" id="L184" title="All 2 branches covered.">        for(int i=j; i&lt;LU.numRows; i++) {</span>
-<span class="fc" id="L185">            value = Math.abs(LU.entries[i*LU.numCols+j]);</span>
-<span class="fc bfc" id="L186" title="All 2 branches covered.">            if(value &gt; currentMax) {</span>
-<span class="fc" id="L187">                currentMax = value;</span>
-<span class="fc" id="L188">                maxIndex = i;</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        for(int i=j; i&lt;LU.numRows; i++) {</span>
+<span class="fc" id="L188">            value = Math.abs(LU.entries[i*LU.numCols+j]);</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">            if(value &gt; currentMax) {</span>
+<span class="fc" id="L190">                currentMax = value;</span>
+<span class="fc" id="L191">                maxIndex = i;</span>
             }
         }
 
-<span class="fc" id="L192">        return maxIndex;</span>
+<span class="fc" id="L195">        return maxIndex;</span>
     }
 
 
@@ -199,22 +202,22 @@ public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
      * @return Index of maximum absolute value in specified sub matrix.
      */
     private int[] maxIndex(int startIndex) {
-<span class="fc" id="L202">        double currentMax = -1;</span>
-<span class="fc" id="L203">        int[] index = {-1, -1};</span>
+<span class="fc" id="L205">        double currentMax = -1;</span>
+<span class="fc" id="L206">        int[] index = {-1, -1};</span>
         double value;
 
-<span class="fc bfc" id="L206" title="All 2 branches covered.">        for(int i=startIndex; i&lt;LU.numRows; i++) {</span>
-<span class="fc bfc" id="L207" title="All 2 branches covered.">            for(int j=startIndex; j&lt;LU.numCols; j++) {</span>
-<span class="fc" id="L208">                value = Math.abs(LU.entries[i*LU.numCols+j]);</span>
-<span class="fc bfc" id="L209" title="All 2 branches covered.">                if(value &gt; currentMax) {</span>
-<span class="fc" id="L210">                    currentMax = value;</span>
-<span class="fc" id="L211">                    index[0] = i;</span>
-<span class="fc" id="L212">                    index[1] = j;</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">        for(int i=startIndex; i&lt;LU.numRows; i++) {</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">            for(int j=startIndex; j&lt;LU.numCols; j++) {</span>
+<span class="fc" id="L211">                value = Math.abs(LU.entries[i*LU.numCols+j]);</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">                if(value &gt; currentMax) {</span>
+<span class="fc" id="L213">                    currentMax = value;</span>
+<span class="fc" id="L214">                    index[0] = i;</span>
+<span class="fc" id="L215">                    index[1] = j;</span>
                 }
             }
         }
 
-<span class="fc" id="L217">        return index;</span>
+<span class="fc" id="L220">        return index;</span>
     }
 
 
@@ -225,18 +228,18 @@ public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
      */
     @Override
     public Matrix getL() {
-<span class="fc" id="L228">        Matrix L = new Matrix(LU.numRows, Math.min(LU.numRows, LU.numCols));</span>
+<span class="fc" id="L231">        Matrix L = new Matrix(LU.numRows, Math.min(LU.numRows, LU.numCols));</span>
 
         // Copy L values from LU matrix.
-<span class="fc bfc" id="L231" title="All 2 branches covered.">        for(int i=0; i&lt;LU.numRows; i++) {</span>
-<span class="fc bfc" id="L232" title="All 2 branches covered.">            if(i&lt;LU.numCols) {</span>
-<span class="fc" id="L233">                L.entries[i*L.numCols+i] = 1; // Set principle diagonal to be ones.</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        for(int i=0; i&lt;LU.numRows; i++) {</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">            if(i&lt;LU.numCols) {</span>
+<span class="fc" id="L236">                L.entries[i*L.numCols+i] = 1; // Set principle diagonal to be ones.</span>
             }
 
-<span class="fc" id="L236">            System.arraycopy(LU.entries, i*LU.numCols, L.entries, i*L.numCols, i);</span>
+<span class="fc" id="L239">            System.arraycopy(LU.entries, i*LU.numCols, L.entries, i*L.numCols, i);</span>
         }
 
-<span class="fc" id="L239">        return L;</span>
+<span class="fc" id="L242">        return L;</span>
     }
 
 
@@ -247,15 +250,15 @@ public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
      */
     @Override
     public Matrix getU() {
-<span class="fc" id="L250">        Matrix U = new Matrix(Math.min(LU.numRows, LU.numCols), LU.numCols);</span>
+<span class="fc" id="L253">        Matrix U = new Matrix(Math.min(LU.numRows, LU.numCols), LU.numCols);</span>
 
         // Copy U values from LU matrix.
-<span class="fc bfc" id="L253" title="All 4 branches covered.">        for(int i=0; i&lt;LU.numRows &amp;&amp; i&lt;LU.numCols; i++) {</span>
-<span class="fc" id="L254">            System.arraycopy(LU.entries, i*(LU.numCols+1),</span>
+<span class="fc bfc" id="L256" title="All 4 branches covered.">        for(int i=0; i&lt;LU.numRows &amp;&amp; i&lt;LU.numCols; i++) {</span>
+<span class="fc" id="L257">            System.arraycopy(LU.entries, i*(LU.numCols+1),</span>
                     U.entries, i*(LU.numCols+1), LU.numCols-i);
         }
 
-<span class="fc" id="L258">        return U;</span>
+<span class="fc" id="L261">        return U;</span>
     }
 
 
@@ -265,7 +268,7 @@ public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
      */
     @Override
     public Matrix getP() {
-<span class="fc" id="L268">        return super.P;</span>
+<span class="fc" id="L271">        return P;</span>
     }
 
 
@@ -273,9 +276,8 @@ public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
      * Gets the column permutation matrix of the decomposition.
      * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
      */
-    @Override
     public Matrix getQ() {
-<span class="fc" id="L278">        return super.Q;</span>
+<span class="fc" id="L280">        return Q;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -108,21 +108,25 @@ public abstract class LUDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; imple
      * Gets the row permutation matrix of the decomposition.
      * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
      */
-    public abstract T getP();
+    public T getP() {
+<span class="nc" id="L112">        return P;</span>
+    }
 
 
     /**
      * Gets the column permutation matrix of the decomposition.
      * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
      */
-    public abstract T getQ();
+    public T getQ() {
+<span class="nc" id="L121">        return Q;</span>
+    }
 
 
     /**
      * Simple enum containing pivoting options for pivoting in LU decomposition.
      */
-<span class="fc" id="L124">    public enum Pivoting {</span>
-<span class="fc" id="L125">        NONE, PARTIAL, FULL;</span>
+<span class="fc" id="L128">    public enum Pivoting {</span>
+<span class="fc" id="L129">        NONE, PARTIAL, FULL;</span>
 
         /**
          * Converts an ordinal to the corresponding pivot flag.
@@ -131,12 +135,12 @@ public abstract class LUDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; imple
          * {@link #PARTIAL} is returned.
          */
         private static Pivoting get(int ordinal) {
-<span class="fc bfc" id="L134" title="All 2 branches covered.">            if(ordinal==Pivoting.FULL.ordinal()) {</span>
-<span class="fc" id="L135">                return Pivoting.FULL;</span>
-<span class="fc bfc" id="L136" title="All 2 branches covered.">            } else if(ordinal==Pivoting.NONE.ordinal()) {</span>
-<span class="fc" id="L137">                return Pivoting.NONE;</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">            if(ordinal==Pivoting.FULL.ordinal()) {</span>
+<span class="fc" id="L139">                return Pivoting.FULL;</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">            } else if(ordinal==Pivoting.NONE.ordinal()) {</span>
+<span class="fc" id="L141">                return Pivoting.NONE;</span>
             } else {
-<span class="fc" id="L139">                return Pivoting.PARTIAL;</span>
+<span class="fc" id="L143">                return Pivoting.PARTIAL;</span>
             }
         }
     }

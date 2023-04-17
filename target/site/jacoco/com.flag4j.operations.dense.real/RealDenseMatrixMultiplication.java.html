@@ -210,7 +210,7 @@ public class RealDenseMatrixMultiplication {
 <span class="fc" id="L210">                            src2Index = k*cols2 + jj;</span>
 
 <span class="fc bfc" id="L212" title="All 2 branches covered.">                            while(destIndex&lt;stopIndex) {</span>
-<span class="fc" id="L213">                                dest[destIndex++] += src1[src1Index] * src2[src2Index];</span>
+<span class="fc" id="L213">                                dest[destIndex++] += src1[src1Index]*src2[src2Index];</span>
 <span class="fc" id="L214">                                src2Index++;</span>
                             }
                         }
