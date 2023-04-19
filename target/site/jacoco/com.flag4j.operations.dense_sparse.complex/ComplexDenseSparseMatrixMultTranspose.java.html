@@ -56,30 +56,30 @@ public class ComplexDenseSparseMatrixMultTranspose {
      */
     public static CNumber[] multTranspose(CNumber[] dSrc, Shape dShape,
                                          CNumber[] spSrc, int[] rowIndices, int[] colIndices, Shape spShape) {
-<span class="nc" id="L59">        int rows1 = dShape.dims[Axis2D.row()];</span>
-<span class="nc" id="L60">        int rows2 = spShape.dims[Axis2D.row()];</span>
-<span class="nc" id="L61">        int cols2 = spShape.dims[Axis2D.col()];</span>
+<span class="fc" id="L59">        int rows1 = dShape.dims[Axis2D.row()];</span>
+<span class="fc" id="L60">        int rows2 = spShape.dims[Axis2D.row()];</span>
+<span class="fc" id="L61">        int cols2 = spShape.dims[Axis2D.col()];</span>
 
-<span class="nc" id="L63">        CNumber[] dest = new CNumber[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.</span>
-<span class="nc" id="L64">        ArrayUtils.fillZeros(dest);</span>
+<span class="fc" id="L63">        CNumber[] dest = new CNumber[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.</span>
+<span class="fc" id="L64">        ArrayUtils.fillZeros(dest);</span>
 
         int row, col;
         int destStart, dSrcStart;
 
-<span class="nc bnc" id="L69" title="All 2 branches missed.">        for(int i=0; i&lt;rows1; i++) {</span>
-<span class="nc" id="L70">            destStart = i*rows2;</span>
-<span class="nc" id="L71">            dSrcStart = i*cols2;</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        for(int i=0; i&lt;rows1; i++) {</span>
+<span class="fc" id="L70">            destStart = i*rows2;</span>
+<span class="fc" id="L71">            dSrcStart = i*cols2;</span>
 
             // Loop over non-zero entries of sparse matrix.
-<span class="nc bnc" id="L74" title="All 2 branches missed.">            for(int j=0; j&lt;spSrc.length; j++) {</span>
-<span class="nc" id="L75">                row = colIndices[j];</span>
-<span class="nc" id="L76">                col = rowIndices[j];</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">            for(int j=0; j&lt;spSrc.length; j++) {</span>
+<span class="fc" id="L75">                row = colIndices[j];</span>
+<span class="fc" id="L76">                col = rowIndices[j];</span>
 
-<span class="nc" id="L78">                dest[destStart + col].addEq(dSrc[dSrcStart + row].mult(spSrc[j]));</span>
+<span class="fc" id="L78">                dest[destStart + col].addEq(dSrc[dSrcStart + row].mult(spSrc[j]));</span>
             }
         }
 
-<span class="nc" id="L82">        return dest;</span>
+<span class="fc" id="L82">        return dest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
