@@ -113,12 +113,12 @@ public class RealDenseMatrixMultTranspose {
 <span class="nc bnc" id="L113" title="All 2 branches missed.">                    for(int i=ii; i&lt;iBound; i++) {</span>
 <span class="nc" id="L114">                        destStart = i*rows2;</span>
 <span class="nc" id="L115">                        src1Start = i*cols2 + kk;</span>
+<span class="nc" id="L116">                        end = src1Start + kBound - kk;</span>
 
-<span class="nc bnc" id="L117" title="All 2 branches missed.">                        for(int j=jj; j&lt;jBound; j++) {</span>
-<span class="nc" id="L118">                            destIndex = destStart + j;</span>
-<span class="nc" id="L119">                            src1Index = src1Start;</span>
-<span class="nc" id="L120">                            src2Index = j*cols2 + kk;</span>
-<span class="nc" id="L121">                            end = src1Index + kBound - kk;</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">                        for(int j=jj; j&lt;jBound; j++) {</span>
+<span class="nc" id="L119">                            destIndex = destStart + j;</span>
+<span class="nc" id="L120">                            src1Index = src1Start;</span>
+<span class="nc" id="L121">                            src2Index = j*cols2 + kk;</span>
 
 <span class="nc bnc" id="L123" title="All 2 branches missed.">                            while(src1Index&lt;end) {</span>
 <span class="nc" id="L124">                                dest[destIndex] += src1[src1Index++]*src2[src2Index++];</span>
@@ -200,12 +200,12 @@ public class RealDenseMatrixMultTranspose {
 <span class="nc bnc" id="L200" title="All 2 branches missed.">                    for(int i=ii; i&lt;iBound; i++) {</span>
 <span class="nc" id="L201">                        int destStart = i*rows2;</span>
 <span class="nc" id="L202">                        int src1Start = i*cols2 + kk;</span>
+<span class="nc" id="L203">                        int end = src1Start + kBound - kk;</span>
 
-<span class="nc bnc" id="L204" title="All 2 branches missed.">                        for(int j=jj; j&lt;jBound; j++) {</span>
-<span class="nc" id="L205">                            int destIndex = destStart + j;</span>
-<span class="nc" id="L206">                            int src1Index = src1Start;</span>
-<span class="nc" id="L207">                            int src2Index = j*cols2 + kk;</span>
-<span class="nc" id="L208">                            int end = src1Index + kBound - kk;</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">                        for(int j=jj; j&lt;jBound; j++) {</span>
+<span class="nc" id="L206">                            int destIndex = destStart + j;</span>
+<span class="nc" id="L207">                            int src1Index = src1Start;</span>
+<span class="nc" id="L208">                            int src2Index = j*cols2 + kk;</span>
 
 <span class="nc bnc" id="L210" title="All 2 branches missed.">                            while(src1Index&lt;end) {</span>
 <span class="nc" id="L211">                                dest[destIndex] += src1[src1Index++]*src2[src2Index++];</span>

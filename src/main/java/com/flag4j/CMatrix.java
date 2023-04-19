@@ -29,6 +29,7 @@ import com.flag4j.core.ComplexMatrixBase;
 import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
+import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
@@ -2063,12 +2064,9 @@ public class CMatrix extends ComplexMatrixBase implements
         // Ensure this matrix can be multiplied to the transpose of B.
         ParameterChecks.assertEquals(this.numCols, B.numCols);
 
-        // TODO: Add dispatcher for various methods in RealComplexDenseMatrixMultTranspose.
         return new CMatrix(
                 new Shape(this.numRows, B.numRows),
-                RealComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(
-                        this.entries, this.shape, B.entries, B.shape
-                )
+                MatrixMultiplyDispatcher.dispatchTranspose(this, B)
         );
     }
 
@@ -2088,7 +2086,6 @@ public class CMatrix extends ComplexMatrixBase implements
         // Ensure this matrix can be multiplied to the transpose of B.
         ParameterChecks.assertEquals(this.numCols, B.numCols);
 
-        // TODO: Add dispatcher for various methods in RealComplexDenseSparseMatrixMultTranspose
         return new CMatrix(
                 new Shape(this.numRows, B.numRows),
                 RealComplexDenseSparseMatrixMultTranspose.multTranspose(
@@ -2113,12 +2110,9 @@ public class CMatrix extends ComplexMatrixBase implements
         // Ensure this matrix can be multiplied to the transpose of B.
         ParameterChecks.assertEquals(this.numCols, B.numCols);
 
-        // TODO: Add dispatcher for various methods in ComplexDenseMatrixMultTranspose.
         return new CMatrix(
                 new Shape(this.numRows, B.numRows),
-                ComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(
-                        this.entries, this.shape, B.entries, B.shape
-                )
+                MatrixMultiplyDispatcher.dispatchTranspose(this, B)
         );
     }
 
@@ -2138,7 +2132,6 @@ public class CMatrix extends ComplexMatrixBase implements
         // Ensure this matrix can be multiplied to the transpose of B.
         ParameterChecks.assertEquals(this.numCols, B.numCols);
 
-        // TODO: Add dispatcher for various methods in RealComplexDenseSparseMatrixMultTranspose
         return new CMatrix(
                 new Shape(this.numRows, B.numRows),
                 ComplexDenseSparseMatrixMultTranspose.multTranspose(

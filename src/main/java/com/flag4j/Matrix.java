@@ -1667,10 +1667,9 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
         // Ensure this matrix can be multiplied to the transpose of B.
         ParameterChecks.assertEquals(this.numCols, B.numCols);
 
-        // TODO: Add dispatcher for various methods in RealDenseMatrixMultTranspose.
         return new Matrix(
                 new Shape(this.numRows, B.numRows),
-                RealDenseMatrixMultTranspose.multTransposeBlockedConcurrent(this.entries, this.shape, B.entries, B.shape)
+                RealDenseMatrixMultiplyDispatcher.dispatchTranspose(this, B)
         );
     }
 
@@ -1690,7 +1689,6 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
         // Ensure this matrix can be multiplied to the transpose of B.
         ParameterChecks.assertEquals(this.numCols, B.numCols);
 
-        // TODO: Add dispatcher for various methods in RealDenseSparseMatrixMultTranspose
         return new Matrix(
                 new Shape(this.numRows, B.numRows),
                 RealDenseSparseMatrixMultTranspose.multTranspose(
@@ -1715,12 +1713,9 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
         // Ensure this matrix can be multiplied to the transpose of B.
         ParameterChecks.assertEquals(this.numCols, B.numCols);
 
-        // TODO: Add dispatcher for various methods in RealDenseMatrixMultTranspose.
         return new CMatrix(
                 new Shape(this.numRows, B.numRows),
-                RealComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(
-                        this.entries, this.shape, B.entries, B.shape
-                )
+                MatrixMultiplyDispatcher.dispatchTranspose(this, B)
         );
     }
 

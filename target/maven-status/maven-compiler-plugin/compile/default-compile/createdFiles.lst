@@ -10,7 +10,6 @@ com\flag4j\concurrency\ThreadManager.class
 com\flag4j\operations\dense\complex\ComplexDenseMatrixMultTranspose.class
 com\flag4j\linalg\Hessenburg.class
 com\flag4j\core\TensorExclusiveMixin.class
-com\flag4j\operations\MatrixMultiplyDispatcher$AlgorithmNames.class
 com\flag4j\linalg\decompositions\RealQRDecomposition.class
 com\flag4j\util\RandomCNumber.class
 com\flag4j\core\VectorComparisonsMixin.class
@@ -102,6 +101,7 @@ com\flag4j\operations\dense\complex\ComplexDenseMatrixMultiplication.class
 com\flag4j\Vector.class
 com\flag4j\core\ComplexMatrixBase.class
 com\flag4j\core\RealMatrixBase.class
+com\flag4j\operations\MatrixMultiplyDispatcher$AlgorithmName.class
 com\flag4j\operations\common\real\AggregateReal.class
 com\flag4j\operations\TransposeDispatcher$1.class
 com\flag4j\util\ParameterChecks.class

@@ -121,12 +121,12 @@ public class ComplexDenseMatrixMultTranspose {
 <span class="nc bnc" id="L121" title="All 2 branches missed.">                    for(int i=ii; i&lt;iBound; i++) {</span>
 <span class="nc" id="L122">                        destStart = i*rows2;</span>
 <span class="nc" id="L123">                        src1Start = i*cols2 + kk;</span>
+<span class="nc" id="L124">                        end = src1Start + kBound - kk;</span>
 
-<span class="nc bnc" id="L125" title="All 2 branches missed.">                        for(int j=jj; j&lt;jBound; j++) {</span>
-<span class="nc" id="L126">                            destIndex = destStart + j;</span>
-<span class="nc" id="L127">                            src1Index = src1Start;</span>
-<span class="nc" id="L128">                            src2Index = j*cols2 + kk;</span>
-<span class="nc" id="L129">                            end = src1Index + kBound - kk;</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">                        for(int j=jj; j&lt;jBound; j++) {</span>
+<span class="nc" id="L127">                            destIndex = destStart + j;</span>
+<span class="nc" id="L128">                            src1Index = src1Start;</span>
+<span class="nc" id="L129">                            src2Index = j*cols2 + kk;</span>
 
 <span class="nc bnc" id="L131" title="All 2 branches missed.">                            while(src1Index&lt;end) {</span>
 <span class="nc" id="L132">                                dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));</span>
@@ -169,15 +169,13 @@ public class ComplexDenseMatrixMultTranspose {
 <span class="nc" id="L169">                int src2Index = j*cols2;</span>
 <span class="nc" id="L170">                int destIndex = destIndexStart + j;</span>
 
-                // TODO: Should we not prefill dest array with zeros and put dest[destIndex] = new CNumber() here?
-
-<span class="nc bnc" id="L174" title="All 2 branches missed.">                while(src1Index&lt;end) {</span>
-<span class="nc" id="L175">                    dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">                while(src1Index&lt;end) {</span>
+<span class="nc" id="L173">                    dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));</span>
                 }
             }
-<span class="nc" id="L178">        });</span>
+<span class="nc" id="L176">        });</span>
 
-<span class="nc" id="L180">        return dest;</span>
+<span class="nc" id="L178">        return dest;</span>
     }
 
 
@@ -191,45 +189,45 @@ public class ComplexDenseMatrixMultTranspose {
      * @return The result of multiplying the first matrix with the transpose of the second matrix.
      */
     public static CNumber[] multTransposeBlockedConcurrent(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
-<span class="nc" id="L194">        int rows1 = shape1.dims[Axis2D.row()];</span>
-<span class="nc" id="L195">        int rows2 = shape2.dims[Axis2D.row()];</span>
-<span class="nc" id="L196">        int cols2 = shape2.dims[Axis2D.col()];</span>
+<span class="nc" id="L192">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="nc" id="L193">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="nc" id="L194">        int cols2 = shape2.dims[Axis2D.col()];</span>
 
-<span class="nc" id="L198">        CNumber[] dest = new CNumber[rows1 * cols2];</span>
-<span class="nc" id="L199">        ArrayUtils.fillZeros(dest);</span>
+<span class="nc" id="L196">        CNumber[] dest = new CNumber[rows1 * cols2];</span>
+<span class="nc" id="L197">        ArrayUtils.fillZeros(dest);</span>
 
-<span class="nc" id="L201">        int blockSize = Configurations.getBlockSize();</span>
+<span class="nc" id="L199">        int blockSize = Configurations.getBlockSize();</span>
 
-<span class="nc" id="L203">        ThreadManager.concurrentLoop(0, rows1, blockSize, (ii)-&gt;{</span>
-<span class="nc" id="L204">            int iBound = Math.min(ii + blockSize, rows1);</span>
+<span class="nc" id="L201">        ThreadManager.concurrentLoop(0, rows1, blockSize, (ii)-&gt;{</span>
+<span class="nc" id="L202">            int iBound = Math.min(ii + blockSize, rows1);</span>
 
-<span class="nc bnc" id="L206" title="All 2 branches missed.">            for(int jj = 0; jj&lt;rows2; jj+=blockSize) {</span>
-<span class="nc" id="L207">                int jBound = Math.min(jj + blockSize, rows2);</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">            for(int jj = 0; jj&lt;rows2; jj+=blockSize) {</span>
+<span class="nc" id="L205">                int jBound = Math.min(jj + blockSize, rows2);</span>
 
-<span class="nc bnc" id="L209" title="All 2 branches missed.">                for(int kk = 0; kk&lt;cols2; kk+=blockSize) {</span>
-<span class="nc" id="L210">                    int kBound = Math.min(kk + blockSize, cols2);</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">                for(int kk = 0; kk&lt;cols2; kk+=blockSize) {</span>
+<span class="nc" id="L208">                    int kBound = Math.min(kk + blockSize, cols2);</span>
 
                     // Multiply the blocks
-<span class="nc bnc" id="L213" title="All 2 branches missed.">                    for(int i=ii; i&lt;iBound; i++) {</span>
-<span class="nc" id="L214">                        int destStart = i*rows2;</span>
-<span class="nc" id="L215">                        int src1Start = i*cols2 + kk;</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">                    for(int i=ii; i&lt;iBound; i++) {</span>
+<span class="nc" id="L212">                        int destStart = i*rows2;</span>
+<span class="nc" id="L213">                        int src1Start = i*cols2 + kk;</span>
+<span class="nc" id="L214">                        int end = src1Start + kBound - kk;</span>
 
-<span class="nc bnc" id="L217" title="All 2 branches missed.">                        for(int j=jj; j&lt;jBound; j++) {</span>
-<span class="nc" id="L218">                            int destIndex = destStart + j;</span>
-<span class="nc" id="L219">                            int src1Index = src1Start;</span>
-<span class="nc" id="L220">                            int src2Index = j*cols2 + kk;</span>
-<span class="nc" id="L221">                            int end = src1Index + kBound - kk;</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">                        for(int j=jj; j&lt;jBound; j++) {</span>
+<span class="nc" id="L217">                            int destIndex = destStart + j;</span>
+<span class="nc" id="L218">                            int src1Index = src1Start;</span>
+<span class="nc" id="L219">                            int src2Index = j*cols2 + kk;</span>
 
-<span class="nc bnc" id="L223" title="All 2 branches missed.">                            while(src1Index&lt;end) {</span>
-<span class="nc" id="L224">                                dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">                            while(src1Index&lt;end) {</span>
+<span class="nc" id="L222">                                dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));</span>
                             }
                         }
                     }
                 }
             }
-<span class="nc" id="L230">        });</span>
+<span class="nc" id="L228">        });</span>
 
-<span class="nc" id="L232">        return dest;</span>
+<span class="nc" id="L230">        return dest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

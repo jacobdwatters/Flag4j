@@ -56,12 +56,12 @@ Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseElemMult,41,37,1
 Flag4j,com.flag4j.operations.sparse.real_complex,RealComplexSparseMatrixMultiplication,541,0,40,0,98,0,33,0,13,0
 Flag4j,com.flag4j.concurrency,ThreadManager,22,67,2,2,8,12,3,6,1,6
 Flag4j,com.flag4j.concurrency,Configurations,49,10,0,0,16,4,8,2,8,2
-Flag4j,com.flag4j.operations,MatrixMultiplyDispatcher,809,335,107,19,152,70,84,12,3,11
-Flag4j,com.flag4j.operations,MatrixMultiplyDispatcher.AlgorithmNames,0,75,0,0,0,4,0,1,0,1
-Flag4j,com.flag4j.operations,RealDenseMatrixMultiplyDispatcher,54,186,21,11,18,29,14,9,0,6
+Flag4j,com.flag4j.operations,MatrixMultiplyDispatcher,989,335,121,19,183,70,96,12,6,11
+Flag4j,com.flag4j.operations,RealDenseMatrixMultiplyDispatcher,117,202,27,11,31,29,19,9,2,6
 Flag4j,com.flag4j.operations,TransposeDispatcher,93,178,14,8,16,29,14,8,2,8
 Flag4j,com.flag4j.operations,TransposeDispatcher.Algorithm,0,27,0,0,0,5,0,1,0,1
-Flag4j,com.flag4j.operations,RealDenseMatrixMultiplyDispatcher.AlgorithmNames,0,75,0,0,0,4,0,1,0,1
+Flag4j,com.flag4j.operations,RealDenseMatrixMultiplyDispatcher.AlgorithmNames,0,99,0,0,0,5,0,1,0,1
+Flag4j,com.flag4j.operations,MatrixMultiplyDispatcher.AlgorithmName,0,99,0,0,0,5,0,1,0,1
 Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseMatrixMultiplication,7,632,4,38,2,101,5,32,1,15
 Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseMatrixMultTranspose,77,0,4,0,14,0,4,0,2,0
 Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseVectorOperations,7,260,0,16,2,35,1,15,1,7

@@ -119,12 +119,12 @@ public class RealComplexDenseMatrixMultTranspose {
                     for(int i=ii; i<iBound; i++) {
                         destStart = i*rows2;
                         src1Start = i*cols2 + kk;
+                        end = src1Start + kBound - kk;
 
                         for(int j=jj; j<jBound; j++) {
                             destIndex = destStart + j;
                             src1Index = src1Start;
                             src2Index = j*cols2 + kk;
-                            end = src1Index + kBound - kk;
 
                             while(src1Index<end) {
                                 dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));
@@ -166,8 +166,6 @@ public class RealComplexDenseMatrixMultTranspose {
                 int src1Index = src1IndexStart;
                 int src2Index = j*cols2;
                 int destIndex = destIndexStart + j;
-
-                // TODO: Should we not prefill dest array with zeros and put dest[destIndex] = new CNumber() here?
 
                 while(src1Index<end) {
                     dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));
@@ -211,12 +209,12 @@ public class RealComplexDenseMatrixMultTranspose {
                     for(int i=ii; i<iBound; i++) {
                         int destStart = i*rows2;
                         int src1Start = i*cols2 + kk;
+                        int end = src1Start + kBound - kk;
 
                         for(int j=jj; j<jBound; j++) {
                             int destIndex = destStart + j;
                             int src1Index = src1Start;
                             int src2Index = j*cols2 + kk;
-                            int end = src1Index + kBound - kk;
 
                             while(src1Index<end) {
                                 dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));
@@ -305,12 +303,12 @@ public class RealComplexDenseMatrixMultTranspose {
                     for(int i=ii; i<iBound; i++) {
                         destStart = i*rows2;
                         src1Start = i*cols2 + kk;
+                        end = src1Start + kBound - kk;
 
                         for(int j=jj; j<jBound; j++) {
                             destIndex = destStart + j;
                             src1Index = src1Start;
                             src2Index = j*cols2 + kk;
-                            end = src1Index + kBound - kk;
 
                             while(src1Index<end) {
                                 dest[destIndex].addEq(src2[src2Index++].mult(src1[src1Index++]));
@@ -352,8 +350,6 @@ public class RealComplexDenseMatrixMultTranspose {
                 int src1Index = src1IndexStart;
                 int src2Index = j*cols2;
                 int destIndex = destIndexStart + j;
-
-                // TODO: Should we not prefill dest array with zeros and put dest[destIndex] = new CNumber() here?
 
                 while(src1Index<end) {
                     dest[destIndex].addEq(src2[src2Index++].mult(src1[src1Index++]));
@@ -397,12 +393,12 @@ public class RealComplexDenseMatrixMultTranspose {
                     for(int i=ii; i<iBound; i++) {
                         int destStart = i*rows2;
                         int src1Start = i*cols2 + kk;
+                        int end = src1Start + kBound - kk;
 
                         for(int j=jj; j<jBound; j++) {
                             int destIndex = destStart + j;
                             int src1Index = src1Start;
                             int src2Index = j*cols2 + kk;
-                            int end = src1Index + kBound - kk;
 
                             while(src1Index<end) {
                                 dest[destIndex].addEq(src2[src2Index++].mult(src1[src1Index++]));
