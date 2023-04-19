@@ -48,7 +48,7 @@ class RealDenseSparseMatMultTests {
         bEntries = new double[]{-0.9345341, 11.67};
         rowIndices = new int[]{1, 2};
         colIndices = new int[]{0, 1};
-        bShape = new Shape(5, 4);
+        bShape = new Shape(5, 3);
         B = new SparseMatrix(bShape, bEntries, rowIndices, colIndices);
         expEntries = new double[][]{{0.0, 0.0, 0.0},
                 {-1.04985560794, -92.7375568794, -0.00011494769430000002},

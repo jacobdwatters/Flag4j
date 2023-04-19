@@ -98,7 +98,7 @@ public class RealComplexDenseMatrixMultTranspose {
         int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
 
-        CNumber[] dest = new CNumber[rows1 * cols2];
+        CNumber[] dest = new CNumber[rows1*rows2];
         ArrayUtils.fillZeros(dest);
 
         int blockSize = Configurations.getBlockSize();
@@ -191,7 +191,7 @@ public class RealComplexDenseMatrixMultTranspose {
         int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
 
-        CNumber[] dest = new CNumber[rows1 * cols2];
+        CNumber[] dest = new CNumber[rows1*rows2];
         ArrayUtils.fillZeros(dest);
 
         int blockSize = Configurations.getBlockSize();
@@ -282,7 +282,7 @@ public class RealComplexDenseMatrixMultTranspose {
         int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
 
-        CNumber[] dest = new CNumber[rows1 * cols2];
+        CNumber[] dest = new CNumber[rows1*rows2];
         ArrayUtils.fillZeros(dest);
 
         int blockSize = Configurations.getBlockSize();
@@ -375,7 +375,7 @@ public class RealComplexDenseMatrixMultTranspose {
         int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
 
-        CNumber[] dest = new CNumber[rows1 * cols2];
+        CNumber[] dest = new CNumber[rows1*rows2];
         ArrayUtils.fillZeros(dest);
 
         int blockSize = Configurations.getBlockSize();

@@ -94,7 +94,7 @@ public class RealDenseMatrixMultTranspose {
         int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
 
-        double[] dest = new double[rows1 * cols2];
+        double[] dest = new double[rows1 * rows2];
         int blockSize = Configurations.getBlockSize();
         int iBound, jBound, kBound;
         int src1Start, destStart, end;
@@ -110,18 +110,18 @@ public class RealDenseMatrixMultTranspose {
                     kBound = Math.min(kk + blockSize, cols2);
 
                     // Multiply the blocks
-                    for(int i=ii; i<iBound; i++) {
-                        destStart = i*rows2;
-                        src1Start = i*cols2 + kk;
+                    for (int i = ii; i < iBound; i++) {
+                        destStart = i * rows2;
+                        src1Start = i * cols2 + kk;
                         end = src1Start + kBound - kk;
 
-                        for(int j=jj; j<jBound; j++) {
+                        for (int j = jj; j < jBound; j++) {
                             destIndex = destStart + j;
                             src1Index = src1Start;
-                            src2Index = j*cols2 + kk;
+                            src2Index = j * cols2 + kk;
 
-                            while(src1Index<end) {
-                                dest[destIndex] += src1[src1Index++]*src2[src2Index++];
+                            while (src1Index < end) {
+                                dest[destIndex] += src1[src1Index++] * src2[src2Index++];
                             }
                         }
                     }
@@ -131,6 +131,7 @@ public class RealDenseMatrixMultTranspose {
 
         return dest;
     }
+
 
 
 
@@ -184,7 +185,7 @@ public class RealDenseMatrixMultTranspose {
         int rows2 = shape2.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
 
-        double[] dest = new double[rows1 * cols2];
+        double[] dest = new double[rows1*rows2];
         int blockSize = Configurations.getBlockSize();
 
         ThreadManager.concurrentLoop(0, rows1, blockSize, (ii)->{
