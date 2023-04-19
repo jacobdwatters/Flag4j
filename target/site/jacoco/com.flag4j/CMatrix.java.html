@@ -2084,11 +2084,11 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public CMatrix multTranspose(SparseMatrix B) {
         // Ensure this matrix can be multiplied to the transpose of B.
-<span class="nc" id="L2087">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
+<span class="fc" id="L2087">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
 
-<span class="nc" id="L2089">        return new CMatrix(</span>
+<span class="fc" id="L2089">        return new CMatrix(</span>
                 new Shape(this.numRows, B.numRows),
-<span class="nc" id="L2091">                RealComplexDenseSparseMatrixMultTranspose.multTranspose(</span>
+<span class="fc" id="L2091">                RealComplexDenseSparseMatrixMultTranspose.multTranspose(</span>
                         this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
                 )
         );

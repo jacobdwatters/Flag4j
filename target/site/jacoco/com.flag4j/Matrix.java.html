@@ -1733,12 +1733,12 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
     @Override
     public CMatrix multTranspose(SparseCMatrix B) {
         // Ensure this matrix can be multiplied to the transpose of B.
-<span class="nc" id="L1736">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
+<span class="fc" id="L1736">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
 
         // TODO: Add dispatcher for various methods in RealComplexDenseSparseMatrixMultTranspose
-<span class="nc" id="L1739">        return new CMatrix(</span>
+<span class="fc" id="L1739">        return new CMatrix(</span>
                 new Shape(this.numRows, B.numRows),
-<span class="nc" id="L1741">                RealComplexDenseSparseMatrixMultTranspose.multTranspose(</span>
+<span class="fc" id="L1741">                RealComplexDenseSparseMatrixMultTranspose.multTranspose(</span>
                         this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
                 )
         );
