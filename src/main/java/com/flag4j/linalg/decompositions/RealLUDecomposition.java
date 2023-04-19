@@ -103,9 +103,6 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
     }
 
 
-
-
-
     /**
      * Computes the LU decomposition using partial pivoting (i.e. row swapping).
      */
@@ -164,7 +161,8 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
         double m;
 
         for(int i=j+1; i<LU.numRows; i++) {
-            m = LU.entries[i*LU.numCols + j]/LU.entries[j*LU.numCols + j];
+            m = LU.entries[i*LU.numCols + j];
+            m = LU.entries[j*LU.numCols + j] == 0 ? m : m/LU.entries[j*LU.numCols + j];
 
             for(int k=j; k<LU.numCols; k++) {
                 LU.entries[i*LU.numCols + k] = LU.entries[i*LU.numCols + k] - m*LU.entries[j*LU.numCols + k];
