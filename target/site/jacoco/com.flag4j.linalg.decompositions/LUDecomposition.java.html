@@ -24,6 +24,8 @@
 
 package com.flag4j.linalg.decompositions;
 
+import com.flag4j.CMatrix;
+import com.flag4j.Matrix;
 import com.flag4j.core.MatrixBase;
 
 // TODO: Implement LDU decomposition.
@@ -45,7 +47,7 @@ public abstract class LUDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; imple
     /**
      * for determining if pivot value is to be considered zero in LU decomposition with no pivoting.
      */
-<span class="pc" id="L48">    final double DEFAULT_ZERO_PIVOT_TOLERANCE = 0.5e-14;</span>
+<span class="pc" id="L50">    final double DEFAULT_ZERO_PIVOT_TOLERANCE = 0.5e-14;</span>
     /**
      * Tolerance for determining if pivot value is to be considered zero in LU decomposition with no pivoting.
      */
@@ -57,11 +59,11 @@ public abstract class LUDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; imple
     /**
      * Permutation matrix to store row swaps if partial pivoting is used.
      */
-    protected T P;
+    protected Matrix P;
     /**
      * Permutation matrix to store column swaps if full pivoting is used.
      */
-    protected T Q;
+    protected Matrix Q;
 
 
 
@@ -70,10 +72,10 @@ public abstract class LUDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; imple
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
      */
-<span class="fc" id="L73">    public LUDecomposition(int pivoting) {</span>
-<span class="fc" id="L74">        pivotFlag = Pivoting.get(pivoting);</span>
-<span class="fc" id="L75">        zeroPivotTol = DEFAULT_ZERO_PIVOT_TOLERANCE;</span>
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L75">    public LUDecomposition(int pivoting) {</span>
+<span class="fc" id="L76">        pivotFlag = Pivoting.get(pivoting);</span>
+<span class="fc" id="L77">        zeroPivotTol = DEFAULT_ZERO_PIVOT_TOLERANCE;</span>
+<span class="fc" id="L78">    }</span>
 
 
     /**
@@ -83,10 +85,54 @@ public abstract class LUDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; imple
      * @param zeroPivotTol Tolerance for considering a pivot to be zero. If a pivot is less than the tolerance in absolute value,
      *                     then it will be considered zero.
      */
-<span class="nc" id="L86">    public LUDecomposition(int pivoting, double zeroPivotTol) {</span>
-<span class="nc" id="L87">        pivotFlag = Pivoting.get(pivoting);</span>
-<span class="nc" id="L88">        this.zeroPivotTol = zeroPivotTol;</span>
-<span class="nc" id="L89">    }</span>
+<span class="nc" id="L88">    public LUDecomposition(int pivoting, double zeroPivotTol) {</span>
+<span class="nc" id="L89">        pivotFlag = Pivoting.get(pivoting);</span>
+<span class="nc" id="L90">        this.zeroPivotTol = zeroPivotTol;</span>
+<span class="nc" id="L91">    }</span>
+
+
+    /**
+     * Applies {@code LU} decomposition to the source matrix using the pivoting specified in the constructor.
+     *
+     * @param src The source matrix to decompose. Not modified.
+     */
+    @Override
+    public void decompose(T src) {
+<span class="fc" id="L101">        initLU(src);</span>
+
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if(pivotFlag==Pivoting.NONE) {</span>
+<span class="fc" id="L104">            noPivot(); // Compute with no pivoting.</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        } else if(pivotFlag==Pivoting.PARTIAL) {</span>
+<span class="fc" id="L106">            partialPivot();</span>
+        } else {
+<span class="fc" id="L108">            fullPivot();</span>
+        }
+<span class="fc" id="L110">    }</span>
+
+
+    /**
+     * Initializes the {@code LU} matrix by copying the source matrix to decompose.
+     * @param src Source matrix to decompose.
+     */
+    protected abstract void initLU(T src);
+
+
+    /**
+     * Computes the LU decomposition using no pivoting (i.e. rows and columns are not swapped).
+     */
+    protected abstract void noPivot();
+
+
+    /**
+     * Computes the LU decomposition using partial pivoting (i.e. row swapping).
+     */
+    protected abstract void partialPivot();
+
+
+    /**
+     * Computes the LU decomposition using full/rook pivoting (i.e. row and column swapping).
+     */
+    protected abstract void fullPivot();
 
 
     /**
@@ -107,8 +153,8 @@ public abstract class LUDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; imple
      * Gets the row permutation matrix of the decomposition.
      * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
      */
-    public T getP() {
-<span class="nc" id="L111">        return P;</span>
+    public Matrix getP() {
+<span class="nc" id="L157">        return P;</span>
     }
 
 
@@ -116,16 +162,16 @@ public abstract class LUDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; imple
      * Gets the column permutation matrix of the decomposition.
      * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
      */
-    public T getQ() {
-<span class="nc" id="L120">        return Q;</span>
+    public Matrix getQ() {
+<span class="nc" id="L166">        return Q;</span>
     }
 
 
     /**
      * Simple enum containing pivoting options for pivoting in LU decomposition.
      */
-<span class="fc" id="L127">    public enum Pivoting {</span>
-<span class="fc" id="L128">        NONE, PARTIAL, FULL;</span>
+<span class="fc" id="L173">    public enum Pivoting {</span>
+<span class="fc" id="L174">        NONE, PARTIAL, FULL;</span>
 
         /**
          * Converts an ordinal to the corresponding pivot flag.
@@ -134,12 +180,12 @@ public abstract class LUDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; imple
          * {@link #PARTIAL} is returned.
          */
         private static Pivoting get(int ordinal) {
-<span class="fc bfc" id="L137" title="All 2 branches covered.">            if(ordinal==Pivoting.FULL.ordinal()) {</span>
-<span class="fc" id="L138">                return Pivoting.FULL;</span>
-<span class="fc bfc" id="L139" title="All 2 branches covered.">            } else if(ordinal==Pivoting.NONE.ordinal()) {</span>
-<span class="fc" id="L140">                return Pivoting.NONE;</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">            if(ordinal==Pivoting.FULL.ordinal()) {</span>
+<span class="fc" id="L184">                return Pivoting.FULL;</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">            } else if(ordinal==Pivoting.NONE.ordinal()) {</span>
+<span class="fc" id="L186">                return Pivoting.NONE;</span>
             } else {
-<span class="fc" id="L142">                return Pivoting.PARTIAL;</span>
+<span class="fc" id="L188">                return Pivoting.PARTIAL;</span>
             }
         }
     }

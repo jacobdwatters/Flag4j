@@ -4022,18 +4022,18 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void swapRows(int rowIndex1, int rowIndex2) {
-<span class="nc" id="L4025">        ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);</span>
-<span class="nc" id="L4026">        ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);</span>
-<span class="nc" id="L4027">        ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);</span>
+<span class="fc" id="L4025">        ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);</span>
+<span class="fc" id="L4026">        ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);</span>
+<span class="fc" id="L4027">        ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);</span>
 
         CNumber temp;
-<span class="nc bnc" id="L4030" title="All 2 branches missed.">        for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc bfc" id="L4030" title="All 2 branches covered.">        for(int j=0; j&lt;numCols; j++) {</span>
             // Swap elements.
-<span class="nc" id="L4032">            temp = entries[rowIndex1*numCols + j];</span>
-<span class="nc" id="L4033">            entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];</span>
-<span class="nc" id="L4034">            entries[rowIndex2*numCols + j] = temp;</span>
+<span class="fc" id="L4032">            temp = entries[rowIndex1*numCols + j];</span>
+<span class="fc" id="L4033">            entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];</span>
+<span class="fc" id="L4034">            entries[rowIndex2*numCols + j] = temp;</span>
         }
-<span class="nc" id="L4036">    }</span>
+<span class="fc" id="L4036">    }</span>
 
 
     /**
@@ -4044,18 +4044,18 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void swapCols(int colIndex1, int colIndex2) {
-<span class="nc" id="L4047">        ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);</span>
-<span class="nc" id="L4048">        ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);</span>
-<span class="nc" id="L4049">        ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);</span>
+<span class="fc" id="L4047">        ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);</span>
+<span class="fc" id="L4048">        ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);</span>
+<span class="fc" id="L4049">        ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);</span>
 
         CNumber temp;
-<span class="nc bnc" id="L4052" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L4052" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
             // Swap elements.
-<span class="nc" id="L4054">            temp = entries[i*numCols + colIndex1];</span>
-<span class="nc" id="L4055">            entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];</span>
-<span class="nc" id="L4056">            entries[i*numCols + colIndex2] = temp;</span>
+<span class="fc" id="L4054">            temp = entries[i*numCols + colIndex1];</span>
+<span class="fc" id="L4055">            entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];</span>
+<span class="fc" id="L4056">            entries[i*numCols + colIndex2] = temp;</span>
         }
-<span class="nc" id="L4058">    }</span>
+<span class="fc" id="L4058">    }</span>
 
 
     /**

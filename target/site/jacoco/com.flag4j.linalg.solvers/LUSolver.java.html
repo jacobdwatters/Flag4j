@@ -25,6 +25,7 @@
 package com.flag4j.linalg.solvers;
 
 
+import com.flag4j.Matrix;
 import com.flag4j.core.MatrixBase;
 import com.flag4j.core.VectorBase;
 import com.flag4j.linalg.decompositions.LUDecomposition;
@@ -52,21 +53,21 @@ public abstract class LUSolver&lt;T extends MatrixBase&lt;?&gt;,
     /**
      * Row permutation matrix for {@code LU} decomposition.
      */
-    protected T P;
+    protected Matrix P;
 
     /**
      * Constructs an exact LU solver with a specified {@code LU} decomposer.
      * @param lu {@code LU} decomposer to employ in solving the linear system.
      * @throws IllegalArgumentException If the {@code LU} decomposer does not use partial pivoting.
      */
-<span class="fc" id="L62">    protected LUSolver(LUDecomposition&lt;T&gt; lu) {</span>
-<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if(lu.pivotFlag!=LUDecomposition.Pivoting.PARTIAL) {</span>
-<span class="nc" id="L64">            throw new IllegalArgumentException(&quot;LU solver must use partial pivoting but got &quot; +</span>
-<span class="nc" id="L65">                    lu.pivotFlag.name() + &quot;.&quot;);</span>
+<span class="fc" id="L63">    protected LUSolver(LUDecomposition&lt;T&gt; lu) {</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if(lu.pivotFlag!=LUDecomposition.Pivoting.PARTIAL) {</span>
+<span class="nc" id="L65">            throw new IllegalArgumentException(&quot;LU solver must use partial pivoting but got &quot; +</span>
+<span class="nc" id="L66">                    lu.pivotFlag.name() + &quot;.&quot;);</span>
         }
 
-<span class="fc" id="L68">        this.lu = lu;</span>
-<span class="fc" id="L69">    }</span>
+<span class="fc" id="L69">        this.lu = lu;</span>
+<span class="fc" id="L70">    }</span>
 
 
     /**
@@ -74,10 +75,10 @@ public abstract class LUSolver&lt;T extends MatrixBase&lt;?&gt;,
      * @param A Matrix to decompose.
      */
     protected void decompose(T A) {
-<span class="fc" id="L77">        lu.decompose(A);</span>
-<span class="fc" id="L78">        L = lu.getL();</span>
-<span class="fc" id="L79">        U = lu.getU();</span>
-<span class="fc" id="L80">        P = lu.getP();</span>
-<span class="fc" id="L81">    }</span>
+<span class="fc" id="L78">        lu.decompose(A);</span>
+<span class="fc" id="L79">        L = lu.getL();</span>
+<span class="fc" id="L80">        U = lu.getU();</span>
+<span class="fc" id="L81">        P = lu.getP();</span>
+<span class="fc" id="L82">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
