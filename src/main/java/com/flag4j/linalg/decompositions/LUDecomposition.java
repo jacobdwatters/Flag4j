@@ -41,7 +41,7 @@ public abstract class LUDecomposition<T extends MatrixBase<?>> implements Decomp
     /**
      * Flag indicating what pivoting to use.
      */
-    final Pivoting pivotFlag;
+    public final Pivoting pivotFlag;
     /**
      * for determining if pivot value is to be considered zero in LU decomposition with no pivoting.
      */
@@ -50,7 +50,6 @@ public abstract class LUDecomposition<T extends MatrixBase<?>> implements Decomp
      * Tolerance for determining if pivot value is to be considered zero in LU decomposition with no pivoting.
      */
     final double zeroPivotTol;
-
     /**
      * Storage for L and U matrices. Stored in a single matrix
      */
@@ -108,14 +107,18 @@ public abstract class LUDecomposition<T extends MatrixBase<?>> implements Decomp
      * Gets the row permutation matrix of the decomposition.
      * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
      */
-    public abstract T getP();
+    public T getP() {
+        return P;
+    }
 
 
     /**
      * Gets the column permutation matrix of the decomposition.
      * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
      */
-    public abstract T getQ();
+    public T getQ() {
+        return Q;
+    }
 
 
     /**

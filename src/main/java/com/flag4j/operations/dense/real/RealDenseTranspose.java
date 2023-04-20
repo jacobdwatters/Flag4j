@@ -204,25 +204,30 @@ public final class RealDenseTranspose {
     public static double[] blockedMatrix(final double[] src, final int numRows, final int numCols) {
         double[] dest = new double[numRows*numCols];
         final int blockSize = Configurations.getBlockSize();
-        int blockRowEnd;
-        int blockColEnd;
-        int srcIndex, destIndex, end;
+        int srcIndexStart, destIndexStart;
+        int srcIndex, destIndex, srcIndexEnd, destIndexEnd;
+        int blockHeight;
 
-        for(int i=0; i<numCols; i+=blockSize) {
-            for(int j=0; j<numRows; j+=blockSize) {
-                blockRowEnd = Math.min(blockSize, numRows);
-                blockColEnd = Math.min(i+blockSize, numCols);
+        for(int ii=0; ii<numRows; ii+=blockSize) {
+            blockHeight = Math.min(ii+blockSize, numRows) - ii;
+            srcIndexStart = ii*numCols;
+            destIndexStart = ii;
 
-                // Transpose the block beginning at (i, j)
-                for(int blockI=i; blockI<blockColEnd; blockI++) {
-                    srcIndex = blockI;
-                    destIndex = blockI*numRows;
-                    end = destIndex + blockRowEnd;
+            for(int jj=0; jj<numCols; jj+=blockSize) {
+                srcIndexEnd = srcIndexStart + Math.min(numCols-jj, blockSize);
 
-                    while (destIndex < end) {
+                while(srcIndexStart<srcIndexEnd) {
+                    srcIndex = srcIndexStart;
+                    destIndex = destIndexStart;
+                    destIndexEnd = destIndex + blockHeight;
+
+                    while(destIndex<destIndexEnd) {
                         dest[destIndex++] = src[srcIndex];
-                        srcIndex += numCols;
+                        srcIndex+=numCols;
                     }
+
+                    destIndexStart += numRows;
+                    srcIndexStart++;
                 }
             }
         }
@@ -269,21 +274,26 @@ public final class RealDenseTranspose {
         final int blockSize = Configurations.getBlockSize();
 
         // Compute transpose concurrently.
-        ThreadManager.concurrentLoop(0, numCols, blockSize, (i) -> {
-            for(int j=0; j<numRows; j+=blockSize) {
-                int blockRowEnd = Math.min(blockSize, numRows);
-                int blockColEnd = Math.min(i+blockSize, numCols);
+        ThreadManager.concurrentLoop(0, numRows, blockSize, (ii)->{
+            int blockHeight = Math.min(ii+blockSize, numRows) - ii;
+            int srcIndexStart = ii*numCols;
+            int destIndexStart = ii;
 
-                // Transpose the block beginning at (i, j)
-                for(int blockI=i; blockI<blockColEnd; blockI++) {
-                    int srcIndex = blockI;
-                    int destIndex = blockI*numRows;
-                    int end = destIndex + blockRowEnd;
+            for(int jj=0; jj<numCols; jj+=blockSize) {
+                int srcIndexEnd = srcIndexStart + Math.min(numCols-jj, blockSize);
 
-                    while (destIndex < end) {
+                while(srcIndexStart<srcIndexEnd) {
+                    int srcIndex = srcIndexStart;
+                    int destIndex = destIndexStart;
+                    int destIndexEnd = destIndex + blockHeight;
+
+                    while(destIndex<destIndexEnd) {
                         dest[destIndex++] = src[srcIndex];
-                        srcIndex += numCols;
+                        srcIndex+=numCols;
                     }
+
+                    destIndexStart += numRows;
+                    srcIndexStart++;
                 }
             }
         });

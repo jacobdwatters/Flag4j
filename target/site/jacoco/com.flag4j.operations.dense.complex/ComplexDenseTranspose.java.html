@@ -207,7 +207,7 @@ public class ComplexDenseTranspose {
 
 <span class="fc bfc" id="L208" title="All 2 branches covered.">        for(int i=0; i&lt;numCols; i+=blockSize) {</span>
 <span class="fc bfc" id="L209" title="All 2 branches covered.">            for(int j=0; j&lt;numRows; j+=blockSize) {</span>
-<span class="fc" id="L210">                blockRowEnd = Math.min(blockSize, numRows);</span>
+<span class="fc" id="L210">                blockRowEnd = Math.min(j+blockSize, numRows);</span>
 <span class="fc" id="L211">                blockColEnd = Math.min(i+blockSize, numCols);</span>
 
                 // Transpose the block beginning at (i, j)
@@ -268,7 +268,7 @@ public class ComplexDenseTranspose {
         // Compute transpose concurrently.
 <span class="fc" id="L269">        ThreadManager.concurrentLoop(0, numCols, blockSize, (i) -&gt; {</span>
 <span class="fc bfc" id="L270" title="All 2 branches covered.">            for(int j=0; j&lt;numRows; j+=blockSize) {</span>
-<span class="fc" id="L271">                int blockRowEnd = Math.min(blockSize, numRows);</span>
+<span class="fc" id="L271">                int blockRowEnd = Math.min(j+blockSize, numRows);</span>
 <span class="fc" id="L272">                int blockColEnd = Math.min(i+blockSize, numCols);</span>
 
                 // Transpose the block beginning at (i, j)
@@ -393,7 +393,7 @@ public class ComplexDenseTranspose {
 
 <span class="fc bfc" id="L394" title="All 2 branches covered.">        for(int i=0; i&lt;numCols; i+=blockSize) {</span>
 <span class="fc bfc" id="L395" title="All 2 branches covered.">            for(int j=0; j&lt;numRows; j+=blockSize) {</span>
-<span class="fc" id="L396">                blockRowEnd = Math.min(blockSize, numRows);</span>
+<span class="fc" id="L396">                blockRowEnd = Math.min(j+blockSize, numRows);</span>
 <span class="fc" id="L397">                blockColEnd = Math.min(i+blockSize, numCols);</span>
 
                 // Transpose the block beginning at (i, j)
@@ -454,7 +454,7 @@ public class ComplexDenseTranspose {
         // Compute transpose concurrently.
 <span class="fc" id="L455">        ThreadManager.concurrentLoop(0, numCols, blockSize, (i) -&gt; {</span>
 <span class="fc bfc" id="L456" title="All 2 branches covered.">            for(int j=0; j&lt;numRows; j+=blockSize) {</span>
-<span class="fc" id="L457">                int blockRowEnd = Math.min(blockSize, numRows);</span>
+<span class="fc" id="L457">                int blockRowEnd = Math.min(j+blockSize, numRows);</span>
 <span class="fc" id="L458">                int blockColEnd = Math.min(i+blockSize, numCols);</span>
 
                 // Transpose the block beginning at (i, j)

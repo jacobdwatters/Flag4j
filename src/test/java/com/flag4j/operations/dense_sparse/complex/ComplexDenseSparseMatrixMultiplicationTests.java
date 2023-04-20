@@ -61,8 +61,6 @@ class ComplexDenseSparseMatrixMultiplicationTests {
                 {new CNumber("0.0"), new CNumber("837.5426799999999+82.9007024i"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("8092.32+2537.82i")}};
         createMatrices();
 
-        System.out.println();
-
         Assertions.assertArrayEquals(ArrayUtils.flatten(expEntries),
                 ComplexDenseSparseMatrixMultiplication.standard(
                         A.entries, A.shape,

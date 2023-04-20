@@ -143,7 +143,7 @@ public class RealComplexSparseMatrixMultiplication {
 
         CNumber[] dest = new CNumber[rows1*cols2];
 
-        // r1, c1, r2, and store the indices for non-zero values in src1 and src2.
+        // r1, c1, and r2 store the indices for non-zero values in src1 and src2.
         int r1, c1, r2;
 
         for(int i=0; i<src1.length; i++) {

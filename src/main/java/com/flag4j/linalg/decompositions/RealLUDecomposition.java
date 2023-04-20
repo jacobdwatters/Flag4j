@@ -67,13 +67,13 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
 
 
     /**
-     * Applies decomposition to the source matrix using the pivoting specified in the constructor.
+     * Applies {@code LU} decomposition to the source matrix using the pivoting specified in the constructor.
      *
-     * @param A The source matrix to decompose.
+     * @param src The source matrix to decompose. Not modified.
      */
     @Override
-    public void decompose(Matrix A) {
-        LU = new Matrix(A);
+    public void decompose(Matrix src) {
+        LU = new Matrix(src);
 
         if(super.pivotFlag==Pivoting.NONE) {
             noPivot(); // Compute with no pivoting.
@@ -161,7 +161,8 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
         double m;
 
         for(int i=j+1; i<LU.numRows; i++) {
-            m = LU.entries[i*LU.numCols + j]/LU.entries[j*LU.numCols + j];
+            m = LU.entries[i*LU.numCols + j];
+            m = LU.entries[j*LU.numCols + j] == 0 ? m : m/LU.entries[j*LU.numCols + j];
 
             for(int k=j; k<LU.numCols; k++) {
                 LU.entries[i*LU.numCols + k] = LU.entries[i*LU.numCols + k] - m*LU.entries[j*LU.numCols + k];
@@ -265,7 +266,7 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      */
     @Override
     public Matrix getP() {
-        return super.P;
+        return P;
     }
 
 
@@ -273,8 +274,7 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      * Gets the column permutation matrix of the decomposition.
      * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
      */
-    @Override
     public Matrix getQ() {
-        return super.Q;
+        return Q;
     }
 }

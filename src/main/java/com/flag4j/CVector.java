@@ -1649,7 +1649,7 @@ public class CVector extends VectorBase<CNumber[]> implements
             result.append(String.format("%-" + width + "s", value));
         }
 
-        // Get last entry now
+        // Get last entry.
         value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
         width = PrintOptions.getPadding() + value.length();
         value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;

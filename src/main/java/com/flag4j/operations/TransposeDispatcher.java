@@ -36,6 +36,8 @@ import com.flag4j.util.ErrorMessages;
  */
 public final class TransposeDispatcher {
 
+    // TODO: These thresholds need to be updated. Perform some benchmarks to get empirical values.
+
     /**
      * Threshold for using complex blocked algorithm.
      */
@@ -51,7 +53,7 @@ public final class TransposeDispatcher {
     /**
      * Threshold for number of elements in matrix to use concurrent implementation.
      */
-    private static final int CONCURRENT_THRESHOLD = 125_000;
+    private static final int CONCURRENT_THRESHOLD = 4_250_000;
 
 
     private TransposeDispatcher() {
@@ -96,7 +98,6 @@ public final class TransposeDispatcher {
      * @return The transpose of the source matrix.
      */
     public static CMatrix dispatch(CMatrix src) {
-
         CNumber[] dest;
 
         Algorithm algorithm = chooseAlgorithm(src.shape);
@@ -177,19 +178,8 @@ public final class TransposeDispatcher {
      * @return
      */
     private static Algorithm chooseAlgorithmTensor(int length1, int length2) {
-        Algorithm algorithm;
-
         int numEntries = length1*length2; // Number of entries involved in transpose.
-
-        if(numEntries < CONCURRENT_THRESHOLD) {
-            // Use standard algorithm.
-            algorithm = Algorithm.STANDARD;
-        } else {
-            // Use concurrent standard algorithm
-            algorithm = Algorithm.CONCURRENT_STANDARD;
-        }
-
-        return algorithm;
+        return numEntries < CONCURRENT_THRESHOLD ? Algorithm.STANDARD : Algorithm.CONCURRENT_STANDARD;
     }
 
 
@@ -200,19 +190,8 @@ public final class TransposeDispatcher {
      * @return The appropriate matrix transpose algorithm.
      */
     private static Algorithm chooseAlgorithm(Shape shape) {
-        Algorithm algorithm;
-
-        int numEntries = shape.totalEntries().intValue();
-
-        if(numEntries < COMPLEX_BLOCKED_THRESHOLD) {
-            // Use blocked algorithm
-            algorithm = Algorithm.BLOCKED;
-        } else {
-            // Use concurrent blocked implementation.
-            algorithm = Algorithm.CONCURRENT_BLOCKED;
-        }
-
-        return algorithm;
+        int numEntries = shape.totalEntries().intValueExact();
+        return numEntries < CONCURRENT_THRESHOLD ? Algorithm.BLOCKED : Algorithm.CONCURRENT_BLOCKED;
     }
 
 
@@ -222,19 +201,8 @@ public final class TransposeDispatcher {
      * @return The appropriate matrix transpose algorithm.
      */
     private static Algorithm chooseAlgorithmHermation(Shape shape) {
-        Algorithm algorithm;
-
-        int numEntries = shape.totalEntries().intValue();
-
-        if(numEntries < HERMATION_BLOCKED_THRESHOLD) {
-            // Use blocked algorithm
-            algorithm = Algorithm.BLOCKED;
-        } else {
-            // Use concurrent blocked implementation.
-            algorithm = Algorithm.CONCURRENT_BLOCKED;
-        }
-
-        return algorithm;
+        int numEntries = shape.totalEntries().intValueExact();
+        return numEntries < HERMATION_BLOCKED_THRESHOLD ? Algorithm.BLOCKED : Algorithm.CONCURRENT_BLOCKED;
     }
 
 
@@ -246,7 +214,7 @@ public final class TransposeDispatcher {
     private static Algorithm chooseAlgorithmComplex(Shape shape) {
         Algorithm algorithm;
 
-        int numEntries = shape.totalEntries().intValue();
+        int numEntries = shape.totalEntries().intValueExact();
 
         if(numEntries < STANDARD_THRESHOLD) {
             // Use standard algorithm.

@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealComplexMatrixMultTranspose.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense.real_complex</a> &gt; <span class="el_source">RealComplexMatrixMultTranspose.java</span></div><h1>RealComplexMatrixMultTranspose.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense.real_complex;
+
+import com.flag4j.Shape;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.concurrency.Configurations;
+import com.flag4j.concurrency.ThreadManager;
+import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.Axis2D;
+import com.flag4j.util.ErrorMessages;
+
+/**
+ * This class contains several low level methods for computing matrix-matrix multiplications with a transpose for a
+ * real dense matrix and a complex dense matrix. &lt;br&gt;
+ * &lt;b&gt;WARNING:&lt;/b&gt; These methods do not perform any sanity checks.
+ */
+public class RealComplexMatrixMultTranspose {
+
+<span class="nc" id="L42">    private RealComplexMatrixMultTranspose() {</span>
+        // Hide default constructor.
+<span class="nc" id="L44">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Multiplies a matrix to the transpose of a second matrix. This method may be significantly faster than computing the
+     * transpose and multiplication in two steps.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape of the second matrix.
+     * @return The result of multiplying the first matrix with the transpose of the second matrix.
+     */
+    public static CNumber[] multTranspose(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="nc" id="L58">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="nc" id="L59">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="nc" id="L60">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="nc" id="L62">        CNumber[] dest = new CNumber[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.</span>
+<span class="nc" id="L63">        ArrayUtils.fillZeros(dest);</span>
+
+        int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
+
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        for(int i=0; i&lt;rows1; i++) {</span>
+<span class="nc" id="L68">            src1IndexStart = i*cols2;</span>
+<span class="nc" id="L69">            destIndexStart = i*rows2;</span>
+<span class="nc" id="L70">            end = src1IndexStart + cols2;</span>
+
+<span class="nc bnc" id="L72" title="All 2 branches missed.">            for(int j=0; j&lt;rows2; j++) {</span>
+<span class="nc" id="L73">                src1Index = src1IndexStart;</span>
+<span class="nc" id="L74">                src2Index = j*cols2;</span>
+<span class="nc" id="L75">                destIndex = destIndexStart + j;</span>
+
+<span class="nc bnc" id="L77" title="All 2 branches missed.">                while(src1Index&lt;end) {</span>
+<span class="nc" id="L78">                    dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));</span>
+                }
+            }
+        }
+
+<span class="nc" id="L83">        return dest;</span>
+    }
+
+
+    /**
+     * Multiplies a matrix to the transpose of a second matrix using a blocked algorithm.
+     * This method may be significantly faster than computing the transpose and multiplication in two steps.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape of the second matrix.
+     * @return The result of multiplying the first matrix with the transpose of the second matrix.
+     */
+    public static CNumber[] multTransposeBlocked(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="nc" id="L97">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="nc" id="L98">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="nc" id="L99">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="nc" id="L101">        CNumber[] dest = new CNumber[rows1 * cols2];</span>
+<span class="nc" id="L102">        ArrayUtils.fillZeros(dest);</span>
+
+<span class="nc" id="L104">        int blockSize = Configurations.getBlockSize();</span>
+        int iBound, jBound, kBound;
+        int src1Start, destStart, end;
+        int destIndex, src1Index, src2Index;
+
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        for(int ii=0; ii&lt;rows1; ii+=blockSize) {</span>
+<span class="nc" id="L110">            iBound = Math.min(ii + blockSize, rows1);</span>
+
+<span class="nc bnc" id="L112" title="All 2 branches missed.">            for(int jj = 0; jj&lt;rows2; jj+=blockSize) {</span>
+<span class="nc" id="L113">                jBound = Math.min(jj + blockSize, rows2);</span>
+
+<span class="nc bnc" id="L115" title="All 2 branches missed.">                for(int kk = 0; kk&lt;cols2; kk+=blockSize) {</span>
+<span class="nc" id="L116">                    kBound = Math.min(kk + blockSize, cols2);</span>
+
+                    // Multiply the blocks
+<span class="nc bnc" id="L119" title="All 2 branches missed.">                    for(int i=ii; i&lt;iBound; i++) {</span>
+<span class="nc" id="L120">                        destStart = i*rows2;</span>
+<span class="nc" id="L121">                        src1Start = i*cols2 + kk;</span>
+
+<span class="nc bnc" id="L123" title="All 2 branches missed.">                        for(int j=jj; j&lt;jBound; j++) {</span>
+<span class="nc" id="L124">                            destIndex = destStart + j;</span>
+<span class="nc" id="L125">                            src1Index = src1Start;</span>
+<span class="nc" id="L126">                            src2Index = j*cols2 + kk;</span>
+<span class="nc" id="L127">                            end = src1Index + kBound - kk;</span>
+
+<span class="nc bnc" id="L129" title="All 2 branches missed.">                            while(src1Index&lt;end) {</span>
+<span class="nc" id="L130">                                dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));</span>
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+<span class="nc" id="L138">        return dest;</span>
+    }
+
+
+
+    /**
+     * Multiplies a matrix to the transpose of a second matrix using a concurrent algorithm.
+     * This method may be significantly faster than computing the transpose and multiplication in two steps.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape of the second matrix.
+     * @return The result of multiplying the first matrix with the transpose of the second matrix.
+     */
+    public static CNumber[] multTransposeConcurrent(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="nc" id="L153">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="nc" id="L154">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="nc" id="L155">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="nc" id="L157">        CNumber[] dest = new CNumber[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.</span>
+<span class="nc" id="L158">        ArrayUtils.fillZeros(dest);</span>
+
+<span class="nc" id="L160">        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</span>
+<span class="nc" id="L161">            int src1IndexStart = i*cols2;</span>
+<span class="nc" id="L162">            int destIndexStart = i*rows2;</span>
+<span class="nc" id="L163">            int end = src1IndexStart + cols2;</span>
+
+<span class="nc bnc" id="L165" title="All 2 branches missed.">            for(int j=0; j&lt;rows2; j++) {</span>
+<span class="nc" id="L166">                int src1Index = src1IndexStart;</span>
+<span class="nc" id="L167">                int src2Index = j*cols2;</span>
+<span class="nc" id="L168">                int destIndex = destIndexStart + j;</span>
+
+                // TODO: Should we not prefill dest array with zeros and put dest[destIndex] = new CNumber() here?
+
+<span class="nc bnc" id="L172" title="All 2 branches missed.">                while(src1Index&lt;end) {</span>
+<span class="nc" id="L173">                    dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));</span>
+                }
+            }
+<span class="nc" id="L176">        });</span>
+
+<span class="nc" id="L178">        return dest;</span>
+    }
+
+
+    /**
+     * Multiplies a matrix to the transpose of a second matrix using a concurrent implementation of a blocked algorithm.
+     * This method may be significantly faster than computing the transpose and multiplication in two steps.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape of the second matrix.
+     * @return The result of multiplying the first matrix with the transpose of the second matrix.
+     */
+    public static CNumber[] multTransposeBlockedConcurrent(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="nc" id="L192">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="nc" id="L193">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="nc" id="L194">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="nc" id="L196">        CNumber[] dest = new CNumber[rows1 * cols2];</span>
+<span class="nc" id="L197">        ArrayUtils.fillZeros(dest);</span>
+
+<span class="nc" id="L199">        int blockSize = Configurations.getBlockSize();</span>
+
+<span class="nc" id="L201">        ThreadManager.concurrentLoop(0, rows1, blockSize, (ii)-&gt;{</span>
+<span class="nc" id="L202">            int iBound = Math.min(ii + blockSize, rows1);</span>
+
+<span class="nc bnc" id="L204" title="All 2 branches missed.">            for(int jj = 0; jj&lt;rows2; jj+=blockSize) {</span>
+<span class="nc" id="L205">                int jBound = Math.min(jj + blockSize, rows2);</span>
+
+<span class="nc bnc" id="L207" title="All 2 branches missed.">                for(int kk = 0; kk&lt;cols2; kk+=blockSize) {</span>
+<span class="nc" id="L208">                    int kBound = Math.min(kk + blockSize, cols2);</span>
+
+                    // Multiply the blocks
+<span class="nc bnc" id="L211" title="All 2 branches missed.">                    for(int i=ii; i&lt;iBound; i++) {</span>
+<span class="nc" id="L212">                        int destStart = i*rows2;</span>
+<span class="nc" id="L213">                        int src1Start = i*cols2 + kk;</span>
+
+<span class="nc bnc" id="L215" title="All 2 branches missed.">                        for(int j=jj; j&lt;jBound; j++) {</span>
+<span class="nc" id="L216">                            int destIndex = destStart + j;</span>
+<span class="nc" id="L217">                            int src1Index = src1Start;</span>
+<span class="nc" id="L218">                            int src2Index = j*cols2 + kk;</span>
+<span class="nc" id="L219">                            int end = src1Index + kBound - kk;</span>
+
+<span class="nc bnc" id="L221" title="All 2 branches missed.">                            while(src1Index&lt;end) {</span>
+<span class="nc" id="L222">                                dest[destIndex].addEq(src1[src1Index++].mult(src2[src2Index++]));</span>
+                            }
+                        }
+                    }
+                }
+            }
+<span class="nc" id="L228">        });</span>
+
+<span class="nc" id="L230">        return dest;</span>
+    }
+
+
+    /**
+     * Multiplies a matrix to the transpose of a second matrix. This method may be significantly faster than computing the
+     * transpose and multiplication in two steps.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape of the second matrix.
+     * @return The result of multiplying the first matrix with the transpose of the second matrix.
+     */
+    public static CNumber[] multTranspose(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="nc" id="L244">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="nc" id="L245">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="nc" id="L246">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="nc" id="L248">        CNumber[] dest = new CNumber[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.</span>
+<span class="nc" id="L249">        ArrayUtils.fillZeros(dest);</span>
+
+        int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
+
+<span class="nc bnc" id="L253" title="All 2 branches missed.">        for(int i=0; i&lt;rows1; i++) {</span>
+<span class="nc" id="L254">            src1IndexStart = i*cols2;</span>
+<span class="nc" id="L255">            destIndexStart = i*rows2;</span>
+<span class="nc" id="L256">            end = src1IndexStart + cols2;</span>
+
+<span class="nc bnc" id="L258" title="All 2 branches missed.">            for(int j=0; j&lt;rows2; j++) {</span>
+<span class="nc" id="L259">                src1Index = src1IndexStart;</span>
+<span class="nc" id="L260">                src2Index = j*cols2;</span>
+<span class="nc" id="L261">                destIndex = destIndexStart + j;</span>
+
+<span class="nc bnc" id="L263" title="All 2 branches missed.">                while(src1Index&lt;end) {</span>
+<span class="nc" id="L264">                    dest[destIndex].addEq(src2[src2Index++].mult(src1[src1Index++]));</span>
+                }
+            }
+        }
+
+<span class="nc" id="L269">        return dest;</span>
+    }
+
+
+    /**
+     * Multiplies a matrix to the transpose of a second matrix using a blocked algorithm.
+     * This method may be significantly faster than computing the transpose and multiplication in two steps.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape of the second matrix.
+     * @return The result of multiplying the first matrix with the transpose of the second matrix.
+     */
+    public static CNumber[] multTransposeBlocked(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="nc" id="L283">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="nc" id="L284">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="nc" id="L285">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="nc" id="L287">        CNumber[] dest = new CNumber[rows1 * cols2];</span>
+<span class="nc" id="L288">        ArrayUtils.fillZeros(dest);</span>
+
+<span class="nc" id="L290">        int blockSize = Configurations.getBlockSize();</span>
+        int iBound, jBound, kBound;
+        int src1Start, destStart, end;
+        int destIndex, src1Index, src2Index;
+
+<span class="nc bnc" id="L295" title="All 2 branches missed.">        for(int ii=0; ii&lt;rows1; ii+=blockSize) {</span>
+<span class="nc" id="L296">            iBound = Math.min(ii + blockSize, rows1);</span>
+
+<span class="nc bnc" id="L298" title="All 2 branches missed.">            for(int jj = 0; jj&lt;rows2; jj+=blockSize) {</span>
+<span class="nc" id="L299">                jBound = Math.min(jj + blockSize, rows2);</span>
+
+<span class="nc bnc" id="L301" title="All 2 branches missed.">                for(int kk = 0; kk&lt;cols2; kk+=blockSize) {</span>
+<span class="nc" id="L302">                    kBound = Math.min(kk + blockSize, cols2);</span>
+
+                    // Multiply the blocks
+<span class="nc bnc" id="L305" title="All 2 branches missed.">                    for(int i=ii; i&lt;iBound; i++) {</span>
+<span class="nc" id="L306">                        destStart = i*rows2;</span>
+<span class="nc" id="L307">                        src1Start = i*cols2 + kk;</span>
+
+<span class="nc bnc" id="L309" title="All 2 branches missed.">                        for(int j=jj; j&lt;jBound; j++) {</span>
+<span class="nc" id="L310">                            destIndex = destStart + j;</span>
+<span class="nc" id="L311">                            src1Index = src1Start;</span>
+<span class="nc" id="L312">                            src2Index = j*cols2 + kk;</span>
+<span class="nc" id="L313">                            end = src1Index + kBound - kk;</span>
+
+<span class="nc bnc" id="L315" title="All 2 branches missed.">                            while(src1Index&lt;end) {</span>
+<span class="nc" id="L316">                                dest[destIndex].addEq(src2[src2Index++].mult(src1[src1Index++]));</span>
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+<span class="nc" id="L324">        return dest;</span>
+    }
+
+
+
+    /**
+     * Multiplies a matrix to the transpose of a second matrix using a concurrent algorithm.
+     * This method may be significantly faster than computing the transpose and multiplication in two steps.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape of the second matrix.
+     * @return The result of multiplying the first matrix with the transpose of the second matrix.
+     */
+    public static CNumber[] multTransposeConcurrent(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="nc" id="L339">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="nc" id="L340">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="nc" id="L341">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="nc" id="L343">        CNumber[] dest = new CNumber[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.</span>
+<span class="nc" id="L344">        ArrayUtils.fillZeros(dest);</span>
+
+<span class="nc" id="L346">        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</span>
+<span class="nc" id="L347">            int src1IndexStart = i*cols2;</span>
+<span class="nc" id="L348">            int destIndexStart = i*rows2;</span>
+<span class="nc" id="L349">            int end = src1IndexStart + cols2;</span>
+
+<span class="nc bnc" id="L351" title="All 2 branches missed.">            for(int j=0; j&lt;rows2; j++) {</span>
+<span class="nc" id="L352">                int src1Index = src1IndexStart;</span>
+<span class="nc" id="L353">                int src2Index = j*cols2;</span>
+<span class="nc" id="L354">                int destIndex = destIndexStart + j;</span>
+
+                // TODO: Should we not prefill dest array with zeros and put dest[destIndex] = new CNumber() here?
+
+<span class="nc bnc" id="L358" title="All 2 branches missed.">                while(src1Index&lt;end) {</span>
+<span class="nc" id="L359">                    dest[destIndex].addEq(src2[src2Index++].mult(src1[src1Index++]));</span>
+                }
+            }
+<span class="nc" id="L362">        });</span>
+
+<span class="nc" id="L364">        return dest;</span>
+    }
+
+
+    /**
+     * Multiplies a matrix to the transpose of a second matrix using a concurrent implementation of a blocked algorithm.
+     * This method may be significantly faster than computing the transpose and multiplication in two steps.
+     * @param src1 Entries of the first matrix.
+     * @param shape1 Shape of the first matrix.
+     * @param src2 Entries of the second matrix.
+     * @param shape2 Shape of the second matrix.
+     * @return The result of multiplying the first matrix with the transpose of the second matrix.
+     */
+    public static CNumber[] multTransposeBlockedConcurrent(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="nc" id="L378">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="nc" id="L379">        int rows2 = shape2.dims[Axis2D.row()];</span>
+<span class="nc" id="L380">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="nc" id="L382">        CNumber[] dest = new CNumber[rows1 * cols2];</span>
+<span class="nc" id="L383">        ArrayUtils.fillZeros(dest);</span>
+
+<span class="nc" id="L385">        int blockSize = Configurations.getBlockSize();</span>
+
+<span class="nc" id="L387">        ThreadManager.concurrentLoop(0, rows1, blockSize, (ii)-&gt;{</span>
+<span class="nc" id="L388">            int iBound = Math.min(ii + blockSize, rows1);</span>
+
+<span class="nc bnc" id="L390" title="All 2 branches missed.">            for(int jj = 0; jj&lt;rows2; jj+=blockSize) {</span>
+<span class="nc" id="L391">                int jBound = Math.min(jj + blockSize, rows2);</span>
+
+<span class="nc bnc" id="L393" title="All 2 branches missed.">                for(int kk = 0; kk&lt;cols2; kk+=blockSize) {</span>
+<span class="nc" id="L394">                    int kBound = Math.min(kk + blockSize, cols2);</span>
+
+                    // Multiply the blocks
+<span class="nc bnc" id="L397" title="All 2 branches missed.">                    for(int i=ii; i&lt;iBound; i++) {</span>
+<span class="nc" id="L398">                        int destStart = i*rows2;</span>
+<span class="nc" id="L399">                        int src1Start = i*cols2 + kk;</span>
+
+<span class="nc bnc" id="L401" title="All 2 branches missed.">                        for(int j=jj; j&lt;jBound; j++) {</span>
+<span class="nc" id="L402">                            int destIndex = destStart + j;</span>
+<span class="nc" id="L403">                            int src1Index = src1Start;</span>
+<span class="nc" id="L404">                            int src2Index = j*cols2 + kk;</span>
+<span class="nc" id="L405">                            int end = src1Index + kBound - kk;</span>
+
+<span class="nc bnc" id="L407" title="All 2 branches missed.">                            while(src1Index&lt;end) {</span>
+<span class="nc" id="L408">                                dest[destIndex].addEq(src2[src2Index++].mult(src1[src1Index++]));</span>
+                            }
+                        }
+                    }
+                }
+            }
+<span class="nc" id="L414">        });</span>
+
+<span class="nc" id="L416">        return dest;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

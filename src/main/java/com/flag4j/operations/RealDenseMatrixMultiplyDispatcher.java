@@ -26,12 +26,14 @@ package com.flag4j.operations;
 
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
+import com.flag4j.operations.dense.real.RealDenseMatrixMultTranspose;
 import com.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
 import com.flag4j.util.Axis2D;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.flag4j.util.ParameterChecks.assertArrayLengthsEq;
 import static com.flag4j.util.ParameterChecks.assertMatMultShapes;
 
 
@@ -64,7 +66,11 @@ public final class RealDenseMatrixMultiplyDispatcher {
             RealDenseMatrixMultiplication::standardVector,
             RealDenseMatrixMultiplication::blockedVector,
             RealDenseMatrixMultiplication::concurrentStandardVector,
-            RealDenseMatrixMultiplication::concurrentBlockedVector
+            RealDenseMatrixMultiplication::concurrentBlockedVector,
+            RealDenseMatrixMultTranspose::multTranspose,
+            RealDenseMatrixMultTranspose::multTransposeBlocked,
+            RealDenseMatrixMultTranspose::multTransposeConcurrent,
+            RealDenseMatrixMultTranspose::multTransposeBlockedConcurrent,
     };
 
     /**
@@ -105,6 +111,8 @@ public final class RealDenseMatrixMultiplyDispatcher {
 
     /**
      * Dispatches a matrix multiply problem to the appropriate algorithm based on the size of the matrices.
+     * @param A First matrix in the multiplication.
+     * @param B Second matrix in the multiplication.
      * @return The result of the matrix multiplication.
      */
     public static double[] dispatch(Matrix A, Matrix B) {
@@ -117,13 +125,30 @@ public final class RealDenseMatrixMultiplyDispatcher {
 
 
     /**
+     * Dispatches a matrix multiply-transpose problem equivalent to A.mult(B.T()) to the appropriate algorithm based
+     * on the size of the matrices.
+     * @param A First matrix in the multiplication.
+     * @param B Second matrix in the multiplication and the matrix to transpose.
+     * @return
+     */
+    public static double[] dispatchTranspose(Matrix A, Matrix B) {
+        assertArrayLengthsEq(A.numCols, B.numCols);
+
+        RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();
+        AlgorithmNames name = selectAlgorithmTranspose(A.shape);
+        return dispatcher.algorithmMap.get(name).apply(A.entries, A.shape, B.entries, B.shape);
+    }
+
+
+
+    /**
      * Dynamically chooses matrix multiply algorithm based on the shapes of the two matrices to multiply.
      * @param shape1 The shape of the first matrix.
      * @param shape2 The shape fo the second matrix.
      * @return The algorithm to use in the matrix multiplication.
      */
-    private static AlgorithmNames selectAlgorithm(Shape shape1, Shape shape2) {
-        AlgorithmNames names;
+    protected static AlgorithmNames selectAlgorithm(Shape shape1, Shape shape2) {
+        AlgorithmNames name;
 
         int rows1 = shape1.get(Axis2D.row());
         int cols1 = shape1.get(Axis2D.col());
@@ -142,42 +167,67 @@ public final class RealDenseMatrixMultiplyDispatcher {
         switch (matrixShape) {
             case 0: // Square
                 if(rows1 < SEQUENTIAL_SWAPPED_THRESHOLD) {
-                    names = AlgorithmNames.REORDERED;
+                    name = AlgorithmNames.REORDERED;
                 } else if (rows1 < CONCURRENT_SWAPPED_THRESHOLD) {
-                    names = AlgorithmNames.CONCURRENT_REORDERED;
+                    name = AlgorithmNames.CONCURRENT_REORDERED;
                 } else {
-                    names = AlgorithmNames.CONCURRENT_BLOCKED_REORDERED;
+                    name = AlgorithmNames.CONCURRENT_BLOCKED_REORDERED;
                 }
                 break;
 
             case 1: // More rows than columns
                 if(rows1 <= 100 && cols1 <= 5) {
-                    names = AlgorithmNames.REORDERED;
+                    name = AlgorithmNames.REORDERED;
                 } else {
-                    names = AlgorithmNames.CONCURRENT_REORDERED;
+                    name = AlgorithmNames.CONCURRENT_REORDERED;
                 }
                 break;
 
             case 2: // More columns than rows
                 if(cols1 <= 100) {
-                    names = (rows1 <= 20) ? AlgorithmNames.REORDERED : AlgorithmNames.CONCURRENT_REORDERED;
+                    name = (rows1 <= 20) ? AlgorithmNames.REORDERED : AlgorithmNames.CONCURRENT_REORDERED;
                 } else if(cols1 <= 500) {
-                    names = (rows1 <= 10) ? AlgorithmNames.REORDERED : AlgorithmNames.CONCURRENT_REORDERED;
+                    name = (rows1 <= 10) ? AlgorithmNames.REORDERED : AlgorithmNames.CONCURRENT_REORDERED;
                 } else {
                     if(rows1 <= 5) {
-                        names = AlgorithmNames.REORDERED;
+                        name = AlgorithmNames.REORDERED;
                     } else if(rows1 <= 50) {
-                        names = AlgorithmNames.CONCURRENT_STANDARD;
+                        name = AlgorithmNames.CONCURRENT_STANDARD;
                     } else {
-                        names = AlgorithmNames.CONCURRENT_REORDERED;
+                        name = AlgorithmNames.CONCURRENT_REORDERED;
                     }
                 }
                 break;
             default:
-                names = AlgorithmNames.BLOCKED_REORDERED; // Default to blocked reordered algorithm.
+                name = AlgorithmNames.BLOCKED_REORDERED; // Default to blocked reordered algorithm.
         }
 
-        return names;
+        return name;
+    }
+
+
+    /**
+     * Selects the matrix multiplication-transpose algorithm to use based on the size of the first matrix.
+     * @param shape Shape of the first matrix.
+     * @return The algorithm to use to compute the matrix multiplication-transpose.
+     */
+    protected static AlgorithmNames selectAlgorithmTranspose(Shape shape) {
+        AlgorithmNames name;
+        int rows = shape.dims[0];
+
+        // TODO: This currently only works well if both matrices are square.
+
+        if(rows < 40) {
+            name = AlgorithmNames.MULT_T;
+        } else if(rows < 55) {
+            name = AlgorithmNames.MULT_T_BLOCKED;
+        } else if(rows < 1200) {
+            name = AlgorithmNames.MULT_T_CONCURRENT;
+        } else {
+            name = AlgorithmNames.MULT_T_BLOCKED_CONCURRENT;
+        }
+
+        return name;
     }
 
 
@@ -199,9 +249,10 @@ public final class RealDenseMatrixMultiplyDispatcher {
     /**
      * Simple enum class containing all possible choices of real dense matrix multiply algorithms.
      */
-    private enum AlgorithmNames {
+    protected enum AlgorithmNames {
         STANDARD, REORDERED, BLOCKED, BLOCKED_REORDERED,
         CONCURRENT_STANDARD, CONCURRENT_REORDERED, CONCURRENT_BLOCKED, CONCURRENT_BLOCKED_REORDERED,
-        STANDARD_VECTOR, BLOCKED_VECTOR, CONCURRENT_STANDARD_VECTOR, CONCURRENT_BLOCKED_VECTOR
+        STANDARD_VECTOR, BLOCKED_VECTOR, CONCURRENT_STANDARD_VECTOR, CONCURRENT_BLOCKED_VECTOR, MULT_T, MULT_T_BLOCKED,
+        MULT_T_CONCURRENT, MULT_T_BLOCKED_CONCURRENT
     }
 }

@@ -204,30 +204,35 @@ public final class RealDenseTranspose {
     public static double[] blockedMatrix(final double[] src, final int numRows, final int numCols) {
 <span class="fc" id="L205">        double[] dest = new double[numRows*numCols];</span>
 <span class="fc" id="L206">        final int blockSize = Configurations.getBlockSize();</span>
-        int blockRowEnd;
-        int blockColEnd;
-        int srcIndex, destIndex, end;
+        int srcIndexStart, destIndexStart;
+        int srcIndex, destIndex, srcIndexEnd, destIndexEnd;
+        int blockHeight;
 
-<span class="fc bfc" id="L211" title="All 2 branches covered.">        for(int i=0; i&lt;numCols; i+=blockSize) {</span>
-<span class="fc bfc" id="L212" title="All 2 branches covered.">            for(int j=0; j&lt;numRows; j+=blockSize) {</span>
-<span class="fc" id="L213">                blockRowEnd = Math.min(blockSize, numRows);</span>
-<span class="fc" id="L214">                blockColEnd = Math.min(i+blockSize, numCols);</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        for(int ii=0; ii&lt;numRows; ii+=blockSize) {</span>
+<span class="fc" id="L212">            blockHeight = Math.min(ii+blockSize, numRows) - ii;</span>
+<span class="fc" id="L213">            srcIndexStart = ii*numCols;</span>
+<span class="fc" id="L214">            destIndexStart = ii;</span>
 
-                // Transpose the block beginning at (i, j)
-<span class="fc bfc" id="L217" title="All 2 branches covered.">                for(int blockI=i; blockI&lt;blockColEnd; blockI++) {</span>
-<span class="fc" id="L218">                    srcIndex = blockI;</span>
-<span class="fc" id="L219">                    destIndex = blockI*numRows;</span>
-<span class="fc" id="L220">                    end = destIndex + blockRowEnd;</span>
+<span class="fc bfc" id="L216" title="All 2 branches covered.">            for(int jj=0; jj&lt;numCols; jj+=blockSize) {</span>
+<span class="fc" id="L217">                srcIndexEnd = srcIndexStart + Math.min(numCols-jj, blockSize);</span>
 
-<span class="fc bfc" id="L222" title="All 2 branches covered.">                    while (destIndex &lt; end) {</span>
-<span class="fc" id="L223">                        dest[destIndex++] = src[srcIndex];</span>
-<span class="fc" id="L224">                        srcIndex += numCols;</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">                while(srcIndexStart&lt;srcIndexEnd) {</span>
+<span class="fc" id="L220">                    srcIndex = srcIndexStart;</span>
+<span class="fc" id="L221">                    destIndex = destIndexStart;</span>
+<span class="fc" id="L222">                    destIndexEnd = destIndex + blockHeight;</span>
+
+<span class="fc bfc" id="L224" title="All 2 branches covered.">                    while(destIndex&lt;destIndexEnd) {</span>
+<span class="fc" id="L225">                        dest[destIndex++] = src[srcIndex];</span>
+<span class="fc" id="L226">                        srcIndex+=numCols;</span>
                     }
+
+<span class="fc" id="L229">                    destIndexStart += numRows;</span>
+<span class="fc" id="L230">                    srcIndexStart++;</span>
                 }
             }
         }
 
-<span class="fc" id="L230">        return dest;</span>
+<span class="fc" id="L235">        return dest;</span>
     }
 
 
@@ -239,21 +244,21 @@ public final class RealDenseTranspose {
      * @return The transpose of the source matrix.
      */
     public static double[] standardMatrixConcurrent(final double[] src, final int numRows, final int numCols) {
-<span class="fc" id="L242">        double[] dest = new double[src.length];</span>
+<span class="fc" id="L247">        double[] dest = new double[src.length];</span>
 
         // Compute transpose concurrently.
-<span class="fc" id="L245">        ThreadManager.concurrentLoop(0, numCols, (i) -&gt; {</span>
-<span class="fc" id="L246">            int srcIndex = i;</span>
-<span class="fc" id="L247">            int destIndex = i*numRows;</span>
-<span class="fc" id="L248">            int end = destIndex + numRows;</span>
+<span class="fc" id="L250">        ThreadManager.concurrentLoop(0, numCols, (i) -&gt; {</span>
+<span class="fc" id="L251">            int srcIndex = i;</span>
+<span class="fc" id="L252">            int destIndex = i*numRows;</span>
+<span class="fc" id="L253">            int end = destIndex + numRows;</span>
 
-<span class="fc bfc" id="L250" title="All 2 branches covered.">            while (destIndex &lt; end) {</span>
-<span class="fc" id="L251">                dest[destIndex++] = src[srcIndex];</span>
-<span class="fc" id="L252">                srcIndex += numCols;</span>
+<span class="fc bfc" id="L255" title="All 2 branches covered.">            while (destIndex &lt; end) {</span>
+<span class="fc" id="L256">                dest[destIndex++] = src[srcIndex];</span>
+<span class="fc" id="L257">                srcIndex += numCols;</span>
             }
-<span class="fc" id="L254">        });</span>
+<span class="fc" id="L259">        });</span>
 
-<span class="fc" id="L256">        return dest;</span>
+<span class="fc" id="L261">        return dest;</span>
     }
 
 
@@ -265,30 +270,35 @@ public final class RealDenseTranspose {
      * @return The transpose of the source matrix.
      */
     public static double[] blockedMatrixConcurrent(final double[] src, final int numRows, final int numCols) {
-<span class="fc" id="L268">        double[] dest = new double[src.length];</span>
-<span class="fc" id="L269">        final int blockSize = Configurations.getBlockSize();</span>
+<span class="fc" id="L273">        double[] dest = new double[src.length];</span>
+<span class="fc" id="L274">        final int blockSize = Configurations.getBlockSize();</span>
 
         // Compute transpose concurrently.
-<span class="fc" id="L272">        ThreadManager.concurrentLoop(0, numCols, blockSize, (i) -&gt; {</span>
-<span class="fc bfc" id="L273" title="All 2 branches covered.">            for(int j=0; j&lt;numRows; j+=blockSize) {</span>
-<span class="fc" id="L274">                int blockRowEnd = Math.min(blockSize, numRows);</span>
-<span class="fc" id="L275">                int blockColEnd = Math.min(i+blockSize, numCols);</span>
+<span class="fc" id="L277">        ThreadManager.concurrentLoop(0, numRows, blockSize, (ii)-&gt;{</span>
+<span class="fc" id="L278">            int blockHeight = Math.min(ii+blockSize, numRows) - ii;</span>
+<span class="fc" id="L279">            int srcIndexStart = ii*numCols;</span>
+<span class="fc" id="L280">            int destIndexStart = ii;</span>
 
-                // Transpose the block beginning at (i, j)
-<span class="fc bfc" id="L278" title="All 2 branches covered.">                for(int blockI=i; blockI&lt;blockColEnd; blockI++) {</span>
-<span class="fc" id="L279">                    int srcIndex = blockI;</span>
-<span class="fc" id="L280">                    int destIndex = blockI*numRows;</span>
-<span class="fc" id="L281">                    int end = destIndex + blockRowEnd;</span>
+<span class="fc bfc" id="L282" title="All 2 branches covered.">            for(int jj=0; jj&lt;numCols; jj+=blockSize) {</span>
+<span class="fc" id="L283">                int srcIndexEnd = srcIndexStart + Math.min(numCols-jj, blockSize);</span>
 
-<span class="fc bfc" id="L283" title="All 2 branches covered.">                    while (destIndex &lt; end) {</span>
-<span class="fc" id="L284">                        dest[destIndex++] = src[srcIndex];</span>
-<span class="fc" id="L285">                        srcIndex += numCols;</span>
+<span class="fc bfc" id="L285" title="All 2 branches covered.">                while(srcIndexStart&lt;srcIndexEnd) {</span>
+<span class="fc" id="L286">                    int srcIndex = srcIndexStart;</span>
+<span class="fc" id="L287">                    int destIndex = destIndexStart;</span>
+<span class="fc" id="L288">                    int destIndexEnd = destIndex + blockHeight;</span>
+
+<span class="fc bfc" id="L290" title="All 2 branches covered.">                    while(destIndex&lt;destIndexEnd) {</span>
+<span class="fc" id="L291">                        dest[destIndex++] = src[srcIndex];</span>
+<span class="fc" id="L292">                        srcIndex+=numCols;</span>
                     }
-                }
-            }
-<span class="fc" id="L289">        });</span>
 
-<span class="fc" id="L291">        return dest;</span>
+<span class="fc" id="L295">                    destIndexStart += numRows;</span>
+<span class="fc" id="L296">                    srcIndexStart++;</span>
+<span class="fc" id="L297">                }</span>
+            }
+<span class="fc" id="L299">        });</span>
+
+<span class="fc" id="L301">        return dest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

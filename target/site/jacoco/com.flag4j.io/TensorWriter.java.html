@@ -36,11 +36,12 @@ import java.io.IOException;
  */
 public class TensorWriter {
 
-<span class="nc" id="L39">    private TensorWriter() {</span>
-        // Hide default constructor in utility class.
-<span class="nc" id="L41">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
-    }
+    // TODO: Add options for matrix market format and csv format.
 
+<span class="nc" id="L41">    private TensorWriter() {</span>
+        // Hide default constructor in utility class.
+<span class="nc" id="L43">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
 
     /**
      * Writes a tensor to a file using a {@link TensorOutputStream}. If the write operation fails it will
@@ -52,16 +53,16 @@ public class TensorWriter {
      * @return True if the write was successful. False if the write failed.
      */
     public static boolean write(String fileName, TensorBase&lt;?&gt; src) {
-<span class="nc" id="L55">        boolean successfulWrite = true;</span>
+<span class="nc" id="L56">        boolean successfulWrite = true;</span>
 
-<span class="nc" id="L57">        try (TensorOutputStream out = new TensorOutputStream(fileName)) {</span>
-<span class="nc" id="L58">            out.write(src);</span>
-<span class="nc" id="L59">        } catch (IOException e) {</span>
+<span class="nc" id="L58">        try (TensorOutputStream out = new TensorOutputStream(fileName)) {</span>
+<span class="nc" id="L59">            out.write(src);</span>
+<span class="nc" id="L60">        } catch (IOException e) {</span>
             // Some exception was thrown.
-<span class="nc" id="L61">            successfulWrite = false;</span>
-<span class="nc" id="L62">        }</span>
+<span class="nc" id="L62">            successfulWrite = false;</span>
+<span class="nc" id="L63">        }</span>
 
-<span class="nc" id="L64">        return successfulWrite;</span>
+<span class="nc" id="L65">        return successfulWrite;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -38,6 +38,14 @@ import java.io.IOException;
  */
 public class TensorReader {
 
+    /*
+        TODO:
+            - Add options for matrix market format and csv format.
+             Tensor reader should be instantiable object where the constructor takes an argument for the format,
+             i.e. serialized, matrix market, or csv.
+            - Make the type to write a generic so only one non-static method is needed for read.
+     */
+
     private TensorReader() {
         // Hide default constructor in utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());

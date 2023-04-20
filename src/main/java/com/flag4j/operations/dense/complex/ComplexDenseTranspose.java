@@ -207,7 +207,7 @@ public class ComplexDenseTranspose {
 
         for(int i=0; i<numCols; i+=blockSize) {
             for(int j=0; j<numRows; j+=blockSize) {
-                blockRowEnd = Math.min(blockSize, numRows);
+                blockRowEnd = Math.min(j+blockSize, numRows);
                 blockColEnd = Math.min(i+blockSize, numCols);
 
                 // Transpose the block beginning at (i, j)
@@ -268,7 +268,7 @@ public class ComplexDenseTranspose {
         // Compute transpose concurrently.
         ThreadManager.concurrentLoop(0, numCols, blockSize, (i) -> {
             for(int j=0; j<numRows; j+=blockSize) {
-                int blockRowEnd = Math.min(blockSize, numRows);
+                int blockRowEnd = Math.min(j+blockSize, numRows);
                 int blockColEnd = Math.min(i+blockSize, numCols);
 
                 // Transpose the block beginning at (i, j)
@@ -393,7 +393,7 @@ public class ComplexDenseTranspose {
 
         for(int i=0; i<numCols; i+=blockSize) {
             for(int j=0; j<numRows; j+=blockSize) {
-                blockRowEnd = Math.min(blockSize, numRows);
+                blockRowEnd = Math.min(j+blockSize, numRows);
                 blockColEnd = Math.min(i+blockSize, numCols);
 
                 // Transpose the block beginning at (i, j)
@@ -454,7 +454,7 @@ public class ComplexDenseTranspose {
         // Compute transpose concurrently.
         ThreadManager.concurrentLoop(0, numCols, blockSize, (i) -> {
             for(int j=0; j<numRows; j+=blockSize) {
-                int blockRowEnd = Math.min(blockSize, numRows);
+                int blockRowEnd = Math.min(j+blockSize, numRows);
                 int blockColEnd = Math.min(i+blockSize, numCols);
 
                 // Transpose the block beginning at (i, j)

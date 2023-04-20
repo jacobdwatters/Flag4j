@@ -63,14 +63,18 @@ public class RealDenseSparseMatrixMultiplication {
         double[] dest = new double[rows1*cols2];
 
         int row, col;
+        int destStart, src1Start;
 
         for(int i=0; i<rows1; i++) {
+            destStart = i*cols2;
+            src1Start = i*cols1;
+
             // Loop over non-zero entries of sparse matrix.
             for(int j=0; j<src2.length; j++) {
                 row = rowIndices[j];
                 col = colIndices[j];
 
-                dest[i*cols2 + col] += src1[i*cols1 + row]*src2[j];
+                dest[destStart + col] += src1[src1Start + row]*src2[j];
             }
         }
 

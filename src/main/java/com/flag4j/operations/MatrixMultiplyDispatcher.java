@@ -26,11 +26,14 @@ package com.flag4j.operations;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.operations.dense.complex.ComplexDenseMatrixMultTranspose;
 import com.flag4j.operations.dense.complex.ComplexDenseMatrixMultiplication;
 import com.flag4j.operations.dense.real.RealDenseMatrixMultiplication;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultTranspose;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
 
 import static com.flag4j.util.ParameterChecks.assertMatMultShapes;
 
@@ -74,7 +77,7 @@ public final class MatrixMultiplyDispatcher {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
         assertMatMultShapes(A.shape, bMatShape);
 
-        AlgorithmNames algorithm;
+        AlgorithmName algorithm;
         double[] dest;
 
         algorithm = chooseAlgorithmRealVector(A.shape);
@@ -108,7 +111,7 @@ public final class MatrixMultiplyDispatcher {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
         assertMatMultShapes(A.shape, bMatShape);
 
-        AlgorithmNames algorithm;
+        AlgorithmName algorithm;
         CNumber[] dest;
 
         algorithm = chooseAlgorithmRealComplexVector(A.shape);
@@ -142,7 +145,7 @@ public final class MatrixMultiplyDispatcher {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
         assertMatMultShapes(A.shape, bMatShape);
 
-        AlgorithmNames algorithm;
+        AlgorithmName algorithm;
         CNumber[] dest;
 
         algorithm = chooseAlgorithmRealComplexVector(A.shape);
@@ -176,7 +179,7 @@ public final class MatrixMultiplyDispatcher {
         Shape bMatShape = new Shape(b.totalEntries().intValue(), 1);
         assertMatMultShapes(A.shape, bMatShape);
 
-        AlgorithmNames algorithm;
+        AlgorithmName algorithm;
         CNumber[] dest;
 
         algorithm = chooseAlgorithmRealComplexVector(A.shape);
@@ -210,7 +213,7 @@ public final class MatrixMultiplyDispatcher {
     public static CNumber[] dispatch(CMatrix A, CMatrix B) {
         assertMatMultShapes(A.shape, B.shape);
 
-        AlgorithmNames algorithm;
+        AlgorithmName algorithm;
         CNumber[] dest;
 
         if(B.numCols==1) {
@@ -272,7 +275,7 @@ public final class MatrixMultiplyDispatcher {
     public static CNumber[] dispatch(Matrix A, CMatrix B) {
         assertMatMultShapes(A.shape, B.shape);
 
-        AlgorithmNames algorithm;
+        AlgorithmName algorithm;
         CNumber[] dest;
 
         if(B.numCols==1) {
@@ -334,7 +337,7 @@ public final class MatrixMultiplyDispatcher {
     public static CNumber[] dispatch(CMatrix A, Matrix B) {
         assertMatMultShapes(A.shape, B.shape);
 
-        AlgorithmNames algorithm;
+        AlgorithmName algorithm;
         CNumber[] dest;
 
         if(B.numCols==1) {
@@ -387,21 +390,163 @@ public final class MatrixMultiplyDispatcher {
 
 
     /**
+     * Dispatches a matrix multiplication-transpose problem to the appropriate algorithm based on the size.
+     * @param A First matrix in matrix multiplication.
+     * @param B Second matrix in matrix multiplication and the matrix to transpose.
+     * @return The result of the matrix multiplication-transpose.
+     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
+     */
+    public static CNumber[] dispatchTranspose(CMatrix A, Matrix B) {
+        ParameterChecks.assertEquals(A.numCols, B.numCols);
+        AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
+        CNumber[] dest;
+
+        switch(algorithm) {
+            case MULT_T:
+                dest = RealComplexDenseMatrixMultTranspose.multTranspose(
+                        A.entries, A.shape, B.entries, B.shape);
+                break;
+            case MULT_T_BLOCKED:
+                dest = RealComplexDenseMatrixMultTranspose.multTransposeBlocked(
+                        A.entries, A.shape, B.entries, B.shape);
+                break;
+            case MULT_T_CONCURRENT:
+                dest = RealComplexDenseMatrixMultTranspose.multTransposeConcurrent(
+                        A.entries, A.shape, B.entries, B.shape);
+                break;
+            default:
+                dest = RealComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(
+                        A.entries, A.shape, B.entries, B.shape);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Dispatches a matrix multiplication-transpose problem to the appropriate algorithm based on the size.
+     * @param A First matrix in matrix multiplication.
+     * @param B Second matrix in matrix multiplication and the matrix to transpose.
+     * @return The result of the matrix multiplication-transpose.
+     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
+     */
+    public static CNumber[] dispatchTranspose(Matrix A, CMatrix B) {
+        ParameterChecks.assertEquals(A.numCols, B.numCols);
+        AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
+        CNumber[] dest;
+
+        switch(algorithm) {
+            case MULT_T:
+                dest = RealComplexDenseMatrixMultTranspose.multTranspose(
+                        A.entries, A.shape, B.entries, B.shape);
+                break;
+            case MULT_T_BLOCKED:
+                dest = RealComplexDenseMatrixMultTranspose.multTransposeBlocked(
+                        A.entries, A.shape, B.entries, B.shape);
+                break;
+            case MULT_T_CONCURRENT:
+                dest = RealComplexDenseMatrixMultTranspose.multTransposeConcurrent(
+                        A.entries, A.shape, B.entries, B.shape);
+                break;
+            default:
+                dest = RealComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(
+                        A.entries, A.shape, B.entries, B.shape);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Dispatches a matrix multiplication-transpose problem to the appropriate algorithm based on the size.
+     * @param A First matrix in matrix multiplication.
+     * @param B Second matrix in matrix multiplication and the matrix to transpose.
+     * @return The result of the matrix multiplication-transpose.
+     * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
+     */
+    public static CNumber[] dispatchTranspose(CMatrix A, CMatrix B) {
+        ParameterChecks.assertEquals(A.numCols, B.numCols);
+        AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
+        CNumber[] dest;
+
+        switch(algorithm) {
+            case MULT_T:
+                dest = ComplexDenseMatrixMultTranspose.multTranspose(
+                        A.entries, A.shape, B.entries, B.shape);
+                break;
+            case MULT_T_CONCURRENT:
+                dest = ComplexDenseMatrixMultTranspose.multTransposeConcurrent(
+                        A.entries, A.shape, B.entries, B.shape);
+                break;
+            default:
+                dest = ComplexDenseMatrixMultTranspose.multTransposeBlockedConcurrent(
+                        A.entries, A.shape, B.entries, B.shape);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Dynamically chooses the matrix multiplication-transpose algorithm to used based on the shape of the first matrix.
+     * @param shape Shape of the first matrix.
+     */
+    public static AlgorithmName chooseAlgorithmRealComplexTranspose(Shape shape) {
+        AlgorithmName algorithm;
+
+        int rows = shape.get(Axis2D.row());
+
+        if(rows<50) {
+            algorithm = AlgorithmName.MULT_T;
+        } else if(rows<60) {
+            algorithm = AlgorithmName.MULT_T_BLOCKED;
+        } else if(rows<300) {
+            algorithm = AlgorithmName.MULT_T_CONCURRENT;
+        } else {
+            algorithm = AlgorithmName.MULT_T_BLOCKED_CONCURRENT;
+        }
+
+        return algorithm;
+    }
+
+
+    /**
+     * Dynamically chooses the matrix multiplication-transpose algorithm to used based on the shape of the first matrix.
+     * @param shape Shape of the first matrix.
+     */
+    public static AlgorithmName chooseAlgorithmComplexTranspose(Shape shape) {
+        AlgorithmName algorithm;
+
+        int rows = shape.get(Axis2D.row());
+
+        if(rows<25) {
+            algorithm = AlgorithmName.MULT_T;
+        } else if(rows<750) {
+            algorithm = AlgorithmName.MULT_T_CONCURRENT;
+        } else {
+            algorithm = AlgorithmName.MULT_T_BLOCKED_CONCURRENT;
+        }
+
+        return algorithm;
+    }
+
+
+    /**
      * Dynamically chooses matrix-vector multiply algorithm based on the shapes of the matrix to multiply.
      * @param shape The shape of the matrix.
      * @return The algorithm to use in the matrix multiplication.
      */
-    public static AlgorithmNames chooseAlgorithmRealVector(Shape shape) {
-        AlgorithmNames algorithm;
+    public static AlgorithmName chooseAlgorithmRealVector(Shape shape) {
+        AlgorithmName algorithm;
 
         int rows = shape.get(Axis2D.row());
 
         if(rows<=300) {
-            algorithm = AlgorithmNames.BLOCKED_VECTOR;
+            algorithm = AlgorithmName.BLOCKED_VECTOR;
         } else if(rows<=2048) {
-            algorithm = AlgorithmNames.CONCURRENT_BLOCKED_VECTOR;
+            algorithm = AlgorithmName.CONCURRENT_BLOCKED_VECTOR;
         } else {
-            algorithm = AlgorithmNames.CONCURRENT_STANDARD_VECTOR;
+            algorithm = AlgorithmName.CONCURRENT_STANDARD_VECTOR;
         }
 
         return algorithm;
@@ -414,8 +559,8 @@ public final class MatrixMultiplyDispatcher {
      * @param shape2 The shape fo the second matrix.
      * @return The algorithm to use in the matrix multiplication.
      */
-    public static AlgorithmNames chooseAlgorithmComplex(Shape shape1, Shape shape2) {
-        AlgorithmNames algorithm;
+    public static AlgorithmName chooseAlgorithmComplex(Shape shape1, Shape shape2) {
+        AlgorithmName algorithm;
 
         int rows1 = shape1.get(Axis2D.row());
         int cols1 = shape1.get(Axis2D.col());
@@ -424,47 +569,47 @@ public final class MatrixMultiplyDispatcher {
         if(getRatio(shape1) >= SQUARENESS_RATIO) {
             // Then the first matrix is approximately square.
             if(rows1<=30) {
-                algorithm = AlgorithmNames.REORDERED;
+                algorithm = AlgorithmName.REORDERED;
             } else if(rows1<=250) {
-                algorithm = AlgorithmNames.CONCURRENT_REORDERED;
+                algorithm = AlgorithmName.CONCURRENT_REORDERED;
             } else {
             /* For large matrices, use a concurrent, blocked algorithm with the j-k loops swapped for
             better cache performance on modern systems */
-                algorithm = AlgorithmNames.CONCURRENT_BLOCKED_REORDERED;
+                algorithm = AlgorithmName.CONCURRENT_BLOCKED_REORDERED;
             }
 
         } else if(rows1>cols1) {
             // Then there are more rows than columns in the first matrix
             if(rows1<=100) {
-                if(cols1<=4) algorithm = AlgorithmNames.REORDERED;
-                else algorithm = AlgorithmNames.CONCURRENT_REORDERED;
+                if(cols1<=4) algorithm = AlgorithmName.REORDERED;
+                else algorithm = AlgorithmName.CONCURRENT_REORDERED;
             } else {
-                if(cols1<=45) algorithm = AlgorithmNames.CONCURRENT_REORDERED;
-                else algorithm = AlgorithmNames.CONCURRENT_BLOCKED_REORDERED;
+                if(cols1<=45) algorithm = AlgorithmName.CONCURRENT_REORDERED;
+                else algorithm = AlgorithmName.CONCURRENT_BLOCKED_REORDERED;
             }
         } else {
             // Then there are more columns than rows in the first matrix
             if(cols1<=100) {
                 if(rows1<=20) {
-                    algorithm = AlgorithmNames.REORDERED;
+                    algorithm = AlgorithmName.REORDERED;
                 } else {
-                    algorithm = AlgorithmNames.CONCURRENT_REORDERED;
+                    algorithm = AlgorithmName.CONCURRENT_REORDERED;
                 }
             } else if(cols1<=500) {
                 if(rows1<=10) {
-                    algorithm = AlgorithmNames.REORDERED;
+                    algorithm = AlgorithmName.REORDERED;
                 } else if(rows1<=200) {
-                    algorithm = AlgorithmNames.CONCURRENT_REORDERED;
+                    algorithm = AlgorithmName.CONCURRENT_REORDERED;
                 } else {
-                    algorithm = AlgorithmNames.CONCURRENT_BLOCKED_REORDERED;
+                    algorithm = AlgorithmName.CONCURRENT_BLOCKED_REORDERED;
                 }
             } else {
                 if(rows1<=5) {
-                    algorithm = AlgorithmNames.REORDERED;
+                    algorithm = AlgorithmName.REORDERED;
                 } else if(rows1<=15){
-                    algorithm = AlgorithmNames.CONCURRENT_REORDERED;
+                    algorithm = AlgorithmName.CONCURRENT_REORDERED;
                 } else {
-                    algorithm = AlgorithmNames.CONCURRENT_BLOCKED_REORDERED;
+                    algorithm = AlgorithmName.CONCURRENT_BLOCKED_REORDERED;
                 }
             }
         }
@@ -478,17 +623,17 @@ public final class MatrixMultiplyDispatcher {
      * @param shape The shape of the matrix.
      * @return The algorithm to use in the matrix multiplication.
      */
-    public static AlgorithmNames chooseAlgorithmComplexVector(Shape shape) {
-        AlgorithmNames algorithm;
+    public static AlgorithmName chooseAlgorithmComplexVector(Shape shape) {
+        AlgorithmName algorithm;
 
         int rows = shape.get(Axis2D.row());
 
         if(rows<=250) {
-            algorithm = AlgorithmNames.STANDARD_VECTOR;
+            algorithm = AlgorithmName.STANDARD_VECTOR;
         } else if(rows<=1024) {
-            algorithm = AlgorithmNames.CONCURRENT_BLOCKED_VECTOR;
+            algorithm = AlgorithmName.CONCURRENT_BLOCKED_VECTOR;
         } else {
-            algorithm = AlgorithmNames.CONCURRENT_STANDARD_VECTOR;
+            algorithm = AlgorithmName.CONCURRENT_STANDARD_VECTOR;
         }
 
         return algorithm;
@@ -501,8 +646,8 @@ public final class MatrixMultiplyDispatcher {
      * @param shape2 The shape fo the second matrix.
      * @return The algorithm to use in the matrix multiplication.
      */
-    public static AlgorithmNames chooseAlgorithmRealComplex(Shape shape1, Shape shape2) {
-        AlgorithmNames algorithm;
+    public static AlgorithmName chooseAlgorithmRealComplex(Shape shape1, Shape shape2) {
+        AlgorithmName algorithm;
 
         int rows1 = shape1.get(Axis2D.row());
         int cols1 = shape1.get(Axis2D.col());
@@ -511,49 +656,49 @@ public final class MatrixMultiplyDispatcher {
         if(getRatio(shape1) >= SQUARENESS_RATIO) {
             // Then the first matrix is approximately square.
             if(rows1<=40) {
-                algorithm = AlgorithmNames.REORDERED;
+                algorithm = AlgorithmName.REORDERED;
             } else if(rows1<=225) {
-                algorithm = AlgorithmNames.CONCURRENT_REORDERED;
+                algorithm = AlgorithmName.CONCURRENT_REORDERED;
             } else {
             /* For large matrices, use a concurrent, blocked algorithm with the j-k loops swapped for
             better cache performance on modern systems */
-                algorithm = AlgorithmNames.CONCURRENT_BLOCKED_REORDERED;
+                algorithm = AlgorithmName.CONCURRENT_BLOCKED_REORDERED;
             }
 
         } else if(rows1>cols1) {
             // Then there are more rows than columns in the first matrix
             if(rows1<=100) {
-                if(cols1<=2) algorithm = AlgorithmNames.REORDERED;
-                else algorithm = AlgorithmNames.CONCURRENT_REORDERED;
+                if(cols1<=2) algorithm = AlgorithmName.REORDERED;
+                else algorithm = AlgorithmName.CONCURRENT_REORDERED;
             } else {
-                if(cols1<=45) algorithm = AlgorithmNames.CONCURRENT_REORDERED;
-                else algorithm = AlgorithmNames.CONCURRENT_BLOCKED_REORDERED;
+                if(cols1<=45) algorithm = AlgorithmName.CONCURRENT_REORDERED;
+                else algorithm = AlgorithmName.CONCURRENT_BLOCKED_REORDERED;
             }
         } else {
             // Then there are more columns than rows in the first matrix
             if(cols1<=100) {
                 if(rows1<=15) {
-                    algorithm = AlgorithmNames.REORDERED;
+                    algorithm = AlgorithmName.REORDERED;
                 } else {
-                    algorithm = AlgorithmNames.CONCURRENT_REORDERED;
+                    algorithm = AlgorithmName.CONCURRENT_REORDERED;
                 }
             } else if(cols1<=500) {
                 if(rows1<=15) {
-                    algorithm = AlgorithmNames.REORDERED;
+                    algorithm = AlgorithmName.REORDERED;
                 } else if(rows1<=100) {
-                    algorithm = AlgorithmNames.CONCURRENT_REORDERED;
+                    algorithm = AlgorithmName.CONCURRENT_REORDERED;
                 } else {
-                    algorithm = AlgorithmNames.CONCURRENT_BLOCKED_REORDERED;
+                    algorithm = AlgorithmName.CONCURRENT_BLOCKED_REORDERED;
                 }
             } else {
                 if(rows1<=2) {
-                    algorithm = AlgorithmNames.REORDERED;
+                    algorithm = AlgorithmName.REORDERED;
                 } else if(rows1<=15){
-                    algorithm = AlgorithmNames.BLOCKED_REORDERED;
+                    algorithm = AlgorithmName.BLOCKED_REORDERED;
                 } else if(rows1<=150) {
-                    algorithm = AlgorithmNames.CONCURRENT_REORDERED;
+                    algorithm = AlgorithmName.CONCURRENT_REORDERED;
                 } else {
-                    algorithm = AlgorithmNames.CONCURRENT_BLOCKED_REORDERED;
+                    algorithm = AlgorithmName.CONCURRENT_BLOCKED_REORDERED;
                 }
             }
         }
@@ -567,15 +712,15 @@ public final class MatrixMultiplyDispatcher {
      * @param shape The shape of the matrix.
      * @return The algorithm to use in the matrix multiplication.
      */
-    public static AlgorithmNames chooseAlgorithmRealComplexVector(Shape shape) {
-        AlgorithmNames algorithm;
+    public static AlgorithmName chooseAlgorithmRealComplexVector(Shape shape) {
+        AlgorithmName algorithm;
 
         int rows = shape.get(Axis2D.row());
 
         if(rows<=600) {
-            algorithm = AlgorithmNames.STANDARD_VECTOR;
+            algorithm = AlgorithmName.STANDARD_VECTOR;
         } else {
-            algorithm = AlgorithmNames.CONCURRENT_BLOCKED_VECTOR;
+            algorithm = AlgorithmName.CONCURRENT_BLOCKED_VECTOR;
         }
 
         return algorithm;
@@ -600,9 +745,10 @@ public final class MatrixMultiplyDispatcher {
     /**
      * Simple enum class containing all possible choices of matrix multiply algorithms.
      */
-    private enum AlgorithmNames {
+    private enum AlgorithmName {
         STANDARD, REORDERED, BLOCKED, BLOCKED_REORDERED,
         CONCURRENT_STANDARD, CONCURRENT_REORDERED, CONCURRENT_BLOCKED, CONCURRENT_BLOCKED_REORDERED,
-        STANDARD_VECTOR, BLOCKED_VECTOR, CONCURRENT_STANDARD_VECTOR, CONCURRENT_BLOCKED_VECTOR
+        STANDARD_VECTOR, BLOCKED_VECTOR, CONCURRENT_STANDARD_VECTOR, CONCURRENT_BLOCKED_VECTOR, MULT_T, MULT_T_BLOCKED,
+        MULT_T_CONCURRENT, MULT_T_BLOCKED_CONCURRENT
     }
 }

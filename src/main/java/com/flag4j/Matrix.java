@@ -38,9 +38,11 @@ import com.flag4j.operations.common.real.RealProperties;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.*;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultTranspose;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultTranspose;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
 import com.flag4j.util.*;
@@ -1647,6 +1649,99 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
         Shape shape = new Shape(this.numRows, 1);
 
         return new CMatrix(shape, entries);
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.}{@link #mult(Matrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public Matrix multTranspose(Matrix B) {
+        // Ensure this matrix can be multiplied to the transpose of B.
+        ParameterChecks.assertEquals(this.numCols, B.numCols);
+
+        return new Matrix(
+                new Shape(this.numRows, B.numRows),
+                RealDenseMatrixMultiplyDispatcher.dispatchTranspose(this, B)
+        );
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.}{@link #mult(SparseMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public Matrix multTranspose(SparseMatrix B) {
+        // Ensure this matrix can be multiplied to the transpose of B.
+        ParameterChecks.assertEquals(this.numCols, B.numCols);
+
+        return new Matrix(
+                new Shape(this.numRows, B.numRows),
+                RealDenseSparseMatrixMultTranspose.multTranspose(
+                        this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
+                )
+        );
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.}{@link #mult(CMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public CMatrix multTranspose(CMatrix B) {
+        // Ensure this matrix can be multiplied to the transpose of B.
+        ParameterChecks.assertEquals(this.numCols, B.numCols);
+
+        return new CMatrix(
+                new Shape(this.numRows, B.numRows),
+                MatrixMultiplyDispatcher.dispatchTranspose(this, B)
+        );
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.}{@link #mult(SparseCMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public CMatrix multTranspose(SparseCMatrix B) {
+        // Ensure this matrix can be multiplied to the transpose of B.
+        ParameterChecks.assertEquals(this.numCols, B.numCols);
+
+        // TODO: Add dispatcher for various methods in RealComplexDenseSparseMatrixMultTranspose
+        return new CMatrix(
+                new Shape(this.numRows, B.numRows),
+                RealComplexDenseSparseMatrixMultTranspose.multTranspose(
+                        this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
+                )
+        );
     }
 
 
