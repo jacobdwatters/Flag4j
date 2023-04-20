@@ -30,6 +30,8 @@ import com.flag4j.core.VectorBase;
 import com.flag4j.linalg.decompositions.QRDecomposition;
 
 
+// TODO: Switch to SVD instead of QR. It will be slower but have better numerical properties.
+
 /**
  * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
  * minimizes {@code ||Ax-b||<sub>2</sub>} which is equivalent to solving the normal equations {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.

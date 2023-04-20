@@ -147,7 +147,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @param shape2 The shape fo the second matrix.
      * @return The algorithm to use in the matrix multiplication.
      */
-    private static AlgorithmNames selectAlgorithm(Shape shape1, Shape shape2) {
+    protected static AlgorithmNames selectAlgorithm(Shape shape1, Shape shape2) {
         AlgorithmNames name;
 
         int rows1 = shape1.get(Axis2D.row());
@@ -211,7 +211,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @param shape Shape of the first matrix.
      * @return The algorithm to use to compute the matrix multiplication-transpose.
      */
-    private static AlgorithmNames selectAlgorithmTranspose(Shape shape) {
+    protected static AlgorithmNames selectAlgorithmTranspose(Shape shape) {
         AlgorithmNames name;
         int rows = shape.dims[0];
 
@@ -249,7 +249,7 @@ public final class RealDenseMatrixMultiplyDispatcher {
     /**
      * Simple enum class containing all possible choices of real dense matrix multiply algorithms.
      */
-    private enum AlgorithmNames {
+    protected enum AlgorithmNames {
         STANDARD, REORDERED, BLOCKED, BLOCKED_REORDERED,
         CONCURRENT_STANDARD, CONCURRENT_REORDERED, CONCURRENT_BLOCKED, CONCURRENT_BLOCKED_REORDERED,
         STANDARD_VECTOR, BLOCKED_VECTOR, CONCURRENT_STANDARD_VECTOR, CONCURRENT_BLOCKED_VECTOR, MULT_T, MULT_T_BLOCKED,
