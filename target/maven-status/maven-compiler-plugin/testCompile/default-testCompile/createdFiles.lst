@@ -138,6 +138,7 @@ com\flag4j\operations\dense_sparse\real\RealDenseSparseMatMultTests.class
 com\flag4j\MatrixPropertiesTests.class
 com\flag4j\operations\dense\complex\CMatrixMultiplyTests.class
 com\flag4j\complex_numbers\CNumberConversionTest.class
+com\flag4j\operations\RealDenseMatrixMultiplyDispatcherTests.class
 com\flag4j\SparseVectorConstructorTests.class
 com\flag4j\CTensorDotTests.class
 com\flag4j\CMatrixUnaryOperationsTests.class
