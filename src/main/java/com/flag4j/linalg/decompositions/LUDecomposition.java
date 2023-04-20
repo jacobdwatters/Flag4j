@@ -24,6 +24,8 @@
 
 package com.flag4j.linalg.decompositions;
 
+import com.flag4j.CMatrix;
+import com.flag4j.Matrix;
 import com.flag4j.core.MatrixBase;
 
 // TODO: Implement LDU decomposition.
@@ -57,11 +59,11 @@ public abstract class LUDecomposition<T extends MatrixBase<?>> implements Decomp
     /**
      * Permutation matrix to store row swaps if partial pivoting is used.
      */
-    protected T P;
+    protected Matrix P;
     /**
      * Permutation matrix to store column swaps if full pivoting is used.
      */
-    protected T Q;
+    protected Matrix Q;
 
 
 
@@ -90,6 +92,50 @@ public abstract class LUDecomposition<T extends MatrixBase<?>> implements Decomp
 
 
     /**
+     * Applies {@code LU} decomposition to the source matrix using the pivoting specified in the constructor.
+     *
+     * @param src The source matrix to decompose. Not modified.
+     */
+    @Override
+    public void decompose(T src) {
+        initLU(src);
+
+        if(pivotFlag==Pivoting.NONE) {
+            noPivot(); // Compute with no pivoting.
+        } else if(pivotFlag==Pivoting.PARTIAL) {
+            partialPivot();
+        } else {
+            fullPivot();
+        }
+    }
+
+
+    /**
+     * Initializes the {@code LU} matrix by copying the source matrix to decompose.
+     * @param src Source matrix to decompose.
+     */
+    protected abstract void initLU(T src);
+
+
+    /**
+     * Computes the LU decomposition using no pivoting (i.e. rows and columns are not swapped).
+     */
+    protected abstract void noPivot();
+
+
+    /**
+     * Computes the LU decomposition using partial pivoting (i.e. row swapping).
+     */
+    protected abstract void partialPivot();
+
+
+    /**
+     * Computes the LU decomposition using full/rook pivoting (i.e. row and column swapping).
+     */
+    protected abstract void fullPivot();
+
+
+    /**
      * Gets the unit lower triangular matrix of the decomposition.
      * @return The unit lower triangular matrix of the decomposition.
      */
@@ -107,7 +153,7 @@ public abstract class LUDecomposition<T extends MatrixBase<?>> implements Decomp
      * Gets the row permutation matrix of the decomposition.
      * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
      */
-    public T getP() {
+    public Matrix getP() {
         return P;
     }
 
@@ -116,7 +162,7 @@ public abstract class LUDecomposition<T extends MatrixBase<?>> implements Decomp
      * Gets the column permutation matrix of the decomposition.
      * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
      */
-    public T getQ() {
+    public Matrix getQ() {
         return Q;
     }
 

@@ -578,10 +578,10 @@ public final class MatrixMultiplyDispatcher {
 <span class="nc" id="L578">                algorithm = AlgorithmName.CONCURRENT_BLOCKED_REORDERED;</span>
             }
 
-<span class="pc bpc" id="L581" title="1 of 2 branches missed.">        } else if(rows1&gt;cols1) {</span>
+<span class="fc bfc" id="L581" title="All 2 branches covered.">        } else if(rows1&gt;cols1) {</span>
             // Then there are more rows than columns in the first matrix
-<span class="nc bnc" id="L583" title="All 2 branches missed.">            if(rows1&lt;=100) {</span>
-<span class="nc bnc" id="L584" title="All 2 branches missed.">                if(cols1&lt;=4) algorithm = AlgorithmName.REORDERED;</span>
+<span class="pc bpc" id="L583" title="1 of 2 branches missed.">            if(rows1&lt;=100) {</span>
+<span class="pc bpc" id="L584" title="1 of 2 branches missed.">                if(cols1&lt;=4) algorithm = AlgorithmName.REORDERED;</span>
 <span class="nc" id="L585">                else algorithm = AlgorithmName.CONCURRENT_REORDERED;</span>
             } else {
 <span class="nc bnc" id="L587" title="All 2 branches missed.">                if(cols1&lt;=45) algorithm = AlgorithmName.CONCURRENT_REORDERED;</span>

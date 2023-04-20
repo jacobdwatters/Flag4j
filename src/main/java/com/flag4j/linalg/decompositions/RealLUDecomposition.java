@@ -27,7 +27,7 @@ package com.flag4j.linalg.decompositions;
 import com.flag4j.Matrix;
 
 /**
- * <p>This class provides methods for computing the LU decomposition of a matrix.</p>
+ * <p>This class provides methods for computing the LU decomposition of a real dense matrix.</p>
  * <p>The following decompositions are provided: {@code A=LU}, {@code PA=LU}, and {@code PAQ=LU}.</p>
  */
 public final class RealLUDecomposition extends LUDecomposition<Matrix> {
@@ -67,28 +67,20 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
 
 
     /**
-     * Applies {@code LU} decomposition to the source matrix using the pivoting specified in the constructor.
-     *
-     * @param src The source matrix to decompose. Not modified.
+     * Initializes the {@code LU} matrix by copying the source matrix to decompose.
+     * @param src Source matrix to decompose.
      */
     @Override
-    public void decompose(Matrix src) {
+    protected void initLU(Matrix src) {
         LU = new Matrix(src);
-
-        if(super.pivotFlag==Pivoting.NONE) {
-            noPivot(); // Compute with no pivoting.
-        } else if(super.pivotFlag==Pivoting.PARTIAL) {
-            partialPivot();
-        } else {
-            fullPivot();
-        }
     }
 
 
     /**
      * Computes the LU decomposition using no pivoting (i.e. rows and columns are not swapped).
      */
-    private void noPivot() {
+    @Override
+    protected void noPivot() {
         P = Q = null; // P and Q are not used here.
 
         // Using Gaussian elimination and no pivoting
@@ -106,7 +98,8 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
     /**
      * Computes the LU decomposition using partial pivoting (i.e. row swapping).
      */
-    private void partialPivot() {
+    @Override
+    protected void partialPivot() {
         P = Matrix.I(LU.numRows);
         Q = null; // Q is not used here.
         int maxIndex;
@@ -129,9 +122,10 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
     /**
      * Computes the LU decomposition using full/rook pivoting (i.e. row and column swapping).
      */
-    private void fullPivot() {
+    @Override
+    protected void fullPivot() {
         P = Matrix.I(LU.numRows);
-        Q = Matrix.I(LU.numRows);
+        Q = Matrix.I(LU.numCols);
         int[] maxIndex;
 
         // Using Gaussian elimination with row and column (rook) pivoting.
@@ -139,11 +133,11 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
             maxIndex = maxIndex(j);
 
             // Make the appropriate swaps in LU, P and Q (This is the full pivoting step).
-            if(j!=maxIndex[0]) {
+            if(j!=maxIndex[0] && maxIndex[0]!=-1) {
                 LU.swapRows(j, maxIndex[0]);
                 P.swapRows(j, maxIndex[0]);
             }
-            if(j!=maxIndex[1]) {
+            if(j!=maxIndex[1] && maxIndex[1]!=-1) {
                 LU.swapCols(j, maxIndex[1]);
                 Q.swapCols(j, maxIndex[1]);
             }

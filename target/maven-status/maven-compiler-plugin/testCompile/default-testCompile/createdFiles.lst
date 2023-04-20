@@ -1,3 +1,4 @@
+com\flag4j\linalg\decompositions\ComplexLUTests.class
 com\flag4j\operations\dense\real\RealDenseSetOperationsTests.class
 com\flag4j\VectorElementwiseTests.class
 com\flag4j\complex_numbers\CNumberPropertiesTest.class
@@ -106,6 +107,7 @@ com\flag4j\operations\dense\complex\ComplexMatrixMultiplyTests.class
 com\flag4j\MatrixAddTests.class
 com\flag4j\CMatrixReshapeTests.class
 com\flag4j\CustomAssertions.class
+com\flag4j\linalg\decompositions\RealCholeskyTests.class
 com\flag4j\CMatrixRowColSumTests.class
 com\flag4j\VectorEqualsTests.class
 com\flag4j\linalg\decompositions\RealQRTests.class
