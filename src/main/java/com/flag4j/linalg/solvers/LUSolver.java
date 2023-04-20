@@ -25,6 +25,7 @@
 package com.flag4j.linalg.solvers;
 
 
+import com.flag4j.Matrix;
 import com.flag4j.core.MatrixBase;
 import com.flag4j.core.VectorBase;
 import com.flag4j.linalg.decompositions.LUDecomposition;
@@ -52,7 +53,7 @@ public abstract class LUSolver<T extends MatrixBase<?>,
     /**
      * Row permutation matrix for {@code LU} decomposition.
      */
-    protected T P;
+    protected Matrix P;
 
     /**
      * Constructs an exact LU solver with a specified {@code LU} decomposer.

@@ -67,12 +67,14 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\TensorPropertiesTest
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense_sparse\real\RealDenseSparseMatMultTransposeTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\sparse\complex\ComplexSparseMatMultTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CVectorEqualsTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\decompositions\ComplexLUTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\VectorAggregateTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\VectorShapeTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\VectorExtendTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixElemMultTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CVectorCrossTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberSqrtTest.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\decompositions\RealCholeskyTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatrixMultiplicationTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\TensorElemMultTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\VectorElementwiseTests.java
