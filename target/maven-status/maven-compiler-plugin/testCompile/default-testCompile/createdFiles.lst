@@ -57,6 +57,7 @@ com\flag4j\operations\dense\complex\ComplexDenseTransposeTests.class
 com\flag4j\CVectorSubTests.class
 com\flag4j\MatrixElementScalarTests.class
 com\flag4j\VectorStackJoinTests.class
+com\flag4j\linalg\solvers\MatrixLstsqSolverTests.class
 com\flag4j\util\ErrorMessagesTests.class
 com\flag4j\CMatrixConstructorTests.class
 com\flag4j\TensorNormTests.class

@@ -38,8 +38,8 @@ import static com.flag4j.operations.dense.real.RealDenseDeterminant.detLU;
  */
 public class MatrixLUSolver extends LUSolver&lt;Matrix, Vector, Vector&gt; {
 
-    private MatrixForwardSolver forwardSolver;
-    private MatrixBackSolver backSolver;
+    private final MatrixForwardSolver forwardSolver;
+    private final MatrixBackSolver backSolver;
 
     /**
      * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is
@@ -78,7 +78,7 @@ public class MatrixLUSolver extends LUSolver&lt;Matrix, Vector, Vector&gt; {
 
 <span class="fc" id="L79">        double det = Math.abs(detLU(L, U));</span>
 
-<span class="fc bfc" id="L81" title="All 4 branches covered.">        if(det &lt;= RANK_THRESHOLD || Double.isNaN(det)) {</span>
+<span class="pc bpc" id="L81" title="1 of 4 branches missed.">        if(det &lt;= RANK_THRESHOLD || Double.isNaN(det)) {</span>
 <span class="fc" id="L82">            throw new IllegalArgumentException(&quot;Matrix expected to have full rank but did not.&quot;);</span>
         }
 

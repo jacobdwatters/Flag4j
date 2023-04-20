@@ -67,10 +67,12 @@ Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseMatrixMultTranspos
 Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseVectorOperations,7,260,0,16,2,35,1,15,1,7
 Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseOperations,69,452,2,20,10,60,3,20,2,10
 Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseEquals,7,202,0,24,2,44,1,15,1,3
+Flag4j,com.flag4j.linalg.solvers,MatrixLstsqSolver,0,28,0,0,0,5,0,2,0,2
 Flag4j,com.flag4j.linalg.solvers,LUSolver,8,30,1,1,2,9,1,2,0,2
-Flag4j,com.flag4j.linalg.solvers,MatrixBackSolver,5,110,1,5,1,11,1,4,0,2
-Flag4j,com.flag4j.linalg.solvers,MatrixForwardSolver,5,76,1,5,1,11,1,4,0,2
-Flag4j,com.flag4j.linalg.solvers,MatrixLUSolver,0,79,0,4,0,12,0,4,0,2
+Flag4j,com.flag4j.linalg.solvers,MatrixBackSolver,0,101,0,4,0,11,0,4,0,2
+Flag4j,com.flag4j.linalg.solvers,MatrixForwardSolver,0,73,0,4,0,10,0,4,0,2
+Flag4j,com.flag4j.linalg.solvers,LstsqSolver,0,21,0,0,0,7,0,2,0,2
+Flag4j,com.flag4j.linalg.solvers,MatrixLUSolver,0,79,1,3,0,12,1,3,0,2
 Flag4j,com.flag4j.complex_numbers,CNumberLexer,32,290,9,61,5,72,10,32,1,6
 Flag4j,com.flag4j.complex_numbers,CNumberParser,8,166,2,14,2,37,3,7,1,1
 Flag4j,com.flag4j.complex_numbers,CNumberToken,24,43,3,5,6,10,5,7,2,6
@@ -88,7 +90,7 @@ Flag4j,com.flag4j,SparseCTensor,0,118,0,6,0,16,0,8,0,5
 Flag4j,com.flag4j,CMatrix,1010,7194,64,376,145,787,94,347,60,161
 Flag4j,com.flag4j,SparseVector,0,44,0,0,0,9,0,4,0,4
 Flag4j,com.flag4j,Shape,35,465,5,37,5,75,5,34,2,16
-Flag4j,com.flag4j,Matrix,424,6776,17,399,49,782,36,372,24,176
+Flag4j,com.flag4j,Matrix,401,6799,17,399,46,785,35,373,23,177
 Flag4j,com.flag4j,SparseMatrix,2,189,0,0,1,20,1,10,1,10
 Flag4j,com.flag4j,Vector,60,1993,8,80,10,272,9,124,2,87
 Flag4j,com.flag4j,CTensor,545,272,5,11,95,53,62,24,58,20

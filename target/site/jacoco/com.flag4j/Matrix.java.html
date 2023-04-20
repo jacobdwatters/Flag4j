@@ -3502,9 +3502,9 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      */
     @Override
     public void set(double value, int... indices) {
-<span class="nc" id="L3505">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
-<span class="nc" id="L3506">        RealDenseSetOperations.set(entries, shape, value, indices);</span>
-<span class="nc" id="L3507">    }</span>
+<span class="fc" id="L3505">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
+<span class="fc" id="L3506">        RealDenseSetOperations.set(entries, shape, value, indices);</span>
+<span class="fc" id="L3507">    }</span>
 
 
     /**

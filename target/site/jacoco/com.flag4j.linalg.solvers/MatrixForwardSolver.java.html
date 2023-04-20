@@ -36,36 +36,33 @@ import com.flag4j.Vector;
 
     /**
      * Performs forward substitution for a unit lower triangular matrix {@code L} and a vector {@code b}.
-     * That is, solves the linear system {@code L*x=b} where L is a lower triangular matrix.
-     * @param L Lower triangular coefficient matrix.
+     * That is, solves the linear system {@code L*x=b} where {@code L} is a lower triangular matrix.
+     * @param L Unit lower triangular coefficient matrix. If {@code L} is not unit lower triangular, it will be treated
+     *          as such.
      * @param b Constant vector.
-     * @return The result of solving the linear system {@code L*x=b} where L is a lower triangular matrix.
+     * @return The result of solving the linear system {@code L*x=b} where {@code L} is a lower triangular matrix.
      * @throws IllegalArgumentException If {@code L} is not lower triangular.
      */
     @Override
     public Vector solve(Matrix L, Vector b) {
-<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        if(!L.isTriL()) {</span>
-<span class="nc" id="L48">            throw new IllegalArgumentException(&quot;Coefficient matrix must be lower triangular.&quot;);</span>
-        }
-
         double sum;
         int lIndexStart;
-<span class="fc" id="L53">        Vector x = new Vector(L.numRows);</span>
+<span class="fc" id="L50">        Vector x = new Vector(L.numRows);</span>
 
-<span class="fc" id="L55">        x.entries[0] = b.entries[0];</span>
+<span class="fc" id="L52">        x.entries[0] = b.entries[0];</span>
 
-<span class="fc bfc" id="L57" title="All 2 branches covered.">        for(int i=1; i&lt;L.numRows; i++) {</span>
-<span class="fc" id="L58">            sum = 0;</span>
-<span class="fc" id="L59">            lIndexStart = i*L.numCols;</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        for(int i=1; i&lt;L.numRows; i++) {</span>
+<span class="fc" id="L55">            sum = 0;</span>
+<span class="fc" id="L56">            lIndexStart = i*L.numCols;</span>
 
-<span class="fc bfc" id="L61" title="All 2 branches covered.">            for(int j=i-1; j&gt;-1; j--) {</span>
-<span class="fc" id="L62">                sum += L.entries[lIndexStart + j]*x.entries[j];</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">            for(int j=i-1; j&gt;-1; j--) {</span>
+<span class="fc" id="L59">                sum += L.entries[lIndexStart + j]*x.entries[j];</span>
             }
 
-<span class="fc" id="L65">            x.entries[i] = b.entries[i]-sum;</span>
+<span class="fc" id="L62">            x.entries[i] = b.entries[i]-sum;</span>
         }
 
-<span class="fc" id="L68">        return x;</span>
+<span class="fc" id="L65">        return x;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -38,32 +38,29 @@ public class MatrixBackSolver implements LinearSolver<Matrix, Vector, Vector> {
      * Solves the linear system of equations given by {@code U*x=b} where the coefficient matrix {@code U}
      * is an upper triangular matrix.
      *
-     * @param U Upper triangular coefficient matrix in the linear system.
+     * @param U Upper triangular coefficient matrix in the linear system. If {@code U} is not upper triangular, it
+     *          will be treated as such.
      * @param b Vector of constants in the linear system.
      * @return The solution to {@code x} in the linear system {@code A*x=b}.
-     * @throws IllegalArgumentException If {@code U} is not upper triangular.
      */
     @Override
     public Vector solve(Matrix U, Vector b) {
-        if(!U.isTriU()) {
-            throw new IllegalArgumentException("Coefficient matrix must be upper triangular.");
-        }
-
         double sum;
         int uIndex;
+        int n = b.size;
         Vector x = new Vector(U.numRows);
 
-        x.entries[U.numRows-1] = b.entries[U.numRows-1]/U.entries[(U.numRows-1)*(U.numCols+1)];
+        x.entries[n-1] = b.entries[n-1]/U.entries[n*n-1];
 
-        for(int i=U.numRows-1; i>-1; i--) {
+        for(int i=n-2; i>-1; i--) {
             sum = 0;
             uIndex = i*U.numCols;
 
-            for(int j=i+1; j<U.numRows; j++) {
+            for(int j=i+1; j<n; j++) {
                 sum += U.entries[uIndex + j]*x.entries[j];
             }
 
-            x.entries[i] = (b.entries[i]-sum)/U.entries[i*(U.numCols+1)];
+            x.entries[i] = (b.entries[i]-sum)/U.entries[i*(n+1)];
         }
 
         return x;

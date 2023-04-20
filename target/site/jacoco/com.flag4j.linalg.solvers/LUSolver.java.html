@@ -30,7 +30,9 @@ import com.flag4j.core.VectorBase;
 import com.flag4j.linalg.decompositions.LUDecomposition;
 
 /**
- * Solves a system of equations in an exact sense by using a {@code LU} decomposition.
+ * &lt;p&gt;Solves a well determined system of equations {@code Ax=b} in an exact sense by using a {@code LU} decomposition.&lt;/p&gt;
+ * &lt;p&gt;If the system is not well determined, i.e. {@code A} is square and full rank, then use a
+ * {@link LstsqSolver least-squares solver}.&lt;/p&gt;
  */
 public abstract class LUSolver&lt;T extends MatrixBase&lt;?&gt;,
         U extends VectorBase&lt;?&gt;, V extends VectorBase&lt;?&gt;&gt; implements LinearSolver&lt;T, U, V&gt; {
@@ -38,7 +40,7 @@ public abstract class LUSolver&lt;T extends MatrixBase&lt;?&gt;,
     /**
      * Decomposer to compute {@code LU} decomposition.
      */
-    protected LUDecomposition&lt;T&gt; lu;
+    protected final LUDecomposition&lt;T&gt; lu;
     /**
      * Unit lower triangular matrix in {@code} LU decomposition.
      */
@@ -52,20 +54,19 @@ public abstract class LUSolver&lt;T extends MatrixBase&lt;?&gt;,
      */
     protected T P;
 
-
     /**
      * Constructs an exact LU solver with a specified {@code LU} decomposer.
      * @param lu {@code LU} decomposer to employ in solving the linear system.
      * @throws IllegalArgumentException If the {@code LU} decomposer does not use partial pivoting.
      */
-<span class="fc" id="L61">    public LUSolver(LUDecomposition&lt;T&gt; lu) {</span>
-<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if(lu.pivotFlag!=LUDecomposition.Pivoting.PARTIAL) {</span>
-<span class="nc" id="L63">            throw new IllegalArgumentException(&quot;LU solver must use partial pivoting but got &quot; +</span>
-<span class="nc" id="L64">                    lu.pivotFlag.name() + &quot;.&quot;);</span>
+<span class="fc" id="L62">    protected LUSolver(LUDecomposition&lt;T&gt; lu) {</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if(lu.pivotFlag!=LUDecomposition.Pivoting.PARTIAL) {</span>
+<span class="nc" id="L64">            throw new IllegalArgumentException(&quot;LU solver must use partial pivoting but got &quot; +</span>
+<span class="nc" id="L65">                    lu.pivotFlag.name() + &quot;.&quot;);</span>
         }
 
-<span class="fc" id="L67">        this.lu = lu;</span>
-<span class="fc" id="L68">    }</span>
+<span class="fc" id="L68">        this.lu = lu;</span>
+<span class="fc" id="L69">    }</span>
 
 
     /**
@@ -73,10 +74,10 @@ public abstract class LUSolver&lt;T extends MatrixBase&lt;?&gt;,
      * @param A Matrix to decompose.
      */
     protected void decompose(T A) {
-<span class="fc" id="L76">        lu.decompose(A);</span>
-<span class="fc" id="L77">        L = lu.getL();</span>
-<span class="fc" id="L78">        U = lu.getU();</span>
-<span class="fc" id="L79">        P = lu.getP();</span>
-<span class="fc" id="L80">    }</span>
+<span class="fc" id="L77">        lu.decompose(A);</span>
+<span class="fc" id="L78">        L = lu.getL();</span>
+<span class="fc" id="L79">        U = lu.getU();</span>
+<span class="fc" id="L80">        P = lu.getP();</span>
+<span class="fc" id="L81">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

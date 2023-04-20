@@ -30,7 +30,9 @@ import com.flag4j.core.VectorBase;
 import com.flag4j.linalg.decompositions.LUDecomposition;
 
 /**
- * Solves a system of equations in an exact sense by using a {@code LU} decomposition.
+ * <p>Solves a well determined system of equations {@code Ax=b} in an exact sense by using a {@code LU} decomposition.</p>
+ * <p>If the system is not well determined, i.e. {@code A} is square and full rank, then use a
+ * {@link LstsqSolver least-squares solver}.</p>
  */
 public abstract class LUSolver<T extends MatrixBase<?>,
         U extends VectorBase<?>, V extends VectorBase<?>> implements LinearSolver<T, U, V> {
@@ -38,7 +40,7 @@ public abstract class LUSolver<T extends MatrixBase<?>,
     /**
      * Decomposer to compute {@code LU} decomposition.
      */
-    protected LUDecomposition<T> lu;
+    protected final LUDecomposition<T> lu;
     /**
      * Unit lower triangular matrix in {@code} LU decomposition.
      */
@@ -52,13 +54,12 @@ public abstract class LUSolver<T extends MatrixBase<?>,
      */
     protected T P;
 
-
     /**
      * Constructs an exact LU solver with a specified {@code LU} decomposer.
      * @param lu {@code LU} decomposer to employ in solving the linear system.
      * @throws IllegalArgumentException If the {@code LU} decomposer does not use partial pivoting.
      */
-    public LUSolver(LUDecomposition<T> lu) {
+    protected LUSolver(LUDecomposition<T> lu) {
         if(lu.pivotFlag!=LUDecomposition.Pivoting.PARTIAL) {
             throw new IllegalArgumentException("LU solver must use partial pivoting but got " +
                     lu.pivotFlag.name() + ".");

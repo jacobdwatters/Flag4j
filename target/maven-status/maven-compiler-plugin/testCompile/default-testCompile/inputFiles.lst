@@ -21,6 +21,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixToStringTests
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\TensorAddTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatMultTransposeTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixToStringTest.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\solvers\MatrixLstsqSolverTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\common\real\MatrixNormTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\VectorZeroOnesTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\real\MatrixMultiplyTests.java

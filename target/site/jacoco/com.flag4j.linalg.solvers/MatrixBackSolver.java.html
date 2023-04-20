@@ -38,35 +38,32 @@ import com.flag4j.Vector;
      * Solves the linear system of equations given by {@code U*x=b} where the coefficient matrix {@code U}
      * is an upper triangular matrix.
      *
-     * @param U Upper triangular coefficient matrix in the linear system.
+     * @param U Upper triangular coefficient matrix in the linear system. If {@code U} is not upper triangular, it
+     *          will be treated as such.
      * @param b Vector of constants in the linear system.
      * @return The solution to {@code x} in the linear system {@code A*x=b}.
-     * @throws IllegalArgumentException If {@code U} is not upper triangular.
      */
     @Override
     public Vector solve(Matrix U, Vector b) {
-<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if(!U.isTriU()) {</span>
-<span class="nc" id="L49">            throw new IllegalArgumentException(&quot;Coefficient matrix must be upper triangular.&quot;);</span>
-        }
-
         double sum;
         int uIndex;
-<span class="fc" id="L54">        Vector x = new Vector(U.numRows);</span>
+<span class="fc" id="L50">        int n = b.size;</span>
+<span class="fc" id="L51">        Vector x = new Vector(U.numRows);</span>
 
-<span class="fc" id="L56">        x.entries[U.numRows-1] = b.entries[U.numRows-1]/U.entries[(U.numRows-1)*(U.numCols+1)];</span>
+<span class="fc" id="L53">        x.entries[n-1] = b.entries[n-1]/U.entries[n*n-1];</span>
 
-<span class="fc bfc" id="L58" title="All 2 branches covered.">        for(int i=U.numRows-1; i&gt;-1; i--) {</span>
-<span class="fc" id="L59">            sum = 0;</span>
-<span class="fc" id="L60">            uIndex = i*U.numCols;</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        for(int i=n-2; i&gt;-1; i--) {</span>
+<span class="fc" id="L56">            sum = 0;</span>
+<span class="fc" id="L57">            uIndex = i*U.numCols;</span>
 
-<span class="fc bfc" id="L62" title="All 2 branches covered.">            for(int j=i+1; j&lt;U.numRows; j++) {</span>
-<span class="fc" id="L63">                sum += U.entries[uIndex + j]*x.entries[j];</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">            for(int j=i+1; j&lt;n; j++) {</span>
+<span class="fc" id="L60">                sum += U.entries[uIndex + j]*x.entries[j];</span>
             }
 
-<span class="fc" id="L66">            x.entries[i] = (b.entries[i]-sum)/U.entries[i*(U.numCols+1)];</span>
+<span class="fc" id="L63">            x.entries[i] = (b.entries[i]-sum)/U.entries[i*(n+1)];</span>
         }
 
-<span class="fc" id="L69">        return x;</span>
+<span class="fc" id="L66">        return x;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

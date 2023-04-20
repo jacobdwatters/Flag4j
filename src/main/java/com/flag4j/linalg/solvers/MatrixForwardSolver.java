@@ -36,18 +36,15 @@ public class MatrixForwardSolver implements LinearSolver<Matrix, Vector, Vector>
 
     /**
      * Performs forward substitution for a unit lower triangular matrix {@code L} and a vector {@code b}.
-     * That is, solves the linear system {@code L*x=b} where L is a lower triangular matrix.
-     * @param L Lower triangular coefficient matrix.
+     * That is, solves the linear system {@code L*x=b} where {@code L} is a lower triangular matrix.
+     * @param L Unit lower triangular coefficient matrix. If {@code L} is not unit lower triangular, it will be treated
+     *          as such.
      * @param b Constant vector.
-     * @return The result of solving the linear system {@code L*x=b} where L is a lower triangular matrix.
+     * @return The result of solving the linear system {@code L*x=b} where {@code L} is a lower triangular matrix.
      * @throws IllegalArgumentException If {@code L} is not lower triangular.
      */
     @Override
     public Vector solve(Matrix L, Vector b) {
-        if(!L.isTriL()) {
-            throw new IllegalArgumentException("Coefficient matrix must be lower triangular.");
-        }
-
         double sum;
         int lIndexStart;
         Vector x = new Vector(L.numRows);

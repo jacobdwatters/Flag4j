@@ -38,8 +38,8 @@ import static com.flag4j.operations.dense.real.RealDenseDeterminant.detLU;
  */
 public class MatrixLUSolver extends LUSolver<Matrix, Vector, Vector> {
 
-    private MatrixForwardSolver forwardSolver;
-    private MatrixBackSolver backSolver;
+    private final MatrixForwardSolver forwardSolver;
+    private final MatrixBackSolver backSolver;
 
     /**
      * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is

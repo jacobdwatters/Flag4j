@@ -37,6 +37,8 @@ com\flag4j\Shape.class
 com\flag4j\operations\dense\complex\ComplexDenseElemDiv.class
 com\flag4j\util\RandomTensor.class
 com\flag4j\CTensor.class
+com\flag4j\linalg\solvers\LstsqSolver.class
+com\flag4j\linalg\solvers\MatrixLstsqSolver.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatrixMultiplication.class
 com\flag4j\core\MatrixManipulationsMixin.class
 com\flag4j\core\TensorManipulationsMixin.class
