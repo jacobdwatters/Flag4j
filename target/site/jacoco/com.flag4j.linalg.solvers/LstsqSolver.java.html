@@ -30,10 +30,12 @@ import com.flag4j.core.VectorBase;
 import com.flag4j.linalg.decompositions.QRDecomposition;
 
 
+// TODO: Switch to SVD instead of QR. It will be slower but have better numerical properties.
+
 /**
  * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
- * solves the normal equations {@code A&lt;sup&gt;T&lt;/sup&gt;Ax=A&lt;sup&gt;T&lt;/sup&gt;b}. This is done using a
- * {@link QRDecomposition}.
+ * minimizes {@code ||Ax-b||&lt;sub&gt;2&lt;/sub&gt;} which is equivalent to solving the normal equations {@code A&lt;sup&gt;T&lt;/sup&gt;Ax=A&lt;sup&gt;T&lt;/sup&gt;b}.
+ * This is done using a {@link QRDecomposition}.
  */
 public abstract class LstsqSolver&lt;T extends MatrixBase&lt;?&gt;,
         U extends VectorBase&lt;?&gt;, V extends VectorBase&lt;?&gt;&gt; implements LinearSolver&lt;T, U, V&gt; {
@@ -42,16 +44,22 @@ public abstract class LstsqSolver&lt;T extends MatrixBase&lt;?&gt;,
      * Decomposer to compute the {@code QR} decomposition for using the least-squares solver.
      */
     protected final QRDecomposition&lt;T&gt; qr;
+    /**
+     * {@code Q} The orthonormal matrix from the {@code QR} decomposition.
+     */
     protected T Q;
+    /**
+     * {@code R} The upper triangular matrix from the {@code QR} decomposition.
+     */
     protected T R;
 
     /**
      * Constructs a least-squares solver with a specified decomposer to use in the {@code QR} decomposition.
      * @param qr The {@code QR} decomposer to use in the solver.
      */
-<span class="fc" id="L52">    protected LstsqSolver(QRDecomposition&lt;T&gt; qr) {</span>
-<span class="fc" id="L53">        this.qr = qr;</span>
-<span class="fc" id="L54">    }</span>
+<span class="fc" id="L60">    protected LstsqSolver(QRDecomposition&lt;T&gt; qr) {</span>
+<span class="fc" id="L61">        this.qr = qr;</span>
+<span class="fc" id="L62">    }</span>
 
 
     /**
@@ -59,9 +67,9 @@ public abstract class LstsqSolver&lt;T extends MatrixBase&lt;?&gt;,
      * @param A Coefficient matrix in the linear system to solve.
      */
     protected void decompose(T A) {
-<span class="fc" id="L62">        qr.decompose(A);</span>
-<span class="fc" id="L63">        Q = qr.getQ();</span>
-<span class="fc" id="L64">        R = qr.getR();</span>
-<span class="fc" id="L65">    }</span>
+<span class="fc" id="L70">        qr.decompose(A);</span>
+<span class="fc" id="L71">        Q = qr.getQ();</span>
+<span class="fc" id="L72">        R = qr.getR();</span>
+<span class="fc" id="L73">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

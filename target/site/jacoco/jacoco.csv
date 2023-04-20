@@ -57,7 +57,7 @@ Flag4j,com.flag4j.operations.sparse.real_complex,RealComplexSparseMatrixMultipli
 Flag4j,com.flag4j.concurrency,ThreadManager,17,72,2,2,5,15,3,6,1,6
 Flag4j,com.flag4j.concurrency,Configurations,49,10,0,0,16,4,8,2,8,2
 Flag4j,com.flag4j.operations,MatrixMultiplyDispatcher,1052,356,121,26,193,76,100,14,8,11
-Flag4j,com.flag4j.operations,RealDenseMatrixMultiplyDispatcher,117,202,27,11,31,29,19,9,2,6
+Flag4j,com.flag4j.operations,RealDenseMatrixMultiplyDispatcher,39,280,2,36,5,55,3,25,1,7
 Flag4j,com.flag4j.operations,TransposeDispatcher,93,178,14,8,16,29,14,8,2,8
 Flag4j,com.flag4j.operations,TransposeDispatcher.Algorithm,0,27,0,0,0,5,0,1,0,1
 Flag4j,com.flag4j.operations,RealDenseMatrixMultiplyDispatcher.AlgorithmNames,0,99,0,0,0,5,0,1,0,1
