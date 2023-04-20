@@ -27,24 +27,28 @@ package com.flag4j.linalg.solvers;
 
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
+import com.flag4j.linalg.decompositions.QRDecomposition;
 import com.flag4j.linalg.decompositions.RealQRDecomposition;
 
 
 /**
- * This linear solver solves a system of linear equations in a least-squares sense. That is, for a system of
- * equations {@code Ax=b}, this solver solves the normal equations {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
+ * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
+ * minimizes {@code ||Ax-b||<sub>2</sub>} which is equivalent to solving the normal equations
+ * {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
+ * This is done using a {@link QRDecomposition}.
  */
 public class MatrixLstsqSolver extends LstsqSolver<Matrix, Vector, Vector> {
 
     /**
      * Backwards solver for solving the system of equations formed from the {@code QR} decomposition,
-     * {@code Rx=Q<sup>T</sup>b} which is equivalent to the normal equations {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
+     * {@code Rx=Q<sup>T</sup>b} which is an equivalent system to {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
      */
     private final MatrixBackSolver backSolver;
 
     /**
-     * Constructs a least-squares solver to solve a system {@code Ax=b} in a least square sense. That is, to solve the
-     * normal equations {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
+     * Constructs a least-squares solver to solve a system {@code Ax=b} in a least square sense. That is,
+     * minimizes {@code ||Ax-b||<sub>2</sub>} which is equivalent to solving the normal equations
+     * {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
      */
     protected MatrixLstsqSolver() {
         super(new RealQRDecomposition());
