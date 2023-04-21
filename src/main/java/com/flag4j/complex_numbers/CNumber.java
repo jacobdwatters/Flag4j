@@ -856,7 +856,7 @@ public class CNumber extends Number {
         CNumber result;
 
         if(value.equals(CNumber.ZERO)) {
-            return CNumber.ZERO;
+            result = new CNumber();
 
         } else if(value.im == 0) {
             if(value.re > 0) {

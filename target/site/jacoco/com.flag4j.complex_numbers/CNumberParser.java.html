@@ -68,8 +68,8 @@ package com.flag4j.complex_numbers;
 <span class="fc" id="L68">                token = lex.getNextToken();</span>
 <span class="fc" id="L69">                token.errorCheck(&quot;eof&quot;, &quot;&quot;);</span>
 
-<span class="pc bpc" id="L71" title="1 of 2 branches missed.">                if(imaginary.getDetails().matches(&quot;-&quot;)) {</span>
-<span class="nc" id="L72">                    result[1] = -1;</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">                if(imaginary.getDetails().matches(&quot;-&quot;)) {</span>
+<span class="fc" id="L72">                    result[1] = -1;</span>
                 }
                 else {
 <span class="fc" id="L75">                    result[1] = Double.parseDouble(imaginary.getDetails());</span>

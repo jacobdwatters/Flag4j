@@ -1625,8 +1625,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void subEq(CMatrix B) {
-<span class="nc" id="L1628">        ComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);</span>
-<span class="nc" id="L1629">    }</span>
+<span class="fc" id="L1628">        ComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);</span>
+<span class="fc" id="L1629">    }</span>
 
 
     /**
@@ -3550,18 +3550,18 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
-<span class="nc" id="L3553">        int sliceRows = rowEnd-rowStart;</span>
-<span class="nc" id="L3554">        int sliceCols = colEnd-colStart;</span>
-<span class="nc" id="L3555">        int destPos = 0;</span>
-<span class="nc" id="L3556">        CNumber[] slice = new CNumber[sliceRows*sliceCols];</span>
+<span class="fc" id="L3553">        int sliceRows = rowEnd-rowStart;</span>
+<span class="fc" id="L3554">        int sliceCols = colEnd-colStart;</span>
+<span class="fc" id="L3555">        int destPos = 0;</span>
+<span class="fc" id="L3556">        CNumber[] slice = new CNumber[sliceRows*sliceCols];</span>
 
-<span class="nc bnc" id="L3558" title="All 2 branches missed.">        for(int i=rowStart; i&lt;rowEnd; i++) {</span>
-<span class="nc bnc" id="L3559" title="All 2 branches missed.">            for(int j=colStart; j&lt;colEnd; j++) {</span>
-<span class="nc" id="L3560">                slice[destPos++] = this.entries[i*this.numCols + j];</span>
+<span class="fc bfc" id="L3558" title="All 2 branches covered.">        for(int i=rowStart; i&lt;rowEnd; i++) {</span>
+<span class="fc bfc" id="L3559" title="All 2 branches covered.">            for(int j=colStart; j&lt;colEnd; j++) {</span>
+<span class="fc" id="L3560">                slice[destPos++] = this.entries[i*this.numCols + j];</span>
             }
         }
 
-<span class="nc" id="L3564">        return new CMatrix(sliceRows, sliceCols, slice);</span>
+<span class="fc" id="L3564">        return new CMatrix(sliceRows, sliceCols, slice);</span>
     }
 
 
@@ -3576,13 +3576,13 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix getColBelow(int rowStart, int j) {
-<span class="nc" id="L3579">        CNumber[] col = new CNumber[numRows-rowStart];</span>
+<span class="fc" id="L3579">        CNumber[] col = new CNumber[numRows-rowStart];</span>
 
-<span class="nc bnc" id="L3581" title="All 2 branches missed.">        for(int i=rowStart; i&lt;numRows; i++) {</span>
-<span class="nc" id="L3582">            col[i-rowStart] = entries[i*numCols + j].copy();</span>
+<span class="fc bfc" id="L3581" title="All 2 branches covered.">        for(int i=rowStart; i&lt;numRows; i++) {</span>
+<span class="fc" id="L3582">            col[i-rowStart] = entries[i*numCols + j].copy();</span>
         }
 
-<span class="nc" id="L3585">        return new CMatrix(new Shape(col.length, 1), col);</span>
+<span class="fc" id="L3585">        return new CMatrix(new Shape(col.length, 1), col);</span>
     }
 
 
@@ -3648,7 +3648,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws IllegalArgumentException If the specified size is less than 1.
      */
     public static CMatrix I(int size) {
-<span class="nc" id="L3651">        return I(size, size);</span>
+<span class="fc" id="L3651">        return I(size, size);</span>
     }
 
 
