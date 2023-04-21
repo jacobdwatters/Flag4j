@@ -36,7 +36,7 @@ import com.flag4j.util.ParameterChecks;
  * {@code A=LL<sup>T</sup>} where {@code L} is a lower triangular matrix and {@code L<sup>T</sup>} is the
  * transpose of {@code L}.</p>
  */
-public class RealCholeskyDecomposition extends CholeskyDecomposition<Matrix> {
+public final class RealCholeskyDecomposition extends CholeskyDecomposition<Matrix> {
 
     /**
      * Gets the transpose of the {@code L} matrix computed by the Cholesky decomposition {@code A=LL<sup>T</sup>}.
@@ -50,7 +50,8 @@ public class RealCholeskyDecomposition extends CholeskyDecomposition<Matrix> {
 
 
     /**
-     * Applies decomposition to the source matrix.
+     * Decompose a matrix into {@code A=LL<sup>T</sup>} where {@code L} is a lower triangular matrix and {@code L<sup>T</sup>} is the
+     * transpose of {@code L}.
      *
      * @param src The source matrix to decompose. Must be symmetric positive-definite.
      * @return A reference to this decomposer.
@@ -81,7 +82,7 @@ public class RealCholeskyDecomposition extends CholeskyDecomposition<Matrix> {
                 }
 
                 if(i==j) {
-                    L.entries[lIndex3] = Math.sqrt((src.entries[lIndex3]-sum));
+                    L.entries[lIndex3] = Math.sqrt(src.entries[lIndex3]-sum);
                 } else {
                     if(L.entries[j*(L.numCols + 1)] != 0) {
                         L.entries[lIndex3] = (src.entries[lIndex3]-sum)/L.entries[lIndex2 + j];

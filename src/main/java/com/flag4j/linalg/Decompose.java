@@ -33,7 +33,7 @@ import com.flag4j.util.ErrorMessages;
 /**
  * This class provides methods for several matrix decompositions.
  */
-public class Decompose {
+public final class Decompose {
 
     private Decompose() {
         // Hide default constructor in utility class.
@@ -105,6 +105,20 @@ public class Decompose {
      */
     public static Matrix Cholesky(Matrix src) {
         RealCholeskyDecomposition cholesky = new RealCholeskyDecomposition();
+        return cholesky.decompose(src).getL();
+    }
+
+
+    /**
+     * Computes the {@link ComplexCholeskyDecomposition cholescky decomposition} of a
+     * symmetric positive-definite matrix. That is, decomposes a symmetric positive-definite matrix {@code A} into
+     * {@code A=LL<sup>*</sup>} where {@code L} is a {@link CMatrix#isTriL() lower triangular}.
+     * @param src The matrix to decompose. Must be symmetric positive-definite.
+     * @return The {@code L} matrix corresponding to {@code A=LL<sup>*</sup>}.
+     * @throws IllegalArgumentException If {@code src} is not symmetric positive-definite.
+     */
+    public static CMatrix Cholesky(CMatrix src) {
+        ComplexCholeskyDecomposition cholesky = new ComplexCholeskyDecomposition();
         return cholesky.decompose(src).getL();
     }
 }
