@@ -47,7 +47,7 @@ public final class Decompose {
      * @param A Matrix to decompose.
      * @return Returns an array of matrices containing in order {@code {P, L, U}} corresponding to {@code PA=LU}.
      */
-    public static Matrix[] LU(Matrix A) {
+    public static Matrix[] lu(Matrix A) {
         RealLUDecomposition LU = new RealLUDecomposition();
         LU.decompose(A);
         return new Matrix[]{LU.getP(), LU.getL(), LU.getU()};
@@ -62,7 +62,7 @@ public final class Decompose {
      * @return Returns an array of matrices containing in order {@code {P, L, U}} corresponding to {@code PA=LU}. Note,
      * although {@code P} is always real, it will be wrapped in a complex Matrix.
      */
-    public static CMatrix[] LU(CMatrix A) {
+    public static CMatrix[] lu(CMatrix A) {
         ComplexLUDecomposition LU = new ComplexLUDecomposition();
         LU.decompose(A);
         return new CMatrix[]{LU.getP().toComplex(), LU.getL(), LU.getU()};
@@ -75,7 +75,7 @@ public final class Decompose {
      * @param A Matrix to decompose.
      * @return Returns an array of matrices containing in order {@code {Q, R}} corresponding to {@code A=QR}.
      */
-    public static Matrix[] QR(Matrix A) {
+    public static Matrix[] qr(Matrix A) {
         RealQRDecomposition QR = new RealQRDecomposition();
         QR.decompose(A);
         return new Matrix[]{QR.getQ(), QR.getR()};
@@ -88,7 +88,7 @@ public final class Decompose {
      * @param A Matrix to decompose.
      * @return Returns an array of matrices containing in order {@code {Q, R}} corresponding to {@code A=QR}.
      */
-    public static CMatrix[] QR(CMatrix A) {
+    public static CMatrix[] qr(CMatrix A) {
         ComplexQRDecomposition QR = new ComplexQRDecomposition();
         QR.decompose(A);
         return new CMatrix[]{QR.getQ(), QR.getR()};
@@ -103,7 +103,7 @@ public final class Decompose {
      * @return The {@code L} matrix corresponding to {@code A=LL<sup>T</sup>}.
      * @throws IllegalArgumentException If {@code src} is not symmetric positive-definite.
      */
-    public static Matrix Cholesky(Matrix src) {
+    public static Matrix cholesky(Matrix src) {
         RealCholeskyDecomposition cholesky = new RealCholeskyDecomposition();
         return cholesky.decompose(src).getL();
     }
@@ -117,7 +117,7 @@ public final class Decompose {
      * @return The {@code L} matrix corresponding to {@code A=LL<sup>*</sup>}.
      * @throws IllegalArgumentException If {@code src} is not symmetric positive-definite.
      */
-    public static CMatrix Cholesky(CMatrix src) {
+    public static CMatrix cholesky(CMatrix src) {
         ComplexCholeskyDecomposition cholesky = new ComplexCholeskyDecomposition();
         return cholesky.decompose(src).getL();
     }
