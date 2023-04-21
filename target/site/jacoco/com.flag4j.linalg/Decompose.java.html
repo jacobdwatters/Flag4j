@@ -47,7 +47,7 @@ public final class Decompose {
      * @param A Matrix to decompose.
      * @return Returns an array of matrices containing in order {@code {P, L, U}} corresponding to {@code PA=LU}.
      */
-    public static Matrix[] LU(Matrix A) {
+    public static Matrix[] lu(Matrix A) {
 <span class="fc" id="L51">        RealLUDecomposition LU = new RealLUDecomposition();</span>
 <span class="fc" id="L52">        LU.decompose(A);</span>
 <span class="fc" id="L53">        return new Matrix[]{LU.getP(), LU.getL(), LU.getU()};</span>
@@ -62,10 +62,10 @@ public final class Decompose {
      * @return Returns an array of matrices containing in order {@code {P, L, U}} corresponding to {@code PA=LU}. Note,
      * although {@code P} is always real, it will be wrapped in a complex Matrix.
      */
-    public static CMatrix[] LU(CMatrix A) {
-<span class="nc" id="L66">        ComplexLUDecomposition LU = new ComplexLUDecomposition();</span>
-<span class="nc" id="L67">        LU.decompose(A);</span>
-<span class="nc" id="L68">        return new CMatrix[]{LU.getP().toComplex(), LU.getL(), LU.getU()};</span>
+    public static CMatrix[] lu(CMatrix A) {
+<span class="fc" id="L66">        ComplexLUDecomposition LU = new ComplexLUDecomposition();</span>
+<span class="fc" id="L67">        LU.decompose(A);</span>
+<span class="fc" id="L68">        return new CMatrix[]{LU.getP().toComplex(), LU.getL(), LU.getU()};</span>
     }
 
 
@@ -75,10 +75,10 @@ public final class Decompose {
      * @param A Matrix to decompose.
      * @return Returns an array of matrices containing in order {@code {Q, R}} corresponding to {@code A=QR}.
      */
-    public static Matrix[] QR(Matrix A) {
-<span class="nc" id="L79">        RealQRDecomposition QR = new RealQRDecomposition();</span>
-<span class="nc" id="L80">        QR.decompose(A);</span>
-<span class="nc" id="L81">        return new Matrix[]{QR.getQ(), QR.getR()};</span>
+    public static Matrix[] qr(Matrix A) {
+<span class="fc" id="L79">        RealQRDecomposition QR = new RealQRDecomposition();</span>
+<span class="fc" id="L80">        QR.decompose(A);</span>
+<span class="fc" id="L81">        return new Matrix[]{QR.getQ(), QR.getR()};</span>
     }
 
 
@@ -88,10 +88,10 @@ public final class Decompose {
      * @param A Matrix to decompose.
      * @return Returns an array of matrices containing in order {@code {Q, R}} corresponding to {@code A=QR}.
      */
-    public static CMatrix[] QR(CMatrix A) {
-<span class="nc" id="L92">        ComplexQRDecomposition QR = new ComplexQRDecomposition();</span>
-<span class="nc" id="L93">        QR.decompose(A);</span>
-<span class="nc" id="L94">        return new CMatrix[]{QR.getQ(), QR.getR()};</span>
+    public static CMatrix[] qr(CMatrix A) {
+<span class="fc" id="L92">        ComplexQRDecomposition QR = new ComplexQRDecomposition();</span>
+<span class="fc" id="L93">        QR.decompose(A);</span>
+<span class="fc" id="L94">        return new CMatrix[]{QR.getQ(), QR.getR()};</span>
     }
 
 
@@ -103,9 +103,9 @@ public final class Decompose {
      * @return The {@code L} matrix corresponding to {@code A=LL&lt;sup&gt;T&lt;/sup&gt;}.
      * @throws IllegalArgumentException If {@code src} is not symmetric positive-definite.
      */
-    public static Matrix Cholesky(Matrix src) {
-<span class="nc" id="L107">        RealCholeskyDecomposition cholesky = new RealCholeskyDecomposition();</span>
-<span class="nc" id="L108">        return cholesky.decompose(src).getL();</span>
+    public static Matrix cholesky(Matrix src) {
+<span class="fc" id="L107">        RealCholeskyDecomposition cholesky = new RealCholeskyDecomposition();</span>
+<span class="fc" id="L108">        return cholesky.decompose(src).getL();</span>
     }
 
 
@@ -117,9 +117,9 @@ public final class Decompose {
      * @return The {@code L} matrix corresponding to {@code A=LL&lt;sup&gt;*&lt;/sup&gt;}.
      * @throws IllegalArgumentException If {@code src} is not symmetric positive-definite.
      */
-    public static CMatrix Cholesky(CMatrix src) {
-<span class="nc" id="L121">        ComplexCholeskyDecomposition cholesky = new ComplexCholeskyDecomposition();</span>
-<span class="nc" id="L122">        return cholesky.decompose(src).getL();</span>
+    public static CMatrix cholesky(CMatrix src) {
+<span class="fc" id="L121">        ComplexCholeskyDecomposition cholesky = new ComplexCholeskyDecomposition();</span>
+<span class="fc" id="L122">        return cholesky.decompose(src).getL();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -99,7 +99,7 @@ Flag4j,com.flag4j,SparseCVector,0,68,0,0,0,13,0,5,0,5
 Flag4j,com.flag4j.linalg,Hessenburg,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,Eigen,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,SubSpace,3,0,0,0,1,0,1,0,1,0
-Flag4j,com.flag4j.linalg,Decompose,100,26,0,0,15,3,6,1,6,1
+Flag4j,com.flag4j.linalg,Decompose,7,119,0,0,2,16,1,6,1,6
 Flag4j,com.flag4j.linalg,RowEchelon,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,PositiveDefiniteness,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,CreateMatrix,3,0,0,0,1,0,1,0,1,0

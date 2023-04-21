@@ -157,6 +157,7 @@ com\flag4j\linalg\decompositions\ComplexQRTests.class
 com\flag4j\complex_numbers\CNumberComparisonTest.class
 com\flag4j\TensorScalMultDivTests.class
 com\flag4j\CMatrixElemMultTests.class
+com\flag4j\linalg\DecomposeTest.class
 com\flag4j\MatrixTriangularTests.class
 com\flag4j\operations\dense_sparse\real\RealDenseSparseMatMultTransposeTests.class
 com\flag4j\TensorElemMultTests.class
