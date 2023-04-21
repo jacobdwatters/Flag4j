@@ -152,6 +152,7 @@ com\flag4j\VectorConstructorTests.class
 com\flag4j\CMatrixDirectSumTests.class
 com\flag4j\TensorEqualsTests.class
 com\flag4j\SparseCMatrixConstructorTests.class
+com\flag4j\linalg\decompositions\ComplexQRTests.class
 com\flag4j\complex_numbers\CNumberComparisonTest.class
 com\flag4j\TensorScalMultDivTests.class
 com\flag4j\CMatrixElemMultTests.class
