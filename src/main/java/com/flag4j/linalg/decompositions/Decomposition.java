@@ -35,6 +35,7 @@ public interface Decomposition<T extends MatrixBase<?>> {
     /**
      * Applies decomposition to the source matrix.
      * @param src The source matrix to decompose.
+     * @return A reference to this decomposer.
      */
-    void decompose(T src);
+    Decomposition<T> decompose(T src);
 }

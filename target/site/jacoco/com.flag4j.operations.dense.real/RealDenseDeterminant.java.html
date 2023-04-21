@@ -78,7 +78,7 @@ public class RealDenseDeterminant {
      */
     public static double detLU(Matrix A) {
 <span class="fc" id="L80">        ParameterChecks.assertSquare(A.shape);</span>
-<span class="fc" id="L81">        Matrix[] LU = Decompose.LU(A);</span>
+<span class="fc" id="L81">        Matrix[] LU = Decompose.lu(A);</span>
 
 <span class="fc" id="L83">        return detLU(LU[0], LU[1], LU[2]);</span>
     }

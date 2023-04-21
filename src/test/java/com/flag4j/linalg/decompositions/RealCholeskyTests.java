@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RealCholeskyTests {
+class RealCholeskyTests {
 
     static double[][] aEntries;
     static double[][] expLEntries;
@@ -22,7 +22,7 @@ public class RealCholeskyTests {
 
     @Test
     void choleskyTest() {
-        MatrixCholeskyDecomposition cholesky = new MatrixCholeskyDecomposition();
+        RealCholeskyDecomposition cholesky = new RealCholeskyDecomposition();
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new double[][]{

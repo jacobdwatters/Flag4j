@@ -820,7 +820,7 @@ public class CNumber extends Number {
     /**
      * Computes the principle square root of a number.
      * @param num Input to square root.
-     * @return The principle square root of {@code num}. That is, the square root of a with positive real part.
+     * @return The principle square root of {@code num}. That is, the square root of {@code num} with positive real part.
      */
     public static CNumber sqrt(CNumber num) {
         CNumber result;

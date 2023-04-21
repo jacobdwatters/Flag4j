@@ -30,7 +30,9 @@ import com.flag4j.Vector;
 
 
 /**
- * Computes the QR decomposition for a real matrix.
+ * <p>Instances of this class compute the {@code QR} decomposition of a real dense matrix.</p>
+ * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into an orthogonal matrix {@code Q}
+ * and an upper triangular matrix {@code R} such that {@code A=QR}.</p>
  */
 public final class RealQRDecomposition extends QRDecomposition<Matrix> {
 
@@ -54,42 +56,30 @@ public final class RealQRDecomposition extends QRDecomposition<Matrix> {
     }
 
 
-    /**
-     * Applies {@code QR} decomposition to the source matrix.
-     *
-     * @param src The source matrix to decompose. Not modified.
-     */
-    @Override
-    public void decompose(Matrix src) {
-        if(fullQR) {
-            this.full(src);
-        } else {
-            this.reduced(src);
-        }
-    }
-
 
     /**
      * Computes the reduced QR decomposition on the src matrix.
-     * @param A The source matrix to decompose.
+     * @param src The source matrix to decompose.
      */
-    private void reduced(Matrix A) {
-        full(A); // First compute the full decomposition
+    @Override
+    protected void reduced(Matrix src) {
+        full(src); // First compute the full decomposition
 
-        int k = Math.min(A.numRows, A.numCols);
+        int k = Math.min(src.numRows, src.numCols);
 
         // Now reduce the decomposition
-        Q = Q.getSlice(0, A.numRows, 0, k);
-        R = R.getSlice(0, k, 0, A.numCols);
+        Q = Q.getSlice(0, src.numRows, 0, k);
+        R = R.getSlice(0, k, 0, src.numCols);
     }
 
 
     /**
      * Computes the full QR decomposition on the src matrix.
-     * @param A The source matrix to decompose.
+     * @param src The source matrix to decompose.
      */
-    private void full(Matrix A) {
-        R = new Matrix(A); // Initialize R to the values in A.
+    @Override
+    protected void full(Matrix src) {
+        R = new Matrix(src); // Initialize R to the values in src.
         int m = R.numRows, n = R.numCols;
         int stop = Math.min(n, m-1);
 

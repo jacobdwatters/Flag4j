@@ -29,6 +29,12 @@ import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.complex_numbers.CNumber;
 
+
+/**
+ * <p>Instances of this class compute the {@code QR} decomposition of a complex dense matrix.</p>
+ * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into an unitary matrix {@code Q}
+ * and an upper triangular matrix {@code R} such that {@code A=QR}.</p>
+ */
 public class ComplexQRDecomposition extends QRDecomposition<CMatrix> {
 
     /**
@@ -51,41 +57,28 @@ public class ComplexQRDecomposition extends QRDecomposition<CMatrix> {
 
 
     /**
-     * Applies {@code QR} decomposition to the source matrix.
-     *
-     * @param src The source matrix to decompose. Not modified.
+     * Computes the reduced QR decomposition on the src matrix.
+     * @param src The source matrix to decompose.
      */
     @Override
-    public void decompose(CMatrix src) {
-        if(fullQR) {
-            this.full(src);
-        } else {
-            this.reduced(src);
-        }
-    }
+    protected void reduced(CMatrix src) {
+        full(src); // First compute the full decomposition
 
-
-    /**
-     * Computes the reduced QR decomposition on the src matrix.
-     * @param A The source matrix to decompose.
-     */
-    private void reduced(CMatrix A) {
-        full(A); // First compute the full decomposition
-
-        int k = Math.min(A.numRows, A.numCols);
+        int k = Math.min(src.numRows, src.numCols);
 
         // Now reduce the decomposition
-        Q = Q.getSlice(0, A.numRows, 0, k);
-        R = R.getSlice(0, k, 0, A.numCols);
+        Q = Q.getSlice(0, src.numRows, 0, k);
+        R = R.getSlice(0, k, 0, src.numCols);
     }
 
 
     /**
      * Computes the full QR decomposition on the src matrix.
-     * @param A The source matrix to decompose.
+     * @param src The source matrix to decompose.
      */
-    private void full(CMatrix A) {
-        R = new CMatrix(A); // Initialize R to the values in A.
+    @Override
+    protected void full(CMatrix src) {
+        R = new CMatrix(src); // Initialize R to the values in src.
         int m = R.numRows, n = R.numCols;
         int stop = Math.min(n, m-1);
 

@@ -25,11 +25,12 @@
 package com.flag4j.linalg.decompositions;
 
 
+import com.flag4j.CMatrix;
 import com.flag4j.core.MatrixBase;
 
 /**
  * &lt;p&gt;This abstract class specifies methods for computing the {@code QR} decomposition of a matrix.&lt;/p&gt;
- * &lt;p&gt;The {@code QR} decomposition, decomposes a matrix {@code A} into an orthogonal matrix {@code Q}
+ * &lt;p&gt;The {@code QR} decomposition, decomposes a matrix {@code A} into a unitary matrix {@code Q}
  * and an upper triangular matrix {@code R} such that {@code A=QR}.&lt;/p&gt;
  */
 public abstract class QRDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; implements Decomposition&lt;T&gt; {
@@ -51,9 +52,9 @@ public abstract class QRDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; imple
     /**
      * Constructs {@code QR} decomposer which computes the full {@code QR} decomposition.
      */
-<span class="fc" id="L54">    public QRDecomposition() {</span>
-<span class="fc" id="L55">        fullQR = true;</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L55">    public QRDecomposition() {</span>
+<span class="fc" id="L56">        fullQR = true;</span>
+<span class="fc" id="L57">    }</span>
 
     /**
      * Constructs a {@code QR} decomposer which computes either the full or reduced {@code QR} decomposition.
@@ -61,9 +62,41 @@ public abstract class QRDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; imple
      *               If true, the full {@code QR} decomposition will be computed, if false,
      *               the reduced {@code QR} decomposition will be computed.
      */
-<span class="fc" id="L64">    public QRDecomposition(boolean fullQR) {</span>
-<span class="fc" id="L65">        this.fullQR = fullQR;</span>
-<span class="fc" id="L66">    }</span>
+<span class="fc" id="L65">    public QRDecomposition(boolean fullQR) {</span>
+<span class="fc" id="L66">        this.fullQR = fullQR;</span>
+<span class="fc" id="L67">    }</span>
+
+
+    /**
+     * Applies {@code QR} decomposition to the source matrix.
+     *
+     * @param src The source matrix to decompose. Not modified.
+     * @return A reference to this decomposer.
+     */
+    @Override
+    public QRDecomposition decompose(T src) {
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if(fullQR) {</span>
+<span class="fc" id="L79">            this.full(src);</span>
+        } else {
+<span class="fc" id="L81">            this.reduced(src);</span>
+        }
+
+<span class="fc" id="L84">        return this;</span>
+    }
+
+
+    /**
+     * Computes the reduced QR decomposition on the src matrix.
+     * @param src The source matrix to decompose.
+     */
+    protected abstract void full(T src);
+
+
+    /**
+     * Computes the full QR decomposition on the src matrix.
+     * @param src The source matrix to decompose.
+     */
+    protected abstract void reduced(T src);
 
 
     /**
@@ -71,7 +104,7 @@ public abstract class QRDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; imple
      * @return The {@code Q} matrix from the {@code QR} decomposition.
      */
     public T getQ(){
-<span class="fc" id="L74">        return Q;</span>
+<span class="fc" id="L107">        return Q;</span>
     }
 
 
@@ -80,7 +113,7 @@ public abstract class QRDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; imple
      * @return The {@code R} matrix from the {@code QR} decomposition.
      */
     public T getR(){
-<span class="fc" id="L83">        return R;</span>
+<span class="fc" id="L116">        return R;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

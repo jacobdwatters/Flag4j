@@ -51,6 +51,7 @@ ___
   - Full Pivoting
 - QR Decomposition
   - Householder Reflectors
+  - Full/Reduced
 - Cholesky Decomposition
 - Eigen/Schur Decompositions
 - Singular Value Decomposition

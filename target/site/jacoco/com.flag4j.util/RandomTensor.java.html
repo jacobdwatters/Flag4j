@@ -396,14 +396,14 @@ public class RandomTensor {
 
     /**
      * Gets a pseudorandom orthogonal matrix. From an implementation point of view, a pseudorandom matrix is generated
-     * as if by {@link #randomMatrix(int, int) getRandomMatrix(size, size)}. Then, a {@link Decompose#QR(Matrix) QR}
+     * as if by {@link #randomMatrix(int, int) getRandomMatrix(size, size)}. Then, a {@link Decompose#qr(Matrix) QR}
      * decomposition is computed on this pseudorandom matrix and the {@code Q} matrix from this decomposition is returned.
      * @param size Size of the orthogonal matrix (i.e. the number rows and columns for the square matrix).
      * @return A pseudorandom orthogonal matrix.
      */
     public Matrix randomOrthogonalMatrix(int size) {
 <span class="nc" id="L405">        Matrix randMat = new Matrix(size, size, genUniformRealArray(size));</span>
-<span class="nc" id="L406">        return Decompose.QR(randMat)[0];</span>
+<span class="nc" id="L406">        return Decompose.qr(randMat)[0];</span>
     }
 
 
