@@ -25,11 +25,12 @@
 package com.flag4j.linalg.decompositions;
 
 
+import com.flag4j.CMatrix;
 import com.flag4j.core.MatrixBase;
 
 /**
  * <p>This abstract class specifies methods for computing the {@code QR} decomposition of a matrix.</p>
- * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into an orthogonal matrix {@code Q}
+ * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into a unitary matrix {@code Q}
  * and an upper triangular matrix {@code R} such that {@code A=QR}.</p>
  */
 public abstract class QRDecomposition<T extends MatrixBase<?>> implements Decomposition<T> {
@@ -64,6 +65,38 @@ public abstract class QRDecomposition<T extends MatrixBase<?>> implements Decomp
     public QRDecomposition(boolean fullQR) {
         this.fullQR = fullQR;
     }
+
+
+    /**
+     * Applies {@code QR} decomposition to the source matrix.
+     *
+     * @param src The source matrix to decompose. Not modified.
+     * @return A reference to this decomposer.
+     */
+    @Override
+    public QRDecomposition decompose(T src) {
+        if(fullQR) {
+            this.full(src);
+        } else {
+            this.reduced(src);
+        }
+
+        return this;
+    }
+
+
+    /**
+     * Computes the reduced QR decomposition on the src matrix.
+     * @param src The source matrix to decompose.
+     */
+    protected abstract void full(T src);
+
+
+    /**
+     * Computes the full QR decomposition on the src matrix.
+     * @param src The source matrix to decompose.
+     */
+    protected abstract void reduced(T src);
 
 
     /**

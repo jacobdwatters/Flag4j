@@ -36,7 +36,7 @@ import com.flag4j.util.ParameterChecks;
  * {@code A=LL<sup>T</sup>} where {@code L} is a lower triangular matrix and {@code L<sup>T</sup>} is the
  * transpose of {@code L}.</p>
  */
-public class MatrixCholeskyDecomposition extends CholeskyDecomposition<Matrix> {
+public class RealCholeskyDecomposition extends CholeskyDecomposition<Matrix> {
 
     /**
      * Gets the transpose of the {@code L} matrix computed by the Cholesky decomposition {@code A=LL<sup>T</sup>}.
@@ -53,10 +53,11 @@ public class MatrixCholeskyDecomposition extends CholeskyDecomposition<Matrix> {
      * Applies decomposition to the source matrix.
      *
      * @param src The source matrix to decompose. Must be symmetric positive-definite.
+     * @return A reference to this decomposer.
      * @throws IllegalArgumentException If {@code src} is not symmetric positive-definite.
      */
     @Override
-    public void decompose(Matrix src) {
+    public RealCholeskyDecomposition decompose(Matrix src) {
         // TODO: Check that matrix is positive definite.
         ParameterChecks.assertSquare(src.shape);
 
@@ -88,5 +89,7 @@ public class MatrixCholeskyDecomposition extends CholeskyDecomposition<Matrix> {
                 }
             }
         }
+
+        return this;
     }
 }

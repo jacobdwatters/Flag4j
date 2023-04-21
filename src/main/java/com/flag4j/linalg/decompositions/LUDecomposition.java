@@ -95,9 +95,10 @@ public abstract class LUDecomposition<T extends MatrixBase<?>> implements Decomp
      * Applies {@code LU} decomposition to the source matrix using the pivoting specified in the constructor.
      *
      * @param src The source matrix to decompose. Not modified.
+     * @return A reference to this decomposer.
      */
     @Override
-    public void decompose(T src) {
+    public LUDecomposition decompose(T src) {
         initLU(src);
 
         if(pivotFlag==Pivoting.NONE) {
@@ -107,6 +108,8 @@ public abstract class LUDecomposition<T extends MatrixBase<?>> implements Decomp
         } else {
             fullPivot();
         }
+
+        return this;
     }
 
 

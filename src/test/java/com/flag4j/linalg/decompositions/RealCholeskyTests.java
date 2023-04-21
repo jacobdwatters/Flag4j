@@ -22,7 +22,7 @@ public class RealCholeskyTests {
 
     @Test
     void choleskyTest() {
-        MatrixCholeskyDecomposition cholesky = new MatrixCholeskyDecomposition();
+        RealCholeskyDecomposition cholesky = new RealCholeskyDecomposition();
 
         // --------------------- Sub-case 1 ---------------------
         aEntries = new double[][]{
