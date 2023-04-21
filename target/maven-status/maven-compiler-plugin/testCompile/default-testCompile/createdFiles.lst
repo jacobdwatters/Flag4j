@@ -93,6 +93,7 @@ com\flag4j\complex_numbers\CNumberExponentialTest.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseMatMultTransposeTests.class
 com\flag4j\CMatrixToStringTests.class
 com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseMatMultTransposeTests.class
+com\flag4j\linalg\decompositions\ComplexCholeskyTests.class
 com\flag4j\complex_numbers\CNumberRoundTest.class
 com\flag4j\CVectorSetTests.class
 com\flag4j\linalg\decompositions\RealLUTests.class

@@ -29,14 +29,20 @@ import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.complex_numbers.CNumber;
 
+
+/**
+ * &lt;p&gt;Instances of this class compute the {@code QR} decomposition of a complex dense matrix.&lt;/p&gt;
+ * &lt;p&gt;The {@code QR} decomposition, decomposes a matrix {@code A} into an unitary matrix {@code Q}
+ * and an upper triangular matrix {@code R} such that {@code A=QR}.&lt;/p&gt;
+ */
 public class ComplexQRDecomposition extends QRDecomposition&lt;CMatrix&gt; {
 
     /**
      * Constructs a {@code QR} decomposer which computes the full {@code QR} decomposition.
      */
     public ComplexQRDecomposition() {
-<span class="fc" id="L38">        super();</span>
-<span class="fc" id="L39">    }</span>
+<span class="fc" id="L44">        super();</span>
+<span class="fc" id="L45">    }</span>
 
 
     /**
@@ -46,66 +52,53 @@ public class ComplexQRDecomposition extends QRDecomposition&lt;CMatrix&gt; {
      *               the reduced {@code QR} decomposition will be computed.
      */
     public ComplexQRDecomposition(boolean fullQR) {
-<span class="fc" id="L49">        super(fullQR);</span>
-<span class="fc" id="L50">    }</span>
-
-
-    /**
-     * Applies {@code QR} decomposition to the source matrix.
-     *
-     * @param src The source matrix to decompose. Not modified.
-     */
-    @Override
-    public void decompose(CMatrix src) {
-<span class="fc bfc" id="L60" title="All 2 branches covered.">        if(fullQR) {</span>
-<span class="fc" id="L61">            this.full(src);</span>
-        } else {
-<span class="fc" id="L63">            this.reduced(src);</span>
-        }
-<span class="fc" id="L65">    }</span>
+<span class="fc" id="L55">        super(fullQR);</span>
+<span class="fc" id="L56">    }</span>
 
 
     /**
      * Computes the reduced QR decomposition on the src matrix.
-     * @param A The source matrix to decompose.
+     * @param src The source matrix to decompose.
      */
-    private void reduced(CMatrix A) {
-<span class="fc" id="L73">        full(A); // First compute the full decomposition</span>
+    @Override
+    protected void reduced(CMatrix src) {
+<span class="fc" id="L65">        full(src); // First compute the full decomposition</span>
 
-<span class="fc" id="L75">        int k = Math.min(A.numRows, A.numCols);</span>
+<span class="fc" id="L67">        int k = Math.min(src.numRows, src.numCols);</span>
 
         // Now reduce the decomposition
-<span class="fc" id="L78">        Q = Q.getSlice(0, A.numRows, 0, k);</span>
-<span class="fc" id="L79">        R = R.getSlice(0, k, 0, A.numCols);</span>
-<span class="fc" id="L80">    }</span>
+<span class="fc" id="L70">        Q = Q.getSlice(0, src.numRows, 0, k);</span>
+<span class="fc" id="L71">        R = R.getSlice(0, k, 0, src.numCols);</span>
+<span class="fc" id="L72">    }</span>
 
 
     /**
      * Computes the full QR decomposition on the src matrix.
-     * @param A The source matrix to decompose.
+     * @param src The source matrix to decompose.
      */
-    private void full(CMatrix A) {
-<span class="fc" id="L88">        R = new CMatrix(A); // Initialize R to the values in A.</span>
-<span class="fc" id="L89">        int m = R.numRows, n = R.numCols;</span>
-<span class="fc" id="L90">        int stop = Math.min(n, m-1);</span>
+    @Override
+    protected void full(CMatrix src) {
+<span class="fc" id="L81">        R = new CMatrix(src); // Initialize R to the values in src.</span>
+<span class="fc" id="L82">        int m = R.numRows, n = R.numCols;</span>
+<span class="fc" id="L83">        int stop = Math.min(n, m-1);</span>
 
         CMatrix H, col;
 
         // Initialize Q to the identity matrix.
-<span class="fc" id="L95">        Q = CMatrix.I(R.numRows);</span>
+<span class="fc" id="L88">        Q = CMatrix.I(R.numRows);</span>
 
-<span class="fc bfc" id="L97" title="All 2 branches covered.">        for(int i=0; i&lt;stop; i++) {</span>
-<span class="fc" id="L98">            H = CMatrix.I(m);</span>
-<span class="fc" id="L99">            col = R.getColBelow(i, i);</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        for(int i=0; i&lt;stop; i++) {</span>
+<span class="fc" id="L91">            H = CMatrix.I(m);</span>
+<span class="fc" id="L92">            col = R.getColBelow(i, i);</span>
 
-<span class="fc bfc" id="L101" title="All 2 branches covered.">            if(!col.isZeros()) { // Then a householder transform must be applied</span>
-<span class="fc" id="L102">                H.setSlice(getHouseholder(col), i, i);</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">            if(!col.isZeros()) { // Then a householder transform must be applied</span>
+<span class="fc" id="L95">                H.setSlice(getHouseholder(col), i, i);</span>
 
-<span class="fc" id="L104">                Q = Q.mult(H); // Apply Householder reflector to Q</span>
-<span class="fc" id="L105">                R = H.mult(R); // Apply Householder reflector to R</span>
+<span class="fc" id="L97">                Q = Q.mult(H); // Apply Householder reflector to Q</span>
+<span class="fc" id="L98">                R = H.mult(R); // Apply Householder reflector to R</span>
             }
         }
-<span class="fc" id="L108">    }</span>
+<span class="fc" id="L101">    }</span>
 
 
     /**
@@ -114,20 +107,20 @@ public class ComplexQRDecomposition extends QRDecomposition&lt;CMatrix&gt; {
      * @return The Householder transformation matrix.
      */
     private CMatrix getHouseholder(CMatrix col) {
-<span class="fc" id="L117">        CMatrix H = CMatrix.I(col.numRows);</span>
-<span class="fc" id="L118">        CVector v = col.toVector();</span>
+<span class="fc" id="L110">        CMatrix H = CMatrix.I(col.numRows);</span>
+<span class="fc" id="L111">        CVector v = col.toVector();</span>
 
-<span class="fc bfc" id="L120" title="All 2 branches covered.">        CNumber signedNorm = v.entries[0].equals(CNumber.ZERO) ?</span>
-<span class="fc" id="L121">                new CNumber(-v.norm()) : CNumber.sgn(v.entries[0]).mult(-v.norm());</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        CNumber signedNorm = v.entries[0].equals(CNumber.ZERO) ?</span>
+<span class="fc" id="L114">                new CNumber(-v.norm()) : CNumber.sgn(v.entries[0]).mult(-v.norm());</span>
 
-<span class="fc" id="L123">        v = v.scalDiv(v.entries[0].add(signedNorm));</span>
-<span class="fc" id="L124">        v.entries[0] = new CNumber(1.0);</span>
+<span class="fc" id="L116">        v = v.scalDiv(v.entries[0].add(signedNorm));</span>
+<span class="fc" id="L117">        v.entries[0] = new CNumber(1.0);</span>
 
         // Create projection matrix
-<span class="fc" id="L127">        CMatrix P = v.outer(v).mult(CNumber.TWO.div(v.inner(v)));</span>
-<span class="fc" id="L128">        H.subEq(P);</span>
+<span class="fc" id="L120">        CMatrix P = v.outer(v).mult(CNumber.TWO.div(v.inner(v)));</span>
+<span class="fc" id="L121">        H.subEq(P);</span>
 
-<span class="fc" id="L130">        return H;</span>
+<span class="fc" id="L123">        return H;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
