@@ -40,7 +40,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <X> Matrix entry type.
  */
 public interface MatrixManipulationsMixin<T extends MatrixBase<?>, U extends MatrixBase<?>, V extends MatrixBase<?>,
-        W extends MatrixBase<CNumber[]>, Y extends MatrixBase<double[]>, X extends Number>
+        W extends ComplexMatrixBase, Y extends RealMatrixBase, X extends Number>
         extends TensorManipulationsMixin<T, U, V, W, Y, X> {
 
 

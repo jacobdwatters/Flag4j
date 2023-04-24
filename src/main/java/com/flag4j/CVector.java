@@ -25,6 +25,7 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.ComplexVectorBase;
 import com.flag4j.core.ComplexVectorMixin;
 import com.flag4j.core.VectorBase;
 import com.flag4j.io.PrintOptions;
@@ -47,7 +48,7 @@ import java.util.Arrays;
 /**
  * Complex dense vector. This class is mostly equivalent to a rank 1 complex tensor.
  */
-public class CVector extends VectorBase<CNumber[]> implements
+public class CVector extends ComplexVectorBase implements
         ComplexVectorMixin<CVector, Vector> {
 
 

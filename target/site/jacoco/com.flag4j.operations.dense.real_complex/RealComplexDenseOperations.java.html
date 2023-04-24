@@ -239,20 +239,21 @@ public final class RealComplexDenseOperations {
 <span class="fc" id="L239">        return sum;</span>
     }
 
+
     /**
-     * Computes the scalar multiplication of a tensor.
+     * Computes the scalar division of a tensor.
      * @param entries Entries of the tensor.
-     * @param divisor Scalar value to multiply.
-     * @return The scalar multiplication of the tensor.
+     * @param divisor Scalar value to divide tensor by.
+     * @return The scalar division of the tensor.
      */
     public static CNumber[] scalDiv(CNumber[] entries, double divisor) {
-<span class="fc" id="L249">        CNumber[] quotient = new CNumber[entries.length];</span>
+<span class="fc" id="L250">        CNumber[] quotient = new CNumber[entries.length];</span>
 
-<span class="fc bfc" id="L251" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
-<span class="fc" id="L252">            quotient[i] = entries[i].div(divisor);</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
+<span class="fc" id="L253">            quotient[i] = entries[i].div(divisor);</span>
         }
 
-<span class="fc" id="L255">        return quotient;</span>
+<span class="fc" id="L256">        return quotient;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

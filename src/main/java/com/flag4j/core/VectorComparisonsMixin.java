@@ -37,7 +37,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <X> Vector entry type.
  */
 public interface VectorComparisonsMixin<T extends VectorBase<?>, U extends VectorBase<?>, V extends VectorBase<?>,
-        W extends VectorBase<CNumber[]>, Y extends VectorBase<double[]>, X extends Number>
+        W extends ComplexVectorBase, Y extends VectorBase<double[]>, X extends Number>
         extends TensorComparisonsMixin<T, U, V, W, Y, X> {
     // TODO: Should this interface be removed?
 }

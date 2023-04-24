@@ -465,15 +465,15 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
      */
     public static CNumber[] dispatchTranspose(CMatrix A, CMatrix B) {
-<span class="fc" id="L468">        ParameterChecks.assertEquals(A.numCols, B.numCols);</span>
-<span class="fc" id="L469">        AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);</span>
+<span class="nc" id="L468">        ParameterChecks.assertEquals(A.numCols, B.numCols);</span>
+<span class="nc" id="L469">        AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);</span>
         CNumber[] dest;
 
-<span class="pc bpc" id="L472" title="2 of 3 branches missed.">        switch(algorithm) {</span>
+<span class="nc bnc" id="L472" title="All 3 branches missed.">        switch(algorithm) {</span>
             case MULT_T:
-<span class="fc" id="L474">                dest = ComplexDenseMatrixMultTranspose.multTranspose(</span>
+<span class="nc" id="L474">                dest = ComplexDenseMatrixMultTranspose.multTranspose(</span>
                         A.entries, A.shape, B.entries, B.shape);
-<span class="fc" id="L476">                break;</span>
+<span class="nc" id="L476">                break;</span>
             case MULT_T_CONCURRENT:
 <span class="nc" id="L478">                dest = ComplexDenseMatrixMultTranspose.multTransposeConcurrent(</span>
                         A.entries, A.shape, B.entries, B.shape);
@@ -483,7 +483,7 @@ public final class MatrixMultiplyDispatcher {
                         A.entries, A.shape, B.entries, B.shape);
         }
 
-<span class="fc" id="L486">        return dest;</span>
+<span class="nc" id="L486">        return dest;</span>
     }
 
 
@@ -494,10 +494,10 @@ public final class MatrixMultiplyDispatcher {
     public static AlgorithmName chooseAlgorithmRealComplexTranspose(Shape shape) {
         AlgorithmName algorithm;
 
-<span class="fc" id="L497">        int rows = shape.get(Axis2D.row());</span>
+<span class="nc" id="L497">        int rows = shape.get(Axis2D.row());</span>
 
-<span class="pc bpc" id="L499" title="1 of 2 branches missed.">        if(rows&lt;50) {</span>
-<span class="fc" id="L500">            algorithm = AlgorithmName.MULT_T;</span>
+<span class="nc bnc" id="L499" title="All 2 branches missed.">        if(rows&lt;50) {</span>
+<span class="nc" id="L500">            algorithm = AlgorithmName.MULT_T;</span>
 <span class="nc bnc" id="L501" title="All 2 branches missed.">        } else if(rows&lt;60) {</span>
 <span class="nc" id="L502">            algorithm = AlgorithmName.MULT_T_BLOCKED;</span>
 <span class="nc bnc" id="L503" title="All 2 branches missed.">        } else if(rows&lt;300) {</span>
@@ -506,7 +506,7 @@ public final class MatrixMultiplyDispatcher {
 <span class="nc" id="L506">            algorithm = AlgorithmName.MULT_T_BLOCKED_CONCURRENT;</span>
         }
 
-<span class="fc" id="L509">        return algorithm;</span>
+<span class="nc" id="L509">        return algorithm;</span>
     }
 
 

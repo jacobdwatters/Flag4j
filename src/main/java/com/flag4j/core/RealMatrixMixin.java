@@ -33,7 +33,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <T> Matrix type.
  * @param <W> Complex matrix type.
  */
-public interface RealMatrixMixin<T extends MatrixBase<double[]>, W extends MatrixBase<CNumber[]>> extends
+public interface RealMatrixMixin<T extends RealMatrixBase, W extends ComplexMatrixBase> extends
         MatrixPropertiesMixin<T, Matrix, SparseMatrix, W, T, Double>,
         MatrixOperationsMixin<T, Matrix, SparseMatrix, W, T, Double>,
         MatrixComparisonsMixin<T, Matrix, SparseMatrix, W, T, Double>,

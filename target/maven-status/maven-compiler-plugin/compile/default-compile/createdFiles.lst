@@ -14,6 +14,7 @@ com\flag4j\core\TensorExclusiveMixin.class
 com\flag4j\linalg\decompositions\RealQRDecomposition.class
 com\flag4j\util\RandomCNumber.class
 com\flag4j\core\VectorComparisonsMixin.class
+com\flag4j\core\RealVectorBase.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseElemMult.class
 com\flag4j\SparseCVector.class
 com\flag4j\operations\dense\real\RealDenseTranspose.class
@@ -66,6 +67,7 @@ com\flag4j\operations\MatrixMultiplyDispatcher$1.class
 com\flag4j\core\ComplexVectorBase.class
 com\flag4j\operations\dense\complex\ComplexDenseSetOperations.class
 com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseMatrixMultTranspose.class
+com\flag4j\operations\dense\real\RealDenseTensorDot.class
 com\flag4j\operations\dense_sparse\real\RealDenseSparseOperations.class
 com\flag4j\operations\dense\real\RealDenseMatrixMultiplication.class
 com\flag4j\io\TensorOutputStream.class

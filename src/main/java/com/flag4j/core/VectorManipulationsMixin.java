@@ -42,8 +42,8 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <WW> Complex Matrix type equivalent.
  */
 public interface VectorManipulationsMixin<T extends VectorBase<?>, U extends VectorBase<?>, V extends VectorBase<?>,
-        W extends VectorBase<CNumber[]>, Y extends VectorBase<double[]>, X extends Number,
-        TT extends MatrixBase<?>, UU extends MatrixBase<?>, VV extends MatrixBase<?>, WW extends MatrixBase<CNumber[]>>
+        W extends ComplexVectorBase, Y extends VectorBase<double[]>, X extends Number,
+        TT extends MatrixBase<?>, UU extends MatrixBase<?>, VV extends MatrixBase<?>, WW extends ComplexMatrixBase>
         extends TensorManipulationsMixin<T, U, V, W, Y, X> {
 
 
