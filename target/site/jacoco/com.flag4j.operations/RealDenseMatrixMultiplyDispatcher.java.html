@@ -132,11 +132,11 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @return
      */
     public static double[] dispatchTranspose(Matrix A, Matrix B) {
-<span class="nc" id="L135">        assertArrayLengthsEq(A.numCols, B.numCols);</span>
+<span class="fc" id="L135">        assertArrayLengthsEq(A.numCols, B.numCols);</span>
 
-<span class="nc" id="L137">        RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();</span>
-<span class="nc" id="L138">        AlgorithmNames name = selectAlgorithmTranspose(A.shape);</span>
-<span class="nc" id="L139">        return dispatcher.algorithmMap.get(name).apply(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="fc" id="L137">        RealDenseMatrixMultiplyDispatcher dispatcher = getInstance();</span>
+<span class="fc" id="L138">        AlgorithmNames name = selectAlgorithmTranspose(A.shape);</span>
+<span class="fc" id="L139">        return dispatcher.algorithmMap.get(name).apply(A.entries, A.shape, B.entries, B.shape);</span>
     }
 
 

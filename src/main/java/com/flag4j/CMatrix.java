@@ -1414,8 +1414,7 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
-     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
-     * independently.
+     * Rounds values which are close to zero in absolute value to zero.
      *
      * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
      *                  will be rounded to zero. This value must be non-negative.
@@ -1687,7 +1686,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CMatrix scalDiv(double divisor) {
+    public CMatrix div(double divisor) {
         return new CMatrix(this.shape.copy(),
                 RealComplexDenseOperations.scalDiv(this.entries, divisor)
         );
@@ -1702,7 +1701,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CMatrix scalDiv(CNumber divisor) {
+    public CMatrix div(CNumber divisor) {
         return new CMatrix(this.shape.copy(),
                 ComplexDenseOperations.scalDiv(this.entries, divisor)
         );
@@ -3553,11 +3552,16 @@ public class CMatrix extends ComplexMatrixBase implements
         int sliceRows = rowEnd-rowStart;
         int sliceCols = colEnd-colStart;
         int destPos = 0;
+        int srcPos;
+        int end;
         CNumber[] slice = new CNumber[sliceRows*sliceCols];
 
         for(int i=rowStart; i<rowEnd; i++) {
-            for(int j=colStart; j<colEnd; j++) {
-                slice[destPos++] = this.entries[i*this.numCols + j];
+            srcPos = i*this.numCols + colStart;
+            end = srcPos + colEnd - colStart;
+
+            while(srcPos < end) {
+                slice[destPos++] = this.entries[srcPos++];
             }
         }
 
@@ -3950,7 +3954,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public CNumber min() {
+    public double min() {
         return minAbs();
     }
 
@@ -3961,7 +3965,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public CNumber max() {
+    public double max() {
         return maxAbs();
     }
 
@@ -3973,7 +3977,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return The minimum value, in absolute value, in this tensor.
      */
     @Override
-    public CNumber minAbs() {
+    public double minAbs() {
         return AggregateComplex.minAbs(this.entries);
     }
 
@@ -3985,7 +3989,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return The maximum value, in absolute value, in this tensor.
      */
     @Override
-    public CNumber maxAbs() {
+    public double maxAbs() {
         return AggregateComplex.maxAbs(this.entries);
     }
 

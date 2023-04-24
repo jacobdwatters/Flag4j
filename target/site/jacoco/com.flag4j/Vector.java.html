@@ -1297,6 +1297,16 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
     }
 
 
+    // TODO: Create a real vector mixin and pull this method up to it.
+    /**
+     * Converts this vector to an equivalent complex vector.
+     * @return A complex vector with values equivalent to this vector.
+     */
+    public CVector toComplex() {
+<span class="nc" id="L1306">        return new CVector(this.entries);</span>
+    }
+
+
     /**
      * Converts a vector to an equivalent matrix representing the vector as a column.
      *
@@ -1304,7 +1314,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public Matrix toMatrix() {
-<span class="fc" id="L1307">        return new Matrix(this.entries.length, 1, this.entries.clone());</span>
+<span class="fc" id="L1317">        return new Matrix(this.entries.length, 1, this.entries.clone());</span>
     }
 
 
@@ -1317,12 +1327,12 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public Matrix toMatrix(boolean columVector) {
-<span class="fc bfc" id="L1320" title="All 2 branches covered.">        if(columVector) {</span>
+<span class="fc bfc" id="L1330" title="All 2 branches covered.">        if(columVector) {</span>
             // Convert to column vector
-<span class="fc" id="L1322">            return new Matrix(this.entries.length, 1, this.entries.clone());</span>
+<span class="fc" id="L1332">            return new Matrix(this.entries.length, 1, this.entries.clone());</span>
         } else {
             // Convert to row vector.
-<span class="fc" id="L1325">            return new Matrix(1, this.entries.length, this.entries.clone());</span>
+<span class="fc" id="L1335">            return new Matrix(1, this.entries.length, this.entries.clone());</span>
         }
     }
 
@@ -1332,7 +1342,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      * @return A tensor which is equivalent to this vector.
      */
     public Tensor toTensor() {
-<span class="fc" id="L1335">        return new Tensor(this.shape.copy(), this.entries.clone());</span>
+<span class="fc" id="L1345">        return new Tensor(this.shape.copy(), this.entries.clone());</span>
     }
 
 
@@ -1342,8 +1352,8 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public Double min() {
-<span class="fc" id="L1346">        return AggregateReal.min(this.entries);</span>
+    public double min() {
+<span class="fc" id="L1356">        return AggregateReal.min(this.entries);</span>
     }
 
 
@@ -1353,8 +1363,8 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public Double max() {
-<span class="fc" id="L1357">        return AggregateReal.max(this.entries);</span>
+    public double max() {
+<span class="fc" id="L1367">        return AggregateReal.max(this.entries);</span>
     }
 
 
@@ -1365,8 +1375,8 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      * @return The minimum value, in absolute value, in this tensor.
      */
     @Override
-    public Double minAbs() {
-<span class="fc" id="L1369">        return AggregateReal.minAbs(this.entries);</span>
+    public double minAbs() {
+<span class="fc" id="L1379">        return AggregateReal.minAbs(this.entries);</span>
     }
 
 
@@ -1377,8 +1387,8 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      * @return The maximum value, in absolute value, in this tensor.
      */
     @Override
-    public Double maxAbs() {
-<span class="fc" id="L1381">        return AggregateReal.maxAbs(this.entries);</span>
+    public double maxAbs() {
+<span class="fc" id="L1391">        return AggregateReal.maxAbs(this.entries);</span>
     }
 
 
@@ -1390,7 +1400,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public int[] argMin() {
-<span class="fc" id="L1393">        return new int[]{AggregateDenseReal.argMin(this.entries)};</span>
+<span class="fc" id="L1403">        return new int[]{AggregateDenseReal.argMin(this.entries)};</span>
     }
 
 
@@ -1402,7 +1412,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public int[] argMax() {
-<span class="fc" id="L1405">        return new int[]{AggregateDenseReal.argMax(this.entries)};</span>
+<span class="fc" id="L1415">        return new int[]{AggregateDenseReal.argMax(this.entries)};</span>
     }
 
 
@@ -1413,13 +1423,13 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public double norm() {
-<span class="fc" id="L1416">        double norm = 0;</span>
+<span class="fc" id="L1426">        double norm = 0;</span>
 
-<span class="fc bfc" id="L1418" title="All 2 branches covered.">        for(int i=0; i&lt;this.size; i++) {</span>
-<span class="fc" id="L1419">            norm += this.entries[i]*this.entries[i];</span>
+<span class="fc bfc" id="L1428" title="All 2 branches covered.">        for(int i=0; i&lt;this.size; i++) {</span>
+<span class="fc" id="L1429">            norm += this.entries[i]*this.entries[i];</span>
         }
 
-<span class="fc" id="L1422">        return Math.sqrt(norm);</span>
+<span class="fc" id="L1432">        return Math.sqrt(norm);</span>
     }
 
 
@@ -1434,20 +1444,20 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
     @Override
     public double norm(double p) {
 
-<span class="fc bfc" id="L1437" title="All 2 branches covered.">        if(Double.isInfinite(p)) {</span>
-<span class="pc bpc" id="L1438" title="1 of 2 branches missed.">            if(p &gt; 0) {</span>
-<span class="fc" id="L1439">                return maxAbs(); // Maximum / infinite norm.</span>
+<span class="fc bfc" id="L1447" title="All 2 branches covered.">        if(Double.isInfinite(p)) {</span>
+<span class="pc bpc" id="L1448" title="1 of 2 branches missed.">            if(p &gt; 0) {</span>
+<span class="fc" id="L1449">                return maxAbs(); // Maximum / infinite norm.</span>
             } else {
-<span class="nc" id="L1441">                return minAbs(); // Minimum norm.</span>
+<span class="nc" id="L1451">                return minAbs(); // Minimum norm.</span>
             }
         } else {
-<span class="fc" id="L1444">            double norm = 0;</span>
+<span class="fc" id="L1454">            double norm = 0;</span>
 
-<span class="fc bfc" id="L1446" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
-<span class="fc" id="L1447">                norm += Math.pow(Math.abs(this.entries[i]), p);</span>
+<span class="fc bfc" id="L1456" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
+<span class="fc" id="L1457">                norm += Math.pow(Math.abs(this.entries[i]), p);</span>
             }
 
-<span class="fc" id="L1450">            return Math.pow(norm, 1.0/p);</span>
+<span class="fc" id="L1460">            return Math.pow(norm, 1.0/p);</span>
         }
     }
 
@@ -1459,7 +1469,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public double infNorm() {
-<span class="fc" id="L1462">        return AggregateReal.maxAbs(this.entries);</span>
+<span class="fc" id="L1472">        return AggregateReal.maxAbs(this.entries);</span>
     }
 
 
@@ -1470,7 +1480,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public int length() {
-<span class="fc" id="L1473">        return this.size;</span>
+<span class="fc" id="L1483">        return this.size;</span>
     }
 
 
@@ -1480,43 +1490,43 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      * @return A human-readable string representation of this vector.
      */
     public String toString() {
-<span class="fc" id="L1483">        StringBuilder result = new StringBuilder();</span>
+<span class="nc" id="L1493">        StringBuilder result = new StringBuilder();</span>
 
-<span class="pc bpc" id="L1485" title="1 of 2 branches missed.">        if(PrintOptions.getMaxColumns()&lt;size) {</span>
+<span class="nc bnc" id="L1495" title="All 2 branches missed.">        if(PrintOptions.getMaxColumns()&lt;size) {</span>
             // Then also get the full size of the vector.
-<span class="nc" id="L1487">            result.append(String.format(&quot;Full Size: %d\n&quot;, size));</span>
+<span class="nc" id="L1497">            result.append(String.format(&quot;Full Size: %d\n&quot;, size));</span>
         }
 
-<span class="fc" id="L1490">        result.append(&quot;[&quot;);</span>
+<span class="nc" id="L1500">        result.append(&quot;[&quot;);</span>
 
-<span class="fc" id="L1492">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
+<span class="nc" id="L1502">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
         int width;
         String value;
 
         // Get entries up until the stopping point.
-<span class="fc bfc" id="L1497" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
-<span class="fc" id="L1498">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
-<span class="fc" id="L1499">            width = PrintOptions.getPadding() + value.length();</span>
-<span class="pc bpc" id="L1500" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1501">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc bnc" id="L1507" title="All 2 branches missed.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="nc" id="L1508">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
+<span class="nc" id="L1509">            width = PrintOptions.getPadding() + value.length();</span>
+<span class="nc bnc" id="L1510" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1511">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="pc bpc" id="L1504" title="1 of 2 branches missed.">        if(stopIndex &lt; size-1) {</span>
-<span class="nc" id="L1505">            width = PrintOptions.getPadding() + 3;</span>
-<span class="nc" id="L1506">            value = &quot;...&quot;;</span>
-<span class="nc bnc" id="L1507" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L1508">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc bnc" id="L1514" title="All 2 branches missed.">        if(stopIndex &lt; size-1) {</span>
+<span class="nc" id="L1515">            width = PrintOptions.getPadding() + 3;</span>
+<span class="nc" id="L1516">            value = &quot;...&quot;;</span>
+<span class="nc bnc" id="L1517" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1518">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
         // Get last entry now
-<span class="fc" id="L1512">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
-<span class="fc" id="L1513">        width = PrintOptions.getPadding() + value.length();</span>
-<span class="pc bpc" id="L1514" title="1 of 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1515">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc" id="L1522">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
+<span class="nc" id="L1523">        width = PrintOptions.getPadding() + value.length();</span>
+<span class="nc bnc" id="L1524" title="All 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1525">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
 
-<span class="fc" id="L1517">        result.append(&quot;]&quot;);</span>
+<span class="nc" id="L1527">        result.append(&quot;]&quot;);</span>
 
-<span class="fc" id="L1519">        return result.toString();</span>
+<span class="nc" id="L1529">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

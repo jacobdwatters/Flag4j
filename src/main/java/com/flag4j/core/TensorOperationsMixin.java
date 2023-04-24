@@ -159,7 +159,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @return The result of dividing this tensor by the specified scalar.
      * @throws ArithmeticException If divisor is zero.
      */
-    T scalDiv(double divisor);
+    T div(double divisor);
 
 
     /**
@@ -168,7 +168,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @return The result of dividing this tensor by the specified scalar.
      * @throws ArithmeticException If divisor is zero.
      */
-    W scalDiv(CNumber divisor);
+    W div(CNumber divisor);
 
 
     /**

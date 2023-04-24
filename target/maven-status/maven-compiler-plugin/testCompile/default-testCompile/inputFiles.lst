@@ -86,6 +86,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNum
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CustomAssertions.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberRoundTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CVectorStackJoinExtendTest.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\decompositions\RealHessenburgTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixSumRowsColsTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberGettersSettersTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberUnaryOperationsTest.java
@@ -113,6 +114,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\VectorCrossProductTe
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseCTensorConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\TensorDotTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\complex\ComplexDenseTransposeTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\decompositions\ComplexHessenburgTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixDetTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixStackTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixScaleOperationsTests.java

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealSchurDecomposition.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.linalg.decompositions</a> &gt; <span class="el_source">RealSchurDecomposition.java</span></div><h1>RealSchurDecomposition.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.linalg.decompositions;
+
+import com.flag4j.CMatrix;
+import com.flag4j.Matrix;
+import com.flag4j.complex_numbers.CNumber;
+
+
+/**
+ * &lt;p&gt;This class computes the Schur decomposition of a square matrix.
+ * That is, decompose a square matrix {@code A} into {@code A=QUQ&lt;sup&gt;H&lt;/sup&gt;} where {@code Q} is a unitary
+ * matrix whose columns are the eigenvectors of {@code A} and {@code U} is an upper triangular matrix in
+ * Schur form whose diagonal entries are the eigenvalues of {@code A}, corresponding to the columns of {@code Q},
+ * repeated per their multiplicity.&lt;/p&gt;
+ *
+ * &lt;p&gt;Note, even if a matrix has only real entries, both {@code Q} and {@code U} may contain complex values.&lt;/p&gt;
+ */
+public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
+
+    /**
+     * Creates a Schur decomposer for a real dense matrix.
+     */
+    public RealSchurDecomposition() {
+<span class="nc" id="L47">        super();</span>
+        /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
+           Hessenburg decomposition. */
+<span class="nc" id="L50">        hess = new RealHessenburgDecomposition(computeU);</span>
+<span class="nc" id="L51">    }</span>
+
+
+    /**
+     * Creates a decomposer for a real dense matrix to compute the Schur decomposition which
+     * will run for at most {@code maxIterations} iterations.
+     * @param maxIterations Maximum number of iterations to run the QR algorithm for when computing the
+     *                      Schur decomposition.
+     */
+    protected RealSchurDecomposition(int maxIterations) {
+<span class="nc" id="L61">        super(maxIterations);</span>
+        /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
+           Hessenburg decomposition. */
+<span class="nc" id="L64">        hess = new RealHessenburgDecomposition(computeU);</span>
+<span class="nc" id="L65">    }</span>
+
+
+    /**
+     * Creates a decomposer for a real dense matrix to compute the Schur decomposition which will
+     * run for at most {@code maxIterations} iterations.
+     * @param maxIterations Maximum number of iterations to run the QR algorithm for when computing the
+     *                      Schur decomposition.
+     * @param computeU A flag which indicates if the unitary matrix {@code Q} should be computed.&lt;br&gt;
+     *                 - If true, the {@code Q} matrix will be computed.
+     *                 - If false, the {@code Q} matrix will &lt;b&gt;not&lt;/b&gt; be computed. If it is not needed, this may
+     *                 provide a performance improvement.
+     */
+    protected RealSchurDecomposition(boolean computeU, int maxIterations) {
+<span class="nc" id="L79">        super(computeU, maxIterations);</span>
+        /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
+           Hessenburg decomposition. */
+<span class="nc" id="L82">        hess = new RealHessenburgDecomposition(computeU);</span>
+<span class="nc" id="L83">    }</span>
+
+
+    /**
+     * Creates a decomposer to compute the Schur decomposition.
+     * @param computeU A flag which indicates if the unitary matrix {@code Q} should be computed.&lt;br&gt;
+     *                 - If true, the {@code Q} matrix will be computed.
+     *                 - If false, the {@code Q} matrix will &lt;b&gt;not&lt;/b&gt; be computed. If it is not needed, this may
+     *                 provide a performance improvement.
+     */
+    protected RealSchurDecomposition(boolean computeU) {
+<span class="nc" id="L94">        super(computeU);</span>
+        /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
+           Hessenburg decomposition. */
+<span class="nc" id="L97">        hess = new RealHessenburgDecomposition(computeU);</span>
+<span class="nc" id="L98">    }</span>
+
+
+    /**
+     * &lt;p&gt;Computes the Schur decomposition for a real dense square matrix.
+     * That is, decompose a square matrix {@code A} into {@code A=QUQ&lt;sup&gt;H&lt;/sup&gt;} where {@code Q} is a unitary
+     * matrix whose columns are the eigenvectors of {@code A} and {@code U} is an upper triangular matrix in
+     * Schur form whose diagonal entries are the eigenvalues of {@code A}, corresponding to the columns of {@code Q},
+     * repeated per their multiplicity.&lt;/p&gt;
+     *
+     * &lt;p&gt;Note, even if a matrix has only real entries, both {@code Q} and {@code U} may contain complex values.&lt;/p&gt;
+     *
+     * @param src The source matrix to compute the Schur decomposition of.
+     * @return A reference to this decomposer.
+     */
+    @Override
+    public RealSchurDecomposition decompose(Matrix src) {
+        // TODO: Add balancing before converting to Hessenburg. See Fundamentals of Matrix Computations Watkins, p342.
+<span class="nc" id="L116">        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).</span>
+
+<span class="nc" id="L118">        System.out.println(&quot;hessH:\n&quot; + hess.getH() + &quot;\n&quot;);</span>
+<span class="nc" id="L119">        System.out.println(&quot;hessQ:\n&quot; + hess.getQ() + &quot;\n&quot;);</span>
+<span class="nc" id="L120">        System.out.println(&quot;hess QHQ^T:\n&quot; + hess.getQ().mult(hess.getH()).multTranspose(hess.getQ()) + &quot;\n&quot;);</span>
+
+<span class="nc" id="L122">        shiftedQR(hess.getH().toComplex()); // Compute Schur decomposition of the Hessenburg form.</span>
+//        realShiftedQR(hess.getH()); // Compute real Schur decomposition of the Hessenburg form.
+
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        if(computeU) {</span>
+<span class="nc" id="L126">            U = hess.getQ().mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.</span>
+        }
+
+<span class="nc" id="L129">        return this;</span>
+    }
+
+
+    public RealSchurDecomposition doubleShiftImplicitQR(Matrix src) {
+<span class="nc" id="L134">        debug = false;</span>
+<span class="nc" id="L135">        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).</span>
+<span class="nc" id="L136">        doubleShiftImplicitQR(hess.getH().toComplex());</span>
+
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        if(computeU) {</span>
+<span class="nc" id="L139">            U = hess.Q.mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.</span>
+        }
+
+<span class="nc" id="L142">        return this;</span>
+    }
+
+
+    /**
+     * Computes the Schur decomposition, in real Schur form, for a real dense matrix using the shifted QR algorithm
+     * (Rayleigh shift).
+     * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
+     */
+    private void realShiftedQR(Matrix H) {
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        if(useDefaultMaxIterations) {</span>
+            // The algorithm should converge within machine precision in O(n^3).
+<span class="nc" id="L154">            maxIterations = (int) Math.max(Math.pow(H.numRows, 3), MIN_DEFAULT_ITERATIONS);</span>
+        }
+
+<span class="nc" id="L157">        int count = 0;</span>
+<span class="nc" id="L158">        int n = H.numRows-1;</span>
+
+<span class="nc" id="L160">        Matrix Treal = H;</span>
+<span class="nc" id="L161">        Matrix Ureal = Matrix.I(H.numRows);</span>
+
+<span class="nc" id="L163">        RealQRDecomposition qr = new RealQRDecomposition(); // Decomposer for use in the QR algorithm.</span>
+        Matrix Q; // Q matrix from QR decomposition.
+        Matrix R; // R matrix from QR decomposition.
+
+        Matrix mu;
+
+        // Apply the QR algorithm (Shifted QR algorithm using Rayleigh shift).
+<span class="nc bnc" id="L170" title="All 2 branches missed.">        while(count&lt;maxIterations) {</span>
+<span class="nc" id="L171">            count++;</span>
+<span class="nc" id="L172">            mu = Matrix.I(n+1).mult(Treal.entries[Treal.entries.length-1]); // Construct diagonal matrix.</span>
+
+<span class="nc" id="L174">            qr.decompose(Treal.sub(mu)); // Compute the QR decomposition with a shift.</span>
+<span class="nc" id="L175">            Q = qr.getQ();</span>
+<span class="nc" id="L176">            R = qr.getR();</span>
+
+<span class="nc" id="L178">            Treal = R.mult(Q).add(mu); // Reverse the shift.</span>
+<span class="nc" id="L179">            Ureal = Ureal.mult(Q);</span>
+        }
+
+<span class="nc" id="L182">        U = Ureal.toComplex();</span>
+<span class="nc" id="L183">        T = Treal.toComplex();</span>
+<span class="nc" id="L184">    }</span>
+
+
+    public static void main(String[] args) {
+<span class="nc" id="L188">        double[][] aEntries = {</span>
+                {0, 0, 0, 1},
+                {0, 0, -1, 0},
+                {0, 1, 0, 0},
+                {-1, 0, 0, 0}};
+<span class="nc" id="L193">        Matrix A = new Matrix(aEntries);</span>
+
+<span class="nc" id="L195">        double[][] bEntries = {</span>
+                {1, 2, 5},
+                {2, 3, 4},
+                {5, 4, 9}};
+<span class="nc" id="L199">        Matrix B = new Matrix(bEntries);</span>
+
+<span class="nc" id="L201">        double[][] cEntries = {</span>
+                {1, 2, 1},
+                {2, 3, 4},
+                {5, 12.1, 9}};
+<span class="nc" id="L205">        Matrix C = new Matrix(cEntries);</span>
+
+<span class="nc" id="L207">        double[][] dEntries = {</span>
+                {1, -1},
+                {1, 1}};
+<span class="nc" id="L210">        Matrix D = new Matrix(dEntries);</span>
+
+<span class="nc" id="L212">        double[][] eEntries = {</span>
+                {0, 0, -1},
+                {1, 0, 0},
+                {0, 1, 0}};
+<span class="nc" id="L216">        Matrix E = new Matrix(eEntries);</span>
+
+<span class="nc" id="L218">        double[][] fEntries = {</span>
+                {2, 1, 0, 0, 0, 0},
+                {1, 2, 1, 0, 0, 0},
+                {0, 1, 2, 1, 0, 0},
+                {0, 0, 1, 2, 1, 0},
+                {0, 0, 0, 1, 2, 1},
+                {0, 0, 0, 0, 1, 2}};
+<span class="nc" id="L225">        Matrix F = new Matrix(fEntries);</span>
+
+<span class="nc" id="L227">        Matrix src = F;</span>
+
+<span class="nc" id="L229">        RealSchurDecomposition schur = new RealSchurDecomposition();</span>
+<span class="nc" id="L230">        schur.doubleShiftImplicitQR(src);</span>
+
+<span class="nc" id="L232">        CMatrix T = schur.getT();</span>
+<span class="nc" id="L233">        CMatrix U = schur.getU();</span>
+
+<span class="nc" id="L235">        System.out.println(&quot;A:\n&quot; + src + &quot;\n&quot;);</span>
+<span class="nc" id="L236">        System.out.println(&quot;T:\n&quot; + T + &quot;\n&quot;);</span>
+<span class="nc" id="L237">        System.out.println(&quot;U:\n&quot; + U + &quot;\n&quot;);</span>
+<span class="nc" id="L238">        System.out.println(&quot;UTU^H:\n&quot; + U.mult(T).mult(U.H()));</span>
+<span class="nc" id="L239">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

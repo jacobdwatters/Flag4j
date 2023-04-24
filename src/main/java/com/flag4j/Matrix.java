@@ -642,10 +642,16 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
     @Override
     public Matrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
         Matrix slice = new Matrix(rowEnd-rowStart, colEnd-colStart);
+        int destPos = 0;
+        int srcPos;
+        int end;
 
-        for(int i=0; i<slice.numRows; i++) {
-            for(int j=0; j<slice.numCols; j++) {
-                slice.entries[i*slice.numCols+j] = this.entries[(i+rowStart)*this.numCols+j+colStart];
+        for(int i=rowStart; i<rowEnd; i++) {
+            srcPos = i*this.numCols + colStart;
+            end = srcPos + colEnd - colStart;
+
+            while(srcPos < end) {
+                slice.entries[destPos++] = this.entries[srcPos++];
             }
         }
 
@@ -1367,7 +1373,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public Matrix scalDiv(double divisor) {
+    public Matrix div(double divisor) {
         return new Matrix(this.shape.copy(),
                 RealDenseOperations.scalDiv(this.entries, divisor)
         );
@@ -1382,7 +1388,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CMatrix scalDiv(CNumber divisor) {
+    public CMatrix div(CNumber divisor) {
         return new CMatrix(this.shape.copy(),
                 RealComplexDenseOperations.scalDiv(this.entries, divisor)
         );
@@ -3091,14 +3097,14 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
     /**
      * Get the row of this matrix at the specified index.
      *
-     * @param i Index of row to get.
+     * @param rowIdx Index of row to get.
      * @return The specified row of this matrix.
-     * @throws ArrayIndexOutOfBoundsException If {@code i} is less than zero or greater than/equal to
+     * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} is less than zero or greater than/equal to
      * the number of rows in this matrix.
      */
     @Override
-    public Matrix getRow(int i) {
-        int start = i*numCols;
+    public Matrix getRow(int rowIdx) {
+        int start = rowIdx*numCols;
         int stop = start+numCols;
 
         double[] row = Arrays.copyOfRange(this.entries, start, stop);
@@ -3110,13 +3116,13 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
     /**
      * Get the row of this matrix at the specified index.
      *
-     * @param i Index of row to get.
+     * @param rowIdx Index of row to get.
      * @return The specified row of this matrix as a vector.
-     * @throws ArrayIndexOutOfBoundsException If {@code i} is less than zero or greater than/equal to
+     * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} is less than zero or greater than/equal to
      * the number of rows in this matrix.
      */
-    public Vector getRowAsVector(int i) {
-        int start = i*numCols;
+    public Vector getRowAsVector(int rowIdx) {
+        int start = rowIdx*numCols;
         int stop = start+numCols;
         return new Vector(Arrays.copyOfRange(this.entries, start, stop));
     }
@@ -3125,17 +3131,17 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
     /**
      * Get the column of this matrix at the specified index.
      *
-     * @param j Index of column to get.
+     * @param colIdx Index of column to get.
      * @return The specified column of this matrix.
-     * @throws ArrayIndexOutOfBoundsException If {@code j} is less than zero or greater than/equal to
+     * @throws ArrayIndexOutOfBoundsException If {@code colIdx} is less than zero or greater than/equal to
      * the number of columns in this matrix.
      */
     @Override
-    public Matrix getCol(int j) {
+    public Matrix getCol(int colIdx) {
         double[] col = new double[numRows];
 
         for(int i=0; i<numRows; i++) {
-            col[i] = entries[i*numCols + j];
+            col[i] = entries[i*numCols + colIdx];
         }
 
         return new Matrix(new Shape(numRows, 1), col);
@@ -3146,17 +3152,17 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * Get a specified column of this matrix at and below a specified row.
      *
      * @param rowStart Index of the row to begin at.
-     * @param j Index of column to get.
+     * @param colIdx Index of column to get.
      * @return The specified column of this matrix beginning at the specified row.
      * @throws NegativeArraySizeException If {@code rowStart} is larger than the number of rows in this matrix.
-     * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code colIdx} is outside the bounds of this matrix.
      */
     @Override
-    public Matrix getColBelow(int rowStart, int j) {
+    public Matrix getColBelow(int rowStart, int colIdx) {
         double[] col = new double[numRows-rowStart];
 
         for(int i=rowStart; i<numRows; i++) {
-            col[i-rowStart] = entries[i*numCols + j];
+            col[i-rowStart] = entries[i*numCols + colIdx];
         }
 
         return new Matrix(new Shape(col.length, 1), col);
@@ -3167,18 +3173,18 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * Get a specified row of this matrix at and after a specified column.
      *
      * @param colStart Index of the row to begin at.
-     * @param i Index of the row to get.
+     * @param rowIdx Index of the row to get.
      * @return The specified row of this matrix beginning at the specified column.
      * @throws NegativeArraySizeException If {@code colStart} is larger than the number of columns in this matrix.
-     * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} or {@code colStart} is outside the bounds of this matrix.
      */
     @Override
-    public Matrix getRowAfter(int colStart, int i) {
-        if(i > this.numRows || colStart > this.numCols) {
-            throw new ArrayIndexOutOfBoundsException(String.format("Index (%d, %d) not in matrix.", i, colStart));
+    public Matrix getRowAfter(int colStart, int rowIdx) {
+        if(rowIdx > this.numRows || colStart > this.numCols) {
+            throw new ArrayIndexOutOfBoundsException(String.format("Index (%d, %d) not in matrix.", rowIdx, colStart));
         }
 
-        double[] row = Arrays.copyOfRange(this.entries, i*this.numCols + colStart, (i+1)*this.numCols);
+        double[] row = Arrays.copyOfRange(this.entries, rowIdx*this.numCols + colStart, (rowIdx+1)*this.numCols);
         return new Matrix(new Shape(1, row.length), row);
     }
 
@@ -3187,16 +3193,16 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
     /**
      * Get the column of this matrix at the specified index.
      *
-     * @param j Index of column to get.
+     * @param colIdx Index of column to get.
      * @return The specified column of this matrix as a vector.
-     * @throws ArrayIndexOutOfBoundsException If {@code j} is less than zero or greater than/equal to
+     * @throws ArrayIndexOutOfBoundsException If {@code colIdx} is less than zero or greater than/equal to
      * the number of rows in this matrix.
      */
-    public Vector getColAsVector(int j) {
+    public Vector getColAsVector(int colIdx) {
         double[] col = new double[numRows];
 
         for(int i=0; i<numRows; i++) {
-            col[i] = entries[i*numCols + j];
+            col[i] = entries[i*numCols + colIdx];
         }
 
         return new Vector(col);
@@ -3513,7 +3519,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public Double min() {
+    public double min() {
         return AggregateReal.min(entries);
     }
 
@@ -3523,7 +3529,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * @return The maximum value in this matrix.
      */
     @Override
-    public Double max() {
+    public double max() {
         return AggregateReal.max(entries);
     }
 
@@ -3535,7 +3541,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * @return The minimum value, in absolute value, in this tensor.
      */
     @Override
-    public Double minAbs() {
+    public double minAbs() {
         return AggregateReal.minAbs(entries);
     }
 
@@ -3547,7 +3553,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * @return The maximum value, in absolute value, in this tensor.
      */
     @Override
-    public Double maxAbs() {
+    public double maxAbs() {
         return AggregateReal.maxAbs(entries);
     }
 

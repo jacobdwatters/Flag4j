@@ -688,9 +688,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
 
 
     /**
-     * Creates a copy of this tensor.
+     * Creates a deep copy of this vector.
      *
-     * @return A copy of this tensor.
+     * @return A copy of this vector.
      */
     @Override
     public CVector copy() {
@@ -699,12 +699,12 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
 
 
     /**
-     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
+     * Finds the minimum value in this vector.
      *
-     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
+     * @return The minimum value in this vector.
      */
     @Override
-    public CNumber min() {
+    public double min() {
 <span class="fc" id="L708">        return AggregateComplex.minAbs(this.entries);</span>
     }
 
@@ -715,7 +715,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public CNumber max() {
+    public double max() {
 <span class="fc" id="L719">        return AggregateComplex.maxAbs(this.entries);</span>
     }
 
@@ -727,7 +727,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @return The minimum value, in absolute value, in this tensor.
      */
     @Override
-    public CNumber minAbs() {
+    public double minAbs() {
 <span class="fc" id="L731">        return min();</span>
     }
 
@@ -739,7 +739,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @return The maximum value, in absolute value, in this tensor.
      */
     @Override
-    public CNumber maxAbs() {
+    public double maxAbs() {
 <span class="fc" id="L743">        return max();</span>
     }
 
@@ -799,9 +799,9 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
     public double norm(double p) {
 <span class="fc bfc" id="L800" title="All 2 branches covered.">        if(Double.isInfinite(p)) {</span>
 <span class="fc bfc" id="L801" title="All 2 branches covered.">            if(p &gt; 0) {</span>
-<span class="fc" id="L802">                return maxAbs().re; // Maximum / infinite norm.</span>
+<span class="fc" id="L802">                return maxAbs(); // Maximum / infinite norm.</span>
             } else {
-<span class="fc" id="L804">                return minAbs().re; // Minimum norm.</span>
+<span class="fc" id="L804">                return minAbs(); // Minimum norm.</span>
             }
         } else {
 <span class="fc" id="L807">            double norm = 0;</span>
@@ -822,7 +822,7 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public double infNorm() {
-<span class="fc" id="L825">        return maxAbs().re;</span>
+<span class="fc" id="L825">        return maxAbs();</span>
     }
 
 
@@ -1621,28 +1621,28 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
      * @return A human-readable string representation of this vector.
      */
     public String toString() {
-<span class="nc" id="L1624">        StringBuilder result = new StringBuilder();</span>
+<span class="fc" id="L1624">        StringBuilder result = new StringBuilder();</span>
 
-<span class="nc bnc" id="L1626" title="All 2 branches missed.">        if(PrintOptions.getMaxColumns()&lt;size) {</span>
+<span class="pc bpc" id="L1626" title="1 of 2 branches missed.">        if(PrintOptions.getMaxColumns()&lt;size) {</span>
             // Then also get the full size of the vector.
 <span class="nc" id="L1628">            result.append(String.format(&quot;Full Size: %d\n&quot;, size));</span>
         }
 
-<span class="nc" id="L1631">        result.append(&quot;[&quot;);</span>
+<span class="fc" id="L1631">        result.append(&quot;[&quot;);</span>
 
-<span class="nc" id="L1633">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
+<span class="fc" id="L1633">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
         int width;
         String value;
 
         // Get entries up until the stopping point.
-<span class="nc bnc" id="L1638" title="All 2 branches missed.">        for(int i=0; i&lt;stopIndex; i++) {</span>
-<span class="nc" id="L1639">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
-<span class="nc" id="L1640">            width = PrintOptions.getPadding() + value.length();</span>
-<span class="nc bnc" id="L1641" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L1642">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L1638" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="fc" id="L1639">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
+<span class="fc" id="L1640">            width = PrintOptions.getPadding() + value.length();</span>
+<span class="pc bpc" id="L1641" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1642">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="nc bnc" id="L1645" title="All 2 branches missed.">        if(stopIndex &lt; size-1) {</span>
+<span class="pc bpc" id="L1645" title="1 of 2 branches missed.">        if(stopIndex &lt; size-1) {</span>
 <span class="nc" id="L1646">            width = PrintOptions.getPadding() + 3;</span>
 <span class="nc" id="L1647">            value = &quot;...&quot;;</span>
 <span class="nc bnc" id="L1648" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
@@ -1650,14 +1650,14 @@ public class CVector extends VectorBase&lt;CNumber[]&gt; implements
         }
 
         // Get last entry.
-<span class="nc" id="L1653">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
-<span class="nc" id="L1654">        width = PrintOptions.getPadding() + value.length();</span>
-<span class="nc bnc" id="L1655" title="All 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L1656">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc" id="L1653">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
+<span class="fc" id="L1654">        width = PrintOptions.getPadding() + value.length();</span>
+<span class="pc bpc" id="L1655" title="1 of 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1656">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
 
-<span class="nc" id="L1658">        result.append(&quot;]&quot;);</span>
+<span class="fc" id="L1658">        result.append(&quot;]&quot;);</span>
 
-<span class="nc" id="L1660">        return result.toString();</span>
+<span class="fc" id="L1660">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

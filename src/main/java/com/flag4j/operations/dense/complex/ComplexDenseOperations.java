@@ -411,7 +411,7 @@ public final class ComplexDenseOperations {
      * @return The infinity norm of the matrix.
      */
     public static double matrixMaxNorm(CNumber[] src) {
-        return maxAbs(src).re;
+        return maxAbs(src);
     }
 
 

@@ -24,6 +24,7 @@
 
 package com.flag4j.core;
 
+import com.flag4j.CVector;
 import com.flag4j.Shape;
 import com.flag4j.util.ParameterChecks;
 
@@ -37,7 +38,7 @@ import java.io.Serializable;
  *     orientation of the vector.
  * </p>
  * @param <T> Type of the storage data structure for the vector.
- *           This common use case will be an array or list-like data structure.
+ *           The common use case will be an array or list-like data structure.
  */
 public abstract class VectorBase<T extends Serializable> extends TensorBase<T> {
 

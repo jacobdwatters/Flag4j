@@ -524,7 +524,7 @@ public class Tensor extends TensorBase<double[]> implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public Tensor scalDiv(double divisor) {
+    public Tensor div(double divisor) {
         return new Tensor(
                 shape.copy(),
                 RealDenseOperations.scalDiv(entries, divisor)
@@ -540,7 +540,7 @@ public class Tensor extends TensorBase<double[]> implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CTensor scalDiv(CNumber divisor) {
+    public CTensor div(CNumber divisor) {
         return new CTensor(shape.copy(),
                 RealComplexDenseOperations.scalDiv(entries, divisor)
         );
@@ -873,7 +873,7 @@ public class Tensor extends TensorBase<double[]> implements
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public Double min() {
+    public double min() {
         return AggregateReal.min(entries);
     }
 
@@ -884,7 +884,7 @@ public class Tensor extends TensorBase<double[]> implements
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public Double max() {
+    public double max() {
         return AggregateReal.max(entries);
     }
 
@@ -896,7 +896,7 @@ public class Tensor extends TensorBase<double[]> implements
      * @return The minimum value, in absolute value, in this tensor.
      */
     @Override
-    public Double minAbs() {
+    public double minAbs() {
         return AggregateReal.minAbs(entries);
     }
 
@@ -908,7 +908,7 @@ public class Tensor extends TensorBase<double[]> implements
      * @return The maximum value, in absolute value, in this tensor.
      */
     @Override
-    public Double maxAbs() {
+    public double maxAbs() {
         return AggregateReal.maxAbs(entries);
     }
 

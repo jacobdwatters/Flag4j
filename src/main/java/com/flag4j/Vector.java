@@ -588,7 +588,7 @@ public class Vector extends VectorBase<double[]> implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public Vector scalDiv(double divisor) {
+    public Vector div(double divisor) {
         return new Vector(RealDenseOperations.scalDiv(this.entries, divisor));
     }
 
@@ -601,7 +601,7 @@ public class Vector extends VectorBase<double[]> implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CVector scalDiv(CNumber divisor) {
+    public CVector div(CNumber divisor) {
         return new CVector(RealComplexDenseOperations.scalDiv(this.entries, divisor));
     }
 
@@ -1108,7 +1108,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Vector normalize() {
-        return this.scalDiv(this.norm());
+        return this.div(this.norm());
     }
 
 
@@ -1297,6 +1297,16 @@ public class Vector extends VectorBase<double[]> implements
     }
 
 
+    // TODO: Create a real vector mixin and pull this method up to it.
+    /**
+     * Converts this vector to an equivalent complex vector.
+     * @return A complex vector with values equivalent to this vector.
+     */
+    public CVector toComplex() {
+        return new CVector(this.entries);
+    }
+
+
     /**
      * Converts a vector to an equivalent matrix representing the vector as a column.
      *
@@ -1342,7 +1352,7 @@ public class Vector extends VectorBase<double[]> implements
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public Double min() {
+    public double min() {
         return AggregateReal.min(this.entries);
     }
 
@@ -1353,7 +1363,7 @@ public class Vector extends VectorBase<double[]> implements
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public Double max() {
+    public double max() {
         return AggregateReal.max(this.entries);
     }
 
@@ -1365,7 +1375,7 @@ public class Vector extends VectorBase<double[]> implements
      * @return The minimum value, in absolute value, in this tensor.
      */
     @Override
-    public Double minAbs() {
+    public double minAbs() {
         return AggregateReal.minAbs(this.entries);
     }
 
@@ -1377,7 +1387,7 @@ public class Vector extends VectorBase<double[]> implements
      * @return The maximum value, in absolute value, in this tensor.
      */
     @Override
-    public Double maxAbs() {
+    public double maxAbs() {
         return AggregateReal.maxAbs(this.entries);
     }
 

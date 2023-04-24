@@ -873,7 +873,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public Double min() {
+    public double min() {
 <span class="fc" id="L877">        return AggregateReal.min(entries);</span>
     }
 
@@ -884,7 +884,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public Double max() {
+    public double max() {
 <span class="fc" id="L888">        return AggregateReal.max(entries);</span>
     }
 
@@ -896,7 +896,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      * @return The minimum value, in absolute value, in this tensor.
      */
     @Override
-    public Double minAbs() {
+    public double minAbs() {
 <span class="fc" id="L900">        return AggregateReal.minAbs(entries);</span>
     }
 
@@ -908,7 +908,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      * @return The maximum value, in absolute value, in this tensor.
      */
     @Override
-    public Double maxAbs() {
+    public double maxAbs() {
 <span class="fc" id="L912">        return AggregateReal.maxAbs(entries);</span>
     }
 

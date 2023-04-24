@@ -239,11 +239,12 @@ public final class RealComplexDenseOperations {
         return sum;
     }
 
+
     /**
-     * Computes the scalar multiplication of a tensor.
+     * Computes the scalar division of a tensor.
      * @param entries Entries of the tensor.
-     * @param divisor Scalar value to multiply.
-     * @return The scalar multiplication of the tensor.
+     * @param divisor Scalar value to divide tensor by.
+     * @return The scalar division of the tensor.
      */
     public static CNumber[] scalDiv(CNumber[] entries, double divisor) {
         CNumber[] quotient = new CNumber[entries.length];

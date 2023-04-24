@@ -704,7 +704,7 @@ public class CTensor extends TensorBase<CNumber[]> implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CTensor scalDiv(double divisor) {
+    public CTensor div(double divisor) {
         return new CTensor(this.shape.copy(),
                 RealComplexDenseOperations.scalDiv(this.entries, divisor)
         );
@@ -719,7 +719,7 @@ public class CTensor extends TensorBase<CNumber[]> implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CTensor scalDiv(CNumber divisor) {
+    public CTensor div(CNumber divisor) {
         return new CTensor(this.shape.copy(),
                 ComplexDenseOperations.scalDiv(this.entries, divisor)
         );
@@ -974,7 +974,7 @@ public class CTensor extends TensorBase<CNumber[]> implements
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public CNumber min() {
+    public double min() {
         return minAbs();
     }
 
@@ -985,7 +985,7 @@ public class CTensor extends TensorBase<CNumber[]> implements
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public CNumber max() {
+    public double max() {
         return maxAbs();
     }
 
@@ -997,7 +997,7 @@ public class CTensor extends TensorBase<CNumber[]> implements
      * @return The minimum value, in absolute value, in this tensor.
      */
     @Override
-    public CNumber minAbs() {
+    public double minAbs() {
         return AggregateComplex.minAbs(this.entries);
     }
 
@@ -1009,7 +1009,7 @@ public class CTensor extends TensorBase<CNumber[]> implements
      * @return The maximum value, in absolute value, in this tensor.
      */
     @Override
-    public CNumber maxAbs() {
+    public double maxAbs() {
         return AggregateComplex.maxAbs(this.entries);
     }
 
@@ -1070,7 +1070,7 @@ public class CTensor extends TensorBase<CNumber[]> implements
      */
     @Override
     public double infNorm() {
-        return AggregateComplex.maxAbs(entries).re;
+        return AggregateComplex.maxAbs(entries);
     }
 
 

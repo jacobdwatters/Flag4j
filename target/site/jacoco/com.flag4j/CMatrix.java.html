@@ -1414,8 +1414,7 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
-     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
-     * independently.
+     * Rounds values which are close to zero in absolute value to zero.
      *
      * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
      *                  will be rounded to zero. This value must be non-negative.
@@ -1424,7 +1423,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix roundToZero(double threshold) {
-<span class="fc" id="L1427">        return new CMatrix(this.shape, ComplexOperations.roundToZero(this.entries, threshold));</span>
+<span class="fc" id="L1426">        return new CMatrix(this.shape, ComplexOperations.roundToZero(this.entries, threshold));</span>
     }
 
 
@@ -1437,8 +1436,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(Matrix B) {
-<span class="fc" id="L1440">        return new CMatrix(this.shape.copy(),</span>
-<span class="fc" id="L1441">                RealComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)</span>
+<span class="fc" id="L1439">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1440">                RealComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1452,7 +1451,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(SparseMatrix B) {
-<span class="fc" id="L1455">        return RealComplexDenseSparseOperations.add(this, B);</span>
+<span class="fc" id="L1454">        return RealComplexDenseSparseOperations.add(this, B);</span>
     }
 
 
@@ -1465,8 +1464,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(CMatrix B) {
-<span class="fc" id="L1468">        return new CMatrix(this.shape.copy(),</span>
-<span class="fc" id="L1469">                ComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)</span>
+<span class="fc" id="L1467">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1468">                ComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1480,7 +1479,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(SparseCMatrix B) {
-<span class="fc" id="L1483">        return ComplexDenseSparseOperations.add(this, B);</span>
+<span class="fc" id="L1482">        return ComplexDenseSparseOperations.add(this, B);</span>
     }
 
 
@@ -1492,8 +1491,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(double a) {
-<span class="fc" id="L1495">        return new CMatrix(this.shape.copy(),</span>
-<span class="fc" id="L1496">                RealComplexDenseOperations.add(this.entries, a)</span>
+<span class="fc" id="L1494">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1495">                RealComplexDenseOperations.add(this.entries, a)</span>
         );
     }
 
@@ -1506,8 +1505,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix add(CNumber a) {
-<span class="fc" id="L1509">        return new CMatrix(this.shape.copy(),</span>
-<span class="fc" id="L1510">                ComplexDenseOperations.add(this.entries, a)</span>
+<span class="fc" id="L1508">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1509">                ComplexDenseOperations.add(this.entries, a)</span>
         );
     }
 
@@ -1521,8 +1520,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(Matrix B) {
-<span class="fc" id="L1524">        return new CMatrix(this.shape.copy(),</span>
-<span class="fc" id="L1525">                RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)</span>
+<span class="fc" id="L1523">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1524">                RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1536,7 +1535,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(SparseMatrix B) {
-<span class="fc" id="L1539">        return RealComplexDenseSparseOperations.sub(this, B);</span>
+<span class="fc" id="L1538">        return RealComplexDenseSparseOperations.sub(this, B);</span>
     }
 
 
@@ -1549,8 +1548,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(CMatrix B) {
-<span class="fc" id="L1552">        return new CMatrix(this.shape.copy(),</span>
-<span class="fc" id="L1553">                ComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)</span>
+<span class="fc" id="L1551">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1552">                ComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1563,8 +1562,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(double a) {
-<span class="fc" id="L1566">        return new CMatrix(this.shape.copy(),</span>
-<span class="fc" id="L1567">                RealComplexDenseOperations.sub(this.entries, a)</span>
+<span class="fc" id="L1565">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1566">                RealComplexDenseOperations.sub(this.entries, a)</span>
         );
     }
 
@@ -1577,8 +1576,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(CNumber a) {
-<span class="fc" id="L1580">        return new CMatrix(this.shape.copy(),</span>
-<span class="fc" id="L1581">                ComplexDenseOperations.sub(this.entries, a)</span>
+<span class="fc" id="L1579">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1580">                ComplexDenseOperations.sub(this.entries, a)</span>
         );
     }
 
@@ -1591,8 +1590,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void addEq(CMatrix B) {
-<span class="nc" id="L1594">        ComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);</span>
-<span class="nc" id="L1595">    }</span>
+<span class="nc" id="L1593">        ComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);</span>
+<span class="nc" id="L1594">    }</span>
 
 
     /**
@@ -1602,8 +1601,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void addEq(CNumber b) {
-<span class="nc" id="L1605">        ComplexDenseOperations.addEq(this.entries, b);</span>
-<span class="nc" id="L1606">    }</span>
+<span class="nc" id="L1604">        ComplexDenseOperations.addEq(this.entries, b);</span>
+<span class="nc" id="L1605">    }</span>
 
 
     /**
@@ -1613,8 +1612,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void addEq(Double b) {
-<span class="nc" id="L1616">        RealComplexDenseOperations.addEq(this.entries, b);</span>
-<span class="nc" id="L1617">    }</span>
+<span class="nc" id="L1615">        RealComplexDenseOperations.addEq(this.entries, b);</span>
+<span class="nc" id="L1616">    }</span>
 
 
     /**
@@ -1625,8 +1624,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void subEq(CMatrix B) {
-<span class="fc" id="L1628">        ComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);</span>
-<span class="fc" id="L1629">    }</span>
+<span class="fc" id="L1627">        ComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);</span>
+<span class="fc" id="L1628">    }</span>
 
 
     /**
@@ -1636,8 +1635,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void subEq(CNumber b) {
-<span class="nc" id="L1639">        ComplexDenseOperations.subEq(this.entries, b);</span>
-<span class="nc" id="L1640">    }</span>
+<span class="nc" id="L1638">        ComplexDenseOperations.subEq(this.entries, b);</span>
+<span class="nc" id="L1639">    }</span>
 
 
     /**
@@ -1647,8 +1646,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void subEq(Double b) {
-<span class="nc" id="L1650">        RealComplexDenseOperations.subEq(this.entries, b);</span>
-<span class="nc" id="L1651">    }</span>
+<span class="nc" id="L1649">        RealComplexDenseOperations.subEq(this.entries, b);</span>
+<span class="nc" id="L1650">    }</span>
 
 
     /**
@@ -1659,8 +1658,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(double factor) {
-<span class="fc" id="L1662">        return new CMatrix(this.shape.copy(),</span>
-<span class="fc" id="L1663">                ComplexOperations.scalMult(this.entries, factor)</span>
+<span class="fc" id="L1661">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1662">                ComplexOperations.scalMult(this.entries, factor)</span>
         );
     }
 
@@ -1673,8 +1672,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(CNumber factor) {
-<span class="fc" id="L1676">        return new CMatrix(this.shape.copy(),</span>
-<span class="fc" id="L1677">                ComplexOperations.scalMult(this.entries, factor)</span>
+<span class="fc" id="L1675">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1676">                ComplexOperations.scalMult(this.entries, factor)</span>
         );
     }
 
@@ -1688,8 +1687,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix scalDiv(double divisor) {
-<span class="fc" id="L1691">        return new CMatrix(this.shape.copy(),</span>
-<span class="fc" id="L1692">                RealComplexDenseOperations.scalDiv(this.entries, divisor)</span>
+<span class="fc" id="L1690">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1691">                RealComplexDenseOperations.scalDiv(this.entries, divisor)</span>
         );
     }
 
@@ -1703,8 +1702,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix scalDiv(CNumber divisor) {
-<span class="fc" id="L1706">        return new CMatrix(this.shape.copy(),</span>
-<span class="fc" id="L1707">                ComplexDenseOperations.scalDiv(this.entries, divisor)</span>
+<span class="fc" id="L1705">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1706">                ComplexDenseOperations.scalDiv(this.entries, divisor)</span>
         );
     }
 
@@ -1716,7 +1715,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber sum() {
-<span class="fc" id="L1719">        return AggregateComplex.sum(this.entries);</span>
+<span class="fc" id="L1718">        return AggregateComplex.sum(this.entries);</span>
     }
 
 
@@ -1728,7 +1727,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sqrt() {
-<span class="fc" id="L1731">        return new CMatrix(this.shape.copy(), ComplexOperations.sqrt(this.entries));</span>
+<span class="fc" id="L1730">        return new CMatrix(this.shape.copy(), ComplexOperations.sqrt(this.entries));</span>
     }
 
 
@@ -1740,7 +1739,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix abs() {
-<span class="fc" id="L1743">        return new CMatrix(this.shape.copy(), ComplexOperations.abs(this.entries));</span>
+<span class="fc" id="L1742">        return new CMatrix(this.shape.copy(), ComplexOperations.abs(this.entries));</span>
     }
 
 
@@ -1752,7 +1751,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix transpose() {
-<span class="fc" id="L1755">        return T();</span>
+<span class="fc" id="L1754">        return T();</span>
     }
 
 
@@ -1764,7 +1763,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix T() {
-<span class="fc" id="L1767">        return TransposeDispatcher.dispatch(this);</span>
+<span class="fc" id="L1766">        return TransposeDispatcher.dispatch(this);</span>
     }
 
 
@@ -1776,7 +1775,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix conjT() {
-<span class="nc" id="L1779">        return H();</span>
+<span class="nc" id="L1778">        return H();</span>
     }
 
 
@@ -1788,7 +1787,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix hermTranspose() {
-<span class="fc" id="L1791">        return H();</span>
+<span class="fc" id="L1790">        return H();</span>
     }
 
 
@@ -1800,7 +1799,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix H() {
-<span class="fc" id="L1803">        return TransposeDispatcher.dispatchHermation(this);</span>
+<span class="fc" id="L1802">        return TransposeDispatcher.dispatchHermation(this);</span>
     }
 
 
@@ -1812,7 +1811,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public boolean isHermitian() {
 
-<span class="nc" id="L1815">        return this.equals(this.H());</span>
+<span class="nc" id="L1814">        return this.equals(this.H());</span>
     }
 
 
@@ -1823,7 +1822,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isAntiHermitian() {
-<span class="nc" id="L1826">        return this.equals(this.H().mult(-1));</span>
+<span class="nc" id="L1825">        return this.equals(this.H().mult(-1));</span>
     }
 
 
@@ -1835,10 +1834,10 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public boolean isUnitary() {
         // TODO: Add approxEq(Object A, double threshold) method to check for approximate equivalence.
-<span class="nc bnc" id="L1838" title="All 2 branches missed.">        if(isSquare()) {</span>
-<span class="nc" id="L1839">            return this.mult(this.H()).equals(I(numRows));</span>
+<span class="nc bnc" id="L1837" title="All 2 branches missed.">        if(isSquare()) {</span>
+<span class="nc" id="L1838">            return this.mult(this.H()).equals(I(numRows));</span>
         } else {
-<span class="nc" id="L1841">            return false;</span>
+<span class="nc" id="L1840">            return false;</span>
         }
     }
 
@@ -1851,9 +1850,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix recip() {
-<span class="fc" id="L1854">        return new CMatrix(</span>
-<span class="fc" id="L1855">                shape.copy(),</span>
-<span class="fc" id="L1856">                ComplexDenseOperations.recep(entries)</span>
+<span class="fc" id="L1853">        return new CMatrix(</span>
+<span class="fc" id="L1854">                shape.copy(),</span>
+<span class="fc" id="L1855">                ComplexDenseOperations.recep(entries)</span>
         );
     }
 
@@ -1867,7 +1866,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sub(SparseCMatrix B) {
-<span class="fc" id="L1870">        return ComplexDenseSparseOperations.sub(this, B);</span>
+<span class="fc" id="L1869">        return ComplexDenseSparseOperations.sub(this, B);</span>
     }
 
 
@@ -1878,8 +1877,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void addEq(Matrix B) {
-<span class="nc" id="L1881">        RealComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);</span>
-<span class="nc" id="L1882">    }</span>
+<span class="nc" id="L1880">        RealComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);</span>
+<span class="nc" id="L1881">    }</span>
 
 
     /**
@@ -1889,8 +1888,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void subEq(Matrix B) {
-<span class="nc" id="L1892">        RealComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);</span>
-<span class="nc" id="L1893">    }</span>
+<span class="nc" id="L1891">        RealComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);</span>
+<span class="nc" id="L1892">    }</span>
 
 
     /**
@@ -1900,8 +1899,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void addEq(SparseMatrix B) {
-<span class="nc" id="L1903">        RealComplexDenseSparseOperations.addEq(this, B);</span>
-<span class="nc" id="L1904">    }</span>
+<span class="nc" id="L1902">        RealComplexDenseSparseOperations.addEq(this, B);</span>
+<span class="nc" id="L1903">    }</span>
 
 
     /**
@@ -1911,8 +1910,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void subEq(SparseMatrix B) {
-<span class="nc" id="L1914">        RealComplexDenseSparseOperations.subEq(this, B);</span>
-<span class="nc" id="L1915">    }</span>
+<span class="nc" id="L1913">        RealComplexDenseSparseOperations.subEq(this, B);</span>
+<span class="nc" id="L1914">    }</span>
 
 
     /**
@@ -1924,10 +1923,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(Matrix B) {
-<span class="fc" id="L1927">        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, B);</span>
-<span class="fc" id="L1928">        Shape shape = new Shape(this.numRows, B.numCols);</span>
+<span class="fc" id="L1926">        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, B);</span>
+<span class="fc" id="L1927">        Shape shape = new Shape(this.numRows, B.numCols);</span>
 
-<span class="fc" id="L1930">        return new CMatrix(shape, entries);</span>
+<span class="fc" id="L1929">        return new CMatrix(shape, entries);</span>
     }
 
 
@@ -1940,13 +1939,13 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseMatrix B) {
-<span class="fc" id="L1943">        ParameterChecks.assertMatMultShapes(this.shape, B.shape);</span>
-<span class="fc" id="L1944">        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(</span>
+<span class="fc" id="L1942">        ParameterChecks.assertMatMultShapes(this.shape, B.shape);</span>
+<span class="fc" id="L1943">        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(</span>
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
         );
-<span class="fc" id="L1947">        Shape shape = new Shape(this.numRows, B.numCols);</span>
+<span class="fc" id="L1946">        Shape shape = new Shape(this.numRows, B.numCols);</span>
 
-<span class="fc" id="L1949">        return new CMatrix(shape, entries);</span>
+<span class="fc" id="L1948">        return new CMatrix(shape, entries);</span>
     }
 
 
@@ -1959,10 +1958,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(CMatrix B) {
-<span class="fc" id="L1962">        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, B);</span>
-<span class="fc" id="L1963">        Shape shape = new Shape(this.numRows, B.numCols);</span>
+<span class="fc" id="L1961">        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, B);</span>
+<span class="fc" id="L1962">        Shape shape = new Shape(this.numRows, B.numCols);</span>
 
-<span class="fc" id="L1965">        return new CMatrix(shape, entries);</span>
+<span class="fc" id="L1964">        return new CMatrix(shape, entries);</span>
     }
 
 
@@ -1975,13 +1974,13 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
-<span class="fc" id="L1978">        ParameterChecks.assertMatMultShapes(this.shape, B.shape);</span>
-<span class="fc" id="L1979">        CNumber[] entries = ComplexDenseSparseMatrixMultiplication.standard(</span>
+<span class="fc" id="L1977">        ParameterChecks.assertMatMultShapes(this.shape, B.shape);</span>
+<span class="fc" id="L1978">        CNumber[] entries = ComplexDenseSparseMatrixMultiplication.standard(</span>
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
         );
-<span class="fc" id="L1982">        Shape shape = new Shape(this.numRows, B.numCols);</span>
+<span class="fc" id="L1981">        Shape shape = new Shape(this.numRows, B.numCols);</span>
 
-<span class="fc" id="L1984">        return new CMatrix(shape, entries);</span>
+<span class="fc" id="L1983">        return new CMatrix(shape, entries);</span>
     }
 
 
@@ -1994,10 +1993,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(Vector b) {
-<span class="fc" id="L1997">        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, b);</span>
-<span class="fc" id="L1998">        Shape shape = new Shape(this.numRows, 1);</span>
+<span class="fc" id="L1996">        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, b);</span>
+<span class="fc" id="L1997">        Shape shape = new Shape(this.numRows, 1);</span>
 
-<span class="fc" id="L2000">        return new CMatrix(shape, entries);</span>
+<span class="fc" id="L1999">        return new CMatrix(shape, entries);</span>
     }
 
 
@@ -2010,10 +2009,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseVector b) {
-<span class="fc" id="L2013">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
-<span class="fc" id="L2014">        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);</span>
-<span class="fc" id="L2015">        Shape shape = new Shape(this.numRows, 1);</span>
-<span class="fc" id="L2016">        return new CMatrix(shape, entries);</span>
+<span class="fc" id="L2012">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
+<span class="fc" id="L2013">        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);</span>
+<span class="fc" id="L2014">        Shape shape = new Shape(this.numRows, 1);</span>
+<span class="fc" id="L2015">        return new CMatrix(shape, entries);</span>
     }
 
 
@@ -2026,10 +2025,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(CVector b) {
-<span class="fc" id="L2029">        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, b);</span>
-<span class="fc" id="L2030">        Shape shape = new Shape(this.numRows, 1);</span>
+<span class="fc" id="L2028">        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, b);</span>
+<span class="fc" id="L2029">        Shape shape = new Shape(this.numRows, 1);</span>
 
-<span class="fc" id="L2032">        return new CMatrix(shape, entries);</span>
+<span class="fc" id="L2031">        return new CMatrix(shape, entries);</span>
     }
 
 
@@ -2042,10 +2041,10 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix mult(SparseCVector b) {
-<span class="fc" id="L2045">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
-<span class="fc" id="L2046">        CNumber[] entries = ComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);</span>
-<span class="fc" id="L2047">        Shape shape = new Shape(this.numRows, 1);</span>
-<span class="fc" id="L2048">        return new CMatrix(shape, entries);</span>
+<span class="fc" id="L2044">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
+<span class="fc" id="L2045">        CNumber[] entries = ComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);</span>
+<span class="fc" id="L2046">        Shape shape = new Shape(this.numRows, 1);</span>
+<span class="fc" id="L2047">        return new CMatrix(shape, entries);</span>
     }
 
 
@@ -2062,11 +2061,11 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public CMatrix multTranspose(Matrix B) {
         // Ensure this matrix can be multiplied to the transpose of B.
-<span class="nc" id="L2065">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
+<span class="nc" id="L2064">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
 
-<span class="nc" id="L2067">        return new CMatrix(</span>
+<span class="nc" id="L2066">        return new CMatrix(</span>
                 new Shape(this.numRows, B.numRows),
-<span class="nc" id="L2069">                MatrixMultiplyDispatcher.dispatchTranspose(this, B)</span>
+<span class="nc" id="L2068">                MatrixMultiplyDispatcher.dispatchTranspose(this, B)</span>
         );
     }
 
@@ -2084,11 +2083,11 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public CMatrix multTranspose(SparseMatrix B) {
         // Ensure this matrix can be multiplied to the transpose of B.
-<span class="fc" id="L2087">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
+<span class="fc" id="L2086">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
 
-<span class="fc" id="L2089">        return new CMatrix(</span>
+<span class="fc" id="L2088">        return new CMatrix(</span>
                 new Shape(this.numRows, B.numRows),
-<span class="fc" id="L2091">                RealComplexDenseSparseMatrixMultTranspose.multTranspose(</span>
+<span class="fc" id="L2090">                RealComplexDenseSparseMatrixMultTranspose.multTranspose(</span>
                         this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
                 )
         );
@@ -2108,11 +2107,11 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public CMatrix multTranspose(CMatrix B) {
         // Ensure this matrix can be multiplied to the transpose of B.
-<span class="nc" id="L2111">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
+<span class="nc" id="L2110">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
 
-<span class="nc" id="L2113">        return new CMatrix(</span>
+<span class="nc" id="L2112">        return new CMatrix(</span>
                 new Shape(this.numRows, B.numRows),
-<span class="nc" id="L2115">                MatrixMultiplyDispatcher.dispatchTranspose(this, B)</span>
+<span class="nc" id="L2114">                MatrixMultiplyDispatcher.dispatchTranspose(this, B)</span>
         );
     }
 
@@ -2130,11 +2129,11 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public CMatrix multTranspose(SparseCMatrix B) {
         // Ensure this matrix can be multiplied to the transpose of B.
-<span class="nc" id="L2133">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
+<span class="nc" id="L2132">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
 
-<span class="nc" id="L2135">        return new CMatrix(</span>
+<span class="nc" id="L2134">        return new CMatrix(</span>
                 new Shape(this.numRows, B.numRows),
-<span class="nc" id="L2137">                ComplexDenseSparseMatrixMultTranspose.multTranspose(</span>
+<span class="nc" id="L2136">                ComplexDenseSparseMatrixMultTranspose.multTranspose(</span>
                         this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
                 )
         );
@@ -2151,21 +2150,21 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix pow(int exponent) {
-<span class="fc" id="L2154">        ParameterChecks.assertGreaterEq(0, exponent);</span>
-<span class="fc" id="L2155">        ParameterChecks.assertSquare(this.shape);</span>
+<span class="fc" id="L2153">        ParameterChecks.assertGreaterEq(0, exponent);</span>
+<span class="fc" id="L2154">        ParameterChecks.assertSquare(this.shape);</span>
         CMatrix result;
 
-<span class="fc bfc" id="L2158" title="All 2 branches covered.">        if(exponent==0) {</span>
-<span class="fc" id="L2159">            result = I(this.shape);</span>
+<span class="fc bfc" id="L2157" title="All 2 branches covered.">        if(exponent==0) {</span>
+<span class="fc" id="L2158">            result = I(this.shape);</span>
         } else {
-<span class="fc" id="L2161">            result = new CMatrix(this);</span>
+<span class="fc" id="L2160">            result = new CMatrix(this);</span>
 
-<span class="fc bfc" id="L2163" title="All 2 branches covered.">            for(int i=1; i&lt;exponent; i++) {</span>
-<span class="fc" id="L2164">                result = result.mult(this);</span>
+<span class="fc bfc" id="L2162" title="All 2 branches covered.">            for(int i=1; i&lt;exponent; i++) {</span>
+<span class="fc" id="L2163">                result = result.mult(this);</span>
             }
         }
 
-<span class="fc" id="L2168">        return result;</span>
+<span class="fc" id="L2167">        return result;</span>
     }
 
 
@@ -2178,9 +2177,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix elemMult(Matrix B) {
-<span class="fc" id="L2181">        return new CMatrix(</span>
-<span class="fc" id="L2182">                shape.copy(),</span>
-<span class="fc" id="L2183">                RealComplexDenseElemMult.dispatch(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L2180">        return new CMatrix(</span>
+<span class="fc" id="L2181">                shape.copy(),</span>
+<span class="fc" id="L2182">                RealComplexDenseElemMult.dispatch(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -2194,7 +2193,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public SparseCMatrix elemMult(SparseMatrix B) {
-<span class="fc" id="L2197">        return RealComplexDenseSparseOperations.elemMult(this, B);</span>
+<span class="fc" id="L2196">        return RealComplexDenseSparseOperations.elemMult(this, B);</span>
     }
 
 
@@ -2207,9 +2206,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix elemMult(CMatrix B) {
-<span class="fc" id="L2210">        return new CMatrix(</span>
-<span class="fc" id="L2211">                shape.copy(),</span>
-<span class="fc" id="L2212">                ComplexDenseElemMult.dispatch(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L2209">        return new CMatrix(</span>
+<span class="fc" id="L2210">                shape.copy(),</span>
+<span class="fc" id="L2211">                ComplexDenseElemMult.dispatch(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -2223,7 +2222,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
-<span class="fc" id="L2226">        return ComplexDenseSparseOperations.elemMult(this, B);</span>
+<span class="fc" id="L2225">        return ComplexDenseSparseOperations.elemMult(this, B);</span>
     }
 
 
@@ -2237,9 +2236,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix elemDiv(Matrix B) {
-<span class="fc" id="L2240">        return new CMatrix(</span>
-<span class="fc" id="L2241">                shape.copy(),</span>
-<span class="fc" id="L2242">                RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L2239">        return new CMatrix(</span>
+<span class="fc" id="L2240">                shape.copy(),</span>
+<span class="fc" id="L2241">                RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -2254,9 +2253,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix elemDiv(CMatrix B) {
-<span class="fc" id="L2257">        return new CMatrix(</span>
-<span class="fc" id="L2258">                shape.copy(),</span>
-<span class="fc" id="L2259">                ComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L2256">        return new CMatrix(</span>
+<span class="fc" id="L2257">                shape.copy(),</span>
+<span class="fc" id="L2258">                ComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -2269,7 +2268,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber det() {
-<span class="nc" id="L2272">        return null;</span>
+<span class="nc" id="L2271">        return null;</span>
     }
 
 
@@ -2282,8 +2281,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber fib(Matrix B) {
-<span class="nc" id="L2285">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
-<span class="nc" id="L2286">        return this.T().mult(B).trace();</span>
+<span class="nc" id="L2284">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
+<span class="nc" id="L2285">        return this.T().mult(B).trace();</span>
     }
 
 
@@ -2296,8 +2295,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber fib(SparseMatrix B) {
-<span class="nc" id="L2299">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
-<span class="nc" id="L2300">        return this.T().mult(B).trace();</span>
+<span class="nc" id="L2298">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
+<span class="nc" id="L2299">        return this.T().mult(B).trace();</span>
     }
 
 
@@ -2310,8 +2309,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber fib(CMatrix B) {
-<span class="nc" id="L2313">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
-<span class="nc" id="L2314">        return this.T().mult(B).trace();</span>
+<span class="nc" id="L2312">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
+<span class="nc" id="L2313">        return this.T().mult(B).trace();</span>
     }
 
 
@@ -2324,8 +2323,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber fib(SparseCMatrix B) {
-<span class="nc" id="L2327">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
-<span class="nc" id="L2328">        return this.T().mult(B).trace();</span>
+<span class="nc" id="L2326">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
+<span class="nc" id="L2327">        return this.T().mult(B).trace();</span>
     }
 
 
@@ -2337,21 +2336,21 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix directSum(Matrix B) {
-<span class="fc" id="L2340">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L2339">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L2343" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc" id="L2344">            ArrayUtils.arraycopy(entries, i*numCols , sum.entries, i*sum.numCols, this.numCols);</span>
+<span class="fc bfc" id="L2342" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L2343">            ArrayUtils.arraycopy(entries, i*numCols , sum.entries, i*sum.numCols, this.numCols);</span>
         }
 
         // Copy over second matrix.
-<span class="fc bfc" id="L2348" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="fc bfc" id="L2349" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
-<span class="fc" id="L2350">                sum.entries[(i+numRows)*sum.numCols + j + numCols] = new CNumber(B.entries[i*B.numCols + j]);</span>
+<span class="fc bfc" id="L2347" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L2348" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L2349">                sum.entries[(i+numRows)*sum.numCols + j + numCols] = new CNumber(B.entries[i*B.numCols + j]);</span>
             }
         }
 
-<span class="fc" id="L2354">        return sum;</span>
+<span class="fc" id="L2353">        return sum;</span>
     }
 
 
@@ -2363,23 +2362,23 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix directSum(SparseMatrix B) {
-<span class="fc" id="L2366">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L2365">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L2369" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc" id="L2370">            ArrayUtils.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
+<span class="fc bfc" id="L2368" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L2369">            ArrayUtils.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
         }
 
         // Copy over second matrix.
         int row, col;
-<span class="fc bfc" id="L2375" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L2376">            row = B.rowIndices[i];</span>
-<span class="fc" id="L2377">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L2374" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L2375">            row = B.rowIndices[i];</span>
+<span class="fc" id="L2376">            col = B.colIndices[i];</span>
 
-<span class="fc" id="L2379">            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = new CNumber(B.entries[i]);</span>
+<span class="fc" id="L2378">            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = new CNumber(B.entries[i]);</span>
         }
 
-<span class="fc" id="L2382">        return sum;</span>
+<span class="fc" id="L2381">        return sum;</span>
     }
 
 
@@ -2391,19 +2390,19 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix directSum(CMatrix B) {
-<span class="fc" id="L2394">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L2393">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L2397" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc" id="L2398">            ArrayUtils.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
+<span class="fc bfc" id="L2396" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L2397">            ArrayUtils.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
         }
 
         // Copy over second matrix.
-<span class="fc bfc" id="L2402" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="fc" id="L2403">            ArrayUtils.arraycopy(B.entries, i*B.numCols, sum.entries, (i+numRows)*sum.numCols + numCols, B.numCols);</span>
+<span class="fc bfc" id="L2401" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc" id="L2402">            ArrayUtils.arraycopy(B.entries, i*B.numCols, sum.entries, (i+numRows)*sum.numCols + numCols, B.numCols);</span>
         }
 
-<span class="fc" id="L2406">        return sum;</span>
+<span class="fc" id="L2405">        return sum;</span>
     }
 
 
@@ -2415,23 +2414,23 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix directSum(SparseCMatrix B) {
-<span class="fc" id="L2418">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L2417">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L2421" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc" id="L2422">            ArrayUtils.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
+<span class="fc bfc" id="L2420" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L2421">            ArrayUtils.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
         }
 
         // Copy over second matrix.
         int row, col;
-<span class="fc bfc" id="L2427" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L2428">            row = B.rowIndices[i];</span>
-<span class="fc" id="L2429">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L2426" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L2427">            row = B.rowIndices[i];</span>
+<span class="fc" id="L2428">            col = B.colIndices[i];</span>
 
-<span class="fc" id="L2431">            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i].copy();</span>
+<span class="fc" id="L2430">            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i].copy();</span>
         }
 
-<span class="fc" id="L2434">        return sum;</span>
+<span class="fc" id="L2433">        return sum;</span>
     }
 
 
@@ -2443,21 +2442,21 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(Matrix B) {
-<span class="fc" id="L2446">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L2445">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L2449" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc" id="L2450">            ArrayUtils.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);</span>
+<span class="fc bfc" id="L2448" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L2449">            ArrayUtils.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);</span>
         }
 
         // Copy over second matrix.
-<span class="fc bfc" id="L2454" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="fc bfc" id="L2455" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
-<span class="fc" id="L2456">                sum.entries[i*sum.numCols + j + this.numCols] = new CNumber(B.entries[i*B.numCols + j]);</span>
+<span class="fc bfc" id="L2453" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L2454" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L2455">                sum.entries[i*sum.numCols + j + this.numCols] = new CNumber(B.entries[i*B.numCols + j]);</span>
             }
         }
 
-<span class="fc" id="L2460">        return sum;</span>
+<span class="fc" id="L2459">        return sum;</span>
     }
 
 
@@ -2469,23 +2468,23 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(SparseMatrix B) {
-<span class="fc" id="L2472">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L2471">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L2475" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc" id="L2476">            ArrayUtils.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);</span>
+<span class="fc bfc" id="L2474" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L2475">            ArrayUtils.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);</span>
         }
 
         // Copy over second matrix.
         int row, col;
-<span class="fc bfc" id="L2481" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L2482">            row = B.rowIndices[i];</span>
-<span class="fc" id="L2483">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L2480" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L2481">            row = B.rowIndices[i];</span>
+<span class="fc" id="L2482">            col = B.colIndices[i];</span>
 
-<span class="fc" id="L2485">            sum.entries[row*sum.numCols + col + this.numCols] = new CNumber(B.entries[i]);</span>
+<span class="fc" id="L2484">            sum.entries[row*sum.numCols + col + this.numCols] = new CNumber(B.entries[i]);</span>
         }
 
-<span class="fc" id="L2488">        return sum;</span>
+<span class="fc" id="L2487">        return sum;</span>
     }
 
 
@@ -2497,23 +2496,23 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(CMatrix B) {
-<span class="fc" id="L2500">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L2499">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L2503" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc bfc" id="L2504" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="fc" id="L2505">                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
+<span class="fc bfc" id="L2502" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L2503" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L2504">                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
             }
         }
 
         // Copy over second matrix.
-<span class="fc bfc" id="L2510" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="fc bfc" id="L2511" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
-<span class="fc" id="L2512">                sum.entries[i*sum.numCols + j + this.numCols] = B.entries[i*B.numCols + j].copy();</span>
+<span class="fc bfc" id="L2509" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L2510" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L2511">                sum.entries[i*sum.numCols + j + this.numCols] = B.entries[i*B.numCols + j].copy();</span>
             }
         }
 
-<span class="fc" id="L2516">        return sum;</span>
+<span class="fc" id="L2515">        return sum;</span>
     }
 
 
@@ -2525,25 +2524,25 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix invDirectSum(SparseCMatrix B) {
-<span class="fc" id="L2528">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L2527">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L2531" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc bfc" id="L2532" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="fc" id="L2533">                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
+<span class="fc bfc" id="L2530" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L2531" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L2532">                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
             }
         }
 
         // Copy over second matrix.
         int row, col;
-<span class="fc bfc" id="L2539" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L2540">            row = B.rowIndices[i];</span>
-<span class="fc" id="L2541">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L2538" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L2539">            row = B.rowIndices[i];</span>
+<span class="fc" id="L2540">            col = B.colIndices[i];</span>
 
-<span class="fc" id="L2543">            sum.entries[row*sum.numCols + col + this.numCols] = B.entries[i].copy();</span>
+<span class="fc" id="L2542">            sum.entries[row*sum.numCols + col + this.numCols] = B.entries[i].copy();</span>
         }
 
-<span class="fc" id="L2546">        return sum;</span>
+<span class="fc" id="L2545">        return sum;</span>
     }
 
 
@@ -2555,15 +2554,15 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sumCols() {
-<span class="fc" id="L2558">        CMatrix sum = new CMatrix(this.numRows, 1);</span>
+<span class="fc" id="L2557">        CMatrix sum = new CMatrix(this.numRows, 1);</span>
 
-<span class="fc bfc" id="L2560" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc bfc" id="L2561" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="fc" id="L2562">                sum.entries[i].addEq(this.entries[i*numCols + j]);</span>
+<span class="fc bfc" id="L2559" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L2560" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L2561">                sum.entries[i].addEq(this.entries[i*numCols + j]);</span>
             }
         }
 
-<span class="fc" id="L2566">        return sum;</span>
+<span class="fc" id="L2565">        return sum;</span>
     }
 
 
@@ -2575,15 +2574,15 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix sumRows() {
-<span class="fc" id="L2578">        CMatrix sum = new CMatrix(1, this.numCols);</span>
+<span class="fc" id="L2577">        CMatrix sum = new CMatrix(1, this.numCols);</span>
 
-<span class="fc bfc" id="L2580" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc bfc" id="L2581" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="fc" id="L2582">                sum.entries[j].addEq(this.entries[i*numCols + j]);</span>
+<span class="fc bfc" id="L2579" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L2580" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L2581">                sum.entries[j].addEq(this.entries[i*numCols + j]);</span>
             }
         }
 
-<span class="fc" id="L2586">        return sum;</span>
+<span class="fc" id="L2585">        return sum;</span>
     }
 
 
@@ -2596,16 +2595,16 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(Vector b) {
-<span class="fc" id="L2599">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
-<span class="fc" id="L2600">        CMatrix sum = new CMatrix(this);</span>
+<span class="fc" id="L2598">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
+<span class="fc" id="L2599">        CMatrix sum = new CMatrix(this);</span>
 
-<span class="fc bfc" id="L2602" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
-<span class="fc bfc" id="L2603" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
-<span class="fc" id="L2604">                sum.entries[i*sum.numCols + j].addEq(b.entries[i]);</span>
+<span class="fc bfc" id="L2601" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2602" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2603">                sum.entries[i*sum.numCols + j].addEq(b.entries[i]);</span>
             }
         }
 
-<span class="fc" id="L2608">        return sum;</span>
+<span class="fc" id="L2607">        return sum;</span>
     }
 
 
@@ -2618,20 +2617,20 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(SparseVector b) {
-<span class="fc" id="L2621">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
-<span class="fc" id="L2622">        CMatrix sum = new CMatrix(this);</span>
+<span class="fc" id="L2620">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
+<span class="fc" id="L2621">        CMatrix sum = new CMatrix(this);</span>
 
         int index;
 
-<span class="fc bfc" id="L2626" title="All 2 branches covered.">        for(int i=0; i&lt;b.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L2627">            index = b.indices[i];</span>
+<span class="fc bfc" id="L2625" title="All 2 branches covered.">        for(int i=0; i&lt;b.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L2626">            index = b.indices[i];</span>
 
-<span class="fc bfc" id="L2629" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
-<span class="fc" id="L2630">                sum.entries[index*sum.numCols + j].addEq(b.entries[i]);</span>
+<span class="fc bfc" id="L2628" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2629">                sum.entries[index*sum.numCols + j].addEq(b.entries[i]);</span>
             }
         }
 
-<span class="fc" id="L2634">        return sum;</span>
+<span class="fc" id="L2633">        return sum;</span>
     }
 
 
@@ -2644,16 +2643,16 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(CVector b) {
-<span class="fc" id="L2647">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
-<span class="fc" id="L2648">        CMatrix sum = new CMatrix(this);</span>
+<span class="fc" id="L2646">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
+<span class="fc" id="L2647">        CMatrix sum = new CMatrix(this);</span>
 
-<span class="fc bfc" id="L2650" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
-<span class="fc bfc" id="L2651" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
-<span class="fc" id="L2652">                sum.entries[i*sum.numCols + j].addEq(b.entries[i]);</span>
+<span class="fc bfc" id="L2649" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2650" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2651">                sum.entries[i*sum.numCols + j].addEq(b.entries[i]);</span>
             }
         }
 
-<span class="fc" id="L2656">        return sum;</span>
+<span class="fc" id="L2655">        return sum;</span>
     }
 
 
@@ -2666,20 +2665,20 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachCol(SparseCVector b) {
-<span class="fc" id="L2669">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
-<span class="fc" id="L2670">        CMatrix sum = new CMatrix(this);</span>
+<span class="fc" id="L2668">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
+<span class="fc" id="L2669">        CMatrix sum = new CMatrix(this);</span>
 
         int index;
 
-<span class="fc bfc" id="L2674" title="All 2 branches covered.">        for(int i=0; i&lt;b.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L2675">            index = b.indices[i];</span>
+<span class="fc bfc" id="L2673" title="All 2 branches covered.">        for(int i=0; i&lt;b.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L2674">            index = b.indices[i];</span>
 
-<span class="fc bfc" id="L2677" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
-<span class="fc" id="L2678">                sum.entries[index*sum.numCols + j].addEq(b.entries[i]);</span>
+<span class="fc bfc" id="L2676" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2677">                sum.entries[index*sum.numCols + j].addEq(b.entries[i]);</span>
             }
         }
 
-<span class="fc" id="L2682">        return sum;</span>
+<span class="fc" id="L2681">        return sum;</span>
     }
 
 
@@ -2692,16 +2691,16 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(Vector b) {
-<span class="fc" id="L2695">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
-<span class="fc" id="L2696">        CMatrix sum = new CMatrix(this);</span>
+<span class="fc" id="L2694">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
+<span class="fc" id="L2695">        CMatrix sum = new CMatrix(this);</span>
 
-<span class="fc bfc" id="L2698" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
-<span class="fc bfc" id="L2699" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
-<span class="fc" id="L2700">                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);</span>
+<span class="fc bfc" id="L2697" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2698" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2699">                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);</span>
             }
         }
 
-<span class="fc" id="L2704">        return sum;</span>
+<span class="fc" id="L2703">        return sum;</span>
     }
 
 
@@ -2714,18 +2713,18 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(SparseVector b) {
-<span class="fc" id="L2717">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
-<span class="fc" id="L2718">        CMatrix sum = new CMatrix(this);</span>
+<span class="fc" id="L2716">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
+<span class="fc" id="L2717">        CMatrix sum = new CMatrix(this);</span>
 
         int col;
-<span class="fc bfc" id="L2721" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
-<span class="fc bfc" id="L2722" title="All 2 branches covered.">            for(int j=0; j&lt;b.nonZeroEntries(); j++) {</span>
-<span class="fc" id="L2723">                col = b.indices[j];</span>
-<span class="fc" id="L2724">                sum.entries[i*sum.numCols + col].addEq(b.entries[j]);</span>
+<span class="fc bfc" id="L2720" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2721" title="All 2 branches covered.">            for(int j=0; j&lt;b.nonZeroEntries(); j++) {</span>
+<span class="fc" id="L2722">                col = b.indices[j];</span>
+<span class="fc" id="L2723">                sum.entries[i*sum.numCols + col].addEq(b.entries[j]);</span>
             }
         }
 
-<span class="fc" id="L2728">        return sum;</span>
+<span class="fc" id="L2727">        return sum;</span>
     }
 
 
@@ -2738,16 +2737,16 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(CVector b) {
-<span class="fc" id="L2741">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
-<span class="fc" id="L2742">        CMatrix sum = new CMatrix(this);</span>
+<span class="fc" id="L2740">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
+<span class="fc" id="L2741">        CMatrix sum = new CMatrix(this);</span>
 
-<span class="fc bfc" id="L2744" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
-<span class="fc bfc" id="L2745" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
-<span class="fc" id="L2746">                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);</span>
+<span class="fc bfc" id="L2743" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2744" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2745">                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);</span>
             }
         }
 
-<span class="fc" id="L2750">        return sum;</span>
+<span class="fc" id="L2749">        return sum;</span>
     }
 
 
@@ -2760,18 +2759,18 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix addToEachRow(SparseCVector b) {
-<span class="fc" id="L2763">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
-<span class="fc" id="L2764">        CMatrix sum = new CMatrix(this);</span>
+<span class="fc" id="L2762">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
+<span class="fc" id="L2763">        CMatrix sum = new CMatrix(this);</span>
 
         int col;
-<span class="fc bfc" id="L2767" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
-<span class="fc bfc" id="L2768" title="All 2 branches covered.">            for(int j=0; j&lt;b.nonZeroEntries(); j++) {</span>
-<span class="fc" id="L2769">                col = b.indices[j];</span>
-<span class="fc" id="L2770">                sum.entries[i*sum.numCols + col].addEq(b.entries[j]);</span>
+<span class="fc bfc" id="L2766" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2767" title="All 2 branches covered.">            for(int j=0; j&lt;b.nonZeroEntries(); j++) {</span>
+<span class="fc" id="L2768">                col = b.indices[j];</span>
+<span class="fc" id="L2769">                sum.entries[i*sum.numCols + col].addEq(b.entries[j]);</span>
             }
         }
 
-<span class="fc" id="L2774">        return sum;</span>
+<span class="fc" id="L2773">        return sum;</span>
     }
 
 
@@ -2785,13 +2784,13 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(Matrix B) {
-<span class="fc" id="L2788">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
-<span class="fc" id="L2789">        CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
+<span class="fc" id="L2787">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
+<span class="fc" id="L2788">        CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
 
-<span class="fc" id="L2791">        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
-<span class="fc" id="L2792">        ArrayUtils.arraycopy(B.entries, 0, stacked.entries, this.entries.length, B.entries.length);</span>
+<span class="fc" id="L2790">        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+<span class="fc" id="L2791">        ArrayUtils.arraycopy(B.entries, 0, stacked.entries, this.entries.length, B.entries.length);</span>
 
-<span class="fc" id="L2794">        return stacked;</span>
+<span class="fc" id="L2793">        return stacked;</span>
     }
 
 
@@ -2805,21 +2804,21 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseMatrix B) {
-<span class="fc" id="L2808">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
-<span class="fc" id="L2809">        CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
+<span class="fc" id="L2807">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
+<span class="fc" id="L2808">        CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
 
-<span class="fc" id="L2811">        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+<span class="fc" id="L2810">        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
 
         int row, col;
 
-<span class="fc bfc" id="L2815" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
-<span class="fc" id="L2816">            row = B.rowIndices[i];</span>
-<span class="fc" id="L2817">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L2814" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="fc" id="L2815">            row = B.rowIndices[i];</span>
+<span class="fc" id="L2816">            col = B.colIndices[i];</span>
             // Offset the row index for destination matrix. i.e. row+this.numRows
-<span class="fc" id="L2819">            stacked.entries[(row+this.numRows)*stacked.numCols + col] = new CNumber(B.entries[i]);</span>
+<span class="fc" id="L2818">            stacked.entries[(row+this.numRows)*stacked.numCols + col] = new CNumber(B.entries[i]);</span>
         }
 
-<span class="fc" id="L2822">        return stacked;</span>
+<span class="fc" id="L2821">        return stacked;</span>
     }
 
 
@@ -2833,22 +2832,22 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(CMatrix B) {
-<span class="fc" id="L2836">        ParameterChecks.assertArrayLengthsEq(numCols, B.numCols);</span>
-<span class="fc" id="L2837">        CMatrix stacked = new CMatrix(new Shape(numRows+B.numRows, numCols));</span>
+<span class="fc" id="L2835">        ParameterChecks.assertArrayLengthsEq(numCols, B.numCols);</span>
+<span class="fc" id="L2836">        CMatrix stacked = new CMatrix(new Shape(numRows+B.numRows, numCols));</span>
 
-<span class="fc bfc" id="L2839" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L2840" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L2841">                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();</span>
+<span class="fc bfc" id="L2838" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2839" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2840">                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();</span>
             }
         }
 
-<span class="fc bfc" id="L2845" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="fc bfc" id="L2846" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
-<span class="fc" id="L2847">                stacked.entries[(i + numRows)*stacked.numCols + j] = B.entries[i*B.numCols+j].copy();</span>
+<span class="fc bfc" id="L2844" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L2845" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L2846">                stacked.entries[(i + numRows)*stacked.numCols + j] = B.entries[i*B.numCols+j].copy();</span>
             }
         }
 
-<span class="fc" id="L2851">        return stacked;</span>
+<span class="fc" id="L2850">        return stacked;</span>
     }
 
 
@@ -2862,24 +2861,24 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCMatrix B) {
-<span class="fc" id="L2865">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
-<span class="fc" id="L2866">        CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
+<span class="fc" id="L2864">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
+<span class="fc" id="L2865">        CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
 
-<span class="fc bfc" id="L2868" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L2869" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L2870">                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();</span>
+<span class="fc bfc" id="L2867" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2868" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2869">                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();</span>
             }
         }
 
         int row, col;
-<span class="fc bfc" id="L2875" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
-<span class="fc" id="L2876">            row = B.rowIndices[i];</span>
-<span class="fc" id="L2877">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L2874" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="fc" id="L2875">            row = B.rowIndices[i];</span>
+<span class="fc" id="L2876">            col = B.colIndices[i];</span>
             // Offset the row index for destination matrix. i.e. row+this.numRows
-<span class="fc" id="L2879">            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i].copy();</span>
+<span class="fc" id="L2878">            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i].copy();</span>
         }
 
-<span class="fc" id="L2882">        return stacked;</span>
+<span class="fc" id="L2881">        return stacked;</span>
     }
 
 
@@ -2899,15 +2898,15 @@ public class CMatrix extends ComplexMatrixBase implements
     public CMatrix stack(Matrix B, int axis) {
         CMatrix stacked;
 
-<span class="fc bfc" id="L2902" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L2903">            stacked = this.augment(B);</span>
-<span class="fc bfc" id="L2904" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L2905">            stacked = this.stack(B);</span>
+<span class="fc bfc" id="L2901" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2902">            stacked = this.augment(B);</span>
+<span class="fc bfc" id="L2903" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2904">            stacked = this.stack(B);</span>
         } else {
-<span class="fc" id="L2907">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="fc" id="L2906">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L2910">        return stacked;</span>
+<span class="fc" id="L2909">        return stacked;</span>
     }
 
 
@@ -2927,15 +2926,15 @@ public class CMatrix extends ComplexMatrixBase implements
     public CMatrix stack(SparseMatrix B, int axis) {
         CMatrix stacked;
 
-<span class="fc bfc" id="L2930" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L2931">            stacked = this.augment(B);</span>
-<span class="fc bfc" id="L2932" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L2933">            stacked = this.stack(B);</span>
+<span class="fc bfc" id="L2929" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2930">            stacked = this.augment(B);</span>
+<span class="fc bfc" id="L2931" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2932">            stacked = this.stack(B);</span>
         } else {
-<span class="fc" id="L2935">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="fc" id="L2934">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L2938">        return stacked;</span>
+<span class="fc" id="L2937">        return stacked;</span>
     }
 
 
@@ -2955,15 +2954,15 @@ public class CMatrix extends ComplexMatrixBase implements
     public CMatrix stack(CMatrix B, int axis) {
         CMatrix stacked;
 
-<span class="fc bfc" id="L2958" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L2959">            stacked = this.augment(B);</span>
-<span class="fc bfc" id="L2960" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L2961">            stacked = this.stack(B);</span>
+<span class="fc bfc" id="L2957" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2958">            stacked = this.augment(B);</span>
+<span class="fc bfc" id="L2959" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2960">            stacked = this.stack(B);</span>
         } else {
-<span class="fc" id="L2963">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="fc" id="L2962">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L2966">        return stacked;</span>
+<span class="fc" id="L2965">        return stacked;</span>
     }
 
 
@@ -2983,15 +2982,15 @@ public class CMatrix extends ComplexMatrixBase implements
     public CMatrix stack(SparseCMatrix B, int axis) {
         CMatrix stacked;
 
-<span class="fc bfc" id="L2986" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L2987">            stacked = this.augment(B);</span>
-<span class="fc bfc" id="L2988" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L2989">            stacked = this.stack(B);</span>
+<span class="fc bfc" id="L2985" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2986">            stacked = this.augment(B);</span>
+<span class="fc bfc" id="L2987" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2988">            stacked = this.stack(B);</span>
         } else {
-<span class="fc" id="L2991">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="fc" id="L2990">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L2994">        return stacked;</span>
+<span class="fc" id="L2993">        return stacked;</span>
     }
 
 
@@ -3005,22 +3004,22 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(Matrix B) {
-<span class="fc" id="L3008">        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);</span>
-<span class="fc" id="L3009">        CMatrix augmented = new CMatrix(new Shape(numRows, numCols+B.numCols));</span>
+<span class="fc" id="L3007">        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);</span>
+<span class="fc" id="L3008">        CMatrix augmented = new CMatrix(new Shape(numRows, numCols+B.numCols));</span>
 
         // Copy entries from this matrix.
-<span class="fc bfc" id="L3012" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc" id="L3013">            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);</span>
+<span class="fc bfc" id="L3011" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L3012">            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);</span>
         }
 
         // Copy entries from the B matrix.
-<span class="fc bfc" id="L3017" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="fc bfc" id="L3018" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
-<span class="fc" id="L3019">                augmented.entries[i*augmented.numCols + j + numCols] = new CNumber(B.entries[i*B.numCols + j]);</span>
+<span class="fc bfc" id="L3016" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L3017" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L3018">                augmented.entries[i*augmented.numCols + j + numCols] = new CNumber(B.entries[i*B.numCols + j]);</span>
             }
         }
 
-<span class="fc" id="L3023">        return augmented;</span>
+<span class="fc" id="L3022">        return augmented;</span>
     }
 
 
@@ -3034,23 +3033,23 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseMatrix B) {
-<span class="fc" id="L3037">        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);</span>
-<span class="fc" id="L3038">        CMatrix augmented = new CMatrix(new Shape(this.numRows, this.numCols+B.numCols));</span>
+<span class="fc" id="L3036">        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);</span>
+<span class="fc" id="L3037">        CMatrix augmented = new CMatrix(new Shape(this.numRows, this.numCols+B.numCols));</span>
 
         // Copy entries from this matrix.
-<span class="fc bfc" id="L3041" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc" id="L3042">            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);</span>
+<span class="fc bfc" id="L3040" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L3041">            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);</span>
         }
 
         int row, col;
-<span class="fc bfc" id="L3046" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
-<span class="fc" id="L3047">            row = B.rowIndices[i];</span>
-<span class="fc" id="L3048">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L3045" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="fc" id="L3046">            row = B.rowIndices[i];</span>
+<span class="fc" id="L3047">            col = B.colIndices[i];</span>
             // Offset the col index for destination matrix. i.e. col+this.numCols
-<span class="fc" id="L3050">            augmented.entries[row*augmented.numCols + (col + numCols)] = new CNumber(B.entries[i]);</span>
+<span class="fc" id="L3049">            augmented.entries[row*augmented.numCols + (col + numCols)] = new CNumber(B.entries[i]);</span>
         }
 
-<span class="fc" id="L3053">        return augmented;</span>
+<span class="fc" id="L3052">        return augmented;</span>
     }
 
 
@@ -3064,24 +3063,24 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(CMatrix B) {
-<span class="fc" id="L3067">        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);</span>
-<span class="fc" id="L3068">        CMatrix augmented = new CMatrix(new Shape(numRows, numCols+B.numCols));</span>
+<span class="fc" id="L3066">        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);</span>
+<span class="fc" id="L3067">        CMatrix augmented = new CMatrix(new Shape(numRows, numCols+B.numCols));</span>
 
         // Copy entries from this matrix.
-<span class="fc bfc" id="L3071" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L3072" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L3073">                augmented.entries[i*augmented.numCols + j] = entries[i*numCols + j].copy();</span>
+<span class="fc bfc" id="L3070" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L3071" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L3072">                augmented.entries[i*augmented.numCols + j] = entries[i*numCols + j].copy();</span>
             }
         }
 
         // Copy entries from the B matrix.
-<span class="fc bfc" id="L3078" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="fc bfc" id="L3079" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
-<span class="fc" id="L3080">                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j].copy();</span>
+<span class="fc bfc" id="L3077" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L3078" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L3079">                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j].copy();</span>
             }
         }
 
-<span class="fc" id="L3084">        return augmented;</span>
+<span class="fc" id="L3083">        return augmented;</span>
     }
 
 
@@ -3095,25 +3094,25 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseCMatrix B) {
-<span class="fc" id="L3098">        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);</span>
-<span class="fc" id="L3099">        CMatrix augmented = new CMatrix(new Shape(this.numRows, this.numCols+B.numCols));</span>
+<span class="fc" id="L3097">        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);</span>
+<span class="fc" id="L3098">        CMatrix augmented = new CMatrix(new Shape(this.numRows, this.numCols+B.numCols));</span>
 
         // Copy entries from this matrix.
-<span class="fc bfc" id="L3102" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L3103" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L3104">                augmented.entries[i*augmented.numCols + j] = entries[i*numCols + j].copy();</span>
+<span class="fc bfc" id="L3101" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L3102" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L3103">                augmented.entries[i*augmented.numCols + j] = entries[i*numCols + j].copy();</span>
             }
         }
 
         int row, col;
-<span class="fc bfc" id="L3109" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
-<span class="fc" id="L3110">            row = B.rowIndices[i];</span>
-<span class="fc" id="L3111">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L3108" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="fc" id="L3109">            row = B.rowIndices[i];</span>
+<span class="fc" id="L3110">            col = B.colIndices[i];</span>
             // Offset the col index for destination matrix. i.e. col+this.numCols
-<span class="fc" id="L3113">            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i].copy();</span>
+<span class="fc" id="L3112">            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i].copy();</span>
         }
 
-<span class="fc" id="L3116">        return augmented;</span>
+<span class="fc" id="L3115">        return augmented;</span>
     }
 
 
@@ -3129,13 +3128,13 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(Vector b) {
-<span class="fc" id="L3132">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);</span>
-<span class="fc" id="L3133">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
+<span class="fc" id="L3131">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);</span>
+<span class="fc" id="L3132">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
 
-<span class="fc" id="L3135">        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
-<span class="fc" id="L3136">        ArrayUtils.arraycopy(b.entries, 0, stacked.entries, this.entries.length, b.entries.length);</span>
+<span class="fc" id="L3134">        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+<span class="fc" id="L3135">        ArrayUtils.arraycopy(b.entries, 0, stacked.entries, this.entries.length, b.entries.length);</span>
 
-<span class="fc" id="L3138">        return stacked;</span>
+<span class="fc" id="L3137">        return stacked;</span>
     }
 
 
@@ -3151,19 +3150,19 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseVector b) {
-<span class="fc" id="L3154">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());</span>
-<span class="fc" id="L3155">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
+<span class="fc" id="L3153">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());</span>
+<span class="fc" id="L3154">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
 
-<span class="fc" id="L3157">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+<span class="fc" id="L3156">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
 
         int index;
 
-<span class="fc bfc" id="L3161" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L3162">            index = b.indices[i];</span>
-<span class="fc" id="L3163">            stacked.entries[(stacked.numRows-1)*numCols + index] = new CNumber(b.entries[i]);</span>
+<span class="fc bfc" id="L3160" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L3161">            index = b.indices[i];</span>
+<span class="fc" id="L3162">            stacked.entries[(stacked.numRows-1)*numCols + index] = new CNumber(b.entries[i]);</span>
         }
 
-<span class="fc" id="L3166">        return stacked;</span>
+<span class="fc" id="L3165">        return stacked;</span>
     }
 
 
@@ -3179,20 +3178,20 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(CVector b) {
-<span class="fc" id="L3182">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);</span>
-<span class="fc" id="L3183">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
+<span class="fc" id="L3181">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);</span>
+<span class="fc" id="L3182">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
 
-<span class="fc bfc" id="L3185" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L3186" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L3187">                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();</span>
+<span class="fc bfc" id="L3184" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L3185" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L3186">                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();</span>
             }
         }
 
-<span class="fc bfc" id="L3191" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L3192">            stacked.entries[(stacked.numRows-1)*numCols + i] = b.entries[i].copy();</span>
+<span class="fc bfc" id="L3190" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L3191">            stacked.entries[(stacked.numRows-1)*numCols + i] = b.entries[i].copy();</span>
         }
 
-<span class="fc" id="L3195">        return stacked;</span>
+<span class="fc" id="L3194">        return stacked;</span>
     }
 
 
@@ -3208,22 +3207,22 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix stack(SparseCVector b) {
-<span class="fc" id="L3211">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());</span>
-<span class="fc" id="L3212">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
+<span class="fc" id="L3210">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());</span>
+<span class="fc" id="L3211">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
 
-<span class="fc bfc" id="L3214" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L3215" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L3216">                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();</span>
+<span class="fc bfc" id="L3213" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L3214" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L3215">                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();</span>
             }
         }
 
         int index;
-<span class="fc bfc" id="L3221" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L3222">            index = b.indices[i];</span>
-<span class="fc" id="L3223">            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[i];</span>
+<span class="fc bfc" id="L3220" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L3221">            index = b.indices[i];</span>
+<span class="fc" id="L3222">            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[i];</span>
         }
 
-<span class="fc" id="L3226">        return stacked;</span>
+<span class="fc" id="L3225">        return stacked;</span>
     }
 
 
@@ -3245,15 +3244,15 @@ public class CMatrix extends ComplexMatrixBase implements
     public CMatrix stack(Vector b, int axis) {
         CMatrix stacked;
 
-<span class="fc bfc" id="L3248" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L3249">            stacked = this.augment(b);</span>
-<span class="fc bfc" id="L3250" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L3251">            stacked = this.stack(b);</span>
+<span class="fc bfc" id="L3247" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L3248">            stacked = this.augment(b);</span>
+<span class="fc bfc" id="L3249" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L3250">            stacked = this.stack(b);</span>
         } else {
-<span class="fc" id="L3253">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="fc" id="L3252">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L3256">        return stacked;</span>
+<span class="fc" id="L3255">        return stacked;</span>
     }
 
 
@@ -3275,15 +3274,15 @@ public class CMatrix extends ComplexMatrixBase implements
     public CMatrix stack(SparseVector b, int axis) {
         CMatrix stacked;
 
-<span class="fc bfc" id="L3278" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L3279">            stacked = this.augment(b);</span>
-<span class="fc bfc" id="L3280" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L3281">            stacked = this.stack(b);</span>
+<span class="fc bfc" id="L3277" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L3278">            stacked = this.augment(b);</span>
+<span class="fc bfc" id="L3279" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L3280">            stacked = this.stack(b);</span>
         } else {
-<span class="fc" id="L3283">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="fc" id="L3282">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L3286">        return stacked;</span>
+<span class="fc" id="L3285">        return stacked;</span>
     }
 
 
@@ -3305,15 +3304,15 @@ public class CMatrix extends ComplexMatrixBase implements
     public CMatrix stack(CVector b, int axis) {
         CMatrix stacked;
 
-<span class="fc bfc" id="L3308" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L3309">            stacked = this.augment(b);</span>
-<span class="fc bfc" id="L3310" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L3311">            stacked = this.stack(b);</span>
+<span class="fc bfc" id="L3307" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L3308">            stacked = this.augment(b);</span>
+<span class="fc bfc" id="L3309" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L3310">            stacked = this.stack(b);</span>
         } else {
-<span class="fc" id="L3313">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="fc" id="L3312">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L3316">        return stacked;</span>
+<span class="fc" id="L3315">        return stacked;</span>
     }
 
 
@@ -3335,15 +3334,15 @@ public class CMatrix extends ComplexMatrixBase implements
     public CMatrix stack(SparseCVector b, int axis) {
         CMatrix stacked;
 
-<span class="fc bfc" id="L3338" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L3339">            stacked = this.augment(b);</span>
-<span class="fc bfc" id="L3340" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L3341">            stacked = this.stack(b);</span>
+<span class="fc bfc" id="L3337" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L3338">            stacked = this.augment(b);</span>
+<span class="fc bfc" id="L3339" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L3340">            stacked = this.stack(b);</span>
         } else {
-<span class="fc" id="L3343">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="fc" id="L3342">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L3346">        return stacked;</span>
+<span class="fc" id="L3345">        return stacked;</span>
     }
 
 
@@ -3359,20 +3358,20 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(Vector b) {
-<span class="fc" id="L3362">        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);</span>
-<span class="fc" id="L3363">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
+<span class="fc" id="L3361">        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);</span>
+<span class="fc" id="L3362">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
 
         // Copy elements of this matrix.
-<span class="fc bfc" id="L3366" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc" id="L3367">            System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);</span>
+<span class="fc bfc" id="L3365" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L3366">            System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);</span>
         }
 
         // Copy elements from b vector.
-<span class="fc bfc" id="L3371" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L3372">            stacked.entries[i*stacked.numCols + stacked.numCols-1] = new CNumber(b.entries[i]);</span>
+<span class="fc bfc" id="L3370" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L3371">            stacked.entries[i*stacked.numCols + stacked.numCols-1] = new CNumber(b.entries[i]);</span>
         }
 
-<span class="fc" id="L3375">        return stacked;</span>
+<span class="fc" id="L3374">        return stacked;</span>
     }
 
 
@@ -3388,21 +3387,21 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseVector b) {
-<span class="fc" id="L3391">        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());</span>
-<span class="fc" id="L3392">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
+<span class="fc" id="L3390">        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());</span>
+<span class="fc" id="L3391">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
 
         // Copy elements of this matrix.
-<span class="fc bfc" id="L3395" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="pc bpc" id="L3396" title="1 of 2 branches missed.">            if (numCols &gt;= 0)</span>
-<span class="fc" id="L3397">                System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);</span>
+<span class="fc bfc" id="L3394" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="pc bpc" id="L3395" title="1 of 2 branches missed.">            if (numCols &gt;= 0)</span>
+<span class="fc" id="L3396">                System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);</span>
         }
 
         // Copy elements from b vector.
-<span class="fc bfc" id="L3401" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L3402">            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = new CNumber(b.entries[i]);</span>
+<span class="fc bfc" id="L3400" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L3401">            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = new CNumber(b.entries[i]);</span>
         }
 
-<span class="fc" id="L3405">        return stacked;</span>
+<span class="fc" id="L3404">        return stacked;</span>
     }
 
 
@@ -3418,22 +3417,22 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(CVector b) {
-<span class="fc" id="L3421">        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);</span>
-<span class="fc" id="L3422">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
+<span class="fc" id="L3420">        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);</span>
+<span class="fc" id="L3421">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
 
         // Copy elements of this matrix.
-<span class="fc bfc" id="L3425" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L3426" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L3427">                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();</span>
+<span class="fc bfc" id="L3424" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L3425" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L3426">                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();</span>
             }
         }
 
         // Copy elements from b vector.
-<span class="fc bfc" id="L3432" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L3433">            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();</span>
+<span class="fc bfc" id="L3431" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L3432">            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();</span>
         }
 
-<span class="fc" id="L3436">        return stacked;</span>
+<span class="fc" id="L3435">        return stacked;</span>
     }
 
 
@@ -3449,22 +3448,22 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix augment(SparseCVector b) {
-<span class="fc" id="L3452">        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());</span>
-<span class="fc" id="L3453">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
+<span class="fc" id="L3451">        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());</span>
+<span class="fc" id="L3452">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
 
         // Copy elements of this matrix.
-<span class="fc bfc" id="L3456" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L3457" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L3458">                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();</span>
+<span class="fc bfc" id="L3455" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L3456" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L3457">                stacked.entries[i*stacked.numCols + j] = entries[i*numCols+j].copy();</span>
             }
         }
 
         // Copy elements from b vector.
-<span class="fc bfc" id="L3463" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L3464">            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();</span>
+<span class="fc bfc" id="L3462" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L3463">            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();</span>
         }
 
-<span class="fc" id="L3467">        return stacked;</span>
+<span class="fc" id="L3466">        return stacked;</span>
     }
 
 
@@ -3476,12 +3475,12 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix getRow(int i) {
-<span class="nc" id="L3479">        int start = i*numCols;</span>
-<span class="nc" id="L3480">        int stop = start+numCols;</span>
+<span class="nc" id="L3478">        int start = i*numCols;</span>
+<span class="nc" id="L3479">        int stop = start+numCols;</span>
 
-<span class="nc" id="L3482">        CNumber[] row = ArrayUtils.copyOfRange(this.entries, start, stop);</span>
+<span class="nc" id="L3481">        CNumber[] row = ArrayUtils.copyOfRange(this.entries, start, stop);</span>
 
-<span class="nc" id="L3484">        return new CMatrix(new Shape(1, numCols), row);</span>
+<span class="nc" id="L3483">        return new CMatrix(new Shape(1, numCols), row);</span>
     }
 
 
@@ -3494,9 +3493,9 @@ public class CMatrix extends ComplexMatrixBase implements
      * the number of rows in this matrix.
      */
     public CVector getRowAsVector(int i) {
-<span class="nc" id="L3497">        int start = i*numCols;</span>
-<span class="nc" id="L3498">        int stop = start+numCols;</span>
-<span class="nc" id="L3499">        return new CVector(ArrayUtils.copyOfRange(this.entries, start, stop));</span>
+<span class="nc" id="L3496">        int start = i*numCols;</span>
+<span class="nc" id="L3497">        int stop = start+numCols;</span>
+<span class="nc" id="L3498">        return new CVector(ArrayUtils.copyOfRange(this.entries, start, stop));</span>
     }
 
 
@@ -3508,13 +3507,13 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix getCol(int j) {
-<span class="fc" id="L3511">        CNumber[] col = new CNumber[numRows];</span>
+<span class="fc" id="L3510">        CNumber[] col = new CNumber[numRows];</span>
 
-<span class="fc bfc" id="L3513" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc" id="L3514">            col[i] = entries[i*numCols + j].copy();</span>
+<span class="fc bfc" id="L3512" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L3513">            col[i] = entries[i*numCols + j].copy();</span>
         }
 
-<span class="fc" id="L3517">        return new CMatrix(new Shape(numRows, 1), col);</span>
+<span class="fc" id="L3516">        return new CMatrix(new Shape(numRows, 1), col);</span>
     }
 
 
@@ -3527,13 +3526,13 @@ public class CMatrix extends ComplexMatrixBase implements
      * the number of rows in this matrix.
      */
     public CVector getColAsVector(int j) {
-<span class="nc" id="L3530">        CNumber[] col = new CNumber[numRows];</span>
+<span class="nc" id="L3529">        CNumber[] col = new CNumber[numRows];</span>
 
-<span class="nc bnc" id="L3532" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="nc" id="L3533">            col[i] = entries[i*numCols + j].copy();</span>
+<span class="nc bnc" id="L3531" title="All 2 branches missed.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc" id="L3532">            col[i] = entries[i*numCols + j].copy();</span>
         }
 
-<span class="nc" id="L3536">        return new CVector(col);</span>
+<span class="nc" id="L3535">        return new CVector(col);</span>
     }
 
 
@@ -3550,18 +3549,23 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
-<span class="fc" id="L3553">        int sliceRows = rowEnd-rowStart;</span>
-<span class="fc" id="L3554">        int sliceCols = colEnd-colStart;</span>
-<span class="fc" id="L3555">        int destPos = 0;</span>
-<span class="fc" id="L3556">        CNumber[] slice = new CNumber[sliceRows*sliceCols];</span>
+<span class="fc" id="L3552">        int sliceRows = rowEnd-rowStart;</span>
+<span class="fc" id="L3553">        int sliceCols = colEnd-colStart;</span>
+<span class="fc" id="L3554">        int destPos = 0;</span>
+        int srcPos;
+        int end;
+<span class="fc" id="L3557">        CNumber[] slice = new CNumber[sliceRows*sliceCols];</span>
 
-<span class="fc bfc" id="L3558" title="All 2 branches covered.">        for(int i=rowStart; i&lt;rowEnd; i++) {</span>
-<span class="fc bfc" id="L3559" title="All 2 branches covered.">            for(int j=colStart; j&lt;colEnd; j++) {</span>
-<span class="fc" id="L3560">                slice[destPos++] = this.entries[i*this.numCols + j];</span>
+<span class="fc bfc" id="L3559" title="All 2 branches covered.">        for(int i=rowStart; i&lt;rowEnd; i++) {</span>
+<span class="fc" id="L3560">            srcPos = i*this.numCols + colStart;</span>
+<span class="fc" id="L3561">            end = srcPos + colEnd - colStart;</span>
+
+<span class="fc bfc" id="L3563" title="All 2 branches covered.">            while(srcPos &lt; end) {</span>
+<span class="fc" id="L3564">                slice[destPos++] = this.entries[srcPos++];</span>
             }
         }
 
-<span class="fc" id="L3564">        return new CMatrix(sliceRows, sliceCols, slice);</span>
+<span class="fc" id="L3568">        return new CMatrix(sliceRows, sliceCols, slice);</span>
     }
 
 
@@ -3576,13 +3580,13 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix getColBelow(int rowStart, int j) {
-<span class="fc" id="L3579">        CNumber[] col = new CNumber[numRows-rowStart];</span>
+<span class="fc" id="L3583">        CNumber[] col = new CNumber[numRows-rowStart];</span>
 
-<span class="fc bfc" id="L3581" title="All 2 branches covered.">        for(int i=rowStart; i&lt;numRows; i++) {</span>
-<span class="fc" id="L3582">            col[i-rowStart] = entries[i*numCols + j].copy();</span>
+<span class="fc bfc" id="L3585" title="All 2 branches covered.">        for(int i=rowStart; i&lt;numRows; i++) {</span>
+<span class="fc" id="L3586">            col[i-rowStart] = entries[i*numCols + j].copy();</span>
         }
 
-<span class="fc" id="L3585">        return new CMatrix(new Shape(col.length, 1), col);</span>
+<span class="fc" id="L3589">        return new CMatrix(new Shape(col.length, 1), col);</span>
     }
 
 
@@ -3597,12 +3601,12 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix getRowAfter(int colStart, int i) {
-<span class="nc bnc" id="L3600" title="All 4 branches missed.">        if(i &gt; this.numRows || colStart &gt; this.numCols) {</span>
-<span class="nc" id="L3601">            throw new ArrayIndexOutOfBoundsException(String.format(&quot;Index (%d, %d) not in matrix.&quot;, i, colStart));</span>
+<span class="nc bnc" id="L3604" title="All 4 branches missed.">        if(i &gt; this.numRows || colStart &gt; this.numCols) {</span>
+<span class="nc" id="L3605">            throw new ArrayIndexOutOfBoundsException(String.format(&quot;Index (%d, %d) not in matrix.&quot;, i, colStart));</span>
         }
 
-<span class="nc" id="L3604">        CNumber[] row = ArrayUtils.copyOfRange(this.entries, i*this.numCols + colStart, (i+1)*this.numCols);</span>
-<span class="nc" id="L3605">        return new CMatrix(new Shape(1, row.length), row);</span>
+<span class="nc" id="L3608">        CNumber[] row = ArrayUtils.copyOfRange(this.entries, i*this.numCols + colStart, (i+1)*this.numCols);</span>
+<span class="nc" id="L3609">        return new CMatrix(new Shape(1, row.length), row);</span>
     }
 
 
@@ -3615,15 +3619,15 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber trace() {
-<span class="nc" id="L3618">        ParameterChecks.assertSquare(this.shape);</span>
-<span class="nc" id="L3619">        CNumber sum = new CNumber();</span>
-<span class="nc" id="L3620">        int colsOffset = this.numCols+1;</span>
+<span class="nc" id="L3622">        ParameterChecks.assertSquare(this.shape);</span>
+<span class="nc" id="L3623">        CNumber sum = new CNumber();</span>
+<span class="nc" id="L3624">        int colsOffset = this.numCols+1;</span>
 
-<span class="nc bnc" id="L3622" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="nc" id="L3623">            sum.addEq(this.entries[i*colsOffset]);</span>
+<span class="nc bnc" id="L3626" title="All 2 branches missed.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="nc" id="L3627">            sum.addEq(this.entries[i*colsOffset]);</span>
         }
 
-<span class="nc" id="L3626">        return sum;</span>
+<span class="nc" id="L3630">        return sum;</span>
     }
 
 
@@ -3636,7 +3640,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CNumber tr() {
-<span class="nc" id="L3639">        return trace();</span>
+<span class="nc" id="L3643">        return trace();</span>
     }
 
 
@@ -3648,7 +3652,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws IllegalArgumentException If the specified size is less than 1.
      */
     public static CMatrix I(int size) {
-<span class="fc" id="L3651">        return I(size, size);</span>
+<span class="fc" id="L3655">        return I(size, size);</span>
     }
 
 
@@ -3662,15 +3666,15 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws IllegalArgumentException If the specified number of rows or columns is less than 1.
      */
     public static CMatrix I(int numRows, int numCols) {
-<span class="fc" id="L3665">        ParameterChecks.assertGreaterEq(1, numRows, numCols);</span>
-<span class="fc" id="L3666">        CMatrix I = new CMatrix(numRows, numCols);</span>
-<span class="fc" id="L3667">        int stop = Math.min(numRows, numCols);</span>
+<span class="fc" id="L3669">        ParameterChecks.assertGreaterEq(1, numRows, numCols);</span>
+<span class="fc" id="L3670">        CMatrix I = new CMatrix(numRows, numCols);</span>
+<span class="fc" id="L3671">        int stop = Math.min(numRows, numCols);</span>
 
-<span class="fc bfc" id="L3669" title="All 2 branches covered.">        for(int i=0; i&lt;stop; i++) {</span>
-<span class="fc" id="L3670">            I.entries[i*numCols+i] = CNumber.ONE.copy();</span>
+<span class="fc bfc" id="L3673" title="All 2 branches covered.">        for(int i=0; i&lt;stop; i++) {</span>
+<span class="fc" id="L3674">            I.entries[i*numCols+i] = CNumber.ONE.copy();</span>
         }
 
-<span class="fc" id="L3673">        return I;</span>
+<span class="fc" id="L3677">        return I;</span>
     }
 
 
@@ -3683,8 +3687,8 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws IllegalArgumentException If the specified shape is not rank 2.
      */
     public static CMatrix I(Shape shape) {
-<span class="fc" id="L3686">        ParameterChecks.assertRank(2, shape);</span>
-<span class="fc" id="L3687">        return I(shape.get(0), shape.get(1));</span>
+<span class="fc" id="L3690">        ParameterChecks.assertRank(2, shape);</span>
+<span class="fc" id="L3691">        return I(shape.get(0), shape.get(1));</span>
     }
 
 
@@ -3695,7 +3699,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isSquare() {
-<span class="fc bfc" id="L3698" title="All 2 branches covered.">        return numRows==numCols;</span>
+<span class="fc bfc" id="L3702" title="All 2 branches covered.">        return numRows==numCols;</span>
     }
 
 
@@ -3706,7 +3710,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isVector() {
-<span class="nc bnc" id="L3709" title="All 4 branches missed.">        return numRows&lt;=1 || numCols&lt;=1;</span>
+<span class="nc bnc" id="L3713" title="All 4 branches missed.">        return numRows&lt;=1 || numCols&lt;=1;</span>
     }
 
 
@@ -3722,21 +3726,21 @@ public class CMatrix extends ComplexMatrixBase implements
     public int vectorType() {
         int type;
 
-<span class="nc bnc" id="L3725" title="All 4 branches missed.">        if(numRows==1 || numCols==1) {</span>
-<span class="nc bnc" id="L3726" title="All 4 branches missed.">            if(numRows==1 &amp;&amp; numCols==1) {</span>
-<span class="nc" id="L3727">                type = 0;</span>
-<span class="nc bnc" id="L3728" title="All 2 branches missed.">            } else if(numRows==1) {</span>
-<span class="nc" id="L3729">                type = 1;</span>
+<span class="nc bnc" id="L3729" title="All 4 branches missed.">        if(numRows==1 || numCols==1) {</span>
+<span class="nc bnc" id="L3730" title="All 4 branches missed.">            if(numRows==1 &amp;&amp; numCols==1) {</span>
+<span class="nc" id="L3731">                type = 0;</span>
+<span class="nc bnc" id="L3732" title="All 2 branches missed.">            } else if(numRows==1) {</span>
+<span class="nc" id="L3733">                type = 1;</span>
             } else {
                 // Then this matrix is equivalent to a column vector.
-<span class="nc" id="L3732">                type = 2;</span>
+<span class="nc" id="L3736">                type = 2;</span>
             }
         } else {
             // Then this matrix is not equivalent to any vector.
-<span class="nc" id="L3736">            type = -1;</span>
+<span class="nc" id="L3740">            type = -1;</span>
         }
 
-<span class="nc" id="L3739">        return type;</span>
+<span class="nc" id="L3743">        return type;</span>
     }
 
 
@@ -3747,7 +3751,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isTri() {
-<span class="nc bnc" id="L3750" title="All 4 branches missed.">        return isTriL() || isTriU();</span>
+<span class="nc bnc" id="L3754" title="All 4 branches missed.">        return isTriL() || isTriU();</span>
     }
 
 
@@ -3758,20 +3762,20 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isTriL() {
-<span class="nc" id="L3761">        boolean result = isSquare();</span>
+<span class="nc" id="L3765">        boolean result = isSquare();</span>
 
-<span class="nc bnc" id="L3763" title="All 2 branches missed.">        if(result) {</span>
+<span class="nc bnc" id="L3767" title="All 2 branches missed.">        if(result) {</span>
             // Ensure upper half is zeros.
-<span class="nc bnc" id="L3765" title="All 2 branches missed.">            for(int i=0; i&lt;numRows; i++) {</span>
-<span class="nc bnc" id="L3766" title="All 2 branches missed.">                for(int j=i+1; j&lt;numCols; j++) {</span>
-<span class="nc bnc" id="L3767" title="All 2 branches missed.">                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {</span>
-<span class="nc" id="L3768">                        return false; // No need to continue.</span>
+<span class="nc bnc" id="L3769" title="All 2 branches missed.">            for(int i=0; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L3770" title="All 2 branches missed.">                for(int j=i+1; j&lt;numCols; j++) {</span>
+<span class="nc bnc" id="L3771" title="All 2 branches missed.">                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {</span>
+<span class="nc" id="L3772">                        return false; // No need to continue.</span>
                     }
                 }
             }
         }
 
-<span class="nc" id="L3774">        return result;</span>
+<span class="nc" id="L3778">        return result;</span>
     }
 
 
@@ -3782,20 +3786,20 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isTriU() {
-<span class="nc" id="L3785">        boolean result = isSquare();</span>
+<span class="nc" id="L3789">        boolean result = isSquare();</span>
 
-<span class="nc bnc" id="L3787" title="All 2 branches missed.">        if(result) {</span>
+<span class="nc bnc" id="L3791" title="All 2 branches missed.">        if(result) {</span>
             // Ensure lower half is zeros.
-<span class="nc bnc" id="L3789" title="All 2 branches missed.">            for(int i=1; i&lt;numRows; i++) {</span>
-<span class="nc bnc" id="L3790" title="All 2 branches missed.">                for(int j=0; j&lt;i; j++) {</span>
-<span class="nc bnc" id="L3791" title="All 2 branches missed.">                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {</span>
-<span class="nc" id="L3792">                        return false; // No need to continue.</span>
+<span class="nc bnc" id="L3793" title="All 2 branches missed.">            for(int i=1; i&lt;numRows; i++) {</span>
+<span class="nc bnc" id="L3794" title="All 2 branches missed.">                for(int j=0; j&lt;i; j++) {</span>
+<span class="nc bnc" id="L3795" title="All 2 branches missed.">                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {</span>
+<span class="nc" id="L3796">                        return false; // No need to continue.</span>
                     }
                 }
             }
         }
 
-<span class="nc" id="L3798">        return result;</span>
+<span class="nc" id="L3802">        return result;</span>
     }
 
 
@@ -3806,7 +3810,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isDiag() {
-<span class="nc bnc" id="L3809" title="All 4 branches missed.">        return isTriL() &amp;&amp; isTriU();</span>
+<span class="nc bnc" id="L3813" title="All 4 branches missed.">        return isTriL() &amp;&amp; isTriU();</span>
     }
 
 
@@ -3818,7 +3822,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public boolean isFullRank() {
         // TODO: Implementation
-<span class="nc" id="L3821">        return false;</span>
+<span class="nc" id="L3825">        return false;</span>
     }
 
 
@@ -3831,7 +3835,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public boolean isSingular() {
         // TODO: Implementation
-<span class="nc" id="L3834">        return false;</span>
+<span class="nc" id="L3838">        return false;</span>
     }
 
 
@@ -3843,7 +3847,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isInvertible() {
-<span class="nc bnc" id="L3846" title="All 2 branches missed.">        return !isSingular();</span>
+<span class="nc bnc" id="L3850" title="All 2 branches missed.">        return !isSingular();</span>
     }
 
 
@@ -3856,7 +3860,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double norm(double p, double q) {
-<span class="nc" id="L3859">        return ComplexDenseOperations.matrixNormLpq(entries, shape, p, q);</span>
+<span class="nc" id="L3863">        return ComplexDenseOperations.matrixNormLpq(entries, shape, p, q);</span>
     }
 
 
@@ -3869,7 +3873,7 @@ public class CMatrix extends ComplexMatrixBase implements
     @Override
     public boolean isDiagonalizable() {
         // TODO: Implementation
-<span class="nc" id="L3872">        return false;</span>
+<span class="nc" id="L3876">        return false;</span>
     }
 
 
@@ -3880,7 +3884,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double maxNorm() {
-<span class="nc" id="L3883">        return ComplexDenseOperations.matrixMaxNorm(entries);</span>
+<span class="nc" id="L3887">        return ComplexDenseOperations.matrixMaxNorm(entries);</span>
     }
 
 
@@ -3892,7 +3896,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public int matrixRank() {
-<span class="nc" id="L3895">        return 0;</span>
+<span class="nc" id="L3899">        return 0;</span>
     }
 
 
@@ -3904,9 +3908,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void set(double value, int... indices) {
-<span class="nc" id="L3907">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
-<span class="nc" id="L3908">        ComplexDenseSetOperations.set(entries, shape, value, indices);</span>
-<span class="nc" id="L3909">    }</span>
+<span class="nc" id="L3911">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
+<span class="nc" id="L3912">        ComplexDenseSetOperations.set(entries, shape, value, indices);</span>
+<span class="nc" id="L3913">    }</span>
 
 
     /**
@@ -3917,9 +3921,9 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void set(CNumber value, int... indices) {
-<span class="fc" id="L3920">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
-<span class="fc" id="L3921">        ComplexDenseSetOperations.set(entries, shape, value, indices);</span>
-<span class="fc" id="L3922">    }</span>
+<span class="fc" id="L3924">        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());</span>
+<span class="fc" id="L3925">        ComplexDenseSetOperations.set(entries, shape, value, indices);</span>
+<span class="fc" id="L3926">    }</span>
 
 
     /**
@@ -3929,8 +3933,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void addEq(SparseCMatrix B) {
-<span class="nc" id="L3932">        ComplexDenseSparseOperations.addEq(this, B);</span>
-<span class="nc" id="L3933">    }</span>
+<span class="nc" id="L3936">        ComplexDenseSparseOperations.addEq(this, B);</span>
+<span class="nc" id="L3937">    }</span>
 
 
     /**
@@ -3940,8 +3944,8 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void subEq(SparseCMatrix B) {
-<span class="nc" id="L3943">        ComplexDenseSparseOperations.subEq(this, B);</span>
-<span class="nc" id="L3944">    }</span>
+<span class="nc" id="L3947">        ComplexDenseSparseOperations.subEq(this, B);</span>
+<span class="nc" id="L3948">    }</span>
 
 
     /**
@@ -3950,8 +3954,8 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public CNumber min() {
-<span class="nc" id="L3954">        return minAbs();</span>
+    public double min() {
+<span class="nc" id="L3958">        return minAbs();</span>
     }
 
 
@@ -3961,8 +3965,8 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public CNumber max() {
-<span class="nc" id="L3965">        return maxAbs();</span>
+    public double max() {
+<span class="nc" id="L3969">        return maxAbs();</span>
     }
 
 
@@ -3973,8 +3977,8 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return The minimum value, in absolute value, in this tensor.
      */
     @Override
-    public CNumber minAbs() {
-<span class="nc" id="L3977">        return AggregateComplex.minAbs(this.entries);</span>
+    public double minAbs() {
+<span class="nc" id="L3981">        return AggregateComplex.minAbs(this.entries);</span>
     }
 
 
@@ -3985,8 +3989,8 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return The maximum value, in absolute value, in this tensor.
      */
     @Override
-    public CNumber maxAbs() {
-<span class="nc" id="L3989">        return AggregateComplex.maxAbs(this.entries);</span>
+    public double maxAbs() {
+<span class="nc" id="L3993">        return AggregateComplex.maxAbs(this.entries);</span>
     }
 
 
@@ -3998,7 +4002,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L4001">        return shape.getIndices(AggregateDenseComplex.argMin(entries));</span>
+<span class="nc" id="L4005">        return shape.getIndices(AggregateDenseComplex.argMin(entries));</span>
     }
 
 
@@ -4010,7 +4014,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L4013">        return shape.getIndices(AggregateDenseComplex.argMax(entries));</span>
+<span class="nc" id="L4017">        return shape.getIndices(AggregateDenseComplex.argMax(entries));</span>
     }
 
 
@@ -4022,18 +4026,18 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void swapRows(int rowIndex1, int rowIndex2) {
-<span class="fc" id="L4025">        ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);</span>
-<span class="fc" id="L4026">        ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);</span>
-<span class="fc" id="L4027">        ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);</span>
+<span class="fc" id="L4029">        ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);</span>
+<span class="fc" id="L4030">        ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);</span>
+<span class="fc" id="L4031">        ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);</span>
 
         CNumber temp;
-<span class="fc bfc" id="L4030" title="All 2 branches covered.">        for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc bfc" id="L4034" title="All 2 branches covered.">        for(int j=0; j&lt;numCols; j++) {</span>
             // Swap elements.
-<span class="fc" id="L4032">            temp = entries[rowIndex1*numCols + j];</span>
-<span class="fc" id="L4033">            entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];</span>
-<span class="fc" id="L4034">            entries[rowIndex2*numCols + j] = temp;</span>
+<span class="fc" id="L4036">            temp = entries[rowIndex1*numCols + j];</span>
+<span class="fc" id="L4037">            entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];</span>
+<span class="fc" id="L4038">            entries[rowIndex2*numCols + j] = temp;</span>
         }
-<span class="fc" id="L4036">    }</span>
+<span class="fc" id="L4040">    }</span>
 
 
     /**
@@ -4044,18 +4048,18 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public void swapCols(int colIndex1, int colIndex2) {
-<span class="fc" id="L4047">        ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);</span>
-<span class="fc" id="L4048">        ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);</span>
-<span class="fc" id="L4049">        ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);</span>
+<span class="fc" id="L4051">        ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);</span>
+<span class="fc" id="L4052">        ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);</span>
+<span class="fc" id="L4053">        ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);</span>
 
         CNumber temp;
-<span class="fc bfc" id="L4052" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L4056" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
             // Swap elements.
-<span class="fc" id="L4054">            temp = entries[i*numCols + colIndex1];</span>
-<span class="fc" id="L4055">            entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];</span>
-<span class="fc" id="L4056">            entries[i*numCols + colIndex2] = temp;</span>
+<span class="fc" id="L4058">            temp = entries[i*numCols + colIndex1];</span>
+<span class="fc" id="L4059">            entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];</span>
+<span class="fc" id="L4060">            entries[i*numCols + colIndex2] = temp;</span>
         }
-<span class="fc" id="L4058">    }</span>
+<span class="fc" id="L4062">    }</span>
 
 
     /**
@@ -4065,7 +4069,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double norm() {
-<span class="nc" id="L4068">        return ComplexDenseOperations.matrixNormL2(entries, shape);</span>
+<span class="nc" id="L4072">        return ComplexDenseOperations.matrixNormL2(entries, shape);</span>
     }
 
 
@@ -4079,7 +4083,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L4082">        return ComplexDenseOperations.matrixNormLp(entries, shape, p);</span>
+<span class="nc" id="L4086">        return ComplexDenseOperations.matrixNormLp(entries, shape, p);</span>
     }
 
 
@@ -4090,7 +4094,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L4093">        return ComplexDenseOperations.matrixInfNorm(entries, shape);</span>
+<span class="nc" id="L4097">        return ComplexDenseOperations.matrixInfNorm(entries, shape);</span>
     }
 
 
@@ -4100,7 +4104,7 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public CMatrix copy() {
-<span class="fc" id="L4103">        return new CMatrix(this);</span>
+<span class="fc" id="L4107">        return new CMatrix(this);</span>
     }
 
 
@@ -4115,35 +4119,35 @@ public class CMatrix extends ComplexMatrixBase implements
     private String rowToString(int i, int colStopIndex, List&lt;Integer&gt; maxList) {
         int width;
         String value;
-<span class="fc" id="L4118">        StringBuilder result = new StringBuilder();</span>
+<span class="fc" id="L4122">        StringBuilder result = new StringBuilder();</span>
 
-<span class="fc bfc" id="L4120" title="All 2 branches covered.">        if(i&gt;0) {</span>
-<span class="fc" id="L4121">            result.append(&quot; [&quot;);</span>
+<span class="fc bfc" id="L4124" title="All 2 branches covered.">        if(i&gt;0) {</span>
+<span class="fc" id="L4125">            result.append(&quot; [&quot;);</span>
         }  else {
-<span class="fc" id="L4123">            result.append(&quot;[&quot;);</span>
+<span class="fc" id="L4127">            result.append(&quot;[&quot;);</span>
         }
 
-<span class="fc bfc" id="L4126" title="All 2 branches covered.">        for(int j=0; j&lt;colStopIndex; j++) {</span>
-<span class="fc" id="L4127">            value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());</span>
-<span class="fc" id="L4128">            width = PrintOptions.getPadding() + maxList.get(j);</span>
-<span class="fc bfc" id="L4129" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L4130">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L4130" title="All 2 branches covered.">        for(int j=0; j&lt;colStopIndex; j++) {</span>
+<span class="fc" id="L4131">            value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());</span>
+<span class="fc" id="L4132">            width = PrintOptions.getPadding() + maxList.get(j);</span>
+<span class="fc bfc" id="L4133" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L4134">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="fc bfc" id="L4133" title="All 2 branches covered.">        if(PrintOptions.getMaxColumns() &lt; this.numCols) {</span>
-<span class="fc" id="L4134">            width = PrintOptions.getPadding() + 3;</span>
-<span class="fc" id="L4135">            value = &quot;...&quot;;</span>
-<span class="pc bpc" id="L4136" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L4137">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L4137" title="All 2 branches covered.">        if(PrintOptions.getMaxColumns() &lt; this.numCols) {</span>
+<span class="fc" id="L4138">            width = PrintOptions.getPadding() + 3;</span>
+<span class="fc" id="L4139">            value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L4140" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L4141">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
         // Get last entry in the column now
-<span class="fc" id="L4141">        value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());</span>
-<span class="fc" id="L4142">        width = PrintOptions.getPadding() + maxList.get(maxList.size()-1);</span>
-<span class="fc bfc" id="L4143" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L4144">        result.append(String.format(&quot;%-&quot; + width + &quot;s]&quot;, value));</span>
+<span class="fc" id="L4145">        value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());</span>
+<span class="fc" id="L4146">        width = PrintOptions.getPadding() + maxList.get(maxList.size()-1);</span>
+<span class="fc bfc" id="L4147" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L4148">        result.append(String.format(&quot;%-&quot; + width + &quot;s]&quot;, value));</span>
 
-<span class="fc" id="L4146">        return result.toString();</span>
+<span class="fc" id="L4150">        return result.toString();</span>
     }
 
 
@@ -4152,57 +4156,57 @@ public class CMatrix extends ComplexMatrixBase implements
      * @return Matrix represented as a human-readable String
      */
     public String toString() {
-<span class="fc" id="L4155">        StringBuilder result  = new StringBuilder();</span>
+<span class="fc" id="L4159">        StringBuilder result  = new StringBuilder();</span>
 
-<span class="fc bfc" id="L4157" title="All 4 branches covered.">        if(PrintOptions.getMaxRows() &lt; this.numRows || PrintOptions.getMaxColumns() &lt; this.numCols) {</span>
+<span class="fc bfc" id="L4161" title="All 4 branches covered.">        if(PrintOptions.getMaxRows() &lt; this.numRows || PrintOptions.getMaxColumns() &lt; this.numCols) {</span>
             // Then also get the full size of the matrix.
-<span class="fc" id="L4159">            result.append(String.format(&quot;Full Shape: %s\n&quot;, this.shape));</span>
+<span class="fc" id="L4163">            result.append(String.format(&quot;Full Shape: %s\n&quot;, this.shape));</span>
         }
 
-<span class="fc" id="L4162">        result.append(&quot;[&quot;);</span>
+<span class="fc" id="L4166">        result.append(&quot;[&quot;);</span>
 
-<span class="fc" id="L4164">        int rowStopIndex = Math.min(PrintOptions.getMaxRows()-1, this.numRows-1);</span>
-<span class="fc" id="L4165">        int colStopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.numCols-1);</span>
+<span class="fc" id="L4168">        int rowStopIndex = Math.min(PrintOptions.getMaxRows()-1, this.numRows-1);</span>
+<span class="fc" id="L4169">        int colStopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.numCols-1);</span>
         int width;
-<span class="fc" id="L4167">        int totalRowLength = 0; // Total string length of each row (not including brackets)</span>
+<span class="fc" id="L4171">        int totalRowLength = 0; // Total string length of each row (not including brackets)</span>
         String value;
 
         // Find maximum entry string width in each column so columns can be aligned.
-<span class="fc" id="L4171">        List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;(colStopIndex+1);</span>
-<span class="fc bfc" id="L4172" title="All 2 branches covered.">        for(int j=0; j&lt;colStopIndex; j++) {</span>
-<span class="fc" id="L4173">            maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));</span>
-<span class="fc" id="L4174">            totalRowLength += maxList.get(maxList.size()-1);</span>
+<span class="fc" id="L4175">        List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;(colStopIndex+1);</span>
+<span class="fc bfc" id="L4176" title="All 2 branches covered.">        for(int j=0; j&lt;colStopIndex; j++) {</span>
+<span class="fc" id="L4177">            maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));</span>
+<span class="fc" id="L4178">            totalRowLength += maxList.get(maxList.size()-1);</span>
         }
 
-<span class="pc bpc" id="L4177" title="1 of 2 branches missed.">        if(colStopIndex &lt; this.numCols) {</span>
-<span class="fc" id="L4178">            maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols-1).entries));</span>
-<span class="fc" id="L4179">            totalRowLength += maxList.get(maxList.size()-1);</span>
+<span class="pc bpc" id="L4181" title="1 of 2 branches missed.">        if(colStopIndex &lt; this.numCols) {</span>
+<span class="fc" id="L4182">            maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols-1).entries));</span>
+<span class="fc" id="L4183">            totalRowLength += maxList.get(maxList.size()-1);</span>
         }
 
-<span class="fc bfc" id="L4182" title="All 2 branches covered.">        if(colStopIndex &lt; this.numCols-1) {</span>
-<span class="fc" id="L4183">            totalRowLength += 3+PrintOptions.getPadding(); // Account for '...' element with padding in each column.</span>
+<span class="fc bfc" id="L4186" title="All 2 branches covered.">        if(colStopIndex &lt; this.numCols-1) {</span>
+<span class="fc" id="L4187">            totalRowLength += 3+PrintOptions.getPadding(); // Account for '...' element with padding in each column.</span>
         }
 
-<span class="fc" id="L4186">        totalRowLength += maxList.size()*PrintOptions.getPadding(); // Account for column padding</span>
+<span class="fc" id="L4190">        totalRowLength += maxList.size()*PrintOptions.getPadding(); // Account for column padding</span>
 
         // Get each row as a string.
-<span class="fc bfc" id="L4189" title="All 2 branches covered.">        for(int i=0; i&lt;rowStopIndex; i++) {</span>
-<span class="fc" id="L4190">            result.append(rowToString(i, colStopIndex, maxList));</span>
-<span class="fc" id="L4191">            result.append(&quot;\n&quot;);</span>
+<span class="fc bfc" id="L4193" title="All 2 branches covered.">        for(int i=0; i&lt;rowStopIndex; i++) {</span>
+<span class="fc" id="L4194">            result.append(rowToString(i, colStopIndex, maxList));</span>
+<span class="fc" id="L4195">            result.append(&quot;\n&quot;);</span>
         }
 
-<span class="fc bfc" id="L4194" title="All 2 branches covered.">        if(PrintOptions.getMaxRows() &lt; this.numRows) {</span>
-<span class="fc" id="L4195">            width = totalRowLength;</span>
-<span class="fc" id="L4196">            value = &quot;...&quot;;</span>
-<span class="pc bpc" id="L4197" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L4198">            result.append(String.format(&quot; [%-&quot; + width + &quot;s]\n&quot;, value));</span>
+<span class="fc bfc" id="L4198" title="All 2 branches covered.">        if(PrintOptions.getMaxRows() &lt; this.numRows) {</span>
+<span class="fc" id="L4199">            width = totalRowLength;</span>
+<span class="fc" id="L4200">            value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L4201" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L4202">            result.append(String.format(&quot; [%-&quot; + width + &quot;s]\n&quot;, value));</span>
         }
 
         // Get Last row as a string.
-<span class="fc" id="L4202">        result.append(rowToString(this.numRows-1, colStopIndex, maxList));</span>
-<span class="fc" id="L4203">        result.append(&quot;]&quot;);</span>
+<span class="fc" id="L4206">        result.append(rowToString(this.numRows-1, colStopIndex, maxList));</span>
+<span class="fc" id="L4207">        result.append(&quot;]&quot;);</span>
 
-<span class="fc" id="L4205">        return result.toString();</span>
+<span class="fc" id="L4209">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

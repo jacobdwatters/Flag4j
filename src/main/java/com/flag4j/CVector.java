@@ -586,7 +586,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CVector scalDiv(double divisor) {
+    public CVector div(double divisor) {
         return new CVector(RealComplexDenseOperations.scalDiv(this.entries, divisor));
     }
 
@@ -599,7 +599,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CVector scalDiv(CNumber divisor) {
+    public CVector div(CNumber divisor) {
         return new CVector(ComplexDenseOperations.scalDiv(this.entries, divisor));
     }
 
@@ -688,9 +688,9 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
-     * Creates a copy of this tensor.
+     * Creates a deep copy of this vector.
      *
-     * @return A copy of this tensor.
+     * @return A copy of this vector.
      */
     @Override
     public CVector copy() {
@@ -699,12 +699,12 @@ public class CVector extends VectorBase<CNumber[]> implements
 
 
     /**
-     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
+     * Finds the minimum value in this vector.
      *
-     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
+     * @return The minimum value in this vector.
      */
     @Override
-    public CNumber min() {
+    public double min() {
         return AggregateComplex.minAbs(this.entries);
     }
 
@@ -715,7 +715,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public CNumber max() {
+    public double max() {
         return AggregateComplex.maxAbs(this.entries);
     }
 
@@ -727,7 +727,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @return The minimum value, in absolute value, in this tensor.
      */
     @Override
-    public CNumber minAbs() {
+    public double minAbs() {
         return min();
     }
 
@@ -739,7 +739,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      * @return The maximum value, in absolute value, in this tensor.
      */
     @Override
-    public CNumber maxAbs() {
+    public double maxAbs() {
         return max();
     }
 
@@ -799,9 +799,9 @@ public class CVector extends VectorBase<CNumber[]> implements
     public double norm(double p) {
         if(Double.isInfinite(p)) {
             if(p > 0) {
-                return maxAbs().re; // Maximum / infinite norm.
+                return maxAbs(); // Maximum / infinite norm.
             } else {
-                return minAbs().re; // Minimum norm.
+                return minAbs(); // Minimum norm.
             }
         } else {
             double norm = 0;
@@ -822,7 +822,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public double infNorm() {
-        return maxAbs().re;
+        return maxAbs();
     }
 
 
@@ -1299,7 +1299,7 @@ public class CVector extends VectorBase<CNumber[]> implements
      */
     @Override
     public CVector normalize() {
-        return this.scalDiv(this.norm());
+        return this.div(this.norm());
     }
 
 

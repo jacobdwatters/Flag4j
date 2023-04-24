@@ -974,7 +974,7 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; implements
      * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public CNumber min() {
+    public double min() {
 <span class="nc" id="L978">        return minAbs();</span>
     }
 
@@ -985,7 +985,7 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; implements
      * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
      */
     @Override
-    public CNumber max() {
+    public double max() {
 <span class="nc" id="L989">        return maxAbs();</span>
     }
 
@@ -997,7 +997,7 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; implements
      * @return The minimum value, in absolute value, in this tensor.
      */
     @Override
-    public CNumber minAbs() {
+    public double minAbs() {
 <span class="nc" id="L1001">        return AggregateComplex.minAbs(this.entries);</span>
     }
 
@@ -1009,7 +1009,7 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; implements
      * @return The maximum value, in absolute value, in this tensor.
      */
     @Override
-    public CNumber maxAbs() {
+    public double maxAbs() {
 <span class="nc" id="L1013">        return AggregateComplex.maxAbs(this.entries);</span>
     }
 
@@ -1070,7 +1070,7 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; implements
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L1073">        return AggregateComplex.maxAbs(entries).re;</span>
+<span class="nc" id="L1073">        return AggregateComplex.maxAbs(entries);</span>
     }
 
 

@@ -73,7 +73,7 @@ class TensorScalMultDivTests {
         expShape = new Shape(2, 3, 2);
         exp = new Tensor(expShape, expEntries);
 
-        assertEquals(exp, A.scalDiv(b));
+        assertEquals(exp, A.div(b));
     }
 
 
@@ -102,6 +102,6 @@ class TensorScalMultDivTests {
         expShape = new Shape(2, 3, 2);
         exp = new CTensor(expShape, expEntries);
 
-        assertEquals(exp, A.scalDiv(b));
+        assertEquals(exp, A.div(b));
     }
 }

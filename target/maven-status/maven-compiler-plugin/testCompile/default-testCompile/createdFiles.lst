@@ -31,6 +31,7 @@ com\flag4j\SparseTensorConstructorTests.class
 com\flag4j\VectorZeroOnesTests.class
 com\flag4j\TensorConstructorTests.class
 com\flag4j\util\ArrayUtilTests.class
+com\flag4j\linalg\decompositions\RealHessenburgTests.class
 com\flag4j\VectorConversionTests.class
 com\flag4j\operations\dense\real\RealDenseOperationsTests.class
 com\flag4j\MatrixDirectSumTests.class
@@ -163,5 +164,6 @@ com\flag4j\operations\dense_sparse\real\RealDenseSparseMatMultTransposeTests.cla
 com\flag4j\TensorElemMultTests.class
 com\flag4j\linalg\solvers\MatrixLUSolverTests.class
 com\flag4j\VectorPerpParallelTests.class
+com\flag4j\linalg\decompositions\ComplexHessenburgTests.class
 com\flag4j\MatrixConversionTests.class
 com\flag4j\MatrixZerosOnesTests.class

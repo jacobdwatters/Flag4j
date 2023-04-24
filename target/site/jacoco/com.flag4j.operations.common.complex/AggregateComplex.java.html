@@ -59,20 +59,20 @@ public class AggregateComplex {
      * @param entries Entries of the tensor.
      * @return The minimum absolute value in the tensor.
      */
-    public static CNumber minAbs(final CNumber[] entries) {
-        CNumber currMin;
+    public static double minAbs(final CNumber[] entries) {
+        double currMin;
 
 <span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if(entries.length!=0) {</span>
-<span class="fc" id="L66">            currMin = new CNumber(Double.MAX_VALUE);</span>
+<span class="fc" id="L66">            currMin = Double.MAX_VALUE;</span>
 
 <span class="fc bfc" id="L68" title="All 2 branches covered.">            for(CNumber value : entries) {</span>
-<span class="fc bfc" id="L69" title="All 2 branches covered.">                if(value.mag().re &lt; currMin.re) {</span>
-<span class="fc" id="L70">                    currMin = value.mag(); // Update current minimum.</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">                if(value.magAsDouble() &lt; currMin) {</span>
+<span class="fc" id="L70">                    currMin = value.magAsDouble(); // Update current minimum.</span>
                 }
             }
 
         } else {
-<span class="nc" id="L75">            currMin = new CNumber();</span>
+<span class="nc" id="L75">            currMin = 0;</span>
         }
 
 <span class="fc" id="L78">        return currMin;</span>
@@ -85,12 +85,12 @@ public class AggregateComplex {
      * @param entries Entries of the tensor.
      * @return The maximum absolute value in the tensor.
      */
-    public static CNumber maxAbs(final CNumber[] entries) {
-<span class="fc" id="L89">        CNumber currMax = new CNumber();</span>
+    public static double maxAbs(final CNumber[] entries) {
+<span class="fc" id="L89">        double currMax = 0;</span>
 
 <span class="fc bfc" id="L91" title="All 2 branches covered.">        for(CNumber value : entries) {</span>
-<span class="fc bfc" id="L92" title="All 2 branches covered.">            if(value.mag().re &gt; currMax.re) {</span>
-<span class="fc" id="L93">                currMax = value.mag(); // Update current maximum.</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">            if(value.magAsDouble() &gt; currMax) {</span>
+<span class="fc" id="L93">                currMax = value.magAsDouble(); // Update current maximum.</span>
             }
         }
 

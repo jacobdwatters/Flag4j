@@ -27,6 +27,7 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
+import com.flag4j.linalg.transformations.Householder;
 
 
 /**
@@ -56,7 +57,6 @@ public final class RealQRDecomposition extends QRDecomposition<Matrix> {
     }
 
 
-
     /**
      * Computes the reduced QR decomposition on the src matrix.
      * @param src The source matrix to decompose.
@@ -83,42 +83,23 @@ public final class RealQRDecomposition extends QRDecomposition<Matrix> {
         int m = R.numRows, n = R.numCols;
         int stop = Math.min(n, m-1);
 
-        Matrix H, col;
+        Matrix H;
+        Vector col;
 
         // Initialize Q to the identity matrix.
         Q = Matrix.I(R.numRows);
 
         for(int i=0; i<stop; i++) {
-            H = Matrix.I(m);
-            col = R.getColBelow(i, i);
+            col = R.getColBelow(i, i).toVector();
 
-            if(!col.isZeros()) { // Then a householder transform must be applied
-                H.setSlice(getHouseholder(col), i, i);
+            // If the column has zeros below the diagonal it is in the correct form. No need to compute reflector.
+            if(!col.isZeros()) {
+                H = Matrix.I(m);
+                H.setSlice(Householder.getReflector(col), i, i);
 
                 Q = Q.mult(H); // Apply Householder reflector to Q
                 R = H.mult(R); // Apply Householder reflector to R
             }
         }
-    }
-
-
-    /**
-     * Computes the Householder reflector for the specified column vector.
-     * @param col Column vector to compute Householder reflector for.
-     * @return The Householder transformation matrix.
-     */
-    private Matrix getHouseholder(Matrix col) {
-        Matrix H = Matrix.I(col.numRows);
-        Vector v = col.toVector();
-
-        double signedNorm = -Math.copySign(v.norm(), v.entries[0]);
-        v = v.scalDiv(v.entries[0] + signedNorm);
-        v.entries[0] = 1;
-
-        // Create projection matrix
-        Matrix P = v.outer(v).mult(2/v.inner(v));
-        H.subEq(P);
-
-        return H;
     }
 }

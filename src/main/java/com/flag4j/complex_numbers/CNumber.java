@@ -541,7 +541,7 @@ public class CNumber extends Number {
      * @return The absolute value/magnitude of this complex number as a double.
      */
     public double magAsDouble() {
-        return Math.sqrt(this.re* this.re + this.im* this.im);
+        return Math.sqrt(this.re*this.re + this.im*this.im);
     }
 
 
