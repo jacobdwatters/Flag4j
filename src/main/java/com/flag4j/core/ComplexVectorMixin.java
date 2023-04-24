@@ -33,7 +33,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <T> Vector type.
  * @param <Y> Real vector type.
  */
-public interface ComplexVectorMixin<T, Y> extends
+public interface ComplexVectorMixin<T extends VectorBase<CNumber[]>, Y extends VectorBase<double[]>> extends
         VectorComparisonsMixin<T, CVector, SparseCVector, CVector, Y, CNumber>,
         VectorManipulationsMixin<T, CVector, SparseCVector, CVector, Y, CNumber,
                 CMatrix, CMatrix, SparseCMatrix, CMatrix>,

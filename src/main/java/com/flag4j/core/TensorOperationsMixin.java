@@ -35,7 +35,8 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <Y> Real Tensor type.
  * @param <X> Tensor entry type.
  */
-interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
+interface TensorOperationsMixin<T extends TensorBase<?>, U extends TensorBase<?>, V extends TensorBase<?>,
+        W extends TensorBase<CNumber[]>, Y  extends TensorBase<double[]>, X extends Number> {
 
     /**
      * Computes the element-wise addition between two tensors of the same rank.

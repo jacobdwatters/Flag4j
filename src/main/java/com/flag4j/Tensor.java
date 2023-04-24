@@ -288,13 +288,15 @@ public class Tensor extends TensorBase<double[]> implements
      *
      * @param value   Value to set.
      * @param indices The indices of this tensor for which to set the value.
+     * @return A reference to this tensor.
      * @throws IllegalArgumentException If the number of indices provided does not match the rank of this tensor.
      * @throws IllegalArgumentException If any of the indices are outside the tensor for that respective axis.
      */
     @Override
-    public void set(double value, int... indices) {
+    public Tensor set(double value, int... indices) {
         ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
         RealDenseSetOperations.set(entries, shape, value, indices);
+        return this;
     }
 
 

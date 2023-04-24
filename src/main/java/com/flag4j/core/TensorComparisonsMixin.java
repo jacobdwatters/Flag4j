@@ -25,6 +25,8 @@
 package com.flag4j.core;
 
 
+import com.flag4j.complex_numbers.CNumber;
+
 /**
  * This interface specifies comparisons which all tensors (i.e. matrices and vectors) should implement.
  *
@@ -35,7 +37,8 @@ package com.flag4j.core;
  * @param <Y> Real Tensor type.
  * @param <X> Tensor entry type.
  */
-public interface TensorComparisonsMixin<T, U, V, W, Y, X extends Number> {
+public interface TensorComparisonsMixin<T extends TensorBase<?>, U extends TensorBase<?>, V extends TensorBase<?>,
+        W extends TensorBase<CNumber[]>, Y extends TensorBase<double[]>, X extends Number> {
 
 
     /**

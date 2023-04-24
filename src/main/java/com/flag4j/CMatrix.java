@@ -29,19 +29,16 @@ import com.flag4j.core.ComplexMatrixBase;
 import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
-import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.operations.dense.complex.*;
-import com.flag4j.operations.dense.real.RealDenseMatrixMultTranspose;
 import com.flag4j.operations.dense.real_complex.*;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultTranspose;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseOperations;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultTranspose;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultTranspose;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
@@ -539,12 +536,14 @@ public class CMatrix extends ComplexMatrixBase implements
      * Sets the value of this matrix using a 2D array.
      *
      * @param values New values of the matrix.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
     @Override
-    public void setValues(CNumber[][] values) {
+    public CMatrix setValues(CNumber[][] values) {
         ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         ComplexDenseSetOperations.setValues(values, this.entries);
+        return this;
     }
 
 
@@ -552,12 +551,14 @@ public class CMatrix extends ComplexMatrixBase implements
      * Sets the value of this matrix using a 2D array.
      *
      * @param values New values of the matrix.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
     @Override
-    public void setValues(double[][] values) {
+    public CMatrix setValues(double[][] values) {
         ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         ComplexDenseSetOperations.setValues(values, this.entries);
+        return this;
     }
 
 
@@ -565,12 +566,14 @@ public class CMatrix extends ComplexMatrixBase implements
      * Sets the value of this matrix using a 2D array.
      *
      * @param values New values of the matrix.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
     @Override
-    public void setValues(int[][] values) {
+    public CMatrix setValues(int[][] values) {
         ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         ComplexDenseSetOperations.setValues(values, this.entries);
+        return this;
     }
 
 
@@ -579,15 +582,18 @@ public class CMatrix extends ComplexMatrixBase implements
      *
      * @param values   New values for the column.
      * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
      */
     @Override
-    public void setCol(CNumber[] values, int colIndex) {
+    public CMatrix setCol(CNumber[] values, int colIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = values[i].copy();
         }
+
+        return this;
     }
 
 
@@ -596,15 +602,18 @@ public class CMatrix extends ComplexMatrixBase implements
      *
      * @param values   New values for the column.
      * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
      */
     @Override
-    public void setCol(Integer[] values, int colIndex) {
+    public CMatrix setCol(Integer[] values, int colIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = new CNumber(values[i]);
         }
+
+        return this;
     }
 
 
@@ -613,15 +622,18 @@ public class CMatrix extends ComplexMatrixBase implements
      *
      * @param values   New values for the column.
      * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
      */
     @Override
-    public void setCol(double[] values, int colIndex) {
+    public CMatrix setCol(double[] values, int colIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = new CNumber(values[i]);
         }
+
+        return this;
     }
 
 
@@ -630,15 +642,18 @@ public class CMatrix extends ComplexMatrixBase implements
      *
      * @param values   New values for the column.
      * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
      */
     @Override
-    public void setCol(int[] values, int colIndex) {
+    public CMatrix setCol(int[] values, int colIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = new CNumber(values[i]);
         }
+
+        return this;
     }
 
 
@@ -647,15 +662,18 @@ public class CMatrix extends ComplexMatrixBase implements
      *
      * @param values   New values for the row.
      * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
      */
     @Override
-    public void setRow(CNumber[] values, int rowIndex) {
+    public CMatrix setRow(CNumber[] values, int rowIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = values[i].copy();
         }
+
+        return this;
     }
 
 
@@ -664,15 +682,18 @@ public class CMatrix extends ComplexMatrixBase implements
      *
      * @param values   New values for the column.
      * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
      */
     @Override
-    public void setCol(CVector values, int colIndex) {
+    public CMatrix setCol(CVector values, int colIndex) {
         ParameterChecks.assertArrayLengthsEq(values.size, this.numRows);
 
         for(int i=0; i<values.size; i++) {
             super.entries[i*numCols + colIndex] = values.entries[i].copy();
         }
+
+        return this;
     }
 
 
@@ -681,10 +702,11 @@ public class CMatrix extends ComplexMatrixBase implements
      *
      * @param values   New values for the column.
      * @param colIndex The index of the columns which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
      */
     @Override
-    public void setCol(SparseCVector values, int colIndex) {
+    public CMatrix setCol(SparseCVector values, int colIndex) {
         ParameterChecks.assertArrayLengthsEq(values.size, super.numRows);
 
         // Zero-out column
@@ -696,6 +718,8 @@ public class CMatrix extends ComplexMatrixBase implements
             index = values.indices[i];
             super.entries[index*numCols + colIndex] = values.entries[i].copy();
         }
+
+        return this;
     }
 
 
@@ -704,13 +728,14 @@ public class CMatrix extends ComplexMatrixBase implements
      *
      * @param values   New values for the row.
      * @param rowIndex The index of the row which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
      */
     @Override
-    public void setRow(CVector values, int rowIndex) {
+    public CMatrix setRow(CVector values, int rowIndex) {
         ParameterChecks.assertArrayLengthsEq(values.size, super.numCols());
-
         ArrayUtils.arraycopy(values.entries, 0, super.entries, rowIndex*numCols, this.numCols);
+        return this;
     }
 
 
@@ -719,10 +744,11 @@ public class CMatrix extends ComplexMatrixBase implements
      *
      * @param values   New values for the row.
      * @param rowIndex The index of the row which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
      */
     @Override
-    public void setRow(SparseCVector values, int rowIndex) {
+    public CMatrix setRow(SparseCVector values, int rowIndex) {
         ParameterChecks.assertArrayLengthsEq(values.size, super.numCols);
         int rowOffset = rowIndex*numCols;
 
@@ -733,6 +759,8 @@ public class CMatrix extends ComplexMatrixBase implements
         for(int i=0; i<values.entries.length; i++) {
             super.entries[rowOffset + i] = values.entries[i].copy();
         }
+
+        return this;
     }
 
 
@@ -743,12 +771,13 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
-    public void setSlice(SparseCMatrix values, int rowStart, int colStart) {
+    public CMatrix setSlice(SparseCMatrix values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -770,6 +799,8 @@ public class CMatrix extends ComplexMatrixBase implements
 
             this.entries[(rowIndex+rowStart)*this.numCols + colIndex + colStart] = values.entries[i].copy();
         }
+
+        return this;
     }
 
 
@@ -821,12 +852,13 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
-    public void setSlice(Matrix values, int rowStart, int colStart) {
+    public CMatrix setSlice(Matrix values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -837,6 +869,8 @@ public class CMatrix extends ComplexMatrixBase implements
                         new CNumber(values.entries[i* values.numCols + j]);
             }
         }
+
+        return this;
     }
 
 
@@ -847,12 +881,13 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
-    public void setSlice(SparseMatrix values, int rowStart, int colStart) {
+    public CMatrix setSlice(SparseMatrix values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -874,6 +909,8 @@ public class CMatrix extends ComplexMatrixBase implements
 
             this.entries[(rowIndex+rowStart)*this.numCols + colIndex + colStart] = new CNumber(values.entries[i]);
         }
+
+        return this;
     }
 
 
@@ -882,15 +919,18 @@ public class CMatrix extends ComplexMatrixBase implements
      *
      * @param values   New values for the row.
      * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
      */
     @Override
-    public void setRow(Integer[] values, int rowIndex) {
+    public CMatrix setRow(Integer[] values, int rowIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = new CNumber(values[i]);
         }
+
+        return this;
     }
 
 
@@ -899,15 +939,18 @@ public class CMatrix extends ComplexMatrixBase implements
      *
      * @param values   New values for the row.
      * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
      */
     @Override
-    public void setRow(double[] values, int rowIndex) {
+    public CMatrix setRow(double[] values, int rowIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = new CNumber(values[i]);
         }
+
+        return this;
     }
 
 
@@ -916,15 +959,18 @@ public class CMatrix extends ComplexMatrixBase implements
      *
      * @param values   New values for the row.
      * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
      */
     @Override
-    public void setRow(int[] values, int rowIndex) {
+    public CMatrix setRow(int[] values, int rowIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = new CNumber(values[i]);
         }
+
+        return this;
     }
 
 
@@ -935,12 +981,13 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
-    public void setSlice(CMatrix values, int rowStart, int colStart) {
+    public CMatrix setSlice(CMatrix values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -951,6 +998,8 @@ public class CMatrix extends ComplexMatrixBase implements
                         values.entries[i* values.numCols + j].copy();
             }
         }
+
+        return this;
     }
 
 
@@ -961,12 +1010,13 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
-    public void setSlice(CNumber[][] values, int rowStart, int colStart) {
+    public CMatrix setSlice(CNumber[][] values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.length);
         ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -976,6 +1026,8 @@ public class CMatrix extends ComplexMatrixBase implements
                 this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j].copy();
             }
         }
+
+        return this;
     }
 
 
@@ -986,12 +1038,13 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
-    public void setSlice(Integer[][] values, int rowStart, int colStart) {
+    public CMatrix setSlice(Integer[][] values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.length);
         ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -1001,6 +1054,8 @@ public class CMatrix extends ComplexMatrixBase implements
                 this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
             }
         }
+
+        return this;
     }
 
 
@@ -1011,12 +1066,13 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
-    public void setSlice(double[][] values, int rowStart, int colStart) {
+    public CMatrix setSlice(double[][] values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.length);
         ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -1026,6 +1082,8 @@ public class CMatrix extends ComplexMatrixBase implements
                 this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
             }
         }
+
+        return this;
     }
 
 
@@ -1036,12 +1094,13 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
-    public void setSlice(int[][] values, int rowStart, int colStart) {
+    public CMatrix setSlice(int[][] values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.length);
         ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -1051,6 +1110,8 @@ public class CMatrix extends ComplexMatrixBase implements
                 this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
             }
         }
+
+        return this;
     }
 
 
@@ -3901,15 +3962,18 @@ public class CMatrix extends ComplexMatrixBase implements
 
 
     /**
-     * Sets an index of this tensor to a specified value.
+     * Sets an index of this matrix to a specified value.
      *
      * @param value   Value to set.
      * @param indices The indices of this tensor for which to set the value.
+     * @return A reference to this matrix.
      */
     @Override
-    public void set(double value, int... indices) {
+    public CMatrix set(double value, int... indices) {
         ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
         ComplexDenseSetOperations.set(entries, shape, value, indices);
+
+        return this;
     }
 
 
@@ -3920,9 +3984,11 @@ public class CMatrix extends ComplexMatrixBase implements
      * @param indices The indices of this tensor for which to set the value.
      */
     @Override
-    public void set(CNumber value, int... indices) {
+    public CMatrix set(CNumber value, int... indices) {
         ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
         ComplexDenseSetOperations.set(entries, shape, value, indices);
+
+        return this;
     }
 
 
@@ -4022,10 +4088,11 @@ public class CMatrix extends ComplexMatrixBase implements
      * Swaps specified rows in the matrix. This is done in place.
      * @param rowIndex1 Index of the first row to swap.
      * @param rowIndex2 Index of the second row to swap.
+     * @return A reference to this matrix.
      * @throws ArrayIndexOutOfBoundsException If either index is outside the matrix bounds.
      */
     @Override
-    public void swapRows(int rowIndex1, int rowIndex2) {
+    public CMatrix swapRows(int rowIndex1, int rowIndex2) {
         ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);
         ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);
         ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);
@@ -4037,6 +4104,8 @@ public class CMatrix extends ComplexMatrixBase implements
             entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];
             entries[rowIndex2*numCols + j] = temp;
         }
+
+        return this;
     }
 
 
@@ -4047,7 +4116,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws ArrayIndexOutOfBoundsException If either index is outside the matrix bounds.
      */
     @Override
-    public void swapCols(int colIndex1, int colIndex2) {
+    public CMatrix swapCols(int colIndex1, int colIndex2) {
         ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);
         ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);
         ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);
@@ -4059,6 +4128,8 @@ public class CMatrix extends ComplexMatrixBase implements
             entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];
             entries[i*numCols + colIndex2] = temp;
         }
+
+        return this;
     }
 
 

@@ -447,12 +447,29 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * Sets the value of this matrix using a 2D array.
      *
      * @param values New values of the matrix.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
     @Override
-    public void setValues(Double[][] values) {
+    public Matrix setValues(Double[][] values) {
         ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         RealDenseSetOperations.setValues(values, this.entries);
+        return this;
+    }
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+     */
+    @Override
+    public Matrix setValues(double[][] values) {
+        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
+        RealDenseSetOperations.setValues(values, this.entries);
+        return this;
     }
 
 
@@ -463,9 +480,10 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
     @Override
-    public void setValues(double[][] values) {
+    public Matrix setValues(Integer[][] values) {
         ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         RealDenseSetOperations.setValues(values, this.entries);
+        return this;
     }
 
 
@@ -473,25 +491,14 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * Sets the value of this matrix using a 2D array.
      *
      * @param values New values of the matrix.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
     @Override
-    public void setValues(Integer[][] values) {
+    public Matrix setValues(int[][] values) {
         ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         RealDenseSetOperations.setValues(values, this.entries);
-    }
-
-
-    /**
-     * Sets the value of this matrix using a 2D array.
-     *
-     * @param values New values of the matrix.
-     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
-     */
-    @Override
-    public void setValues(int[][] values) {
-        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
-        RealDenseSetOperations.setValues(values, this.entries);
+        return this;
     }
 
 
@@ -500,15 +507,18 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      *
      * @param values   New values for the column.
      * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
      */
     @Override
-    public void setCol(Double[] values, int colIndex) {
+    public Matrix setCol(Double[] values, int colIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = values[i];
         }
+
+        return this;
     }
 
 
@@ -517,15 +527,18 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      *
      * @param values   New values for the column.
      * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
      */
     @Override
-    public void setCol(Integer[] values, int colIndex) {
+    public Matrix setCol(Integer[] values, int colIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = values[i];
         }
+
+        return this;
     }
 
 
@@ -534,15 +547,18 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      *
      * @param values   New values for the column.
      * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
      */
     @Override
-    public void setCol(double[] values, int colIndex) {
+    public Matrix setCol(double[] values, int colIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = values[i];
         }
+
+        return this;
     }
 
 
@@ -551,15 +567,18 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      *
      * @param values   New values for the column.
      * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
      */
     @Override
-    public void setCol(int[] values, int colIndex) {
+    public Matrix setCol(int[] values, int colIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = values[i];
         }
+
+        return this;
     }
 
 
@@ -568,15 +587,18 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      *
      * @param values   New values for the row.
      * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
      */
     @Override
-    public void setRow(Double[] values, int rowIndex) {
+    public Matrix setRow(Double[] values, int rowIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = values[i];
         }
+
+        return this;
     }
 
 
@@ -585,15 +607,18 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      *
      * @param values   New values for the row.
      * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
      */
     @Override
-    public void setRow(Integer[] values, int rowIndex) {
+    public Matrix setRow(Integer[] values, int rowIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = values[i];
         }
+
+        return this;
     }
 
 
@@ -602,12 +627,14 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      *
      * @param values   New values for the row.
      * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
      */
     @Override
-    public void setRow(double[] values, int rowIndex) {
+    public Matrix setRow(double[] values, int rowIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
         System.arraycopy(values, 0, super.entries, rowIndex*numCols, values.length);
+        return this;
     }
 
 
@@ -616,15 +643,18 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      *
      * @param values   New values for the row.
      * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
      */
     @Override
-    public void setRow(int[] values, int rowIndex) {
+    public Matrix setRow(int[] values, int rowIndex) {
         ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = values[i];
         }
+
+        return this;
     }
 
 
@@ -666,12 +696,13 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
-    public void setSlice(Matrix values, int rowStart, int colStart) {
+    public Matrix setSlice(Matrix values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -682,6 +713,8 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
                         values.entries[i*values.numCols + j];
             }
         }
+
+        return this;
     }
 
 
@@ -692,12 +725,13 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
-    public void setSlice(SparseMatrix values, int rowStart, int colStart) {
+    public Matrix setSlice(SparseMatrix values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -719,6 +753,8 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
 
             this.entries[(rowIndex+rowStart)*this.numCols + colIndex + colStart] = values.entries[i];
         }
+
+        return this;
     }
 
 
@@ -729,12 +765,13 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
-    public void setSlice(Double[][] values, int rowStart, int colStart) {
+    public Matrix setSlice(Double[][] values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.length);
         ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -744,6 +781,8 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
                 this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
             }
         }
+
+        return this;
     }
 
 
@@ -754,12 +793,13 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
-    public void setSlice(Integer[][] values, int rowStart, int colStart) {
+    public Matrix setSlice(Integer[][] values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.length);
         ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -769,6 +809,8 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
                 this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
             }
         }
+
+        return this;
     }
 
 
@@ -779,12 +821,13 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
-    public void setSlice(double[][] values, int rowStart, int colStart) {
+    public Matrix setSlice(double[][] values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.length);
         ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -794,6 +837,8 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
                 this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
             }
         }
+
+        return this;
     }
 
 
@@ -804,12 +849,13 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
     @Override
-    public void setSlice(int[][] values, int rowStart, int colStart) {
+    public Matrix setSlice(int[][] values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.length);
         ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
@@ -819,6 +865,8 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
                 this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
             }
         }
+
+        return this;
     }
 
 
@@ -3507,9 +3555,10 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * @throws IllegalArgumentException If the number of indices is not 2.
      */
     @Override
-    public void set(double value, int... indices) {
+    public Matrix set(double value, int... indices) {
         ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
         RealDenseSetOperations.set(entries, shape, value, indices);
+        return this;
     }
 
 
@@ -3594,10 +3643,11 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * Swaps specified rows in the matrix.
      * @param rowIndex1 Index of the first row to swap.
      * @param rowIndex2 Index of the second row to swap.
+     * @return A reference to this matrix.
      * @throws ArrayIndexOutOfBoundsException If either index is outside the matrix bounds.
      */
     @Override
-    public void swapRows(int rowIndex1, int rowIndex2) {
+    public Matrix swapRows(int rowIndex1, int rowIndex2) {
         ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);
         ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);
         ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);
@@ -3609,6 +3659,8 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
             entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];
             entries[rowIndex2*numCols + j] = temp;
         }
+
+        return this;
     }
 
 
@@ -3616,10 +3668,11 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
      * Swaps specified columns in the matrix.
      * @param colIndex1 Index of the first column to swap.
      * @param colIndex2 Index of the second column to swap.
+     * @return A reference to this matrix.
      * @throws ArrayIndexOutOfBoundsException If either index is outside the matrix bounds.
      */
     @Override
-    public void swapCols(int colIndex1, int colIndex2) {
+    public Matrix swapCols(int colIndex1, int colIndex2) {
         ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);
         ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);
         ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);
@@ -3631,6 +3684,8 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CM
             entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];
             entries[i*numCols + colIndex2] = temp;
         }
+
+        return this;
     }
 
 

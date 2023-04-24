@@ -588,7 +588,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public Vector scalDiv(double divisor) {
+    public Vector div(double divisor) {
 <span class="fc" id="L592">        return new Vector(RealDenseOperations.scalDiv(this.entries, divisor));</span>
     }
 
@@ -601,7 +601,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CVector scalDiv(CNumber divisor) {
+    public CVector div(CNumber divisor) {
 <span class="fc" id="L605">        return new CVector(RealComplexDenseOperations.scalDiv(this.entries, divisor));</span>
     }
 
@@ -1108,7 +1108,7 @@ public class Vector extends VectorBase&lt;double[]&gt; implements
      */
     @Override
     public Vector normalize() {
-<span class="fc" id="L1111">        return this.scalDiv(this.norm());</span>
+<span class="fc" id="L1111">        return this.div(this.norm());</span>
     }
 
 

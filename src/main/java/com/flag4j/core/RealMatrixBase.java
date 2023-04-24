@@ -60,8 +60,9 @@ public abstract class RealMatrixBase extends MatrixBase<double[]> {
      * @param values New values of the matrix.
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
-    public void setValues(Integer[][] values) {
+    public RealMatrixBase setValues(Integer[][] values) {
         ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         RealDenseSetOperations.setValues(values, this.entries);
+        return this;
     }
 }

@@ -57,8 +57,9 @@ public abstract class ComplexMatrixBase extends MatrixBase<CNumber[]> {
      * Sets an index of this matrix to the specified value.
      * @param value New value.
      * @param indices Indices for new value.
+     * @return A reference to this matrix.
      */
-    public abstract void set(CNumber value, int... indices);
+    public abstract MatrixBase<CNumber[]> set(CNumber value, int... indices);
 
 
     /**

@@ -704,7 +704,7 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CTensor scalDiv(double divisor) {
+    public CTensor div(double divisor) {
 <span class="nc" id="L708">        return new CTensor(this.shape.copy(),</span>
 <span class="nc" id="L709">                RealComplexDenseOperations.scalDiv(this.entries, divisor)</span>
         );
@@ -719,7 +719,7 @@ public class CTensor extends TensorBase&lt;CNumber[]&gt; implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CTensor scalDiv(CNumber divisor) {
+    public CTensor div(CNumber divisor) {
 <span class="nc" id="L723">        return new CTensor(this.shape.copy(),</span>
 <span class="nc" id="L724">                ComplexDenseOperations.scalDiv(this.entries, divisor)</span>
         );

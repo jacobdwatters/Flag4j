@@ -24,9 +24,36 @@
 
 package com.flag4j.linalg;
 
+import com.flag4j.CMatrix;
+import com.flag4j.CVector;
+import com.flag4j.Matrix;
+
 /**
  * This class provides several methods useful for computing eigen values, eigen vectors, as well as singular values and
  * singular vectors.
  */
 public class Eigen {
+
+    /**
+     * Computes the eigenvalues of a 2x2 matrix explicitly.
+     * @param src The 2x2 matrix to compute the eigenvalues of.
+     * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
+     */
+    public static CVector get2x2EigenValues(Matrix src) {
+        CVector lambda = new CVector(2);
+        // TODO: Implementation.
+        return lambda;
+    }
+
+
+    /**
+     * Computes the eigenvalues of a 2x2 matrix explicitly.
+     * @param src The 2x2 matrix to compute the eigenvalues of.
+     * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
+     */
+    public static CVector get2x2EigenValues(CMatrix src) {
+        CVector lambda = new CVector(2);
+        // TODO: Implementation.
+        return lambda;
+    }
 }

@@ -27,6 +27,7 @@ package com.flag4j.core;
 
 import com.flag4j.Matrix;
 import com.flag4j.SparseMatrix;
+import com.flag4j.complex_numbers.CNumber;
 
 /**
  * This interface specifies manipulations which all matrices should implement.
@@ -38,7 +39,9 @@ import com.flag4j.SparseMatrix;
  * @param <Y> Real matrix type.
  * @param <X> Matrix entry type.
  */
-public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> extends TensorManipulationsMixin<T, U, V, W, Y, X> {
+public interface MatrixManipulationsMixin<T extends MatrixBase<?>, U extends MatrixBase<?>, V extends MatrixBase<?>,
+        W extends MatrixBase<CNumber[]>, Y extends MatrixBase<double[]>, X extends Number>
+        extends TensorManipulationsMixin<T, U, V, W, Y, X> {
 
 
     /**
@@ -54,95 +57,107 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
     /**
      * Sets the value of this matrix using a 2D array.
      * @param values New values of the matrix.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
-    void setValues(X[][] values);
+    T setValues(X[][] values);
 
 
     /**
      * Sets the value of this matrix using a 2D array.
      * @param values New values of the matrix.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
-    void setValues(double[][] values);
+    T setValues(double[][] values);
 
 
     /**
      * Sets the value of this matrix using a 2D array.
      * @param values New values of the matrix.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
-    void setValues(int[][] values);
+    T setValues(int[][] values);
 
 
     /**
      * Sets a column of this matrix at the given index to the specified values.
      * @param values New values for the column.
      * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
      */
-    void setCol(X[] values, int colIndex);
+    T setCol(X[] values, int colIndex);
 
 
     /**
      * Sets a column of this matrix at the given index to the specified values.
      * @param values New values for the column.
      * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
      */
-    void setCol(Integer[] values, int colIndex);
-
-    /**
-     * Sets a column of this matrix at the given index to the specified values.
-     * @param values New values for the column.
-     * @param colIndex The index of the column which is to be set.
-     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
-     */
-    void setCol(double[] values, int colIndex);
+    T setCol(Integer[] values, int colIndex);
 
 
     /**
      * Sets a column of this matrix at the given index to the specified values.
      * @param values New values for the column.
      * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
      */
-    void setCol(int[] values, int colIndex);
+    T setCol(double[] values, int colIndex);
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     * @param values New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     */
+    T setCol(int[] values, int colIndex);
 
 
     /**
      * Sets a row of this matrix at the given index to the specified values.
      * @param values New values for the row.
      * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
      */
-    void setRow(X[] values, int rowIndex);
+    T setRow(X[] values, int rowIndex);
 
 
     /**
      * Sets a row of this matrix at the given index to the specified values.
      * @param values New values for the row.
      * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
      */
-    void setRow(Integer[] values, int rowIndex);
+    T setRow(Integer[] values, int rowIndex);
 
     /**
      * Sets a row of this matrix at the given index to the specified values.
      * @param values New values for the row.
      * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
      */
-    void setRow(double[] values, int rowIndex);
+    T setRow(double[] values, int rowIndex);
 
 
     /**
      * Sets a row of this matrix at the given index to the specified values.
      * @param values New values for the row.
      * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
      */
-    void setRow(int[] values, int rowIndex);
+    T setRow(int[] values, int rowIndex);
 
     /**
      * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
@@ -150,24 +165,12 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * @param values New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    void setSlice(T values, int rowStart, int colStart);
-
-
-    /**
-     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set.
-     * @param values New values for the specified slice.
-     * @param rowStart Starting row index for the slice (inclusive).
-     * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
-     * fit completely within this matrix.
-     */
-    void setSlice(Matrix values, int rowStart, int colStart);
+    T setSlice(T values, int rowStart, int colStart);
 
 
     /**
@@ -176,11 +179,12 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * @param values New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    void setSlice(SparseMatrix values, int rowStart, int colStart);
+    T setSlice(Matrix values, int rowStart, int colStart);
 
 
     /**
@@ -189,11 +193,12 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * @param values New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    void setSlice(X[][] values, int rowStart, int colStart);
+    T setSlice(SparseMatrix values, int rowStart, int colStart);
 
 
     /**
@@ -202,11 +207,12 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * @param values New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    void setSlice(Integer[][] values, int rowStart, int colStart);
+    T setSlice(X[][] values, int rowStart, int colStart);
 
 
     /**
@@ -215,11 +221,12 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * @param values New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    void setSlice(double[][] values, int rowStart, int colStart);
+    T setSlice(Integer[][] values, int rowStart, int colStart);
 
 
     /**
@@ -228,12 +235,27 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      * @param values New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
      * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    void setSlice(int[][] values, int rowStart, int colStart);
+    T setSlice(double[][] values, int rowStart, int colStart);
 
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+     * fit completely within this matrix.
+     */
+    T setSlice(int[][] values, int rowStart, int colStart);
+//---------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
@@ -403,7 +425,20 @@ public interface MatrixManipulationsMixin<T, U, V, W, Y, X extends Number> exten
      */
     T roundToZero(double threshold);
 
-    void swapRows(int rowIndex1, int rowIndex2);
 
-    void swapCols(int colIndex1, int colIndex2);
+    /**
+     * Swaps rows in the matrix.
+     * @param rowIndex1 Index of first row to swap.
+     * @param rowIndex2 index of second row to swap.
+     * @return A reference to this matrix.
+     */
+    T swapRows(int rowIndex1, int rowIndex2);
+
+    /**
+     * Swaps columns in the matrix.
+     * @param colIndex1 Index of first column to swap.
+     * @param colIndex2 index of second column to swap.
+     * @return A reference to this matrix.
+     */
+    T swapCols(int colIndex1, int colIndex2);
 }

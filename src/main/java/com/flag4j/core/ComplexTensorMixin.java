@@ -33,7 +33,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <T> Tensor type.
  * @param <Y> Real tensor type.
  */
-public interface ComplexTensorMixin<T, Y> extends
+public interface ComplexTensorMixin<T extends TensorBase<CNumber[]>, Y extends TensorBase<double[]>> extends
         TensorComparisonsMixin<T, CTensor, SparseCTensor, T, Y, CNumber>,
         TensorManipulationsMixin<T, CTensor, SparseCTensor, T, Y, CNumber>,
         TensorOperationsMixin<T, CTensor, SparseCTensor, T, Y, CNumber>,

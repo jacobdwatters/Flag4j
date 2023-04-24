@@ -43,8 +43,9 @@ interface TensorManipulationsMixin<T, U, V, W, Y, X extends Number> {
      * Sets an index of this tensor to a specified value.
      * @param value Value to set.
      * @param indices The indices of this tensor for which to set the value.
+     * @return A reference to this tensor.
      */
-    void set(double value, int... indices);
+    TensorBase<?> set(double value, int... indices);
 
 
     /**

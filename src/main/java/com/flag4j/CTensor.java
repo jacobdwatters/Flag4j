@@ -934,11 +934,13 @@ public class CTensor extends TensorBase<CNumber[]> implements
      *
      * @param value   Value to set.
      * @param indices The indices of this tensor for which to set the value.
+     * @return A reference to this tensor.
      */
     @Override
-    public void set(double value, int... indices) {
+    public CTensor set(double value, int... indices) {
         ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
         ComplexDenseSetOperations.set(entries, shape, value, indices);
+        return this;
     }
 
 

@@ -24,6 +24,8 @@
 
 package com.flag4j.core;
 
+import com.flag4j.complex_numbers.CNumber;
+
 /**
  * This interface specifies comparisons which all vectors should implement.
  *
@@ -34,6 +36,8 @@ package com.flag4j.core;
  * @param <Y> Real vector type.
  * @param <X> Vector entry type.
  */
-public interface VectorComparisonsMixin<T, U, V, W, Y, X extends Number> extends TensorComparisonsMixin<T, U, V, W, Y, X> {
+public interface VectorComparisonsMixin<T extends VectorBase<?>, U extends VectorBase<?>, V extends VectorBase<?>,
+        W extends VectorBase<CNumber[]>, Y extends VectorBase<double[]>, X extends Number>
+        extends TensorComparisonsMixin<T, U, V, W, Y, X> {
     // TODO: Should this interface be removed?
 }

@@ -188,11 +188,13 @@ public class CVector extends VectorBase<CNumber[]> implements
      *
      * @param value   Value to set.
      * @param indices The indices of this tensor for which to set the value.
+     * @return A reference to this vector.
      */
     @Override
-    public void set(double value, int... indices) {
+    public CVector set(double value, int... indices) {
         ParameterChecks.assertArrayLengthsEq(1, indices.length);
         this.entries[indices[0]] = new CNumber(value);
+        return this;
     }
 
 
@@ -201,10 +203,12 @@ public class CVector extends VectorBase<CNumber[]> implements
      *
      * @param value   Value to set.
      * @param indices The indices of this tensor for which to set the value.
+     * @return A reference to this vector.
      */
-    public void set(CNumber value, int... indices) {
+    public CVector set(CNumber value, int... indices) {
         ParameterChecks.assertArrayLengthsEq(1, indices.length);
         this.entries[indices[0]] = value;
+        return this;
     }
 
 

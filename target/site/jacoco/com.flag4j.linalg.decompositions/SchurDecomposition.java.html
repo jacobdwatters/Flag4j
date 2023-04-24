@@ -278,8 +278,8 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; im
 <span class="nc" id="L278">            CVector rho = get2x2BlockEigenValues(T);</span>
 
 <span class="nc bnc" id="L280" title="All 2 branches missed.">            if(debug) {</span>
-<span class="nc" id="L281">                System.out.println(&quot;Iteration: &quot; + i + &quot;\n&quot; + &quot;-&quot;.repeat(100) + &quot;\n&quot;);</span>
-<span class="nc" id="L282">                System.out.println(&quot;T_start:\n&quot; + T + &quot;\n&quot;);</span>
+<span class="nc" id="L281">                System.out.println(&quot;[DEBUG] Iteration: &quot; + i + &quot;\n[DEBUG]&quot; + &quot;-&quot;.repeat(100) + &quot;\n&quot;);</span>
+<span class="nc" id="L282">                System.out.println(&quot;[DEBUG] T_start:\n&quot; + T + &quot;\n&quot;);</span>
             }
 
 <span class="nc" id="L285">            CNumber[] pEntries = {</span>
@@ -291,38 +291,32 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; im
 <span class="nc" id="L291">            qr.decompose(p.toMatrix()); // Easy way to build an orthogonal matrix with first column proportional to p.</span>
 <span class="nc" id="L292">            Matrix Q = qr.getQ(); // Realistically, the QR decomposition need not be computed explicitly.</span>
 
-<span class="nc bnc" id="L294" title="All 2 branches missed.">            if(computeU) {</span>
-<span class="nc" id="L295">                CMatrix Qsub = CMatrix.I(U.numRows).setSliceCopy(Q, 0, 0);</span>
+<span class="nc" id="L294">            T.setSlice(Q.T().mult(T.getSlice(0, 3, 0, T.numCols)), 0, 0);</span>
+<span class="nc" id="L295">            T.setSlice(T.getSlice(0, 4, 0, 3).mult(Q), 0, 0); // Create bulge.</span>
 
-<span class="nc" id="L297">                U = U.mult(Qsub); // Aggregate unitary transformations.</span>
-            }
-
-<span class="nc" id="L300">            T.setSlice(Q.T().mult(T.getSlice(0, 3, 0, T.numCols)), 0, 0);</span>
-<span class="nc" id="L301">            T.setSlice(T.getSlice(0, 4, 0, 3).mult(Q), 0, 0); // Create bulge.</span>
-
-<span class="nc bnc" id="L303" title="All 2 branches missed.">            if(debug) {</span>
-<span class="nc" id="L304">                System.out.println(&quot;T_after_transforms:\n&quot; + T + &quot;\n&quot;);</span>
+<span class="nc bnc" id="L297" title="All 2 branches missed.">            if(debug) {</span>
+<span class="nc" id="L298">                System.out.println(&quot;[DEBUG] T_after_transforms:\n&quot; + T + &quot;\n&quot;);</span>
             }
 
             // A crude bulge chase using Hessenberg decomposition. Since we know A is nearly in Hessenberg already, this
             // will perform a lot of superfluous computations.
-<span class="nc" id="L309">            T = hess.decompose(T).getH();</span>
+<span class="nc" id="L303">            T = hess.decompose(T).getH();</span>
 
-<span class="nc bnc" id="L311" title="All 2 branches missed.">            if(computeU) {</span>
-<span class="nc" id="L312">                U = hess.Q.mult(U);</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">            if(computeU) {</span>
+<span class="nc" id="L306">                U = hess.Q.mult(U);</span>
             }
 
-<span class="nc bnc" id="L315" title="All 2 branches missed.">            if(debug) {</span>
-<span class="nc" id="L316">                System.out.println(&quot;T_hess:\n&quot; + T);</span>
-<span class="nc" id="L317">                stdin.nextLine();</span>
-<span class="nc" id="L318">                System.out.println(&quot;-&quot;.repeat(100) + &quot;\n\n\n&quot;);</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">            if(debug) {</span>
+<span class="nc" id="L310">                System.out.println(&quot;[DEBUG] T_hess:\n&quot; + T);</span>
+<span class="nc" id="L311">                stdin.nextLine();</span>
+<span class="nc" id="L312">                System.out.println(&quot;[DEBUG]&quot; + &quot;-&quot;.repeat(100) + &quot;\n\n\n&quot;);</span>
             }
 
-<span class="nc bnc" id="L321" title="All 2 branches missed.">            if(T.roundToZero().isTriU()) {</span>
-<span class="nc" id="L322">                break; // We have converged to an upper triangular matrix.</span>
+<span class="nc bnc" id="L315" title="All 2 branches missed.">            if(T.roundToZero().isTriU()) {</span>
+<span class="nc" id="L316">                break; // We have converged (approximately) to an upper triangular matrix.</span>
             }
         }
-<span class="nc" id="L325">    }</span>
+<span class="nc" id="L319">    }</span>
 
 
     /**
@@ -331,23 +325,23 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; im
      * @return A vector of length 2 containing the eigenvalues of the lower right 2x2 block of {@code src}.
      */
     private CVector get2x2BlockEigenValues(CMatrix src) {
-<span class="nc" id="L334">        CVector shifts = new CVector(2);</span>
-<span class="nc" id="L335">        int n = src.numRows-1;</span>
+<span class="nc" id="L328">        CVector shifts = new CVector(2);</span>
+<span class="nc" id="L329">        int n = src.numRows-1;</span>
 
         // Get the four entries from lower right 2x2 sub-matrix.
-<span class="nc" id="L338">        CNumber a = src.entries[(n-1)*(src.numCols + 1)];</span>
-<span class="nc" id="L339">        CNumber b = src.entries[(n-1)*src.numCols + n];</span>
-<span class="nc" id="L340">        CNumber c = src.entries[n*(src.numCols + 1) - 1];</span>
-<span class="nc" id="L341">        CNumber d = src.entries[(n)*(src.numCols + 1)];</span>
+<span class="nc" id="L332">        CNumber a = src.entries[(n-1)*(src.numCols + 1)];</span>
+<span class="nc" id="L333">        CNumber b = src.entries[(n-1)*src.numCols + n];</span>
+<span class="nc" id="L334">        CNumber c = src.entries[n*(src.numCols + 1) - 1];</span>
+<span class="nc" id="L335">        CNumber d = src.entries[(n)*(src.numCols + 1)];</span>
 
-<span class="nc" id="L343">        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.</span>
-<span class="nc" id="L344">        CNumber htr = a.add(b).div(2); // Half of the 2x2 trace.</span>
+<span class="nc" id="L337">        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.</span>
+<span class="nc" id="L338">        CNumber htr = a.add(b).div(2); // Half of the 2x2 trace.</span>
 
         // 2x2 block eigenvalues.
-<span class="nc" id="L347">        shifts.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
-<span class="nc" id="L348">        shifts.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+<span class="nc" id="L341">        shifts.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+<span class="nc" id="L342">        shifts.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
 
-<span class="nc" id="L350">        return shifts;</span>
+<span class="nc" id="L344">        return shifts;</span>
     }
 
 
@@ -356,7 +350,7 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; im
      * @return The {@code T} from the Schur decomposition corresponding to {@code A=UTU&lt;sup&gt;H&lt;/sup&gt;}.
      */
     public CMatrix getT() {
-<span class="nc" id="L359">        return T;</span>
+<span class="nc" id="L353">        return T;</span>
     }
 
 
@@ -365,7 +359,7 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; im
      * @return The {@code U} from the Schur decomposition corresponding to {@code A=UTU&lt;sup&gt;H&lt;/sup&gt;}.
      */
     public CMatrix getU() {
-<span class="nc" id="L368">        return U;</span>
+<span class="nc" id="L362">        return U;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1373,7 +1373,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public Matrix scalDiv(double divisor) {
+    public Matrix div(double divisor) {
 <span class="fc" id="L1377">        return new Matrix(this.shape.copy(),</span>
 <span class="fc" id="L1378">                RealDenseOperations.scalDiv(this.entries, divisor)</span>
         );
@@ -1388,7 +1388,7 @@ public class Matrix extends RealMatrixBase implements RealMatrixMixin&lt;Matrix,
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CMatrix scalDiv(CNumber divisor) {
+    public CMatrix div(CNumber divisor) {
 <span class="fc" id="L1392">        return new CMatrix(this.shape.copy(),</span>
 <span class="fc" id="L1393">                RealComplexDenseOperations.scalDiv(this.entries, divisor)</span>
         );

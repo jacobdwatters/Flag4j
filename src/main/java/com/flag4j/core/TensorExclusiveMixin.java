@@ -39,7 +39,7 @@ import com.flag4j.SparseTensor;
  * @param <U> Dense Tensor type.
  * @param <V> Sparse Tensor type.
  */
-public interface TensorExclusiveMixin<T, U, V> {
+public interface TensorExclusiveMixin<T extends TensorBase<?>, U extends TensorBase<?>, V extends TensorBase<?>> {
 
     // TODO: add toVector() and toMatrix() methods.
     // TODO: Add tensorDot(...) methods for Tensor, CTensor, SparseTensor, SparseCTensor.

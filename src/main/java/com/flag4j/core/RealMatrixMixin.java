@@ -26,13 +26,14 @@ package com.flag4j.core;
 
 import com.flag4j.Matrix;
 import com.flag4j.SparseMatrix;
+import com.flag4j.complex_numbers.CNumber;
 
 /**
  * This interface specifies methods which all real matrices should implement.
  * @param <T> Matrix type.
  * @param <W> Complex matrix type.
  */
-public interface RealMatrixMixin<T, W> extends
+public interface RealMatrixMixin<T extends MatrixBase<double[]>, W extends MatrixBase<CNumber[]>> extends
         MatrixPropertiesMixin<T, Matrix, SparseMatrix, W, T, Double>,
         MatrixOperationsMixin<T, Matrix, SparseMatrix, W, T, Double>,
         MatrixComparisonsMixin<T, Matrix, SparseMatrix, W, T, Double>,

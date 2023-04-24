@@ -1686,7 +1686,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CMatrix scalDiv(double divisor) {
+    public CMatrix div(double divisor) {
 <span class="fc" id="L1690">        return new CMatrix(this.shape.copy(),</span>
 <span class="fc" id="L1691">                RealComplexDenseOperations.scalDiv(this.entries, divisor)</span>
         );
@@ -1701,7 +1701,7 @@ public class CMatrix extends ComplexMatrixBase implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CMatrix scalDiv(CNumber divisor) {
+    public CMatrix div(CNumber divisor) {
 <span class="fc" id="L1705">        return new CMatrix(this.shape.copy(),</span>
 <span class="fc" id="L1706">                ComplexDenseOperations.scalDiv(this.entries, divisor)</span>
         );

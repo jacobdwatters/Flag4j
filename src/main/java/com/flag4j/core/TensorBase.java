@@ -25,6 +25,7 @@
 package com.flag4j.core;
 
 import com.flag4j.Shape;
+import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.util.ErrorMessages;
 
 import java.io.Serializable;

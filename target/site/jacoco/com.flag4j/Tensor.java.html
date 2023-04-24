@@ -524,7 +524,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public Tensor scalDiv(double divisor) {
+    public Tensor div(double divisor) {
 <span class="fc" id="L528">        return new Tensor(</span>
 <span class="fc" id="L529">                shape.copy(),</span>
 <span class="fc" id="L530">                RealDenseOperations.scalDiv(entries, divisor)</span>
@@ -540,7 +540,7 @@ public class Tensor extends TensorBase&lt;double[]&gt; implements
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CTensor scalDiv(CNumber divisor) {
+    public CTensor div(CNumber divisor) {
 <span class="fc" id="L544">        return new CTensor(shape.copy(),</span>
 <span class="fc" id="L545">                RealComplexDenseOperations.scalDiv(entries, divisor)</span>
         );

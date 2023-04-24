@@ -186,11 +186,13 @@ public class Vector extends VectorBase<double[]> implements
      *
      * @param value   Value to set.
      * @param indices The indices of this tensor for which to set the value.
+     * @return A reference to this tensor.
      */
     @Override
-    public void set(double value, int... indices) {
+    public Vector set(double value, int... indices) {
         ParameterChecks.assertArrayLengthsEq(1, indices.length);
         this.entries[indices[0]] = value;
+        return this;
     }
 
 

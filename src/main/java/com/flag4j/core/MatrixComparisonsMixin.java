@@ -25,6 +25,8 @@
 package com.flag4j.core;
 
 
+import com.flag4j.complex_numbers.CNumber;
+
 /**
  * This interface specifies comparisons which all matrices should implement.
  *
@@ -35,7 +37,9 @@ package com.flag4j.core;
  * @param <Y> Real matrix type.
  * @param <X> matrix entry type.
  */
-public interface MatrixComparisonsMixin<T, U, V, W, Y, X extends Number> extends TensorComparisonsMixin<T, U, V, W, Y, X> {
+public interface MatrixComparisonsMixin<T extends MatrixBase<?>, U extends MatrixBase<?>, V extends MatrixBase<?>,
+        W extends MatrixBase<CNumber[]>, Y extends MatrixBase<double[]>, X extends Number>
+        extends TensorComparisonsMixin<T, U, V, W, Y, X> {
 
     /**
      * Checks if this matrix is the identity matrix.

@@ -278,8 +278,8 @@ public abstract class SchurDecomposition<T extends MatrixBase<?>> implements Dec
             CVector rho = get2x2BlockEigenValues(T);
 
             if(debug) {
-                System.out.println("Iteration: " + i + "\n" + "-".repeat(100) + "\n");
-                System.out.println("T_start:\n" + T + "\n");
+                System.out.println("[DEBUG] Iteration: " + i + "\n[DEBUG]" + "-".repeat(100) + "\n");
+                System.out.println("[DEBUG] T_start:\n" + T + "\n");
             }
 
             CNumber[] pEntries = {
@@ -295,7 +295,7 @@ public abstract class SchurDecomposition<T extends MatrixBase<?>> implements Dec
             T.setSlice(T.getSlice(0, 4, 0, 3).mult(Q), 0, 0); // Create bulge.
 
             if(debug) {
-                System.out.println("T_after_transforms:\n" + T + "\n");
+                System.out.println("[DEBUG] T_after_transforms:\n" + T + "\n");
             }
 
             // A crude bulge chase using Hessenberg decomposition. Since we know A is nearly in Hessenberg already, this
@@ -307,9 +307,9 @@ public abstract class SchurDecomposition<T extends MatrixBase<?>> implements Dec
             }
 
             if(debug) {
-                System.out.println("T_hess:\n" + T);
+                System.out.println("[DEBUG] T_hess:\n" + T);
                 stdin.nextLine();
-                System.out.println("-".repeat(100) + "\n\n\n");
+                System.out.println("[DEBUG]" + "-".repeat(100) + "\n\n\n");
             }
 
             if(T.roundToZero().isTriU()) {

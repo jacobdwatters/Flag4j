@@ -24,6 +24,8 @@
 
 package com.flag4j.core;
 
+import com.flag4j.complex_numbers.CNumber;
+
 /**
  * This interface specifies methods which provide properties of a tensor. All tensors should implement this interface.
  *
@@ -34,7 +36,8 @@ package com.flag4j.core;
  * @param <Y> Real Tensor type.
  * @param <X> Tensor entry type.
  */
-interface TensorPropertiesMixin<T, U, V, W, Y, X extends Number> {
+interface TensorPropertiesMixin<T extends TensorBase<?>, U extends TensorBase<?>, V extends TensorBase<?>,
+        W extends TensorBase<CNumber[]>, Y extends TensorBase<double[]>, X extends Number> {
 
 
     /**

@@ -38,7 +38,9 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <Y> Real Matrix type.
  * @param <X> Matrix entry type.
  */
-public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> extends TensorOperationsMixin<T, U, V, W, Y, X> {
+public interface MatrixOperationsMixin<T extends MatrixBase<?>, U extends MatrixBase<?>, V extends MatrixBase<?>,
+        W extends MatrixBase<CNumber[]>, Y extends MatrixBase<double[]>, X extends Number>
+        extends TensorOperationsMixin<T, U, V, W, Y, X> {
 
     /**
      * Computes the element-wise addition between two matrices.

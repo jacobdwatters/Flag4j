@@ -84,7 +84,7 @@ Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseOpe
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseEquals,85,365,11,43,17,75,8,26,2,5
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseMatrixMultiplication,7,1276,8,76,2,218,9,64,1,30
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseVectorOperations,7,469,0,28,2,70,1,26,1,12
-Flag4j,com.flag4j,CVector,276,1897,27,57,49,264,31,112,15,86
+Flag4j,com.flag4j,CVector,384,1789,33,51,65,248,33,110,16,85
 Flag4j,com.flag4j,SparseTensor,0,70,0,2,0,10,0,5,0,4
 Flag4j,com.flag4j,Tensor,153,895,10,28,21,166,7,87,2,73
 Flag4j,com.flag4j,SparseCTensor,0,118,0,6,0,16,0,8,0,5
@@ -126,6 +126,6 @@ Flag4j,com.flag4j.linalg.decompositions,QRDecomposition,0,30,0,2,0,12,0,6,0,5
 Flag4j,com.flag4j.linalg.decompositions,ComplexCholeskyDecomposition,5,141,1,9,1,16,2,6,1,2
 Flag4j,com.flag4j.linalg.decompositions,ComplexHessenburgDecomposition,3,89,3,5,1,17,3,4,0,3
 Flag4j,com.flag4j.linalg.decompositions,LUDecomposition.Pivoting,0,35,0,4,0,7,0,4,0,2
-Flag4j,com.flag4j.linalg.decompositions,SchurDecomposition,700,0,34,0,115,0,27,0,10,0
+Flag4j,com.flag4j.linalg.decompositions,SchurDecomposition,682,0,32,0,112,0,26,0,10,0
 Flag4j,com.flag4j.linalg.decompositions,CholeskyDecomposition,0,6,0,0,0,2,0,2,0,2
 Flag4j,com.flag4j.linalg.decompositions,HessenburgDecomposition,0,12,0,0,0,5,0,3,0,3

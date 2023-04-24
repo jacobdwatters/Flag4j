@@ -40,7 +40,9 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <VV> Sparse Matrix type equivalent.
  * @param <WW> Complex Matrix type equivalent.
  */
-public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW>
+public interface VectorOperationsMixin<T extends VectorBase<?>, U extends VectorBase<?>, V extends VectorBase<?>,
+        W extends VectorBase<CNumber[]>, Y extends VectorBase<double[]>, X extends Number,
+        TT extends MatrixBase<?>, UU extends MatrixBase<?>, VV extends MatrixBase<?>, WW extends MatrixBase<CNumber[]>>
         extends TensorOperationsMixin<T, U, V, W, Y, X> {
 
 
