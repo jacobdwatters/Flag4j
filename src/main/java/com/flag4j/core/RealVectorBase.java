@@ -25,8 +25,10 @@
 package com.flag4j.core;
 
 import com.flag4j.Shape;
+import com.flag4j.Vector;
 
-public class RealVectorBase extends VectorBase<double[]> {
+public abstract class RealVectorBase<T, W> extends
+        VectorBase<T, Vector, W, T, double[], Double> {
 
     /**
      * Constructs a basic vector with the specified number of entries.

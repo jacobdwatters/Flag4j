@@ -24,14 +24,17 @@
 
 package com.flag4j;
 
-import com.flag4j.core.SparseMatrixBase;
+
+import com.flag4j.core.RealMatrixBase;
+import com.flag4j.core.RealSparseMatrixBase;
 
 import java.util.Arrays;
 
 /**
  * Real sparse matrix. Matrix is stored in coordinate list (COO) format.
+ * TODO: Temporarily abstract
  */
-public class SparseMatrix extends SparseMatrixBase<double[]> {
+public abstract class SparseMatrix extends RealSparseMatrixBase {
 
 
     /**

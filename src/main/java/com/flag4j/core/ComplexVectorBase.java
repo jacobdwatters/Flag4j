@@ -24,14 +24,18 @@
 
 package com.flag4j.core;
 
+import com.flag4j.CVector;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 
 
 /**
  * The base class for all complex vectors.
+ * @param <T> Vector type.
+ * @param <Y> Real vector Type.
  */
-public abstract class ComplexVectorBase extends VectorBase<CNumber[]> {
+public abstract class ComplexVectorBase<T, Y> extends
+        VectorBase<T, CVector, T, Y, CNumber[], CNumber> {
 
     /**
      * Constructs a basic vector with the specified number of entries.

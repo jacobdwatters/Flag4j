@@ -36,11 +36,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <T> Matrix type.
  * @param <Y> Real matrix type.
  */
-public interface ComplexMatrixMixin<T extends ComplexMatrixBase, Y extends RealMatrixBase> extends
-        MatrixPropertiesMixin<T, CMatrix, SparseCMatrix, T, Y, CNumber>,
-        MatrixOperationsMixin<T, CMatrix, SparseCMatrix, T, Y, CNumber>,
-        MatrixComparisonsMixin<T, CMatrix, SparseCMatrix, CMatrix, Y, CNumber>,
-        MatrixManipulationsMixin<T, CMatrix, SparseCMatrix, CMatrix, Y, CNumber> {
+public interface ComplexMatrixMixin<T, Y> extends ComplexTensorMixin<T, Y> {
 
 
     /**
@@ -109,7 +105,7 @@ public interface ComplexMatrixMixin<T extends ComplexMatrixBase, Y extends RealM
      *
      * @return The complex conjugate of this tensor.
      */
-    CMatrix conj();
+    T conj();
 
 
     /**
@@ -227,5 +223,5 @@ public interface ComplexMatrixMixin<T extends ComplexMatrixBase, Y extends RealM
      * @throws IllegalArgumentException  If the {@code values} slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
-    CMatrix setSliceCopy(SparseCMatrix values, int rowStart, int colStart);
+    T setSliceCopy(SparseCMatrix values, int rowStart, int colStart);
 }

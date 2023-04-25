@@ -25,13 +25,15 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.SparseTensorBase;
+import com.flag4j.core.ComplexSparseTensorBase;
+import com.flag4j.core.RealSparseTensorBase;
 
 
 /**
  * Complex sparse tensor.
+ * TODO: Temporarily abstract.
  */
-public class SparseCTensor extends SparseTensorBase<CNumber[]> {
+public abstract class SparseCTensor extends ComplexSparseTensorBase {
 
 
     /**

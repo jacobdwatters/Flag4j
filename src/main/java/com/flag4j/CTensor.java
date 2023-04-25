@@ -48,8 +48,8 @@ import java.util.Arrays;
 /**
  * Complex dense tensor.
  */
-public class CTensor extends TensorBase<CNumber[]> implements
-        ComplexTensorMixin<CTensor, Tensor>,
+public class CTensor extends TensorBase<CTensor, CTensor, CTensor, Tensor, CNumber[], CNumber>
+        implements ComplexTensorMixin<CTensor, Tensor>,
         TensorExclusiveMixin<CTensor, CTensor, SparseCTensor> {
 
 

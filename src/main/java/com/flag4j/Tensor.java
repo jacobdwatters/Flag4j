@@ -25,8 +25,7 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.RealTensorMixin;
-import com.flag4j.core.TensorBase;
+import com.flag4j.core.RealTensorBase;
 import com.flag4j.core.TensorExclusiveMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.TransposeDispatcher;
@@ -55,8 +54,8 @@ import java.util.Arrays;
 /**
  * Real Dense Tensor. May have any rank (that is, may have any number of unique axes/dimensions).
  */
-public class Tensor extends TensorBase<double[]> implements
-        RealTensorMixin<Tensor, CTensor>, TensorExclusiveMixin<Tensor, Tensor, SparseTensor> {
+public class Tensor extends RealTensorBase<Tensor, CTensor>
+        implements TensorExclusiveMixin<Tensor, Tensor, SparseTensor> {
 
 
     /**

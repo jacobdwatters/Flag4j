@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,32 +24,27 @@
 
 package com.flag4j.core;
 
+
+import com.flag4j.CTensor;
+import com.flag4j.Shape;
+import com.flag4j.complex_numbers.CNumber;
+
 /**
- * This interface specifies methods which all real tensors should implement.
- * @param <T> Tensor type.
- * @param <W> Complex tensor type.
+ * This abstract class is the base class for all complex tensors.
+ * @param <T> Type of this tensor.
+ * @param <Y> Real tensor type.
  */
-public interface RealTensorMixin<T, W> {
-
-
-    /**
-     * Checks if this tensor contains only non-negative values.
-     * @return True if this tensor only contains non-negative values. Otherwise, returns false.
-     */
-    boolean isPos();
-
+public abstract class ComplexTensorBase<T, Y>
+        extends TensorBase<T, CTensor, T, Y, CNumber[], CNumber>
+        implements ComplexTensorMixin<T, Y> {
 
     /**
-     * Checks if this tensor contains only non-positive values.
-     * @return trie if this tensor only contains non-positive values. Otherwise, returns false.
+     * Creates a complex tensor with specified entries and shape.
+     *
+     * @param shape   Shape of this tensor.
+     * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      */
-    boolean isNeg();
-
-
-    /**
-     * Converts this tensor to an equivalent complex tensor. That is, the entries of the resultant matrix will be exactly
-     * the same value but will have type {@link com.flag4j.complex_numbers.CNumber CNumber} rather than {@link Double}.
-     * @return A complex matrix which is equivalent to this matrix.
-     */
-    W toComplex();
+    public ComplexTensorBase(Shape shape, CNumber[] entries) {
+        super(shape, entries);
+    }
 }

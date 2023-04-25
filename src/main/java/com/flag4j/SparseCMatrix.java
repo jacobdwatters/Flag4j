@@ -25,13 +25,14 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.SparseMatrixBase;
+import com.flag4j.core.ComplexSparseMatrixBase;
 import com.flag4j.util.ArrayUtils;
 
 /**
  * Complex sparse matrix. Stored in COO (Coordinate) format.
+ * TODO: Temporarily abstract until methods are implemented.
  */
-public class SparseCMatrix extends SparseMatrixBase<CNumber[]> {
+public abstract class SparseCMatrix extends ComplexSparseMatrixBase {
 
 
     /**

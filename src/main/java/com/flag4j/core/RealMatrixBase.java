@@ -24,6 +24,8 @@
 
 package com.flag4j.core;
 
+import com.flag4j.CMatrix;
+import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.operations.dense.real.RealDenseSetOperations;
 import com.flag4j.util.ParameterChecks;
@@ -31,8 +33,12 @@ import com.flag4j.util.ParameterChecks;
 
 /**
  * The base class for all real matrices.
+ * @param <T> Type of this matrix.
+ * @param <W> Type of complex type equivalent of this matrix.
  */
-public abstract class RealMatrixBase extends MatrixBase<double[]> {
+public abstract class RealMatrixBase<T, W>
+        extends MatrixBase<T, Matrix, CMatrix, T, double[], Double>
+        implements RealMatrixMixin<T, W> {
 
 
     /**
@@ -51,7 +57,7 @@ public abstract class RealMatrixBase extends MatrixBase<double[]> {
      * Converts this matrix to an equivalent complex matrix.
      * @return A complex matrix with equivalent real part and zero imaginary part.
      */
-    public abstract ComplexMatrixBase toComplex();
+    public abstract W toComplex();
 
 
     /**
@@ -60,7 +66,7 @@ public abstract class RealMatrixBase extends MatrixBase<double[]> {
      * @param values New values of the matrix.
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
-    public RealMatrixBase setValues(Integer[][] values) {
+    public RealMatrixBase<T, W> setValues(Integer[][] values) {
         ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         RealDenseSetOperations.setValues(values, this.entries);
         return this;

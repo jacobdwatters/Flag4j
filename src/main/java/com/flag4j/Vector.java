@@ -47,13 +47,7 @@ import java.util.Arrays;
 /**
  * Real dense vector. This class is mostly Equivalent to a real dense tensor with rank 1.
  */
-public class Vector extends RealVectorBase implements
-        VectorComparisonsMixin<Vector, Vector, SparseVector, CVector, Vector, Double>,
-        VectorManipulationsMixin<Vector, Vector, SparseVector, CVector, Vector, Double,
-                    Matrix, Matrix, SparseMatrix, CMatrix>,
-        VectorOperationsMixin<Vector, Vector, SparseVector, CVector, Vector, Double,
-                    Matrix, Matrix, SparseMatrix, CMatrix>,
-        VectorPropertiesMixin<Vector, Vector, SparseVector, CVector, Vector, Double> {
+public class Vector extends RealVectorBase<Vector, CVector> {
     
 
     /**

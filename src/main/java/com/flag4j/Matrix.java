@@ -54,7 +54,7 @@ import java.util.List;
 /**
  * Real dense matrix. Stored in row major format. This class is mostly equivalent to a real dense tensor of rank 2.
  */
-public class Matrix extends RealMatrixBase implements RealMatrixMixin<Matrix, CMatrix> {
+public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
 
 
     /**

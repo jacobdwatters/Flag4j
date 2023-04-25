@@ -25,14 +25,15 @@
 package com.flag4j;
 
 
-import com.flag4j.core.SparseTensorBase;
+import com.flag4j.core.RealSparseTensorBase;
 
 import java.util.Arrays;
 
 /**
  * Real sparse tensor. Can be any rank.
+ * TODO: Temporarily abstract.
  */
-public class SparseTensor extends SparseTensorBase<double[]> {
+public abstract class SparseTensor extends RealSparseTensorBase {
 
 
     /**

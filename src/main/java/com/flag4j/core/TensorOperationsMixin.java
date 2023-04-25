@@ -30,13 +30,11 @@ import com.flag4j.complex_numbers.CNumber;
  *
  * @param <T> Tensor type.
  * @param <U> Dense Tensor type.
- * @param <V> Sparse Tensor type.
  * @param <W> Complex Tensor type.
  * @param <Y> Real Tensor type.
  * @param <X> Tensor entry type.
  */
-interface TensorOperationsMixin<T extends TensorBase<?>, U extends TensorBase<?>, V extends TensorBase<?>,
-        W extends TensorBase<CNumber[]>, Y  extends TensorBase<double[]>, X extends Number> {
+interface TensorOperationsMixin<T, U, W, Y , X extends Number> {
 
     /**
      * Computes the element-wise addition between two tensors of the same rank.

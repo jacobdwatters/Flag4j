@@ -52,8 +52,7 @@ import java.util.List;
 /**
  * Complex dense matrix. Stored in row major format.
  */
-public class CMatrix extends ComplexMatrixBase implements
-        ComplexMatrixMixin<CMatrix, Matrix> {
+public class CMatrix extends ComplexMatrixBase<CMatrix, Matrix> {
 
     /**
      * Constructs a square complex dense matrix of a specified size. The entries of the matrix will default to zero.
@@ -1863,6 +1862,30 @@ public class CMatrix extends ComplexMatrixBase implements
         return TransposeDispatcher.dispatchHermation(this);
     }
 
+    @Override
+    public CMatrix hermTranspose(int axis1, int axis2) {
+        // TODO: This does not need to be here. Pull into a ComplexTensorExclusiveMixin interface.
+        return null;
+    }
+
+    @Override
+    public CMatrix H(int axis1, int axis2) {
+        // TODO: This does not need to be here. Pull into a ComplexTensorExclusiveMixin interface.
+        return null;
+    }
+
+    @Override
+    public CMatrix hermTranspose(int... axes) {
+        // TODO: This does not need to be here. Pull into a ComplexTensorExclusiveMixin interface.
+        return null;
+    }
+
+    @Override
+    public CMatrix H(int... axes) {
+        // TODO: This does not need to be here. Pull into a ComplexTensorExclusiveMixin interface.
+        return null;
+    }
+
 
     /**
      * Checks if a matrix is Hermitian. That is, if the matrix is equal to its conjugate transpose.
@@ -1871,7 +1894,6 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isHermitian() {
-
         return this.equals(this.H());
     }
 
