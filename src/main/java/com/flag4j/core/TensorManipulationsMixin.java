@@ -40,7 +40,7 @@ interface TensorManipulationsMixin<T> {
      * @param indices The indices of this tensor for which to set the value.
      * @return A reference to this tensor.
      */
-    TensorBase<?> set(double value, int... indices);
+    T set(double value, int... indices);
 
 
     /**

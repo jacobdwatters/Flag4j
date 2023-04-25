@@ -25,19 +25,17 @@
 package com.flag4j.core;
 
 
-import com.flag4j.*;
-
 /**
  * This interface specifies methods which any complex vector should implement.
  * @param <T> Vector type.
  * @param <Y> Real vector type.
  */
-public interface ComplexVectorMixin extends ComplexTensorMixin<CVector, Vector> {
+public interface ComplexVectorMixin<T, Y> extends ComplexTensorMixin<T, Y> {
     boolean isReal();
 
     boolean isComplex();
 
-    CVector conj();
+    T conj();
 
-    Vector toReal();
+    Y toReal();
 }

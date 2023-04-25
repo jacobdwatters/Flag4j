@@ -24,27 +24,12 @@
 
 package com.flag4j.core;
 
-
-import com.flag4j.complex_numbers.CNumber;
-
 /**
  * This interface specifies manipulations which all vectors should implement.
  *
- * @param <T> Vectors type.
- * @param <U> Dense vectors type.
- * @param <V> Sparse vectors type.
- * @param <W> Complex vectors type.
- * @param <Y> Real vectors type.
- * @param <X> Vectors entry type.
  * @param <TT> Matrix type equivalent.
- * @param <UU> Dense Matrix type equivalent.
- * @param <VV> Sparse Matrix type equivalent.
- * @param <WW> Complex Matrix type equivalent.
  */
-public interface VectorManipulationsMixin<T extends VectorBase<?>, U extends VectorBase<?>, V extends VectorBase<?>,
-        W extends ComplexVectorBase, Y extends VectorBase<double[]>, X extends Number,
-        TT extends MatrixBase<?>, UU extends MatrixBase<?>, VV extends MatrixBase<?>, WW extends ComplexMatrixBase>
-        extends TensorManipulationsMixin<T, U, V, W, Y, X> {
+public interface VectorManipulationsMixin<TT> {
 
 
     /**

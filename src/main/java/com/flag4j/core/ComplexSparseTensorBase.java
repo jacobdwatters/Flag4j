@@ -38,7 +38,7 @@ import java.math.RoundingMode;
 /**
  * This abstract class is the base class of all complex sparse tensors.
  */
-public abstract class ComplexSparseTensorBase  extends ComplexTensorBase<SparseCTensor, SparseTensor> {
+public abstract class ComplexSparseTensorBase extends ComplexTensorBase<SparseCTensor, SparseTensor> {
 
     /**
      * Indices for non-zero entries of this tensor. Will have shape (rank-by-nonZeroEntries)

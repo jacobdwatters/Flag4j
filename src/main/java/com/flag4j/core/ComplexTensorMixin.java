@@ -29,7 +29,7 @@ package com.flag4j.core;
  * @param <T> Tensor type.
  * @param <Y> Real tensor type.
  */
-public interface ComplexTensorMixin<T, Y>{
+public interface ComplexTensorMixin<T, Y> {
 
     /**
      * Checks if this tensor has only real valued entries.
@@ -73,54 +73,4 @@ public interface ComplexTensorMixin<T, Y>{
      * @return The complex transpose of this tensor.
      */
     T H();
-
-
-    /**
-     * Computes the conjugate transpose of a tensor. Same as {@link #H(int, int)}.
-     * In the context of a tensor, this exchanges the specified axes and takes the complex conjugate of elements along
-     * those axes.
-     * Also see {@link #hermTranspose() hermTranspose()} and
-     * {@link #H() H()} to conjugate transpose first and last axes.
-     *
-     * @param axis1 First axis to exchange and apply complex conjugate.
-     * @param axis2 Second axis to exchange and apply complex conjugate.
-     * @return The conjugate transpose of this tensor.
-     */
-    T hermTranspose(int axis1, int axis2);
-
-
-    /**
-     * Computes the transpose of a tensor. Same as {@link #hermTranspose(int, int)}.
-     * In the context of a tensor, this exchanges the specified axes and takes the complex conjugate of elements along
-     * those axes.
-     * Also see {@link #hermTranspose()} and
-     * {@link #H()} to conjugate transpose first and last axes.
-     *
-     * @param axis1 First axis to exchange and apply complex conjugate.
-     * @param axis2 Second axis to exchange and apply complex conjugate.
-     * @return The conjugate transpose of this tensor.
-     */
-    T H(int axis1, int axis2);
-
-
-    /**
-     * Computes the conjugate transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
-     * the specified axes permutation and takes the complex conjugate of the elements of these axes. Same as {@link #H(int[])}.
-     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
-     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
-     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
-     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
-     */
-    T hermTranspose(int... axes);
-
-
-    /**
-     * Computes the conjugate transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
-     * the specified axes permutation and takes the complex conjugate of the elements of these axes. Same as {@link #H(int[])}.
-     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
-     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
-     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
-     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
-     */
-    T H(int... axes);
 }

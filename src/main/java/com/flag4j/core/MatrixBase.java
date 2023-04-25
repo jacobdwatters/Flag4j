@@ -28,8 +28,6 @@ import com.flag4j.Shape;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 
-import java.io.Serializable;
-
 
 /**
  * <p>

@@ -31,7 +31,7 @@ import com.flag4j.core.MatrixBase;
  * &lt;p&gt;The {@code QR} decomposition, decomposes a matrix {@code A} into a unitary matrix {@code Q}
  * and an upper triangular matrix {@code R} such that {@code A=QR}.&lt;/p&gt;
  */
-public abstract class QRDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; implements Decomposition&lt;T&gt; {
+public abstract class QRDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, ?, ?&gt;&gt; implements Decomposition&lt;T&gt; {
 
     /**
      * Storage matrix for {@code Q}.

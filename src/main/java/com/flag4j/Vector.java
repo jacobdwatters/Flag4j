@@ -25,7 +25,7 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.*;
+import com.flag4j.core.RealVectorBase;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
@@ -47,7 +47,7 @@ import java.util.Arrays;
 /**
  * Real dense vector. This class is mostly Equivalent to a real dense tensor with rank 1.
  */
-public class Vector extends RealVectorBase<Vector, CVector> {
+public class Vector extends RealVectorBase<Vector, CVector, Matrix, CMatrix> {
     
 
     /**

@@ -27,7 +27,6 @@ package com.flag4j.core;
 
 import com.flag4j.Matrix;
 import com.flag4j.SparseMatrix;
-import com.flag4j.complex_numbers.CNumber;
 
 /**
  * This interface specifies manipulations which all matrices should implement.

@@ -33,17 +33,12 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <U> Dense Vector type.
  * @param <V> Sparse Vector type.
  * @param <W> Complex Vector type.
- * @param <Y> Real Vector type.
  * @param <X> Vector entry type.
  * @param <TT> Matrix type equivalent.
  * @param <UU> Dense Matrix type equivalent.
- * @param <VV> Sparse Matrix type equivalent.
  * @param <WW> Complex Matrix type equivalent.
  */
-public interface VectorOperationsMixin<T extends VectorBase<?>, U extends VectorBase<?>, V extends VectorBase<?>,
-        W extends ComplexVectorBase, Y extends VectorBase<double[]>, X extends Number,
-        TT extends MatrixBase<?>, UU extends MatrixBase<?>, VV extends MatrixBase<?>, WW extends ComplexMatrixBase>
-        extends TensorOperationsMixin<T, U, V, W, Y, X> {
+public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW> {
 
 
     /**
@@ -76,7 +71,6 @@ public interface VectorOperationsMixin<T extends VectorBase<?>, U extends Vector
      * @return A vector resulting from joining the specified vector with this vector.
      */
     W join(SparseCVector b);
-
 
     // TODO: Add stack(vec, axis) methods so vectors can be stacked as if column vectors.
 
@@ -247,7 +241,7 @@ public interface VectorOperationsMixin<T extends VectorBase<?>, U extends Vector
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    T add(SparseVector B);
+    U add(SparseVector B);
 
 
     /**
@@ -265,7 +259,7 @@ public interface VectorOperationsMixin<T extends VectorBase<?>, U extends Vector
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    W add(SparseCVector B);
+    CVector add(SparseCVector B);
 
 
     /**
@@ -283,7 +277,7 @@ public interface VectorOperationsMixin<T extends VectorBase<?>, U extends Vector
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    T sub(SparseVector B);
+    U sub(SparseVector B);
 
 
     /**
@@ -301,7 +295,7 @@ public interface VectorOperationsMixin<T extends VectorBase<?>, U extends Vector
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    W sub(SparseCVector B);
+    CVector sub(SparseCVector B);
 
 
     /**

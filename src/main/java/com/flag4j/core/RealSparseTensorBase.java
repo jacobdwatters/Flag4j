@@ -30,7 +30,6 @@ import com.flag4j.SparseTensor;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;

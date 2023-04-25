@@ -24,6 +24,8 @@
 
 package com.flag4j.core;
 
+import com.flag4j.CMatrix;
+import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.operations.dense.real.RealDenseSetOperations;
 import com.flag4j.util.ParameterChecks;
@@ -31,8 +33,12 @@ import com.flag4j.util.ParameterChecks;
 
 /**
  * The base class for all real matrices.
+ * @param &lt;T&gt; Type of this matrix.
+ * @param &lt;W&gt; Type of complex type equivalent of this matrix.
  */
-public abstract class RealMatrixBase extends MatrixBase&lt;double[]&gt; {
+public abstract class RealMatrixBase&lt;T, W&gt;
+        extends MatrixBase&lt;T, Matrix, CMatrix, T, double[], Double&gt;
+        implements RealMatrixMixin&lt;T, W&gt; {
 
 
     /**
@@ -43,15 +49,15 @@ public abstract class RealMatrixBase extends MatrixBase&lt;double[]&gt; {
      * @throws IllegalArgumentException If the shape parameter is not of rank 2.
      */
     public RealMatrixBase(Shape shape, double[] entries) {
-<span class="fc" id="L46">        super(shape, entries);</span>
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L52">        super(shape, entries);</span>
+<span class="fc" id="L53">    }</span>
 
 
     /**
      * Converts this matrix to an equivalent complex matrix.
      * @return A complex matrix with equivalent real part and zero imaginary part.
      */
-    public abstract ComplexMatrixBase toComplex();
+    public abstract W toComplex();
 
 
     /**
@@ -60,10 +66,10 @@ public abstract class RealMatrixBase extends MatrixBase&lt;double[]&gt; {
      * @param values New values of the matrix.
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
-    public RealMatrixBase setValues(Integer[][] values) {
-<span class="nc" id="L64">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
-<span class="nc" id="L65">        RealDenseSetOperations.setValues(values, this.entries);</span>
-<span class="nc" id="L66">        return this;</span>
+    public RealMatrixBase&lt;T, W&gt; setValues(Integer[][] values) {
+<span class="nc" id="L70">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
+<span class="nc" id="L71">        RealDenseSetOperations.setValues(values, this.entries);</span>
+<span class="nc" id="L72">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

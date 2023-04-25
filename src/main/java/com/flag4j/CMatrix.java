@@ -26,7 +26,6 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexMatrixBase;
-import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
@@ -34,7 +33,10 @@ import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.operations.dense.complex.*;
-import com.flag4j.operations.dense.real_complex.*;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultTranspose;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplication;
@@ -1860,30 +1862,6 @@ public class CMatrix extends ComplexMatrixBase<CMatrix, Matrix> {
     @Override
     public CMatrix H() {
         return TransposeDispatcher.dispatchHermation(this);
-    }
-
-    @Override
-    public CMatrix hermTranspose(int axis1, int axis2) {
-        // TODO: This does not need to be here. Pull into a ComplexTensorExclusiveMixin interface.
-        return null;
-    }
-
-    @Override
-    public CMatrix H(int axis1, int axis2) {
-        // TODO: This does not need to be here. Pull into a ComplexTensorExclusiveMixin interface.
-        return null;
-    }
-
-    @Override
-    public CMatrix hermTranspose(int... axes) {
-        // TODO: This does not need to be here. Pull into a ComplexTensorExclusiveMixin interface.
-        return null;
-    }
-
-    @Override
-    public CMatrix H(int... axes) {
-        // TODO: This does not need to be here. Pull into a ComplexTensorExclusiveMixin interface.
-        return null;
     }
 
 

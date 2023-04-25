@@ -35,8 +35,9 @@ import com.flag4j.linalg.decompositions.LUDecomposition;
  * &lt;p&gt;If the system is not well determined, i.e. {@code A} is square and full rank, then use a
  * {@link LstsqSolver least-squares solver}.&lt;/p&gt;
  */
-public abstract class LUSolver&lt;T extends MatrixBase&lt;?&gt;,
-        U extends VectorBase&lt;?&gt;, V extends VectorBase&lt;?&gt;&gt; implements LinearSolver&lt;T, U, V&gt; {
+public abstract class LUSolver&lt;T extends MatrixBase&lt;?, ?, ?, ?, ?, ?&gt;,
+        U extends VectorBase&lt;?, ?, ?, ?, ?, ?, ?, ?, ?, ?&gt;,
+        V extends VectorBase&lt;?, ?, ?, ?, ?, ?, ?, ?, ?, ?&gt;&gt; implements LinearSolver&lt;T, U, V&gt; {
 
     /**
      * Decomposer to compute {@code LU} decomposition.
@@ -60,14 +61,14 @@ public abstract class LUSolver&lt;T extends MatrixBase&lt;?&gt;,
      * @param lu {@code LU} decomposer to employ in solving the linear system.
      * @throws IllegalArgumentException If the {@code LU} decomposer does not use partial pivoting.
      */
-<span class="fc" id="L63">    protected LUSolver(LUDecomposition&lt;T&gt; lu) {</span>
-<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if(lu.pivotFlag!=LUDecomposition.Pivoting.PARTIAL) {</span>
-<span class="nc" id="L65">            throw new IllegalArgumentException(&quot;LU solver must use partial pivoting but got &quot; +</span>
-<span class="nc" id="L66">                    lu.pivotFlag.name() + &quot;.&quot;);</span>
+<span class="fc" id="L64">    protected LUSolver(LUDecomposition&lt;T&gt; lu) {</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if(lu.pivotFlag!=LUDecomposition.Pivoting.PARTIAL) {</span>
+<span class="nc" id="L66">            throw new IllegalArgumentException(&quot;LU solver must use partial pivoting but got &quot; +</span>
+<span class="nc" id="L67">                    lu.pivotFlag.name() + &quot;.&quot;);</span>
         }
 
-<span class="fc" id="L69">        this.lu = lu;</span>
-<span class="fc" id="L70">    }</span>
+<span class="fc" id="L70">        this.lu = lu;</span>
+<span class="fc" id="L71">    }</span>
 
 
     /**
@@ -75,10 +76,10 @@ public abstract class LUSolver&lt;T extends MatrixBase&lt;?&gt;,
      * @param A Matrix to decompose.
      */
     protected void decompose(T A) {
-<span class="fc" id="L78">        lu.decompose(A);</span>
-<span class="fc" id="L79">        L = lu.getL();</span>
-<span class="fc" id="L80">        U = lu.getU();</span>
-<span class="fc" id="L81">        P = lu.getP();</span>
-<span class="fc" id="L82">    }</span>
+<span class="fc" id="L79">        lu.decompose(A);</span>
+<span class="fc" id="L80">        L = lu.getL();</span>
+<span class="fc" id="L81">        U = lu.getU();</span>
+<span class="fc" id="L82">        P = lu.getP();</span>
+<span class="fc" id="L83">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

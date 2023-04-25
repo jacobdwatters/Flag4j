@@ -24,7 +24,6 @@
 
 package com.flag4j.core;
 
-
 import com.flag4j.CTensor;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;

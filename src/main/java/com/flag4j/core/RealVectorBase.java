@@ -24,11 +24,20 @@
 
 package com.flag4j.core;
 
+import com.flag4j.Matrix;
 import com.flag4j.Shape;
+import com.flag4j.SparseVector;
 import com.flag4j.Vector;
 
-public abstract class RealVectorBase<T, W> extends
-        VectorBase<T, Vector, W, T, double[], Double> {
+/**
+ * This abstract class is the base class for all real vectors.
+ * @param <T> Vector type.
+ * @param <W> Complex Vector type.
+ * @param <TT> Matrix type equivalent.
+ * @param <WW> Complex Matrix type equivalent.
+ */
+public abstract class RealVectorBase<T, W, TT, WW> extends
+        VectorBase<T, Vector, SparseVector, W, T, double[], Double, TT, Matrix, WW> {
 
     /**
      * Constructs a basic vector with the specified number of entries.

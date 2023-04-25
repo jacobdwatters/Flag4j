@@ -30,7 +30,7 @@ import com.flag4j.core.MatrixBase;
  * This interface specifies methods which should be implemented in all decompositions.
  * @param <T> Matrix type to decompose.
  */
-public interface Decomposition<T extends MatrixBase<?>> {
+public interface Decomposition<T extends MatrixBase<?, ?, ?, ?, ?, ?>> {
 
     /**
      * Applies decomposition to the source matrix.

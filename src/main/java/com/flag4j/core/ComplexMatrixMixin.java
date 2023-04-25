@@ -24,7 +24,6 @@
 
 package com.flag4j.core;
 
-import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.SparseCMatrix;
 import com.flag4j.SparseCVector;

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,20 +24,24 @@
 
 package com.flag4j.core;
 
-
+import com.flag4j.SparseCMatrix;
+import com.flag4j.SparseCVector;
+import com.flag4j.SparseMatrix;
+import com.flag4j.SparseVector;
+import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
 /**
- * Base class for all sparse vectors.
- * @param <T> Type of the entries for this sparse vector.
+ * This abstract class is the base class for all complex sparse vectors.
  */
-public abstract class SparseVectorBase<T extends Serializable> extends VectorBase<T> {
+public abstract class ComplexSparseVectorBase extends
+        ComplexVectorBase<SparseCVector, SparseVector, SparseCMatrix, SparseMatrix> {
+
 
     /**
      * Indices of non-zero values in this sparse vector.
@@ -57,7 +61,7 @@ public abstract class SparseVectorBase<T extends Serializable> extends VectorBas
      * @param indices Indices of the non-zero entries of this tensor.
      * @throws IllegalArgumentException If the lengths of the entries and indices arrays are not equal.
      */
-    public SparseVectorBase(int totalEntries, int nonZeroEntries, T entries, int[] indices) {
+    public ComplexSparseVectorBase(int totalEntries, int nonZeroEntries, CNumber[] entries, int[] indices) {
         super(totalEntries, entries);
 
         if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) < 0) {
