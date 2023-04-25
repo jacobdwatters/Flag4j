@@ -97,7 +97,7 @@ public abstract class LUDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, ?, 
      * @return A reference to this decomposer.
      */
     @Override
-    public LUDecomposition decompose(T src) {
+    public LUDecomposition&lt;T&gt; decompose(T src) {
 <span class="fc" id="L101">        initLU(src);</span>
 
 <span class="fc bfc" id="L103" title="All 2 branches covered.">        if(pivotFlag==Pivoting.NONE) {</span>

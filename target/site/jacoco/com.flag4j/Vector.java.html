@@ -1343,52 +1343,6 @@ public class Vector extends RealVectorBase&lt;Vector, CVector, Matrix, CMatrix&g
 
 
     /**
-     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
-     *
-     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double min() {
-<span class="fc" id="L1352">        return AggregateReal.min(this.entries);</span>
-    }
-
-
-    /**
-     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
-     *
-     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double max() {
-<span class="fc" id="L1363">        return AggregateReal.max(this.entries);</span>
-    }
-
-
-    /**
-     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #min()}.
-     *
-     * @return The minimum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-<span class="fc" id="L1375">        return AggregateReal.minAbs(this.entries);</span>
-    }
-
-
-    /**
-     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-<span class="fc" id="L1387">        return AggregateReal.maxAbs(this.entries);</span>
-    }
-
-
-    /**
      * Finds the indices of the minimum value in this tensor.
      *
      * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
@@ -1396,7 +1350,7 @@ public class Vector extends RealVectorBase&lt;Vector, CVector, Matrix, CMatrix&g
      */
     @Override
     public int[] argMin() {
-<span class="fc" id="L1399">        return new int[]{AggregateDenseReal.argMin(this.entries)};</span>
+<span class="fc" id="L1353">        return new int[]{AggregateDenseReal.argMin(this.entries)};</span>
     }
 
 
@@ -1408,7 +1362,7 @@ public class Vector extends RealVectorBase&lt;Vector, CVector, Matrix, CMatrix&g
      */
     @Override
     public int[] argMax() {
-<span class="fc" id="L1411">        return new int[]{AggregateDenseReal.argMax(this.entries)};</span>
+<span class="fc" id="L1365">        return new int[]{AggregateDenseReal.argMax(this.entries)};</span>
     }
 
 
@@ -1419,13 +1373,13 @@ public class Vector extends RealVectorBase&lt;Vector, CVector, Matrix, CMatrix&g
      */
     @Override
     public double norm() {
-<span class="fc" id="L1422">        double norm = 0;</span>
+<span class="fc" id="L1376">        double norm = 0;</span>
 
-<span class="fc bfc" id="L1424" title="All 2 branches covered.">        for(int i=0; i&lt;this.size; i++) {</span>
-<span class="fc" id="L1425">            norm += this.entries[i]*this.entries[i];</span>
+<span class="fc bfc" id="L1378" title="All 2 branches covered.">        for(int i=0; i&lt;this.size; i++) {</span>
+<span class="fc" id="L1379">            norm += this.entries[i]*this.entries[i];</span>
         }
 
-<span class="fc" id="L1428">        return Math.sqrt(norm);</span>
+<span class="fc" id="L1382">        return Math.sqrt(norm);</span>
     }
 
 
@@ -1440,20 +1394,20 @@ public class Vector extends RealVectorBase&lt;Vector, CVector, Matrix, CMatrix&g
     @Override
     public double norm(double p) {
 
-<span class="fc bfc" id="L1443" title="All 2 branches covered.">        if(Double.isInfinite(p)) {</span>
-<span class="pc bpc" id="L1444" title="1 of 2 branches missed.">            if(p &gt; 0) {</span>
-<span class="fc" id="L1445">                return maxAbs(); // Maximum / infinite norm.</span>
+<span class="fc bfc" id="L1397" title="All 2 branches covered.">        if(Double.isInfinite(p)) {</span>
+<span class="pc bpc" id="L1398" title="1 of 2 branches missed.">            if(p &gt; 0) {</span>
+<span class="fc" id="L1399">                return maxAbs(); // Maximum / infinite norm.</span>
             } else {
-<span class="nc" id="L1447">                return minAbs(); // Minimum norm.</span>
+<span class="nc" id="L1401">                return minAbs(); // Minimum norm.</span>
             }
         } else {
-<span class="fc" id="L1450">            double norm = 0;</span>
+<span class="fc" id="L1404">            double norm = 0;</span>
 
-<span class="fc bfc" id="L1452" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
-<span class="fc" id="L1453">                norm += Math.pow(Math.abs(this.entries[i]), p);</span>
+<span class="fc bfc" id="L1406" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
+<span class="fc" id="L1407">                norm += Math.pow(Math.abs(this.entries[i]), p);</span>
             }
 
-<span class="fc" id="L1456">            return Math.pow(norm, 1.0/p);</span>
+<span class="fc" id="L1410">            return Math.pow(norm, 1.0/p);</span>
         }
     }
 
@@ -1465,7 +1419,7 @@ public class Vector extends RealVectorBase&lt;Vector, CVector, Matrix, CMatrix&g
      */
     @Override
     public double infNorm() {
-<span class="fc" id="L1468">        return AggregateReal.maxAbs(this.entries);</span>
+<span class="fc" id="L1422">        return AggregateReal.maxAbs(this.entries);</span>
     }
 
 
@@ -1476,7 +1430,7 @@ public class Vector extends RealVectorBase&lt;Vector, CVector, Matrix, CMatrix&g
      */
     @Override
     public int length() {
-<span class="fc" id="L1479">        return this.size;</span>
+<span class="fc" id="L1433">        return this.size;</span>
     }
 
 
@@ -1486,43 +1440,43 @@ public class Vector extends RealVectorBase&lt;Vector, CVector, Matrix, CMatrix&g
      * @return A human-readable string representation of this vector.
      */
     public String toString() {
-<span class="nc" id="L1489">        StringBuilder result = new StringBuilder();</span>
+<span class="nc" id="L1443">        StringBuilder result = new StringBuilder();</span>
 
-<span class="nc bnc" id="L1491" title="All 2 branches missed.">        if(PrintOptions.getMaxColumns()&lt;size) {</span>
+<span class="nc bnc" id="L1445" title="All 2 branches missed.">        if(PrintOptions.getMaxColumns()&lt;size) {</span>
             // Then also get the full size of the vector.
-<span class="nc" id="L1493">            result.append(String.format(&quot;Full Size: %d\n&quot;, size));</span>
+<span class="nc" id="L1447">            result.append(String.format(&quot;Full Size: %d\n&quot;, size));</span>
         }
 
-<span class="nc" id="L1496">        result.append(&quot;[&quot;);</span>
+<span class="nc" id="L1450">        result.append(&quot;[&quot;);</span>
 
-<span class="nc" id="L1498">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
+<span class="nc" id="L1452">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
         int width;
         String value;
 
         // Get entries up until the stopping point.
-<span class="nc bnc" id="L1503" title="All 2 branches missed.">        for(int i=0; i&lt;stopIndex; i++) {</span>
-<span class="nc" id="L1504">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
-<span class="nc" id="L1505">            width = PrintOptions.getPadding() + value.length();</span>
-<span class="nc bnc" id="L1506" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L1507">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc bnc" id="L1457" title="All 2 branches missed.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="nc" id="L1458">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
+<span class="nc" id="L1459">            width = PrintOptions.getPadding() + value.length();</span>
+<span class="nc bnc" id="L1460" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1461">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="nc bnc" id="L1510" title="All 2 branches missed.">        if(stopIndex &lt; size-1) {</span>
-<span class="nc" id="L1511">            width = PrintOptions.getPadding() + 3;</span>
-<span class="nc" id="L1512">            value = &quot;...&quot;;</span>
-<span class="nc bnc" id="L1513" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L1514">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc bnc" id="L1464" title="All 2 branches missed.">        if(stopIndex &lt; size-1) {</span>
+<span class="nc" id="L1465">            width = PrintOptions.getPadding() + 3;</span>
+<span class="nc" id="L1466">            value = &quot;...&quot;;</span>
+<span class="nc bnc" id="L1467" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1468">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
         // Get last entry now
-<span class="nc" id="L1518">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
-<span class="nc" id="L1519">        width = PrintOptions.getPadding() + value.length();</span>
-<span class="nc bnc" id="L1520" title="All 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L1521">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc" id="L1472">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
+<span class="nc" id="L1473">        width = PrintOptions.getPadding() + value.length();</span>
+<span class="nc bnc" id="L1474" title="All 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1475">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
 
-<span class="nc" id="L1523">        result.append(&quot;]&quot;);</span>
+<span class="nc" id="L1477">        result.append(&quot;]&quot;);</span>
 
-<span class="nc" id="L1525">        return result.toString();</span>
+<span class="nc" id="L1479">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

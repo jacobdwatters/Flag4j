@@ -1053,47 +1053,6 @@ public class SparseVector extends RealSparseVectorBase {
 <span class="nc" id="L1053">        return null;</span>
     }
 
-    /**
-     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
-     *
-     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double min() {
-<span class="nc" id="L1063">        return 0;</span>
-    }
-
-    /**
-     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
-     *
-     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double max() {
-<span class="nc" id="L1073">        return 0;</span>
-    }
-
-    /**
-     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #min()}.
-     *
-     * @return The minimum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-<span class="nc" id="L1084">        return 0;</span>
-    }
-
-    /**
-     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-<span class="nc" id="L1095">        return 0;</span>
-    }
 
     /**
      * Finds the indices of the minimum value in this tensor.
@@ -1103,7 +1062,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L1106">        return new int[0];</span>
+<span class="nc" id="L1065">        return new int[0];</span>
     }
 
     /**
@@ -1114,7 +1073,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L1117">        return new int[0];</span>
+<span class="nc" id="L1076">        return new int[0];</span>
     }
 
     /**
@@ -1124,7 +1083,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public double norm() {
-<span class="nc" id="L1127">        return 0;</span>
+<span class="nc" id="L1086">        return 0;</span>
     }
 
     /**
@@ -1137,7 +1096,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L1140">        return 0;</span>
+<span class="nc" id="L1099">        return 0;</span>
     }
 
     /**
@@ -1147,7 +1106,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L1150">        return 0;</span>
+<span class="nc" id="L1109">        return 0;</span>
     }
 
     /**
@@ -1159,7 +1118,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseMatrix extend(int n, int axis) {
-<span class="nc" id="L1162">        return null;</span>
+<span class="nc" id="L1121">        return null;</span>
     }
 
     /**
@@ -1169,7 +1128,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public int length() {
-<span class="nc" id="L1172">        return 0;</span>
+<span class="nc" id="L1131">        return 0;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

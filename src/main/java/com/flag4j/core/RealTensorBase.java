@@ -25,8 +25,14 @@
 package com.flag4j.core;
 
 
+import com.flag4j.CTensor;
 import com.flag4j.Shape;
 import com.flag4j.Tensor;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.common.real.AggregateReal;
+import com.flag4j.operations.common.real.RealOperations;
+import com.flag4j.operations.common.real.RealProperties;
 
 
 /**
@@ -49,4 +55,84 @@ public abstract class RealTensorBase<T, W>
     public RealTensorBase(Shape shape, double[] entries) {
         super(shape, entries);
     }
+
+
+    /**
+     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
+     *
+     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
+     */
+    @Override
+    public double min() {
+        return AggregateReal.min(entries);
+    }
+
+
+    /**
+     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
+     *
+     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
+     */
+    @Override
+    public double max() {
+        return AggregateReal.max(entries);
+    }
+
+
+    /**
+     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+     * to {@link #min()}.
+     *
+     * @return The minimum value, in absolute value, in this tensor.
+     */
+    @Override
+    public double minAbs() {
+        return AggregateReal.minAbs(entries);
+    }
+
+
+    /**
+     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+     * to {@link #max()}.
+     *
+     * @return The maximum value, in absolute value, in this tensor.
+     */
+    @Override
+    public double maxAbs() {
+        return AggregateReal.maxAbs(entries);
+    }
+
+
+    /**
+     * Computes the maximum/infinite norm of this tensor.
+     *
+     * @return The maximum/infinite norm of this tensor.
+     */
+    @Override
+    public double infNorm() {
+        return AggregateReal.max(entries);
+    }
+
+
+    /**
+     * Checks if this tensor contains only non-negative values.
+     *
+     * @return True if this tensor only contains non-negative values. Otherwise, returns false.
+     */
+    @Override
+    public boolean isPos() {
+        return RealProperties.isPos(entries);
+    }
+
+
+    /**
+     * Checks if this tensor contains only non-positive values.
+     *
+     * @return trie if this tensor only contains non-positive values. Otherwise, returns false.
+     */
+    @Override
+    public boolean isNeg() {
+        return RealProperties.isNeg(entries);
+    }
+
 }

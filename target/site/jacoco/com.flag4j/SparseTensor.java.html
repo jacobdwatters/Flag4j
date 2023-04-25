@@ -27,6 +27,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealSparseTensorBase;
+import com.flag4j.operations.common.real.AggregateReal;
 
 import java.util.Arrays;
 
@@ -41,8 +42,8 @@ public class SparseTensor extends RealSparseTensorBase {
      * @param shape Shape of the tensor.
      */
     public SparseTensor(Shape shape) {
-<span class="fc" id="L44">        super(shape, 0, new double[0], new int[0][0]);</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L45">        super(shape, 0, new double[0], new int[0][0]);</span>
+<span class="fc" id="L46">    }</span>
 
 
     /**
@@ -53,8 +54,8 @@ public class SparseTensor extends RealSparseTensorBase {
      * @param indices Indices of the non-zero entries of the tensor.
      */
     public SparseTensor(Shape shape, double[] nonZeroEntries, int[][] indices) {
-<span class="fc" id="L56">        super(shape, nonZeroEntries.length, nonZeroEntries, indices);</span>
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L57">        super(shape, nonZeroEntries.length, nonZeroEntries, indices);</span>
+<span class="fc" id="L58">    }</span>
 
 
     /**
@@ -64,8 +65,8 @@ public class SparseTensor extends RealSparseTensorBase {
      * @param indices Indices of the non-zero entries of the tensor.
      */
     public SparseTensor(Shape shape, int[] nonZeroEntries, int[][] indices) {
-<span class="fc" id="L67">        super(shape, nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(), indices);</span>
-<span class="fc" id="L68">    }</span>
+<span class="fc" id="L68">        super(shape, nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(), indices);</span>
+<span class="fc" id="L69">    }</span>
 
 
 //    /**
@@ -174,32 +175,12 @@ public class SparseTensor extends RealSparseTensorBase {
      * @param A Tensor to copy.
      */
     public SparseTensor(SparseTensor A) {
-<span class="fc" id="L177">        super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);</span>
-<span class="fc bfc" id="L178" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
-<span class="fc" id="L179">            super.indices[i] = A.indices[i].clone();</span>
+<span class="fc" id="L178">        super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
+<span class="fc" id="L180">            super.indices[i] = A.indices[i].clone();</span>
         }
-<span class="fc" id="L181">    }</span>
+<span class="fc" id="L182">    }</span>
 
-
-    /**
-     * Checks if this tensor contains only non-negative values.
-     *
-     * @return True if this tensor only contains non-negative values. Otherwise, returns false.
-     */
-    @Override
-    public boolean isPos() {
-<span class="nc" id="L191">        return false;</span>
-    }
-
-    /**
-     * Checks if this tensor contains only non-positive values.
-     *
-     * @return trie if this tensor only contains non-positive values. Otherwise, returns false.
-     */
-    @Override
-    public boolean isNeg() {
-<span class="nc" id="L201">        return false;</span>
-    }
 
     /**
      * Converts this tensor to an equivalent complex tensor. That is, the entries of the resultant matrix will be exactly
@@ -209,8 +190,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseCTensor toComplex() {
-<span class="nc" id="L212">        return null;</span>
+<span class="nc" id="L193">        return null;</span>
     }
+
 
     /**
      * Checks if this tensor only contains zeros.
@@ -219,8 +201,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public boolean isZeros() {
-<span class="nc" id="L222">        return false;</span>
+<span class="nc" id="L204">        return false;</span>
     }
+
 
     /**
      * Checks if this tensor only contains ones.
@@ -229,8 +212,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public boolean isOnes() {
-<span class="nc" id="L232">        return false;</span>
+<span class="nc" id="L215">        return false;</span>
     }
+
 
     /**
      * Sets an index of this tensor to a specified value.
@@ -241,8 +225,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseTensor set(double value, int... indices) {
-<span class="nc" id="L244">        return null;</span>
+<span class="nc" id="L228">        return null;</span>
     }
+
 
     /**
      * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
@@ -254,8 +239,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseTensor reshape(Shape shape) {
-<span class="nc" id="L257">        return null;</span>
+<span class="nc" id="L242">        return null;</span>
     }
+
 
     /**
      * Flattens tensor to single dimension. To flatten tensor along a single axis.
@@ -264,8 +250,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseTensor flatten() {
-<span class="nc" id="L267">        return null;</span>
+<span class="nc" id="L253">        return null;</span>
     }
+
 
     /**
      * Computes the element-wise addition between two tensors of the same rank.
@@ -276,8 +263,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public Tensor add(SparseTensor B) {
-<span class="nc" id="L279">        return null;</span>
+<span class="nc" id="L266">        return null;</span>
     }
+
 
     /**
      * Adds specified value to all entries of this tensor.
@@ -287,8 +275,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public Tensor add(double a) {
-<span class="nc" id="L290">        return null;</span>
+<span class="nc" id="L278">        return null;</span>
     }
+
 
     /**
      * Adds specified value to all entries of this tensor.
@@ -298,8 +287,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseCTensor add(CNumber a) {
-<span class="nc" id="L301">        return null;</span>
+<span class="nc" id="L290">        return null;</span>
     }
+
 
     /**
      * Computes the element-wise subtraction between two tensors of the same rank.
@@ -310,8 +300,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public Tensor sub(SparseTensor B) {
-<span class="nc" id="L313">        return null;</span>
+<span class="nc" id="L303">        return null;</span>
     }
+
 
     /**
      * Adds specified value to all entries of this tensor.
@@ -321,8 +312,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public Tensor sub(double a) {
-<span class="nc" id="L324">        return null;</span>
+<span class="nc" id="L315">        return null;</span>
     }
+
 
     /**
      * Subtracts a specified value from all entries of this tensor.
@@ -332,8 +324,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseCTensor sub(CNumber a) {
-<span class="nc" id="L335">        return null;</span>
+<span class="nc" id="L327">        return null;</span>
     }
+
 
     /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
@@ -344,7 +337,8 @@ public class SparseTensor extends RealSparseTensorBase {
     @Override
     public void addEq(SparseTensor B) {
 
-<span class="nc" id="L347">    }</span>
+<span class="nc" id="L340">    }</span>
+
 
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
@@ -354,7 +348,8 @@ public class SparseTensor extends RealSparseTensorBase {
     @Override
     public void addEq(Double b) {
 
-<span class="nc" id="L357">    }</span>
+<span class="nc" id="L351">    }</span>
+
 
     /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
@@ -365,7 +360,8 @@ public class SparseTensor extends RealSparseTensorBase {
     @Override
     public void subEq(SparseTensor B) {
 
-<span class="nc" id="L368">    }</span>
+<span class="nc" id="L363">    }</span>
+
 
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
@@ -375,7 +371,8 @@ public class SparseTensor extends RealSparseTensorBase {
     @Override
     public void subEq(Double b) {
 
-<span class="nc" id="L378">    }</span>
+<span class="nc" id="L374">    }</span>
+
 
     /**
      * Computes scalar multiplication of a tensor.
@@ -385,8 +382,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseTensor mult(double factor) {
-<span class="nc" id="L388">        return null;</span>
+<span class="nc" id="L385">        return null;</span>
     }
+
 
     /**
      * Computes scalar multiplication of a tensor.
@@ -396,8 +394,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseCTensor mult(CNumber factor) {
-<span class="nc" id="L399">        return null;</span>
+<span class="nc" id="L397">        return null;</span>
     }
+
 
     /**
      * Computes the scalar division of a tensor.
@@ -408,8 +407,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseTensor div(double divisor) {
-<span class="nc" id="L411">        return null;</span>
+<span class="nc" id="L410">        return null;</span>
     }
+
 
     /**
      * Computes the scalar division of a tensor.
@@ -423,6 +423,7 @@ public class SparseTensor extends RealSparseTensorBase {
 <span class="nc" id="L423">        return null;</span>
     }
 
+
     /**
      * Sums together all entries in the tensor.
      *
@@ -430,8 +431,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public Double sum() {
-<span class="nc" id="L433">        return null;</span>
+<span class="nc" id="L434">        return null;</span>
     }
+
 
     /**
      * Computes the element-wise square root of a tensor.
@@ -441,8 +443,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseTensor sqrt() {
-<span class="nc" id="L444">        return null;</span>
+<span class="nc" id="L446">        return null;</span>
     }
+
 
     /**
      * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
@@ -452,8 +455,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseTensor abs() {
-<span class="nc" id="L455">        return null;</span>
+<span class="nc" id="L458">        return null;</span>
     }
+
 
     /**
      * Computes the transpose of a tensor. Same as {@link #T()}.
@@ -462,8 +466,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseTensor transpose() {
-<span class="nc" id="L465">        return null;</span>
+<span class="nc" id="L469">        return null;</span>
     }
+
 
     /**
      * Computes the transpose of a tensor. Same as {@link #transpose()}.
@@ -472,8 +477,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseTensor T() {
-<span class="nc" id="L475">        return null;</span>
+<span class="nc" id="L480">        return null;</span>
     }
+
 
     /**
      * Computes the reciprocals, element-wise, of a tensor.
@@ -483,8 +489,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseTensor recip() {
-<span class="nc" id="L486">        return null;</span>
+<span class="nc" id="L492">        return null;</span>
     }
+
 
     /**
      * Gets the element in this tensor at the specified indices.
@@ -495,8 +502,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public Double get(int... indices) {
-<span class="nc" id="L498">        return null;</span>
+<span class="nc" id="L505">        return null;</span>
     }
+
 
     /**
      * Creates a copy of this tensor.
@@ -505,8 +513,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseTensor copy() {
-<span class="nc" id="L508">        return null;</span>
+<span class="nc" id="L516">        return null;</span>
     }
+
 
     /**
      * Computes the element-wise multiplication between two tensors.
@@ -517,8 +526,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseTensor elemMult(SparseTensor B) {
-<span class="nc" id="L520">        return null;</span>
+<span class="nc" id="L529">        return null;</span>
     }
+
 
     /**
      * Computes the element-wise division between two tensors.
@@ -529,50 +539,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public SparseTensor elemDiv(SparseTensor B) {
-<span class="nc" id="L532">        return null;</span>
+<span class="nc" id="L542">        return null;</span>
     }
 
-    /**
-     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
-     *
-     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double min() {
-<span class="nc" id="L542">        return 0;</span>
-    }
-
-    /**
-     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
-     *
-     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double max() {
-<span class="nc" id="L552">        return 0;</span>
-    }
-
-    /**
-     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #min()}.
-     *
-     * @return The minimum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-<span class="nc" id="L563">        return 0;</span>
-    }
-
-    /**
-     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-<span class="nc" id="L574">        return 0;</span>
-    }
 
     /**
      * Finds the indices of the minimum value in this tensor.
@@ -582,8 +551,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L585">        return new int[0];</span>
+<span class="nc" id="L554">        return new int[0];</span>
     }
+
 
     /**
      * Finds the indices of the maximum value in this tensor.
@@ -593,8 +563,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L596">        return new int[0];</span>
+<span class="nc" id="L566">        return new int[0];</span>
     }
+
 
     /**
      * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
@@ -603,8 +574,9 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public double norm() {
-<span class="nc" id="L606">        return 0;</span>
+<span class="nc" id="L577">        return 0;</span>
     }
+
 
     /**
      * Computes the p-norm of this tensor.
@@ -616,17 +588,7 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L619">        return 0;</span>
-    }
-
-    /**
-     * Computes the maximum/infinite norm of this tensor.
-     *
-     * @return The maximum/infinite norm of this tensor.
-     */
-    @Override
-    public double infNorm() {
-<span class="nc" id="L629">        return 0;</span>
+<span class="nc" id="L591">        return 0;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -203,6 +203,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
 //        super.setNonZeroEntries(super.entries.length);
 //    }
 
+
     /**
      * Constructs a sparse tensor whose shape and values are given by another sparse tensor. This effectively copies
      * the tensor.
@@ -218,6 +219,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Checks if this matrix is the identity matrix.
      *
@@ -227,6 +229,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public boolean isI() {
         return false;
     }
+
 
     /**
      * Checks if matrices are inverses of each other.
@@ -238,6 +241,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public boolean isInv(SparseMatrix B) {
         return false;
     }
+
 
     /**
      * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
@@ -252,6 +256,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Sets the value of this matrix using a 2D array.
      *
@@ -263,6 +268,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix setValues(Double[][] values) {
         return null;
     }
+
 
     /**
      * Sets the value of this matrix using a 2D array.
@@ -276,6 +282,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Sets the value of this matrix using a 2D array.
      *
@@ -287,6 +294,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix setValues(int[][] values) {
         return null;
     }
+
 
     /**
      * Sets a column of this matrix at the given index to the specified values.
@@ -301,6 +309,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Sets a column of this matrix at the given index to the specified values.
      *
@@ -313,6 +322,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix setCol(Integer[] values, int colIndex) {
         return null;
     }
+
 
     /**
      * Sets a column of this matrix at the given index to the specified values.
@@ -327,6 +337,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Sets a column of this matrix at the given index to the specified values.
      *
@@ -339,6 +350,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix setCol(int[] values, int colIndex) {
         return null;
     }
+
 
     /**
      * Sets a row of this matrix at the given index to the specified values.
@@ -353,6 +365,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Sets a row of this matrix at the given index to the specified values.
      *
@@ -365,6 +378,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix setRow(Integer[] values, int rowIndex) {
         return null;
     }
+
 
     /**
      * Sets a row of this matrix at the given index to the specified values.
@@ -379,6 +393,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Sets a row of this matrix at the given index to the specified values.
      *
@@ -391,6 +406,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix setRow(int[] values, int rowIndex) {
         return null;
     }
+
 
     /**
      * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
@@ -409,6 +425,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
      * left index location of the slice to set.
@@ -425,6 +442,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix setSlice(Double[][] values, int rowStart, int colStart) {
         return null;
     }
+
 
     /**
      * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
@@ -443,6 +461,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
      * left index location of the slice to set.
@@ -459,6 +478,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix setSlice(double[][] values, int rowStart, int colStart) {
         return null;
     }
+
 
     /**
      * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
@@ -477,6 +497,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
      * left index location of the slice to set.
@@ -494,6 +515,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Removes a specified row from this matrix.
      *
@@ -504,6 +526,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix removeRow(int rowIndex) {
         return null;
     }
+
 
     /**
      * Removes a specified set of rows from this matrix.
@@ -516,6 +539,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Removes a specified column from this matrix.
      *
@@ -526,6 +550,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix removeCol(int colIndex) {
         return null;
     }
+
 
     /**
      * Removes a specified set of columns from this matrix.
@@ -538,6 +563,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Rounds this matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
      * be rounded independently.
@@ -548,6 +574,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix round() {
         return null;
     }
+
 
     /**
      * Rounds a matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
@@ -562,6 +589,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
      * independently. By default, the values must be within 1.0*E^-12 of zero. To specify a threshold value see
@@ -573,6 +601,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix roundToZero() {
         return null;
     }
+
 
     /**
      * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
@@ -588,6 +617,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Swaps rows in the matrix.
      *
@@ -600,6 +630,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Swaps columns in the matrix.
      *
@@ -611,6 +642,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix swapCols(int colIndex1, int colIndex2) {
         return null;
     }
+
 
     /**
      * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
@@ -629,6 +661,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
      * left index location of the slice to set.
@@ -645,6 +678,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix setSliceCopy(Integer[][] values, int rowStart, int colStart) {
         return null;
     }
+
 
     /**
      * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
@@ -663,6 +697,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
      * left index location of the slice to set.
@@ -679,6 +714,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix setSliceCopy(int[][] values, int rowStart, int colStart) {
         return null;
     }
+
 
     /**
      * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
@@ -697,6 +733,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
      * left index location of the slice to set.
@@ -714,6 +751,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise addition between two matrices.
      *
@@ -725,6 +763,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object add(Matrix B) {
         return null;
     }
+
 
     /**
      * Computes the element-wise addition between two tensors of the same rank.
@@ -738,6 +777,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise addition between two tensors of the same rank.
      *
@@ -749,6 +789,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object add(SparseCMatrix B) {
         return null;
     }
+
 
     /**
      * Computes the element-wise subtraction of two tensors of the same rank.
@@ -762,6 +803,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise subtraction of two tensors of the same rank.
      *
@@ -773,6 +815,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object sub(CMatrix B) {
         return null;
     }
+
 
     /**
      * Computes the element-wise subtraction of two tensors of the same rank.
@@ -786,6 +829,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise addition of a matrix with a real dense matrix. The result is stored in this matrix.
      *
@@ -796,6 +840,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
 
     }
 
+
     /**
      * Computes the element-wise subtraction of this matrix with a real dense matrix. The result is stored in this matrix.
      *
@@ -805,6 +850,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public void subEq(Matrix B) {
 
     }
+
 
     /**
      * Computes the matrix multiplication between two matrices.
@@ -818,6 +864,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the matrix multiplication between two matrices.
      *
@@ -829,6 +876,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object mult(SparseMatrix B) {
         return null;
     }
+
 
     /**
      * Computes the matrix multiplication between two matrices.
@@ -842,6 +890,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the matrix multiplication between two matrices.
      *
@@ -853,6 +902,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public CMatrix mult(SparseCMatrix B) {
         return null;
     }
+
 
     /**
      * Computes matrix-vector multiplication.
@@ -866,6 +916,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes matrix-vector multiplication.
      *
@@ -877,6 +928,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object mult(SparseVector b) {
         return null;
     }
+
 
     /**
      * Computes matrix-vector multiplication.
@@ -890,6 +942,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes matrix-vector multiplication.
      *
@@ -901,6 +954,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public CMatrix mult(SparseCVector b) {
         return null;
     }
+
 
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
@@ -917,6 +971,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
      * {@code this.mult(B.T())}.
@@ -931,6 +986,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object multTranspose(SparseMatrix B) {
         return null;
     }
+
 
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
@@ -947,6 +1003,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
      * {@code this.mult(B.T())}.
@@ -962,6 +1019,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the matrix power with a given exponent. This is equivalent to multiplying a matrix to itself 'exponent'
      * times. Note, this method is preferred over repeated multiplication of a matrix as this method will be significantly
@@ -975,6 +1033,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise multiplication (Hadamard product) between two matrices.
      *
@@ -986,6 +1045,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object elemMult(Matrix B) {
         return null;
     }
+
 
     /**
      * Computes the element-wise multiplication (Hadamard product) between two matrices.
@@ -999,6 +1059,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise multiplication (Hadamard product) between two matrices.
      *
@@ -1010,6 +1071,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseCMatrix elemMult(SparseCMatrix B) {
         return null;
     }
+
 
     /**
      * Computes the element-wise division between two matrices.
@@ -1024,6 +1086,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise division between two matrices.
      *
@@ -1037,6 +1100,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the determinant of a square matrix.
      *
@@ -1047,6 +1111,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Number det() {
         return null;
     }
+
 
     /**
      * Computes the Frobenius inner product of two matrices.
@@ -1060,6 +1125,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the Frobenius inner product of two matrices.
      *
@@ -1071,6 +1137,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Number fib(SparseMatrix B) {
         return null;
     }
+
 
     /**
      * Computes the Frobenius inner product of two matrices.
@@ -1084,6 +1151,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the Frobenius inner product of two matrices.
      *
@@ -1096,6 +1164,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the direct sum of two matrices.
      *
@@ -1106,6 +1175,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object directSum(Matrix B) {
         return null;
     }
+
 
     /**
      * Computes the direct sum of two matrices.
@@ -1118,6 +1188,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the direct sum of two matrices.
      *
@@ -1128,6 +1199,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object directSum(CMatrix B) {
         return null;
     }
+
 
     /**
      * Computes the direct sum of two matrices.
@@ -1140,6 +1212,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes direct sum from bottom left to top right of two matrices.
      *
@@ -1150,6 +1223,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object invDirectSum(Matrix B) {
         return null;
     }
+
 
     /**
      * Computes direct sum from bottom left to top right of two matrices.
@@ -1162,6 +1236,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes direct sum from bottom left to top right of two matrices.
      *
@@ -1172,6 +1247,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object invDirectSum(CMatrix B) {
         return null;
     }
+
 
     /**
      * Computes direct sum from bottom left to top right of two matrices.
@@ -1184,6 +1260,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Sums together the columns of a matrix as if each column was a column vector.
      *
@@ -1195,6 +1272,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Sums together the rows of a matrix as if each row was a row vector.
      *
@@ -1205,6 +1283,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object sumRows() {
         return null;
     }
+
 
     /**
      * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
@@ -1218,6 +1297,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
      * treated as if it were a column vector.
@@ -1229,6 +1309,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object addToEachCol(SparseVector b) {
         return null;
     }
+
 
     /**
      * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
@@ -1242,6 +1323,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
      * treated as if it were a column vector.
@@ -1253,6 +1335,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object addToEachCol(SparseCVector b) {
         return null;
     }
+
 
     /**
      * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
@@ -1266,6 +1349,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
      * treated as if it were a row vector for this operation.
@@ -1277,6 +1361,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object addToEachRow(SparseVector b) {
         return null;
     }
+
 
     /**
      * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
@@ -1290,6 +1375,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
      * treated as if it were a row vector for this operation.
@@ -1301,6 +1387,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object addToEachRow(SparseCVector b) {
         return null;
     }
+
 
     /**
      * Stacks matrices along columns. <br>
@@ -1315,6 +1402,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Stacks matrices along columns. <br>
      * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
@@ -1327,6 +1415,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object stack(SparseMatrix B) {
         return null;
     }
+
 
     /**
      * Stacks matrices along columns. <br>
@@ -1341,6 +1430,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Stacks matrices along columns. <br>
      * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
@@ -1353,6 +1443,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object stack(SparseCMatrix B) {
         return null;
     }
+
 
     /**
      * Stacks matrices along specified axis. <br>
@@ -1371,6 +1462,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Stacks matrices along specified axis. <br>
      * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
@@ -1387,6 +1479,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object stack(SparseMatrix B, int axis) {
         return null;
     }
+
 
     /**
      * Stacks matrices along specified axis. <br>
@@ -1405,6 +1498,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Stacks matrices along specified axis. <br>
      * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
@@ -1422,6 +1516,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Stacks matrices along rows. <br>
      * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
@@ -1434,6 +1529,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object augment(Matrix B) {
         return null;
     }
+
 
     /**
      * Stacks matrices along rows. <br>
@@ -1448,6 +1544,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Stacks matrices along rows. <br>
      * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
@@ -1461,6 +1558,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Stacks matrices along rows. <br>
      * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
@@ -1473,6 +1571,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object augment(SparseCMatrix B) {
         return null;
     }
+
 
     /**
      * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
@@ -1489,6 +1588,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
      * does not affect the output of this function. All vectors will be treated as row vectors.<br>
@@ -1503,6 +1603,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object stack(SparseVector b) {
         return null;
     }
+
 
     /**
      * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
@@ -1519,6 +1620,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
      * does not affect the output of this function. All vectors will be treated as row vectors.<br>
@@ -1533,6 +1635,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object stack(SparseCVector b) {
         return null;
     }
+
 
     /**
      * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
@@ -1553,6 +1656,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
      * does not affect the output of this function. See the axis parameter for more info.<br>
@@ -1571,6 +1675,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object stack(SparseVector b, int axis) {
         return null;
     }
+
 
     /**
      * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
@@ -1591,6 +1696,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
      * does not affect the output of this function. See the axis parameter for more info.<br>
@@ -1610,6 +1716,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
      * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
@@ -1624,6 +1731,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object augment(Vector b) {
         return null;
     }
+
 
     /**
      * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
@@ -1640,6 +1748,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
      * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
@@ -1654,6 +1763,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object augment(CVector b) {
         return null;
     }
+
 
     /**
      * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
@@ -1670,6 +1780,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Get the row of this matrix at the specified index.
      *
@@ -1681,6 +1792,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Get the column of this matrix at the specified index.
      *
@@ -1691,6 +1803,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object getCol(int j) {
         return null;
     }
+
 
     /**
      * Gets a specified slice of this matrix.
@@ -1708,6 +1821,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Get a specified column of this matrix at and below a specified row.
      *
@@ -1721,6 +1835,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Object getColBelow(int rowStart, int j) {
         return null;
     }
+
 
     /**
      * Get a specified row of this matrix at and after a specified column.
@@ -1736,6 +1851,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
      * Same as {@link #tr()}
@@ -1747,6 +1863,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Number trace() {
         return null;
     }
+
 
     /**
      * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
@@ -1760,6 +1877,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Checks if this matrix is square.
      *
@@ -1770,6 +1888,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return false;
     }
 
+
     /**
      * Checks if a matrix can be represented as a vector. That is, if a matrix has only one row or one column.
      *
@@ -1779,6 +1898,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public boolean isVector() {
         return false;
     }
+
 
     /**
      * Checks what type of vector this matrix is. i.e. not a vector, a 1x1 matrix, a row vector, or a column vector.
@@ -1793,6 +1913,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return 0;
     }
 
+
     /**
      * Checks if this matrix is triangular (i.e. upper triangular, diagonal, lower triangular).
      *
@@ -1802,6 +1923,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public boolean isTri() {
         return false;
     }
+
 
     /**
      * Checks if this matrix is lower triangular.
@@ -1813,6 +1935,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return false;
     }
 
+
     /**
      * Checks if this matrix is upper triangular.
      *
@@ -1822,6 +1945,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public boolean isTriU() {
         return false;
     }
+
 
     /**
      * Checks if this matrix is diagonal.
@@ -1833,6 +1957,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return false;
     }
 
+
     /**
      * Checks if a matrix has full rank. That is, if a matrices rank is equal to the number of rows in the matrix.
      *
@@ -1842,6 +1967,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public boolean isFullRank() {
         return false;
     }
+
 
     /**
      * Checks if a matrix is singular. That is, if the matrix is <b>NOT</b> invertible.<br>
@@ -1854,6 +1980,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return false;
     }
 
+
     /**
      * Checks if a matrix is invertible.<br>
      * Also see {@link #isSingular()}.
@@ -1864,6 +1991,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public boolean isInvertible() {
         return false;
     }
+
 
     /**
      * Computes the L<sub>p, q</sub> norm of this matrix.
@@ -1877,6 +2005,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return 0;
     }
 
+
     /**
      * Checks if a matrix is diagonalizable. A matrix is diagonalizable if and only if
      * the multiplicity for each eigenvalue is equivalent to the eigenspace for that eigenvalue.
@@ -1888,6 +2017,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return false;
     }
 
+
     /**
      * Computes the max norm of a matrix.
      *
@@ -1897,6 +2027,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public double maxNorm() {
         return 0;
     }
+
 
     /**
      * Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
@@ -1909,6 +2040,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return 0;
     }
 
+
     /**
      * Checks if a matrix is symmetric. That is, if the matrix is equal to its transpose.
      *
@@ -1918,6 +2050,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public boolean isSymmetric() {
         return false;
     }
+
 
     /**
      * Checks if a matrix is anti-symmetric. That is, if the matrix is equal to the negative of its transpose.
@@ -1929,6 +2062,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return false;
     }
 
+
     /**
      * Checks if this matrix is orthogonal. That is, if the inverse of this matrix is equal to its transpose.
      *
@@ -1938,6 +2072,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public boolean isOrthogonal() {
         return false;
     }
+
 
     /**
      * Computes the complex element-wise square root of a tensor.
@@ -1950,25 +2085,6 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
-    /**
-     * Checks if this tensor contains only non-negative values.
-     *
-     * @return True if this tensor only contains non-negative values. Otherwise, returns false.
-     */
-    @Override
-    public boolean isPos() {
-        return false;
-    }
-
-    /**
-     * Checks if this tensor contains only non-positive values.
-     *
-     * @return trie if this tensor only contains non-positive values. Otherwise, returns false.
-     */
-    @Override
-    public boolean isNeg() {
-        return false;
-    }
 
     /**
      * Converts this matrix to an equivalent complex matrix.
@@ -1980,6 +2096,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Checks if this tensor only contains zeros.
      *
@@ -1990,6 +2107,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return false;
     }
 
+
     /**
      * Checks if this tensor only contains ones.
      *
@@ -1999,6 +2117,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public boolean isOnes() {
         return false;
     }
+
 
     /**
      * Sets an index of this tensor to a specified value.
@@ -2011,6 +2130,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix set(double value, int... indices) {
         return null;
     }
+
 
     /**
      * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
@@ -2025,6 +2145,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Flattens tensor to single dimension. To flatten tensor along a single axis.
      *
@@ -2034,6 +2155,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix flatten() {
         return null;
     }
+
 
     /**
      * Computes the element-wise addition between two tensors of the same rank.
@@ -2047,6 +2169,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Adds specified value to all entries of this tensor.
      *
@@ -2058,6 +2181,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Adds specified value to all entries of this tensor.
      *
@@ -2068,6 +2192,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public CMatrix add(CNumber a) {
         return null;
     }
+
 
     /**
      * Computes the element-wise subtraction between two tensors of the same rank.
@@ -2081,6 +2206,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Adds specified value to all entries of this tensor.
      *
@@ -2091,6 +2217,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Matrix sub(double a) {
         return null;
     }
+
 
     /**
      * Subtracts a specified value from all entries of this tensor.
@@ -2103,6 +2230,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
      *
@@ -2114,6 +2242,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
 
     }
 
+
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
      *
@@ -2123,6 +2252,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public void addEq(Double b) {
 
     }
+
 
     /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
@@ -2135,6 +2265,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
 
     }
 
+
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
      *
@@ -2144,6 +2275,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public void subEq(Double b) {
 
     }
+
 
     /**
      * Computes scalar multiplication of a tensor.
@@ -2156,6 +2288,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes scalar multiplication of a tensor.
      *
@@ -2166,6 +2299,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public CMatrix mult(CNumber factor) {
         return null;
     }
+
 
     /**
      * Computes the scalar division of a tensor.
@@ -2179,6 +2313,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the scalar division of a tensor.
      *
@@ -2191,6 +2326,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Sums together all entries in the tensor.
      *
@@ -2200,6 +2336,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public Double sum() {
         return null;
     }
+
 
     /**
      * Computes the element-wise square root of a tensor.
@@ -2212,6 +2349,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
      * be computed.
@@ -2223,6 +2361,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the transpose of a tensor. Same as {@link #T()}.
      *
@@ -2232,6 +2371,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix transpose() {
         return null;
     }
+
 
     /**
      * Computes the transpose of a tensor. Same as {@link #transpose()}.
@@ -2243,6 +2383,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the reciprocals, element-wise, of a tensor.
      *
@@ -2253,6 +2394,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix recip() {
         return null;
     }
+
 
     /**
      * Gets the element in this tensor at the specified indices.
@@ -2266,6 +2408,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Creates a copy of this tensor.
      *
@@ -2275,6 +2418,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix copy() {
         return null;
     }
+
 
     /**
      * Computes the element-wise multiplication between two tensors.
@@ -2288,6 +2432,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise division between two tensors.
      *
@@ -2299,48 +2444,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public SparseMatrix elemDiv(SparseMatrix B) {
         return null;
     }
-
-    /**
-     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
-     *
-     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double min() {
-        return 0;
-    }
-
-    /**
-     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
-     *
-     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double max() {
-        return 0;
-    }
-
-    /**
-     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #min()}.
-     *
-     * @return The minimum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-        return 0;
-    }
-
-    /**
-     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-        return 0;
-    }
+    
 
     /**
      * Finds the indices of the minimum value in this tensor.
@@ -2353,6 +2457,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return new int[0];
     }
 
+
     /**
      * Finds the indices of the maximum value in this tensor.
      *
@@ -2364,6 +2469,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
         return new int[0];
     }
 
+
     /**
      * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
      *
@@ -2373,6 +2479,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     public double norm() {
         return 0;
     }
+
 
     /**
      * Computes the p-norm of this tensor.

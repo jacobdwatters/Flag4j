@@ -27,6 +27,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealSparseTensorBase;
+import com.flag4j.operations.common.real.AggregateReal;
 
 import java.util.Arrays;
 
@@ -182,26 +183,6 @@ public class SparseTensor extends RealSparseTensorBase {
 
 
     /**
-     * Checks if this tensor contains only non-negative values.
-     *
-     * @return True if this tensor only contains non-negative values. Otherwise, returns false.
-     */
-    @Override
-    public boolean isPos() {
-        return false;
-    }
-
-    /**
-     * Checks if this tensor contains only non-positive values.
-     *
-     * @return trie if this tensor only contains non-positive values. Otherwise, returns false.
-     */
-    @Override
-    public boolean isNeg() {
-        return false;
-    }
-
-    /**
      * Converts this tensor to an equivalent complex tensor. That is, the entries of the resultant matrix will be exactly
      * the same value but will have type {@link CNumber CNumber} rather than {@link Double}.
      *
@@ -211,6 +192,7 @@ public class SparseTensor extends RealSparseTensorBase {
     public SparseCTensor toComplex() {
         return null;
     }
+
 
     /**
      * Checks if this tensor only contains zeros.
@@ -222,6 +204,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return false;
     }
 
+
     /**
      * Checks if this tensor only contains ones.
      *
@@ -231,6 +214,7 @@ public class SparseTensor extends RealSparseTensorBase {
     public boolean isOnes() {
         return false;
     }
+
 
     /**
      * Sets an index of this tensor to a specified value.
@@ -243,6 +227,7 @@ public class SparseTensor extends RealSparseTensorBase {
     public SparseTensor set(double value, int... indices) {
         return null;
     }
+
 
     /**
      * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
@@ -257,6 +242,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return null;
     }
 
+
     /**
      * Flattens tensor to single dimension. To flatten tensor along a single axis.
      *
@@ -266,6 +252,7 @@ public class SparseTensor extends RealSparseTensorBase {
     public SparseTensor flatten() {
         return null;
     }
+
 
     /**
      * Computes the element-wise addition between two tensors of the same rank.
@@ -279,6 +266,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return null;
     }
 
+
     /**
      * Adds specified value to all entries of this tensor.
      *
@@ -290,6 +278,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return null;
     }
 
+
     /**
      * Adds specified value to all entries of this tensor.
      *
@@ -300,6 +289,7 @@ public class SparseTensor extends RealSparseTensorBase {
     public SparseCTensor add(CNumber a) {
         return null;
     }
+
 
     /**
      * Computes the element-wise subtraction between two tensors of the same rank.
@@ -313,6 +303,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return null;
     }
 
+
     /**
      * Adds specified value to all entries of this tensor.
      *
@@ -323,6 +314,7 @@ public class SparseTensor extends RealSparseTensorBase {
     public Tensor sub(double a) {
         return null;
     }
+
 
     /**
      * Subtracts a specified value from all entries of this tensor.
@@ -335,6 +327,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
      *
@@ -346,6 +339,7 @@ public class SparseTensor extends RealSparseTensorBase {
 
     }
 
+
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
      *
@@ -355,6 +349,7 @@ public class SparseTensor extends RealSparseTensorBase {
     public void addEq(Double b) {
 
     }
+
 
     /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
@@ -367,6 +362,7 @@ public class SparseTensor extends RealSparseTensorBase {
 
     }
 
+
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
      *
@@ -376,6 +372,7 @@ public class SparseTensor extends RealSparseTensorBase {
     public void subEq(Double b) {
 
     }
+
 
     /**
      * Computes scalar multiplication of a tensor.
@@ -388,6 +385,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return null;
     }
 
+
     /**
      * Computes scalar multiplication of a tensor.
      *
@@ -398,6 +396,7 @@ public class SparseTensor extends RealSparseTensorBase {
     public SparseCTensor mult(CNumber factor) {
         return null;
     }
+
 
     /**
      * Computes the scalar division of a tensor.
@@ -411,6 +410,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return null;
     }
 
+
     /**
      * Computes the scalar division of a tensor.
      *
@@ -423,6 +423,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return null;
     }
 
+
     /**
      * Sums together all entries in the tensor.
      *
@@ -432,6 +433,7 @@ public class SparseTensor extends RealSparseTensorBase {
     public Double sum() {
         return null;
     }
+
 
     /**
      * Computes the element-wise square root of a tensor.
@@ -444,6 +446,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
      * be computed.
@@ -455,6 +458,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return null;
     }
 
+
     /**
      * Computes the transpose of a tensor. Same as {@link #T()}.
      *
@@ -464,6 +468,7 @@ public class SparseTensor extends RealSparseTensorBase {
     public SparseTensor transpose() {
         return null;
     }
+
 
     /**
      * Computes the transpose of a tensor. Same as {@link #transpose()}.
@@ -475,6 +480,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return null;
     }
 
+
     /**
      * Computes the reciprocals, element-wise, of a tensor.
      *
@@ -485,6 +491,7 @@ public class SparseTensor extends RealSparseTensorBase {
     public SparseTensor recip() {
         return null;
     }
+
 
     /**
      * Gets the element in this tensor at the specified indices.
@@ -498,6 +505,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return null;
     }
 
+
     /**
      * Creates a copy of this tensor.
      *
@@ -507,6 +515,7 @@ public class SparseTensor extends RealSparseTensorBase {
     public SparseTensor copy() {
         return null;
     }
+
 
     /**
      * Computes the element-wise multiplication between two tensors.
@@ -520,6 +529,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise division between two tensors.
      *
@@ -532,47 +542,6 @@ public class SparseTensor extends RealSparseTensorBase {
         return null;
     }
 
-    /**
-     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
-     *
-     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double min() {
-        return 0;
-    }
-
-    /**
-     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
-     *
-     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double max() {
-        return 0;
-    }
-
-    /**
-     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #min()}.
-     *
-     * @return The minimum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-        return 0;
-    }
-
-    /**
-     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-        return 0;
-    }
 
     /**
      * Finds the indices of the minimum value in this tensor.
@@ -585,6 +554,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return new int[0];
     }
 
+
     /**
      * Finds the indices of the maximum value in this tensor.
      *
@@ -596,6 +566,7 @@ public class SparseTensor extends RealSparseTensorBase {
         return new int[0];
     }
 
+
     /**
      * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
      *
@@ -605,6 +576,7 @@ public class SparseTensor extends RealSparseTensorBase {
     public double norm() {
         return 0;
     }
+
 
     /**
      * Computes the p-norm of this tensor.
@@ -616,16 +588,6 @@ public class SparseTensor extends RealSparseTensorBase {
      */
     @Override
     public double norm(double p) {
-        return 0;
-    }
-
-    /**
-     * Computes the maximum/infinite norm of this tensor.
-     *
-     * @return The maximum/infinite norm of this tensor.
-     */
-    @Override
-    public double infNorm() {
         return 0;
     }
 }

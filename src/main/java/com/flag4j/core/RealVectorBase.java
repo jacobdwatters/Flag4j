@@ -28,6 +28,7 @@ import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.SparseVector;
 import com.flag4j.Vector;
+import com.flag4j.operations.common.real.AggregateReal;
 
 /**
  * This abstract class is the base class for all real vectors.
@@ -59,5 +60,51 @@ public abstract class RealVectorBase<T, W, TT, WW> extends
      */
     public RealVectorBase(Shape shape, double[] entries) {
         super(shape, entries);
+    }
+
+
+    /**
+     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
+     *
+     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
+     */
+    @Override
+    public double min() {
+        return AggregateReal.min(this.entries);
+    }
+
+
+    /**
+     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
+     *
+     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
+     */
+    @Override
+    public double max() {
+        return AggregateReal.max(this.entries);
+    }
+
+
+    /**
+     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+     * to {@link #min()}.
+     *
+     * @return The minimum value, in absolute value, in this tensor.
+     */
+    @Override
+    public double minAbs() {
+        return AggregateReal.minAbs(this.entries);
+    }
+
+
+    /**
+     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+     * to {@link #max()}.
+     *
+     * @return The maximum value, in absolute value, in this tensor.
+     */
+    @Override
+    public double maxAbs() {
+        return AggregateReal.maxAbs(this.entries);
     }
 }

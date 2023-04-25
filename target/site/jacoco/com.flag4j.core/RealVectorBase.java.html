@@ -28,6 +28,7 @@ import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.SparseVector;
 import com.flag4j.Vector;
+import com.flag4j.operations.common.real.AggregateReal;
 
 /**
  * This abstract class is the base class for all real vectors.
@@ -46,8 +47,8 @@ public abstract class RealVectorBase&lt;T, W, TT, WW&gt; extends
      * @param entries     The non-zero entries of this sparse tensor.
      */
     public RealVectorBase(int size, double[] entries) {
-<span class="fc" id="L49">        super(size, entries);</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L50">        super(size, entries);</span>
+<span class="fc" id="L51">    }</span>
 
 
     /**
@@ -58,7 +59,53 @@ public abstract class RealVectorBase&lt;T, W, TT, WW&gt; extends
      * @throws IllegalArgumentException If the rank of the shape is not 1.
      */
     public RealVectorBase(Shape shape, double[] entries) {
-<span class="fc" id="L61">        super(shape, entries);</span>
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L62">        super(shape, entries);</span>
+<span class="fc" id="L63">    }</span>
+
+
+    /**
+     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
+     *
+     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
+     */
+    @Override
+    public double min() {
+<span class="fc" id="L73">        return AggregateReal.min(this.entries);</span>
+    }
+
+
+    /**
+     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
+     *
+     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
+     */
+    @Override
+    public double max() {
+<span class="fc" id="L84">        return AggregateReal.max(this.entries);</span>
+    }
+
+
+    /**
+     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+     * to {@link #min()}.
+     *
+     * @return The minimum value, in absolute value, in this tensor.
+     */
+    @Override
+    public double minAbs() {
+<span class="fc" id="L96">        return AggregateReal.minAbs(this.entries);</span>
+    }
+
+
+    /**
+     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+     * to {@link #max()}.
+     *
+     * @return The maximum value, in absolute value, in this tensor.
+     */
+    @Override
+    public double maxAbs() {
+<span class="fc" id="L108">        return AggregateReal.maxAbs(this.entries);</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
