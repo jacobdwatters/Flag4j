@@ -25,26 +25,17 @@
 package com.flag4j.core;
 
 
-import com.flag4j.*;
-import com.flag4j.complex_numbers.CNumber;
-
 /**
  * This interface specifies methods which any complex vector should implement.
  * @param <T> Vector type.
  * @param <Y> Real vector type.
  */
-public interface ComplexVectorMixin<T extends ComplexVectorBase, Y extends VectorBase<double[]>> extends
-        VectorComparisonsMixin<T, CVector, SparseCVector, CVector, Y, CNumber>,
-        VectorManipulationsMixin<T, CVector, SparseCVector, CVector, Y, CNumber,
-                CMatrix, CMatrix, SparseCMatrix, CMatrix>,
-        VectorOperationsMixin<T, CVector, SparseCVector, CVector, Y, CNumber,
-                CMatrix, CMatrix, SparseCMatrix, CMatrix>,
-        VectorPropertiesMixin<T, CVector, SparseCVector, CVector, Y, CNumber>{
+public interface ComplexVectorMixin<T, Y> extends ComplexTensorMixin<T, Y> {
     boolean isReal();
 
     boolean isComplex();
 
-    CVector conj();
+    T conj();
 
-    Vector toReal();
+    Y toReal();
 }

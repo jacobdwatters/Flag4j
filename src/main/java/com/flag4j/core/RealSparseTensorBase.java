@@ -24,46 +24,53 @@
 
 package com.flag4j.core;
 
-
+import com.flag4j.Shape;
+import com.flag4j.SparseCTensor;
+import com.flag4j.SparseTensor;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
 /**
- * Base class for all sparse vectors.
- * @param <T> Type of the entries for this sparse vector.
+ * Base class for all sparse tensor.
+ * @param <T> Type of the entries of the sparse tensor.
  */
-public abstract class SparseVectorBase<T extends Serializable> extends VectorBase<T> {
+public abstract class RealSparseTensorBase extends RealTensorBase<SparseTensor, SparseCTensor> {
 
     /**
-     * Indices of non-zero values in this sparse vector.
+     * Indices for non-zero entries of this tensor. Will have shape (rank-by-nonZeroEntries)
      */
-    public final int[] indices;
+    public final int[][] indices;
     /**
-     * Number of non-zero entries of this sparse vec
+     * The number of non-zero entries in this sparse tensor.
      */
-    private int nonZeroEntries;
+    private final int nonZeroEntries;
 
 
     /**
-     * Creates a sparse vector with specified number of entries.
-     * @param totalEntries Number of total entries in this sparse vector, including zeros.
-     * @param nonZeroEntries Number of non-zero entries in this sparse vector.
-     * @param entries Non-zero entries of this sparse vector.
-     * @param indices Indices of the non-zero entries of this tensor.
-     * @throws IllegalArgumentException If the lengths of the entries and indices arrays are not equal.
+     * Creates a sparse tensor with specified shape.
+     * @param shape Shape of this tensor.
+     * @param nonZeroEntries Number of non-zero entries in the sparse tensor.
+     * @param entries Non-zero entries of this sparse tensor.
+     * @param indices Indices of the non-zero entries.
+     * @throws IllegalArgumentException If the number of rows in the indices array is not equal to the number of
+     * elements in the entries array.
+     * @throws IllegalArgumentException If the number of columns in the entries array is not equal to the rank of this
+     * tensor.
      */
-    public SparseVectorBase(int totalEntries, int nonZeroEntries, T entries, int[] indices) {
-        super(totalEntries, entries);
+    public RealSparseTensorBase(Shape shape, int nonZeroEntries, double[] entries, int[][] indices) {
+        super(shape, entries);
 
         if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) < 0) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));
         }
         ParameterChecks.assertArrayLengthsEq(nonZeroEntries, indices.length);
+        if (indices.length > 0) {
+            ParameterChecks.assertArrayLengthsEq(super.getRank(), indices[0].length);
+        }
 
         this.nonZeroEntries = nonZeroEntries;
         this.indices = indices;
@@ -71,18 +78,8 @@ public abstract class SparseVectorBase<T extends Serializable> extends VectorBas
 
 
     /**
-     * Sets the number of non-zero entries in this sparse vector. WARNING: Caution should be used when calling this
-     * method.
-     * @param nonZeroEntries Non-zero entries contained within this sparse vector.
-     */
-    protected void setNonZeroEntries(int nonZeroEntries) {
-        this.nonZeroEntries = nonZeroEntries;
-    }
-
-
-    /**
-     * Gets the number of non-zero entries in this sparse matrix.
-     * @return The number of non-zero entries in this sparse matrix.
+     * Gets the number of non-zero entries in this sparse tensor.
+     * @return The number of non-zero entries in this sparse tensor.
      */
     public int nonZeroEntries() {
         return nonZeroEntries;

@@ -24,8 +24,6 @@
 
 package com.flag4j.core;
 
-import com.flag4j.complex_numbers.CNumber;
-
 /**
  * This interface specifies methods which provide properties of a matrix. All matrices should implement this interface.
  *
@@ -36,9 +34,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <Y> Real Matrix type.
  * @param <X> Matrix entry type.
  */
-public interface MatrixPropertiesMixin<T extends MatrixBase<?>, U extends MatrixBase<?>, V extends MatrixBase<?>,
-        W extends ComplexMatrixBase, Y extends RealMatrixBase, X extends Number>
-        extends TensorPropertiesMixin<T, U, V, W, Y, X> {
+public interface MatrixPropertiesMixin {
 
 
     /**

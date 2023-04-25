@@ -25,7 +25,7 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.*;
+import com.flag4j.core.RealVectorBase;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
@@ -47,13 +47,7 @@ import java.util.Arrays;
 /**
  * Real dense vector. This class is mostly Equivalent to a real dense tensor with rank 1.
  */
-public class Vector extends RealVectorBase implements
-        VectorComparisonsMixin<Vector, Vector, SparseVector, CVector, Vector, Double>,
-        VectorManipulationsMixin<Vector, Vector, SparseVector, CVector, Vector, Double,
-                    Matrix, Matrix, SparseMatrix, CMatrix>,
-        VectorOperationsMixin<Vector, Vector, SparseVector, CVector, Vector, Double,
-                    Matrix, Matrix, SparseMatrix, CMatrix>,
-        VectorPropertiesMixin<Vector, Vector, SparseVector, CVector, Vector, Double> {
+public class Vector extends RealVectorBase<Vector, CVector, Matrix, CMatrix> {
     
 
     /**
@@ -1345,52 +1339,6 @@ public class Vector extends RealVectorBase implements
      */
     public Tensor toTensor() {
         return new Tensor(this.shape.copy(), this.entries.clone());
-    }
-
-
-    /**
-     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
-     *
-     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double min() {
-        return AggregateReal.min(this.entries);
-    }
-
-
-    /**
-     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
-     *
-     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double max() {
-        return AggregateReal.max(this.entries);
-    }
-
-
-    /**
-     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #min()}.
-     *
-     * @return The minimum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-        return AggregateReal.minAbs(this.entries);
-    }
-
-
-    /**
-     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-        return AggregateReal.maxAbs(this.entries);
     }
 
 

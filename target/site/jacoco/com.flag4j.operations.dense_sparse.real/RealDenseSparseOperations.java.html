@@ -244,31 +244,29 @@ public class RealDenseSparseOperations {
      * Adds a real dense tensor to a real sparse tensor and stores the result in the first tensor.
      * @param src1 First tensor in sum. Also, storage of result.
      * @param src2 Second tensor in sum.
-     * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static void addEq(Tensor src1, SparseTensor src2) {
-<span class="fc" id="L251">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L250">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
-<span class="fc bfc" id="L253" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L254">            src1.entries[src1.shape.entriesIndex(src2.indices[i])] += src2.entries[i];</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L253">            src1.entries[src1.shape.entriesIndex(src2.indices[i])] += src2.entries[i];</span>
         }
-<span class="fc" id="L256">    }</span>
+<span class="fc" id="L255">    }</span>
 
 
     /**
      * Subtracts a real sparse tensor from a real dense tensor and stores the result in the dense tensor.
      * @param src1 First tensor in difference. Also, storage of result.
      * @param src2 Second tensor in difference.
-     * @return The result of the tensor subtraction.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static void subEq(Tensor src1, SparseTensor src2) {
-<span class="fc" id="L267">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L265">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
-<span class="fc bfc" id="L269" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L270">            src1.entries[src1.shape.entriesIndex(src2.indices[i])] -= src2.entries[i];</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L268">            src1.entries[src1.shape.entriesIndex(src2.indices[i])] -= src2.entries[i];</span>
         }
-<span class="fc" id="L272">    }</span>
+<span class="fc" id="L270">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

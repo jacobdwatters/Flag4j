@@ -2,6 +2,7 @@ package com.flag4j.operations.dense.real;
 
 import com.flag4j.Matrix;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class RealDenseMatMultTransposeTests {

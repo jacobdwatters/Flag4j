@@ -26,8 +26,6 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexVectorBase;
-import com.flag4j.core.ComplexVectorMixin;
-import com.flag4j.core.VectorBase;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
@@ -48,8 +46,7 @@ import java.util.Arrays;
 /**
  * Complex dense vector. This class is mostly equivalent to a rank 1 complex tensor.
  */
-public class CVector extends ComplexVectorBase implements
-        ComplexVectorMixin<CVector, Vector> {
+public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix> {
 
 
     /**
@@ -1593,6 +1590,30 @@ public class CVector extends ComplexVectorBase implements
     @Override
     public Vector toReal() {
         return new Vector(ComplexOperations.toReal(this.entries));
+    }
+
+
+    /**
+     * Computes the conjugate transpose of this vector. Since a vector is a rank 1 tensor, this simply
+     * computes the complex conjugate of this vector.
+     *
+     * @return The complex conjugate of this vector.
+     */
+    @Override
+    public CVector hermTranspose() {
+        return conj();
+    }
+
+
+    /**
+     * Computes the conjugate transpose of this vector. Since a vector is a rank 1 tensor, this simply
+     * computes the complex conjugate of this vector.
+     *
+     * @return The complex conjugate of this vector.
+     */
+    @Override
+    public CVector H() {
+        return conj();
     }
 
 

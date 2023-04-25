@@ -24,15 +24,23 @@
 
 package com.flag4j.core;
 
+import com.flag4j.CMatrix;
+import com.flag4j.Matrix;
 import com.flag4j.Shape;
+import com.flag4j.operations.common.real.AggregateReal;
+import com.flag4j.operations.common.real.RealProperties;
 import com.flag4j.operations.dense.real.RealDenseSetOperations;
 import com.flag4j.util.ParameterChecks;
 
 
 /**
  * The base class for all real matrices.
+ * @param &lt;T&gt; Type of this matrix.
+ * @param &lt;W&gt; Type of complex type equivalent of this matrix.
  */
-public abstract class RealMatrixBase extends MatrixBase&lt;double[]&gt; {
+public abstract class RealMatrixBase&lt;T, W&gt;
+        extends MatrixBase&lt;T, Matrix, CMatrix, T, double[], Double&gt;
+        implements RealMatrixMixin&lt;T, W&gt; {
 
 
     /**
@@ -43,15 +51,15 @@ public abstract class RealMatrixBase extends MatrixBase&lt;double[]&gt; {
      * @throws IllegalArgumentException If the shape parameter is not of rank 2.
      */
     public RealMatrixBase(Shape shape, double[] entries) {
-<span class="fc" id="L46">        super(shape, entries);</span>
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L54">        super(shape, entries);</span>
+<span class="fc" id="L55">    }</span>
 
 
     /**
      * Converts this matrix to an equivalent complex matrix.
      * @return A complex matrix with equivalent real part and zero imaginary part.
      */
-    public abstract ComplexMatrixBase toComplex();
+    public abstract W toComplex();
 
 
     /**
@@ -60,10 +68,77 @@ public abstract class RealMatrixBase extends MatrixBase&lt;double[]&gt; {
      * @param values New values of the matrix.
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
-    public RealMatrixBase setValues(Integer[][] values) {
-<span class="nc" id="L64">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
-<span class="nc" id="L65">        RealDenseSetOperations.setValues(values, this.entries);</span>
-<span class="nc" id="L66">        return this;</span>
+    public RealMatrixBase&lt;T, W&gt; setValues(Integer[][] values) {
+<span class="nc" id="L72">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
+<span class="nc" id="L73">        RealDenseSetOperations.setValues(values, this.entries);</span>
+<span class="nc" id="L74">        return this;</span>
+    }
+
+
+    /**
+     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
+     *
+     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
+     */
+    @Override
+    public double min() {
+<span class="fc" id="L85">        return AggregateReal.min(entries);</span>
+    }
+
+
+    /**
+     * Finds the maximum value in this matrix. If this matrix has zero entries, the method will return 0.
+     * @return The maximum value in this matrix.
+     */
+    @Override
+    public double max() {
+<span class="fc" id="L95">        return AggregateReal.max(entries);</span>
+    }
+
+
+    /**
+     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+     * to {@link #min()}.
+     *
+     * @return The minimum value, in absolute value, in this tensor.
+     */
+    @Override
+    public double minAbs() {
+<span class="fc" id="L107">        return AggregateReal.minAbs(entries);</span>
+    }
+
+
+    /**
+     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+     * to {@link #max()}.
+     *
+     * @return The maximum value, in absolute value, in this tensor.
+     */
+    @Override
+    public double maxAbs() {
+<span class="fc" id="L119">        return AggregateReal.maxAbs(entries);</span>
+    }
+
+
+    /**
+     * Checks if this tensor contains only non-negative values.
+     *
+     * @return True if this tensor only contains non-negative values. Otherwise, returns false.
+     */
+    @Override
+    public boolean isPos() {
+<span class="nc" id="L130">        return RealProperties.isPos(entries);</span>
+    }
+
+
+    /**
+     * Checks if this tensor contains only non-positive values.
+     *
+     * @return trie if this tensor only contains non-positive values. Otherwise, returns false.
+     */
+    @Override
+    public boolean isNeg() {
+<span class="nc" id="L141">        return RealProperties.isNeg(entries);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

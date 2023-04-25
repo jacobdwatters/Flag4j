@@ -35,8 +35,9 @@ import com.flag4j.linalg.decompositions.LUDecomposition;
  * <p>If the system is not well determined, i.e. {@code A} is square and full rank, then use a
  * {@link LstsqSolver least-squares solver}.</p>
  */
-public abstract class LUSolver<T extends MatrixBase<?>,
-        U extends VectorBase<?>, V extends VectorBase<?>> implements LinearSolver<T, U, V> {
+public abstract class LUSolver<T extends MatrixBase<?, ?, ?, ?, ?, ?>,
+        U extends VectorBase<?, ?, ?, ?, ?, ?, ?, ?, ?, ?>,
+        V extends VectorBase<?, ?, ?, ?, ?, ?, ?, ?, ?, ?>> implements LinearSolver<T, U, V> {
 
     /**
      * Decomposer to compute {@code LU} decomposition.

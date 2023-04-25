@@ -44,7 +44,7 @@ import java.util.Scanner;
  *
  * @param &lt;T&gt; The type of matrix to compute the Schur decomposition of.
  */
-public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; implements Decomposition&lt;T&gt; {
+public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, ?, ?&gt;&gt; implements Decomposition&lt;T&gt; {
 
     /**
      * The maximum number of iterations to run the {@code QR} algorithm when computing the Schur decomposition. This

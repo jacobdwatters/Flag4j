@@ -25,8 +25,8 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.ComplexTensorMixin;
-import com.flag4j.core.TensorBase;
+import com.flag4j.core.ComplexTensorBase;
+import com.flag4j.core.ComplexTensorExclusiveMixin;
 import com.flag4j.core.TensorExclusiveMixin;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.AggregateComplex;
@@ -48,9 +48,9 @@ import java.util.Arrays;
 /**
  * Complex dense tensor.
  */
-public class CTensor extends TensorBase<CNumber[]> implements
-        ComplexTensorMixin<CTensor, Tensor>,
-        TensorExclusiveMixin<CTensor, CTensor, SparseCTensor> {
+public class CTensor extends ComplexTensorBase<CTensor, Tensor>
+        implements TensorExclusiveMixin<CTensor, CTensor, SparseCTensor>,
+        ComplexTensorExclusiveMixin<CTensor> {
 
 
     /**

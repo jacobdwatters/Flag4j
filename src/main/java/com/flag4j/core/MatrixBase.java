@@ -28,18 +28,26 @@ import com.flag4j.Shape;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 
-import java.io.Serializable;
-
 
 /**
  * <p>
  *     The base class for all matrices. A matrix is equivalent to a {@link TensorBase tensor} of rank 2.
  * </p>
  *
- * @param <T> Type of the storage data structure for the matrix.
+ * @param <T> Type of this matrix.
+ * @param <U> Dense matrix type.
+ * @param <W> Complex matrix type.
+ * @param <Y> Real matrix type.
+ * @param <D> Type of the storage data structure for the matrix.
  *           This common use case will be an array or list-like data structure.
+ * @param <X> The type of individual entry within the {@code D} data structure.
  */
-public abstract class MatrixBase<T extends Serializable> extends TensorBase<T> {
+public abstract class MatrixBase<T, U, W, Y, D, X extends Number>
+        extends TensorBase<T, U, W, Y, D, X>
+        implements MatrixPropertiesMixin,
+        MatrixComparisonsMixin<T>,
+        MatrixManipulationsMixin<T, X>,
+        MatrixOperationsMixin{
 
     // TODO: Move DEFAULT_ROUND_TO_ZERO_THRESHOLD somewhere else and use for all tensors.
     /**
@@ -62,7 +70,7 @@ public abstract class MatrixBase<T extends Serializable> extends TensorBase<T> {
      * @param entries Entries of this matrix.
      * @throws IllegalArgumentException If the shape parameter is not of rank 2.
      */
-    public MatrixBase(Shape shape, T entries) {
+    public MatrixBase(Shape shape, D entries) {
         super(shape, entries);
 
         numRows = shape.dims[Axis2D.row()];
@@ -92,5 +100,5 @@ public abstract class MatrixBase<T extends Serializable> extends TensorBase<T> {
     }
 
 
-    public abstract MatrixBase<T> flatten(int axis);
+    public abstract MatrixBase<?, ?, ?, ?, D, X> flatten(int axis);
 }

@@ -24,14 +24,19 @@
 
 package com.flag4j.core;
 
+import com.flag4j.CMatrix;
 import com.flag4j.Shape;
 import com.flag4j.SparseCMatrix;
 import com.flag4j.complex_numbers.CNumber;
 
 /**
  * The base class for all complex matrices.
+ * @param <T> Type of this matrix.
+ * @param <Y> Type of real equivalent of this matrix.
  */
-public abstract class ComplexMatrixBase extends MatrixBase<CNumber[]> {
+public abstract class ComplexMatrixBase<T, Y>
+        extends MatrixBase<T, CMatrix, T, Y, CNumber[], CNumber>
+        implements ComplexMatrixMixin<T, Y> {
 
 
     /**
@@ -50,7 +55,7 @@ public abstract class ComplexMatrixBase extends MatrixBase<CNumber[]> {
      * Converts this matrix to an equivalent real matrix. Imaginary components are ignored.
      * @return A real matrix with equivalent real parts.
      */
-    public abstract RealMatrixBase toReal();
+    public abstract Y toReal();
 
 
     /**
@@ -59,7 +64,7 @@ public abstract class ComplexMatrixBase extends MatrixBase<CNumber[]> {
      * @param indices Indices for new value.
      * @return A reference to this matrix.
      */
-    public abstract MatrixBase<CNumber[]> set(CNumber value, int... indices);
+    public abstract T set(CNumber value, int... indices);
 
 
     /**

@@ -26,7 +26,6 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
-import com.flag4j.complex_numbers.CNumber;
 
 
 /**
@@ -44,11 +43,11 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      * Creates a Schur decomposer for a real dense matrix.
      */
     public RealSchurDecomposition() {
-<span class="nc" id="L47">        super();</span>
+<span class="nc" id="L46">        super();</span>
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-<span class="nc" id="L50">        hess = new RealHessenburgDecomposition(computeU);</span>
-<span class="nc" id="L51">    }</span>
+<span class="nc" id="L49">        hess = new RealHessenburgDecomposition(computeU);</span>
+<span class="nc" id="L50">    }</span>
 
 
     /**
@@ -58,11 +57,11 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      *                      Schur decomposition.
      */
     protected RealSchurDecomposition(int maxIterations) {
-<span class="nc" id="L61">        super(maxIterations);</span>
+<span class="nc" id="L60">        super(maxIterations);</span>
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-<span class="nc" id="L64">        hess = new RealHessenburgDecomposition(computeU);</span>
-<span class="nc" id="L65">    }</span>
+<span class="nc" id="L63">        hess = new RealHessenburgDecomposition(computeU);</span>
+<span class="nc" id="L64">    }</span>
 
 
     /**
@@ -76,11 +75,11 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      *                 provide a performance improvement.
      */
     protected RealSchurDecomposition(boolean computeU, int maxIterations) {
-<span class="nc" id="L79">        super(computeU, maxIterations);</span>
+<span class="nc" id="L78">        super(computeU, maxIterations);</span>
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-<span class="nc" id="L82">        hess = new RealHessenburgDecomposition(computeU);</span>
-<span class="nc" id="L83">    }</span>
+<span class="nc" id="L81">        hess = new RealHessenburgDecomposition(computeU);</span>
+<span class="nc" id="L82">    }</span>
 
 
     /**
@@ -91,11 +90,11 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      *                 provide a performance improvement.
      */
     protected RealSchurDecomposition(boolean computeU) {
-<span class="nc" id="L94">        super(computeU);</span>
+<span class="nc" id="L93">        super(computeU);</span>
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-<span class="nc" id="L97">        hess = new RealHessenburgDecomposition(computeU);</span>
-<span class="nc" id="L98">    }</span>
+<span class="nc" id="L96">        hess = new RealHessenburgDecomposition(computeU);</span>
+<span class="nc" id="L97">    }</span>
 
 
     /**
@@ -113,33 +112,33 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
     @Override
     public RealSchurDecomposition decompose(Matrix src) {
         // TODO: Add balancing before converting to Hessenburg. See Fundamentals of Matrix Computations Watkins, p342.
-<span class="nc" id="L116">        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).</span>
+<span class="nc" id="L115">        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).</span>
 
-<span class="nc" id="L118">        System.out.println(&quot;hessH:\n&quot; + hess.getH() + &quot;\n&quot;);</span>
-<span class="nc" id="L119">        System.out.println(&quot;hessQ:\n&quot; + hess.getQ() + &quot;\n&quot;);</span>
-<span class="nc" id="L120">        System.out.println(&quot;hess QHQ^T:\n&quot; + hess.getQ().mult(hess.getH()).multTranspose(hess.getQ()) + &quot;\n&quot;);</span>
+<span class="nc" id="L117">        System.out.println(&quot;hessH:\n&quot; + hess.getH() + &quot;\n&quot;);</span>
+<span class="nc" id="L118">        System.out.println(&quot;hessQ:\n&quot; + hess.getQ() + &quot;\n&quot;);</span>
+<span class="nc" id="L119">        System.out.println(&quot;hess QHQ^T:\n&quot; + hess.getQ().mult(hess.getH()).multTranspose(hess.getQ()) + &quot;\n&quot;);</span>
 
-<span class="nc" id="L122">        shiftedQR(hess.getH().toComplex()); // Compute Schur decomposition of the Hessenburg form.</span>
+<span class="nc" id="L121">        shiftedQR(hess.getH().toComplex()); // Compute Schur decomposition of the Hessenburg form.</span>
 //        realShiftedQR(hess.getH()); // Compute real Schur decomposition of the Hessenburg form.
 
-<span class="nc bnc" id="L125" title="All 2 branches missed.">        if(computeU) {</span>
-<span class="nc" id="L126">            U = hess.getQ().mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if(computeU) {</span>
+<span class="nc" id="L125">            U = hess.getQ().mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.</span>
         }
 
-<span class="nc" id="L129">        return this;</span>
+<span class="nc" id="L128">        return this;</span>
     }
 
 
     public RealSchurDecomposition doubleShiftImplicitQR(Matrix src) {
-<span class="nc" id="L134">        debug = false;</span>
-<span class="nc" id="L135">        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).</span>
-<span class="nc" id="L136">        doubleShiftImplicitQR(hess.getH().toComplex());</span>
+<span class="nc" id="L133">        debug = false;</span>
+<span class="nc" id="L134">        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).</span>
+<span class="nc" id="L135">        doubleShiftImplicitQR(hess.getH().toComplex());</span>
 
-<span class="nc bnc" id="L138" title="All 2 branches missed.">        if(computeU) {</span>
-<span class="nc" id="L139">            U = hess.Q.mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if(computeU) {</span>
+<span class="nc" id="L138">            U = hess.Q.mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.</span>
         }
 
-<span class="nc" id="L142">        return this;</span>
+<span class="nc" id="L141">        return this;</span>
     }
 
 
@@ -149,93 +148,93 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
      */
     private void realShiftedQR(Matrix H) {
-<span class="nc bnc" id="L152" title="All 2 branches missed.">        if(useDefaultMaxIterations) {</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        if(useDefaultMaxIterations) {</span>
             // The algorithm should converge within machine precision in O(n^3).
-<span class="nc" id="L154">            maxIterations = (int) Math.max(Math.pow(H.numRows, 3), MIN_DEFAULT_ITERATIONS);</span>
+<span class="nc" id="L153">            maxIterations = (int) Math.max(Math.pow(H.numRows, 3), MIN_DEFAULT_ITERATIONS);</span>
         }
 
-<span class="nc" id="L157">        int count = 0;</span>
-<span class="nc" id="L158">        int n = H.numRows-1;</span>
+<span class="nc" id="L156">        int count = 0;</span>
+<span class="nc" id="L157">        int n = H.numRows-1;</span>
 
-<span class="nc" id="L160">        Matrix Treal = H;</span>
-<span class="nc" id="L161">        Matrix Ureal = Matrix.I(H.numRows);</span>
+<span class="nc" id="L159">        Matrix Treal = H;</span>
+<span class="nc" id="L160">        Matrix Ureal = Matrix.I(H.numRows);</span>
 
-<span class="nc" id="L163">        RealQRDecomposition qr = new RealQRDecomposition(); // Decomposer for use in the QR algorithm.</span>
+<span class="nc" id="L162">        RealQRDecomposition qr = new RealQRDecomposition(); // Decomposer for use in the QR algorithm.</span>
         Matrix Q; // Q matrix from QR decomposition.
         Matrix R; // R matrix from QR decomposition.
 
         Matrix mu;
 
         // Apply the QR algorithm (Shifted QR algorithm using Rayleigh shift).
-<span class="nc bnc" id="L170" title="All 2 branches missed.">        while(count&lt;maxIterations) {</span>
-<span class="nc" id="L171">            count++;</span>
-<span class="nc" id="L172">            mu = Matrix.I(n+1).mult(Treal.entries[Treal.entries.length-1]); // Construct diagonal matrix.</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">        while(count&lt;maxIterations) {</span>
+<span class="nc" id="L170">            count++;</span>
+<span class="nc" id="L171">            mu = Matrix.I(n+1).mult(Treal.entries[Treal.entries.length-1]); // Construct diagonal matrix.</span>
 
-<span class="nc" id="L174">            qr.decompose(Treal.sub(mu)); // Compute the QR decomposition with a shift.</span>
-<span class="nc" id="L175">            Q = qr.getQ();</span>
-<span class="nc" id="L176">            R = qr.getR();</span>
+<span class="nc" id="L173">            qr.decompose(Treal.sub(mu)); // Compute the QR decomposition with a shift.</span>
+<span class="nc" id="L174">            Q = qr.getQ();</span>
+<span class="nc" id="L175">            R = qr.getR();</span>
 
-<span class="nc" id="L178">            Treal = R.mult(Q).add(mu); // Reverse the shift.</span>
-<span class="nc" id="L179">            Ureal = Ureal.mult(Q);</span>
+<span class="nc" id="L177">            Treal = R.mult(Q).add(mu); // Reverse the shift.</span>
+<span class="nc" id="L178">            Ureal = Ureal.mult(Q);</span>
         }
 
-<span class="nc" id="L182">        U = Ureal.toComplex();</span>
-<span class="nc" id="L183">        T = Treal.toComplex();</span>
-<span class="nc" id="L184">    }</span>
+<span class="nc" id="L181">        U = Ureal.toComplex();</span>
+<span class="nc" id="L182">        T = Treal.toComplex();</span>
+<span class="nc" id="L183">    }</span>
 
 
     public static void main(String[] args) {
-<span class="nc" id="L188">        double[][] aEntries = {</span>
+<span class="nc" id="L187">        double[][] aEntries = {</span>
                 {0, 0, 0, 1},
                 {0, 0, -1, 0},
                 {0, 1, 0, 0},
                 {-1, 0, 0, 0}};
-<span class="nc" id="L193">        Matrix A = new Matrix(aEntries);</span>
+<span class="nc" id="L192">        Matrix A = new Matrix(aEntries);</span>
 
-<span class="nc" id="L195">        double[][] bEntries = {</span>
+<span class="nc" id="L194">        double[][] bEntries = {</span>
                 {1, 2, 5},
                 {2, 3, 4},
                 {5, 4, 9}};
-<span class="nc" id="L199">        Matrix B = new Matrix(bEntries);</span>
+<span class="nc" id="L198">        Matrix B = new Matrix(bEntries);</span>
 
-<span class="nc" id="L201">        double[][] cEntries = {</span>
+<span class="nc" id="L200">        double[][] cEntries = {</span>
                 {1, 2, 1},
                 {2, 3, 4},
                 {5, 12.1, 9}};
-<span class="nc" id="L205">        Matrix C = new Matrix(cEntries);</span>
+<span class="nc" id="L204">        Matrix C = new Matrix(cEntries);</span>
 
-<span class="nc" id="L207">        double[][] dEntries = {</span>
+<span class="nc" id="L206">        double[][] dEntries = {</span>
                 {1, -1},
                 {1, 1}};
-<span class="nc" id="L210">        Matrix D = new Matrix(dEntries);</span>
+<span class="nc" id="L209">        Matrix D = new Matrix(dEntries);</span>
 
-<span class="nc" id="L212">        double[][] eEntries = {</span>
+<span class="nc" id="L211">        double[][] eEntries = {</span>
                 {0, 0, -1},
                 {1, 0, 0},
                 {0, 1, 0}};
-<span class="nc" id="L216">        Matrix E = new Matrix(eEntries);</span>
+<span class="nc" id="L215">        Matrix E = new Matrix(eEntries);</span>
 
-<span class="nc" id="L218">        double[][] fEntries = {</span>
+<span class="nc" id="L217">        double[][] fEntries = {</span>
                 {2, 1, 0, 0, 0, 0},
                 {1, 2, 1, 0, 0, 0},
                 {0, 1, 2, 1, 0, 0},
                 {0, 0, 1, 2, 1, 0},
                 {0, 0, 0, 1, 2, 1},
                 {0, 0, 0, 0, 1, 2}};
-<span class="nc" id="L225">        Matrix F = new Matrix(fEntries);</span>
+<span class="nc" id="L224">        Matrix F = new Matrix(fEntries);</span>
 
-<span class="nc" id="L227">        Matrix src = F;</span>
+<span class="nc" id="L226">        Matrix src = F;</span>
 
-<span class="nc" id="L229">        RealSchurDecomposition schur = new RealSchurDecomposition();</span>
-<span class="nc" id="L230">        schur.doubleShiftImplicitQR(src);</span>
+<span class="nc" id="L228">        RealSchurDecomposition schur = new RealSchurDecomposition();</span>
+<span class="nc" id="L229">        schur.doubleShiftImplicitQR(src);</span>
 
-<span class="nc" id="L232">        CMatrix T = schur.getT();</span>
-<span class="nc" id="L233">        CMatrix U = schur.getU();</span>
+<span class="nc" id="L231">        CMatrix T = schur.getT();</span>
+<span class="nc" id="L232">        CMatrix U = schur.getU();</span>
 
-<span class="nc" id="L235">        System.out.println(&quot;A:\n&quot; + src + &quot;\n&quot;);</span>
-<span class="nc" id="L236">        System.out.println(&quot;T:\n&quot; + T + &quot;\n&quot;);</span>
-<span class="nc" id="L237">        System.out.println(&quot;U:\n&quot; + U + &quot;\n&quot;);</span>
-<span class="nc" id="L238">        System.out.println(&quot;UTU^H:\n&quot; + U.mult(T).mult(U.H()));</span>
-<span class="nc" id="L239">    }</span>
+<span class="nc" id="L234">        System.out.println(&quot;A:\n&quot; + src + &quot;\n&quot;);</span>
+<span class="nc" id="L235">        System.out.println(&quot;T:\n&quot; + T + &quot;\n&quot;);</span>
+<span class="nc" id="L236">        System.out.println(&quot;U:\n&quot; + U + &quot;\n&quot;);</span>
+<span class="nc" id="L237">        System.out.println(&quot;UTU^H:\n&quot; + U.mult(T).mult(U.H()));</span>
+<span class="nc" id="L238">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

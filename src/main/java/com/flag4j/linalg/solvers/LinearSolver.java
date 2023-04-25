@@ -36,8 +36,9 @@ import com.flag4j.core.VectorBase;
  * @param <U> Type of the vector containing the constants in the linear system.
  * @param <V> Type of the vector to hold the solution to the linear system.
  */
-public interface LinearSolver<T extends MatrixBase<?>,
-        U extends VectorBase<?>, V extends VectorBase<?>> {
+public interface LinearSolver<T extends MatrixBase<?, ?, ?, ?, ?, ?>,
+        U extends VectorBase<?, ?, ?, ?, ?, ?, ?, ?, ?, ?>,
+        V extends VectorBase<?, ?, ?, ?, ?, ?, ?, ?, ?, ?>> {
 
 
     /**

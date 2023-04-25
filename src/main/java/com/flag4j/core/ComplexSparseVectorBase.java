@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,61 +24,60 @@
 
 package com.flag4j.core;
 
-import com.flag4j.Shape;
+import com.flag4j.SparseCMatrix;
+import com.flag4j.SparseCVector;
+import com.flag4j.SparseMatrix;
+import com.flag4j.SparseVector;
+import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
 /**
- * Base class for all sparse matrices.
+ * This abstract class is the base class for all complex sparse vectors.
  */
-public abstract class SparseMatrixBase<T extends Serializable> extends MatrixBase<T> {
+public abstract class ComplexSparseVectorBase extends
+        ComplexVectorBase<SparseCVector, SparseVector, SparseCMatrix, SparseMatrix> {
+
 
     /**
-     * Row indices.
+     * Indices of non-zero values in this sparse vector.
      */
-    public final int[] rowIndices;
+    public final int[] indices;
     /**
-     * Col indices.
-     */
-    public final int[] colIndices;
-    /**
-     * Number of non-zero entries in this sparse matrix.
+     * Number of non-zero entries of this sparse vec
      */
     private int nonZeroEntries;
 
 
     /**
-     * Creates a sparse matrix with specified size, non-zero entries, and row/column indices.
-     * @param shape Shape of this sparse matrix.
-     * @param nonZeroEntries Number of non-zero entries in the sparse matrix.
-     * @param entries Non-zero entries of this sparse tensor.
-     * @param rowIndices The row indices of all non-zero entries.
-     * @param colIndices The column indices of all non-zero entries.
-     * @throws IllegalArgumentException If the number of non-zero entries, row indices, and column indices are not all
-     * equal.
+     * Creates a sparse vector with specified number of entries.
+     * @param totalEntries Number of total entries in this sparse vector, including zeros.
+     * @param nonZeroEntries Number of non-zero entries in this sparse vector.
+     * @param entries Non-zero entries of this sparse vector.
+     * @param indices Indices of the non-zero entries of this tensor.
+     * @throws IllegalArgumentException If the lengths of the entries and indices arrays are not equal.
      */
-    public SparseMatrixBase(Shape shape, int nonZeroEntries, T entries, int[] rowIndices, int[] colIndices) {
-        super(shape, entries);
+    public ComplexSparseVectorBase(int totalEntries, int nonZeroEntries, CNumber[] entries, int[] indices) {
+        super(totalEntries, entries);
 
         if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) < 0) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));
         }
-        ParameterChecks.assertArrayLengthsEq(nonZeroEntries, rowIndices.length, colIndices.length);
+        ParameterChecks.assertArrayLengthsEq(nonZeroEntries, indices.length);
 
         this.nonZeroEntries = nonZeroEntries;
-        this.rowIndices = rowIndices;
-        this.colIndices = colIndices;
+        this.indices = indices;
     }
 
 
     /**
-     * Sets the number of non-zero entries in this sparse matrix.
-     * @param nonZeroEntries New number of non-zero entries in this sparse matrix.
+     * Sets the number of non-zero entries in this sparse vector. WARNING: Caution should be used when calling this
+     * method.
+     * @param nonZeroEntries Non-zero entries contained within this sparse vector.
      */
     protected void setNonZeroEntries(int nonZeroEntries) {
         this.nonZeroEntries = nonZeroEntries;
@@ -95,27 +94,26 @@ public abstract class SparseMatrixBase<T extends Serializable> extends MatrixBas
 
 
     /**
-     * Gets the sparsity of this matrix as a decimal percentage.
-     * @return The sparsity of this matrix.
+     * Gets the sparsity of this tensor as a decimal percentage.
+     * @return The sparsity of this tensor.
      */
     public double sparsity() {
         BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));
-        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50,RoundingMode.HALF_UP);
+        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);
 
         return sparsity.doubleValue();
     }
 
 
     /**
-     * Gets the density of this matrix as a decimal percentage.
-     * @return The density of this matrix.
+     * Gets the density of this tensor as a decimal percentage.
+     * @return The density of this tensor.
      */
     public double density() {
         BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(
-                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);
+                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP
+        );
 
         return density.doubleValue();
     }
-
-    // TODO: Add abstract methods for sparse matrices. i.e. toDense().
 }

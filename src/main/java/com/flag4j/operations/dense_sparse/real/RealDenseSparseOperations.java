@@ -244,7 +244,6 @@ public class RealDenseSparseOperations {
      * Adds a real dense tensor to a real sparse tensor and stores the result in the first tensor.
      * @param src1 First tensor in sum. Also, storage of result.
      * @param src2 Second tensor in sum.
-     * @return The result of the tensor addition.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static void addEq(Tensor src1, SparseTensor src2) {
@@ -260,7 +259,6 @@ public class RealDenseSparseOperations {
      * Subtracts a real sparse tensor from a real dense tensor and stores the result in the dense tensor.
      * @param src1 First tensor in difference. Also, storage of result.
      * @param src2 Second tensor in difference.
-     * @return The result of the tensor subtraction.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     public static void subEq(Tensor src1, SparseTensor src2) {

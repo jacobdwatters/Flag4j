@@ -27,21 +27,14 @@ package com.flag4j.core;
 
 import com.flag4j.Matrix;
 import com.flag4j.SparseMatrix;
-import com.flag4j.complex_numbers.CNumber;
 
 /**
  * This interface specifies manipulations which all matrices should implement.
  *
  * @param <T> Matrix type.
- * @param <U> Dense matrix type.
- * @param <V> Sparse matrix type.
- * @param <W> Complex matrix type.
- * @param <Y> Real matrix type.
  * @param <X> Matrix entry type.
  */
-public interface MatrixManipulationsMixin<T extends MatrixBase<?>, U extends MatrixBase<?>, V extends MatrixBase<?>,
-        W extends ComplexMatrixBase, Y extends RealMatrixBase, X extends Number>
-        extends TensorManipulationsMixin<T, U, V, W, Y, X> {
+public interface MatrixManipulationsMixin<T, X extends Number> {
 
 
     /**

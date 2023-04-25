@@ -52,7 +52,7 @@ public class TensorWriter {
      * @param src Source object to write to the specified file.
      * @return True if the write was successful. False if the write failed.
      */
-    public static boolean write(String fileName, TensorBase&lt;?&gt; src) {
+    public static boolean write(String fileName, TensorBase&lt;?, ?, ?, ?, ?, ?&gt; src) {
 <span class="nc" id="L56">        boolean successfulWrite = true;</span>
 
 <span class="nc" id="L58">        try (TensorOutputStream out = new TensorOutputStream(fileName)) {</span>

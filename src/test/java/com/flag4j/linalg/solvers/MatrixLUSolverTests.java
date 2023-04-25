@@ -3,13 +3,10 @@ package com.flag4j.linalg.solvers;
 
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
-import com.flag4j.linalg.decompositions.RealLUDecomposition;
-import com.flag4j.linalg.solvers.MatrixLUSolver;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class MatrixLUSolverTests {

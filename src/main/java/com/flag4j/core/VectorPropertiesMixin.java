@@ -24,8 +24,6 @@
 
 package com.flag4j.core;
 
-import com.flag4j.complex_numbers.CNumber;
-
 /**
  * This interface specifies methods which provide properties of a vector. All vectors should implement this interface.
  *
@@ -36,9 +34,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <Y> Real Vector type.
  * @param <X> Vector entry type.
  */
-public interface VectorPropertiesMixin<T extends VectorBase<?>, U extends VectorBase<?>, V extends VectorBase<?>,
-        W extends ComplexVectorBase, Y extends VectorBase<double[]>, X extends Number>
-        extends TensorPropertiesMixin<T, U, V, W, Y, X> {
+public interface VectorPropertiesMixin {
 
     /**
      * Gets the length of a vector.

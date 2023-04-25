@@ -24,20 +24,12 @@
 
 package com.flag4j.core;
 
-import com.flag4j.SparseTensor;
-import com.flag4j.Tensor;
-import com.flag4j.complex_numbers.CNumber;
-
 /**
  * This interface specifies methods which all real tensors should implement.
  * @param <T> Tensor type.
  * @param <W> Complex tensor type.
  */
-public interface RealTensorMixin<T extends TensorBase<double[]>, W extends TensorBase<CNumber[]>> extends
-        TensorComparisonsMixin<T, Tensor, SparseTensor, W, T, Double>,
-        TensorManipulationsMixin<T, Tensor, SparseTensor, W, T, Double>,
-        TensorOperationsMixin<T, Tensor, SparseTensor, W, T, Double>,
-        TensorPropertiesMixin<T, Tensor, SparseTensor, W, T, Double> {
+public interface RealTensorMixin<T, W> {
 
 
     /**

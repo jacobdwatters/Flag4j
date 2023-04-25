@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -43,11 +43,11 @@ public class TensorInputStream extends InputStream {
     /**
      * Stream for loading bytes from a system file.
      */
-    private FileInputStream fileIn;
+    private final FileInputStream fileIn;
     /**
      * Stream for deserializing an object.
      */
-    private ObjectInputStream objectIn;
+    private final ObjectInputStream objectIn;
 
 
     /**

@@ -5,7 +5,7 @@ import com.flag4j.Shape;
 import com.flag4j.SparseMatrix;
 import org.junit.jupiter.api.Test;
 
-import static com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultTranspose.*;
+import static com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultTranspose.multTranspose;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class RealDenseSparseMatMultTransposeTests {

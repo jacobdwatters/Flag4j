@@ -39,7 +39,8 @@ import com.flag4j.core.MatrixBase;
  *
  * @param <T> The type of matrix to compute the Cholesky decomposition of.
  */
-public abstract class CholeskyDecomposition<T extends MatrixBase<?>> implements Decomposition<T> {
+public abstract class CholeskyDecomposition<T extends MatrixBase<?, ?, ?, ?, ?, ?>>
+        implements Decomposition<T> {
 
     /**
      * The lower triangular matrix resulting from the Cholesky decomposition {@code A=LL<sup>*</sup>}.

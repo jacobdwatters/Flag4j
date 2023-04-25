@@ -38,9 +38,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <Y> Real Matrix type.
  * @param <X> Matrix entry type.
  */
-public interface MatrixOperationsMixin<T extends MatrixBase<?>, U extends MatrixBase<?>, V extends MatrixBase<?>,
-        W extends ComplexMatrixBase, Y extends RealMatrixBase, X extends Number>
-        extends TensorOperationsMixin<T, U, V, W, Y, X> {
+public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> {
 
     /**
      * Computes the element-wise addition between two matrices.
@@ -218,7 +216,7 @@ public interface MatrixOperationsMixin<T extends MatrixBase<?>, U extends Matrix
     // TODO: Implement these methods.
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {@code this.}{@link #mult(Matrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * {@code this.mult(B.T())}.
      * For large matrices, this method may
      * be significantly faster than directly computing the transpose followed by the multiplication as
      * {@code this.mult(B.T())}.
@@ -230,7 +228,7 @@ public interface MatrixOperationsMixin<T extends MatrixBase<?>, U extends Matrix
 
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {@code this.}{@link #mult(SparseMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * {@code this.mult(B.T())}.
      * For large matrices, this method may
      * be significantly faster than directly computing the transpose followed by the multiplication as
      * {@code this.mult(B.T())}.
@@ -242,7 +240,7 @@ public interface MatrixOperationsMixin<T extends MatrixBase<?>, U extends Matrix
 
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {@code this.}{@link #mult(CMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * {{@code this.mult(B.T())}.
      * For large matrices, this method may
      * be significantly faster than directly computing the transpose followed by the multiplication as
      * {@code this.mult(B.T())}.
@@ -254,7 +252,7 @@ public interface MatrixOperationsMixin<T extends MatrixBase<?>, U extends Matrix
 
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
-     * {@code this.}{@link #mult(SparseCMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * {@code this.mult(B.T())}.
      * For large matrices, this method may
      * be significantly faster than directly computing the transpose followed by the multiplication as
      * {@code this.mult(B.T())}.

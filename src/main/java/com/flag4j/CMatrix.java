@@ -26,7 +26,6 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexMatrixBase;
-import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
@@ -34,7 +33,10 @@ import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.operations.dense.complex.*;
-import com.flag4j.operations.dense.real_complex.*;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultTranspose;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplication;
@@ -52,8 +54,7 @@ import java.util.List;
 /**
  * Complex dense matrix. Stored in row major format.
  */
-public class CMatrix extends ComplexMatrixBase implements
-        ComplexMatrixMixin<CMatrix, Matrix> {
+public class CMatrix extends ComplexMatrixBase<CMatrix, Matrix> {
 
     /**
      * Constructs a square complex dense matrix of a specified size. The entries of the matrix will default to zero.
@@ -1871,7 +1872,6 @@ public class CMatrix extends ComplexMatrixBase implements
      */
     @Override
     public boolean isHermitian() {
-
         return this.equals(this.H());
     }
 

@@ -25,13 +25,17 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.SparseTensorBase;
+import com.flag4j.core.ComplexSparseTensorBase;
+import com.flag4j.core.ComplexTensorExclusiveMixin;
+import com.flag4j.core.TensorExclusiveMixin;
 
 
 /**
  * Complex sparse tensor.
  */
-public class SparseCTensor extends SparseTensorBase&lt;CNumber[]&gt; {
+public class SparseCTensor extends ComplexSparseTensorBase
+        implements TensorExclusiveMixin&lt;SparseCTensor, CTensor, SparseCTensor&gt;,
+        ComplexTensorExclusiveMixin&lt;CTensor&gt; {
 
 
     /**
@@ -39,8 +43,8 @@ public class SparseCTensor extends SparseTensorBase&lt;CNumber[]&gt; {
      * @param shape Shape of the tensor.
      */
     public SparseCTensor(Shape shape) {
-<span class="fc" id="L42">        super(shape, 0, new CNumber[0], new int[0][0]);</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L46">        super(shape, 0, new CNumber[0], new int[0][0]);</span>
+<span class="fc" id="L47">    }</span>
 
 
     /**
@@ -50,12 +54,12 @@ public class SparseCTensor extends SparseTensorBase&lt;CNumber[]&gt; {
      * @param indices Indices of the non-zero entries of the tensor.
      */
     public SparseCTensor(Shape shape, double[] nonZeroEntries, int[][] indices) {
-<span class="fc" id="L53">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</span>
+<span class="fc" id="L57">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</span>
 
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
-<span class="fc" id="L56">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
+<span class="fc" id="L60">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L62">    }</span>
 
 
     /**
@@ -65,12 +69,12 @@ public class SparseCTensor extends SparseTensorBase&lt;CNumber[]&gt; {
      * @param indices Indices of the non-zero entries of the tensor.
      */
     public SparseCTensor(Shape shape, int[] nonZeroEntries, int[][] indices) {
-<span class="fc" id="L68">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</span>
+<span class="fc" id="L72">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</span>
 
-<span class="fc bfc" id="L70" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
-<span class="fc" id="L71">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
+<span class="fc" id="L75">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="fc" id="L73">    }</span>
+<span class="fc" id="L77">    }</span>
 
 
     /**
@@ -80,8 +84,8 @@ public class SparseCTensor extends SparseTensorBase&lt;CNumber[]&gt; {
      * @param indices Indices of the non-zero entries of the tensor.
      */
     public SparseCTensor(Shape shape, CNumber[] nonZeroEntries, int[][] indices) {
-<span class="fc" id="L83">        super(shape, nonZeroEntries.length, nonZeroEntries, indices);</span>
-<span class="fc" id="L84">    }</span>
+<span class="fc" id="L87">        super(shape, nonZeroEntries.length, nonZeroEntries, indices);</span>
+<span class="fc" id="L88">    }</span>
 
 
 //    /**
@@ -240,10 +244,863 @@ public class SparseCTensor extends SparseTensorBase&lt;CNumber[]&gt; {
      * @param A The sparse complex tensor to construct a copy of.
      */
     public SparseCTensor(SparseCTensor A) {
-<span class="fc" id="L243">        super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);</span>
-<span class="fc bfc" id="L244" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
-<span class="fc" id="L245">            super.indices[i] = A.indices[i].clone();</span>
+<span class="fc" id="L247">        super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
+<span class="fc" id="L249">            super.indices[i] = A.indices[i].clone();</span>
         }
-<span class="fc" id="L247">    }</span>
+<span class="fc" id="L251">    }</span>
+
+
+    /**
+     * Computes the conjugate transpose of a tensor. Same as {@link #H(int, int)}.
+     * In the context of a tensor, this exchanges the specified axes and takes the complex conjugate of elements along
+     * those axes.
+     * Also see {@link #hermTranspose() hermTranspose()} and
+     * {@link #H() H()} to conjugate transpose first and last axes.
+     *
+     * @param axis1 First axis to exchange and apply complex conjugate.
+     * @param axis2 Second axis to exchange and apply complex conjugate.
+     * @return The conjugate transpose of this tensor.
+     */
+    @Override
+    public CTensor hermTranspose(int axis1, int axis2) {
+<span class="nc" id="L267">        return null;</span>
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #hermTranspose(int, int)}.
+     * In the context of a tensor, this exchanges the specified axes and takes the complex conjugate of elements along
+     * those axes.
+     * Also see {@link #hermTranspose()} and
+     * {@link #H()} to conjugate transpose first and last axes.
+     *
+     * @param axis1 First axis to exchange and apply complex conjugate.
+     * @param axis2 Second axis to exchange and apply complex conjugate.
+     * @return The conjugate transpose of this tensor.
+     */
+    @Override
+    public CTensor H(int axis1, int axis2) {
+<span class="nc" id="L284">        return null;</span>
+    }
+
+
+    /**
+     * Computes the conjugate transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
+     * the specified axes permutation and takes the complex conjugate of the elements of these axes. Same as {@link #H(int[])}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
+     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     */
+    @Override
+    public CTensor hermTranspose(int... axes) {
+<span class="nc" id="L299">        return null;</span>
+    }
+
+
+    /**
+     * Computes the conjugate transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
+     * the specified axes permutation and takes the complex conjugate of the elements of these axes. Same as {@link #hermTranspose(int[])}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
+     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     */
+    @Override
+    public CTensor H(int... axes) {
+<span class="nc" id="L314">        return null;</span>
+    }
+
+
+    /**
+     * Checks if this tensor has only real valued entries.
+     *
+     * @return True if this tensor contains &lt;b&gt;NO&lt;/b&gt; complex entries. Otherwise, returns false.
+     */
+    @Override
+    public boolean isReal() {
+<span class="nc" id="L325">        return false;</span>
+    }
+
+
+    /**
+     * Checks if this tensor contains at least one complex entry.
+     *
+     * @return True if this tensor contains at least one complex entry. Otherwise, returns false.
+     */
+    @Override
+    public boolean isComplex() {
+<span class="nc" id="L336">        return false;</span>
+    }
+
+
+    /**
+     * Computes the complex conjugate of a tensor.
+     *
+     * @return The complex conjugate of this tensor.
+     */
+    @Override
+    public SparseCTensor conj() {
+<span class="nc" id="L347">        return null;</span>
+    }
+
+
+    /**
+     * Converts a complex tensor to a real matrix. The imaginary component of any complex value will be ignored.
+     *
+     * @return A tensor of the same size containing only the real components of this tensor.
+     */
+    @Override
+    public SparseTensor toReal() {
+<span class="nc" id="L358">        return null;</span>
+    }
+
+
+    /**
+     * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
+     * and takes the complex conjugate of the elements along these axes. Same as {@link #H}.
+     *
+     * @return The complex transpose of this tensor.
+     */
+    @Override
+    public SparseCTensor hermTranspose() {
+<span class="nc" id="L370">        return null;</span>
+    }
+
+
+    /**
+     * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
+     * and takes the complex conjugate of the elements along these axes. Same as {@link #hermTranspose()}.
+     *
+     * @return The complex transpose of this tensor.
+     */
+    @Override
+    public SparseCTensor H() {
+<span class="nc" id="L382">        return null;</span>
+    }
+
+
+    /**
+     * Checks if this tensor only contains zeros.
+     *
+     * @return True if this tensor only contains zeros. Otherwise, returns false.
+     */
+    @Override
+    public boolean isZeros() {
+<span class="nc" id="L393">        return false;</span>
+    }
+
+
+    /**
+     * Checks if this tensor only contains ones.
+     *
+     * @return True if this tensor only contains ones. Otherwise, returns false.
+     */
+    @Override
+    public boolean isOnes() {
+<span class="nc" id="L404">        return false;</span>
+    }
+
+
+    /**
+     * Computes the tensor contraction of this tensor with a specified tensor over the specified axes. That is,
+     * computes the sum of products between the two tensors along the specified axes.
+     *
+     * @param src2  Tensor to contract with this tensor.
+     * @param aAxis Axis along which to compute products for this tensor.
+     * @param bAxis Axis along which to compute products for {@code src2} tensor.
+     * @return The tensor dot product over the specified axes.
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes {@code aAxis}
+     *                                  and {@code bAxis}.
+     * @throws IllegalArgumentException If either axis is out of bounds of the corresponding tensor.
+     */
+    @Override
+    public SparseCTensor tensorDot(SparseCTensor src2, int aAxis, int bAxis) {
+<span class="nc" id="L422">        return null;</span>
+    }
+
+
+    /**
+     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
+     * computes the sum of products between the two tensors along the specified set of axes.
+     *
+     * @param src2  Tensor to contract with this tensor.
+     * @param aAxes Axes along which to compute products for this tensor.
+     * @param bAxes Axes along which to compute products for {@code src2} tensor.
+     * @return The tensor dot product over the specified axes.
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
+     *                                  {@code aAxes} and {@code bAxes}.
+     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
+     *                                  are out of bounds for the corresponding tensor.
+     */
+    @Override
+    public SparseCTensor tensorDot(SparseCTensor src2, int[] aAxes, int[] bAxes) {
+<span class="nc" id="L441">        return null;</span>
+    }
+
+
+    /**
+     * Computes the tensor dot product of this tensor with a second tensor. That is, sums the product of two tensor
+     * elements over the last axis of this tensor and the second-to-last axis of {@code src2}. If both tensors are
+     * rank 2, this is equivalent to matrix multiplication.
+     *
+     * @param src2 Tensor to compute dot product with this tensor.
+     * @return The tensor dot product over the last axis of this tensor and the second to last axis of {@code src2}.
+     * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
+     *                                  along the second-to-last axis.
+     */
+    @Override
+    public SparseCTensor dot(SparseCTensor src2) {
+<span class="nc" id="L457">        return null;</span>
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #T(int, int)}.
+     * In the context of a tensor, this exchanges the specified axes.
+     * Also see {@link #transpose() transpose()} and
+     * {@link #T() T()} to exchange first and last axes.
+     *
+     * @param axis1 First axis to exchange.
+     * @param axis2 Second axis to exchange.
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public SparseCTensor transpose(int axis1, int axis2) {
+<span class="nc" id="L473">        return null;</span>
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #transpose(int, int)}.
+     * In the context of a tensor, this exchanges the specified axes.
+     * Also see {@link #transpose()} and
+     * {@link #T()} to exchange first and last axes.
+     *
+     * @param axis1 First axis to exchange.
+     * @param axis2 Second axis to exchange.
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public SparseCTensor T(int axis1, int axis2) {
+<span class="nc" id="L489">        return null;</span>
+    }
+
+
+    /**
+     * Computes the transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
+     * the specified axes permutation. Same as {@link #T(int[])}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
+     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     */
+    @Override
+    public SparseCTensor transpose(int... axes) {
+<span class="nc" id="L504">        return null;</span>
+    }
+
+
+    /**
+     * Computes the transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
+     * the specified axes permutation. Same as {@link #transpose(int[])}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
+     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     */
+    @Override
+    public SparseCTensor T(int... axes) {
+<span class="nc" id="L519">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor add(SparseTensor B) {
+<span class="nc" id="L532">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor add(CTensor B) {
+<span class="nc" id="L545">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between two tensors of the same rank.
+     *
+     * @param B Second tensor in element-wise subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor sub(SparseTensor B) {
+<span class="nc" id="L558">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between two tensors of the same rank.
+     *
+     * @param B Second tensor in element-wise subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor sub(CTensor B) {
+<span class="nc" id="L571">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void addEq(SparseTensor B) {
+
+<span class="nc" id="L584">    }</span>
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void subEq(SparseTensor B) {
+
+<span class="nc" id="L596">    }</span>
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     *
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public SparseCTensor elemMult(SparseTensor B) {
+<span class="nc" id="L608">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     *
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public CTensor elemMult(CTensor B) {
+<span class="nc" id="L621">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     *
+     * @param B Tensor to element-wise divide with this tensor.
+     * @return The result of the element-wise tensor division.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public CTensor elemDiv(CTensor B) {
+<span class="nc" id="L634">        return null;</span>
+    }
+
+
+    /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public SparseCTensor reshape(int... shape) {
+<span class="nc" id="L648">        return null;</span>
+    }
+
+
+    /**
+     * Sets an index of this tensor to a specified value.
+     *
+     * @param value   Value to set.
+     * @param indices The indices of this tensor for which to set the value.
+     * @return A reference to this tensor.
+     */
+    @Override
+    public SparseCTensor set(double value, int... indices) {
+<span class="nc" id="L661">        return null;</span>
+    }
+
+
+    /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public SparseCTensor reshape(Shape shape) {
+<span class="nc" id="L675">        return null;</span>
+    }
+
+
+    /**
+     * Flattens tensor to single dimension. To flatten tensor along a single axis.
+     *
+     * @return The flattened tensor.
+     */
+    @Override
+    public SparseCTensor flatten() {
+<span class="nc" id="L686">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor add(SparseCTensor B) {
+<span class="nc" id="L699">        return null;</span>
+    }
+
+
+    /**
+     * Adds specified value to all entries of this tensor.
+     *
+     * @param a Value to add to all entries of this tensor.
+     * @return The result of adding the specified value to each entry of this tensor.
+     */
+    @Override
+    public CTensor add(double a) {
+<span class="nc" id="L711">        return null;</span>
+    }
+
+
+    /**
+     * Adds specified value to all entries of this tensor.
+     *
+     * @param a Value to add to all entries of this tensor.
+     * @return The result of adding the specified value to each entry of this tensor.
+     */
+    @Override
+    public SparseCTensor add(CNumber a) {
+<span class="nc" id="L723">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between two tensors of the same rank.
+     *
+     * @param B Second tensor in element-wise subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor sub(SparseCTensor B) {
+<span class="nc" id="L736">        return null;</span>
+    }
+
+
+    /**
+     * Adds specified value to all entries of this tensor.
+     *
+     * @param a Value to add to all entries of this tensor.
+     * @return The result of adding the specified value to each entry of this tensor.
+     */
+    @Override
+    public CTensor sub(double a) {
+<span class="nc" id="L748">        return null;</span>
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor.
+     *
+     * @param a Value to subtract from all entries of this tensor.
+     * @return The result of subtracting the specified value from each entry of this tensor.
+     */
+    @Override
+    public SparseCTensor sub(CNumber a) {
+<span class="nc" id="L760">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void addEq(SparseCTensor B) {
+
+<span class="nc" id="L773">    }</span>
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void addEq(CNumber b) {
+
+<span class="nc" id="L784">    }</span>
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void addEq(Double b) {
+
+<span class="nc" id="L795">    }</span>
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void subEq(SparseCTensor B) {
+
+<span class="nc" id="L807">    }</span>
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void subEq(CNumber b) {
+
+<span class="nc" id="L818">    }</span>
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void subEq(Double b) {
+
+<span class="nc" id="L829">    }</span>
+
+
+    /**
+     * Computes scalar multiplication of a tensor.
+     *
+     * @param factor Scalar value to multiply with tensor.
+     * @return The result of multiplying this tensor by the specified scalar.
+     */
+    @Override
+    public SparseCTensor mult(double factor) {
+<span class="nc" id="L840">        return null;</span>
+    }
+
+
+    /**
+     * Computes scalar multiplication of a tensor.
+     *
+     * @param factor Scalar value to multiply with tensor.
+     * @return The result of multiplying this tensor by the specified scalar.
+     */
+    @Override
+    public SparseCTensor mult(CNumber factor) {
+<span class="nc" id="L852">        return null;</span>
+    }
+
+
+    /**
+     * Computes the scalar division of a tensor.
+     *
+     * @param divisor The scalar value to divide tensor by.
+     * @return The result of dividing this tensor by the specified scalar.
+     * @throws ArithmeticException If divisor is zero.
+     */
+    @Override
+    public SparseCTensor div(double divisor) {
+<span class="nc" id="L865">        return null;</span>
+    }
+
+
+    /**
+     * Computes the scalar division of a tensor.
+     *
+     * @param divisor The scalar value to divide tensor by.
+     * @return The result of dividing this tensor by the specified scalar.
+     * @throws ArithmeticException If divisor is zero.
+     */
+    @Override
+    public SparseCTensor div(CNumber divisor) {
+<span class="nc" id="L878">        return null;</span>
+    }
+
+
+    /**
+     * Sums together all entries in the tensor.
+     *
+     * @return The sum of all entries in this tensor.
+     */
+    @Override
+    public CNumber sum() {
+<span class="nc" id="L889">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise square root of a tensor.
+     *
+     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
+     * the principle square root i.e. the square root with positive real part.
+     */
+    @Override
+    public SparseCTensor sqrt() {
+<span class="nc" id="L901">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
+     * be computed.
+     *
+     * @return The result of applying an element-wise absolute value/magnitude to this tensor.
+     */
+    @Override
+    public SparseCTensor abs() {
+<span class="nc" id="L913">        return null;</span>
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #T()}.
+     *
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public SparseCTensor transpose() {
+<span class="nc" id="L924">        return null;</span>
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #transpose()}.
+     *
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public SparseCTensor T() {
+<span class="nc" id="L935">        return null;</span>
+    }
+
+
+    /**
+     * Computes the reciprocals, element-wise, of a tensor.
+     *
+     * @return A tensor containing the reciprocal elements of this tensor.
+     * @throws ArithmeticException If this tensor contains any zeros.
+     */
+    @Override
+    public SparseCTensor recip() {
+<span class="nc" id="L947">        return null;</span>
+    }
+
+
+    /**
+     * Gets the element in this tensor at the specified indices.
+     *
+     * @param indices Indices of element.
+     * @return The element at the specified indices.
+     * @throws IllegalArgumentException If the number of indices does not match the rank of this tensor.
+     */
+    @Override
+    public CNumber get(int... indices) {
+<span class="nc" id="L960">        return null;</span>
+    }
+
+
+    /**
+     * Creates a copy of this tensor.
+     *
+     * @return A copy of this tensor.
+     */
+    @Override
+    public SparseCTensor copy() {
+<span class="nc" id="L971">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     *
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
+     */
+    @Override
+    public SparseCTensor elemMult(SparseCTensor B) {
+<span class="nc" id="L984">        return null;</span>
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     *
+     * @param B Tensor to element-wise divide with this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
+     */
+    @Override
+    public SparseCTensor elemDiv(SparseCTensor B) {
+<span class="nc" id="L997">        return null;</span>
+    }
+
+
+    /**
+     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
+     *
+     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
+     */
+    @Override
+    public double min() {
+<span class="nc" id="L1008">        return 0;</span>
+    }
+
+
+    /**
+     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
+     *
+     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
+     */
+    @Override
+    public double max() {
+<span class="nc" id="L1019">        return 0;</span>
+    }
+
+
+    /**
+     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+     * to {@link #min()}.
+     *
+     * @return The minimum value, in absolute value, in this tensor.
+     */
+    @Override
+    public double minAbs() {
+<span class="nc" id="L1031">        return 0;</span>
+    }
+
+
+    /**
+     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+     * to {@link #max()}.
+     *
+     * @return The maximum value, in absolute value, in this tensor.
+     */
+    @Override
+    public double maxAbs() {
+<span class="nc" id="L1043">        return 0;</span>
+    }
+
+
+    /**
+     * Finds the indices of the minimum value in this tensor.
+     *
+     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argMin() {
+<span class="nc" id="L1055">        return new int[0];</span>
+    }
+
+
+    /**
+     * Finds the indices of the maximum value in this tensor.
+     *
+     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argMax() {
+<span class="nc" id="L1067">        return new int[0];</span>
+    }
+
+
+    /**
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
+     *
+     * @return the 2-norm of this tensor.
+     */
+    @Override
+    public double norm() {
+<span class="nc" id="L1078">        return 0;</span>
+    }
+
+
+    /**
+     * Computes the p-norm of this tensor.
+     *
+     * @param p The p value in the p-norm. &lt;br&gt;
+     *          - If p is inf, then this method computes the maximum/infinite norm.
+     * @return The p-norm of this tensor.
+     * @throws IllegalArgumentException If p is less than 1.
+     */
+    @Override
+    public double norm(double p) {
+<span class="nc" id="L1092">        return 0;</span>
+    }
+
+
+    /**
+     * Computes the maximum/infinite norm of this tensor.
+     *
+     * @return The maximum/infinite norm of this tensor.
+     */
+    @Override
+    public double infNorm() {
+<span class="nc" id="L1103">        return 0;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

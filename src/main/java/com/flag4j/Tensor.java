@@ -25,8 +25,7 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.RealTensorMixin;
-import com.flag4j.core.TensorBase;
+import com.flag4j.core.RealTensorBase;
 import com.flag4j.core.TensorExclusiveMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.TransposeDispatcher;
@@ -55,8 +54,8 @@ import java.util.Arrays;
 /**
  * Real Dense Tensor. May have any rank (that is, may have any number of unique axes/dimensions).
  */
-public class Tensor extends TensorBase<double[]> implements
-        RealTensorMixin<Tensor, CTensor>, TensorExclusiveMixin<Tensor, Tensor, SparseTensor> {
+public class Tensor extends RealTensorBase<Tensor, CTensor>
+        implements TensorExclusiveMixin<Tensor, Tensor, SparseTensor> {
 
 
     /**
@@ -246,28 +245,6 @@ public class Tensor extends TensorBase<double[]> implements
     @Override
     public int hashCode() {
         return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);
-    }
-
-
-    /**
-     * Checks if this tensor contains only non-negative values.
-     *
-     * @return True if this tensor only contains non-negative values. Otherwise, returns false.
-     */
-    @Override
-    public boolean isPos() {
-        return RealProperties.isPos(entries);
-    }
-
-
-    /**
-     * Checks if this tensor contains only non-positive values.
-     *
-     * @return trie if this tensor only contains non-positive values. Otherwise, returns false.
-     */
-    @Override
-    public boolean isNeg() {
-        return RealProperties.isNeg(entries);
     }
 
 
@@ -870,52 +847,6 @@ public class Tensor extends TensorBase<double[]> implements
 
 
     /**
-     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
-     *
-     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double min() {
-        return AggregateReal.min(entries);
-    }
-
-
-    /**
-     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
-     *
-     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double max() {
-        return AggregateReal.max(entries);
-    }
-
-
-    /**
-     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #min()}.
-     *
-     * @return The minimum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-        return AggregateReal.minAbs(entries);
-    }
-
-
-    /**
-     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-        return AggregateReal.maxAbs(entries);
-    }
-
-
-    /**
      * Finds the indices of the minimum value in this tensor.
      *
      * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
@@ -969,17 +900,6 @@ public class Tensor extends TensorBase<double[]> implements
     @Override
     public double norm(double p) {
         return RealDenseOperations.tensorNormLp(entries, p);
-    }
-
-
-    /**
-     * Computes the maximum/infinite norm of this tensor.
-     *
-     * @return The maximum/infinite norm of this tensor.
-     */
-    @Override
-    public double infNorm() {
-        return AggregateReal.max(entries);
     }
 
 

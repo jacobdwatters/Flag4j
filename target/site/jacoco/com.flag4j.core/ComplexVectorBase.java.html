@@ -24,14 +24,21 @@
 
 package com.flag4j.core;
 
+import com.flag4j.CMatrix;
+import com.flag4j.CVector;
 import com.flag4j.Shape;
+import com.flag4j.SparseCVector;
 import com.flag4j.complex_numbers.CNumber;
 
 
 /**
  * The base class for all complex vectors.
+ * @param &lt;T&gt; Vector type.
+ * @param &lt;Y&gt; Real vector Type.
  */
-public abstract class ComplexVectorBase extends VectorBase&lt;CNumber[]&gt; {
+public abstract class ComplexVectorBase&lt;T, Y, TT, YY&gt;
+        extends VectorBase&lt;T, CVector, SparseCVector, T, Y, CNumber[], CNumber, TT, CMatrix, CMatrix&gt;
+        implements ComplexVectorMixin&lt;T, Y&gt; {
 
     /**
      * Constructs a basic vector with the specified number of entries.
@@ -40,8 +47,8 @@ public abstract class ComplexVectorBase extends VectorBase&lt;CNumber[]&gt; {
      * @param entries The non-zero entries of this sparse tensor.
      */
     public ComplexVectorBase(int size, CNumber[] entries) {
-<span class="fc" id="L43">        super(size, entries);</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L50">        super(size, entries);</span>
+<span class="fc" id="L51">    }</span>
 
 
     /**
@@ -52,7 +59,7 @@ public abstract class ComplexVectorBase extends VectorBase&lt;CNumber[]&gt; {
      * @throws IllegalArgumentException If the rank of the shape is not 1.
      */
     public ComplexVectorBase(Shape shape, CNumber[] entries) {
-<span class="nc" id="L55">        super(shape, entries);</span>
-<span class="nc" id="L56">    }</span>
+<span class="nc" id="L62">        super(shape, entries);</span>
+<span class="nc" id="L63">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
