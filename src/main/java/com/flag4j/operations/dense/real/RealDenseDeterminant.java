@@ -86,12 +86,12 @@ public class RealDenseDeterminant {
 
     /**
      * Computes the determinant for a matrix which has been factored into a unit lower triangular matrix {@code L}
-     * and an upper triangular matrix {@cod U} using partial pivoting (i.e. row swaps).
+     * and an upper triangular matrix {@code U} using partial pivoting (i.e. row swaps).
      * @param P Row permutation matrix in the {@code LU} decomposition.
      * @param L Unit lower triangular matrix.
      * @param U Upper triangular matrix.
      * @return The determinant of the matrix which has been factored into a unit lower triangular matrix {@code L}
-     * and an upper triangular matrix {@cod U} using partial pivoting.
+     * and an upper triangular matrix {@code U} using partial pivoting.
      */
     public static double detLU(Matrix P, Matrix L, Matrix U) {
         int numSwaps = (int) (L.numRows - P.trace()) - 1; // Number of swaps in permutation matrix.
@@ -102,11 +102,11 @@ public class RealDenseDeterminant {
 
     /**
      * Computes the determinant for a matrix which has been factored into a unit lower triangular matrix {@code L}
-     * and an upper triangular matrix {@cod U} with no pivoting.
+     * and an upper triangular matrix {@code U} with no pivoting.
      * @param L Unit lower triangular matrix.
      * @param U Upper triangular matrix.
      * @return The determinant of the matrix which has been factored into a unit lower triangular matrix {@code L}
-     * and an upper triangular matrix {@cod U}.
+     * and an upper triangular matrix {@code U}.
      */
     public static double detLU(Matrix L, Matrix U) {
         double detU = 1;
