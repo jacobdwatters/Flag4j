@@ -525,7 +525,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CMatrix add(SparseCMatrix B) {
+    public SparseCMatrix add(SparseCMatrix B) {
         return null;
     }
 

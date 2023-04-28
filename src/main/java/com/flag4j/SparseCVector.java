@@ -377,7 +377,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @return A vector resulting from joining the specified vector with this vector.
      */
     @Override
-    public SparseCVector join(Vector b) {
+    public CVector join(Vector b) {
         return null;
     }
 
@@ -602,7 +602,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public CVector add(SparseVector B) {
+    public SparseCVector add(SparseVector B) {
         return null;
     }
 
@@ -614,7 +614,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public SparseCVector add(CVector B) {
+    public CVector add(CVector B) {
         return null;
     }
 
@@ -626,7 +626,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CVector add(SparseCVector B) {
+    public SparseCVector add(SparseCVector B) {
         return null;
     }
 

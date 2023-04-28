@@ -37,7 +37,7 @@ import com.flag4j.linalg.decompositions.QRDecomposition;
  * minimizes {@code ||Ax-b||<sub>2</sub>} which is equivalent to solving the normal equations {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
  * This is done using a {@link QRDecomposition}.
  */
-public abstract class LstsqSolver<T extends MatrixBase<?, ?, ?, ?, ?, ?>,
+public abstract class LstsqSolver<T extends MatrixBase<?, ?, ?, ?, ?, ?, ?>,
         U extends VectorBase<?, ?, ?, ?, ?, ?, ?, ?, ?, ?>,
         V extends VectorBase<?, ?, ?, ?, ?, ?, ?, ?, ?, ?>> implements LinearSolver<T, U, V> {
 

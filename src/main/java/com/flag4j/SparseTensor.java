@@ -262,7 +262,7 @@ public class SparseTensor extends RealSparseTensorBase {
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public Tensor add(SparseTensor B) {
+    public SparseTensor add(SparseTensor B) {
         return null;
     }
 

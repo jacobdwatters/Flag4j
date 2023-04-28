@@ -28,10 +28,7 @@ package com.flag4j.core;
 import com.flag4j.CTensor;
 import com.flag4j.Shape;
 import com.flag4j.Tensor;
-import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
-import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.common.real.RealProperties;
 
 
@@ -41,7 +38,7 @@ import com.flag4j.operations.common.real.RealProperties;
  * @param &lt;W&gt; Type of the complex equivalent tensor.
  */
 public abstract class RealTensorBase&lt;T, W&gt;
-        extends TensorBase&lt;T, Tensor, W, Tensor, double[], Double&gt;
+        extends TensorBase&lt;T, Tensor, W, CTensor, Tensor, double[], Double&gt;
         implements RealTensorMixin&lt;T, W&gt; {
 
 
@@ -53,8 +50,8 @@ public abstract class RealTensorBase&lt;T, W&gt;
      *                If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
     public RealTensorBase(Shape shape, double[] entries) {
-<span class="fc" id="L56">        super(shape, entries);</span>
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L53">        super(shape, entries);</span>
+<span class="fc" id="L54">    }</span>
 
 
     /**
@@ -64,7 +61,7 @@ public abstract class RealTensorBase&lt;T, W&gt;
      */
     @Override
     public double min() {
-<span class="fc" id="L67">        return AggregateReal.min(entries);</span>
+<span class="fc" id="L64">        return AggregateReal.min(entries);</span>
     }
 
 
@@ -75,7 +72,7 @@ public abstract class RealTensorBase&lt;T, W&gt;
      */
     @Override
     public double max() {
-<span class="fc" id="L78">        return AggregateReal.max(entries);</span>
+<span class="fc" id="L75">        return AggregateReal.max(entries);</span>
     }
 
 
@@ -87,7 +84,7 @@ public abstract class RealTensorBase&lt;T, W&gt;
      */
     @Override
     public double minAbs() {
-<span class="fc" id="L90">        return AggregateReal.minAbs(entries);</span>
+<span class="fc" id="L87">        return AggregateReal.minAbs(entries);</span>
     }
 
 
@@ -99,7 +96,7 @@ public abstract class RealTensorBase&lt;T, W&gt;
      */
     @Override
     public double maxAbs() {
-<span class="fc" id="L102">        return AggregateReal.maxAbs(entries);</span>
+<span class="fc" id="L99">        return AggregateReal.maxAbs(entries);</span>
     }
 
 
@@ -110,7 +107,7 @@ public abstract class RealTensorBase&lt;T, W&gt;
      */
     @Override
     public double infNorm() {
-<span class="fc" id="L113">        return AggregateReal.max(entries);</span>
+<span class="fc" id="L110">        return AggregateReal.max(entries);</span>
     }
 
 
@@ -121,7 +118,7 @@ public abstract class RealTensorBase&lt;T, W&gt;
      */
     @Override
     public boolean isPos() {
-<span class="fc" id="L124">        return RealProperties.isPos(entries);</span>
+<span class="fc" id="L121">        return RealProperties.isPos(entries);</span>
     }
 
 
@@ -132,7 +129,7 @@ public abstract class RealTensorBase&lt;T, W&gt;
      */
     @Override
     public boolean isNeg() {
-<span class="fc" id="L135">        return RealProperties.isNeg(entries);</span>
+<span class="fc" id="L132">        return RealProperties.isNeg(entries);</span>
     }
 
 }

@@ -34,7 +34,7 @@ import com.flag4j.core.TensorExclusiveMixin;
  * Complex sparse tensor.
  */
 public class SparseCTensor extends ComplexSparseTensorBase
-        implements TensorExclusiveMixin<SparseCTensor, CTensor, SparseCTensor>,
+        implements TensorExclusiveMixin<SparseCTensor, CTensor, SparseCTensor, SparseCTensor>,
         ComplexTensorExclusiveMixin<CTensor> {
 
 
@@ -528,7 +528,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CTensor add(SparseTensor B) {
+    public SparseCTensor add(SparseTensor B) {
         return null;
     }
 
@@ -554,7 +554,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CTensor sub(SparseTensor B) {
+    public SparseCTensor sub(SparseTensor B) {
         return null;
     }
 
@@ -695,7 +695,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CTensor add(SparseCTensor B) {
+    public SparseCTensor add(SparseCTensor B) {
         return null;
     }
 

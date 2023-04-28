@@ -28,10 +28,7 @@ package com.flag4j.core;
 import com.flag4j.CTensor;
 import com.flag4j.Shape;
 import com.flag4j.Tensor;
-import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
-import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.common.real.RealProperties;
 
 
@@ -41,7 +38,7 @@ import com.flag4j.operations.common.real.RealProperties;
  * @param <W> Type of the complex equivalent tensor.
  */
 public abstract class RealTensorBase<T, W>
-        extends TensorBase<T, Tensor, W, Tensor, double[], Double>
+        extends TensorBase<T, Tensor, W, CTensor, Tensor, double[], Double>
         implements RealTensorMixin<T, W> {
 
 

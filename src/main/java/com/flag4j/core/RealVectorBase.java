@@ -24,10 +24,7 @@
 
 package com.flag4j.core;
 
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
-import com.flag4j.SparseVector;
-import com.flag4j.Vector;
+import com.flag4j.*;
 import com.flag4j.operations.common.real.AggregateReal;
 
 /**

@@ -39,7 +39,7 @@ import com.flag4j.util.ParameterChecks;
  * @param <W> Type of complex type equivalent of this matrix.
  */
 public abstract class RealMatrixBase<T, W>
-        extends MatrixBase<T, Matrix, CMatrix, T, double[], Double>
+        extends MatrixBase<T, Matrix, CMatrix, CMatrix, T, double[], Double>
         implements RealMatrixMixin<T, W> {
 
 

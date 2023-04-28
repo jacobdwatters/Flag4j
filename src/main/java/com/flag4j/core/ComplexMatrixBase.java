@@ -35,7 +35,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <Y> Type of real equivalent of this matrix.
  */
 public abstract class ComplexMatrixBase<T, Y>
-        extends MatrixBase<T, CMatrix, T, Y, CNumber[], CNumber>
+        extends MatrixBase<T, CMatrix, T, CMatrix, Y, CNumber[], CNumber>
         implements ComplexMatrixMixin<T, Y> {
 
 

@@ -27,6 +27,8 @@ package com.flag4j.operations.dense_sparse.real;
 
 import com.flag4j.SparseVector;
 import com.flag4j.Vector;
+import com.flag4j.operations.common.real.RealOperations;
+import com.flag4j.operations.dense.real.RealDenseOperations;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -95,7 +97,7 @@ public class RealDenseSparseVectorOperations {
      * Subtracts a real sparse vector from a real dense vector.
      * @param src1 Dense vector.
      * @param src2 Sparse vector.
-     * @return The result of the vector addition.
+     * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static Vector sub(Vector src1, SparseVector src2) {
@@ -104,6 +106,25 @@ public class RealDenseSparseVectorOperations {
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             dest.entries[src2.indices[i]] -= src2.entries[i];
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Subtracts a real dense vector from a real sparse vector.
+     * @param src1 Sparse vector.
+     * @param src2 Dense vector.
+     * @return The result of the vector subtraction.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static Vector sub(SparseVector src1, Vector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        Vector dest = new Vector(RealOperations.scalMult(src2.entries, -1));
+
+        for(int i=0; i<src1.nonZeroEntries(); i++) {
+            dest.entries[src1.indices[i]] += src1.entries[i];
         }
 
         return dest;

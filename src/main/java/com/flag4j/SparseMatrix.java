@@ -2165,7 +2165,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public Matrix add(SparseMatrix B) {
+    public SparseMatrix add(SparseMatrix B) {
         return null;
     }
 

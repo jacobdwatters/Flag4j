@@ -29,12 +29,13 @@ import com.flag4j.complex_numbers.CNumber;
  * This interface specifies operations which all tensors (i.e. matrices and vectors) should implement.
  *
  * @param <T> Tensor type.
- * @param <U> Dense Tensor type.
- * @param <W> Complex Tensor type.
- * @param <Y> Real Tensor type.
+ * @param <U> Dense tensor type.
+ * @param <W> Complex tensor type.
+ * @param <Z> Dense complex tensor type.
+ * @param <Y> Real tensor type.
  * @param <X> Tensor entry type.
  */
-interface TensorOperationsMixin<T, U, W, Y , X extends Number> {
+interface TensorOperationsMixin<T, U, W, Z, Y, X extends Number> {
 
     /**
      * Computes the element-wise addition between two tensors of the same rank.
@@ -42,7 +43,7 @@ interface TensorOperationsMixin<T, U, W, Y , X extends Number> {
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    U add(T B);
+    T add(T B);
 
 
     /**

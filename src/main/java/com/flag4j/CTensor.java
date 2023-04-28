@@ -49,7 +49,7 @@ import java.util.Arrays;
  * Complex dense tensor.
  */
 public class CTensor extends ComplexTensorBase<CTensor, Tensor>
-        implements TensorExclusiveMixin<CTensor, CTensor, SparseCTensor>,
+        implements TensorExclusiveMixin<CTensor, CTensor, SparseCTensor, CTensor>,
         ComplexTensorExclusiveMixin<CTensor> {
 
 

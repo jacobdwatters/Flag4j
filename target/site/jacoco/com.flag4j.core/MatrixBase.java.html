@@ -37,13 +37,14 @@ import com.flag4j.util.ErrorMessages;
  * @param &lt;T&gt; Type of this matrix.
  * @param &lt;U&gt; Dense matrix type.
  * @param &lt;W&gt; Complex matrix type.
+ * @param &lt;Z&gt; Dense complex tensor type.
  * @param &lt;Y&gt; Real matrix type.
  * @param &lt;D&gt; Type of the storage data structure for the matrix.
  *           This common use case will be an array or list-like data structure.
  * @param &lt;X&gt; The type of individual entry within the {@code D} data structure.
  */
-public abstract class MatrixBase&lt;T, U, W, Y, D, X extends Number&gt;
-        extends TensorBase&lt;T, U, W, Y, D, X&gt;
+public abstract class MatrixBase&lt;T, U, W, Z, Y, D, X extends Number&gt;
+        extends TensorBase&lt;T, U, W, Z, Y, D, X&gt;
         implements MatrixPropertiesMixin,
         MatrixComparisonsMixin&lt;T&gt;,
         MatrixManipulationsMixin&lt;T, X&gt;,
@@ -71,15 +72,15 @@ public abstract class MatrixBase&lt;T, U, W, Y, D, X extends Number&gt;
      * @throws IllegalArgumentException If the shape parameter is not of rank 2.
      */
     public MatrixBase(Shape shape, D entries) {
-<span class="fc" id="L74">        super(shape, entries);</span>
+<span class="fc" id="L75">        super(shape, entries);</span>
 
-<span class="fc" id="L76">        numRows = shape.dims[Axis2D.row()];</span>
-<span class="fc" id="L77">        numCols = shape.dims[Axis2D.col()];</span>
+<span class="fc" id="L77">        numRows = shape.dims[Axis2D.row()];</span>
+<span class="fc" id="L78">        numCols = shape.dims[Axis2D.col()];</span>
 
-<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if(shape.getRank() != 2) {</span>
-<span class="nc" id="L80">            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), 2));</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if(shape.getRank() != 2) {</span>
+<span class="nc" id="L81">            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), 2));</span>
         }
-<span class="fc" id="L82">    }</span>
+<span class="fc" id="L83">    }</span>
 
 
     /**
@@ -87,7 +88,7 @@ public abstract class MatrixBase&lt;T, U, W, Y, D, X extends Number&gt;
      * @return The number of rows in this matrix.
      */
     public int numRows() {
-<span class="fc" id="L90">        return numRows;</span>
+<span class="fc" id="L91">        return numRows;</span>
     }
 
 
@@ -96,10 +97,10 @@ public abstract class MatrixBase&lt;T, U, W, Y, D, X extends Number&gt;
      * @return The number of columns in this matrix.
      */
     public int numCols() {
-<span class="fc" id="L99">        return numCols;</span>
+<span class="fc" id="L100">        return numCols;</span>
     }
 
 
-    public abstract MatrixBase&lt;?, ?, ?, ?, D, X&gt; flatten(int axis);
+    public abstract MatrixBase&lt;?, ?, ?, ?, ?, D, X&gt; flatten(int axis);
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

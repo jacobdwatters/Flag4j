@@ -24,6 +24,7 @@
 
 package com.flag4j.core;
 
+import com.flag4j.CVector;
 import com.flag4j.Shape;
 import com.flag4j.util.ParameterChecks;
 
@@ -47,7 +48,7 @@ import com.flag4j.util.ParameterChecks;
  */
 public abstract class VectorBase<T, U, V, W, Y, D, X extends Number,
         TT, UU, WW>
-        extends TensorBase<T, U, W, Y, D, X>
+        extends TensorBase<T, U, W, CVector, Y, D, X>
         implements VectorPropertiesMixin,
         VectorManipulationsMixin<TT>,
         VectorComparisonsMixin,
