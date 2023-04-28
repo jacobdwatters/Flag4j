@@ -28,7 +28,6 @@ package com.flag4j.operations.dense_sparse.real;
 import com.flag4j.SparseVector;
 import com.flag4j.Vector;
 import com.flag4j.operations.common.real.RealOperations;
-import com.flag4j.operations.dense.real.RealDenseOperations;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 

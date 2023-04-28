@@ -27,7 +27,6 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealSparseTensorBase;
-import com.flag4j.operations.common.real.AggregateReal;
 
 import java.util.Arrays;
 

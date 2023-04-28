@@ -26,6 +26,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealSparseVectorBase;
+import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.dense.real.RealDenseProperties;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
@@ -221,8 +222,7 @@ public class SparseVector extends RealSparseVectorBase {
 
 
     /**
-     * Sets an index of this vector to a specified value. Please note, if a non-zero value does not already exist at the
-     * specified index, this method may be slow if there are a significant number of non-zero entries in this sparse vector.
+     * Sets an index of a copy of this vector to a specified value.
      *
      * Creates a copy of this vector and sets an index to the specified value. Note, unlike the dense version of this
      * method, this <b>does not</b> affect this vector.
@@ -1195,14 +1195,12 @@ public class SparseVector extends RealSparseVectorBase {
 
 
     /**
-     * Converts a vector to an equivalent matrix.
+     * Converts this vector to an equivalent matrix as if it were a column vector.
      *
-     * @return A matrix equivalent to this vector. This method will respect the orientation of the vector. That is, if
-     * this vector is a row vector, then the resulting matrix will have a single row. If this vector is a column vector, then the
-     * resulting matrix will have a single column.
+     * @return A matrix equivalent to this vector as if the vector is a column vector.
      */
     @Override
-    public Matrix toMatrix() {
+    public SparseMatrix toMatrix() {
         return null;
     }
 
@@ -1290,7 +1288,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public double infNorm() {
-        return 0;
+        return maxAbs();
     }
 
 

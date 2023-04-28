@@ -1165,6 +1165,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
         return null;
     }
 
+
     /**
      * Checks if a vector is parallel to this vector.
      *
@@ -1175,6 +1176,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     public boolean isParallel(Vector b) {
         return false;
     }
+
 
     /**
      * Checks if a vector is perpendicular to this vector.
@@ -1187,17 +1189,17 @@ public class SparseCVector extends ComplexSparseVectorBase {
         return false;
     }
 
+
     /**
-     * Converts a vector to an equivalent matrix.
+     * Converts this vector to an equivalent matrix as if it were a column vector.
      *
-     * @return A matrix equivalent to this vector. This method will respect the orientation of the vector. That is, if
-     * this vector is a row vector, then the resulting matrix will have a single row. If this vector is a column vector, then the
-     * resulting matrix will have a single column.
+     * @return A matrix equivalent to this vector as if it were a column vector.
      */
     @Override
-    public CMatrix toMatrix() {
+    public SparseCMatrix toMatrix() {
         return null;
     }
+
 
     /**
      * Converts a vector to an equivalent matrix representing either a row or column vector.
@@ -1212,6 +1214,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise division between two tensors.
      *
@@ -1224,6 +1227,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
         return null;
     }
 
+
     /**
      * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
      *
@@ -1234,6 +1238,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
         return 0;
     }
 
+
     /**
      * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
      *
@@ -1243,6 +1248,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     public double max() {
         return 0;
     }
+
 
     /**
      * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
@@ -1255,6 +1261,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
         return 0;
     }
 
+
     /**
      * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
      * to {@link #max()}.
@@ -1265,6 +1272,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     public double maxAbs() {
         return 0;
     }
+
 
     /**
      * Finds the indices of the minimum value in this tensor.
@@ -1277,6 +1285,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
         return new int[0];
     }
 
+
     /**
      * Finds the indices of the maximum value in this tensor.
      *
@@ -1288,6 +1297,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
         return new int[0];
     }
 
+
     /**
      * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
      *
@@ -1297,6 +1307,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     public double norm() {
         return 0;
     }
+
 
     /**
      * Computes the p-norm of this tensor.
@@ -1311,6 +1322,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
         return 0;
     }
 
+
     /**
      * Computes the maximum/infinite norm of this tensor.
      *
@@ -1320,6 +1332,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     public double infNorm() {
         return 0;
     }
+
 
     /**
      * Extends a vector a specified number of times to a matrix.
@@ -1332,6 +1345,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     public SparseCMatrix extend(int n, int axis) {
         return null;
     }
+
 
     /**
      * Gets the length of a vector.

@@ -24,7 +24,10 @@
 
 package com.flag4j.core;
 
-import com.flag4j.*;
+import com.flag4j.Matrix;
+import com.flag4j.Shape;
+import com.flag4j.SparseVector;
+import com.flag4j.Vector;
 import com.flag4j.operations.common.real.AggregateReal;
 
 /**
@@ -44,8 +47,8 @@ public abstract class RealVectorBase&lt;T, W, TT, WW&gt; extends
      * @param entries     The non-zero entries of this sparse tensor.
      */
     public RealVectorBase(int size, double[] entries) {
-<span class="fc" id="L47">        super(size, entries);</span>
-<span class="fc" id="L48">    }</span>
+<span class="fc" id="L50">        super(size, entries);</span>
+<span class="fc" id="L51">    }</span>
 
 
     /**
@@ -56,8 +59,8 @@ public abstract class RealVectorBase&lt;T, W, TT, WW&gt; extends
      * @throws IllegalArgumentException If the rank of the shape is not 1.
      */
     public RealVectorBase(Shape shape, double[] entries) {
-<span class="fc" id="L59">        super(shape, entries);</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L62">        super(shape, entries);</span>
+<span class="fc" id="L63">    }</span>
 
 
     /**
@@ -67,7 +70,7 @@ public abstract class RealVectorBase&lt;T, W, TT, WW&gt; extends
      */
     @Override
     public double min() {
-<span class="fc" id="L70">        return AggregateReal.min(this.entries);</span>
+<span class="fc" id="L73">        return AggregateReal.min(this.entries);</span>
     }
 
 
@@ -78,7 +81,7 @@ public abstract class RealVectorBase&lt;T, W, TT, WW&gt; extends
      */
     @Override
     public double max() {
-<span class="fc" id="L81">        return AggregateReal.max(this.entries);</span>
+<span class="fc" id="L84">        return AggregateReal.max(this.entries);</span>
     }
 
 
@@ -90,7 +93,7 @@ public abstract class RealVectorBase&lt;T, W, TT, WW&gt; extends
      */
     @Override
     public double minAbs() {
-<span class="fc" id="L93">        return AggregateReal.minAbs(this.entries);</span>
+<span class="fc" id="L96">        return AggregateReal.minAbs(this.entries);</span>
     }
 
 
@@ -102,7 +105,7 @@ public abstract class RealVectorBase&lt;T, W, TT, WW&gt; extends
      */
     @Override
     public double maxAbs() {
-<span class="fc" id="L105">        return AggregateReal.maxAbs(this.entries);</span>
+<span class="fc" id="L108">        return AggregateReal.maxAbs(this.entries);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

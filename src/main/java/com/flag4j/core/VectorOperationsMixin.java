@@ -495,7 +495,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
     boolean isParallel(Vector b);
 
 
-    // TODO: ADD isPerp(CVector b), isPerp(SparseVector b), and isPerp(sparseCVector)
+    // TODO: Add isPerp(CVector b), isPerp(SparseVector b), and isPerp(sparseCVector)
     /**
      * Checks if a vector is perpendicular to this vector.
      *
@@ -505,13 +505,15 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
     boolean isPerp(Vector b);
 
 
+    // TODO: Add toTensor methods.
+
     /**
      * Converts a vector to an equivalent matrix.
      * @return A matrix equivalent to this vector. This method will respect the orientation of the vector. That is, if
      * this vector is a row vector, then the resulting matrix will have a single row. If this vector is a column vector, then the
      * resulting matrix will have a single column.
      */
-    UU toMatrix();
+    TT toMatrix();
 
 
     /**
