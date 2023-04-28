@@ -286,7 +286,7 @@ public class SparseTensor extends RealSparseTensorBase {
      * @return The result of adding the specified value to each entry of this tensor.
      */
     @Override
-    public SparseCTensor add(CNumber a) {
+    public CTensor add(CNumber a) {
         return null;
     }
 

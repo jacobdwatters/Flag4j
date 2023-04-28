@@ -30,6 +30,7 @@ import com.flag4j.operations.dense.real.RealDenseProperties;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
 import com.flag4j.operations.sparse.real.RealSparseOperations;
+import com.flag4j.operations.sparse.real_complex.RealComplexSparseOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
 import com.flag4j.util.SparseDataWrapper;
@@ -603,6 +604,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector add(SparseVector B) {
+        // TODO: Implementation - Assume indices are sorted and use dual counter algorithm
         return null;
     }
 
@@ -666,9 +668,8 @@ public class SparseVector extends RealSparseVectorBase {
      * @return The result of adding the specified value to each entry of this tensor.
      */
     @Override
-    public SparseCVector add(CNumber a) {
-//        return RealComplexSparseOperations.add(this, a);
-        return null;
+    public CVector add(CNumber a) {
+        return RealComplexSparseOperations.add(this, a);
     }
 
 

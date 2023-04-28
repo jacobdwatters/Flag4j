@@ -59,7 +59,7 @@ interface TensorOperationsMixin<T, U, W, Z, Y, X extends Number> {
      * @param a Value to add to all entries of this tensor.
      * @return The result of adding the specified value to each entry of this tensor.
      */
-    W add(CNumber a);
+    Z add(CNumber a);
 
 
     /**

@@ -684,7 +684,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @return The result of adding the specified value to each entry of this tensor.
      */
     @Override
-    public SparseCVector add(CNumber a) {
+    public CVector add(CNumber a) {
         return null;
     }
 

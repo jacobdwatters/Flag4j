@@ -100,7 +100,7 @@ Flag4j,com.flag4j,SparseTensor,66,70,0,2,34,10,34,5,34,4
 Flag4j,com.flag4j,Tensor,153,861,10,28,21,159,7,80,2,66
 Flag4j,com.flag4j,SparseCTensor,128,118,0,6,67,16,67,8,67,5
 Flag4j,com.flag4j,CMatrix,726,7511,54,386,114,820,83,358,54,167
-Flag4j,com.flag4j,SparseVector,728,44,22,0,122,9,88,4,77,4
+Flag4j,com.flag4j,SparseVector,730,44,22,0,122,9,88,4,77,4
 Flag4j,com.flag4j,Shape,35,465,5,37,5,75,5,34,2,16
 Flag4j,com.flag4j,Matrix,378,6807,17,399,44,784,33,369,21,173
 Flag4j,com.flag4j,SparseMatrix,336,189,0,0,170,20,170,10,170,10

@@ -30,6 +30,7 @@ import com.flag4j.operations.dense.real.RealDenseProperties;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
 import com.flag4j.operations.sparse.real.RealSparseOperations;
+import com.flag4j.operations.sparse.real_complex.RealComplexSparseOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
 import com.flag4j.util.SparseDataWrapper;
@@ -47,8 +48,8 @@ public class SparseVector extends RealSparseVectorBase {
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      */
     public SparseVector(int size) {
-<span class="fc" id="L50">        super(size, 0, new double[0], new int[0]);</span>
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L51">        super(size, 0, new double[0], new int[0]);</span>
+<span class="fc" id="L52">    }</span>
 
 
     /**
@@ -62,10 +63,10 @@ public class SparseVector extends RealSparseVectorBase {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, int[] nonZeroEntries, int[] indices) {
-<span class="fc" id="L65">        super(size, nonZeroEntries.length,</span>
-<span class="fc" id="L66">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L66">        super(size, nonZeroEntries.length,</span>
+<span class="fc" id="L67">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
                 indices);
-<span class="fc" id="L68">    }</span>
+<span class="fc" id="L69">    }</span>
 
 
     /**
@@ -77,8 +78,8 @@ public class SparseVector extends RealSparseVectorBase {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, double[] nonZeroEntries, int[] indices) {
-<span class="fc" id="L80">        super(size, nonZeroEntries.length, nonZeroEntries, indices);</span>
-<span class="fc" id="L81">    }</span>
+<span class="fc" id="L81">        super(size, nonZeroEntries.length, nonZeroEntries, indices);</span>
+<span class="fc" id="L82">    }</span>
 
 
     /**
@@ -86,8 +87,8 @@ public class SparseVector extends RealSparseVectorBase {
      * @param a Sparse vector to copy
      */
     public SparseVector(SparseVector a) {
-<span class="fc" id="L89">        super(a.size(), a.nonZeroEntries(), a.entries.clone(), a.indices.clone());</span>
-<span class="fc" id="L90">    }</span>
+<span class="fc" id="L90">        super(a.size(), a.nonZeroEntries(), a.entries.clone(), a.indices.clone());</span>
+<span class="fc" id="L91">    }</span>
 
 
 //    /**
@@ -204,7 +205,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public boolean isZeros() {
-<span class="nc bnc" id="L207" title="All 2 branches missed.">        return entries.length==0;</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">        return entries.length==0;</span>
     }
 
 
@@ -215,7 +216,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public boolean isOnes() {
-<span class="nc bnc" id="L218" title="All 4 branches missed.">        return entries.length==size &amp;&amp; RealDenseProperties.isOnes(this.entries);</span>
+<span class="nc bnc" id="L219" title="All 4 branches missed.">        return entries.length==size &amp;&amp; RealDenseProperties.isOnes(this.entries);</span>
     }
 
 
@@ -235,7 +236,7 @@ public class SparseVector extends RealSparseVectorBase {
     @Override
     public SparseVector set(double value, int... indices) {
         // TODO: Set should return a new instance for sparse vectors, matrices, and tensors, so entries can remain final.
-<span class="nc" id="L238">        return null;</span>
+<span class="nc" id="L239">        return null;</span>
     }
 
 
@@ -247,9 +248,9 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector reshape(Shape shape) {
-<span class="nc" id="L250">        ParameterChecks.assertBroadcastable(this.shape, shape);</span>
-<span class="nc" id="L251">        ParameterChecks.assertRank(1, shape);</span>
-<span class="nc" id="L252">        return this.copy();</span>
+<span class="nc" id="L251">        ParameterChecks.assertBroadcastable(this.shape, shape);</span>
+<span class="nc" id="L252">        ParameterChecks.assertRank(1, shape);</span>
+<span class="nc" id="L253">        return this.copy();</span>
     }
 
 
@@ -259,7 +260,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector flatten() {
-<span class="nc" id="L262">        return this.copy();</span>
+<span class="nc" id="L263">        return this.copy();</span>
     }
 
 
@@ -271,17 +272,17 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Vector join(Vector b) {
-<span class="nc" id="L274">        double[] newEntries = new double[this.size + b.entries.length];</span>
+<span class="nc" id="L275">        double[] newEntries = new double[this.size + b.entries.length];</span>
 
         // Copy over sparse values.
-<span class="nc bnc" id="L277" title="All 2 branches missed.">        for(int i=0; i&lt;this.entries.length; i++) {</span>
-<span class="nc" id="L278">            newEntries[indices[i]] = entries[i];</span>
+<span class="nc bnc" id="L278" title="All 2 branches missed.">        for(int i=0; i&lt;this.entries.length; i++) {</span>
+<span class="nc" id="L279">            newEntries[indices[i]] = entries[i];</span>
         }
 
         // Copy over dense values.
-<span class="nc" id="L282">        System.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);</span>
+<span class="nc" id="L283">        System.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);</span>
 
-<span class="nc" id="L284">        return new Vector(newEntries);</span>
+<span class="nc" id="L285">        return new Vector(newEntries);</span>
     }
 
 
@@ -293,17 +294,17 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public CVector join(CVector b) {
-<span class="nc" id="L296">        CNumber[] newEntries = new CNumber[this.size + b.entries.length];</span>
+<span class="nc" id="L297">        CNumber[] newEntries = new CNumber[this.size + b.entries.length];</span>
 
         // Copy over sparse values.
-<span class="nc bnc" id="L299" title="All 2 branches missed.">        for(int i=0; i&lt;this.entries.length; i++) {</span>
-<span class="nc" id="L300">            newEntries[indices[i]] = new CNumber(entries[i]);</span>
+<span class="nc bnc" id="L300" title="All 2 branches missed.">        for(int i=0; i&lt;this.entries.length; i++) {</span>
+<span class="nc" id="L301">            newEntries[indices[i]] = new CNumber(entries[i]);</span>
         }
 
         // Copy over dense values.
-<span class="nc" id="L304">        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);</span>
+<span class="nc" id="L305">        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);</span>
 
-<span class="nc" id="L306">        return new CVector(newEntries);</span>
+<span class="nc" id="L307">        return new CVector(newEntries);</span>
     }
 
 
@@ -315,23 +316,23 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector join(SparseVector b) {
-<span class="nc" id="L318">        double[] newEntries = new double[this.entries.length + b.entries.length];</span>
-<span class="nc" id="L319">        int[] newIndices = new int[this.indices.length + b.indices.length];</span>
+<span class="nc" id="L319">        double[] newEntries = new double[this.entries.length + b.entries.length];</span>
+<span class="nc" id="L320">        int[] newIndices = new int[this.indices.length + b.indices.length];</span>
 
         // Copy values from this vector.
-<span class="nc" id="L322">        System.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);</span>
+<span class="nc" id="L323">        System.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);</span>
         // Copy values from vector b.
-<span class="nc" id="L324">        System.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);</span>
+<span class="nc" id="L325">        System.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);</span>
 
         // Copy indices from this vector.
-<span class="nc" id="L327">        System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);</span>
+<span class="nc" id="L328">        System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);</span>
 
         // Copy the indices from vector b with a shift.
-<span class="nc bnc" id="L330" title="All 2 branches missed.">        for(int i=0; i&lt;b.indices.length; i++) {</span>
-<span class="nc" id="L331">            newIndices[this.indices.length+i] = b.indices[i] + this.size;</span>
+<span class="nc bnc" id="L331" title="All 2 branches missed.">        for(int i=0; i&lt;b.indices.length; i++) {</span>
+<span class="nc" id="L332">            newIndices[this.indices.length+i] = b.indices[i] + this.size;</span>
         }
 
-<span class="nc" id="L334">        return new SparseVector(this.size + b.size, newEntries, newIndices);</span>
+<span class="nc" id="L335">        return new SparseVector(this.size + b.size, newEntries, newIndices);</span>
     }
 
 
@@ -343,23 +344,23 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseCVector join(SparseCVector b) {
-<span class="nc" id="L346">        CNumber[] newEntries = new CNumber[this.entries.length + b.entries.length];</span>
-<span class="nc" id="L347">        int[] newIndices = new int[this.indices.length + b.indices.length];</span>
+<span class="nc" id="L347">        CNumber[] newEntries = new CNumber[this.entries.length + b.entries.length];</span>
+<span class="nc" id="L348">        int[] newIndices = new int[this.indices.length + b.indices.length];</span>
 
         // Copy values from this vector.
-<span class="nc" id="L350">        ArrayUtils.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);</span>
+<span class="nc" id="L351">        ArrayUtils.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);</span>
         // Copy values from vector b.
-<span class="nc" id="L352">        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);</span>
+<span class="nc" id="L353">        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);</span>
 
         // Copy indices from this vector.
-<span class="nc" id="L355">        System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);</span>
+<span class="nc" id="L356">        System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);</span>
 
         // Copy the indices from vector b with a shift.
-<span class="nc bnc" id="L358" title="All 2 branches missed.">        for(int i=0; i&lt;b.indices.length; i++) {</span>
-<span class="nc" id="L359">            newIndices[this.indices.length+i] = b.indices[i] + this.size;</span>
+<span class="nc bnc" id="L359" title="All 2 branches missed.">        for(int i=0; i&lt;b.indices.length; i++) {</span>
+<span class="nc" id="L360">            newIndices[this.indices.length+i] = b.indices[i] + this.size;</span>
         }
 
-<span class="nc" id="L362">        return new SparseCVector(this.size + b.size, newEntries, newIndices);</span>
+<span class="nc" id="L363">        return new SparseCVector(this.size + b.size, newEntries, newIndices);</span>
     }
 
 
@@ -375,7 +376,7 @@ public class SparseVector extends RealSparseVectorBase {
     @Override
     public SparseMatrix stack(Vector b) {
         // TODO: Implementation.
-<span class="nc" id="L378">        return null;</span>
+<span class="nc" id="L379">        return null;</span>
     }
 
 
@@ -390,25 +391,25 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseMatrix stack(SparseVector b) {
-<span class="nc" id="L393">        ParameterChecks.assertEqualShape(this.shape, b.shape);</span>
+<span class="nc" id="L394">        ParameterChecks.assertEqualShape(this.shape, b.shape);</span>
 
-<span class="nc" id="L395">        double[] entries = new double[this.entries.length + b.entries.length];</span>
-<span class="nc" id="L396">        int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.</span>
+<span class="nc" id="L396">        double[] entries = new double[this.entries.length + b.entries.length];</span>
+<span class="nc" id="L397">        int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.</span>
 
         // Copy values from this vector.
-<span class="nc" id="L399">        System.arraycopy(this.entries, 0, entries, 0, this.entries.length);</span>
+<span class="nc" id="L400">        System.arraycopy(this.entries, 0, entries, 0, this.entries.length);</span>
         // Copy values from vector b.
-<span class="nc" id="L401">        System.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);</span>
+<span class="nc" id="L402">        System.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);</span>
 
         // Set row indices to 1 for b values (this vectors row indices are 0 which was implicitly set already).
-<span class="nc" id="L404">        Arrays.fill(indices[0], this.indices.length, entries.length, 1);</span>
+<span class="nc" id="L405">        Arrays.fill(indices[0], this.indices.length, entries.length, 1);</span>
 
         // Copy indices from this vector to the column indices.
-<span class="nc" id="L407">        System.arraycopy(this.indices, 0, indices[1], 0, this.entries.length);</span>
+<span class="nc" id="L408">        System.arraycopy(this.indices, 0, indices[1], 0, this.entries.length);</span>
         // Copy indices from b vector to the column indices.
-<span class="nc" id="L409">        System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);</span>
+<span class="nc" id="L410">        System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);</span>
 
-<span class="nc" id="L411">        return new SparseMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);</span>
+<span class="nc" id="L412">        return new SparseMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);</span>
     }
 
 
@@ -424,7 +425,7 @@ public class SparseVector extends RealSparseVectorBase {
     @Override
     public SparseCMatrix stack(CVector b) {
         // TODO: Implementation.
-<span class="nc" id="L427">        return null;</span>
+<span class="nc" id="L428">        return null;</span>
     }
 
 
@@ -439,25 +440,25 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseCMatrix stack(SparseCVector b) {
-<span class="nc" id="L442">        ParameterChecks.assertEqualShape(this.shape, b.shape);</span>
+<span class="nc" id="L443">        ParameterChecks.assertEqualShape(this.shape, b.shape);</span>
 
-<span class="nc" id="L444">        CNumber[] entries = new CNumber[this.entries.length + b.entries.length];</span>
-<span class="nc" id="L445">        int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.</span>
+<span class="nc" id="L445">        CNumber[] entries = new CNumber[this.entries.length + b.entries.length];</span>
+<span class="nc" id="L446">        int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.</span>
 
         // Copy values from this vector.
-<span class="nc" id="L448">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.entries.length);</span>
+<span class="nc" id="L449">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.entries.length);</span>
         // Copy values from vector b.
-<span class="nc" id="L450">        ArrayUtils.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);</span>
+<span class="nc" id="L451">        ArrayUtils.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);</span>
 
         // Set row indices to 1 for b values (this vectors row indices are 0 which was implicitly set already).
-<span class="nc" id="L453">        Arrays.fill(indices[0], this.indices.length, entries.length, 1);</span>
+<span class="nc" id="L454">        Arrays.fill(indices[0], this.indices.length, entries.length, 1);</span>
 
         // Copy indices from this vector to the column indices.
-<span class="nc" id="L456">        System.arraycopy(this.indices, 0, indices[1], 0, this.entries.length);</span>
+<span class="nc" id="L457">        System.arraycopy(this.indices, 0, indices[1], 0, this.entries.length);</span>
         // Copy indices from b vector to the column indices.
-<span class="nc" id="L458">        System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);</span>
+<span class="nc" id="L459">        System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);</span>
 
-<span class="nc" id="L460">        return new SparseCMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);</span>
+<span class="nc" id="L461">        return new SparseCMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);</span>
     }
 
 
@@ -486,8 +487,8 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseMatrix stack(Vector b, int axis) {
-<span class="nc" id="L489">        ParameterChecks.assertAxis2D(axis);</span>
-<span class="nc bnc" id="L490" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
+<span class="nc" id="L490">        ParameterChecks.assertAxis2D(axis);</span>
+<span class="nc bnc" id="L491" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
     }
 
 
@@ -516,8 +517,8 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseMatrix stack(SparseVector b, int axis) {
-<span class="nc" id="L519">        ParameterChecks.assertAxis2D(axis);</span>
-<span class="nc bnc" id="L520" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
+<span class="nc" id="L520">        ParameterChecks.assertAxis2D(axis);</span>
+<span class="nc bnc" id="L521" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
     }
 
 
@@ -546,8 +547,8 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseCMatrix stack(CVector b, int axis) {
-<span class="nc" id="L549">        ParameterChecks.assertAxis2D(axis);</span>
-<span class="nc bnc" id="L550" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
+<span class="nc" id="L550">        ParameterChecks.assertAxis2D(axis);</span>
+<span class="nc bnc" id="L551" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
     }
 
 
@@ -576,8 +577,8 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseCMatrix stack(SparseCVector b, int axis) {
-<span class="nc" id="L579">        ParameterChecks.assertAxis2D(axis);</span>
-<span class="nc bnc" id="L580" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
+<span class="nc" id="L580">        ParameterChecks.assertAxis2D(axis);</span>
+<span class="nc bnc" id="L581" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
     }
 
 
@@ -590,7 +591,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Vector add(Vector B) {
-<span class="nc" id="L593">        return RealDenseSparseVectorOperations.add(B, this);</span>
+<span class="nc" id="L594">        return RealDenseSparseVectorOperations.add(B, this);</span>
     }
 
 
@@ -603,7 +604,8 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector add(SparseVector B) {
-<span class="nc" id="L606">        return null;</span>
+        // TODO: Implementation - Assume indices are sorted and use dual counter algorithm
+<span class="nc" id="L608">        return null;</span>
     }
 
 
@@ -616,7 +618,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public CVector add(CVector B) {
-<span class="nc" id="L619">        return RealComplexDenseSparseVectorOperations.add(B, this);</span>
+<span class="nc" id="L621">        return RealComplexDenseSparseVectorOperations.add(B, this);</span>
     }
 
 
@@ -630,7 +632,7 @@ public class SparseVector extends RealSparseVectorBase {
     @Override
     public SparseCVector add(SparseCVector B) {
         // TODO: Implementation - Assume indices are sorted and use dual counter algorithm
-<span class="nc" id="L633">        return null;</span>
+<span class="nc" id="L635">        return null;</span>
     }
 
 
@@ -643,7 +645,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Vector sub(Vector B) {
-<span class="nc" id="L646">        return RealDenseSparseVectorOperations.sub(this, B);</span>
+<span class="nc" id="L648">        return RealDenseSparseVectorOperations.sub(this, B);</span>
     }
 
 
@@ -655,7 +657,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Vector add(double a) {
-<span class="nc" id="L658">        return RealSparseOperations.add(this, a);</span>
+<span class="nc" id="L660">        return RealSparseOperations.add(this, a);</span>
     }
 
 
@@ -666,9 +668,8 @@ public class SparseVector extends RealSparseVectorBase {
      * @return The result of adding the specified value to each entry of this tensor.
      */
     @Override
-    public SparseCVector add(CNumber a) {
-//        return RealComplexSparseOperations.add(this, a);
-<span class="nc" id="L671">        return null;</span>
+    public CVector add(CNumber a) {
+<span class="nc" id="L672">        return RealComplexSparseOperations.add(this, a);</span>
     }
 
 
@@ -681,7 +682,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Vector sub(SparseVector B) {
-<span class="nc" id="L684">        return null;</span>
+<span class="nc" id="L685">        return null;</span>
     }
 
 
@@ -694,7 +695,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseCVector sub(CVector B) {
-<span class="nc" id="L697">        return null;</span>
+<span class="nc" id="L698">        return null;</span>
     }
 
 
@@ -707,7 +708,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public CVector sub(SparseCVector B) {
-<span class="nc" id="L710">        return null;</span>
+<span class="nc" id="L711">        return null;</span>
     }
 
 
@@ -719,7 +720,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Vector sub(double a) {
-<span class="nc" id="L722">        return null;</span>
+<span class="nc" id="L723">        return null;</span>
     }
 
 
@@ -731,7 +732,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseCVector sub(CNumber a) {
-<span class="nc" id="L734">        return null;</span>
+<span class="nc" id="L735">        return null;</span>
     }
 
 
@@ -744,7 +745,7 @@ public class SparseVector extends RealSparseVectorBase {
     @Override
     public void addEq(SparseVector B) {
 
-<span class="nc" id="L747">    }</span>
+<span class="nc" id="L748">    }</span>
 
 
     /**
@@ -757,7 +758,7 @@ public class SparseVector extends RealSparseVectorBase {
     @Override
     public void addEq(Vector B) {
 
-<span class="nc" id="L760">    }</span>
+<span class="nc" id="L761">    }</span>
 
 
     /**
@@ -770,7 +771,7 @@ public class SparseVector extends RealSparseVectorBase {
     @Override
     public void subEq(Vector B) {
 
-<span class="nc" id="L773">    }</span>
+<span class="nc" id="L774">    }</span>
 
 
     /**
@@ -781,7 +782,7 @@ public class SparseVector extends RealSparseVectorBase {
     @Override
     public void addEq(Double b) {
 
-<span class="nc" id="L784">    }</span>
+<span class="nc" id="L785">    }</span>
 
 
     /**
@@ -793,7 +794,7 @@ public class SparseVector extends RealSparseVectorBase {
     @Override
     public void subEq(SparseVector B) {
 
-<span class="nc" id="L796">    }</span>
+<span class="nc" id="L797">    }</span>
 
 
     /**
@@ -805,7 +806,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector elemMult(Vector B) {
-<span class="nc" id="L808">        return null;</span>
+<span class="nc" id="L809">        return null;</span>
     }
 
 
@@ -817,7 +818,7 @@ public class SparseVector extends RealSparseVectorBase {
     @Override
     public void subEq(Double b) {
 
-<span class="nc" id="L820">    }</span>
+<span class="nc" id="L821">    }</span>
 
 
     /**
@@ -828,7 +829,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector mult(double factor) {
-<span class="nc" id="L831">        return null;</span>
+<span class="nc" id="L832">        return null;</span>
     }
 
 
@@ -840,7 +841,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseCVector mult(CNumber factor) {
-<span class="nc" id="L843">        return null;</span>
+<span class="nc" id="L844">        return null;</span>
     }
 
 
@@ -853,7 +854,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector div(double divisor) {
-<span class="nc" id="L856">        return null;</span>
+<span class="nc" id="L857">        return null;</span>
     }
 
 
@@ -866,7 +867,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseCVector div(CNumber divisor) {
-<span class="nc" id="L869">        return null;</span>
+<span class="nc" id="L870">        return null;</span>
     }
 
 
@@ -877,7 +878,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Double sum() {
-<span class="nc" id="L880">        return null;</span>
+<span class="nc" id="L881">        return null;</span>
     }
 
 
@@ -889,7 +890,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector sqrt() {
-<span class="nc" id="L892">        return null;</span>
+<span class="nc" id="L893">        return null;</span>
     }
 
 
@@ -901,7 +902,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector abs() {
-<span class="nc" id="L904">        return null;</span>
+<span class="nc" id="L905">        return null;</span>
     }
 
 
@@ -912,7 +913,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector transpose() {
-<span class="nc" id="L915">        return null;</span>
+<span class="nc" id="L916">        return null;</span>
     }
 
 
@@ -923,7 +924,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector T() {
-<span class="nc" id="L926">        return null;</span>
+<span class="nc" id="L927">        return null;</span>
     }
 
 
@@ -935,7 +936,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector recip() {
-<span class="nc" id="L938">        return null;</span>
+<span class="nc" id="L939">        return null;</span>
     }
 
 
@@ -948,7 +949,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Double get(int... indices) {
-<span class="nc" id="L951">        return null;</span>
+<span class="nc" id="L952">        return null;</span>
     }
 
 
@@ -959,7 +960,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector copy() {
-<span class="nc" id="L962">        return null;</span>
+<span class="nc" id="L963">        return null;</span>
     }
 
 
@@ -972,7 +973,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector elemMult(SparseVector B) {
-<span class="nc" id="L975">        return null;</span>
+<span class="nc" id="L976">        return null;</span>
     }
 
 
@@ -985,7 +986,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseCVector elemMult(CVector B) {
-<span class="nc" id="L988">        return null;</span>
+<span class="nc" id="L989">        return null;</span>
     }
 
 
@@ -998,7 +999,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseCVector elemMult(SparseCVector B) {
-<span class="nc" id="L1001">        return null;</span>
+<span class="nc" id="L1002">        return null;</span>
     }
 
 
@@ -1011,7 +1012,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector elemDiv(Vector B) {
-<span class="nc" id="L1014">        return null;</span>
+<span class="nc" id="L1015">        return null;</span>
     }
 
 
@@ -1024,7 +1025,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseCVector elemDiv(CVector B) {
-<span class="nc" id="L1027">        return null;</span>
+<span class="nc" id="L1028">        return null;</span>
     }
 
 
@@ -1037,7 +1038,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Double inner(Vector b) {
-<span class="nc" id="L1040">        return null;</span>
+<span class="nc" id="L1041">        return null;</span>
     }
 
 
@@ -1050,7 +1051,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Double inner(SparseVector b) {
-<span class="nc" id="L1053">        return null;</span>
+<span class="nc" id="L1054">        return null;</span>
     }
 
 
@@ -1061,7 +1062,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector normalize() {
-<span class="nc" id="L1064">        return null;</span>
+<span class="nc" id="L1065">        return null;</span>
     }
 
 
@@ -1074,7 +1075,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public CNumber inner(CVector b) {
-<span class="nc" id="L1077">        return null;</span>
+<span class="nc" id="L1078">        return null;</span>
     }
 
 
@@ -1087,7 +1088,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public CNumber inner(SparseCVector b) {
-<span class="nc" id="L1090">        return null;</span>
+<span class="nc" id="L1091">        return null;</span>
     }
 
 
@@ -1100,7 +1101,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Vector cross(Vector b) {
-<span class="nc" id="L1103">        return null;</span>
+<span class="nc" id="L1104">        return null;</span>
     }
 
 
@@ -1113,7 +1114,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public CVector cross(CVector b) {
-<span class="nc" id="L1116">        return null;</span>
+<span class="nc" id="L1117">        return null;</span>
     }
 
 
@@ -1126,7 +1127,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Matrix outer(Vector b) {
-<span class="nc" id="L1129">        return null;</span>
+<span class="nc" id="L1130">        return null;</span>
     }
 
 
@@ -1139,7 +1140,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Matrix outer(SparseVector b) {
-<span class="nc" id="L1142">        return null;</span>
+<span class="nc" id="L1143">        return null;</span>
     }
 
 
@@ -1152,7 +1153,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public CMatrix outer(CVector b) {
-<span class="nc" id="L1155">        return null;</span>
+<span class="nc" id="L1156">        return null;</span>
     }
 
 
@@ -1165,7 +1166,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public CMatrix outer(SparseCVector b) {
-<span class="nc" id="L1168">        return null;</span>
+<span class="nc" id="L1169">        return null;</span>
     }
 
 
@@ -1177,7 +1178,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public boolean isParallel(Vector b) {
-<span class="nc" id="L1180">        return false;</span>
+<span class="nc" id="L1181">        return false;</span>
     }
 
 
@@ -1189,7 +1190,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public boolean isPerp(Vector b) {
-<span class="nc" id="L1192">        return false;</span>
+<span class="nc" id="L1193">        return false;</span>
     }
 
 
@@ -1202,7 +1203,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Matrix toMatrix() {
-<span class="nc" id="L1205">        return null;</span>
+<span class="nc" id="L1206">        return null;</span>
     }
 
 
@@ -1216,7 +1217,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseMatrix toMatrix(boolean columVector) {
-<span class="nc" id="L1219">        return null;</span>
+<span class="nc" id="L1220">        return null;</span>
     }
 
 
@@ -1229,7 +1230,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseVector elemDiv(SparseVector B) {
-<span class="nc" id="L1232">        return null;</span>
+<span class="nc" id="L1233">        return null;</span>
     }
 
 
@@ -1241,7 +1242,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L1244">        return new int[0];</span>
+<span class="nc" id="L1245">        return new int[0];</span>
     }
 
 
@@ -1253,7 +1254,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L1256">        return new int[0];</span>
+<span class="nc" id="L1257">        return new int[0];</span>
     }
 
 
@@ -1264,7 +1265,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public double norm() {
-<span class="nc" id="L1267">        return 0;</span>
+<span class="nc" id="L1268">        return 0;</span>
     }
 
 
@@ -1278,7 +1279,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L1281">        return 0;</span>
+<span class="nc" id="L1282">        return 0;</span>
     }
 
 
@@ -1289,7 +1290,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L1292">        return 0;</span>
+<span class="nc" id="L1293">        return 0;</span>
     }
 
 
@@ -1302,7 +1303,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseMatrix extend(int n, int axis) {
-<span class="nc" id="L1305">        return null;</span>
+<span class="nc" id="L1306">        return null;</span>
     }
 
 
@@ -1313,7 +1314,7 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public int length() {
-<span class="nc" id="L1316">        return 0;</span>
+<span class="nc" id="L1317">        return 0;</span>
     }
 
 
@@ -1322,8 +1323,8 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public void sparseSort() {
-<span class="nc" id="L1325">        SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);</span>
-<span class="nc" id="L1326">    }</span>
+<span class="nc" id="L1326">        SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);</span>
+<span class="nc" id="L1327">    }</span>
 }
 
 

@@ -549,7 +549,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of adding the specified value to each entry of this tensor.
      */
     @Override
-    public SparseCMatrix add(CNumber a) {
+    public CMatrix add(CNumber a) {
         return null;
     }
 
