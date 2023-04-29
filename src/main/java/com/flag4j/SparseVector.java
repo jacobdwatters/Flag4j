@@ -26,7 +26,6 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealSparseVectorBase;
-import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.dense.real.RealDenseProperties;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;

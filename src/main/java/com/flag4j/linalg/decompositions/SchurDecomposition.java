@@ -35,12 +35,12 @@ import java.util.Scanner;
 
 /**
  * <p>This abstract class specifies methods for computing the Schur decomposition of a square matrix.
- * That is, decompose a square matrix {@code A} into {@code A=QUQ<sup>H</sup>} where {@code Q} is a unitary
- * matrix whose columns are the eigenvectors of {@code A} and {@code U} is an upper triangular matrix in
- * Schur form whose diagonal entries are the eigenvalues of {@code A}, corresponding to the columns of {@code Q},
+ * That is, decompose a square matrix {@code A} into {@code A=UTU<sup>H</sup>} where {@code U} is a unitary
+ * matrix whose columns are the eigenvectors of {@code A} and {@code T} is an upper triangular matrix in
+ * Schur form whose diagonal entries are the eigenvalues of {@code A}, corresponding to the columns of {@code U},
  * repeated per their multiplicity.</p>
  *
- * <p>Note, even if a matrix has only real entries, both {@code Q} and {@code U} may contain complex values.</p>
+ * <p>Note, even if a matrix has only real entries, both {@code U} and {@code T} may contain complex values.</p>
  *
  * @param <T> The type of matrix to compute the Schur decomposition of.
  */
@@ -271,7 +271,6 @@ public abstract class SchurDecomposition<T extends MatrixBase<?, ?, ?, ?, ?, ?, 
             U = CMatrix.I(T.numRows);
         }
 
-        Scanner stdin =  new Scanner(System.in);
 
         for(int i=0; i<maxIterations; i++) {
             // Compute shifts as eigenvalues of lower right 2x2 block.
@@ -303,12 +302,15 @@ public abstract class SchurDecomposition<T extends MatrixBase<?, ?, ?, ?, ?, ?, 
             T = hess.decompose(T).getH();
 
             if(computeU) {
+                // TODO: This is not sufficient to compute the eigenvectors. Only the eigenvalues (i.e.) diagonal
+                //      of T is computed. however, the entire T is needed to compute the eigenvectors.
+                //      See Fundamentals of matrix computations (David Watkins) p. 386.
+                U.setSlice(U.getSlice(0, 4, 0, 3).mult(Q), 0, 0);
                 U = hess.Q.mult(U);
             }
 
             if(debug) {
                 System.out.println("[DEBUG] T_hess:\n" + T);
-                stdin.nextLine();
                 System.out.println("[DEBUG]" + "-".repeat(100) + "\n\n\n");
             }
 
@@ -320,11 +322,13 @@ public abstract class SchurDecomposition<T extends MatrixBase<?, ?, ?, ?, ?, ?, 
 
 
     /**
-     * Computes the eigenvalues for the lower right 2x2 block matrix with a larger matrix.
+     * Computes the eigenvalues for the lower right 2x2 block matrix of a larger matrix.
      * @param src Source matrix to compute eigenvalues of lower right 2x2 block.
      * @return A vector of length 2 containing the eigenvalues of the lower right 2x2 block of {@code src}.
      */
     private CVector get2x2BlockEigenValues(CMatrix src) {
+        // TODO: While theoretically correct, there are some numerical
+        //  issues here.
         CVector shifts = new CVector(2);
         int n = src.numRows-1;
 
