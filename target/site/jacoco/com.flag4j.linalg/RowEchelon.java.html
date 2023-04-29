@@ -24,23 +24,28 @@
 
 package com.flag4j.linalg;
 
+import com.flag4j.CMatrix;
+import com.flag4j.Matrix;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
+import com.flag4j.linalg.decompositions.RealLUDecomposition;
+
 /**
  * This class contains several methods for computing row echelon, reduced row echelon, and extended reduced row echelon
  * forms of a matrix.
  */
-<span class="nc" id="L31">public class RowEchelon {</span>
+<span class="nc" id="L37">public class RowEchelon {</span>
 
-//    /**
-//     * Computes row echelon form of a Matrix.
-//     * @param A The matrix for which to compute the row echelon form.
-//     * @return A matrix in row echelon form which is row-equivalent to this matrix.
-//     */
-//    public static Matrix ref(Matrix A) {
-//        // TODO:
-//        return null;
-//    }
-//
-//
+    /**
+     * Computes a row echelon form of a Matrix. For a reduced row echelon form use {@link #rref(Matrix)}.
+     * @param A The matrix for which to compute the row echelon form.
+     * @return A matrix in row echelon form which is row-equivalent to the matrix {@code A}.
+     */
+    public static Matrix ref(Matrix A) {
+<span class="nc" id="L45">        return new RealLUDecomposition().decompose(A).getU();</span>
+    }
+
+
 //    /**
 //     * Computes row echelon form of a Matrix.
 //     * @param A The matrix for which to compute the row echelon form.
@@ -50,19 +55,18 @@ package com.flag4j.linalg;
 //        /*TODO*/
 //        return null;
 //    }
-//
-//
-//    /**
-//     * Computes row echelon form of a Matrix.
-//     * @param A The matrix for which to compute the row echelon form.
-//     * @return A matrix in row echelon form which is row-equivalent to this matrix.
-//     */
-//    public static CMatrix ref(CMatrix A) {
-//        // TODO:
-//        return null;
-//    }
-//
-//
+
+
+    /**
+     * Computes a row echelon form of a Matrix. For a reduced row echelon form use {@link #rref(CMatrix)}.
+     * @param A The matrix for which to compute the row echelon form.
+     * @return A matrix in row echelon form which is row-equivalent to the matrix {@code A}.
+     */
+    public static CMatrix ref(CMatrix A) {
+<span class="nc" id="L66">        return new ComplexLUDecomposition().decompose(A).getU();</span>
+    }
+
+
 //    /**
 //     * Computes row echelon form of a Matrix.
 //     * @param A The matrix for which to compute the row echelon form.
@@ -72,17 +76,45 @@ package com.flag4j.linalg;
 //        // TODO:
 //        return null;
 //    }
-//
-//
-//    /**
-//     * Computes the reduced row echelon form of a matrix. By default, this method uses partial pivoting.
-//     * To use full or no pivoting see {@link #rref(Matrix, int)}.
-//     * @param A The matrix for which to compute the reduced row echelon form.
-//     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
-//     */
-//    public static Matrix rref(Matrix A) {/*TODO*/return null;}
-//
-//
+
+
+    /**
+     * Computes the reduced row echelon form of a matrix. For a non-reduced row echelon form see {@link #ref(Matrix)}.
+     * @param A The matrix for which to compute the reduced row echelon form.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
+     */
+    public static Matrix rref(Matrix A) {
+<span class="nc" id="L87">        Matrix U = new RealLUDecomposition().decompose(A).getU();</span>
+<span class="nc" id="L88">        int colStop = Math.min(U.numCols, U.numRows);</span>
+        int pivotRow;
+        int iRow;
+        double m;
+        double pivotValue;
+
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        for(int j=0; j&lt;colStop; j++) {</span>
+<span class="nc" id="L95">            pivotRow = j*U.numCols;</span>
+<span class="nc" id="L96">            pivotValue = U.entries[pivotRow + j];</span>
+
+            // Scale row so pivot is 1.
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            for(int k=j; k&lt;U.numCols; k++) {</span>
+<span class="nc" id="L100">                U.entries[pivotRow + k] = U.entries[pivotRow + k]/pivotValue;</span>
+            }
+
+            // Zero out column above pivot.
+<span class="nc bnc" id="L104" title="All 2 branches missed.">            for(int i=0; i&lt;j; i++) {</span>
+<span class="nc" id="L105">                iRow = i*U.numCols;</span>
+<span class="nc" id="L106">                m = U.entries[iRow + j];</span>
+
+<span class="nc bnc" id="L108" title="All 2 branches missed.">                for(int k=j; k&lt;U.numCols; k++) {</span>
+<span class="nc" id="L109">                    U.entries[iRow + k] = U.entries[iRow + k] - m*U.entries[pivotRow + k];</span>
+                }
+            }
+        }
+
+<span class="nc" id="L114">        return U;</span>
+    }
+
+
 //    /**
 //     * Computes the reduced row echelon form of a matrix. By default, this method uses partial pivoting.
 //     * To use full or no pivoting see {@link #rref(Matrix, int)}.
@@ -90,17 +122,44 @@ package com.flag4j.linalg;
 //     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
 //     */
 //    public static SparseMatrix rref(SparseMatrix A) {/*TODO*/return null;}
-//
-//
-//    /**
-//     * Computes the reduced row echelon form of a matrix. By default, this method uses partial pivoting.
-//     * To use full or no pivoting see {@link #rref(CMatrix, int)}.
-//     * @param A The matrix for which to compute the reduced row echelon form.
-//     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
-//     */
-//    public static CMatrix rref(CMatrix A) {/*TODO*/return null;}
-//
-//
+
+
+    /**
+     * Computes the reduced row echelon form of a matrix. For a non-reduced row echelon form see {@link #ref(CMatrix)}.
+     * @param A The matrix for which to compute the reduced row echelon form.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
+     */
+    public static CMatrix rref(CMatrix A) {
+<span class="nc" id="L133">        CMatrix U = new ComplexLUDecomposition().decompose(A).getU();</span>
+<span class="nc" id="L134">        int colStop = Math.min(U.numCols, U.numRows);</span>
+        int pivotRow;
+        int iRow;
+        CNumber m;
+
+<span class="nc bnc" id="L139" title="All 2 branches missed.">        for(int j=0; j&lt;colStop; j++) {</span>
+<span class="nc" id="L140">            pivotRow = j*U.numCols;</span>
+<span class="nc" id="L141">            m = U.entries[pivotRow + j];</span>
+
+            // Scale row so pivot is 1.
+<span class="nc bnc" id="L144" title="All 2 branches missed.">            for(int k=j; k&lt;U.numCols; k++) {</span>
+<span class="nc" id="L145">                U.entries[pivotRow + k] = U.entries[pivotRow + k].div(m);</span>
+            }
+
+            // Zero out column above pivot.
+<span class="nc bnc" id="L149" title="All 2 branches missed.">            for(int i=0; i&lt;j; i++) {</span>
+<span class="nc" id="L150">                iRow = i*U.numCols;</span>
+<span class="nc" id="L151">                m = U.entries[iRow + j];</span>
+
+<span class="nc bnc" id="L153" title="All 2 branches missed.">                for(int k=j; k&lt;U.numCols; k++) {</span>
+<span class="nc" id="L154">                    U.entries[iRow + k].subEq(m.mult(U.entries[pivotRow + k]));</span>
+                }
+            }
+        }
+
+<span class="nc" id="L159">        return U;</span>
+    }
+
+
 //    /**
 //     * Computes the reduced row echelon form of a matrix. By default, this method uses partial pivoting.
 //     * To use full or no pivoting see {@link #rref(SparseCMatrix, int)}.
@@ -200,5 +259,15 @@ package com.flag4j.linalg;
 //     * appropriately sized identity matrix.
 //     */
 //    public static SparseCMatrix erref(SparseCMatrix A) {/*TODO*/return null;}
+
+    public static void main(String[] args) {
+<span class="nc" id="L264">        double[][] aEntries = {</span>
+                {1, -2.244, 0.53, 4, 5},
+                {6, 7, 8, -9.31, 1.101},
+                {94, 1.45, 1.6, 1, 0}};
+<span class="nc" id="L268">        Matrix A = new Matrix(aEntries);</span>
+
+<span class="nc" id="L270">        System.out.println(rref(A));</span>
+<span class="nc" id="L271">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
