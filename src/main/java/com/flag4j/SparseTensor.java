@@ -27,7 +27,6 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealSparseTensorBase;
-import com.flag4j.operations.common.real.AggregateReal;
 
 import java.util.Arrays;
 
@@ -262,7 +261,7 @@ public class SparseTensor extends RealSparseTensorBase {
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public Tensor add(SparseTensor B) {
+    public SparseTensor add(SparseTensor B) {
         return null;
     }
 
@@ -286,7 +285,7 @@ public class SparseTensor extends RealSparseTensorBase {
      * @return The result of adding the specified value to each entry of this tensor.
      */
     @Override
-    public SparseCTensor add(CNumber a) {
+    public CTensor add(CNumber a) {
         return null;
     }
 

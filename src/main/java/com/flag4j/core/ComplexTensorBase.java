@@ -34,7 +34,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <Y> Real tensor type.
  */
 public abstract class ComplexTensorBase<T, Y>
-        extends TensorBase<T, CTensor, T, Y, CNumber[], CNumber>
+        extends TensorBase<T, CTensor, T, CTensor, Y, CNumber[], CNumber>
         implements ComplexTensorMixin<T, Y> {
 
     /**

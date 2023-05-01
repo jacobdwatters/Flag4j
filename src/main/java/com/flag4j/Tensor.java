@@ -32,7 +32,6 @@ import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
-import com.flag4j.operations.common.real.RealProperties;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
@@ -55,7 +54,7 @@ import java.util.Arrays;
  * Real Dense Tensor. May have any rank (that is, may have any number of unique axes/dimensions).
  */
 public class Tensor extends RealTensorBase<Tensor, CTensor>
-        implements TensorExclusiveMixin<Tensor, Tensor, SparseTensor> {
+        implements TensorExclusiveMixin<Tensor, Tensor, SparseTensor, CTensor> {
 
 
     /**

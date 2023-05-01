@@ -33,7 +33,6 @@ import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
-import com.flag4j.operations.common.real.RealProperties;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.*;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
@@ -3573,7 +3572,7 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
 
 
     /**
-     * Swaps specified rows in the matrix.
+     * Swaps specified rows in the matrix. This is done in place.
      * @param rowIndex1 Index of the first row to swap.
      * @param rowIndex2 Index of the second row to swap.
      * @return A reference to this matrix.
@@ -3598,7 +3597,7 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
 
 
     /**
-     * Swaps specified columns in the matrix.
+     * Swaps specified columns in the matrix. This is done in place.
      * @param colIndex1 Index of the first column to swap.
      * @param colIndex2 Index of the second column to swap.
      * @return A reference to this matrix.

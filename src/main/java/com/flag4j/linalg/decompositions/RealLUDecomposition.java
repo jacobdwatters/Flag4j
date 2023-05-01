@@ -82,9 +82,10 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
     @Override
     protected void noPivot() {
         P = Q = null; // P and Q are not used here.
+        int colStop = Math.min(LU.numCols, LU.numRows);
 
         // Using Gaussian elimination and no pivoting
-        for(int j=0; j<LU.numCols; j++) {
+        for(int j=0; j<colStop; j++) {
             if(j<LU.numRows && Math.abs(LU.entries[j*LU.numCols + j]) < zeroPivotTol) {
                 throw new ArithmeticException("Zero pivot encountered in decomposition." +
                         " Consider using LU decomposition with partial pivoting.");
@@ -102,10 +103,12 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
     protected void partialPivot() {
         P = Matrix.I(LU.numRows);
         Q = null; // Q is not used here.
+        int colStop = Math.min(LU.numCols, LU.numRows);
         int maxIndex;
 
+
         // Using Gaussian elimination with row pivoting.
-        for(int j=0; j<LU.numCols; j++) {
+        for(int j=0; j<colStop; j++) {
             maxIndex = maxColIndex(j); // Find row index of max value (in absolute value) in column j so that the index >= j.
 
             // Make the appropriate swaps in LU and P (This is the partial pivoting step).
@@ -127,9 +130,10 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
         P = Matrix.I(LU.numRows);
         Q = Matrix.I(LU.numCols);
         int[] maxIndex;
+        int colStop = Math.min(LU.numCols, LU.numRows);
 
         // Using Gaussian elimination with row and column (rook) pivoting.
-        for(int j=0; j<LU.numCols; j++) {
+        for(int j=0; j<colStop; j++) {
             maxIndex = maxIndex(j);
 
             // Make the appropriate swaps in LU, P and Q (This is the full pivoting step).
@@ -153,15 +157,21 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      */
     private void computeRows(int j) {
         double m;
+        int pivotRow = j*LU.numCols;
+        int iRow;
 
         for(int i=j+1; i<LU.numRows; i++) {
-            m = LU.entries[i*LU.numCols + j];
-            m = LU.entries[j*LU.numCols + j] == 0 ? m : m/LU.entries[j*LU.numCols + j];
+            iRow = i*LU.numCols;
+            m = LU.entries[iRow + j];
+            m = LU.entries[pivotRow + j] == 0 ? m : m/LU.entries[pivotRow + j];
 
+            // Compute and set U values.
             for(int k=j; k<LU.numCols; k++) {
-                LU.entries[i*LU.numCols + k] = LU.entries[i*LU.numCols + k] - m*LU.entries[j*LU.numCols + k];
-                LU.entries[i*LU.numCols + j] = m;
+                LU.entries[iRow + k] -= m*LU.entries[pivotRow + k];
             }
+
+            // Compute and set L value.
+            LU.entries[iRow + j] = m;
         }
     }
 
@@ -177,7 +187,7 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
         double value;
 
         for(int i=j; i<LU.numRows; i++) {
-            value = Math.abs(LU.entries[i*LU.numCols+j]);
+            value = Math.abs(LU.entries[i*LU.numCols + j]);
             if(value > currentMax) {
                 currentMax = value;
                 maxIndex = i;
@@ -195,12 +205,17 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      */
     private int[] maxIndex(int startIndex) {
         double currentMax = -1;
-        int[] index = {-1, -1};
         double value;
+        int rowIdx;
+        int[] index = {-1, -1};
+
 
         for(int i=startIndex; i<LU.numRows; i++) {
+            rowIdx = i*LU.numCols;
+
             for(int j=startIndex; j<LU.numCols; j++) {
-                value = Math.abs(LU.entries[i*LU.numCols+j]);
+                value = Math.abs(LU.entries[rowIdx+j]);
+
                 if(value > currentMax) {
                     currentMax = value;
                     index[0] = i;
@@ -225,9 +240,8 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
         // Copy L values from LU matrix.
         for(int i=0; i<LU.numRows; i++) {
             if(i<LU.numCols) {
-                L.entries[i*L.numCols+i] = 1; // Set principle diagonal to be ones.
+                L.entries[i*L.numCols+i] = 1; // Set principle diagonal to be 1, so it is unit lower-triangular.
             }
-
             System.arraycopy(LU.entries, i*LU.numCols, L.entries, i*L.numCols, i);
         }
 

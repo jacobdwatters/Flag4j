@@ -361,4 +361,19 @@ public final class ParameterChecks {
             }
         }
     }
+
+
+    /**
+     * Checks that a value is within the specified inclusive range.
+     * @param value Value of interest.
+     * @param lowerBound Lower bound of range (inclusive).
+     * @param upperBound Upper bound of range (inclusive).
+     * @param paramName Name of the parameter.
+     * @throws IllegalArgumentException If {@code value} is not within the range {@code [lowerBound, upperBound]}
+     */
+    public static void assertInRange(double value, double lowerBound, double upperBound, String paramName) {
+        if(value < lowerBound || value > upperBound) {
+            throw new IllegalArgumentException();
+        }
+    }
 }

@@ -300,4 +300,34 @@ public final class RealDenseTranspose {
 
         return dest;
     }
+
+
+    /**
+     * Transposes an integer matrix using a blocked algorithm.
+     * @param src Entries of the matrix to transpose.
+     * @return The transpose of the matrix.
+     */
+    public static int[][] blockedIntMatrix(final int[][] src) {
+        int[][] dest = new int[src[0].length][src.length];
+        int blockSize = Configurations.getBlockSize();
+
+        int iBound;
+        int jBound;
+
+        for(int ii=0; ii<src[0].length; ii+=blockSize) {
+            iBound = Math.min(src[0].length, ii+blockSize);
+
+            for(int jj=0; jj<src.length; jj+=blockSize) {
+                jBound = Math.min(src.length, jj+blockSize);
+
+                for(int i=ii; i<iBound; i++) {
+                    for(int j=jj; j<jBound; j++) {
+                        dest[i][j] = src[j][i];
+                    }
+                }
+            }
+        }
+
+        return dest;
+    }
 }

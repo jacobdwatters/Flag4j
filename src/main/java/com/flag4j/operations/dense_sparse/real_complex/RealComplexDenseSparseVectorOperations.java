@@ -29,6 +29,8 @@ import com.flag4j.SparseCVector;
 import com.flag4j.SparseVector;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -202,6 +204,44 @@ public class RealComplexDenseSparseVectorOperations {
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             index = src2.indices[i];
             dest.entries[index].subEq(src2.entries[i]);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Subtracts a complex dense vector from a complex sparse vector.
+     * @param src1 Sparse vector.
+     * @param src2 Dense vector.
+     * @return The result of the vector subtraction.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static CVector sub(SparseCVector src1, Vector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CVector dest = new CVector(RealOperations.scalMult(src2.entries, -1));
+
+        for(int i=0; i<src1.nonZeroEntries(); i++) {
+            dest.entries[src1.indices[i]].addEq(src1.entries[i]);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Subtracts a complex dense vector from a complex sparse vector.
+     * @param src1 Sparse vector.
+     * @param src2 Dense vector.
+     * @return The result of the vector subtraction.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static CVector sub(SparseVector src1, CVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CVector dest = new CVector(ComplexOperations.scalMult(src2.entries, -1));
+
+        for(int i=0; i<src1.nonZeroEntries(); i++) {
+            dest.entries[src1.indices[i]].addEq(src1.entries[i]);
         }
 
         return dest;

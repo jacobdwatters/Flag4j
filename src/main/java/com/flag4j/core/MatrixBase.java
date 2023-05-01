@@ -37,13 +37,14 @@ import com.flag4j.util.ErrorMessages;
  * @param <T> Type of this matrix.
  * @param <U> Dense matrix type.
  * @param <W> Complex matrix type.
+ * @param <Z> Dense complex tensor type.
  * @param <Y> Real matrix type.
  * @param <D> Type of the storage data structure for the matrix.
  *           This common use case will be an array or list-like data structure.
  * @param <X> The type of individual entry within the {@code D} data structure.
  */
-public abstract class MatrixBase<T, U, W, Y, D, X extends Number>
-        extends TensorBase<T, U, W, Y, D, X>
+public abstract class MatrixBase<T, U, W, Z, Y, D, X extends Number>
+        extends TensorBase<T, U, W, Z, Y, D, X>
         implements MatrixPropertiesMixin,
         MatrixComparisonsMixin<T>,
         MatrixManipulationsMixin<T, X>,
@@ -100,5 +101,5 @@ public abstract class MatrixBase<T, U, W, Y, D, X extends Number>
     }
 
 
-    public abstract MatrixBase<?, ?, ?, ?, D, X> flatten(int axis);
+    public abstract MatrixBase<?, ?, ?, ?, ?, D, X> flatten(int axis);
 }

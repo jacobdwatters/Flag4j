@@ -36,10 +36,11 @@ import com.flag4j.SparseTensor;
  * {@link VectorBase vectors} or the methods do not apply to rank 1 and/or 2 tensors.
  *
  * @param <T> Tensor type.
- * @param <U> Dense Tensor type.
- * @param <V> Sparse Tensor type.
+ * @param <U> Dense tensor type.
+ * @param <V> Sparse tensor type.
+ * @param <W> Complex tensor type.
  */
-public interface TensorExclusiveMixin<T, U, V> {
+public interface TensorExclusiveMixin<T, U, V, W> {
 
     // TODO: add toVector() and toMatrix() methods.
     // TODO: Add tensorDot(...) methods for Tensor, CTensor, SparseTensor, SparseCTensor.
@@ -140,7 +141,7 @@ public interface TensorExclusiveMixin<T, U, V> {
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    U add(SparseTensor B);
+    T add(SparseTensor B);
 
 
     /**
@@ -160,7 +161,7 @@ public interface TensorExclusiveMixin<T, U, V> {
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    CTensor add(SparseCTensor B);
+    W add(SparseCTensor B);
 
 
     /**
@@ -170,7 +171,7 @@ public interface TensorExclusiveMixin<T, U, V> {
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    U sub(SparseTensor B);
+    T sub(SparseTensor B);
 
 
     /**

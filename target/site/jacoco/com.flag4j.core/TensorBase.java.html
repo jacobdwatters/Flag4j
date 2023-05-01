@@ -37,16 +37,17 @@ import java.math.BigInteger;
  * @param &lt;T&gt; Type of this tensor.
  * @param &lt;U&gt; Dense Tensor type.
  * @param &lt;W&gt; Complex Tensor type.
+ * @param &lt;Z&gt; Dense complex tensor type.
  * @param &lt;Y&gt; Real Tensor type.
  * @param &lt;D&gt; Type of the storage data structure for the tensor.
  *           This common use case will be an array or list-like data structure.
  * @param &lt;X&gt; The type of individual entry within the {@code D} data structure
  */
-public abstract class TensorBase&lt;T, U, W, Y, D, X extends Number&gt; implements Serializable,
+public abstract class TensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt; implements Serializable,
         TensorComparisonsMixin,
         TensorPropertiesMixin,
         TensorManipulationsMixin&lt;T&gt;,
-        TensorOperationsMixin&lt;T, U, W, Y, X&gt; {
+        TensorOperationsMixin&lt;T, U, W, Z, Y, X&gt; {
 
     /**
      * Entry data for this tensor.
@@ -64,10 +65,10 @@ public abstract class TensorBase&lt;T, U, W, Y, D, X extends Number&gt; implemen
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      *                If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-<span class="fc" id="L67">    public TensorBase(Shape shape, D entries) {</span>
-<span class="fc" id="L68">        this.shape = shape;</span>
-<span class="fc" id="L69">        this.entries = entries;</span>
-<span class="fc" id="L70">    }</span>
+<span class="fc" id="L68">    public TensorBase(Shape shape, D entries) {</span>
+<span class="fc" id="L69">        this.shape = shape;</span>
+<span class="fc" id="L70">        this.entries = entries;</span>
+<span class="fc" id="L71">    }</span>
 
 
     /**
@@ -75,7 +76,7 @@ public abstract class TensorBase&lt;T, U, W, Y, D, X extends Number&gt; implemen
      * @return The shape of this tensor.
      */
     public Shape getShape() {
-<span class="fc" id="L78">        return this.shape;</span>
+<span class="fc" id="L79">        return this.shape;</span>
     }
 
 
@@ -93,7 +94,7 @@ public abstract class TensorBase&lt;T, U, W, Y, D, X extends Number&gt; implemen
      * @return The rank of this tensor.
      */
     public int getRank() {
-<span class="fc" id="L96">        return this.shape.getRank();</span>
+<span class="fc" id="L97">        return this.shape.getRank();</span>
     }
 
 
@@ -102,7 +103,7 @@ public abstract class TensorBase&lt;T, U, W, Y, D, X extends Number&gt; implemen
      * @return The entries of this tensor.
      */
     public D getEntries() {
-<span class="nc" id="L105">        return this.entries;</span>
+<span class="nc" id="L106">        return this.entries;</span>
     }
 
 
@@ -112,7 +113,7 @@ public abstract class TensorBase&lt;T, U, W, Y, D, X extends Number&gt; implemen
      */
     public BigInteger totalEntries() {
         // Using the shape to compute the total number of entries ensures the correct result for sparse tensors.
-<span class="fc" id="L115">        return shape.totalEntries();</span>
+<span class="fc" id="L116">        return shape.totalEntries();</span>
     }
 
 
@@ -121,8 +122,8 @@ public abstract class TensorBase&lt;T, U, W, Y, D, X extends Number&gt; implemen
      * @param B Second tensor.
      * @return True if this tensor and B have the same shape. False otherwise.
      */
-    public boolean sameShape(TensorBase&lt;?, ?, ?, ?, ?, ?&gt; B) {
-<span class="nc" id="L125">        return this.shape.equals(B.shape);</span>
+    public boolean sameShape(TensorBase&lt;?, ?, ?, ?, ?, ?, ?&gt; B) {
+<span class="nc" id="L126">        return this.shape.equals(B.shape);</span>
     }
 
 
@@ -134,14 +135,14 @@ public abstract class TensorBase&lt;T, U, W, Y, D, X extends Number&gt; implemen
      * @return True if tensor A and tensor B have the same length along the specified axis. Otherwise, returns false.
      * @throws IllegalArgumentException If axis is negative or unspecified for either tensor.
      */
-    public static boolean sameLength(TensorBase&lt;?, ?, ?, ?, ?, ?&gt; A, TensorBase&lt;?, ?, ?, ?, ?, ?&gt; B, int axis) {
-<span class="nc bnc" id="L138" title="All 4 branches missed.">        if(axis &lt; 0 || axis&gt;=Math.min(A.shape.getRank(), B.shape.getRank())) {</span>
-<span class="nc" id="L139">            throw new IllegalArgumentException(</span>
-<span class="nc" id="L140">                    ErrorMessages.getAxisErr(axis)</span>
+    public static boolean sameLength(TensorBase&lt;?, ?, ?, ?, ?, ?, ?&gt; A, TensorBase&lt;?, ?, ?, ?, ?, ?, ?&gt; B, int axis) {
+<span class="nc bnc" id="L139" title="All 4 branches missed.">        if(axis &lt; 0 || axis&gt;=Math.min(A.shape.getRank(), B.shape.getRank())) {</span>
+<span class="nc" id="L140">            throw new IllegalArgumentException(</span>
+<span class="nc" id="L141">                    ErrorMessages.getAxisErr(axis)</span>
             );
         }
 
-<span class="nc bnc" id="L144" title="All 2 branches missed.">        return A.shape.dims[axis]==B.shape.dims[axis];</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        return A.shape.dims[axis]==B.shape.dims[axis];</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

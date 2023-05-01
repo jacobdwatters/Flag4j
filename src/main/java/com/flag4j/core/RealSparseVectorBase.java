@@ -39,7 +39,9 @@ import java.math.RoundingMode;
 /**
  * Base class for all sparse vectors.
  */
-public abstract class RealSparseVectorBase extends RealVectorBase<SparseVector, SparseCVector, SparseMatrix, SparseCMatrix> {
+public abstract class RealSparseVectorBase
+        extends RealVectorBase<SparseVector, SparseCVector, SparseMatrix, SparseCMatrix>
+        implements SparseTensorMixin<Double> {
 
     /**
      * Indices of non-zero values in this sparse vector.
@@ -48,7 +50,7 @@ public abstract class RealSparseVectorBase extends RealVectorBase<SparseVector, 
     /**
      * Number of non-zero entries of this sparse vector.
      */
-    private int nonZeroEntries;
+    protected int nonZeroEntries;
 
 
     /**
@@ -56,7 +58,8 @@ public abstract class RealSparseVectorBase extends RealVectorBase<SparseVector, 
      * @param totalEntries Number of total entries in this sparse vector, including zeros.
      * @param nonZeroEntries Number of non-zero entries in this sparse vector.
      * @param entries Non-zero entries of this sparse vector.
-     * @param indices Indices of the non-zero entries of this tensor.
+     * @param indices Indices of the non-zero entries of this tensor. Assumed to be sorted in geographical order.
+     *                However, this is not enforced but many algorithms assume this to be true.
      * @throws IllegalArgumentException If the lengths of the entries and indices arrays are not equal.
      */
     public RealSparseVectorBase(int totalEntries, int nonZeroEntries, double[] entries, int[] indices) {
@@ -114,4 +117,7 @@ public abstract class RealSparseVectorBase extends RealVectorBase<SparseVector, 
 
         return density.doubleValue();
     }
+
+
+
 }

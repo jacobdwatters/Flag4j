@@ -37,16 +37,17 @@ import java.math.BigInteger;
  * @param <T> Type of this tensor.
  * @param <U> Dense Tensor type.
  * @param <W> Complex Tensor type.
+ * @param <Z> Dense complex tensor type.
  * @param <Y> Real Tensor type.
  * @param <D> Type of the storage data structure for the tensor.
  *           This common use case will be an array or list-like data structure.
  * @param <X> The type of individual entry within the {@code D} data structure
  */
-public abstract class TensorBase<T, U, W, Y, D, X extends Number> implements Serializable,
+public abstract class TensorBase<T, U, W, Z, Y, D, X extends Number> implements Serializable,
         TensorComparisonsMixin,
         TensorPropertiesMixin,
         TensorManipulationsMixin<T>,
-        TensorOperationsMixin<T, U, W, Y, X> {
+        TensorOperationsMixin<T, U, W, Z, Y, X> {
 
     /**
      * Entry data for this tensor.
@@ -121,7 +122,7 @@ public abstract class TensorBase<T, U, W, Y, D, X extends Number> implements Ser
      * @param B Second tensor.
      * @return True if this tensor and B have the same shape. False otherwise.
      */
-    public boolean sameShape(TensorBase<?, ?, ?, ?, ?, ?> B) {
+    public boolean sameShape(TensorBase<?, ?, ?, ?, ?, ?, ?> B) {
         return this.shape.equals(B.shape);
     }
 
@@ -134,7 +135,7 @@ public abstract class TensorBase<T, U, W, Y, D, X extends Number> implements Ser
      * @return True if tensor A and tensor B have the same length along the specified axis. Otherwise, returns false.
      * @throws IllegalArgumentException If axis is negative or unspecified for either tensor.
      */
-    public static boolean sameLength(TensorBase<?, ?, ?, ?, ?, ?> A, TensorBase<?, ?, ?, ?, ?, ?> B, int axis) {
+    public static boolean sameLength(TensorBase<?, ?, ?, ?, ?, ?, ?> A, TensorBase<?, ?, ?, ?, ?, ?, ?> B, int axis) {
         if(axis < 0 || axis>=Math.min(A.shape.getRank(), B.shape.getRank())) {
             throw new IllegalArgumentException(
                     ErrorMessages.getAxisErr(axis)

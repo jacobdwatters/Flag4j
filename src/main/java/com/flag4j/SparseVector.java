@@ -26,11 +26,19 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealSparseVectorBase;
+import com.flag4j.operations.dense.real.RealDenseProperties;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
+import com.flag4j.operations.sparse.real.RealSparseOperations;
+import com.flag4j.operations.sparse.real_complex.RealComplexSparseOperations;
+import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.SparseDataWrapper;
 
 import java.util.Arrays;
 
 /**
- * Real sparse vector.
+ * Real sparse vector of arbitrary size.
  */
 public class SparseVector extends RealSparseVectorBase {
 
@@ -48,7 +56,9 @@ public class SparseVector extends RealSparseVectorBase {
      * Creates a sparse column vector of specified size filled with zeros.
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      * @param nonZeroEntries The nonZero entries of this sparse vector.
-     * @param indices Indices of the nonZero entries.
+     * @param indices Indices of the nonZero entries. Indices are assumed to be sorted in lexicographical order but this
+     *                is <b>not</b> enforced. However, many algorithms assume the indices to be sorted. If they are not,
+     *                use
      * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
      * the length of the nonZeroEntries array is greater than the size.
      */
@@ -69,6 +79,15 @@ public class SparseVector extends RealSparseVectorBase {
      */
     public SparseVector(int size, double[] nonZeroEntries, int[] indices) {
         super(size, nonZeroEntries.length, nonZeroEntries, indices);
+    }
+
+
+    /**
+     * Constructs a sparse vector whose non-zero values, indices, and size are specified by another sparse vector.
+     * @param a Sparse vector to copy
+     */
+    public SparseVector(SparseVector a) {
+        super(a.size(), a.nonZeroEntries(), a.entries.clone(), a.indices.clone());
     }
 
 
@@ -180,112 +199,169 @@ public class SparseVector extends RealSparseVectorBase {
 
 
     /**
-     * Constructs a sparse vector whose non-zero values, indices, and size are specified by another sparse vector.
-     * @param a Sparse vector to copy
-     */
-    public SparseVector(SparseVector a) {
-        super(a.size(), a.nonZeroEntries(), a.entries.clone(), a.indices.clone());
-    }
-
-    /**
-     * Checks if this tensor only contains zeros.
+     * Checks if this vector only contains zeros.
      *
-     * @return True if this tensor only contains zeros. Otherwise, returns false.
+     * @return True if this vector only contains zeros. Otherwise, returns false.
      */
     @Override
     public boolean isZeros() {
-        return false;
+        return entries.length==0;
     }
 
 
     /**
-     * Checks if this tensor only contains ones.
+     * Checks if this vector only contains ones.
      *
-     * @return True if this tensor only contains ones. Otherwise, returns false.
+     * @return True if this vector only contains ones. Otherwise, returns false.
      */
     @Override
     public boolean isOnes() {
-        return false;
+        return entries.length==size && RealDenseProperties.isOnes(this.entries);
     }
 
+
     /**
-     * Sets an index of this tensor to a specified value.
+     * Sets an index of a copy of this vector to a specified value.
+     *
+     * Creates a copy of this vector and sets an index to the specified value. Note, unlike the dense version of this
+     * method, this <b>does not</b> affect this vector.
      *
      * @param value   Value to set.
-     * @param indices The indices of this tensor for which to set the value.
-     * @return A reference to this tensor.
+     * @param indices The index of for which to set the value.
+     * @return A copy of this vector with the specified index set to the specified value.
+     * @throws IllegalArgumentException If the number of indices provided is greater than 1.
+     * @throws IllegalArgumentException If the index is negative or larger than the total vector size.
      */
     @Override
     public SparseVector set(double value, int... indices) {
+        // TODO: Set should return a new instance for sparse vectors, matrices, and tensors, so entries can remain final.
         return null;
     }
 
+
     /**
-     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
-     * in the reshaped tensor.
-     *
-     * @param shape Shape of the new tensor.
-     * @return A tensor which is equivalent to this tensor but with the specified shape.
-     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     * Copies and reshapes vector. Note, since a vector is rank 1, this method simply copies the vector.
+     * @param shape Shape of the new vector.
+     * @return A copy of this vector.
+     * @throws IllegalArgumentException If the new shape is not rank 1.
      */
     @Override
     public SparseVector reshape(Shape shape) {
-        return null;
+        ParameterChecks.assertBroadcastable(this.shape, shape);
+        ParameterChecks.assertRank(1, shape);
+        return this.copy();
     }
 
+
     /**
-     * Flattens tensor to single dimension. To flatten tensor along a single axis.
-     *
-     * @return The flattened tensor.
+     * Flattens vector. Note, since a vector is already rank 1. This just copies the vector.
+     * @return A copy of this vector.
      */
     @Override
     public SparseVector flatten() {
-        return null;
+        return this.copy();
     }
 
+
     /**
-     * Joints specified vector with this vector.
+     * Joins specified vector with this vector.
      *
      * @param b Vector to join with this vector.
      * @return A vector resulting from joining the specified vector with this vector.
      */
     @Override
-    public SparseVector join(Vector b) {
-        return null;
+    public Vector join(Vector b) {
+        double[] newEntries = new double[this.size + b.entries.length];
+
+        // Copy over sparse values.
+        for(int i=0; i<this.entries.length; i++) {
+            newEntries[indices[i]] = entries[i];
+        }
+
+        // Copy over dense values.
+        System.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);
+
+        return new Vector(newEntries);
     }
 
+
     /**
-     * Joints specified vector with this vector.
+     * Joins specified vector with this vector.
      *
      * @param b Vector to join with this vector.
      * @return A vector resulting from joining the specified vector with this vector.
      */
     @Override
     public CVector join(CVector b) {
-        return null;
+        CNumber[] newEntries = new CNumber[this.size + b.entries.length];
+
+        // Copy over sparse values.
+        for(int i=0; i<this.entries.length; i++) {
+            newEntries[indices[i]] = new CNumber(entries[i]);
+        }
+
+        // Copy over dense values.
+        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);
+
+        return new CVector(newEntries);
     }
 
+
     /**
-     * Joints specified vector with this vector.
+     * Joins specified vector with this vector.
      *
      * @param b Vector to join with this vector.
      * @return A vector resulting from joining the specified vector with this vector.
      */
     @Override
     public SparseVector join(SparseVector b) {
-        return null;
+        double[] newEntries = new double[this.entries.length + b.entries.length];
+        int[] newIndices = new int[this.indices.length + b.indices.length];
+
+        // Copy values from this vector.
+        System.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);
+        // Copy values from vector b.
+        System.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);
+
+        // Copy indices from this vector.
+        System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);
+
+        // Copy the indices from vector b with a shift.
+        for(int i=0; i<b.indices.length; i++) {
+            newIndices[this.indices.length+i] = b.indices[i] + this.size;
+        }
+
+        return new SparseVector(this.size + b.size, newEntries, newIndices);
     }
 
+
     /**
-     * Joints specified vector with this vector.
+     * Joins specified vector with this vector.
      *
      * @param b Vector to join with this vector.
      * @return A vector resulting from joining the specified vector with this vector.
      */
     @Override
     public SparseCVector join(SparseCVector b) {
-        return null;
+        CNumber[] newEntries = new CNumber[this.entries.length + b.entries.length];
+        int[] newIndices = new int[this.indices.length + b.indices.length];
+
+        // Copy values from this vector.
+        ArrayUtils.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);
+        // Copy values from vector b.
+        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);
+
+        // Copy indices from this vector.
+        System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);
+
+        // Copy the indices from vector b with a shift.
+        for(int i=0; i<b.indices.length; i++) {
+            newIndices[this.indices.length+i] = b.indices[i] + this.size;
+        }
+
+        return new SparseCVector(this.size + b.size, newEntries, newIndices);
     }
+
 
     /**
      * Stacks two vectors along columns as if they were row vectors.
@@ -298,8 +374,10 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseMatrix stack(Vector b) {
+        // TODO: Implementation.
         return null;
     }
+
 
     /**
      * Stacks two vectors along columns as if they were row vectors.
@@ -312,8 +390,27 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseMatrix stack(SparseVector b) {
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, b.shape);
+
+        double[] entries = new double[this.entries.length + b.entries.length];
+        int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.
+
+        // Copy values from this vector.
+        System.arraycopy(this.entries, 0, entries, 0, this.entries.length);
+        // Copy values from vector b.
+        System.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);
+
+        // Set row indices to 1 for b values (this vectors row indices are 0 which was implicitly set already).
+        Arrays.fill(indices[0], this.indices.length, entries.length, 1);
+
+        // Copy indices from this vector to the column indices.
+        System.arraycopy(this.indices, 0, indices[1], 0, this.entries.length);
+        // Copy indices from b vector to the column indices.
+        System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);
+
+        return new SparseMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);
     }
+
 
     /**
      * Stacks two vectors along columns as if they were row vectors.
@@ -326,8 +423,10 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseCMatrix stack(CVector b) {
+        // TODO: Implementation.
         return null;
     }
+
 
     /**
      * Stacks two vectors along columns as if they were row vectors.
@@ -340,8 +439,27 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseCMatrix stack(SparseCVector b) {
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, b.shape);
+
+        CNumber[] entries = new CNumber[this.entries.length + b.entries.length];
+        int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.
+
+        // Copy values from this vector.
+        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.entries.length);
+        // Copy values from vector b.
+        ArrayUtils.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);
+
+        // Set row indices to 1 for b values (this vectors row indices are 0 which was implicitly set already).
+        Arrays.fill(indices[0], this.indices.length, entries.length, 1);
+
+        // Copy indices from this vector to the column indices.
+        System.arraycopy(this.indices, 0, indices[1], 0, this.entries.length);
+        // Copy indices from b vector to the column indices.
+        System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);
+
+        return new SparseCMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);
     }
+
 
     /**
      * <p>
@@ -368,8 +486,10 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseMatrix stack(Vector b, int axis) {
-        return null;
+        ParameterChecks.assertAxis2D(axis);
+        return axis==0 ? stack(b) : stack(b).T();
     }
+
 
     /**
      * <p>
@@ -396,8 +516,10 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseMatrix stack(SparseVector b, int axis) {
-        return null;
+        ParameterChecks.assertAxis2D(axis);
+        return axis==0 ? stack(b) : stack(b).T();
     }
+
 
     /**
      * <p>
@@ -424,8 +546,10 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseCMatrix stack(CVector b, int axis) {
-        return null;
+        ParameterChecks.assertAxis2D(axis);
+        return axis==0 ? stack(b) : stack(b).T();
     }
+
 
     /**
      * <p>
@@ -452,8 +576,10 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public SparseCMatrix stack(SparseCVector b, int axis) {
-        return null;
+        ParameterChecks.assertAxis2D(axis);
+        return axis==0 ? stack(b) : stack(b).T();
     }
+
 
     /**
      * Computes the element-wise addition between this vector and the specified vector.
@@ -464,8 +590,9 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Vector add(Vector B) {
-        return null;
+        return RealDenseSparseVectorOperations.add(B, this);
     }
+
 
     /**
      * Computes the element-wise addition between two tensors of the same rank.
@@ -475,9 +602,11 @@ public class SparseVector extends RealSparseVectorBase {
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public Vector add(SparseVector B) {
+    public SparseVector add(SparseVector B) {
+        // TODO: Implementation - Assume indices are sorted and use dual counter algorithm
         return null;
     }
+
 
     /**
      * Computes the element-wise addition between this vector and the specified vector.
@@ -487,9 +616,10 @@ public class SparseVector extends RealSparseVectorBase {
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public SparseCVector add(CVector B) {
-        return null;
+    public CVector add(CVector B) {
+        return RealComplexDenseSparseVectorOperations.add(B, this);
     }
+
 
     /**
      * Computes the element-wise addition between this vector and the specified vector.
@@ -499,9 +629,11 @@ public class SparseVector extends RealSparseVectorBase {
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public CVector add(SparseCVector B) {
+    public SparseCVector add(SparseCVector B) {
+        // TODO: Implementation - Assume indices are sorted and use dual counter algorithm
         return null;
     }
+
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
@@ -512,8 +644,9 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Vector sub(Vector B) {
-        return null;
+        return RealDenseSparseVectorOperations.sub(this, B);
     }
+
 
     /**
      * Adds specified value to all entries of this tensor.
@@ -523,19 +656,21 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public Vector add(double a) {
-        return null;
+        return RealSparseOperations.add(this, a);
     }
+
 
     /**
      * Adds specified value to all entries of this tensor.
-     *
+     * If zeros are introduced, they will be explicitly stored.
      * @param a Value to add to all entries of this tensor.
      * @return The result of adding the specified value to each entry of this tensor.
      */
     @Override
-    public SparseCVector add(CNumber a) {
-        return null;
+    public CVector add(CNumber a) {
+        return RealComplexSparseOperations.add(this, a);
     }
+
 
     /**
      * Computes the element-wise subtraction between two tensors of the same rank.
@@ -549,6 +684,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
      *
@@ -560,6 +696,7 @@ public class SparseVector extends RealSparseVectorBase {
     public SparseCVector sub(CVector B) {
         return null;
     }
+
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
@@ -573,6 +710,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Adds specified value to all entries of this tensor.
      *
@@ -583,6 +721,7 @@ public class SparseVector extends RealSparseVectorBase {
     public Vector sub(double a) {
         return null;
     }
+
 
     /**
      * Subtracts a specified value from all entries of this tensor.
@@ -595,6 +734,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
      *
@@ -605,6 +745,7 @@ public class SparseVector extends RealSparseVectorBase {
     public void addEq(SparseVector B) {
 
     }
+
 
     /**
      * Computes the element-wise addition between this vector and the specified vector and stores the result
@@ -618,6 +759,7 @@ public class SparseVector extends RealSparseVectorBase {
 
     }
 
+
     /**
      * Computes the element-wise subtraction between this vector and the specified vector and stores the result
      * in this vector.
@@ -630,6 +772,7 @@ public class SparseVector extends RealSparseVectorBase {
 
     }
 
+
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
      *
@@ -639,6 +782,7 @@ public class SparseVector extends RealSparseVectorBase {
     public void addEq(Double b) {
 
     }
+
 
     /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
@@ -650,6 +794,7 @@ public class SparseVector extends RealSparseVectorBase {
     public void subEq(SparseVector B) {
 
     }
+
 
     /**
      * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
@@ -663,6 +808,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
      *
@@ -672,6 +818,7 @@ public class SparseVector extends RealSparseVectorBase {
     public void subEq(Double b) {
 
     }
+
 
     /**
      * Computes scalar multiplication of a tensor.
@@ -684,6 +831,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes scalar multiplication of a tensor.
      *
@@ -694,6 +842,7 @@ public class SparseVector extends RealSparseVectorBase {
     public SparseCVector mult(CNumber factor) {
         return null;
     }
+
 
     /**
      * Computes the scalar division of a tensor.
@@ -707,6 +856,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes the scalar division of a tensor.
      *
@@ -719,6 +869,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Sums together all entries in the tensor.
      *
@@ -728,6 +879,7 @@ public class SparseVector extends RealSparseVectorBase {
     public Double sum() {
         return null;
     }
+
 
     /**
      * Computes the element-wise square root of a tensor.
@@ -740,6 +892,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
      * be computed.
@@ -751,6 +904,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes the transpose of a tensor. Same as {@link #T()}.
      *
@@ -760,6 +914,7 @@ public class SparseVector extends RealSparseVectorBase {
     public SparseVector transpose() {
         return null;
     }
+
 
     /**
      * Computes the transpose of a tensor. Same as {@link #transpose()}.
@@ -771,6 +926,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes the reciprocals, element-wise, of a tensor.
      *
@@ -781,6 +937,7 @@ public class SparseVector extends RealSparseVectorBase {
     public SparseVector recip() {
         return null;
     }
+
 
     /**
      * Gets the element in this tensor at the specified indices.
@@ -794,6 +951,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Creates a copy of this tensor.
      *
@@ -803,6 +961,7 @@ public class SparseVector extends RealSparseVectorBase {
     public SparseVector copy() {
         return null;
     }
+
 
     /**
      * Computes the element-wise multiplication between two tensors.
@@ -816,6 +975,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
      *
@@ -827,6 +987,7 @@ public class SparseVector extends RealSparseVectorBase {
     public SparseCVector elemMult(CVector B) {
         return null;
     }
+
 
     /**
      * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
@@ -840,6 +1001,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
      *
@@ -851,6 +1013,7 @@ public class SparseVector extends RealSparseVectorBase {
     public SparseVector elemDiv(Vector B) {
         return null;
     }
+
 
     /**
      * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
@@ -864,6 +1027,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes the inner product between two vectors.
      *
@@ -875,6 +1039,7 @@ public class SparseVector extends RealSparseVectorBase {
     public Double inner(Vector b) {
         return null;
     }
+
 
     /**
      * Computes the inner product between two vectors.
@@ -888,6 +1053,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes a unit vector in the same direction as this vector.
      *
@@ -897,6 +1063,7 @@ public class SparseVector extends RealSparseVectorBase {
     public SparseVector normalize() {
         return null;
     }
+
 
     /**
      * Computes the inner product between two vectors.
@@ -910,6 +1077,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes the inner product between two vectors.
      *
@@ -921,6 +1089,7 @@ public class SparseVector extends RealSparseVectorBase {
     public CNumber inner(SparseCVector b) {
         return null;
     }
+
 
     /**
      * Computes the vector cross product between two vectors.
@@ -934,6 +1103,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes the vector cross product between two vectors.
      *
@@ -945,6 +1115,7 @@ public class SparseVector extends RealSparseVectorBase {
     public CVector cross(CVector b) {
         return null;
     }
+
 
     /**
      * Computes the outer product of two vectors.
@@ -958,6 +1129,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes the outer product of two vectors.
      *
@@ -969,6 +1141,7 @@ public class SparseVector extends RealSparseVectorBase {
     public Matrix outer(SparseVector b) {
         return null;
     }
+
 
     /**
      * Computes the outer product of two vectors.
@@ -982,6 +1155,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Computes the outer product of two vectors.
      *
@@ -994,6 +1168,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Checks if a vector is parallel to this vector.
      *
@@ -1004,6 +1179,7 @@ public class SparseVector extends RealSparseVectorBase {
     public boolean isParallel(Vector b) {
         return false;
     }
+
 
     /**
      * Checks if a vector is perpendicular to this vector.
@@ -1016,17 +1192,17 @@ public class SparseVector extends RealSparseVectorBase {
         return false;
     }
 
+
     /**
-     * Converts a vector to an equivalent matrix.
+     * Converts this vector to an equivalent matrix as if it were a column vector.
      *
-     * @return A matrix equivalent to this vector. This method will respect the orientation of the vector. That is, if
-     * this vector is a row vector, then the resulting matrix will have a single row. If this vector is a column vector, then the
-     * resulting matrix will have a single column.
+     * @return A matrix equivalent to this vector as if the vector is a column vector.
      */
     @Override
-    public Matrix toMatrix() {
+    public SparseMatrix toMatrix() {
         return null;
     }
+
 
     /**
      * Converts a vector to an equivalent matrix representing either a row or column vector.
@@ -1040,6 +1216,7 @@ public class SparseVector extends RealSparseVectorBase {
     public SparseMatrix toMatrix(boolean columVector) {
         return null;
     }
+
 
     /**
      * Computes the element-wise division between two tensors.
@@ -1065,6 +1242,7 @@ public class SparseVector extends RealSparseVectorBase {
         return new int[0];
     }
 
+
     /**
      * Finds the indices of the maximum value in this tensor.
      *
@@ -1076,6 +1254,7 @@ public class SparseVector extends RealSparseVectorBase {
         return new int[0];
     }
 
+
     /**
      * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
      *
@@ -1085,6 +1264,7 @@ public class SparseVector extends RealSparseVectorBase {
     public double norm() {
         return 0;
     }
+
 
     /**
      * Computes the p-norm of this tensor.
@@ -1099,6 +1279,7 @@ public class SparseVector extends RealSparseVectorBase {
         return 0;
     }
 
+
     /**
      * Computes the maximum/infinite norm of this tensor.
      *
@@ -1106,8 +1287,9 @@ public class SparseVector extends RealSparseVectorBase {
      */
     @Override
     public double infNorm() {
-        return 0;
+        return maxAbs();
     }
+
 
     /**
      * Extends a vector a specified number of times to a matrix.
@@ -1121,6 +1303,7 @@ public class SparseVector extends RealSparseVectorBase {
         return null;
     }
 
+
     /**
      * Gets the length of a vector.
      *
@@ -1130,4 +1313,15 @@ public class SparseVector extends RealSparseVectorBase {
     public int length() {
         return 0;
     }
+
+
+    /**
+     * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
+     */
+    @Override
+    public void sparseSort() {
+        SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);
+    }
 }
+
+

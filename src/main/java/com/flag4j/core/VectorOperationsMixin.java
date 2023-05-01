@@ -46,7 +46,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @param b Vector to join with this vector.
      * @return A vector resulting from joining the specified vector with this vector.
      */
-    T join(Vector b);
+    U join(Vector b);
 
 
     /**
@@ -241,7 +241,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    U add(SparseVector B);
+    T add(SparseVector B);
 
 
     /**
@@ -250,7 +250,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    W add(CVector B);
+    CVector add(CVector B);
 
 
     /**
@@ -259,7 +259,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    CVector add(SparseCVector B);
+    W add(SparseCVector B);
 
 
     /**
@@ -495,7 +495,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
     boolean isParallel(Vector b);
 
 
-    // TODO: ADD isPerp(CVector b), isPerp(SparseVector b), and isPerp(sparseCVector)
+    // TODO: Add isPerp(CVector b), isPerp(SparseVector b), and isPerp(sparseCVector)
     /**
      * Checks if a vector is perpendicular to this vector.
      *
@@ -505,13 +505,15 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
     boolean isPerp(Vector b);
 
 
+    // TODO: Add toTensor methods.
+
     /**
      * Converts a vector to an equivalent matrix.
      * @return A matrix equivalent to this vector. This method will respect the orientation of the vector. That is, if
      * this vector is a row vector, then the resulting matrix will have a single row. If this vector is a column vector, then the
      * resulting matrix will have a single column.
      */
-    UU toMatrix();
+    TT toMatrix();
 
 
     /**

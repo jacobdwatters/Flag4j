@@ -377,7 +377,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @return A vector resulting from joining the specified vector with this vector.
      */
     @Override
-    public SparseCVector join(Vector b) {
+    public CVector join(Vector b) {
 <span class="nc" id="L381">        return null;</span>
     }
 
@@ -602,7 +602,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public CVector add(SparseVector B) {
+    public SparseCVector add(SparseVector B) {
 <span class="nc" id="L606">        return null;</span>
     }
 
@@ -614,7 +614,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public SparseCVector add(CVector B) {
+    public CVector add(CVector B) {
 <span class="nc" id="L618">        return null;</span>
     }
 
@@ -626,7 +626,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CVector add(SparseCVector B) {
+    public SparseCVector add(SparseCVector B) {
 <span class="nc" id="L630">        return null;</span>
     }
 
@@ -684,7 +684,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @return The result of adding the specified value to each entry of this tensor.
      */
     @Override
-    public SparseCVector add(CNumber a) {
+    public CVector add(CNumber a) {
 <span class="nc" id="L688">        return null;</span>
     }
 
@@ -1165,6 +1165,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
 <span class="nc" id="L1165">        return null;</span>
     }
 
+
     /**
      * Checks if a vector is parallel to this vector.
      *
@@ -1173,8 +1174,9 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public boolean isParallel(Vector b) {
-<span class="nc" id="L1176">        return false;</span>
+<span class="nc" id="L1177">        return false;</span>
     }
+
 
     /**
      * Checks if a vector is perpendicular to this vector.
@@ -1184,20 +1186,20 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public boolean isPerp(Vector b) {
-<span class="nc" id="L1187">        return false;</span>
+<span class="nc" id="L1189">        return false;</span>
     }
 
+
     /**
-     * Converts a vector to an equivalent matrix.
+     * Converts this vector to an equivalent matrix as if it were a column vector.
      *
-     * @return A matrix equivalent to this vector. This method will respect the orientation of the vector. That is, if
-     * this vector is a row vector, then the resulting matrix will have a single row. If this vector is a column vector, then the
-     * resulting matrix will have a single column.
+     * @return A matrix equivalent to this vector as if it were a column vector.
      */
     @Override
-    public CMatrix toMatrix() {
-<span class="nc" id="L1199">        return null;</span>
+    public SparseCMatrix toMatrix() {
+<span class="nc" id="L1200">        return null;</span>
     }
+
 
     /**
      * Converts a vector to an equivalent matrix representing either a row or column vector.
@@ -1209,8 +1211,9 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCMatrix toMatrix(boolean columVector) {
-<span class="nc" id="L1212">        return null;</span>
+<span class="nc" id="L1214">        return null;</span>
     }
+
 
     /**
      * Computes the element-wise division between two tensors.
@@ -1221,8 +1224,9 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector elemDiv(SparseCVector B) {
-<span class="nc" id="L1224">        return null;</span>
+<span class="nc" id="L1227">        return null;</span>
     }
+
 
     /**
      * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
@@ -1231,8 +1235,9 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public double min() {
-<span class="nc" id="L1234">        return 0;</span>
+<span class="nc" id="L1238">        return 0;</span>
     }
+
 
     /**
      * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
@@ -1241,8 +1246,9 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public double max() {
-<span class="nc" id="L1244">        return 0;</span>
+<span class="nc" id="L1249">        return 0;</span>
     }
+
 
     /**
      * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
@@ -1252,8 +1258,9 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public double minAbs() {
-<span class="nc" id="L1255">        return 0;</span>
+<span class="nc" id="L1261">        return 0;</span>
     }
+
 
     /**
      * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
@@ -1263,8 +1270,9 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public double maxAbs() {
-<span class="nc" id="L1266">        return 0;</span>
+<span class="nc" id="L1273">        return 0;</span>
     }
+
 
     /**
      * Finds the indices of the minimum value in this tensor.
@@ -1274,8 +1282,9 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L1277">        return new int[0];</span>
+<span class="nc" id="L1285">        return new int[0];</span>
     }
+
 
     /**
      * Finds the indices of the maximum value in this tensor.
@@ -1285,8 +1294,9 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L1288">        return new int[0];</span>
+<span class="nc" id="L1297">        return new int[0];</span>
     }
+
 
     /**
      * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
@@ -1295,8 +1305,9 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public double norm() {
-<span class="nc" id="L1298">        return 0;</span>
+<span class="nc" id="L1308">        return 0;</span>
     }
+
 
     /**
      * Computes the p-norm of this tensor.
@@ -1308,8 +1319,9 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L1311">        return 0;</span>
+<span class="nc" id="L1322">        return 0;</span>
     }
+
 
     /**
      * Computes the maximum/infinite norm of this tensor.
@@ -1318,8 +1330,9 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L1321">        return 0;</span>
+<span class="nc" id="L1333">        return 0;</span>
     }
+
 
     /**
      * Extends a vector a specified number of times to a matrix.
@@ -1330,8 +1343,9 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCMatrix extend(int n, int axis) {
-<span class="nc" id="L1333">        return null;</span>
+<span class="nc" id="L1346">        return null;</span>
     }
+
 
     /**
      * Gets the length of a vector.
@@ -1340,7 +1354,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public int length() {
-<span class="nc" id="L1343">        return 0;</span>
+<span class="nc" id="L1357">        return 0;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
