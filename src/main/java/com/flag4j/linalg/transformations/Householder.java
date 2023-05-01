@@ -32,7 +32,7 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
 
 /**
- * This class contains methods for computing real or complex Householder reflectors (also known as elementary reflector).
+ * This class contains methods for computing real or complex Householder reflectors (also known as elementary reflectors).
  * A Householder reflector is a transformation matrix which reflects a vector about a hyperplane containing the origin.
  */
 public class Householder {

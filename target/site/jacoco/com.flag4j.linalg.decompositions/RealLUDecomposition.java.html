@@ -157,17 +157,17 @@ public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
      */
     private void computeRows(int j) {
         double m;
-<span class="fc" id="L160">        int fixedRow = j*LU.numCols;</span>
+<span class="fc" id="L160">        int pivotRow = j*LU.numCols;</span>
         int iRow;
 
 <span class="fc bfc" id="L163" title="All 2 branches covered.">        for(int i=j+1; i&lt;LU.numRows; i++) {</span>
 <span class="fc" id="L164">            iRow = i*LU.numCols;</span>
 <span class="fc" id="L165">            m = LU.entries[iRow + j];</span>
-<span class="fc bfc" id="L166" title="All 2 branches covered.">            m = LU.entries[fixedRow + j] == 0 ? m : m/LU.entries[fixedRow + j];</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">            m = LU.entries[pivotRow + j] == 0 ? m : m/LU.entries[pivotRow + j];</span>
 
             // Compute and set U values.
 <span class="fc bfc" id="L169" title="All 2 branches covered.">            for(int k=j; k&lt;LU.numCols; k++) {</span>
-<span class="fc" id="L170">                LU.entries[iRow + k] -= m*LU.entries[fixedRow + k];</span>
+<span class="fc" id="L170">                LU.entries[iRow + k] -= m*LU.entries[pivotRow + k];</span>
             }
 
             // Compute and set L value.

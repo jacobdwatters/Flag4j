@@ -38,6 +38,7 @@ com\flag4j\linalg\decompositions\HessenburgDecomposition.class
 com\flag4j\operations\common\complex\ComplexOperations.class
 com\flag4j\operations\common\complex\ComplexProperties.class
 com\flag4j\linalg\decompositions\ComplexQRDecomposition.class
+com\flag4j\linalg\transformations\Projection.class
 com\flag4j\operations\common\real\RealProperties.class
 com\flag4j\SparseCTensor.class
 com\flag4j\operations\TransposeDispatcher$Algorithm.class
