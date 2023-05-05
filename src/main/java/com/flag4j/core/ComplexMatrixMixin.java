@@ -116,17 +116,6 @@ public interface ComplexMatrixMixin<T, Y> {
 
 
     /**
-     * Sets an index of this matrix to a specified value.
-     * @param value Value to set.
-     * @param indices The indices of this matrix for which to set the value.
-     * @return A reference to this matrix.
-     * @throws IllegalArgumentException If the number of indices is not 2.
-     * @throws IndexOutOfBoundsException If any of the indices are not within this matrix.
-     */
-    T set(CNumber value, int... indices);
-
-
-    /**
      * Sets a column of this matrix at the given index to the specified values.
      * @param values New values for the column.
      * @param colIndex The index of the column which is to be set.

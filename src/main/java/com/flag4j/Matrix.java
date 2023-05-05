@@ -439,20 +439,6 @@ public class Matrix
 
 
     /**
-     * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
-     * in the reshaped matrix.
-     *
-     * @param numRows The number of rows in the reshaped matrix.
-     * @param numCols The number of columns in the reshaped matrix.
-     * @return A matrix which is equivalent to this matrix but with the specified dimensions.
-     */
-    @Override
-    public Matrix reshape(int numRows, int numCols) {
-        return reshape(new Shape(numRows, numCols));
-    }
-
-
-    /**
      * Flattens a matrix to have a single row. To flatten matrix to a single column, see {@link #flatten(int)}.
      *
      * @return The flat version of this matrix.

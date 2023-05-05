@@ -63,15 +63,6 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
 
 
     /**
-     * Factory to create a tensor with the specified shape and size.
-     * @param shape Shape of the tensor to make.
-     * @param entries Entries of the tensor to make.
-     * @return A new tensor with the specified shape and entries.
-     */
-    protected abstract T makeTensor(Shape shape, double[] entries);
-
-
-    /**
      * Factory to create a complex tensor with the specified shape and size.
      * @param shape Shape of the tensor to make.
      * @param entries Entries of the tensor to make.
@@ -87,13 +78,6 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
      * @return A new tensor with the specified shape and entries.
      */
     protected abstract W makeComplexTensor(Shape shape, CNumber[] entries);
-
-
-    /**
-     * Simply returns this tensor.
-     * @return A reference to this tensor.
-     */
-    protected abstract T getSelf();
 
 
     @Override
@@ -310,6 +294,20 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
 
 
     /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public T reshape(int... shape) {
+        return reshape(new Shape(shape));
+    }
+
+
+    /**
      * Computes the reciprocals, element-wise, of a tensor.
      *
      * @return A tensor containing the reciprocal elements of this tensor.
@@ -431,6 +429,9 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
     public int hashCode() {
         return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);
     }
+
+
+
 }
 
 

@@ -58,7 +58,7 @@ class CVectorSetTests {
         a = new CVector(aEntries);
 
         double finalVal = val;
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->a.set(finalVal, index));
+        assertThrows(IndexOutOfBoundsException.class, ()->a.set(finalVal, index));
 
         // ------------------ Sub-case 5 ------------------
         val = 45.14;
@@ -67,7 +67,7 @@ class CVectorSetTests {
         a = new CVector(aEntries);
 
         double finalVal2 = val;
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->a.set(finalVal2, index));
+        assertThrows(IndexOutOfBoundsException.class, ()->a.set(finalVal2, index));
     }
 
     @Test
@@ -117,7 +117,7 @@ class CVectorSetTests {
         a = new CVector(aEntries);
 
         CNumber finalVal = val;
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->a.set(finalVal, index));
+        assertThrows(IndexOutOfBoundsException.class, ()->a.set(finalVal, index));
 
         // ------------------ Sub-case 5 ------------------
         val = new CNumber(2.4567, -9.13357);
@@ -126,6 +126,6 @@ class CVectorSetTests {
         a = new CVector(aEntries);
 
         CNumber finalVal2 = val;
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->a.set(finalVal2, index));
+        assertThrows(IndexOutOfBoundsException.class, ()->a.set(finalVal2, index));
     }
 }

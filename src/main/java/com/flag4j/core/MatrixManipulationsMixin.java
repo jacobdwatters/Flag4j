@@ -38,16 +38,6 @@ public interface MatrixManipulationsMixin<T, X extends Number> {
 
 
     /**
-     * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
-     *      * in the reshaped matrix.
-     * @param numRows The number of rows in the reshaped matrix.
-     * @param numCols The number of columns in the reshaped matrix.
-     * @return A matrix which is equivalent to this matrix but with the specified dimensions.
-     */
-    T reshape(int numRows, int numCols);
-
-
-    /**
      * Sets the value of this matrix using a 2D array.
      * @param values New values of the matrix.
      * @return A reference to this matrix.

@@ -336,6 +336,21 @@ public class SparseCVector
         return null;
     }
 
+
+    /**
+     * Sets an index of this tensor to a specified value.
+     *
+     * @param value   Value to set.
+     * @param indices The indices of this matrix for which to set the value.
+     * @return A reference to this tensor.
+     * @throws IllegalArgumentException  If the number of indices is not equal to the rank of this tensor.
+     * @throws IndexOutOfBoundsException If any of the indices are not within this tensor.
+     */
+    @Override
+    public SparseCVector set(CNumber value, int... indices) {
+        return null;
+    }
+
     @Override
     public boolean isReal() {
         return false;
@@ -398,6 +413,20 @@ public class SparseCVector
      */
     @Override
     public SparseCVector reshape(Shape shape) {
+        return null;
+    }
+
+    
+    /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public SparseCVector reshape(int... shape) {
         return null;
     }
 

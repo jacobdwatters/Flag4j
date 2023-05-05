@@ -353,20 +353,6 @@ public class SparseMatrix
 
 
     /**
-     * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
-     * * in the reshaped matrix.
-     *
-     * @param numRows The number of rows in the reshaped matrix.
-     * @param numCols The number of columns in the reshaped matrix.
-     * @return A matrix which is equivalent to this matrix but with the specified dimensions.
-     */
-    @Override
-    public SparseMatrix reshape(int numRows, int numCols) {
-        return null;
-    }
-
-
-    /**
      * Sets the value of this matrix using a 2D array.
      *
      * @param values New values of the matrix.
@@ -2251,6 +2237,20 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix reshape(Shape shape) {
+        return null;
+    }
+
+
+    /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public SparseMatrix reshape(int... shape) {
         return null;
     }
 

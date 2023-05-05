@@ -31,9 +31,7 @@ import com.flag4j.core.MatrixMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
-import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.operations.dense.complex.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
@@ -50,7 +48,6 @@ import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOpe
 import com.flag4j.util.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -340,6 +337,43 @@ public class CMatrix
 
 
     /**
+     * Factory to create a tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected CMatrix makeTensor(Shape shape, CNumber[] entries) {
+        return new CMatrix(shape, entries);
+    }
+
+
+    /**
+     * Simply returns a reference of this tensor.
+     *
+     * @return A reference to this tensor.
+     */
+    @Override
+    protected CMatrix getSelf() {
+        return this;
+    }
+
+
+    /**
+     * Factory to create a real tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected Matrix makeRealTensor(Shape shape, double[] entries) {
+        return new Matrix(shape, entries);
+    }
+
+
+    /**
      * Constructs a complex matrix with specified shapes and entries. Note, unlike other constructors, the entries parameter
      * is not copied.
      * @param numRows Number of rows in the matrix.
@@ -372,49 +406,6 @@ public class CMatrix
 
 
     /**
-     * Checks if this tensor has only real valued entries.
-     *
-     * @return True if this tensor contains <b>NO</b> complex entries. Otherwise, returns false.
-     */
-    @Override
-    public boolean isReal() {
-        return ComplexProperties.isReal(this.entries);
-    }
-
-
-    /**
-     * Checks if this tensor contains at least one complex entry.
-     *
-     * @return True if this tensor contains at least one complex entry. Otherwise, returns false.
-     */
-    @Override
-    public boolean isComplex() {
-        return ComplexProperties.isComplex(this.entries);
-    }
-
-
-    /**
-     * Computes the complex conjugate of a tensor.
-     *
-     * @return The complex conjugate of this tensor.
-     */
-    @Override
-    public CMatrix conj() {
-        return new CMatrix(this.shape, ComplexOperations.conj(this.entries));
-    }
-
-
-    /**
-     * Converts this matrix to an equivalent real matrix. Imaginary components are ignored.
-     * @return A real matrix with equivalent real parts.
-     */
-    @Override
-    public Matrix toReal() {
-        return new Matrix(this.shape.copy(), ComplexOperations.toReal(entries));
-    }
-
-
-    /**
      * Converts this matrix to an equivalent complex tensor.
      * @return A complex tensor which is equivalent to this matrix.
      */
@@ -430,28 +421,6 @@ public class CMatrix
      */
     public CVector toVector() {
         return new CVector(ArrayUtils.copyOfRange(entries, 0, entries.length));
-    }
-
-
-    /**
-     * Checks if this tensor only contains zeros.
-     *
-     * @return True if this tensor only contains zeros. Otherwise, returns false.
-     */
-    @Override
-    public boolean isZeros() {
-        return ArrayUtils.isZeros(this.entries);
-    }
-
-
-    /**
-     * Checks if this tensor only contains ones.
-     *
-     * @return True if this tensor only contains ones. Otherwise, returns false.
-     */
-    @Override
-    public boolean isOnes() {
-        return ComplexDenseProperties.isOnes(this.entries);
     }
 
 
@@ -482,29 +451,6 @@ public class CMatrix
         }
 
         return equal;
-    }
-
-
-    /**
-     * Creates a hashcode for this matrix. Note, method adds {@link Arrays#hashCode(double[])} on the
-     * underlying data array and the underlying shape array.
-     * @return The hashcode for this matrix.
-     */
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);
-    }
-
-
-    /**
-     * Gets the element in this tensor at the specified indices.
-     * @param indices Indices of element.
-     * @return The element at the specified indices.
-     * @throws IllegalArgumentException If the number of indices does not match the rank of this tensor.
-     */
-    @Override
-    public CNumber get(int... indices) {
-        return this.entries[this.shape.entriesIndex(indices)];
     }
 
 
@@ -545,39 +491,6 @@ public class CMatrix
     @Override
     public boolean isInv(CMatrix B) {
         return this.mult(B).roundToZero().isI();
-    }
-
-
-    /**
-     * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
-     * in the reshaped matrix.
-     *
-     * @param shape An array of length 2 containing, in order, the number of rows and the number of columns for the
-     *              reshaped matrix.
-     * @return A matrix which is equivalent to this matrix but with the specified dimensions.
-     * @throws IllegalArgumentException If either,<br>
-     *                                  - The shape array contains negative indices.<br>
-     *                                  - This matrix cannot be reshaped to the specified dimensions.
-     */
-    @Override
-    public CMatrix reshape(Shape shape) {
-        // Ensure the total number of entries in each shape is equal
-        ParameterChecks.assertBroadcastable(shape, this.shape);
-        return new CMatrix(shape, ArrayUtils.copyOfRange(entries, 0, entries.length));
-    }
-
-
-    /**
-     * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
-     * * in the reshaped matrix.
-     *
-     * @param numRows The number of rows in the reshaped matrix.
-     * @param numCols The number of columns in the reshaped matrix.
-     * @return A matrix which is equivalent to this matrix but with the specified dimensions.
-     */
-    @Override
-    public CMatrix reshape(int numRows, int numCols) {
-        return reshape(new Shape(numRows, numCols));
     }
 
 
@@ -1679,51 +1592,8 @@ public class CMatrix
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public CMatrix add(CMatrix B) {
-        return new CMatrix(this.shape.copy(),
-                ComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)
-        );
-    }
-
-
-    /**
-     * Computes the element-wise addition between two tensors of the same rank.
-     *
-     * @param B Second tensor in the addition.
-     * @return The result of adding the tensor B to this tensor element-wise.
-     * @throws IllegalArgumentException If A and B have different shapes.
-     */
-    @Override
     public CMatrix add(SparseCMatrix B) {
         return ComplexDenseSparseOperations.add(this, B);
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CMatrix add(double a) {
-        return new CMatrix(this.shape.copy(),
-                RealComplexDenseOperations.add(this.entries, a)
-        );
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CMatrix add(CNumber a) {
-        return new CMatrix(this.shape.copy(),
-                ComplexDenseOperations.add(this.entries, a)
-        );
     }
 
 
@@ -1752,210 +1622,6 @@ public class CMatrix
     @Override
     public CMatrix sub(SparseMatrix B) {
         return RealComplexDenseSparseOperations.sub(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank.
-     *
-     * @param B Second tensor in the subtraction.
-     * @return The result of subtracting the tensor B from this tensor element-wise.
-     * @throws IllegalArgumentException If A and B have different shapes.
-     */
-    @Override
-    public CMatrix sub(CMatrix B) {
-        return new CMatrix(this.shape.copy(),
-                ComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
-        );
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CMatrix sub(double a) {
-        return new CMatrix(this.shape.copy(),
-                RealComplexDenseOperations.sub(this.entries, a)
-        );
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor.
-     *
-     * @param a Value to subtract from all entries of this tensor.
-     * @return The result of subtracting the specified value from each entry of this tensor.
-     */
-    @Override
-    public CMatrix sub(CNumber a) {
-        return new CMatrix(this.shape.copy(),
-                ComplexDenseOperations.sub(this.entries, a)
-        );
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void addEq(CMatrix B) {
-        ComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void addEq(CNumber b) {
-        ComplexDenseOperations.addEq(this.entries, b);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void addEq(Double b) {
-        RealComplexDenseOperations.addEq(this.entries, b);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void subEq(CMatrix B) {
-        ComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void subEq(CNumber b) {
-        ComplexDenseOperations.subEq(this.entries, b);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void subEq(Double b) {
-        RealComplexDenseOperations.subEq(this.entries, b);
-    }
-
-
-    /**
-     * Computes scalar multiplication of a tensor.
-     *
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    @Override
-    public CMatrix mult(double factor) {
-        return new CMatrix(this.shape.copy(),
-                ComplexOperations.scalMult(this.entries, factor)
-        );
-    }
-
-
-    /**
-     * Computes scalar multiplication of a tensor.
-     *
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    @Override
-    public CMatrix mult(CNumber factor) {
-        return new CMatrix(this.shape.copy(),
-                ComplexOperations.scalMult(this.entries, factor)
-        );
-    }
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    @Override
-    public CMatrix div(double divisor) {
-        return new CMatrix(this.shape.copy(),
-                RealComplexDenseOperations.scalDiv(this.entries, divisor)
-        );
-    }
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    @Override
-    public CMatrix div(CNumber divisor) {
-        return new CMatrix(this.shape.copy(),
-                ComplexDenseOperations.scalDiv(this.entries, divisor)
-        );
-    }
-
-
-    /**
-     * Sums together all entries in the tensor.
-     *
-     * @return The sum of all entries in this tensor.
-     */
-    @Override
-    public CNumber sum() {
-        return AggregateComplex.sum(this.entries);
-    }
-
-
-    /**
-     * Computes the element-wise square root of a tensor.
-     *
-     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
-     * the principle square root i.e. the square root with positive real part.
-     */
-    @Override
-    public CMatrix sqrt() {
-        return new CMatrix(this.shape.copy(), ComplexOperations.sqrt(this.entries));
-    }
-
-
-    /**
-     * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
-     * be computed.
-     *
-     * @return The result of applying an element-wise absolute value/magnitude to this tensor.
-     */
-    @Override
-    public Matrix abs() {
-        return new Matrix(this.shape.copy(), ComplexOperations.abs(this.entries));
     }
 
 
@@ -2054,21 +1720,6 @@ public class CMatrix
         } else {
             return false;
         }
-    }
-
-
-    /**
-     * Computes the reciprocals, element-wise, of a tensor.
-     *
-     * @return A tensor containing the reciprocal elements of this tensor.
-     * @throws ArithmeticException If this tensor contains any zeros.
-     */
-    @Override
-    public CMatrix recip() {
-        return new CMatrix(
-                shape.copy(),
-                ComplexDenseOperations.recep(entries)
-        );
     }
 
 
@@ -2420,22 +2071,6 @@ public class CMatrix
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public CMatrix elemMult(CMatrix B) {
-        return new CMatrix(
-                shape.copy(),
-                ComplexDenseElemMult.dispatch(entries, shape, B.entries, B.shape)
-        );
-    }
-
-
-    /**
-     * Computes the element-wise multiplication (Hadamard product) between two matrices.
-     *
-     * @param B Second matrix in the element-wise multiplication.
-     * @return The result of element-wise multiplication of this matrix with the matrix B.
-     * @throws IllegalArgumentException If this matrix and B have different shapes.
-     */
-    @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
         return ComplexDenseSparseOperations.elemMult(this, B);
     }
@@ -2454,23 +2089,6 @@ public class CMatrix
         return new CMatrix(
                 shape.copy(),
                 RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
-        );
-    }
-
-
-    /**
-     * Computes the element-wise division between two matrices.
-     *
-     * @param B Second matrix in the element-wise division.
-     * @return The result of element-wise division of this matrix with the matrix B.
-     * @throws IllegalArgumentException If this matrix and B have different shapes.
-     * @throws ArithmeticException      If B contains any zero entries.
-     */
-    @Override
-    public CMatrix elemDiv(CMatrix B) {
-        return new CMatrix(
-                shape.copy(),
-                ComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
         );
     }
 
@@ -4116,37 +3734,6 @@ public class CMatrix
 
 
     /**
-     * Sets an index of this matrix to a specified value.
-     *
-     * @param value   Value to set.
-     * @param indices The indices of this tensor for which to set the value.
-     * @return A reference to this matrix.
-     */
-    @Override
-    public CMatrix set(double value, int... indices) {
-        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
-        ComplexDenseSetOperations.set(entries, shape, value, indices);
-
-        return this;
-    }
-
-
-    /**
-     * Sets an index of this tensor to a specified value.
-     *
-     * @param value   Value to set.
-     * @param indices The indices of this tensor for which to set the value.
-     */
-    @Override
-    public CMatrix set(CNumber value, int... indices) {
-        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
-        ComplexDenseSetOperations.set(entries, shape, value, indices);
-
-        return this;
-    }
-
-
-    /**
      * Adds a complex sparse matrix to this matrix and stores the result in this matrix.
      *
      * @param B Complex sparse matrix to add to this matrix,
@@ -4165,76 +3752,6 @@ public class CMatrix
     @Override
     public void subEq(SparseCMatrix B) {
         ComplexDenseSparseOperations.subEq(this, B);
-    }
-
-
-    /**
-     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
-     *
-     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double min() {
-        return minAbs();
-    }
-
-
-    /**
-     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
-     *
-     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double max() {
-        return maxAbs();
-    }
-
-
-    /**
-     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #min()}.
-     *
-     * @return The minimum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-        return AggregateComplex.minAbs(this.entries);
-    }
-
-
-    /**
-     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-        return AggregateComplex.maxAbs(this.entries);
-    }
-
-
-    /**
-     * Finds the indices of the minimum value in this tensor.
-     *
-     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMin() {
-        return shape.getIndices(AggregateDenseComplex.argMin(entries));
-    }
-
-
-    /**
-     * Finds the indices of the maximum value in this tensor.
-     *
-     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMax() {
-        return shape.getIndices(AggregateDenseComplex.argMax(entries));
     }
 
 
@@ -4320,16 +3837,6 @@ public class CMatrix
     @Override
     public double infNorm() {
         return ComplexDenseOperations.matrixInfNorm(entries, shape);
-    }
-
-
-    /**
-     * Creates a deep copy of this matrix.
-     * @return A deep copy of this matrix.
-     */
-    @Override
-    public CMatrix copy() {
-        return new CMatrix(this);
     }
 
 

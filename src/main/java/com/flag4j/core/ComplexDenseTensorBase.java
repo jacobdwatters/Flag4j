@@ -27,16 +27,21 @@ package com.flag4j.core;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.common.complex.AggregateComplex;
-import com.flag4j.operations.dense.complex.ComplexDenseProperties;
+import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.common.complex.ComplexProperties;
+import com.flag4j.operations.dense.complex.*;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
+
+import java.util.Arrays;
 
 /**
  * The base class for all complex dense tensors. This includes complex dense matrices and vectors.
  * @param <T> Type of this tensor.
  * @param <Y> Real Tensor type.
  */
-public abstract class ComplexDenseTensorBase<T, Y>
+public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T, Y>, Y extends RealDenseTensorBase<Y, T>>
         extends DenseTensorBase<T, T, Y, CNumber[], CNumber>
         implements ComplexTensorMixin<T, Y> {
 
@@ -58,6 +63,14 @@ public abstract class ComplexDenseTensorBase<T, Y>
     // TODO: Pull up implementation of all methods which are the same for any real dense tensor.
     //  e.g. addition/subtraction, element-wise/scalar multiplication/division, any element-wise operation
     //  such as abs, sqrt, etc.
+
+    /**
+     * Factory to create a real tensor with the specified shape and size.
+     * @param shape Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    protected abstract Y makeRealTensor(Shape shape, double[] entries);
 
 
     @Override
@@ -84,9 +97,27 @@ public abstract class ComplexDenseTensorBase<T, Y>
     }
 
 
+    /**
+     * Finds the indices of the minimum value in this tensor.
+     *
+     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
     @Override
-    public double infNorm() {
-        return AggregateComplex.maxAbs(entries);
+    public int[] argMin() {
+        return shape.getIndices(AggregateDenseComplex.argMin(entries));
+    }
+
+
+    /**
+     * Finds the indices of the maximum value in this tensor.
+     *
+     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argMax() {
+        return shape.getIndices(AggregateDenseComplex.argMax(entries));
     }
 
 
@@ -99,5 +130,433 @@ public abstract class ComplexDenseTensorBase<T, Y>
     @Override
     public boolean isOnes() {
         return ComplexDenseProperties.isOnes(entries);
+    }
+
+
+    /**
+     * Creates a hashcode for this matrix. Note, method adds {@link Arrays#hashCode(double[])} applied on the
+     * underlying data array and the underlying shape array.
+     * @return The hashcode for this matrix.
+     */
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);
+    }
+
+
+    /**
+     * Checks if this tensor has only real valued entries.
+     *
+     * @return True if this tensor contains <b>NO</b> complex entries. Otherwise, returns false.
+     */
+    @Override
+    public boolean isReal() {
+        return ComplexProperties.isReal(this.entries);
+    }
+
+
+    /**
+     * Checks if this tensor contains at least one complex entry.
+     *
+     * @return True if this tensor contains at least one complex entry. Otherwise, returns false.
+     */
+    @Override
+    public boolean isComplex() {
+        return ComplexProperties.isComplex(this.entries);
+    }
+
+
+    /**
+     * Sets an index of this tensor to a specified value.
+     *
+     * @param value   Value to set.
+     * @param indices The indices of this tensor for which to set the value.
+     * @return A reference to this tensor.
+     */
+    @Override
+    public T set(double value, int... indices) {
+        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
+        ComplexDenseSetOperations.set(entries, shape, value, indices);
+        return getSelf();
+    }
+
+
+    /**
+     * Sets an index of this tensor to a specified value.
+     *
+     * @param value   Value to set.
+     * @param indices The indices of this tensor for which to set the value.
+     */
+    @Override
+    public T set(CNumber value, int... indices) {
+        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
+        ComplexDenseSetOperations.set(entries, shape, value, indices);
+
+        return getSelf();
+    }
+
+
+    /**
+     * Gets the element in this tensor at the specified indices.
+     *
+     * @param indices Indices of element.
+     * @return The element at the specified indices.
+     * @throws IllegalArgumentException If the number of indices does not match the rank of this tensor.
+     */
+    @Override
+    public CNumber get(int... indices) {
+        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
+        return entries[shape.entriesIndex(indices)];
+    }
+
+
+    /**
+     * Converts a complex tensor to a real matrix. The imaginary component of any complex value will be ignored.
+     *
+     * @return A tensor of the same size containing only the real components of this tensor.
+     */
+    @Override
+    public Y toReal() {
+        return makeRealTensor(this.shape.copy(), ComplexOperations.toReal(this.entries));
+    }
+
+
+    /**
+     * Creates a deep copy of this tensor.
+     *
+     * @return A deep copy of this tensor.
+     */
+    @Override
+    public T copy() {
+        return makeTensor(this.shape.copy(), ArrayUtils.copyOf(entries));
+    }
+
+
+    /**
+     * Computes the reciprocals, element-wise, of a tensor.
+     *
+     * @return A tensor containing the reciprocal elements of this tensor.
+     * @throws ArithmeticException If this tensor contains any zeros.
+     */
+    @Override
+    public T recip() {
+        return makeTensor(this.shape, ComplexDenseOperations.recip(this.entries));
+    }
+
+
+    /**
+     * Sums together all entries in the tensor.
+     *
+     * @return The sum of all entries in this tensor.
+     */
+    @Override
+    public CNumber sum() {
+        return AggregateComplex.sum(this.entries);
+    }
+
+
+    /**
+     * Computes the element-wise square root of a tensor.
+     *
+     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
+     * the principle square root i.e. the square root with positive real part.
+     */
+    @Override
+    public T sqrt() {
+        return makeTensor(this.shape.copy(), ComplexOperations.sqrt(this.entries));
+    }
+
+
+    /**
+     * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
+     * be computed.
+     *
+     * @return The result of applying an element-wise absolute value/magnitude to this tensor.
+     */
+    @Override
+    public Y abs() {
+        return makeRealTensor(this.shape.copy(), ComplexOperations.abs(this.entries));
+    }
+
+
+    /**
+     * Computes the complex conjugate of a tensor.
+     *
+     * @return The complex conjugate of this tensor.
+     */
+    @Override
+    public T conj() {
+        return makeTensor(this.shape.copy(), ComplexOperations.conj(this.entries));
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public T add(T B) {
+        return makeTensor(
+                this.shape.copy(),
+                ComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)
+        );
+    }
+
+
+    /**
+     * Adds specified value to all entries of this tensor.
+     *
+     * @param a Value to add to all entries of this tensor.
+     * @return The result of adding the specified value to each entry of this tensor.
+     */
+    @Override
+    public T add(double a) {
+        return makeTensor(this.shape.copy(), RealComplexDenseOperations.add(this.entries, a));
+    }
+
+
+    /**
+     * Adds specified value to all entries of this tensor.
+     *
+     * @param a Value to add to all entries of this tensor.
+     * @return The result of adding the specified value to each entry of this tensor.
+     */
+    @Override
+    public T add(CNumber a) {
+        return makeTensor(this.shape.copy(), ComplexDenseOperations.add(this.entries, a));
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between two tensors of the same rank.
+     *
+     * @param B Second tensor in element-wise subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public T sub(T B) {
+        return makeTensor(
+                this.shape.copy(),
+                ComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
+        );
+    }
+
+
+    /**
+     * Adds specified value to all entries of this tensor.
+     *
+     * @param a Value to add to all entries of this tensor.
+     * @return The result of adding the specified value to each entry of this tensor.
+     */
+    @Override
+    public T sub(double a) {
+        return makeTensor(this.shape.copy(),
+                RealComplexDenseOperations.sub(this.entries, a)
+        );
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor.
+     *
+     * @param a Value to subtract from all entries of this tensor.
+     * @return The result of subtracting the specified value from each entry of this tensor.
+     */
+    @Override
+    public T sub(CNumber a) {
+        return makeTensor(this.shape.copy(),
+                ComplexDenseOperations.sub(this.entries, a)
+        );
+    }
+
+
+    /**
+     * Computes scalar multiplication of a tensor.
+     *
+     * @param factor Scalar value to multiply with tensor.
+     * @return The result of multiplying this tensor by the specified scalar.
+     */
+    @Override
+    public T mult(double factor) {
+        return makeTensor(this.shape.copy(),
+                ComplexOperations.scalMult(this.entries, factor)
+        );
+    }
+
+
+    /**
+     * Computes scalar multiplication of a tensor.
+     *
+     * @param factor Scalar value to multiply with tensor.
+     * @return The result of multiplying this tensor by the specified scalar.
+     */
+    @Override
+    public T mult(CNumber factor) {
+        return makeTensor(this.shape.copy(),
+                ComplexOperations.scalMult(this.entries, factor)
+        );
+    }
+
+
+    /**
+     * Computes the scalar division of a tensor.
+     *
+     * @param divisor The scalar value to divide tensor by.
+     * @return The result of dividing this tensor by the specified scalar.
+     * @throws ArithmeticException If divisor is zero.
+     */
+    @Override
+    public T div(double divisor) {
+        return makeTensor(this.shape.copy(),
+                RealComplexDenseOperations.scalDiv(this.entries, divisor)
+        );
+    }
+
+
+    /**
+     * Computes the scalar division of a tensor.
+     *
+     * @param divisor The scalar value to divide tensor by.
+     * @return The result of dividing this tensor by the specified scalar.
+     * @throws ArithmeticException If divisor is zero.
+     */
+    @Override
+    public T div(CNumber divisor) {
+        return makeTensor(this.shape.copy(),
+                ComplexDenseOperations.scalDiv(this.entries, divisor)
+        );
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     *
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public T elemMult(T B) {
+        return makeTensor(
+                shape.copy(),
+                ComplexDenseElemMult.dispatch(entries, shape, B.entries, B.shape)
+        );
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     *
+     * @param B Tensor to element-wise divide with this tensor.
+     * @return The result of the element-wise tensor division.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public T elemDiv(T B) {
+        return makeTensor(
+                shape.copy(),
+                ComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
+        );
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void addEq(T B) {
+        ComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void addEq(CNumber b) {
+        ComplexDenseOperations.addEq(this.entries, b);
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void addEq(Double b) {
+        RealComplexDenseOperations.addEq(this.entries, b);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void subEq(T B) {
+        ComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void subEq(CNumber b) {
+        ComplexDenseOperations.subEq(this.entries, b);
+    }
+
+
+    /**
+     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
+     *
+     * @param b Value to subtract from all entries of this tensor.
+     */
+    @Override
+    public void subEq(Double b) {
+        RealComplexDenseOperations.subEq(this.entries, b);
+    }
+
+
+    /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public T reshape(int... shape) {
+        return reshape(new Shape(shape));
+    }
+
+
+    /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public T reshape(Shape shape) {
+        ParameterChecks.assertBroadcastable(this.shape, shape);
+        return makeTensor(shape, this.entries.clone());
     }
 }

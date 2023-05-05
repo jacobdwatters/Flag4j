@@ -54,6 +54,16 @@ interface TensorManipulationsMixin<T> {
 
 
     /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    T reshape(int... shape);
+
+
+    /**
      * Flattens tensor to single dimension. To flatten tensor along a single axis.
      * @return The flattened tensor.
      */

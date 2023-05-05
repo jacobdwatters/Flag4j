@@ -29,18 +29,14 @@ import com.flag4j.core.ComplexDenseTensorBase;
 import com.flag4j.core.ComplexTensorExclusiveMixin;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.AggregateComplex;
-import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.operations.dense.complex.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
-import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
 
@@ -135,19 +131,6 @@ public class CTensor
 
 
     /**
-     * Flattens a tensor along the specified axis.
-     *
-     * @param axis Axis along which to flatten tensor.
-     * @throws IllegalArgumentException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
-     */
-    @Override
-    public CTensor flatten(int axis) {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
      * Creates a complex tensor whose shape and entries are specified by another tensor.
      * @param A Tensor specifying shape and entries.
      */
@@ -168,24 +151,57 @@ public class CTensor
 
 
     /**
-     * Checks if this tensor only contains zeros.
+     * Factory to create a tensor with the specified shape and size.
      *
-     * @return True if this tensor only contains zeros. Otherwise, returns false.
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
      */
     @Override
-    public boolean isZeros() {
-        return ArrayUtils.isZeros(entries);
+    protected CTensor makeTensor(Shape shape, CNumber[] entries) {
+        return new CTensor(shape, entries);
     }
 
 
     /**
-     * Checks if this tensor only contains ones.
+     * Simply returns a reference of this tensor.
      *
-     * @return True if this tensor only contains ones. Otherwise, returns false.
+     * @return A reference to this tensor.
      */
     @Override
-    public boolean isOnes() {
-        return ComplexDenseProperties.isOnes(entries);
+    protected CTensor getSelf() {
+        return this;
+    }
+
+
+    /**
+     * Factory to create a real tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected Tensor makeRealTensor(Shape shape, double[] entries) {
+        return new Tensor(shape, entries);
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis. The resulting tensor will have the same rank but only have values
+     * along the single specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     */
+    @Override
+    public CTensor flatten(int axis) {
+        int[] dims = new int[this.getRank()];
+        Arrays.fill(dims, 1);
+        dims[axis] = shape.totalEntries().intValueExact();
+        Shape flatShape = new Shape(dims);
+
+        return new CTensor(flatShape, entries.clone());
     }
 
 
@@ -223,60 +239,6 @@ public class CTensor
     }
 
 
-    /**
-     * Creates a hashcode for this matrix. Note, method adds {@link Arrays#hashCode(double[])} applied on the
-     * underlying data array and the underlying shape array.
-     * @return The hashcode for this matrix.
-     */
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);
-    }
-
-
-    /**
-     * Checks if this tensor has only real valued entries.
-     *
-     * @return True if this tensor contains <b>NO</b> complex entries. Otherwise, returns false.
-     */
-    @Override
-    public boolean isReal() {
-        return ComplexProperties.isReal(this.entries);
-    }
-
-
-    /**
-     * Checks if this tensor contains at least one complex entry.
-     *
-     * @return True if this tensor contains at least one complex entry. Otherwise, returns false.
-     */
-    @Override
-    public boolean isComplex() {
-        return ComplexProperties.isComplex(this.entries);
-    }
-
-
-    /**
-     * Computes the complex conjugate of a tensor.
-     *
-     * @return The complex conjugate of this tensor.
-     */
-    @Override
-    public CTensor conj() {
-        return new CTensor(this.shape.copy(), ComplexOperations.conj(this.entries));
-    }
-
-
-    /**
-     * Converts a complex tensor to a real matrix. The imaginary component of any complex value will be ignored.
-     *
-     * @return A tensor of the same size containing only the real components of this tensor.
-     */
-    @Override
-    public Tensor toReal() {
-        return new Tensor(this.shape.copy(), ComplexOperations.toReal(this.entries));
-    }
-
 
     /**
      * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
@@ -286,8 +248,7 @@ public class CTensor
      */
     @Override
     public CTensor hermTranspose() {
-        // TODO: Implementation.
-        return null;
+        return H();
     }
 
 
@@ -299,8 +260,15 @@ public class CTensor
      */
     @Override
     public CTensor H() {
-        // TODO: Implementation.
-        return null;
+        return new CTensor(
+                shape.copy().swapAxes(0, getRank()-1),
+                ComplexDenseTranspose.standardConcurrentHerm(
+                    entries,
+                    shape,
+                    0,
+                    getRank()-1
+                )
+        );
     }
 
 
@@ -317,8 +285,7 @@ public class CTensor
      */
     @Override
     public CTensor hermTranspose(int axis1, int axis2) {
-        // TODO: Implementation.
-        return null;
+        return H(axis1, axis2);
     }
 
 
@@ -335,8 +302,15 @@ public class CTensor
      */
     @Override
     public CTensor H(int axis1, int axis2) {
-        // TODO: Implementation.
-        return null;
+        return new CTensor(
+                shape.copy().swapAxes(axis1, axis2),
+                ComplexDenseTranspose.standardConcurrentHerm(
+                        entries,
+                        shape,
+                        axis1,
+                        axis2
+                )
+        );
     }
 
 
@@ -351,8 +325,7 @@ public class CTensor
      */
     @Override
     public CTensor hermTranspose(int... axes) {
-        // TODO: Implementation.
-        return null;
+        return H(axes);
     }
 
 
@@ -367,8 +340,10 @@ public class CTensor
      */
     @Override
     public CTensor H(int... axes) {
-        // TODO: Implementation.
-        return null;
+        return new CTensor(
+                this.shape.copy().swapAxes(axes),
+                ComplexDenseTranspose.standardConcurrentHerm(this.entries, this.shape, axes)
+        );
     }
 
 
@@ -510,46 +485,6 @@ public class CTensor
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CTensor add(CTensor B) {
-        return new CTensor(
-                this.shape.copy(),
-                ComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)
-        );
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CTensor add(double a) {
-        return new CTensor(this.shape.copy(), RealComplexDenseOperations.add(this.entries, a));
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CTensor add(CNumber a) {
-        return new CTensor(this.shape.copy(), ComplexDenseOperations.add(this.entries, a));
-    }
-
-
-    /**
-     * Computes the element-wise addition between two tensors of the same rank.
-     *
-     * @param B Second tensor in the addition.
-     * @return The result of adding the tensor B to this tensor element-wise.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
     public CTensor add(SparseCTensor B) {
         return ComplexDenseSparseOperations.add(this, B);
     }
@@ -565,211 +500,6 @@ public class CTensor
     @Override
     public CTensor sub(SparseTensor B) {
         return RealComplexDenseSparseOperations.sub(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction between two tensors of the same rank.
-     *
-     * @param B Second tensor in element-wise subtraction.
-     * @return The result of subtracting the tensor B from this tensor element-wise.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CTensor sub(CTensor B) {
-        return new CTensor(
-                this.shape.copy(),
-                ComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
-        );
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CTensor sub(double a) {
-        return new CTensor(this.shape.copy(),
-                RealComplexDenseOperations.sub(this.entries, a)
-        );
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor.
-     *
-     * @param a Value to subtract from all entries of this tensor.
-     * @return The result of subtracting the specified value from each entry of this tensor.
-     */
-    @Override
-    public CTensor sub(CNumber a) {
-        return new CTensor(this.shape.copy(),
-                ComplexDenseOperations.sub(this.entries, a)
-        );
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void addEq(CTensor B) {
-        ComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void addEq(CNumber b) {
-        ComplexDenseOperations.addEq(this.entries, b);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void addEq(Double b) {
-        RealComplexDenseOperations.addEq(this.entries, b);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void subEq(CTensor B) {
-        ComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void subEq(CNumber b) {
-        ComplexDenseOperations.subEq(this.entries, b);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void subEq(Double b) {
-        RealComplexDenseOperations.subEq(this.entries, b);
-    }
-
-
-    /**
-     * Computes scalar multiplication of a tensor.
-     *
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    @Override
-    public CTensor mult(double factor) {
-        return new CTensor(this.shape.copy(),
-                ComplexOperations.scalMult(this.entries, factor)
-        );
-    }
-
-
-    /**
-     * Computes scalar multiplication of a tensor.
-     *
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    @Override
-    public CTensor mult(CNumber factor) {
-        return new CTensor(this.shape.copy(),
-                ComplexOperations.scalMult(this.entries, factor)
-        );
-    }
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    @Override
-    public CTensor div(double divisor) {
-        return new CTensor(this.shape.copy(),
-                RealComplexDenseOperations.scalDiv(this.entries, divisor)
-        );
-    }
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    @Override
-    public CTensor div(CNumber divisor) {
-        return new CTensor(this.shape.copy(),
-                ComplexDenseOperations.scalDiv(this.entries, divisor)
-        );
-    }
-
-
-    /**
-     * Sums together all entries in the tensor.
-     *
-     * @return The sum of all entries in this tensor.
-     */
-    @Override
-    public CNumber sum() {
-        return AggregateComplex.sum(this.entries);
-    }
-
-
-    /**
-     * Computes the element-wise square root of a tensor.
-     *
-     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
-     * the principle square root i.e. the square root with positive real part.
-     */
-    @Override
-    public CTensor sqrt() {
-        return new CTensor(this.shape.copy(), ComplexOperations.sqrt(this.entries));
-    }
-
-
-    /**
-     * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
-     * be computed.
-     *
-     * @return The result of applying an element-wise absolute value/magnitude to this tensor.
-     */
-    @Override
-    public Tensor abs() {
-        return new Tensor(this.shape.copy(), ComplexOperations.abs(this.entries));
     }
 
 
@@ -792,43 +522,6 @@ public class CTensor
     @Override
     public CTensor T() {
         return TransposeDispatcher.dispatchTensor(this, 0, shape.getRank()-1);
-    }
-
-
-    /**
-     * Computes the reciprocals, element-wise, of a tensor.
-     *
-     * @return A tensor containing the reciprocal elements of this tensor.
-     * @throws ArithmeticException If this tensor contains any zeros.
-     */
-    @Override
-    public CTensor recip() {
-        return new CTensor(this.shape, ComplexOperations.conj(this.entries));
-    }
-
-
-    /**
-     * Gets the element in this tensor at the specified indices.
-     *
-     * @param indices Indices of element.
-     * @return The element at the specified indices.
-     * @throws IllegalArgumentException If the number of indices does not match the rank of this tensor.
-     */
-    @Override
-    public CNumber get(int... indices) {
-        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
-        return entries[shape.entriesIndex(indices)];
-    }
-
-
-    /**
-     * Creates a copy of this tensor.
-     *
-     * @return A copy of this tensor.
-     */
-    @Override
-    public CTensor copy() {
-        return new CTensor(this);
     }
 
 
@@ -890,84 +583,8 @@ public class CTensor
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     @Override
-    public CTensor elemMult(CTensor B) {
-        return new CTensor(
-                shape.copy(),
-                ComplexDenseElemMult.dispatch(entries, shape, B.entries, B.shape)
-        );
-    }
-
-
-    /**
-     * Computes the element-wise multiplication between two tensors.
-     *
-     * @param B Tensor to element-wise multiply to this tensor.
-     * @return The result of the element-wise tensor multiplication.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    @Override
     public SparseCTensor elemMult(SparseCTensor B) {
         return ComplexDenseSparseOperations.elemMult(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise division between two tensors.
-     *
-     * @param B Tensor to element-wise divide with this tensor.
-     * @return The result of the element-wise tensor division.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    @Override
-    public CTensor elemDiv(CTensor B) {
-        return new CTensor(
-                shape.copy(),
-                ComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
-        );
-    }
-
-
-    /**
-     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
-     * in the reshaped tensor.
-     *
-     * @param shape Shape of the new tensor.
-     * @return A tensor which is equivalent to this tensor but with the specified shape.
-     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
-     */
-    @Override
-    public CTensor reshape(int... shape) {
-        return reshape(new Shape(shape));
-    }
-
-
-    /**
-     * Sets an index of this tensor to a specified value.
-     *
-     * @param value   Value to set.
-     * @param indices The indices of this tensor for which to set the value.
-     * @return A reference to this tensor.
-     */
-    @Override
-    public CTensor set(double value, int... indices) {
-        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
-        ComplexDenseSetOperations.set(entries, shape, value, indices);
-        return this;
-    }
-
-
-    /**
-     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
-     * in the reshaped tensor.
-     *
-     * @param shape Shape of the new tensor.
-     * @return A tensor which is equivalent to this tensor but with the specified shape.
-     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
-     */
-    @Override
-    public CTensor reshape(Shape shape) {
-        ParameterChecks.assertBroadcastable(this.shape, shape);
-        return new CTensor(shape, this.entries.clone());
     }
 
 
@@ -979,76 +596,6 @@ public class CTensor
     @Override
     public CTensor flatten() {
         return new CTensor(new Shape(entries.length), this.entries.clone());
-    }
-
-
-    /**
-     * Finds the minimum value, in terms of magnitude, in this tensor.
-     *
-     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double min() {
-        return minAbs();
-    }
-
-
-    /**
-     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
-     *
-     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double max() {
-        return maxAbs();
-    }
-
-
-    /**
-     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #min()}.
-     *
-     * @return The minimum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-        return AggregateComplex.minAbs(this.entries);
-    }
-
-
-    /**
-     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-        return AggregateComplex.maxAbs(this.entries);
-    }
-
-
-    /**
-     * Finds the indices of the minimum value in this tensor.
-     *
-     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMin() {
-        return shape.getIndices(AggregateDenseComplex.argMin(entries));
-    }
-
-
-    /**
-     * Finds the indices of the maximum value in this tensor.
-     *
-     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMax() {
-        return shape.getIndices(AggregateDenseComplex.argMax(entries));
     }
 
     

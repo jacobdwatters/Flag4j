@@ -383,6 +383,21 @@ public class SparseCTensor
 
 
     /**
+     * Sets an index of this tensor to a specified value.
+     *
+     * @param value   Value to set.
+     * @param indices The indices of this matrix for which to set the value.
+     * @return A reference to this tensor.
+     * @throws IllegalArgumentException  If the number of indices is not equal to the rank of this tensor.
+     * @throws IndexOutOfBoundsException If any of the indices are not within this tensor.
+     */
+    @Override
+    public SparseCTensor set(CNumber value, int... indices) {
+        return null;
+    }
+
+
+    /**
      * Checks if this tensor only contains zeros.
      *
      * @return True if this tensor only contains zeros. Otherwise, returns false.
