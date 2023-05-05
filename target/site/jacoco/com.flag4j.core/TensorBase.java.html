@@ -50,6 +50,11 @@ public abstract class TensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt; imple
         TensorOperationsMixin&lt;T, U, W, Z, Y, X&gt; {
 
     /**
+     * Default value for rounding to zero.
+     */
+    protected static final double DEFAULT_ROUND_TO_ZERO_THRESHOLD = 1e-12;
+
+    /**
      * Entry data for this tensor.
      */
     public final D entries;
@@ -65,10 +70,10 @@ public abstract class TensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt; imple
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
      *                If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-<span class="fc" id="L68">    public TensorBase(Shape shape, D entries) {</span>
-<span class="fc" id="L69">        this.shape = shape;</span>
-<span class="fc" id="L70">        this.entries = entries;</span>
-<span class="fc" id="L71">    }</span>
+<span class="fc" id="L73">    public TensorBase(Shape shape, D entries) {</span>
+<span class="fc" id="L74">        this.shape = shape;</span>
+<span class="fc" id="L75">        this.entries = entries;</span>
+<span class="fc" id="L76">    }</span>
 
 
     /**
@@ -76,7 +81,7 @@ public abstract class TensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt; imple
      * @return The shape of this tensor.
      */
     public Shape getShape() {
-<span class="fc" id="L79">        return this.shape;</span>
+<span class="fc" id="L84">        return this.shape;</span>
     }
 
 
@@ -94,7 +99,7 @@ public abstract class TensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt; imple
      * @return The rank of this tensor.
      */
     public int getRank() {
-<span class="fc" id="L97">        return this.shape.getRank();</span>
+<span class="fc" id="L102">        return this.shape.getRank();</span>
     }
 
 
@@ -103,7 +108,7 @@ public abstract class TensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt; imple
      * @return The entries of this tensor.
      */
     public D getEntries() {
-<span class="nc" id="L106">        return this.entries;</span>
+<span class="nc" id="L111">        return this.entries;</span>
     }
 
 
@@ -113,7 +118,7 @@ public abstract class TensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt; imple
      */
     public BigInteger totalEntries() {
         // Using the shape to compute the total number of entries ensures the correct result for sparse tensors.
-<span class="fc" id="L116">        return shape.totalEntries();</span>
+<span class="fc" id="L121">        return shape.totalEntries();</span>
     }
 
 
@@ -123,7 +128,7 @@ public abstract class TensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt; imple
      * @return True if this tensor and B have the same shape. False otherwise.
      */
     public boolean sameShape(TensorBase&lt;?, ?, ?, ?, ?, ?, ?&gt; B) {
-<span class="nc" id="L126">        return this.shape.equals(B.shape);</span>
+<span class="fc" id="L131">        return this.shape.equals(B.shape);</span>
     }
 
 
@@ -136,13 +141,13 @@ public abstract class TensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt; imple
      * @throws IllegalArgumentException If axis is negative or unspecified for either tensor.
      */
     public static boolean sameLength(TensorBase&lt;?, ?, ?, ?, ?, ?, ?&gt; A, TensorBase&lt;?, ?, ?, ?, ?, ?, ?&gt; B, int axis) {
-<span class="nc bnc" id="L139" title="All 4 branches missed.">        if(axis &lt; 0 || axis&gt;=Math.min(A.shape.getRank(), B.shape.getRank())) {</span>
-<span class="nc" id="L140">            throw new IllegalArgumentException(</span>
-<span class="nc" id="L141">                    ErrorMessages.getAxisErr(axis)</span>
+<span class="nc bnc" id="L144" title="All 4 branches missed.">        if(axis &lt; 0 || axis&gt;=Math.min(A.shape.getRank(), B.shape.getRank())) {</span>
+<span class="nc" id="L145">            throw new IllegalArgumentException(</span>
+<span class="nc" id="L146">                    ErrorMessages.getAxisErr(axis)</span>
             );
         }
 
-<span class="nc bnc" id="L145" title="All 2 branches missed.">        return A.shape.dims[axis]==B.shape.dims[axis];</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">        return A.shape.dims[axis]==B.shape.dims[axis];</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

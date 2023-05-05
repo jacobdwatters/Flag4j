@@ -27,15 +27,14 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexSparseTensorBase;
 import com.flag4j.core.ComplexTensorExclusiveMixin;
-import com.flag4j.core.TensorExclusiveMixin;
 
 
 /**
  * Complex sparse tensor.
  */
-public class SparseCTensor extends ComplexSparseTensorBase
-        implements TensorExclusiveMixin<SparseCTensor, CTensor, SparseCTensor, SparseCTensor>,
-        ComplexTensorExclusiveMixin<CTensor> {
+public class SparseCTensor
+        extends ComplexSparseTensorBase<SparseCTensor, CTensor, SparseTensor>
+        implements ComplexTensorExclusiveMixin<SparseCTensor> {
 
 
     /**
@@ -263,7 +262,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @return The conjugate transpose of this tensor.
      */
     @Override
-    public CTensor hermTranspose(int axis1, int axis2) {
+    public SparseCTensor hermTranspose(int axis1, int axis2) {
         return null;
     }
 
@@ -280,7 +279,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @return The conjugate transpose of this tensor.
      */
     @Override
-    public CTensor H(int axis1, int axis2) {
+    public SparseCTensor H(int axis1, int axis2) {
         return null;
     }
 
@@ -295,7 +294,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
      */
     @Override
-    public CTensor hermTranspose(int... axes) {
+    public SparseCTensor hermTranspose(int... axes) {
         return null;
     }
 
@@ -310,7 +309,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
      */
     @Override
-    public CTensor H(int... axes) {
+    public SparseCTensor H(int... axes) {
         return null;
     }
 
@@ -732,7 +731,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CTensor sub(SparseCTensor B) {
+    public SparseCTensor sub(SparseCTensor B) {
         return null;
     }
 
@@ -909,7 +908,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @return The result of applying an element-wise absolute value/magnitude to this tensor.
      */
     @Override
-    public SparseCTensor abs() {
+    public SparseTensor abs() {
         return null;
     }
 
@@ -1101,5 +1100,26 @@ public class SparseCTensor extends ComplexSparseTensorBase
     @Override
     public double infNorm() {
         return 0;
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     */
+    @Override
+    public SparseCTensor flatten(int axis) {
+        return null;
+    }
+
+
+    /**
+     * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
+     */
+    @Override
+    public void sparseSort() {
+
     }
 }

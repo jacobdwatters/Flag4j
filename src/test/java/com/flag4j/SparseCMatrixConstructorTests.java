@@ -162,7 +162,7 @@ public class SparseCMatrixConstructorTests {
         expRowIndices = new int[]{0, 0, 1, 3};
         expColIndices = new int[]{0, 4, 1};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseCMatrix(size, expNonZero, expRowIndices, expColIndices));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> new SparseCMatrix(size, expNonZero, expRowIndices, expColIndices));
     }
 
 
@@ -301,7 +301,7 @@ public class SparseCMatrixConstructorTests {
         expRowIndices = new int[]{0, 0, 1, 3};
         expColIndices = new int[]{0, 4, 1};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseCMatrix(size, expNonZeroI, expRowIndices, expColIndices));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> new SparseCMatrix(size, expNonZeroI, expRowIndices, expColIndices));
     }
 
 
@@ -447,7 +447,7 @@ public class SparseCMatrixConstructorTests {
         expRowIndices = new int[]{0, 0, 1, 3};
         expColIndices = new int[]{0, 4, 1};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseCMatrix(size, expNonZeroD, expRowIndices, expColIndices));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> new SparseCMatrix(size, expNonZeroD, expRowIndices, expColIndices));
     }
 
 

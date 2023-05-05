@@ -36,7 +36,6 @@ class CVectorElemOppTests {
         expEntries = new CNumber[]{aEntries[0].mag(), aEntries[1].mag(), aEntries[2].mag(),
                 aEntries[3].mag(), aEntries[4].mag()};
         exp = new CVector(expEntries);
-
         assertEquals(exp, a.abs());
     }
 

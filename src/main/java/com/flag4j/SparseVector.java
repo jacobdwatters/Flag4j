@@ -25,8 +25,10 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.RealSparseVectorBase;
+import com.flag4j.core.RealSparseTensorBase;
+import com.flag4j.core.VectorMixin;
 import com.flag4j.operations.dense.real.RealDenseProperties;
+import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
 import com.flag4j.operations.sparse.real.RealSparseOperations;
@@ -40,7 +42,18 @@ import java.util.Arrays;
 /**
  * Real sparse vector of arbitrary size.
  */
-public class SparseVector extends RealSparseVectorBase {
+public class SparseVector
+        extends RealSparseTensorBase<SparseVector, Vector, SparseCVector, CVector>
+        implements VectorMixin<SparseVector, Vector, SparseVector, SparseCVector, Double, SparseMatrix, Matrix, SparseCMatrix> {
+
+    /**
+     * The size of this vector. That is, the number of entries in this vector.
+     */
+    public final int size;
+    /**
+     * Indices of non-zero entries in this sparse vector.
+     */
+    public final int[] indices;
 
 
     /**
@@ -48,7 +61,9 @@ public class SparseVector extends RealSparseVectorBase {
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      */
     public SparseVector(int size) {
-        super(size, 0, new double[0], new int[0]);
+        super(new Shape(size), 0, new double[0], new int[0][0]);
+        this.size = size;
+        this.indices = new int[0];
     }
 
 
@@ -63,9 +78,11 @@ public class SparseVector extends RealSparseVectorBase {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, int[] nonZeroEntries, int[] indices) {
-        super(size, nonZeroEntries.length,
+        super(new Shape(size), nonZeroEntries.length,
                 Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),
-                indices);
+                RealDenseTranspose.blockedIntMatrix(new int[][]{indices}));
+        this.size = size;
+        this.indices = indices;
     }
 
 
@@ -78,7 +95,14 @@ public class SparseVector extends RealSparseVectorBase {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, double[] nonZeroEntries, int[] indices) {
-        super(size, nonZeroEntries.length, nonZeroEntries, indices);
+        super(new Shape(size),
+                nonZeroEntries.length,
+                nonZeroEntries,
+                RealDenseTranspose.blockedIntMatrix(new int[][]{indices})
+        );
+
+        this.size = size;
+        this.indices = indices;
     }
 
 
@@ -87,7 +111,13 @@ public class SparseVector extends RealSparseVectorBase {
      * @param a Sparse vector to copy
      */
     public SparseVector(SparseVector a) {
-        super(a.size(), a.nonZeroEntries(), a.entries.clone(), a.indices.clone());
+        super(a.shape.copy(),
+                a.nonZeroEntries(),
+                a.entries.clone(),
+                new int[a.indices.length][1]
+        );
+        this.indices = a.indices.clone();
+        this.size = a.size;
     }
 
 
@@ -680,7 +710,7 @@ public class SparseVector extends RealSparseVectorBase {
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public Vector sub(SparseVector B) {
+    public SparseVector sub(SparseVector B) {
         return null;
     }
 
@@ -706,7 +736,7 @@ public class SparseVector extends RealSparseVectorBase {
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public CVector sub(SparseCVector B) {
+    public SparseCVector sub(SparseCVector B) {
         return null;
     }
 
@@ -1321,6 +1351,41 @@ public class SparseVector extends RealSparseVectorBase {
     @Override
     public void sparseSort() {
         SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);
+    }
+
+
+    /**
+     * Converts this tensor to an equivalent complex tensor. That is, the entries of the resultant matrix will be exactly
+     * the same value but will have type {@link CNumber CNumber} rather than {@link Double}.
+     *
+     * @return A complex matrix which is equivalent to this matrix.
+     */
+    @Override
+    public SparseCVector toComplex() {
+        return null;
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     */
+    @Override
+    public SparseVector flatten(int axis) {
+        return null;
+    }
+
+
+    /**
+     * gets the size of this vector.
+     *
+     * @return The number of total entries (including zeros) of this vector.
+     */
+    @Override
+    public int size() {
+        return this.size;
     }
 }
 

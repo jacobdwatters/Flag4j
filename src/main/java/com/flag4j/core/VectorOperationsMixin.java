@@ -277,7 +277,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    U sub(SparseVector B);
+    T sub(SparseVector B);
 
 
     /**
@@ -295,7 +295,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    CVector sub(SparseCVector B);
+    W sub(SparseCVector B);
 
 
     /**

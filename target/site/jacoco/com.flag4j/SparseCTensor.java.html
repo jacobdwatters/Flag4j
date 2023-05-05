@@ -27,15 +27,14 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexSparseTensorBase;
 import com.flag4j.core.ComplexTensorExclusiveMixin;
-import com.flag4j.core.TensorExclusiveMixin;
 
 
 /**
  * Complex sparse tensor.
  */
-public class SparseCTensor extends ComplexSparseTensorBase
-        implements TensorExclusiveMixin&lt;SparseCTensor, CTensor, SparseCTensor, SparseCTensor&gt;,
-        ComplexTensorExclusiveMixin&lt;CTensor&gt; {
+public class SparseCTensor
+        extends ComplexSparseTensorBase&lt;SparseCTensor, CTensor, SparseTensor&gt;
+        implements ComplexTensorExclusiveMixin&lt;SparseCTensor&gt; {
 
 
     /**
@@ -43,8 +42,8 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @param shape Shape of the tensor.
      */
     public SparseCTensor(Shape shape) {
-<span class="fc" id="L46">        super(shape, 0, new CNumber[0], new int[0][0]);</span>
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L45">        super(shape, 0, new CNumber[0], new int[0][0]);</span>
+<span class="fc" id="L46">    }</span>
 
 
     /**
@@ -54,12 +53,12 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @param indices Indices of the non-zero entries of the tensor.
      */
     public SparseCTensor(Shape shape, double[] nonZeroEntries, int[][] indices) {
-<span class="fc" id="L57">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</span>
+<span class="fc" id="L56">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</span>
 
-<span class="fc bfc" id="L59" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
-<span class="fc" id="L60">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
+<span class="fc" id="L59">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L61">    }</span>
 
 
     /**
@@ -69,12 +68,12 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @param indices Indices of the non-zero entries of the tensor.
      */
     public SparseCTensor(Shape shape, int[] nonZeroEntries, int[][] indices) {
-<span class="fc" id="L72">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</span>
+<span class="fc" id="L71">        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</span>
 
-<span class="fc bfc" id="L74" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
-<span class="fc" id="L75">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
+<span class="fc" id="L74">            super.entries[i] = new CNumber(nonZeroEntries[i]);</span>
         }
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L76">    }</span>
 
 
     /**
@@ -84,8 +83,8 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @param indices Indices of the non-zero entries of the tensor.
      */
     public SparseCTensor(Shape shape, CNumber[] nonZeroEntries, int[][] indices) {
-<span class="fc" id="L87">        super(shape, nonZeroEntries.length, nonZeroEntries, indices);</span>
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L86">        super(shape, nonZeroEntries.length, nonZeroEntries, indices);</span>
+<span class="fc" id="L87">    }</span>
 
 
 //    /**
@@ -244,11 +243,11 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @param A The sparse complex tensor to construct a copy of.
      */
     public SparseCTensor(SparseCTensor A) {
-<span class="fc" id="L247">        super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);</span>
-<span class="fc bfc" id="L248" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
-<span class="fc" id="L249">            super.indices[i] = A.indices[i].clone();</span>
+<span class="fc" id="L246">        super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">        for(int i=0; i&lt;indices.length; i++) {</span>
+<span class="fc" id="L248">            super.indices[i] = A.indices[i].clone();</span>
         }
-<span class="fc" id="L251">    }</span>
+<span class="fc" id="L250">    }</span>
 
 
     /**
@@ -263,8 +262,8 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @return The conjugate transpose of this tensor.
      */
     @Override
-    public CTensor hermTranspose(int axis1, int axis2) {
-<span class="nc" id="L267">        return null;</span>
+    public SparseCTensor hermTranspose(int axis1, int axis2) {
+<span class="nc" id="L266">        return null;</span>
     }
 
 
@@ -280,8 +279,8 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @return The conjugate transpose of this tensor.
      */
     @Override
-    public CTensor H(int axis1, int axis2) {
-<span class="nc" id="L284">        return null;</span>
+    public SparseCTensor H(int axis1, int axis2) {
+<span class="nc" id="L283">        return null;</span>
     }
 
 
@@ -295,8 +294,8 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
      */
     @Override
-    public CTensor hermTranspose(int... axes) {
-<span class="nc" id="L299">        return null;</span>
+    public SparseCTensor hermTranspose(int... axes) {
+<span class="nc" id="L298">        return null;</span>
     }
 
 
@@ -310,8 +309,8 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
      */
     @Override
-    public CTensor H(int... axes) {
-<span class="nc" id="L314">        return null;</span>
+    public SparseCTensor H(int... axes) {
+<span class="nc" id="L313">        return null;</span>
     }
 
 
@@ -322,7 +321,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public boolean isReal() {
-<span class="nc" id="L325">        return false;</span>
+<span class="nc" id="L324">        return false;</span>
     }
 
 
@@ -333,7 +332,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public boolean isComplex() {
-<span class="nc" id="L336">        return false;</span>
+<span class="nc" id="L335">        return false;</span>
     }
 
 
@@ -344,7 +343,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor conj() {
-<span class="nc" id="L347">        return null;</span>
+<span class="nc" id="L346">        return null;</span>
     }
 
 
@@ -355,7 +354,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseTensor toReal() {
-<span class="nc" id="L358">        return null;</span>
+<span class="nc" id="L357">        return null;</span>
     }
 
 
@@ -367,7 +366,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor hermTranspose() {
-<span class="nc" id="L370">        return null;</span>
+<span class="nc" id="L369">        return null;</span>
     }
 
 
@@ -379,7 +378,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor H() {
-<span class="nc" id="L382">        return null;</span>
+<span class="nc" id="L381">        return null;</span>
     }
 
 
@@ -390,7 +389,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public boolean isZeros() {
-<span class="nc" id="L393">        return false;</span>
+<span class="nc" id="L392">        return false;</span>
     }
 
 
@@ -401,7 +400,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public boolean isOnes() {
-<span class="nc" id="L404">        return false;</span>
+<span class="nc" id="L403">        return false;</span>
     }
 
 
@@ -419,7 +418,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor tensorDot(SparseCTensor src2, int aAxis, int bAxis) {
-<span class="nc" id="L422">        return null;</span>
+<span class="nc" id="L421">        return null;</span>
     }
 
 
@@ -438,7 +437,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor tensorDot(SparseCTensor src2, int[] aAxes, int[] bAxes) {
-<span class="nc" id="L441">        return null;</span>
+<span class="nc" id="L440">        return null;</span>
     }
 
 
@@ -454,7 +453,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor dot(SparseCTensor src2) {
-<span class="nc" id="L457">        return null;</span>
+<span class="nc" id="L456">        return null;</span>
     }
 
 
@@ -470,7 +469,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor transpose(int axis1, int axis2) {
-<span class="nc" id="L473">        return null;</span>
+<span class="nc" id="L472">        return null;</span>
     }
 
 
@@ -486,7 +485,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor T(int axis1, int axis2) {
-<span class="nc" id="L489">        return null;</span>
+<span class="nc" id="L488">        return null;</span>
     }
 
 
@@ -501,7 +500,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor transpose(int... axes) {
-<span class="nc" id="L504">        return null;</span>
+<span class="nc" id="L503">        return null;</span>
     }
 
 
@@ -516,7 +515,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor T(int... axes) {
-<span class="nc" id="L519">        return null;</span>
+<span class="nc" id="L518">        return null;</span>
     }
 
 
@@ -529,7 +528,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor add(SparseTensor B) {
-<span class="nc" id="L532">        return null;</span>
+<span class="nc" id="L531">        return null;</span>
     }
 
 
@@ -542,7 +541,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public CTensor add(CTensor B) {
-<span class="nc" id="L545">        return null;</span>
+<span class="nc" id="L544">        return null;</span>
     }
 
 
@@ -555,7 +554,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor sub(SparseTensor B) {
-<span class="nc" id="L558">        return null;</span>
+<span class="nc" id="L557">        return null;</span>
     }
 
 
@@ -568,7 +567,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public CTensor sub(CTensor B) {
-<span class="nc" id="L571">        return null;</span>
+<span class="nc" id="L570">        return null;</span>
     }
 
 
@@ -581,7 +580,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
     @Override
     public void addEq(SparseTensor B) {
 
-<span class="nc" id="L584">    }</span>
+<span class="nc" id="L583">    }</span>
 
 
     /**
@@ -593,7 +592,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
     @Override
     public void subEq(SparseTensor B) {
 
-<span class="nc" id="L596">    }</span>
+<span class="nc" id="L595">    }</span>
 
 
     /**
@@ -605,7 +604,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor elemMult(SparseTensor B) {
-<span class="nc" id="L608">        return null;</span>
+<span class="nc" id="L607">        return null;</span>
     }
 
 
@@ -618,7 +617,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public CTensor elemMult(CTensor B) {
-<span class="nc" id="L621">        return null;</span>
+<span class="nc" id="L620">        return null;</span>
     }
 
 
@@ -631,7 +630,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public CTensor elemDiv(CTensor B) {
-<span class="nc" id="L634">        return null;</span>
+<span class="nc" id="L633">        return null;</span>
     }
 
 
@@ -645,7 +644,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor reshape(int... shape) {
-<span class="nc" id="L648">        return null;</span>
+<span class="nc" id="L647">        return null;</span>
     }
 
 
@@ -658,7 +657,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor set(double value, int... indices) {
-<span class="nc" id="L661">        return null;</span>
+<span class="nc" id="L660">        return null;</span>
     }
 
 
@@ -672,7 +671,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor reshape(Shape shape) {
-<span class="nc" id="L675">        return null;</span>
+<span class="nc" id="L674">        return null;</span>
     }
 
 
@@ -683,7 +682,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor flatten() {
-<span class="nc" id="L686">        return null;</span>
+<span class="nc" id="L685">        return null;</span>
     }
 
 
@@ -696,7 +695,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor add(SparseCTensor B) {
-<span class="nc" id="L699">        return null;</span>
+<span class="nc" id="L698">        return null;</span>
     }
 
 
@@ -708,7 +707,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public CTensor add(double a) {
-<span class="nc" id="L711">        return null;</span>
+<span class="nc" id="L710">        return null;</span>
     }
 
 
@@ -720,7 +719,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public CTensor add(CNumber a) {
-<span class="nc" id="L723">        return null;</span>
+<span class="nc" id="L722">        return null;</span>
     }
 
 
@@ -732,8 +731,8 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CTensor sub(SparseCTensor B) {
-<span class="nc" id="L736">        return null;</span>
+    public SparseCTensor sub(SparseCTensor B) {
+<span class="nc" id="L735">        return null;</span>
     }
 
 
@@ -745,7 +744,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public CTensor sub(double a) {
-<span class="nc" id="L748">        return null;</span>
+<span class="nc" id="L747">        return null;</span>
     }
 
 
@@ -757,7 +756,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor sub(CNumber a) {
-<span class="nc" id="L760">        return null;</span>
+<span class="nc" id="L759">        return null;</span>
     }
 
 
@@ -770,7 +769,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
     @Override
     public void addEq(SparseCTensor B) {
 
-<span class="nc" id="L773">    }</span>
+<span class="nc" id="L772">    }</span>
 
 
     /**
@@ -781,7 +780,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
     @Override
     public void addEq(CNumber b) {
 
-<span class="nc" id="L784">    }</span>
+<span class="nc" id="L783">    }</span>
 
 
     /**
@@ -792,7 +791,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
     @Override
     public void addEq(Double b) {
 
-<span class="nc" id="L795">    }</span>
+<span class="nc" id="L794">    }</span>
 
 
     /**
@@ -804,7 +803,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
     @Override
     public void subEq(SparseCTensor B) {
 
-<span class="nc" id="L807">    }</span>
+<span class="nc" id="L806">    }</span>
 
 
     /**
@@ -815,7 +814,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
     @Override
     public void subEq(CNumber b) {
 
-<span class="nc" id="L818">    }</span>
+<span class="nc" id="L817">    }</span>
 
 
     /**
@@ -826,7 +825,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
     @Override
     public void subEq(Double b) {
 
-<span class="nc" id="L829">    }</span>
+<span class="nc" id="L828">    }</span>
 
 
     /**
@@ -837,7 +836,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor mult(double factor) {
-<span class="nc" id="L840">        return null;</span>
+<span class="nc" id="L839">        return null;</span>
     }
 
 
@@ -849,7 +848,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor mult(CNumber factor) {
-<span class="nc" id="L852">        return null;</span>
+<span class="nc" id="L851">        return null;</span>
     }
 
 
@@ -862,7 +861,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor div(double divisor) {
-<span class="nc" id="L865">        return null;</span>
+<span class="nc" id="L864">        return null;</span>
     }
 
 
@@ -875,7 +874,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor div(CNumber divisor) {
-<span class="nc" id="L878">        return null;</span>
+<span class="nc" id="L877">        return null;</span>
     }
 
 
@@ -886,7 +885,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public CNumber sum() {
-<span class="nc" id="L889">        return null;</span>
+<span class="nc" id="L888">        return null;</span>
     }
 
 
@@ -898,7 +897,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor sqrt() {
-<span class="nc" id="L901">        return null;</span>
+<span class="nc" id="L900">        return null;</span>
     }
 
 
@@ -909,8 +908,8 @@ public class SparseCTensor extends ComplexSparseTensorBase
      * @return The result of applying an element-wise absolute value/magnitude to this tensor.
      */
     @Override
-    public SparseCTensor abs() {
-<span class="nc" id="L913">        return null;</span>
+    public SparseTensor abs() {
+<span class="nc" id="L912">        return null;</span>
     }
 
 
@@ -921,7 +920,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor transpose() {
-<span class="nc" id="L924">        return null;</span>
+<span class="nc" id="L923">        return null;</span>
     }
 
 
@@ -932,7 +931,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor T() {
-<span class="nc" id="L935">        return null;</span>
+<span class="nc" id="L934">        return null;</span>
     }
 
 
@@ -944,7 +943,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor recip() {
-<span class="nc" id="L947">        return null;</span>
+<span class="nc" id="L946">        return null;</span>
     }
 
 
@@ -957,7 +956,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public CNumber get(int... indices) {
-<span class="nc" id="L960">        return null;</span>
+<span class="nc" id="L959">        return null;</span>
     }
 
 
@@ -968,7 +967,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor copy() {
-<span class="nc" id="L971">        return null;</span>
+<span class="nc" id="L970">        return null;</span>
     }
 
 
@@ -981,7 +980,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor elemMult(SparseCTensor B) {
-<span class="nc" id="L984">        return null;</span>
+<span class="nc" id="L983">        return null;</span>
     }
 
 
@@ -994,7 +993,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public SparseCTensor elemDiv(SparseCTensor B) {
-<span class="nc" id="L997">        return null;</span>
+<span class="nc" id="L996">        return null;</span>
     }
 
 
@@ -1005,7 +1004,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public double min() {
-<span class="nc" id="L1008">        return 0;</span>
+<span class="nc" id="L1007">        return 0;</span>
     }
 
 
@@ -1016,7 +1015,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public double max() {
-<span class="nc" id="L1019">        return 0;</span>
+<span class="nc" id="L1018">        return 0;</span>
     }
 
 
@@ -1028,7 +1027,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public double minAbs() {
-<span class="nc" id="L1031">        return 0;</span>
+<span class="nc" id="L1030">        return 0;</span>
     }
 
 
@@ -1040,7 +1039,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public double maxAbs() {
-<span class="nc" id="L1043">        return 0;</span>
+<span class="nc" id="L1042">        return 0;</span>
     }
 
 
@@ -1052,7 +1051,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L1055">        return new int[0];</span>
+<span class="nc" id="L1054">        return new int[0];</span>
     }
 
 
@@ -1064,7 +1063,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L1067">        return new int[0];</span>
+<span class="nc" id="L1066">        return new int[0];</span>
     }
 
 
@@ -1075,7 +1074,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public double norm() {
-<span class="nc" id="L1078">        return 0;</span>
+<span class="nc" id="L1077">        return 0;</span>
     }
 
 
@@ -1089,7 +1088,7 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L1092">        return 0;</span>
+<span class="nc" id="L1091">        return 0;</span>
     }
 
 
@@ -1100,7 +1099,28 @@ public class SparseCTensor extends ComplexSparseTensorBase
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L1103">        return 0;</span>
+<span class="nc" id="L1102">        return 0;</span>
     }
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is not positive or larger than &lt;code&gt;this.{@link #getRank()}-1&lt;/code&gt;.
+     */
+    @Override
+    public SparseCTensor flatten(int axis) {
+<span class="nc" id="L1114">        return null;</span>
+    }
+
+
+    /**
+     * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
+     */
+    @Override
+    public void sparseSort() {
+
+<span class="nc" id="L1124">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

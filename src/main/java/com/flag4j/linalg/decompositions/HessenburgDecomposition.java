@@ -24,8 +24,6 @@
 
 package com.flag4j.linalg.decompositions;
 
-import com.flag4j.core.MatrixBase;
-
 
 /**
  * <p>This abstract class specifies methods for computing the Hessenburg decomposition of a square matrix. That is, for a square matrix
@@ -44,7 +42,7 @@ import com.flag4j.core.MatrixBase;
  *      [ 0 0 0 x x ]]</pre>
  * </p>
  */
-public abstract class HessenburgDecomposition<T extends MatrixBase<?, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class HessenburgDecomposition<T> implements Decomposition<T> {
 
     /**
      * A flag for determining if {@code Q} should be computed in the Hessenburg decomposition.

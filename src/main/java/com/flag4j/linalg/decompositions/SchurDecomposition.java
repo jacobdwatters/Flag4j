@@ -29,9 +29,6 @@ import com.flag4j.CVector;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.MatrixBase;
-
-import java.util.Scanner;
 
 /**
  * <p>This abstract class specifies methods for computing the Schur decomposition of a square matrix.
@@ -44,7 +41,7 @@ import java.util.Scanner;
  *
  * @param <T> The type of matrix to compute the Schur decomposition of.
  */
-public abstract class SchurDecomposition<T extends MatrixBase<?, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class SchurDecomposition<T> implements Decomposition<T> {
 
     /**
      * The maximum number of iterations to run the {@code QR} algorithm when computing the Schur decomposition. This

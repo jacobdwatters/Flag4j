@@ -58,4 +58,12 @@ interface TensorManipulationsMixin<T> {
      * @return The flattened tensor.
      */
     T flatten();
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is not positive or larger than the rank of this tensor.
+     */
+    T flatten(int axis);
 }

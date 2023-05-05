@@ -25,7 +25,8 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.ComplexVectorBase;
+import com.flag4j.core.ComplexDenseTensorBase;
+import com.flag4j.core.VectorMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
@@ -46,16 +47,22 @@ import java.util.Arrays;
 /**
  * Complex dense vector. This class is mostly equivalent to a rank 1 complex tensor.
  */
-public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix> {
+public class CVector extends ComplexDenseTensorBase<CVector, Vector>
+implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatrix, CMatrix, CMatrix> {
 
+    /**
+     * The size of this vector. That is, the number of entries in this vector.
+     */
+    public final int size;
 
     /**
      * Creates a column vector of specified size filled with zeros.
      * @param size Size of the vector.
      */
     public CVector(int size) {
-        super(size, new CNumber[size]);
+        super(new Shape(size), new CNumber[size]);
         ArrayUtils.fillZeros(super.entries);
+        this.size = shape.dims[0];
     }
 
 
@@ -65,8 +72,9 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @param fillValue Value to fill vector with.
      */
     public CVector(int size, double fillValue) {
-        super(size, new CNumber[size]);
+        super(new Shape(size), new CNumber[size]);
         ArrayUtils.fill(super.entries, fillValue);
+        this.size = shape.dims[0];
     }
 
 
@@ -76,8 +84,9 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @param fillValue Value to fill vector with.
      */
     public CVector(int size, CNumber fillValue) {
-        super(size, new CNumber[size]);
+        super(new Shape(size), new CNumber[size]);
         ArrayUtils.fill(super.entries, fillValue);
+        this.size = shape.dims[0];
     }
 
 
@@ -86,8 +95,9 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @param entries Entries for this column vector.
      */
     public CVector(double[] entries) {
-        super(entries.length, new CNumber[entries.length]);
+        super(new Shape(entries.length), new CNumber[entries.length]);
         ArrayUtils.copy2CNumber(entries, super.entries);
+        this.size = shape.dims[0];
     }
 
 
@@ -96,8 +106,9 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @param entries Entries for this column vector.
      */
     public CVector(int[] entries) {
-        super(entries.length, new CNumber[entries.length]);
+        super(new Shape(entries.length), new CNumber[entries.length]);
         ArrayUtils.copy2CNumber(entries, super.entries);
+        this.size = shape.dims[0];
     }
 
 
@@ -106,7 +117,8 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @param entries Entries for this column vector.
      */
     public CVector(CNumber[] entries) {
-        super(entries.length, entries);
+        super(new Shape(entries.length), entries);
+        this.size = shape.dims[0];
     }
 
 
@@ -115,8 +127,9 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @param a Real vector to copy.
      */
     public CVector(Vector a) {
-        super(a.size(), new CNumber[a.totalEntries().intValue()]);
+        super(a.shape.copy(), new CNumber[a.totalEntries().intValue()]);
         ArrayUtils.copy2CNumber(a.entries, super.entries);
+        this.size = shape.dims[0];
     }
 
 
@@ -125,8 +138,9 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @param a Complex vector to copy.
      */
     public CVector(CVector a) {
-        super(a.size(), new CNumber[a.totalEntries().intValue()]);
+        super(a.shape.copy(), new CNumber[a.totalEntries().intValue()]);
         ArrayUtils.copy2CNumber(a.entries, super.entries);
+        this.size = shape.dims[0];
     }
 
 
@@ -636,8 +650,8 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @return The result of applying an element-wise absolute value/magnitude to this tensor.
      */
     @Override
-    public CVector abs() {
-        return new CVector(ComplexOperations.abs(this.entries));
+    public Vector abs() {
+        return new Vector(ComplexOperations.abs(this.entries));
     }
 
 
@@ -1684,5 +1698,28 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
         result.append("]");
 
         return result.toString();
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     */
+    @Override
+    public CVector flatten(int axis) {
+        return null;
+    }
+
+
+    /**
+     * gets the size of this vector.
+     *
+     * @return The total number of entries in this vector.
+     */
+    @Override
+    public int size() {
+        return size;
     }
 }

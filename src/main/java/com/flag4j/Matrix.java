@@ -25,13 +25,14 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.RealMatrixBase;
+import com.flag4j.core.MatrixMixin;
+import com.flag4j.core.RealDenseTensorBase;
+import com.flag4j.core.RealMatrixMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.*;
@@ -52,7 +53,19 @@ import java.util.List;
 /**
  * Real dense matrix. Stored in row major format. This class is mostly equivalent to a real dense tensor of rank 2.
  */
-public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
+public class Matrix
+        extends RealDenseTensorBase<Matrix, CMatrix>
+        implements MatrixMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double>,
+        RealMatrixMixin<Matrix, CMatrix> {
+
+    /**
+     * The number of rows in this matrix.
+     */
+    public final int numRows;
+    /**
+     * The number of columns in this matrix.
+     */
+    public final int numCols;
 
 
     /**
@@ -62,6 +75,8 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
      */
     public Matrix(int size) {
         super(new Shape(size, size), new double[size*size]);
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -74,6 +89,8 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
     public Matrix(int size, double value) {
         super(new Shape(size, size), new double[size*size]);
         Arrays.fill(super.entries, value);
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -85,6 +102,8 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
      */
     public Matrix(int rows, int cols) {
         super(new Shape(rows, cols), new double[rows*cols]);
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -98,6 +117,8 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
     public Matrix(int rows, int cols, double value) {
         super(new Shape(rows, cols), new double[rows*cols]);
         Arrays.fill(super.entries, value);
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -108,9 +129,10 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
     public Matrix(Double[][] entries) {
         super(new Shape(entries.length, entries[0].length),
                 new double[entries.length*entries[0].length]);
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
 
         int index = 0;
-
         for(Double[] row : entries) {
             for(Double value : row) {
                 super.entries[index++] = value;
@@ -126,9 +148,10 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
     public Matrix(Integer[][] entries) {
         super(new Shape(entries.length, entries[0].length),
                 new double[entries.length*entries[0].length]);
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
 
         int index = 0;
-
         for(Integer[] row : entries) {
             for(Integer value : row) {
                 super.entries[index++] = value;
@@ -144,9 +167,10 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
     public Matrix(double[][] entries) {
         super(new Shape(entries.length, entries[0].length),
                 new double[entries.length*entries[0].length]);
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
 
         int index = 0;
-
         for(double[] row : entries) {
             for(double value : row) {
                 super.entries[index++] = value;
@@ -161,6 +185,8 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
      */
     public Matrix(int[][] entries) {
         super(new Shape(entries.length, entries[0].length), new double[entries.length*entries[0].length]);
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
 
         // Copy the int array
         int index=0;
@@ -178,15 +204,21 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
      */
     public Matrix(Matrix A) {
         super(A.shape.copy(), A.entries.clone());
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
     /**
      * Creates a real dense matrix with specified shape filled with zeros.
      * @param shape Shape of matrix.
+     * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
      */
     public Matrix(Shape shape) {
         super(shape, new double[shape.totalEntries().intValue()]);
+        ParameterChecks.assertRank(2, shape);
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -194,10 +226,14 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
      * Creates a real dense matrix with specified shape filled with a specific value.
      * @param shape Shape of matrix.
      * @param value Value to fill matrix with.
+     * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
      */
     public Matrix(Shape shape, double value) {
         super(shape, new double[shape.totalEntries().intValue()]);
         Arrays.fill(super.entries, value);
+        ParameterChecks.assertRank(2, shape);
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -206,9 +242,63 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
      * is not copied.
      * @param shape Shape of the matrix
      * @param entries Entries of the matrix.
+     * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
      */
     public Matrix(Shape shape, double[] entries) {
         super(shape, entries);
+        ParameterChecks.assertRank(2, shape);
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
+    }
+
+
+    /**
+     * Factory to create a tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected Matrix makeTensor(Shape shape, double[] entries) {
+        return new Matrix(shape, entries);
+    }
+
+
+    /**
+     * Factory to create a complex tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected CMatrix makeComplexTensor(Shape shape, double[] entries) {
+        return new CMatrix(shape, entries);
+    }
+
+
+    /**
+     * Factory to create a complex tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected CMatrix makeComplexTensor(Shape shape, CNumber[] entries) {
+        return new CMatrix(shape, entries);
+    }
+
+
+    /**
+     * Simply returns this tensor.
+     *
+     * @return A reference to this tensor.
+     */
+    @Override
+    protected Matrix getSelf() {
+        return this;
     }
 
 
@@ -221,17 +311,26 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
      */
     public Matrix(int numRows, int numCols, double[] entries) {
         super(new Shape(numRows, numCols), entries);
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
     /**
-     * Converts this matrix to an equivalent complex matrix.
-     *
-     * @return A complex matrix with equivalent real part and zero imaginary part.
+     * Gets the number of rows in this matrix.
+     * @return The number of rows in this matrix.
      */
-    @Override
-    public CMatrix toComplex() {
-        return new CMatrix(this);
+    public int numRows() {
+        return numRows;
+    }
+
+
+    /**
+     * Gets the number of columns in this matrix.
+     * @return The number of columns in this matrix.
+     */
+    public int numCols() {
+        return numCols;
     }
 
 
@@ -319,17 +418,6 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
 
 
     /**
-     * Creates a hashcode for this matrix. Note, method adds {@link Arrays#hashCode(double[])} on the
-     * underlying data array and the underlying shape array.
-     * @return The hashcode for this matrix.
-     */
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);
-    }
-
-
-    /**
      * Checks if matrices are inverses of each other. This method rounds values near zero to zero when checking
      * if the two matrices are inverses to account for floating point precision loss.
      *
@@ -347,29 +435,6 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
         }
 
         return result;
-    }
-
-
-    // TODO: pull reshape up to tensor manipulations mixin interface.
-    //  Add reshapeCopy(), and flattenCopy() to replace current methods. Then change
-    //  current methods to reshape the instanced they are called with.
-
-
-    /**
-     * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
-     * in the reshaped matrix.
-     *
-     * @param shape New Shape.
-     * @return A matrix which is equivalent to this matrix but with the specified dimensions.
-     * @throws IllegalArgumentException If either,<br>
-     *                                  - The shape array contains negative indices.<br>
-     *                                  - This matrix cannot be reshaped to the specified dimensions.
-     */
-    @Override
-    public Matrix reshape(Shape shape) {
-        // Ensure the total number of entries in each shape is equal
-        ParameterChecks.assertBroadcastable(shape, this.shape);
-        return new Matrix(shape, entries.clone());
     }
 
 
@@ -456,7 +521,6 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
      * @param values New values of the matrix.
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
-    @Override
     public Matrix setValues(Integer[][] values) {
         ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
         RealDenseSetOperations.setValues(values, this.entries);
@@ -569,7 +633,7 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
      */
     @Override
     public Matrix setRow(Double[] values, int rowIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = values[i];
@@ -589,7 +653,7 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
      */
     @Override
     public Matrix setRow(Integer[] values, int rowIndex) {
-        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols());
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
 
         for(int i=0; i<values.length; i++) {
             super.entries[rowIndex*numCols + i] = values[i];
@@ -1146,6 +1210,7 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
      */
     @Override
     public Matrix roundToZero() {
+        this.abs();
         return new Matrix(this.shape, RealOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD));
     }
 
@@ -1162,49 +1227,6 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
     @Override
     public Matrix roundToZero(double threshold) {
         return new Matrix(this.shape, RealOperations.roundToZero(this.entries, threshold));
-    }
-
-
-    /**
-     * Computes the element-wise addition between two matrices.
-     *
-     * @param B Second matrix in the addition.
-     * @return The result of adding the matrix B to this matrix element-wise.
-     * @throws IllegalArgumentException If A and B have different shapes.
-     */
-    @Override
-    public Matrix add(Matrix B) {
-        return new Matrix(this.shape.copy(),
-                RealDenseOperations.add(this.entries, this.shape, B.entries, B.shape)
-        );
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public Matrix add(double a) {
-        return new Matrix(this.shape.copy(),
-                RealDenseOperations.add(this.entries, a)
-        );
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CMatrix add(CNumber a) {
-        return new CMatrix(this.shape.copy(),
-                RealComplexDenseVectorOperations.add(this.entries, a)
-        );
     }
 
 
@@ -1250,61 +1272,6 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
 
 
     /**
-     * Computes the element-wise subtraction of two tensors of the same rank.
-     *
-     * @param B Second tensor in the subtraction.
-     * @return The result of subtracting the tensor B from this tensor element-wise.
-     * @throws IllegalArgumentException If A and B have different shapes.
-     */
-    @Override
-    public Matrix sub(Matrix B) {
-        return new Matrix(this.shape.copy(),
-                RealDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
-        );
-    }
-
-
-    /**
-     * Subtracts specified value to all entries of this tensor.
-     *
-     * @param a Value to subtract from all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public Matrix sub(double a) {
-        return new Matrix(this.shape.copy(),
-                RealDenseOperations.sub(this.entries, a)
-        );
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor.
-     *
-     * @param a Value to subtract from all entries of this tensor.
-     * @return The result of subtracting the specified value from each entry of this tensor.
-     */
-    @Override
-    public CMatrix sub(CNumber a) {
-        return new CMatrix(this.shape.copy(),
-                RealComplexDenseOperations.sub(this.entries, a)
-        );
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void subEq(Matrix B) {
-        RealDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
-    }
-
-
-    /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
      *
      * @param B Second tensor in the subtraction.
@@ -1317,29 +1284,6 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
 
 
     /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void subEq(Double b) {
-        RealDenseOperations.subEq(this.entries, b);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void addEq(Matrix B) {
-        RealDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
-    }
-
-
-    /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
      *
      * @param B Second tensor in the subtraction.
@@ -1348,115 +1292,6 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
     @Override
     public void addEq(SparseMatrix B) {
         RealDenseSparseOperations.addEq(this, B);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void addEq(Double b) {
-        RealDenseOperations.addEq(this.entries, b);
-    }
-
-
-    /**
-     * Computes scalar multiplication of a tensor.
-     *
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    @Override
-    public Matrix mult(double factor) {
-        return new Matrix(this.shape.copy(),
-                RealOperations.scalMult(this.entries, factor)
-        );
-    }
-
-
-    /**
-     * Computes scalar multiplication of a tensor.
-     *
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    @Override
-    public CMatrix mult(CNumber factor) {
-        return new CMatrix(this.shape.copy(),
-                ComplexOperations.scalMult(this.entries, factor)
-        );
-    }
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    @Override
-    public Matrix div(double divisor) {
-        return new Matrix(this.shape.copy(),
-                RealDenseOperations.scalDiv(this.entries, divisor)
-        );
-    }
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    @Override
-    public CMatrix div(CNumber divisor) {
-        return new CMatrix(this.shape.copy(),
-                RealComplexDenseOperations.scalDiv(this.entries, divisor)
-        );
-    }
-
-
-    /**
-     * Sums together all entries in the tensor.
-     *
-     * @return The sum of all entries in this tensor.
-     */
-    @Override
-    public Double sum() {
-        return AggregateReal.sum(entries);
-    }
-
-
-    /**
-     * Computes the element-wise square root of a tensor. If this matrix contains negative entries, the corresponding
-     * square root will be {@code NaN}.
-     *
-     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
-     * the principle square root i.e. the square root with positive real part.
-     */
-    @Override
-    public Matrix sqrt() {
-        return new Matrix(this.shape.copy(),
-                RealOperations.sqrt(entries)
-        );
-    }
-
-
-    /**
-     * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
-     * be computed.
-     *
-     * @return The result of applying an element-wise absolute value/magnitude to this tensor.
-     */
-    @Override
-    public Matrix abs() {
-        return new Matrix(this.shape.copy(),
-                RealOperations.abs(entries)
-        );
     }
 
 
@@ -1479,21 +1314,6 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
     @Override
     public Matrix T() {
         return transpose();
-    }
-
-
-    /**
-     * Computes the reciprocals, element-wise, of a tensor.
-     *
-     * @return A tensor containing the reciprocal elements of this tensor.
-     * @throws ArithmeticException If this tensor contains any zeros.
-     */
-    @Override
-    public Matrix recip() {
-        return new Matrix(
-                shape.copy(),
-                RealDenseOperations.recip(entries)
-        );
     }
 
 
@@ -1814,22 +1634,6 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public Matrix elemMult(Matrix B) {
-        return new Matrix(
-                shape.copy(),
-                RealDenseElemMult.dispatch(entries, shape, B.entries, B.shape)
-        );
-    }
-
-
-    /**
-     * Computes the element-wise multiplication (Hadamard product) between two matrices.
-     *
-     * @param B Second matrix in the element-wise multiplication.
-     * @return The result of element-wise multiplication of this matrix with the matrix B.
-     * @throws IllegalArgumentException If this matrix and B have different shapes.
-     */
-    @Override
     public SparseMatrix elemMult(SparseMatrix B) {
         return RealDenseSparseOperations.elemMult(this, B);
     }
@@ -1861,23 +1665,6 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
         return RealComplexDenseSparseOperations.elemMult(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise division between two matrices.
-     *
-     * @param B Second matrix in the element-wise division.
-     * @return The result of element-wise division of this matrix with the matrix B.
-     * @throws IllegalArgumentException If this matrix and B have different shapes.
-     * @throws ArithmeticException      If B contains any zero entries.
-     */
-    @Override
-    public Matrix elemDiv(Matrix B) {
-        return new Matrix(
-                shape.copy(),
-                RealDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
-        );
     }
 
 
@@ -3107,19 +2894,6 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
 
 
     /**
-     * Gets the element in this matrix at the specified indices.
-     * @param indices Indices of element.
-     * @return The element at the specified indices.
-     * @throws IllegalArgumentException If the number of indices is not two.
-     */
-    @Override
-    public Double get(int... indices) {
-        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
-        return entries[shape.entriesIndex(indices)];
-    }
-
-
-    /**
      * Get the row of this matrix at the specified index.
      *
      * @param rowIdx Index of row to get.
@@ -3503,75 +3277,6 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
 
 
     /**
-     * Checks if this tensor only contains zeros.
-     *
-     * @return True if this tensor only contains zeros. Otherwise, returns false.
-     */
-    @Override
-    public boolean isZeros() {
-        return ArrayUtils.isZeros(entries);
-    }
-
-
-    /**
-     * Checks if this tensor only contains ones.
-     *
-     * @return True if this tensor only contains ones. Otherwise, returns false.
-     */
-    @Override
-    public boolean isOnes() {
-        return RealDenseProperties.isOnes(entries);
-    }
-
-
-    /**
-     * Sets an index of this tensor to a specified value.
-     *
-     * @param value   Value to set.
-     * @param indices The indices of this tensor for which to set the value.
-     * @throws IllegalArgumentException If the number of indices is not 2.
-     */
-    @Override
-    public Matrix set(double value, int... indices) {
-        ParameterChecks.assertArrayLengthsEq(indices.length, shape.getRank());
-        RealDenseSetOperations.set(entries, shape, value, indices);
-        return this;
-    }
-
-
-    /**
-     * Finds the indices of the minimum value in this tensor.
-     *
-     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned. If this matrix is empty the array returned will be empty.
-     */
-    @Override
-    public int[] argMin() {
-        if(this.entries.length==0) {
-            return new int[]{};
-        } else {
-            return shape.getIndices(AggregateDenseReal.argMin(entries));
-        }
-    }
-
-
-    /**
-     * Finds the indices of the maximum value in this tensor.
-     *
-     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned. If this matrix is empty the array returned will be empty.
-     */
-    @Override
-    public int[] argMax() {
-        if(this.entries.length==0) {
-            return new int[]{};
-        } else {
-            return shape.getIndices(AggregateDenseReal.argMax(entries));
-        }
-    }
-
-
-    /**
      * Swaps specified rows in the matrix. This is done in place.
      * @param rowIndex1 Index of the first row to swap.
      * @param rowIndex2 Index of the second row to swap.
@@ -3647,24 +3352,26 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
 
 
     /**
-     * Computes the maximum/infinite norm of this tensor.
+     * Computes the maximum norm of this matrix. That is, the maximum value in the matrix.
      *
-     * @return The maximum/infinite norm of this tensor.
-     */
-    @Override
-    public double infNorm() {
-        return RealDenseOperations.matrixInfNorm(entries, shape);
-    }
-
-
-    /**
-     * Computes the maximum/infinite norm of this tensor.
-     *
-     * @return The maximum/infinite norm of this tensor.
+     * @return The maximum norm of this matrix.
+     * @see #infNorm()
      */
     @Override
     public double maxNorm() {
         return RealDenseOperations.matrixMaxNorm(entries);
+    }
+
+
+    /**
+     * Computes the infinite norm of this matrix. that is the maximum row sum in the matrix.
+     *
+     * @return The infinite norm of this matrix.
+     * @see #maxNorm()
+     */
+    @Override
+    public double infNorm() {
+        return RealDenseOperations.matrixInfNorm(entries, shape);
     }
 
 
@@ -3678,16 +3385,6 @@ public class Matrix extends RealMatrixBase<Matrix, CMatrix> {
     public int matrixRank() {
         // TODO: Implementation
         return 0;
-    }
-
-
-    /**
-     * Creates a deep copy of this matrix.
-     * @return A deep copy of this matrix.
-     */
-    @Override
-    public Matrix copy() {
-        return new Matrix(this);
     }
 
 

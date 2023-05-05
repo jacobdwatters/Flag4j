@@ -35,7 +35,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <T> Matrix type.
  * @param <Y> Real matrix type.
  */
-public interface ComplexMatrixMixin<T, Y> extends ComplexTensorMixin<T, Y> {
+public interface ComplexMatrixMixin<T, Y> {
 
 
     /**
@@ -223,4 +223,20 @@ public interface ComplexMatrixMixin<T, Y> extends ComplexTensorMixin<T, Y> {
      *                                   fit completely within this matrix.
      */
     T setSliceCopy(SparseCMatrix values, int rowStart, int colStart);
+
+
+    /**
+     * Adds a complex sparse matrix to this matrix and stores the result in this matrix.
+     *
+     * @param B Complex sparse matrix to add to this matrix,
+     */
+    void addEq(SparseCMatrix B);
+
+
+    /**
+     * Subtracts a complex sparse matrix from this matrix and stores the result in this matrix.
+     *
+     * @param B Complex sparse matrix to subtract from this matrix,
+     */
+    void subEq(SparseCMatrix B);
 }

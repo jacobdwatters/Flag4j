@@ -25,13 +25,27 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.ComplexSparseVectorBase;
+import com.flag4j.core.ComplexSparseTensorBase;
+import com.flag4j.core.VectorMixin;
+import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.util.ArrayUtils;
 
 /**
  * Complex sparse vector.
  */
-public class SparseCVector extends ComplexSparseVectorBase {
+public class SparseCVector
+        extends ComplexSparseTensorBase<SparseCVector, CVector, SparseVector>
+        implements VectorMixin<SparseCVector, CVector, SparseCVector, SparseCVector, CNumber, SparseCMatrix, CMatrix, SparseCMatrix> {
+
+
+    /**
+     * The size of this vector. That is, the number of entries in this vector.
+     */
+    public final int size;
+    /**
+     * Indices of non-zero entries in this sparse vector.
+     */
+    public final int[] indices;
 
 
     /**
@@ -39,7 +53,9 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      */
     public SparseCVector(int size) {
-        super(size, 0, new CNumber[0], new int[0]);
+        super(new Shape(size), 0, new CNumber[0], new int[0][0]);
+        this.size = size;
+        this.indices = new int[0];
     }
 
 
@@ -52,8 +68,14 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, int[] nonZeroEntries, int[] indices) {
-        super(size, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);
+        super(new Shape(size),
+                nonZeroEntries.length,
+                new CNumber[nonZeroEntries.length],
+                RealDenseTranspose.blockedIntMatrix(new int[][]{indices})
+        );
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
+        this.size = size;
+        this.indices = indices;
     }
 
 
@@ -66,8 +88,14 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, double[] nonZeroEntries, int[] indices) {
-        super(size, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);
+        super(new Shape(size),
+                nonZeroEntries.length,
+                new CNumber[nonZeroEntries.length],
+                RealDenseTranspose.blockedIntMatrix(new int[][]{indices}
+        ));
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
+        this.size = size;
+        this.indices = indices;
     }
 
 
@@ -80,7 +108,30 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, CNumber[] nonZeroEntries, int[] indices) {
-        super(size, nonZeroEntries.length, nonZeroEntries, indices);
+        super(new Shape(size),
+                nonZeroEntries.length,
+                nonZeroEntries,
+                RealDenseTranspose.blockedIntMatrix(new int[][]{indices})
+        );
+        this.size = size;
+        this.indices = indices;
+    }
+
+
+    /**
+     * Constructs a complex sparse vector whose size, orientation, non-zero entries, and indices are specified
+     * by another complex sparse vector.
+     * @param a Vector to copy.
+     */
+    public SparseCVector(SparseCVector a) {
+        super(a.shape.copy(),
+                a.nonZeroEntries(),
+                new CNumber[a.nonZeroEntries()],
+                RealDenseTranspose.blockedIntMatrix(new int[][]{a.indices})
+        );
+        ArrayUtils.copy2CNumber(a.entries, super.entries);
+        this.size = a.size;
+        this.indices = a.indices.clone();
     }
 
 
@@ -263,16 +314,6 @@ public class SparseCVector extends ComplexSparseVectorBase {
 
 
     /**
-     * Constructs a complex sparse vector whose size, orientation, non-zero entries, and indices are specified
-     * by another complex sparse vector.
-     * @param a Vector to copy.
-     */
-    public SparseCVector(SparseCVector a) {
-        super(a.size(), a.nonZeroEntries(), new CNumber[a.nonZeroEntries()], a.indices.clone());
-        ArrayUtils.copy2CNumber(a.entries, super.entries);
-    }
-
-    /**
      * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
      * and takes the complex conjugate of the elements along these axes. Same as {@link #H}.
      *
@@ -452,7 +493,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      *                                  the vector {@code b}.
      */
     @Override
-    public CMatrix stack(CVector b) {
+    public SparseCMatrix stack(CVector b) {
         return null;
     }
 
@@ -466,7 +507,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      *                                  the vector {@code b}.
      */
     @Override
-    public CMatrix stack(SparseCVector b) {
+    public SparseCMatrix stack(SparseCVector b) {
         return null;
     }
 
@@ -550,7 +591,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public CMatrix stack(CVector b, int axis) {
+    public SparseCMatrix stack(CVector b, int axis) {
         return null;
     }
 
@@ -578,7 +619,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public CMatrix stack(SparseCVector b, int axis) {
+    public SparseCMatrix stack(SparseCVector b, int axis) {
         return null;
     }
 
@@ -650,7 +691,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public CVector sub(SparseVector B) {
+    public SparseCVector sub(SparseVector B) {
         return null;
     }
 
@@ -696,7 +737,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CVector sub(SparseCVector B) {
+    public SparseCVector sub(SparseCVector B) {
         return null;
     }
 
@@ -942,7 +983,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @return The result of applying an element-wise absolute value/magnitude to this tensor.
      */
     @Override
-    public SparseCVector abs() {
+    public SparseVector abs() {
         return null;
     }
 
@@ -1355,5 +1396,37 @@ public class SparseCVector extends ComplexSparseVectorBase {
     @Override
     public int length() {
         return 0;
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     */
+    @Override
+    public SparseCVector flatten(int axis) {
+        return null;
+    }
+
+
+    /**
+     * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
+     */
+    @Override
+    public void sparseSort() {
+
+    }
+
+
+    /**
+     * gets the size of this vector.
+     *
+     * @return The number of total entries (including zeros) of this vector.
+     */
+    @Override
+    public int size() {
+        return this.size;
     }
 }

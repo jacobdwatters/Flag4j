@@ -25,11 +25,16 @@
 package com.flag4j.core;
 
 
+import com.flag4j.CTensor;
+import com.flag4j.SparseCTensor;
+
 /**
- * This class specifies methods which any complex tensor should implement.
- * @param <T> Type of this complex tensor.
+ * This class specifies methods which any complex tensor that is <b>NOT</b> a matrix or vector should implement.
+ * @param <T> Tensor type.
  */
-public interface ComplexTensorExclusiveMixin<T> {
+public interface ComplexTensorExclusiveMixin<T>
+        extends TensorExclusiveMixin<T, CTensor, SparseCTensor, T> {
+
     /**
      * Computes the conjugate transpose of a tensor. Same as {@link #H(int, int)}.
      * In the context of a tensor, this exchanges the specified axes and takes the complex conjugate of elements along

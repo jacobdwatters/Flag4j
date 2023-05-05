@@ -25,9 +25,8 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.ComplexTensorBase;
+import com.flag4j.core.ComplexDenseTensorBase;
 import com.flag4j.core.ComplexTensorExclusiveMixin;
-import com.flag4j.core.TensorExclusiveMixin;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
@@ -48,9 +47,9 @@ import java.util.Arrays;
 /**
  * Complex dense tensor.
  */
-public class CTensor extends ComplexTensorBase<CTensor, Tensor>
-        implements TensorExclusiveMixin<CTensor, CTensor, SparseCTensor, CTensor>,
-        ComplexTensorExclusiveMixin<CTensor> {
+public class CTensor
+        extends ComplexDenseTensorBase<CTensor, Tensor>
+        implements ComplexTensorExclusiveMixin<CTensor> {
 
 
     /**
@@ -132,6 +131,19 @@ public class CTensor extends ComplexTensorBase<CTensor, Tensor>
         if(entries.length != super.totalEntries().intValue()) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
         }
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     */
+    @Override
+    public CTensor flatten(int axis) {
+        // TODO: Implementation.
+        return null;
     }
 
 
@@ -756,8 +768,8 @@ public class CTensor extends ComplexTensorBase<CTensor, Tensor>
      * @return The result of applying an element-wise absolute value/magnitude to this tensor.
      */
     @Override
-    public CTensor abs() {
-        return new CTensor(this.shape.copy(), ComplexOperations.abs(this.entries));
+    public Tensor abs() {
+        return new Tensor(this.shape.copy(), ComplexOperations.abs(this.entries));
     }
 
 

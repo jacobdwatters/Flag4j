@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseTensorBase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.core</a> &gt; <span class="el_source">SparseTensorBase.java</span></div><h1>SparseTensorBase.java</h1><pre class="source lang-java linenums">/*
  * MIT License
  *
- * Copyright (c) 2022-2023 Jacob Watters
+ * Copyright (c) 2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,24 +23,30 @@
  */
 
 package com.flag4j.core;
-
 import com.flag4j.Shape;
-import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 
+
 /**
- * Base class for all sparse tensor.
- * @param &lt;T&gt; Type of the entries of the sparse tensor.
+ * The base class for all sparse tensors. This includes sparse matrices and vectors.
+ * @param &lt;T&gt; Type of this tensor.
+ * @param &lt;U&gt; Dense Tensor type.
+ * @param &lt;W&gt; Complex Tensor type.
+ * @param &lt;Z&gt; Dense complex tensor type.
+ * @param &lt;Y&gt; Real Tensor type.
+ * @param &lt;D&gt; Type of the storage data structure for the tensor.
+ *           This common use case will be an array or list-like data structure.
+ * @param &lt;X&gt; The type of individual entry within the {@code D} data structure
  */
-public abstract class SparseTensorBase&lt;T extends Serializable&gt; extends TensorBase&lt;T&gt; {
+public abstract class SparseTensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt;
+        extends TensorBase&lt;T, U, W, Z, Y, D, X&gt;
+        implements SparseTensorMixin {
 
     /**
-     * Indices for non-zero entries of this tensor. Will have shape (rank-by-nonZeroEntries)
+     * Indices for non-zero entries of this tensor. Will have shape {@code (nonZeroEntries-by-rank)}.
      */
     public final int[][] indices;
     /**
@@ -48,32 +54,24 @@ public abstract class SparseTensorBase&lt;T extends Serializable&gt; extends Ten
      */
     private final int nonZeroEntries;
 
-
     /**
-     * Creates a sparse tensor with specified shape.
-     * @param shape Shape of this tensor.
-     * @param nonZeroEntries Number of non-zero entries in the sparse tensor.
-     * @param entries Non-zero entries of this sparse tensor.
-     * @param indices Indices of the non-zero entries.
-     * @throws IllegalArgumentException If the number of rows in the indices array is not equal to the number of
-     * elements in the entries array.
-     * @throws IllegalArgumentException If the number of columns in the entries array is not equal to the rank of this
-     * tensor.
+     * Creates a sparse tensor with specified shape, non-zero entries, and non-zero indices.
+     *
+     * @param shape   Shape of this tensor.
+     * @param entries Non-zero entries of this tensor.
+     * @param indices Indices of non-zero entries in this tensor. Must have shape {@code (nonZeroEntries-by-rank)}.
+     * @throws IllegalArgumentException If the rank of {@code shape} does not match the number of columns in {@code indices}.
      */
-    public SparseTensorBase(Shape shape, int nonZeroEntries, T entries, int[][] indices) {
-<span class="fc" id="L64">        super(shape, entries);</span>
+    public SparseTensorBase(Shape shape, int nonZeroEntries, D entries, int[][] indices) {
+<span class="fc" id="L66">        super(shape, entries);</span>
 
-<span class="fc bfc" id="L66" title="All 2 branches covered.">        if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) &lt; 0) {</span>
-<span class="fc" id="L67">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));</span>
-        }
-<span class="fc" id="L69">        ParameterChecks.assertArrayLengthsEq(nonZeroEntries, indices.length);</span>
-<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (indices.length &gt; 0) {</span>
-<span class="fc" id="L71">            ParameterChecks.assertArrayLengthsEq(super.getRank(), indices[0].length);</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        if(indices.length &gt; 0) {</span>
+<span class="fc" id="L69">            ParameterChecks.assertEquals(indices[0].length, shape.getRank());</span>
         }
 
-<span class="fc" id="L74">        this.nonZeroEntries = nonZeroEntries;</span>
-<span class="fc" id="L75">        this.indices = indices;</span>
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L72">        this.indices = indices;</span>
+<span class="fc" id="L73">        this.nonZeroEntries = nonZeroEntries;</span>
+<span class="fc" id="L74">    }</span>
 
 
     /**
@@ -81,7 +79,7 @@ public abstract class SparseTensorBase&lt;T extends Serializable&gt; extends Ten
      * @return The number of non-zero entries in this sparse tensor.
      */
     public int nonZeroEntries() {
-<span class="fc" id="L84">        return nonZeroEntries;</span>
+<span class="nc" id="L82">        return nonZeroEntries;</span>
     }
 
 
@@ -90,10 +88,10 @@ public abstract class SparseTensorBase&lt;T extends Serializable&gt; extends Ten
      * @return The sparsity of this tensor.
      */
     public double sparsity() {
-<span class="nc" id="L93">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
-<span class="nc" id="L94">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
+<span class="nc" id="L91">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
+<span class="nc" id="L92">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
 
-<span class="nc" id="L96">        return sparsity.doubleValue();</span>
+<span class="nc" id="L94">        return sparsity.doubleValue();</span>
     }
 
 
@@ -102,11 +100,11 @@ public abstract class SparseTensorBase&lt;T extends Serializable&gt; extends Ten
      * @return The density of this tensor.
      */
     public double density() {
-<span class="nc" id="L105">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
-<span class="nc" id="L106">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP</span>
+<span class="nc" id="L103">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
+<span class="nc" id="L104">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP</span>
         );
 
-<span class="nc" id="L109">        return density.doubleValue();</span>
+<span class="nc" id="L107">        return density.doubleValue();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

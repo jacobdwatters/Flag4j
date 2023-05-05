@@ -42,7 +42,7 @@ class VectorConstructorTests {
 
         // ----------- Sub-case 3 ------------
         expSize = -1;
-        assertThrows(NegativeArraySizeException.class, () -> new Vector(expSize));
+        assertThrows(IllegalArgumentException.class, () -> new Vector(expSize));
     }
 
     @Test
@@ -76,7 +76,7 @@ class VectorConstructorTests {
         // ----------- Sub-case 3 ------------
         expSize = -1;
         fillValue = -10.23423;
-        assertThrows(NegativeArraySizeException.class, () -> new Vector(expSize, fillValue));
+        assertThrows(IllegalArgumentException.class, () -> new Vector(expSize, fillValue));
     }
 
 

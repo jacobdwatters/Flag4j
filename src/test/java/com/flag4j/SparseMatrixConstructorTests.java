@@ -157,7 +157,7 @@ class SparseMatrixConstructorTests {
         expRowIndices = new int[]{0, 0, 1, 3};
         expColIndices = new int[]{0, 4, 1};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseMatrix(size, expNonZero, expRowIndices, expColIndices));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> new SparseMatrix(size, expNonZero, expRowIndices, expColIndices));
     }
 
 
@@ -285,7 +285,7 @@ class SparseMatrixConstructorTests {
         expRowIndices = new int[]{0, 0, 1, 3};
         expColIndices = new int[]{0, 4, 1};
 
-        assertThrows(IllegalArgumentException.class, () -> new SparseMatrix(size, expNonZeroI, expRowIndices, expColIndices));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> new SparseMatrix(size, expNonZeroI, expRowIndices, expColIndices));
     }
 
 
