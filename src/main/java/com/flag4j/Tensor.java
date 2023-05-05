@@ -29,7 +29,10 @@ import com.flag4j.core.RealDenseTensorBase;
 import com.flag4j.core.TensorExclusiveMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.TransposeDispatcher;
-import com.flag4j.operations.dense.real.*;
+import com.flag4j.operations.dense.real.RealDenseEquals;
+import com.flag4j.operations.dense.real.RealDenseOperations;
+import com.flag4j.operations.dense.real.RealDenseTensorDot;
+import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
@@ -67,9 +70,9 @@ public class Tensor
      * @param fillValue Value to fill tensor with.
      */
     public Tensor(Shape shape, double fillValue) {
-        super(shape, new double[shape.totalEntries().intValue()]);
+        super(shape, new double[shape.totalEntries().intValueExact()]);
 
-        for(int i=0; i<super.totalEntries().intValue(); i++) {
+        for(int i=0; i<super.totalEntries().intValueExact(); i++) {
             super.entries[i] = fillValue;
         }
     }
@@ -84,7 +87,7 @@ public class Tensor
     public Tensor(Shape shape, double[] entries) {
         super(shape, entries);
 
-        if(entries.length != super.totalEntries().intValue()) {
+        if(entries.length != super.totalEntries().intValueExact()) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
         }
     }
@@ -99,7 +102,7 @@ public class Tensor
     public Tensor(Shape shape, int[] entries) {
         super(shape, Arrays.stream(entries).asDoubleStream().toArray());
 
-        if(entries.length != super.totalEntries().intValue()) {
+        if(entries.length != super.totalEntries().intValueExact()) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
         }
     }
@@ -114,7 +117,7 @@ public class Tensor
     public Tensor(Shape shape, Double[] entries) {
         super(shape, new double[entries.length]);
 
-        if(entries.length != super.totalEntries().intValue()) {
+        if(entries.length != super.totalEntries().intValueExact()) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
         }
 

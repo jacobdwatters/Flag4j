@@ -24,7 +24,7 @@
 
 package com.flag4j.core;
 
-import com.flag4j.*;
+import com.flag4j.Shape;
 import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealProperties;
 import com.flag4j.util.ArrayUtils;
