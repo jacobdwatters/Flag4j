@@ -6,6 +6,7 @@ com.flag4j.io
 com.flag4j.linalg
 com.flag4j.linalg.decompositions
 com.flag4j.linalg.solvers
+com.flag4j.linalg.transformations
 com.flag4j.operations
 com.flag4j.operations.common.complex
 com.flag4j.operations.common.real

@@ -78,11 +78,11 @@ public class ComplexOperations {
      * @param src Elements of the tensor.
      * @return The element-wise absolute value of the tensor.
      */
-    public static CNumber[] abs(CNumber[] src) {
-        CNumber[] abs = new CNumber[src.length];
+    public static double[] abs(CNumber[] src) {
+        double[] abs = new double[src.length];
 
         for(int i=0; i<abs.length; i++) {
-            abs[i] = src[i].mag();
+            abs[i] = src[i].magAsDouble();
         }
 
         return abs;

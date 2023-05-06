@@ -24,14 +24,12 @@
 
 package com.flag4j.linalg.decompositions;
 
-import com.flag4j.core.MatrixBase;
-
 /**
  * &lt;p&gt;This abstract class specifies methods for computing the {@code QR} decomposition of a matrix.&lt;/p&gt;
  * &lt;p&gt;The {@code QR} decomposition, decomposes a matrix {@code A} into a unitary matrix {@code Q}
  * and an upper triangular matrix {@code R} such that {@code A=QR}.&lt;/p&gt;
  */
-public abstract class QRDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, ?, ?, ?&gt;&gt; implements Decomposition&lt;T&gt; {
+public abstract class QRDecomposition&lt;T&gt; implements Decomposition&lt;T&gt; {
 
     /**
      * Storage matrix for {@code Q}.
@@ -50,9 +48,9 @@ public abstract class QRDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, ?, 
     /**
      * Constructs {@code QR} decomposer which computes the full {@code QR} decomposition.
      */
-<span class="fc" id="L53">    public QRDecomposition() {</span>
-<span class="fc" id="L54">        fullQR = true;</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L51">    public QRDecomposition() {</span>
+<span class="fc" id="L52">        fullQR = true;</span>
+<span class="fc" id="L53">    }</span>
 
     /**
      * Constructs a {@code QR} decomposer which computes either the full or reduced {@code QR} decomposition.
@@ -60,9 +58,9 @@ public abstract class QRDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, ?, 
      *               If true, the full {@code QR} decomposition will be computed, if false,
      *               the reduced {@code QR} decomposition will be computed.
      */
-<span class="fc" id="L63">    public QRDecomposition(boolean fullQR) {</span>
-<span class="fc" id="L64">        this.fullQR = fullQR;</span>
-<span class="fc" id="L65">    }</span>
+<span class="fc" id="L61">    public QRDecomposition(boolean fullQR) {</span>
+<span class="fc" id="L62">        this.fullQR = fullQR;</span>
+<span class="fc" id="L63">    }</span>
 
 
     /**
@@ -73,13 +71,13 @@ public abstract class QRDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, ?, 
      */
     @Override
     public QRDecomposition decompose(T src) {
-<span class="fc bfc" id="L76" title="All 2 branches covered.">        if(fullQR) {</span>
-<span class="fc" id="L77">            this.full(src);</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if(fullQR) {</span>
+<span class="fc" id="L75">            this.full(src);</span>
         } else {
-<span class="fc" id="L79">            this.reduced(src);</span>
+<span class="fc" id="L77">            this.reduced(src);</span>
         }
 
-<span class="fc" id="L82">        return this;</span>
+<span class="fc" id="L80">        return this;</span>
     }
 
 
@@ -102,7 +100,7 @@ public abstract class QRDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, ?, 
      * @return The {@code Q} matrix from the {@code QR} decomposition.
      */
     public T getQ(){
-<span class="fc" id="L105">        return Q;</span>
+<span class="fc" id="L103">        return Q;</span>
     }
 
 
@@ -111,7 +109,7 @@ public abstract class QRDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, ?, 
      * @return The {@code R} matrix from the {@code QR} decomposition.
      */
     public T getR(){
-<span class="fc" id="L114">        return R;</span>
+<span class="fc" id="L112">        return R;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

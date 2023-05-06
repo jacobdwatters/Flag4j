@@ -25,21 +25,17 @@
 package com.flag4j.linalg.solvers;
 
 
-import com.flag4j.core.MatrixBase;
-import com.flag4j.core.VectorBase;
 import com.flag4j.linalg.decompositions.QRDecomposition;
 
 
-// TODO: Switch to SVD instead of QR. It will be slower but have better numerical properties.
+// TODO: Switch to SVD instead of QR. It will be slower but has better numerical properties.
 
 /**
  * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
  * minimizes {@code ||Ax-b||&lt;sub&gt;2&lt;/sub&gt;} which is equivalent to solving the normal equations {@code A&lt;sup&gt;T&lt;/sup&gt;Ax=A&lt;sup&gt;T&lt;/sup&gt;b}.
  * This is done using a {@link QRDecomposition}.
  */
-public abstract class LstsqSolver&lt;T extends MatrixBase&lt;?, ?, ?, ?, ?, ?, ?&gt;,
-        U extends VectorBase&lt;?, ?, ?, ?, ?, ?, ?, ?, ?, ?&gt;,
-        V extends VectorBase&lt;?, ?, ?, ?, ?, ?, ?, ?, ?, ?&gt;&gt; implements LinearSolver&lt;T, U, V&gt; {
+public abstract class LstsqSolver&lt;T, U, V&gt; implements LinearSolver&lt;T, U, V&gt; {
 
     /**
      * Decomposer to compute the {@code QR} decomposition for using the least-squares solver.
@@ -58,9 +54,9 @@ public abstract class LstsqSolver&lt;T extends MatrixBase&lt;?, ?, ?, ?, ?, ?, ?
      * Constructs a least-squares solver with a specified decomposer to use in the {@code QR} decomposition.
      * @param qr The {@code QR} decomposer to use in the solver.
      */
-<span class="fc" id="L61">    protected LstsqSolver(QRDecomposition&lt;T&gt; qr) {</span>
-<span class="fc" id="L62">        this.qr = qr;</span>
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L57">    protected LstsqSolver(QRDecomposition&lt;T&gt; qr) {</span>
+<span class="fc" id="L58">        this.qr = qr;</span>
+<span class="fc" id="L59">    }</span>
 
 
     /**
@@ -68,9 +64,9 @@ public abstract class LstsqSolver&lt;T extends MatrixBase&lt;?, ?, ?, ?, ?, ?, ?
      * @param A Coefficient matrix in the linear system to solve.
      */
     protected void decompose(T A) {
-<span class="fc" id="L71">        qr.decompose(A);</span>
-<span class="fc" id="L72">        Q = qr.getQ();</span>
-<span class="fc" id="L73">        R = qr.getR();</span>
-<span class="fc" id="L74">    }</span>
+<span class="fc" id="L67">        qr.decompose(A);</span>
+<span class="fc" id="L68">        Q = qr.getQ();</span>
+<span class="fc" id="L69">        R = qr.getR();</span>
+<span class="fc" id="L70">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

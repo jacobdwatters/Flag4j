@@ -25,11 +25,9 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.ComplexVectorBase;
+import com.flag4j.core.ComplexDenseTensorBase;
+import com.flag4j.core.VectorMixin;
 import com.flag4j.io.PrintOptions;
-import com.flag4j.operations.common.complex.AggregateComplex;
-import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.operations.dense.complex.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
@@ -46,16 +44,22 @@ import java.util.Arrays;
 /**
  * Complex dense vector. This class is mostly equivalent to a rank 1 complex tensor.
  */
-public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix> {
+public class CVector extends ComplexDenseTensorBase<CVector, Vector>
+implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatrix, CMatrix, CMatrix> {
 
+    /**
+     * The size of this vector. That is, the number of entries in this vector.
+     */
+    public final int size;
 
     /**
      * Creates a column vector of specified size filled with zeros.
      * @param size Size of the vector.
      */
     public CVector(int size) {
-        super(size, new CNumber[size]);
+        super(new Shape(size), new CNumber[size]);
         ArrayUtils.fillZeros(super.entries);
+        this.size = shape.dims[0];
     }
 
 
@@ -65,8 +69,9 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @param fillValue Value to fill vector with.
      */
     public CVector(int size, double fillValue) {
-        super(size, new CNumber[size]);
+        super(new Shape(size), new CNumber[size]);
         ArrayUtils.fill(super.entries, fillValue);
+        this.size = shape.dims[0];
     }
 
 
@@ -76,8 +81,9 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @param fillValue Value to fill vector with.
      */
     public CVector(int size, CNumber fillValue) {
-        super(size, new CNumber[size]);
+        super(new Shape(size), new CNumber[size]);
         ArrayUtils.fill(super.entries, fillValue);
+        this.size = shape.dims[0];
     }
 
 
@@ -86,8 +92,9 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @param entries Entries for this column vector.
      */
     public CVector(double[] entries) {
-        super(entries.length, new CNumber[entries.length]);
+        super(new Shape(entries.length), new CNumber[entries.length]);
         ArrayUtils.copy2CNumber(entries, super.entries);
+        this.size = shape.dims[0];
     }
 
 
@@ -96,8 +103,9 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @param entries Entries for this column vector.
      */
     public CVector(int[] entries) {
-        super(entries.length, new CNumber[entries.length]);
+        super(new Shape(entries.length), new CNumber[entries.length]);
         ArrayUtils.copy2CNumber(entries, super.entries);
+        this.size = shape.dims[0];
     }
 
 
@@ -106,7 +114,8 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @param entries Entries for this column vector.
      */
     public CVector(CNumber[] entries) {
-        super(entries.length, entries);
+        super(new Shape(entries.length), entries);
+        this.size = shape.dims[0];
     }
 
 
@@ -115,8 +124,9 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @param a Real vector to copy.
      */
     public CVector(Vector a) {
-        super(a.size(), new CNumber[a.totalEntries().intValue()]);
+        super(a.shape.copy(), new CNumber[a.totalEntries().intValue()]);
         ArrayUtils.copy2CNumber(a.entries, super.entries);
+        this.size = shape.dims[0];
     }
 
 
@@ -125,30 +135,9 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @param a Complex vector to copy.
      */
     public CVector(CVector a) {
-        super(a.size(), new CNumber[a.totalEntries().intValue()]);
+        super(a.shape.copy(), new CNumber[a.totalEntries().intValue()]);
         ArrayUtils.copy2CNumber(a.entries, super.entries);
-    }
-
-
-    /**
-     * Checks if this tensor only contains zeros.
-     *
-     * @return True if this tensor only contains zeros. Otherwise, returns false.
-     */
-    @Override
-    public boolean isZeros() {
-        return ArrayUtils.isZeros(this.entries);
-    }
-
-
-    /**
-     * Checks if this tensor only contains ones.
-     *
-     * @return True if this tensor only contains ones. Otherwise, returns false.
-     */
-    @Override
-    public boolean isOnes() {
-        return ComplexDenseProperties.isOnes(this.entries);
+        this.size = shape.dims[0];
     }
 
 
@@ -178,49 +167,6 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
         }
 
         return equal;
-    }
-
-
-    /**
-     * Sets an index of this tensor to a specified value.
-     *
-     * @param value   Value to set.
-     * @param indices The indices of this tensor for which to set the value.
-     * @return A reference to this vector.
-     */
-    @Override
-    public CVector set(double value, int... indices) {
-        ParameterChecks.assertArrayLengthsEq(1, indices.length);
-        this.entries[indices[0]] = new CNumber(value);
-        return this;
-    }
-
-
-    /**
-     * Sets an index of this tensor to a specified value.
-     *
-     * @param value   Value to set.
-     * @param indices The indices of this tensor for which to set the value.
-     * @return A reference to this vector.
-     */
-    public CVector set(CNumber value, int... indices) {
-        ParameterChecks.assertArrayLengthsEq(1, indices.length);
-        this.entries[indices[0]] = value;
-        return this;
-    }
-
-
-    /**
-     * Computes the element-wise addition between two tensors of the same rank.
-     *
-     * @param B Second tensor in the addition.
-     * @return The result of adding the tensor B to this tensor element-wise.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CVector add(CVector B) {
-        return new CVector(ComplexDenseOperations.add(this.entries, this.shape,
-                B.entries, B.shape));
     }
 
 
@@ -260,44 +206,6 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
     @Override
     public CVector sub(SparseVector B) {
         return RealComplexDenseSparseVectorOperations.sub(this, B);
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CVector add(double a) {
-        return new CVector(RealComplexDenseOperations.add(this.entries, a));
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CVector add(CNumber a) {
-        return new CVector(ComplexDenseOperations.add(this.entries, a));
-    }
-
-
-    /**
-     * Computes the element-wise subtraction between two tensors of the same rank.
-     *
-     * @param B Second tensor in element-wise subtraction.
-     * @return The result of subtracting the tensor B from this tensor element-wise.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CVector sub(CVector B) {
-        return new CVector(ComplexDenseOperations.sub(this.entries, this.shape,
-                B.entries, B.shape));
     }
 
 
@@ -420,19 +328,6 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
     @Override
-    public CVector elemMult(CVector B) {
-        return new CVector(ComplexDenseElemMult.dispatch(this.entries, this.shape, B.entries, B.shape));
-    }
-
-
-    /**
-     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
-     *
-     * @param B Vector to element-wise multiply to this vector.
-     * @return The vector resulting from the element-wise multiplication.
-     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
-     */
-    @Override
     public SparseCVector elemMult(SparseCVector B) {
         return ComplexDenseSparseVectorOperations.elemMult(this, B);
     }
@@ -448,196 +343,6 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
     @Override
     public CVector elemDiv(Vector B) {
         return new CVector(RealComplexDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));
-    }
-
-
-    /**
-     * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
-     *
-     * @param B Vector to element-wise divide this vector by.
-     * @return The vector resulting from the element-wise division.
-     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
-     */
-    @Override
-    public CVector elemDiv(CVector B) {
-        return new CVector(ComplexDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CVector sub(double a) {
-        return new CVector(RealComplexDenseOperations.sub(this.entries, a));
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor.
-     *
-     * @param a Value to subtract from all entries of this tensor.
-     * @return The result of subtracting the specified value from each entry of this tensor.
-     */
-    @Override
-    public CVector sub(CNumber a) {
-        return new CVector(ComplexDenseOperations.sub(this.entries, a));
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void addEq(CVector B) {
-        ComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void addEq(CNumber b) {
-        ComplexDenseOperations.addEq(this.entries, b);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void addEq(Double b) {
-        RealComplexDenseOperations.addEq(this.entries, b);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void subEq(CVector B) {
-        ComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void subEq(CNumber b) {
-        ComplexDenseOperations.subEq(this.entries, b);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void subEq(Double b) {
-        RealComplexDenseOperations.subEq(this.entries, b);
-    }
-
-
-    /**
-     * Computes scalar multiplication of a tensor.
-     *
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    @Override
-    public CVector mult(double factor) {
-        return new CVector(ComplexDenseOperations.scalMult(this.entries, factor));
-    }
-
-
-    /**
-     * Computes scalar multiplication of a tensor.
-     *
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    @Override
-    public CVector mult(CNumber factor) {
-        return new CVector(ComplexDenseOperations.scalMult(this.entries, factor));
-    }
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    @Override
-    public CVector div(double divisor) {
-        return new CVector(RealComplexDenseOperations.scalDiv(this.entries, divisor));
-    }
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    @Override
-    public CVector div(CNumber divisor) {
-        return new CVector(ComplexDenseOperations.scalDiv(this.entries, divisor));
-    }
-
-
-    /**
-     * Sums together all entries in the tensor.
-     *
-     * @return The sum of all entries in this tensor.
-     */
-    @Override
-    public CNumber sum() {
-        return AggregateComplex.sum(this.entries);
-    }
-
-
-    /**
-     * Computes the element-wise square root of a tensor.
-     *
-     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
-     * the principle square root i.e. the square root with positive real part.
-     */
-    @Override
-    public CVector sqrt() {
-        return new CVector(ComplexOperations.sqrt(this.entries));
-    }
-
-
-    /**
-     * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
-     * be computed.
-     *
-     * @return The result of applying an element-wise absolute value/magnitude to this tensor.
-     */
-    @Override
-    public CVector abs() {
-        return new CVector(ComplexOperations.abs(this.entries));
     }
 
 
@@ -664,109 +369,16 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
 
 
     /**
-     * Computes the reciprocals, element-wise, of a tensor.
+     * Factory to create a real tensor with the specified shape and size.
      *
-     * @return A tensor containing the reciprocal elements of this tensor.
-     * @throws ArithmeticException If this tensor contains any zeros.
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
      */
     @Override
-    public CVector recip() {
-        return new CVector(ComplexDenseOperations.recep(this.entries));
-    }
-
-
-    /**
-     * Gets the element in this tensor at the specified indices.
-     *
-     * @param indices Indices of element.
-     * @return The element at the specified indices.
-     * @throws IllegalArgumentException If the number of indices does not match the rank of this tensor.
-     */
-    @Override
-    public CNumber get(int... indices) {
-        ParameterChecks.assertArrayLengthsEq(1, indices.length);
-        return this.entries[indices[0]];
-    }
-
-
-    /**
-     * Creates a deep copy of this vector.
-     *
-     * @return A copy of this vector.
-     */
-    @Override
-    public CVector copy() {
-        return new CVector(this);
-    }
-
-
-    /**
-     * Finds the minimum value in this vector.
-     *
-     * @return The minimum value in this vector.
-     */
-    @Override
-    public double min() {
-        return AggregateComplex.minAbs(this.entries);
-    }
-
-
-    /**
-     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
-     *
-     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public double max() {
-        return AggregateComplex.maxAbs(this.entries);
-    }
-
-
-    /**
-     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #min()}.
-     *
-     * @return The minimum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double minAbs() {
-        return min();
-    }
-
-
-    /**
-     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum value, in absolute value, in this tensor.
-     */
-    @Override
-    public double maxAbs() {
-        return max();
-    }
-
-
-    /**
-     * Finds the indices of the minimum value in this tensor.
-     *
-     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMin() {
-        return new int[]{AggregateDenseComplex.argMin(this.entries)};
-    }
-
-
-    /**
-     * Finds the indices of the maximum value in this tensor.
-     *
-     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMax() {
-        return new int[]{AggregateDenseComplex.argMax(this.entries)};
+    protected Vector makeRealTensor(Shape shape, double[] entries) {
+        // Shape not needed to make vector.
+        return new Vector(entries);
     }
 
 
@@ -1550,50 +1162,6 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
 
 
     /**
-     * Checks if this tensor has only real valued entries.
-     *
-     * @return True if this tensor contains <b>NO</b> complex entries. Otherwise, returns false.
-     */
-    @Override
-    public boolean isReal() {
-        return ComplexProperties.isReal(this.entries);
-    }
-
-
-    /**
-     * Checks if this tensor contains at least one complex entry.
-     *
-     * @return True if this tensor contains at least one complex entry. Otherwise, returns false.
-     */
-    @Override
-    public boolean isComplex() {
-        return ComplexProperties.isComplex(this.entries);
-    }
-
-
-    /**
-     * Computes the complex conjugate of a tensor.
-     *
-     * @return The complex conjugate of this tensor.
-     */
-    @Override
-    public CVector conj() {
-        return new CVector(ComplexOperations.conj(this.entries));
-    }
-
-
-    /**
-     * Converts a complex tensor to a real matrix. The imaginary component of any complex value will be ignored.
-     *
-     * @return A tensor of the same size containing only the real components of this tensor.
-     */
-    @Override
-    public Vector toReal() {
-        return new Vector(ComplexOperations.toReal(this.entries));
-    }
-
-
-    /**
      * Computes the conjugate transpose of this vector. Since a vector is a rank 1 tensor, this simply
      * computes the complex conjugate of this vector.
      *
@@ -1627,6 +1195,7 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
     @Override
     public CVector reshape(Shape shape) {
         ParameterChecks.assertBroadcastable(this.shape, shape);
+        ParameterChecks.assertRank(1, shape);
         return this.copy();
     }
 
@@ -1639,6 +1208,53 @@ public class CVector extends ComplexVectorBase<CVector, Vector, CMatrix, Matrix>
     @Override
     public CVector flatten() {
         return this.copy();
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     */
+    @Override
+    public CVector flatten(int axis) {
+        return null;
+    }
+
+
+    /**
+     * gets the size of this vector.
+     *
+     * @return The total number of entries in this vector.
+     */
+    @Override
+    public int size() {
+        return size;
+    }
+
+
+    /**
+     * Factory to create a tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected CVector makeTensor(Shape shape, CNumber[] entries) {
+        return new CVector(entries);
+    }
+
+
+    /**
+     * Simply returns a reference of this tensor.
+     *
+     * @return A reference to this tensor.
+     */
+    @Override
+    protected CVector getSelf() {
+        return this;
     }
 
 

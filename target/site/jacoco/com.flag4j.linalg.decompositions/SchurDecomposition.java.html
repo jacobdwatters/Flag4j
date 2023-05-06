@@ -29,9 +29,6 @@ import com.flag4j.CVector;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.MatrixBase;
-
-import java.util.Scanner;
 
 /**
  * &lt;p&gt;This abstract class specifies methods for computing the Schur decomposition of a square matrix.
@@ -44,7 +41,7 @@ import java.util.Scanner;
  *
  * @param &lt;T&gt; The type of matrix to compute the Schur decomposition of.
  */
-public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, ?, ?, ?&gt;&gt; implements Decomposition&lt;T&gt; {
+public abstract class SchurDecomposition&lt;T&gt; implements Decomposition&lt;T&gt; {
 
     /**
      * The maximum number of iterations to run the {@code QR} algorithm when computing the Schur decomposition. This
@@ -83,17 +80,17 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, 
      */
     protected HessenburgDecomposition&lt;T&gt; hess;
 
-<span class="nc" id="L86">    public boolean debug = false; // TODO: Temporary for testing. Must be removed.</span>
+<span class="nc" id="L83">    public boolean debug = false; // TODO: Temporary for testing. Must be removed.</span>
 
 
     /**
      * Creates a decomposer to compute the Schur decomposition.
      */
-<span class="nc" id="L92">    protected SchurDecomposition() {</span>
-<span class="nc" id="L93">        maxIterations = -1;</span>
-<span class="nc" id="L94">        useDefaultMaxIterations = true;</span>
-<span class="nc" id="L95">        computeU = true;</span>
-<span class="nc" id="L96">    }</span>
+<span class="nc" id="L89">    protected SchurDecomposition() {</span>
+<span class="nc" id="L90">        maxIterations = -1;</span>
+<span class="nc" id="L91">        useDefaultMaxIterations = true;</span>
+<span class="nc" id="L92">        computeU = true;</span>
+<span class="nc" id="L93">    }</span>
 
 
     /**
@@ -101,11 +98,11 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, 
      * iterations.
      * @param maxIterations Maximum number of iterations to run when computing the Schur decomposition.
      */
-<span class="nc" id="L104">    protected SchurDecomposition(int maxIterations) {</span>
-<span class="nc" id="L105">        this.maxIterations = maxIterations;</span>
-<span class="nc" id="L106">        useDefaultMaxIterations = false;</span>
-<span class="nc" id="L107">        computeU = true;</span>
-<span class="nc" id="L108">    }</span>
+<span class="nc" id="L101">    protected SchurDecomposition(int maxIterations) {</span>
+<span class="nc" id="L102">        this.maxIterations = maxIterations;</span>
+<span class="nc" id="L103">        useDefaultMaxIterations = false;</span>
+<span class="nc" id="L104">        computeU = true;</span>
+<span class="nc" id="L105">    }</span>
 
 
     /**
@@ -117,11 +114,11 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, 
      *                 - If false, the {@code Q} matrix will &lt;b&gt;not&lt;/b&gt; be computed. If it is not needed, this may
      *                 provide a performance improvement.
      */
-<span class="nc" id="L120">    protected SchurDecomposition(boolean computeU, int maxIterations) {</span>
-<span class="nc" id="L121">        this.maxIterations = maxIterations;</span>
-<span class="nc" id="L122">        this.computeU = computeU;</span>
-<span class="nc" id="L123">        useDefaultMaxIterations = false;</span>
-<span class="nc" id="L124">    }</span>
+<span class="nc" id="L117">    protected SchurDecomposition(boolean computeU, int maxIterations) {</span>
+<span class="nc" id="L118">        this.maxIterations = maxIterations;</span>
+<span class="nc" id="L119">        this.computeU = computeU;</span>
+<span class="nc" id="L120">        useDefaultMaxIterations = false;</span>
+<span class="nc" id="L121">    }</span>
 
 
     /**
@@ -131,11 +128,11 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, 
      *                 - If false, the {@code Q} matrix will &lt;b&gt;not&lt;/b&gt; be computed. If it is not needed, this may
      *                 provide a performance improvement.
      */
-<span class="nc" id="L134">    protected SchurDecomposition(boolean computeU) {</span>
-<span class="nc" id="L135">        maxIterations = -1;</span>
-<span class="nc" id="L136">        this.computeU = computeU;</span>
-<span class="nc" id="L137">        useDefaultMaxIterations = true;</span>
-<span class="nc" id="L138">    }</span>
+<span class="nc" id="L131">    protected SchurDecomposition(boolean computeU) {</span>
+<span class="nc" id="L132">        maxIterations = -1;</span>
+<span class="nc" id="L133">        this.computeU = computeU;</span>
+<span class="nc" id="L134">        useDefaultMaxIterations = true;</span>
+<span class="nc" id="L135">    }</span>
 
 
     /**
@@ -143,57 +140,57 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, 
      * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
      */
     protected void computeSchurDecomp(CMatrix H) {
-<span class="nc bnc" id="L146" title="All 2 branches missed.">        if(useDefaultMaxIterations) {</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        if(useDefaultMaxIterations) {</span>
             // The algorithm should converge within machine precision in O(n^3) in general.
-<span class="nc" id="L148">            maxIterations = (int) Math.max(Math.pow(H.numRows, 3), MIN_DEFAULT_ITERATIONS);</span>
+<span class="nc" id="L145">            maxIterations = (int) Math.max(Math.pow(H.numRows, 3), MIN_DEFAULT_ITERATIONS);</span>
         }
 
-<span class="nc" id="L151">        double tol = 1e-14;</span>
+<span class="nc" id="L148">        double tol = 1e-14;</span>
         int count;
-<span class="nc" id="L153">        int n = H.numRows-1;</span>
+<span class="nc" id="L150">        int n = H.numRows-1;</span>
 
-<span class="nc" id="L155">        T = CMatrix.I(H.numRows);</span>
-<span class="nc" id="L156">        U = CMatrix.I(H.numRows);</span>
+<span class="nc" id="L152">        T = CMatrix.I(H.numRows);</span>
+<span class="nc" id="L153">        U = CMatrix.I(H.numRows);</span>
 
-<span class="nc" id="L158">        ComplexQRDecomposition qr = new ComplexQRDecomposition(); // Decomposer for use in the QR algorithm.</span>
+<span class="nc" id="L155">        ComplexQRDecomposition qr = new ComplexQRDecomposition(); // Decomposer for use in the QR algorithm.</span>
         CMatrix Q; // Q matrix from QR decomposition.
         CMatrix R; // R matrix from QR decomposition.
 
         CMatrix mu;
 
         CNumber disc;
-<span class="nc" id="L165">        CVector lam = new CVector(H.numRows);</span>
+<span class="nc" id="L162">        CVector lam = new CVector(H.numRows);</span>
 
-<span class="nc bnc" id="L167" title="All 2 branches missed.">        while(n&gt;0) {</span>
-<span class="nc" id="L168">            count = 0;</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">        while(n&gt;0) {</span>
+<span class="nc" id="L165">            count = 0;</span>
 
             // Apply the QR algorithm (Shifted QR algorithm using Rayleigh shift).
-<span class="nc bnc" id="L171" title="All 4 branches missed.">            while(H.getSlice(n, n+1, 0, n).maxAbs() &gt; tol &amp;&amp; count&lt;maxIterations) {</span>
-<span class="nc" id="L172">                count++;</span>
-<span class="nc" id="L173">                mu = CMatrix.I(n+1).mult(H.entries[n*(H.numCols + 1)]); // Construct diagonal matrix.</span>
+<span class="nc bnc" id="L168" title="All 4 branches missed.">            while(H.getSlice(n, n+1, 0, n).maxAbs() &gt; tol &amp;&amp; count&lt;maxIterations) {</span>
+<span class="nc" id="L169">                count++;</span>
+<span class="nc" id="L170">                mu = CMatrix.I(n+1).mult(H.entries[n*(H.numCols + 1)]); // Construct diagonal matrix.</span>
 
-<span class="nc" id="L175">                qr.decompose(H.sub(mu)); // Compute the QR decomposition with a shift.</span>
-<span class="nc" id="L176">                Q = qr.getQ();</span>
-<span class="nc" id="L177">                R = qr.getR();</span>
+<span class="nc" id="L172">                qr.decompose(H.sub(mu)); // Compute the QR decomposition with a shift.</span>
+<span class="nc" id="L173">                Q = qr.getQ();</span>
+<span class="nc" id="L174">                R = qr.getR();</span>
 
-<span class="nc" id="L179">                H = R.mult(Q).add(mu); // Reverse the shift.</span>
+<span class="nc" id="L176">                H = R.mult(Q).add(mu); // Reverse the shift.</span>
 
-<span class="nc bnc" id="L181" title="All 2 branches missed.">                if(computeU) {</span>
-<span class="nc" id="L182">                    Q = CMatrix.I(U.numRows).setSliceCopy(Q, 1, 1);</span>
-<span class="nc" id="L183">                    U = Q.mult(U);</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">                if(computeU) {</span>
+<span class="nc" id="L179">                    Q = CMatrix.I(U.numRows).setSliceCopy(Q, 1, 1);</span>
+<span class="nc" id="L180">                    U = Q.mult(U);</span>
                 }
             }
 
-<span class="nc" id="L187">            T.setSlice(H, H.numRows-(n+1), H.numRows-(n+1));</span>
+<span class="nc" id="L184">            T.setSlice(H, H.numRows-(n+1), H.numRows-(n+1));</span>
 
-<span class="nc bnc" id="L189" title="All 2 branches missed.">            if(count&lt;maxIterations) {</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">            if(count&lt;maxIterations) {</span>
                 // Then there is an isolated 1x1 block.
 //                lam.entries[n] = H.entries[n*(H.numCols + 1)];
-<span class="nc" id="L192">                H = H.getSlice(0, n, 0, n);</span>
-<span class="nc" id="L193">                n--; // Deflate H by 1.</span>
+<span class="nc" id="L189">                H = H.getSlice(0, n, 0, n);</span>
+<span class="nc" id="L190">                n--; // Deflate H by 1.</span>
 
             } else {
-<span class="nc" id="L196">                System.out.println(&quot;Here&quot;);</span>
+<span class="nc" id="L193">                System.out.println(&quot;Here&quot;);</span>
                 // Then there is an isolated 2x2 block.
 //                disc = CNumber.pow(H.entries[(n-1)*(H.numCols + 1)].sub(H.entries[n*(H.numCols + 1)]), 2);
 //                disc.addEq(H.entries[n*(H.numCols + 1) - 1].mult(H.entries[(n-1)*H.numCols + n]).mult(4));
@@ -205,11 +202,11 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, 
 //                T.entries[n*(H.numCols + 1)] = lam.entries[n];
 //                T.entries[(n-1)*(H.numCols + 1)] = lam.entries[n-1];
 
-<span class="nc" id="L208">                n-=2; // Deflate H by 2.</span>
-<span class="nc" id="L209">                H = H.getSlice(0, n+1, 0, n+1);</span>
+<span class="nc" id="L205">                n-=2; // Deflate H by 2.</span>
+<span class="nc" id="L206">                H = H.getSlice(0, n+1, 0, n+1);</span>
             }
         }
-<span class="nc" id="L212">    }</span>
+<span class="nc" id="L209">    }</span>
 
 
     /**
@@ -217,37 +214,37 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, 
      * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
      */
     protected void shiftedQR(CMatrix H) {
-<span class="nc bnc" id="L220" title="All 2 branches missed.">        if(useDefaultMaxIterations) {</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">        if(useDefaultMaxIterations) {</span>
             // The algorithm should converge within machine precision in O(n^3).
-<span class="nc" id="L222">            maxIterations = (int) Math.max(Math.pow(H.numRows, 3), MIN_DEFAULT_ITERATIONS);</span>
+<span class="nc" id="L219">            maxIterations = (int) Math.max(Math.pow(H.numRows, 3), MIN_DEFAULT_ITERATIONS);</span>
         }
 
-<span class="nc" id="L225">        int count = 0;</span>
-<span class="nc" id="L226">        int n = H.numRows-1;</span>
+<span class="nc" id="L222">        int count = 0;</span>
+<span class="nc" id="L223">        int n = H.numRows-1;</span>
 
-<span class="nc" id="L228">        T = H;</span>
-<span class="nc" id="L229">        U = CMatrix.I(H.numRows);</span>
+<span class="nc" id="L225">        T = H;</span>
+<span class="nc" id="L226">        U = CMatrix.I(H.numRows);</span>
 
-<span class="nc" id="L231">        ComplexQRDecomposition qr = new ComplexQRDecomposition(); // Decomposer for use in the QR algorithm.</span>
+<span class="nc" id="L228">        ComplexQRDecomposition qr = new ComplexQRDecomposition(); // Decomposer for use in the QR algorithm.</span>
         CMatrix Q; // Q matrix from QR decomposition.
         CMatrix R; // R matrix from QR decomposition.
 
         CMatrix mu;
 
         // Apply the QR algorithm (Shifted QR algorithm using Rayleigh shift).
-<span class="nc bnc" id="L238" title="All 2 branches missed.">        while(count&lt;maxIterations) {</span>
-<span class="nc" id="L239">            count++;</span>
+<span class="nc bnc" id="L235" title="All 2 branches missed.">        while(count&lt;maxIterations) {</span>
+<span class="nc" id="L236">            count++;</span>
 //            mu = CMatrix.I(n+1).mult(T.entries[T.entries.length-1]); // Construct diagonal matrix.
-<span class="nc" id="L241">            mu = CMatrix.I(n+1).mult(CNumber.exp(CNumber.IMAGINARY_UNIT)); // Construct diagonal matrix.</span>
+<span class="nc" id="L238">            mu = CMatrix.I(n+1).mult(CNumber.exp(CNumber.IMAGINARY_UNIT)); // Construct diagonal matrix.</span>
 
-<span class="nc" id="L243">            qr.decompose(T.sub(mu)); // Compute the QR decomposition with a shift.</span>
-<span class="nc" id="L244">            Q = qr.getQ();</span>
-<span class="nc" id="L245">            R = qr.getR();</span>
+<span class="nc" id="L240">            qr.decompose(T.sub(mu)); // Compute the QR decomposition with a shift.</span>
+<span class="nc" id="L241">            Q = qr.getQ();</span>
+<span class="nc" id="L242">            R = qr.getR();</span>
 
-<span class="nc" id="L247">            T = R.mult(Q).add(mu); // Reverse the shift.</span>
-<span class="nc" id="L248">            U = U.mult(Q);</span>
+<span class="nc" id="L244">            T = R.mult(Q).add(mu); // Reverse the shift.</span>
+<span class="nc" id="L245">            U = U.mult(Q);</span>
         }
-<span class="nc" id="L250">    }</span>
+<span class="nc" id="L247">    }</span>
 
 
     /**
@@ -259,66 +256,66 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, 
         // NOTE: This is a quick and dirty implementation and should only be used as reference.
         //  See Fundamentals of Matrix Computations (Watkins) p 368-369.
         // Right now, this only computes eigenvalues which are represented in the real Schur form.
-<span class="nc bnc" id="L262" title="All 2 branches missed.">        if(useDefaultMaxIterations) {</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">        if(useDefaultMaxIterations) {</span>
             // The algorithm should converge within machine precision in O(n^3).
-<span class="nc" id="L264">            maxIterations = (int) Math.max(Math.pow(H.numRows, 3), MIN_DEFAULT_ITERATIONS);</span>
+<span class="nc" id="L261">            maxIterations = (int) Math.max(Math.pow(H.numRows, 3), MIN_DEFAULT_ITERATIONS);</span>
         }
 
-<span class="nc" id="L267">        RealQRDecomposition qr = new RealQRDecomposition();</span>
-<span class="nc" id="L268">        ComplexHessenburgDecomposition hess = new ComplexHessenburgDecomposition(computeU); // Would need to compute Q to compute eigenvectors as well.</span>
-<span class="nc" id="L269">        T = H;</span>
-<span class="nc bnc" id="L270" title="All 2 branches missed.">        if(computeU) {</span>
-<span class="nc" id="L271">            U = CMatrix.I(T.numRows);</span>
+<span class="nc" id="L264">        RealQRDecomposition qr = new RealQRDecomposition();</span>
+<span class="nc" id="L265">        ComplexHessenburgDecomposition hess = new ComplexHessenburgDecomposition(computeU); // Would need to compute Q to compute eigenvectors as well.</span>
+<span class="nc" id="L266">        T = H;</span>
+<span class="nc bnc" id="L267" title="All 2 branches missed.">        if(computeU) {</span>
+<span class="nc" id="L268">            U = CMatrix.I(T.numRows);</span>
         }
 
 
-<span class="nc bnc" id="L275" title="All 2 branches missed.">        for(int i=0; i&lt;maxIterations; i++) {</span>
+<span class="nc bnc" id="L272" title="All 2 branches missed.">        for(int i=0; i&lt;maxIterations; i++) {</span>
             // Compute shifts as eigenvalues of lower right 2x2 block.
-<span class="nc" id="L277">            CVector rho = get2x2BlockEigenValues(T);</span>
+<span class="nc" id="L274">            CVector rho = get2x2BlockEigenValues(T);</span>
 
-<span class="nc bnc" id="L279" title="All 2 branches missed.">            if(debug) {</span>
-<span class="nc" id="L280">                System.out.println(&quot;[DEBUG] Iteration: &quot; + i + &quot;\n[DEBUG]&quot; + &quot;-&quot;.repeat(100) + &quot;\n&quot;);</span>
-<span class="nc" id="L281">                System.out.println(&quot;[DEBUG] T_start:\n&quot; + T + &quot;\n&quot;);</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">            if(debug) {</span>
+<span class="nc" id="L277">                System.out.println(&quot;[DEBUG] Iteration: &quot; + i + &quot;\n[DEBUG]&quot; + &quot;-&quot;.repeat(100) + &quot;\n&quot;);</span>
+<span class="nc" id="L278">                System.out.println(&quot;[DEBUG] T_start:\n&quot; + T + &quot;\n&quot;);</span>
             }
 
-<span class="nc" id="L284">            CNumber[] pEntries = {</span>
-<span class="nc" id="L285">                    T.entries[0].sub(rho.entries[0]).mult(T.entries[0].sub(rho.entries[1])).add(T.entries[1].mult(T.entries[T.numCols])),</span>
-<span class="nc" id="L286">                    T.entries[T.numCols].mult( T.entries[0].add(T.entries[T.numCols + 1]).sub(rho.entries[0]).sub(rho.entries[1]) ),</span>
-<span class="nc" id="L287">                    T.entries[2*T.numCols+1].mult(T.entries[T.numCols])</span>
+<span class="nc" id="L281">            CNumber[] pEntries = {</span>
+<span class="nc" id="L282">                    T.entries[0].sub(rho.entries[0]).mult(T.entries[0].sub(rho.entries[1])).add(T.entries[1].mult(T.entries[T.numCols])),</span>
+<span class="nc" id="L283">                    T.entries[T.numCols].mult( T.entries[0].add(T.entries[T.numCols + 1]).sub(rho.entries[0]).sub(rho.entries[1]) ),</span>
+<span class="nc" id="L284">                    T.entries[2*T.numCols+1].mult(T.entries[T.numCols])</span>
             };
-<span class="nc" id="L289">            Vector p = new CVector(pEntries).toReal(); // Should be real anyway</span>
-<span class="nc" id="L290">            qr.decompose(p.toMatrix()); // Easy way to build an orthogonal matrix with first column proportional to p.</span>
-<span class="nc" id="L291">            Matrix Q = qr.getQ(); // Realistically, the QR decomposition need not be computed explicitly.</span>
+<span class="nc" id="L286">            Vector p = new CVector(pEntries).toReal(); // Should be real anyway</span>
+<span class="nc" id="L287">            qr.decompose(p.toMatrix()); // Easy way to build an orthogonal matrix with first column proportional to p.</span>
+<span class="nc" id="L288">            Matrix Q = qr.getQ(); // Realistically, the QR decomposition need not be computed explicitly.</span>
 
-<span class="nc" id="L293">            T.setSlice(Q.T().mult(T.getSlice(0, 3, 0, T.numCols)), 0, 0);</span>
-<span class="nc" id="L294">            T.setSlice(T.getSlice(0, 4, 0, 3).mult(Q), 0, 0); // Create bulge.</span>
+<span class="nc" id="L290">            T.setSlice(Q.T().mult(T.getSlice(0, 3, 0, T.numCols)), 0, 0);</span>
+<span class="nc" id="L291">            T.setSlice(T.getSlice(0, 4, 0, 3).mult(Q), 0, 0); // Create bulge.</span>
 
-<span class="nc bnc" id="L296" title="All 2 branches missed.">            if(debug) {</span>
-<span class="nc" id="L297">                System.out.println(&quot;[DEBUG] T_after_transforms:\n&quot; + T + &quot;\n&quot;);</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">            if(debug) {</span>
+<span class="nc" id="L294">                System.out.println(&quot;[DEBUG] T_after_transforms:\n&quot; + T + &quot;\n&quot;);</span>
             }
 
             // A crude bulge chase using Hessenberg decomposition. Since we know A is nearly in Hessenberg already, this
             // will perform a lot of superfluous computations.
-<span class="nc" id="L302">            T = hess.decompose(T).getH();</span>
+<span class="nc" id="L299">            T = hess.decompose(T).getH();</span>
 
-<span class="nc bnc" id="L304" title="All 2 branches missed.">            if(computeU) {</span>
+<span class="nc bnc" id="L301" title="All 2 branches missed.">            if(computeU) {</span>
                 // TODO: This is not sufficient to compute the eigenvectors. Only the eigenvalues (i.e.) diagonal
                 //      of T is computed. however, the entire T is needed to compute the eigenvectors.
                 //      See Fundamentals of matrix computations (David Watkins) p. 386.
-<span class="nc" id="L308">                U.setSlice(U.getSlice(0, 4, 0, 3).mult(Q), 0, 0);</span>
-<span class="nc" id="L309">                U = hess.Q.mult(U);</span>
+<span class="nc" id="L305">                U.setSlice(U.getSlice(0, 4, 0, 3).mult(Q), 0, 0);</span>
+<span class="nc" id="L306">                U = hess.Q.mult(U);</span>
             }
 
-<span class="nc bnc" id="L312" title="All 2 branches missed.">            if(debug) {</span>
-<span class="nc" id="L313">                System.out.println(&quot;[DEBUG] T_hess:\n&quot; + T);</span>
-<span class="nc" id="L314">                System.out.println(&quot;[DEBUG]&quot; + &quot;-&quot;.repeat(100) + &quot;\n\n\n&quot;);</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">            if(debug) {</span>
+<span class="nc" id="L310">                System.out.println(&quot;[DEBUG] T_hess:\n&quot; + T);</span>
+<span class="nc" id="L311">                System.out.println(&quot;[DEBUG]&quot; + &quot;-&quot;.repeat(100) + &quot;\n\n\n&quot;);</span>
             }
 
-<span class="nc bnc" id="L317" title="All 2 branches missed.">            if(T.roundToZero().isTriU()) {</span>
-<span class="nc" id="L318">                break; // We have converged (approximately) to an upper triangular matrix.</span>
+<span class="nc bnc" id="L314" title="All 2 branches missed.">            if(T.roundToZero().isTriU()) {</span>
+<span class="nc" id="L315">                break; // We have converged (approximately) to an upper triangular matrix.</span>
             }
         }
-<span class="nc" id="L321">    }</span>
+<span class="nc" id="L318">    }</span>
 
 
     /**
@@ -329,23 +326,23 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, 
     private CVector get2x2BlockEigenValues(CMatrix src) {
         // TODO: While theoretically correct, there are some numerical
         //  issues here.
-<span class="nc" id="L332">        CVector shifts = new CVector(2);</span>
-<span class="nc" id="L333">        int n = src.numRows-1;</span>
+<span class="nc" id="L329">        CVector shifts = new CVector(2);</span>
+<span class="nc" id="L330">        int n = src.numRows-1;</span>
 
         // Get the four entries from lower right 2x2 sub-matrix.
-<span class="nc" id="L336">        CNumber a = src.entries[(n-1)*(src.numCols + 1)];</span>
-<span class="nc" id="L337">        CNumber b = src.entries[(n-1)*src.numCols + n];</span>
-<span class="nc" id="L338">        CNumber c = src.entries[n*(src.numCols + 1) - 1];</span>
-<span class="nc" id="L339">        CNumber d = src.entries[(n)*(src.numCols + 1)];</span>
+<span class="nc" id="L333">        CNumber a = src.entries[(n-1)*(src.numCols + 1)];</span>
+<span class="nc" id="L334">        CNumber b = src.entries[(n-1)*src.numCols + n];</span>
+<span class="nc" id="L335">        CNumber c = src.entries[n*(src.numCols + 1) - 1];</span>
+<span class="nc" id="L336">        CNumber d = src.entries[(n)*(src.numCols + 1)];</span>
 
-<span class="nc" id="L341">        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.</span>
-<span class="nc" id="L342">        CNumber htr = a.add(b).div(2); // Half of the 2x2 trace.</span>
+<span class="nc" id="L338">        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.</span>
+<span class="nc" id="L339">        CNumber htr = a.add(b).div(2); // Half of the 2x2 trace.</span>
 
         // 2x2 block eigenvalues.
-<span class="nc" id="L345">        shifts.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
-<span class="nc" id="L346">        shifts.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+<span class="nc" id="L342">        shifts.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+<span class="nc" id="L343">        shifts.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
 
-<span class="nc" id="L348">        return shifts;</span>
+<span class="nc" id="L345">        return shifts;</span>
     }
 
 
@@ -354,7 +351,7 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, 
      * @return The {@code T} from the Schur decomposition corresponding to {@code A=UTU&lt;sup&gt;H&lt;/sup&gt;}.
      */
     public CMatrix getT() {
-<span class="nc" id="L357">        return T;</span>
+<span class="nc" id="L354">        return T;</span>
     }
 
 
@@ -363,7 +360,7 @@ public abstract class SchurDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, 
      * @return The {@code U} from the Schur decomposition corresponding to {@code A=UTU&lt;sup&gt;H&lt;/sup&gt;}.
      */
     public CMatrix getU() {
-<span class="nc" id="L366">        return U;</span>
+<span class="nc" id="L363">        return U;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

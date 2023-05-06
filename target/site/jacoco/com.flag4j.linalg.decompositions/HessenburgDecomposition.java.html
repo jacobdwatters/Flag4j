@@ -24,8 +24,6 @@
 
 package com.flag4j.linalg.decompositions;
 
-import com.flag4j.core.MatrixBase;
-
 
 /**
  * &lt;p&gt;This abstract class specifies methods for computing the Hessenburg decomposition of a square matrix. That is, for a square matrix
@@ -44,7 +42,7 @@ import com.flag4j.core.MatrixBase;
  *      [ 0 0 0 x x ]]&lt;/pre&gt;
  * &lt;/p&gt;
  */
-public abstract class HessenburgDecomposition&lt;T extends MatrixBase&lt;?, ?, ?, ?, ?, ?, ?&gt;&gt; implements Decomposition&lt;T&gt; {
+public abstract class HessenburgDecomposition&lt;T&gt; implements Decomposition&lt;T&gt; {
 
     /**
      * A flag for determining if {@code Q} should be computed in the Hessenburg decomposition.
@@ -69,9 +67,9 @@ public abstract class HessenburgDecomposition&lt;T extends MatrixBase&lt;?, ?, ?
      *                 - If false, the unitary {@code Q} matrix will not be computed which may give a performance
      *                 increase if it is not needed.
      */
-<span class="fc" id="L72">    protected HessenburgDecomposition(boolean computeQ) {</span>
-<span class="fc" id="L73">        this.computeQ = computeQ;</span>
-<span class="fc" id="L74">    }</span>
+<span class="fc" id="L70">    protected HessenburgDecomposition(boolean computeQ) {</span>
+<span class="fc" id="L71">        this.computeQ = computeQ;</span>
+<span class="fc" id="L72">    }</span>
 
 
     /**
@@ -79,7 +77,7 @@ public abstract class HessenburgDecomposition&lt;T extends MatrixBase&lt;?, ?, ?
      * @return The unitary {@code Q} matrix from the Hessenburg decomposition corresponding to {@code A=QHQ&lt;sup&gt;*&lt;/sup&gt;}.
      */
     public T getQ() {
-<span class="fc" id="L82">        return Q;</span>
+<span class="fc" id="L80">        return Q;</span>
     }
 
 
@@ -88,7 +86,7 @@ public abstract class HessenburgDecomposition&lt;T extends MatrixBase&lt;?, ?, ?
      * @return The upper Hessenburg {@code H} matrix from the Hessenburg decomposition corresponding to {@code A=QHQ&lt;sup&gt;H&lt;/sup&gt;}.
      */
     public T getH() {
-<span class="fc" id="L91">        return H;</span>
+<span class="fc" id="L89">        return H;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -25,21 +25,47 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.ComplexSparseMatrixBase;
+import com.flag4j.core.ComplexMatrixMixin;
+import com.flag4j.core.ComplexSparseTensorBase;
+import com.flag4j.core.MatrixMixin;
+import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.util.ArrayUtils;
 
 /**
- * Complex sparse matrix. Stored in COO (Coordinate) format.
+ * Complex sparse matrix. Stored in coordinate list (COO) format.
  */
-public class SparseCMatrix extends ComplexSparseMatrixBase {
+public class SparseCMatrix
+        extends ComplexSparseTensorBase<SparseCMatrix, CMatrix, SparseMatrix>
+        implements MatrixMixin<SparseCMatrix, CMatrix, SparseCMatrix, SparseCMatrix, SparseMatrix, CNumber>,
+        ComplexMatrixMixin<SparseCMatrix, SparseMatrix> {
 
+    /**
+     * Row indices of the non-zero entries of the sparse matrix.
+     */
+    public final int[] rowIndices;
+    /**
+     * Column indices of the non-zero entries of the sparse matrix.
+     */
+    public final int[] colIndices;
+    /**
+     * The number of rows in this matrix.
+     */
+    public final int numRows;
+    /**
+     * The number of columns in this matrix.
+     */
+    public final int numCols;
 
     /**
      * Creates a square sparse matrix filled with zeros.
      * @param size size of the square matrix.
      */
     public SparseCMatrix(int size) {
-        super(new Shape(size, size), 0, new CNumber[0], new int[0], new int[0]);
+        super(new Shape(size, size), 0, new CNumber[0], new int[0][0]);
+        rowIndices = new int[0];
+        colIndices = new int[0];
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -49,7 +75,11 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @param cols Number of columns in the sparse matrix.
      */
     public SparseCMatrix(int rows, int cols) {
-        super(new Shape(rows, cols), 0, new CNumber[0], new int[0], new int[0]);
+        super(new Shape(rows, cols), 0, new CNumber[0], new int[0][0]);
+        rowIndices = new int[0];
+        colIndices = new int[0];
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -58,7 +88,11 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @param shape Shape of this sparse matrix.
      */
     public SparseCMatrix(Shape shape) {
-        super(shape, 0, new CNumber[0], new int[0], new int[0]);
+        super(shape, 0, new CNumber[0], new int[0][0]);
+        rowIndices = new int[0];
+        colIndices = new int[0];
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -72,8 +106,16 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(int size, CNumber[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-        super(new Shape(size, size), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);
+        super(new Shape(size, size),
+                nonZeroEntries.length,
+                nonZeroEntries,
+                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+        );
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -88,8 +130,16 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(int rows, int cols, CNumber[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-        super(new Shape(rows, cols), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);
+        super(new Shape(rows, cols),
+                nonZeroEntries.length,
+                nonZeroEntries,
+                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+        );
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -103,7 +153,15 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(Shape shape, CNumber[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-        super(shape, nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);
+        super(shape,
+                nonZeroEntries.length,
+                nonZeroEntries,
+                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+        );
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -117,8 +175,15 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(int size, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-        super(new Shape(size, size), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);
+        super(new Shape(size, size),
+                nonZeroEntries.length,
+                new CNumber[nonZeroEntries.length],
+                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices}));
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -133,8 +198,16 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(int rows, int cols, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-        super(new Shape(rows, cols), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);
+        super(new Shape(rows, cols),
+                nonZeroEntries.length,
+                new CNumber[nonZeroEntries.length],
+                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+        );
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -148,8 +221,16 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(Shape shape, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);
+        super(shape,
+                nonZeroEntries.length,
+                new CNumber[nonZeroEntries.length],
+                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+        );
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -163,8 +244,16 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(int size, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-        super(new Shape(size, size), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);
+        super(new Shape(size, size),
+                nonZeroEntries.length,
+                new CNumber[nonZeroEntries.length],
+                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+        );
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -179,8 +268,16 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(int rows, int cols, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-        super(new Shape(rows, cols), nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);
+        super(new Shape(rows, cols),
+                nonZeroEntries.length,
+                new CNumber[nonZeroEntries.length],
+                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+        );
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -194,8 +291,36 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseCMatrix(Shape shape, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], rowIndices, colIndices);
+        super(shape,
+                nonZeroEntries.length,
+                new CNumber[nonZeroEntries.length],
+                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+        );
         ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
+    }
+
+
+    /**
+     * Constructs a sparse complex matrix whose non-zero entries, indices, and shape are specified by another
+     * complex sparse matrix.
+     * @param A Complex sparse matrix to copy.
+     */
+    public SparseCMatrix(SparseCMatrix A) {
+        super(A.shape.copy(),
+                A.nonZeroEntries(),
+                new CNumber[A.nonZeroEntries()],
+                new int[A.indices.length][A.indices[0].length]
+        );
+        ArrayUtils.copy2CNumber(A.entries, super.entries);
+        ArrayUtils.deepCopy(A.indices, this.indices);
+        this.rowIndices = A.rowIndices.clone();
+        this.colIndices = A.colIndices.clone();
+        this.numRows = shape.dims[0];
+        this.numCols = shape.dims[1];
     }
 
 
@@ -309,15 +434,21 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
 //        super.colIndices = colIndices.stream().mapToInt(Integer::intValue).toArray();
 //    }
 
+    /**
+     * Gets the number of rows in this matrix.
+     * @return The number of rows in this matrix.
+     */
+    public int numRows() {
+        return numRows;
+    }
+
 
     /**
-     * Constructs a sparse complex matrix whose non-zero entries, indices, and shape are specified by another
-     * complex sparse matrix.
-     * @param A Complex sparse matrix to copy.
+     * Gets the number of columns in this matrix.
+     * @return The number of columns in this matrix.
      */
-    public SparseCMatrix(SparseCMatrix A) {
-        super(A.shape.copy(), A.nonZeroEntries(), new CNumber[A.nonZeroEntries()], A.rowIndices.clone(), A.colIndices.clone());
-        ArrayUtils.copy2CNumber(A.entries, super.entries);
+    public int numCols() {
+        return numCols;
     }
 
 
@@ -562,7 +693,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CMatrix sub(SparseCMatrix B) {
+    public SparseCMatrix sub(SparseCMatrix B) {
         return null;
     }
 
@@ -737,7 +868,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of applying an element-wise absolute value/magnitude to this tensor.
      */
     @Override
-    public SparseCMatrix abs() {
+    public SparseMatrix abs() {
         return null;
     }
 
@@ -850,15 +981,14 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
 
 
     /**
-     * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
-     * * in the reshaped matrix.
+     * Sets the value of this matrix using a 2D array.
      *
-     * @param numRows The number of rows in the reshaped matrix.
-     * @param numCols The number of columns in the reshaped matrix.
-     * @return A matrix which is equivalent to this matrix but with the specified dimensions.
+     * @param values New values of the matrix.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
     @Override
-    public SparseCMatrix reshape(int numRows, int numCols) {
+    public SparseCMatrix setValues(Double[][] values) {
         return null;
     }
 
@@ -898,6 +1028,20 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      */
     @Override
     public SparseCMatrix setValues(int[][] values) {
+        return null;
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public SparseCMatrix setCol(Double[] values, int colIndex) {
         return null;
     }
 
@@ -954,6 +1098,20 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      */
     @Override
     public SparseCMatrix setCol(int[] values, int colIndex) {
+        return null;
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public SparseCMatrix setRow(Double[] values, int rowIndex) {
         return null;
     }
 
@@ -1067,6 +1225,23 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
         return null;
     }
 
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public SparseCMatrix setSlice(Double[][] values, int rowStart, int colStart) {
+        return null;
+    }
+
 
     /**
      * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
@@ -1154,6 +1329,24 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      */
     @Override
     public SparseCMatrix setSliceCopy(SparseCMatrix values, int rowStart, int colStart) {
+        return null;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public SparseCMatrix setSliceCopy(Double[][] values, int rowStart, int colStart) {
         return null;
     }
 
@@ -1402,7 +1595,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object add(Matrix B) {
+    public CMatrix add(Matrix B) {
         return null;
     }
 
@@ -1415,7 +1608,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object add(SparseMatrix B) {
+    public SparseCMatrix add(SparseMatrix B) {
         return null;
     }
 
@@ -1428,7 +1621,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object add(CMatrix B) {
+    public SparseCMatrix add(CMatrix B) {
         return null;
     }
 
@@ -1441,7 +1634,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object sub(Matrix B) {
+    public CMatrix sub(Matrix B) {
         return null;
     }
 
@@ -1454,7 +1647,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object sub(SparseMatrix B) {
+    public SparseCMatrix sub(SparseMatrix B) {
         return null;
     }
 
@@ -1467,7 +1660,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object sub(CMatrix B) {
+    public SparseCMatrix sub(CMatrix B) {
         return null;
     }
 
@@ -1524,7 +1717,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     @Override
-    public Object mult(Matrix B) {
+    public CMatrix mult(Matrix B) {
         return null;
     }
 
@@ -1537,7 +1730,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     @Override
-    public Object mult(SparseMatrix B) {
+    public CMatrix mult(SparseMatrix B) {
         return null;
     }
 
@@ -1576,7 +1769,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public Object mult(Vector b) {
+    public CMatrix mult(Vector b) {
         return null;
     }
 
@@ -1589,7 +1782,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public Object mult(SparseVector b) {
+    public CMatrix mult(SparseVector b) {
         return null;
     }
 
@@ -1631,7 +1824,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
     @Override
-    public Object multTranspose(Matrix B) {
+    public CMatrix multTranspose(Matrix B) {
         return null;
     }
 
@@ -1647,7 +1840,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
     @Override
-    public Object multTranspose(SparseMatrix B) {
+    public CMatrix multTranspose(SparseMatrix B) {
         return null;
     }
 
@@ -1693,7 +1886,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of multiplying this matrix with itself 'exponent' times.
      */
     @Override
-    public Object pow(int exponent) {
+    public CMatrix pow(int exponent) {
         return null;
     }
 
@@ -1706,7 +1899,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public Object elemMult(Matrix B) {
+    public SparseCMatrix elemMult(Matrix B) {
         return null;
     }
 
@@ -1719,7 +1912,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public Object elemMult(SparseMatrix B) {
+    public SparseCMatrix elemMult(SparseMatrix B) {
         return null;
     }
 
@@ -1732,7 +1925,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public Object elemMult(CMatrix B) {
+    public SparseCMatrix elemMult(CMatrix B) {
         return null;
     }
 
@@ -1746,7 +1939,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws ArithmeticException      If B contains any zero entries.
      */
     @Override
-    public Object elemDiv(Matrix B) {
+    public SparseCMatrix elemDiv(Matrix B) {
         return null;
     }
 
@@ -1760,7 +1953,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws ArithmeticException      If B contains any zero entries.
      */
     @Override
-    public Object elemDiv(CMatrix B) {
+    public SparseCMatrix elemDiv(CMatrix B) {
         return null;
     }
 
@@ -1772,7 +1965,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix is not square.
      */
     @Override
-    public Number det() {
+    public CNumber det() {
         return null;
     }
 
@@ -1785,7 +1978,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public Number fib(Matrix B) {
+    public CNumber fib(Matrix B) {
         return null;
     }
 
@@ -1798,7 +1991,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public Number fib(SparseMatrix B) {
+    public CNumber fib(SparseMatrix B) {
         return null;
     }
 
@@ -1836,7 +2029,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public Object directSum(Matrix B) {
+    public SparseCMatrix directSum(Matrix B) {
         return null;
     }
 
@@ -1848,7 +2041,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public Object directSum(SparseMatrix B) {
+    public SparseCMatrix directSum(SparseMatrix B) {
         return null;
     }
 
@@ -1860,7 +2053,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public Object directSum(CMatrix B) {
+    public SparseCMatrix directSum(CMatrix B) {
         return null;
     }
 
@@ -1872,7 +2065,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public Object directSum(SparseCMatrix B) {
+    public SparseCMatrix directSum(SparseCMatrix B) {
         return null;
     }
 
@@ -1884,7 +2077,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public Object invDirectSum(Matrix B) {
+    public SparseCMatrix invDirectSum(Matrix B) {
         return null;
     }
 
@@ -1896,7 +2089,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public Object invDirectSum(SparseMatrix B) {
+    public SparseCMatrix invDirectSum(SparseMatrix B) {
         return null;
     }
 
@@ -1908,7 +2101,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public Object invDirectSum(CMatrix B) {
+    public SparseCMatrix invDirectSum(CMatrix B) {
         return null;
     }
 
@@ -1920,7 +2113,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public Object invDirectSum(SparseCMatrix B) {
+    public SparseCMatrix invDirectSum(SparseCMatrix B) {
         return null;
     }
 
@@ -1932,7 +2125,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * an m-by-1 matrix.
      */
     @Override
-    public Object sumCols() {
+    public SparseCMatrix sumCols() {
         return null;
     }
 
@@ -1944,7 +2137,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * an 1-by-n matrix.
      */
     @Override
-    public Object sumRows() {
+    public SparseCMatrix sumRows() {
         return null;
     }
 
@@ -1957,7 +2150,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public Object addToEachCol(Vector b) {
+    public CMatrix addToEachCol(Vector b) {
         return null;
     }
 
@@ -1970,7 +2163,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public Object addToEachCol(SparseVector b) {
+    public SparseCMatrix addToEachCol(SparseVector b) {
         return null;
     }
 
@@ -1996,7 +2189,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public Object addToEachCol(SparseCVector b) {
+    public SparseCMatrix addToEachCol(SparseCVector b) {
         return null;
     }
 
@@ -2009,7 +2202,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public Object addToEachRow(Vector b) {
+    public CMatrix addToEachRow(Vector b) {
         return null;
     }
 
@@ -2022,7 +2215,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public Object addToEachRow(SparseVector b) {
+    public SparseCMatrix addToEachRow(SparseVector b) {
         return null;
     }
 
@@ -2048,7 +2241,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public Object addToEachRow(SparseCVector b) {
+    public SparseCMatrix addToEachRow(SparseCVector b) {
         return null;
     }
 
@@ -2062,7 +2255,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
     @Override
-    public Object stack(Matrix B) {
+    public CMatrix stack(Matrix B) {
         return null;
     }
 
@@ -2076,7 +2269,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
     @Override
-    public Object stack(SparseMatrix B) {
+    public SparseCMatrix stack(SparseMatrix B) {
         return null;
     }
 
@@ -2104,7 +2297,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
     @Override
-    public Object stack(SparseCMatrix B) {
+    public SparseCMatrix stack(SparseCMatrix B) {
         return null;
     }
 
@@ -2122,7 +2315,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(Matrix B, int axis) {
+    public CMatrix stack(Matrix B, int axis) {
         return null;
     }
 
@@ -2140,7 +2333,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(SparseMatrix B, int axis) {
+    public SparseCMatrix stack(SparseMatrix B, int axis) {
         return null;
     }
 
@@ -2176,7 +2369,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(SparseCMatrix B, int axis) {
+    public SparseCMatrix stack(SparseCMatrix B, int axis) {
         return null;
     }
 
@@ -2190,7 +2383,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     @Override
-    public Object augment(Matrix B) {
+    public CMatrix augment(Matrix B) {
         return null;
     }
 
@@ -2204,7 +2397,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     @Override
-    public Object augment(SparseMatrix B) {
+    public SparseCMatrix augment(SparseMatrix B) {
         return null;
     }
 
@@ -2232,7 +2425,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     @Override
-    public Object augment(SparseCMatrix B) {
+    public SparseCMatrix augment(SparseCMatrix B) {
         return null;
     }
 
@@ -2248,7 +2441,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      *                                  the vector b.
      */
     @Override
-    public Object stack(Vector b) {
+    public SparseCMatrix stack(Vector b) {
         return null;
     }
 
@@ -2264,7 +2457,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      *                                  the vector b.
      */
     @Override
-    public Object stack(SparseVector b) {
+    public SparseCMatrix stack(SparseVector b) {
         return null;
     }
 
@@ -2280,7 +2473,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      *                                  the vector b.
      */
     @Override
-    public Object stack(CVector b) {
+    public SparseCMatrix stack(CVector b) {
         return null;
     }
 
@@ -2296,7 +2489,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      *                                  the vector b.
      */
     @Override
-    public Object stack(SparseCVector b) {
+    public SparseCMatrix stack(SparseCVector b) {
         return null;
     }
 
@@ -2316,7 +2509,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(Vector b, int axis) {
+    public SparseCMatrix stack(Vector b, int axis) {
         return null;
     }
 
@@ -2336,7 +2529,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(SparseVector b, int axis) {
+    public SparseCMatrix stack(SparseVector b, int axis) {
         return null;
     }
 
@@ -2356,7 +2549,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(CVector b, int axis) {
+    public SparseCMatrix stack(CVector b, int axis) {
         return null;
     }
 
@@ -2376,7 +2569,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(SparseCVector b, int axis) {
+    public SparseCMatrix stack(SparseCVector b, int axis) {
         return null;
     }
 
@@ -2392,7 +2585,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public Object augment(Vector b) {
+    public SparseCMatrix augment(Vector b) {
         return null;
     }
 
@@ -2408,7 +2601,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public Object augment(SparseVector b) {
+    public SparseCMatrix augment(SparseVector b) {
         return null;
     }
 
@@ -2424,7 +2617,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public Object augment(CVector b) {
+    public SparseCMatrix augment(CVector b) {
         return null;
     }
 
@@ -2440,7 +2633,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public Object augment(SparseCVector b) {
+    public SparseCMatrix augment(SparseCVector b) {
         return null;
     }
 
@@ -2452,7 +2645,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The specified row of this matrix.
      */
     @Override
-    public Object getRow(int i) {
+    public SparseCMatrix getRow(int i) {
         return null;
     }
 
@@ -2464,7 +2657,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @return The specified column of this matrix.
      */
     @Override
-    public Object getCol(int j) {
+    public SparseCMatrix getCol(int j) {
         return null;
     }
 
@@ -2481,7 +2674,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException       If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
      */
     @Override
-    public Object getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
+    public SparseCMatrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
         return null;
     }
 
@@ -2496,7 +2689,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
      */
     @Override
-    public Object getColBelow(int rowStart, int j) {
+    public SparseCMatrix getColBelow(int rowStart, int j) {
         return null;
     }
 
@@ -2511,7 +2704,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
      */
     @Override
-    public Object getRowAfter(int colStart, int i) {
+    public SparseCMatrix getRowAfter(int colStart, int i) {
         return null;
     }
 
@@ -2524,7 +2717,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix is not square.
      */
     @Override
-    public Number trace() {
+    public CNumber trace() {
         return null;
     }
 
@@ -2537,7 +2730,7 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix is not square.
      */
     @Override
-    public Number tr() {
+    public CNumber tr() {
         return null;
     }
 
@@ -2750,6 +2943,20 @@ public class SparseCMatrix extends ComplexSparseMatrixBase {
      */
     @Override
     public SparseCMatrix reshape(Shape shape) {
+        return null;
+    }
+
+
+    /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public SparseCMatrix reshape(int... shape) {
         return null;
     }
 

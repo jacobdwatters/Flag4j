@@ -24,14 +24,12 @@
 
 package com.flag4j.linalg.decompositions;
 
-import com.flag4j.core.MatrixBase;
-
 /**
  * <p>This abstract class specifies methods for computing the {@code QR} decomposition of a matrix.</p>
  * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into a unitary matrix {@code Q}
  * and an upper triangular matrix {@code R} such that {@code A=QR}.</p>
  */
-public abstract class QRDecomposition<T extends MatrixBase<?, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class QRDecomposition<T> implements Decomposition<T> {
 
     /**
      * Storage matrix for {@code Q}.

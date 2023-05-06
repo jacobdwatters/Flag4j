@@ -26,14 +26,39 @@ package com.flag4j;
 
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.RealSparseMatrixBase;
+import com.flag4j.core.MatrixMixin;
+import com.flag4j.core.RealMatrixMixin;
+import com.flag4j.core.RealSparseTensorBase;
+import com.flag4j.operations.dense.real.RealDenseTranspose;
+import com.flag4j.util.ArrayUtils;
 
 import java.util.Arrays;
 
 /**
  * Real sparse matrix. Matrix is stored in coordinate list (COO) format.
  */
-public class SparseMatrix extends RealSparseMatrixBase {
+public class SparseMatrix
+        extends RealSparseTensorBase&lt;SparseMatrix, Matrix, SparseCMatrix, CMatrix&gt;
+        implements MatrixMixin&lt;SparseMatrix, Matrix, SparseMatrix, SparseCMatrix, SparseMatrix, Double&gt;,
+        RealMatrixMixin&lt;SparseMatrix, SparseCMatrix&gt; {
+
+
+    /**
+     * Row indices of the non-zero entries of the sparse matrix.
+     */
+    public final int[] rowIndices;
+    /**
+     * Column indices of the non-zero entries of the sparse matrix.
+     */
+    public final int[] colIndices;
+    /**
+     * The number of rows in this matrix.
+     */
+    public final int numRows;
+    /**
+     * The number of columns in this matrix.
+     */
+    public final int numCols;
 
 
     /**
@@ -41,8 +66,12 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param size The number of rows/columns in this sparse matrix.
      */
     public SparseMatrix(int size) {
-<span class="fc" id="L44">        super(new Shape(size, size), 0, new double[0], new int[0], new int[0]);</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L69">        super(new Shape(size, size), 0, new double[0], new int[0][0]);</span>
+<span class="fc" id="L70">        rowIndices = new int[0];</span>
+<span class="fc" id="L71">        colIndices = new int[0];</span>
+<span class="fc" id="L72">        numRows = shape.dims[0];</span>
+<span class="fc" id="L73">        numCols = shape.dims[1];</span>
+<span class="fc" id="L74">    }</span>
 
 
     /**
@@ -51,8 +80,12 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param cols The number of columns in this sparse matrix.
      */
     public SparseMatrix(int rows, int cols) {
-<span class="fc" id="L54">        super(new Shape(rows, cols), 0, new double[0], new int[0], new int[0]);</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L83">        super(new Shape(rows, cols), 0, new double[0], new int[0][0]);</span>
+<span class="fc" id="L84">        rowIndices = new int[0];</span>
+<span class="fc" id="L85">        colIndices = new int[0];</span>
+<span class="fc" id="L86">        numRows = shape.dims[0];</span>
+<span class="fc" id="L87">        numCols = shape.dims[1];</span>
+<span class="fc" id="L88">    }</span>
 
 
     /**
@@ -60,8 +93,12 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param shape Shape of this sparse matrix.
      */
     public SparseMatrix(Shape shape) {
-<span class="fc" id="L63">        super(shape, 0, new double[0], new int[0], new int[0]);</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L96">        super(shape, 0, new double[0], new int[0][0]);</span>
+<span class="fc" id="L97">        rowIndices = new int[0];</span>
+<span class="fc" id="L98">        colIndices = new int[0];</span>
+<span class="fc" id="L99">        numRows = shape.dims[0];</span>
+<span class="fc" id="L100">        numCols = shape.dims[1];</span>
+<span class="fc" id="L101">    }</span>
 
 
     /**
@@ -72,8 +109,16 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int size, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L75">        super(new Shape(size, size), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L112">        super(new Shape(size, size),</span>
+                nonZeroEntries.length,
+                nonZeroEntries,
+<span class="fc" id="L115">                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})</span>
+        );
+<span class="fc" id="L117">        this.rowIndices = rowIndices;</span>
+<span class="fc" id="L118">        this.colIndices = colIndices;</span>
+<span class="fc" id="L119">        numRows = shape.dims[0];</span>
+<span class="fc" id="L120">        numCols = shape.dims[1];</span>
+<span class="fc" id="L121">    }</span>
 
 
     /**
@@ -85,8 +130,16 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int rows, int cols, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L88">        super(new Shape(rows, cols), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
-<span class="fc" id="L89">    }</span>
+<span class="fc" id="L133">        super(new Shape(rows, cols),</span>
+                nonZeroEntries.length,
+                nonZeroEntries,
+<span class="fc" id="L136">                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})</span>
+        );
+<span class="fc" id="L138">        this.rowIndices = rowIndices;</span>
+<span class="fc" id="L139">        this.colIndices = colIndices;</span>
+<span class="fc" id="L140">        numRows = shape.dims[0];</span>
+<span class="fc" id="L141">        numCols = shape.dims[1];</span>
+<span class="fc" id="L142">    }</span>
 
 
     /**
@@ -97,8 +150,16 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(Shape shape, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L100">        super(shape, nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);</span>
-<span class="fc" id="L101">    }</span>
+<span class="fc" id="L153">        super(shape,</span>
+                nonZeroEntries.length,
+                nonZeroEntries,
+<span class="fc" id="L156">                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})</span>
+        );
+<span class="fc" id="L158">        this.rowIndices = rowIndices;</span>
+<span class="fc" id="L159">        this.colIndices = colIndices;</span>
+<span class="fc" id="L160">        numRows = shape.dims[0];</span>
+<span class="fc" id="L161">        numCols = shape.dims[1];</span>
+<span class="fc" id="L162">    }</span>
 
 
     /**
@@ -109,9 +170,16 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int size, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L112">        super(new Shape(size, size), nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
-                rowIndices, colIndices);
-<span class="fc" id="L114">    }</span>
+<span class="fc" id="L173">        super(new Shape(size, size),</span>
+                nonZeroEntries.length,
+<span class="fc" id="L175">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L176">                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})</span>
+        );
+<span class="fc" id="L178">        this.rowIndices = rowIndices;</span>
+<span class="fc" id="L179">        this.colIndices = colIndices;</span>
+<span class="fc" id="L180">        numRows = shape.dims[0];</span>
+<span class="fc" id="L181">        numCols = shape.dims[1];</span>
+<span class="fc" id="L182">    }</span>
 
 
     /**
@@ -123,9 +191,16 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int rows, int cols, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L126">        super(new Shape(rows, cols), nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
-                rowIndices, colIndices);
-<span class="fc" id="L128">    }</span>
+<span class="fc" id="L194">        super(new Shape(rows, cols),</span>
+                nonZeroEntries.length,
+<span class="fc" id="L196">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L197">                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})</span>
+        );
+<span class="fc" id="L199">        this.rowIndices = rowIndices;</span>
+<span class="fc" id="L200">        this.colIndices = colIndices;</span>
+<span class="fc" id="L201">        numRows = shape.dims[0];</span>
+<span class="fc" id="L202">        numCols = shape.dims[1];</span>
+<span class="fc" id="L203">    }</span>
 
 
     /**
@@ -138,9 +213,35 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseMatrix(Shape shape, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L141">        super(shape, nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
-                rowIndices, colIndices);
-<span class="fc" id="L143">    }</span>
+<span class="fc" id="L216">        super(shape,</span>
+                nonZeroEntries.length,
+<span class="fc" id="L218">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L219">                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})</span>
+        );
+<span class="fc" id="L221">        this.rowIndices = rowIndices;</span>
+<span class="fc" id="L222">        this.colIndices = colIndices;</span>
+<span class="fc" id="L223">        numRows = shape.dims[0];</span>
+<span class="fc" id="L224">        numCols = shape.dims[1];</span>
+<span class="fc" id="L225">    }</span>
+
+
+    /**
+     * Constructs a sparse tensor whose shape and values are given by another sparse tensor. This effectively copies
+     * the tensor.
+     * @param A Sparse Matrix to copy.
+     */
+    public SparseMatrix(SparseMatrix A) {
+<span class="fc" id="L234">        super(A.shape.copy(),</span>
+<span class="fc" id="L235">                A.nonZeroEntries(),</span>
+<span class="fc" id="L236">                A.entries.clone(),</span>
+                new int[A.indices.length][A.indices[0].length]
+        );
+<span class="fc" id="L239">        ArrayUtils.deepCopy(A.indices, this.indices);</span>
+<span class="fc" id="L240">        this.rowIndices = A.rowIndices.clone();</span>
+<span class="fc" id="L241">        this.colIndices = A.colIndices.clone();</span>
+<span class="fc" id="L242">        numRows = shape.dims[0];</span>
+<span class="fc" id="L243">        numCols = shape.dims[1];</span>
+<span class="fc" id="L244">    }</span>
 
 
 //    /**
@@ -205,18 +306,26 @@ public class SparseMatrix extends RealSparseMatrixBase {
 
 
     /**
-     * Constructs a sparse tensor whose shape and values are given by another sparse tensor. This effectively copies
-     * the tensor.
-     * @param A Sparse Matrix to copy.
+     * Gets the number of rows in this matrix.
+     * @return The number of rows in this matrix.
      */
-    public SparseMatrix(SparseMatrix A) {
-<span class="fc" id="L213">        super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), A.rowIndices.clone(), A.colIndices.clone());</span>
-<span class="fc" id="L214">    }</span>
+    public int numRows() {
+<span class="nc" id="L313">        return numRows;</span>
+    }
+
+
+    /**
+     * Gets the number of columns in this matrix.
+     * @return The number of columns in this matrix.
+     */
+    public int numCols() {
+<span class="nc" id="L322">        return numCols;</span>
+    }
 
 
     @Override
     public SparseMatrix flatten(int axis) {
-<span class="nc" id="L219">        return null;</span>
+<span class="nc" id="L328">        return null;</span>
     }
 
 
@@ -227,7 +336,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isI() {
-<span class="nc" id="L230">        return false;</span>
+<span class="nc" id="L339">        return false;</span>
     }
 
 
@@ -239,21 +348,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isInv(SparseMatrix B) {
-<span class="nc" id="L242">        return false;</span>
-    }
-
-
-    /**
-     * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
-     * * in the reshaped matrix.
-     *
-     * @param numRows The number of rows in the reshaped matrix.
-     * @param numCols The number of columns in the reshaped matrix.
-     * @return A matrix which is equivalent to this matrix but with the specified dimensions.
-     */
-    @Override
-    public SparseMatrix reshape(int numRows, int numCols) {
-<span class="nc" id="L256">        return null;</span>
+<span class="nc" id="L351">        return false;</span>
     }
 
 
@@ -266,7 +361,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setValues(Double[][] values) {
-<span class="nc" id="L269">        return null;</span>
+<span class="nc" id="L364">        return null;</span>
     }
 
 
@@ -279,7 +374,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setValues(double[][] values) {
-<span class="nc" id="L282">        return null;</span>
+<span class="nc" id="L377">        return null;</span>
     }
 
 
@@ -292,7 +387,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setValues(int[][] values) {
-<span class="nc" id="L295">        return null;</span>
+<span class="nc" id="L390">        return null;</span>
     }
 
 
@@ -306,7 +401,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setCol(Double[] values, int colIndex) {
-<span class="nc" id="L309">        return null;</span>
+<span class="nc" id="L404">        return null;</span>
     }
 
 
@@ -320,7 +415,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setCol(Integer[] values, int colIndex) {
-<span class="nc" id="L323">        return null;</span>
+<span class="nc" id="L418">        return null;</span>
     }
 
 
@@ -334,7 +429,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setCol(double[] values, int colIndex) {
-<span class="nc" id="L337">        return null;</span>
+<span class="nc" id="L432">        return null;</span>
     }
 
 
@@ -348,7 +443,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setCol(int[] values, int colIndex) {
-<span class="nc" id="L351">        return null;</span>
+<span class="nc" id="L446">        return null;</span>
     }
 
 
@@ -362,7 +457,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setRow(Double[] values, int rowIndex) {
-<span class="nc" id="L365">        return null;</span>
+<span class="nc" id="L460">        return null;</span>
     }
 
 
@@ -376,7 +471,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setRow(Integer[] values, int rowIndex) {
-<span class="nc" id="L379">        return null;</span>
+<span class="nc" id="L474">        return null;</span>
     }
 
 
@@ -390,7 +485,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setRow(double[] values, int rowIndex) {
-<span class="nc" id="L393">        return null;</span>
+<span class="nc" id="L488">        return null;</span>
     }
 
 
@@ -404,7 +499,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setRow(int[] values, int rowIndex) {
-<span class="nc" id="L407">        return null;</span>
+<span class="nc" id="L502">        return null;</span>
     }
 
 
@@ -422,7 +517,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setSlice(SparseMatrix values, int rowStart, int colStart) {
-<span class="nc" id="L425">        return null;</span>
+<span class="nc" id="L520">        return null;</span>
     }
 
 
@@ -440,7 +535,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setSlice(Double[][] values, int rowStart, int colStart) {
-<span class="nc" id="L443">        return null;</span>
+<span class="nc" id="L538">        return null;</span>
     }
 
 
@@ -458,7 +553,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setSlice(Integer[][] values, int rowStart, int colStart) {
-<span class="nc" id="L461">        return null;</span>
+<span class="nc" id="L556">        return null;</span>
     }
 
 
@@ -476,7 +571,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setSlice(double[][] values, int rowStart, int colStart) {
-<span class="nc" id="L479">        return null;</span>
+<span class="nc" id="L574">        return null;</span>
     }
 
 
@@ -494,7 +589,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setSlice(int[][] values, int rowStart, int colStart) {
-<span class="nc" id="L497">        return null;</span>
+<span class="nc" id="L592">        return null;</span>
     }
 
 
@@ -512,7 +607,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
-<span class="nc" id="L515">        return null;</span>
+<span class="nc" id="L610">        return null;</span>
     }
 
 
@@ -524,7 +619,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix removeRow(int rowIndex) {
-<span class="nc" id="L527">        return null;</span>
+<span class="nc" id="L622">        return null;</span>
     }
 
 
@@ -536,7 +631,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix removeRows(int... rowIndices) {
-<span class="nc" id="L539">        return null;</span>
+<span class="nc" id="L634">        return null;</span>
     }
 
 
@@ -548,7 +643,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix removeCol(int colIndex) {
-<span class="nc" id="L551">        return null;</span>
+<span class="nc" id="L646">        return null;</span>
     }
 
 
@@ -560,7 +655,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix removeCols(int... colIndices) {
-<span class="nc" id="L563">        return null;</span>
+<span class="nc" id="L658">        return null;</span>
     }
 
 
@@ -572,7 +667,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix round() {
-<span class="nc" id="L575">        return null;</span>
+<span class="nc" id="L670">        return null;</span>
     }
 
 
@@ -586,7 +681,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix round(int precision) {
-<span class="nc" id="L589">        return null;</span>
+<span class="nc" id="L684">        return null;</span>
     }
 
 
@@ -599,7 +694,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix roundToZero() {
-<span class="nc" id="L602">        return null;</span>
+<span class="nc" id="L697">        return null;</span>
     }
 
 
@@ -614,7 +709,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix roundToZero(double threshold) {
-<span class="nc" id="L617">        return null;</span>
+<span class="nc" id="L712">        return null;</span>
     }
 
 
@@ -627,7 +722,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix swapRows(int rowIndex1, int rowIndex2) {
-<span class="nc" id="L630">        return null;</span>
+<span class="nc" id="L725">        return null;</span>
     }
 
 
@@ -640,7 +735,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix swapCols(int colIndex1, int colIndex2) {
-<span class="nc" id="L643">        return null;</span>
+<span class="nc" id="L738">        return null;</span>
     }
 
 
@@ -658,7 +753,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setSliceCopy(Double[][] values, int rowStart, int colStart) {
-<span class="nc" id="L661">        return null;</span>
+<span class="nc" id="L756">        return null;</span>
     }
 
 
@@ -676,7 +771,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setSliceCopy(Integer[][] values, int rowStart, int colStart) {
-<span class="nc" id="L679">        return null;</span>
+<span class="nc" id="L774">        return null;</span>
     }
 
 
@@ -694,7 +789,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setSliceCopy(double[][] values, int rowStart, int colStart) {
-<span class="nc" id="L697">        return null;</span>
+<span class="nc" id="L792">        return null;</span>
     }
 
 
@@ -712,7 +807,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setSliceCopy(int[][] values, int rowStart, int colStart) {
-<span class="nc" id="L715">        return null;</span>
+<span class="nc" id="L810">        return null;</span>
     }
 
 
@@ -730,7 +825,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setSliceCopy(Matrix values, int rowStart, int colStart) {
-<span class="nc" id="L733">        return null;</span>
+<span class="nc" id="L828">        return null;</span>
     }
 
 
@@ -748,7 +843,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix setSlice(Matrix values, int rowStart, int colStart) {
-<span class="nc" id="L751">        return null;</span>
+<span class="nc" id="L846">        return null;</span>
     }
 
 
@@ -760,8 +855,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object add(Matrix B) {
-<span class="nc" id="L764">        return null;</span>
+    public Matrix add(Matrix B) {
+<span class="nc" id="L859">        return null;</span>
     }
 
 
@@ -773,8 +868,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object add(CMatrix B) {
-<span class="nc" id="L777">        return null;</span>
+    public SparseCMatrix add(CMatrix B) {
+<span class="nc" id="L872">        return null;</span>
     }
 
 
@@ -786,8 +881,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object add(SparseCMatrix B) {
-<span class="nc" id="L790">        return null;</span>
+    public SparseCMatrix add(SparseCMatrix B) {
+<span class="nc" id="L885">        return null;</span>
     }
 
 
@@ -799,8 +894,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object sub(Matrix B) {
-<span class="nc" id="L803">        return null;</span>
+    public Matrix sub(Matrix B) {
+<span class="nc" id="L898">        return null;</span>
     }
 
 
@@ -812,8 +907,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object sub(CMatrix B) {
-<span class="nc" id="L816">        return null;</span>
+    public SparseCMatrix sub(CMatrix B) {
+<span class="nc" id="L911">        return null;</span>
     }
 
 
@@ -825,8 +920,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object sub(SparseCMatrix B) {
-<span class="nc" id="L829">        return null;</span>
+    public SparseCMatrix sub(SparseCMatrix B) {
+<span class="nc" id="L924">        return null;</span>
     }
 
 
@@ -838,7 +933,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     @Override
     public void addEq(Matrix B) {
 
-<span class="nc" id="L841">    }</span>
+<span class="nc" id="L936">    }</span>
 
 
     /**
@@ -849,7 +944,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     @Override
     public void subEq(Matrix B) {
 
-<span class="nc" id="L852">    }</span>
+<span class="nc" id="L947">    }</span>
 
 
     /**
@@ -860,8 +955,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     @Override
-    public Object mult(Matrix B) {
-<span class="nc" id="L864">        return null;</span>
+    public Matrix mult(Matrix B) {
+<span class="nc" id="L959">        return null;</span>
     }
 
 
@@ -873,8 +968,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     @Override
-    public Object mult(SparseMatrix B) {
-<span class="nc" id="L877">        return null;</span>
+    public Matrix mult(SparseMatrix B) {
+<span class="nc" id="L972">        return null;</span>
     }
 
 
@@ -887,7 +982,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public CMatrix mult(CMatrix B) {
-<span class="nc" id="L890">        return null;</span>
+<span class="nc" id="L985">        return null;</span>
     }
 
 
@@ -900,7 +995,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
-<span class="nc" id="L903">        return null;</span>
+<span class="nc" id="L998">        return null;</span>
     }
 
 
@@ -912,8 +1007,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public Object mult(Vector b) {
-<span class="nc" id="L916">        return null;</span>
+    public Matrix mult(Vector b) {
+<span class="nc" id="L1011">        return null;</span>
     }
 
 
@@ -925,8 +1020,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public Object mult(SparseVector b) {
-<span class="nc" id="L929">        return null;</span>
+    public Matrix mult(SparseVector b) {
+<span class="nc" id="L1024">        return null;</span>
     }
 
 
@@ -939,7 +1034,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public CMatrix mult(CVector b) {
-<span class="nc" id="L942">        return null;</span>
+<span class="nc" id="L1037">        return null;</span>
     }
 
 
@@ -952,7 +1047,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public CMatrix mult(SparseCVector b) {
-<span class="nc" id="L955">        return null;</span>
+<span class="nc" id="L1050">        return null;</span>
     }
 
 
@@ -967,8 +1062,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
     @Override
-    public Object multTranspose(Matrix B) {
-<span class="nc" id="L971">        return null;</span>
+    public Matrix multTranspose(Matrix B) {
+<span class="nc" id="L1066">        return null;</span>
     }
 
 
@@ -983,8 +1078,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
     @Override
-    public Object multTranspose(SparseMatrix B) {
-<span class="nc" id="L987">        return null;</span>
+    public Matrix multTranspose(SparseMatrix B) {
+<span class="nc" id="L1082">        return null;</span>
     }
 
 
@@ -1000,7 +1095,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public CMatrix multTranspose(CMatrix B) {
-<span class="nc" id="L1003">        return null;</span>
+<span class="nc" id="L1098">        return null;</span>
     }
 
 
@@ -1016,7 +1111,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public CMatrix multTranspose(SparseCMatrix B) {
-<span class="nc" id="L1019">        return null;</span>
+<span class="nc" id="L1114">        return null;</span>
     }
 
 
@@ -1029,8 +1124,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of multiplying this matrix with itself 'exponent' times.
      */
     @Override
-    public Object pow(int exponent) {
-<span class="nc" id="L1033">        return null;</span>
+    public Matrix pow(int exponent) {
+<span class="nc" id="L1128">        return null;</span>
     }
 
 
@@ -1042,8 +1137,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public Object elemMult(Matrix B) {
-<span class="nc" id="L1046">        return null;</span>
+    public SparseMatrix elemMult(Matrix B) {
+<span class="nc" id="L1141">        return null;</span>
     }
 
 
@@ -1055,8 +1150,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public Object elemMult(CMatrix B) {
-<span class="nc" id="L1059">        return null;</span>
+    public SparseCMatrix elemMult(CMatrix B) {
+<span class="nc" id="L1154">        return null;</span>
     }
 
 
@@ -1069,7 +1164,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
-<span class="nc" id="L1072">        return null;</span>
+<span class="nc" id="L1167">        return null;</span>
     }
 
 
@@ -1082,8 +1177,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws ArithmeticException      If B contains any zero entries.
      */
     @Override
-    public Object elemDiv(Matrix B) {
-<span class="nc" id="L1086">        return null;</span>
+    public SparseMatrix elemDiv(Matrix B) {
+<span class="nc" id="L1181">        return null;</span>
     }
 
 
@@ -1096,8 +1191,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws ArithmeticException      If B contains any zero entries.
      */
     @Override
-    public Object elemDiv(CMatrix B) {
-<span class="nc" id="L1100">        return null;</span>
+    public SparseCMatrix elemDiv(CMatrix B) {
+<span class="nc" id="L1195">        return null;</span>
     }
 
 
@@ -1108,8 +1203,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix is not square.
      */
     @Override
-    public Number det() {
-<span class="nc" id="L1112">        return null;</span>
+    public Double det() {
+<span class="nc" id="L1207">        return null;</span>
     }
 
 
@@ -1121,8 +1216,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public Number fib(Matrix B) {
-<span class="nc" id="L1125">        return null;</span>
+    public Double fib(Matrix B) {
+<span class="nc" id="L1220">        return null;</span>
     }
 
 
@@ -1134,8 +1229,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public Number fib(SparseMatrix B) {
-<span class="nc" id="L1138">        return null;</span>
+    public Double fib(SparseMatrix B) {
+<span class="nc" id="L1233">        return null;</span>
     }
 
 
@@ -1148,7 +1243,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public CNumber fib(CMatrix B) {
-<span class="nc" id="L1151">        return null;</span>
+<span class="nc" id="L1246">        return null;</span>
     }
 
 
@@ -1161,7 +1256,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public CNumber fib(SparseCMatrix B) {
-<span class="nc" id="L1164">        return null;</span>
+<span class="nc" id="L1259">        return null;</span>
     }
 
 
@@ -1172,8 +1267,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public Object directSum(Matrix B) {
-<span class="nc" id="L1176">        return null;</span>
+    public SparseMatrix directSum(Matrix B) {
+<span class="nc" id="L1271">        return null;</span>
     }
 
 
@@ -1184,8 +1279,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public Object directSum(SparseMatrix B) {
-<span class="nc" id="L1188">        return null;</span>
+    public SparseMatrix directSum(SparseMatrix B) {
+<span class="nc" id="L1283">        return null;</span>
     }
 
 
@@ -1196,8 +1291,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public Object directSum(CMatrix B) {
-<span class="nc" id="L1200">        return null;</span>
+    public SparseCMatrix directSum(CMatrix B) {
+<span class="nc" id="L1295">        return null;</span>
     }
 
 
@@ -1208,8 +1303,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public Object directSum(SparseCMatrix B) {
-<span class="nc" id="L1212">        return null;</span>
+    public SparseCMatrix directSum(SparseCMatrix B) {
+<span class="nc" id="L1307">        return null;</span>
     }
 
 
@@ -1220,8 +1315,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public Object invDirectSum(Matrix B) {
-<span class="nc" id="L1224">        return null;</span>
+    public SparseMatrix invDirectSum(Matrix B) {
+<span class="nc" id="L1319">        return null;</span>
     }
 
 
@@ -1232,8 +1327,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public Object invDirectSum(SparseMatrix B) {
-<span class="nc" id="L1236">        return null;</span>
+    public SparseMatrix invDirectSum(SparseMatrix B) {
+<span class="nc" id="L1331">        return null;</span>
     }
 
 
@@ -1244,8 +1339,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public Object invDirectSum(CMatrix B) {
-<span class="nc" id="L1248">        return null;</span>
+    public SparseCMatrix invDirectSum(CMatrix B) {
+<span class="nc" id="L1343">        return null;</span>
     }
 
 
@@ -1256,8 +1351,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public Object invDirectSum(SparseCMatrix B) {
-<span class="nc" id="L1260">        return null;</span>
+    public SparseCMatrix invDirectSum(SparseCMatrix B) {
+<span class="nc" id="L1355">        return null;</span>
     }
 
 
@@ -1268,8 +1363,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * an m-by-1 matrix.
      */
     @Override
-    public Object sumCols() {
-<span class="nc" id="L1272">        return null;</span>
+    public SparseMatrix sumCols() {
+<span class="nc" id="L1367">        return null;</span>
     }
 
 
@@ -1280,8 +1375,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * an 1-by-n matrix.
      */
     @Override
-    public Object sumRows() {
-<span class="nc" id="L1284">        return null;</span>
+    public SparseMatrix sumRows() {
+<span class="nc" id="L1379">        return null;</span>
     }
 
 
@@ -1293,8 +1388,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public Object addToEachCol(Vector b) {
-<span class="nc" id="L1297">        return null;</span>
+    public Matrix addToEachCol(Vector b) {
+<span class="nc" id="L1392">        return null;</span>
     }
 
 
@@ -1306,8 +1401,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public Object addToEachCol(SparseVector b) {
-<span class="nc" id="L1310">        return null;</span>
+    public SparseMatrix addToEachCol(SparseVector b) {
+<span class="nc" id="L1405">        return null;</span>
     }
 
 
@@ -1320,7 +1415,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public CMatrix addToEachCol(CVector b) {
-<span class="nc" id="L1323">        return null;</span>
+<span class="nc" id="L1418">        return null;</span>
     }
 
 
@@ -1332,8 +1427,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public Object addToEachCol(SparseCVector b) {
-<span class="nc" id="L1336">        return null;</span>
+    public SparseCMatrix addToEachCol(SparseCVector b) {
+<span class="nc" id="L1431">        return null;</span>
     }
 
 
@@ -1345,8 +1440,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public Object addToEachRow(Vector b) {
-<span class="nc" id="L1349">        return null;</span>
+    public Matrix addToEachRow(Vector b) {
+<span class="nc" id="L1444">        return null;</span>
     }
 
 
@@ -1358,8 +1453,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public Object addToEachRow(SparseVector b) {
-<span class="nc" id="L1362">        return null;</span>
+    public SparseMatrix addToEachRow(SparseVector b) {
+<span class="nc" id="L1457">        return null;</span>
     }
 
 
@@ -1372,7 +1467,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public CMatrix addToEachRow(CVector b) {
-<span class="nc" id="L1375">        return null;</span>
+<span class="nc" id="L1470">        return null;</span>
     }
 
 
@@ -1384,8 +1479,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public Object addToEachRow(SparseCVector b) {
-<span class="nc" id="L1388">        return null;</span>
+    public SparseCMatrix addToEachRow(SparseCVector b) {
+<span class="nc" id="L1483">        return null;</span>
     }
 
 
@@ -1398,8 +1493,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
     @Override
-    public Object stack(Matrix B) {
-<span class="nc" id="L1402">        return null;</span>
+    public Matrix stack(Matrix B) {
+<span class="nc" id="L1497">        return null;</span>
     }
 
 
@@ -1412,8 +1507,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
     @Override
-    public Object stack(SparseMatrix B) {
-<span class="nc" id="L1416">        return null;</span>
+    public SparseMatrix stack(SparseMatrix B) {
+<span class="nc" id="L1511">        return null;</span>
     }
 
 
@@ -1427,7 +1522,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public CMatrix stack(CMatrix B) {
-<span class="nc" id="L1430">        return null;</span>
+<span class="nc" id="L1525">        return null;</span>
     }
 
 
@@ -1440,8 +1535,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
     @Override
-    public Object stack(SparseCMatrix B) {
-<span class="nc" id="L1444">        return null;</span>
+    public SparseCMatrix stack(SparseCMatrix B) {
+<span class="nc" id="L1539">        return null;</span>
     }
 
 
@@ -1458,8 +1553,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(Matrix B, int axis) {
-<span class="nc" id="L1462">        return null;</span>
+    public Matrix stack(Matrix B, int axis) {
+<span class="nc" id="L1557">        return null;</span>
     }
 
 
@@ -1476,8 +1571,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(SparseMatrix B, int axis) {
-<span class="nc" id="L1480">        return null;</span>
+    public SparseMatrix stack(SparseMatrix B, int axis) {
+<span class="nc" id="L1575">        return null;</span>
     }
 
 
@@ -1495,7 +1590,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public CMatrix stack(CMatrix B, int axis) {
-<span class="nc" id="L1498">        return null;</span>
+<span class="nc" id="L1593">        return null;</span>
     }
 
 
@@ -1512,8 +1607,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(SparseCMatrix B, int axis) {
-<span class="nc" id="L1516">        return null;</span>
+    public SparseCMatrix stack(SparseCMatrix B, int axis) {
+<span class="nc" id="L1611">        return null;</span>
     }
 
 
@@ -1526,8 +1621,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     @Override
-    public Object augment(Matrix B) {
-<span class="nc" id="L1530">        return null;</span>
+    public Matrix augment(Matrix B) {
+<span class="nc" id="L1625">        return null;</span>
     }
 
 
@@ -1540,8 +1635,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     @Override
-    public Object augment(SparseMatrix B) {
-<span class="nc" id="L1544">        return null;</span>
+    public SparseMatrix augment(SparseMatrix B) {
+<span class="nc" id="L1639">        return null;</span>
     }
 
 
@@ -1555,7 +1650,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public CMatrix augment(CMatrix B) {
-<span class="nc" id="L1558">        return null;</span>
+<span class="nc" id="L1653">        return null;</span>
     }
 
 
@@ -1568,8 +1663,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     @Override
-    public Object augment(SparseCMatrix B) {
-<span class="nc" id="L1572">        return null;</span>
+    public SparseCMatrix augment(SparseCMatrix B) {
+<span class="nc" id="L1667">        return null;</span>
     }
 
 
@@ -1584,8 +1679,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      *                                  the vector b.
      */
     @Override
-    public Object stack(Vector b) {
-<span class="nc" id="L1588">        return null;</span>
+    public SparseMatrix stack(Vector b) {
+<span class="nc" id="L1683">        return null;</span>
     }
 
 
@@ -1600,8 +1695,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      *                                  the vector b.
      */
     @Override
-    public Object stack(SparseVector b) {
-<span class="nc" id="L1604">        return null;</span>
+    public SparseMatrix stack(SparseVector b) {
+<span class="nc" id="L1699">        return null;</span>
     }
 
 
@@ -1616,8 +1711,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      *                                  the vector b.
      */
     @Override
-    public Object stack(CVector b) {
-<span class="nc" id="L1620">        return null;</span>
+    public SparseCMatrix stack(CVector b) {
+<span class="nc" id="L1715">        return null;</span>
     }
 
 
@@ -1632,8 +1727,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      *                                  the vector b.
      */
     @Override
-    public Object stack(SparseCVector b) {
-<span class="nc" id="L1636">        return null;</span>
+    public SparseCMatrix stack(SparseCVector b) {
+<span class="nc" id="L1731">        return null;</span>
     }
 
 
@@ -1652,8 +1747,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(Vector b, int axis) {
-<span class="nc" id="L1656">        return null;</span>
+    public SparseMatrix stack(Vector b, int axis) {
+<span class="nc" id="L1751">        return null;</span>
     }
 
 
@@ -1672,8 +1767,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(SparseVector b, int axis) {
-<span class="nc" id="L1676">        return null;</span>
+    public SparseMatrix stack(SparseVector b, int axis) {
+<span class="nc" id="L1771">        return null;</span>
     }
 
 
@@ -1692,8 +1787,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(CVector b, int axis) {
-<span class="nc" id="L1696">        return null;</span>
+    public SparseCMatrix stack(CVector b, int axis) {
+<span class="nc" id="L1791">        return null;</span>
     }
 
 
@@ -1712,8 +1807,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(SparseCVector b, int axis) {
-<span class="nc" id="L1716">        return null;</span>
+    public SparseCMatrix stack(SparseCVector b, int axis) {
+<span class="nc" id="L1811">        return null;</span>
     }
 
 
@@ -1728,8 +1823,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public Object augment(Vector b) {
-<span class="nc" id="L1732">        return null;</span>
+    public SparseMatrix augment(Vector b) {
+<span class="nc" id="L1827">        return null;</span>
     }
 
 
@@ -1744,8 +1839,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public Object augment(SparseVector b) {
-<span class="nc" id="L1748">        return null;</span>
+    public SparseMatrix augment(SparseVector b) {
+<span class="nc" id="L1843">        return null;</span>
     }
 
 
@@ -1760,8 +1855,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public Object augment(CVector b) {
-<span class="nc" id="L1764">        return null;</span>
+    public SparseCMatrix augment(CVector b) {
+<span class="nc" id="L1859">        return null;</span>
     }
 
 
@@ -1776,8 +1871,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public Object augment(SparseCVector b) {
-<span class="nc" id="L1780">        return null;</span>
+    public SparseCMatrix augment(SparseCVector b) {
+<span class="nc" id="L1875">        return null;</span>
     }
 
 
@@ -1788,8 +1883,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The specified row of this matrix.
      */
     @Override
-    public Object getRow(int i) {
-<span class="nc" id="L1792">        return null;</span>
+    public SparseMatrix getRow(int i) {
+<span class="nc" id="L1887">        return null;</span>
     }
 
 
@@ -1800,8 +1895,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The specified column of this matrix.
      */
     @Override
-    public Object getCol(int j) {
-<span class="nc" id="L1804">        return null;</span>
+    public SparseMatrix getCol(int j) {
+<span class="nc" id="L1899">        return null;</span>
     }
 
 
@@ -1817,8 +1912,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException       If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
      */
     @Override
-    public Object getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
-<span class="nc" id="L1821">        return null;</span>
+    public SparseMatrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
+<span class="nc" id="L1916">        return null;</span>
     }
 
 
@@ -1832,8 +1927,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
      */
     @Override
-    public Object getColBelow(int rowStart, int j) {
-<span class="nc" id="L1836">        return null;</span>
+    public SparseMatrix getColBelow(int rowStart, int j) {
+<span class="nc" id="L1931">        return null;</span>
     }
 
 
@@ -1847,8 +1942,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
      */
     @Override
-    public Object getRowAfter(int colStart, int i) {
-<span class="nc" id="L1851">        return null;</span>
+    public SparseMatrix getRowAfter(int colStart, int i) {
+<span class="nc" id="L1946">        return null;</span>
     }
 
 
@@ -1860,8 +1955,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix is not square.
      */
     @Override
-    public Number trace() {
-<span class="nc" id="L1864">        return null;</span>
+    public Double trace() {
+<span class="nc" id="L1959">        return null;</span>
     }
 
 
@@ -1873,8 +1968,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix is not square.
      */
     @Override
-    public Number tr() {
-<span class="nc" id="L1877">        return null;</span>
+    public Double tr() {
+<span class="nc" id="L1972">        return null;</span>
     }
 
 
@@ -1885,7 +1980,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isSquare() {
-<span class="nc" id="L1888">        return false;</span>
+<span class="nc" id="L1983">        return false;</span>
     }
 
 
@@ -1896,7 +1991,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isVector() {
-<span class="nc" id="L1899">        return false;</span>
+<span class="nc" id="L1994">        return false;</span>
     }
 
 
@@ -1910,7 +2005,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public int vectorType() {
-<span class="nc" id="L1913">        return 0;</span>
+<span class="nc" id="L2008">        return 0;</span>
     }
 
 
@@ -1921,7 +2016,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isTri() {
-<span class="nc" id="L1924">        return false;</span>
+<span class="nc" id="L2019">        return false;</span>
     }
 
 
@@ -1932,7 +2027,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isTriL() {
-<span class="nc" id="L1935">        return false;</span>
+<span class="nc" id="L2030">        return false;</span>
     }
 
 
@@ -1943,7 +2038,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isTriU() {
-<span class="nc" id="L1946">        return false;</span>
+<span class="nc" id="L2041">        return false;</span>
     }
 
 
@@ -1954,7 +2049,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isDiag() {
-<span class="nc" id="L1957">        return false;</span>
+<span class="nc" id="L2052">        return false;</span>
     }
 
 
@@ -1965,7 +2060,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isFullRank() {
-<span class="nc" id="L1968">        return false;</span>
+<span class="nc" id="L2063">        return false;</span>
     }
 
 
@@ -1977,7 +2072,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isSingular() {
-<span class="nc" id="L1980">        return false;</span>
+<span class="nc" id="L2075">        return false;</span>
     }
 
 
@@ -1989,7 +2084,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isInvertible() {
-<span class="nc" id="L1992">        return false;</span>
+<span class="nc" id="L2087">        return false;</span>
     }
 
 
@@ -2002,7 +2097,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public double norm(double p, double q) {
-<span class="nc" id="L2005">        return 0;</span>
+<span class="nc" id="L2100">        return 0;</span>
     }
 
 
@@ -2014,7 +2109,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isDiagonalizable() {
-<span class="nc" id="L2017">        return false;</span>
+<span class="nc" id="L2112">        return false;</span>
     }
 
 
@@ -2025,7 +2120,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public double maxNorm() {
-<span class="nc" id="L2028">        return 0;</span>
+<span class="nc" id="L2123">        return 0;</span>
     }
 
 
@@ -2037,7 +2132,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public int matrixRank() {
-<span class="nc" id="L2040">        return 0;</span>
+<span class="nc" id="L2135">        return 0;</span>
     }
 
 
@@ -2048,7 +2143,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isSymmetric() {
-<span class="nc" id="L2051">        return false;</span>
+<span class="nc" id="L2146">        return false;</span>
     }
 
 
@@ -2059,7 +2154,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isAntiSymmetric() {
-<span class="nc" id="L2062">        return false;</span>
+<span class="nc" id="L2157">        return false;</span>
     }
 
 
@@ -2070,7 +2165,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isOrthogonal() {
-<span class="nc" id="L2073">        return false;</span>
+<span class="nc" id="L2168">        return false;</span>
     }
 
 
@@ -2082,7 +2177,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseCMatrix sqrtComplex() {
-<span class="nc" id="L2085">        return null;</span>
+<span class="nc" id="L2180">        return null;</span>
     }
 
 
@@ -2093,7 +2188,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseCMatrix toComplex() {
-<span class="nc" id="L2096">        return null;</span>
+<span class="nc" id="L2191">        return null;</span>
     }
 
 
@@ -2104,7 +2199,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isZeros() {
-<span class="nc" id="L2107">        return false;</span>
+<span class="nc" id="L2202">        return false;</span>
     }
 
 
@@ -2115,7 +2210,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public boolean isOnes() {
-<span class="nc" id="L2118">        return false;</span>
+<span class="nc" id="L2213">        return false;</span>
     }
 
 
@@ -2128,7 +2223,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix set(double value, int... indices) {
-<span class="nc" id="L2131">        return null;</span>
+<span class="nc" id="L2226">        return null;</span>
     }
 
 
@@ -2142,7 +2237,21 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix reshape(Shape shape) {
-<span class="nc" id="L2145">        return null;</span>
+<span class="nc" id="L2240">        return null;</span>
+    }
+
+
+    /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public SparseMatrix reshape(int... shape) {
+<span class="nc" id="L2254">        return null;</span>
     }
 
 
@@ -2153,7 +2262,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix flatten() {
-<span class="nc" id="L2156">        return null;</span>
+<span class="nc" id="L2265">        return null;</span>
     }
 
 
@@ -2166,7 +2275,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix add(SparseMatrix B) {
-<span class="nc" id="L2169">        return null;</span>
+<span class="nc" id="L2278">        return null;</span>
     }
 
 
@@ -2178,7 +2287,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public Matrix add(double a) {
-<span class="nc" id="L2181">        return null;</span>
+<span class="nc" id="L2290">        return null;</span>
     }
 
 
@@ -2190,7 +2299,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public CMatrix add(CNumber a) {
-<span class="nc" id="L2193">        return null;</span>
+<span class="nc" id="L2302">        return null;</span>
     }
 
 
@@ -2202,8 +2311,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public Matrix sub(SparseMatrix B) {
-<span class="nc" id="L2206">        return null;</span>
+    public SparseMatrix sub(SparseMatrix B) {
+<span class="nc" id="L2315">        return null;</span>
     }
 
 
@@ -2215,7 +2324,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public Matrix sub(double a) {
-<span class="nc" id="L2218">        return null;</span>
+<span class="nc" id="L2327">        return null;</span>
     }
 
 
@@ -2226,8 +2335,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of subtracting the specified value from each entry of this tensor.
      */
     @Override
-    public CMatrix sub(CNumber a) {
-<span class="nc" id="L2230">        return null;</span>
+    public SparseCMatrix sub(CNumber a) {
+<span class="nc" id="L2339">        return null;</span>
     }
 
 
@@ -2240,7 +2349,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     @Override
     public void addEq(SparseMatrix B) {
 
-<span class="nc" id="L2243">    }</span>
+<span class="nc" id="L2352">    }</span>
 
 
     /**
@@ -2251,7 +2360,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     @Override
     public void addEq(Double b) {
 
-<span class="nc" id="L2254">    }</span>
+<span class="nc" id="L2363">    }</span>
 
 
     /**
@@ -2263,7 +2372,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     @Override
     public void subEq(SparseMatrix B) {
 
-<span class="nc" id="L2266">    }</span>
+<span class="nc" id="L2375">    }</span>
 
 
     /**
@@ -2274,7 +2383,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
     @Override
     public void subEq(Double b) {
 
-<span class="nc" id="L2277">    }</span>
+<span class="nc" id="L2386">    }</span>
 
 
     /**
@@ -2285,7 +2394,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix mult(double factor) {
-<span class="nc" id="L2288">        return null;</span>
+<span class="nc" id="L2397">        return null;</span>
     }
 
 
@@ -2296,8 +2405,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public CMatrix mult(CNumber factor) {
-<span class="nc" id="L2300">        return null;</span>
+    public SparseCMatrix mult(CNumber factor) {
+<span class="nc" id="L2409">        return null;</span>
     }
 
 
@@ -2310,7 +2419,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix div(double divisor) {
-<span class="nc" id="L2313">        return null;</span>
+<span class="nc" id="L2422">        return null;</span>
     }
 
 
@@ -2322,8 +2431,8 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CMatrix div(CNumber divisor) {
-<span class="nc" id="L2326">        return null;</span>
+    public SparseCMatrix div(CNumber divisor) {
+<span class="nc" id="L2435">        return null;</span>
     }
 
 
@@ -2334,7 +2443,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public Double sum() {
-<span class="nc" id="L2337">        return null;</span>
+<span class="nc" id="L2446">        return null;</span>
     }
 
 
@@ -2346,7 +2455,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix sqrt() {
-<span class="nc" id="L2349">        return null;</span>
+<span class="nc" id="L2458">        return null;</span>
     }
 
 
@@ -2358,7 +2467,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix abs() {
-<span class="nc" id="L2361">        return null;</span>
+<span class="nc" id="L2470">        return null;</span>
     }
 
 
@@ -2369,7 +2478,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix transpose() {
-<span class="nc" id="L2372">        return null;</span>
+<span class="nc" id="L2481">        return null;</span>
     }
 
 
@@ -2380,7 +2489,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix T() {
-<span class="nc" id="L2383">        return null;</span>
+<span class="nc" id="L2492">        return null;</span>
     }
 
 
@@ -2392,7 +2501,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix recip() {
-<span class="nc" id="L2395">        return null;</span>
+<span class="nc" id="L2504">        return null;</span>
     }
 
 
@@ -2405,7 +2514,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public Double get(int... indices) {
-<span class="nc" id="L2408">        return null;</span>
+<span class="nc" id="L2517">        return null;</span>
     }
 
 
@@ -2416,7 +2525,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix copy() {
-<span class="nc" id="L2419">        return null;</span>
+<span class="nc" id="L2528">        return null;</span>
     }
 
 
@@ -2429,7 +2538,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix elemMult(SparseMatrix B) {
-<span class="nc" id="L2432">        return null;</span>
+<span class="nc" id="L2541">        return null;</span>
     }
 
 
@@ -2442,7 +2551,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public SparseMatrix elemDiv(SparseMatrix B) {
-<span class="nc" id="L2445">        return null;</span>
+<span class="nc" id="L2554">        return null;</span>
     }
     
 
@@ -2454,7 +2563,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L2457">        return new int[0];</span>
+<span class="nc" id="L2566">        return new int[0];</span>
     }
 
 
@@ -2466,7 +2575,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L2469">        return new int[0];</span>
+<span class="nc" id="L2578">        return new int[0];</span>
     }
 
 
@@ -2477,7 +2586,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public double norm() {
-<span class="nc" id="L2480">        return 0;</span>
+<span class="nc" id="L2589">        return 0;</span>
     }
 
 
@@ -2491,7 +2600,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L2494">        return 0;</span>
+<span class="nc" id="L2603">        return 0;</span>
     }
 
 
@@ -2502,7 +2611,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L2505">        return 0;</span>
+<span class="nc" id="L2614">        return 0;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

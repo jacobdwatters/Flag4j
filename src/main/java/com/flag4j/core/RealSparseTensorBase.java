@@ -25,30 +25,25 @@
 package com.flag4j.core;
 
 import com.flag4j.Shape;
-import com.flag4j.SparseCTensor;
-import com.flag4j.SparseTensor;
+import com.flag4j.operations.common.real.AggregateReal;
+import com.flag4j.operations.common.real.RealProperties;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.SparseDataWrapper;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.RoundingMode;
 
 /**
  * Base class for all sparse tensor.
- * @param <T> Type of the entries of the sparse tensor.
+ * @param <T> Type of this tensor.
+ * @param <U> Dense Tensor type.
+ * @param <W> Complex Tensor type.
+ * @param <Z> Dense complex tensor type.
  */
-public abstract class RealSparseTensorBase extends RealTensorBase<SparseTensor, SparseCTensor> {
-
-    /**
-     * Indices for non-zero entries of this tensor. Will have shape (rank-by-nonZeroEntries)
-     */
-    public final int[][] indices;
-    /**
-     * The number of non-zero entries in this sparse tensor.
-     */
-    private final int nonZeroEntries;
-
+public abstract class RealSparseTensorBase<T, U, W, Z>
+        extends SparseTensorBase<T, U, W, Z, T, double[], Double>
+        implements RealTensorMixin<T, W> {
 
     /**
      * Creates a sparse tensor with specified shape.
@@ -62,51 +57,77 @@ public abstract class RealSparseTensorBase extends RealTensorBase<SparseTensor, 
      * tensor.
      */
     public RealSparseTensorBase(Shape shape, int nonZeroEntries, double[] entries, int[][] indices) {
-        super(shape, entries);
+        super(shape, nonZeroEntries, entries, indices);
 
         if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) < 0) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));
         }
         ParameterChecks.assertArrayLengthsEq(nonZeroEntries, indices.length);
-        if (indices.length > 0) {
-            ParameterChecks.assertArrayLengthsEq(super.getRank(), indices[0].length);
-        }
-
-        this.nonZeroEntries = nonZeroEntries;
-        this.indices = indices;
     }
 
 
+     /**
+      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
+      */
+     @Override public void sparseSort() {
+         SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);
+     }
+
+
     /**
-     * Gets the number of non-zero entries in this sparse tensor.
-     * @return The number of non-zero entries in this sparse tensor.
+     * Gets the number of non-zero entries stored in this sparse tensor.
+     * @return The number of non-zero entries stored in this tensor.
      */
+    @Override
     public int nonZeroEntries() {
-        return nonZeroEntries;
+        return entries.length;
     }
 
 
-    /**
-     * Gets the sparsity of this tensor as a decimal percentage.
-     * @return The sparsity of this tensor.
-     */
-    public double sparsity() {
-        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));
-        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);
-
-        return sparsity.doubleValue();
+     @Override
+     public double min() {
+        return AggregateReal.min(entries);
     }
 
 
-    /**
-     * Gets the density of this tensor as a decimal percentage.
-     * @return The density of this tensor.
-     */
-    public double density() {
-        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(
-                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP
-        );
+     @Override
+     public double max() {
+        return AggregateReal.max(entries);
+    }
 
-        return density.doubleValue();
+
+     @Override
+     public double minAbs() {
+        return AggregateReal.minAbs(entries);
+    }
+
+
+     @Override
+     public double maxAbs() {
+        return AggregateReal.maxAbs(entries);
+    }
+
+
+     @Override
+     public double infNorm() {
+        return AggregateReal.maxAbs(entries);
+    }
+
+
+     @Override
+     public boolean isPos() {
+        return RealProperties.isPos(entries);
+    }
+
+
+     @Override
+     public boolean isNeg() {
+        return RealProperties.isNeg(entries);
+    }
+
+
+     @Override
+     public boolean isZeros() {
+        return ArrayUtils.isZeros(entries);
     }
 }

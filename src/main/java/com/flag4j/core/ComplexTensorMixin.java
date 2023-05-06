@@ -24,6 +24,8 @@
 
 package com.flag4j.core;
 
+import com.flag4j.complex_numbers.CNumber;
+
 /**
  * This interface specifies methods which any complex tensor should implement.
  * @param <T> Tensor type.
@@ -73,4 +75,15 @@ public interface ComplexTensorMixin<T, Y> {
      * @return The complex transpose of this tensor.
      */
     T H();
+
+
+    /**
+     * Sets an index of this tensor to a specified value.
+     * @param value Value to set.
+     * @param indices The indices of this matrix for which to set the value.
+     * @return A reference to this tensor.
+     * @throws IllegalArgumentException If the number of indices is not equal to the rank of this tensor.
+     * @throws IndexOutOfBoundsException If any of the indices are not within this tensor.
+     */
+    T set(CNumber value, int... indices);
 }

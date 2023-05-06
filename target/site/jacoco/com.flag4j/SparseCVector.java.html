@@ -25,13 +25,27 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.ComplexSparseVectorBase;
+import com.flag4j.core.ComplexSparseTensorBase;
+import com.flag4j.core.VectorMixin;
+import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.util.ArrayUtils;
 
 /**
  * Complex sparse vector.
  */
-public class SparseCVector extends ComplexSparseVectorBase {
+public class SparseCVector
+        extends ComplexSparseTensorBase&lt;SparseCVector, CVector, SparseVector&gt;
+        implements VectorMixin&lt;SparseCVector, CVector, SparseCVector, SparseCVector, CNumber, SparseCMatrix, CMatrix, SparseCMatrix&gt; {
+
+
+    /**
+     * The size of this vector. That is, the number of entries in this vector.
+     */
+    public final int size;
+    /**
+     * Indices of non-zero entries in this sparse vector.
+     */
+    public final int[] indices;
 
 
     /**
@@ -39,8 +53,10 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      */
     public SparseCVector(int size) {
-<span class="fc" id="L42">        super(size, 0, new CNumber[0], new int[0]);</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L56">        super(new Shape(size), 0, new CNumber[0], new int[0][0]);</span>
+<span class="fc" id="L57">        this.size = size;</span>
+<span class="fc" id="L58">        this.indices = new int[0];</span>
+<span class="fc" id="L59">    }</span>
 
 
     /**
@@ -52,9 +68,15 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, int[] nonZeroEntries, int[] indices) {
-<span class="fc" id="L55">        super(size, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</span>
-<span class="fc" id="L56">        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);</span>
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L71">        super(new Shape(size),</span>
+                nonZeroEntries.length,
+                new CNumber[nonZeroEntries.length],
+<span class="fc" id="L74">                RealDenseTranspose.blockedIntMatrix(new int[][]{indices})</span>
+        );
+<span class="fc" id="L76">        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);</span>
+<span class="fc" id="L77">        this.size = size;</span>
+<span class="fc" id="L78">        this.indices = indices;</span>
+<span class="fc" id="L79">    }</span>
 
 
     /**
@@ -66,9 +88,15 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, double[] nonZeroEntries, int[] indices) {
-<span class="fc" id="L69">        super(size, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);</span>
-<span class="fc" id="L70">        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);</span>
-<span class="fc" id="L71">    }</span>
+<span class="fc" id="L91">        super(new Shape(size),</span>
+                nonZeroEntries.length,
+                new CNumber[nonZeroEntries.length],
+<span class="fc" id="L94">                RealDenseTranspose.blockedIntMatrix(new int[][]{indices}</span>
+        ));
+<span class="fc" id="L96">        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);</span>
+<span class="fc" id="L97">        this.size = size;</span>
+<span class="fc" id="L98">        this.indices = indices;</span>
+<span class="fc" id="L99">    }</span>
 
 
     /**
@@ -80,8 +108,31 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseCVector(int size, CNumber[] nonZeroEntries, int[] indices) {
-<span class="fc" id="L83">        super(size, nonZeroEntries.length, nonZeroEntries, indices);</span>
-<span class="fc" id="L84">    }</span>
+<span class="fc" id="L111">        super(new Shape(size),</span>
+                nonZeroEntries.length,
+                nonZeroEntries,
+<span class="fc" id="L114">                RealDenseTranspose.blockedIntMatrix(new int[][]{indices})</span>
+        );
+<span class="fc" id="L116">        this.size = size;</span>
+<span class="fc" id="L117">        this.indices = indices;</span>
+<span class="fc" id="L118">    }</span>
+
+
+    /**
+     * Constructs a complex sparse vector whose size, orientation, non-zero entries, and indices are specified
+     * by another complex sparse vector.
+     * @param a Vector to copy.
+     */
+    public SparseCVector(SparseCVector a) {
+<span class="fc" id="L127">        super(a.shape.copy(),</span>
+<span class="fc" id="L128">                a.nonZeroEntries(),</span>
+<span class="fc" id="L129">                new CNumber[a.nonZeroEntries()],</span>
+<span class="fc" id="L130">                RealDenseTranspose.blockedIntMatrix(new int[][]{a.indices})</span>
+        );
+<span class="fc" id="L132">        ArrayUtils.copy2CNumber(a.entries, super.entries);</span>
+<span class="fc" id="L133">        this.size = a.size;</span>
+<span class="fc" id="L134">        this.indices = a.indices.clone();</span>
+<span class="fc" id="L135">    }</span>
 
 
 //    /**
@@ -263,16 +314,6 @@ public class SparseCVector extends ComplexSparseVectorBase {
 
 
     /**
-     * Constructs a complex sparse vector whose size, orientation, non-zero entries, and indices are specified
-     * by another complex sparse vector.
-     * @param a Vector to copy.
-     */
-    public SparseCVector(SparseCVector a) {
-<span class="fc" id="L271">        super(a.size(), a.nonZeroEntries(), new CNumber[a.nonZeroEntries()], a.indices.clone());</span>
-<span class="fc" id="L272">        ArrayUtils.copy2CNumber(a.entries, super.entries);</span>
-<span class="fc" id="L273">    }</span>
-
-    /**
      * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
      * and takes the complex conjugate of the elements along these axes. Same as {@link #H}.
      *
@@ -280,7 +321,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector hermTranspose() {
-<span class="nc" id="L283">        return null;</span>
+<span class="nc" id="L324">        return null;</span>
     }
 
 
@@ -292,27 +333,42 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector H() {
-<span class="nc" id="L295">        return null;</span>
+<span class="nc" id="L336">        return null;</span>
+    }
+
+
+    /**
+     * Sets an index of this tensor to a specified value.
+     *
+     * @param value   Value to set.
+     * @param indices The indices of this matrix for which to set the value.
+     * @return A reference to this tensor.
+     * @throws IllegalArgumentException  If the number of indices is not equal to the rank of this tensor.
+     * @throws IndexOutOfBoundsException If any of the indices are not within this tensor.
+     */
+    @Override
+    public SparseCVector set(CNumber value, int... indices) {
+<span class="nc" id="L351">        return null;</span>
     }
 
     @Override
     public boolean isReal() {
-<span class="nc" id="L300">        return false;</span>
+<span class="nc" id="L356">        return false;</span>
     }
 
     @Override
     public boolean isComplex() {
-<span class="nc" id="L305">        return false;</span>
+<span class="nc" id="L361">        return false;</span>
     }
 
     @Override
     public SparseCVector conj() {
-<span class="nc" id="L310">        return null;</span>
+<span class="nc" id="L366">        return null;</span>
     }
 
     @Override
     public SparseVector toReal() {
-<span class="nc" id="L315">        return null;</span>
+<span class="nc" id="L371">        return null;</span>
     }
 
     /**
@@ -322,7 +378,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public boolean isZeros() {
-<span class="nc" id="L325">        return false;</span>
+<span class="nc" id="L381">        return false;</span>
     }
 
     /**
@@ -332,7 +388,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public boolean isOnes() {
-<span class="nc" id="L335">        return false;</span>
+<span class="nc" id="L391">        return false;</span>
     }
 
     /**
@@ -344,7 +400,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector set(double value, int... indices) {
-<span class="nc" id="L347">        return null;</span>
+<span class="nc" id="L403">        return null;</span>
     }
 
     /**
@@ -357,7 +413,21 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector reshape(Shape shape) {
-<span class="nc" id="L360">        return null;</span>
+<span class="nc" id="L416">        return null;</span>
+    }
+
+    
+    /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public SparseCVector reshape(int... shape) {
+<span class="nc" id="L430">        return null;</span>
     }
 
     /**
@@ -367,7 +437,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector flatten() {
-<span class="nc" id="L370">        return null;</span>
+<span class="nc" id="L440">        return null;</span>
     }
 
     /**
@@ -378,7 +448,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CVector join(Vector b) {
-<span class="nc" id="L381">        return null;</span>
+<span class="nc" id="L451">        return null;</span>
     }
 
     /**
@@ -389,7 +459,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CVector join(CVector b) {
-<span class="nc" id="L392">        return null;</span>
+<span class="nc" id="L462">        return null;</span>
     }
 
     /**
@@ -400,7 +470,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector join(SparseVector b) {
-<span class="nc" id="L403">        return null;</span>
+<span class="nc" id="L473">        return null;</span>
     }
 
     /**
@@ -411,7 +481,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector join(SparseCVector b) {
-<span class="nc" id="L414">        return null;</span>
+<span class="nc" id="L484">        return null;</span>
     }
 
     /**
@@ -425,7 +495,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCMatrix stack(Vector b) {
-<span class="nc" id="L428">        return null;</span>
+<span class="nc" id="L498">        return null;</span>
     }
 
     /**
@@ -439,7 +509,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCMatrix stack(SparseVector b) {
-<span class="nc" id="L442">        return null;</span>
+<span class="nc" id="L512">        return null;</span>
     }
 
     /**
@@ -452,8 +522,8 @@ public class SparseCVector extends ComplexSparseVectorBase {
      *                                  the vector {@code b}.
      */
     @Override
-    public CMatrix stack(CVector b) {
-<span class="nc" id="L456">        return null;</span>
+    public SparseCMatrix stack(CVector b) {
+<span class="nc" id="L526">        return null;</span>
     }
 
     /**
@@ -466,8 +536,8 @@ public class SparseCVector extends ComplexSparseVectorBase {
      *                                  the vector {@code b}.
      */
     @Override
-    public CMatrix stack(SparseCVector b) {
-<span class="nc" id="L470">        return null;</span>
+    public SparseCMatrix stack(SparseCVector b) {
+<span class="nc" id="L540">        return null;</span>
     }
 
     /**
@@ -495,7 +565,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCMatrix stack(Vector b, int axis) {
-<span class="nc" id="L498">        return null;</span>
+<span class="nc" id="L568">        return null;</span>
     }
 
     /**
@@ -523,7 +593,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCMatrix stack(SparseVector b, int axis) {
-<span class="nc" id="L526">        return null;</span>
+<span class="nc" id="L596">        return null;</span>
     }
 
     /**
@@ -550,8 +620,8 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public CMatrix stack(CVector b, int axis) {
-<span class="nc" id="L554">        return null;</span>
+    public SparseCMatrix stack(CVector b, int axis) {
+<span class="nc" id="L624">        return null;</span>
     }
 
     /**
@@ -578,8 +648,8 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public CMatrix stack(SparseCVector b, int axis) {
-<span class="nc" id="L582">        return null;</span>
+    public SparseCMatrix stack(SparseCVector b, int axis) {
+<span class="nc" id="L652">        return null;</span>
     }
 
     /**
@@ -591,7 +661,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CVector add(Vector B) {
-<span class="nc" id="L594">        return null;</span>
+<span class="nc" id="L664">        return null;</span>
     }
 
     /**
@@ -603,7 +673,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector add(SparseVector B) {
-<span class="nc" id="L606">        return null;</span>
+<span class="nc" id="L676">        return null;</span>
     }
 
     /**
@@ -615,7 +685,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CVector add(CVector B) {
-<span class="nc" id="L618">        return null;</span>
+<span class="nc" id="L688">        return null;</span>
     }
 
     /**
@@ -627,7 +697,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector add(SparseCVector B) {
-<span class="nc" id="L630">        return null;</span>
+<span class="nc" id="L700">        return null;</span>
     }
 
     /**
@@ -639,7 +709,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CVector sub(Vector B) {
-<span class="nc" id="L642">        return null;</span>
+<span class="nc" id="L712">        return null;</span>
     }
 
     /**
@@ -650,8 +720,8 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public CVector sub(SparseVector B) {
-<span class="nc" id="L654">        return null;</span>
+    public SparseCVector sub(SparseVector B) {
+<span class="nc" id="L724">        return null;</span>
     }
 
     /**
@@ -663,7 +733,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector sub(CVector B) {
-<span class="nc" id="L666">        return null;</span>
+<span class="nc" id="L736">        return null;</span>
     }
 
     /**
@@ -674,7 +744,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CVector add(double a) {
-<span class="nc" id="L677">        return null;</span>
+<span class="nc" id="L747">        return null;</span>
     }
 
     /**
@@ -685,7 +755,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CVector add(CNumber a) {
-<span class="nc" id="L688">        return null;</span>
+<span class="nc" id="L758">        return null;</span>
     }
 
     /**
@@ -696,8 +766,8 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public CVector sub(SparseCVector B) {
-<span class="nc" id="L700">        return null;</span>
+    public SparseCVector sub(SparseCVector B) {
+<span class="nc" id="L770">        return null;</span>
     }
 
     /**
@@ -710,7 +780,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     @Override
     public void addEq(SparseVector B) {
 
-<span class="nc" id="L713">    }</span>
+<span class="nc" id="L783">    }</span>
 
     /**
      * Computes the element-wise addition between this vector and the specified vector and stores the result
@@ -722,7 +792,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     @Override
     public void addEq(Vector B) {
 
-<span class="nc" id="L725">    }</span>
+<span class="nc" id="L795">    }</span>
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector and stores the result
@@ -734,7 +804,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     @Override
     public void subEq(Vector B) {
 
-<span class="nc" id="L737">    }</span>
+<span class="nc" id="L807">    }</span>
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector and stores the result
@@ -746,7 +816,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     @Override
     public void subEq(SparseVector B) {
 
-<span class="nc" id="L749">    }</span>
+<span class="nc" id="L819">    }</span>
 
     /**
      * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
@@ -757,7 +827,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector elemMult(Vector B) {
-<span class="nc" id="L760">        return null;</span>
+<span class="nc" id="L830">        return null;</span>
     }
 
     /**
@@ -769,7 +839,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector elemMult(SparseVector B) {
-<span class="nc" id="L772">        return null;</span>
+<span class="nc" id="L842">        return null;</span>
     }
 
     /**
@@ -781,7 +851,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector elemMult(CVector B) {
-<span class="nc" id="L784">        return null;</span>
+<span class="nc" id="L854">        return null;</span>
     }
 
     /**
@@ -792,7 +862,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CVector sub(double a) {
-<span class="nc" id="L795">        return null;</span>
+<span class="nc" id="L865">        return null;</span>
     }
 
     /**
@@ -803,7 +873,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector sub(CNumber a) {
-<span class="nc" id="L806">        return null;</span>
+<span class="nc" id="L876">        return null;</span>
     }
 
     /**
@@ -815,7 +885,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     @Override
     public void addEq(SparseCVector B) {
 
-<span class="nc" id="L818">    }</span>
+<span class="nc" id="L888">    }</span>
 
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
@@ -825,7 +895,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     @Override
     public void addEq(CNumber b) {
 
-<span class="nc" id="L828">    }</span>
+<span class="nc" id="L898">    }</span>
 
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
@@ -835,7 +905,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     @Override
     public void addEq(Double b) {
 
-<span class="nc" id="L838">    }</span>
+<span class="nc" id="L908">    }</span>
 
     /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
@@ -846,7 +916,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     @Override
     public void subEq(SparseCVector B) {
 
-<span class="nc" id="L849">    }</span>
+<span class="nc" id="L919">    }</span>
 
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
@@ -856,7 +926,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     @Override
     public void subEq(CNumber b) {
 
-<span class="nc" id="L859">    }</span>
+<span class="nc" id="L929">    }</span>
 
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
@@ -866,7 +936,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
     @Override
     public void subEq(Double b) {
 
-<span class="nc" id="L869">    }</span>
+<span class="nc" id="L939">    }</span>
 
     /**
      * Computes scalar multiplication of a tensor.
@@ -876,7 +946,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector mult(double factor) {
-<span class="nc" id="L879">        return null;</span>
+<span class="nc" id="L949">        return null;</span>
     }
 
     /**
@@ -887,7 +957,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector mult(CNumber factor) {
-<span class="nc" id="L890">        return null;</span>
+<span class="nc" id="L960">        return null;</span>
     }
 
     /**
@@ -899,7 +969,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector div(double divisor) {
-<span class="nc" id="L902">        return null;</span>
+<span class="nc" id="L972">        return null;</span>
     }
 
     /**
@@ -911,7 +981,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector div(CNumber divisor) {
-<span class="nc" id="L914">        return null;</span>
+<span class="nc" id="L984">        return null;</span>
     }
 
     /**
@@ -921,7 +991,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CNumber sum() {
-<span class="nc" id="L924">        return null;</span>
+<span class="nc" id="L994">        return null;</span>
     }
 
     /**
@@ -932,7 +1002,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector sqrt() {
-<span class="nc" id="L935">        return null;</span>
+<span class="nc" id="L1005">        return null;</span>
     }
 
     /**
@@ -942,8 +1012,8 @@ public class SparseCVector extends ComplexSparseVectorBase {
      * @return The result of applying an element-wise absolute value/magnitude to this tensor.
      */
     @Override
-    public SparseCVector abs() {
-<span class="nc" id="L946">        return null;</span>
+    public SparseVector abs() {
+<span class="nc" id="L1016">        return null;</span>
     }
 
     /**
@@ -953,7 +1023,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector transpose() {
-<span class="nc" id="L956">        return null;</span>
+<span class="nc" id="L1026">        return null;</span>
     }
 
     /**
@@ -963,7 +1033,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector T() {
-<span class="nc" id="L966">        return null;</span>
+<span class="nc" id="L1036">        return null;</span>
     }
 
     /**
@@ -974,7 +1044,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector recip() {
-<span class="nc" id="L977">        return null;</span>
+<span class="nc" id="L1047">        return null;</span>
     }
 
     /**
@@ -986,7 +1056,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CNumber get(int... indices) {
-<span class="nc" id="L989">        return null;</span>
+<span class="nc" id="L1059">        return null;</span>
     }
 
     /**
@@ -996,7 +1066,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector copy() {
-<span class="nc" id="L999">        return null;</span>
+<span class="nc" id="L1069">        return null;</span>
     }
 
     /**
@@ -1008,7 +1078,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector elemMult(SparseCVector B) {
-<span class="nc" id="L1011">        return null;</span>
+<span class="nc" id="L1081">        return null;</span>
     }
 
     /**
@@ -1020,7 +1090,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector elemDiv(Vector B) {
-<span class="nc" id="L1023">        return null;</span>
+<span class="nc" id="L1093">        return null;</span>
     }
 
     /**
@@ -1032,7 +1102,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector elemDiv(CVector B) {
-<span class="nc" id="L1035">        return null;</span>
+<span class="nc" id="L1105">        return null;</span>
     }
 
     /**
@@ -1044,7 +1114,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CNumber inner(Vector b) {
-<span class="nc" id="L1047">        return null;</span>
+<span class="nc" id="L1117">        return null;</span>
     }
 
     /**
@@ -1056,7 +1126,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CNumber inner(SparseVector b) {
-<span class="nc" id="L1059">        return null;</span>
+<span class="nc" id="L1129">        return null;</span>
     }
 
     /**
@@ -1066,7 +1136,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector normalize() {
-<span class="nc" id="L1069">        return null;</span>
+<span class="nc" id="L1139">        return null;</span>
     }
 
     /**
@@ -1078,7 +1148,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CNumber inner(CVector b) {
-<span class="nc" id="L1081">        return null;</span>
+<span class="nc" id="L1151">        return null;</span>
     }
 
     /**
@@ -1090,7 +1160,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CNumber inner(SparseCVector b) {
-<span class="nc" id="L1093">        return null;</span>
+<span class="nc" id="L1163">        return null;</span>
     }
 
     /**
@@ -1102,7 +1172,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CVector cross(Vector b) {
-<span class="nc" id="L1105">        return null;</span>
+<span class="nc" id="L1175">        return null;</span>
     }
 
     /**
@@ -1114,7 +1184,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CVector cross(CVector b) {
-<span class="nc" id="L1117">        return null;</span>
+<span class="nc" id="L1187">        return null;</span>
     }
 
     /**
@@ -1126,7 +1196,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CMatrix outer(Vector b) {
-<span class="nc" id="L1129">        return null;</span>
+<span class="nc" id="L1199">        return null;</span>
     }
 
     /**
@@ -1138,7 +1208,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CMatrix outer(SparseVector b) {
-<span class="nc" id="L1141">        return null;</span>
+<span class="nc" id="L1211">        return null;</span>
     }
 
     /**
@@ -1150,7 +1220,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CMatrix outer(CVector b) {
-<span class="nc" id="L1153">        return null;</span>
+<span class="nc" id="L1223">        return null;</span>
     }
 
     /**
@@ -1162,7 +1232,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public CMatrix outer(SparseCVector b) {
-<span class="nc" id="L1165">        return null;</span>
+<span class="nc" id="L1235">        return null;</span>
     }
 
 
@@ -1174,7 +1244,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public boolean isParallel(Vector b) {
-<span class="nc" id="L1177">        return false;</span>
+<span class="nc" id="L1247">        return false;</span>
     }
 
 
@@ -1186,7 +1256,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public boolean isPerp(Vector b) {
-<span class="nc" id="L1189">        return false;</span>
+<span class="nc" id="L1259">        return false;</span>
     }
 
 
@@ -1197,7 +1267,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCMatrix toMatrix() {
-<span class="nc" id="L1200">        return null;</span>
+<span class="nc" id="L1270">        return null;</span>
     }
 
 
@@ -1211,7 +1281,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCMatrix toMatrix(boolean columVector) {
-<span class="nc" id="L1214">        return null;</span>
+<span class="nc" id="L1284">        return null;</span>
     }
 
 
@@ -1224,7 +1294,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCVector elemDiv(SparseCVector B) {
-<span class="nc" id="L1227">        return null;</span>
+<span class="nc" id="L1297">        return null;</span>
     }
 
 
@@ -1235,7 +1305,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public double min() {
-<span class="nc" id="L1238">        return 0;</span>
+<span class="nc" id="L1308">        return 0;</span>
     }
 
 
@@ -1246,7 +1316,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public double max() {
-<span class="nc" id="L1249">        return 0;</span>
+<span class="nc" id="L1319">        return 0;</span>
     }
 
 
@@ -1258,7 +1328,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public double minAbs() {
-<span class="nc" id="L1261">        return 0;</span>
+<span class="nc" id="L1331">        return 0;</span>
     }
 
 
@@ -1270,7 +1340,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public double maxAbs() {
-<span class="nc" id="L1273">        return 0;</span>
+<span class="nc" id="L1343">        return 0;</span>
     }
 
 
@@ -1282,7 +1352,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L1285">        return new int[0];</span>
+<span class="nc" id="L1355">        return new int[0];</span>
     }
 
 
@@ -1294,7 +1364,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L1297">        return new int[0];</span>
+<span class="nc" id="L1367">        return new int[0];</span>
     }
 
 
@@ -1305,7 +1375,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public double norm() {
-<span class="nc" id="L1308">        return 0;</span>
+<span class="nc" id="L1378">        return 0;</span>
     }
 
 
@@ -1319,7 +1389,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L1322">        return 0;</span>
+<span class="nc" id="L1392">        return 0;</span>
     }
 
 
@@ -1330,7 +1400,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L1333">        return 0;</span>
+<span class="nc" id="L1403">        return 0;</span>
     }
 
 
@@ -1343,7 +1413,7 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public SparseCMatrix extend(int n, int axis) {
-<span class="nc" id="L1346">        return null;</span>
+<span class="nc" id="L1416">        return null;</span>
     }
 
 
@@ -1354,7 +1424,39 @@ public class SparseCVector extends ComplexSparseVectorBase {
      */
     @Override
     public int length() {
-<span class="nc" id="L1357">        return 0;</span>
+<span class="nc" id="L1427">        return 0;</span>
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is not positive or larger than &lt;code&gt;this.{@link #getRank()}-1&lt;/code&gt;.
+     */
+    @Override
+    public SparseCVector flatten(int axis) {
+<span class="nc" id="L1439">        return null;</span>
+    }
+
+
+    /**
+     * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
+     */
+    @Override
+    public void sparseSort() {
+
+<span class="nc" id="L1449">    }</span>
+
+
+    /**
+     * gets the size of this vector.
+     *
+     * @return The number of total entries (including zeros) of this vector.
+     */
+    @Override
+    public int size() {
+<span class="fc" id="L1459">        return this.size;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

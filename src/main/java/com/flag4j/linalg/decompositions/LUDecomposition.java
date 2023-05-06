@@ -25,7 +25,6 @@
 package com.flag4j.linalg.decompositions;
 
 import com.flag4j.Matrix;
-import com.flag4j.core.MatrixBase;
 
 // TODO: Implement LDU decomposition.
 
@@ -38,7 +37,7 @@ import com.flag4j.core.MatrixBase;
  * <p>If full pivoting is used, the decomposition will yield an additional permutation matrix {@code Q} such that
  *  {@code PAQ=LU}.</p>
  */
-public abstract class LUDecomposition<T extends MatrixBase<?, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class LUDecomposition<T> implements Decomposition<T> {
     /**
      * Flag indicating what pivoting to use.
      */

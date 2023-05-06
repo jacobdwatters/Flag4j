@@ -50,6 +50,11 @@ public abstract class TensorBase<T, U, W, Z, Y, D, X extends Number> implements 
         TensorOperationsMixin<T, U, W, Z, Y, X> {
 
     /**
+     * Default value for rounding to zero.
+     */
+    protected static final double DEFAULT_ROUND_TO_ZERO_THRESHOLD = 1e-12;
+
+    /**
      * Entry data for this tensor.
      */
     public final D entries;

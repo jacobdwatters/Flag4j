@@ -35,7 +35,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <T> Matrix type.
  * @param <Y> Real matrix type.
  */
-public interface ComplexMatrixMixin<T, Y> extends ComplexTensorMixin<T, Y> {
+public interface ComplexMatrixMixin<T, Y> {
 
 
     /**
@@ -113,17 +113,6 @@ public interface ComplexMatrixMixin<T, Y> extends ComplexTensorMixin<T, Y> {
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
     T setValues(CNumber[][] values);
-
-
-    /**
-     * Sets an index of this matrix to a specified value.
-     * @param value Value to set.
-     * @param indices The indices of this matrix for which to set the value.
-     * @return A reference to this matrix.
-     * @throws IllegalArgumentException If the number of indices is not 2.
-     * @throws IndexOutOfBoundsException If any of the indices are not within this matrix.
-     */
-    T set(CNumber value, int... indices);
 
 
     /**
@@ -223,4 +212,20 @@ public interface ComplexMatrixMixin<T, Y> extends ComplexTensorMixin<T, Y> {
      *                                   fit completely within this matrix.
      */
     T setSliceCopy(SparseCMatrix values, int rowStart, int colStart);
+
+
+    /**
+     * Adds a complex sparse matrix to this matrix and stores the result in this matrix.
+     *
+     * @param B Complex sparse matrix to add to this matrix,
+     */
+    void addEq(SparseCMatrix B);
+
+
+    /**
+     * Subtracts a complex sparse matrix from this matrix and stores the result in this matrix.
+     *
+     * @param B Complex sparse matrix to subtract from this matrix,
+     */
+    void subEq(SparseCMatrix B);
 }

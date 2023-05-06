@@ -30,10 +30,8 @@ import com.flag4j.SparseTensor;
 
 
 /**
- * This interface contains several methods which should be implemented by any class extending {@link TensorBase} but
- * does <b>not</b> extend either {@link MatrixBase} or {@link VectorBase}. This is either
- * because an equivalent method with a different name is already defined for {@link MatrixBase matrices} and/or
- * {@link VectorBase vectors} or the methods do not apply to rank 1 and/or 2 tensors.
+ * This interface contains several methods which should be implemented by all tensors which are <b>NOT</b> a matrix or
+ * vector.
  *
  * @param <T> Tensor type.
  * @param <U> Dense tensor type.
@@ -191,7 +189,7 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    CTensor sub(SparseCTensor B);
+    W sub(SparseCTensor B);
 
 
     /**
@@ -246,14 +244,4 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     CTensor elemDiv(CTensor B);
-
-
-    /**
-     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
-     * in the reshaped tensor.
-     * @param shape Shape of the new tensor.
-     * @return A tensor which is equivalent to this tensor but with the specified shape.
-     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
-     */
-    T reshape(int... shape);
 }

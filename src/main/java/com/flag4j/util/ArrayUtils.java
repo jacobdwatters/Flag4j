@@ -185,7 +185,26 @@ public final class ArrayUtils {
 
         int count=0;
         for(int i=start; i<stop; i++) {
-            dest[count++] = src[i];
+            dest[count++] = src[i].copy();
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Copies the full array. Similar to {@link Arrays#copyOfRange(Object[], int, int)} but
+     * performs a deep copy.
+     * @param src Source array to copy from.
+     * @return An array of length {@code stop-start} containing a deep copy of the specified range of the source array.
+     * @throws NegativeArraySizeException If stop is less than start.
+     */
+    public static CNumber[] copyOf(CNumber[] src) {
+        CNumber[] dest = new CNumber[src.length];
+
+        int count=0;
+        for(int i=0; i<dest.length; i++) {
+            dest[count++] = src[i].copy();
         }
 
         return dest;

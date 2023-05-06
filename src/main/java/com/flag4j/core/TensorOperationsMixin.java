@@ -68,7 +68,7 @@ interface TensorOperationsMixin<T, U, W, Z, Y, X extends Number> {
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    U sub(T B);
+    T sub(T B);
 
 
     /**
@@ -191,7 +191,7 @@ interface TensorOperationsMixin<T, U, W, Z, Y, X extends Number> {
      * be computed.
      * @return The result of applying an element-wise absolute value/magnitude to this tensor.
      */
-    T abs();
+    Y abs();
 
 
     /**

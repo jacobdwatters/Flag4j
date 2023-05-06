@@ -26,14 +26,39 @@ package com.flag4j;
 
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.RealSparseMatrixBase;
+import com.flag4j.core.MatrixMixin;
+import com.flag4j.core.RealMatrixMixin;
+import com.flag4j.core.RealSparseTensorBase;
+import com.flag4j.operations.dense.real.RealDenseTranspose;
+import com.flag4j.util.ArrayUtils;
 
 import java.util.Arrays;
 
 /**
  * Real sparse matrix. Matrix is stored in coordinate list (COO) format.
  */
-public class SparseMatrix extends RealSparseMatrixBase {
+public class SparseMatrix
+        extends RealSparseTensorBase<SparseMatrix, Matrix, SparseCMatrix, CMatrix>
+        implements MatrixMixin<SparseMatrix, Matrix, SparseMatrix, SparseCMatrix, SparseMatrix, Double>,
+        RealMatrixMixin<SparseMatrix, SparseCMatrix> {
+
+
+    /**
+     * Row indices of the non-zero entries of the sparse matrix.
+     */
+    public final int[] rowIndices;
+    /**
+     * Column indices of the non-zero entries of the sparse matrix.
+     */
+    public final int[] colIndices;
+    /**
+     * The number of rows in this matrix.
+     */
+    public final int numRows;
+    /**
+     * The number of columns in this matrix.
+     */
+    public final int numCols;
 
 
     /**
@@ -41,7 +66,11 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param size The number of rows/columns in this sparse matrix.
      */
     public SparseMatrix(int size) {
-        super(new Shape(size, size), 0, new double[0], new int[0], new int[0]);
+        super(new Shape(size, size), 0, new double[0], new int[0][0]);
+        rowIndices = new int[0];
+        colIndices = new int[0];
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
     }
 
 
@@ -51,7 +80,11 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param cols The number of columns in this sparse matrix.
      */
     public SparseMatrix(int rows, int cols) {
-        super(new Shape(rows, cols), 0, new double[0], new int[0], new int[0]);
+        super(new Shape(rows, cols), 0, new double[0], new int[0][0]);
+        rowIndices = new int[0];
+        colIndices = new int[0];
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
     }
 
 
@@ -60,7 +93,11 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param shape Shape of this sparse matrix.
      */
     public SparseMatrix(Shape shape) {
-        super(shape, 0, new double[0], new int[0], new int[0]);
+        super(shape, 0, new double[0], new int[0][0]);
+        rowIndices = new int[0];
+        colIndices = new int[0];
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
     }
 
 
@@ -72,7 +109,15 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int size, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-        super(new Shape(size, size), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);
+        super(new Shape(size, size),
+                nonZeroEntries.length,
+                nonZeroEntries,
+                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+        );
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
     }
 
 
@@ -85,7 +130,15 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int rows, int cols, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-        super(new Shape(rows, cols), nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);
+        super(new Shape(rows, cols),
+                nonZeroEntries.length,
+                nonZeroEntries,
+                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+        );
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
     }
 
 
@@ -97,7 +150,15 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(Shape shape, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-        super(shape, nonZeroEntries.length, nonZeroEntries, rowIndices, colIndices);
+        super(shape,
+                nonZeroEntries.length,
+                nonZeroEntries,
+                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+        );
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
     }
 
 
@@ -109,8 +170,15 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int size, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-        super(new Shape(size, size), nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),
-                rowIndices, colIndices);
+        super(new Shape(size, size),
+                nonZeroEntries.length,
+                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),
+                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+        );
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
     }
 
 
@@ -123,8 +191,15 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int rows, int cols, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-        super(new Shape(rows, cols), nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),
-                rowIndices, colIndices);
+        super(new Shape(rows, cols),
+                nonZeroEntries.length,
+                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),
+                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+        );
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
     }
 
 
@@ -138,8 +213,34 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseMatrix(Shape shape, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-        super(shape, nonZeroEntries.length, Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),
-                rowIndices, colIndices);
+        super(shape,
+                nonZeroEntries.length,
+                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),
+                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+        );
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
+    }
+
+
+    /**
+     * Constructs a sparse tensor whose shape and values are given by another sparse tensor. This effectively copies
+     * the tensor.
+     * @param A Sparse Matrix to copy.
+     */
+    public SparseMatrix(SparseMatrix A) {
+        super(A.shape.copy(),
+                A.nonZeroEntries(),
+                A.entries.clone(),
+                new int[A.indices.length][A.indices[0].length]
+        );
+        ArrayUtils.deepCopy(A.indices, this.indices);
+        this.rowIndices = A.rowIndices.clone();
+        this.colIndices = A.colIndices.clone();
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
     }
 
 
@@ -205,12 +306,20 @@ public class SparseMatrix extends RealSparseMatrixBase {
 
 
     /**
-     * Constructs a sparse tensor whose shape and values are given by another sparse tensor. This effectively copies
-     * the tensor.
-     * @param A Sparse Matrix to copy.
+     * Gets the number of rows in this matrix.
+     * @return The number of rows in this matrix.
      */
-    public SparseMatrix(SparseMatrix A) {
-        super(A.shape.copy(), A.nonZeroEntries(), A.entries.clone(), A.rowIndices.clone(), A.colIndices.clone());
+    public int numRows() {
+        return numRows;
+    }
+
+
+    /**
+     * Gets the number of columns in this matrix.
+     * @return The number of columns in this matrix.
+     */
+    public int numCols() {
+        return numCols;
     }
 
 
@@ -240,20 +349,6 @@ public class SparseMatrix extends RealSparseMatrixBase {
     @Override
     public boolean isInv(SparseMatrix B) {
         return false;
-    }
-
-
-    /**
-     * Reshapes matrix if possible. The total number of entries in this matrix must match the total number of entries
-     * * in the reshaped matrix.
-     *
-     * @param numRows The number of rows in the reshaped matrix.
-     * @param numCols The number of columns in the reshaped matrix.
-     * @return A matrix which is equivalent to this matrix but with the specified dimensions.
-     */
-    @Override
-    public SparseMatrix reshape(int numRows, int numCols) {
-        return null;
     }
 
 
@@ -760,7 +855,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object add(Matrix B) {
+    public Matrix add(Matrix B) {
         return null;
     }
 
@@ -773,7 +868,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object add(CMatrix B) {
+    public SparseCMatrix add(CMatrix B) {
         return null;
     }
 
@@ -786,7 +881,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object add(SparseCMatrix B) {
+    public SparseCMatrix add(SparseCMatrix B) {
         return null;
     }
 
@@ -799,7 +894,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object sub(Matrix B) {
+    public Matrix sub(Matrix B) {
         return null;
     }
 
@@ -812,7 +907,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object sub(CMatrix B) {
+    public SparseCMatrix sub(CMatrix B) {
         return null;
     }
 
@@ -825,7 +920,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public Object sub(SparseCMatrix B) {
+    public SparseCMatrix sub(SparseCMatrix B) {
         return null;
     }
 
@@ -860,7 +955,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     @Override
-    public Object mult(Matrix B) {
+    public Matrix mult(Matrix B) {
         return null;
     }
 
@@ -873,7 +968,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     @Override
-    public Object mult(SparseMatrix B) {
+    public Matrix mult(SparseMatrix B) {
         return null;
     }
 
@@ -912,7 +1007,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public Object mult(Vector b) {
+    public Matrix mult(Vector b) {
         return null;
     }
 
@@ -925,7 +1020,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public Object mult(SparseVector b) {
+    public Matrix mult(SparseVector b) {
         return null;
     }
 
@@ -967,7 +1062,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
     @Override
-    public Object multTranspose(Matrix B) {
+    public Matrix multTranspose(Matrix B) {
         return null;
     }
 
@@ -983,7 +1078,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of multiplying this matrix with the transpose of {@code B}.
      */
     @Override
-    public Object multTranspose(SparseMatrix B) {
+    public Matrix multTranspose(SparseMatrix B) {
         return null;
     }
 
@@ -1029,7 +1124,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of multiplying this matrix with itself 'exponent' times.
      */
     @Override
-    public Object pow(int exponent) {
+    public Matrix pow(int exponent) {
         return null;
     }
 
@@ -1042,7 +1137,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public Object elemMult(Matrix B) {
+    public SparseMatrix elemMult(Matrix B) {
         return null;
     }
 
@@ -1055,7 +1150,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public Object elemMult(CMatrix B) {
+    public SparseCMatrix elemMult(CMatrix B) {
         return null;
     }
 
@@ -1082,7 +1177,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws ArithmeticException      If B contains any zero entries.
      */
     @Override
-    public Object elemDiv(Matrix B) {
+    public SparseMatrix elemDiv(Matrix B) {
         return null;
     }
 
@@ -1096,7 +1191,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws ArithmeticException      If B contains any zero entries.
      */
     @Override
-    public Object elemDiv(CMatrix B) {
+    public SparseCMatrix elemDiv(CMatrix B) {
         return null;
     }
 
@@ -1108,7 +1203,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix is not square.
      */
     @Override
-    public Number det() {
+    public Double det() {
         return null;
     }
 
@@ -1121,7 +1216,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public Number fib(Matrix B) {
+    public Double fib(Matrix B) {
         return null;
     }
 
@@ -1134,7 +1229,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and B have different shapes.
      */
     @Override
-    public Number fib(SparseMatrix B) {
+    public Double fib(SparseMatrix B) {
         return null;
     }
 
@@ -1172,7 +1267,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public Object directSum(Matrix B) {
+    public SparseMatrix directSum(Matrix B) {
         return null;
     }
 
@@ -1184,7 +1279,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public Object directSum(SparseMatrix B) {
+    public SparseMatrix directSum(SparseMatrix B) {
         return null;
     }
 
@@ -1196,7 +1291,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public Object directSum(CMatrix B) {
+    public SparseCMatrix directSum(CMatrix B) {
         return null;
     }
 
@@ -1208,7 +1303,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of direct summing this matrix with B.
      */
     @Override
-    public Object directSum(SparseCMatrix B) {
+    public SparseCMatrix directSum(SparseCMatrix B) {
         return null;
     }
 
@@ -1220,7 +1315,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public Object invDirectSum(Matrix B) {
+    public SparseMatrix invDirectSum(Matrix B) {
         return null;
     }
 
@@ -1232,7 +1327,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public Object invDirectSum(SparseMatrix B) {
+    public SparseMatrix invDirectSum(SparseMatrix B) {
         return null;
     }
 
@@ -1244,7 +1339,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public Object invDirectSum(CMatrix B) {
+    public SparseCMatrix invDirectSum(CMatrix B) {
         return null;
     }
 
@@ -1256,7 +1351,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of inverse direct summing this matrix with B.
      */
     @Override
-    public Object invDirectSum(SparseCMatrix B) {
+    public SparseCMatrix invDirectSum(SparseCMatrix B) {
         return null;
     }
 
@@ -1268,7 +1363,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * an m-by-1 matrix.
      */
     @Override
-    public Object sumCols() {
+    public SparseMatrix sumCols() {
         return null;
     }
 
@@ -1280,7 +1375,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * an 1-by-n matrix.
      */
     @Override
-    public Object sumRows() {
+    public SparseMatrix sumRows() {
         return null;
     }
 
@@ -1293,7 +1388,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public Object addToEachCol(Vector b) {
+    public Matrix addToEachCol(Vector b) {
         return null;
     }
 
@@ -1306,7 +1401,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public Object addToEachCol(SparseVector b) {
+    public SparseMatrix addToEachCol(SparseVector b) {
         return null;
     }
 
@@ -1332,7 +1427,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public Object addToEachCol(SparseCVector b) {
+    public SparseCMatrix addToEachCol(SparseCVector b) {
         return null;
     }
 
@@ -1345,7 +1440,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public Object addToEachRow(Vector b) {
+    public Matrix addToEachRow(Vector b) {
         return null;
     }
 
@@ -1358,7 +1453,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public Object addToEachRow(SparseVector b) {
+    public SparseMatrix addToEachRow(SparseVector b) {
         return null;
     }
 
@@ -1384,7 +1479,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public Object addToEachRow(SparseCVector b) {
+    public SparseCMatrix addToEachRow(SparseCVector b) {
         return null;
     }
 
@@ -1398,7 +1493,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
     @Override
-    public Object stack(Matrix B) {
+    public Matrix stack(Matrix B) {
         return null;
     }
 
@@ -1412,7 +1507,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
     @Override
-    public Object stack(SparseMatrix B) {
+    public SparseMatrix stack(SparseMatrix B) {
         return null;
     }
 
@@ -1440,7 +1535,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
      */
     @Override
-    public Object stack(SparseCMatrix B) {
+    public SparseCMatrix stack(SparseCMatrix B) {
         return null;
     }
 
@@ -1458,7 +1553,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(Matrix B, int axis) {
+    public Matrix stack(Matrix B, int axis) {
         return null;
     }
 
@@ -1476,7 +1571,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(SparseMatrix B, int axis) {
+    public SparseMatrix stack(SparseMatrix B, int axis) {
         return null;
     }
 
@@ -1512,7 +1607,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(SparseCMatrix B, int axis) {
+    public SparseCMatrix stack(SparseCMatrix B, int axis) {
         return null;
     }
 
@@ -1526,7 +1621,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     @Override
-    public Object augment(Matrix B) {
+    public Matrix augment(Matrix B) {
         return null;
     }
 
@@ -1540,7 +1635,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     @Override
-    public Object augment(SparseMatrix B) {
+    public SparseMatrix augment(SparseMatrix B) {
         return null;
     }
 
@@ -1568,7 +1663,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
      */
     @Override
-    public Object augment(SparseCMatrix B) {
+    public SparseCMatrix augment(SparseCMatrix B) {
         return null;
     }
 
@@ -1584,7 +1679,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      *                                  the vector b.
      */
     @Override
-    public Object stack(Vector b) {
+    public SparseMatrix stack(Vector b) {
         return null;
     }
 
@@ -1600,7 +1695,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      *                                  the vector b.
      */
     @Override
-    public Object stack(SparseVector b) {
+    public SparseMatrix stack(SparseVector b) {
         return null;
     }
 
@@ -1616,7 +1711,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      *                                  the vector b.
      */
     @Override
-    public Object stack(CVector b) {
+    public SparseCMatrix stack(CVector b) {
         return null;
     }
 
@@ -1632,7 +1727,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      *                                  the vector b.
      */
     @Override
-    public Object stack(SparseCVector b) {
+    public SparseCMatrix stack(SparseCVector b) {
         return null;
     }
 
@@ -1652,7 +1747,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(Vector b, int axis) {
+    public SparseMatrix stack(Vector b, int axis) {
         return null;
     }
 
@@ -1672,7 +1767,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(SparseVector b, int axis) {
+    public SparseMatrix stack(SparseVector b, int axis) {
         return null;
     }
 
@@ -1692,7 +1787,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(CVector b, int axis) {
+    public SparseCMatrix stack(CVector b, int axis) {
         return null;
     }
 
@@ -1712,7 +1807,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If axis is not either 0 or 1.
      */
     @Override
-    public Object stack(SparseCVector b, int axis) {
+    public SparseCMatrix stack(SparseCVector b, int axis) {
         return null;
     }
 
@@ -1728,7 +1823,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public Object augment(Vector b) {
+    public SparseMatrix augment(Vector b) {
         return null;
     }
 
@@ -1744,7 +1839,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public Object augment(SparseVector b) {
+    public SparseMatrix augment(SparseVector b) {
         return null;
     }
 
@@ -1760,7 +1855,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public Object augment(CVector b) {
+    public SparseCMatrix augment(CVector b) {
         return null;
     }
 
@@ -1776,7 +1871,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
      */
     @Override
-    public Object augment(SparseCVector b) {
+    public SparseCMatrix augment(SparseCVector b) {
         return null;
     }
 
@@ -1788,7 +1883,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The specified row of this matrix.
      */
     @Override
-    public Object getRow(int i) {
+    public SparseMatrix getRow(int i) {
         return null;
     }
 
@@ -1800,7 +1895,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The specified column of this matrix.
      */
     @Override
-    public Object getCol(int j) {
+    public SparseMatrix getCol(int j) {
         return null;
     }
 
@@ -1817,7 +1912,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException       If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
      */
     @Override
-    public Object getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
+    public SparseMatrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
         return null;
     }
 
@@ -1832,7 +1927,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
      */
     @Override
-    public Object getColBelow(int rowStart, int j) {
+    public SparseMatrix getColBelow(int rowStart, int j) {
         return null;
     }
 
@@ -1847,7 +1942,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
      */
     @Override
-    public Object getRowAfter(int colStart, int i) {
+    public SparseMatrix getRowAfter(int colStart, int i) {
         return null;
     }
 
@@ -1860,7 +1955,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix is not square.
      */
     @Override
-    public Number trace() {
+    public Double trace() {
         return null;
     }
 
@@ -1873,7 +1968,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this matrix is not square.
      */
     @Override
-    public Number tr() {
+    public Double tr() {
         return null;
     }
 
@@ -2147,6 +2242,20 @@ public class SparseMatrix extends RealSparseMatrixBase {
 
 
     /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     *
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    @Override
+    public SparseMatrix reshape(int... shape) {
+        return null;
+    }
+
+
+    /**
      * Flattens tensor to single dimension. To flatten tensor along a single axis.
      *
      * @return The flattened tensor.
@@ -2202,7 +2311,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
-    public Matrix sub(SparseMatrix B) {
+    public SparseMatrix sub(SparseMatrix B) {
         return null;
     }
 
@@ -2226,7 +2335,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of subtracting the specified value from each entry of this tensor.
      */
     @Override
-    public CMatrix sub(CNumber a) {
+    public SparseCMatrix sub(CNumber a) {
         return null;
     }
 
@@ -2296,7 +2405,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @return The result of multiplying this tensor by the specified scalar.
      */
     @Override
-    public CMatrix mult(CNumber factor) {
+    public SparseCMatrix mult(CNumber factor) {
         return null;
     }
 
@@ -2322,7 +2431,7 @@ public class SparseMatrix extends RealSparseMatrixBase {
      * @throws ArithmeticException If divisor is zero.
      */
     @Override
-    public CMatrix div(CNumber divisor) {
+    public SparseCMatrix div(CNumber divisor) {
         return null;
     }
 

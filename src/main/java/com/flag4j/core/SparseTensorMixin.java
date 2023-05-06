@@ -27,9 +27,8 @@ package com.flag4j.core;
 
 /**
  * This interface specifies methods which all sparse tensor, matrices, and vectors should implement.
- * @param <X> Type of individual entry within the sparse tensor.
  */
-public interface SparseTensorMixin<X extends Number> {
+public interface SparseTensorMixin {
 
     /**
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
