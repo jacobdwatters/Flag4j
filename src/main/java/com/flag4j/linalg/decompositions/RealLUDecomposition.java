@@ -266,23 +266,4 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
 
         return U;
     }
-
-
-    /**
-     * Gets the row permutation matrix of the decomposition.
-     * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
-     */
-    @Override
-    public Matrix getP() {
-        return P;
-    }
-
-
-    /**
-     * Gets the column permutation matrix of the decomposition.
-     * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
-     */
-    public Matrix getQ() {
-        return Q;
-    }
 }

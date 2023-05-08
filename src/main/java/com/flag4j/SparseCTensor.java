@@ -87,156 +87,6 @@ public class SparseCTensor
     }
 
 
-//    /**
-//     * Create a sparse tensor from the dense entries of another tensor. This is not the recommended method for
-//     * constructing sparse tensors. Use {@link #SparseCTensor(Shape, double[], int[][])} if the coordinate information
-//     * is already known.
-//     * @param shape Shape of the sparse tensor.
-//     * @param entries Dense entries from which to construct sparse tensor.
-//     */
-//    public SparseCTensor(Shape shape, double[] entries) {
-//        super(shape);
-//
-//        if(entries.length != shape.totalEntries()) {
-//            throw new IllegalArgumentException(
-//                    ErrorMessages.shapeEntriesError(shape, entries.length)
-//            );
-//        }
-//
-//        ArrayList<Double> nonZeroEntries = new ArrayList<>(entries.length/2);
-//        ArrayList<int[]> indices = new ArrayList<>(entries.length/2);
-//        int[] entryIndices = new int[super.getRank()];
-//
-//        int prod;
-//
-//        for(int i=0; i<entries.length; i++) {
-//
-//            if(entries[i]!=0) {
-//                nonZeroEntries.add(entries[i]);
-//                indices.add(entryIndices.copy());
-//            }
-//
-//            // Compute the indices for next entry based on the shape of the tensor.
-//            prod = super.shape.totalEntries();
-//            for(int j=0; j<entryIndices.length; j++) {
-//                prod/=super.shape.dims[j];
-//                if((i+1)%prod==0) {
-//                    entryIndices[j] = (entryIndices[j]+1) % super.shape.dims[j];
-//                }
-//            }
-//        }
-//
-//        super.setNonZeroEntries(nonZeroEntries.size());
-//        super.entries = new CNumber[super.nonZeroEntries()];
-//        super.indices = new int[super.nonZeroEntries()][super.getRank()];
-//
-//        for(int i=0; i<nonZeroEntries.size(); i++) {
-//            super.entries[i] = new CNumber(nonZeroEntries.get(i));
-//            super.indices[i] = indices.get(i);
-//        }
-//    }
-//
-//
-//    /**
-//     * Create a sparse tensor from the dense entries of another tensor. This is not the recommended method for
-//     * constructing sparse tensors. Use {@link #SparseCTensor(Shape, double[], int[][])} if the coordinate information
-//     * is already known.
-//     * @param shape Shape of the sparse tensor.
-//     * @param entries Dense entries from which to construct sparse tensor.
-//     */
-//    public SparseCTensor(Shape shape, int[] entries) {
-//        super(shape);
-//
-//        if(entries.length != shape.totalEntries()) {
-//            throw new IllegalArgumentException(
-//                    ErrorMessages.shapeEntriesError(shape, entries.length)
-//            );
-//        }
-//
-//        ArrayList<Integer> nonZeroEntries = new ArrayList<>(entries.length/2);
-//        ArrayList<int[]> indices = new ArrayList<>(entries.length/2);
-//        int[] entryIndices = new int[super.getRank()];
-//
-//        int prod;
-//
-//        for(int i=0; i<entries.length; i++) {
-//
-//            if(entries[i]!=0) {
-//                nonZeroEntries.add(entries[i]);
-//                indices.add(entryIndices.copy());
-//            }
-//
-//            // Compute the indices for next entry based on the shape of the tensor.
-//            prod = super.shape.totalEntries();
-//            for(int j=0; j<entryIndices.length; j++) {
-//                prod/=super.shape.dims[j];
-//                if((i+1)%prod==0) {
-//                    entryIndices[j] = (entryIndices[j]+1) % super.shape.dims[j];
-//                }
-//            }
-//        }
-//
-//        super.setNonZeroEntries(nonZeroEntries.size());
-//        super.entries = new CNumber[super.nonZeroEntries()];
-//        super.indices = new int[super.nonZeroEntries()][super.getRank()];
-//
-//        for(int i=0; i<nonZeroEntries.size(); i++) {
-//            super.entries[i] = new CNumber(nonZeroEntries.get(i));
-//            super.indices[i] = indices.get(i);
-//        }
-//    }
-//
-//
-//    /**
-//     * Create a sparse tensor from the dense entries of another tensor. This is not the recommended method for
-//     * constructing sparse tensors. Use {@link #SparseCTensor(Shape, double[], int[][])} if the coordinate information
-//     * is already known.
-//     * @param shape Shape of the sparse tensor.
-//     * @param entries Dense entries from which to construct sparse tensor.
-//     */
-//    public SparseCTensor(Shape shape, CNumber[] entries) {
-//        super(shape);
-//
-//        if(entries.length != shape.totalEntries()) {
-//            throw new IllegalArgumentException(
-//                    ErrorMessages.shapeEntriesError(shape, entries.length)
-//            );
-//        }
-//
-//        ArrayList<CNumber> nonZeroEntries = new ArrayList<>(entries.length/2);
-//        ArrayList<int[]> indices = new ArrayList<>(entries.length/2);
-//        int[] entryIndices = new int[super.getRank()];
-//
-//        int prod;
-//
-//        for(int i=0; i<entries.length; i++) {
-//
-//            if(entries[i].re!=0 || entries[i].im!=0) {
-//                nonZeroEntries.add(entries[i]);
-//                indices.add(entryIndices.copy());
-//            }
-//
-//            // Compute the indices for next entry based on the shape of the tensor.
-//            prod = super.shape.totalEntries();
-//            for(int j=0; j<entryIndices.length; j++) {
-//                prod/=super.shape.dims[j];
-//                if((i+1)%prod==0) {
-//                    entryIndices[j] = (entryIndices[j]+1) % super.shape.dims[j];
-//                }
-//            }
-//        }
-//
-//        super.setNonZeroEntries(nonZeroEntries.size());
-//        super.entries = new CNumber[super.nonZeroEntries()];
-//        super.indices = new int[super.nonZeroEntries()][super.getRank()];
-//
-//        for(int i=0; i<nonZeroEntries.size(); i++) {
-//            super.entries[i] = nonZeroEntries.get(i).copy();
-//            super.indices[i] = indices.get(i);
-//        }
-//    }
-
-
     /**
      * Constructs a sparse complex tensor whose non-zero values, indices, and shape are specified by another sparse complex
      * tensor.
@@ -247,6 +97,17 @@ public class SparseCTensor
         for(int i=0; i<indices.length; i++) {
             super.indices[i] = A.indices[i].clone();
         }
+    }
+
+
+    /**
+     * Simply returns a reference of this tensor.
+     *
+     * @return A reference to this tensor.
+     */
+    @Override
+    protected SparseCTensor getSelf() {
+        return this;
     }
 
 
@@ -311,6 +172,18 @@ public class SparseCTensor
     @Override
     public SparseCTensor H(int... axes) {
         return null;
+    }
+
+
+    /**
+     * Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the addition.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    @Override
+    public void addEq(Tensor B) {
+
     }
 
 
@@ -555,6 +428,31 @@ public class SparseCTensor
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
+    public CTensor add(Tensor B) {
+        return null;
+    }
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor sub(Tensor B) {
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
     public CTensor add(CTensor B) {
         return null;
     }
@@ -618,6 +516,19 @@ public class SparseCTensor
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     @Override
+    public SparseCTensor elemMult(Tensor B) {
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     *
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
     public SparseCTensor elemMult(SparseTensor B) {
         return null;
     }
@@ -645,6 +556,19 @@ public class SparseCTensor
      */
     @Override
     public CTensor elemDiv(CTensor B) {
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     *
+     * @param B Tensor to element-wise divide from this tensor.
+     * @return The result of the element-wise tensor division.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public SparseCTensor elemDiv(Tensor B) {
         return null;
     }
 
@@ -783,6 +707,18 @@ public class SparseCTensor
      */
     @Override
     public void addEq(SparseCTensor B) {
+
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    @Override
+    public void subEq(Tensor B) {
 
     }
 

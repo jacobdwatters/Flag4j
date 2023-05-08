@@ -27,6 +27,7 @@ package com.flag4j.core;
 import com.flag4j.CTensor;
 import com.flag4j.SparseCTensor;
 import com.flag4j.SparseTensor;
+import com.flag4j.Tensor;
 
 
 /**
@@ -149,6 +150,26 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
+    U add(Tensor B);
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    U sub(Tensor B);
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
     CTensor add(CTensor B);
 
 
@@ -216,6 +237,15 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
+    T elemMult(Tensor B);
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
     V elemMult(SparseTensor B);
 
 
@@ -244,4 +274,13 @@ public interface TensorExclusiveMixin<T, U, V, W> {
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     CTensor elemDiv(CTensor B);
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     * @param B Tensor to element-wise divide from this tensor.
+     * @return The result of the element-wise tensor division.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    T elemDiv(Tensor B);
 }

@@ -158,16 +158,31 @@ public class ComplexDenseSparseOperations {
      * @return The result of the element-wise subtraction.
      */
     public static CTensor add(CTensor src1, SparseCTensor src2) {
-<span class="nc" id="L161">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L161">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
-<span class="nc" id="L163">        CTensor dest = new CTensor(src1);</span>
+<span class="fc" id="L163">        CTensor dest = new CTensor(src1);</span>
 
-<span class="nc bnc" id="L165" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L166">            dest.entries[src2.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L166">            dest.entries[src2.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);</span>
         }
 
-<span class="nc" id="L169">        return dest;</span>
+<span class="fc" id="L169">        return dest;</span>
     }
+
+
+    /**
+     * Computes element-wise addition of a complex dense tensor with a complex sparse tensor.
+     * @param src1 Complex dense tensor.
+     * @param src2 Complex sparse tensor.
+     * @return The result of the element-wise addition.
+     */
+    public static void addEq(CTensor src1, SparseCTensor src2) {
+<span class="fc" id="L180">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L183">            src1.entries[src2.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);</span>
+        }
+<span class="fc" id="L185">    }</span>
 
 
     /**
@@ -177,15 +192,30 @@ public class ComplexDenseSparseOperations {
      * @return The result of the element-wise tensor subtraction.
      */
     public static CTensor sub(CTensor src1, SparseCTensor src2) {
-<span class="nc" id="L180">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
-<span class="nc" id="L181">        CTensor dest = new CTensor(src1);</span>
+<span class="fc" id="L195">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L196">        CTensor dest = new CTensor(src1);</span>
 
-<span class="nc bnc" id="L183" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L184">            dest.entries[src2.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L199">            dest.entries[src2.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);</span>
         }
 
-<span class="nc" id="L187">        return dest;</span>
+<span class="fc" id="L202">        return dest;</span>
     }
+
+
+    /**
+     * Computes element-wise subtraction of a complex dense tensor with a complex sparse tensor.
+     * @param src1 Complex dense tensor.
+     * @param src2 Complex sparse tensor.
+     * @return The result of the element-wise subtraction.
+     */
+    public static void subEq(CTensor src1, SparseCTensor src2) {
+<span class="fc" id="L213">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc bfc" id="L215" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L216">            src1.entries[src2.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);</span>
+        }
+<span class="fc" id="L218">    }</span>
 
 
     /**
@@ -195,17 +225,17 @@ public class ComplexDenseSparseOperations {
      * @return THe result of the element-wise tensor multiplication.
      */
     public static SparseCTensor elemMult(CTensor src1, SparseCTensor src2) {
-<span class="nc" id="L198">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L228">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
-<span class="nc" id="L200">        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];</span>
-<span class="nc" id="L201">        int[][] indices = new int[src2.indices.length][src2.indices[0].length];</span>
-<span class="nc" id="L202">        ArrayUtils.deepCopy(src2.indices, indices);</span>
+<span class="fc" id="L230">        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];</span>
+<span class="fc" id="L231">        int[][] indices = new int[src2.indices.length][src2.indices[0].length];</span>
+<span class="fc" id="L232">        ArrayUtils.deepCopy(src2.indices, indices);</span>
 
-<span class="nc bnc" id="L204" title="All 2 branches missed.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
-<span class="nc" id="L205">            destEntries[i] = src1.entries[src2.shape.entriesIndex(src2.indices[i])].mult(src2.entries[i]);</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
+<span class="fc" id="L235">            destEntries[i] = src1.entries[src2.shape.entriesIndex(src2.indices[i])].mult(src2.entries[i]);</span>
         }
 
-<span class="nc" id="L208">        return new SparseCTensor(src2.shape.copy(), destEntries, indices);</span>
+<span class="fc" id="L238">        return new SparseCTensor(src2.shape.copy(), destEntries, indices);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

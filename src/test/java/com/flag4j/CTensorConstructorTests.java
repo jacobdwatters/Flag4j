@@ -130,7 +130,7 @@ public class CTensorConstructorTests {
         assertArrayEquals(expEntries, A.entries);
 
         // -------------- Sub-case 3 --------------
-        valueC = new CNumber(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);;
+        valueC = new CNumber(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         expShape = new Shape(1003);
         expEntries = new CNumber[expShape.totalEntries().intValue()];
         for(int i=0; i<expEntries.length; i++) {

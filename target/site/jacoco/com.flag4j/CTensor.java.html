@@ -27,16 +27,24 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexDenseTensorBase;
 import com.flag4j.core.ComplexTensorExclusiveMixin;
+import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.AggregateComplex;
-import com.flag4j.operations.dense.complex.*;
+import com.flag4j.operations.dense.complex.ComplexDenseEquals;
+import com.flag4j.operations.dense.complex.ComplexDenseOperations;
+import com.flag4j.operations.dense.complex.ComplexDenseTensorDot;
+import com.flag4j.operations.dense.complex.ComplexDenseTranspose;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.StringUtils;
 
 import java.util.Arrays;
 
@@ -53,9 +61,9 @@ public class CTensor
      * @param shape Shape of the tensor.
      */
     public CTensor(Shape shape) {
-<span class="fc" id="L56">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
-<span class="fc" id="L57">        ArrayUtils.fillZeros(super.entries);</span>
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L64">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L65">        ArrayUtils.fillZeros(super.entries);</span>
+<span class="fc" id="L66">    }</span>
 
 
     /**
@@ -64,9 +72,9 @@ public class CTensor
      * @param fillValue Value to fill tensor with.
      */
     public CTensor(Shape shape, double fillValue) {
-<span class="fc" id="L67">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
-<span class="fc" id="L68">        ArrayUtils.fill(super.entries, fillValue);</span>
-<span class="fc" id="L69">    }</span>
+<span class="fc" id="L75">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L76">        ArrayUtils.fill(super.entries, fillValue);</span>
+<span class="fc" id="L77">    }</span>
 
 
     /**
@@ -75,9 +83,9 @@ public class CTensor
      * @param fillValue Value to fill tensor with.
      */
     public CTensor(Shape shape, CNumber fillValue) {
-<span class="fc" id="L78">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
-<span class="fc" id="L79">        ArrayUtils.fill(super.entries, fillValue);</span>
-<span class="fc" id="L80">    }</span>
+<span class="fc" id="L86">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L87">        ArrayUtils.fill(super.entries, fillValue);</span>
+<span class="fc" id="L88">    }</span>
 
 
     /**
@@ -87,14 +95,14 @@ public class CTensor
      * @throws IllegalArgumentException If the shape does not match the number of entries.
      */
     public CTensor(Shape shape, double[] entries) {
-<span class="fc" id="L90">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L98">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
 
-<span class="fc bfc" id="L92" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
-<span class="fc" id="L93">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="fc" id="L101">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
         }
 
-<span class="fc" id="L96">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
-<span class="fc" id="L97">    }</span>
+<span class="fc" id="L104">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
+<span class="fc" id="L105">    }</span>
 
 
     /**
@@ -104,14 +112,14 @@ public class CTensor
      * @throws IllegalArgumentException If the shape does not match the number of entries.
      */
     public CTensor(Shape shape, int[] entries) {
-<span class="fc" id="L107">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L115">        super(shape, new CNumber[shape.totalEntries().intValue()]);</span>
 
-<span class="fc bfc" id="L109" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
-<span class="fc" id="L110">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        if(entries.length != super.totalEntries().intValue()) {</span>
+<span class="fc" id="L118">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
         }
 
-<span class="fc" id="L113">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
-<span class="fc" id="L114">    }</span>
+<span class="fc" id="L121">        ArrayUtils.copy2CNumber(entries, super.entries);</span>
+<span class="fc" id="L122">    }</span>
 
 
     /**
@@ -122,12 +130,8 @@ public class CTensor
      * @throws IllegalArgumentException If the shape does not match the number of entries.
      */
     public CTensor(Shape shape, CNumber[] entries) {
-<span class="fc" id="L125">        super(shape, entries);</span>
-
-<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        if(entries.length != super.totalEntries().intValue()) {</span>
-<span class="nc" id="L128">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
-        }
-<span class="fc" id="L130">    }</span>
+<span class="fc" id="L133">        super(shape, entries);</span>
+<span class="fc" id="L134">    }</span>
 
 
     /**
@@ -135,9 +139,9 @@ public class CTensor
      * @param A Tensor specifying shape and entries.
      */
     public CTensor(Tensor A) {
-<span class="fc" id="L138">        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);</span>
-<span class="fc" id="L139">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
-<span class="fc" id="L140">    }</span>
+<span class="fc" id="L142">        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);</span>
+<span class="fc" id="L143">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
+<span class="fc" id="L144">    }</span>
 
 
     /**
@@ -145,9 +149,9 @@ public class CTensor
      * @param A Tensor specifying shape and entries.
      */
     public CTensor(CTensor A) {
-<span class="fc" id="L148">        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);</span>
-<span class="fc" id="L149">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
-<span class="fc" id="L150">    }</span>
+<span class="fc" id="L152">        super(A.shape.copy(), new CNumber[A.totalEntries().intValue()]);</span>
+<span class="fc" id="L153">        ArrayUtils.copy2CNumber(A.entries, super.entries);</span>
+<span class="fc" id="L154">    }</span>
 
 
     /**
@@ -159,7 +163,7 @@ public class CTensor
      */
     @Override
     protected CTensor makeTensor(Shape shape, CNumber[] entries) {
-<span class="fc" id="L162">        return new CTensor(shape, entries);</span>
+<span class="fc" id="L166">        return new CTensor(shape, entries);</span>
     }
 
 
@@ -170,7 +174,7 @@ public class CTensor
      */
     @Override
     protected CTensor getSelf() {
-<span class="nc" id="L173">        return this;</span>
+<span class="nc" id="L177">        return this;</span>
     }
 
 
@@ -183,7 +187,7 @@ public class CTensor
      */
     @Override
     protected Tensor makeRealTensor(Shape shape, double[] entries) {
-<span class="nc" id="L186">        return new Tensor(shape, entries);</span>
+<span class="fc" id="L190">        return new Tensor(shape, entries);</span>
     }
 
 
@@ -196,12 +200,12 @@ public class CTensor
      */
     @Override
     public CTensor flatten(int axis) {
-<span class="nc" id="L199">        int[] dims = new int[this.getRank()];</span>
-<span class="nc" id="L200">        Arrays.fill(dims, 1);</span>
-<span class="nc" id="L201">        dims[axis] = shape.totalEntries().intValueExact();</span>
-<span class="nc" id="L202">        Shape flatShape = new Shape(dims);</span>
+<span class="fc" id="L203">        int[] dims = new int[this.getRank()];</span>
+<span class="fc" id="L204">        Arrays.fill(dims, 1);</span>
+<span class="fc" id="L205">        dims[axis] = shape.totalEntries().intValueExact();</span>
+<span class="fc" id="L206">        Shape flatShape = new Shape(dims);</span>
 
-<span class="nc" id="L204">        return new CTensor(flatShape, entries.clone());</span>
+<span class="fc" id="L208">        return new CTensor(flatShape, entries.clone());</span>
     }
 
 
@@ -216,26 +220,26 @@ public class CTensor
     public boolean equals(Object object) {
         boolean equal;
 
-<span class="pc bpc" id="L219" title="1 of 2 branches missed.">        if(object instanceof Tensor) {</span>
-<span class="nc" id="L220">            Tensor tensor = (Tensor) object;</span>
-<span class="nc" id="L221">            equal = RealComplexDenseEquals.tensorEquals(tensor, this);</span>
-<span class="pc bfc" id="L222" title="All 2 branches covered.">        } else if(object instanceof CTensor) {</span>
-<span class="fc" id="L223">            CTensor tensor = (CTensor) object;</span>
-<span class="fc" id="L224">            equal = ComplexDenseEquals.tensorEquals(entries, shape, tensor.entries, tensor.shape);</span>
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">        if(object instanceof Tensor) {</span>
+<span class="nc" id="L224">            Tensor tensor = (Tensor) object;</span>
+<span class="nc" id="L225">            equal = RealComplexDenseEquals.tensorEquals(tensor, this);</span>
+<span class="pc bfc" id="L226" title="All 2 branches covered.">        } else if(object instanceof CTensor) {</span>
+<span class="fc" id="L227">            CTensor tensor = (CTensor) object;</span>
+<span class="fc" id="L228">            equal = ComplexDenseEquals.tensorEquals(entries, shape, tensor.entries, tensor.shape);</span>
 
-<span class="pc bpc" id="L226" title="1 of 2 branches missed.">        } else if(object instanceof SparseTensor) {</span>
-<span class="nc" id="L227">            SparseTensor tensor = (SparseTensor) object;</span>
-<span class="nc" id="L228">            equal = RealComplexDenseSparseEquals.tensorEquals(this, tensor);</span>
+<span class="pc bpc" id="L230" title="1 of 2 branches missed.">        } else if(object instanceof SparseTensor) {</span>
+<span class="nc" id="L231">            SparseTensor tensor = (SparseTensor) object;</span>
+<span class="nc" id="L232">            equal = RealComplexDenseSparseEquals.tensorEquals(this, tensor);</span>
 
-<span class="pc bpc" id="L230" title="1 of 2 branches missed.">        } else if(object instanceof SparseCTensor) {</span>
-<span class="fc" id="L231">            SparseCTensor tensor = (SparseCTensor) object;</span>
-<span class="fc" id="L232">            equal = ComplexDenseSparseEquals.tensorEquals(this, tensor);</span>
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">        } else if(object instanceof SparseCTensor) {</span>
+<span class="fc" id="L235">            SparseCTensor tensor = (SparseCTensor) object;</span>
+<span class="fc" id="L236">            equal = ComplexDenseSparseEquals.tensorEquals(this, tensor);</span>
 
-<span class="fc" id="L234">        } else {</span>
-<span class="nc" id="L235">            equal = false;</span>
+<span class="fc" id="L238">        } else {</span>
+<span class="nc" id="L239">            equal = false;</span>
         }
 
-<span class="fc" id="L238">        return equal;</span>
+<span class="fc" id="L242">        return equal;</span>
     }
 
 
@@ -248,7 +252,7 @@ public class CTensor
      */
     @Override
     public CTensor hermTranspose() {
-<span class="nc" id="L251">        return H();</span>
+<span class="fc" id="L255">        return H();</span>
     }
 
 
@@ -260,13 +264,13 @@ public class CTensor
      */
     @Override
     public CTensor H() {
-<span class="nc" id="L263">        return new CTensor(</span>
-<span class="nc" id="L264">                shape.copy().swapAxes(0, getRank()-1),</span>
-<span class="nc" id="L265">                ComplexDenseTranspose.standardConcurrentHerm(</span>
+<span class="fc" id="L267">        return new CTensor(</span>
+<span class="fc" id="L268">                shape.copy().swapAxes(0, getRank()-1),</span>
+<span class="fc" id="L269">                ComplexDenseTranspose.standardConcurrentHerm(</span>
                     entries,
                     shape,
                     0,
-<span class="nc" id="L269">                    getRank()-1</span>
+<span class="fc" id="L273">                    getRank()-1</span>
                 )
         );
     }
@@ -285,7 +289,7 @@ public class CTensor
      */
     @Override
     public CTensor hermTranspose(int axis1, int axis2) {
-<span class="nc" id="L288">        return H(axis1, axis2);</span>
+<span class="fc" id="L292">        return H(axis1, axis2);</span>
     }
 
 
@@ -302,9 +306,9 @@ public class CTensor
      */
     @Override
     public CTensor H(int axis1, int axis2) {
-<span class="nc" id="L305">        return new CTensor(</span>
-<span class="nc" id="L306">                shape.copy().swapAxes(axis1, axis2),</span>
-<span class="nc" id="L307">                ComplexDenseTranspose.standardConcurrentHerm(</span>
+<span class="fc" id="L309">        return new CTensor(</span>
+<span class="fc" id="L310">                shape.copy().swapAxes(axis1, axis2),</span>
+<span class="fc" id="L311">                ComplexDenseTranspose.standardConcurrentHerm(</span>
                         entries,
                         shape,
                         axis1,
@@ -325,7 +329,7 @@ public class CTensor
      */
     @Override
     public CTensor hermTranspose(int... axes) {
-<span class="nc" id="L328">        return H(axes);</span>
+<span class="fc" id="L332">        return H(axes);</span>
     }
 
 
@@ -340,11 +344,59 @@ public class CTensor
      */
     @Override
     public CTensor H(int... axes) {
-<span class="nc" id="L343">        return new CTensor(</span>
-<span class="nc" id="L344">                this.shape.copy().swapAxes(axes),</span>
-<span class="nc" id="L345">                ComplexDenseTranspose.standardConcurrentHerm(this.entries, this.shape, axes)</span>
+<span class="fc" id="L347">        return new CTensor(</span>
+<span class="fc" id="L348">                this.shape.copy().swapAxes(axes),</span>
+<span class="fc" id="L349">                ComplexDenseTranspose.standardConcurrentHerm(this.entries, this.shape, axes)</span>
         );
     }
+
+
+    /**
+     * Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the addition.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    @Override
+    public void addEq(Tensor B) {
+<span class="fc" id="L362">        RealComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);</span>
+<span class="fc" id="L363">    }</span>
+
+
+    /**
+     * Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the addition.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    @Override
+    public void addEq(SparseCTensor B) {
+<span class="fc" id="L374">        ComplexDenseSparseOperations.addEq(this, B);</span>
+<span class="fc" id="L375">    }</span>
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    @Override
+    public void subEq(Tensor B) {
+<span class="fc" id="L386">        RealComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);</span>
+<span class="fc" id="L387">    }</span>
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    @Override
+    public void subEq(SparseCTensor B) {
+<span class="fc" id="L398">        ComplexDenseSparseOperations.subEq(this, B);</span>
+<span class="fc" id="L399">    }</span>
 
 
     /**
@@ -359,7 +411,7 @@ public class CTensor
      */
     @Override
     public CTensor transpose(int axis1, int axis2) {
-<span class="fc" id="L362">        return T(axis1, axis2);</span>
+<span class="fc" id="L414">        return T(axis1, axis2);</span>
     }
 
 
@@ -375,7 +427,7 @@ public class CTensor
      */
     @Override
     public CTensor T(int axis1, int axis2) {
-<span class="fc" id="L378">        return TransposeDispatcher.dispatchTensor(this, axis1, axis2);</span>
+<span class="fc" id="L430">        return TransposeDispatcher.dispatchTensor(this, axis1, axis2);</span>
     }
 
     /**
@@ -389,7 +441,7 @@ public class CTensor
      */
     @Override
     public CTensor transpose(int... axes) {
-<span class="fc" id="L392">        return T(axes);</span>
+<span class="fc" id="L444">        return T(axes);</span>
     }
 
     /**
@@ -404,9 +456,9 @@ public class CTensor
     @Override
     public CTensor T(int... axes) {
         // TODO: Add dispatcher for this method to choose between concurrent and sequential implementations.
-<span class="fc" id="L407">        return new CTensor(</span>
-<span class="fc" id="L408">                this.shape.copy().swapAxes(axes),</span>
-<span class="fc" id="L409">                ComplexDenseTranspose.standardConcurrent(this.entries, this.shape, axes)</span>
+<span class="fc" id="L459">        return new CTensor(</span>
+<span class="fc" id="L460">                this.shape.copy().swapAxes(axes),</span>
+<span class="fc" id="L461">                ComplexDenseTranspose.standardConcurrent(this.entries, this.shape, axes)</span>
         );
     }
 
@@ -425,7 +477,7 @@ public class CTensor
      */
     @Override
     public CTensor tensorDot(CTensor src2, int aAxis, int bAxis) {
-<span class="fc" id="L428">        return ComplexDenseTensorDot.tensorDot(this, src2, new int[]{aAxis}, new int[]{bAxis});</span>
+<span class="fc" id="L480">        return ComplexDenseTensorDot.tensorDot(this, src2, new int[]{aAxis}, new int[]{bAxis});</span>
     }
 
 
@@ -444,7 +496,7 @@ public class CTensor
      */
     @Override
     public CTensor tensorDot(CTensor src2, int[] aAxes, int[] bAxes) {
-<span class="fc" id="L447">        return ComplexDenseTensorDot.tensorDot(this, src2, aAxes, bAxes);</span>
+<span class="fc" id="L499">        return ComplexDenseTensorDot.tensorDot(this, src2, aAxes, bAxes);</span>
     }
 
 
@@ -460,7 +512,7 @@ public class CTensor
      */
     @Override
     public CTensor dot(CTensor src2) {
-<span class="fc" id="L463">        return ComplexDenseTensorDot.dot(this, src2);</span>
+<span class="fc" id="L515">        return ComplexDenseTensorDot.dot(this, src2);</span>
     }
 
 
@@ -473,7 +525,38 @@ public class CTensor
      */
     @Override
     public CTensor add(SparseTensor B) {
-<span class="nc" id="L476">        return new CTensor(RealComplexDenseSparseOperations.add(this, B));</span>
+<span class="fc" id="L528">        return new CTensor(RealComplexDenseSparseOperations.add(this, B));</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor add(Tensor B) {
+<span class="fc" id="L541">        return new CTensor(</span>
+<span class="fc" id="L542">                this.shape.copy(),</span>
+<span class="fc" id="L543">                RealComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)</span>
+        );
+    }
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor sub(Tensor B) {
+<span class="fc" id="L556">        return new CTensor(</span>
+<span class="fc" id="L557">                this.shape.copy(),</span>
+<span class="fc" id="L558">                RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)</span>
+        );
     }
 
 
@@ -486,7 +569,7 @@ public class CTensor
      */
     @Override
     public CTensor add(SparseCTensor B) {
-<span class="nc" id="L489">        return ComplexDenseSparseOperations.add(this, B);</span>
+<span class="fc" id="L572">        return ComplexDenseSparseOperations.add(this, B);</span>
     }
 
 
@@ -499,7 +582,7 @@ public class CTensor
      */
     @Override
     public CTensor sub(SparseTensor B) {
-<span class="nc" id="L502">        return RealComplexDenseSparseOperations.sub(this, B);</span>
+<span class="fc" id="L585">        return RealComplexDenseSparseOperations.sub(this, B);</span>
     }
 
 
@@ -510,7 +593,7 @@ public class CTensor
      */
     @Override
     public CTensor transpose() {
-<span class="fc" id="L513">        return T();</span>
+<span class="fc" id="L596">        return T();</span>
     }
 
 
@@ -521,7 +604,7 @@ public class CTensor
      */
     @Override
     public CTensor T() {
-<span class="fc" id="L524">        return TransposeDispatcher.dispatchTensor(this, 0, shape.getRank()-1);</span>
+<span class="fc" id="L607">        return TransposeDispatcher.dispatchTensor(this, 0, shape.getRank()-1);</span>
     }
 
 
@@ -534,7 +617,7 @@ public class CTensor
      */
     @Override
     public CTensor sub(SparseCTensor B) {
-<span class="nc" id="L537">        return ComplexDenseSparseOperations.sub(this, B);</span>
+<span class="fc" id="L620">        return ComplexDenseSparseOperations.sub(this, B);</span>
     }
 
 
@@ -546,8 +629,8 @@ public class CTensor
      */
     @Override
     public void addEq(SparseTensor B) {
-<span class="nc" id="L549">        RealComplexDenseSparseOperations.addEq(this, B);</span>
-<span class="nc" id="L550">    }</span>
+<span class="fc" id="L632">        RealComplexDenseSparseOperations.addEq(this, B);</span>
+<span class="fc" id="L633">    }</span>
 
 
     /**
@@ -558,8 +641,24 @@ public class CTensor
      */
     @Override
     public void subEq(SparseTensor B) {
-<span class="nc" id="L561">        RealComplexDenseSparseOperations.subEq(this, B);</span>
-<span class="nc" id="L562">    }</span>
+<span class="fc" id="L644">        RealComplexDenseSparseOperations.subEq(this, B);</span>
+<span class="fc" id="L645">    }</span>
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     *
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public CTensor elemMult(Tensor B) {
+<span class="fc" id="L657">        return new CTensor(</span>
+<span class="fc" id="L658">                this.shape.copy(),</span>
+<span class="fc" id="L659">                RealComplexDenseElemMult.dispatch(this.entries, this.shape, B.entries, B.shape)</span>
+        );
+    }
 
 
     /**
@@ -571,7 +670,7 @@ public class CTensor
      */
     @Override
     public SparseCTensor elemMult(SparseTensor B) {
-<span class="nc" id="L574">        return RealComplexDenseSparseOperations.elemMult(this, B);</span>
+<span class="fc" id="L673">        return RealComplexDenseSparseOperations.elemMult(this, B);</span>
     }
 
 
@@ -584,7 +683,23 @@ public class CTensor
      */
     @Override
     public SparseCTensor elemMult(SparseCTensor B) {
-<span class="nc" id="L587">        return ComplexDenseSparseOperations.elemMult(this, B);</span>
+<span class="fc" id="L686">        return ComplexDenseSparseOperations.elemMult(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     *
+     * @param B Tensor to element-wise divide from this tensor.
+     * @return The result of the element-wise tensor division.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public CTensor elemDiv(Tensor B) {
+<span class="fc" id="L699">        return new CTensor(</span>
+<span class="fc" id="L700">                shape.copy(),</span>
+<span class="fc" id="L701">                RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)</span>
+        );
     }
 
 
@@ -595,7 +710,7 @@ public class CTensor
      */
     @Override
     public CTensor flatten() {
-<span class="nc" id="L598">        return new CTensor(new Shape(entries.length), this.entries.clone());</span>
+<span class="fc" id="L713">        return new CTensor(new Shape(entries.length), this.entries.clone());</span>
     }
 
     
@@ -606,7 +721,7 @@ public class CTensor
      */
     @Override
     public double norm() {
-<span class="nc" id="L609">        return ComplexDenseOperations.tensorNormL2(entries);</span>
+<span class="nc" id="L724">        return ComplexDenseOperations.tensorNormL2(entries);</span>
     }
 
 
@@ -620,7 +735,7 @@ public class CTensor
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L623">        return ComplexDenseOperations.tensorNormLp(entries, p);</span>
+<span class="nc" id="L738">        return ComplexDenseOperations.tensorNormLp(entries, p);</span>
     }
 
 
@@ -631,7 +746,7 @@ public class CTensor
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L634">        return AggregateComplex.maxAbs(entries);</span>
+<span class="nc" id="L749">        return AggregateComplex.maxAbs(entries);</span>
     }
 
 
@@ -640,10 +755,10 @@ public class CTensor
      * @return A vector equivalent of this tensor.
      */
     public CVector toVector() {
-<span class="nc" id="L643">        CNumber[] entries = new CNumber[this.entries.length];</span>
-<span class="nc" id="L644">        ArrayUtils.copy2CNumber(this.entries, entries);</span>
+<span class="fc" id="L758">        CNumber[] entries = new CNumber[this.entries.length];</span>
+<span class="fc" id="L759">        ArrayUtils.copy2CNumber(this.entries, entries);</span>
 
-<span class="nc" id="L646">        return new CVector(entries);</span>
+<span class="fc" id="L761">        return new CVector(entries);</span>
     }
 
 
@@ -656,16 +771,57 @@ public class CTensor
     public CMatrix toMatrix() {
         CMatrix mat;
 
-<span class="nc" id="L659">        CNumber[] entries = new CNumber[this.entries.length];</span>
-<span class="nc" id="L660">        ArrayUtils.copy2CNumber(this.entries, entries);</span>
+<span class="fc" id="L774">        CNumber[] entries = new CNumber[this.entries.length];</span>
+<span class="fc" id="L775">        ArrayUtils.copy2CNumber(this.entries, entries);</span>
 
-<span class="nc bnc" id="L662" title="All 2 branches missed.">        if(this.getRank()==2) {</span>
-<span class="nc" id="L663">            mat = new CMatrix(this.shape.copy(), entries);</span>
+<span class="fc bfc" id="L777" title="All 2 branches covered.">        if(this.getRank()==2) {</span>
+<span class="fc" id="L778">            mat = new CMatrix(this.shape.copy(), entries);</span>
         } else {
-<span class="nc" id="L665">            mat = new CMatrix(1, this.entries.length, entries);</span>
+<span class="fc" id="L780">            mat = new CMatrix(1, this.entries.length, entries);</span>
         }
 
-<span class="nc" id="L668">        return mat;</span>
+<span class="fc" id="L783">        return mat;</span>
+    }
+
+
+    /**
+     * Formats this tensor as a human-readable string. Specifically, a string containing the
+     * shape and flatten entries of this tensor.
+     * @return A human-readable string representing this tensor.
+     */
+    public String toString() {
+<span class="fc" id="L793">        int size = shape.totalEntries().intValueExact();</span>
+<span class="fc" id="L794">        StringBuilder result = new StringBuilder(String.format(&quot;Full Shape: %s\n&quot;, shape));</span>
+<span class="fc" id="L795">        result.append(&quot;[&quot;);</span>
+
+<span class="fc" id="L797">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
+        int width;
+        String value;
+
+        // Get entries up until the stopping point.
+<span class="fc bfc" id="L802" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="fc" id="L803">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
+<span class="fc" id="L804">            width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L805" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L806">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+        }
+
+<span class="fc bfc" id="L809" title="All 2 branches covered.">        if(stopIndex &lt; size-1) {</span>
+<span class="fc" id="L810">            width = PrintOptions.getPadding() + 3;</span>
+<span class="fc" id="L811">            value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L812" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L813">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+        }
+
+        // Get last entry now
+<span class="fc" id="L817">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
+<span class="fc" id="L818">        width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L819" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L820">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+
+<span class="fc" id="L822">        result.append(&quot;]&quot;);</span>
+
+<span class="fc" id="L824">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -266,24 +266,5 @@ public final class RealLUDecomposition extends LUDecomposition&lt;Matrix&gt; {
 
 <span class="fc" id="L267">        return U;</span>
     }
-
-
-    /**
-     * Gets the row permutation matrix of the decomposition.
-     * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
-     */
-    @Override
-    public Matrix getP() {
-<span class="fc" id="L277">        return P;</span>
-    }
-
-
-    /**
-     * Gets the column permutation matrix of the decomposition.
-     * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
-     */
-    public Matrix getQ() {
-<span class="fc" id="L286">        return Q;</span>
-    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

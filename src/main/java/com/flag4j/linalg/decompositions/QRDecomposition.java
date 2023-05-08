@@ -70,7 +70,7 @@ public abstract class QRDecomposition<T> implements Decomposition<T> {
      * @return A reference to this decomposer.
      */
     @Override
-    public QRDecomposition decompose(T src) {
+    public QRDecomposition<T> decompose(T src) {
         if(fullQR) {
             this.full(src);
         } else {

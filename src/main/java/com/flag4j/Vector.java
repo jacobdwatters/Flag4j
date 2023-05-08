@@ -105,7 +105,7 @@ public class Vector
      * Creates a vector with specified entries.
      * @param entries Entries for this column vector.
      */
-    public Vector(double[] entries) {
+    public Vector(double... entries) {
         super(new Shape(entries.length), entries.clone());
         this.size = shape.dims[0];
     }
@@ -115,7 +115,7 @@ public class Vector
      * Creates a vector with specified entries.
      * @param entries Entries for this column vector.
      */
-    public Vector(int[] entries) {
+    public Vector(int... entries) {
         super(new Shape(entries.length), new double[entries.length]);
         this.size = shape.dims[0];
 

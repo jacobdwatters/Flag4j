@@ -1401,6 +1401,17 @@ public class SparseVector
     public int size() {
 <span class="fc" id="L1402">        return this.size;</span>
     }
+
+
+    /**
+     * Simply returns a reference of this tensor.
+     *
+     * @return A reference to this tensor.
+     */
+    @Override
+    protected SparseVector getSelf() {
+<span class="nc" id="L1413">        return this;</span>
+    }
 }
 
 

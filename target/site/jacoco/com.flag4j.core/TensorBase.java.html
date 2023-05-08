@@ -149,5 +149,12 @@ public abstract class TensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt; imple
 
 <span class="nc bnc" id="L150" title="All 2 branches missed.">        return A.shape.dims[axis]==B.shape.dims[axis];</span>
     }
+
+
+    /**
+     * Simply returns a reference of this tensor.
+     * @return A reference to this tensor.
+     */
+    protected abstract T getSelf();
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

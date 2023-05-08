@@ -32,7 +32,9 @@ import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.dense.complex.*;
+import com.flag4j.operations.dense.complex.ComplexDenseEquals;
+import com.flag4j.operations.dense.complex.ComplexDenseOperations;
+import com.flag4j.operations.dense.complex.ComplexDenseSetOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
@@ -486,11 +488,11 @@ public class CMatrix
      * Checks if matrices are inverses of each other.
      *
      * @param B Second matrix.
-     * @return True if matrix B is an inverse of this matrix. Otherwise, returns false. Otherwise, returns false.
+     * @return True if matrix B is an inverse (approximately) of this matrix. Otherwise, returns false. Otherwise, returns false.
      */
     @Override
     public boolean isInv(CMatrix B) {
-        return this.mult(B).roundToZero().isI();
+        return this.mult(B).round().isI();
     }
 
 
@@ -551,7 +553,9 @@ public class CMatrix
      */
     @Override
     public CMatrix setValues(Double[][] values) {
-        return null;
+        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));
+        ComplexDenseSetOperations.setValues(values, this.entries);
+        return this;
     }
 
 
@@ -614,7 +618,13 @@ public class CMatrix
      */
     @Override
     public CMatrix setCol(Double[] values, int colIndex) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);
+
+        for(int i=0; i<values.length; i++) {
+            super.entries[i*numCols + colIndex] = new CNumber(values[i]);
+        }
+
+        return this;
     }
 
 
@@ -707,7 +717,13 @@ public class CMatrix
      */
     @Override
     public CMatrix setRow(Double[] values, int rowIndex) {
-        return null;
+        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);
+
+        for(int i=0; i<values.length; i++) {
+            super.entries[rowIndex*numCols + i] = new CNumber(values[i]);
+        }
+
+        return this;
     }
 
 
@@ -1078,7 +1094,17 @@ public class CMatrix
      */
     @Override
     public CMatrix setSlice(Double[][] values, int rowStart, int colStart) {
-        return null;
+        ParameterChecks.assertLessEq(numRows, rowStart+values.length);
+        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);
+        ParameterChecks.assertGreaterEq(0, rowStart, colStart);
+
+        for(int i=0; i<values.length; i++) {
+            for(int j=0; j<values[0].length; j++) {
+                this.entries[(i+rowStart)*numCols + j+colStart] = new CNumber(values[i][j]);
+            }
+        }
+
+        return this;
     }
 
 
@@ -1716,7 +1742,7 @@ public class CMatrix
     public boolean isUnitary() {
         // TODO: Add approxEq(Object A, double threshold) method to check for approximate equivalence.
         if(isSquare()) {
-            return this.mult(this.H()).equals(I(numRows));
+            return mult(H()).round().equals(I(numRows));
         } else {
             return false;
         }

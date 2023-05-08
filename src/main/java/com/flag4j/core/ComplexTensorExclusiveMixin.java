@@ -27,6 +27,7 @@ package com.flag4j.core;
 
 import com.flag4j.CTensor;
 import com.flag4j.SparseCTensor;
+import com.flag4j.Tensor;
 
 /**
  * This class specifies methods which any complex tensor that is <b>NOT</b> a matrix or vector should implement.
@@ -76,11 +77,47 @@ public interface ComplexTensorExclusiveMixin<T>
 
     /**
      * Computes the conjugate transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
-     * the specified axes permutation and takes the complex conjugate of the elements of these axes. Same as {@link #H(int[])}.
+     * the specified axes permutation and takes the complex conjugate of the elements of these axes. Same as {@link #hermTranspose(int[])}.
      * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
      *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
      * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
      * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
      */
     T H(int... axes);
+
+
+    /**
+     * Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the addition.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    void addEq(Tensor B);
+
+
+    /**
+     * Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the addition.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    void addEq(SparseCTensor B);
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    void subEq(Tensor B);
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    void subEq(SparseCTensor B);
 }

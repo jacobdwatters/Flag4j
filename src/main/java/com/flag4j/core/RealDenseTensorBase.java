@@ -429,9 +429,6 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
     public int hashCode() {
         return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);
     }
-
-
-
 }
 
 

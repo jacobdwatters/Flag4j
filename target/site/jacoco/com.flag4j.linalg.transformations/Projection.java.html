@@ -32,7 +32,7 @@ import com.flag4j.util.ParameterChecks;
 /**
  * This class contains methods usefully for computing projection transformation matrices.
  */
-<span class="nc bnc" id="L35" title="All 2 branches missed.">public class Projection {</span>
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">public class Projection {</span>
 
 
 <span class="nc" id="L38">    private Projection() {</span>
@@ -51,24 +51,24 @@ import com.flag4j.util.ParameterChecks;
      * @param nearClip The distance from the camera to the near clipping plane.
      * @param farClip The distance from the camera to the far clipping plane.
      * @return The perspective projection matrix based on the provided attributes.
-     * @throws IllegalArgumentException If {@code aspectRatio} is not positive.
-     * @throws AssertionError If {@code nearClip==farClip}.
+     * @throws IllegalArgumentException If {@code aspectRatio}  is not positive.
+     * @throws AssertionError If {@code nearClip!=farClip}.
      */
-    public static Matrix getPerspective(double fov, double aspectRatio, double nearClip, double farClip){
-<span class="nc" id="L58">        ParameterChecks.assertGreaterEq(0, aspectRatio);</span>
-<span class="nc bnc" id="L59" title="All 4 branches missed.">        assert(nearClip!=farClip) : &quot;nearClip cannot equal farClip&quot;;</span>
+    public static Matrix getPerspective(double fov, double aspectRatio, double nearClip, double farClip) {
+<span class="fc" id="L58">        ParameterChecks.assertGreaterEq(0, aspectRatio);</span>
+<span class="pc bpc" id="L59" title="2 of 4 branches missed.">        assert(nearClip!=farClip) : &quot;nearClip cannot equal farClip.&quot;;</span>
 
-<span class="nc" id="L61">        Matrix perspective = new Matrix(4);</span>
+<span class="fc" id="L61">        Matrix perspective = new Matrix(4);</span>
 
-<span class="nc" id="L63">        double cotHalfFov = 1.0/Math.tan(fov/2.0);</span>
+<span class="fc" id="L63">        double cotHalfFov = 1.0/Math.tan(fov/2.0);</span>
 
-<span class="nc" id="L65">        perspective.entries[0] = cotHalfFov/aspectRatio;</span>
-<span class="nc" id="L66">        perspective.entries[5] = cotHalfFov;</span>
-<span class="nc" id="L67">        perspective.entries[10] = -(farClip + nearClip)/(farClip - nearClip);</span>
-<span class="nc" id="L68">        perspective.entries[11] = -1;</span>
-<span class="nc" id="L69">        perspective.entries[14] = -2*farClip*nearClip/(farClip - nearClip);</span>
+<span class="fc" id="L65">        perspective.entries[0] = cotHalfFov/aspectRatio;</span>
+<span class="fc" id="L66">        perspective.entries[5] = cotHalfFov;</span>
+<span class="fc" id="L67">        perspective.entries[10] = -(farClip + nearClip)/(farClip - nearClip);</span>
+<span class="fc" id="L68">        perspective.entries[11] = -1;</span>
+<span class="fc" id="L69">        perspective.entries[14] = -2*farClip*nearClip/(farClip - nearClip);</span>
 
-<span class="nc" id="L71">        return perspective;</span>
+<span class="fc" id="L71">        return perspective;</span>
     }
 
 
@@ -82,24 +82,26 @@ import com.flag4j.util.ParameterChecks;
      * @param nearClip The distance from the camera to the near clipping plane.
      * @param farClip The distance from the camera to the far clipping plane.
      * @return The perspective projection matrix based on the provided attributes.
+     * @throws IllegalArgumentException If {@code aspectRatio}  is not positive.
+     * @throws AssertionError If {@code nearClip!=farClip}.
      */
     public static Matrix getPerspective(double fovX, double fovY, double aspectRatio, double nearClip, double farClip){
-<span class="nc" id="L87">        ParameterChecks.assertGreaterEq(0, aspectRatio);</span>
-<span class="nc bnc" id="L88" title="All 4 branches missed.">        assert(nearClip!=farClip) : &quot;nearClip cannot equal farClip&quot;;</span>
+<span class="fc" id="L89">        ParameterChecks.assertGreaterEq(0, aspectRatio);</span>
+<span class="pc bpc" id="L90" title="2 of 4 branches missed.">        assert(nearClip!=farClip) : &quot;nearClip cannot equal farClip.&quot;;</span>
 
-<span class="nc" id="L90">        Matrix perspective = new Matrix(4);</span>
+<span class="fc" id="L92">        Matrix perspective = new Matrix(4);</span>
 
         // Convert the field of views to radians.
-<span class="nc" id="L93">        double fovXRad = Math.toRadians(fovX);</span>
-<span class="nc" id="L94">        double fovYRad = Math.toRadians(fovX);</span>
+<span class="fc" id="L95">        double fovXRad = Math.toRadians(fovX);</span>
+<span class="fc" id="L96">        double fovYRad = Math.toRadians(fovX);</span>
 
-<span class="nc" id="L96">        perspective.entries[0] = 1.0/(aspectRatio*Math.tan(fovXRad/2.0));</span>
-<span class="nc" id="L97">        perspective.entries[5] = 1.0/(Math.tan(fovYRad/2.0));</span>
-<span class="nc" id="L98">        perspective.entries[10] = -(farClip + nearClip)/(farClip - nearClip);</span>
-<span class="nc" id="L99">        perspective.entries[11] = -1;</span>
-<span class="nc" id="L100">        perspective.entries[14] = -2*farClip*nearClip/(farClip-nearClip);</span>
+<span class="fc" id="L98">        perspective.entries[0] = 1.0/(aspectRatio*Math.tan(fovXRad/2.0));</span>
+<span class="fc" id="L99">        perspective.entries[5] = 1.0/(Math.tan(fovYRad/2.0));</span>
+<span class="fc" id="L100">        perspective.entries[10] = -(farClip + nearClip)/(farClip - nearClip);</span>
+<span class="fc" id="L101">        perspective.entries[11] = -1;</span>
+<span class="fc" id="L102">        perspective.entries[14] = -2*farClip*nearClip/(farClip-nearClip);</span>
 
-<span class="nc" id="L102">        return perspective;</span>
+<span class="fc" id="L104">        return perspective;</span>
     }
 
 
@@ -117,17 +119,17 @@ import com.flag4j.util.ParameterChecks;
      */
     public static Matrix getOrthogonal(double xMin, double xMax, double yMin, double yMax,
                                        double nearClip, double farClip){
-<span class="nc" id="L120">        Matrix ortho = new Matrix(4);</span>
+<span class="fc" id="L122">        Matrix ortho = new Matrix(4);</span>
 
-<span class="nc" id="L122">        ortho.entries[0] = 2.0/(xMax-xMin);</span>
-<span class="nc" id="L123">        ortho.entries[5] = 2.0/(yMax-yMin);</span>
-<span class="nc" id="L124">        ortho.entries[10] = -2.0/(farClip-nearClip);</span>
-<span class="nc" id="L125">        ortho.entries[12] = -(xMax + xMin)/(xMax - xMin);</span>
-<span class="nc" id="L126">        ortho.entries[13] = -(yMax + yMin)/(yMax - yMin);</span>
-<span class="nc" id="L127">        ortho.entries[14] = -(farClip + nearClip)/(farClip-nearClip);</span>
-<span class="nc" id="L128">        ortho.entries[15] = 1;</span>
+<span class="fc" id="L124">        ortho.entries[0] = 2.0/(xMax-xMin);</span>
+<span class="fc" id="L125">        ortho.entries[5] = 2.0/(yMax-yMin);</span>
+<span class="fc" id="L126">        ortho.entries[10] = -2.0/(farClip-nearClip);</span>
+<span class="fc" id="L127">        ortho.entries[12] = -(xMax + xMin)/(xMax - xMin);</span>
+<span class="fc" id="L128">        ortho.entries[13] = -(yMax + yMin)/(yMax - yMin);</span>
+<span class="fc" id="L129">        ortho.entries[14] = -(farClip + nearClip)/(farClip-nearClip);</span>
+<span class="fc" id="L130">        ortho.entries[15] = 1;</span>
 
-<span class="nc" id="L130">        return ortho;</span>
+<span class="fc" id="L132">        return ortho;</span>
     }
 
 
@@ -144,17 +146,67 @@ import com.flag4j.util.ParameterChecks;
      */
     public static Matrix getOrthogonal(double xMax, double yMax,
                                        double nearClip, double farClip){
-<span class="nc" id="L147">        Matrix ortho = new Matrix(4);</span>
+<span class="fc" id="L149">        Matrix ortho = new Matrix(4);</span>
 
-<span class="nc" id="L149">        ortho.entries[0] = 2.0/xMax;</span>
-<span class="nc" id="L150">        ortho.entries[5] = 2.0/yMax;</span>
-<span class="nc" id="L151">        ortho.entries[10] = -2.0/(farClip-nearClip);</span>
-<span class="nc" id="L152">        ortho.entries[12] = -1;</span>
-<span class="nc" id="L153">        ortho.entries[13] = -1;</span>
-<span class="nc" id="L154">        ortho.entries[14] = -(farClip + nearClip)/(farClip-nearClip);</span>
-<span class="nc" id="L155">        ortho.entries[15] = 1;</span>
+<span class="fc" id="L151">        ortho.entries[0] = 2.0/xMax;</span>
+<span class="fc" id="L152">        ortho.entries[5] = 2.0/yMax;</span>
+<span class="fc" id="L153">        ortho.entries[10] = -2.0/(farClip-nearClip);</span>
+<span class="fc" id="L154">        ortho.entries[12] = -1;</span>
+<span class="fc" id="L155">        ortho.entries[13] = -1;</span>
+<span class="fc" id="L156">        ortho.entries[14] = -(farClip + nearClip)/(farClip-nearClip);</span>
+<span class="fc" id="L157">        ortho.entries[15] = 1;</span>
 
-<span class="nc" id="L157">        return ortho;</span>
+<span class="fc" id="L159">        return ortho;</span>
+    }
+
+
+
+    /**
+     * Creates a {@code 4x4} orthogonal projection matrix to project a 2D point in an orthographic viewing region.
+     * Equivalent to {@link #getOrthogonal(double, double, double, double, double, double)} with {@code nearClip=-1} and
+     * {@code farClip = 1}.
+     * @param xMin Minimum {@code x} value of image plane to project to.
+     * @param xMax Maximum {@code x} value of image plane to project to.
+     * @param yMin Minimum {@code y} value of image plane to project to.
+     * @param yMax Maximum {@code y} value of image plane to project to.
+     * @return The orthogonal projection for the specified parameters.
+     */
+    public static Matrix getOrthogonal2D(double xMin, double xMax, double yMin, double yMax){
+<span class="fc" id="L175">        Matrix ortho = new Matrix(4);</span>
+
+<span class="fc" id="L177">        ortho.entries[0] = 2.0/(xMax-xMin);</span>
+<span class="fc" id="L178">        ortho.entries[5] = 2.0/(yMax-yMin);</span>
+<span class="fc" id="L179">        ortho.entries[10] = -1;</span>
+<span class="fc" id="L180">        ortho.entries[12] = -(xMax + xMin)/(xMax - xMin);</span>
+<span class="fc" id="L181">        ortho.entries[13] = -(yMax + yMin)/(yMax - yMin);</span>
+<span class="fc" id="L182">        ortho.entries[14] = 0;</span>
+<span class="fc" id="L183">        ortho.entries[15] = 1;</span>
+
+<span class="fc" id="L185">        return ortho;</span>
+    }
+
+
+    /**
+     * Creates a {@code 4x4} orthogonal projection matrix to project a 2D point in an orthographic viewing region. the
+     * minimum {@code x} and {@code y} values are assumed to be zero. Equivalent to
+     * {@link #getOrthogonal(double, double, double, double)} with {@code nearClip=-1} and
+     * @code farClip = 1}.
+     * @param xMax Maximum {@code x} value of image plane to project to.
+     * @param yMax Maximum {@code y} value of image plane to project to.
+     * @return The orthogonal projection for the specified parameters.
+     */
+    public static Matrix getOrthogonal2D(double xMax, double yMax){
+<span class="fc" id="L199">        Matrix ortho = new Matrix(4);</span>
+
+<span class="fc" id="L201">        ortho.entries[0] = 2.0/xMax;</span>
+<span class="fc" id="L202">        ortho.entries[5] = 2.0/yMax;</span>
+<span class="fc" id="L203">        ortho.entries[10] = -1;</span>
+<span class="fc" id="L204">        ortho.entries[12] = -1;</span>
+<span class="fc" id="L205">        ortho.entries[13] = -1;</span>
+<span class="fc" id="L206">        ortho.entries[14] = 0;</span>
+<span class="fc" id="L207">        ortho.entries[15] = 1;</span>
+
+<span class="fc" id="L209">        return ortho;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

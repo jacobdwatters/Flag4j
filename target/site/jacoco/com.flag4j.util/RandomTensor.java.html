@@ -27,6 +27,8 @@ package com.flag4j.util;
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.Decompose;
+import com.flag4j.linalg.decompositions.ComplexQRDecomposition;
+import com.flag4j.linalg.decompositions.RealQRDecomposition;
 
 /**
  * An instance of this class is used for generating streams of pseudorandom tensors, matrices, and vectors.
@@ -41,17 +43,17 @@ public class RandomTensor {
      * Constructs a new pseudorandom tensor generator with a seed which is unlikely to be the same as other
      * from any other invocation of this constructor.
      */
-<span class="nc" id="L44">    public RandomTensor() {</span>
-<span class="nc" id="L45">        complexRng = new RandomCNumber();</span>
-<span class="nc" id="L46">    }</span>
+<span class="nc" id="L46">    public RandomTensor() {</span>
+<span class="nc" id="L47">        complexRng = new RandomCNumber();</span>
+<span class="nc" id="L48">    }</span>
 
     /**
      * Constructs a pseudorandom tensor generator with a specified seed. Use this constructor for reproducible results.
      * @param seed Seed of the pseudorandom tensor generator.
      */
-<span class="fc" id="L52">    public RandomTensor(long seed) {</span>
-<span class="fc" id="L53">        complexRng = new RandomCNumber(seed);</span>
-<span class="fc" id="L54">    }</span>
+<span class="nc" id="L54">    public RandomTensor(long seed) {</span>
+<span class="nc" id="L55">        complexRng = new RandomCNumber(seed);</span>
+<span class="nc" id="L56">    }</span>
 
 
     /**
@@ -60,7 +62,7 @@ public class RandomTensor {
      * @return A tensor filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
      */
     public Tensor randomTensor(Shape shape) {
-<span class="nc" id="L63">        return new Tensor(shape, genUniformRealArray(shape.totalEntries().intValueExact()));</span>
+<span class="nc" id="L65">        return new Tensor(shape, genUniformRealArray(shape.totalEntries().intValueExact()));</span>
     }
 
 
@@ -73,8 +75,8 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code max} is less than {@code min}.
      */
     public Tensor randomTensor(Shape shape, double min, double max) {
-<span class="nc" id="L76">        return new Tensor(shape, genUniformRealArray(</span>
-<span class="nc" id="L77">                shape.totalEntries().intValueExact(),</span>
+<span class="nc" id="L78">        return new Tensor(shape, genUniformRealArray(</span>
+<span class="nc" id="L79">                shape.totalEntries().intValueExact(),</span>
                 min,
                 max)
         );
@@ -89,7 +91,7 @@ public class RandomTensor {
      * mean of 0.0 and standard deviation of 1.0.
      */
     public Tensor randnTensor(Shape shape) {
-<span class="nc" id="L92">        return new Tensor(shape, genNormalRealArray(shape.totalEntries().intValueExact()));</span>
+<span class="nc" id="L94">        return new Tensor(shape, genNormalRealArray(shape.totalEntries().intValueExact()));</span>
     }
 
 
@@ -104,8 +106,8 @@ public class RandomTensor {
      * @throws IllegalArgumentException If standard deviation is negative.
      */
     public Tensor randnTensor(Shape shape, double mean, double std) {
-<span class="nc" id="L107">        return new Tensor(shape, genNormalRealArray(</span>
-<span class="nc" id="L108">                shape.totalEntries().intValueExact(),</span>
+<span class="nc" id="L109">        return new Tensor(shape, genNormalRealArray(</span>
+<span class="nc" id="L110">                shape.totalEntries().intValueExact(),</span>
                 mean,
                 std)
         );
@@ -120,7 +122,7 @@ public class RandomTensor {
      * uniformly distributed in {@code [0, 1)}.
      */
     public CTensor randomCTensor(Shape shape) {
-<span class="nc" id="L123">        return new CTensor(shape, genUniformComplexArray(shape.totalEntries().intValueExact()));</span>
+<span class="nc" id="L125">        return new CTensor(shape, genUniformComplexArray(shape.totalEntries().intValueExact()));</span>
     }
 
 
@@ -133,8 +135,8 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code min} is negative or if {@code max} is less than {@code min}.
      */
     public CTensor randomCTensor(Shape shape, double min, double max) {
-<span class="nc" id="L136">        return new CTensor(shape, genUniformComplexArray(</span>
-<span class="nc" id="L137">                shape.totalEntries().intValueExact(),</span>
+<span class="nc" id="L138">        return new CTensor(shape, genUniformComplexArray(</span>
+<span class="nc" id="L139">                shape.totalEntries().intValueExact(),</span>
                 min,
                 max)
         );
@@ -149,7 +151,7 @@ public class RandomTensor {
      * mean of 0.0 and standard deviation of 1.0.
      */
     public CTensor randnCTensor(Shape shape) {
-<span class="nc" id="L152">        return new CTensor(shape, genNormalComplexArray(shape.totalEntries().intValueExact()));</span>
+<span class="nc" id="L154">        return new CTensor(shape, genNormalComplexArray(shape.totalEntries().intValueExact()));</span>
     }
 
 
@@ -164,8 +166,8 @@ public class RandomTensor {
      * @throws IllegalArgumentException If standard deviation is negative.
      */
     public CTensor randnCTensor(Shape shape, double mean, double std) {
-<span class="nc" id="L167">        return new CTensor(shape, genNormalComplexArray(</span>
-<span class="nc" id="L168">                shape.totalEntries().intValueExact(),</span>
+<span class="nc" id="L169">        return new CTensor(shape, genNormalComplexArray(</span>
+<span class="nc" id="L170">                shape.totalEntries().intValueExact(),</span>
                 mean,
                 std)
         );
@@ -178,7 +180,7 @@ public class RandomTensor {
      * @return A vector filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
      */
     public Vector randomVector(int size) {
-<span class="nc" id="L181">        return new Vector(genUniformRealArray(size));</span>
+<span class="nc" id="L183">        return new Vector(genUniformRealArray(size));</span>
     }
 
 
@@ -190,7 +192,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code max} is less than {@code min}.
      */
     public Vector randomVector(int size, double min, double max) {
-<span class="nc" id="L193">        return new Vector(genUniformRealArray(size, min, max));</span>
+<span class="nc" id="L195">        return new Vector(genUniformRealArray(size, min, max));</span>
     }
 
 
@@ -202,7 +204,7 @@ public class RandomTensor {
      * a standard deviation of 1.0.
      */
     public Vector randnVector(int size) {
-<span class="nc" id="L205">        return new Vector(genNormalRealArray(size));</span>
+<span class="nc" id="L207">        return new Vector(genNormalRealArray(size));</span>
     }
 
 
@@ -215,7 +217,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public Vector randnVector(int size, double mean, double std) {
-<span class="nc" id="L218">        return new Vector(genNormalRealArray(size));</span>
+<span class="nc" id="L220">        return new Vector(genNormalRealArray(size));</span>
     }
 
 
@@ -226,7 +228,7 @@ public class RandomTensor {
      * @return A vector filled with pseudorandom complex values with magnitudes uniformly distributed in {@code [0, 1)}.
      */
     public CVector randomCVector(int size) {
-<span class="nc" id="L229">        return new CVector(genUniformComplexArray(size));</span>
+<span class="nc" id="L231">        return new CVector(genUniformComplexArray(size));</span>
     }
 
 
@@ -238,7 +240,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code min} is negative or if {@code max} is less than {@code min}.
      */
     public CVector randomCVector(int size, double min, double max) {
-<span class="nc" id="L241">        return new CVector(genUniformComplexArray(size, min, max));</span>
+<span class="nc" id="L243">        return new CVector(genUniformComplexArray(size, min, max));</span>
     }
 
 
@@ -250,7 +252,7 @@ public class RandomTensor {
      * mean of 0.0 and a standard deviation of 1.0.
      */
     public CVector randnCVector(int size) {
-<span class="nc" id="L253">        return new CVector(genNormalComplexArray(size));</span>
+<span class="nc" id="L255">        return new CVector(genNormalComplexArray(size));</span>
     }
 
 
@@ -263,7 +265,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public CVector randnCVector(int size, double mean, double std) {
-<span class="nc" id="L266">        return new CVector(genNormalComplexArray(size, mean, std));</span>
+<span class="nc" id="L268">        return new CVector(genNormalComplexArray(size, mean, std));</span>
     }
 
 
@@ -274,7 +276,7 @@ public class RandomTensor {
      * @return A matrix filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
      */
     public Matrix randomMatrix(int rows, int cols) {
-<span class="nc" id="L277">        return new Matrix(rows, cols, genUniformRealArray(rows*cols));</span>
+<span class="nc" id="L279">        return new Matrix(rows, cols, genUniformRealArray(rows*cols));</span>
     }
 
 
@@ -285,7 +287,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
      */
     public Matrix randomMatrix(Shape shape) {
-<span class="nc" id="L288">        return randomMatrix(shape.get(0), shape.get(1));</span>
+<span class="nc" id="L290">        return randomMatrix(shape.get(0), shape.get(1));</span>
     }
 
 
@@ -299,7 +301,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code max} is less than {@code min}.
      */
     public Matrix randomMatrix(int rows, int cols, double min, double max) {
-<span class="nc" id="L302">        return new Matrix(rows, cols, genUniformRealArray(rows*cols, min, max));</span>
+<span class="nc" id="L304">        return new Matrix(rows, cols, genUniformRealArray(rows*cols, min, max));</span>
     }
 
 
@@ -313,7 +315,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code shape} is not of rank 2.
      */
     public Matrix randomMatrix(Shape shape, double min, double max) {
-<span class="nc" id="L316">        return randomMatrix(shape.get(0), shape.get(1), min, max);</span>
+<span class="nc" id="L318">        return randomMatrix(shape.get(0), shape.get(1), min, max);</span>
     }
 
 
@@ -326,7 +328,7 @@ public class RandomTensor {
      * a standard deviation of 1.0.
      */
     public Matrix randnMatrix(int rows, int cols) {
-<span class="nc" id="L329">        return new Matrix(rows, cols, genNormalRealArray(rows*cols));</span>
+<span class="nc" id="L331">        return new Matrix(rows, cols, genNormalRealArray(rows*cols));</span>
     }
 
 
@@ -338,7 +340,7 @@ public class RandomTensor {
      * a standard deviation of 1.0.
      */
     public Matrix randnMatrix(Shape shape) {
-<span class="nc" id="L341">        return randnMatrix(shape.get(0), shape.get(1));</span>
+<span class="nc" id="L343">        return randnMatrix(shape.get(0), shape.get(1));</span>
     }
 
 
@@ -354,7 +356,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public Matrix randnMatrix(int rows, int cols, double mean, double std) {
-<span class="nc" id="L357">        return new Matrix(rows, cols, genNormalRealArray(rows*cols, mean, std));</span>
+<span class="nc" id="L359">        return new Matrix(rows, cols, genNormalRealArray(rows*cols, mean, std));</span>
     }
 
 
@@ -369,7 +371,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public Matrix randnMatrix(Shape shape, double mean, double std) {
-<span class="nc" id="L372">        return randnMatrix(shape.get(0), shape.get(1), mean, std);</span>
+<span class="nc" id="L374">        return randnMatrix(shape.get(0), shape.get(1), mean, std);</span>
     }
 
 
@@ -379,18 +381,18 @@ public class RandomTensor {
      * @return A symmetric matrix filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
      */
     public Matrix getRandomSymmetricMatrix(int size) {
-<span class="nc" id="L382">        Matrix randMat = new Matrix(size);</span>
+<span class="nc" id="L384">        Matrix randMat = new Matrix(size);</span>
 
-<span class="nc bnc" id="L384" title="All 2 branches missed.">        for(int i=0; i&lt;size; i++) {</span>
-<span class="nc bnc" id="L385" title="All 2 branches missed.">            for(int j=0; j&lt;i; j++) {</span>
-<span class="nc" id="L386">                randMat.entries[i*size+j] = complexRng.rng.nextDouble();</span>
-<span class="nc" id="L387">                randMat.entries[j*size+i] = randMat.entries[i*size+j];</span>
+<span class="nc bnc" id="L386" title="All 2 branches missed.">        for(int i=0; i&lt;size; i++) {</span>
+<span class="nc bnc" id="L387" title="All 2 branches missed.">            for(int j=0; j&lt;i; j++) {</span>
+<span class="nc" id="L388">                randMat.entries[i*size+j] = complexRng.rng.nextDouble();</span>
+<span class="nc" id="L389">                randMat.entries[j*size+i] = randMat.entries[i*size+j];</span>
             }
 
-<span class="nc" id="L390">            randMat.entries[i*(size+1)] = complexRng.rng.nextDouble(); // Diagonal entry</span>
+<span class="nc" id="L392">            randMat.entries[i*(size+1)] = complexRng.rng.nextDouble(); // Diagonal entry</span>
         }
 
-<span class="nc" id="L393">        return randMat;</span>
+<span class="nc" id="L395">        return randMat;</span>
     }
 
 
@@ -402,8 +404,8 @@ public class RandomTensor {
      * @return A pseudorandom orthogonal matrix.
      */
     public Matrix randomOrthogonalMatrix(int size) {
-<span class="nc" id="L405">        Matrix randMat = new Matrix(size, size, genUniformRealArray(size));</span>
-<span class="nc" id="L406">        return Decompose.qr(randMat)[0];</span>
+<span class="nc" id="L407">        Matrix randMat = new Matrix(size, size, genUniformRealArray(size));</span>
+<span class="nc" id="L408">        return new RealQRDecomposition().decompose(randMat).getQ();</span>
     }
 
 
@@ -416,7 +418,7 @@ public class RandomTensor {
      * distributed in {@code [0, 1)}.
      */
     public CMatrix randomCMatrix(int rows, int cols) {
-<span class="nc" id="L419">        return new CMatrix(rows, cols, genUniformComplexArray(rows*cols));</span>
+<span class="nc" id="L421">        return new CMatrix(rows, cols, genUniformComplexArray(rows*cols));</span>
     }
 
 
@@ -429,7 +431,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
      */
     public CMatrix randomCMatrix(Shape shape) {
-<span class="nc" id="L432">        return randomCMatrix(shape.get(0), shape.get(1));</span>
+<span class="nc" id="L434">        return randomCMatrix(shape.get(0), shape.get(1));</span>
     }
 
 
@@ -445,7 +447,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code max} is less than {@code min}.
      */
     public CMatrix randomCMatrix(int rows, int cols, double min, double max) {
-<span class="nc" id="L448">        return new CMatrix(rows, cols, genUniformComplexArray(rows*cols, min, max));</span>
+<span class="nc" id="L450">        return new CMatrix(rows, cols, genUniformComplexArray(rows*cols, min, max));</span>
     }
 
 
@@ -461,7 +463,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code shape} is not of rank 2.
      */
     public CMatrix randomCMatrix(Shape shape, double min, double max) {
-<span class="nc" id="L464">        return randomCMatrix(shape.get(0), shape.get(1), min, max);</span>
+<span class="nc" id="L466">        return randomCMatrix(shape.get(0), shape.get(1), min, max);</span>
     }
 
 
@@ -474,7 +476,7 @@ public class RandomTensor {
      * a standard deviation of 1.0.
      */
     public CMatrix randnCMatrix(int rows, int cols) {
-<span class="nc" id="L477">        return new CMatrix(rows, cols, genNormalComplexArray(rows*cols));</span>
+<span class="nc" id="L479">        return new CMatrix(rows, cols, genNormalComplexArray(rows*cols));</span>
     }
 
 
@@ -486,7 +488,7 @@ public class RandomTensor {
      * a standard deviation of 1.0.
      */
     public CMatrix randnCMatrix(Shape shape) {
-<span class="nc" id="L489">        return randnCMatrix(shape.get(0), shape.get(1));</span>
+<span class="nc" id="L491">        return randnCMatrix(shape.get(0), shape.get(1));</span>
     }
 
 
@@ -502,7 +504,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public CMatrix randnCMatrix(int rows, int cols, double mean, double std) {
-<span class="nc" id="L505">        return new CMatrix(rows, cols, genNormalComplexArray(rows*cols, mean, std));</span>
+<span class="nc" id="L507">        return new CMatrix(rows, cols, genNormalComplexArray(rows*cols, mean, std));</span>
     }
 
 
@@ -517,10 +519,22 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public CMatrix randnCMatrix(Shape shape, double mean, double std) {
-<span class="nc" id="L520">        return randnCMatrix(shape.get(0), shape.get(1), mean, std);</span>
+<span class="nc" id="L522">        return randnCMatrix(shape.get(0), shape.get(1), mean, std);</span>
     }
 
-    // TODO: Once the QR decomposition is implemented for complex matrices, add randomUnitaryMatrix(int size) method.
+
+    /**
+     * Gets a pseudorandom unitary matrix. From an implementation point of view, a pseudorandom complex matrix is generated
+     * as if by {@link #randomCMatrix(int, int) getRandomMatrix(size, size)}. Then, a {@link Decompose#qr(CMatrix) QR}
+     * decomposition is computed on this pseudorandom matrix and the {@code Q} matrix from this decomposition is returned.
+     * @param size Size of the unitary matrix (i.e. the number rows and columns for the square matrix).
+     * @return A pseudorandom unitary matrix.
+     */
+    public CMatrix randomUnitaryMatrix(int size) {
+<span class="nc" id="L534">        CMatrix randMat = new CMatrix(size, size, genUniformComplexArray(size));</span>
+<span class="nc" id="L535">        return new ComplexQRDecomposition().decompose(randMat).getQ();</span>
+    }
+
 
     /**
      * Generates an array of doubles filled with uniformly distributed pseudorandom values in {@code [0.0, 1.0)}.
@@ -529,13 +543,13 @@ public class RandomTensor {
      * @return An array of doubles with specified length filled with uniformly distributed values in {@code [0.0, 1.0)}.
      */
     private double[] genUniformRealArray(int length) {
-<span class="nc" id="L532">        double[] values = new double[length];</span>
+<span class="nc" id="L546">        double[] values = new double[length];</span>
 
-<span class="nc bnc" id="L534" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L535">            values[i] = complexRng.rng.nextDouble();</span>
+<span class="nc bnc" id="L548" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L549">            values[i] = complexRng.rng.nextDouble();</span>
         }
 
-<span class="nc" id="L538">        return values;</span>
+<span class="nc" id="L552">        return values;</span>
     }
 
 
@@ -547,13 +561,13 @@ public class RandomTensor {
      * @return An array of doubles with specified length filled with uniformly distributed values in {@code [min, max)}.
      */
     private double[] genUniformRealArray(int length, double min, double max) {
-<span class="nc" id="L550">        double[] values = new double[length];</span>
+<span class="nc" id="L564">        double[] values = new double[length];</span>
 
-<span class="nc bnc" id="L552" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L553">            values[i] = complexRng.rng.nextDouble()*(max - min) + min;</span>
+<span class="nc bnc" id="L566" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L567">            values[i] = complexRng.rng.nextDouble()*(max - min) + min;</span>
         }
 
-<span class="nc" id="L556">        return values;</span>
+<span class="nc" id="L570">        return values;</span>
     }
 
 
@@ -564,13 +578,13 @@ public class RandomTensor {
      * @return An array of integers with specified length filled with uniformly distributed values in {@code [0, 1)}.
      */
     private double[] genUniformRealIntArray(int length) {
-<span class="nc" id="L567">        double[] values = new double[length];</span>
+<span class="nc" id="L581">        double[] values = new double[length];</span>
 
-<span class="nc bnc" id="L569" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L570">            values[i] = complexRng.rng.nextInt();</span>
+<span class="nc bnc" id="L583" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L584">            values[i] = complexRng.rng.nextInt();</span>
         }
 
-<span class="nc" id="L573">        return values;</span>
+<span class="nc" id="L587">        return values;</span>
     }
 
 
@@ -582,13 +596,13 @@ public class RandomTensor {
      * @return An array of integers with specified length filled with uniformly distributed values in {@code [min, max)}.
      */
     private double[] genUniformRealIntArray(int length, int min, int max) {
-<span class="nc" id="L585">        double[] values = new double[length];</span>
+<span class="nc" id="L599">        double[] values = new double[length];</span>
 
-<span class="nc bnc" id="L587" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L588">            values[i] = complexRng.rng.nextInt()*((double) (max - min)) + min;</span>
+<span class="nc bnc" id="L601" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L602">            values[i] = complexRng.rng.nextInt()*((double) (max - min)) + min;</span>
         }
 
-<span class="nc" id="L591">        return values;</span>
+<span class="nc" id="L605">        return values;</span>
     }
 
 
@@ -600,13 +614,13 @@ public class RandomTensor {
      * standard deviation of 1.
      */
     private double[] genNormalRealArray(int length) {
-<span class="nc" id="L603">        double[] values = new double[length];</span>
+<span class="nc" id="L617">        double[] values = new double[length];</span>
 
-<span class="nc bnc" id="L605" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L606">            values[i] = complexRng.rng.nextGaussian();</span>
+<span class="nc bnc" id="L619" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L620">            values[i] = complexRng.rng.nextGaussian();</span>
         }
 
-<span class="nc" id="L609">        return values;</span>
+<span class="nc" id="L623">        return values;</span>
     }
 
 
@@ -620,13 +634,13 @@ public class RandomTensor {
      * @throws IllegalArgumentException If standard deviation is negative.
      */
     private double[] genNormalRealArray(int length, double mean, double std) {
-<span class="nc" id="L623">        double[] values = new double[length];</span>
+<span class="nc" id="L637">        double[] values = new double[length];</span>
 
-<span class="nc bnc" id="L625" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L626">            values[i] = complexRng.rng.nextGaussian()*mean + std;</span>
+<span class="nc bnc" id="L639" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L640">            values[i] = complexRng.rng.nextGaussian()*mean + std;</span>
         }
 
-<span class="nc" id="L629">        return values;</span>
+<span class="nc" id="L643">        return values;</span>
     }
 
 
@@ -638,13 +652,13 @@ public class RandomTensor {
      * in {@code [0.0, 1.0)}.
      */
     private CNumber[] genUniformComplexArray(int length) {
-<span class="nc" id="L641">        CNumber[] values = new CNumber[length];</span>
+<span class="nc" id="L655">        CNumber[] values = new CNumber[length];</span>
 
-<span class="nc bnc" id="L643" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L644">            values[i] = complexRng.random();</span>
+<span class="nc bnc" id="L657" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L658">            values[i] = complexRng.random();</span>
         }
 
-<span class="nc" id="L647">        return values;</span>
+<span class="nc" id="L661">        return values;</span>
     }
 
 
@@ -659,13 +673,13 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code min} is negative or if {@code max} is less than {@code min}.
      */
     private CNumber[] genUniformComplexArray(int length, double min, double max) {
-<span class="nc" id="L662">        CNumber[] values = new CNumber[length];</span>
+<span class="nc" id="L676">        CNumber[] values = new CNumber[length];</span>
 
-<span class="nc bnc" id="L664" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L665">            values[i] = complexRng.random(min, max);</span>
+<span class="nc bnc" id="L678" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L679">            values[i] = complexRng.random(min, max);</span>
         }
 
-<span class="nc" id="L668">        return values;</span>
+<span class="nc" id="L682">        return values;</span>
     }
 
 
@@ -677,13 +691,13 @@ public class RandomTensor {
      * with a mean of 0.0 and a magnitude of 1.0.
      */
     private CNumber[] genNormalComplexArray(int length) {
-<span class="nc" id="L680">        CNumber[] values = new CNumber[length];</span>
+<span class="nc" id="L694">        CNumber[] values = new CNumber[length];</span>
 
-<span class="nc bnc" id="L682" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L683">            values[i] = complexRng.randn();</span>
+<span class="nc bnc" id="L696" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L697">            values[i] = complexRng.randn();</span>
         }
 
-<span class="nc" id="L686">        return values;</span>
+<span class="nc" id="L700">        return values;</span>
     }
 
 
@@ -698,13 +712,13 @@ public class RandomTensor {
      * @throws IllegalArgumentException If standard deviation is negative.
      */
     private CNumber[] genNormalComplexArray(int length, double mean, double std) {
-<span class="nc" id="L701">        CNumber[] values = new CNumber[length];</span>
+<span class="nc" id="L715">        CNumber[] values = new CNumber[length];</span>
 
-<span class="nc bnc" id="L703" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
-<span class="nc" id="L704">            values[i] = complexRng.randn(mean, std);</span>
+<span class="nc bnc" id="L717" title="All 2 branches missed.">        for(int i=0; i&lt;length; i++) {</span>
+<span class="nc" id="L718">            values[i] = complexRng.randn(mean, std);</span>
         }
 
-<span class="nc" id="L707">        return values;</span>
+<span class="nc" id="L721">        return values;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

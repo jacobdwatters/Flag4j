@@ -231,7 +231,7 @@ public class Tensor
      * Flattens a tensor along the specified axis.
      *
      * @param axis Axis along which to flatten tensor.
-     * @throws IllegalArgumentException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
      */
     @Override
     public Tensor flatten(int axis) {

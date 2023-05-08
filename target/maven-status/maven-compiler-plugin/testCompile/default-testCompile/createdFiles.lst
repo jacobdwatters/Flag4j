@@ -2,6 +2,7 @@ com\flag4j\linalg\decompositions\ComplexLUTests.class
 com\flag4j\operations\dense\real\RealDenseSetOperationsTests.class
 com\flag4j\VectorElementwiseTests.class
 com\flag4j\complex_numbers\CNumberPropertiesTest.class
+com\flag4j\VectorToStringTest.class
 com\flag4j\CMatrixSetOperationTests.class
 com\flag4j\MatrixAddToEachColTests.class
 com\flag4j\VectorNormTest.class
@@ -14,9 +15,11 @@ com\flag4j\TensorConversionTests.class
 com\flag4j\complex_numbers\CNumberToStringTest.class
 com\flag4j\VectorAddSubEqTests.class
 com\flag4j\operations\dense\complex\ComplexDenseMatMultTransposeTests.class
+com\flag4j\TensorToStringTests.class
 com\flag4j\CVectorOuterProductTests.class
 com\flag4j\CTensorConstructorTests.class
 com\flag4j\MatrixReshapeTests.class
+com\flag4j\MatrixElemOppTests.class
 com\flag4j\CMatrixElemDivTests.class
 com\flag4j\MatrixToStringTest.class
 com\flag4j\CMatrixStackTests.class
@@ -63,6 +66,7 @@ com\flag4j\linalg\solvers\MatrixLstsqSolverTests.class
 com\flag4j\util\ErrorMessagesTests.class
 com\flag4j\CMatrixConstructorTests.class
 com\flag4j\TensorNormTests.class
+com\flag4j\CTensorReshapeTests.class
 com\flag4j\TensorAggregateTests.class
 com\flag4j\VectorAggregateTests.class
 com\flag4j\VectorCopyTransposeTests.class
@@ -73,6 +77,7 @@ com\flag4j\operations\dense\real\RoundTests.class
 com\flag4j\CTensorTransposeTest.class
 com\flag4j\CVectorAddTests.class
 com\flag4j\VectorInnerProductTest.class
+com\flag4j\CTensorAddTests.class
 com\flag4j\operations\dense\complex\ComplexDenseOperationsTests.class
 com\flag4j\operations\dense\real\MatrixMultiplyTests.class
 com\flag4j\util\ParameterChecksTests.class
@@ -85,6 +90,7 @@ com\flag4j\MatrixTransposeTests.class
 com\flag4j\TensorTransposeTests.class
 com\flag4j\MatrixStackTests.class
 com\flag4j\CMatrixScaleOperationsTests.class
+com\flag4j\CTensorElemDivTests.class
 com\flag4j\CVectorStackJoinExtendTest.class
 com\flag4j\CVectorNormTests.class
 com\flag4j\complex_numbers\CNumberConstructorTest.class
@@ -92,6 +98,7 @@ com\flag4j\CMatrixSubTests.class
 com\flag4j\CVectorInnerProductTests.class
 com\flag4j\complex_numbers\CNumberExponentialTest.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseMatMultTransposeTests.class
+com\flag4j\CTensorToStringTests.class
 com\flag4j\CMatrixToStringTests.class
 com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseMatMultTransposeTests.class
 com\flag4j\linalg\decompositions\ComplexCholeskyTests.class
@@ -99,8 +106,10 @@ com\flag4j\complex_numbers\CNumberRoundTest.class
 com\flag4j\CVectorSetTests.class
 com\flag4j\linalg\decompositions\RealLUTests.class
 com\flag4j\VectorCrossProductTests.class
+com\flag4j\CTensorSubTests.class
 com\flag4j\complex_numbers\CNumberGettersSettersTest.class
 com\flag4j\CVectorCrossTests.class
+com\flag4j\linalg\transformations\ProjectionTests.class
 com\flag4j\TensorUnitaryOperationTests.class
 com\flag4j\CVectorScalMultDivTests.class
 com\flag4j\TensorReshapeTests.class
@@ -130,6 +139,7 @@ com\flag4j\MatrixElemMultTests.class
 com\flag4j\TensorGetSetTests.class
 com\flag4j\util\StringUtilsTests.class
 com\flag4j\operations\dense\real\RealDenseMatMultTransposeTests.class
+com\flag4j\CTensorTransposeTests.class
 com\flag4j\CMatrixMatVecMultTests.class
 com\flag4j\MatrixElemDivTests.class
 com\flag4j\TensorPropertiesTests.class
@@ -140,6 +150,7 @@ com\flag4j\CMatrixPropertiesTests.class
 com\flag4j\complex_numbers\CNumberBinaryOperationsTest.class
 com\flag4j\operations\dense_sparse\real\RealDenseSparseMatMultTests.class
 com\flag4j\MatrixPropertiesTests.class
+com\flag4j\CTensorElemMultTests.class
 com\flag4j\operations\dense\complex\CMatrixMultiplyTests.class
 com\flag4j\complex_numbers\CNumberConversionTest.class
 com\flag4j\operations\RealDenseMatrixMultiplyDispatcherTests.class
@@ -158,6 +169,7 @@ com\flag4j\linalg\decompositions\ComplexQRTests.class
 com\flag4j\complex_numbers\CNumberComparisonTest.class
 com\flag4j\TensorScalMultDivTests.class
 com\flag4j\CMatrixElemMultTests.class
+com\flag4j\CTensorConversionTests.class
 com\flag4j\linalg\DecomposeTest.class
 com\flag4j\MatrixTriangularTests.class
 com\flag4j\operations\dense_sparse\real\RealDenseSparseMatMultTransposeTests.class

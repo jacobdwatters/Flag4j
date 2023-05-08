@@ -244,65 +244,15 @@ public class SparseMatrix
 <span class="fc" id="L244">    }</span>
 
 
-//    /**
-//     * Creates a sparse matrix whose entries are specified by a 2D array. This is not the recommended method of constructing
-//     * a sparse matrix. It is recommended to use {@link #SparseMatrix(Shape, double[], int[], int[])} if the coordinate information is already known.
-//     * @param entries Entries of sparse matrix.
-//     */
-//    public SparseMatrix(double[][] entries) {
-//        super(new Shape(entries.length, entries[0].length));
-//
-//        ArrayList&lt;Double&gt; nonZeroEntries = new ArrayList&lt;&gt;(this.totalEntries()/8);
-//        ArrayList&lt;Integer&gt; rowIndices = new ArrayList&lt;&gt;(this.totalEntries()/8);
-//        ArrayList&lt;Integer&gt; colIndices = new ArrayList&lt;&gt;(this.totalEntries()/8);
-//
-//        // Fill entries with non-zero values.
-//        int numCols=super.numCols();
-//        for(int i=0; i&lt;entries.length; i++) {
-//            for(int j=0; j&lt;entries[0].length; j++) {
-//                if(entries[i][j] != 0) {
-//                    nonZeroEntries.add(entries[i][j]);
-//                    rowIndices.add(i);
-//                    colIndices.add(j);
-//                }
-//            }
-//        }
-//
-//        super.entries = nonZeroEntries.stream().mapToDouble(Double::doubleValue).toArray();
-//        super.rowIndices = rowIndices.stream().mapToInt(Integer::intValue).toArray();
-//        super.colIndices = colIndices.stream().mapToInt(Integer::intValue).toArray();
-//        super.setNonZeroEntries(super.entries.length);
-//    }
-//
-//
-//    /**
-//     * Creates a sparse matrix whose entries are specified by a 2D array. This is not the recommended method of constructing
-//     * a sparse matrix. It is recommended to use {@link #SparseMatrix(Shape, int[], int[], int[])} if the coordinate information is already known.
-//     * @param entries Entries of sparse matrix.
-//     */
-//    public SparseMatrix(int[][] entries) {
-//        super(new Shape(entries.length, entries[0].length));
-//
-//        ArrayList&lt;Integer&gt; nonZeroEntries = new ArrayList&lt;&gt;(this.totalEntries()/8);
-//        ArrayList&lt;Integer&gt; rowIndices = new ArrayList&lt;&gt;(this.totalEntries()/8);
-//        ArrayList&lt;Integer&gt; colIndices = new ArrayList&lt;&gt;(this.totalEntries()/8);
-//
-//        // Fill entries with non-zero values.
-//        for(int i=0; i&lt;entries.length; i++) {
-//            for(int j=0; j&lt;entries[0].length; j++) {
-//                if(entries[i][j] != 0) {
-//                    nonZeroEntries.add(entries[i][j]);
-//                    rowIndices.add(i);
-//                    colIndices.add(j);
-//                }
-//            }
-//        }
-//
-//        super.entries = nonZeroEntries.stream().mapToDouble(Integer::doubleValue).toArray();
-//        super.rowIndices = rowIndices.stream().mapToInt(Integer::intValue).toArray();
-//        super.colIndices = colIndices.stream().mapToInt(Integer::intValue).toArray();
-//        super.setNonZeroEntries(super.entries.length);
-//    }
+    /**
+     * Simply returns a reference of this tensor.
+     *
+     * @return A reference to this tensor.
+     */
+    @Override
+    protected SparseMatrix getSelf() {
+<span class="nc" id="L254">        return this;</span>
+    }
 
 
     /**
@@ -310,7 +260,7 @@ public class SparseMatrix
      * @return The number of rows in this matrix.
      */
     public int numRows() {
-<span class="nc" id="L313">        return numRows;</span>
+<span class="nc" id="L263">        return numRows;</span>
     }
 
 
@@ -319,13 +269,13 @@ public class SparseMatrix
      * @return The number of columns in this matrix.
      */
     public int numCols() {
-<span class="nc" id="L322">        return numCols;</span>
+<span class="nc" id="L272">        return numCols;</span>
     }
 
 
     @Override
     public SparseMatrix flatten(int axis) {
-<span class="nc" id="L328">        return null;</span>
+<span class="nc" id="L278">        return null;</span>
     }
 
 
@@ -336,7 +286,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isI() {
-<span class="nc" id="L339">        return false;</span>
+<span class="nc" id="L289">        return false;</span>
     }
 
 
@@ -348,7 +298,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isInv(SparseMatrix B) {
-<span class="nc" id="L351">        return false;</span>
+<span class="nc" id="L301">        return false;</span>
     }
 
 
@@ -361,7 +311,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setValues(Double[][] values) {
-<span class="nc" id="L364">        return null;</span>
+<span class="nc" id="L314">        return null;</span>
     }
 
 
@@ -374,7 +324,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setValues(double[][] values) {
-<span class="nc" id="L377">        return null;</span>
+<span class="nc" id="L327">        return null;</span>
     }
 
 
@@ -387,7 +337,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setValues(int[][] values) {
-<span class="nc" id="L390">        return null;</span>
+<span class="nc" id="L340">        return null;</span>
     }
 
 
@@ -401,7 +351,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setCol(Double[] values, int colIndex) {
-<span class="nc" id="L404">        return null;</span>
+<span class="nc" id="L354">        return null;</span>
     }
 
 
@@ -415,7 +365,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setCol(Integer[] values, int colIndex) {
-<span class="nc" id="L418">        return null;</span>
+<span class="nc" id="L368">        return null;</span>
     }
 
 
@@ -429,7 +379,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setCol(double[] values, int colIndex) {
-<span class="nc" id="L432">        return null;</span>
+<span class="nc" id="L382">        return null;</span>
     }
 
 
@@ -443,7 +393,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setCol(int[] values, int colIndex) {
-<span class="nc" id="L446">        return null;</span>
+<span class="nc" id="L396">        return null;</span>
     }
 
 
@@ -457,7 +407,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setRow(Double[] values, int rowIndex) {
-<span class="nc" id="L460">        return null;</span>
+<span class="nc" id="L410">        return null;</span>
     }
 
 
@@ -471,7 +421,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setRow(Integer[] values, int rowIndex) {
-<span class="nc" id="L474">        return null;</span>
+<span class="nc" id="L424">        return null;</span>
     }
 
 
@@ -485,7 +435,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setRow(double[] values, int rowIndex) {
-<span class="nc" id="L488">        return null;</span>
+<span class="nc" id="L438">        return null;</span>
     }
 
 
@@ -499,7 +449,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setRow(int[] values, int rowIndex) {
-<span class="nc" id="L502">        return null;</span>
+<span class="nc" id="L452">        return null;</span>
     }
 
 
@@ -517,7 +467,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSlice(SparseMatrix values, int rowStart, int colStart) {
-<span class="nc" id="L520">        return null;</span>
+<span class="nc" id="L470">        return null;</span>
     }
 
 
@@ -535,7 +485,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSlice(Double[][] values, int rowStart, int colStart) {
-<span class="nc" id="L538">        return null;</span>
+<span class="nc" id="L488">        return null;</span>
     }
 
 
@@ -553,7 +503,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSlice(Integer[][] values, int rowStart, int colStart) {
-<span class="nc" id="L556">        return null;</span>
+<span class="nc" id="L506">        return null;</span>
     }
 
 
@@ -571,7 +521,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSlice(double[][] values, int rowStart, int colStart) {
-<span class="nc" id="L574">        return null;</span>
+<span class="nc" id="L524">        return null;</span>
     }
 
 
@@ -589,7 +539,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSlice(int[][] values, int rowStart, int colStart) {
-<span class="nc" id="L592">        return null;</span>
+<span class="nc" id="L542">        return null;</span>
     }
 
 
@@ -607,7 +557,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
-<span class="nc" id="L610">        return null;</span>
+<span class="nc" id="L560">        return null;</span>
     }
 
 
@@ -619,7 +569,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix removeRow(int rowIndex) {
-<span class="nc" id="L622">        return null;</span>
+<span class="nc" id="L572">        return null;</span>
     }
 
 
@@ -631,7 +581,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix removeRows(int... rowIndices) {
-<span class="nc" id="L634">        return null;</span>
+<span class="nc" id="L584">        return null;</span>
     }
 
 
@@ -643,7 +593,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix removeCol(int colIndex) {
-<span class="nc" id="L646">        return null;</span>
+<span class="nc" id="L596">        return null;</span>
     }
 
 
@@ -655,7 +605,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix removeCols(int... colIndices) {
-<span class="nc" id="L658">        return null;</span>
+<span class="nc" id="L608">        return null;</span>
     }
 
 
@@ -667,7 +617,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix round() {
-<span class="nc" id="L670">        return null;</span>
+<span class="nc" id="L620">        return null;</span>
     }
 
 
@@ -681,7 +631,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix round(int precision) {
-<span class="nc" id="L684">        return null;</span>
+<span class="nc" id="L634">        return null;</span>
     }
 
 
@@ -694,7 +644,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix roundToZero() {
-<span class="nc" id="L697">        return null;</span>
+<span class="nc" id="L647">        return null;</span>
     }
 
 
@@ -709,7 +659,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix roundToZero(double threshold) {
-<span class="nc" id="L712">        return null;</span>
+<span class="nc" id="L662">        return null;</span>
     }
 
 
@@ -722,7 +672,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix swapRows(int rowIndex1, int rowIndex2) {
-<span class="nc" id="L725">        return null;</span>
+<span class="nc" id="L675">        return null;</span>
     }
 
 
@@ -735,7 +685,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix swapCols(int colIndex1, int colIndex2) {
-<span class="nc" id="L738">        return null;</span>
+<span class="nc" id="L688">        return null;</span>
     }
 
 
@@ -753,7 +703,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSliceCopy(Double[][] values, int rowStart, int colStart) {
-<span class="nc" id="L756">        return null;</span>
+<span class="nc" id="L706">        return null;</span>
     }
 
 
@@ -771,7 +721,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSliceCopy(Integer[][] values, int rowStart, int colStart) {
-<span class="nc" id="L774">        return null;</span>
+<span class="nc" id="L724">        return null;</span>
     }
 
 
@@ -789,7 +739,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSliceCopy(double[][] values, int rowStart, int colStart) {
-<span class="nc" id="L792">        return null;</span>
+<span class="nc" id="L742">        return null;</span>
     }
 
 
@@ -807,7 +757,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSliceCopy(int[][] values, int rowStart, int colStart) {
-<span class="nc" id="L810">        return null;</span>
+<span class="nc" id="L760">        return null;</span>
     }
 
 
@@ -825,7 +775,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSliceCopy(Matrix values, int rowStart, int colStart) {
-<span class="nc" id="L828">        return null;</span>
+<span class="nc" id="L778">        return null;</span>
     }
 
 
@@ -843,7 +793,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSlice(Matrix values, int rowStart, int colStart) {
-<span class="nc" id="L846">        return null;</span>
+<span class="nc" id="L796">        return null;</span>
     }
 
 
@@ -856,7 +806,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix add(Matrix B) {
-<span class="nc" id="L859">        return null;</span>
+<span class="nc" id="L809">        return null;</span>
     }
 
 
@@ -869,7 +819,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix add(CMatrix B) {
-<span class="nc" id="L872">        return null;</span>
+<span class="nc" id="L822">        return null;</span>
     }
 
 
@@ -882,7 +832,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix add(SparseCMatrix B) {
-<span class="nc" id="L885">        return null;</span>
+<span class="nc" id="L835">        return null;</span>
     }
 
 
@@ -895,7 +845,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix sub(Matrix B) {
-<span class="nc" id="L898">        return null;</span>
+<span class="nc" id="L848">        return null;</span>
     }
 
 
@@ -908,7 +858,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix sub(CMatrix B) {
-<span class="nc" id="L911">        return null;</span>
+<span class="nc" id="L861">        return null;</span>
     }
 
 
@@ -921,7 +871,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix sub(SparseCMatrix B) {
-<span class="nc" id="L924">        return null;</span>
+<span class="nc" id="L874">        return null;</span>
     }
 
 
@@ -933,7 +883,7 @@ public class SparseMatrix
     @Override
     public void addEq(Matrix B) {
 
-<span class="nc" id="L936">    }</span>
+<span class="nc" id="L886">    }</span>
 
 
     /**
@@ -944,7 +894,7 @@ public class SparseMatrix
     @Override
     public void subEq(Matrix B) {
 
-<span class="nc" id="L947">    }</span>
+<span class="nc" id="L897">    }</span>
 
 
     /**
@@ -956,7 +906,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix mult(Matrix B) {
-<span class="nc" id="L959">        return null;</span>
+<span class="nc" id="L909">        return null;</span>
     }
 
 
@@ -969,7 +919,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix mult(SparseMatrix B) {
-<span class="nc" id="L972">        return null;</span>
+<span class="nc" id="L922">        return null;</span>
     }
 
 
@@ -982,7 +932,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix mult(CMatrix B) {
-<span class="nc" id="L985">        return null;</span>
+<span class="nc" id="L935">        return null;</span>
     }
 
 
@@ -995,7 +945,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
-<span class="nc" id="L998">        return null;</span>
+<span class="nc" id="L948">        return null;</span>
     }
 
 
@@ -1008,7 +958,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix mult(Vector b) {
-<span class="nc" id="L1011">        return null;</span>
+<span class="nc" id="L961">        return null;</span>
     }
 
 
@@ -1021,7 +971,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix mult(SparseVector b) {
-<span class="nc" id="L1024">        return null;</span>
+<span class="nc" id="L974">        return null;</span>
     }
 
 
@@ -1034,7 +984,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix mult(CVector b) {
-<span class="nc" id="L1037">        return null;</span>
+<span class="nc" id="L987">        return null;</span>
     }
 
 
@@ -1047,7 +997,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix mult(SparseCVector b) {
-<span class="nc" id="L1050">        return null;</span>
+<span class="nc" id="L1000">        return null;</span>
     }
 
 
@@ -1063,7 +1013,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix multTranspose(Matrix B) {
-<span class="nc" id="L1066">        return null;</span>
+<span class="nc" id="L1016">        return null;</span>
     }
 
 
@@ -1079,7 +1029,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix multTranspose(SparseMatrix B) {
-<span class="nc" id="L1082">        return null;</span>
+<span class="nc" id="L1032">        return null;</span>
     }
 
 
@@ -1095,7 +1045,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix multTranspose(CMatrix B) {
-<span class="nc" id="L1098">        return null;</span>
+<span class="nc" id="L1048">        return null;</span>
     }
 
 
@@ -1111,7 +1061,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix multTranspose(SparseCMatrix B) {
-<span class="nc" id="L1114">        return null;</span>
+<span class="nc" id="L1064">        return null;</span>
     }
 
 
@@ -1125,7 +1075,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix pow(int exponent) {
-<span class="nc" id="L1128">        return null;</span>
+<span class="nc" id="L1078">        return null;</span>
     }
 
 
@@ -1138,7 +1088,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix elemMult(Matrix B) {
-<span class="nc" id="L1141">        return null;</span>
+<span class="nc" id="L1091">        return null;</span>
     }
 
 
@@ -1151,7 +1101,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix elemMult(CMatrix B) {
-<span class="nc" id="L1154">        return null;</span>
+<span class="nc" id="L1104">        return null;</span>
     }
 
 
@@ -1164,7 +1114,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
-<span class="nc" id="L1167">        return null;</span>
+<span class="nc" id="L1117">        return null;</span>
     }
 
 
@@ -1178,7 +1128,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix elemDiv(Matrix B) {
-<span class="nc" id="L1181">        return null;</span>
+<span class="nc" id="L1131">        return null;</span>
     }
 
 
@@ -1192,7 +1142,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix elemDiv(CMatrix B) {
-<span class="nc" id="L1195">        return null;</span>
+<span class="nc" id="L1145">        return null;</span>
     }
 
 
@@ -1204,7 +1154,7 @@ public class SparseMatrix
      */
     @Override
     public Double det() {
-<span class="nc" id="L1207">        return null;</span>
+<span class="nc" id="L1157">        return null;</span>
     }
 
 
@@ -1217,7 +1167,7 @@ public class SparseMatrix
      */
     @Override
     public Double fib(Matrix B) {
-<span class="nc" id="L1220">        return null;</span>
+<span class="nc" id="L1170">        return null;</span>
     }
 
 
@@ -1230,7 +1180,7 @@ public class SparseMatrix
      */
     @Override
     public Double fib(SparseMatrix B) {
-<span class="nc" id="L1233">        return null;</span>
+<span class="nc" id="L1183">        return null;</span>
     }
 
 
@@ -1243,7 +1193,7 @@ public class SparseMatrix
      */
     @Override
     public CNumber fib(CMatrix B) {
-<span class="nc" id="L1246">        return null;</span>
+<span class="nc" id="L1196">        return null;</span>
     }
 
 
@@ -1256,7 +1206,7 @@ public class SparseMatrix
      */
     @Override
     public CNumber fib(SparseCMatrix B) {
-<span class="nc" id="L1259">        return null;</span>
+<span class="nc" id="L1209">        return null;</span>
     }
 
 
@@ -1268,7 +1218,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix directSum(Matrix B) {
-<span class="nc" id="L1271">        return null;</span>
+<span class="nc" id="L1221">        return null;</span>
     }
 
 
@@ -1280,7 +1230,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix directSum(SparseMatrix B) {
-<span class="nc" id="L1283">        return null;</span>
+<span class="nc" id="L1233">        return null;</span>
     }
 
 
@@ -1292,7 +1242,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix directSum(CMatrix B) {
-<span class="nc" id="L1295">        return null;</span>
+<span class="nc" id="L1245">        return null;</span>
     }
 
 
@@ -1304,7 +1254,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix directSum(SparseCMatrix B) {
-<span class="nc" id="L1307">        return null;</span>
+<span class="nc" id="L1257">        return null;</span>
     }
 
 
@@ -1316,7 +1266,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix invDirectSum(Matrix B) {
-<span class="nc" id="L1319">        return null;</span>
+<span class="nc" id="L1269">        return null;</span>
     }
 
 
@@ -1328,7 +1278,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix invDirectSum(SparseMatrix B) {
-<span class="nc" id="L1331">        return null;</span>
+<span class="nc" id="L1281">        return null;</span>
     }
 
 
@@ -1340,7 +1290,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix invDirectSum(CMatrix B) {
-<span class="nc" id="L1343">        return null;</span>
+<span class="nc" id="L1293">        return null;</span>
     }
 
 
@@ -1352,7 +1302,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix invDirectSum(SparseCMatrix B) {
-<span class="nc" id="L1355">        return null;</span>
+<span class="nc" id="L1305">        return null;</span>
     }
 
 
@@ -1364,7 +1314,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix sumCols() {
-<span class="nc" id="L1367">        return null;</span>
+<span class="nc" id="L1317">        return null;</span>
     }
 
 
@@ -1376,7 +1326,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix sumRows() {
-<span class="nc" id="L1379">        return null;</span>
+<span class="nc" id="L1329">        return null;</span>
     }
 
 
@@ -1389,7 +1339,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix addToEachCol(Vector b) {
-<span class="nc" id="L1392">        return null;</span>
+<span class="nc" id="L1342">        return null;</span>
     }
 
 
@@ -1402,7 +1352,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix addToEachCol(SparseVector b) {
-<span class="nc" id="L1405">        return null;</span>
+<span class="nc" id="L1355">        return null;</span>
     }
 
 
@@ -1415,7 +1365,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix addToEachCol(CVector b) {
-<span class="nc" id="L1418">        return null;</span>
+<span class="nc" id="L1368">        return null;</span>
     }
 
 
@@ -1428,7 +1378,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix addToEachCol(SparseCVector b) {
-<span class="nc" id="L1431">        return null;</span>
+<span class="nc" id="L1381">        return null;</span>
     }
 
 
@@ -1441,7 +1391,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix addToEachRow(Vector b) {
-<span class="nc" id="L1444">        return null;</span>
+<span class="nc" id="L1394">        return null;</span>
     }
 
 
@@ -1454,7 +1404,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix addToEachRow(SparseVector b) {
-<span class="nc" id="L1457">        return null;</span>
+<span class="nc" id="L1407">        return null;</span>
     }
 
 
@@ -1467,7 +1417,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix addToEachRow(CVector b) {
-<span class="nc" id="L1470">        return null;</span>
+<span class="nc" id="L1420">        return null;</span>
     }
 
 
@@ -1480,7 +1430,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix addToEachRow(SparseCVector b) {
-<span class="nc" id="L1483">        return null;</span>
+<span class="nc" id="L1433">        return null;</span>
     }
 
 
@@ -1494,7 +1444,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix stack(Matrix B) {
-<span class="nc" id="L1497">        return null;</span>
+<span class="nc" id="L1447">        return null;</span>
     }
 
 
@@ -1508,7 +1458,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix stack(SparseMatrix B) {
-<span class="nc" id="L1511">        return null;</span>
+<span class="nc" id="L1461">        return null;</span>
     }
 
 
@@ -1522,7 +1472,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix stack(CMatrix B) {
-<span class="nc" id="L1525">        return null;</span>
+<span class="nc" id="L1475">        return null;</span>
     }
 
 
@@ -1536,7 +1486,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix stack(SparseCMatrix B) {
-<span class="nc" id="L1539">        return null;</span>
+<span class="nc" id="L1489">        return null;</span>
     }
 
 
@@ -1554,7 +1504,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix stack(Matrix B, int axis) {
-<span class="nc" id="L1557">        return null;</span>
+<span class="nc" id="L1507">        return null;</span>
     }
 
 
@@ -1572,7 +1522,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix stack(SparseMatrix B, int axis) {
-<span class="nc" id="L1575">        return null;</span>
+<span class="nc" id="L1525">        return null;</span>
     }
 
 
@@ -1590,7 +1540,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix stack(CMatrix B, int axis) {
-<span class="nc" id="L1593">        return null;</span>
+<span class="nc" id="L1543">        return null;</span>
     }
 
 
@@ -1608,7 +1558,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix stack(SparseCMatrix B, int axis) {
-<span class="nc" id="L1611">        return null;</span>
+<span class="nc" id="L1561">        return null;</span>
     }
 
 
@@ -1622,7 +1572,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix augment(Matrix B) {
-<span class="nc" id="L1625">        return null;</span>
+<span class="nc" id="L1575">        return null;</span>
     }
 
 
@@ -1636,7 +1586,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix augment(SparseMatrix B) {
-<span class="nc" id="L1639">        return null;</span>
+<span class="nc" id="L1589">        return null;</span>
     }
 
 
@@ -1650,7 +1600,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix augment(CMatrix B) {
-<span class="nc" id="L1653">        return null;</span>
+<span class="nc" id="L1603">        return null;</span>
     }
 
 
@@ -1664,7 +1614,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix augment(SparseCMatrix B) {
-<span class="nc" id="L1667">        return null;</span>
+<span class="nc" id="L1617">        return null;</span>
     }
 
 
@@ -1680,7 +1630,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix stack(Vector b) {
-<span class="nc" id="L1683">        return null;</span>
+<span class="nc" id="L1633">        return null;</span>
     }
 
 
@@ -1696,7 +1646,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix stack(SparseVector b) {
-<span class="nc" id="L1699">        return null;</span>
+<span class="nc" id="L1649">        return null;</span>
     }
 
 
@@ -1712,7 +1662,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix stack(CVector b) {
-<span class="nc" id="L1715">        return null;</span>
+<span class="nc" id="L1665">        return null;</span>
     }
 
 
@@ -1728,7 +1678,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix stack(SparseCVector b) {
-<span class="nc" id="L1731">        return null;</span>
+<span class="nc" id="L1681">        return null;</span>
     }
 
 
@@ -1748,7 +1698,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix stack(Vector b, int axis) {
-<span class="nc" id="L1751">        return null;</span>
+<span class="nc" id="L1701">        return null;</span>
     }
 
 
@@ -1768,7 +1718,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix stack(SparseVector b, int axis) {
-<span class="nc" id="L1771">        return null;</span>
+<span class="nc" id="L1721">        return null;</span>
     }
 
 
@@ -1788,7 +1738,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix stack(CVector b, int axis) {
-<span class="nc" id="L1791">        return null;</span>
+<span class="nc" id="L1741">        return null;</span>
     }
 
 
@@ -1808,7 +1758,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix stack(SparseCVector b, int axis) {
-<span class="nc" id="L1811">        return null;</span>
+<span class="nc" id="L1761">        return null;</span>
     }
 
 
@@ -1824,7 +1774,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix augment(Vector b) {
-<span class="nc" id="L1827">        return null;</span>
+<span class="nc" id="L1777">        return null;</span>
     }
 
 
@@ -1840,7 +1790,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix augment(SparseVector b) {
-<span class="nc" id="L1843">        return null;</span>
+<span class="nc" id="L1793">        return null;</span>
     }
 
 
@@ -1856,7 +1806,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix augment(CVector b) {
-<span class="nc" id="L1859">        return null;</span>
+<span class="nc" id="L1809">        return null;</span>
     }
 
 
@@ -1872,7 +1822,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix augment(SparseCVector b) {
-<span class="nc" id="L1875">        return null;</span>
+<span class="nc" id="L1825">        return null;</span>
     }
 
 
@@ -1884,7 +1834,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix getRow(int i) {
-<span class="nc" id="L1887">        return null;</span>
+<span class="nc" id="L1837">        return null;</span>
     }
 
 
@@ -1896,7 +1846,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix getCol(int j) {
-<span class="nc" id="L1899">        return null;</span>
+<span class="nc" id="L1849">        return null;</span>
     }
 
 
@@ -1913,7 +1863,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
-<span class="nc" id="L1916">        return null;</span>
+<span class="nc" id="L1866">        return null;</span>
     }
 
 
@@ -1928,7 +1878,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix getColBelow(int rowStart, int j) {
-<span class="nc" id="L1931">        return null;</span>
+<span class="nc" id="L1881">        return null;</span>
     }
 
 
@@ -1943,7 +1893,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix getRowAfter(int colStart, int i) {
-<span class="nc" id="L1946">        return null;</span>
+<span class="nc" id="L1896">        return null;</span>
     }
 
 
@@ -1956,7 +1906,7 @@ public class SparseMatrix
      */
     @Override
     public Double trace() {
-<span class="nc" id="L1959">        return null;</span>
+<span class="nc" id="L1909">        return null;</span>
     }
 
 
@@ -1969,7 +1919,7 @@ public class SparseMatrix
      */
     @Override
     public Double tr() {
-<span class="nc" id="L1972">        return null;</span>
+<span class="nc" id="L1922">        return null;</span>
     }
 
 
@@ -1980,7 +1930,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isSquare() {
-<span class="nc" id="L1983">        return false;</span>
+<span class="nc" id="L1933">        return false;</span>
     }
 
 
@@ -1991,7 +1941,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isVector() {
-<span class="nc" id="L1994">        return false;</span>
+<span class="nc" id="L1944">        return false;</span>
     }
 
 
@@ -2005,7 +1955,7 @@ public class SparseMatrix
      */
     @Override
     public int vectorType() {
-<span class="nc" id="L2008">        return 0;</span>
+<span class="nc" id="L1958">        return 0;</span>
     }
 
 
@@ -2016,7 +1966,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isTri() {
-<span class="nc" id="L2019">        return false;</span>
+<span class="nc" id="L1969">        return false;</span>
     }
 
 
@@ -2027,7 +1977,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isTriL() {
-<span class="nc" id="L2030">        return false;</span>
+<span class="nc" id="L1980">        return false;</span>
     }
 
 
@@ -2038,7 +1988,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isTriU() {
-<span class="nc" id="L2041">        return false;</span>
+<span class="nc" id="L1991">        return false;</span>
     }
 
 
@@ -2049,7 +1999,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isDiag() {
-<span class="nc" id="L2052">        return false;</span>
+<span class="nc" id="L2002">        return false;</span>
     }
 
 
@@ -2060,7 +2010,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isFullRank() {
-<span class="nc" id="L2063">        return false;</span>
+<span class="nc" id="L2013">        return false;</span>
     }
 
 
@@ -2072,7 +2022,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isSingular() {
-<span class="nc" id="L2075">        return false;</span>
+<span class="nc" id="L2025">        return false;</span>
     }
 
 
@@ -2084,7 +2034,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isInvertible() {
-<span class="nc" id="L2087">        return false;</span>
+<span class="nc" id="L2037">        return false;</span>
     }
 
 
@@ -2097,7 +2047,7 @@ public class SparseMatrix
      */
     @Override
     public double norm(double p, double q) {
-<span class="nc" id="L2100">        return 0;</span>
+<span class="nc" id="L2050">        return 0;</span>
     }
 
 
@@ -2109,7 +2059,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isDiagonalizable() {
-<span class="nc" id="L2112">        return false;</span>
+<span class="nc" id="L2062">        return false;</span>
     }
 
 
@@ -2120,7 +2070,7 @@ public class SparseMatrix
      */
     @Override
     public double maxNorm() {
-<span class="nc" id="L2123">        return 0;</span>
+<span class="nc" id="L2073">        return 0;</span>
     }
 
 
@@ -2132,7 +2082,7 @@ public class SparseMatrix
      */
     @Override
     public int matrixRank() {
-<span class="nc" id="L2135">        return 0;</span>
+<span class="nc" id="L2085">        return 0;</span>
     }
 
 
@@ -2143,7 +2093,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isSymmetric() {
-<span class="nc" id="L2146">        return false;</span>
+<span class="nc" id="L2096">        return false;</span>
     }
 
 
@@ -2154,7 +2104,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isAntiSymmetric() {
-<span class="nc" id="L2157">        return false;</span>
+<span class="nc" id="L2107">        return false;</span>
     }
 
 
@@ -2165,7 +2115,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isOrthogonal() {
-<span class="nc" id="L2168">        return false;</span>
+<span class="nc" id="L2118">        return false;</span>
     }
 
 
@@ -2177,7 +2127,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix sqrtComplex() {
-<span class="nc" id="L2180">        return null;</span>
+<span class="nc" id="L2130">        return null;</span>
     }
 
 
@@ -2188,7 +2138,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix toComplex() {
-<span class="nc" id="L2191">        return null;</span>
+<span class="nc" id="L2141">        return null;</span>
     }
 
 
@@ -2199,7 +2149,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isZeros() {
-<span class="nc" id="L2202">        return false;</span>
+<span class="nc" id="L2152">        return false;</span>
     }
 
 
@@ -2210,7 +2160,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isOnes() {
-<span class="nc" id="L2213">        return false;</span>
+<span class="nc" id="L2163">        return false;</span>
     }
 
 
@@ -2223,7 +2173,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix set(double value, int... indices) {
-<span class="nc" id="L2226">        return null;</span>
+<span class="nc" id="L2176">        return null;</span>
     }
 
 
@@ -2237,7 +2187,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix reshape(Shape shape) {
-<span class="nc" id="L2240">        return null;</span>
+<span class="nc" id="L2190">        return null;</span>
     }
 
 
@@ -2251,7 +2201,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix reshape(int... shape) {
-<span class="nc" id="L2254">        return null;</span>
+<span class="nc" id="L2204">        return null;</span>
     }
 
 
@@ -2262,7 +2212,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix flatten() {
-<span class="nc" id="L2265">        return null;</span>
+<span class="nc" id="L2215">        return null;</span>
     }
 
 
@@ -2275,7 +2225,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix add(SparseMatrix B) {
-<span class="nc" id="L2278">        return null;</span>
+<span class="nc" id="L2228">        return null;</span>
     }
 
 
@@ -2287,7 +2237,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix add(double a) {
-<span class="nc" id="L2290">        return null;</span>
+<span class="nc" id="L2240">        return null;</span>
     }
 
 
@@ -2299,7 +2249,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix add(CNumber a) {
-<span class="nc" id="L2302">        return null;</span>
+<span class="nc" id="L2252">        return null;</span>
     }
 
 
@@ -2312,7 +2262,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix sub(SparseMatrix B) {
-<span class="nc" id="L2315">        return null;</span>
+<span class="nc" id="L2265">        return null;</span>
     }
 
 
@@ -2324,7 +2274,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix sub(double a) {
-<span class="nc" id="L2327">        return null;</span>
+<span class="nc" id="L2277">        return null;</span>
     }
 
 
@@ -2336,7 +2286,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix sub(CNumber a) {
-<span class="nc" id="L2339">        return null;</span>
+<span class="nc" id="L2289">        return null;</span>
     }
 
 
@@ -2349,7 +2299,7 @@ public class SparseMatrix
     @Override
     public void addEq(SparseMatrix B) {
 
-<span class="nc" id="L2352">    }</span>
+<span class="nc" id="L2302">    }</span>
 
 
     /**
@@ -2360,7 +2310,7 @@ public class SparseMatrix
     @Override
     public void addEq(Double b) {
 
-<span class="nc" id="L2363">    }</span>
+<span class="nc" id="L2313">    }</span>
 
 
     /**
@@ -2372,7 +2322,7 @@ public class SparseMatrix
     @Override
     public void subEq(SparseMatrix B) {
 
-<span class="nc" id="L2375">    }</span>
+<span class="nc" id="L2325">    }</span>
 
 
     /**
@@ -2383,7 +2333,7 @@ public class SparseMatrix
     @Override
     public void subEq(Double b) {
 
-<span class="nc" id="L2386">    }</span>
+<span class="nc" id="L2336">    }</span>
 
 
     /**
@@ -2394,7 +2344,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix mult(double factor) {
-<span class="nc" id="L2397">        return null;</span>
+<span class="nc" id="L2347">        return null;</span>
     }
 
 
@@ -2406,7 +2356,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix mult(CNumber factor) {
-<span class="nc" id="L2409">        return null;</span>
+<span class="nc" id="L2359">        return null;</span>
     }
 
 
@@ -2419,7 +2369,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix div(double divisor) {
-<span class="nc" id="L2422">        return null;</span>
+<span class="nc" id="L2372">        return null;</span>
     }
 
 
@@ -2432,7 +2382,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix div(CNumber divisor) {
-<span class="nc" id="L2435">        return null;</span>
+<span class="nc" id="L2385">        return null;</span>
     }
 
 
@@ -2443,7 +2393,7 @@ public class SparseMatrix
      */
     @Override
     public Double sum() {
-<span class="nc" id="L2446">        return null;</span>
+<span class="nc" id="L2396">        return null;</span>
     }
 
 
@@ -2455,7 +2405,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix sqrt() {
-<span class="nc" id="L2458">        return null;</span>
+<span class="nc" id="L2408">        return null;</span>
     }
 
 
@@ -2467,7 +2417,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix abs() {
-<span class="nc" id="L2470">        return null;</span>
+<span class="nc" id="L2420">        return null;</span>
     }
 
 
@@ -2478,7 +2428,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix transpose() {
-<span class="nc" id="L2481">        return null;</span>
+<span class="nc" id="L2431">        return null;</span>
     }
 
 
@@ -2489,7 +2439,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix T() {
-<span class="nc" id="L2492">        return null;</span>
+<span class="nc" id="L2442">        return null;</span>
     }
 
 
@@ -2501,7 +2451,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix recip() {
-<span class="nc" id="L2504">        return null;</span>
+<span class="nc" id="L2454">        return null;</span>
     }
 
 
@@ -2514,7 +2464,7 @@ public class SparseMatrix
      */
     @Override
     public Double get(int... indices) {
-<span class="nc" id="L2517">        return null;</span>
+<span class="nc" id="L2467">        return null;</span>
     }
 
 
@@ -2525,7 +2475,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix copy() {
-<span class="nc" id="L2528">        return null;</span>
+<span class="nc" id="L2478">        return null;</span>
     }
 
 
@@ -2538,7 +2488,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix elemMult(SparseMatrix B) {
-<span class="nc" id="L2541">        return null;</span>
+<span class="nc" id="L2491">        return null;</span>
     }
 
 
@@ -2551,7 +2501,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix elemDiv(SparseMatrix B) {
-<span class="nc" id="L2554">        return null;</span>
+<span class="nc" id="L2504">        return null;</span>
     }
     
 
@@ -2563,7 +2513,7 @@ public class SparseMatrix
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L2566">        return new int[0];</span>
+<span class="nc" id="L2516">        return new int[0];</span>
     }
 
 
@@ -2575,7 +2525,7 @@ public class SparseMatrix
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L2578">        return new int[0];</span>
+<span class="nc" id="L2528">        return new int[0];</span>
     }
 
 
@@ -2586,7 +2536,7 @@ public class SparseMatrix
      */
     @Override
     public double norm() {
-<span class="nc" id="L2589">        return 0;</span>
+<span class="nc" id="L2539">        return 0;</span>
     }
 
 
@@ -2600,7 +2550,7 @@ public class SparseMatrix
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L2603">        return 0;</span>
+<span class="nc" id="L2553">        return 0;</span>
     }
 
 
@@ -2611,7 +2561,7 @@ public class SparseMatrix
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L2614">        return 0;</span>
+<span class="nc" id="L2564">        return 0;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

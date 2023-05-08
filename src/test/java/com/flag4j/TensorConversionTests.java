@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TensorConversionTests {
 
     static double[] aEntries;
-    static Shape shape, expShape;
+    static Shape shape;
     static Tensor A;
     static CTensor exp;
     static CNumber[] expEntries;
@@ -65,7 +65,6 @@ class TensorConversionTests {
     @Test
     void toVectorTest() {
         double[] expEntries;
-        Shape expShape;
         Vector exp;
 
         // ----------------------- Sub-case 1 -----------------------

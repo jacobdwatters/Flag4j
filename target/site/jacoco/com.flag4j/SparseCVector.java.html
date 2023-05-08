@@ -314,6 +314,17 @@ public class SparseCVector
 
 
     /**
+     * Simply returns a reference of this tensor.
+     *
+     * @return A reference to this tensor.
+     */
+    @Override
+    protected SparseCVector getSelf() {
+<span class="nc" id="L323">        return this;</span>
+    }
+
+
+    /**
      * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
      * and takes the complex conjugate of the elements along these axes. Same as {@link #H}.
      *
@@ -321,7 +332,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector hermTranspose() {
-<span class="nc" id="L324">        return null;</span>
+<span class="nc" id="L335">        return null;</span>
     }
 
 
@@ -333,7 +344,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector H() {
-<span class="nc" id="L336">        return null;</span>
+<span class="nc" id="L347">        return null;</span>
     }
 
 
@@ -348,27 +359,27 @@ public class SparseCVector
      */
     @Override
     public SparseCVector set(CNumber value, int... indices) {
-<span class="nc" id="L351">        return null;</span>
+<span class="nc" id="L362">        return null;</span>
     }
 
     @Override
     public boolean isReal() {
-<span class="nc" id="L356">        return false;</span>
+<span class="nc" id="L367">        return false;</span>
     }
 
     @Override
     public boolean isComplex() {
-<span class="nc" id="L361">        return false;</span>
+<span class="nc" id="L372">        return false;</span>
     }
 
     @Override
     public SparseCVector conj() {
-<span class="nc" id="L366">        return null;</span>
+<span class="nc" id="L377">        return null;</span>
     }
 
     @Override
     public SparseVector toReal() {
-<span class="nc" id="L371">        return null;</span>
+<span class="nc" id="L382">        return null;</span>
     }
 
     /**
@@ -378,7 +389,7 @@ public class SparseCVector
      */
     @Override
     public boolean isZeros() {
-<span class="nc" id="L381">        return false;</span>
+<span class="nc" id="L392">        return false;</span>
     }
 
     /**
@@ -388,7 +399,7 @@ public class SparseCVector
      */
     @Override
     public boolean isOnes() {
-<span class="nc" id="L391">        return false;</span>
+<span class="nc" id="L402">        return false;</span>
     }
 
     /**
@@ -400,7 +411,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector set(double value, int... indices) {
-<span class="nc" id="L403">        return null;</span>
+<span class="nc" id="L414">        return null;</span>
     }
 
     /**
@@ -413,7 +424,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector reshape(Shape shape) {
-<span class="nc" id="L416">        return null;</span>
+<span class="nc" id="L427">        return null;</span>
     }
 
     
@@ -427,7 +438,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector reshape(int... shape) {
-<span class="nc" id="L430">        return null;</span>
+<span class="nc" id="L441">        return null;</span>
     }
 
     /**
@@ -437,17 +448,6 @@ public class SparseCVector
      */
     @Override
     public SparseCVector flatten() {
-<span class="nc" id="L440">        return null;</span>
-    }
-
-    /**
-     * Joints specified vector with this vector.
-     *
-     * @param b Vector to join with this vector.
-     * @return A vector resulting from joining the specified vector with this vector.
-     */
-    @Override
-    public CVector join(Vector b) {
 <span class="nc" id="L451">        return null;</span>
     }
 
@@ -458,7 +458,7 @@ public class SparseCVector
      * @return A vector resulting from joining the specified vector with this vector.
      */
     @Override
-    public CVector join(CVector b) {
+    public CVector join(Vector b) {
 <span class="nc" id="L462">        return null;</span>
     }
 
@@ -469,7 +469,7 @@ public class SparseCVector
      * @return A vector resulting from joining the specified vector with this vector.
      */
     @Override
-    public SparseCVector join(SparseVector b) {
+    public CVector join(CVector b) {
 <span class="nc" id="L473">        return null;</span>
     }
 
@@ -480,8 +480,19 @@ public class SparseCVector
      * @return A vector resulting from joining the specified vector with this vector.
      */
     @Override
-    public SparseCVector join(SparseCVector b) {
+    public SparseCVector join(SparseVector b) {
 <span class="nc" id="L484">        return null;</span>
+    }
+
+    /**
+     * Joints specified vector with this vector.
+     *
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    @Override
+    public SparseCVector join(SparseCVector b) {
+<span class="nc" id="L495">        return null;</span>
     }
 
     /**
@@ -495,7 +506,7 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(Vector b) {
-<span class="nc" id="L498">        return null;</span>
+<span class="nc" id="L509">        return null;</span>
     }
 
     /**
@@ -509,7 +520,7 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(SparseVector b) {
-<span class="nc" id="L512">        return null;</span>
+<span class="nc" id="L523">        return null;</span>
     }
 
     /**
@@ -523,7 +534,7 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(CVector b) {
-<span class="nc" id="L526">        return null;</span>
+<span class="nc" id="L537">        return null;</span>
     }
 
     /**
@@ -537,7 +548,7 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(SparseCVector b) {
-<span class="nc" id="L540">        return null;</span>
+<span class="nc" id="L551">        return null;</span>
     }
 
     /**
@@ -565,7 +576,7 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(Vector b, int axis) {
-<span class="nc" id="L568">        return null;</span>
+<span class="nc" id="L579">        return null;</span>
     }
 
     /**
@@ -593,7 +604,7 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(SparseVector b, int axis) {
-<span class="nc" id="L596">        return null;</span>
+<span class="nc" id="L607">        return null;</span>
     }
 
     /**
@@ -621,7 +632,7 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(CVector b, int axis) {
-<span class="nc" id="L624">        return null;</span>
+<span class="nc" id="L635">        return null;</span>
     }
 
     /**
@@ -649,7 +660,7 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(SparseCVector b, int axis) {
-<span class="nc" id="L652">        return null;</span>
+<span class="nc" id="L663">        return null;</span>
     }
 
     /**
@@ -661,7 +672,7 @@ public class SparseCVector
      */
     @Override
     public CVector add(Vector B) {
-<span class="nc" id="L664">        return null;</span>
+<span class="nc" id="L675">        return null;</span>
     }
 
     /**
@@ -673,7 +684,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector add(SparseVector B) {
-<span class="nc" id="L676">        return null;</span>
+<span class="nc" id="L687">        return null;</span>
     }
 
     /**
@@ -685,7 +696,7 @@ public class SparseCVector
      */
     @Override
     public CVector add(CVector B) {
-<span class="nc" id="L688">        return null;</span>
+<span class="nc" id="L699">        return null;</span>
     }
 
     /**
@@ -697,7 +708,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector add(SparseCVector B) {
-<span class="nc" id="L700">        return null;</span>
+<span class="nc" id="L711">        return null;</span>
     }
 
     /**
@@ -709,7 +720,7 @@ public class SparseCVector
      */
     @Override
     public CVector sub(Vector B) {
-<span class="nc" id="L712">        return null;</span>
+<span class="nc" id="L723">        return null;</span>
     }
 
     /**
@@ -721,7 +732,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector sub(SparseVector B) {
-<span class="nc" id="L724">        return null;</span>
+<span class="nc" id="L735">        return null;</span>
     }
 
     /**
@@ -733,17 +744,6 @@ public class SparseCVector
      */
     @Override
     public SparseCVector sub(CVector B) {
-<span class="nc" id="L736">        return null;</span>
-    }
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CVector add(double a) {
 <span class="nc" id="L747">        return null;</span>
     }
 
@@ -754,8 +754,19 @@ public class SparseCVector
      * @return The result of adding the specified value to each entry of this tensor.
      */
     @Override
-    public CVector add(CNumber a) {
+    public CVector add(double a) {
 <span class="nc" id="L758">        return null;</span>
+    }
+
+    /**
+     * Adds specified value to all entries of this tensor.
+     *
+     * @param a Value to add to all entries of this tensor.
+     * @return The result of adding the specified value to each entry of this tensor.
+     */
+    @Override
+    public CVector add(CNumber a) {
+<span class="nc" id="L769">        return null;</span>
     }
 
     /**
@@ -767,7 +778,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector sub(SparseCVector B) {
-<span class="nc" id="L770">        return null;</span>
+<span class="nc" id="L781">        return null;</span>
     }
 
     /**
@@ -780,7 +791,7 @@ public class SparseCVector
     @Override
     public void addEq(SparseVector B) {
 
-<span class="nc" id="L783">    }</span>
+<span class="nc" id="L794">    }</span>
 
     /**
      * Computes the element-wise addition between this vector and the specified vector and stores the result
@@ -792,7 +803,7 @@ public class SparseCVector
     @Override
     public void addEq(Vector B) {
 
-<span class="nc" id="L795">    }</span>
+<span class="nc" id="L806">    }</span>
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector and stores the result
@@ -804,7 +815,7 @@ public class SparseCVector
     @Override
     public void subEq(Vector B) {
 
-<span class="nc" id="L807">    }</span>
+<span class="nc" id="L818">    }</span>
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector and stores the result
@@ -816,7 +827,7 @@ public class SparseCVector
     @Override
     public void subEq(SparseVector B) {
 
-<span class="nc" id="L819">    }</span>
+<span class="nc" id="L830">    }</span>
 
     /**
      * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
@@ -827,7 +838,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector elemMult(Vector B) {
-<span class="nc" id="L830">        return null;</span>
+<span class="nc" id="L841">        return null;</span>
     }
 
     /**
@@ -839,7 +850,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector elemMult(SparseVector B) {
-<span class="nc" id="L842">        return null;</span>
+<span class="nc" id="L853">        return null;</span>
     }
 
     /**
@@ -851,7 +862,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector elemMult(CVector B) {
-<span class="nc" id="L854">        return null;</span>
+<span class="nc" id="L865">        return null;</span>
     }
 
     /**
@@ -862,7 +873,7 @@ public class SparseCVector
      */
     @Override
     public CVector sub(double a) {
-<span class="nc" id="L865">        return null;</span>
+<span class="nc" id="L876">        return null;</span>
     }
 
     /**
@@ -873,7 +884,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector sub(CNumber a) {
-<span class="nc" id="L876">        return null;</span>
+<span class="nc" id="L887">        return null;</span>
     }
 
     /**
@@ -885,7 +896,7 @@ public class SparseCVector
     @Override
     public void addEq(SparseCVector B) {
 
-<span class="nc" id="L888">    }</span>
+<span class="nc" id="L899">    }</span>
 
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
@@ -895,7 +906,7 @@ public class SparseCVector
     @Override
     public void addEq(CNumber b) {
 
-<span class="nc" id="L898">    }</span>
+<span class="nc" id="L909">    }</span>
 
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
@@ -905,7 +916,7 @@ public class SparseCVector
     @Override
     public void addEq(Double b) {
 
-<span class="nc" id="L908">    }</span>
+<span class="nc" id="L919">    }</span>
 
     /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
@@ -916,7 +927,7 @@ public class SparseCVector
     @Override
     public void subEq(SparseCVector B) {
 
-<span class="nc" id="L919">    }</span>
+<span class="nc" id="L930">    }</span>
 
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
@@ -926,7 +937,7 @@ public class SparseCVector
     @Override
     public void subEq(CNumber b) {
 
-<span class="nc" id="L929">    }</span>
+<span class="nc" id="L940">    }</span>
 
     /**
      * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
@@ -936,7 +947,7 @@ public class SparseCVector
     @Override
     public void subEq(Double b) {
 
-<span class="nc" id="L939">    }</span>
+<span class="nc" id="L950">    }</span>
 
     /**
      * Computes scalar multiplication of a tensor.
@@ -946,7 +957,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector mult(double factor) {
-<span class="nc" id="L949">        return null;</span>
+<span class="nc" id="L960">        return null;</span>
     }
 
     /**
@@ -957,7 +968,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector mult(CNumber factor) {
-<span class="nc" id="L960">        return null;</span>
+<span class="nc" id="L971">        return null;</span>
     }
 
     /**
@@ -969,7 +980,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector div(double divisor) {
-<span class="nc" id="L972">        return null;</span>
+<span class="nc" id="L983">        return null;</span>
     }
 
     /**
@@ -981,7 +992,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector div(CNumber divisor) {
-<span class="nc" id="L984">        return null;</span>
+<span class="nc" id="L995">        return null;</span>
     }
 
     /**
@@ -991,7 +1002,7 @@ public class SparseCVector
      */
     @Override
     public CNumber sum() {
-<span class="nc" id="L994">        return null;</span>
+<span class="nc" id="L1005">        return null;</span>
     }
 
     /**
@@ -1002,7 +1013,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector sqrt() {
-<span class="nc" id="L1005">        return null;</span>
+<span class="nc" id="L1016">        return null;</span>
     }
 
     /**
@@ -1013,7 +1024,7 @@ public class SparseCVector
      */
     @Override
     public SparseVector abs() {
-<span class="nc" id="L1016">        return null;</span>
+<span class="nc" id="L1027">        return null;</span>
     }
 
     /**
@@ -1023,7 +1034,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector transpose() {
-<span class="nc" id="L1026">        return null;</span>
+<span class="nc" id="L1037">        return null;</span>
     }
 
     /**
@@ -1033,7 +1044,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector T() {
-<span class="nc" id="L1036">        return null;</span>
+<span class="nc" id="L1047">        return null;</span>
     }
 
     /**
@@ -1044,7 +1055,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector recip() {
-<span class="nc" id="L1047">        return null;</span>
+<span class="nc" id="L1058">        return null;</span>
     }
 
     /**
@@ -1056,7 +1067,7 @@ public class SparseCVector
      */
     @Override
     public CNumber get(int... indices) {
-<span class="nc" id="L1059">        return null;</span>
+<span class="nc" id="L1070">        return null;</span>
     }
 
     /**
@@ -1066,7 +1077,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector copy() {
-<span class="nc" id="L1069">        return null;</span>
+<span class="nc" id="L1080">        return null;</span>
     }
 
     /**
@@ -1078,7 +1089,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector elemMult(SparseCVector B) {
-<span class="nc" id="L1081">        return null;</span>
+<span class="nc" id="L1092">        return null;</span>
     }
 
     /**
@@ -1090,7 +1101,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector elemDiv(Vector B) {
-<span class="nc" id="L1093">        return null;</span>
+<span class="nc" id="L1104">        return null;</span>
     }
 
     /**
@@ -1102,7 +1113,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector elemDiv(CVector B) {
-<span class="nc" id="L1105">        return null;</span>
+<span class="nc" id="L1116">        return null;</span>
     }
 
     /**
@@ -1114,7 +1125,7 @@ public class SparseCVector
      */
     @Override
     public CNumber inner(Vector b) {
-<span class="nc" id="L1117">        return null;</span>
+<span class="nc" id="L1128">        return null;</span>
     }
 
     /**
@@ -1126,7 +1137,7 @@ public class SparseCVector
      */
     @Override
     public CNumber inner(SparseVector b) {
-<span class="nc" id="L1129">        return null;</span>
+<span class="nc" id="L1140">        return null;</span>
     }
 
     /**
@@ -1136,7 +1147,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector normalize() {
-<span class="nc" id="L1139">        return null;</span>
+<span class="nc" id="L1150">        return null;</span>
     }
 
     /**
@@ -1148,7 +1159,7 @@ public class SparseCVector
      */
     @Override
     public CNumber inner(CVector b) {
-<span class="nc" id="L1151">        return null;</span>
+<span class="nc" id="L1162">        return null;</span>
     }
 
     /**
@@ -1160,7 +1171,7 @@ public class SparseCVector
      */
     @Override
     public CNumber inner(SparseCVector b) {
-<span class="nc" id="L1163">        return null;</span>
+<span class="nc" id="L1174">        return null;</span>
     }
 
     /**
@@ -1172,7 +1183,7 @@ public class SparseCVector
      */
     @Override
     public CVector cross(Vector b) {
-<span class="nc" id="L1175">        return null;</span>
+<span class="nc" id="L1186">        return null;</span>
     }
 
     /**
@@ -1184,7 +1195,7 @@ public class SparseCVector
      */
     @Override
     public CVector cross(CVector b) {
-<span class="nc" id="L1187">        return null;</span>
+<span class="nc" id="L1198">        return null;</span>
     }
 
     /**
@@ -1196,7 +1207,7 @@ public class SparseCVector
      */
     @Override
     public CMatrix outer(Vector b) {
-<span class="nc" id="L1199">        return null;</span>
+<span class="nc" id="L1210">        return null;</span>
     }
 
     /**
@@ -1208,7 +1219,7 @@ public class SparseCVector
      */
     @Override
     public CMatrix outer(SparseVector b) {
-<span class="nc" id="L1211">        return null;</span>
+<span class="nc" id="L1222">        return null;</span>
     }
 
     /**
@@ -1220,7 +1231,7 @@ public class SparseCVector
      */
     @Override
     public CMatrix outer(CVector b) {
-<span class="nc" id="L1223">        return null;</span>
+<span class="nc" id="L1234">        return null;</span>
     }
 
     /**
@@ -1232,7 +1243,7 @@ public class SparseCVector
      */
     @Override
     public CMatrix outer(SparseCVector b) {
-<span class="nc" id="L1235">        return null;</span>
+<span class="nc" id="L1246">        return null;</span>
     }
 
 
@@ -1244,7 +1255,7 @@ public class SparseCVector
      */
     @Override
     public boolean isParallel(Vector b) {
-<span class="nc" id="L1247">        return false;</span>
+<span class="nc" id="L1258">        return false;</span>
     }
 
 
@@ -1256,7 +1267,7 @@ public class SparseCVector
      */
     @Override
     public boolean isPerp(Vector b) {
-<span class="nc" id="L1259">        return false;</span>
+<span class="nc" id="L1270">        return false;</span>
     }
 
 
@@ -1267,7 +1278,7 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix toMatrix() {
-<span class="nc" id="L1270">        return null;</span>
+<span class="nc" id="L1281">        return null;</span>
     }
 
 
@@ -1281,7 +1292,7 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix toMatrix(boolean columVector) {
-<span class="nc" id="L1284">        return null;</span>
+<span class="nc" id="L1295">        return null;</span>
     }
 
 
@@ -1294,7 +1305,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector elemDiv(SparseCVector B) {
-<span class="nc" id="L1297">        return null;</span>
+<span class="nc" id="L1308">        return null;</span>
     }
 
 
@@ -1305,7 +1316,7 @@ public class SparseCVector
      */
     @Override
     public double min() {
-<span class="nc" id="L1308">        return 0;</span>
+<span class="nc" id="L1319">        return 0;</span>
     }
 
 
@@ -1316,7 +1327,7 @@ public class SparseCVector
      */
     @Override
     public double max() {
-<span class="nc" id="L1319">        return 0;</span>
+<span class="nc" id="L1330">        return 0;</span>
     }
 
 
@@ -1328,7 +1339,7 @@ public class SparseCVector
      */
     @Override
     public double minAbs() {
-<span class="nc" id="L1331">        return 0;</span>
+<span class="nc" id="L1342">        return 0;</span>
     }
 
 
@@ -1340,7 +1351,7 @@ public class SparseCVector
      */
     @Override
     public double maxAbs() {
-<span class="nc" id="L1343">        return 0;</span>
+<span class="nc" id="L1354">        return 0;</span>
     }
 
 
@@ -1352,7 +1363,7 @@ public class SparseCVector
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L1355">        return new int[0];</span>
+<span class="nc" id="L1366">        return new int[0];</span>
     }
 
 
@@ -1364,7 +1375,7 @@ public class SparseCVector
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L1367">        return new int[0];</span>
+<span class="nc" id="L1378">        return new int[0];</span>
     }
 
 
@@ -1375,7 +1386,7 @@ public class SparseCVector
      */
     @Override
     public double norm() {
-<span class="nc" id="L1378">        return 0;</span>
+<span class="nc" id="L1389">        return 0;</span>
     }
 
 
@@ -1389,7 +1400,7 @@ public class SparseCVector
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L1392">        return 0;</span>
+<span class="nc" id="L1403">        return 0;</span>
     }
 
 
@@ -1400,7 +1411,7 @@ public class SparseCVector
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L1403">        return 0;</span>
+<span class="nc" id="L1414">        return 0;</span>
     }
 
 
@@ -1413,7 +1424,7 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix extend(int n, int axis) {
-<span class="nc" id="L1416">        return null;</span>
+<span class="nc" id="L1427">        return null;</span>
     }
 
 
@@ -1424,7 +1435,7 @@ public class SparseCVector
      */
     @Override
     public int length() {
-<span class="nc" id="L1427">        return 0;</span>
+<span class="nc" id="L1438">        return 0;</span>
     }
 
 
@@ -1436,7 +1447,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector flatten(int axis) {
-<span class="nc" id="L1439">        return null;</span>
+<span class="nc" id="L1450">        return null;</span>
     }
 
 
@@ -1446,7 +1457,7 @@ public class SparseCVector
     @Override
     public void sparseSort() {
 
-<span class="nc" id="L1449">    }</span>
+<span class="nc" id="L1460">    }</span>
 
 
     /**
@@ -1456,7 +1467,7 @@ public class SparseCVector
      */
     @Override
     public int size() {
-<span class="fc" id="L1459">        return this.size;</span>
+<span class="fc" id="L1470">        return this.size;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

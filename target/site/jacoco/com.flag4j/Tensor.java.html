@@ -231,16 +231,16 @@ public class Tensor
      * Flattens a tensor along the specified axis.
      *
      * @param axis Axis along which to flatten tensor.
-     * @throws IllegalArgumentException If the axis is not positive or larger than &lt;code&gt;this.{@link #getRank()}-1&lt;/code&gt;.
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than &lt;code&gt;this.{@link #getRank()}-1&lt;/code&gt;.
      */
     @Override
     public Tensor flatten(int axis) {
-<span class="nc" id="L238">        int[] dims = new int[this.getRank()];</span>
-<span class="nc" id="L239">        Arrays.fill(dims, 1);</span>
-<span class="nc" id="L240">        dims[axis] = shape.totalEntries().intValueExact();</span>
-<span class="nc" id="L241">        Shape flatShape = new Shape(dims);</span>
+<span class="fc" id="L238">        int[] dims = new int[this.getRank()];</span>
+<span class="fc" id="L239">        Arrays.fill(dims, 1);</span>
+<span class="fc" id="L240">        dims[axis] = shape.totalEntries().intValueExact();</span>
+<span class="fc" id="L241">        Shape flatShape = new Shape(dims);</span>
 
-<span class="nc" id="L243">        return new Tensor(flatShape, entries.clone());</span>
+<span class="fc" id="L243">        return new Tensor(flatShape, entries.clone());</span>
     }
 
 
@@ -666,38 +666,38 @@ public class Tensor
      * @return A human-readable string representing this tensor.
      */
     public String toString() {
-<span class="nc" id="L669">        int size = shape.totalEntries().intValueExact();</span>
-<span class="nc" id="L670">        StringBuilder result = new StringBuilder(String.format(&quot;Full Shape: %s\n&quot;, shape));</span>
-<span class="nc" id="L671">        result.append(&quot;[&quot;);</span>
+<span class="fc" id="L669">        int size = shape.totalEntries().intValueExact();</span>
+<span class="fc" id="L670">        StringBuilder result = new StringBuilder(String.format(&quot;Full Shape: %s\n&quot;, shape));</span>
+<span class="fc" id="L671">        result.append(&quot;[&quot;);</span>
 
-<span class="nc" id="L673">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
+<span class="fc" id="L673">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
         int width;
         String value;
 
         // Get entries up until the stopping point.
-<span class="nc bnc" id="L678" title="All 2 branches missed.">        for(int i=0; i&lt;stopIndex; i++) {</span>
-<span class="nc" id="L679">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
-<span class="nc" id="L680">            width = PrintOptions.getPadding() + value.length();</span>
-<span class="nc bnc" id="L681" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L682">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L678" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="fc" id="L679">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
+<span class="fc" id="L680">            width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L681" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L682">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="nc bnc" id="L685" title="All 2 branches missed.">        if(stopIndex &lt; size-1) {</span>
-<span class="nc" id="L686">            width = PrintOptions.getPadding() + 3;</span>
-<span class="nc" id="L687">            value = &quot;...&quot;;</span>
-<span class="nc bnc" id="L688" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L689">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L685" title="All 2 branches covered.">        if(stopIndex &lt; size-1) {</span>
+<span class="fc" id="L686">            width = PrintOptions.getPadding() + 3;</span>
+<span class="fc" id="L687">            value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L688" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L689">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
         // Get last entry now
-<span class="nc" id="L693">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
-<span class="nc" id="L694">        width = PrintOptions.getPadding() + value.length();</span>
-<span class="nc bnc" id="L695" title="All 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L696">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc" id="L693">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
+<span class="fc" id="L694">        width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L695" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L696">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
 
-<span class="nc" id="L698">        result.append(&quot;]&quot;);</span>
+<span class="fc" id="L698">        result.append(&quot;]&quot;);</span>
 
-<span class="nc" id="L700">        return result.toString();</span>
+<span class="fc" id="L700">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

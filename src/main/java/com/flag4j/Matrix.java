@@ -763,7 +763,6 @@ public class Matrix
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
-        // TODO: Algorithm could be improved if we assume sparse indices are sorted.
         // Fill slice with zeros
         ArrayUtils.stridedFillZerosRange(
                 this.entries,
@@ -1693,7 +1692,7 @@ public class Matrix
     @Override
     public Double fib(Matrix B) {
         ParameterChecks.assertEqualShape(this.shape, B.shape);
-        return this.T().mult(B).trace();
+        return this.T().mult(B).tr();
     }
 
 
@@ -1707,7 +1706,7 @@ public class Matrix
     @Override
     public Double fib(SparseMatrix B) {
         ParameterChecks.assertEqualShape(this.shape, B.shape);
-        return this.T().mult(B).trace();
+        return this.T().mult(B).tr();
     }
 
 
@@ -1721,7 +1720,7 @@ public class Matrix
     @Override
     public CNumber fib(CMatrix B) {
         ParameterChecks.assertEqualShape(this.shape, B.shape);
-        return this.T().mult(B).trace();
+        return this.T().mult(B).tr();
     }
 
 
@@ -1735,7 +1734,7 @@ public class Matrix
     @Override
     public CNumber fib(SparseCMatrix B) {
         ParameterChecks.assertEqualShape(this.shape, B.shape);
-        return this.T().mult(B).trace();
+        return this.T().mult(B).tr();
     }
 
 
@@ -2965,7 +2964,7 @@ public class Matrix
      */
     @Override
     public Matrix getRowAfter(int colStart, int rowIdx) {
-        if(rowIdx > this.numRows || colStart > this.numCols) {
+        if(rowIdx > this.numRows ||  rowIdx < 0 || colStart > this.numCols || colStart < 0) {
             throw new ArrayIndexOutOfBoundsException(String.format("Index (%d, %d) not in matrix.", rowIdx, colStart));
         }
 
@@ -3447,7 +3446,7 @@ public class Matrix
     public boolean isOrthogonal() {
         // TODO: Add approxEq(Object A, double threshold) method to check for approximate equivalence.
         if(isSquare()) {
-            return this.mult(this.T()).equals(I(numRows));
+            return this.mult(this.T()).round().equals(I(numRows));
         } else {
             return false;
         }

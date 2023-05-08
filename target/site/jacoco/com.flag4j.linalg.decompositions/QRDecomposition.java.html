@@ -70,7 +70,7 @@ public abstract class QRDecomposition&lt;T&gt; implements Decomposition&lt;T&gt;
      * @return A reference to this decomposer.
      */
     @Override
-    public QRDecomposition decompose(T src) {
+    public QRDecomposition&lt;T&gt; decompose(T src) {
 <span class="fc bfc" id="L74" title="All 2 branches covered.">        if(fullQR) {</span>
 <span class="fc" id="L75">            this.full(src);</span>
         } else {

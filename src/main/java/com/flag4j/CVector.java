@@ -28,7 +28,7 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexDenseTensorBase;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.io.PrintOptions;
-import com.flag4j.operations.dense.complex.*;
+import com.flag4j.operations.dense.complex.ComplexDenseVectorOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
@@ -91,7 +91,7 @@ implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatri
      * Creates a vector with specified entries.
      * @param entries Entries for this column vector.
      */
-    public CVector(double[] entries) {
+    public CVector(double... entries) {
         super(new Shape(entries.length), new CNumber[entries.length]);
         ArrayUtils.copy2CNumber(entries, super.entries);
         this.size = shape.dims[0];
@@ -102,7 +102,7 @@ implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatri
      * Creates a vector with specified entries.
      * @param entries Entries for this column vector.
      */
-    public CVector(int[] entries) {
+    public CVector(int... entries) {
         super(new Shape(entries.length), new CNumber[entries.length]);
         ArrayUtils.copy2CNumber(entries, super.entries);
         this.size = shape.dims[0];
@@ -113,7 +113,7 @@ implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatri
      * Creates a vector with specified entries.
      * @param entries Entries for this column vector.
      */
-    public CVector(CNumber[] entries) {
+    public CVector(CNumber... entries) {
         super(new Shape(entries.length), entries);
         this.size = shape.dims[0];
     }

@@ -38,6 +38,7 @@ import com.flag4j.Matrix;
  *  {@code PAQ=LU}.</p>
  */
 public abstract class LUDecomposition<T> implements Decomposition<T> {
+
     /**
      * Flag indicating what pivoting to use.
      */

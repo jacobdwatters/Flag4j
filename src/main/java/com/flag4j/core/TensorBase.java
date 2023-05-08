@@ -149,4 +149,11 @@ public abstract class TensorBase<T, U, W, Z, Y, D, X extends Number> implements 
 
         return A.shape.dims[axis]==B.shape.dims[axis];
     }
+
+
+    /**
+     * Simply returns a reference of this tensor.
+     * @return A reference to this tensor.
+     */
+    protected abstract T getSelf();
 }

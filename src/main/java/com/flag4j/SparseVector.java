@@ -1401,6 +1401,17 @@ public class SparseVector
     public int size() {
         return this.size;
     }
+
+
+    /**
+     * Simply returns a reference of this tensor.
+     *
+     * @return A reference to this tensor.
+     */
+    @Override
+    protected SparseVector getSelf() {
+        return this;
+    }
 }
 
 

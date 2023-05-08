@@ -165,7 +165,6 @@ class MatrixMultTests {
 
         assertEquals(expC, A.mult(B));
 
-
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
                 {-932.45, 551.35, -0.92342},
@@ -233,9 +232,124 @@ class MatrixMultTests {
         // ---------------------- Sub-case 5 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
                 {-932.45, 551.35, -0.92342},
-                {123.445, 0.00013, 0.0}};;
+                {123.445, 0.00013, 0.0}};
         A = new Matrix(aEntries);
 
         assertThrows(IllegalArgumentException.class, ()->A.pow(-1));
+    }
+
+
+    @Test
+    void multTransposeTests() {
+        double[][] bEntries;
+        Matrix B;
+
+        // ---------------------- Sub-case 1 ----------------------
+        aEntries = new double[][]{{1.1234, 99.234, 0.000123},
+                {-932.45, 551.35, -0.92342},
+                {123.445, 0.00013, 0.0},
+                {78.234, 12.234, -9923.23}};
+        A = new Matrix(aEntries);
+        bEntries = new double[][]{{1.666, 11.5},
+                {-0.9345341, 88.234},
+                {0.0, 2e-05}};
+        B = new Matrix(bEntries).T();
+
+        exp = A.mult(B.T());
+        assertEquals(exp, A.multTranspose(B));
+
+
+        // ---------------------- Sub-case 2 ----------------------
+        aEntries = new double[][]{{1.1234, 99.234, 0.000123},
+                {-932.45, 551.35, -0.92342},
+                {123.445, 0.00013, 0.0},
+                {78.234, 12.234, -9923.23}};
+        A = new Matrix(aEntries);
+        bEntries = new double[][]{{1.666, 11.5},
+                {-0.9345341, 88.234},
+                {0.0, 2e-05},
+                {993.3, 1.23}};
+        B = new Matrix(bEntries).T();
+
+        Matrix finalB = B;
+        assertThrows(IllegalArgumentException.class, ()->A.multTranspose(finalB));
+    }
+
+
+    @Test
+    void multTransposeComplexTest() {
+        CNumber[][] bEntries;
+        CMatrix B;
+
+        // ---------------------- Sub-case 1 ----------------------
+        aEntries = new double[][]{{1.1234, 99.234, 0.000123},
+                {-932.45, 551.35, -0.92342},
+                {123.445, 0.00013, 0.0},
+                {78.234, 12.234, -9923.23}};
+        A = new Matrix(aEntries);
+        bEntries = new CNumber[][]{{new CNumber("1.666+1.0i"), new CNumber("11.5-9.123i")},
+                {new CNumber("-0.0-0.9345341i"), new CNumber("88.234")},
+                {new CNumber("0.0"), new CNumber("0.00002+85.23i")}};
+        B = new CMatrix(bEntries).T();
+
+        expC = A.multTranspose(B);
+        assertEquals(expC, A.multTranspose(B));
+
+        // ---------------------- Sub-case 2 ----------------------
+        aEntries = new double[][]{{1.1234, 99.234, 0.000123},
+                {-932.45, 551.35, -0.92342},
+                {123.445, 0.00013, 0.0},
+                {78.234, 12.234, -9923.23}};
+        A = new Matrix(aEntries);
+        bEntries = new CNumber[][]{{new CNumber("1.666+1.0i"), new CNumber("11.5-9.123i")},
+                {new CNumber("-0.0-0.9345341i"), new CNumber("88.234")}};
+        B = new CMatrix(bEntries).T();
+
+        CMatrix finalB = B;
+        assertThrows(IllegalArgumentException.class, ()->A.multTranspose(finalB));
+    }
+
+
+    @Test
+    void multTransposeSparseTest() {
+        double[] bEntries;
+        int[] rowIndices, colIndices;
+        SparseMatrix B;
+        Shape bShape;
+
+        // ---------------------- Sub-case 1 ----------------------
+        aEntries = new double[][]{{1.1234, 99.234, 0.000123},
+                {-932.45, 551.35, -0.92342},
+                {123.445, 0.00013, 0.0},
+                {78.234, 12.234, -9923.23}};
+        A = new Matrix(aEntries);
+        bEntries = new double[]{-0.9345341, 11.67};
+        rowIndices = new int[]{0, 1};
+        colIndices = new int[]{1, 2};
+        bShape = new Shape(2, 3);
+        B = new SparseMatrix(bShape, bEntries, rowIndices, colIndices);
+        expEntries = new double[][]{{-92.7375568794, 0.00143541},
+                {-515.255376035, -10.7763114},
+                {-0.00012148943299999999, 0.0},
+                {-11.4330901794, -115804.09409999999}};
+        exp = new Matrix(expEntries);
+
+        assertEquals(exp, A.multTranspose(B));
+
+
+        // ---------------------- Sub-case 2 ----------------------
+        aEntries = new double[][]{{1.1234, 99.234, 0.000123},
+                {-932.45, 551.35, -0.92342},
+                {123.445, 0.00013, 0.0},
+                {78.234, 12.234, -9923.23}};
+        A = new Matrix(aEntries);
+        bEntries = new double[]{-0.9345341, 11.67};
+        rowIndices = new int[]{0, 1};
+        colIndices = new int[]{1, 2};
+        bShape = new Shape(2, 31);
+        B = new SparseMatrix(bShape, bEntries, rowIndices, colIndices);
+
+        SparseMatrix finalB = B;
+        assertThrows(IllegalArgumentException.class, ()->A.multTranspose(finalB));
     }
 }

@@ -324,115 +324,16 @@ public class SparseCMatrix
     }
 
 
-//    /**
-//     * Creates a sparse matrix whose entries are specified by a 2D array. This is not the recommended method of constructing
-//     * a sparse matrix. It is recommended to use {@link #SparseCMatrix(Shape, double[], int[], int[])} if the coordinate information is already known.
-//     * @param entries Entries of sparse matrix.
-//     */
-//    public SparseCMatrix(double[][] entries) {
-//        super(new Shape(entries.length, entries[0].length));
-//
-//        ArrayList<Double> nonZeroEntries = new ArrayList<>(this.totalEntries()/8);
-//        ArrayList<Integer> rowIndices = new ArrayList<>(this.totalEntries()/8);
-//        ArrayList<Integer> colIndices = new ArrayList<>(this.totalEntries()/8);
-//
-//        // Fill entries with non-zero values.
-//        int numCols=super.numCols();
-//        for(int i=0; i<entries.length; i++) {
-//            for(int j=0; j<entries[0].length; j++) {
-//                if(entries[i][j] != 0) {
-//                    nonZeroEntries.add(entries[i][j]);
-//                    rowIndices.add(i);
-//                    colIndices.add(j);
-//                }
-//            }
-//        }
-//
-//        nonZeroEntries.trimToSize();
-//
-//        super.setNonZeroEntries(nonZeroEntries.size());
-//        super.entries = new CNumber[super.nonZeroEntries()];
-//
-//        for(int i=0; i<nonZeroEntries.size(); i++) {
-//            super.entries[i] = new CNumber(nonZeroEntries.get(i));
-//        }
-//
-//        super.rowIndices = rowIndices.stream().mapToInt(Integer::intValue).toArray();
-//        super.colIndices = colIndices.stream().mapToInt(Integer::intValue).toArray();
-//
-//    }
-//
-//
-//    /**
-//     * Creates a sparse matrix whose entries are specified by a 2D array. This is not the recommended method of constructing
-//     * a sparse matrix. It is recommended to use {@link #SparseCMatrix(Shape, int[], int[], int[])} if the coordinate information is already known.
-//     * @param entries Entries of sparse matrix.
-//     */
-//    public SparseCMatrix(int[][] entries) {
-//        super(new Shape(entries.length, entries[0].length));
-//
-//        ArrayList<Integer> nonZeroEntries = new ArrayList<>(this.totalEntries()/8);
-//        ArrayList<Integer> rowIndices = new ArrayList<>(this.totalEntries()/8);
-//        ArrayList<Integer> colIndices = new ArrayList<>(this.totalEntries()/8);
-//
-//        // Fill entries with non-zero values.
-//        for(int i=0; i<entries.length; i++) {
-//            for(int j=0; j<entries[0].length; j++) {
-//                if(entries[i][j] != 0) {
-//                    nonZeroEntries.add(entries[i][j]);
-//                    rowIndices.add(i);
-//                    colIndices.add(j);
-//                }
-//            }
-//        }
-//
-//        nonZeroEntries.trimToSize();
-//        super.setNonZeroEntries(nonZeroEntries.size());
-//        super.entries = new CNumber[super.nonZeroEntries()];
-//
-//        for(int i=0; i<nonZeroEntries.size(); i++) {
-//            super.entries[i] = new CNumber(nonZeroEntries.get(i));
-//        }
-//
-//        super.rowIndices = rowIndices.stream().mapToInt(Integer::intValue).toArray();
-//        super.colIndices = colIndices.stream().mapToInt(Integer::intValue).toArray();
-//    }
-//
-//
-//    /**
-//     * Creates a sparse matrix whose entries are specified by a 2D array. This is not the recommended method of constructing
-//     * a sparse matrix. It is recommended to use {@link #SparseCMatrix(Shape, CNumber[], int[], int[])} if the coordinate information is already known.
-//     * @param entries Entries of sparse matrix.
-//     */
-//    public SparseCMatrix(CNumber[][] entries) {
-//        super(new Shape(entries.length, entries[0].length));
-//
-//        ArrayList<CNumber> nonZeroEntries = new ArrayList<>(this.totalEntries()/8);
-//        ArrayList<Integer> rowIndices = new ArrayList<>(this.totalEntries()/8);
-//        ArrayList<Integer> colIndices = new ArrayList<>(this.totalEntries()/8);
-//
-//        // Fill entries with non-zero values.
-//        for(int i=0; i<entries.length; i++) {
-//            for(int j=0; j<entries[0].length; j++) {
-//                if(entries[i][j].re != 0 && entries[i][j].im != 0) {
-//                    nonZeroEntries.add(entries[i][j]);
-//                    rowIndices.add(i);
-//                    colIndices.add(j);
-//                }
-//            }
-//        }
-//
-//        nonZeroEntries.trimToSize();
-//        super.setNonZeroEntries(nonZeroEntries.size());
-//        super.entries = new CNumber[super.nonZeroEntries()];
-//
-//        for(int i=0; i<nonZeroEntries.size(); i++) {
-//            super.entries[i] = nonZeroEntries.get(i).copy();
-//        }
-//
-//        super.rowIndices = rowIndices.stream().mapToInt(Integer::intValue).toArray();
-//        super.colIndices = colIndices.stream().mapToInt(Integer::intValue).toArray();
-//    }
+    /**
+     * Simply returns a reference of this tensor.
+     *
+     * @return A reference to this tensor.
+     */
+    @Override
+    protected SparseCMatrix getSelf() {
+        return this;
+    }
+
 
     /**
      * Gets the number of rows in this matrix.

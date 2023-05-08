@@ -27,16 +27,24 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexDenseTensorBase;
 import com.flag4j.core.ComplexTensorExclusiveMixin;
+import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.AggregateComplex;
-import com.flag4j.operations.dense.complex.*;
+import com.flag4j.operations.dense.complex.ComplexDenseEquals;
+import com.flag4j.operations.dense.complex.ComplexDenseOperations;
+import com.flag4j.operations.dense.complex.ComplexDenseTensorDot;
+import com.flag4j.operations.dense.complex.ComplexDenseTranspose;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.StringUtils;
 
 import java.util.Arrays;
 
@@ -123,10 +131,6 @@ public class CTensor
      */
     public CTensor(Shape shape, CNumber[] entries) {
         super(shape, entries);
-
-        if(entries.length != super.totalEntries().intValue()) {
-            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));
-        }
     }
 
 
@@ -348,6 +352,54 @@ public class CTensor
 
 
     /**
+     * Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the addition.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    @Override
+    public void addEq(Tensor B) {
+        RealComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the addition.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    @Override
+    public void addEq(SparseCTensor B) {
+        ComplexDenseSparseOperations.addEq(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    @Override
+    public void subEq(Tensor B) {
+        RealComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    @Override
+    public void subEq(SparseCTensor B) {
+        ComplexDenseSparseOperations.subEq(this, B);
+    }
+
+
+    /**
      * Computes the transpose of a tensor. Same as {@link #T(int, int)}.
      * In the context of a tensor, this exchanges the specified axes.
      * Also see {@link #transpose() transpose()} and
@@ -485,6 +537,37 @@ public class CTensor
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
+    public CTensor add(Tensor B) {
+        return new CTensor(
+                this.shape.copy(),
+                RealComplexDenseOperations.add(this.entries, this.shape, B.entries, B.shape)
+        );
+    }
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor sub(Tensor B) {
+        return new CTensor(
+                this.shape.copy(),
+                RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)
+        );
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
     public CTensor add(SparseCTensor B) {
         return ComplexDenseSparseOperations.add(this, B);
     }
@@ -570,6 +653,22 @@ public class CTensor
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
     @Override
+    public CTensor elemMult(Tensor B) {
+        return new CTensor(
+                this.shape.copy(),
+                RealComplexDenseElemMult.dispatch(this.entries, this.shape, B.entries, B.shape)
+        );
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     *
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
     public SparseCTensor elemMult(SparseTensor B) {
         return RealComplexDenseSparseOperations.elemMult(this, B);
     }
@@ -585,6 +684,22 @@ public class CTensor
     @Override
     public SparseCTensor elemMult(SparseCTensor B) {
         return ComplexDenseSparseOperations.elemMult(this, B);
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     *
+     * @param B Tensor to element-wise divide from this tensor.
+     * @return The result of the element-wise tensor division.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public CTensor elemDiv(Tensor B) {
+        return new CTensor(
+                shape.copy(),
+                RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)
+        );
     }
 
 
@@ -666,5 +781,46 @@ public class CTensor
         }
 
         return mat;
+    }
+
+
+    /**
+     * Formats this tensor as a human-readable string. Specifically, a string containing the
+     * shape and flatten entries of this tensor.
+     * @return A human-readable string representing this tensor.
+     */
+    public String toString() {
+        int size = shape.totalEntries().intValueExact();
+        StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
+        result.append("[");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        // Get entries up until the stopping point.
+        for(int i=0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(stopIndex < size-1) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry now
+        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + value.length();
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s", value));
+
+        result.append("]");
+
+        return result.toString();
     }
 }

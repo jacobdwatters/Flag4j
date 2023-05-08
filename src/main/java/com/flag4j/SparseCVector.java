@@ -314,6 +314,17 @@ public class SparseCVector
 
 
     /**
+     * Simply returns a reference of this tensor.
+     *
+     * @return A reference to this tensor.
+     */
+    @Override
+    protected SparseCVector getSelf() {
+        return this;
+    }
+
+
+    /**
      * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
      * and takes the complex conjugate of the elements along these axes. Same as {@link #H}.
      *

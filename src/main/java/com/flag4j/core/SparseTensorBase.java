@@ -52,7 +52,7 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D, X extends Number>
     /**
      * The number of non-zero entries in this sparse tensor.
      */
-    private final int nonZeroEntries;
+    protected final int nonZeroEntries;
 
     /**
      * Creates a sparse tensor with specified shape, non-zero entries, and non-zero indices.

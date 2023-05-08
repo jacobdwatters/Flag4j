@@ -171,6 +171,21 @@ public class ComplexDenseSparseOperations {
 
 
     /**
+     * Computes element-wise addition of a complex dense tensor with a complex sparse tensor.
+     * @param src1 Complex dense tensor.
+     * @param src2 Complex sparse tensor.
+     * @return The result of the element-wise addition.
+     */
+    public static void addEq(CTensor src1, SparseCTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            src1.entries[src2.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);
+        }
+    }
+
+
+    /**
      * Computes the element-wise tensor a complex sparse tensor from a complex dense tensor.
      * @param src1 Complex dense tensor.
      * @param src2 Complex sparse tensor.
@@ -185,6 +200,21 @@ public class ComplexDenseSparseOperations {
         }
 
         return dest;
+    }
+
+
+    /**
+     * Computes element-wise subtraction of a complex dense tensor with a complex sparse tensor.
+     * @param src1 Complex dense tensor.
+     * @param src2 Complex sparse tensor.
+     * @return The result of the element-wise subtraction.
+     */
+    public static void subEq(CTensor src1, SparseCTensor src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        for(int i=0; i<src2.nonZeroEntries(); i++) {
+            src1.entries[src2.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);
+        }
     }
 
 

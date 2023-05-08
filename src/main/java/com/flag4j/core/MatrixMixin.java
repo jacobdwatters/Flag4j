@@ -40,8 +40,6 @@ public interface MatrixMixin<T, U, V, W, Y, X extends Number>
         MatrixManipulationsMixin<T, X>,
         MatrixOperationsMixin<T, U, V, W, Y, X> {
 
-    // TODO: Add default methods for methods which are the same for all matrices.
-
     /**
      * Gets the number of rows in this matrix.
      * @return The number of rows in this matrix.

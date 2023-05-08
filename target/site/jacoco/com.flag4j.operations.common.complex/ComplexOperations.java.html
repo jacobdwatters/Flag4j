@@ -63,13 +63,13 @@ public class ComplexOperations {
      * @return The element-wise square root of the tensor.
      */
     public static CNumber[] sqrt(double[] src) {
-<span class="nc" id="L66">        CNumber[] roots = new CNumber[src.length];</span>
+<span class="fc" id="L66">        CNumber[] roots = new CNumber[src.length];</span>
 
-<span class="nc bnc" id="L68" title="All 2 branches missed.">        for(int i=0; i&lt;roots.length; i++) {</span>
-<span class="nc" id="L69">            roots[i] = CNumber.sqrt(src[i]);</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        for(int i=0; i&lt;roots.length; i++) {</span>
+<span class="fc" id="L69">            roots[i] = CNumber.sqrt(src[i]);</span>
         }
 
-<span class="nc" id="L72">        return roots;</span>
+<span class="fc" id="L72">        return roots;</span>
     }
 
 

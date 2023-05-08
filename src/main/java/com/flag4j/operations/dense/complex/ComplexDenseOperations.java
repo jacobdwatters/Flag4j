@@ -217,22 +217,6 @@ public final class ComplexDenseOperations {
 
 
     /**
-     * Sums all entries in a tensor.
-     * @param src Entries of tensor to sum.
-     * @return The sum of all entries in the tensor.
-     */
-    public static CNumber sum(CNumber[] src) {
-        CNumber sum = new CNumber();
-
-        for(CNumber value : src) {
-           sum = sum.add(value);
-        }
-
-        return sum;
-    }
-
-
-    /**
      * Multiplies all entries in a tensor.
      * @param src Entries of tensor to compute product of.
      * @return The product of all src in the tensor.

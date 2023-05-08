@@ -25,15 +25,13 @@
 package com.flag4j.core;
 import com.flag4j.Shape;
 
-import java.util.Arrays;
-
 /**
  * This is the base class for all dense tensors.
  * @param <T> Type of this tensor.
  * @param <W> Complex Tensor type.
  * @param <Y> Real Tensor type.
  * @param <D> Type of the storage data structure for the tensor.
- *           This common use case will be an array or list-like data structure.
+ *           The common use case will be an array or list-like data structure.
  * @param <X> The type of individual entry within the {@code D} data structure
  */
 public abstract class DenseTensorBase<T, W, Y, D, X extends Number>
@@ -51,6 +49,7 @@ public abstract class DenseTensorBase<T, W, Y, D, X extends Number>
         super(shape, entries);
     }
 
+
     /**
      * Factory to create a tensor with the specified shape and size.
      * @param shape Shape of the tensor to make.
@@ -58,11 +57,4 @@ public abstract class DenseTensorBase<T, W, Y, D, X extends Number>
      * @return A new tensor with the specified shape and entries.
      */
     protected abstract T makeTensor(Shape shape, D entries);
-
-
-    /**
-     * Simply returns a reference of this tensor.
-     * @return A reference to this tensor.
-     */
-    protected abstract T getSelf();
 }
