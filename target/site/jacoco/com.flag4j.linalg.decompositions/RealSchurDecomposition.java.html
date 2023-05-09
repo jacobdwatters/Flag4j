@@ -44,11 +44,11 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      * Creates a Schur decomposer for a real dense matrix.
      */
     public RealSchurDecomposition() {
-<span class="nc" id="L47">        super();</span>
+<span class="fc" id="L47">        super();</span>
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-<span class="nc" id="L50">        hess = new RealHessenburgDecomposition(computeU);</span>
-<span class="nc" id="L51">    }</span>
+<span class="fc" id="L50">        hess = new RealHessenburgDecomposition(computeU);</span>
+<span class="fc" id="L51">    }</span>
 
 
     /**
@@ -91,11 +91,11 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      *                 provide a performance improvement.
      */
     public RealSchurDecomposition(boolean computeU) {
-<span class="nc" id="L94">        super(computeU);</span>
+<span class="fc" id="L94">        super(computeU);</span>
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-<span class="nc" id="L97">        hess = new RealHessenburgDecomposition(computeU);</span>
-<span class="nc" id="L98">    }</span>
+<span class="fc" id="L97">        hess = new RealHessenburgDecomposition(computeU);</span>
+<span class="fc" id="L98">    }</span>
 
 
     /**
@@ -112,15 +112,15 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      */
     @Override
     public RealSchurDecomposition decompose(Matrix src) {
-<span class="nc" id="L115">        ParameterChecks.assertSquare(src.shape);</span>
-<span class="nc" id="L116">        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).</span>
-<span class="nc" id="L117">        doubleShiftImplicitQR(hess.getH().toComplex());</span>
+<span class="fc" id="L115">        ParameterChecks.assertSquare(src.shape);</span>
+<span class="fc" id="L116">        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).</span>
+<span class="fc" id="L117">        doubleShiftImplicitQR(hess.getH().toComplex());</span>
 
-<span class="nc bnc" id="L119" title="All 2 branches missed.">        if(computeU) {</span>
-<span class="nc" id="L120">            U = hess.Q.mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        if(computeU) {</span>
+<span class="fc" id="L120">            U = hess.Q.mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.</span>
         }
 
-<span class="nc" id="L123">        return this;</span>
+<span class="fc" id="L123">        return this;</span>
     }
 
 
@@ -164,7 +164,7 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
                 {0, 0, 0, 0, 1, 2}};
 <span class="nc" id="L165">        Matrix F = new Matrix(fEntries);</span>
 
-<span class="nc" id="L167">        Matrix src = E;</span>
+<span class="nc" id="L167">        Matrix src = F;</span>
 
 <span class="nc" id="L169">        RealSchurDecomposition schur = new RealSchurDecomposition();</span>
 <span class="nc" id="L170">        schur.decompose(src);</span>

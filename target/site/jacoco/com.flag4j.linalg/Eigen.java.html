@@ -83,23 +83,23 @@ import com.flag4j.linalg.decompositions.SchurDecomposition;
     public static CVector get2x2LowerLeftBlockEigenValues(CMatrix src) {
         // TODO: While theoretically correct, there are some numerical
         //  issues here.
-<span class="nc" id="L86">        CVector shifts = new CVector(2);</span>
-<span class="nc" id="L87">        int n = src.numRows-1;</span>
+<span class="fc" id="L86">        CVector shifts = new CVector(2);</span>
+<span class="fc" id="L87">        int n = src.numRows-1;</span>
 
         // Get the four entries from lower right 2x2 sub-matrix.
-<span class="nc" id="L90">        CNumber a = src.entries[(n-1)*(src.numCols + 1)];</span>
-<span class="nc" id="L91">        CNumber b = src.entries[(n-1)*src.numCols + n];</span>
-<span class="nc" id="L92">        CNumber c = src.entries[n*(src.numCols + 1) - 1];</span>
-<span class="nc" id="L93">        CNumber d = src.entries[(n)*(src.numCols + 1)];</span>
+<span class="fc" id="L90">        CNumber a = src.entries[(n-1)*(src.numCols + 1)];</span>
+<span class="fc" id="L91">        CNumber b = src.entries[(n-1)*src.numCols + n];</span>
+<span class="fc" id="L92">        CNumber c = src.entries[n*(src.numCols + 1) - 1];</span>
+<span class="fc" id="L93">        CNumber d = src.entries[(n)*(src.numCols + 1)];</span>
 
-<span class="nc" id="L95">        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.</span>
-<span class="nc" id="L96">        CNumber htr = a.add(b).div(2); // Half of the 2x2 trace.</span>
+<span class="fc" id="L95">        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.</span>
+<span class="fc" id="L96">        CNumber htr = a.add(b).div(2); // Half of the 2x2 trace.</span>
 
         // 2x2 block eigenvalues.
-<span class="nc" id="L99">        shifts.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
-<span class="nc" id="L100">        shifts.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+<span class="fc" id="L99">        shifts.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+<span class="fc" id="L100">        shifts.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
 
-<span class="nc" id="L102">        return shifts;</span>
+<span class="fc" id="L102">        return shifts;</span>
     }
 
 

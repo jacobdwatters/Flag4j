@@ -164,7 +164,7 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
                 {0, 0, 0, 0, 1, 2}};
         Matrix F = new Matrix(fEntries);
 
-        Matrix src = E;
+        Matrix src = F;
 
         RealSchurDecomposition schur = new RealSchurDecomposition();
         schur.decompose(src);

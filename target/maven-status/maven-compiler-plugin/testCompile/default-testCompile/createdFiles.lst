@@ -76,6 +76,7 @@ com\flag4j\MatrixConstructorTests.class
 com\flag4j\operations\dense\real\RoundTests.class
 com\flag4j\CTensorTransposeTest.class
 com\flag4j\CVectorAddTests.class
+com\flag4j\linalg\decompositions\RealSchurTests.class
 com\flag4j\VectorInnerProductTest.class
 com\flag4j\CTensorAddTests.class
 com\flag4j\operations\dense\complex\ComplexDenseOperationsTests.class
@@ -167,6 +168,7 @@ com\flag4j\TensorEqualsTests.class
 com\flag4j\SparseCMatrixConstructorTests.class
 com\flag4j\linalg\decompositions\ComplexQRTests.class
 com\flag4j\complex_numbers\CNumberComparisonTest.class
+com\flag4j\linalg\decompositions\ComplexSchurTest.class
 com\flag4j\TensorScalMultDivTests.class
 com\flag4j\CMatrixElemMultTests.class
 com\flag4j\CTensorConversionTests.class
