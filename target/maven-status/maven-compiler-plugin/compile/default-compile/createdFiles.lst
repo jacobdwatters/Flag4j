@@ -50,6 +50,7 @@ com\flag4j\linalg\solvers\MatrixLstsqSolver.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatrixMultiplication.class
 com\flag4j\core\MatrixManipulationsMixin.class
 com\flag4j\core\TensorManipulationsMixin.class
+com\flag4j\linalg\decompositions\ComplexSchurDecomposition.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseMatrixMultTranspose.class
 com\flag4j\linalg\decompositions\QRDecomposition.class
 com\flag4j\Matrix.class
