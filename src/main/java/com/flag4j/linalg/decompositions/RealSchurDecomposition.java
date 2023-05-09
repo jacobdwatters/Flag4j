@@ -26,6 +26,7 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
+import com.flag4j.util.ParameterChecks;
 
 
 /**
@@ -56,7 +57,7 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
      * @param maxIterations Maximum number of iterations to run the QR algorithm for when computing the
      *                      Schur decomposition.
      */
-    protected RealSchurDecomposition(int maxIterations) {
+    public RealSchurDecomposition(int maxIterations) {
         super(maxIterations);
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
@@ -74,7 +75,7 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
      *                 - If false, the {@code Q} matrix will <b>not</b> be computed. If it is not needed, this may
      *                 provide a performance improvement.
      */
-    protected RealSchurDecomposition(boolean computeU, int maxIterations) {
+    public RealSchurDecomposition(boolean computeU, int maxIterations) {
         super(computeU, maxIterations);
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
@@ -89,7 +90,7 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
      *                 - If false, the {@code Q} matrix will <b>not</b> be computed. If it is not needed, this may
      *                 provide a performance improvement.
      */
-    protected RealSchurDecomposition(boolean computeU) {
+    public RealSchurDecomposition(boolean computeU) {
         super(computeU);
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
@@ -111,26 +112,7 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
      */
     @Override
     public RealSchurDecomposition decompose(Matrix src) {
-        // TODO: Add balancing before converting to Hessenburg. See Fundamentals of Matrix Computations Watkins, p342.
-        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).
-
-        System.out.println("hessH:\n" + hess.getH() + "\n");
-        System.out.println("hessQ:\n" + hess.getQ() + "\n");
-        System.out.println("hess QHQ^T:\n" + hess.getQ().mult(hess.getH()).multTranspose(hess.getQ()) + "\n");
-
-        shiftedQR(hess.getH().toComplex()); // Compute Schur decomposition of the Hessenburg form.
-//        realShiftedQR(hess.getH()); // Compute real Schur decomposition of the Hessenburg form.
-
-        if(computeU) {
-            U = hess.getQ().mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.
-        }
-
-        return this;
-    }
-
-
-    public RealSchurDecomposition doubleShiftImplicitQR(Matrix src) {
-        debug = false;
+        ParameterChecks.assertSquare(src.shape);
         hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).
         doubleShiftImplicitQR(hess.getH().toComplex());
 
@@ -139,47 +121,6 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
         }
 
         return this;
-    }
-
-
-    /**
-     * Computes the Schur decomposition, in real Schur form, for a real dense matrix using the shifted QR algorithm
-     * (Rayleigh shift).
-     * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
-     */
-    private void realShiftedQR(Matrix H) {
-        if(useDefaultMaxIterations) {
-            // The algorithm should converge within machine precision in O(n^3).
-            maxIterations = (int) Math.max(Math.pow(H.numRows, 3), MIN_DEFAULT_ITERATIONS);
-        }
-
-        int count = 0;
-        int n = H.numRows-1;
-
-        Matrix Treal = H;
-        Matrix Ureal = Matrix.I(H.numRows);
-
-        RealQRDecomposition qr = new RealQRDecomposition(); // Decomposer for use in the QR algorithm.
-        Matrix Q; // Q matrix from QR decomposition.
-        Matrix R; // R matrix from QR decomposition.
-
-        Matrix mu;
-
-        // Apply the QR algorithm (Shifted QR algorithm using Rayleigh shift).
-        while(count<maxIterations) {
-            count++;
-            mu = Matrix.I(n+1).mult(Treal.entries[Treal.entries.length-1]); // Construct diagonal matrix.
-
-            qr.decompose(Treal.sub(mu)); // Compute the QR decomposition with a shift.
-            Q = qr.getQ();
-            R = qr.getR();
-
-            Treal = R.mult(Q).add(mu); // Reverse the shift.
-            Ureal = Ureal.mult(Q);
-        }
-
-        U = Ureal.toComplex();
-        T = Treal.toComplex();
     }
 
 
@@ -223,10 +164,10 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
                 {0, 0, 0, 0, 1, 2}};
         Matrix F = new Matrix(fEntries);
 
-        Matrix src = F;
+        Matrix src = E;
 
         RealSchurDecomposition schur = new RealSchurDecomposition();
-        schur.doubleShiftImplicitQR(src);
+        schur.decompose(src);
 
         CMatrix T = schur.getT();
         CMatrix U = schur.getU();
@@ -235,5 +176,7 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
         System.out.println("T:\n" + T + "\n");
         System.out.println("U:\n" + U + "\n");
         System.out.println("UTU^H:\n" + U.mult(T).mult(U.H()));
+
+        System.out.println(src.mult(U.getColAsVector(2)).div(T.get(2, 2)));
     }
 }

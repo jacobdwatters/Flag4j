@@ -30,6 +30,8 @@ import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.MatrixMixin;
+import com.flag4j.linalg.Eigen;
+import com.flag4j.linalg.transformations.Householder;
 
 /**
  * <p>This abstract class specifies methods for computing the Schur decomposition of a square matrix.
@@ -80,8 +82,6 @@ public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?>
      * matrix will be the actual matrix that the Schur decomposition is computed for.
      */
     protected HessenburgDecomposition<T> hess;
-
-    public boolean debug = false; // TODO: Temporary for testing. Must be removed.
 
 
     /**
@@ -137,147 +137,31 @@ public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?>
 
 
     /**
-     * Computes the Schur decomposition for a complex dense matrix.
-     * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
-     */
-    protected void computeSchurDecomp(CMatrix H) {
-        if(useDefaultMaxIterations) {
-            // The algorithm should converge within machine precision in O(n^3) in general.
-            maxIterations = (int) Math.max(Math.pow(H.numRows, 3), MIN_DEFAULT_ITERATIONS);
-        }
-
-        double tol = 1e-14;
-        int count;
-        int n = H.numRows-1;
-
-        T = CMatrix.I(H.numRows);
-        U = CMatrix.I(H.numRows);
-
-        ComplexQRDecomposition qr = new ComplexQRDecomposition(); // Decomposer for use in the QR algorithm.
-        CMatrix Q; // Q matrix from QR decomposition.
-        CMatrix R; // R matrix from QR decomposition.
-
-        CMatrix mu;
-
-        CNumber disc;
-        CVector lam = new CVector(H.numRows);
-
-        while(n>0) {
-            count = 0;
-
-            // Apply the QR algorithm (Shifted QR algorithm using Rayleigh shift).
-            while(H.getSlice(n, n+1, 0, n).maxAbs() > tol && count<maxIterations) {
-                count++;
-                mu = CMatrix.I(n+1).mult(H.entries[n*(H.numCols + 1)]); // Construct diagonal matrix.
-
-                qr.decompose(H.sub(mu)); // Compute the QR decomposition with a shift.
-                Q = qr.getQ();
-                R = qr.getR();
-
-                H = R.mult(Q).add(mu); // Reverse the shift.
-
-                if(computeU) {
-                    Q = CMatrix.I(U.numRows).setSliceCopy(Q, 1, 1);
-                    U = Q.mult(U);
-                }
-            }
-
-            T.setSlice(H, H.numRows-(n+1), H.numRows-(n+1));
-
-            if(count<maxIterations) {
-                // Then there is an isolated 1x1 block.
-//                lam.entries[n] = H.entries[n*(H.numCols + 1)];
-                H = H.getSlice(0, n, 0, n);
-                n--; // Deflate H by 1.
-
-            } else {
-                System.out.println("Here");
-                // Then there is an isolated 2x2 block.
-//                disc = CNumber.pow(H.entries[(n-1)*(H.numCols + 1)].sub(H.entries[n*(H.numCols + 1)]), 2);
-//                disc.addEq(H.entries[n*(H.numCols + 1) - 1].mult(H.entries[(n-1)*H.numCols + n]).mult(4));
-//
-//                lam.entries[n] = (H.entries[(n-1)*(H.numCols + 1)].add(H.entries[n*(H.numCols + 1)]).add(CNumber.sqrt(disc))).div(2.0);
-//                lam.entries[n-1] = (H.entries[(n-1)*(H.numCols + 1)].add(H.entries[n*(H.numCols + 1)]).sub(CNumber.sqrt(disc))).div(2.0);
-
-//                T.setSlice(new CMatrix(2), n-1, n-1);
-//                T.entries[n*(H.numCols + 1)] = lam.entries[n];
-//                T.entries[(n-1)*(H.numCols + 1)] = lam.entries[n-1];
-
-                n-=2; // Deflate H by 2.
-                H = H.getSlice(0, n+1, 0, n+1);
-            }
-        }
-    }
-
-
-    /**
-     * Computes the Schur decomposition for a complex dense matrix using the basic shifted QR algorithm (Rayleigh shift).
-     * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
-     */
-    protected void shiftedQR(CMatrix H) {
-        if(useDefaultMaxIterations) {
-            // The algorithm should converge within machine precision in O(n^3).
-            maxIterations = (int) Math.max(Math.pow(H.numRows, 3), MIN_DEFAULT_ITERATIONS);
-        }
-
-        int count = 0;
-        int n = H.numRows-1;
-
-        T = H;
-        U = CMatrix.I(H.numRows);
-
-        ComplexQRDecomposition qr = new ComplexQRDecomposition(); // Decomposer for use in the QR algorithm.
-        CMatrix Q; // Q matrix from QR decomposition.
-        CMatrix R; // R matrix from QR decomposition.
-
-        CMatrix mu;
-
-        // Apply the QR algorithm (Shifted QR algorithm using Rayleigh shift).
-        while(count<maxIterations) {
-            count++;
-//            mu = CMatrix.I(n+1).mult(T.entries[T.entries.length-1]); // Construct diagonal matrix.
-            mu = CMatrix.I(n+1).mult(CNumber.exp(CNumber.IMAGINARY_UNIT)); // Construct diagonal matrix.
-
-            qr.decompose(T.sub(mu)); // Compute the QR decomposition with a shift.
-            Q = qr.getQ();
-            R = qr.getR();
-
-            T = R.mult(Q).add(mu); // Reverse the shift.
-            U = U.mult(Q);
-        }
-    }
-
-
-    /**
      * Computes the Schur decomposition for a complex dense matrix using a double shifted implicit QR algorithm
      * (also known as Francis's Algorithm of degree two).
      * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
      */
+    // TODO: This is a very rudimentary implementation of Francis's double shift implicit QR algorithm.
+    //  Several improvements must be made. See Fundamentals of matrix computations Vol. 3 for more information.
+    //  this may also only work for real symmetric matrices...
     protected void doubleShiftImplicitQR(CMatrix H) {
-        // NOTE: This is a quick and dirty implementation and should only be used as reference.
-        //  See Fundamentals of Matrix Computations (Watkins) p 368-369.
-        // Right now, this only computes eigenvalues which are represented in the real Schur form.
         if(useDefaultMaxIterations) {
             // The algorithm should converge within machine precision in O(n^3).
             maxIterations = (int) Math.max(Math.pow(H.numRows, 3), MIN_DEFAULT_ITERATIONS);
         }
 
-        RealQRDecomposition qr = new RealQRDecomposition();
         ComplexHessenburgDecomposition hess = new ComplexHessenburgDecomposition(computeU); // Would need to compute Q to compute eigenvectors as well.
+
         T = H;
+
         if(computeU) {
             U = CMatrix.I(T.numRows);
         }
 
-
         for(int i=0; i<maxIterations; i++) {
             // Compute shifts as eigenvalues of lower right 2x2 block.
-            CVector rho = get2x2BlockEigenValues(T);
-
-            if(debug) {
-                System.out.println("[DEBUG] Iteration: " + i + "\n[DEBUG]" + "-".repeat(100) + "\n");
-                System.out.println("[DEBUG] T_start:\n" + T + "\n");
-            }
+            // TODO: Ensure this is numerically stable. Also, add random shifts as noted in Fundamentals of Matrix Computations Vol. 3.
+            CVector rho = Eigen.get2x2LowerLeftBlockEigenValues(T);
 
             CNumber[] pEntries = {
                     T.entries[0].sub(rho.entries[0]).mult(T.entries[0].sub(rho.entries[1])).add(T.entries[1].mult(T.entries[T.numCols])),
@@ -285,65 +169,29 @@ public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?>
                     T.entries[2*T.numCols+1].mult(T.entries[T.numCols])
             };
             Vector p = new CVector(pEntries).toReal(); // Should be real anyway
-            qr.decompose(p.toMatrix()); // Easy way to build an orthogonal matrix with first column proportional to p.
-            Matrix Q = qr.getQ(); // Realistically, the QR decomposition need not be computed explicitly.
+            Matrix Q = Householder.getReflector(p);
 
-            T.setSlice(Q.T().mult(T.getSlice(0, 3, 0, T.numCols)), 0, 0);
-            T.setSlice(T.getSlice(0, 4, 0, 3).mult(Q), 0, 0); // Create bulge.
+            // Apply the Householder reflector to T.
+            T.setSlice(Q.T().mult(T.getSlice(0, Q.numRows, 0, T.numCols)), 0, 0);
+            T.setSlice(T.getSlice(0, T.numRows, 0, Q.numCols).mult(Q), 0, 0);
 
-            if(debug) {
-                System.out.println("[DEBUG] T_after_transforms:\n" + T + "\n");
+            if(computeU) {
+                // Apply the Householder reflector to U.
+                U.setSlice(U.getSlice(0, U.numRows, 0, Q.numCols).mult(Q), 0, 0);
             }
 
-            // A crude bulge chase using Hessenberg decomposition. Since we know A is nearly in Hessenberg already, this
-            // will perform a lot of superfluous computations.
+            // TODO: A crude bulge chase using Hessenberg decomposition. Since we know A is nearly in Hessenberg already, this
+            //  will perform a lot of superfluous computations. Use Householder transformations instead.
             T = hess.decompose(T).getH();
 
             if(computeU) {
-                // TODO: This is not sufficient to compute the eigenvectors. Only the eigenvalues (i.e.) diagonal
-                //      of T is computed. however, the entire T is needed to compute the eigenvectors.
-                //      See Fundamentals of matrix computations (David Watkins) p. 386.
-                U.setSlice(U.getSlice(0, 4, 0, 3).mult(Q), 0, 0);
-                U = hess.Q.mult(U);
-            }
-
-            if(debug) {
-                System.out.println("[DEBUG] T_hess:\n" + T);
-                System.out.println("[DEBUG]" + "-".repeat(100) + "\n\n\n");
+                U = U.mult(hess.getQ());
             }
 
             if(T.roundToZero().isTriU()) {
                 break; // We have converged (approximately) to an upper triangular matrix.
             }
         }
-    }
-
-
-    /**
-     * Computes the eigenvalues for the lower right 2x2 block matrix of a larger matrix.
-     * @param src Source matrix to compute eigenvalues of lower right 2x2 block.
-     * @return A vector of length 2 containing the eigenvalues of the lower right 2x2 block of {@code src}.
-     */
-    private CVector get2x2BlockEigenValues(CMatrix src) {
-        // TODO: While theoretically correct, there are some numerical
-        //  issues here.
-        CVector shifts = new CVector(2);
-        int n = src.numRows-1;
-
-        // Get the four entries from lower right 2x2 sub-matrix.
-        CNumber a = src.entries[(n-1)*(src.numCols + 1)];
-        CNumber b = src.entries[(n-1)*src.numCols + n];
-        CNumber c = src.entries[n*(src.numCols + 1) - 1];
-        CNumber d = src.entries[(n)*(src.numCols + 1)];
-
-        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.
-        CNumber htr = a.add(b).div(2); // Half of the 2x2 trace.
-
-        // 2x2 block eigenvalues.
-        shifts.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
-        shifts.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
-
-        return shifts;
     }
 
 
