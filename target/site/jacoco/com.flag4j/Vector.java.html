@@ -28,6 +28,7 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealDenseTensorBase;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.io.PrintOptions;
+import com.flag4j.operations.common.real.VectorNorms;
 import com.flag4j.operations.dense.real.RealDenseEquals;
 import com.flag4j.operations.dense.real.RealDenseVectorOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
@@ -60,9 +61,9 @@ public class Vector
      * @param size Size of the vector.
      */
     public Vector(int size) {
-<span class="fc" id="L63">        super(new Shape(size), new double[size]);</span>
-<span class="fc" id="L64">        this.size = shape.dims[0];</span>
-<span class="fc" id="L65">    }</span>
+<span class="fc" id="L64">        super(new Shape(size), new double[size]);</span>
+<span class="fc" id="L65">        this.size = shape.dims[0];</span>
+<span class="fc" id="L66">    }</span>
 
 
     /**
@@ -71,10 +72,10 @@ public class Vector
      * @param fillValue Value to fill vector with.
      */
     public Vector(int size, double fillValue) {
-<span class="fc" id="L74">        super(new Shape(size), new double[size]);</span>
-<span class="fc" id="L75">        Arrays.fill(super.entries, fillValue);</span>
-<span class="fc" id="L76">        this.size = shape.dims[0];</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L75">        super(new Shape(size), new double[size]);</span>
+<span class="fc" id="L76">        Arrays.fill(super.entries, fillValue);</span>
+<span class="fc" id="L77">        this.size = shape.dims[0];</span>
+<span class="fc" id="L78">    }</span>
 
 
     /**
@@ -83,9 +84,9 @@ public class Vector
      * @throws IllegalArgumentException If the shapes is not rank 1.
      */
     public Vector(Shape shape) {
-<span class="fc" id="L86">        super(shape, new double[shape.dims[0]]);</span>
-<span class="fc" id="L87">        this.size = shape.dims[0];</span>
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L87">        super(shape, new double[shape.dims[0]]);</span>
+<span class="fc" id="L88">        this.size = shape.dims[0];</span>
+<span class="fc" id="L89">    }</span>
 
 
     /**
@@ -95,10 +96,10 @@ public class Vector
      * @throws IllegalArgumentException If the shapes is not rank 1.
      */
     public Vector(Shape shape, double fillValue) {
-<span class="fc" id="L98">        super(shape, new double[shape.dims[0]]);</span>
-<span class="fc" id="L99">        Arrays.fill(super.entries, fillValue);</span>
-<span class="fc" id="L100">        this.size = shape.dims[0];</span>
-<span class="fc" id="L101">    }</span>
+<span class="fc" id="L99">        super(shape, new double[shape.dims[0]]);</span>
+<span class="fc" id="L100">        Arrays.fill(super.entries, fillValue);</span>
+<span class="fc" id="L101">        this.size = shape.dims[0];</span>
+<span class="fc" id="L102">    }</span>
 
 
     /**
@@ -106,9 +107,9 @@ public class Vector
      * @param entries Entries for this column vector.
      */
     public Vector(double... entries) {
-<span class="fc" id="L109">        super(new Shape(entries.length), entries.clone());</span>
-<span class="fc" id="L110">        this.size = shape.dims[0];</span>
-<span class="fc" id="L111">    }</span>
+<span class="fc" id="L110">        super(new Shape(entries.length), entries.clone());</span>
+<span class="fc" id="L111">        this.size = shape.dims[0];</span>
+<span class="fc" id="L112">    }</span>
 
 
     /**
@@ -116,13 +117,13 @@ public class Vector
      * @param entries Entries for this column vector.
      */
     public Vector(int... entries) {
-<span class="fc" id="L119">        super(new Shape(entries.length), new double[entries.length]);</span>
-<span class="fc" id="L120">        this.size = shape.dims[0];</span>
+<span class="fc" id="L120">        super(new Shape(entries.length), new double[entries.length]);</span>
+<span class="fc" id="L121">        this.size = shape.dims[0];</span>
 
-<span class="fc bfc" id="L122" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="fc" id="L123">            super.entries[i] = entries[i];</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L124">            super.entries[i] = entries[i];</span>
         }
-<span class="fc" id="L125">    }</span>
+<span class="fc" id="L126">    }</span>
 
 
     /**
@@ -130,9 +131,9 @@ public class Vector
      * @param a Vector to make copy of.
      */
     public Vector(Vector a) {
-<span class="fc" id="L133">        super(a.shape.copy(), a.entries.clone());</span>
-<span class="fc" id="L134">        this.size = shape.dims[0];</span>
-<span class="fc" id="L135">    }</span>
+<span class="fc" id="L134">        super(a.shape.copy(), a.entries.clone());</span>
+<span class="fc" id="L135">        this.size = shape.dims[0];</span>
+<span class="fc" id="L136">    }</span>
 
 
     /**
@@ -144,23 +145,23 @@ public class Vector
      */
     @Override
     public boolean equals(Object b) {
-<span class="fc" id="L147">        boolean equal = false;</span>
+<span class="fc" id="L148">        boolean equal = false;</span>
 
-<span class="fc bfc" id="L149" title="All 2 branches covered.">        if(b instanceof Vector) {</span>
-<span class="fc" id="L150">            Vector vec = (Vector) b;</span>
-<span class="fc" id="L151">            equal = RealDenseEquals.vectorEquals(this.entries, vec.entries);</span>
-<span class="fc bfc" id="L152" title="All 2 branches covered.">        } else if(b instanceof CVector) {</span>
-<span class="fc" id="L153">            CVector vec = (CVector) b;</span>
-<span class="fc" id="L154">            equal = ArrayUtils.equals(this.entries, vec.entries);</span>
-<span class="fc bfc" id="L155" title="All 2 branches covered.">        } else if(b instanceof SparseVector) {</span>
-<span class="fc" id="L156">            SparseVector vec = (SparseVector) b;</span>
-<span class="fc" id="L157">            equal = RealDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);</span>
-<span class="fc bfc" id="L158" title="All 2 branches covered.">        } else if(b instanceof SparseCVector) {</span>
-<span class="fc" id="L159">            SparseCVector vec = (SparseCVector) b;</span>
-<span class="fc" id="L160">            equal = RealComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        if(b instanceof Vector) {</span>
+<span class="fc" id="L151">            Vector vec = (Vector) b;</span>
+<span class="fc" id="L152">            equal = RealDenseEquals.vectorEquals(this.entries, vec.entries);</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">        } else if(b instanceof CVector) {</span>
+<span class="fc" id="L154">            CVector vec = (CVector) b;</span>
+<span class="fc" id="L155">            equal = ArrayUtils.equals(this.entries, vec.entries);</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        } else if(b instanceof SparseVector) {</span>
+<span class="fc" id="L157">            SparseVector vec = (SparseVector) b;</span>
+<span class="fc" id="L158">            equal = RealDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        } else if(b instanceof SparseCVector) {</span>
+<span class="fc" id="L160">            SparseCVector vec = (SparseCVector) b;</span>
+<span class="fc" id="L161">            equal = RealComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);</span>
         }
 
-<span class="fc" id="L163">        return equal;</span>
+<span class="fc" id="L164">        return equal;</span>
     }
 
 
@@ -171,8 +172,8 @@ public class Vector
      */
     @Override
     public Vector flatten() {
-<span class="nc" id="L174">        ParameterChecks.assertBroadcastable(this.shape, shape);</span>
-<span class="nc" id="L175">        return this.copy();</span>
+<span class="nc" id="L175">        ParameterChecks.assertBroadcastable(this.shape, shape);</span>
+<span class="nc" id="L176">        return this.copy();</span>
     }
 
 
@@ -189,25 +190,25 @@ public class Vector
     public Matrix extend(int n, int axis) {
         Matrix extended;
 
-<span class="fc bfc" id="L192" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L193">            extended = new Matrix(n, this.size);</span>
-<span class="fc bfc" id="L194" title="All 2 branches covered.">            for(int i=0; i&lt;n; i++) {</span>
-<span class="fc" id="L195">                System.arraycopy(this.entries, 0, extended.entries, i*extended.numCols, this.size);</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L194">            extended = new Matrix(n, this.size);</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">            for(int i=0; i&lt;n; i++) {</span>
+<span class="fc" id="L196">                System.arraycopy(this.entries, 0, extended.entries, i*extended.numCols, this.size);</span>
             }
 
-<span class="fc bfc" id="L198" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L199">            extended = new Matrix(this.size, n);</span>
-<span class="fc" id="L200">            double[] row = new double[n];</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L200">            extended = new Matrix(this.size, n);</span>
+<span class="fc" id="L201">            double[] row = new double[n];</span>
 
-<span class="fc bfc" id="L202" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
-<span class="fc" id="L203">                Arrays.fill(row, this.entries[i]);</span>
-<span class="fc" id="L204">                System.arraycopy(row, 0, extended.entries, i*extended.numCols, row.length);</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
+<span class="fc" id="L204">                Arrays.fill(row, this.entries[i]);</span>
+<span class="fc" id="L205">                System.arraycopy(row, 0, extended.entries, i*extended.numCols, row.length);</span>
             }
-<span class="fc" id="L206">        } else {</span>
-<span class="fc" id="L207">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));</span>
+<span class="fc" id="L207">        } else {</span>
+<span class="fc" id="L208">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));</span>
         }
 
-<span class="fc" id="L210">        return extended;</span>
+<span class="fc" id="L211">        return extended;</span>
     }
 
 
@@ -220,7 +221,7 @@ public class Vector
      */
     @Override
     public Vector add(SparseVector B) {
-<span class="fc" id="L223">        return RealDenseSparseVectorOperations.add(this, B);</span>
+<span class="fc" id="L224">        return RealDenseSparseVectorOperations.add(this, B);</span>
     }
 
 
@@ -233,7 +234,7 @@ public class Vector
      */
     @Override
     public CVector add(CVector B) {
-<span class="fc" id="L236">        return new CVector(RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape));</span>
+<span class="fc" id="L237">        return new CVector(RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape));</span>
     }
 
 
@@ -246,7 +247,7 @@ public class Vector
      */
     @Override
     public CVector add(SparseCVector B) {
-<span class="fc" id="L249">        return RealComplexDenseSparseVectorOperations.add(this, B);</span>
+<span class="fc" id="L250">        return RealComplexDenseSparseVectorOperations.add(this, B);</span>
     }
 
 
@@ -259,7 +260,7 @@ public class Vector
      */
     @Override
     public Vector sub(SparseVector B) {
-<span class="fc" id="L262">        return RealDenseSparseVectorOperations.sub(this, B);</span>
+<span class="fc" id="L263">        return RealDenseSparseVectorOperations.sub(this, B);</span>
     }
 
 
@@ -272,7 +273,7 @@ public class Vector
      */
     @Override
     public CVector sub(CVector B) {
-<span class="fc" id="L275">        return new CVector(RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape));</span>
+<span class="fc" id="L276">        return new CVector(RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape));</span>
     }
 
 
@@ -285,7 +286,7 @@ public class Vector
      */
     @Override
     public CVector sub(SparseCVector B) {
-<span class="fc" id="L288">        return RealComplexDenseSparseVectorOperations.sub(this, B);</span>
+<span class="fc" id="L289">        return RealComplexDenseSparseVectorOperations.sub(this, B);</span>
     }
 
 
@@ -298,8 +299,8 @@ public class Vector
      */
     @Override
     public void addEq(SparseVector B) {
-<span class="fc" id="L301">        RealDenseSparseVectorOperations.addEq(this, B);</span>
-<span class="fc" id="L302">    }</span>
+<span class="fc" id="L302">        RealDenseSparseVectorOperations.addEq(this, B);</span>
+<span class="fc" id="L303">    }</span>
 
 
     /**
@@ -310,8 +311,8 @@ public class Vector
      */
     @Override
     public void subEq(SparseVector B) {
-<span class="fc" id="L313">        RealDenseSparseVectorOperations.subEq(this, B);</span>
-<span class="fc" id="L314">    }</span>
+<span class="fc" id="L314">        RealDenseSparseVectorOperations.subEq(this, B);</span>
+<span class="fc" id="L315">    }</span>
 
 
     /**
@@ -323,7 +324,7 @@ public class Vector
      */
     @Override
     public SparseVector elemMult(SparseVector B) {
-<span class="fc" id="L326">        return RealDenseSparseVectorOperations.elemMult(this, B);</span>
+<span class="fc" id="L327">        return RealDenseSparseVectorOperations.elemMult(this, B);</span>
     }
 
 
@@ -336,7 +337,7 @@ public class Vector
      */
     @Override
     public CVector elemMult(CVector B) {
-<span class="fc" id="L339">        return new CVector(RealComplexDenseElemMult.dispatch(B.entries, B.shape, this.entries, this.shape));</span>
+<span class="fc" id="L340">        return new CVector(RealComplexDenseElemMult.dispatch(B.entries, B.shape, this.entries, this.shape));</span>
     }
 
 
@@ -349,7 +350,7 @@ public class Vector
      */
     @Override
     public SparseCVector elemMult(SparseCVector B) {
-<span class="fc" id="L352">        return RealComplexDenseSparseVectorOperations.elemMult(this, B);</span>
+<span class="fc" id="L353">        return RealComplexDenseSparseVectorOperations.elemMult(this, B);</span>
     }
 
 
@@ -362,7 +363,7 @@ public class Vector
      */
     @Override
     public CVector elemDiv(CVector B) {
-<span class="fc" id="L365">        return new CVector(RealComplexDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));</span>
+<span class="fc" id="L366">        return new CVector(RealComplexDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));</span>
     }
 
 
@@ -373,7 +374,7 @@ public class Vector
      */
     @Override
     public Vector transpose() {
-<span class="fc" id="L376">        return new Vector(this);</span>
+<span class="fc" id="L377">        return new Vector(this);</span>
     }
 
 
@@ -385,7 +386,7 @@ public class Vector
      */
     @Override
     public Vector T() {
-<span class="fc" id="L388">        return new Vector(this);</span>
+<span class="fc" id="L389">        return new Vector(this);</span>
     }
 
 
@@ -397,11 +398,11 @@ public class Vector
      */
     @Override
     public Vector join(Vector b) {
-<span class="fc" id="L400">        Vector joined = new Vector(this.size+b.size);</span>
-<span class="fc" id="L401">        System.arraycopy(this.entries, 0, joined.entries, 0, this.size);</span>
-<span class="fc" id="L402">        System.arraycopy(b.entries, 0, joined.entries, this.size, b.size);</span>
+<span class="fc" id="L401">        Vector joined = new Vector(this.size+b.size);</span>
+<span class="fc" id="L402">        System.arraycopy(this.entries, 0, joined.entries, 0, this.size);</span>
+<span class="fc" id="L403">        System.arraycopy(b.entries, 0, joined.entries, this.size, b.size);</span>
 
-<span class="fc" id="L404">        return joined;</span>
+<span class="fc" id="L405">        return joined;</span>
     }
 
 
@@ -413,11 +414,11 @@ public class Vector
      */
     @Override
     public CVector join(CVector b) {
-<span class="fc" id="L416">        CNumber[] entries = new CNumber[this.size+b.size];</span>
-<span class="fc" id="L417">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
-<span class="fc" id="L418">        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);</span>
+<span class="fc" id="L417">        CNumber[] entries = new CNumber[this.size+b.size];</span>
+<span class="fc" id="L418">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
+<span class="fc" id="L419">        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);</span>
 
-<span class="fc" id="L420">        return new CVector(entries);</span>
+<span class="fc" id="L421">        return new CVector(entries);</span>
     }
 
 
@@ -429,17 +430,17 @@ public class Vector
      */
     @Override
     public Vector join(SparseVector b) {
-<span class="fc" id="L432">        Vector joined = new Vector(this.size+b.size);</span>
-<span class="fc" id="L433">        System.arraycopy(this.entries, 0, joined.entries, 0, this.size);</span>
+<span class="fc" id="L433">        Vector joined = new Vector(this.size+b.size);</span>
+<span class="fc" id="L434">        System.arraycopy(this.entries, 0, joined.entries, 0, this.size);</span>
 
         // Copy entries from sparse vector.
         int index;
-<span class="fc bfc" id="L437" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L438">            index = b.indices[i];</span>
-<span class="fc" id="L439">            joined.entries[this.size+index] = b.entries[i];</span>
+<span class="fc bfc" id="L438" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L439">            index = b.indices[i];</span>
+<span class="fc" id="L440">            joined.entries[this.size+index] = b.entries[i];</span>
         }
 
-<span class="fc" id="L442">        return joined;</span>
+<span class="fc" id="L443">        return joined;</span>
     }
 
 
@@ -451,17 +452,17 @@ public class Vector
      */
     @Override
     public CVector join(SparseCVector b) {
-<span class="fc" id="L454">        CVector joined = new CVector(this.size+b.size);</span>
-<span class="fc" id="L455">        ArrayUtils.arraycopy(this.entries, 0, joined.entries, 0, this.size);</span>
+<span class="fc" id="L455">        CVector joined = new CVector(this.size+b.size);</span>
+<span class="fc" id="L456">        ArrayUtils.arraycopy(this.entries, 0, joined.entries, 0, this.size);</span>
 
         // Copy entries from sparse vector.
         int index;
-<span class="fc bfc" id="L459" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L460">            index = b.indices[i];</span>
-<span class="fc" id="L461">            joined.entries[this.size+index] = b.entries[i].copy();</span>
+<span class="fc bfc" id="L460" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L461">            index = b.indices[i];</span>
+<span class="fc" id="L462">            joined.entries[this.size+index] = b.entries[i].copy();</span>
         }
 
-<span class="fc" id="L464">        return joined;</span>
+<span class="fc" id="L465">        return joined;</span>
     }
 
 
@@ -475,14 +476,14 @@ public class Vector
      */
     @Override
     public Matrix stack(Vector b) {
-<span class="fc" id="L478">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
-<span class="fc" id="L479">        Matrix stacked = new Matrix(2, this.size);</span>
+<span class="fc" id="L479">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L480">        Matrix stacked = new Matrix(2, this.size);</span>
 
         // Copy entries from each vector to the matrix.
-<span class="fc" id="L482">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.size);</span>
-<span class="fc" id="L483">        System.arraycopy(b.entries, 0, stacked.entries, this.size, b.size);</span>
+<span class="fc" id="L483">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.size);</span>
+<span class="fc" id="L484">        System.arraycopy(b.entries, 0, stacked.entries, this.size, b.size);</span>
 
-<span class="fc" id="L485">        return stacked;</span>
+<span class="fc" id="L486">        return stacked;</span>
     }
 
 
@@ -496,20 +497,20 @@ public class Vector
      */
     @Override
     public Matrix stack(SparseVector b) {
-<span class="fc" id="L499">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
-<span class="fc" id="L500">        Matrix stacked = new Matrix(2, this.size);</span>
+<span class="fc" id="L500">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L501">        Matrix stacked = new Matrix(2, this.size);</span>
 
         // Copy entries from dense vector to the matrix.
-<span class="fc" id="L503">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.size);</span>
+<span class="fc" id="L504">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.size);</span>
 
         // Copy entries from sparse vector to the matrix.
         int index;
-<span class="fc bfc" id="L507" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L508">            index = b.indices[i];</span>
-<span class="fc" id="L509">            stacked.entries[stacked.numCols + index] = b.entries[i];</span>
+<span class="fc bfc" id="L508" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L509">            index = b.indices[i];</span>
+<span class="fc" id="L510">            stacked.entries[stacked.numCols + index] = b.entries[i];</span>
         }
 
-<span class="fc" id="L512">        return stacked;</span>
+<span class="fc" id="L513">        return stacked;</span>
     }
 
 
@@ -523,14 +524,14 @@ public class Vector
      */
     @Override
     public CMatrix stack(CVector b) {
-<span class="fc" id="L526">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
-<span class="fc" id="L527">        CNumber[] entries = new CNumber[this.size+b.size];</span>
+<span class="fc" id="L527">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L528">        CNumber[] entries = new CNumber[this.size+b.size];</span>
 
         // Copy entries from each vector to the matrix.
-<span class="fc" id="L530">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
-<span class="fc" id="L531">        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);</span>
+<span class="fc" id="L531">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
+<span class="fc" id="L532">        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);</span>
 
-<span class="fc" id="L533">        return new CMatrix(2, this.size, entries);</span>
+<span class="fc" id="L534">        return new CMatrix(2, this.size, entries);</span>
     }
 
 
@@ -544,20 +545,20 @@ public class Vector
      */
     @Override
     public CMatrix stack(SparseCVector b) {
-<span class="fc" id="L547">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
-<span class="fc" id="L548">        CMatrix stacked = new CMatrix(2, this.size);</span>
+<span class="fc" id="L548">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L549">        CMatrix stacked = new CMatrix(2, this.size);</span>
 
         // Copy entries from dense vector to the matrix.
-<span class="fc" id="L551">        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);</span>
+<span class="fc" id="L552">        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);</span>
 
         // Copy entries from sparse vector to the matrix.
         int index;
-<span class="fc bfc" id="L555" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L556">            index = b.indices[i];</span>
-<span class="fc" id="L557">            stacked.entries[stacked.numCols + index] = b.entries[i].copy();</span>
+<span class="fc bfc" id="L556" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L557">            index = b.indices[i];</span>
+<span class="fc" id="L558">            stacked.entries[stacked.numCols + index] = b.entries[i].copy();</span>
         }
 
-<span class="fc" id="L560">        return stacked;</span>
+<span class="fc" id="L561">        return stacked;</span>
     }
 
 
@@ -586,25 +587,25 @@ public class Vector
      */
     @Override
     public Matrix stack(Vector b, int axis) {
-<span class="fc" id="L589">        ParameterChecks.assertAxis2D(axis);</span>
+<span class="fc" id="L590">        ParameterChecks.assertAxis2D(axis);</span>
         Matrix stacked;
 
-<span class="fc bfc" id="L592" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L593">            stacked = stack(b);</span>
+<span class="fc bfc" id="L593" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L594">            stacked = stack(b);</span>
         } else {
-<span class="fc" id="L595">            ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
-<span class="fc" id="L596">            double[] stackedEntries = new double[2*this.size];</span>
+<span class="fc" id="L596">            ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L597">            double[] stackedEntries = new double[2*this.size];</span>
 
-<span class="fc" id="L598">            int count = 0;</span>
-<span class="fc bfc" id="L599" title="All 2 branches covered.">            for(int i=0; i&lt;stackedEntries.length; i+=2) {</span>
-<span class="fc" id="L600">                stackedEntries[i] = this.entries[count];</span>
-<span class="fc" id="L601">                stackedEntries[i+1] = b.entries[count++];</span>
+<span class="fc" id="L599">            int count = 0;</span>
+<span class="fc bfc" id="L600" title="All 2 branches covered.">            for(int i=0; i&lt;stackedEntries.length; i+=2) {</span>
+<span class="fc" id="L601">                stackedEntries[i] = this.entries[count];</span>
+<span class="fc" id="L602">                stackedEntries[i+1] = b.entries[count++];</span>
             }
 
-<span class="fc" id="L604">            stacked = new Matrix(this.size, 2, stackedEntries);</span>
+<span class="fc" id="L605">            stacked = new Matrix(this.size, 2, stackedEntries);</span>
         }
 
-<span class="fc" id="L607">        return stacked;</span>
+<span class="fc" id="L608">        return stacked;</span>
     }
 
 
@@ -633,31 +634,31 @@ public class Vector
      */
     @Override
     public Matrix stack(SparseVector b, int axis) {
-<span class="fc" id="L636">        ParameterChecks.assertAxis2D(axis);</span>
+<span class="fc" id="L637">        ParameterChecks.assertAxis2D(axis);</span>
         Matrix stacked;
 
-<span class="fc bfc" id="L639" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L640">            stacked = stack(b);</span>
+<span class="fc bfc" id="L640" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L641">            stacked = stack(b);</span>
         } else {
-<span class="fc" id="L642">            ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
-<span class="fc" id="L643">            double[] stackedEntries = new double[2*this.size];</span>
+<span class="fc" id="L643">            ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L644">            double[] stackedEntries = new double[2*this.size];</span>
 
             // Copy dense values.
-<span class="fc bfc" id="L646" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
-<span class="fc" id="L647">                stackedEntries[i*2] = this.entries[i];</span>
+<span class="fc bfc" id="L647" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
+<span class="fc" id="L648">                stackedEntries[i*2] = this.entries[i];</span>
             }
 
             // Copy sparse values.
             int index;
-<span class="fc bfc" id="L652" title="All 2 branches covered.">            for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L653">                index = b.indices[i];</span>
-<span class="fc" id="L654">                stackedEntries[index*2 + 1] = b.entries[i];</span>
+<span class="fc bfc" id="L653" title="All 2 branches covered.">            for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L654">                index = b.indices[i];</span>
+<span class="fc" id="L655">                stackedEntries[index*2 + 1] = b.entries[i];</span>
             }
 
-<span class="fc" id="L657">            stacked = new Matrix(this.size, 2, stackedEntries);</span>
+<span class="fc" id="L658">            stacked = new Matrix(this.size, 2, stackedEntries);</span>
         }
 
-<span class="fc" id="L660">        return stacked;</span>
+<span class="fc" id="L661">        return stacked;</span>
     }
 
 
@@ -686,26 +687,26 @@ public class Vector
      */
     @Override
     public CMatrix stack(CVector b, int axis) {
-<span class="fc" id="L689">        ParameterChecks.assertAxis2D(axis);</span>
+<span class="fc" id="L690">        ParameterChecks.assertAxis2D(axis);</span>
         CMatrix stacked;
 
-<span class="fc bfc" id="L692" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L693">            stacked = stack(b);</span>
+<span class="fc bfc" id="L693" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L694">            stacked = stack(b);</span>
         } else {
-<span class="fc" id="L695">            ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
-<span class="fc" id="L696">            CNumber[] stackedEntries = new CNumber[2*this.size];</span>
+<span class="fc" id="L696">            ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L697">            CNumber[] stackedEntries = new CNumber[2*this.size];</span>
 
-<span class="fc" id="L698">            int count = 0;</span>
+<span class="fc" id="L699">            int count = 0;</span>
 
-<span class="fc bfc" id="L700" title="All 2 branches covered.">            for(int i=0; i&lt;stackedEntries.length; i+=2) {</span>
-<span class="fc" id="L701">                stackedEntries[i] = new CNumber(this.entries[count]);</span>
-<span class="fc" id="L702">                stackedEntries[i+1] = b.entries[count++].copy();</span>
+<span class="fc bfc" id="L701" title="All 2 branches covered.">            for(int i=0; i&lt;stackedEntries.length; i+=2) {</span>
+<span class="fc" id="L702">                stackedEntries[i] = new CNumber(this.entries[count]);</span>
+<span class="fc" id="L703">                stackedEntries[i+1] = b.entries[count++].copy();</span>
             }
 
-<span class="fc" id="L705">            stacked = new CMatrix(this.size, 2, stackedEntries);</span>
+<span class="fc" id="L706">            stacked = new CMatrix(this.size, 2, stackedEntries);</span>
         }
 
-<span class="fc" id="L708">        return stacked;</span>
+<span class="fc" id="L709">        return stacked;</span>
     }
 
 
@@ -734,32 +735,32 @@ public class Vector
      */
     @Override
     public CMatrix stack(SparseCVector b, int axis) {
-<span class="fc" id="L737">        ParameterChecks.assertAxis2D(axis);</span>
+<span class="fc" id="L738">        ParameterChecks.assertAxis2D(axis);</span>
         CMatrix stacked;
 
-<span class="fc bfc" id="L740" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L741">            stacked = stack(b);</span>
+<span class="fc bfc" id="L741" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L742">            stacked = stack(b);</span>
         } else {
-<span class="fc" id="L743">            ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
-<span class="fc" id="L744">            CNumber[] stackedEntries = new CNumber[2*this.size];</span>
-<span class="fc" id="L745">            ArrayUtils.fillZeros(stackedEntries);</span>
+<span class="fc" id="L744">            ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L745">            CNumber[] stackedEntries = new CNumber[2*this.size];</span>
+<span class="fc" id="L746">            ArrayUtils.fillZeros(stackedEntries);</span>
 
             // Copy dense values.
-<span class="fc bfc" id="L748" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
-<span class="fc" id="L749">                stackedEntries[i*2] = new CNumber(this.entries[i]);</span>
+<span class="fc bfc" id="L749" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
+<span class="fc" id="L750">                stackedEntries[i*2] = new CNumber(this.entries[i]);</span>
             }
 
             // Copy sparse values.
             int index;
-<span class="fc bfc" id="L754" title="All 2 branches covered.">            for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L755">                index = b.indices[i];</span>
-<span class="fc" id="L756">                stackedEntries[index*2 + 1] = b.entries[i].copy();</span>
+<span class="fc bfc" id="L755" title="All 2 branches covered.">            for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L756">                index = b.indices[i];</span>
+<span class="fc" id="L757">                stackedEntries[index*2 + 1] = b.entries[i].copy();</span>
             }
 
-<span class="fc" id="L759">            stacked = new CMatrix(this.size, 2, stackedEntries);</span>
+<span class="fc" id="L760">            stacked = new CMatrix(this.size, 2, stackedEntries);</span>
         }
 
-<span class="fc" id="L762">        return stacked;</span>
+<span class="fc" id="L763">        return stacked;</span>
     }
 
 
@@ -772,7 +773,7 @@ public class Vector
      */
     @Override
     public Double inner(Vector b) {
-<span class="fc" id="L775">        return RealDenseVectorOperations.innerProduct(this.entries, b.entries);</span>
+<span class="fc" id="L776">        return RealDenseVectorOperations.innerProduct(this.entries, b.entries);</span>
     }
 
 
@@ -785,7 +786,7 @@ public class Vector
      */
     @Override
     public Double inner(SparseVector b) {
-<span class="fc" id="L788">        return RealDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);</span>
+<span class="fc" id="L789">        return RealDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);</span>
     }
 
 
@@ -796,7 +797,7 @@ public class Vector
      */
     @Override
     public Vector normalize() {
-<span class="fc" id="L799">        return this.div(this.norm());</span>
+<span class="fc" id="L800">        return this.div(this.norm());</span>
     }
 
 
@@ -809,7 +810,7 @@ public class Vector
      */
     @Override
     public CNumber inner(CVector b) {
-<span class="fc" id="L812">        return RealComplexDenseVectorOperations.innerProduct(this.entries, b.entries);</span>
+<span class="fc" id="L813">        return RealComplexDenseVectorOperations.innerProduct(this.entries, b.entries);</span>
     }
 
 
@@ -822,7 +823,7 @@ public class Vector
      */
     @Override
     public CNumber inner(SparseCVector b) {
-<span class="fc" id="L825">        return RealComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);</span>
+<span class="fc" id="L826">        return RealComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);</span>
     }
 
 
@@ -835,15 +836,15 @@ public class Vector
      */
     @Override
     public Vector cross(Vector b) {
-<span class="fc" id="L838">        ParameterChecks.assertArrayLengthsEq(3, b.size);</span>
-<span class="fc" id="L839">        ParameterChecks.assertArrayLengthsEq(3, this.size);</span>
-<span class="fc" id="L840">        double[] entries = new double[3];</span>
+<span class="fc" id="L839">        ParameterChecks.assertArrayLengthsEq(3, b.size);</span>
+<span class="fc" id="L840">        ParameterChecks.assertArrayLengthsEq(3, this.size);</span>
+<span class="fc" id="L841">        double[] entries = new double[3];</span>
 
-<span class="fc" id="L842">        entries[0] = this.entries[1]*b.entries[2]-this.entries[2]*b.entries[1];</span>
-<span class="fc" id="L843">        entries[1] = this.entries[2]*b.entries[0]-this.entries[0]*b.entries[2];</span>
-<span class="fc" id="L844">        entries[2] = this.entries[0]*b.entries[1]-this.entries[1]*b.entries[0];</span>
+<span class="fc" id="L843">        entries[0] = this.entries[1]*b.entries[2]-this.entries[2]*b.entries[1];</span>
+<span class="fc" id="L844">        entries[1] = this.entries[2]*b.entries[0]-this.entries[0]*b.entries[2];</span>
+<span class="fc" id="L845">        entries[2] = this.entries[0]*b.entries[1]-this.entries[1]*b.entries[0];</span>
 
-<span class="fc" id="L846">        return new Vector(entries);</span>
+<span class="fc" id="L847">        return new Vector(entries);</span>
     }
 
 
@@ -856,15 +857,15 @@ public class Vector
      */
     @Override
     public CVector cross(CVector b) {
-<span class="fc" id="L859">        ParameterChecks.assertArrayLengthsEq(3, b.size);</span>
-<span class="fc" id="L860">        ParameterChecks.assertArrayLengthsEq(3, this.size);</span>
-<span class="fc" id="L861">        CNumber[] entries = new CNumber[3];</span>
+<span class="fc" id="L860">        ParameterChecks.assertArrayLengthsEq(3, b.size);</span>
+<span class="fc" id="L861">        ParameterChecks.assertArrayLengthsEq(3, this.size);</span>
+<span class="fc" id="L862">        CNumber[] entries = new CNumber[3];</span>
 
-<span class="fc" id="L863">        entries[0] = b.entries[2].mult(this.entries[1]).sub(b.entries[1].mult(this.entries[2]));</span>
-<span class="fc" id="L864">        entries[1] = b.entries[0].mult(this.entries[2]).sub(b.entries[2].mult(this.entries[0]));</span>
-<span class="fc" id="L865">        entries[2] = b.entries[1].mult(this.entries[0]).sub(b.entries[0].mult(this.entries[1]));</span>
+<span class="fc" id="L864">        entries[0] = b.entries[2].mult(this.entries[1]).sub(b.entries[1].mult(this.entries[2]));</span>
+<span class="fc" id="L865">        entries[1] = b.entries[0].mult(this.entries[2]).sub(b.entries[2].mult(this.entries[0]));</span>
+<span class="fc" id="L866">        entries[2] = b.entries[1].mult(this.entries[0]).sub(b.entries[0].mult(this.entries[1]));</span>
 
-<span class="fc" id="L867">        return new CVector(entries);</span>
+<span class="fc" id="L868">        return new CVector(entries);</span>
     }
 
 
@@ -877,8 +878,8 @@ public class Vector
      */
     @Override
     public Matrix outer(Vector b) {
-<span class="fc" id="L880">        return new Matrix(this.size, b.size,</span>
-<span class="fc" id="L881">                RealDenseVectorOperations.outerProduct(this.entries, b.entries));</span>
+<span class="fc" id="L881">        return new Matrix(this.size, b.size,</span>
+<span class="fc" id="L882">                RealDenseVectorOperations.outerProduct(this.entries, b.entries));</span>
     }
 
 
@@ -891,8 +892,8 @@ public class Vector
      */
     @Override
     public Matrix outer(SparseVector b) {
-<span class="fc" id="L894">        return new Matrix(this.size, b.size,</span>
-<span class="fc" id="L895">                RealDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));</span>
+<span class="fc" id="L895">        return new Matrix(this.size, b.size,</span>
+<span class="fc" id="L896">                RealDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));</span>
     }
 
 
@@ -905,8 +906,8 @@ public class Vector
      */
     @Override
     public CMatrix outer(CVector b) {
-<span class="fc" id="L908">        return new CMatrix(this.size, b.size,</span>
-<span class="fc" id="L909">                RealComplexDenseVectorOperations.outerProduct(this.entries, b.entries));</span>
+<span class="fc" id="L909">        return new CMatrix(this.size, b.size,</span>
+<span class="fc" id="L910">                RealComplexDenseVectorOperations.outerProduct(this.entries, b.entries));</span>
     }
 
 
@@ -919,8 +920,8 @@ public class Vector
      */
     @Override
     public CMatrix outer(SparseCVector b) {
-<span class="fc" id="L922">        return new CMatrix(this.size, b.size,</span>
-<span class="fc" id="L923">                RealComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));</span>
+<span class="fc" id="L923">        return new CMatrix(this.size, b.size,</span>
+<span class="fc" id="L924">                RealComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));</span>
     }
 
 
@@ -932,36 +933,37 @@ public class Vector
      */
     @Override
     public boolean isParallel(Vector b) {
+        // TODO: Add overloaded methods for other vector types.
         boolean result;
 
-<span class="fc bfc" id="L937" title="All 2 branches covered.">        if(this.size!=b.size) {</span>
-<span class="fc" id="L938">            result = false;</span>
-<span class="fc bfc" id="L939" title="All 2 branches covered.">        } else if(this.size==1) {</span>
-<span class="fc" id="L940">            result = true;</span>
-<span class="fc bfc" id="L941" title="All 4 branches covered.">        } else if(this.isZeros() || b.isZeros()) {</span>
-<span class="fc" id="L942">            result = true; // Any vector is parallel to zero vector.</span>
+<span class="fc bfc" id="L939" title="All 2 branches covered.">        if(this.size!=b.size) {</span>
+<span class="fc" id="L940">            result = false;</span>
+<span class="fc bfc" id="L941" title="All 2 branches covered.">        } else if(this.size==1) {</span>
+<span class="fc" id="L942">            result = true;</span>
+<span class="fc bfc" id="L943" title="All 4 branches covered.">        } else if(this.isZeros() || b.isZeros()) {</span>
+<span class="fc" id="L944">            result = true; // Any vector is parallel to zero vector.</span>
         } else {
-<span class="fc" id="L944">            result = true;</span>
-<span class="fc" id="L945">            double scale = 0;</span>
+<span class="fc" id="L946">            result = true;</span>
+<span class="fc" id="L947">            double scale = 0;</span>
 
             // Find first non-zero entry of b to compute the scaling factor.
-<span class="pc bpc" id="L948" title="1 of 2 branches missed.">            for(int i=0; i&lt;b.size; i++) {</span>
-<span class="fc bfc" id="L949" title="All 2 branches covered.">                if(b.entries[i]!=0) {</span>
-<span class="fc" id="L950">                    scale = this.entries[i]/b.entries[i];</span>
-<span class="fc" id="L951">                    break;</span>
+<span class="pc bpc" id="L950" title="1 of 2 branches missed.">            for(int i=0; i&lt;b.size; i++) {</span>
+<span class="fc bfc" id="L951" title="All 2 branches covered.">                if(b.entries[i]!=0) {</span>
+<span class="fc" id="L952">                    scale = this.entries[i]/b.entries[i];</span>
+<span class="fc" id="L953">                    break;</span>
                 }
             }
 
             // Ensure all entries of b are the same scalar multiple of the entries in this vector.
-<span class="fc bfc" id="L956" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
-<span class="fc bfc" id="L957" title="All 2 branches covered.">                if(b.entries[i]*scale != this.entries[i]) {</span>
-<span class="fc" id="L958">                    result = false;</span>
-<span class="fc" id="L959">                    break;</span>
+<span class="fc bfc" id="L958" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
+<span class="fc bfc" id="L959" title="All 2 branches covered.">                if(b.entries[i]*scale != this.entries[i]) {</span>
+<span class="fc" id="L960">                    result = false;</span>
+<span class="fc" id="L961">                    break;</span>
                 }
             }
         }
 
-<span class="fc" id="L964">        return result;</span>
+<span class="fc" id="L966">        return result;</span>
     }
 
 
@@ -973,15 +975,16 @@ public class Vector
      */
     @Override
     public boolean isPerp(Vector b) {
+        // TODO: Add overloaded methods for other vector types.
         boolean result;
 
-<span class="fc bfc" id="L978" title="All 2 branches covered.">        if(this.size!=b.size) {</span>
-<span class="fc" id="L979">            result = false;</span>
+<span class="fc bfc" id="L981" title="All 2 branches covered.">        if(this.size!=b.size) {</span>
+<span class="fc" id="L982">            result = false;</span>
         } else {
-<span class="fc bfc" id="L981" title="All 2 branches covered.">            result = this.inner(b)==0;</span>
+<span class="fc bfc" id="L984" title="All 2 branches covered.">            result = this.inner(b)==0;</span>
         }
 
-<span class="fc" id="L984">        return result;</span>
+<span class="fc" id="L987">        return result;</span>
     }
 
 
@@ -992,7 +995,7 @@ public class Vector
      */
     @Override
     public Matrix toMatrix() {
-<span class="fc" id="L995">        return new Matrix(this.entries.length, 1, this.entries.clone());</span>
+<span class="fc" id="L998">        return new Matrix(this.entries.length, 1, this.entries.clone());</span>
     }
 
 
@@ -1005,12 +1008,12 @@ public class Vector
      */
     @Override
     public Matrix toMatrix(boolean columVector) {
-<span class="fc bfc" id="L1008" title="All 2 branches covered.">        if(columVector) {</span>
+<span class="fc bfc" id="L1011" title="All 2 branches covered.">        if(columVector) {</span>
             // Convert to column vector
-<span class="fc" id="L1010">            return new Matrix(this.entries.length, 1, this.entries.clone());</span>
+<span class="fc" id="L1013">            return new Matrix(this.entries.length, 1, this.entries.clone());</span>
         } else {
             // Convert to row vector.
-<span class="fc" id="L1013">            return new Matrix(1, this.entries.length, this.entries.clone());</span>
+<span class="fc" id="L1016">            return new Matrix(1, this.entries.length, this.entries.clone());</span>
         }
     }
 
@@ -1020,7 +1023,7 @@ public class Vector
      * @return A tensor which is equivalent to this vector.
      */
     public Tensor toTensor() {
-<span class="fc" id="L1023">        return new Tensor(this.shape.copy(), this.entries.clone());</span>
+<span class="fc" id="L1026">        return new Tensor(this.shape.copy(), this.entries.clone());</span>
     }
 
 
@@ -1031,13 +1034,7 @@ public class Vector
      */
     @Override
     public double norm() {
-<span class="fc" id="L1034">        double norm = 0;</span>
-
-<span class="fc bfc" id="L1036" title="All 2 branches covered.">        for(int i=0; i&lt;this.size; i++) {</span>
-<span class="fc" id="L1037">            norm += this.entries[i]*this.entries[i];</span>
-        }
-
-<span class="fc" id="L1040">        return Math.sqrt(norm);</span>
+<span class="fc" id="L1037">        return VectorNorms.norm(entries);</span>
     }
 
 
@@ -1051,22 +1048,7 @@ public class Vector
      */
     @Override
     public double norm(double p) {
-
-<span class="fc bfc" id="L1055" title="All 2 branches covered.">        if(Double.isInfinite(p)) {</span>
-<span class="pc bpc" id="L1056" title="1 of 2 branches missed.">            if(p &gt; 0) {</span>
-<span class="fc" id="L1057">                return maxAbs(); // Maximum / infinite norm.</span>
-            } else {
-<span class="nc" id="L1059">                return minAbs(); // Minimum norm.</span>
-            }
-        } else {
-<span class="fc" id="L1062">            double norm = 0;</span>
-
-<span class="fc bfc" id="L1064" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
-<span class="fc" id="L1065">                norm += Math.pow(Math.abs(this.entries[i]), p);</span>
-            }
-
-<span class="fc" id="L1068">            return Math.pow(norm, 1.0/p);</span>
-        }
+<span class="fc" id="L1051">        return VectorNorms.norm(entries, p);</span>
     }
 
 
@@ -1080,7 +1062,7 @@ public class Vector
     @Override
     protected Vector makeTensor(Shape shape, double[] entries) {
         // Shape not needed to construct a dense vector.
-<span class="fc" id="L1083">        return new Vector(entries);</span>
+<span class="fc" id="L1065">        return new Vector(entries);</span>
     }
 
 
@@ -1094,7 +1076,7 @@ public class Vector
     @Override
     protected CVector makeComplexTensor(Shape shape, double[] entries) {
         // Shape not needed to construct a dense vector.
-<span class="nc" id="L1097">        return new CVector(entries);</span>
+<span class="nc" id="L1079">        return new CVector(entries);</span>
     }
 
 
@@ -1108,7 +1090,7 @@ public class Vector
     @Override
     protected CVector makeComplexTensor(Shape shape, CNumber[] entries) {
         // Shape not needed to construct a dense vector.
-<span class="fc" id="L1111">        return new CVector(entries);</span>
+<span class="fc" id="L1093">        return new CVector(entries);</span>
     }
 
 
@@ -1119,7 +1101,7 @@ public class Vector
      */
     @Override
     protected Vector getSelf() {
-<span class="fc" id="L1122">        return this;</span>
+<span class="fc" id="L1104">        return this;</span>
     }
 
 
@@ -1130,7 +1112,7 @@ public class Vector
      */
     @Override
     public int length() {
-<span class="fc" id="L1133">        return this.size;</span>
+<span class="fc" id="L1115">        return this.size;</span>
     }
 
 
@@ -1141,7 +1123,7 @@ public class Vector
      */
     @Override
     public int size() {
-<span class="fc" id="L1144">        return size;</span>
+<span class="fc" id="L1126">        return size;</span>
     }
 
 
@@ -1153,7 +1135,7 @@ public class Vector
      */
     @Override
     public Vector flatten(int axis) {
-<span class="nc" id="L1156">        return this.copy();</span>
+<span class="nc" id="L1138">        return this.copy();</span>
     }
 
 
@@ -1163,43 +1145,43 @@ public class Vector
      * @return A human-readable string representation of this vector.
      */
     public String toString() {
-<span class="fc" id="L1166">        StringBuilder result = new StringBuilder();</span>
+<span class="fc" id="L1148">        StringBuilder result = new StringBuilder();</span>
 
-<span class="fc bfc" id="L1168" title="All 2 branches covered.">        if(PrintOptions.getMaxColumns()&lt;size) {</span>
+<span class="fc bfc" id="L1150" title="All 2 branches covered.">        if(PrintOptions.getMaxColumns()&lt;size) {</span>
             // Then also get the full size of the vector.
-<span class="fc" id="L1170">            result.append(String.format(&quot;Full Size: %d\n&quot;, size));</span>
+<span class="fc" id="L1152">            result.append(String.format(&quot;Full Size: %d\n&quot;, size));</span>
         }
 
-<span class="fc" id="L1173">        result.append(&quot;[&quot;);</span>
+<span class="fc" id="L1155">        result.append(&quot;[&quot;);</span>
 
-<span class="fc" id="L1175">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
+<span class="fc" id="L1157">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
         int width;
         String value;
 
         // Get entries up until the stopping point.
-<span class="fc bfc" id="L1180" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
-<span class="fc" id="L1181">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
-<span class="fc" id="L1182">            width = PrintOptions.getPadding() + value.length();</span>
-<span class="fc bfc" id="L1183" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1184">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L1162" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="fc" id="L1163">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
+<span class="fc" id="L1164">            width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L1165" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1166">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="fc bfc" id="L1187" title="All 2 branches covered.">        if(stopIndex &lt; size-1) {</span>
-<span class="fc" id="L1188">            width = PrintOptions.getPadding() + 3;</span>
-<span class="fc" id="L1189">            value = &quot;...&quot;;</span>
-<span class="pc bpc" id="L1190" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1191">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L1169" title="All 2 branches covered.">        if(stopIndex &lt; size-1) {</span>
+<span class="fc" id="L1170">            width = PrintOptions.getPadding() + 3;</span>
+<span class="fc" id="L1171">            value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L1172" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1173">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
         // Get last entry now
-<span class="fc" id="L1195">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
-<span class="fc" id="L1196">        width = PrintOptions.getPadding() + value.length();</span>
-<span class="fc bfc" id="L1197" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1198">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc" id="L1177">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
+<span class="fc" id="L1178">        width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L1179" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1180">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
 
-<span class="fc" id="L1200">        result.append(&quot;]&quot;);</span>
+<span class="fc" id="L1182">        result.append(&quot;]&quot;);</span>
 
-<span class="fc" id="L1202">        return result.toString();</span>
+<span class="fc" id="L1184">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
