@@ -28,6 +28,7 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealDenseTensorBase;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.io.PrintOptions;
+import com.flag4j.operations.common.real.VectorNorms;
 import com.flag4j.operations.dense.real.RealDenseEquals;
 import com.flag4j.operations.dense.real.RealDenseVectorOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
@@ -932,6 +933,7 @@ public class Vector
      */
     @Override
     public boolean isParallel(Vector b) {
+        // TODO: Add overloaded methods for other vector types.
         boolean result;
 
         if(this.size!=b.size) {
@@ -973,6 +975,7 @@ public class Vector
      */
     @Override
     public boolean isPerp(Vector b) {
+        // TODO: Add overloaded methods for other vector types.
         boolean result;
 
         if(this.size!=b.size) {
@@ -1031,13 +1034,7 @@ public class Vector
      */
     @Override
     public double norm() {
-        double norm = 0;
-
-        for(int i=0; i<this.size; i++) {
-            norm += this.entries[i]*this.entries[i];
-        }
-
-        return Math.sqrt(norm);
+        return VectorNorms.norm(entries);
     }
 
 
@@ -1051,22 +1048,7 @@ public class Vector
      */
     @Override
     public double norm(double p) {
-
-        if(Double.isInfinite(p)) {
-            if(p > 0) {
-                return maxAbs(); // Maximum / infinite norm.
-            } else {
-                return minAbs(); // Minimum norm.
-            }
-        } else {
-            double norm = 0;
-
-            for(int i=0; i<this.size; i++) {
-                norm += Math.pow(Math.abs(this.entries[i]), p);
-            }
-
-            return Math.pow(norm, 1.0/p);
-        }
+        return VectorNorms.norm(entries, p);
     }
 
 

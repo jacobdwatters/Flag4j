@@ -62,6 +62,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\DecomposeTest
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixElemDivTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CVectorElemOppTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\RemoveRowColTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CTensorToStringTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\decompositions\ComplexCholeskyTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\real\RealDenseSetOperationsTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\VectorNormTest.java
@@ -166,6 +167,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixElemDivTests.j
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixRowColSumTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberBinaryOperationsTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\RealComplexDenseSparseMatMultTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CTensorConversionTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseMatMultTransposeTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixDirectSumTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\complex\CMatrixMultiplyTests.java

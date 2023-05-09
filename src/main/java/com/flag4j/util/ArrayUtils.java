@@ -451,7 +451,6 @@ public final class ArrayUtils {
      * @param fillValue Value to fill array with.
      */
     public static void fill(CNumber[] dest, CNumber fillValue) {
-        // TODO: Investigate speed of using Arrays.setAll(...) and Arrays.parallelSetAll(...)
         for(int i=0; i<dest.length; i++) {
             dest[i] = fillValue.copy();
         }

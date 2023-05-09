@@ -743,7 +743,7 @@ public class SparseCVector
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public SparseCVector sub(CVector B) {
+    public CVector sub(CVector B) {
         return null;
     }
 
@@ -883,7 +883,7 @@ public class SparseCVector
      * @return The result of subtracting the specified value from each entry of this tensor.
      */
     @Override
-    public SparseCVector sub(CNumber a) {
+    public CVector sub(CNumber a) {
         return null;
     }
 

@@ -68,6 +68,7 @@ com\flag4j\operations\dense\real\RealDenseProperties.class
 com\flag4j\operations\TransposeDispatcher.class
 com\flag4j\operations\dense\real\RealDenseElemDiv.class
 com\flag4j\core\SparseTensorBase.class
+com\flag4j\operations\common\real\VectorNorms.class
 com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseOperations.class
 com\flag4j\operations\MatrixMultiplyDispatcher$1.class
 com\flag4j\operations\dense\complex\ComplexDenseSetOperations.class

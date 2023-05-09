@@ -264,8 +264,8 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
+     * @param B Vector to subtract from this vector.
+     * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     U sub(Vector B);
@@ -273,8 +273,8 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
+     * @param B Vector to subtract from this vector.
+     * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     T sub(SparseVector B);
@@ -282,17 +282,17 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
+     * @param B Vector to subtract from this vector.
+     * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    W sub(CVector B);
+    CVector sub(CVector B);
 
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
+     * @param B Vector to subtract from this vector.
+     * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     W sub(SparseCVector B);
@@ -319,7 +319,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
     /**
      * Computes the element-wise subtraction between this vector and the specified vector and stores the result
      * in this vector.
-     * @param B Vector to add to this vector.
+     * @param B Vector to subtract this vector.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     void subEq(Vector B);
@@ -328,7 +328,7 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
     /**
      * Computes the element-wise subtraction between this vector and the specified vector and stores the result
      * in this vector.
-     * @param B Vector to add to this vector.
+     * @param B Vector to subtract from this vector.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     void subEq(SparseVector B);

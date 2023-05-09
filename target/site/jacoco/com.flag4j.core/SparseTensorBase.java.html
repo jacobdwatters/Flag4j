@@ -26,6 +26,7 @@ package com.flag4j.core;
 import com.flag4j.Shape;
 import com.flag4j.util.ParameterChecks;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -41,7 +42,7 @@ import java.math.RoundingMode;
  *           This common use case will be an array or list-like data structure.
  * @param &lt;X&gt; The type of individual entry within the {@code D} data structure
  */
-public abstract class SparseTensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt;
+public abstract class SparseTensorBase&lt;T, U, W, Z, Y, D extends Serializable, X extends Number&gt;
         extends TensorBase&lt;T, U, W, Z, Y, D, X&gt;
         implements SparseTensorMixin {
 
@@ -63,15 +64,15 @@ public abstract class SparseTensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt;
      * @throws IllegalArgumentException If the rank of {@code shape} does not match the number of columns in {@code indices}.
      */
     public SparseTensorBase(Shape shape, int nonZeroEntries, D entries, int[][] indices) {
-<span class="fc" id="L66">        super(shape, entries);</span>
+<span class="fc" id="L67">        super(shape, entries);</span>
 
-<span class="fc bfc" id="L68" title="All 2 branches covered.">        if(indices.length &gt; 0) {</span>
-<span class="fc" id="L69">            ParameterChecks.assertEquals(indices[0].length, shape.getRank());</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if(indices.length &gt; 0) {</span>
+<span class="fc" id="L70">            ParameterChecks.assertEquals(indices[0].length, shape.getRank());</span>
         }
 
-<span class="fc" id="L72">        this.indices = indices;</span>
-<span class="fc" id="L73">        this.nonZeroEntries = nonZeroEntries;</span>
-<span class="fc" id="L74">    }</span>
+<span class="fc" id="L73">        this.indices = indices;</span>
+<span class="fc" id="L74">        this.nonZeroEntries = nonZeroEntries;</span>
+<span class="fc" id="L75">    }</span>
 
 
     /**
@@ -79,7 +80,7 @@ public abstract class SparseTensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt;
      * @return The number of non-zero entries in this sparse tensor.
      */
     public int nonZeroEntries() {
-<span class="nc" id="L82">        return nonZeroEntries;</span>
+<span class="nc" id="L83">        return nonZeroEntries;</span>
     }
 
 
@@ -88,10 +89,10 @@ public abstract class SparseTensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt;
      * @return The sparsity of this tensor.
      */
     public double sparsity() {
-<span class="nc" id="L91">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
-<span class="nc" id="L92">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
+<span class="nc" id="L92">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
+<span class="nc" id="L93">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
 
-<span class="nc" id="L94">        return sparsity.doubleValue();</span>
+<span class="nc" id="L95">        return sparsity.doubleValue();</span>
     }
 
 
@@ -100,11 +101,11 @@ public abstract class SparseTensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt;
      * @return The density of this tensor.
      */
     public double density() {
-<span class="nc" id="L103">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
-<span class="nc" id="L104">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP</span>
+<span class="nc" id="L104">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
+<span class="nc" id="L105">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP</span>
         );
 
-<span class="nc" id="L107">        return density.doubleValue();</span>
+<span class="nc" id="L108">        return density.doubleValue();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

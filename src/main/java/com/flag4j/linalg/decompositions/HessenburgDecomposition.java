@@ -25,6 +25,8 @@
 package com.flag4j.linalg.decompositions;
 
 
+import com.flag4j.core.MatrixMixin;
+
 /**
  * <p>This abstract class specifies methods for computing the Hessenburg decomposition of a square matrix. That is, for a square matrix
  * {@code A}, computes the decomposition {@code A=QHQ<sup>H</sup>} where {@code Q} is a unitary matrix and
@@ -42,7 +44,7 @@ package com.flag4j.linalg.decompositions;
  *      [ 0 0 0 x x ]]</pre>
  * </p>
  */
-public abstract class HessenburgDecomposition<T> implements Decomposition<T> {
+public abstract class HessenburgDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?>> implements Decomposition<T> {
 
     /**
      * A flag for determining if {@code Q} should be computed in the Hessenburg decomposition.

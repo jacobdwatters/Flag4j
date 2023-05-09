@@ -64,56 +64,129 @@ public class RealSparseOperations {
 
 
     /**
+     * Subtracts a real number from each entry of a sparse vector, including the zero entries.
+     * @param src Sparse vector to subtract value from.
+     * @param a Value to subtract from the {@code src} sparse vector.
+     * @return The result of subtracting the specified value from the sparse vector.
+     */
+    public static Vector sub(SparseVector src, double a) {
+<span class="nc" id="L73">        double[] dest = new double[src.size];</span>
+<span class="nc" id="L74">        Arrays.fill(dest, -a);</span>
+
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        for(int i=0; i&lt;src.entries.length; i++) {</span>
+<span class="nc" id="L77">            dest[src.indices[i]] += src.entries[i];</span>
+        }
+
+<span class="nc" id="L80">        return new Vector(dest);</span>
+    }
+
+
+    /**
      * Computes the element-wise vector addition between two real sparse vectors. Both sparse vectors are assumed
      * to have their indices sorted lexicographically.
      * @param src1 First sparse vector in the addition. Indices assumed to be sorted lexicographically.
      * @param src2 Second sparse vector in the addition. Indices assumed to be sorted lexicographically.
-     * @return The result of adding the specified value to the sparse vector.
-     * @throws IllegalArgumentException If the two vectors do not have the same size (including zeros).
+     * @return The result of the vector addition.
+     * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
     public static SparseVector add(SparseVector src1,SparseVector src2) {
-<span class="nc" id="L75">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
-<span class="nc" id="L76">        List&lt;Double&gt; values = new ArrayList&lt;&gt;(src1.entries.length);</span>
-<span class="nc" id="L77">        List&lt;Integer&gt; indices = new ArrayList&lt;&gt;(src1.entries.length);</span>
+<span class="nc" id="L93">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="nc" id="L94">        List&lt;Double&gt; values = new ArrayList&lt;&gt;(src1.entries.length);</span>
+<span class="nc" id="L95">        List&lt;Integer&gt; indices = new ArrayList&lt;&gt;(src1.entries.length);</span>
 
-<span class="nc" id="L79">        int src1Counter = 0;</span>
-<span class="nc" id="L80">        int src2Counter = 0;</span>
+<span class="nc" id="L97">        int src1Counter = 0;</span>
+<span class="nc" id="L98">        int src2Counter = 0;</span>
 
-<span class="nc bnc" id="L82" title="All 4 branches missed.">        while(src1Counter &lt; src1.entries.length &amp;&amp; src2Counter &lt; src2.entries.length) {</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">            if(src1.indices[src1Counter] == src2.indices[src2Counter]) {</span>
-<span class="nc" id="L84">                values.add(src1.entries[src1Counter] + src2.entries[src2Counter]);</span>
-<span class="nc" id="L85">                indices.add(src1.indices[src1Counter]);</span>
-<span class="nc" id="L86">                src1Counter++;</span>
-<span class="nc" id="L87">                src2Counter++;</span>
+<span class="nc bnc" id="L100" title="All 4 branches missed.">        while(src1Counter &lt; src1.entries.length &amp;&amp; src2Counter &lt; src2.entries.length) {</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">            if(src1.indices[src1Counter] == src2.indices[src2Counter]) {</span>
+<span class="nc" id="L102">                values.add(src1.entries[src1Counter] + src2.entries[src2Counter]);</span>
+<span class="nc" id="L103">                indices.add(src1.indices[src1Counter]);</span>
+<span class="nc" id="L104">                src1Counter++;</span>
+<span class="nc" id="L105">                src2Counter++;</span>
 
-<span class="nc bnc" id="L89" title="All 2 branches missed.">            } else if(src1.indices[src1Counter] &lt; src2.indices[src2Counter]) {</span>
-<span class="nc" id="L90">                values.add(src1.entries[src1Counter]);</span>
-<span class="nc" id="L91">                indices.add(src1.indices[src1Counter]);</span>
-<span class="nc" id="L92">                src1Counter++;</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            } else if(src1.indices[src1Counter] &lt; src2.indices[src2Counter]) {</span>
+<span class="nc" id="L108">                values.add(src1.entries[src1Counter]);</span>
+<span class="nc" id="L109">                indices.add(src1.indices[src1Counter]);</span>
+<span class="nc" id="L110">                src1Counter++;</span>
             } else {
-<span class="nc" id="L94">                values.add(src2.entries[src2Counter]);</span>
-<span class="nc" id="L95">                indices.add(src2.indices[src2Counter]);</span>
-<span class="nc" id="L96">                src2Counter++;</span>
+<span class="nc" id="L112">                values.add(src2.entries[src2Counter]);</span>
+<span class="nc" id="L113">                indices.add(src2.indices[src2Counter]);</span>
+<span class="nc" id="L114">                src2Counter++;</span>
             }
         }
 
         // Finish inserting the rest of the values.
-<span class="nc bnc" id="L101" title="All 2 branches missed.">        if(src1Counter &lt; src1.entries.length) {</span>
-<span class="nc bnc" id="L102" title="All 2 branches missed.">            for(int i=src1Counter; i&lt;src1.entries.length; i++) {</span>
-<span class="nc" id="L103">                values.add(src1.entries[i]);</span>
-<span class="nc" id="L104">                indices.add(src1.indices[i]);</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if(src1Counter &lt; src1.entries.length) {</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">            for(int i=src1Counter; i&lt;src1.entries.length; i++) {</span>
+<span class="nc" id="L121">                values.add(src1.entries[i]);</span>
+<span class="nc" id="L122">                indices.add(src1.indices[i]);</span>
             }
-<span class="nc bnc" id="L106" title="All 2 branches missed.">        } else if(src2Counter &lt; src2.entries.length) {</span>
-<span class="nc bnc" id="L107" title="All 2 branches missed.">            for(int i=src2Counter; i&lt;src2.entries.length; i++) {</span>
-<span class="nc" id="L108">                values.add(src2.entries[i]);</span>
-<span class="nc" id="L109">                indices.add(src2.indices[i]);</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        } else if(src2Counter &lt; src2.entries.length) {</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">            for(int i=src2Counter; i&lt;src2.entries.length; i++) {</span>
+<span class="nc" id="L126">                values.add(src2.entries[i]);</span>
+<span class="nc" id="L127">                indices.add(src2.indices[i]);</span>
             }
         }
 
-<span class="nc" id="L113">        return new SparseVector(</span>
+<span class="nc" id="L131">        return new SparseVector(</span>
                 src1.size,
-<span class="nc" id="L115">                values.stream().mapToDouble(Double::doubleValue).toArray(),</span>
-<span class="nc" id="L116">                indices.stream().mapToInt(Integer::intValue).toArray()</span>
+<span class="nc" id="L133">                values.stream().mapToDouble(Double::doubleValue).toArray(),</span>
+<span class="nc" id="L134">                indices.stream().mapToInt(Integer::intValue).toArray()</span>
+        );
+    }
+
+
+    /**
+     * Computes the element-wise vector subtraction between two real sparse vectors. Both sparse vectors are assumed
+     * to have their indices sorted lexicographically.
+     * @param src1 First sparse vector in the subtraction. Indices assumed to be sorted lexicographically.
+     * @param src2 Second sparse vector in the subtraction. Indices assumed to be sorted lexicographically.
+     * @return The result of the vector subtraction.
+     * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
+     */
+    public static SparseVector sub(SparseVector src1, SparseVector src2) {
+<span class="nc" id="L148">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="nc" id="L149">        List&lt;Double&gt; values = new ArrayList&lt;&gt;(src1.entries.length);</span>
+<span class="nc" id="L150">        List&lt;Integer&gt; indices = new ArrayList&lt;&gt;(src1.entries.length);</span>
+
+<span class="nc" id="L152">        int src1Counter = 0;</span>
+<span class="nc" id="L153">        int src2Counter = 0;</span>
+
+<span class="nc bnc" id="L155" title="All 4 branches missed.">        while(src1Counter &lt; src1.entries.length &amp;&amp; src2Counter &lt; src2.entries.length) {</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">            if(src1.indices[src1Counter] == src2.indices[src2Counter]) {</span>
+<span class="nc" id="L157">                values.add(src1.entries[src1Counter] - src2.entries[src2Counter]);</span>
+<span class="nc" id="L158">                indices.add(src1.indices[src1Counter]);</span>
+<span class="nc" id="L159">                src1Counter++;</span>
+<span class="nc" id="L160">                src2Counter++;</span>
+
+<span class="nc bnc" id="L162" title="All 2 branches missed.">            } else if(src1.indices[src1Counter] &lt; src2.indices[src2Counter]) {</span>
+<span class="nc" id="L163">                values.add(src1.entries[src1Counter]);</span>
+<span class="nc" id="L164">                indices.add(src1.indices[src1Counter]);</span>
+<span class="nc" id="L165">                src1Counter++;</span>
+            } else {
+<span class="nc" id="L167">                values.add(-src2.entries[src2Counter]);</span>
+<span class="nc" id="L168">                indices.add(src2.indices[src2Counter]);</span>
+<span class="nc" id="L169">                src2Counter++;</span>
+            }
+        }
+
+        // Finish inserting the rest of the values.
+<span class="nc bnc" id="L174" title="All 2 branches missed.">        if(src1Counter &lt; src1.entries.length) {</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">            for(int i=src1Counter; i&lt;src1.entries.length; i++) {</span>
+<span class="nc" id="L176">                values.add(src1.entries[i]);</span>
+<span class="nc" id="L177">                indices.add(src1.indices[i]);</span>
+            }
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        } else if(src2Counter &lt; src2.entries.length) {</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">            for(int i=src2Counter; i&lt;src2.entries.length; i++) {</span>
+<span class="nc" id="L181">                values.add(-src2.entries[i]);</span>
+<span class="nc" id="L182">                indices.add(src2.indices[i]);</span>
+            }
+        }
+
+<span class="nc" id="L186">        return new SparseVector(</span>
+                src1.size,
+<span class="nc" id="L188">                values.stream().mapToDouble(Double::doubleValue).toArray(),</span>
+<span class="nc" id="L189">                indices.stream().mapToInt(Integer::intValue).toArray()</span>
         );
     }
 }

@@ -618,7 +618,7 @@ public class SparseCMatrix
      * @return The result of subtracting the specified value from each entry of this tensor.
      */
     @Override
-    public SparseCMatrix sub(CNumber a) {
+    public CMatrix sub(CNumber a) {
         return null;
     }
 

@@ -25,6 +25,8 @@
 package com.flag4j.linalg.decompositions;
 
 
+import com.flag4j.core.MatrixMixin;
+
 /**
  * <p>This abstract class specifies methods for computing the Cholesky decomposition of a positive-definite matrix.</p>
  *
@@ -37,7 +39,7 @@ package com.flag4j.linalg.decompositions;
  *
  * @param <T> The type of matrix to compute the Cholesky decomposition of.
  */
-public abstract class CholeskyDecomposition<T>
+public abstract class CholeskyDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?>>
         implements Decomposition<T> {
 
     /**

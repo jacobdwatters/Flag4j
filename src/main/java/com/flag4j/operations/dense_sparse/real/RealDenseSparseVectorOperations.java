@@ -60,7 +60,6 @@ public class RealDenseSparseVectorOperations {
 
         for(int i=0; i<src2.length; i++) {
             index = indices[i];
-
             innerProd += src1[index]*src2[i];
         }
 

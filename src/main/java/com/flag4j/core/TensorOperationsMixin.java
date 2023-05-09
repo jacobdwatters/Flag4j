@@ -23,6 +23,7 @@
  */
 
 package com.flag4j.core;
+import com.flag4j.CVector;
 import com.flag4j.complex_numbers.CNumber;
 
 /**
@@ -84,7 +85,7 @@ interface TensorOperationsMixin<T, U, W, Z, Y, X extends Number> {
      * @param a Value to subtract from all entries of this tensor.
      * @return The result of subtracting the specified value from each entry of this tensor.
      */
-    W sub(CNumber a);
+    Z sub(CNumber a);
 
 
     /**

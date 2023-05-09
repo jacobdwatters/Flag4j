@@ -43,7 +43,7 @@ import java.math.BigInteger;
  *           This common use case will be an array or list-like data structure.
  * @param &lt;X&gt; The type of individual entry within the {@code D} data structure
  */
-public abstract class TensorBase&lt;T, U, W, Z, Y, D, X extends Number&gt; implements Serializable,
+public abstract class TensorBase&lt;T, U, W, Z, Y, D extends Serializable, X extends Number&gt; implements Serializable,
         TensorComparisonsMixin,
         TensorPropertiesMixin,
         TensorManipulationsMixin&lt;T&gt;,

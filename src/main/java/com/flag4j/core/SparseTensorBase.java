@@ -26,6 +26,7 @@ package com.flag4j.core;
 import com.flag4j.Shape;
 import com.flag4j.util.ParameterChecks;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -41,7 +42,7 @@ import java.math.RoundingMode;
  *           This common use case will be an array or list-like data structure.
  * @param <X> The type of individual entry within the {@code D} data structure
  */
-public abstract class SparseTensorBase<T, U, W, Z, Y, D, X extends Number>
+public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X extends Number>
         extends TensorBase<T, U, W, Z, Y, D, X>
         implements SparseTensorMixin {
 

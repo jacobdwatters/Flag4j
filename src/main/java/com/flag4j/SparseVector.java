@@ -27,6 +27,9 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealSparseTensorBase;
 import com.flag4j.core.VectorMixin;
+import com.flag4j.operations.common.real.AggregateReal;
+import com.flag4j.operations.common.real.RealOperations;
+import com.flag4j.operations.common.real.VectorNorms;
 import com.flag4j.operations.dense.real.RealDenseProperties;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
@@ -235,18 +238,18 @@ public class SparseVector
      */
     @Override
     public boolean isZeros() {
-        return entries.length==0;
+        return entries.length==0 || ArrayUtils.isZeros(entries);
     }
 
 
     /**
-     * Checks if this vector only contains ones.
+     * Checks if this vectors non-zero entries only contains ones.
      *
-     * @return True if this vector only contains ones. Otherwise, returns false.
+     * @return True if this vectors non-zero entries only contains ones. Otherwise, returns false.
      */
     @Override
     public boolean isOnes() {
-        return entries.length==size && RealDenseProperties.isOnes(this.entries);
+        return RealDenseProperties.isOnes(entries);
     }
 
 
@@ -293,7 +296,7 @@ public class SparseVector
      */
     @Override
     public SparseVector reshape(int... shape) {
-        return null;
+        return reshape(new Shape(shape));
     }
 
 
@@ -359,6 +362,7 @@ public class SparseVector
      */
     @Override
     public SparseVector join(SparseVector b) {
+        // TODO: This must be fixed so that indices remain sorted. (Assume both vectors indices are already sorted)
         double[] newEntries = new double[this.entries.length + b.entries.length];
         int[] newIndices = new int[this.indices.length + b.indices.length];
 
@@ -387,6 +391,7 @@ public class SparseVector
      */
     @Override
     public SparseCVector join(SparseCVector b) {
+        // TODO: This must be fixed so that indices remain sorted. (Assume both vectors indices are already sorted)
         CNumber[] newEntries = new CNumber[this.entries.length + b.entries.length];
         int[] newIndices = new int[this.indices.length + b.indices.length];
 
@@ -434,6 +439,7 @@ public class SparseVector
      */
     @Override
     public SparseMatrix stack(SparseVector b) {
+        // TODO: This must be fixed so that indices remain sorted. (Assume both vectors indices are already sorted)
         ParameterChecks.assertEqualShape(this.shape, b.shape);
 
         double[] entries = new double[this.entries.length + b.entries.length];
@@ -483,6 +489,7 @@ public class SparseVector
      */
     @Override
     public SparseCMatrix stack(SparseCVector b) {
+        // TODO: This must be fixed so that indices remain sorted. (Assume both vectors indices are already sorted)
         ParameterChecks.assertEqualShape(this.shape, b.shape);
 
         CNumber[] entries = new CNumber[this.entries.length + b.entries.length];
@@ -647,8 +654,7 @@ public class SparseVector
      */
     @Override
     public SparseVector add(SparseVector B) {
-        // TODO: Implementation - Assume indices are sorted and use dual counter algorithm
-        return null;
+        return RealSparseOperations.add(this, B);
     }
 
 
@@ -674,8 +680,7 @@ public class SparseVector
      */
     @Override
     public SparseCVector add(SparseCVector B) {
-        // TODO: Implementation - Assume indices are sorted and use dual counter algorithm
-        return null;
+        return RealComplexSparseOperations.add(B, this);
     }
 
 
@@ -719,39 +724,39 @@ public class SparseVector
     /**
      * Computes the element-wise subtraction between two tensors of the same rank.
      *
-     * @param B Second tensor in element-wise subtraction.
-     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @param B Vector to subtract from this vector.
+     * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     @Override
     public SparseVector sub(SparseVector B) {
-        return null;
+        return RealSparseOperations.sub(this, B);
     }
 
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
      *
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
+     * @param B Vector to subtract from this vector.
+     * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public SparseCVector sub(CVector B) {
-        return null;
+    public CVector sub(CVector B) {
+        return RealComplexDenseSparseVectorOperations.sub(this, B);
     }
 
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
      *
-     * @param B Vector to add to this vector.
+     * @param B Vector to subtract from this vector.
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
     public SparseCVector sub(SparseCVector B) {
-        return null;
+        return RealComplexSparseOperations.sub(this, B);
     }
 
 
@@ -763,7 +768,7 @@ public class SparseVector
      */
     @Override
     public Vector sub(double a) {
-        return null;
+        return RealSparseOperations.sub(this, a);
     }
 
 
@@ -774,8 +779,8 @@ public class SparseVector
      * @return The result of subtracting the specified value from each entry of this tensor.
      */
     @Override
-    public SparseCVector sub(CNumber a) {
-        return null;
+    public CVector sub(CNumber a) {
+        return RealComplexSparseOperations.sub(this, a);
     }
 
 
@@ -921,7 +926,7 @@ public class SparseVector
      */
     @Override
     public Double sum() {
-        return null;
+        return AggregateReal.sum(entries);
     }
 
 
@@ -933,7 +938,7 @@ public class SparseVector
      */
     @Override
     public SparseVector sqrt() {
-        return null;
+        return new SparseVector(this.size, RealOperations.sqrt(entries), indices.clone());
     }
 
 
@@ -945,29 +950,31 @@ public class SparseVector
      */
     @Override
     public SparseVector abs() {
-        return null;
+        return new SparseVector(this.size, RealOperations.abs(entries), indices.clone());
     }
 
 
     /**
-     * Computes the transpose of a tensor. Same as {@link #T()}.
+     * Computes the transpose of a tensor. Same as {@link #T()}. Since a vector is a rank 1 tensor, this just
+     * copies the vector.
      *
      * @return The transpose of this tensor.
      */
     @Override
     public SparseVector transpose() {
-        return null;
+        return this.copy();
     }
 
 
     /**
-     * Computes the transpose of a tensor. Same as {@link #transpose()}.
+     * Computes the transpose of a tensor. Same as {@link #transpose()}. Since a vector is a rank 1 tensor, this just
+     *      * copies the vector.
      *
      * @return The transpose of this tensor.
      */
     @Override
     public SparseVector T() {
-        return null;
+        return this.copy();
     }
 
 
@@ -979,6 +986,7 @@ public class SparseVector
      */
     @Override
     public SparseVector recip() {
+        // TODO: This probably does not make sense for a sparse tensor.
         return null;
     }
 
@@ -992,6 +1000,9 @@ public class SparseVector
      */
     @Override
     public Double get(int... indices) {
+        ParameterChecks.assertEquals(indices.length, 1);
+        ParameterChecks.assertInRange(indices[0], 0, size, "index");
+        // TODO: Assume indices sorted and do binary search. If index not in indices, return zero.
         return null;
     }
 
@@ -1003,7 +1014,7 @@ public class SparseVector
      */
     @Override
     public SparseVector copy() {
-        return null;
+        return new SparseVector(this.size, this.entries.clone(), this.indices.clone());
     }
 
 
@@ -1233,7 +1244,15 @@ public class SparseVector
      */
     @Override
     public boolean isPerp(Vector b) {
-        return false;
+        boolean result;
+
+        if(this.size!=b.size) {
+            result = false;
+        } else {
+            result = this.inner(b)==0;
+        }
+
+        return result;
     }
 
 
@@ -1244,7 +1263,10 @@ public class SparseVector
      */
     @Override
     public SparseMatrix toMatrix() {
-        return null;
+        int[] rowIndices = indices.clone();
+        int[] colIndices = new int[entries.length];
+
+        return new SparseMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);
     }
 
 
@@ -1258,7 +1280,19 @@ public class SparseVector
      */
     @Override
     public SparseMatrix toMatrix(boolean columVector) {
-        return null;
+        if(columVector) {
+            // Convert to column vector
+            int[] rowIndices = indices.clone();
+            int[] colIndices = new int[entries.length];
+
+            return new SparseMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);
+        } else {
+            // Convert to row vector.
+            int[] rowIndices = new int[entries.length];
+            int[] colIndices = indices.clone();
+
+            return new SparseMatrix(1, this.size, entries.clone(), rowIndices, colIndices);
+        }
     }
 
 
@@ -1276,9 +1310,9 @@ public class SparseVector
 
 
     /**
-     * Finds the indices of the minimum value in this tensor.
+     * Finds the indices of the minimum non-zero value in this sparse vector.
      *
-     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
+     * @return The indices of the minimum non-zero value in this sparse vector. If this value occurs multiple times, the indices of the first
      * entry (in row-major ordering) are returned.
      */
     @Override
@@ -1306,7 +1340,7 @@ public class SparseVector
      */
     @Override
     public double norm() {
-        return 0;
+        return VectorNorms.norm(entries);
     }
 
 
@@ -1320,7 +1354,7 @@ public class SparseVector
      */
     @Override
     public double norm(double p) {
-        return 0;
+        return VectorNorms.norm(entries, p);
     }
 
 
@@ -1355,7 +1389,7 @@ public class SparseVector
      */
     @Override
     public int length() {
-        return 0;
+        return this.size;
     }
 
 
@@ -1369,26 +1403,34 @@ public class SparseVector
 
 
     /**
-     * Converts this tensor to an equivalent complex tensor. That is, the entries of the resultant matrix will be exactly
+     * Converts this tensor to an equivalent complex tensor. That is, the entries of the resultant tensor will be exactly
      * the same value but will have type {@link CNumber CNumber} rather than {@link Double}.
      *
      * @return A complex matrix which is equivalent to this matrix.
      */
     @Override
     public SparseCVector toComplex() {
-        return null;
+        CNumber[] destEntries = new CNumber[entries.length];
+        ArrayUtils.copy2CNumber(entries, destEntries);
+
+        return new SparseCVector(
+                this.size,
+                destEntries,
+                indices.clone()
+        );
     }
 
 
     /**
-     * Flattens a tensor along the specified axis.
+     * Flattens a tensor along the specified axis. This simply copies the vector since it is rank 1.
      *
-     * @param axis Axis along which to flatten tensor.
+     * @param axis Axis along which to flatten tensor. Must be 0.
      * @throws IllegalArgumentException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
      */
     @Override
     public SparseVector flatten(int axis) {
-        return null;
+        assert(axis==0) : "Axis must be zero but got " + axis;
+        return this.copy();
     }
 
 
@@ -1412,6 +1454,9 @@ public class SparseVector
     protected SparseVector getSelf() {
         return this;
     }
+
+
+    // TODO: Add toString method.
 }
 
 

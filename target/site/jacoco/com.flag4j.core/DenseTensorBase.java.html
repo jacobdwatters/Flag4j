@@ -25,6 +25,8 @@
 package com.flag4j.core;
 import com.flag4j.Shape;
 
+import java.io.Serializable;
+
 /**
  * This is the base class for all dense tensors.
  * @param &lt;T&gt; Type of this tensor.
@@ -34,7 +36,7 @@ import com.flag4j.Shape;
  *           The common use case will be an array or list-like data structure.
  * @param &lt;X&gt; The type of individual entry within the {@code D} data structure
  */
-public abstract class DenseTensorBase&lt;T, W, Y, D, X extends Number&gt;
+public abstract class DenseTensorBase&lt;T, W, Y, D extends Serializable, X extends Number&gt;
         extends TensorBase&lt;T, T, W, W, Y, D, X&gt; {
 
 
@@ -46,8 +48,8 @@ public abstract class DenseTensorBase&lt;T, W, Y, D, X extends Number&gt;
      *                all {@code shape} dimensions. &lt;b&gt;Warning&lt;/b&gt;: this is not enforced.
      */
     public DenseTensorBase(Shape shape, D entries) {
-<span class="fc" id="L49">        super(shape, entries);</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L51">        super(shape, entries);</span>
+<span class="fc" id="L52">    }</span>
 
 
     /**

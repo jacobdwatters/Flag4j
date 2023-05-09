@@ -25,6 +25,7 @@
 package com.flag4j.linalg.decompositions;
 
 import com.flag4j.Matrix;
+import com.flag4j.core.MatrixMixin;
 
 // TODO: Implement LDU decomposition.
 
@@ -37,7 +38,7 @@ import com.flag4j.Matrix;
  * &lt;p&gt;If full pivoting is used, the decomposition will yield an additional permutation matrix {@code Q} such that
  *  {@code PAQ=LU}.&lt;/p&gt;
  */
-public abstract class LUDecomposition&lt;T&gt; implements Decomposition&lt;T&gt; {
+public abstract class LUDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?, ?, ?&gt;&gt; implements Decomposition&lt;T&gt; {
 
     /**
      * Flag indicating what pivoting to use.
@@ -46,7 +47,7 @@ public abstract class LUDecomposition&lt;T&gt; implements Decomposition&lt;T&gt;
     /**
      * for determining if pivot value is to be considered zero in LU decomposition with no pivoting.
      */
-<span class="pc" id="L49">    final double DEFAULT_ZERO_PIVOT_TOLERANCE = 0.5e-14;</span>
+<span class="pc" id="L50">    final double DEFAULT_ZERO_PIVOT_TOLERANCE = 0.5e-14;</span>
     /**
      * Tolerance for determining if pivot value is to be considered zero in LU decomposition with no pivoting.
      */
@@ -63,7 +64,6 @@ public abstract class LUDecomposition&lt;T&gt; implements Decomposition&lt;T&gt;
      * Permutation matrix to store column swaps if full pivoting is used.
      */
     protected Matrix Q;
-
 
 
     /**
