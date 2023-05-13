@@ -107,5 +107,12 @@ public abstract class SparseTensorBase&lt;T, U, W, Z, Y, D extends Serializable,
 
 <span class="nc" id="L108">        return density.doubleValue();</span>
     }
+
+
+    /**
+     * Converts this sparse tensor to an equivalent dense tensor.
+     * @return A dense tensor which is equivalent to this sparse tensor.
+     */
+    public abstract U toDense();
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
