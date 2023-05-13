@@ -408,7 +408,9 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
     /**
      * Computes a unit vector in the same direction as this vector.
-     * @return A unit vector with the same direction as this vector.
+     *
+     * @return A unit vector with the same direction as this vector. If this vector is zeros, then an equivalently sized
+     * zero vector will be returned.
      */
     T normalize();
 
@@ -429,24 +431,6 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
     CNumber inner(SparseCVector b);
-
-
-    /**
-     * Computes the vector cross product between two vectors.
-     * @param b Second vector in the cross product.
-     * @return The result of the vector cross product between this vector and b.
-     * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
-     */
-    U cross(Vector b);
-
-
-    /**
-     * Computes the vector cross product between two vectors.
-     * @param b Second vector in the cross product.
-     * @return The result of the vector cross product between this vector and b.
-     * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
-     */
-    CVector cross(CVector b);
 
 
     /**

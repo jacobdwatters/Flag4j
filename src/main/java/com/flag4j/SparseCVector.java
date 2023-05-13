@@ -26,7 +26,6 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexSparseTensorBase;
-import com.flag4j.core.VectorMixin;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.util.ArrayUtils;
 
@@ -35,7 +34,8 @@ import com.flag4j.util.ArrayUtils;
  */
 public class SparseCVector
         extends ComplexSparseTensorBase<SparseCVector, CVector, SparseVector>
-        implements VectorMixin<SparseCVector, CVector, SparseCVector, SparseCVector, CNumber, SparseCMatrix, CMatrix, SparseCMatrix> {
+//        implements VectorMixin<SparseCVector, CVector, SparseCVector, SparseCVector, CNumber, SparseCMatrix, CMatrix, SparseCMatrix>
+{
 
 
     /**
@@ -451,253 +451,6 @@ public class SparseCVector
         return null;
     }
 
-    /**
-     * Joints specified vector with this vector.
-     *
-     * @param b Vector to join with this vector.
-     * @return A vector resulting from joining the specified vector with this vector.
-     */
-    @Override
-    public CVector join(Vector b) {
-        return null;
-    }
-
-    /**
-     * Joints specified vector with this vector.
-     *
-     * @param b Vector to join with this vector.
-     * @return A vector resulting from joining the specified vector with this vector.
-     */
-    @Override
-    public CVector join(CVector b) {
-        return null;
-    }
-
-    /**
-     * Joints specified vector with this vector.
-     *
-     * @param b Vector to join with this vector.
-     * @return A vector resulting from joining the specified vector with this vector.
-     */
-    @Override
-    public SparseCVector join(SparseVector b) {
-        return null;
-    }
-
-    /**
-     * Joints specified vector with this vector.
-     *
-     * @param b Vector to join with this vector.
-     * @return A vector resulting from joining the specified vector with this vector.
-     */
-    @Override
-    public SparseCVector join(SparseCVector b) {
-        return null;
-    }
-
-    /**
-     * Stacks two vectors along columns as if they were row vectors.
-     *
-     * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector {@code b}.
-     * @throws IllegalArgumentException <br>
-     *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector {@code b}.
-     */
-    @Override
-    public SparseCMatrix stack(Vector b) {
-        return null;
-    }
-
-    /**
-     * Stacks two vectors along columns as if they were row vectors.
-     *
-     * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector {@code b}.
-     * @throws IllegalArgumentException <br>
-     *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector {@code b}.
-     */
-    @Override
-    public SparseCMatrix stack(SparseVector b) {
-        return null;
-    }
-
-    /**
-     * Stacks two vectors along columns as if they were row vectors.
-     *
-     * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector {@code b}.
-     * @throws IllegalArgumentException <br>
-     *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector {@code b}.
-     */
-    @Override
-    public SparseCMatrix stack(CVector b) {
-        return null;
-    }
-
-    /**
-     * Stacks two vectors along columns as if they were row vectors.
-     *
-     * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector {@code b}.
-     * @throws IllegalArgumentException <br>
-     *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector {@code b}.
-     */
-    @Override
-    public SparseCMatrix stack(SparseCVector b) {
-        return null;
-    }
-
-    /**
-     * <p>
-     * Stacks two vectors along specified axis.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
-     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
-     * as if they were column vectors resulting in a {@code n-by-2} matrix.
-     * </p>
-     *
-     * @param b    Vector to stack with this vector.
-     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
-     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
-     * @return The result of stacking this vector and the vector {@code b}.
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
-     *                                  entries in the vector {@code b}.
-     * @throws IllegalArgumentException If axis is not either 0 or 1.
-     */
-    @Override
-    public SparseCMatrix stack(Vector b, int axis) {
-        return null;
-    }
-
-    /**
-     * <p>
-     * Stacks two vectors along specified axis.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
-     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
-     * as if they were column vectors resulting in a {@code n-by-2} matrix.
-     * </p>
-     *
-     * @param b    Vector to stack with this vector.
-     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
-     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
-     * @return The result of stacking this vector and the vector {@code b}.
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
-     *                                  entries in the vector {@code b}.
-     * @throws IllegalArgumentException If axis is not either 0 or 1.
-     */
-    @Override
-    public SparseCMatrix stack(SparseVector b, int axis) {
-        return null;
-    }
-
-    /**
-     * <p>
-     * Stacks two vectors along specified axis.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
-     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
-     * as if they were column vectors resulting in a {@code n-by-2} matrix.
-     * </p>
-     *
-     * @param b    Vector to stack with this vector.
-     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
-     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
-     * @return The result of stacking this vector and the vector {@code b}.
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
-     *                                  entries in the vector {@code b}.
-     * @throws IllegalArgumentException If axis is not either 0 or 1.
-     */
-    @Override
-    public SparseCMatrix stack(CVector b, int axis) {
-        return null;
-    }
-
-    /**
-     * <p>
-     * Stacks two vectors along specified axis.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
-     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
-     * as if they were column vectors resulting in a {@code n-by-2} matrix.
-     * </p>
-     *
-     * @param b    Vector to stack with this vector.
-     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
-     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
-     * @return The result of stacking this vector and the vector {@code b}.
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
-     *                                  entries in the vector {@code b}.
-     * @throws IllegalArgumentException If axis is not either 0 or 1.
-     */
-    @Override
-    public SparseCMatrix stack(SparseCVector b, int axis) {
-        return null;
-    }
-
-    /**
-     * Computes the element-wise addition between this vector and the specified vector.
-     *
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public CVector add(Vector B) {
-        return null;
-    }
-
-    /**
-     * Computes the element-wise addition between this vector and the specified vector.
-     *
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public SparseCVector add(SparseVector B) {
-        return null;
-    }
-
-    /**
-     * Computes the element-wise addition between this vector and the specified vector.
-     *
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public CVector add(CVector B) {
-        return null;
-    }
 
     /**
      * Computes the element-wise addition between two tensors of the same rank.
@@ -711,41 +464,6 @@ public class SparseCVector
         return null;
     }
 
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector.
-     *
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public CVector sub(Vector B) {
-        return null;
-    }
-
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector.
-     *
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public SparseCVector sub(SparseVector B) {
-        return null;
-    }
-
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector.
-     *
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public CVector sub(CVector B) {
-        return null;
-    }
 
     /**
      * Adds specified value to all entries of this tensor.
@@ -781,89 +499,6 @@ public class SparseCVector
         return null;
     }
 
-    /**
-     * Computes the element-wise addition between this vector and the specified vector and stores the result
-     * in this vector.
-     *
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public void addEq(SparseVector B) {
-
-    }
-
-    /**
-     * Computes the element-wise addition between this vector and the specified vector and stores the result
-     * in this vector.
-     *
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public void addEq(Vector B) {
-
-    }
-
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
-     * in this vector.
-     *
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public void subEq(Vector B) {
-
-    }
-
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
-     * in this vector.
-     *
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public void subEq(SparseVector B) {
-
-    }
-
-    /**
-     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
-     *
-     * @param B Vector to element-wise multiply to this vector.
-     * @return The vector resulting from the element-wise multiplication.
-     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
-     */
-    @Override
-    public SparseCVector elemMult(Vector B) {
-        return null;
-    }
-
-    /**
-     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
-     *
-     * @param B Vector to element-wise multiply to this vector.
-     * @return The vector resulting from the element-wise multiplication.
-     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
-     */
-    @Override
-    public SparseCVector elemMult(SparseVector B) {
-        return null;
-    }
-
-    /**
-     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
-     *
-     * @param B Vector to element-wise multiply to this vector.
-     * @return The vector resulting from the element-wise multiplication.
-     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
-     */
-    @Override
-    public SparseCVector elemMult(CVector B) {
-        return null;
-    }
 
     /**
      * Adds specified value to all entries of this tensor.
@@ -1092,209 +727,6 @@ public class SparseCVector
         return null;
     }
 
-    /**
-     * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
-     *
-     * @param B Vector to element-wise divide this vector by.
-     * @return The vector resulting from the element-wise division.
-     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
-     */
-    @Override
-    public SparseCVector elemDiv(Vector B) {
-        return null;
-    }
-
-    /**
-     * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
-     *
-     * @param B Vector to element-wise divide this vector by.
-     * @return The vector resulting from the element-wise division.
-     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
-     */
-    @Override
-    public SparseCVector elemDiv(CVector B) {
-        return null;
-    }
-
-    /**
-     * Computes the inner product between two vectors.
-     *
-     * @param b Second vector in the inner product.
-     * @return The inner product between this vector and the vector b.
-     * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
-     */
-    @Override
-    public CNumber inner(Vector b) {
-        return null;
-    }
-
-    /**
-     * Computes the inner product between two vectors.
-     *
-     * @param b Second vector in the inner product.
-     * @return The inner product between this vector and the vector b.
-     * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
-     */
-    @Override
-    public CNumber inner(SparseVector b) {
-        return null;
-    }
-
-    /**
-     * Computes a unit vector in the same direction as this vector.
-     *
-     * @return A unit vector with the same direction as this vector.
-     */
-    @Override
-    public SparseCVector normalize() {
-        return null;
-    }
-
-    /**
-     * Computes the inner product between two vectors.
-     *
-     * @param b Second vector in the inner product.
-     * @return The inner product between this vector and the vector b.
-     * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
-     */
-    @Override
-    public CNumber inner(CVector b) {
-        return null;
-    }
-
-    /**
-     * Computes the inner product between two vectors.
-     *
-     * @param b Second vector in the inner product.
-     * @return The inner product between this vector and the vector b.
-     * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
-     */
-    @Override
-    public CNumber inner(SparseCVector b) {
-        return null;
-    }
-
-    /**
-     * Computes the vector cross product between two vectors.
-     *
-     * @param b Second vector in the cross product.
-     * @return The result of the vector cross product between this vector and b.
-     * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
-     */
-    @Override
-    public CVector cross(Vector b) {
-        return null;
-    }
-
-    /**
-     * Computes the vector cross product between two vectors.
-     *
-     * @param b Second vector in the cross product.
-     * @return The result of the vector cross product between this vector and b.
-     * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
-     */
-    @Override
-    public CVector cross(CVector b) {
-        return null;
-    }
-
-    /**
-     * Computes the outer product of two vectors.
-     *
-     * @param b Second vector in the outer product.
-     * @return The result of the vector outer product between this vector and b.
-     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
-     */
-    @Override
-    public CMatrix outer(Vector b) {
-        return null;
-    }
-
-    /**
-     * Computes the outer product of two vectors.
-     *
-     * @param b Second vector in the outer product.
-     * @return The result of the vector outer product between this vector and b.
-     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
-     */
-    @Override
-    public CMatrix outer(SparseVector b) {
-        return null;
-    }
-
-    /**
-     * Computes the outer product of two vectors.
-     *
-     * @param b Second vector in the outer product.
-     * @return The result of the vector outer product between this vector and b.
-     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
-     */
-    @Override
-    public CMatrix outer(CVector b) {
-        return null;
-    }
-
-    /**
-     * Computes the outer product of two vectors.
-     *
-     * @param b Second vector in the outer product.
-     * @return The result of the vector outer product between this vector and b.
-     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
-     */
-    @Override
-    public CMatrix outer(SparseCVector b) {
-        return null;
-    }
-
-
-    /**
-     * Checks if a vector is parallel to this vector.
-     *
-     * @param b Vector to compare to this vector.
-     * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
-     */
-    @Override
-    public boolean isParallel(Vector b) {
-        return false;
-    }
-
-
-    /**
-     * Checks if a vector is perpendicular to this vector.
-     *
-     * @param b Vector to compare to this vector.
-     * @return True if the vector {@code b} is perpendicular to this vector and the same size. Otherwise, returns false.
-     */
-    @Override
-    public boolean isPerp(Vector b) {
-        return false;
-    }
-
-
-    /**
-     * Converts this vector to an equivalent matrix as if it were a column vector.
-     *
-     * @return A matrix equivalent to this vector as if it were a column vector.
-     */
-    @Override
-    public SparseCMatrix toMatrix() {
-        return null;
-    }
-
-
-    /**
-     * Converts a vector to an equivalent matrix representing either a row or column vector.
-     *
-     * @param columVector Flag for choosing whether to convert this vector to a matrix representing a row or column vector.
-     *                    <p>If true, the vector will be converted to a matrix representing a column vector.</p>
-     *                    <p>If false, The vector will be converted to a matrix representing a row vector.</p>
-     * @return A matrix equivalent to this vector.
-     */
-    @Override
-    public SparseCMatrix toMatrix(boolean columVector) {
-        return null;
-    }
-
 
     /**
      * Computes the element-wise division between two tensors.
@@ -1304,7 +736,7 @@ public class SparseCVector
      * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
      */
     @Override
-    public SparseCVector elemDiv(SparseCVector B) {
+    public SparseCVector elemDiv(CVector B) {
         return null;
     }
 
@@ -1416,30 +848,6 @@ public class SparseCVector
 
 
     /**
-     * Extends a vector a specified number of times to a matrix.
-     *
-     * @param n    The number of times to extend this vector.
-     * @param axis Axis along which to extend vector.
-     * @return A matrix which is the result of extending a vector {@code n} times.
-     */
-    @Override
-    public SparseCMatrix extend(int n, int axis) {
-        return null;
-    }
-
-
-    /**
-     * Gets the length of a vector.
-     *
-     * @return The length, i.e. the number of entries, in this vector.
-     */
-    @Override
-    public int length() {
-        return 0;
-    }
-
-
-    /**
      * Flattens a tensor along the specified axis.
      *
      * @param axis Axis along which to flatten tensor.
@@ -1461,12 +869,10 @@ public class SparseCVector
 
 
     /**
-     * gets the size of this vector.
-     *
-     * @return The number of total entries (including zeros) of this vector.
+     * Gets the full size of this vector (including non-zero entries).
+     * @return The full size of this vector.
      */
-    @Override
     public int size() {
-        return this.size;
+        return shape.totalEntries().intValueExact();
     }
 }

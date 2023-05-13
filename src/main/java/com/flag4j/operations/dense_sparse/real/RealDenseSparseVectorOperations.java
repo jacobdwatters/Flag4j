@@ -53,7 +53,7 @@ public class RealDenseSparseVectorOperations {
      * @return The inner product of the two vectors.
      * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
      */
-    public static double innerProduct(double[] src1, double[] src2, int[] indices, int sparseSize) {
+    public static double inner(double[] src1, double[] src2, int[] indices, int sparseSize) {
         ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);
         double innerProd = 0;
         int index;
@@ -84,6 +84,30 @@ public class RealDenseSparseVectorOperations {
                 index = indices[j];
 
                 dest[i*src1.length + index] = src1[i]*src2[j];
+            }
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Computes the vector outer product between a real dense vector and a real sparse vector.
+     * @param src1 Non-zero entries of the sparse vector.
+     * @param src2 Entries of the dense vector.
+     * @param indices Indices of non-zero entries of sparse vector.
+     * @param sparseSize Full size of the sparse vector including zero entries.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static double[] outerProduct(double[] src1, int[] indices, int sparseSize, double[] src2) {
+        double[] dest = new double[src2.length*sparseSize];
+        int index;
+
+        for(int i=0; i<src2.length; i++) {
+            for(int j=0; j<src1.length; j++) {
+                index = indices[j];
+
+                dest[i*src2.length + index] = src2[i]*src1[j];
             }
         }
 
@@ -195,5 +219,23 @@ public class RealDenseSparseVectorOperations {
         }
 
         return dest;
+    }
+
+
+    /**
+     * Compute the element-wise division between a sparse vector and a dense vector.
+     * @param src1 First vector in the element-wise division.
+     * @param src2 Second vector in the element-wise division.
+     * @return The result of the element-wise vector division.
+     */
+    public static SparseVector elemDiv(SparseVector src1, Vector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        double[] dest = new double[src1.entries.length];
+
+        for(int i=0; i<src2.entries.length; i++) {
+            dest[i] = src1.entries[i]/src2.entries[src1.indices[i]];
+        }
+
+        return new SparseVector(src1.size, dest, src1.indices.clone());
     }
 }

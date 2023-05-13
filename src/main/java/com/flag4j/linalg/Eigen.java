@@ -43,7 +43,22 @@ public class Eigen {
      * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
      */
     public static CVector get2x2EigenValues(Matrix src) {
-        CVector lambda = get2x2EigenValues(src.toComplex());
+        // TODO: While theoretically correct, there are some numerical issues here.
+        CVector lambda = new CVector(2);
+
+        // Get the four entries from lower right 2x2 sub-matrix.
+        double a = src.entries[0];
+        double b = src.entries[1];
+        double c = src.entries[2];
+        double d = src.entries[3];
+
+        double det = a*d - b*c; // 2x2 determinant.
+        double htr = (a+d)/2; // Half of the 2x2 trace.
+
+        // 2x2 block eigenvalues.
+        lambda.entries[0] = CNumber.sqrt(CNumber.pow(htr, 2).sub(det)).add(htr);
+        lambda.entries[1] = CNumber.sqrt(CNumber.pow(htr, 2).sub(det)).add(htr);
+
         return lambda;
     }
 
@@ -56,7 +71,6 @@ public class Eigen {
     public static CVector get2x2EigenValues(CMatrix src) {
         // TODO: While theoretically correct, there are some numerical issues here.
         CVector lambda = new CVector(2);
-        int n = src.numRows-1;
 
         // Get the four entries from lower right 2x2 sub-matrix.
         CNumber a = src.entries[0];
@@ -65,7 +79,7 @@ public class Eigen {
         CNumber d = src.entries[3];
 
         CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.
-        CNumber htr = a.add(b).div(2); // Half of the 2x2 trace.
+        CNumber htr = a.add(d).div(2); // Half of the 2x2 trace.
 
         // 2x2 block eigenvalues.
         lambda.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
@@ -90,10 +104,10 @@ public class Eigen {
         CNumber a = src.entries[(n-1)*(src.numCols + 1)];
         CNumber b = src.entries[(n-1)*src.numCols + n];
         CNumber c = src.entries[n*(src.numCols + 1) - 1];
-        CNumber d = src.entries[(n)*(src.numCols + 1)];
+        CNumber d = src.entries[n*(src.numCols + 1)];
 
         CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.
-        CNumber htr = a.add(b).div(2); // Half of the 2x2 trace.
+        CNumber htr = a.add(d).div(2); // Half of the 2x2 trace.
 
         // 2x2 block eigenvalues.
         shifts.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
@@ -129,7 +143,6 @@ public class Eigen {
      * @return A matrix containing the eigenvectors of {@code src} as its columns.
      */
     public static CMatrix getEigenVectors(Matrix src) {
-        CVector lambdas = new CVector(src.numRows);
         return new RealSchurDecomposition(true).decompose(src).getU();
     }
 }

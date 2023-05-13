@@ -204,6 +204,23 @@ public class ComplexOperations {
 
 
     /**
+     * Computes the scalar division of a tensor.
+     * @param entries Entries of the tensor.
+     * @param factor Scalar value to divide each element ot the tensor by.
+     * @return The scalar division of the tensor.
+     */
+    public static CNumber[] scalDiv(double[] entries, CNumber factor) {
+        CNumber[] product = new CNumber[entries.length];
+
+        for(int i=0; i<product.length; i++) {
+            product[i] = factor.mult(entries[i]);
+        }
+
+        return product;
+    }
+
+
+    /**
      * Computes the element-wise complex conjugate of a tensor.
      * @param src Entries of the tensor.
      * @return The element-wise complex conjugate of the tensor

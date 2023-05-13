@@ -27,6 +27,7 @@ package com.flag4j.operations.dense_sparse.complex;
 
 import com.flag4j.CVector;
 import com.flag4j.SparseCVector;
+import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.util.ArrayUtils;
@@ -198,5 +199,23 @@ public class ComplexDenseSparseVectorOperations {
         }
 
         return new SparseCVector(src1.size, entries, src2.indices.clone());
+    }
+
+
+    /**
+     * Compute the element-wise division between a complex sparse vector and a complex dense vector.
+     * @param src1 First vector in the element-wise division.
+     * @param src2 Second vector in the element-wise division.
+     * @return The result of the element-wise vector division.
+     */
+    public static SparseCVector elemDiv(SparseCVector src1, CVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CNumber[] dest = new CNumber[src1.entries.length];
+
+        for(int i=0; i<src2.entries.length; i++) {
+            dest[i] = src1.entries[i].div(src2.entries[src1.indices[i]]);
+        }
+
+        return new SparseCVector(src1.size, dest, src1.indices.clone());
     }
 }

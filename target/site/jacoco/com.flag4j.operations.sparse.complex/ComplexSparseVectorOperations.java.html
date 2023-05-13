@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComplexSparseVectorOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.sparse.complex</a> &gt; <span class="el_source">ComplexSparseVectorOperations.java</span></div><h1>ComplexSparseVectorOperations.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.sparse.complex;
+
+
+import com.flag4j.*;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.ParameterChecks;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * This class contains low level implementations of operations on two complex sparse tensors.
+ */
+public class ComplexSparseVectorOperations {
+
+    private ComplexSparseVectorOperations() {
+        // Hide default constructor in utility clas.
+    }
+
+
+    /**
+     * Adds a real number to each entry of a sparse vector, including the zero entries.
+     * @param src Sparse vector to add value to.
+     * @param a Value to add to the {@code src} sparse vector.
+     * @return The result of adding the specified value to the sparse vector.
+     */
+    public static CVector add(SparseCVector src, double a) {
+<span class="nc" id="L53">        CNumber[] dest = new CNumber[src.size];</span>
+<span class="nc" id="L54">        ArrayUtils.fill(dest, a);</span>
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        for(int i=0; i&lt;src.entries.length; i++) {</span>
+<span class="nc" id="L57">            dest[src.indices[i]].addEq(src.entries[i]);</span>
+        }
+
+<span class="nc" id="L60">        return new CVector(dest);</span>
+    }
+
+
+    /**
+     * Subtracts a real number from each entry of a sparse vector, including the zero entries.
+     * @param src Sparse vector to subtract value from.
+     * @param a Value to subtract from the {@code src} sparse vector.
+     * @return The result of subtracting the specified value from the sparse vector.
+     */
+    public static CVector sub(SparseCVector src, double a) {
+<span class="nc" id="L71">        CNumber[] dest = new CNumber[src.size];</span>
+<span class="nc" id="L72">        ArrayUtils.fill(dest, -a);</span>
+
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        for(int i=0; i&lt;src.entries.length; i++) {</span>
+<span class="nc" id="L75">            dest[src.indices[i]].addEq(src.entries[i]);</span>
+        }
+
+<span class="nc" id="L78">        return new CVector(dest);</span>
+    }
+
+
+    /**
+     * Subtracts a real number from each entry of a sparse vector, including the zero entries.
+     * @param src Sparse vector to subtract value from.
+     * @param a Value to subtract from the {@code src} sparse vector.
+     * @return The result of subtracting the specified value from the sparse vector.
+     */
+    public static CVector sub(SparseCVector src, CNumber a) {
+<span class="nc" id="L89">        CNumber[] dest = new CNumber[src.size];</span>
+<span class="nc" id="L90">        ArrayUtils.fill(dest, a.addInv());</span>
+
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        for(int i=0; i&lt;src.entries.length; i++) {</span>
+<span class="nc" id="L93">            dest[src.indices[i]].addEq(src.entries[i]);</span>
+        }
+
+<span class="nc" id="L96">        return new CVector(dest);</span>
+    }
+
+
+    /**
+     * Computes the element-wise vector addition between two real sparse vectors. Both sparse vectors are assumed
+     * to have their indices sorted lexicographically.
+     * @param src1 First sparse vector in the addition. Indices assumed to be sorted lexicographically.
+     * @param src2 Second sparse vector in the addition. Indices assumed to be sorted lexicographically.
+     * @return The result of the vector addition.
+     * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
+     */
+    public static SparseCVector add(SparseCVector src1,SparseCVector src2) {
+<span class="nc" id="L109">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="nc" id="L110">        List&lt;CNumber&gt; values = new ArrayList&lt;&gt;(src1.entries.length);</span>
+<span class="nc" id="L111">        List&lt;Integer&gt; indices = new ArrayList&lt;&gt;(src1.entries.length);</span>
+
+<span class="nc" id="L113">        int src1Counter = 0;</span>
+<span class="nc" id="L114">        int src2Counter = 0;</span>
+
+<span class="nc bnc" id="L116" title="All 4 branches missed.">        while(src1Counter &lt; src1.entries.length &amp;&amp; src2Counter &lt; src2.entries.length) {</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">            if(src1.indices[src1Counter] == src2.indices[src2Counter]) {</span>
+<span class="nc" id="L118">                values.add(src1.entries[src1Counter].add(src2.entries[src2Counter]));</span>
+<span class="nc" id="L119">                indices.add(src1.indices[src1Counter]);</span>
+<span class="nc" id="L120">                src1Counter++;</span>
+<span class="nc" id="L121">                src2Counter++;</span>
+
+<span class="nc bnc" id="L123" title="All 2 branches missed.">            } else if(src1.indices[src1Counter] &lt; src2.indices[src2Counter]) {</span>
+<span class="nc" id="L124">                values.add(src1.entries[src1Counter].copy());</span>
+<span class="nc" id="L125">                indices.add(src1.indices[src1Counter]);</span>
+<span class="nc" id="L126">                src1Counter++;</span>
+            } else {
+<span class="nc" id="L128">                values.add(src2.entries[src2Counter].copy());</span>
+<span class="nc" id="L129">                indices.add(src2.indices[src2Counter]);</span>
+<span class="nc" id="L130">                src2Counter++;</span>
+            }
+        }
+
+        // Finish inserting the rest of the values.
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        if(src1Counter &lt; src1.entries.length) {</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">            for(int i=src1Counter; i&lt;src1.entries.length; i++) {</span>
+<span class="nc" id="L137">                values.add(src1.entries[i].copy());</span>
+<span class="nc" id="L138">                indices.add(src1.indices[i]);</span>
+            }
+<span class="nc bnc" id="L140" title="All 2 branches missed.">        } else if(src2Counter &lt; src2.entries.length) {</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">            for(int i=src2Counter; i&lt;src2.entries.length; i++) {</span>
+<span class="nc" id="L142">                values.add(src2.entries[i].copy());</span>
+<span class="nc" id="L143">                indices.add(src2.indices[i]);</span>
+            }
+        }
+
+<span class="nc" id="L147">        return new SparseCVector(</span>
+                src1.size,
+<span class="nc" id="L149">                values.toArray(CNumber[]::new),</span>
+<span class="nc" id="L150">                indices.stream().mapToInt(Integer::intValue).toArray()</span>
+        );
+    }
+
+
+    /**
+     * Computes the element-wise vector subtraction between two real sparse vectors. Both sparse vectors are assumed
+     * to have their indices sorted lexicographically.
+     * @param src1 First sparse vector in the subtraction. Indices assumed to be sorted lexicographically.
+     * @param src2 Second sparse vector in the subtraction. Indices assumed to be sorted lexicographically.
+     * @return The result of the vector subtraction.
+     * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
+     */
+    public static SparseCVector sub(SparseCVector src1, SparseCVector src2) {
+<span class="nc" id="L164">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="nc" id="L165">        List&lt;CNumber&gt; values = new ArrayList&lt;&gt;(src1.entries.length);</span>
+<span class="nc" id="L166">        List&lt;Integer&gt; indices = new ArrayList&lt;&gt;(src1.entries.length);</span>
+
+<span class="nc" id="L168">        int src1Counter = 0;</span>
+<span class="nc" id="L169">        int src2Counter = 0;</span>
+
+<span class="nc bnc" id="L171" title="All 4 branches missed.">        while(src1Counter &lt; src1.entries.length &amp;&amp; src2Counter &lt; src2.entries.length) {</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">            if(src1.indices[src1Counter] == src2.indices[src2Counter]) {</span>
+<span class="nc" id="L173">                values.add(src1.entries[src1Counter].sub(src2.entries[src2Counter]));</span>
+<span class="nc" id="L174">                indices.add(src1.indices[src1Counter]);</span>
+<span class="nc" id="L175">                src1Counter++;</span>
+<span class="nc" id="L176">                src2Counter++;</span>
+
+<span class="nc bnc" id="L178" title="All 2 branches missed.">            } else if(src1.indices[src1Counter] &lt; src2.indices[src2Counter]) {</span>
+<span class="nc" id="L179">                values.add(src1.entries[src1Counter].copy());</span>
+<span class="nc" id="L180">                indices.add(src1.indices[src1Counter]);</span>
+<span class="nc" id="L181">                src1Counter++;</span>
+            } else {
+<span class="nc" id="L183">                values.add(src2.entries[src2Counter].addInv());</span>
+<span class="nc" id="L184">                indices.add(src2.indices[src2Counter]);</span>
+<span class="nc" id="L185">                src2Counter++;</span>
+            }
+        }
+
+        // Finish inserting the rest of the values.
+<span class="nc bnc" id="L190" title="All 2 branches missed.">        if(src1Counter &lt; src1.entries.length) {</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">            for(int i=src1Counter; i&lt;src1.entries.length; i++) {</span>
+<span class="nc" id="L192">                values.add(src1.entries[i].copy());</span>
+<span class="nc" id="L193">                indices.add(src1.indices[i]);</span>
+            }
+<span class="nc bnc" id="L195" title="All 2 branches missed.">        } else if(src2Counter &lt; src2.entries.length) {</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">            for(int i=src2Counter; i&lt;src2.entries.length; i++) {</span>
+<span class="nc" id="L197">                values.add(src2.entries[i].addInv());</span>
+<span class="nc" id="L198">                indices.add(src2.indices[i]);</span>
+            }
+        }
+
+<span class="nc" id="L202">        return new SparseCVector(</span>
+                src1.size,
+<span class="nc" id="L204">                values.toArray(CNumber[]::new),</span>
+<span class="nc" id="L205">                indices.stream().mapToInt(Integer::intValue).toArray()</span>
+        );
+    }
+
+
+    /**
+     * Computes the element-wise vector multiplication between two real sparse vectors. Both sparse vectors are assumed
+     * to have their indices sorted lexicographically.
+     * @param src1 First sparse vector in the multiplication. Indices assumed to be sorted lexicographically.
+     * @param src2 Second sparse vector in the multiplication. Indices assumed to be sorted lexicographically.
+     * @return The result of the vector multiplication.
+     * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
+     */
+    public static SparseCVector elemMult(SparseCVector src1, SparseCVector src2) {
+<span class="nc" id="L219">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="nc" id="L220">        List&lt;CNumber&gt; values = new ArrayList&lt;&gt;(src1.entries.length);</span>
+<span class="nc" id="L221">        List&lt;Integer&gt; indices = new ArrayList&lt;&gt;(src1.entries.length);</span>
+
+<span class="nc" id="L223">        int src1Counter = 0;</span>
+<span class="nc" id="L224">        int src2Counter = 0;</span>
+
+<span class="nc bnc" id="L226" title="All 4 branches missed.">        while(src1Counter &lt; src1.entries.length &amp;&amp; src2Counter &lt; src2.entries.length) {</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">            if(src1.indices[src1Counter]==src2.indices[src2Counter]) {</span>
+                // Then indices match, add product of elements.
+<span class="nc" id="L229">                values.add(src1.entries[src1Counter].mult(src2.entries[src2Counter]));</span>
+<span class="nc" id="L230">                indices.add(src1.indices[src1Counter]);</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">            } else if(src1.indices[src1Counter] &lt; src2.indices[src2Counter]) {</span>
+<span class="nc" id="L232">                src1Counter++;</span>
+            } else {
+<span class="nc" id="L234">                src2Counter++;</span>
+            }
+        }
+
+<span class="nc" id="L238">        return new SparseCVector(</span>
+                src1.size,
+<span class="nc" id="L240">                values.toArray(CNumber[]::new),</span>
+<span class="nc" id="L241">                indices.stream().mapToInt(Integer::intValue).toArray()</span>
+        );
+    }
+
+
+    /**
+     * Computes the inner product of two complex sparse vectors. Both sparse vectors are assumed
+     * to have their indices sorted lexicographically.
+     * @param src1 First sparse vector in the inner product. Indices assumed to be sorted lexicographically.
+     * @param src2 Second sparse vector in the inner product. Indices assumed to be sorted lexicographically.
+     * @return The result of the vector inner product.
+     * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
+     */
+    public static CNumber inner(SparseCVector src1, SparseCVector src2) {
+<span class="nc" id="L255">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="nc" id="L256">        CNumber product = new CNumber();</span>
+
+<span class="nc" id="L258">        int src1Counter = 0;</span>
+<span class="nc" id="L259">        int src2Counter = 0;</span>
+
+<span class="nc bnc" id="L261" title="All 4 branches missed.">        while(src1Counter &lt; src1.entries.length &amp;&amp; src2Counter &lt; src2.entries.length) {</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">            if(src1.indices[src1Counter]==src2.indices[src2Counter]) {</span>
+                // Then indices match, add product of elements.
+<span class="nc" id="L264">                product.addEq(src1.entries[src1Counter].mult(src2.entries[src2Counter].conj()));</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">            } else if(src1.indices[src1Counter] &lt; src2.indices[src2Counter]) {</span>
+<span class="nc" id="L266">                src1Counter++;</span>
+            } else {
+<span class="nc" id="L268">                src2Counter++;</span>
+            }
+        }
+
+<span class="nc" id="L272">        return product;</span>
+    }
+
+
+    /**
+     * Computes the vector outer product between two complex sparse vectors.
+     * @param src1 Entries of the first sparse vector in the outer product.
+     * @param src2 Second sparse vector in the outer product.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static CMatrix outerProduct(SparseCVector src1, SparseCVector src2) {
+<span class="nc" id="L283">        CNumber[] dest = new CNumber[src2.size*src1.size];</span>
+<span class="nc" id="L284">        ArrayUtils.fillZeros(dest);</span>
+
+        int destRow;
+        int index1;
+        int index2;
+
+<span class="nc bnc" id="L290" title="All 2 branches missed.">        for(int i=0; i&lt;src1.entries.length; i++) {</span>
+<span class="nc" id="L291">            index1 = src1.indices[i];</span>
+<span class="nc" id="L292">            destRow = index1*src1.size;</span>
+
+<span class="nc bnc" id="L294" title="All 2 branches missed.">            for(int j=0; j&lt;src2.entries.length; j++) {</span>
+<span class="nc" id="L295">                index2 = src2.indices[j];</span>
+
+<span class="nc" id="L297">                dest[destRow + index2] = src1.entries[i].mult(src2.entries[j]);</span>
+            }
+        }
+
+<span class="nc" id="L301">        return new CMatrix(src1.size, src2.size, dest);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

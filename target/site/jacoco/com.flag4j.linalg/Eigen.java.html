@@ -43,8 +43,23 @@ import com.flag4j.linalg.decompositions.SchurDecomposition;
      * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
      */
     public static CVector get2x2EigenValues(Matrix src) {
-<span class="nc" id="L46">        CVector lambda = get2x2EigenValues(src.toComplex());</span>
-<span class="nc" id="L47">        return lambda;</span>
+        // TODO: While theoretically correct, there are some numerical issues here.
+<span class="nc" id="L47">        CVector lambda = new CVector(2);</span>
+
+        // Get the four entries from lower right 2x2 sub-matrix.
+<span class="nc" id="L50">        double a = src.entries[0];</span>
+<span class="nc" id="L51">        double b = src.entries[1];</span>
+<span class="nc" id="L52">        double c = src.entries[2];</span>
+<span class="nc" id="L53">        double d = src.entries[3];</span>
+
+<span class="nc" id="L55">        double det = a*d - b*c; // 2x2 determinant.</span>
+<span class="nc" id="L56">        double htr = (a+d)/2; // Half of the 2x2 trace.</span>
+
+        // 2x2 block eigenvalues.
+<span class="nc" id="L59">        lambda.entries[0] = CNumber.sqrt(CNumber.pow(htr, 2).sub(det)).add(htr);</span>
+<span class="nc" id="L60">        lambda.entries[1] = CNumber.sqrt(CNumber.pow(htr, 2).sub(det)).add(htr);</span>
+
+<span class="nc" id="L62">        return lambda;</span>
     }
 
 
@@ -55,23 +70,22 @@ import com.flag4j.linalg.decompositions.SchurDecomposition;
      */
     public static CVector get2x2EigenValues(CMatrix src) {
         // TODO: While theoretically correct, there are some numerical issues here.
-<span class="nc" id="L58">        CVector lambda = new CVector(2);</span>
-<span class="nc" id="L59">        int n = src.numRows-1;</span>
+<span class="nc" id="L73">        CVector lambda = new CVector(2);</span>
 
         // Get the four entries from lower right 2x2 sub-matrix.
-<span class="nc" id="L62">        CNumber a = src.entries[0];</span>
-<span class="nc" id="L63">        CNumber b = src.entries[1];</span>
-<span class="nc" id="L64">        CNumber c = src.entries[2];</span>
-<span class="nc" id="L65">        CNumber d = src.entries[3];</span>
+<span class="nc" id="L76">        CNumber a = src.entries[0];</span>
+<span class="nc" id="L77">        CNumber b = src.entries[1];</span>
+<span class="nc" id="L78">        CNumber c = src.entries[2];</span>
+<span class="nc" id="L79">        CNumber d = src.entries[3];</span>
 
-<span class="nc" id="L67">        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.</span>
-<span class="nc" id="L68">        CNumber htr = a.add(b).div(2); // Half of the 2x2 trace.</span>
+<span class="nc" id="L81">        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.</span>
+<span class="nc" id="L82">        CNumber htr = a.add(d).div(2); // Half of the 2x2 trace.</span>
 
         // 2x2 block eigenvalues.
-<span class="nc" id="L71">        lambda.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
-<span class="nc" id="L72">        lambda.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+<span class="nc" id="L85">        lambda.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+<span class="nc" id="L86">        lambda.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
 
-<span class="nc" id="L74">        return lambda;</span>
+<span class="nc" id="L88">        return lambda;</span>
     }
 
 
@@ -83,23 +97,23 @@ import com.flag4j.linalg.decompositions.SchurDecomposition;
     public static CVector get2x2LowerLeftBlockEigenValues(CMatrix src) {
         // TODO: While theoretically correct, there are some numerical
         //  issues here.
-<span class="fc" id="L86">        CVector shifts = new CVector(2);</span>
-<span class="fc" id="L87">        int n = src.numRows-1;</span>
+<span class="nc" id="L100">        CVector shifts = new CVector(2);</span>
+<span class="nc" id="L101">        int n = src.numRows-1;</span>
 
         // Get the four entries from lower right 2x2 sub-matrix.
-<span class="fc" id="L90">        CNumber a = src.entries[(n-1)*(src.numCols + 1)];</span>
-<span class="fc" id="L91">        CNumber b = src.entries[(n-1)*src.numCols + n];</span>
-<span class="fc" id="L92">        CNumber c = src.entries[n*(src.numCols + 1) - 1];</span>
-<span class="fc" id="L93">        CNumber d = src.entries[(n)*(src.numCols + 1)];</span>
+<span class="nc" id="L104">        CNumber a = src.entries[(n-1)*(src.numCols + 1)];</span>
+<span class="nc" id="L105">        CNumber b = src.entries[(n-1)*src.numCols + n];</span>
+<span class="nc" id="L106">        CNumber c = src.entries[n*(src.numCols + 1) - 1];</span>
+<span class="nc" id="L107">        CNumber d = src.entries[n*(src.numCols + 1)];</span>
 
-<span class="fc" id="L95">        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.</span>
-<span class="fc" id="L96">        CNumber htr = a.add(b).div(2); // Half of the 2x2 trace.</span>
+<span class="nc" id="L109">        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.</span>
+<span class="nc" id="L110">        CNumber htr = a.add(d).div(2); // Half of the 2x2 trace.</span>
 
         // 2x2 block eigenvalues.
-<span class="fc" id="L99">        shifts.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
-<span class="fc" id="L100">        shifts.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+<span class="nc" id="L113">        shifts.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+<span class="nc" id="L114">        shifts.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
 
-<span class="fc" id="L102">        return shifts;</span>
+<span class="nc" id="L116">        return shifts;</span>
     }
 
 
@@ -109,17 +123,17 @@ import com.flag4j.linalg.decompositions.SchurDecomposition;
      * @return The eigenvalues of the {@code src} matrix.
      */
     public static CVector getEigenValues(Matrix src) {
-<span class="nc" id="L112">        CVector lambdas = new CVector(src.numRows);</span>
+<span class="nc" id="L126">        CVector lambdas = new CVector(src.numRows);</span>
 
-<span class="nc" id="L114">        SchurDecomposition&lt;Matrix&gt; schur = new RealSchurDecomposition(false).decompose(src);</span>
-<span class="nc" id="L115">        CMatrix T = schur.getT();</span>
+<span class="nc" id="L128">        SchurDecomposition&lt;Matrix&gt; schur = new RealSchurDecomposition(false).decompose(src);</span>
+<span class="nc" id="L129">        CMatrix T = schur.getT();</span>
 
         // Extract diagonal of T.
-<span class="nc bnc" id="L118" title="All 2 branches missed.">        for(int i=0; i&lt;T.numRows; i++) {</span>
-<span class="nc" id="L119">            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        for(int i=0; i&lt;T.numRows; i++) {</span>
+<span class="nc" id="L133">            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];</span>
         }
 
-<span class="nc" id="L122">        return lambdas;</span>
+<span class="nc" id="L136">        return lambdas;</span>
     }
 
 
@@ -129,8 +143,7 @@ import com.flag4j.linalg.decompositions.SchurDecomposition;
      * @return A matrix containing the eigenvectors of {@code src} as its columns.
      */
     public static CMatrix getEigenVectors(Matrix src) {
-<span class="nc" id="L132">        CVector lambdas = new CVector(src.numRows);</span>
-<span class="nc" id="L133">        return new RealSchurDecomposition(true).decompose(src).getU();</span>
+<span class="nc" id="L146">        return new RealSchurDecomposition(true).decompose(src).getU();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

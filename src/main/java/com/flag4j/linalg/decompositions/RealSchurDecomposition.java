@@ -139,9 +139,9 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
         Matrix B = new Matrix(bEntries);
 
         double[][] cEntries = {
-                {1, 2, 1},
-                {2, 3, 4},
-                {5, 12.1, 9}};
+                {5.4, 4.0, 7.7},
+                {3.5, -0.7, 2.8},
+                {-3.2, 5.1, 0.8}};
         Matrix C = new Matrix(cEntries);
 
         double[][] dEntries = {
@@ -176,7 +176,5 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
         System.out.println("T:\n" + T + "\n");
         System.out.println("U:\n" + U + "\n");
         System.out.println("UTU^H:\n" + U.mult(T).mult(U.H()));
-
-        System.out.println(src.mult(U.getColAsVector(2)).div(T.get(2, 2)));
     }
 }

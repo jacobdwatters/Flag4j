@@ -68,6 +68,7 @@ public final class RealHessenburgDecomposition extends HessenburgDecomposition<M
      */
     public RealHessenburgDecomposition(boolean computeQ) {
         super(computeQ);
+
     }
 
 
@@ -84,6 +85,21 @@ public final class RealHessenburgDecomposition extends HessenburgDecomposition<M
     public Decomposition<Matrix> decompose(Matrix src) {
         ParameterChecks.assertSquare(src.shape);
 
+        if(src.isSymmetric()) {
+            symmetricDecomposition(src);
+        } else {
+            generalDecomposition(src);
+        }
+
+        return this;
+    }
+
+
+    /**
+     * Computes the Hessenburg decomposition of a general real matrix.
+     * @param src Matrix to compute the Hessenburg decomposition of.
+     */
+    private void generalDecomposition(Matrix src) {
         H = src.copy(); // Storage for upper Hessenburg matrix
         Matrix ref; // For storing Householder reflector
         Vector col; // Normal vector for Householder reflector computation.
@@ -108,7 +124,17 @@ public final class RealHessenburgDecomposition extends HessenburgDecomposition<M
                 }
             }
         }
+    }
 
-        return this;
+
+    /**
+     * Computes the Hessenburg decomposition of a symmetric real matrix.
+     * @param src Matrix to compute the Hessenburg decomposition of.
+     */
+    private void symmetricDecomposition(Matrix src) {
+        // TODO:
     }
 }
+
+
+

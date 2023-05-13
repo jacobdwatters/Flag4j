@@ -26,7 +26,6 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexSparseTensorBase;
-import com.flag4j.core.ComplexTensorExclusiveMixin;
 
 
 /**
@@ -34,7 +33,8 @@ import com.flag4j.core.ComplexTensorExclusiveMixin;
  */
 public class SparseCTensor
         extends ComplexSparseTensorBase<SparseCTensor, CTensor, SparseTensor>
-        implements ComplexTensorExclusiveMixin<SparseCTensor> {
+//        implements ComplexTensorExclusiveMixin<SparseCTensor>
+{
 
 
     /**
@@ -108,82 +108,6 @@ public class SparseCTensor
     @Override
     protected SparseCTensor getSelf() {
         return this;
-    }
-
-
-    /**
-     * Computes the conjugate transpose of a tensor. Same as {@link #H(int, int)}.
-     * In the context of a tensor, this exchanges the specified axes and takes the complex conjugate of elements along
-     * those axes.
-     * Also see {@link #hermTranspose() hermTranspose()} and
-     * {@link #H() H()} to conjugate transpose first and last axes.
-     *
-     * @param axis1 First axis to exchange and apply complex conjugate.
-     * @param axis2 Second axis to exchange and apply complex conjugate.
-     * @return The conjugate transpose of this tensor.
-     */
-    @Override
-    public SparseCTensor hermTranspose(int axis1, int axis2) {
-        return null;
-    }
-
-
-    /**
-     * Computes the transpose of a tensor. Same as {@link #hermTranspose(int, int)}.
-     * In the context of a tensor, this exchanges the specified axes and takes the complex conjugate of elements along
-     * those axes.
-     * Also see {@link #hermTranspose()} and
-     * {@link #H()} to conjugate transpose first and last axes.
-     *
-     * @param axis1 First axis to exchange and apply complex conjugate.
-     * @param axis2 Second axis to exchange and apply complex conjugate.
-     * @return The conjugate transpose of this tensor.
-     */
-    @Override
-    public SparseCTensor H(int axis1, int axis2) {
-        return null;
-    }
-
-
-    /**
-     * Computes the conjugate transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
-     * the specified axes permutation and takes the complex conjugate of the elements of these axes. Same as {@link #H(int[])}.
-     *
-     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
-     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
-     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
-     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
-     */
-    @Override
-    public SparseCTensor hermTranspose(int... axes) {
-        return null;
-    }
-
-
-    /**
-     * Computes the conjugate transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
-     * the specified axes permutation and takes the complex conjugate of the elements of these axes. Same as {@link #hermTranspose(int[])}.
-     *
-     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
-     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
-     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
-     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
-     */
-    @Override
-    public SparseCTensor H(int... axes) {
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the addition.
-     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
-     */
-    @Override
-    public void addEq(Tensor B) {
-
     }
 
 
@@ -289,287 +213,6 @@ public class SparseCTensor
     @Override
     public boolean isOnes() {
         return false;
-    }
-
-
-    /**
-     * Computes the tensor contraction of this tensor with a specified tensor over the specified axes. That is,
-     * computes the sum of products between the two tensors along the specified axes.
-     *
-     * @param src2  Tensor to contract with this tensor.
-     * @param aAxis Axis along which to compute products for this tensor.
-     * @param bAxis Axis along which to compute products for {@code src2} tensor.
-     * @return The tensor dot product over the specified axes.
-     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes {@code aAxis}
-     *                                  and {@code bAxis}.
-     * @throws IllegalArgumentException If either axis is out of bounds of the corresponding tensor.
-     */
-    @Override
-    public SparseCTensor tensorDot(SparseCTensor src2, int aAxis, int bAxis) {
-        return null;
-    }
-
-
-    /**
-     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
-     * computes the sum of products between the two tensors along the specified set of axes.
-     *
-     * @param src2  Tensor to contract with this tensor.
-     * @param aAxes Axes along which to compute products for this tensor.
-     * @param bAxes Axes along which to compute products for {@code src2} tensor.
-     * @return The tensor dot product over the specified axes.
-     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
-     *                                  {@code aAxes} and {@code bAxes}.
-     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
-     *                                  are out of bounds for the corresponding tensor.
-     */
-    @Override
-    public SparseCTensor tensorDot(SparseCTensor src2, int[] aAxes, int[] bAxes) {
-        return null;
-    }
-
-
-    /**
-     * Computes the tensor dot product of this tensor with a second tensor. That is, sums the product of two tensor
-     * elements over the last axis of this tensor and the second-to-last axis of {@code src2}. If both tensors are
-     * rank 2, this is equivalent to matrix multiplication.
-     *
-     * @param src2 Tensor to compute dot product with this tensor.
-     * @return The tensor dot product over the last axis of this tensor and the second to last axis of {@code src2}.
-     * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
-     *                                  along the second-to-last axis.
-     */
-    @Override
-    public SparseCTensor dot(SparseCTensor src2) {
-        return null;
-    }
-
-
-    /**
-     * Computes the transpose of a tensor. Same as {@link #T(int, int)}.
-     * In the context of a tensor, this exchanges the specified axes.
-     * Also see {@link #transpose() transpose()} and
-     * {@link #T() T()} to exchange first and last axes.
-     *
-     * @param axis1 First axis to exchange.
-     * @param axis2 Second axis to exchange.
-     * @return The transpose of this tensor.
-     */
-    @Override
-    public SparseCTensor transpose(int axis1, int axis2) {
-        return null;
-    }
-
-
-    /**
-     * Computes the transpose of a tensor. Same as {@link #transpose(int, int)}.
-     * In the context of a tensor, this exchanges the specified axes.
-     * Also see {@link #transpose()} and
-     * {@link #T()} to exchange first and last axes.
-     *
-     * @param axis1 First axis to exchange.
-     * @param axis2 Second axis to exchange.
-     * @return The transpose of this tensor.
-     */
-    @Override
-    public SparseCTensor T(int axis1, int axis2) {
-        return null;
-    }
-
-
-    /**
-     * Computes the transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
-     * the specified axes permutation. Same as {@link #T(int[])}.
-     *
-     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
-     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
-     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
-     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
-     */
-    @Override
-    public SparseCTensor transpose(int... axes) {
-        return null;
-    }
-
-
-    /**
-     * Computes the transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
-     * the specified axes permutation. Same as {@link #transpose(int[])}.
-     *
-     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
-     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
-     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
-     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
-     */
-    @Override
-    public SparseCTensor T(int... axes) {
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise addition between two tensors of the same rank.
-     *
-     * @param B Second tensor in the addition.
-     * @return The result of adding the tensor B to this tensor element-wise.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public SparseCTensor add(SparseTensor B) {
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise addition between two tensors of the same rank.
-     *
-     * @param B Second tensor in the addition.
-     * @return The result of adding the tensor B to this tensor element-wise.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CTensor add(Tensor B) {
-        return null;
-    }
-
-    /**
-     * Computes the element-wise addition between two tensors of the same rank.
-     *
-     * @param B Second tensor in the addition.
-     * @return The result of adding the tensor B to this tensor element-wise.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CTensor sub(Tensor B) {
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise addition between two tensors of the same rank.
-     *
-     * @param B Second tensor in the addition.
-     * @return The result of adding the tensor B to this tensor element-wise.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CTensor add(CTensor B) {
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise subtraction between two tensors of the same rank.
-     *
-     * @param B Second tensor in element-wise subtraction.
-     * @return The result of subtracting the tensor B from this tensor element-wise.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public SparseCTensor sub(SparseTensor B) {
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise subtraction between two tensors of the same rank.
-     *
-     * @param B Second tensor in element-wise subtraction.
-     * @return The result of subtracting the tensor B from this tensor element-wise.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CTensor sub(CTensor B) {
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void addEq(SparseTensor B) {
-
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void subEq(SparseTensor B) {
-
-    }
-
-
-    /**
-     * Computes the element-wise multiplication between two tensors.
-     *
-     * @param B Tensor to element-wise multiply to this tensor.
-     * @return The result of the element-wise tensor multiplication.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    @Override
-    public SparseCTensor elemMult(Tensor B) {
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise multiplication between two tensors.
-     *
-     * @param B Tensor to element-wise multiply to this tensor.
-     * @return The result of the element-wise tensor multiplication.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    @Override
-    public SparseCTensor elemMult(SparseTensor B) {
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise multiplication between two tensors.
-     *
-     * @param B Tensor to element-wise multiply to this tensor.
-     * @return The result of the element-wise tensor multiplication.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    @Override
-    public CTensor elemMult(CTensor B) {
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise division between two tensors.
-     *
-     * @param B Tensor to element-wise divide with this tensor.
-     * @return The result of the element-wise tensor division.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    @Override
-    public CTensor elemDiv(CTensor B) {
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise division between two tensors.
-     *
-     * @param B Tensor to element-wise divide from this tensor.
-     * @return The result of the element-wise tensor division.
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    @Override
-    public SparseCTensor elemDiv(Tensor B) {
-        return null;
     }
 
 
@@ -707,18 +350,6 @@ public class SparseCTensor
      */
     @Override
     public void addEq(SparseCTensor B) {
-
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
-     */
-    @Override
-    public void subEq(Tensor B) {
 
     }
 
@@ -943,7 +574,7 @@ public class SparseCTensor
      * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
      */
     @Override
-    public SparseCTensor elemDiv(SparseCTensor B) {
+    public SparseCTensor elemDiv(CTensor B) {
         return null;
     }
 

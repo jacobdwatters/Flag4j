@@ -25,6 +25,7 @@
 package com.flag4j.operations.sparse.real;
 
 
+import com.flag4j.Matrix;
 import com.flag4j.SparseVector;
 import com.flag4j.Vector;
 import com.flag4j.util.ErrorMessages;
@@ -37,9 +38,9 @@ import java.util.List;
 /**
  * This class contains low level implementations of operations on two real sparse tensors.
  */
-public class RealSparseOperations {
+public class RealSparseVectorOperations {
 
-    private RealSparseOperations() {
+    private RealSparseVectorOperations() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
@@ -189,4 +190,98 @@ public class RealSparseOperations {
                 indices.stream().mapToInt(Integer::intValue).toArray()
         );
     }
+
+
+    /**
+     * Computes the element-wise vector multiplication between two real sparse vectors. Both sparse vectors are assumed
+     * to have their indices sorted lexicographically.
+     * @param src1 First sparse vector in the multiplication. Indices assumed to be sorted lexicographically.
+     * @param src2 Second sparse vector in the multiplication. Indices assumed to be sorted lexicographically.
+     * @return The result of the vector multiplication.
+     * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
+     */
+    public static SparseVector elemMult(SparseVector src1,SparseVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        List<Double> values = new ArrayList<>(src1.entries.length);
+        List<Integer> indices = new ArrayList<>(src1.entries.length);
+
+        int src1Counter = 0;
+        int src2Counter = 0;
+
+        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+            if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
+                // Then indices match, add product of elements.
+                values.add(src1.entries[src1Counter]*src2.entries[src2Counter]);
+                indices.add(src1.indices[src1Counter]);
+            } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
+                src1Counter++;
+            } else {
+                src2Counter++;
+            }
+        }
+
+        return new SparseVector(
+                src1.size,
+                values.stream().mapToDouble(Double::doubleValue).toArray(),
+                indices.stream().mapToInt(Integer::intValue).toArray()
+        );
+    }
+
+
+    /**
+     * Computes the inner product of two real sparse vectors. Both sparse vectors are assumed
+     * to have their indices sorted lexicographically.
+     * @param src1 First sparse vector in the inner product. Indices assumed to be sorted lexicographically.
+     * @param src2 Second sparse vector in the inner product. Indices assumed to be sorted lexicographically.
+     * @return The result of the vector inner product.
+     * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
+     */
+    public static double inner(SparseVector src1,SparseVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        double product = 0;
+
+        int src1Counter = 0;
+        int src2Counter = 0;
+
+        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+            if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
+                // Then indices match, add product of elements.
+                product += src1.entries[src1Counter]*src2.entries[src2Counter];
+            } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
+                src1Counter++;
+            } else {
+                src2Counter++;
+            }
+        }
+
+        return product;
+    }
+
+
+    /**
+     * Computes the vector outer product between two real sparse vectors.
+     * @param src1 Entries of the first sparse vector in the outer product.
+     * @param src2 Second sparse vector in the outer product.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static Matrix outerProduct(SparseVector src1, SparseVector src2) {
+        double[] dest = new double[src2.size*src1.size];
+        int destRow;
+        int index1;
+        int index2;
+
+        for(int i=0; i<src1.entries.length; i++) {
+            index1 = src1.indices[i];
+            destRow = index1*src1.size;
+
+            for(int j=0; j<src2.entries.length; j++) {
+                index2 = src2.indices[j];
+
+                dest[destRow + index2] = src1.entries[i]*src2.entries[j];
+            }
+        }
+
+        return new Matrix(src1.size, src2.size, dest);
+    }
 }
+

@@ -902,18 +902,20 @@ implements VectorMixin&lt;CVector, CVector, SparseCVector, CVector, CNumber, CMa
      */
     @Override
     public CNumber inner(SparseVector b) {
-<span class="fc" id="L905">        return RealComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);</span>
+<span class="fc" id="L905">        return RealComplexDenseSparseVectorOperations.inner(this.entries, b.entries, b.indices, b.size);</span>
     }
 
 
     /**
      * Computes a unit vector in the same direction as this vector.
      *
-     * @return A unit vector with the same direction as this vector.
+     * @return A unit vector with the same direction as this vector. If this vector is zeros, then an equivalently sized
+     * zero vector will be returned.
      */
     @Override
     public CVector normalize() {
-<span class="nc" id="L916">        return this.div(this.norm());</span>
+<span class="nc" id="L917">        double norm = this.norm();</span>
+<span class="nc bnc" id="L918" title="All 2 branches missed.">        return norm==0 ? new CVector(size) : this.div(norm);</span>
     }
 
 
@@ -926,7 +928,7 @@ implements VectorMixin&lt;CVector, CVector, SparseCVector, CVector, CNumber, CMa
      */
     @Override
     public CNumber inner(CVector b) {
-<span class="fc" id="L929">        return ComplexDenseVectorOperations.innerProduct(this.entries, b.entries);</span>
+<span class="fc" id="L931">        return ComplexDenseVectorOperations.innerProduct(this.entries, b.entries);</span>
     }
 
 
@@ -939,7 +941,7 @@ implements VectorMixin&lt;CVector, CVector, SparseCVector, CVector, CNumber, CMa
      */
     @Override
     public CNumber inner(SparseCVector b) {
-<span class="fc" id="L942">        return ComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);</span>
+<span class="fc" id="L944">        return ComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);</span>
     }
 
 
@@ -950,17 +952,16 @@ implements VectorMixin&lt;CVector, CVector, SparseCVector, CVector, CNumber, CMa
      * @return The result of the vector cross product between this vector and b.
      * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
      */
-    @Override
     public CVector cross(Vector b) {
-<span class="fc" id="L955">        ParameterChecks.assertArrayLengthsEq(3, b.size);</span>
-<span class="fc" id="L956">        ParameterChecks.assertArrayLengthsEq(3, this.size);</span>
-<span class="fc" id="L957">        CNumber[] entries = new CNumber[3];</span>
+<span class="fc" id="L956">        ParameterChecks.assertArrayLengthsEq(3, b.size);</span>
+<span class="fc" id="L957">        ParameterChecks.assertArrayLengthsEq(3, this.size);</span>
+<span class="fc" id="L958">        CNumber[] entries = new CNumber[3];</span>
 
-<span class="fc" id="L959">        entries[0] = this.entries[1].mult(b.entries[2]).sub(this.entries[2].mult(b.entries[1]));</span>
-<span class="fc" id="L960">        entries[1] = this.entries[2].mult(b.entries[0]).sub(this.entries[0].mult(b.entries[2]));</span>
-<span class="fc" id="L961">        entries[2] = this.entries[0].mult(b.entries[1]).sub(this.entries[1].mult(b.entries[0]));</span>
+<span class="fc" id="L960">        entries[0] = this.entries[1].mult(b.entries[2]).sub(this.entries[2].mult(b.entries[1]));</span>
+<span class="fc" id="L961">        entries[1] = this.entries[2].mult(b.entries[0]).sub(this.entries[0].mult(b.entries[2]));</span>
+<span class="fc" id="L962">        entries[2] = this.entries[0].mult(b.entries[1]).sub(this.entries[1].mult(b.entries[0]));</span>
 
-<span class="fc" id="L963">        return new CVector(entries);</span>
+<span class="fc" id="L964">        return new CVector(entries);</span>
     }
 
 
@@ -971,7 +972,6 @@ implements VectorMixin&lt;CVector, CVector, SparseCVector, CVector, CNumber, CMa
      * @return The result of the vector cross product between this vector and b.
      * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
      */
-    @Override
     public CVector cross(CVector b) {
 <span class="fc" id="L976">        ParameterChecks.assertArrayLengthsEq(3, b.size);</span>
 <span class="fc" id="L977">        ParameterChecks.assertArrayLengthsEq(3, this.size);</span>

@@ -786,18 +786,20 @@ public class Vector
      */
     @Override
     public Double inner(SparseVector b) {
-        return RealDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);
+        return RealDenseSparseVectorOperations.inner(this.entries, b.entries, b.indices, b.size);
     }
 
 
     /**
      * Computes a unit vector in the same direction as this vector.
      *
-     * @return A unit vector with the same direction as this vector.
+     * @return A unit vector with the same direction as this vector. If this vector is zeros, then an equivalently sized
+     * zero vector will be returned.
      */
     @Override
     public Vector normalize() {
-        return this.div(this.norm());
+        double norm = this.norm();
+        return norm==0 ? new Vector(size) : this.div(norm);
     }
 
 
@@ -823,7 +825,7 @@ public class Vector
      */
     @Override
     public CNumber inner(SparseCVector b) {
-        return RealComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);
+        return RealComplexDenseSparseVectorOperations.inner(this.entries, b.entries, b.indices, b.size);
     }
 
 
@@ -834,7 +836,6 @@ public class Vector
      * @return The result of the vector cross product between this vector and b.
      * @throws IllegalArgumentException If either this vector or b do not have exactly 3 entries.
      */
-    @Override
     public Vector cross(Vector b) {
         ParameterChecks.assertArrayLengthsEq(3, b.size);
         ParameterChecks.assertArrayLengthsEq(3, this.size);
@@ -855,7 +856,6 @@ public class Vector
      * @return The result of the vector cross product between this vector and b.
      * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
      */
-    @Override
     public CVector cross(CVector b) {
         ParameterChecks.assertArrayLengthsEq(3, b.size);
         ParameterChecks.assertArrayLengthsEq(3, this.size);

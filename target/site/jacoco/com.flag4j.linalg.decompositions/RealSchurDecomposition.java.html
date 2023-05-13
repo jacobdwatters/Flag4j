@@ -44,11 +44,11 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      * Creates a Schur decomposer for a real dense matrix.
      */
     public RealSchurDecomposition() {
-<span class="fc" id="L47">        super();</span>
+<span class="nc" id="L47">        super();</span>
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-<span class="fc" id="L50">        hess = new RealHessenburgDecomposition(computeU);</span>
-<span class="fc" id="L51">    }</span>
+<span class="nc" id="L50">        hess = new RealHessenburgDecomposition(computeU);</span>
+<span class="nc" id="L51">    }</span>
 
 
     /**
@@ -91,11 +91,11 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      *                 provide a performance improvement.
      */
     public RealSchurDecomposition(boolean computeU) {
-<span class="fc" id="L94">        super(computeU);</span>
+<span class="nc" id="L94">        super(computeU);</span>
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-<span class="fc" id="L97">        hess = new RealHessenburgDecomposition(computeU);</span>
-<span class="fc" id="L98">    }</span>
+<span class="nc" id="L97">        hess = new RealHessenburgDecomposition(computeU);</span>
+<span class="nc" id="L98">    }</span>
 
 
     /**
@@ -112,15 +112,15 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      */
     @Override
     public RealSchurDecomposition decompose(Matrix src) {
-<span class="fc" id="L115">        ParameterChecks.assertSquare(src.shape);</span>
-<span class="fc" id="L116">        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).</span>
-<span class="fc" id="L117">        doubleShiftImplicitQR(hess.getH().toComplex());</span>
+<span class="nc" id="L115">        ParameterChecks.assertSquare(src.shape);</span>
+<span class="nc" id="L116">        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).</span>
+<span class="nc" id="L117">        doubleShiftImplicitQR(hess.getH().toComplex());</span>
 
-<span class="fc bfc" id="L119" title="All 2 branches covered.">        if(computeU) {</span>
-<span class="fc" id="L120">            U = hess.Q.mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if(computeU) {</span>
+<span class="nc" id="L120">            U = hess.Q.mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.</span>
         }
 
-<span class="fc" id="L123">        return this;</span>
+<span class="nc" id="L123">        return this;</span>
     }
 
 
@@ -139,9 +139,9 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
 <span class="nc" id="L139">        Matrix B = new Matrix(bEntries);</span>
 
 <span class="nc" id="L141">        double[][] cEntries = {</span>
-                {1, 2, 1},
-                {2, 3, 4},
-                {5, 12.1, 9}};
+                {5.4, 4.0, 7.7},
+                {3.5, -0.7, 2.8},
+                {-3.2, 5.1, 0.8}};
 <span class="nc" id="L145">        Matrix C = new Matrix(cEntries);</span>
 
 <span class="nc" id="L147">        double[][] dEntries = {</span>
@@ -176,8 +176,6 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
 <span class="nc" id="L176">        System.out.println(&quot;T:\n&quot; + T + &quot;\n&quot;);</span>
 <span class="nc" id="L177">        System.out.println(&quot;U:\n&quot; + U + &quot;\n&quot;);</span>
 <span class="nc" id="L178">        System.out.println(&quot;UTU^H:\n&quot; + U.mult(T).mult(U.H()));</span>
-
-<span class="nc" id="L180">        System.out.println(src.mult(U.getColAsVector(2)).div(T.get(2, 2)));</span>
-<span class="nc" id="L181">    }</span>
+<span class="nc" id="L179">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

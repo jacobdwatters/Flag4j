@@ -33,6 +33,8 @@ import com.flag4j.core.MatrixMixin;
 import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.transformations.Householder;
 
+import java.util.Scanner;
+
 /**
  * <p>This abstract class specifies methods for computing the Schur decomposition of a square matrix.
  * That is, decompose a square matrix {@code A} into {@code A=UTU<sup>H</sup>} where {@code U} is a unitary
@@ -82,6 +84,10 @@ public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?>
      * matrix will be the actual matrix that the Schur decomposition is computed for.
      */
     protected HessenburgDecomposition<T> hess;
+
+    // TODO: Temporary
+    protected boolean debug = false;
+    protected Scanner in = new Scanner(System.in);
 
 
     /**
@@ -144,19 +150,17 @@ public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?>
     // TODO: This is a very rudimentary implementation of Francis's double shift implicit QR algorithm.
     //  Several improvements must be made. See Fundamentals of matrix computations Vol. 3 for more information.
     //  this may also only work for real symmetric matrices...
+    //  Currently, only computes the real schur form.
     protected void doubleShiftImplicitQR(CMatrix H) {
         if(useDefaultMaxIterations) {
             // The algorithm should converge within machine precision in O(n^3).
-            maxIterations = (int) Math.max(Math.pow(H.numRows, 3), MIN_DEFAULT_ITERATIONS);
+            maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
         }
 
         ComplexHessenburgDecomposition hess = new ComplexHessenburgDecomposition(computeU); // Would need to compute Q to compute eigenvectors as well.
 
         T = H;
-
-        if(computeU) {
-            U = CMatrix.I(T.numRows);
-        }
+        if(computeU) U = CMatrix.I(T.numRows);
 
         for(int i=0; i<maxIterations; i++) {
             // Compute shifts as eigenvalues of lower right 2x2 block.
@@ -175,16 +179,13 @@ public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?>
             T.setSlice(Q.T().mult(T.getSlice(0, Q.numRows, 0, T.numCols)), 0, 0);
             T.setSlice(T.getSlice(0, T.numRows, 0, Q.numCols).mult(Q), 0, 0);
 
-            if(computeU) {
-                // Apply the Householder reflector to U.
-                U.setSlice(U.getSlice(0, U.numRows, 0, Q.numCols).mult(Q), 0, 0);
-            }
-
             // TODO: A crude bulge chase using Hessenberg decomposition. Since we know A is nearly in Hessenberg already, this
             //  will perform a lot of superfluous computations. Use Householder transformations instead.
             T = hess.decompose(T).getH();
 
             if(computeU) {
+                // Apply the Householder reflectors to U.
+                U.setSlice(U.getSlice(0, U.numRows, 0, Q.numCols).mult(Q), 0, 0);
                 U = U.mult(hess.getQ());
             }
 

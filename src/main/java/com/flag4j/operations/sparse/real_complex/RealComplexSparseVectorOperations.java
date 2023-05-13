@@ -24,26 +24,22 @@
 
 package com.flag4j.operations.sparse.real_complex;
 
-import com.flag4j.CVector;
-import com.flag4j.SparseCVector;
-import com.flag4j.SparseVector;
-import com.flag4j.Vector;
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
 /**
  * This class contains low level implementations of operations on a real sparse tensor and a complex sparse tensor.
  */
-public class RealComplexSparseOperations {
+public class RealComplexSparseVectorOperations {
 
-    private RealComplexSparseOperations() {
+    private RealComplexSparseVectorOperations() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
@@ -265,5 +261,159 @@ public class RealComplexSparseOperations {
                 values.toArray(new CNumber[0]),
                 indices.stream().mapToInt(Integer::intValue).toArray()
         );
+    }
+
+
+    /**
+     * Computes the element-wise vector multiplication between two real sparse vectors. Both sparse vectors are assumed
+     * to have their indices sorted lexicographically.
+     * @param src1 First sparse vector in the multiplication. Indices assumed to be sorted lexicographically.
+     * @param src2 Second sparse vector in the multiplication. Indices assumed to be sorted lexicographically.
+     * @return The result of the vector multiplication.
+     * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
+     */
+    public static SparseCVector elemMult(SparseCVector src1, SparseVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        List<CNumber> values = new ArrayList<>(src1.entries.length);
+        List<Integer> indices = new ArrayList<>(src1.entries.length);
+
+        int src1Counter = 0;
+        int src2Counter = 0;
+
+        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+            if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
+                // Then indices match, add product of elements.
+                values.add(src1.entries[src1Counter].mult(src2.entries[src2Counter]));
+                indices.add(src1.indices[src1Counter]);
+            } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
+                src1Counter++;
+            } else {
+                src2Counter++;
+            }
+        }
+
+        return new SparseCVector(
+                src1.size,
+                values.toArray(CNumber[]::new),
+                indices.stream().mapToInt(Integer::intValue).toArray()
+        );
+    }
+
+
+    /**
+     * Computes the inner product of a real and complex sparse vector. Both sparse vectors are assumed
+     * to have their indices sorted lexicographically.
+     * @param src1 First sparse vector in the inner product. Indices assumed to be sorted lexicographically.
+     * @param src2 Second sparse vector in the inner product. Indices assumed to be sorted lexicographically.
+     * @return The result of the vector inner product.
+     * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
+     */
+    public static CNumber inner(SparseCVector src1, SparseVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CNumber product = new CNumber();
+
+        int src1Counter = 0;
+        int src2Counter = 0;
+
+        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+            if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
+                // Then indices match, add product of elements.
+                product.addEq(src1.entries[src1Counter].mult(src2.entries[src2Counter]));
+            } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
+                src1Counter++;
+            } else {
+                src2Counter++;
+            }
+        }
+
+        return product;
+    }
+
+
+    /**
+     * Computes the inner product of a real and complex sparse vector. Both sparse vectors are assumed
+     * to have their indices sorted lexicographically.
+     * @param src1 First sparse vector in the inner product. Indices assumed to be sorted lexicographically.
+     * @param src2 Second sparse vector in the inner product. Indices assumed to be sorted lexicographically.
+     * @return The result of the vector inner product.
+     * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
+     */
+    public static CNumber inner(SparseVector src1, SparseCVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CNumber product = new CNumber();
+
+        int src1Counter = 0;
+        int src2Counter = 0;
+
+        while(src1Counter < src1.entries.length && src2Counter < src2.entries.length) {
+            if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
+                // Then indices match, add product of elements.
+                product.addEq(src2.entries[src2Counter].conj().mult(src1.entries[src1Counter]));
+            } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
+                src1Counter++;
+            } else {
+                src2Counter++;
+            }
+        }
+
+        return product;
+    }
+
+
+    /**
+     * Computes the vector outer product between a complex sparse vector and a real sparse vector.
+     * @param src1 Entries of the first sparse vector in the outer product.
+     * @param src2 Second sparse vector in the outer product.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static CMatrix outerProduct(SparseCVector src1, SparseVector src2) {
+        CNumber[] dest = new CNumber[src2.size*src1.size];
+        ArrayUtils.fillZeros(dest);
+
+        int destRow;
+        int index1;
+        int index2;
+
+        for(int i=0; i<src1.entries.length; i++) {
+            index1 = src1.indices[i];
+            destRow = index1*src1.size;
+
+            for(int j=0; j<src2.entries.length; j++) {
+                index2 = src2.indices[j];
+
+                dest[destRow + index2] = src1.entries[i].mult(src2.entries[j]);
+            }
+        }
+
+        return new CMatrix(src1.size, src2.size, dest);
+    }
+
+
+    /**
+     * Computes the vector outer product between a complex sparse vector and a real sparse vector.
+     * @param src1 Entries of the first sparse vector in the outer product.
+     * @param src2 Second sparse vector in the outer product.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static CMatrix outerProduct(SparseVector src1, SparseCVector src2) {
+        CNumber[] dest = new CNumber[src2.size*src1.size];
+        ArrayUtils.fillZeros(dest);
+
+        int destRow;
+        int index1;
+        int index2;
+
+        for(int i=0; i<src1.entries.length; i++) {
+            index1 = src1.indices[i];
+            destRow = index1*src1.size;
+
+            for(int j=0; j<src2.entries.length; j++) {
+                index2 = src2.indices[j];
+
+                dest[destRow + index2] = src2.entries[j].mult(src1.entries[i]);
+            }
+        }
+
+        return new CMatrix(src1.size, src2.size, dest);
     }
 }

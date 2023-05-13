@@ -902,18 +902,20 @@ implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatri
      */
     @Override
     public CNumber inner(SparseVector b) {
-        return RealComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);
+        return RealComplexDenseSparseVectorOperations.inner(this.entries, b.entries, b.indices, b.size);
     }
 
 
     /**
      * Computes a unit vector in the same direction as this vector.
      *
-     * @return A unit vector with the same direction as this vector.
+     * @return A unit vector with the same direction as this vector. If this vector is zeros, then an equivalently sized
+     * zero vector will be returned.
      */
     @Override
     public CVector normalize() {
-        return this.div(this.norm());
+        double norm = this.norm();
+        return norm==0 ? new CVector(size) : this.div(norm);
     }
 
 
@@ -950,7 +952,6 @@ implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatri
      * @return The result of the vector cross product between this vector and b.
      * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
      */
-    @Override
     public CVector cross(Vector b) {
         ParameterChecks.assertArrayLengthsEq(3, b.size);
         ParameterChecks.assertArrayLengthsEq(3, this.size);
@@ -971,7 +972,6 @@ implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatri
      * @return The result of the vector cross product between this vector and b.
      * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
      */
-    @Override
     public CVector cross(CVector b) {
         ParameterChecks.assertArrayLengthsEq(3, b.size);
         ParameterChecks.assertArrayLengthsEq(3, this.size);

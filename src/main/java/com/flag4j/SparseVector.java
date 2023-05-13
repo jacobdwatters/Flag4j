@@ -27,15 +27,18 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealSparseTensorBase;
 import com.flag4j.core.VectorMixin;
+import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.common.real.VectorNorms;
+import com.flag4j.operations.dense.real.RealDenseElemDiv;
+import com.flag4j.operations.dense.real.RealDenseOperations;
 import com.flag4j.operations.dense.real.RealDenseProperties;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
-import com.flag4j.operations.sparse.real.RealSparseOperations;
-import com.flag4j.operations.sparse.real_complex.RealComplexSparseOperations;
+import com.flag4j.operations.sparse.real.RealSparseVectorOperations;
+import com.flag4j.operations.sparse.real_complex.RealComplexSparseVectorOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
 import com.flag4j.util.SparseDataWrapper;
@@ -60,7 +63,7 @@ public class SparseVector
 
 
     /**
-     * Creates a sparse column vector of specified size filled with zeros.
+     * Creates a sparse vector of specified size filled with zeros.
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      */
     public SparseVector(int size) {
@@ -71,7 +74,7 @@ public class SparseVector
 
 
     /**
-     * Creates a sparse column vector of specified size filled with zeros.
+     * Creates a sparse vector of specified size filled with zeros.
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      * @param nonZeroEntries The nonZero entries of this sparse vector.
      * @param indices Indices of the nonZero entries. Indices are assumed to be sorted in lexicographical order but this
@@ -90,7 +93,7 @@ public class SparseVector
 
 
     /**
-     * Creates a sparse column vector of specified size filled with zeros.
+     * Creates a sparse vector of specified size filled with zeros.
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      * @param nonZeroEntries The nonZero entries of this sparse vector.
      * @param indices Indices of the nonZero entries.
@@ -654,7 +657,7 @@ public class SparseVector
      */
     @Override
     public SparseVector add(SparseVector B) {
-        return RealSparseOperations.add(this, B);
+        return RealSparseVectorOperations.add(this, B);
     }
 
 
@@ -680,7 +683,7 @@ public class SparseVector
      */
     @Override
     public SparseCVector add(SparseCVector B) {
-        return RealComplexSparseOperations.add(B, this);
+        return RealComplexSparseVectorOperations.add(B, this);
     }
 
 
@@ -705,7 +708,7 @@ public class SparseVector
      */
     @Override
     public Vector add(double a) {
-        return RealSparseOperations.add(this, a);
+        return RealSparseVectorOperations.add(this, a);
     }
 
 
@@ -717,7 +720,7 @@ public class SparseVector
      */
     @Override
     public CVector add(CNumber a) {
-        return RealComplexSparseOperations.add(this, a);
+        return RealComplexSparseVectorOperations.add(this, a);
     }
 
 
@@ -730,7 +733,7 @@ public class SparseVector
      */
     @Override
     public SparseVector sub(SparseVector B) {
-        return RealSparseOperations.sub(this, B);
+        return RealSparseVectorOperations.sub(this, B);
     }
 
 
@@ -756,7 +759,7 @@ public class SparseVector
      */
     @Override
     public SparseCVector sub(SparseCVector B) {
-        return RealComplexSparseOperations.sub(this, B);
+        return RealComplexSparseVectorOperations.sub(this, B);
     }
 
 
@@ -768,7 +771,7 @@ public class SparseVector
      */
     @Override
     public Vector sub(double a) {
-        return RealSparseOperations.sub(this, a);
+        return RealSparseVectorOperations.sub(this, a);
     }
 
 
@@ -780,7 +783,7 @@ public class SparseVector
      */
     @Override
     public CVector sub(CNumber a) {
-        return RealComplexSparseOperations.sub(this, a);
+        return RealComplexSparseVectorOperations.sub(this, a);
     }
 
 
@@ -877,7 +880,7 @@ public class SparseVector
      */
     @Override
     public SparseVector mult(double factor) {
-        return null;
+        return new SparseVector(size, RealOperations.scalMult(entries, factor), indices.clone());
     }
 
 
@@ -889,7 +892,7 @@ public class SparseVector
      */
     @Override
     public SparseCVector mult(CNumber factor) {
-        return null;
+        return new SparseCVector(size, ComplexOperations.scalMult(entries, factor), indices.clone());
     }
 
 
@@ -902,7 +905,7 @@ public class SparseVector
      */
     @Override
     public SparseVector div(double divisor) {
-        return null;
+        return new SparseVector(size, RealOperations.scalDiv(entries, divisor), indices.clone());
     }
 
 
@@ -915,7 +918,7 @@ public class SparseVector
      */
     @Override
     public SparseCVector div(CNumber divisor) {
-        return null;
+        return new SparseCVector(size, ComplexOperations.scalDiv(entries, divisor), indices.clone());
     }
 
 
@@ -979,15 +982,14 @@ public class SparseVector
 
 
     /**
-     * Computes the reciprocals, element-wise, of a tensor.
+     * Computes the reciprocals, element-wise, of this sparse vector. However, all zero entries will remain zero.
      *
-     * @return A tensor containing the reciprocal elements of this tensor.
+     * @return A sparse vector containing the reciprocal elements of this sparse vector with zero entries preserved.
      * @throws ArithmeticException If this tensor contains any zeros.
      */
     @Override
     public SparseVector recip() {
-        // TODO: This probably does not make sense for a sparse tensor.
-        return null;
+        return new SparseVector(size, RealDenseOperations.recip(entries), indices.clone());
     }
 
 
@@ -1027,7 +1029,7 @@ public class SparseVector
      */
     @Override
     public SparseVector elemMult(SparseVector B) {
-        return null;
+        return RealSparseVectorOperations.elemMult(this, B);
     }
 
 
@@ -1040,7 +1042,7 @@ public class SparseVector
      */
     @Override
     public SparseCVector elemMult(CVector B) {
-        return null;
+        return RealComplexDenseSparseVectorOperations.elemMult(B, this);
     }
 
 
@@ -1053,33 +1055,33 @@ public class SparseVector
      */
     @Override
     public SparseCVector elemMult(SparseCVector B) {
-        return null;
+        return RealComplexSparseVectorOperations.elemMult(B, this);
     }
 
 
     /**
      * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
      *
-     * @param B Vector to element-wise divide this vector by.
+     * @param b Vector to element-wise divide this vector by.
      * @return The vector resulting from the element-wise division.
-     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     * @throws IllegalArgumentException If this vector and {@code b} do not have the same size.
      */
     @Override
-    public SparseVector elemDiv(Vector B) {
-        return null;
+    public SparseVector elemDiv(Vector b) {
+        return RealDenseSparseVectorOperations.elemDiv(this, b);
     }
 
 
     /**
      * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
      *
-     * @param B Vector to element-wise divide this vector by.
+     * @param b Vector to element-wise divide this vector by.
      * @return The vector resulting from the element-wise division.
-     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     * @throws IllegalArgumentException If this vector and {@code b} do not have the same size.
      */
     @Override
-    public SparseCVector elemDiv(CVector B) {
-        return null;
+    public SparseCVector elemDiv(CVector b) {
+        return RealComplexDenseSparseVectorOperations.elemDiv(this, b);
     }
 
 
@@ -1092,7 +1094,8 @@ public class SparseVector
      */
     @Override
     public Double inner(Vector b) {
-        return null;
+        ParameterChecks.assertEqualShape(shape, b.shape);
+        return RealDenseSparseVectorOperations.inner(b.entries, this.entries, this.indices, this.size);
     }
 
 
@@ -1105,7 +1108,7 @@ public class SparseVector
      */
     @Override
     public Double inner(SparseVector b) {
-        return null;
+        return RealSparseVectorOperations.inner(this, b);
     }
 
 
@@ -1116,7 +1119,8 @@ public class SparseVector
      */
     @Override
     public SparseVector normalize() {
-        return null;
+        double norm = this.norm();
+        return norm==0 ? new SparseVector(size) : this.div(norm);
     }
 
 
@@ -1129,7 +1133,7 @@ public class SparseVector
      */
     @Override
     public CNumber inner(CVector b) {
-        return null;
+        return RealComplexDenseSparseVectorOperations.inner(b.entries, this.entries, this.indices, this.size);
     }
 
 
@@ -1142,33 +1146,7 @@ public class SparseVector
      */
     @Override
     public CNumber inner(SparseCVector b) {
-        return null;
-    }
-
-
-    /**
-     * Computes the vector cross product between two vectors.
-     *
-     * @param b Second vector in the cross product.
-     * @return The result of the vector cross product between this vector and b.
-     * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
-     */
-    @Override
-    public Vector cross(Vector b) {
-        return null;
-    }
-
-
-    /**
-     * Computes the vector cross product between two vectors.
-     *
-     * @param b Second vector in the cross product.
-     * @return The result of the vector cross product between this vector and b.
-     * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
-     */
-    @Override
-    public CVector cross(CVector b) {
-        return null;
+        return RealComplexSparseVectorOperations.inner(this, b);
     }
 
 
@@ -1181,7 +1159,11 @@ public class SparseVector
      */
     @Override
     public Matrix outer(Vector b) {
-        return null;
+        return new Matrix(
+                this.size,
+                b.size,
+                RealDenseSparseVectorOperations.outerProduct(this.entries, this.indices, this.size, b.entries)
+        );
     }
 
 
@@ -1194,7 +1176,7 @@ public class SparseVector
      */
     @Override
     public Matrix outer(SparseVector b) {
-        return null;
+        return RealSparseVectorOperations.outerProduct(this, b);
     }
 
 
@@ -1207,7 +1189,11 @@ public class SparseVector
      */
     @Override
     public CMatrix outer(CVector b) {
-        return null;
+        return new CMatrix(
+                this.size,
+                b.size,
+                RealComplexDenseSparseVectorOperations.outerProduct(this.entries, this.indices, this.size, b.entries)
+        );
     }
 
 
@@ -1220,19 +1206,52 @@ public class SparseVector
      */
     @Override
     public CMatrix outer(SparseCVector b) {
-        return null;
+        return RealComplexSparseVectorOperations.outerProduct(this, b);
     }
 
 
     /**
-     * Checks if a vector is parallel to this vector.
+     * Checks if a vector is parallel to this vector. This sparse vectors indices are assumed to be sorted lexicographically.
+     * If this is not the case call {@link #sparseSort() this.sparseSort()} before calling this method.
      *
      * @param b Vector to compare to this vector.
      * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
      */
     @Override
     public boolean isParallel(Vector b) {
-        return false;
+        boolean result;
+
+        if(this.size!=b.size) {
+            result = false;
+        } else if(this.size==1 || this.size==0) {
+            result = true;
+        } else if(this.isZeros() || b.isZeros()) {
+            result = true; // Any vector is parallel to zero vector.
+        } else {
+            result = true;
+            int sparseIndex = 0;
+            double scale = this.entries[0]/b.entries[this.indices[0]];
+
+            for(int i=0; i<b.size; i++) {
+                if(i!=this.indices[sparseIndex]) {
+                    // Then this index is not in the sparse vector.
+                    if(b.entries[i] != 0) {
+                        result = false;
+                        break;
+                    }
+
+                } else {
+                    if(b.entries[i]*scale != this.entries[sparseIndex]) {
+                        result = false;
+                        break;
+                    }
+
+                    sparseIndex++;
+                }
+            }
+        }
+
+        return result;
     }
 
 
@@ -1260,6 +1279,7 @@ public class SparseVector
      * Converts this vector to an equivalent matrix as if it were a column vector.
      *
      * @return A matrix equivalent to this vector as if the vector is a column vector.
+     * @see #toMatrix(boolean)
      */
     @Override
     public SparseMatrix toMatrix() {
@@ -1277,6 +1297,7 @@ public class SparseVector
      *                    <p>If true, the vector will be converted to a matrix representing a column vector.</p>
      *                    <p>If false, The vector will be converted to a matrix representing a row vector.</p>
      * @return A matrix equivalent to this vector.
+     * @see #toMatrix() 
      */
     @Override
     public SparseMatrix toMatrix(boolean columVector) {
@@ -1297,19 +1318,6 @@ public class SparseVector
 
 
     /**
-     * Computes the element-wise division between two tensors.
-     *
-     * @param B Tensor to element-wise divide with this tensor.
-     * @return The result of the element-wise tensor multiplication.
-     * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
-     */
-    @Override
-    public SparseVector elemDiv(SparseVector B) {
-        return null;
-    }
-
-
-    /**
      * Finds the indices of the minimum non-zero value in this sparse vector.
      *
      * @return The indices of the minimum non-zero value in this sparse vector. If this value occurs multiple times, the indices of the first
@@ -1317,12 +1325,13 @@ public class SparseVector
      */
     @Override
     public int[] argMin() {
+        // TODO: Implementation.
         return new int[0];
     }
 
 
     /**
-     * Finds the indices of the maximum value in this tensor.
+     * Finds the indices of the maximum non-zero value in this tensor.
      *
      * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
      * entry (in row-major ordering) are returned.

@@ -640,10 +640,10 @@ public class CNumber extends Number {
     public static CNumber pow(CNumber a, double b) {
         CNumber result;
 
-<span class="pc bpc" id="L643" title="1 of 2 branches missed.">        if(a.isReal()) {</span>
+<span class="fc bfc" id="L643" title="All 2 branches covered.">        if(a.isReal()) {</span>
 <span class="fc" id="L644">            result = CNumber.pow(a.re, b);</span>
         } else {
-<span class="nc" id="L646">            result = exp(ln(a).mult(b));</span>
+<span class="fc" id="L646">            result = exp(ln(a).mult(b));</span>
         }
 
 <span class="fc" id="L649">        return result;</span>

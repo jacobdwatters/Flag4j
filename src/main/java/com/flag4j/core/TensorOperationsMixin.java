@@ -23,7 +23,6 @@
  */
 
 package com.flag4j.core;
-import com.flag4j.CVector;
 import com.flag4j.complex_numbers.CNumber;
 
 /**
@@ -248,5 +247,5 @@ interface TensorOperationsMixin<T, U, W, Z, Y, X extends Number> {
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
      */
-    T elemDiv(T B);
+    T elemDiv(U B);
 }
