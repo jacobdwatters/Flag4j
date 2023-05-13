@@ -107,4 +107,11 @@ public abstract class SparseTensorBase<T, U, W, Z, Y, D extends Serializable, X 
 
         return density.doubleValue();
     }
+
+
+    /**
+     * Converts this sparse tensor to an equivalent dense tensor.
+     * @return A dense tensor which is equivalent to this sparse tensor.
+     */
+    public abstract U toDense();
 }

@@ -134,6 +134,7 @@ public class SparseMatrix
                 nonZeroEntries,
                 RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
         );
+
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         numRows = shape.dims[0];
@@ -709,5 +710,27 @@ public class SparseMatrix
     @Override
     public double infNorm() {
         return 0;
+    }
+
+
+    /**
+     * Converts this sparse tensor to an equivalent dense tensor.
+     *
+     * @return A dense tensor which is equivalent to this sparse tensor.
+     */
+    @Override
+    public Matrix toDense() {
+        double[] entries = new double[totalEntries().intValueExact()];
+        int row;
+        int col;
+
+        for(int i=0; i<nonZeroEntries; i++) {
+            row = rowIndices[i];
+            col = colIndices[i];
+
+            entries[row*numCols + col] = this.entries[i];
+        }
+
+        return new Matrix(shape.copy(), entries);
     }
 }

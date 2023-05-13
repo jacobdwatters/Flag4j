@@ -927,4 +927,26 @@ public class SparseCMatrix
     public double infNorm() {
         return 0;
     }
+
+
+    /**
+     * Converts this sparse tensor to an equivalent dense tensor.
+     *
+     * @return A dense tensor which is equivalent to this sparse tensor.
+     */
+    @Override
+    public CMatrix toDense() {
+        CNumber[] entries = new CNumber[totalEntries().intValueExact()];
+        int row;
+        int col;
+
+        for(int i=0; i<nonZeroEntries; i++) {
+            row = rowIndices[i];
+            col = colIndices[i];
+
+            entries[row*numCols + col] = this.entries[i];
+        }
+
+        return new CMatrix(shape.copy(), entries);
+    }
 }

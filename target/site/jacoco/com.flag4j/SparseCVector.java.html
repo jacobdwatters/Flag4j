@@ -875,5 +875,22 @@ public class SparseCVector
     public int size() {
 <span class="fc" id="L876">        return shape.totalEntries().intValueExact();</span>
     }
+
+
+    /**
+     * Converts this sparse tensor to an equivalent dense tensor.
+     *
+     * @return A dense tensor which is equivalent to this sparse tensor.
+     */
+    @Override
+    public CVector toDense() {
+<span class="nc" id="L887">        CNumber[] entries = new CNumber[size];</span>
+
+<span class="nc bnc" id="L889" title="All 2 branches missed.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
+<span class="nc" id="L890">            entries[indices[i]] = this.entries[i];</span>
+        }
+
+<span class="nc" id="L893">        return new CVector(entries);</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

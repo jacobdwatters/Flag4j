@@ -161,6 +161,7 @@ com\flag4j\CTensorDotTests.class
 com\flag4j\CMatrixUnaryOperationsTests.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatrixMultiplicationTests.class
 com\flag4j\RemoveRowColTests.class
+com\flag4j\SparseVectorToStringTests.class
 com\flag4j\CMatrixConversionTests.class
 com\flag4j\TensorDotTests.class
 com\flag4j\VectorConstructorTests.class

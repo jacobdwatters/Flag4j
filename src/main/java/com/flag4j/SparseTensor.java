@@ -49,8 +49,7 @@ public class SparseTensor
 
 
     /**
-     * Creates a sparse tensor with specified shape filled with zeros.
-     * Note, unlike other constructors, the entries parameter is not copied.
+     * Creates a sparse tensor with specified shape and non-zero values/indices.
      * @param shape Shape of the tensor.
      * @param nonZeroEntries Non-zero entries of the tensor.
      * @param indices Indices of the non-zero entries of the tensor.
@@ -61,7 +60,7 @@ public class SparseTensor
 
 
     /**
-     * Creates a sparse tensor with specified shape filled with zeros.
+     * Creates a sparse tensor with specified shape and non-zero values/indices.
      * @param shape Shape of the tensor.
      * @param nonZeroEntries Non-zero entries of the tensor.
      * @param indices Indices of the non-zero entries of the tensor.
@@ -72,8 +71,8 @@ public class SparseTensor
 
 
     /**
-     * Constructs a sparse tensor whose shape and values are given by another sparse tensor. This effectively copies
-     * the tensor.
+     * Constructs a sparse tensor whose shape and non-zero values/indices are given by another sparse tensor.
+     * This effectively copies the tensor.
      * @param A Tensor to copy.
      */
     public SparseTensor(SparseTensor A) {
@@ -518,5 +517,22 @@ public class SparseTensor
     @Override
     protected SparseTensor getSelf() {
         return this;
+    }
+
+
+    /**
+     * Converts this sparse tensor to an equivalent dense tensor.
+     *
+     * @return A dense tensor which is equivalent to this sparse tensor.
+     */
+    @Override
+    public Tensor toDense() {
+        double[] entries = new double[totalEntries().intValueExact()];
+
+        for(int i=0; i<nonZeroEntries; i++) {
+            entries[shape.entriesIndex(indices[i])] = this.entries[i];
+        }
+
+        return new Tensor(shape.copy(), entries);
     }
 }

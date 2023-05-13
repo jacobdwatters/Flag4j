@@ -551,6 +551,24 @@ public final class ArrayUtils {
 
 
     /**
+     * Gets an array filled with integers from {@code start} (inclusive) to {@code end} (exclusive)
+     * @param start Staring value (inclusive).
+     * @param end Stopping value (exclusive).
+     * @return An array containing the integer range {@code [start, end)}.
+     */
+    public static int[] rangeInt(int start, int end) {
+        int[] rangeArr = new int[end-start];
+
+        int j=0;
+        for(int i=start; i<end; i++) {
+            rangeArr[j++]=i;
+        }
+
+        return rangeArr;
+    }
+
+
+    /**
      * Checks if a double array is numerically equal to a {@link CNumber complex number} array.
      * @param src1 Double array.
      * @param src2 Complex number array.

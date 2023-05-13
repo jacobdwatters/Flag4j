@@ -27,11 +27,12 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealSparseTensorBase;
 import com.flag4j.core.VectorMixin;
+import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.common.real.VectorNorms;
-import com.flag4j.operations.dense.real.RealDenseElemDiv;
+import com.flag4j.operations.dense.real.AggregateDenseReal;
 import com.flag4j.operations.dense.real.RealDenseOperations;
 import com.flag4j.operations.dense.real.RealDenseProperties;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
@@ -42,6 +43,7 @@ import com.flag4j.operations.sparse.real_complex.RealComplexSparseVectorOperatio
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
 import com.flag4j.util.SparseDataWrapper;
+import com.flag4j.util.StringUtils;
 
 import java.util.Arrays;
 
@@ -270,8 +272,35 @@ public class SparseVector
      */
     @Override
     public SparseVector set(double value, int... indices) {
-        // TODO: Set should return a new instance for sparse vectors, matrices, and tensors, so entries can remain final.
-        return null;
+        ParameterChecks.assertEquals(indices.length, 1);
+        ParameterChecks.assertInRange(indices[0], 0, size, "index");
+
+        int idx = Arrays.binarySearch(this.indices, indices[0]);
+        double[] destEntries;
+        int[] destIndices;
+
+        if(idx >= 0) {
+            // Then the index was found in the sparse vector.
+            destIndices = this.indices.clone();
+            destEntries = entries.clone();
+            destEntries[idx] = value;
+
+        } else{
+            // Then the index was Not found int the sparse vector.
+            destIndices = new int[this.indices.length+1];
+            destEntries = new double[entries.length+1];
+            idx = -(idx+1);
+
+            System.arraycopy(this.indices, 0, destIndices, 0, idx);
+            destIndices[idx] = indices[0];
+            System.arraycopy(this.indices, idx, destIndices, idx+1, this.indices.length-idx);
+
+            System.arraycopy(entries, 0, destEntries, 0, idx);
+            destEntries[idx] = value;
+            System.arraycopy(entries, idx, destEntries, idx+1, entries.length-idx);
+        }
+
+        return new SparseVector(size, destEntries, destIndices);
     }
 
 
@@ -365,7 +394,6 @@ public class SparseVector
      */
     @Override
     public SparseVector join(SparseVector b) {
-        // TODO: This must be fixed so that indices remain sorted. (Assume both vectors indices are already sorted)
         double[] newEntries = new double[this.entries.length + b.entries.length];
         int[] newIndices = new int[this.indices.length + b.indices.length];
 
@@ -394,7 +422,6 @@ public class SparseVector
      */
     @Override
     public SparseCVector join(SparseCVector b) {
-        // TODO: This must be fixed so that indices remain sorted. (Assume both vectors indices are already sorted)
         CNumber[] newEntries = new CNumber[this.entries.length + b.entries.length];
         int[] newIndices = new int[this.indices.length + b.indices.length];
 
@@ -426,8 +453,23 @@ public class SparseVector
      */
     @Override
     public SparseMatrix stack(Vector b) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, b.shape);
+
+        double[] destEntries = new double[nonZeroEntries + b.length()];
+        int[][] indices = new int[2][nonZeroEntries + b.length()];
+
+        // Copy sparse values and column indices (row indices will be implicitly zero)
+        System.arraycopy(entries, 0, destEntries,0,  entries.length);
+        System.arraycopy(this.indices, 0, indices[1], 0, this.indices.length);
+
+        // Copy dense values. Set column indices as range and set row indices to 1.
+        int[] rowIndices = new int[b.size];
+        Arrays.fill(rowIndices, 1);
+        System.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
+        System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
+        System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);
+
+        return new SparseMatrix(2, b.size, destEntries, indices[0], indices[1]);
     }
 
 
@@ -442,7 +484,6 @@ public class SparseVector
      */
     @Override
     public SparseMatrix stack(SparseVector b) {
-        // TODO: This must be fixed so that indices remain sorted. (Assume both vectors indices are already sorted)
         ParameterChecks.assertEqualShape(this.shape, b.shape);
 
         double[] entries = new double[this.entries.length + b.entries.length];
@@ -476,8 +517,23 @@ public class SparseVector
      */
     @Override
     public SparseCMatrix stack(CVector b) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, b.shape);
+
+        CNumber[] destEntries = new CNumber[nonZeroEntries + b.length()];
+        int[][] indices = new int[2][nonZeroEntries + b.length()];
+
+        // Copy sparse values and column indices (row indices will be implicitly zero)
+        ArrayUtils.arraycopy(entries, 0, destEntries,0,  entries.length);
+        System.arraycopy(this.indices, 0, indices[1], 0, this.indices.length);
+
+        // Copy dense values. Set column indices as range and set row indices to 1.
+        int[] rowIndices = new int[b.size];
+        Arrays.fill(rowIndices, 1);
+        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
+        System.arraycopy(rowIndices, 0, indices[1], entries.length,  b.size);
+        System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);
+
+        return new SparseCMatrix(2, b.size, destEntries, indices[0], indices[1]);
     }
 
 
@@ -492,7 +548,6 @@ public class SparseVector
      */
     @Override
     public SparseCMatrix stack(SparseCVector b) {
-        // TODO: This must be fixed so that indices remain sorted. (Assume both vectors indices are already sorted)
         ParameterChecks.assertEqualShape(this.shape, b.shape);
 
         CNumber[] entries = new CNumber[this.entries.length + b.entries.length];
@@ -994,7 +1049,9 @@ public class SparseVector
 
 
     /**
-     * Gets the element in this tensor at the specified indices.
+     * Gets the element in this tensor at the specified indices. This sparse vectors indices are assumed to
+     * be sorted lexicographically. If this is not the case call
+     * {@link #sparseSort() this.sparseSort()} before calling this method.
      *
      * @param indices Indices of element.
      * @return The element at the specified indices.
@@ -1004,8 +1061,9 @@ public class SparseVector
     public Double get(int... indices) {
         ParameterChecks.assertEquals(indices.length, 1);
         ParameterChecks.assertInRange(indices[0], 0, size, "index");
-        // TODO: Assume indices sorted and do binary search. If index not in indices, return zero.
-        return null;
+
+        int idx = Arrays.binarySearch(this.indices, indices[0]);
+        return idx>=0 ? entries[idx] : 0;
     }
 
 
@@ -1297,7 +1355,7 @@ public class SparseVector
      *                    <p>If true, the vector will be converted to a matrix representing a column vector.</p>
      *                    <p>If false, The vector will be converted to a matrix representing a row vector.</p>
      * @return A matrix equivalent to this vector.
-     * @see #toMatrix() 
+     * @see #toMatrix()
      */
     @Override
     public SparseMatrix toMatrix(boolean columVector) {
@@ -1325,8 +1383,8 @@ public class SparseVector
      */
     @Override
     public int[] argMin() {
-        // TODO: Implementation.
-        return new int[0];
+        int idx = AggregateDenseReal.argMin(entries);
+        return new int[]{indices[idx]};
     }
 
 
@@ -1338,7 +1396,8 @@ public class SparseVector
      */
     @Override
     public int[] argMax() {
-        return new int[0];
+        int idx = AggregateDenseReal.argMax(entries);
+        return new int[]{indices[idx]};
     }
 
 
@@ -1382,12 +1441,45 @@ public class SparseVector
      * Extends a vector a specified number of times to a matrix.
      *
      * @param n    The number of times to extend this vector.
-     * @param axis Axis along which to extend vector.
+     * @param axis Axis along which to extend. If {@code axis=0}, then the vector will be treated as a row vector. If
+     *    {@code axis=1} then the vector will be treated as a column vector.
      * @return A matrix which is the result of extending a vector {@code n} times.
      */
     @Override
     public SparseMatrix extend(int n, int axis) {
-        return null;
+        ParameterChecks.assertAxis2D(axis);
+
+        int[][] matIndices = new int[2][n*nonZeroEntries];
+        double[] matEntries = new double[n*nonZeroEntries];
+        Shape matShape;
+
+        if(axis==0) {
+            matShape = new Shape(n, this.size);
+            int[] rowIndices = new int[indices.length];
+
+            for(int i=0; i<n; i++) {
+                Arrays.fill(rowIndices, i);
+
+                System.arraycopy(entries, 0, matEntries, n*i, entries.length);
+                System.arraycopy(rowIndices, 0, matIndices[0], n*i, indices.length);
+                System.arraycopy(indices, 0, matIndices[1], n*i, indices.length);
+            }
+
+        } else {
+            matShape = new Shape(this.size, n);
+            int[] rowIndices = new int[n];
+            int[] colIndices = ArrayUtils.rangeInt(0, n);
+
+            for(int i=0; i<entries.length; i++) {
+                Arrays.fill(rowIndices, indices[i]);
+
+                Arrays.fill(matEntries, entries.length*i, entries.length*i + n, entries[i]);
+                System.arraycopy(rowIndices, 0, matIndices[0], entries.length*i, n);
+                System.arraycopy(colIndices, 0, matIndices[1], entries.length*i, n);
+            }
+        }
+
+        return new SparseMatrix(matShape, matEntries, matIndices[0], matIndices[1]);
     }
 
 
@@ -1465,7 +1557,63 @@ public class SparseVector
     }
 
 
-    // TODO: Add toString method.
+    /**
+     * Converts this sparse tensor to an equivalent dense tensor.
+     *
+     * @return A dense tensor which is equivalent to this sparse tensor.
+     */
+    @Override
+    public Vector toDense() {
+        double[] entries = new double[size];
+
+        for(int i=0; i<nonZeroEntries; i++) {
+            entries[indices[i]] = this.entries[i];
+        }
+
+        return new Vector(entries);
+    }
+
+
+    /**
+     * Formats this tensor as a human-readable string. Specifically, a string containing the
+     * shape and flatten entries of this tensor.
+     * @return A human-readable string representing this tensor.
+     */
+    public String toString() {
+        int size = nonZeroEntries;
+        StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
+        result.append("Non-zero entries: [");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        // Get entries up until the stopping point.
+        for(int i=0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(stopIndex < size-1) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry now
+        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + value.length();
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s", value));
+
+        result.append("]\n");
+        result.append("Indices: ").append(Arrays.toString(indices));
+
+        return result.toString();
+    }
 }
 
 

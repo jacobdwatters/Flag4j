@@ -927,5 +927,27 @@ public class SparseCMatrix
     public double infNorm() {
 <span class="nc" id="L928">        return 0;</span>
     }
+
+
+    /**
+     * Converts this sparse tensor to an equivalent dense tensor.
+     *
+     * @return A dense tensor which is equivalent to this sparse tensor.
+     */
+    @Override
+    public CMatrix toDense() {
+<span class="nc" id="L939">        CNumber[] entries = new CNumber[totalEntries().intValueExact()];</span>
+        int row;
+        int col;
+
+<span class="nc bnc" id="L943" title="All 2 branches missed.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
+<span class="nc" id="L944">            row = rowIndices[i];</span>
+<span class="nc" id="L945">            col = colIndices[i];</span>
+
+<span class="nc" id="L947">            entries[row*numCols + col] = this.entries[i];</span>
+        }
+
+<span class="nc" id="L950">        return new CMatrix(shape.copy(), entries);</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

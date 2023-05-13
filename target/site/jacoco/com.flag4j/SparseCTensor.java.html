@@ -704,5 +704,22 @@ public class SparseCTensor
     public void sparseSort() {
 
 <span class="nc" id="L706">    }</span>
+
+
+    /**
+     * Converts this sparse tensor to an equivalent dense tensor.
+     *
+     * @return A dense tensor which is equivalent to this sparse tensor.
+     */
+    @Override
+    public CTensor toDense() {
+<span class="nc" id="L716">        CNumber[] entries = new CNumber[totalEntries().intValueExact()];</span>
+
+<span class="nc bnc" id="L718" title="All 2 branches missed.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
+<span class="nc" id="L719">            entries[shape.entriesIndex(indices[i])] = this.entries[i];</span>
+        }
+
+<span class="nc" id="L722">        return new CTensor(shape.copy(), entries);</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

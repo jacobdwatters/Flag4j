@@ -704,4 +704,21 @@ public class SparseCTensor
     public void sparseSort() {
 
     }
+
+
+    /**
+     * Converts this sparse tensor to an equivalent dense tensor.
+     *
+     * @return A dense tensor which is equivalent to this sparse tensor.
+     */
+    @Override
+    public CTensor toDense() {
+        CNumber[] entries = new CNumber[totalEntries().intValueExact()];
+
+        for(int i=0; i<nonZeroEntries; i++) {
+            entries[shape.entriesIndex(indices[i])] = this.entries[i];
+        }
+
+        return new CTensor(shape.copy(), entries);
+    }
 }

@@ -134,11 +134,12 @@ public class SparseMatrix
                 nonZeroEntries,
 <span class="fc" id="L135">                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})</span>
         );
-<span class="fc" id="L137">        this.rowIndices = rowIndices;</span>
-<span class="fc" id="L138">        this.colIndices = colIndices;</span>
-<span class="fc" id="L139">        numRows = shape.dims[0];</span>
-<span class="fc" id="L140">        numCols = shape.dims[1];</span>
-<span class="fc" id="L141">    }</span>
+
+<span class="fc" id="L138">        this.rowIndices = rowIndices;</span>
+<span class="fc" id="L139">        this.colIndices = colIndices;</span>
+<span class="fc" id="L140">        numRows = shape.dims[0];</span>
+<span class="fc" id="L141">        numCols = shape.dims[1];</span>
+<span class="fc" id="L142">    }</span>
 
 
     /**
@@ -149,16 +150,16 @@ public class SparseMatrix
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(Shape shape, double[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L152">        super(shape,</span>
+<span class="fc" id="L153">        super(shape,</span>
                 nonZeroEntries.length,
                 nonZeroEntries,
-<span class="fc" id="L155">                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})</span>
+<span class="fc" id="L156">                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})</span>
         );
-<span class="fc" id="L157">        this.rowIndices = rowIndices;</span>
-<span class="fc" id="L158">        this.colIndices = colIndices;</span>
-<span class="fc" id="L159">        numRows = shape.dims[0];</span>
-<span class="fc" id="L160">        numCols = shape.dims[1];</span>
-<span class="fc" id="L161">    }</span>
+<span class="fc" id="L158">        this.rowIndices = rowIndices;</span>
+<span class="fc" id="L159">        this.colIndices = colIndices;</span>
+<span class="fc" id="L160">        numRows = shape.dims[0];</span>
+<span class="fc" id="L161">        numCols = shape.dims[1];</span>
+<span class="fc" id="L162">    }</span>
 
 
     /**
@@ -169,16 +170,16 @@ public class SparseMatrix
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int size, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L172">        super(new Shape(size, size),</span>
+<span class="fc" id="L173">        super(new Shape(size, size),</span>
                 nonZeroEntries.length,
-<span class="fc" id="L174">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
-<span class="fc" id="L175">                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})</span>
+<span class="fc" id="L175">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L176">                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})</span>
         );
-<span class="fc" id="L177">        this.rowIndices = rowIndices;</span>
-<span class="fc" id="L178">        this.colIndices = colIndices;</span>
-<span class="fc" id="L179">        numRows = shape.dims[0];</span>
-<span class="fc" id="L180">        numCols = shape.dims[1];</span>
-<span class="fc" id="L181">    }</span>
+<span class="fc" id="L178">        this.rowIndices = rowIndices;</span>
+<span class="fc" id="L179">        this.colIndices = colIndices;</span>
+<span class="fc" id="L180">        numRows = shape.dims[0];</span>
+<span class="fc" id="L181">        numCols = shape.dims[1];</span>
+<span class="fc" id="L182">    }</span>
 
 
     /**
@@ -190,16 +191,16 @@ public class SparseMatrix
      * @param colIndices Column indices of the non-zero entries.
      */
     public SparseMatrix(int rows, int cols, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L193">        super(new Shape(rows, cols),</span>
+<span class="fc" id="L194">        super(new Shape(rows, cols),</span>
                 nonZeroEntries.length,
-<span class="fc" id="L195">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
-<span class="fc" id="L196">                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})</span>
+<span class="fc" id="L196">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L197">                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})</span>
         );
-<span class="fc" id="L198">        this.rowIndices = rowIndices;</span>
-<span class="fc" id="L199">        this.colIndices = colIndices;</span>
-<span class="fc" id="L200">        numRows = shape.dims[0];</span>
-<span class="fc" id="L201">        numCols = shape.dims[1];</span>
-<span class="fc" id="L202">    }</span>
+<span class="fc" id="L199">        this.rowIndices = rowIndices;</span>
+<span class="fc" id="L200">        this.colIndices = colIndices;</span>
+<span class="fc" id="L201">        numRows = shape.dims[0];</span>
+<span class="fc" id="L202">        numCols = shape.dims[1];</span>
+<span class="fc" id="L203">    }</span>
 
 
     /**
@@ -212,16 +213,16 @@ public class SparseMatrix
      * lengths of the non-zero entries, row indices, and column indices arrays are not all the same.
      */
     public SparseMatrix(Shape shape, int[] nonZeroEntries, int[] rowIndices, int[] colIndices) {
-<span class="fc" id="L215">        super(shape,</span>
+<span class="fc" id="L216">        super(shape,</span>
                 nonZeroEntries.length,
-<span class="fc" id="L217">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
-<span class="fc" id="L218">                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})</span>
+<span class="fc" id="L218">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L219">                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})</span>
         );
-<span class="fc" id="L220">        this.rowIndices = rowIndices;</span>
-<span class="fc" id="L221">        this.colIndices = colIndices;</span>
-<span class="fc" id="L222">        numRows = shape.dims[0];</span>
-<span class="fc" id="L223">        numCols = shape.dims[1];</span>
-<span class="fc" id="L224">    }</span>
+<span class="fc" id="L221">        this.rowIndices = rowIndices;</span>
+<span class="fc" id="L222">        this.colIndices = colIndices;</span>
+<span class="fc" id="L223">        numRows = shape.dims[0];</span>
+<span class="fc" id="L224">        numCols = shape.dims[1];</span>
+<span class="fc" id="L225">    }</span>
 
 
     /**
@@ -230,17 +231,17 @@ public class SparseMatrix
      * @param A Sparse Matrix to copy.
      */
     public SparseMatrix(SparseMatrix A) {
-<span class="fc" id="L233">        super(A.shape.copy(),</span>
-<span class="fc" id="L234">                A.nonZeroEntries(),</span>
-<span class="fc" id="L235">                A.entries.clone(),</span>
+<span class="fc" id="L234">        super(A.shape.copy(),</span>
+<span class="fc" id="L235">                A.nonZeroEntries(),</span>
+<span class="fc" id="L236">                A.entries.clone(),</span>
                 new int[A.indices.length][A.indices[0].length]
         );
-<span class="fc" id="L238">        ArrayUtils.deepCopy(A.indices, this.indices);</span>
-<span class="fc" id="L239">        this.rowIndices = A.rowIndices.clone();</span>
-<span class="fc" id="L240">        this.colIndices = A.colIndices.clone();</span>
-<span class="fc" id="L241">        numRows = shape.dims[0];</span>
-<span class="fc" id="L242">        numCols = shape.dims[1];</span>
-<span class="fc" id="L243">    }</span>
+<span class="fc" id="L239">        ArrayUtils.deepCopy(A.indices, this.indices);</span>
+<span class="fc" id="L240">        this.rowIndices = A.rowIndices.clone();</span>
+<span class="fc" id="L241">        this.colIndices = A.colIndices.clone();</span>
+<span class="fc" id="L242">        numRows = shape.dims[0];</span>
+<span class="fc" id="L243">        numCols = shape.dims[1];</span>
+<span class="fc" id="L244">    }</span>
 
 
     /**
@@ -250,7 +251,7 @@ public class SparseMatrix
      */
     @Override
     protected SparseMatrix getSelf() {
-<span class="nc" id="L253">        return this;</span>
+<span class="nc" id="L254">        return this;</span>
     }
 
 
@@ -259,7 +260,7 @@ public class SparseMatrix
      * @return The number of rows in this matrix.
      */
     public int numRows() {
-<span class="nc" id="L262">        return numRows;</span>
+<span class="nc" id="L263">        return numRows;</span>
     }
 
 
@@ -268,13 +269,13 @@ public class SparseMatrix
      * @return The number of columns in this matrix.
      */
     public int numCols() {
-<span class="nc" id="L271">        return numCols;</span>
+<span class="nc" id="L272">        return numCols;</span>
     }
 
 
     @Override
     public SparseMatrix flatten(int axis) {
-<span class="nc" id="L277">        return null;</span>
+<span class="nc" id="L278">        return null;</span>
     }
 
 
@@ -285,7 +286,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix toComplex() {
-<span class="nc" id="L288">        return null;</span>
+<span class="nc" id="L289">        return null;</span>
     }
 
 
@@ -296,7 +297,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isZeros() {
-<span class="nc" id="L299">        return false;</span>
+<span class="nc" id="L300">        return false;</span>
     }
 
 
@@ -307,7 +308,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isOnes() {
-<span class="nc" id="L310">        return false;</span>
+<span class="nc" id="L311">        return false;</span>
     }
 
 
@@ -320,7 +321,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix set(double value, int... indices) {
-<span class="nc" id="L323">        return null;</span>
+<span class="nc" id="L324">        return null;</span>
     }
 
 
@@ -334,7 +335,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix reshape(Shape shape) {
-<span class="nc" id="L337">        return null;</span>
+<span class="nc" id="L338">        return null;</span>
     }
 
 
@@ -348,7 +349,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix reshape(int... shape) {
-<span class="nc" id="L351">        return null;</span>
+<span class="nc" id="L352">        return null;</span>
     }
 
 
@@ -359,7 +360,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix flatten() {
-<span class="nc" id="L362">        return null;</span>
+<span class="nc" id="L363">        return null;</span>
     }
 
 
@@ -372,7 +373,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix add(SparseMatrix B) {
-<span class="nc" id="L375">        return null;</span>
+<span class="nc" id="L376">        return null;</span>
     }
 
 
@@ -384,7 +385,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix add(double a) {
-<span class="nc" id="L387">        return null;</span>
+<span class="nc" id="L388">        return null;</span>
     }
 
 
@@ -396,7 +397,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix add(CNumber a) {
-<span class="nc" id="L399">        return null;</span>
+<span class="nc" id="L400">        return null;</span>
     }
 
 
@@ -409,7 +410,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix sub(SparseMatrix B) {
-<span class="nc" id="L412">        return null;</span>
+<span class="nc" id="L413">        return null;</span>
     }
 
 
@@ -421,7 +422,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix sub(double a) {
-<span class="nc" id="L424">        return null;</span>
+<span class="nc" id="L425">        return null;</span>
     }
 
 
@@ -433,7 +434,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix sub(CNumber a) {
-<span class="nc" id="L436">        return null;</span>
+<span class="nc" id="L437">        return null;</span>
     }
 
 
@@ -446,7 +447,7 @@ public class SparseMatrix
     @Override
     public void addEq(SparseMatrix B) {
 
-<span class="nc" id="L449">    }</span>
+<span class="nc" id="L450">    }</span>
 
 
     /**
@@ -457,7 +458,7 @@ public class SparseMatrix
     @Override
     public void addEq(Double b) {
 
-<span class="nc" id="L460">    }</span>
+<span class="nc" id="L461">    }</span>
 
 
     /**
@@ -469,7 +470,7 @@ public class SparseMatrix
     @Override
     public void subEq(SparseMatrix B) {
 
-<span class="nc" id="L472">    }</span>
+<span class="nc" id="L473">    }</span>
 
 
     /**
@@ -480,7 +481,7 @@ public class SparseMatrix
     @Override
     public void subEq(Double b) {
 
-<span class="nc" id="L483">    }</span>
+<span class="nc" id="L484">    }</span>
 
 
     /**
@@ -491,7 +492,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix mult(double factor) {
-<span class="nc" id="L494">        return null;</span>
+<span class="nc" id="L495">        return null;</span>
     }
 
 
@@ -503,7 +504,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix mult(CNumber factor) {
-<span class="nc" id="L506">        return null;</span>
+<span class="nc" id="L507">        return null;</span>
     }
 
 
@@ -516,7 +517,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix div(double divisor) {
-<span class="nc" id="L519">        return null;</span>
+<span class="nc" id="L520">        return null;</span>
     }
 
 
@@ -529,7 +530,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix div(CNumber divisor) {
-<span class="nc" id="L532">        return null;</span>
+<span class="nc" id="L533">        return null;</span>
     }
 
 
@@ -540,7 +541,7 @@ public class SparseMatrix
      */
     @Override
     public Double sum() {
-<span class="nc" id="L543">        return null;</span>
+<span class="nc" id="L544">        return null;</span>
     }
 
 
@@ -552,7 +553,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix sqrt() {
-<span class="nc" id="L555">        return null;</span>
+<span class="nc" id="L556">        return null;</span>
     }
 
 
@@ -564,7 +565,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix abs() {
-<span class="nc" id="L567">        return null;</span>
+<span class="nc" id="L568">        return null;</span>
     }
 
 
@@ -575,7 +576,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix transpose() {
-<span class="nc" id="L578">        return null;</span>
+<span class="nc" id="L579">        return null;</span>
     }
 
 
@@ -586,7 +587,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix T() {
-<span class="nc" id="L589">        return null;</span>
+<span class="nc" id="L590">        return null;</span>
     }
 
 
@@ -598,7 +599,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix recip() {
-<span class="nc" id="L601">        return null;</span>
+<span class="nc" id="L602">        return null;</span>
     }
 
 
@@ -611,7 +612,7 @@ public class SparseMatrix
      */
     @Override
     public Double get(int... indices) {
-<span class="nc" id="L614">        return null;</span>
+<span class="nc" id="L615">        return null;</span>
     }
 
 
@@ -622,7 +623,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix copy() {
-<span class="nc" id="L625">        return null;</span>
+<span class="nc" id="L626">        return null;</span>
     }
 
 
@@ -635,7 +636,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix elemMult(SparseMatrix B) {
-<span class="nc" id="L638">        return null;</span>
+<span class="nc" id="L639">        return null;</span>
     }
 
 
@@ -648,7 +649,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix elemDiv(Matrix B) {
-<span class="nc" id="L651">        return null;</span>
+<span class="nc" id="L652">        return null;</span>
     }
     
 
@@ -660,7 +661,7 @@ public class SparseMatrix
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L663">        return new int[0];</span>
+<span class="nc" id="L664">        return new int[0];</span>
     }
 
 
@@ -672,7 +673,7 @@ public class SparseMatrix
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L675">        return new int[0];</span>
+<span class="nc" id="L676">        return new int[0];</span>
     }
 
 
@@ -683,7 +684,7 @@ public class SparseMatrix
      */
     @Override
     public double norm() {
-<span class="nc" id="L686">        return 0;</span>
+<span class="nc" id="L687">        return 0;</span>
     }
 
 
@@ -697,7 +698,7 @@ public class SparseMatrix
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L700">        return 0;</span>
+<span class="nc" id="L701">        return 0;</span>
     }
 
 
@@ -708,7 +709,29 @@ public class SparseMatrix
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L711">        return 0;</span>
+<span class="nc" id="L712">        return 0;</span>
+    }
+
+
+    /**
+     * Converts this sparse tensor to an equivalent dense tensor.
+     *
+     * @return A dense tensor which is equivalent to this sparse tensor.
+     */
+    @Override
+    public Matrix toDense() {
+<span class="nc" id="L723">        double[] entries = new double[totalEntries().intValueExact()];</span>
+        int row;
+        int col;
+
+<span class="nc bnc" id="L727" title="All 2 branches missed.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
+<span class="nc" id="L728">            row = rowIndices[i];</span>
+<span class="nc" id="L729">            col = colIndices[i];</span>
+
+<span class="nc" id="L731">            entries[row*numCols + col] = this.entries[i];</span>
+        }
+
+<span class="nc" id="L734">        return new Matrix(shape.copy(), entries);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

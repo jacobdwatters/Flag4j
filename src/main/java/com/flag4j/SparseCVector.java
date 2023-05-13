@@ -875,4 +875,21 @@ public class SparseCVector
     public int size() {
         return shape.totalEntries().intValueExact();
     }
+
+
+    /**
+     * Converts this sparse tensor to an equivalent dense tensor.
+     *
+     * @return A dense tensor which is equivalent to this sparse tensor.
+     */
+    @Override
+    public CVector toDense() {
+        CNumber[] entries = new CNumber[size];
+
+        for(int i=0; i<nonZeroEntries; i++) {
+            entries[indices[i]] = this.entries[i];
+        }
+
+        return new CVector(entries);
+    }
 }
