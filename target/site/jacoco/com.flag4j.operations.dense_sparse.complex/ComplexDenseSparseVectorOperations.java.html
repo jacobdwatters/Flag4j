@@ -27,7 +27,6 @@ package com.flag4j.operations.dense_sparse.complex;
 
 import com.flag4j.CVector;
 import com.flag4j.SparseCVector;
-import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.util.ArrayUtils;
@@ -40,9 +39,9 @@ import com.flag4j.util.ParameterChecks;
  */
 public class ComplexDenseSparseVectorOperations {
 
-<span class="nc" id="L43">    private ComplexDenseSparseVectorOperations() {</span>
+<span class="nc" id="L42">    private ComplexDenseSparseVectorOperations() {</span>
         // Hide default constructor in utility class.
-<span class="nc" id="L45">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L44">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -56,16 +55,39 @@ public class ComplexDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
      */
     public static CNumber innerProduct(CNumber[] src1, CNumber[] src2, int[] indices, int sparseSize) {
-<span class="fc" id="L59">        ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);</span>
-<span class="fc" id="L60">        CNumber innerProd = new CNumber();</span>
+<span class="fc" id="L58">        ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);</span>
+<span class="fc" id="L59">        CNumber innerProd = new CNumber();</span>
         int index;
 
-<span class="fc bfc" id="L63" title="All 2 branches covered.">        for(int i=0; i&lt;src2.length; i++) {</span>
-<span class="fc" id="L64">            index = indices[i];</span>
-<span class="fc" id="L65">            innerProd.addEq(src2[i].conj().mult(src1[index]));</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        for(int i=0; i&lt;src2.length; i++) {</span>
+<span class="fc" id="L63">            index = indices[i];</span>
+<span class="fc" id="L64">            innerProd.addEq(src2[i].conj().mult(src1[index]));</span>
         }
 
-<span class="fc" id="L68">        return innerProd;</span>
+<span class="fc" id="L67">        return innerProd;</span>
+    }
+
+
+    /**
+     * Computes the vector inner product between a complex dense vector and a complex sparse vector.
+     * @param src1 Entries of the dense vector.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of nonzero values in sparse vector.
+     * @param sparseSize Full size of the sparse vector (i.e. total number of entries including zeros).
+     * @return The inner product of the two vectors.
+     * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
+     */
+    public static CNumber innerProduct(CNumber[] src1, int[] indices, int sparseSize, CNumber[] src2) {
+<span class="nc" id="L81">        ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);</span>
+<span class="nc" id="L82">        CNumber innerProd = new CNumber();</span>
+        int index;
+
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="nc" id="L86">            index = indices[i];</span>
+<span class="nc" id="L87">            innerProd.addEq(src1[i].mult(src2[index].conj()));</span>
+        }
+
+<span class="nc" id="L90">        return innerProd;</span>
     }
 
 
@@ -77,18 +99,18 @@ public class ComplexDenseSparseVectorOperations {
      * @return The matrix resulting from the vector outer product.
      */
     public static CNumber[] outerProduct(CNumber[] src1, CNumber[] src2, int[] indices, int sparseSize) {
-<span class="fc" id="L80">        CNumber[] dest = new CNumber[src1.length*sparseSize];</span>
-<span class="fc" id="L81">        ArrayUtils.fillZeros(dest);</span>
+<span class="fc" id="L102">        CNumber[] dest = new CNumber[src1.length*sparseSize];</span>
+<span class="fc" id="L103">        ArrayUtils.fillZeros(dest);</span>
         int index;
 
-<span class="fc bfc" id="L84" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
-<span class="fc bfc" id="L85" title="All 2 branches covered.">            for(int j=0; j&lt;src2.length; j++) {</span>
-<span class="fc" id="L86">                index = indices[j];</span>
-<span class="fc" id="L87">                dest[i*sparseSize + index] = src1[i].mult(src2[j].conj());</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="fc" id="L108">                index = indices[j];</span>
+<span class="fc" id="L109">                dest[i*sparseSize + index] = src1[i].mult(src2[j].conj());</span>
             }
         }
 
-<span class="fc" id="L91">        return dest;</span>
+<span class="fc" id="L113">        return dest;</span>
     }
 
 
@@ -99,14 +121,14 @@ public class ComplexDenseSparseVectorOperations {
      * @return The result of the vector addition.
      */
     public static CVector add(CVector src1, SparseCVector src2) {
-<span class="fc" id="L102">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
-<span class="fc" id="L103">        CVector dest = new CVector(src1);</span>
+<span class="fc" id="L124">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L125">        CVector dest = new CVector(src1);</span>
 
-<span class="fc bfc" id="L105" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L106">            dest.entries[src2.indices[i]].addEq(src2.entries[i]);</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L128">            dest.entries[src2.indices[i]].addEq(src2.entries[i]);</span>
         }
 
-<span class="fc" id="L109">        return dest;</span>
+<span class="fc" id="L131">        return dest;</span>
     }
 
 
@@ -117,12 +139,12 @@ public class ComplexDenseSparseVectorOperations {
      * @param src2 Sparse vector.
      */
     public static void addEq(CVector src1, SparseCVector src2) {
-<span class="fc" id="L120">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L142">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
-<span class="fc bfc" id="L122" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L123">            src1.entries[src2.indices[i]].addEq(src2.entries[i]);</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L145">            src1.entries[src2.indices[i]].addEq(src2.entries[i]);</span>
         }
-<span class="fc" id="L125">    }</span>
+<span class="fc" id="L147">    }</span>
 
 
 
@@ -134,17 +156,17 @@ public class ComplexDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static CVector sub(CVector src1, SparseCVector src2) {
-<span class="fc" id="L137">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L159">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
-<span class="fc" id="L139">        CVector dest = src1.copy();</span>
+<span class="fc" id="L161">        CVector dest = src1.copy();</span>
         int index;
 
-<span class="fc bfc" id="L142" title="All 2 branches covered.">        for(int i=0; i&lt;src2.entries.length; i++) {</span>
-<span class="fc" id="L143">            index = src2.indices[i];</span>
-<span class="fc" id="L144">            dest.entries[index].subEq(src2.entries[i]);</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        for(int i=0; i&lt;src2.entries.length; i++) {</span>
+<span class="fc" id="L165">            index = src2.indices[i];</span>
+<span class="fc" id="L166">            dest.entries[index].subEq(src2.entries[i]);</span>
         }
 
-<span class="fc" id="L147">        return dest;</span>
+<span class="fc" id="L169">        return dest;</span>
     }
 
 
@@ -156,14 +178,14 @@ public class ComplexDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static CVector sub(SparseCVector src1, CVector src2) {
-<span class="nc" id="L159">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
-<span class="nc" id="L160">        CVector dest = new CVector(ComplexOperations.scalMult(src2.entries, -1));</span>
+<span class="nc" id="L181">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="nc" id="L182">        CVector dest = new CVector(ComplexOperations.scalMult(src2.entries, -1));</span>
 
-<span class="nc bnc" id="L162" title="All 2 branches missed.">        for(int i=0; i&lt;src1.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L163">            dest.entries[src1.indices[i]].addEq(src1.entries[i]);</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">        for(int i=0; i&lt;src1.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L185">            dest.entries[src1.indices[i]].addEq(src1.entries[i]);</span>
         }
 
-<span class="nc" id="L166">        return dest;</span>
+<span class="nc" id="L188">        return dest;</span>
     }
 
 
@@ -174,12 +196,12 @@ public class ComplexDenseSparseVectorOperations {
      * @param src2 Sparse vector.
      */
     public static void subEq(CVector src1, SparseCVector src2) {
-<span class="fc" id="L177">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L199">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
-<span class="fc bfc" id="L179" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L180">            src1.entries[src2.indices[i]].subEq(src2.entries[i]);</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L202">            src1.entries[src2.indices[i]].subEq(src2.entries[i]);</span>
         }
-<span class="fc" id="L182">    }</span>
+<span class="fc" id="L204">    }</span>
 
 
     /**
@@ -190,15 +212,15 @@ public class ComplexDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the two vectors are not the same size.
      */
     public static SparseCVector elemMult(CVector src1, SparseCVector src2) {
-<span class="fc" id="L193">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L215">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
-<span class="fc" id="L195">        CNumber[] entries = new CNumber[src2.entries.length];</span>
+<span class="fc" id="L217">        CNumber[] entries = new CNumber[src2.entries.length];</span>
 
-<span class="fc bfc" id="L197" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L198">            entries[i] = src1.entries[src2.indices[i]].mult(src2.entries[i]);</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L220">            entries[i] = src1.entries[src2.indices[i]].mult(src2.entries[i]);</span>
         }
 
-<span class="fc" id="L201">        return new SparseCVector(src1.size, entries, src2.indices.clone());</span>
+<span class="fc" id="L223">        return new SparseCVector(src1.size, entries, src2.indices.clone());</span>
     }
 
 
@@ -209,14 +231,14 @@ public class ComplexDenseSparseVectorOperations {
      * @return The result of the element-wise vector division.
      */
     public static SparseCVector elemDiv(SparseCVector src1, CVector src2) {
-<span class="nc" id="L212">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
-<span class="nc" id="L213">        CNumber[] dest = new CNumber[src1.entries.length];</span>
+<span class="nc" id="L234">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="nc" id="L235">        CNumber[] dest = new CNumber[src1.entries.length];</span>
 
-<span class="nc bnc" id="L215" title="All 2 branches missed.">        for(int i=0; i&lt;src2.entries.length; i++) {</span>
-<span class="nc" id="L216">            dest[i] = src1.entries[i].div(src2.entries[src1.indices[i]]);</span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">        for(int i=0; i&lt;src2.entries.length; i++) {</span>
+<span class="nc" id="L238">            dest[i] = src1.entries[i].div(src2.entries[src1.indices[i]]);</span>
         }
 
-<span class="nc" id="L219">        return new SparseCVector(src1.size, dest, src1.indices.clone());</span>
+<span class="nc" id="L241">        return new SparseCVector(src1.size, dest, src1.indices.clone());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
