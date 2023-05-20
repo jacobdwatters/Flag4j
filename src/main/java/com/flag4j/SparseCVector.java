@@ -352,7 +352,17 @@ public class SparseCVector
      */
     @Override
     public CVector join(Vector b) {
-        return null;
+        CNumber[] newEntries = new CNumber[this.size + b.entries.length];
+
+        // Copy over sparse values.
+        for(int i=0; i<this.entries.length; i++) {
+            newEntries[indices[i]] = entries[i];
+        }
+
+        // Copy over dense values.
+        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);
+
+        return new CVector(newEntries);
     }
 
 
@@ -364,7 +374,17 @@ public class SparseCVector
      */
     @Override
     public CVector join(CVector b) {
-        return null;
+        CNumber[] newEntries = new CNumber[this.size + b.entries.length];
+
+        // Copy over sparse values.
+        for(int i=0; i<this.entries.length; i++) {
+            newEntries[indices[i]] = new CNumber(entries[i]);
+        }
+
+        // Copy over dense values.
+        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);
+
+        return new CVector(newEntries);
     }
 
 
@@ -376,7 +396,23 @@ public class SparseCVector
      */
     @Override
     public SparseCVector join(SparseVector b) {
-        return null;
+        CNumber[] newEntries = new CNumber[this.entries.length + b.entries.length];
+        int[] newIndices = new int[this.indices.length + b.indices.length];
+
+        // Copy values from this vector.
+        ArrayUtils.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);
+        // Copy values from vector b.
+        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);
+
+        // Copy indices from this vector.
+        System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);
+
+        // Copy the indices from vector b with a shift.
+        for(int i=0; i<b.indices.length; i++) {
+            newIndices[this.indices.length+i] = b.indices[i] + this.size;
+        }
+
+        return new SparseCVector(this.size + b.size, newEntries, newIndices);
     }
 
 
@@ -388,7 +424,23 @@ public class SparseCVector
      */
     @Override
     public SparseCVector join(SparseCVector b) {
-        return null;
+        CNumber[] newEntries = new CNumber[this.entries.length + b.entries.length];
+        int[] newIndices = new int[this.indices.length + b.indices.length];
+
+        // Copy values from this vector.
+        ArrayUtils.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);
+        // Copy values from vector b.
+        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);
+
+        // Copy indices from this vector.
+        System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);
+
+        // Copy the indices from vector b with a shift.
+        for(int i=0; i<b.indices.length; i++) {
+            newIndices[this.indices.length+i] = b.indices[i] + this.size;
+        }
+
+        return new SparseCVector(this.size + b.size, newEntries, newIndices);
     }
 
 
@@ -403,7 +455,23 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(Vector b) {
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, b.shape);
+
+        CNumber[] destEntries = new CNumber[nonZeroEntries + b.length()];
+        int[][] indices = new int[2][nonZeroEntries + b.length()];
+
+        // Copy sparse values and column indices (row indices will be implicitly zero)
+        ArrayUtils.arraycopy(entries, 0, destEntries,0,  entries.length);
+        System.arraycopy(this.indices, 0, indices[1], 0, this.indices.length);
+
+        // Copy dense values. Set column indices as range and set row indices to 1.
+        int[] rowIndices = new int[b.size];
+        Arrays.fill(rowIndices, 1);
+        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
+        System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
+        System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);
+
+        return new SparseCMatrix(2, b.size, destEntries, indices[0], indices[1]);
     }
 
 
@@ -418,7 +486,25 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(SparseVector b) {
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, b.shape);
+
+        CNumber[] entries = new CNumber[this.entries.length + b.entries.length];
+        int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.
+
+        // Copy values from this vector.
+        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.entries.length);
+        // Copy values from vector b.
+        ArrayUtils.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);
+
+        // Set row indices to 1 for b values (this vectors row indices are 0 which was implicitly set already).
+        Arrays.fill(indices[0], this.indices.length, entries.length, 1);
+
+        // Copy indices from this vector to the column indices.
+        System.arraycopy(this.indices, 0, indices[1], 0, this.entries.length);
+        // Copy indices from b vector to the column indices.
+        System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);
+
+        return new SparseCMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);
     }
 
 
@@ -433,7 +519,23 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(CVector b) {
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, b.shape);
+
+        CNumber[] destEntries = new CNumber[nonZeroEntries + b.length()];
+        int[][] indices = new int[2][nonZeroEntries + b.length()];
+
+        // Copy sparse values and column indices (row indices will be implicitly zero)
+        ArrayUtils.arraycopy(entries, 0, destEntries,0,  entries.length);
+        System.arraycopy(this.indices, 0, indices[1], 0, this.indices.length);
+
+        // Copy dense values. Set column indices as range and set row indices to 1.
+        int[] rowIndices = new int[b.size];
+        Arrays.fill(rowIndices, 1);
+        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
+        System.arraycopy(rowIndices, 0, indices[1], entries.length,  b.size);
+        System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);
+
+        return new SparseCMatrix(2, b.size, destEntries, indices[0], indices[1]);
     }
 
 
@@ -448,7 +550,25 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(SparseCVector b) {
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, b.shape);
+
+        CNumber[] entries = new CNumber[this.entries.length + b.entries.length];
+        int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.
+
+        // Copy values from this vector.
+        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.entries.length);
+        // Copy values from vector b.
+        ArrayUtils.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);
+
+        // Set row indices to 1 for b values (this vectors row indices are 0 which was implicitly set already).
+        Arrays.fill(indices[0], this.indices.length, entries.length, 1);
+
+        // Copy indices from this vector to the column indices.
+        System.arraycopy(this.indices, 0, indices[1], 0, this.entries.length);
+        // Copy indices from b vector to the column indices.
+        System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);
+
+        return new SparseCMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);
     }
 
 
@@ -477,7 +597,8 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(Vector b, int axis) {
-        return null;
+        ParameterChecks.assertAxis2D(axis);
+        return axis==0 ? stack(b) : stack(b).T();
     }
 
 
@@ -506,7 +627,8 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(SparseVector b, int axis) {
-        return null;
+        ParameterChecks.assertAxis2D(axis);
+        return axis==0 ? stack(b) : stack(b).T();
     }
 
 
@@ -535,7 +657,8 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(CVector b, int axis) {
-        return null;
+        ParameterChecks.assertAxis2D(axis);
+        return axis==0 ? stack(b) : stack(b).T();
     }
 
 
@@ -564,7 +687,8 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix stack(SparseCVector b, int axis) {
-        return null;
+        ParameterChecks.assertAxis2D(axis);
+        return axis==0 ? stack(b) : stack(b).T();
     }
 
 
