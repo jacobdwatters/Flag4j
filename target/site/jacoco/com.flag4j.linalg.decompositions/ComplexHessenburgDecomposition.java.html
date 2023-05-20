@@ -88,10 +88,10 @@ public final class ComplexHessenburgDecomposition extends HessenburgDecompositio
         CMatrix ref; // For storing Householder reflector
         CVector col; // Normal vector for Householder reflector computation.
 
-<span class="fc bfc" id="L91" title="All 2 branches covered.">        if(computeQ) {</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        if(computeQ) {</span>
 <span class="fc" id="L92">            Q = CMatrix.I(this.H.numRows); // Storage for unitary matrix in the decomposition.</span>
         } else {
-<span class="fc" id="L94">            Q = null;</span>
+<span class="nc" id="L94">            Q = null;</span>
         }
 
 <span class="fc bfc" id="L97" title="All 2 branches covered.">        for(int k = 0; k&lt; this.H.numRows-2; k++) {</span>
@@ -103,7 +103,7 @@ public final class ComplexHessenburgDecomposition extends HessenburgDecompositio
 
 <span class="fc" id="L104">                H = ref.mult(H).mult(ref.H()); // Apply Householder reflector to both sides of B.</span>
 
-<span class="fc bfc" id="L106" title="All 2 branches covered.">                if(computeQ) {</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">                if(computeQ) {</span>
 <span class="fc" id="L107">                    Q = Q.mult(ref); // Apply Householder reflector to Q.</span>
                 }
             }

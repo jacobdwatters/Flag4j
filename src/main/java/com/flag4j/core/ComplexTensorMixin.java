@@ -55,7 +55,7 @@ public interface ComplexTensorMixin<T, Y> {
 
 
     /**
-     * Converts a complex tensor to a real matrix. The imaginary component of any complex value will be ignored.
+     * Converts a complex tensor to a real tensor. The imaginary component of any complex value will be ignored.
      * @return A tensor of the same size containing only the real components of this tensor.
      */
     Y toReal();
@@ -80,7 +80,7 @@ public interface ComplexTensorMixin<T, Y> {
     /**
      * Sets an index of this tensor to a specified value.
      * @param value Value to set.
-     * @param indices The indices of this matrix for which to set the value.
+     * @param indices The indices of this tensor for which to set the value.
      * @return A reference to this tensor.
      * @throws IllegalArgumentException If the number of indices is not equal to the rank of this tensor.
      * @throws IndexOutOfBoundsException If any of the indices are not within this tensor.

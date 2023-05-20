@@ -346,7 +346,7 @@ public final class MatrixMultiplyDispatcher {
 <span class="fc" id="L346">            algorithm = chooseAlgorithmRealComplex(A.shape, B.shape);</span>
         }
 
-<span class="pc bpc" id="L349" title="10 of 12 branches missed.">        switch(algorithm) {</span>
+<span class="pc bpc" id="L349" title="11 of 12 branches missed.">        switch(algorithm) {</span>
             case STANDARD:
 <span class="nc" id="L351">                dest = RealComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);</span>
 <span class="nc" id="L352">                break;</span>
@@ -363,8 +363,8 @@ public final class MatrixMultiplyDispatcher {
 <span class="nc" id="L363">                dest = RealComplexDenseMatrixMultiplication.concurrentStandard(A.entries, A.shape, B.entries, B.shape);</span>
 <span class="nc" id="L364">                break;</span>
             case CONCURRENT_REORDERED:
-<span class="fc" id="L366">                dest = RealComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="fc" id="L367">                break;</span>
+<span class="nc" id="L366">                dest = RealComplexDenseMatrixMultiplication.concurrentReordered(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="nc" id="L367">                break;</span>
             case CONCURRENT_BLOCKED:
 <span class="nc" id="L369">                dest = RealComplexDenseMatrixMultiplication.concurrentBlocked(A.entries, A.shape, B.entries, B.shape);</span>
 <span class="nc" id="L370">                break;</span>
@@ -668,8 +668,8 @@ public final class MatrixMultiplyDispatcher {
 <span class="fc bfc" id="L668" title="All 2 branches covered.">        } else if(rows1&gt;cols1) {</span>
             // Then there are more rows than columns in the first matrix
 <span class="pc bpc" id="L670" title="1 of 2 branches missed.">            if(rows1&lt;=100) {</span>
-<span class="fc bfc" id="L671" title="All 2 branches covered.">                if(cols1&lt;=2) algorithm = AlgorithmName.REORDERED;</span>
-<span class="fc" id="L672">                else algorithm = AlgorithmName.CONCURRENT_REORDERED;</span>
+<span class="pc bpc" id="L671" title="1 of 2 branches missed.">                if(cols1&lt;=2) algorithm = AlgorithmName.REORDERED;</span>
+<span class="nc" id="L672">                else algorithm = AlgorithmName.CONCURRENT_REORDERED;</span>
             } else {
 <span class="nc bnc" id="L674" title="All 2 branches missed.">                if(cols1&lt;=45) algorithm = AlgorithmName.CONCURRENT_REORDERED;</span>
 <span class="nc" id="L675">                else algorithm = AlgorithmName.CONCURRENT_BLOCKED_REORDERED;</span>

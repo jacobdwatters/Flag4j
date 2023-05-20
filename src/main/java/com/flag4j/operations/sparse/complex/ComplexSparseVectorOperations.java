@@ -62,6 +62,24 @@ public class ComplexSparseVectorOperations {
 
 
     /**
+     * Adds a real number to each entry of a sparse vector, including the zero entries.
+     * @param src Sparse vector to add value to.
+     * @param a Value to add to the {@code src} sparse vector.
+     * @return The result of adding the specified value to the sparse vector.
+     */
+    public static CVector add(SparseCVector src, CNumber a) {
+        CNumber[] dest = new CNumber[src.size];
+        ArrayUtils.fill(dest, a);
+
+        for(int i=0; i<src.entries.length; i++) {
+            dest[src.indices[i]].addEq(src.entries[i]);
+        }
+
+        return new CVector(dest);
+    }
+
+
+    /**
      * Subtracts a real number from each entry of a sparse vector, including the zero entries.
      * @param src Sparse vector to subtract value from.
      * @param a Value to subtract from the {@code src} sparse vector.

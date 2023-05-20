@@ -25,7 +25,7 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.RealSparseTensorBase;
+import com.flag4j.core.sparse.RealSparseTensorBase;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.complex.ComplexOperations;
@@ -34,7 +34,6 @@ import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.common.real.VectorNorms;
 import com.flag4j.operations.dense.real.AggregateDenseReal;
 import com.flag4j.operations.dense.real.RealDenseOperations;
-import com.flag4j.operations.dense.real.RealDenseProperties;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
@@ -45,7 +44,9 @@ import com.flag4j.util.ParameterChecks;
 import com.flag4j.util.SparseDataWrapper;
 import com.flag4j.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Real sparse vector of arbitrary size.
@@ -126,135 +127,6 @@ public class SparseVector
         );
         this.indices = a.indices.clone();
         this.size = a.size;
-    }
-
-
-//    /**
-//     * Creates a sparse column vector from a dense array.
-//     * @param entries Dense entries of the vector.
-//     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-//     * the length of the nonZeroEntries array is greater than the size.
-//     */
-//    public SparseVector(int[] entries) {
-//        super(entries.length, VectorOrientations.COL);
-//
-//        ArrayList<Integer> nonZeroEntries = new ArrayList<>(super.totalEntries()/8);
-//        ArrayList<Integer> indices = new ArrayList<>(super.totalEntries()/8);
-//
-//        // Fill entries with non-zero values.
-//        for(int i=0; i<entries.length; i++) {
-//            if(entries[i]!=0) {
-//                nonZeroEntries.add(entries[i]);
-//                indices.add(i);
-//            }
-//        }
-//
-//        super.entries = nonZeroEntries.stream().mapToDouble(Integer::doubleValue).toArray();
-//        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
-//        super.setNonZeroEntries(super.entries.length);
-//    }
-//
-//
-//    /**
-//     * Creates a sparse column vector from a dense array.
-//     * @param entries Dense entries of the vector.
-//     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-//     * the length of the nonZeroEntries array is greater than the size.
-//     */
-//    public SparseVector(double[] entries) {
-//        super(entries.length, VectorOrientations.COL);
-//
-//        ArrayList<Double> nonZeroEntries = new ArrayList<>(super.totalEntries()/8);
-//        ArrayList<Integer> indices = new ArrayList<>(super.totalEntries()/8);
-//
-//        // Fill entries with non-zero values.
-//        for(int i=0; i<entries.length; i++) {
-//            if(entries[i]!=0) {
-//                nonZeroEntries.add(entries[i]);
-//                indices.add(i);
-//            }
-//        }
-//
-//        super.entries = nonZeroEntries.stream().mapToDouble(Double::doubleValue).toArray();
-//        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
-//        super.setNonZeroEntries(super.entries.length);
-//    }
-
-
-//
-//    /**
-//     * Creates a sparse column vector from a dense array.
-//     * @param entries Dense entries of the vector.
-//     * @param orientation Orientation of the vector.
-//     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-//     * the length of the nonZeroEntries array is greater than the size.
-//     */
-//    public SparseVector(int[] entries, VectorOrientations orientation) {
-//        super(entries.length, orientation);
-//
-//        ArrayList<Integer> nonZeroEntries = new ArrayList<>(super.totalEntries()/8);
-//        ArrayList<Integer> indices = new ArrayList<>(super.totalEntries()/8);
-//
-//        // Fill entries with non-zero values.
-//        for(int i=0; i<entries.length; i++) {
-//            if(entries[i]!=0) {
-//                nonZeroEntries.add(entries[i]);
-//                indices.add(i);
-//            }
-//        }
-//
-//        super.entries = nonZeroEntries.stream().mapToDouble(Integer::doubleValue).toArray();
-//        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
-//        super.setNonZeroEntries(super.entries.length);
-//    }
-//
-//
-//    /**
-//     * Creates a sparse column vector from a dense array.
-//     * @param entries Dense entries of the vector.
-//     * @param orientation Orientation of the vector.
-//     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-//     * the length of the nonZeroEntries array is greater than the size.
-//     */
-//    public SparseVector(double[] entries, VectorOrientations orientation) {
-//        super(entries.length, orientation);
-//
-//        ArrayList<Double> nonZeroEntries = new ArrayList<>(super.totalEntries()/8);
-//        ArrayList<Integer> indices = new ArrayList<>(super.totalEntries()/8);
-//
-//        // Fill entries with non-zero values.
-//        for(int i=0; i<entries.length; i++) {
-//            if(entries[i]!=0) {
-//                nonZeroEntries.add(entries[i]);
-//                indices.add(i);
-//            }
-//        }
-//
-//        super.entries = nonZeroEntries.stream().mapToDouble(Double::doubleValue).toArray();
-//        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
-//        super.setNonZeroEntries(super.entries.length);
-//    }
-
-
-    /**
-     * Checks if this vector only contains zeros.
-     *
-     * @return True if this vector only contains zeros. Otherwise, returns false.
-     */
-    @Override
-    public boolean isZeros() {
-        return entries.length==0 || ArrayUtils.isZeros(entries);
-    }
-
-
-    /**
-     * Checks if this vectors non-zero entries only contains ones.
-     *
-     * @return True if this vectors non-zero entries only contains ones. Otherwise, returns false.
-     */
-    @Override
-    public boolean isOnes() {
-        return RealDenseProperties.isOnes(entries);
     }
 
 
@@ -850,44 +722,7 @@ public class SparseVector
      */
     @Override
     public void addEq(SparseVector B) {
-
-    }
-
-
-    /**
-     * Computes the element-wise addition between this vector and the specified vector and stores the result
-     * in this vector.
-     *
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public void addEq(Vector B) {
-
-    }
-
-
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
-     * in this vector.
-     *
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public void subEq(Vector B) {
-
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void addEq(Double b) {
-
+        // TODO: This does not make since for sparse tensors since the entries array is final.
     }
 
 
@@ -899,7 +734,7 @@ public class SparseVector
      */
     @Override
     public void subEq(SparseVector B) {
-
+        // TODO: This does not make since for sparse tensors since the entries array is final.
     }
 
 
@@ -912,18 +747,7 @@ public class SparseVector
      */
     @Override
     public SparseVector elemMult(Vector B) {
-        return null;
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void subEq(Double b) {
-
+        return RealDenseSparseVectorOperations.elemMult(B, this);
     }
 
 
@@ -1571,6 +1395,32 @@ public class SparseVector
         }
 
         return new Vector(entries);
+    }
+
+
+    /**
+     * Creates a sparse tensor from a dense tensor.
+     *
+     * @param src Dense tensor to convert to a sparse tensor.
+     * @return A sparse tensor which is equivalent to the {@code src} dense tensor.
+     */
+    public static SparseVector fromDense(Vector src) {
+        List<Double> nonZeroEntries = new ArrayList<>((int) (src.entries.length*0.8));
+        List<Integer> indices = new ArrayList<>((int) (src.entries.length*0.8));
+
+        // Fill entries with non-zero values.
+        for(int i=0; i<src.entries.length; i++) {
+            if(src.entries[i]!=0) {
+                nonZeroEntries.add(src.entries[i]);
+                indices.add(i);
+            }
+        }
+
+        return new SparseVector(
+                src.size,
+                nonZeroEntries.stream().mapToDouble(Double::doubleValue).toArray(),
+                indices.stream().mapToInt(Integer::intValue).toArray()
+        );
     }
 
 

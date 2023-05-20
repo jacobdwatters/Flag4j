@@ -25,7 +25,7 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.ComplexDenseTensorBase;
+import com.flag4j.core.dense.ComplexDenseTensorBase;
 import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.io.PrintOptions;

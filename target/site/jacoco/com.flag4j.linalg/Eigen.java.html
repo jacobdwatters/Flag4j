@@ -145,5 +145,26 @@ import com.flag4j.linalg.decompositions.SchurDecomposition;
     public static CMatrix getEigenVectors(Matrix src) {
 <span class="nc" id="L146">        return new RealSchurDecomposition(true).decompose(src).getU();</span>
     }
+
+
+    /**
+     * Computes the eigenvalues and eigenvectors of a square real matrix.
+     * @param src The matrix to compute the eigenvalues and vectors of.
+     * @return An array containing two matrices. The first matrix has shape {@code 1xsrc.numCols} and contains the eigenvalues
+     * of the {@code src} matrix. The second matrix has shape {@code src.numRowsxsrc.numCols}.
+     */
+    public static CMatrix[] getEigenPairs(Matrix src) {
+<span class="nc" id="L157">        CMatrix lambdas = new CMatrix(1, src.numRows);</span>
+
+<span class="nc" id="L159">        SchurDecomposition&lt;Matrix&gt; schur = new RealSchurDecomposition(true).decompose(src);</span>
+<span class="nc" id="L160">        CMatrix T = schur.getT();</span>
+
+        // Extract diagonal of T.
+<span class="nc bnc" id="L163" title="All 2 branches missed.">        for(int i=0; i&lt;T.numRows; i++) {</span>
+<span class="nc" id="L164">            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];</span>
+        }
+
+<span class="nc" id="L167">        return new CMatrix[]{lambdas, schur.getU()};</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

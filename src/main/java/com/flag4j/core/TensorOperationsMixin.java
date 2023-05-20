@@ -97,44 +97,12 @@ interface TensorOperationsMixin<T, U, W, Z, Y, X extends Number> {
 
 
     /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    void addEq(X b);
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    void addEq(Double b);
-
-
-    /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
      *
      * @param B Second tensor in the subtraction.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     void subEq(T B);
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    void subEq(X b);
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    void subEq(Double b);
 
 
     /**

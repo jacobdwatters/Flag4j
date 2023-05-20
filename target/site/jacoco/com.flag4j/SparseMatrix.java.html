@@ -26,7 +26,7 @@ package com.flag4j;
 
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.RealSparseTensorBase;
+import com.flag4j.core.sparse.RealSparseTensorBase;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.util.ArrayUtils;
 
@@ -451,17 +451,6 @@ public class SparseMatrix
 
 
     /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void addEq(Double b) {
-
-<span class="nc" id="L461">    }</span>
-
-
-    /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
      *
      * @param B Second tensor in the subtraction.
@@ -470,18 +459,7 @@ public class SparseMatrix
     @Override
     public void subEq(SparseMatrix B) {
 
-<span class="nc" id="L473">    }</span>
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void subEq(Double b) {
-
-<span class="nc" id="L484">    }</span>
+<span class="nc" id="L462">    }</span>
 
 
     /**
@@ -492,7 +470,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix mult(double factor) {
-<span class="nc" id="L495">        return null;</span>
+<span class="nc" id="L473">        return null;</span>
     }
 
 
@@ -504,7 +482,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix mult(CNumber factor) {
-<span class="nc" id="L507">        return null;</span>
+<span class="nc" id="L485">        return null;</span>
     }
 
 
@@ -517,7 +495,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix div(double divisor) {
-<span class="nc" id="L520">        return null;</span>
+<span class="nc" id="L498">        return null;</span>
     }
 
 
@@ -530,7 +508,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix div(CNumber divisor) {
-<span class="nc" id="L533">        return null;</span>
+<span class="nc" id="L511">        return null;</span>
     }
 
 
@@ -541,7 +519,7 @@ public class SparseMatrix
      */
     @Override
     public Double sum() {
-<span class="nc" id="L544">        return null;</span>
+<span class="nc" id="L522">        return null;</span>
     }
 
 
@@ -553,7 +531,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix sqrt() {
-<span class="nc" id="L556">        return null;</span>
+<span class="nc" id="L534">        return null;</span>
     }
 
 
@@ -565,7 +543,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix abs() {
-<span class="nc" id="L568">        return null;</span>
+<span class="nc" id="L546">        return null;</span>
     }
 
 
@@ -576,7 +554,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix transpose() {
-<span class="nc" id="L579">        return null;</span>
+<span class="nc" id="L557">        return null;</span>
     }
 
 
@@ -587,7 +565,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix T() {
-<span class="nc" id="L590">        return null;</span>
+<span class="nc" id="L568">        return null;</span>
     }
 
 
@@ -599,7 +577,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix recip() {
-<span class="nc" id="L602">        return null;</span>
+<span class="nc" id="L580">        return null;</span>
     }
 
 
@@ -612,7 +590,7 @@ public class SparseMatrix
      */
     @Override
     public Double get(int... indices) {
-<span class="nc" id="L615">        return null;</span>
+<span class="nc" id="L593">        return null;</span>
     }
 
 
@@ -623,7 +601,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix copy() {
-<span class="nc" id="L626">        return null;</span>
+<span class="nc" id="L604">        return null;</span>
     }
 
 
@@ -636,7 +614,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix elemMult(SparseMatrix B) {
-<span class="nc" id="L639">        return null;</span>
+<span class="nc" id="L617">        return null;</span>
     }
 
 
@@ -649,7 +627,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix elemDiv(Matrix B) {
-<span class="nc" id="L652">        return null;</span>
+<span class="nc" id="L630">        return null;</span>
     }
     
 
@@ -661,7 +639,7 @@ public class SparseMatrix
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L664">        return new int[0];</span>
+<span class="nc" id="L642">        return new int[0];</span>
     }
 
 
@@ -673,7 +651,7 @@ public class SparseMatrix
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L676">        return new int[0];</span>
+<span class="nc" id="L654">        return new int[0];</span>
     }
 
 
@@ -684,7 +662,7 @@ public class SparseMatrix
      */
     @Override
     public double norm() {
-<span class="nc" id="L687">        return 0;</span>
+<span class="nc" id="L665">        return 0;</span>
     }
 
 
@@ -698,7 +676,7 @@ public class SparseMatrix
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L701">        return 0;</span>
+<span class="nc" id="L679">        return 0;</span>
     }
 
 
@@ -709,7 +687,7 @@ public class SparseMatrix
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L712">        return 0;</span>
+<span class="nc" id="L690">        return 0;</span>
     }
 
 
@@ -720,18 +698,18 @@ public class SparseMatrix
      */
     @Override
     public Matrix toDense() {
-<span class="nc" id="L723">        double[] entries = new double[totalEntries().intValueExact()];</span>
+<span class="nc" id="L701">        double[] entries = new double[totalEntries().intValueExact()];</span>
         int row;
         int col;
 
-<span class="nc bnc" id="L727" title="All 2 branches missed.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
-<span class="nc" id="L728">            row = rowIndices[i];</span>
-<span class="nc" id="L729">            col = colIndices[i];</span>
+<span class="nc bnc" id="L705" title="All 2 branches missed.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
+<span class="nc" id="L706">            row = rowIndices[i];</span>
+<span class="nc" id="L707">            col = colIndices[i];</span>
 
-<span class="nc" id="L731">            entries[row*numCols + col] = this.entries[i];</span>
+<span class="nc" id="L709">            entries[row*numCols + col] = this.entries[i];</span>
         }
 
-<span class="nc" id="L734">        return new Matrix(shape.copy(), entries);</span>
+<span class="nc" id="L712">        return new Matrix(shape.copy(), entries);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

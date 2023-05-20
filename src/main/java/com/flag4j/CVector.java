@@ -25,9 +25,11 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.ComplexDenseTensorBase;
+import com.flag4j.core.dense.ComplexDenseTensorBase;
 import com.flag4j.core.VectorMixin;
+import com.flag4j.core.dense.DenseVectorMixin;
 import com.flag4j.io.PrintOptions;
+import com.flag4j.operations.common.real.VectorNorms;
 import com.flag4j.operations.dense.complex.ComplexDenseVectorOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
@@ -45,7 +47,8 @@ import java.util.Arrays;
  * Complex dense vector. This class is mostly equivalent to a rank 1 complex tensor.
  */
 public class CVector extends ComplexDenseTensorBase<CVector, Vector>
-implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatrix, CMatrix, CMatrix> {
+implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatrix, CMatrix, CMatrix>,
+        DenseVectorMixin {
 
     /**
      * The size of this vector. That is, the number of entries in this vector.
@@ -235,18 +238,6 @@ implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatri
 
 
     /**
-     * Computes the element-wise addition between this vector and the specified vector.
-     *
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public void addEq(Vector B) {
-        RealComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
-    }
-
-
-    /**
      * Computes the element-wise addition between this vector and the specified vector and stores the result
      * in this vector.
      *
@@ -255,18 +246,6 @@ implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatri
      */
     public void addEq(SparseCVector B) {
         ComplexDenseSparseVectorOperations.addEq(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise addition between this vector and the specified vector.
-     *
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public void subEq(Vector B) {
-        RealComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
     }
 
 
@@ -389,15 +368,7 @@ implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatri
      */
     @Override
     public double norm() {
-        double norm = 0;
-        double mag;
-
-        for(int i=0; i<this.size; i++) {
-            mag = this.entries[i].magAsDouble();
-            norm += mag*mag;
-        }
-
-        return Math.sqrt(norm);
+        return VectorNorms.norm(entries);
     }
 
 
@@ -411,21 +382,7 @@ implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatri
      */
     @Override
     public double norm(double p) {
-        if(Double.isInfinite(p)) {
-            if(p > 0) {
-                return maxAbs(); // Maximum / infinite norm.
-            } else {
-                return minAbs(); // Minimum norm.
-            }
-        } else {
-            double norm = 0;
-
-            for(int i=0; i<this.size; i++) {
-                norm += Math.pow(this.entries[i].magAsDouble(), p);
-            }
-
-            return Math.pow(norm, 1.0/p);
-        }
+        return VectorNorms.norm(entries, p);
     }
 
 
@@ -1300,5 +1257,31 @@ implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatri
         result.append("]");
 
         return result.toString();
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector and stores the result
+     * in this vector.
+     *
+     * @param B Vector to add to this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public void addEq(Vector B) {
+        RealComplexDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
+     * in this vector.
+     *
+     * @param B Vector to subtract this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public void subEq(Vector B) {
+        RealComplexDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
     }
 }

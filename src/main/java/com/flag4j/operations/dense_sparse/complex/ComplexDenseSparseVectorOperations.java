@@ -27,7 +27,6 @@ package com.flag4j.operations.dense_sparse.complex;
 
 import com.flag4j.CVector;
 import com.flag4j.SparseCVector;
-import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.util.ArrayUtils;
@@ -63,6 +62,29 @@ public class ComplexDenseSparseVectorOperations {
         for(int i=0; i<src2.length; i++) {
             index = indices[i];
             innerProd.addEq(src2[i].conj().mult(src1[index]));
+        }
+
+        return innerProd;
+    }
+
+
+    /**
+     * Computes the vector inner product between a complex dense vector and a complex sparse vector.
+     * @param src1 Entries of the dense vector.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of nonzero values in sparse vector.
+     * @param sparseSize Full size of the sparse vector (i.e. total number of entries including zeros).
+     * @return The inner product of the two vectors.
+     * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
+     */
+    public static CNumber innerProduct(CNumber[] src1, int[] indices, int sparseSize, CNumber[] src2) {
+        ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);
+        CNumber innerProd = new CNumber();
+        int index;
+
+        for(int i=0; i<src1.length; i++) {
+            index = indices[i];
+            innerProd.addEq(src1[i].mult(src2[index].conj()));
         }
 
         return innerProd;

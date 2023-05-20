@@ -145,4 +145,25 @@ public class Eigen {
     public static CMatrix getEigenVectors(Matrix src) {
         return new RealSchurDecomposition(true).decompose(src).getU();
     }
+
+
+    /**
+     * Computes the eigenvalues and eigenvectors of a square real matrix.
+     * @param src The matrix to compute the eigenvalues and vectors of.
+     * @return An array containing two matrices. The first matrix has shape {@code 1xsrc.numCols} and contains the eigenvalues
+     * of the {@code src} matrix. The second matrix has shape {@code src.numRowsxsrc.numCols}.
+     */
+    public static CMatrix[] getEigenPairs(Matrix src) {
+        CMatrix lambdas = new CMatrix(1, src.numRows);
+
+        SchurDecomposition<Matrix> schur = new RealSchurDecomposition(true).decompose(src);
+        CMatrix T = schur.getT();
+
+        // Extract diagonal of T.
+        for(int i=0; i<T.numRows; i++) {
+            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];
+        }
+
+        return new CMatrix[]{lambdas, schur.getU()};
+    }
 }

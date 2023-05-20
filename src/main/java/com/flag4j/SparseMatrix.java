@@ -26,7 +26,7 @@ package com.flag4j;
 
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.RealSparseTensorBase;
+import com.flag4j.core.sparse.RealSparseTensorBase;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.util.ArrayUtils;
 
@@ -451,17 +451,6 @@ public class SparseMatrix
 
 
     /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void addEq(Double b) {
-
-    }
-
-
-    /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
      *
      * @param B Second tensor in the subtraction.
@@ -469,17 +458,6 @@ public class SparseMatrix
      */
     @Override
     public void subEq(SparseMatrix B) {
-
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void subEq(Double b) {
 
     }
 

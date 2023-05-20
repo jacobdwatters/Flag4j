@@ -25,7 +25,7 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.RealSparseTensorBase;
+import com.flag4j.core.sparse.RealSparseTensorBase;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.complex.ComplexOperations;
@@ -34,7 +34,6 @@ import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.common.real.VectorNorms;
 import com.flag4j.operations.dense.real.AggregateDenseReal;
 import com.flag4j.operations.dense.real.RealDenseOperations;
-import com.flag4j.operations.dense.real.RealDenseProperties;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
@@ -45,12 +44,14 @@ import com.flag4j.util.ParameterChecks;
 import com.flag4j.util.SparseDataWrapper;
 import com.flag4j.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Real sparse vector of arbitrary size.
  */
-<span class="pc bpc" id="L53" title="1 of 2 branches missed.">public class SparseVector</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">public class SparseVector</span>
         extends RealSparseTensorBase&lt;SparseVector, Vector, SparseCVector, CVector&gt;
         implements VectorMixin&lt;SparseVector, Vector, SparseVector, SparseCVector, Double, SparseMatrix, Matrix, SparseCMatrix&gt; {
 
@@ -69,10 +70,10 @@ import java.util.Arrays;
      * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
      */
     public SparseVector(int size) {
-<span class="fc" id="L72">        super(new Shape(size), 0, new double[0], new int[0][0]);</span>
-<span class="fc" id="L73">        this.size = size;</span>
-<span class="fc" id="L74">        this.indices = new int[0];</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L73">        super(new Shape(size), 0, new double[0], new int[0][0]);</span>
+<span class="fc" id="L74">        this.size = size;</span>
+<span class="fc" id="L75">        this.indices = new int[0];</span>
+<span class="fc" id="L76">    }</span>
 
 
     /**
@@ -86,12 +87,12 @@ import java.util.Arrays;
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, int[] nonZeroEntries, int[] indices) {
-<span class="fc" id="L89">        super(new Shape(size), nonZeroEntries.length,</span>
-<span class="fc" id="L90">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
-<span class="fc" id="L91">                RealDenseTranspose.blockedIntMatrix(new int[][]{indices}));</span>
-<span class="fc" id="L92">        this.size = size;</span>
-<span class="fc" id="L93">        this.indices = indices;</span>
-<span class="fc" id="L94">    }</span>
+<span class="fc" id="L90">        super(new Shape(size), nonZeroEntries.length,</span>
+<span class="fc" id="L91">                Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),</span>
+<span class="fc" id="L92">                RealDenseTranspose.blockedIntMatrix(new int[][]{indices}));</span>
+<span class="fc" id="L93">        this.size = size;</span>
+<span class="fc" id="L94">        this.indices = indices;</span>
+<span class="fc" id="L95">    }</span>
 
 
     /**
@@ -103,15 +104,15 @@ import java.util.Arrays;
      * the length of the nonZeroEntries array is greater than the size.
      */
     public SparseVector(int size, double[] nonZeroEntries, int[] indices) {
-<span class="fc" id="L106">        super(new Shape(size),</span>
+<span class="fc" id="L107">        super(new Shape(size),</span>
                 nonZeroEntries.length,
                 nonZeroEntries,
-<span class="fc" id="L109">                RealDenseTranspose.blockedIntMatrix(new int[][]{indices})</span>
+<span class="fc" id="L110">                RealDenseTranspose.blockedIntMatrix(new int[][]{indices})</span>
         );
 
-<span class="fc" id="L112">        this.size = size;</span>
-<span class="fc" id="L113">        this.indices = indices;</span>
-<span class="fc" id="L114">    }</span>
+<span class="fc" id="L113">        this.size = size;</span>
+<span class="fc" id="L114">        this.indices = indices;</span>
+<span class="fc" id="L115">    }</span>
 
 
     /**
@@ -119,143 +120,14 @@ import java.util.Arrays;
      * @param a Sparse vector to copy
      */
     public SparseVector(SparseVector a) {
-<span class="fc" id="L122">        super(a.shape.copy(),</span>
-<span class="fc" id="L123">                a.nonZeroEntries(),</span>
-<span class="fc" id="L124">                a.entries.clone(),</span>
+<span class="fc" id="L123">        super(a.shape.copy(),</span>
+<span class="fc" id="L124">                a.nonZeroEntries(),</span>
+<span class="fc" id="L125">                a.entries.clone(),</span>
                 new int[a.indices.length][1]
         );
-<span class="fc" id="L127">        this.indices = a.indices.clone();</span>
-<span class="fc" id="L128">        this.size = a.size;</span>
-<span class="fc" id="L129">    }</span>
-
-
-//    /**
-//     * Creates a sparse column vector from a dense array.
-//     * @param entries Dense entries of the vector.
-//     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-//     * the length of the nonZeroEntries array is greater than the size.
-//     */
-//    public SparseVector(int[] entries) {
-//        super(entries.length, VectorOrientations.COL);
-//
-//        ArrayList&lt;Integer&gt; nonZeroEntries = new ArrayList&lt;&gt;(super.totalEntries()/8);
-//        ArrayList&lt;Integer&gt; indices = new ArrayList&lt;&gt;(super.totalEntries()/8);
-//
-//        // Fill entries with non-zero values.
-//        for(int i=0; i&lt;entries.length; i++) {
-//            if(entries[i]!=0) {
-//                nonZeroEntries.add(entries[i]);
-//                indices.add(i);
-//            }
-//        }
-//
-//        super.entries = nonZeroEntries.stream().mapToDouble(Integer::doubleValue).toArray();
-//        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
-//        super.setNonZeroEntries(super.entries.length);
-//    }
-//
-//
-//    /**
-//     * Creates a sparse column vector from a dense array.
-//     * @param entries Dense entries of the vector.
-//     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-//     * the length of the nonZeroEntries array is greater than the size.
-//     */
-//    public SparseVector(double[] entries) {
-//        super(entries.length, VectorOrientations.COL);
-//
-//        ArrayList&lt;Double&gt; nonZeroEntries = new ArrayList&lt;&gt;(super.totalEntries()/8);
-//        ArrayList&lt;Integer&gt; indices = new ArrayList&lt;&gt;(super.totalEntries()/8);
-//
-//        // Fill entries with non-zero values.
-//        for(int i=0; i&lt;entries.length; i++) {
-//            if(entries[i]!=0) {
-//                nonZeroEntries.add(entries[i]);
-//                indices.add(i);
-//            }
-//        }
-//
-//        super.entries = nonZeroEntries.stream().mapToDouble(Double::doubleValue).toArray();
-//        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
-//        super.setNonZeroEntries(super.entries.length);
-//    }
-
-
-//
-//    /**
-//     * Creates a sparse column vector from a dense array.
-//     * @param entries Dense entries of the vector.
-//     * @param orientation Orientation of the vector.
-//     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-//     * the length of the nonZeroEntries array is greater than the size.
-//     */
-//    public SparseVector(int[] entries, VectorOrientations orientation) {
-//        super(entries.length, orientation);
-//
-//        ArrayList&lt;Integer&gt; nonZeroEntries = new ArrayList&lt;&gt;(super.totalEntries()/8);
-//        ArrayList&lt;Integer&gt; indices = new ArrayList&lt;&gt;(super.totalEntries()/8);
-//
-//        // Fill entries with non-zero values.
-//        for(int i=0; i&lt;entries.length; i++) {
-//            if(entries[i]!=0) {
-//                nonZeroEntries.add(entries[i]);
-//                indices.add(i);
-//            }
-//        }
-//
-//        super.entries = nonZeroEntries.stream().mapToDouble(Integer::doubleValue).toArray();
-//        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
-//        super.setNonZeroEntries(super.entries.length);
-//    }
-//
-//
-//    /**
-//     * Creates a sparse column vector from a dense array.
-//     * @param entries Dense entries of the vector.
-//     * @param orientation Orientation of the vector.
-//     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-//     * the length of the nonZeroEntries array is greater than the size.
-//     */
-//    public SparseVector(double[] entries, VectorOrientations orientation) {
-//        super(entries.length, orientation);
-//
-//        ArrayList&lt;Double&gt; nonZeroEntries = new ArrayList&lt;&gt;(super.totalEntries()/8);
-//        ArrayList&lt;Integer&gt; indices = new ArrayList&lt;&gt;(super.totalEntries()/8);
-//
-//        // Fill entries with non-zero values.
-//        for(int i=0; i&lt;entries.length; i++) {
-//            if(entries[i]!=0) {
-//                nonZeroEntries.add(entries[i]);
-//                indices.add(i);
-//            }
-//        }
-//
-//        super.entries = nonZeroEntries.stream().mapToDouble(Double::doubleValue).toArray();
-//        super.indices = indices.stream().mapToInt(Integer::intValue).toArray();
-//        super.setNonZeroEntries(super.entries.length);
-//    }
-
-
-    /**
-     * Checks if this vector only contains zeros.
-     *
-     * @return True if this vector only contains zeros. Otherwise, returns false.
-     */
-    @Override
-    public boolean isZeros() {
-<span class="nc bnc" id="L246" title="All 4 branches missed.">        return entries.length==0 || ArrayUtils.isZeros(entries);</span>
-    }
-
-
-    /**
-     * Checks if this vectors non-zero entries only contains ones.
-     *
-     * @return True if this vectors non-zero entries only contains ones. Otherwise, returns false.
-     */
-    @Override
-    public boolean isOnes() {
-<span class="nc" id="L257">        return RealDenseProperties.isOnes(entries);</span>
-    }
+<span class="fc" id="L128">        this.indices = a.indices.clone();</span>
+<span class="fc" id="L129">        this.size = a.size;</span>
+<span class="fc" id="L130">    }</span>
 
 
     /**
@@ -272,35 +144,35 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector set(double value, int... indices) {
-<span class="nc" id="L275">        ParameterChecks.assertEquals(indices.length, 1);</span>
-<span class="nc" id="L276">        ParameterChecks.assertInRange(indices[0], 0, size, &quot;index&quot;);</span>
+<span class="nc" id="L147">        ParameterChecks.assertEquals(indices.length, 1);</span>
+<span class="nc" id="L148">        ParameterChecks.assertInRange(indices[0], 0, size, &quot;index&quot;);</span>
 
-<span class="nc" id="L278">        int idx = Arrays.binarySearch(this.indices, indices[0]);</span>
+<span class="nc" id="L150">        int idx = Arrays.binarySearch(this.indices, indices[0]);</span>
         double[] destEntries;
         int[] destIndices;
 
-<span class="nc bnc" id="L282" title="All 2 branches missed.">        if(idx &gt;= 0) {</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        if(idx &gt;= 0) {</span>
             // Then the index was found in the sparse vector.
-<span class="nc" id="L284">            destIndices = this.indices.clone();</span>
-<span class="nc" id="L285">            destEntries = entries.clone();</span>
-<span class="nc" id="L286">            destEntries[idx] = value;</span>
+<span class="nc" id="L156">            destIndices = this.indices.clone();</span>
+<span class="nc" id="L157">            destEntries = entries.clone();</span>
+<span class="nc" id="L158">            destEntries[idx] = value;</span>
 
         } else{
             // Then the index was Not found int the sparse vector.
-<span class="nc" id="L290">            destIndices = new int[this.indices.length+1];</span>
-<span class="nc" id="L291">            destEntries = new double[entries.length+1];</span>
-<span class="nc" id="L292">            idx = -(idx+1);</span>
+<span class="nc" id="L162">            destIndices = new int[this.indices.length+1];</span>
+<span class="nc" id="L163">            destEntries = new double[entries.length+1];</span>
+<span class="nc" id="L164">            idx = -(idx+1);</span>
 
-<span class="nc" id="L294">            System.arraycopy(this.indices, 0, destIndices, 0, idx);</span>
-<span class="nc" id="L295">            destIndices[idx] = indices[0];</span>
-<span class="nc" id="L296">            System.arraycopy(this.indices, idx, destIndices, idx+1, this.indices.length-idx);</span>
+<span class="nc" id="L166">            System.arraycopy(this.indices, 0, destIndices, 0, idx);</span>
+<span class="nc" id="L167">            destIndices[idx] = indices[0];</span>
+<span class="nc" id="L168">            System.arraycopy(this.indices, idx, destIndices, idx+1, this.indices.length-idx);</span>
 
-<span class="nc" id="L298">            System.arraycopy(entries, 0, destEntries, 0, idx);</span>
-<span class="nc" id="L299">            destEntries[idx] = value;</span>
-<span class="nc" id="L300">            System.arraycopy(entries, idx, destEntries, idx+1, entries.length-idx);</span>
+<span class="nc" id="L170">            System.arraycopy(entries, 0, destEntries, 0, idx);</span>
+<span class="nc" id="L171">            destEntries[idx] = value;</span>
+<span class="nc" id="L172">            System.arraycopy(entries, idx, destEntries, idx+1, entries.length-idx);</span>
         }
 
-<span class="nc" id="L303">        return new SparseVector(size, destEntries, destIndices);</span>
+<span class="nc" id="L175">        return new SparseVector(size, destEntries, destIndices);</span>
     }
 
 
@@ -312,9 +184,9 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector reshape(Shape shape) {
-<span class="nc" id="L315">        ParameterChecks.assertBroadcastable(this.shape, shape);</span>
-<span class="nc" id="L316">        ParameterChecks.assertRank(1, shape);</span>
-<span class="nc" id="L317">        return this.copy();</span>
+<span class="nc" id="L187">        ParameterChecks.assertBroadcastable(this.shape, shape);</span>
+<span class="nc" id="L188">        ParameterChecks.assertRank(1, shape);</span>
+<span class="nc" id="L189">        return this.copy();</span>
     }
 
 
@@ -328,7 +200,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector reshape(int... shape) {
-<span class="nc" id="L331">        return reshape(new Shape(shape));</span>
+<span class="nc" id="L203">        return reshape(new Shape(shape));</span>
     }
 
 
@@ -338,7 +210,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector flatten() {
-<span class="nc" id="L341">        return this.copy();</span>
+<span class="nc" id="L213">        return this.copy();</span>
     }
 
 
@@ -350,17 +222,17 @@ import java.util.Arrays;
      */
     @Override
     public Vector join(Vector b) {
-<span class="nc" id="L353">        double[] newEntries = new double[this.size + b.entries.length];</span>
+<span class="nc" id="L225">        double[] newEntries = new double[this.size + b.entries.length];</span>
 
         // Copy over sparse values.
-<span class="nc bnc" id="L356" title="All 2 branches missed.">        for(int i=0; i&lt;this.entries.length; i++) {</span>
-<span class="nc" id="L357">            newEntries[indices[i]] = entries[i];</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">        for(int i=0; i&lt;this.entries.length; i++) {</span>
+<span class="nc" id="L229">            newEntries[indices[i]] = entries[i];</span>
         }
 
         // Copy over dense values.
-<span class="nc" id="L361">        System.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);</span>
+<span class="nc" id="L233">        System.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);</span>
 
-<span class="nc" id="L363">        return new Vector(newEntries);</span>
+<span class="nc" id="L235">        return new Vector(newEntries);</span>
     }
 
 
@@ -372,17 +244,17 @@ import java.util.Arrays;
      */
     @Override
     public CVector join(CVector b) {
-<span class="nc" id="L375">        CNumber[] newEntries = new CNumber[this.size + b.entries.length];</span>
+<span class="nc" id="L247">        CNumber[] newEntries = new CNumber[this.size + b.entries.length];</span>
 
         // Copy over sparse values.
-<span class="nc bnc" id="L378" title="All 2 branches missed.">        for(int i=0; i&lt;this.entries.length; i++) {</span>
-<span class="nc" id="L379">            newEntries[indices[i]] = new CNumber(entries[i]);</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">        for(int i=0; i&lt;this.entries.length; i++) {</span>
+<span class="nc" id="L251">            newEntries[indices[i]] = new CNumber(entries[i]);</span>
         }
 
         // Copy over dense values.
-<span class="nc" id="L383">        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);</span>
+<span class="nc" id="L255">        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);</span>
 
-<span class="nc" id="L385">        return new CVector(newEntries);</span>
+<span class="nc" id="L257">        return new CVector(newEntries);</span>
     }
 
 
@@ -394,23 +266,23 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector join(SparseVector b) {
-<span class="nc" id="L397">        double[] newEntries = new double[this.entries.length + b.entries.length];</span>
-<span class="nc" id="L398">        int[] newIndices = new int[this.indices.length + b.indices.length];</span>
+<span class="nc" id="L269">        double[] newEntries = new double[this.entries.length + b.entries.length];</span>
+<span class="nc" id="L270">        int[] newIndices = new int[this.indices.length + b.indices.length];</span>
 
         // Copy values from this vector.
-<span class="nc" id="L401">        System.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);</span>
+<span class="nc" id="L273">        System.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);</span>
         // Copy values from vector b.
-<span class="nc" id="L403">        System.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);</span>
+<span class="nc" id="L275">        System.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);</span>
 
         // Copy indices from this vector.
-<span class="nc" id="L406">        System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);</span>
+<span class="nc" id="L278">        System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);</span>
 
         // Copy the indices from vector b with a shift.
-<span class="nc bnc" id="L409" title="All 2 branches missed.">        for(int i=0; i&lt;b.indices.length; i++) {</span>
-<span class="nc" id="L410">            newIndices[this.indices.length+i] = b.indices[i] + this.size;</span>
+<span class="nc bnc" id="L281" title="All 2 branches missed.">        for(int i=0; i&lt;b.indices.length; i++) {</span>
+<span class="nc" id="L282">            newIndices[this.indices.length+i] = b.indices[i] + this.size;</span>
         }
 
-<span class="nc" id="L413">        return new SparseVector(this.size + b.size, newEntries, newIndices);</span>
+<span class="nc" id="L285">        return new SparseVector(this.size + b.size, newEntries, newIndices);</span>
     }
 
 
@@ -422,23 +294,23 @@ import java.util.Arrays;
      */
     @Override
     public SparseCVector join(SparseCVector b) {
-<span class="nc" id="L425">        CNumber[] newEntries = new CNumber[this.entries.length + b.entries.length];</span>
-<span class="nc" id="L426">        int[] newIndices = new int[this.indices.length + b.indices.length];</span>
+<span class="nc" id="L297">        CNumber[] newEntries = new CNumber[this.entries.length + b.entries.length];</span>
+<span class="nc" id="L298">        int[] newIndices = new int[this.indices.length + b.indices.length];</span>
 
         // Copy values from this vector.
-<span class="nc" id="L429">        ArrayUtils.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);</span>
+<span class="nc" id="L301">        ArrayUtils.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);</span>
         // Copy values from vector b.
-<span class="nc" id="L431">        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);</span>
+<span class="nc" id="L303">        ArrayUtils.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);</span>
 
         // Copy indices from this vector.
-<span class="nc" id="L434">        System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);</span>
+<span class="nc" id="L306">        System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);</span>
 
         // Copy the indices from vector b with a shift.
-<span class="nc bnc" id="L437" title="All 2 branches missed.">        for(int i=0; i&lt;b.indices.length; i++) {</span>
-<span class="nc" id="L438">            newIndices[this.indices.length+i] = b.indices[i] + this.size;</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">        for(int i=0; i&lt;b.indices.length; i++) {</span>
+<span class="nc" id="L310">            newIndices[this.indices.length+i] = b.indices[i] + this.size;</span>
         }
 
-<span class="nc" id="L441">        return new SparseCVector(this.size + b.size, newEntries, newIndices);</span>
+<span class="nc" id="L313">        return new SparseCVector(this.size + b.size, newEntries, newIndices);</span>
     }
 
 
@@ -453,23 +325,23 @@ import java.util.Arrays;
      */
     @Override
     public SparseMatrix stack(Vector b) {
-<span class="nc" id="L456">        ParameterChecks.assertEqualShape(this.shape, b.shape);</span>
+<span class="nc" id="L328">        ParameterChecks.assertEqualShape(this.shape, b.shape);</span>
 
-<span class="nc" id="L458">        double[] destEntries = new double[nonZeroEntries + b.length()];</span>
-<span class="nc" id="L459">        int[][] indices = new int[2][nonZeroEntries + b.length()];</span>
+<span class="nc" id="L330">        double[] destEntries = new double[nonZeroEntries + b.length()];</span>
+<span class="nc" id="L331">        int[][] indices = new int[2][nonZeroEntries + b.length()];</span>
 
         // Copy sparse values and column indices (row indices will be implicitly zero)
-<span class="nc" id="L462">        System.arraycopy(entries, 0, destEntries,0,  entries.length);</span>
-<span class="nc" id="L463">        System.arraycopy(this.indices, 0, indices[1], 0, this.indices.length);</span>
+<span class="nc" id="L334">        System.arraycopy(entries, 0, destEntries,0,  entries.length);</span>
+<span class="nc" id="L335">        System.arraycopy(this.indices, 0, indices[1], 0, this.indices.length);</span>
 
         // Copy dense values. Set column indices as range and set row indices to 1.
-<span class="nc" id="L466">        int[] rowIndices = new int[b.size];</span>
-<span class="nc" id="L467">        Arrays.fill(rowIndices, 1);</span>
-<span class="nc" id="L468">        System.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);</span>
-<span class="nc" id="L469">        System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);</span>
-<span class="nc" id="L470">        System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);</span>
+<span class="nc" id="L338">        int[] rowIndices = new int[b.size];</span>
+<span class="nc" id="L339">        Arrays.fill(rowIndices, 1);</span>
+<span class="nc" id="L340">        System.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);</span>
+<span class="nc" id="L341">        System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);</span>
+<span class="nc" id="L342">        System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);</span>
 
-<span class="nc" id="L472">        return new SparseMatrix(2, b.size, destEntries, indices[0], indices[1]);</span>
+<span class="nc" id="L344">        return new SparseMatrix(2, b.size, destEntries, indices[0], indices[1]);</span>
     }
 
 
@@ -484,25 +356,25 @@ import java.util.Arrays;
      */
     @Override
     public SparseMatrix stack(SparseVector b) {
-<span class="nc" id="L487">        ParameterChecks.assertEqualShape(this.shape, b.shape);</span>
+<span class="nc" id="L359">        ParameterChecks.assertEqualShape(this.shape, b.shape);</span>
 
-<span class="nc" id="L489">        double[] entries = new double[this.entries.length + b.entries.length];</span>
-<span class="nc" id="L490">        int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.</span>
+<span class="nc" id="L361">        double[] entries = new double[this.entries.length + b.entries.length];</span>
+<span class="nc" id="L362">        int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.</span>
 
         // Copy values from this vector.
-<span class="nc" id="L493">        System.arraycopy(this.entries, 0, entries, 0, this.entries.length);</span>
+<span class="nc" id="L365">        System.arraycopy(this.entries, 0, entries, 0, this.entries.length);</span>
         // Copy values from vector b.
-<span class="nc" id="L495">        System.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);</span>
+<span class="nc" id="L367">        System.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);</span>
 
         // Set row indices to 1 for b values (this vectors row indices are 0 which was implicitly set already).
-<span class="nc" id="L498">        Arrays.fill(indices[0], this.indices.length, entries.length, 1);</span>
+<span class="nc" id="L370">        Arrays.fill(indices[0], this.indices.length, entries.length, 1);</span>
 
         // Copy indices from this vector to the column indices.
-<span class="nc" id="L501">        System.arraycopy(this.indices, 0, indices[1], 0, this.entries.length);</span>
+<span class="nc" id="L373">        System.arraycopy(this.indices, 0, indices[1], 0, this.entries.length);</span>
         // Copy indices from b vector to the column indices.
-<span class="nc" id="L503">        System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);</span>
+<span class="nc" id="L375">        System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);</span>
 
-<span class="nc" id="L505">        return new SparseMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);</span>
+<span class="nc" id="L377">        return new SparseMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);</span>
     }
 
 
@@ -517,23 +389,23 @@ import java.util.Arrays;
      */
     @Override
     public SparseCMatrix stack(CVector b) {
-<span class="nc" id="L520">        ParameterChecks.assertEqualShape(this.shape, b.shape);</span>
+<span class="nc" id="L392">        ParameterChecks.assertEqualShape(this.shape, b.shape);</span>
 
-<span class="nc" id="L522">        CNumber[] destEntries = new CNumber[nonZeroEntries + b.length()];</span>
-<span class="nc" id="L523">        int[][] indices = new int[2][nonZeroEntries + b.length()];</span>
+<span class="nc" id="L394">        CNumber[] destEntries = new CNumber[nonZeroEntries + b.length()];</span>
+<span class="nc" id="L395">        int[][] indices = new int[2][nonZeroEntries + b.length()];</span>
 
         // Copy sparse values and column indices (row indices will be implicitly zero)
-<span class="nc" id="L526">        ArrayUtils.arraycopy(entries, 0, destEntries,0,  entries.length);</span>
-<span class="nc" id="L527">        System.arraycopy(this.indices, 0, indices[1], 0, this.indices.length);</span>
+<span class="nc" id="L398">        ArrayUtils.arraycopy(entries, 0, destEntries,0,  entries.length);</span>
+<span class="nc" id="L399">        System.arraycopy(this.indices, 0, indices[1], 0, this.indices.length);</span>
 
         // Copy dense values. Set column indices as range and set row indices to 1.
-<span class="nc" id="L530">        int[] rowIndices = new int[b.size];</span>
-<span class="nc" id="L531">        Arrays.fill(rowIndices, 1);</span>
-<span class="nc" id="L532">        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);</span>
-<span class="nc" id="L533">        System.arraycopy(rowIndices, 0, indices[1], entries.length,  b.size);</span>
-<span class="nc" id="L534">        System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);</span>
+<span class="nc" id="L402">        int[] rowIndices = new int[b.size];</span>
+<span class="nc" id="L403">        Arrays.fill(rowIndices, 1);</span>
+<span class="nc" id="L404">        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);</span>
+<span class="nc" id="L405">        System.arraycopy(rowIndices, 0, indices[1], entries.length,  b.size);</span>
+<span class="nc" id="L406">        System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);</span>
 
-<span class="nc" id="L536">        return new SparseCMatrix(2, b.size, destEntries, indices[0], indices[1]);</span>
+<span class="nc" id="L408">        return new SparseCMatrix(2, b.size, destEntries, indices[0], indices[1]);</span>
     }
 
 
@@ -548,25 +420,25 @@ import java.util.Arrays;
      */
     @Override
     public SparseCMatrix stack(SparseCVector b) {
-<span class="nc" id="L551">        ParameterChecks.assertEqualShape(this.shape, b.shape);</span>
+<span class="nc" id="L423">        ParameterChecks.assertEqualShape(this.shape, b.shape);</span>
 
-<span class="nc" id="L553">        CNumber[] entries = new CNumber[this.entries.length + b.entries.length];</span>
-<span class="nc" id="L554">        int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.</span>
+<span class="nc" id="L425">        CNumber[] entries = new CNumber[this.entries.length + b.entries.length];</span>
+<span class="nc" id="L426">        int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.</span>
 
         // Copy values from this vector.
-<span class="nc" id="L557">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.entries.length);</span>
+<span class="nc" id="L429">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.entries.length);</span>
         // Copy values from vector b.
-<span class="nc" id="L559">        ArrayUtils.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);</span>
+<span class="nc" id="L431">        ArrayUtils.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);</span>
 
         // Set row indices to 1 for b values (this vectors row indices are 0 which was implicitly set already).
-<span class="nc" id="L562">        Arrays.fill(indices[0], this.indices.length, entries.length, 1);</span>
+<span class="nc" id="L434">        Arrays.fill(indices[0], this.indices.length, entries.length, 1);</span>
 
         // Copy indices from this vector to the column indices.
-<span class="nc" id="L565">        System.arraycopy(this.indices, 0, indices[1], 0, this.entries.length);</span>
+<span class="nc" id="L437">        System.arraycopy(this.indices, 0, indices[1], 0, this.entries.length);</span>
         // Copy indices from b vector to the column indices.
-<span class="nc" id="L567">        System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);</span>
+<span class="nc" id="L439">        System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);</span>
 
-<span class="nc" id="L569">        return new SparseCMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);</span>
+<span class="nc" id="L441">        return new SparseCMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);</span>
     }
 
 
@@ -595,8 +467,8 @@ import java.util.Arrays;
      */
     @Override
     public SparseMatrix stack(Vector b, int axis) {
-<span class="nc" id="L598">        ParameterChecks.assertAxis2D(axis);</span>
-<span class="nc bnc" id="L599" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
+<span class="nc" id="L470">        ParameterChecks.assertAxis2D(axis);</span>
+<span class="nc bnc" id="L471" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
     }
 
 
@@ -625,8 +497,8 @@ import java.util.Arrays;
      */
     @Override
     public SparseMatrix stack(SparseVector b, int axis) {
-<span class="nc" id="L628">        ParameterChecks.assertAxis2D(axis);</span>
-<span class="nc bnc" id="L629" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
+<span class="nc" id="L500">        ParameterChecks.assertAxis2D(axis);</span>
+<span class="nc bnc" id="L501" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
     }
 
 
@@ -655,8 +527,8 @@ import java.util.Arrays;
      */
     @Override
     public SparseCMatrix stack(CVector b, int axis) {
-<span class="nc" id="L658">        ParameterChecks.assertAxis2D(axis);</span>
-<span class="nc bnc" id="L659" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
+<span class="nc" id="L530">        ParameterChecks.assertAxis2D(axis);</span>
+<span class="nc bnc" id="L531" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
     }
 
 
@@ -685,8 +557,8 @@ import java.util.Arrays;
      */
     @Override
     public SparseCMatrix stack(SparseCVector b, int axis) {
-<span class="nc" id="L688">        ParameterChecks.assertAxis2D(axis);</span>
-<span class="nc bnc" id="L689" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
+<span class="nc" id="L560">        ParameterChecks.assertAxis2D(axis);</span>
+<span class="nc bnc" id="L561" title="All 2 branches missed.">        return axis==0 ? stack(b) : stack(b).T();</span>
     }
 
 
@@ -699,7 +571,7 @@ import java.util.Arrays;
      */
     @Override
     public Vector add(Vector B) {
-<span class="nc" id="L702">        return RealDenseSparseVectorOperations.add(B, this);</span>
+<span class="nc" id="L574">        return RealDenseSparseVectorOperations.add(B, this);</span>
     }
 
 
@@ -712,7 +584,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector add(SparseVector B) {
-<span class="nc" id="L715">        return RealSparseVectorOperations.add(this, B);</span>
+<span class="nc" id="L587">        return RealSparseVectorOperations.add(this, B);</span>
     }
 
 
@@ -725,7 +597,7 @@ import java.util.Arrays;
      */
     @Override
     public CVector add(CVector B) {
-<span class="nc" id="L728">        return RealComplexDenseSparseVectorOperations.add(B, this);</span>
+<span class="nc" id="L600">        return RealComplexDenseSparseVectorOperations.add(B, this);</span>
     }
 
 
@@ -738,7 +610,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseCVector add(SparseCVector B) {
-<span class="nc" id="L741">        return RealComplexSparseVectorOperations.add(B, this);</span>
+<span class="nc" id="L613">        return RealComplexSparseVectorOperations.add(B, this);</span>
     }
 
 
@@ -751,7 +623,7 @@ import java.util.Arrays;
      */
     @Override
     public Vector sub(Vector B) {
-<span class="nc" id="L754">        return RealDenseSparseVectorOperations.sub(this, B);</span>
+<span class="nc" id="L626">        return RealDenseSparseVectorOperations.sub(this, B);</span>
     }
 
 
@@ -763,7 +635,7 @@ import java.util.Arrays;
      */
     @Override
     public Vector add(double a) {
-<span class="nc" id="L766">        return RealSparseVectorOperations.add(this, a);</span>
+<span class="nc" id="L638">        return RealSparseVectorOperations.add(this, a);</span>
     }
 
 
@@ -775,7 +647,7 @@ import java.util.Arrays;
      */
     @Override
     public CVector add(CNumber a) {
-<span class="nc" id="L778">        return RealComplexSparseVectorOperations.add(this, a);</span>
+<span class="nc" id="L650">        return RealComplexSparseVectorOperations.add(this, a);</span>
     }
 
 
@@ -788,7 +660,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector sub(SparseVector B) {
-<span class="nc" id="L791">        return RealSparseVectorOperations.sub(this, B);</span>
+<span class="nc" id="L663">        return RealSparseVectorOperations.sub(this, B);</span>
     }
 
 
@@ -801,7 +673,7 @@ import java.util.Arrays;
      */
     @Override
     public CVector sub(CVector B) {
-<span class="nc" id="L804">        return RealComplexDenseSparseVectorOperations.sub(this, B);</span>
+<span class="nc" id="L676">        return RealComplexDenseSparseVectorOperations.sub(this, B);</span>
     }
 
 
@@ -814,7 +686,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseCVector sub(SparseCVector B) {
-<span class="nc" id="L817">        return RealComplexSparseVectorOperations.sub(this, B);</span>
+<span class="nc" id="L689">        return RealComplexSparseVectorOperations.sub(this, B);</span>
     }
 
 
@@ -826,7 +698,7 @@ import java.util.Arrays;
      */
     @Override
     public Vector sub(double a) {
-<span class="nc" id="L829">        return RealSparseVectorOperations.sub(this, a);</span>
+<span class="nc" id="L701">        return RealSparseVectorOperations.sub(this, a);</span>
     }
 
 
@@ -838,7 +710,7 @@ import java.util.Arrays;
      */
     @Override
     public CVector sub(CNumber a) {
-<span class="nc" id="L841">        return RealComplexSparseVectorOperations.sub(this, a);</span>
+<span class="nc" id="L713">        return RealComplexSparseVectorOperations.sub(this, a);</span>
     }
 
 
@@ -850,45 +722,8 @@ import java.util.Arrays;
      */
     @Override
     public void addEq(SparseVector B) {
-
-<span class="nc" id="L854">    }</span>
-
-
-    /**
-     * Computes the element-wise addition between this vector and the specified vector and stores the result
-     * in this vector.
-     *
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public void addEq(Vector B) {
-
-<span class="nc" id="L867">    }</span>
-
-
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
-     * in this vector.
-     *
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public void subEq(Vector B) {
-
-<span class="nc" id="L880">    }</span>
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void addEq(Double b) {
-
-<span class="nc" id="L891">    }</span>
+        // TODO: Implementation.
+<span class="nc" id="L726">    }</span>
 
 
     /**
@@ -899,8 +734,8 @@ import java.util.Arrays;
      */
     @Override
     public void subEq(SparseVector B) {
-
-<span class="nc" id="L903">    }</span>
+        // TODO: Implementation
+<span class="nc" id="L738">    }</span>
 
 
     /**
@@ -912,19 +747,8 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector elemMult(Vector B) {
-<span class="nc" id="L915">        return null;</span>
+<span class="nc" id="L750">        return RealDenseSparseVectorOperations.elemMult(B, this);</span>
     }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void subEq(Double b) {
-
-<span class="nc" id="L927">    }</span>
 
 
     /**
@@ -935,7 +759,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector mult(double factor) {
-<span class="nc" id="L938">        return new SparseVector(size, RealOperations.scalMult(entries, factor), indices.clone());</span>
+<span class="nc" id="L762">        return new SparseVector(size, RealOperations.scalMult(entries, factor), indices.clone());</span>
     }
 
 
@@ -947,7 +771,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseCVector mult(CNumber factor) {
-<span class="nc" id="L950">        return new SparseCVector(size, ComplexOperations.scalMult(entries, factor), indices.clone());</span>
+<span class="nc" id="L774">        return new SparseCVector(size, ComplexOperations.scalMult(entries, factor), indices.clone());</span>
     }
 
 
@@ -960,7 +784,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector div(double divisor) {
-<span class="nc" id="L963">        return new SparseVector(size, RealOperations.scalDiv(entries, divisor), indices.clone());</span>
+<span class="nc" id="L787">        return new SparseVector(size, RealOperations.scalDiv(entries, divisor), indices.clone());</span>
     }
 
 
@@ -973,7 +797,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseCVector div(CNumber divisor) {
-<span class="nc" id="L976">        return new SparseCVector(size, ComplexOperations.scalDiv(entries, divisor), indices.clone());</span>
+<span class="nc" id="L800">        return new SparseCVector(size, ComplexOperations.scalDiv(entries, divisor), indices.clone());</span>
     }
 
 
@@ -984,7 +808,7 @@ import java.util.Arrays;
      */
     @Override
     public Double sum() {
-<span class="nc" id="L987">        return AggregateReal.sum(entries);</span>
+<span class="nc" id="L811">        return AggregateReal.sum(entries);</span>
     }
 
 
@@ -996,7 +820,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector sqrt() {
-<span class="nc" id="L999">        return new SparseVector(this.size, RealOperations.sqrt(entries), indices.clone());</span>
+<span class="nc" id="L823">        return new SparseVector(this.size, RealOperations.sqrt(entries), indices.clone());</span>
     }
 
 
@@ -1008,7 +832,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector abs() {
-<span class="nc" id="L1011">        return new SparseVector(this.size, RealOperations.abs(entries), indices.clone());</span>
+<span class="nc" id="L835">        return new SparseVector(this.size, RealOperations.abs(entries), indices.clone());</span>
     }
 
 
@@ -1020,7 +844,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector transpose() {
-<span class="nc" id="L1023">        return this.copy();</span>
+<span class="nc" id="L847">        return this.copy();</span>
     }
 
 
@@ -1032,7 +856,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector T() {
-<span class="nc" id="L1035">        return this.copy();</span>
+<span class="nc" id="L859">        return this.copy();</span>
     }
 
 
@@ -1044,7 +868,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector recip() {
-<span class="nc" id="L1047">        return new SparseVector(size, RealDenseOperations.recip(entries), indices.clone());</span>
+<span class="nc" id="L871">        return new SparseVector(size, RealDenseOperations.recip(entries), indices.clone());</span>
     }
 
 
@@ -1059,11 +883,11 @@ import java.util.Arrays;
      */
     @Override
     public Double get(int... indices) {
-<span class="nc" id="L1062">        ParameterChecks.assertEquals(indices.length, 1);</span>
-<span class="nc" id="L1063">        ParameterChecks.assertInRange(indices[0], 0, size, &quot;index&quot;);</span>
+<span class="nc" id="L886">        ParameterChecks.assertEquals(indices.length, 1);</span>
+<span class="nc" id="L887">        ParameterChecks.assertInRange(indices[0], 0, size, &quot;index&quot;);</span>
 
-<span class="nc" id="L1065">        int idx = Arrays.binarySearch(this.indices, indices[0]);</span>
-<span class="nc bnc" id="L1066" title="All 2 branches missed.">        return idx&gt;=0 ? entries[idx] : 0;</span>
+<span class="nc" id="L889">        int idx = Arrays.binarySearch(this.indices, indices[0]);</span>
+<span class="nc bnc" id="L890" title="All 2 branches missed.">        return idx&gt;=0 ? entries[idx] : 0;</span>
     }
 
 
@@ -1074,7 +898,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector copy() {
-<span class="nc" id="L1077">        return new SparseVector(this.size, this.entries.clone(), this.indices.clone());</span>
+<span class="nc" id="L901">        return new SparseVector(this.size, this.entries.clone(), this.indices.clone());</span>
     }
 
 
@@ -1087,7 +911,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector elemMult(SparseVector B) {
-<span class="nc" id="L1090">        return RealSparseVectorOperations.elemMult(this, B);</span>
+<span class="nc" id="L914">        return RealSparseVectorOperations.elemMult(this, B);</span>
     }
 
 
@@ -1100,7 +924,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseCVector elemMult(CVector B) {
-<span class="nc" id="L1103">        return RealComplexDenseSparseVectorOperations.elemMult(B, this);</span>
+<span class="nc" id="L927">        return RealComplexDenseSparseVectorOperations.elemMult(B, this);</span>
     }
 
 
@@ -1113,7 +937,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseCVector elemMult(SparseCVector B) {
-<span class="nc" id="L1116">        return RealComplexSparseVectorOperations.elemMult(B, this);</span>
+<span class="nc" id="L940">        return RealComplexSparseVectorOperations.elemMult(B, this);</span>
     }
 
 
@@ -1126,7 +950,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector elemDiv(Vector b) {
-<span class="nc" id="L1129">        return RealDenseSparseVectorOperations.elemDiv(this, b);</span>
+<span class="nc" id="L953">        return RealDenseSparseVectorOperations.elemDiv(this, b);</span>
     }
 
 
@@ -1139,7 +963,7 @@ import java.util.Arrays;
      */
     @Override
     public SparseCVector elemDiv(CVector b) {
-<span class="nc" id="L1142">        return RealComplexDenseSparseVectorOperations.elemDiv(this, b);</span>
+<span class="nc" id="L966">        return RealComplexDenseSparseVectorOperations.elemDiv(this, b);</span>
     }
 
 
@@ -1152,8 +976,8 @@ import java.util.Arrays;
      */
     @Override
     public Double inner(Vector b) {
-<span class="nc" id="L1155">        ParameterChecks.assertEqualShape(shape, b.shape);</span>
-<span class="nc" id="L1156">        return RealDenseSparseVectorOperations.inner(b.entries, this.entries, this.indices, this.size);</span>
+<span class="nc" id="L979">        ParameterChecks.assertEqualShape(shape, b.shape);</span>
+<span class="nc" id="L980">        return RealDenseSparseVectorOperations.inner(b.entries, this.entries, this.indices, this.size);</span>
     }
 
 
@@ -1166,7 +990,7 @@ import java.util.Arrays;
      */
     @Override
     public Double inner(SparseVector b) {
-<span class="nc" id="L1169">        return RealSparseVectorOperations.inner(this, b);</span>
+<span class="nc" id="L993">        return RealSparseVectorOperations.inner(this, b);</span>
     }
 
 
@@ -1177,8 +1001,8 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector normalize() {
-<span class="nc" id="L1180">        double norm = this.norm();</span>
-<span class="nc bnc" id="L1181" title="All 2 branches missed.">        return norm==0 ? new SparseVector(size) : this.div(norm);</span>
+<span class="nc" id="L1004">        double norm = this.norm();</span>
+<span class="nc bnc" id="L1005" title="All 2 branches missed.">        return norm==0 ? new SparseVector(size) : this.div(norm);</span>
     }
 
 
@@ -1191,7 +1015,7 @@ import java.util.Arrays;
      */
     @Override
     public CNumber inner(CVector b) {
-<span class="nc" id="L1194">        return RealComplexDenseSparseVectorOperations.inner(b.entries, this.entries, this.indices, this.size);</span>
+<span class="nc" id="L1018">        return RealComplexDenseSparseVectorOperations.inner(b.entries, this.entries, this.indices, this.size);</span>
     }
 
 
@@ -1204,7 +1028,7 @@ import java.util.Arrays;
      */
     @Override
     public CNumber inner(SparseCVector b) {
-<span class="nc" id="L1207">        return RealComplexSparseVectorOperations.inner(this, b);</span>
+<span class="nc" id="L1031">        return RealComplexSparseVectorOperations.inner(this, b);</span>
     }
 
 
@@ -1217,10 +1041,10 @@ import java.util.Arrays;
      */
     @Override
     public Matrix outer(Vector b) {
-<span class="nc" id="L1220">        return new Matrix(</span>
+<span class="nc" id="L1044">        return new Matrix(</span>
                 this.size,
                 b.size,
-<span class="nc" id="L1223">                RealDenseSparseVectorOperations.outerProduct(this.entries, this.indices, this.size, b.entries)</span>
+<span class="nc" id="L1047">                RealDenseSparseVectorOperations.outerProduct(this.entries, this.indices, this.size, b.entries)</span>
         );
     }
 
@@ -1234,7 +1058,7 @@ import java.util.Arrays;
      */
     @Override
     public Matrix outer(SparseVector b) {
-<span class="nc" id="L1237">        return RealSparseVectorOperations.outerProduct(this, b);</span>
+<span class="nc" id="L1061">        return RealSparseVectorOperations.outerProduct(this, b);</span>
     }
 
 
@@ -1247,10 +1071,10 @@ import java.util.Arrays;
      */
     @Override
     public CMatrix outer(CVector b) {
-<span class="nc" id="L1250">        return new CMatrix(</span>
+<span class="nc" id="L1074">        return new CMatrix(</span>
                 this.size,
                 b.size,
-<span class="nc" id="L1253">                RealComplexDenseSparseVectorOperations.outerProduct(this.entries, this.indices, this.size, b.entries)</span>
+<span class="nc" id="L1077">                RealComplexDenseSparseVectorOperations.outerProduct(this.entries, this.indices, this.size, b.entries)</span>
         );
     }
 
@@ -1264,7 +1088,7 @@ import java.util.Arrays;
      */
     @Override
     public CMatrix outer(SparseCVector b) {
-<span class="nc" id="L1267">        return RealComplexSparseVectorOperations.outerProduct(this, b);</span>
+<span class="nc" id="L1091">        return RealComplexSparseVectorOperations.outerProduct(this, b);</span>
     }
 
 
@@ -1279,37 +1103,37 @@ import java.util.Arrays;
     public boolean isParallel(Vector b) {
         boolean result;
 
-<span class="nc bnc" id="L1282" title="All 2 branches missed.">        if(this.size!=b.size) {</span>
-<span class="nc" id="L1283">            result = false;</span>
-<span class="nc bnc" id="L1284" title="All 4 branches missed.">        } else if(this.size==1 || this.size==0) {</span>
-<span class="nc" id="L1285">            result = true;</span>
-<span class="nc bnc" id="L1286" title="All 4 branches missed.">        } else if(this.isZeros() || b.isZeros()) {</span>
-<span class="nc" id="L1287">            result = true; // Any vector is parallel to zero vector.</span>
+<span class="nc bnc" id="L1106" title="All 2 branches missed.">        if(this.size!=b.size) {</span>
+<span class="nc" id="L1107">            result = false;</span>
+<span class="nc bnc" id="L1108" title="All 4 branches missed.">        } else if(this.size==1 || this.size==0) {</span>
+<span class="nc" id="L1109">            result = true;</span>
+<span class="nc bnc" id="L1110" title="All 4 branches missed.">        } else if(this.isZeros() || b.isZeros()) {</span>
+<span class="nc" id="L1111">            result = true; // Any vector is parallel to zero vector.</span>
         } else {
-<span class="nc" id="L1289">            result = true;</span>
-<span class="nc" id="L1290">            int sparseIndex = 0;</span>
-<span class="nc" id="L1291">            double scale = this.entries[0]/b.entries[this.indices[0]];</span>
+<span class="nc" id="L1113">            result = true;</span>
+<span class="nc" id="L1114">            int sparseIndex = 0;</span>
+<span class="nc" id="L1115">            double scale = this.entries[0]/b.entries[this.indices[0]];</span>
 
-<span class="nc bnc" id="L1293" title="All 2 branches missed.">            for(int i=0; i&lt;b.size; i++) {</span>
-<span class="nc bnc" id="L1294" title="All 2 branches missed.">                if(i!=this.indices[sparseIndex]) {</span>
+<span class="nc bnc" id="L1117" title="All 2 branches missed.">            for(int i=0; i&lt;b.size; i++) {</span>
+<span class="nc bnc" id="L1118" title="All 2 branches missed.">                if(i!=this.indices[sparseIndex]) {</span>
                     // Then this index is not in the sparse vector.
-<span class="nc bnc" id="L1296" title="All 2 branches missed.">                    if(b.entries[i] != 0) {</span>
-<span class="nc" id="L1297">                        result = false;</span>
-<span class="nc" id="L1298">                        break;</span>
+<span class="nc bnc" id="L1120" title="All 2 branches missed.">                    if(b.entries[i] != 0) {</span>
+<span class="nc" id="L1121">                        result = false;</span>
+<span class="nc" id="L1122">                        break;</span>
                     }
 
                 } else {
-<span class="nc bnc" id="L1302" title="All 2 branches missed.">                    if(b.entries[i]*scale != this.entries[sparseIndex]) {</span>
-<span class="nc" id="L1303">                        result = false;</span>
-<span class="nc" id="L1304">                        break;</span>
+<span class="nc bnc" id="L1126" title="All 2 branches missed.">                    if(b.entries[i]*scale != this.entries[sparseIndex]) {</span>
+<span class="nc" id="L1127">                        result = false;</span>
+<span class="nc" id="L1128">                        break;</span>
                     }
 
-<span class="nc" id="L1307">                    sparseIndex++;</span>
+<span class="nc" id="L1131">                    sparseIndex++;</span>
                 }
             }
         }
 
-<span class="nc" id="L1312">        return result;</span>
+<span class="nc" id="L1136">        return result;</span>
     }
 
 
@@ -1323,13 +1147,13 @@ import java.util.Arrays;
     public boolean isPerp(Vector b) {
         boolean result;
 
-<span class="nc bnc" id="L1326" title="All 2 branches missed.">        if(this.size!=b.size) {</span>
-<span class="nc" id="L1327">            result = false;</span>
+<span class="nc bnc" id="L1150" title="All 2 branches missed.">        if(this.size!=b.size) {</span>
+<span class="nc" id="L1151">            result = false;</span>
         } else {
-<span class="nc bnc" id="L1329" title="All 2 branches missed.">            result = this.inner(b)==0;</span>
+<span class="nc bnc" id="L1153" title="All 2 branches missed.">            result = this.inner(b)==0;</span>
         }
 
-<span class="nc" id="L1332">        return result;</span>
+<span class="nc" id="L1156">        return result;</span>
     }
 
 
@@ -1341,10 +1165,10 @@ import java.util.Arrays;
      */
     @Override
     public SparseMatrix toMatrix() {
-<span class="nc" id="L1344">        int[] rowIndices = indices.clone();</span>
-<span class="nc" id="L1345">        int[] colIndices = new int[entries.length];</span>
+<span class="nc" id="L1168">        int[] rowIndices = indices.clone();</span>
+<span class="nc" id="L1169">        int[] colIndices = new int[entries.length];</span>
 
-<span class="nc" id="L1347">        return new SparseMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);</span>
+<span class="nc" id="L1171">        return new SparseMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);</span>
     }
 
 
@@ -1359,18 +1183,18 @@ import java.util.Arrays;
      */
     @Override
     public SparseMatrix toMatrix(boolean columVector) {
-<span class="nc bnc" id="L1362" title="All 2 branches missed.">        if(columVector) {</span>
+<span class="nc bnc" id="L1186" title="All 2 branches missed.">        if(columVector) {</span>
             // Convert to column vector
-<span class="nc" id="L1364">            int[] rowIndices = indices.clone();</span>
-<span class="nc" id="L1365">            int[] colIndices = new int[entries.length];</span>
+<span class="nc" id="L1188">            int[] rowIndices = indices.clone();</span>
+<span class="nc" id="L1189">            int[] colIndices = new int[entries.length];</span>
 
-<span class="nc" id="L1367">            return new SparseMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);</span>
+<span class="nc" id="L1191">            return new SparseMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);</span>
         } else {
             // Convert to row vector.
-<span class="nc" id="L1370">            int[] rowIndices = new int[entries.length];</span>
-<span class="nc" id="L1371">            int[] colIndices = indices.clone();</span>
+<span class="nc" id="L1194">            int[] rowIndices = new int[entries.length];</span>
+<span class="nc" id="L1195">            int[] colIndices = indices.clone();</span>
 
-<span class="nc" id="L1373">            return new SparseMatrix(1, this.size, entries.clone(), rowIndices, colIndices);</span>
+<span class="nc" id="L1197">            return new SparseMatrix(1, this.size, entries.clone(), rowIndices, colIndices);</span>
         }
     }
 
@@ -1383,8 +1207,8 @@ import java.util.Arrays;
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L1386">        int idx = AggregateDenseReal.argMin(entries);</span>
-<span class="nc" id="L1387">        return new int[]{indices[idx]};</span>
+<span class="nc" id="L1210">        int idx = AggregateDenseReal.argMin(entries);</span>
+<span class="nc" id="L1211">        return new int[]{indices[idx]};</span>
     }
 
 
@@ -1396,8 +1220,8 @@ import java.util.Arrays;
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L1399">        int idx = AggregateDenseReal.argMax(entries);</span>
-<span class="nc" id="L1400">        return new int[]{indices[idx]};</span>
+<span class="nc" id="L1223">        int idx = AggregateDenseReal.argMax(entries);</span>
+<span class="nc" id="L1224">        return new int[]{indices[idx]};</span>
     }
 
 
@@ -1408,7 +1232,7 @@ import java.util.Arrays;
      */
     @Override
     public double norm() {
-<span class="nc" id="L1411">        return VectorNorms.norm(entries);</span>
+<span class="nc" id="L1235">        return VectorNorms.norm(entries);</span>
     }
 
 
@@ -1422,7 +1246,7 @@ import java.util.Arrays;
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L1425">        return VectorNorms.norm(entries, p);</span>
+<span class="nc" id="L1249">        return VectorNorms.norm(entries, p);</span>
     }
 
 
@@ -1433,7 +1257,7 @@ import java.util.Arrays;
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L1436">        return maxAbs();</span>
+<span class="nc" id="L1260">        return maxAbs();</span>
     }
 
 
@@ -1447,39 +1271,39 @@ import java.util.Arrays;
      */
     @Override
     public SparseMatrix extend(int n, int axis) {
-<span class="nc" id="L1450">        ParameterChecks.assertAxis2D(axis);</span>
+<span class="nc" id="L1274">        ParameterChecks.assertAxis2D(axis);</span>
 
-<span class="nc" id="L1452">        int[][] matIndices = new int[2][n*nonZeroEntries];</span>
-<span class="nc" id="L1453">        double[] matEntries = new double[n*nonZeroEntries];</span>
+<span class="nc" id="L1276">        int[][] matIndices = new int[2][n*nonZeroEntries];</span>
+<span class="nc" id="L1277">        double[] matEntries = new double[n*nonZeroEntries];</span>
         Shape matShape;
 
-<span class="nc bnc" id="L1456" title="All 2 branches missed.">        if(axis==0) {</span>
-<span class="nc" id="L1457">            matShape = new Shape(n, this.size);</span>
-<span class="nc" id="L1458">            int[] rowIndices = new int[indices.length];</span>
+<span class="nc bnc" id="L1280" title="All 2 branches missed.">        if(axis==0) {</span>
+<span class="nc" id="L1281">            matShape = new Shape(n, this.size);</span>
+<span class="nc" id="L1282">            int[] rowIndices = new int[indices.length];</span>
 
-<span class="nc bnc" id="L1460" title="All 2 branches missed.">            for(int i=0; i&lt;n; i++) {</span>
-<span class="nc" id="L1461">                Arrays.fill(rowIndices, i);</span>
+<span class="nc bnc" id="L1284" title="All 2 branches missed.">            for(int i=0; i&lt;n; i++) {</span>
+<span class="nc" id="L1285">                Arrays.fill(rowIndices, i);</span>
 
-<span class="nc" id="L1463">                System.arraycopy(entries, 0, matEntries, n*i, entries.length);</span>
-<span class="nc" id="L1464">                System.arraycopy(rowIndices, 0, matIndices[0], n*i, indices.length);</span>
-<span class="nc" id="L1465">                System.arraycopy(indices, 0, matIndices[1], n*i, indices.length);</span>
+<span class="nc" id="L1287">                System.arraycopy(entries, 0, matEntries, n*i, entries.length);</span>
+<span class="nc" id="L1288">                System.arraycopy(rowIndices, 0, matIndices[0], n*i, indices.length);</span>
+<span class="nc" id="L1289">                System.arraycopy(indices, 0, matIndices[1], n*i, indices.length);</span>
             }
 
-<span class="nc" id="L1468">        } else {</span>
-<span class="nc" id="L1469">            matShape = new Shape(this.size, n);</span>
-<span class="nc" id="L1470">            int[] rowIndices = new int[n];</span>
-<span class="nc" id="L1471">            int[] colIndices = ArrayUtils.rangeInt(0, n);;</span>
+<span class="nc" id="L1292">        } else {</span>
+<span class="nc" id="L1293">            matShape = new Shape(this.size, n);</span>
+<span class="nc" id="L1294">            int[] rowIndices = new int[n];</span>
+<span class="nc" id="L1295">            int[] colIndices = ArrayUtils.rangeInt(0, n);</span>
 
-<span class="nc bnc" id="L1473" title="All 2 branches missed.">            for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="nc" id="L1474">                Arrays.fill(rowIndices, indices[i]);</span>
+<span class="nc bnc" id="L1297" title="All 2 branches missed.">            for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="nc" id="L1298">                Arrays.fill(rowIndices, indices[i]);</span>
 
-<span class="nc" id="L1476">                Arrays.fill(matEntries, entries.length*i, entries.length*i + n, entries[i]);</span>
-<span class="nc" id="L1477">                System.arraycopy(rowIndices, 0, matIndices[0], entries.length*i, n);</span>
-<span class="nc" id="L1478">                System.arraycopy(colIndices, 0, matIndices[1], entries.length*i, n);</span>
+<span class="nc" id="L1300">                Arrays.fill(matEntries, entries.length*i, entries.length*i + n, entries[i]);</span>
+<span class="nc" id="L1301">                System.arraycopy(rowIndices, 0, matIndices[0], entries.length*i, n);</span>
+<span class="nc" id="L1302">                System.arraycopy(colIndices, 0, matIndices[1], entries.length*i, n);</span>
             }
         }
 
-<span class="nc" id="L1482">        return new SparseMatrix(matShape, matEntries, matIndices[0], matIndices[1]);</span>
+<span class="nc" id="L1306">        return new SparseMatrix(matShape, matEntries, matIndices[0], matIndices[1]);</span>
     }
 
 
@@ -1490,7 +1314,7 @@ import java.util.Arrays;
      */
     @Override
     public int length() {
-<span class="nc" id="L1493">        return this.size;</span>
+<span class="nc" id="L1317">        return this.size;</span>
     }
 
 
@@ -1499,8 +1323,8 @@ import java.util.Arrays;
      */
     @Override
     public void sparseSort() {
-<span class="nc" id="L1502">        SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);</span>
-<span class="nc" id="L1503">    }</span>
+<span class="nc" id="L1326">        SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);</span>
+<span class="nc" id="L1327">    }</span>
 
 
     /**
@@ -1511,13 +1335,13 @@ import java.util.Arrays;
      */
     @Override
     public SparseCVector toComplex() {
-<span class="nc" id="L1514">        CNumber[] destEntries = new CNumber[entries.length];</span>
-<span class="nc" id="L1515">        ArrayUtils.copy2CNumber(entries, destEntries);</span>
+<span class="nc" id="L1338">        CNumber[] destEntries = new CNumber[entries.length];</span>
+<span class="nc" id="L1339">        ArrayUtils.copy2CNumber(entries, destEntries);</span>
 
-<span class="nc" id="L1517">        return new SparseCVector(</span>
+<span class="nc" id="L1341">        return new SparseCVector(</span>
                 this.size,
                 destEntries,
-<span class="nc" id="L1520">                indices.clone()</span>
+<span class="nc" id="L1344">                indices.clone()</span>
         );
     }
 
@@ -1530,8 +1354,8 @@ import java.util.Arrays;
      */
     @Override
     public SparseVector flatten(int axis) {
-<span class="nc bnc" id="L1533" title="All 4 branches missed.">        assert(axis==0) : &quot;Axis must be zero but got &quot; + axis;</span>
-<span class="nc" id="L1534">        return this.copy();</span>
+<span class="nc bnc" id="L1357" title="All 4 branches missed.">        assert(axis==0) : &quot;Axis must be zero but got &quot; + axis;</span>
+<span class="nc" id="L1358">        return this.copy();</span>
     }
 
 
@@ -1542,7 +1366,7 @@ import java.util.Arrays;
      */
     @Override
     public int size() {
-<span class="fc" id="L1545">        return this.size;</span>
+<span class="fc" id="L1369">        return this.size;</span>
     }
 
 
@@ -1553,7 +1377,7 @@ import java.util.Arrays;
      */
     @Override
     protected SparseVector getSelf() {
-<span class="nc" id="L1556">        return this;</span>
+<span class="nc" id="L1380">        return this;</span>
     }
 
 
@@ -1564,13 +1388,39 @@ import java.util.Arrays;
      */
     @Override
     public Vector toDense() {
-<span class="nc" id="L1567">        double[] entries = new double[size];</span>
+<span class="nc" id="L1391">        double[] entries = new double[size];</span>
 
-<span class="nc bnc" id="L1569" title="All 2 branches missed.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
-<span class="nc" id="L1570">            entries[indices[i]] = this.entries[i];</span>
+<span class="nc bnc" id="L1393" title="All 2 branches missed.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
+<span class="nc" id="L1394">            entries[indices[i]] = this.entries[i];</span>
         }
 
-<span class="nc" id="L1573">        return new Vector(entries);</span>
+<span class="nc" id="L1397">        return new Vector(entries);</span>
+    }
+
+
+    /**
+     * Creates a sparse tensor from a dense tensor.
+     *
+     * @param src Dense tensor to convert to a sparse tensor.
+     * @return A sparse tensor which is equivalent to the {@code src} dense tensor.
+     */
+    public static SparseVector fromDense(Vector src) {
+<span class="nc" id="L1408">        List&lt;Double&gt; nonZeroEntries = new ArrayList&lt;&gt;((int) (src.entries.length*0.8));</span>
+<span class="nc" id="L1409">        List&lt;Integer&gt; indices = new ArrayList&lt;&gt;((int) (src.entries.length*0.8));</span>
+
+        // Fill entries with non-zero values.
+<span class="nc bnc" id="L1412" title="All 2 branches missed.">        for(int i=0; i&lt;src.entries.length; i++) {</span>
+<span class="nc bnc" id="L1413" title="All 2 branches missed.">            if(src.entries[i]!=0) {</span>
+<span class="nc" id="L1414">                nonZeroEntries.add(src.entries[i]);</span>
+<span class="nc" id="L1415">                indices.add(i);</span>
+            }
+        }
+
+<span class="nc" id="L1419">        return new SparseVector(</span>
+                src.size,
+<span class="nc" id="L1421">                nonZeroEntries.stream().mapToDouble(Double::doubleValue).toArray(),</span>
+<span class="nc" id="L1422">                indices.stream().mapToInt(Integer::intValue).toArray()</span>
+        );
     }
 
 
@@ -1580,39 +1430,39 @@ import java.util.Arrays;
      * @return A human-readable string representing this tensor.
      */
     public String toString() {
-<span class="fc" id="L1583">        int size = nonZeroEntries;</span>
-<span class="fc" id="L1584">        StringBuilder result = new StringBuilder(String.format(&quot;Full Shape: %s\n&quot;, shape));</span>
-<span class="fc" id="L1585">        result.append(&quot;Non-zero entries: [&quot;);</span>
+<span class="fc" id="L1433">        int size = nonZeroEntries;</span>
+<span class="fc" id="L1434">        StringBuilder result = new StringBuilder(String.format(&quot;Full Shape: %s\n&quot;, shape));</span>
+<span class="fc" id="L1435">        result.append(&quot;Non-zero entries: [&quot;);</span>
 
-<span class="fc" id="L1587">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
+<span class="fc" id="L1437">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
         int width;
         String value;
 
         // Get entries up until the stopping point.
-<span class="fc bfc" id="L1592" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
-<span class="fc" id="L1593">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
-<span class="fc" id="L1594">            width = PrintOptions.getPadding() + value.length();</span>
-<span class="fc bfc" id="L1595" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1596">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L1442" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="fc" id="L1443">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
+<span class="fc" id="L1444">            width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L1445" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1446">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="fc bfc" id="L1599" title="All 2 branches covered.">        if(stopIndex &lt; size-1) {</span>
-<span class="fc" id="L1600">            width = PrintOptions.getPadding() + 3;</span>
-<span class="fc" id="L1601">            value = &quot;...&quot;;</span>
-<span class="pc bpc" id="L1602" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1603">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L1449" title="All 2 branches covered.">        if(stopIndex &lt; size-1) {</span>
+<span class="fc" id="L1450">            width = PrintOptions.getPadding() + 3;</span>
+<span class="fc" id="L1451">            value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L1452" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1453">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
         // Get last entry now
-<span class="fc" id="L1607">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
-<span class="fc" id="L1608">        width = PrintOptions.getPadding() + value.length();</span>
-<span class="fc bfc" id="L1609" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1610">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc" id="L1457">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
+<span class="fc" id="L1458">        width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L1459" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1460">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
 
-<span class="fc" id="L1612">        result.append(&quot;]\n&quot;);</span>
-<span class="fc" id="L1613">        result.append(&quot;Indices: &quot;).append(Arrays.toString(indices));</span>
+<span class="fc" id="L1462">        result.append(&quot;]\n&quot;);</span>
+<span class="fc" id="L1463">        result.append(&quot;Indices: &quot;).append(Arrays.toString(indices));</span>
 
-<span class="fc" id="L1615">        return result.toString();</span>
+<span class="fc" id="L1465">        return result.toString();</span>
     }
 }
 

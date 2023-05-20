@@ -25,7 +25,7 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.ComplexSparseTensorBase;
+import com.flag4j.core.sparse.ComplexSparseTensorBase;
 
 
 /**
@@ -355,28 +355,6 @@ public class SparseCTensor
 
 
     /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void addEq(CNumber b) {
-
-<span class="nc" id="L365">    }</span>
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void addEq(Double b) {
-
-<span class="nc" id="L376">    }</span>
-
-
-    /**
      * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
      *
      * @param B Second tensor in the subtraction.
@@ -385,29 +363,7 @@ public class SparseCTensor
     @Override
     public void subEq(SparseCTensor B) {
 
-<span class="nc" id="L388">    }</span>
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void subEq(CNumber b) {
-
-<span class="nc" id="L399">    }</span>
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void subEq(Double b) {
-
-<span class="nc" id="L410">    }</span>
+<span class="nc" id="L366">    }</span>
 
 
     /**
@@ -418,7 +374,7 @@ public class SparseCTensor
      */
     @Override
     public SparseCTensor mult(double factor) {
-<span class="nc" id="L421">        return null;</span>
+<span class="nc" id="L377">        return null;</span>
     }
 
 
@@ -430,7 +386,7 @@ public class SparseCTensor
      */
     @Override
     public SparseCTensor mult(CNumber factor) {
-<span class="nc" id="L433">        return null;</span>
+<span class="nc" id="L389">        return null;</span>
     }
 
 
@@ -443,7 +399,7 @@ public class SparseCTensor
      */
     @Override
     public SparseCTensor div(double divisor) {
-<span class="nc" id="L446">        return null;</span>
+<span class="nc" id="L402">        return null;</span>
     }
 
 
@@ -456,7 +412,7 @@ public class SparseCTensor
      */
     @Override
     public SparseCTensor div(CNumber divisor) {
-<span class="nc" id="L459">        return null;</span>
+<span class="nc" id="L415">        return null;</span>
     }
 
 
@@ -467,7 +423,7 @@ public class SparseCTensor
      */
     @Override
     public CNumber sum() {
-<span class="nc" id="L470">        return null;</span>
+<span class="nc" id="L426">        return null;</span>
     }
 
 
@@ -479,7 +435,7 @@ public class SparseCTensor
      */
     @Override
     public SparseCTensor sqrt() {
-<span class="nc" id="L482">        return null;</span>
+<span class="nc" id="L438">        return null;</span>
     }
 
 
@@ -491,7 +447,7 @@ public class SparseCTensor
      */
     @Override
     public SparseTensor abs() {
-<span class="nc" id="L494">        return null;</span>
+<span class="nc" id="L450">        return null;</span>
     }
 
 
@@ -502,7 +458,7 @@ public class SparseCTensor
      */
     @Override
     public SparseCTensor transpose() {
-<span class="nc" id="L505">        return null;</span>
+<span class="nc" id="L461">        return null;</span>
     }
 
 
@@ -513,7 +469,7 @@ public class SparseCTensor
      */
     @Override
     public SparseCTensor T() {
-<span class="nc" id="L516">        return null;</span>
+<span class="nc" id="L472">        return null;</span>
     }
 
 
@@ -525,7 +481,7 @@ public class SparseCTensor
      */
     @Override
     public SparseCTensor recip() {
-<span class="nc" id="L528">        return null;</span>
+<span class="nc" id="L484">        return null;</span>
     }
 
 
@@ -538,7 +494,7 @@ public class SparseCTensor
      */
     @Override
     public CNumber get(int... indices) {
-<span class="nc" id="L541">        return null;</span>
+<span class="nc" id="L497">        return null;</span>
     }
 
 
@@ -549,7 +505,7 @@ public class SparseCTensor
      */
     @Override
     public SparseCTensor copy() {
-<span class="nc" id="L552">        return null;</span>
+<span class="nc" id="L508">        return null;</span>
     }
 
 
@@ -562,7 +518,7 @@ public class SparseCTensor
      */
     @Override
     public SparseCTensor elemMult(SparseCTensor B) {
-<span class="nc" id="L565">        return null;</span>
+<span class="nc" id="L521">        return null;</span>
     }
 
 
@@ -575,7 +531,7 @@ public class SparseCTensor
      */
     @Override
     public SparseCTensor elemDiv(CTensor B) {
-<span class="nc" id="L578">        return null;</span>
+<span class="nc" id="L534">        return null;</span>
     }
 
 
@@ -586,7 +542,7 @@ public class SparseCTensor
      */
     @Override
     public double min() {
-<span class="nc" id="L589">        return 0;</span>
+<span class="nc" id="L545">        return 0;</span>
     }
 
 
@@ -597,7 +553,7 @@ public class SparseCTensor
      */
     @Override
     public double max() {
-<span class="nc" id="L600">        return 0;</span>
+<span class="nc" id="L556">        return 0;</span>
     }
 
 
@@ -609,7 +565,7 @@ public class SparseCTensor
      */
     @Override
     public double minAbs() {
-<span class="nc" id="L612">        return 0;</span>
+<span class="nc" id="L568">        return 0;</span>
     }
 
 
@@ -621,7 +577,7 @@ public class SparseCTensor
      */
     @Override
     public double maxAbs() {
-<span class="nc" id="L624">        return 0;</span>
+<span class="nc" id="L580">        return 0;</span>
     }
 
 
@@ -633,7 +589,7 @@ public class SparseCTensor
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L636">        return new int[0];</span>
+<span class="nc" id="L592">        return new int[0];</span>
     }
 
 
@@ -645,7 +601,7 @@ public class SparseCTensor
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L648">        return new int[0];</span>
+<span class="nc" id="L604">        return new int[0];</span>
     }
 
 
@@ -656,7 +612,7 @@ public class SparseCTensor
      */
     @Override
     public double norm() {
-<span class="nc" id="L659">        return 0;</span>
+<span class="nc" id="L615">        return 0;</span>
     }
 
 
@@ -670,7 +626,7 @@ public class SparseCTensor
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L673">        return 0;</span>
+<span class="nc" id="L629">        return 0;</span>
     }
 
 
@@ -681,7 +637,7 @@ public class SparseCTensor
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L684">        return 0;</span>
+<span class="nc" id="L640">        return 0;</span>
     }
 
 
@@ -693,7 +649,7 @@ public class SparseCTensor
      */
     @Override
     public SparseCTensor flatten(int axis) {
-<span class="nc" id="L696">        return null;</span>
+<span class="nc" id="L652">        return null;</span>
     }
 
 
@@ -703,7 +659,7 @@ public class SparseCTensor
     @Override
     public void sparseSort() {
 
-<span class="nc" id="L706">    }</span>
+<span class="nc" id="L662">    }</span>
 
 
     /**
@@ -713,13 +669,13 @@ public class SparseCTensor
      */
     @Override
     public CTensor toDense() {
-<span class="nc" id="L716">        CNumber[] entries = new CNumber[totalEntries().intValueExact()];</span>
+<span class="nc" id="L672">        CNumber[] entries = new CNumber[totalEntries().intValueExact()];</span>
 
-<span class="nc bnc" id="L718" title="All 2 branches missed.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
-<span class="nc" id="L719">            entries[shape.entriesIndex(indices[i])] = this.entries[i];</span>
+<span class="nc bnc" id="L674" title="All 2 branches missed.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
+<span class="nc" id="L675">            entries[shape.entriesIndex(indices[i])] = this.entries[i];</span>
         }
 
-<span class="nc" id="L722">        return new CTensor(shape.copy(), entries);</span>
+<span class="nc" id="L678">        return new CTensor(shape.copy(), entries);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

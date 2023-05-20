@@ -308,24 +308,6 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
 
     /**
-     * Computes the element-wise addition between this vector and the specified vector and stores the result
-     * in this vector.
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    void addEq(Vector B);
-
-
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
-     * in this vector.
-     * @param B Vector to subtract this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    void subEq(Vector B);
-
-
-    /**
      * Computes the element-wise subtraction between this vector and the specified vector and stores the result
      * in this vector.
      * @param B Vector to subtract from this vector.
