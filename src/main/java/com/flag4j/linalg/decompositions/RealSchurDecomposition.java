@@ -24,9 +24,7 @@
 
 package com.flag4j.linalg.decompositions;
 
-import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
-import com.flag4j.linalg.Eigen;
 import com.flag4j.util.ParameterChecks;
 
 
@@ -115,66 +113,12 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
     public RealSchurDecomposition decompose(Matrix src) {
         ParameterChecks.assertSquare(src.shape);
         hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).g
-        shiftedExplicitQR(hess.getH().toComplex());
+        shiftedExplicitQR(hess.getH().toComplex()); // Use the shifted QR algorithm.
 
         if(computeU) {
             U = hess.Q.mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.
         }
 
         return this;
-    }
-
-
-    public static void main(String[] args) {
-        double[][] aEntries = {
-                {0, 0, 0, 1},
-                {0, 0, -1, 0},
-                {0, 1, 0, 0},
-                {-1, 0, 0, 0}};
-        Matrix A = new Matrix(aEntries);
-
-        double[][] bEntries = {
-                {1, 2, 5},
-                {2, 3, 4},
-                {5, 4, 9}};
-        Matrix B = new Matrix(bEntries);
-
-        double[][] cEntries = {
-                {5.4, 4.0, 7.7},
-                {3.5, -0.7, 2.8},
-                {-3.2, 5.1, 0.8}};
-        Matrix C = new Matrix(cEntries);
-
-        double[][] dEntries = {
-                {1, -1},
-                {1, 1}};
-        Matrix D = new Matrix(dEntries);
-
-        double[][] eEntries = {
-                {0, 0, -1},
-                {1, 0, 0},
-                {0, 1, 0}};
-        Matrix E = new Matrix(eEntries);
-
-        double[][] fEntries = {
-                {2, 1, 0, 0, 0, 0},
-                {1, 2, 1, 0, 0, 0},
-                {0, 1, 2, 1, 0, 0},
-                {0, 0, 1, 2, 1, 0},
-                {0, 0, 0, 1, 2, 1},
-                {0, 0, 0, 0, 1, 2}};
-        Matrix F = new Matrix(fEntries);
-
-        double[][] gEntries = {
-                {1, 1, 1},
-                {0, 2, 1},
-                {0, 0, 3}};
-        Matrix G = new Matrix(gEntries);
-
-        Matrix src = C;
-
-        CMatrix eigVectors = Eigen.getEigenVectors(src);
-
-        System.out.println(eigVectors);
     }
 }
