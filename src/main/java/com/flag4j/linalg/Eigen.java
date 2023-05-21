@@ -27,9 +27,11 @@ package com.flag4j.linalg;
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.Matrix;
+import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.decompositions.RealSchurDecomposition;
 import com.flag4j.linalg.decompositions.SchurDecomposition;
+import com.flag4j.linalg.solvers.ComplexBackSolver;
 
 /**
  * This class provides several methods useful for computing eigen values, eigen vectors, as well as singular values and
@@ -97,7 +99,7 @@ public class Eigen {
     public static CVector get2x2LowerLeftBlockEigenValues(CMatrix src) {
         // TODO: While theoretically correct, there are some numerical
         //  issues here.
-        CVector shifts = new CVector(2);
+        CVector lambdas = new CVector(2);
         int n = src.numRows-1;
 
         // Get the four entries from lower right 2x2 sub-matrix.
@@ -110,10 +112,10 @@ public class Eigen {
         CNumber htr = a.add(d).div(2); // Half of the 2x2 trace.
 
         // 2x2 block eigenvalues.
-        shifts.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
-        shifts.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
+        lambdas.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
+        lambdas.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
 
-        return shifts;
+        return lambdas;
     }
 
 
@@ -143,7 +145,49 @@ public class Eigen {
      * @return A matrix containing the eigenvectors of {@code src} as its columns.
      */
     public static CMatrix getEigenVectors(Matrix src) {
-        return new RealSchurDecomposition(true).decompose(src).getU();
+        SchurDecomposition<Matrix> schur = new RealSchurDecomposition(true).decompose(src);
+        CMatrix U = schur.getU();
+
+        if(src.isSymmetric()) {
+            // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
+            return U;
+        } else {
+            // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
+            CMatrix Q = getEigenVectorsTriu(schur.getT()); // Compute the eigenvectors of T.
+            return U.mult(Q); // Convert the eigenvectors of T to the eigenvectors of the src matrix.
+        }
+    }
+
+
+    /**
+     * Computes the eigenvectors of an upper triangular matrix.
+     * @param T The upper triangular matrix to compute the eigenvectors of.
+     * @return A matrix containing the eigenvectors of {@code T} as its columns.
+     */
+    public static CMatrix getEigenVectorsTriu(CMatrix T) {
+        ComplexBackSolver backSolver = new ComplexBackSolver();
+        Matrix I = Matrix.I(T.numRows);
+        CMatrix Q = new CMatrix(T.numRows);
+
+        for(int j=0; j<T.numRows; j++) {
+            CMatrix t = I.mult(T.get(j, j));
+            CMatrix S = T.sub(t).getSlice(0, j+1, 0, j+1);
+            CMatrix S_hat = S.getSlice(0, j, 0, j);
+            CVector r = S.getSlice(0, j, S.numCols-1, S.numCols).toVector();
+            CVector v;
+
+            if(S_hat.entries.length > 0) {
+                v = backSolver.solve(S_hat, r.mult(-1));
+                v = v.join(new CVector(1.0));
+            } else {
+                v = new CVector(1.0);
+            }
+
+            v = v.normalize().join(new Vector(T.numRows-v.size));
+            Q.setCol(v, j);
+        }
+
+        return Q;
     }
 
 
@@ -158,12 +202,20 @@ public class Eigen {
 
         SchurDecomposition<Matrix> schur = new RealSchurDecomposition(true).decompose(src);
         CMatrix T = schur.getT();
+        CMatrix U = schur.getU();
 
         // Extract diagonal of T.
         for(int i=0; i<T.numRows; i++) {
             lambdas.entries[i] = T.entries[i*(T.numCols + 1)];
         }
 
-        return new CMatrix[]{lambdas, schur.getU()};
+        if(src.isSymmetric()) {
+            // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
+            return new CMatrix[]{lambdas, U};
+        } else {
+            // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
+            U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.
+            return new CMatrix[]{lambdas, U};
+        }
     }
 }

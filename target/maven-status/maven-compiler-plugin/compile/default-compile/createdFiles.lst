@@ -120,6 +120,7 @@ com\flag4j\core\RealTensorMixin.class
 com\flag4j\core\TensorOperationsMixin.class
 com\flag4j\operations\dense\complex\ComplexDenseMatrixMultiplication.class
 com\flag4j\Vector.class
+com\flag4j\linalg\solvers\ComplexBackSolver.class
 com\flag4j\linalg\solvers\MatrixForwardSolver.class
 com\flag4j\operations\MatrixMultiplyDispatcher$AlgorithmName.class
 com\flag4j\operations\common\real\AggregateReal.class

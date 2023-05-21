@@ -26,6 +26,7 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
+import com.flag4j.linalg.Eigen;
 import com.flag4j.util.ParameterChecks;
 
 
@@ -44,11 +45,11 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      * Creates a Schur decomposer for a real dense matrix.
      */
     public RealSchurDecomposition() {
-<span class="nc" id="L47">        super();</span>
+<span class="nc" id="L48">        super();</span>
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-<span class="nc" id="L50">        hess = new RealHessenburgDecomposition(computeU);</span>
-<span class="nc" id="L51">    }</span>
+<span class="nc" id="L51">        hess = new RealHessenburgDecomposition(super.computeU);</span>
+<span class="nc" id="L52">    }</span>
 
 
     /**
@@ -58,11 +59,11 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      *                      Schur decomposition.
      */
     public RealSchurDecomposition(int maxIterations) {
-<span class="nc" id="L61">        super(maxIterations);</span>
+<span class="nc" id="L62">        super(maxIterations);</span>
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-<span class="nc" id="L64">        hess = new RealHessenburgDecomposition(computeU);</span>
-<span class="nc" id="L65">    }</span>
+<span class="nc" id="L65">        hess = new RealHessenburgDecomposition(super.computeU);</span>
+<span class="nc" id="L66">    }</span>
 
 
     /**
@@ -76,11 +77,11 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      *                 provide a performance improvement.
      */
     public RealSchurDecomposition(boolean computeU, int maxIterations) {
-<span class="nc" id="L79">        super(computeU, maxIterations);</span>
+<span class="nc" id="L80">        super(computeU, maxIterations);</span>
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-<span class="nc" id="L82">        hess = new RealHessenburgDecomposition(computeU);</span>
-<span class="nc" id="L83">    }</span>
+<span class="nc" id="L83">        hess = new RealHessenburgDecomposition(computeU);</span>
+<span class="nc" id="L84">    }</span>
 
 
     /**
@@ -91,11 +92,11 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      *                 provide a performance improvement.
      */
     public RealSchurDecomposition(boolean computeU) {
-<span class="nc" id="L94">        super(computeU);</span>
+<span class="nc" id="L95">        super(computeU);</span>
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-<span class="nc" id="L97">        hess = new RealHessenburgDecomposition(computeU);</span>
-<span class="nc" id="L98">    }</span>
+<span class="nc" id="L98">        hess = new RealHessenburgDecomposition(computeU);</span>
+<span class="nc" id="L99">    }</span>
 
 
     /**
@@ -112,70 +113,69 @@ public class RealSchurDecomposition extends SchurDecomposition&lt;Matrix&gt; {
      */
     @Override
     public RealSchurDecomposition decompose(Matrix src) {
-<span class="nc" id="L115">        ParameterChecks.assertSquare(src.shape);</span>
-<span class="nc" id="L116">        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).</span>
-<span class="nc" id="L117">        doubleShiftImplicitQR(hess.getH().toComplex());</span>
+<span class="nc" id="L116">        ParameterChecks.assertSquare(src.shape);</span>
+<span class="nc" id="L117">        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).g</span>
+<span class="nc" id="L118">        shiftedExplicitQR(hess.getH().toComplex());</span>
 
-<span class="nc bnc" id="L119" title="All 2 branches missed.">        if(computeU) {</span>
-<span class="nc" id="L120">            U = hess.Q.mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">        if(computeU) {</span>
+<span class="nc" id="L121">            U = hess.Q.mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.</span>
         }
 
-<span class="nc" id="L123">        return this;</span>
+<span class="nc" id="L124">        return this;</span>
     }
 
 
     public static void main(String[] args) {
-<span class="nc" id="L128">        double[][] aEntries = {</span>
+<span class="nc" id="L129">        double[][] aEntries = {</span>
                 {0, 0, 0, 1},
                 {0, 0, -1, 0},
                 {0, 1, 0, 0},
                 {-1, 0, 0, 0}};
-<span class="nc" id="L133">        Matrix A = new Matrix(aEntries);</span>
+<span class="nc" id="L134">        Matrix A = new Matrix(aEntries);</span>
 
-<span class="nc" id="L135">        double[][] bEntries = {</span>
+<span class="nc" id="L136">        double[][] bEntries = {</span>
                 {1, 2, 5},
                 {2, 3, 4},
                 {5, 4, 9}};
-<span class="nc" id="L139">        Matrix B = new Matrix(bEntries);</span>
+<span class="nc" id="L140">        Matrix B = new Matrix(bEntries);</span>
 
-<span class="nc" id="L141">        double[][] cEntries = {</span>
+<span class="nc" id="L142">        double[][] cEntries = {</span>
                 {5.4, 4.0, 7.7},
                 {3.5, -0.7, 2.8},
                 {-3.2, 5.1, 0.8}};
-<span class="nc" id="L145">        Matrix C = new Matrix(cEntries);</span>
+<span class="nc" id="L146">        Matrix C = new Matrix(cEntries);</span>
 
-<span class="nc" id="L147">        double[][] dEntries = {</span>
+<span class="nc" id="L148">        double[][] dEntries = {</span>
                 {1, -1},
                 {1, 1}};
-<span class="nc" id="L150">        Matrix D = new Matrix(dEntries);</span>
+<span class="nc" id="L151">        Matrix D = new Matrix(dEntries);</span>
 
-<span class="nc" id="L152">        double[][] eEntries = {</span>
+<span class="nc" id="L153">        double[][] eEntries = {</span>
                 {0, 0, -1},
                 {1, 0, 0},
                 {0, 1, 0}};
-<span class="nc" id="L156">        Matrix E = new Matrix(eEntries);</span>
+<span class="nc" id="L157">        Matrix E = new Matrix(eEntries);</span>
 
-<span class="nc" id="L158">        double[][] fEntries = {</span>
+<span class="nc" id="L159">        double[][] fEntries = {</span>
                 {2, 1, 0, 0, 0, 0},
                 {1, 2, 1, 0, 0, 0},
                 {0, 1, 2, 1, 0, 0},
                 {0, 0, 1, 2, 1, 0},
                 {0, 0, 0, 1, 2, 1},
                 {0, 0, 0, 0, 1, 2}};
-<span class="nc" id="L165">        Matrix F = new Matrix(fEntries);</span>
+<span class="nc" id="L166">        Matrix F = new Matrix(fEntries);</span>
 
-<span class="nc" id="L167">        Matrix src = F;</span>
+<span class="nc" id="L168">        double[][] gEntries = {</span>
+                {1, 1, 1},
+                {0, 2, 1},
+                {0, 0, 3}};
+<span class="nc" id="L172">        Matrix G = new Matrix(gEntries);</span>
 
-<span class="nc" id="L169">        RealSchurDecomposition schur = new RealSchurDecomposition();</span>
-<span class="nc" id="L170">        schur.decompose(src);</span>
+<span class="nc" id="L174">        Matrix src = C;</span>
 
-<span class="nc" id="L172">        CMatrix T = schur.getT();</span>
-<span class="nc" id="L173">        CMatrix U = schur.getU();</span>
+<span class="nc" id="L176">        CMatrix eigVectors = Eigen.getEigenVectors(src);</span>
 
-<span class="nc" id="L175">        System.out.println(&quot;A:\n&quot; + src + &quot;\n&quot;);</span>
-<span class="nc" id="L176">        System.out.println(&quot;T:\n&quot; + T + &quot;\n&quot;);</span>
-<span class="nc" id="L177">        System.out.println(&quot;U:\n&quot; + U + &quot;\n&quot;);</span>
-<span class="nc" id="L178">        System.out.println(&quot;UTU^H:\n&quot; + U.mult(T).mult(U.H()));</span>
+<span class="nc" id="L178">        System.out.println(eigVectors);</span>
 <span class="nc" id="L179">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

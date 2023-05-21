@@ -212,6 +212,9 @@ public class Vector
     }
 
 
+    // TODO: Add append(double v) to append a single scalar to the end of a vector.
+
+
     /**
      * Computes the element-wise addition between this vector and the specified vector.
      *

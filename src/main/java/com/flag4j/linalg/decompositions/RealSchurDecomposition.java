@@ -26,6 +26,7 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
+import com.flag4j.linalg.Eigen;
 import com.flag4j.util.ParameterChecks;
 
 
@@ -47,7 +48,7 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
         super();
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-        hess = new RealHessenburgDecomposition(computeU);
+        hess = new RealHessenburgDecomposition(super.computeU);
     }
 
 
@@ -61,7 +62,7 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
         super(maxIterations);
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-        hess = new RealHessenburgDecomposition(computeU);
+        hess = new RealHessenburgDecomposition(super.computeU);
     }
 
 
@@ -113,8 +114,8 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
     @Override
     public RealSchurDecomposition decompose(Matrix src) {
         ParameterChecks.assertSquare(src.shape);
-        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).
-        doubleShiftImplicitQR(hess.getH().toComplex());
+        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).g
+        shiftedExplicitQR(hess.getH().toComplex());
 
         if(computeU) {
             U = hess.Q.mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.
@@ -164,17 +165,16 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
                 {0, 0, 0, 0, 1, 2}};
         Matrix F = new Matrix(fEntries);
 
-        Matrix src = F;
+        double[][] gEntries = {
+                {1, 1, 1},
+                {0, 2, 1},
+                {0, 0, 3}};
+        Matrix G = new Matrix(gEntries);
 
-        RealSchurDecomposition schur = new RealSchurDecomposition();
-        schur.decompose(src);
+        Matrix src = C;
 
-        CMatrix T = schur.getT();
-        CMatrix U = schur.getU();
+        CMatrix eigVectors = Eigen.getEigenVectors(src);
 
-        System.out.println("A:\n" + src + "\n");
-        System.out.println("T:\n" + T + "\n");
-        System.out.println("U:\n" + U + "\n");
-        System.out.println("UTU^H:\n" + U.mult(T).mult(U.H()));
+        System.out.println(eigVectors);
     }
 }

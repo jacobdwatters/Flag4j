@@ -153,7 +153,6 @@ public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?>
     //  Currently, only computes the real schur form.
     protected void doubleShiftImplicitQR(CMatrix H) {
         if(useDefaultMaxIterations) {
-            // The algorithm should converge within machine precision in O(n^3).
             maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
         }
 
@@ -192,6 +191,59 @@ public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?>
             if(T.roundToZero().isTriU()) {
                 break; // We have converged (approximately) to an upper triangular matrix.
             }
+        }
+    }
+
+
+    /**
+     * Computes the Schur decomposition for a complex matrix using a shifted QR algorithm where the QR decomposition
+     * @param H - The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
+     */
+    protected void shiftedExplicitQR(CMatrix H) {
+        if(useDefaultMaxIterations) {
+            maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
+        }
+
+        QRDecomposition<CMatrix> qr = new ComplexQRDecomposition();
+
+        // Initialize matrices.
+        T = H;
+        if(computeU) U = CMatrix.I(T.numRows);
+
+        for(int i=0; i<maxIterations; i++) {
+            CNumber lam = getWilkinsonShift(T);
+            CMatrix mu = Matrix.I(T.numRows).mult(lam);
+
+            // Compute the QR decomposition with a shift.
+            qr.decompose(T.sub(mu));
+
+            // Update T and undo the shift.
+            T = qr.R.mult(qr.Q).add(mu);
+
+            if(computeU) U = U.mult(qr.Q);
+
+            if(T.roundToZero().isTriU()) {
+                break; // We have converged (approximately) to an upper triangular matrix. No need to continue.
+            }
+        }
+    }
+
+
+    /**
+     * Computes the Wilkinson shift for a complex matrix. That is, the eigenvalue of the lower left 2x2 sub matrix
+     * which is closest in magnitude to the lower left entry of the matrix.
+     * @param src Matrix to compute the Wilkinson shift for.
+     * @return The Wilkinson shift for the {@code src} matrix.
+     */
+    private CNumber getWilkinsonShift(CMatrix src) {
+        // Compute eigenvalues of lower 2x2 block.
+        CVector lambdas = Eigen.get2x2LowerLeftBlockEigenValues(src);
+        CNumber v = src.entries[src.entries.length-1];
+
+        if(v.sub(lambdas.entries[0]).magAsDouble() < v.sub(lambdas.entries[1]).magAsDouble()) {
+            return lambdas.entries[0];
+        } else {
+            return lambdas.entries[1];
         }
     }
 

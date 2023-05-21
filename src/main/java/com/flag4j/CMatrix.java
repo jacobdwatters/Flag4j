@@ -3923,45 +3923,50 @@ public class CMatrix
 
         result.append("[");
 
-        int rowStopIndex = Math.min(PrintOptions.getMaxRows()-1, this.numRows-1);
-        int colStopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.numCols-1);
-        int width;
-        int totalRowLength = 0; // Total string length of each row (not including brackets)
-        String value;
+        if(this.entries.length==0) {
+            result.append("[]"); // No entries in this matrix.
+        } else {
+            int rowStopIndex = Math.min(PrintOptions.getMaxRows() - 1, this.numRows - 1);
+            int colStopIndex = Math.min(PrintOptions.getMaxColumns() - 1, this.numCols - 1);
+            int width;
+            int totalRowLength = 0; // Total string length of each row (not including brackets)
+            String value;
 
-        // Find maximum entry string width in each column so columns can be aligned.
-        List<Integer> maxList = new ArrayList<>(colStopIndex+1);
-        for(int j=0; j<colStopIndex; j++) {
-            maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));
-            totalRowLength += maxList.get(maxList.size()-1);
+            // Find maximum entry string width in each column so columns can be aligned.
+            List<Integer> maxList = new ArrayList<>(colStopIndex + 1);
+            for (int j = 0; j < colStopIndex; j++) {
+                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));
+                totalRowLength += maxList.get(maxList.size() - 1);
+            }
+
+            if (colStopIndex < this.numCols) {
+                maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols - 1).entries));
+                totalRowLength += maxList.get(maxList.size() - 1);
+            }
+
+            if (colStopIndex < this.numCols - 1) {
+                totalRowLength += 3 + PrintOptions.getPadding(); // Account for '...' element with padding in each column.
+            }
+
+            totalRowLength += maxList.size() * PrintOptions.getPadding(); // Account for column padding
+
+            // Get each row as a string.
+            for (int i = 0; i < rowStopIndex; i++) {
+                result.append(rowToString(i, colStopIndex, maxList));
+                result.append("\n");
+            }
+
+            if (PrintOptions.getMaxRows() < this.numRows) {
+                width = totalRowLength;
+                value = "...";
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format(" [%-" + width + "s]\n", value));
+            }
+
+            // Get Last row as a string.
+            result.append(rowToString(this.numRows - 1, colStopIndex, maxList));
         }
 
-        if(colStopIndex < this.numCols) {
-            maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols-1).entries));
-            totalRowLength += maxList.get(maxList.size()-1);
-        }
-
-        if(colStopIndex < this.numCols-1) {
-            totalRowLength += 3+PrintOptions.getPadding(); // Account for '...' element with padding in each column.
-        }
-
-        totalRowLength += maxList.size()*PrintOptions.getPadding(); // Account for column padding
-
-        // Get each row as a string.
-        for(int i=0; i<rowStopIndex; i++) {
-            result.append(rowToString(i, colStopIndex, maxList));
-            result.append("\n");
-        }
-
-        if(PrintOptions.getMaxRows() < this.numRows) {
-            width = totalRowLength;
-            value = "...";
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-            result.append(String.format(" [%-" + width + "s]\n", value));
-        }
-
-        // Get Last row as a string.
-        result.append(rowToString(this.numRows-1, colStopIndex, maxList));
         result.append("]");
 
         return result.toString();
