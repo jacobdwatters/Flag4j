@@ -99,7 +99,7 @@ Flag4j,com.flag4j,SparseCVector,1526,164,30,0,202,30,95,6,80,6
 Flag4j,com.flag4j.core.dense,ComplexDenseTensorBase,10,455,0,0,1,69,1,41,1,41
 Flag4j,com.flag4j.core.dense,RealDenseTensorBase,10,432,0,4,1,62,1,40,1,38
 Flag4j,com.flag4j.core.dense,DenseTensorBase,0,5,0,0,0,2,0,1,0,1
-Flag4j,com.flag4j.linalg,Eigen,617,0,16,0,84,0,16,0,8,0
+Flag4j,com.flag4j.linalg,Eigen,510,0,12,0,69,0,14,0,8,0
 Flag4j,com.flag4j.linalg,SubSpace,3,0,0,0,1,0,1,0,1,0
 Flag4j,com.flag4j.linalg,Decompose,7,120,0,0,2,16,1,6,1,6
 Flag4j,com.flag4j.linalg,RowEchelon,245,0,16,0,31,0,15,0,7,0
