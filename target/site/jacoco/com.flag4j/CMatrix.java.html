@@ -3923,48 +3923,53 @@ public class CMatrix
 
 <span class="fc" id="L3924">        result.append(&quot;[&quot;);</span>
 
-<span class="fc" id="L3926">        int rowStopIndex = Math.min(PrintOptions.getMaxRows()-1, this.numRows-1);</span>
-<span class="fc" id="L3927">        int colStopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.numCols-1);</span>
-        int width;
-<span class="fc" id="L3929">        int totalRowLength = 0; // Total string length of each row (not including brackets)</span>
-        String value;
+<span class="pc bpc" id="L3926" title="1 of 2 branches missed.">        if(this.entries.length==0) {</span>
+<span class="nc" id="L3927">            result.append(&quot;[]&quot;); // No entries in this matrix.</span>
+        } else {
+<span class="fc" id="L3929">            int rowStopIndex = Math.min(PrintOptions.getMaxRows() - 1, this.numRows - 1);</span>
+<span class="fc" id="L3930">            int colStopIndex = Math.min(PrintOptions.getMaxColumns() - 1, this.numCols - 1);</span>
+            int width;
+<span class="fc" id="L3932">            int totalRowLength = 0; // Total string length of each row (not including brackets)</span>
+            String value;
 
-        // Find maximum entry string width in each column so columns can be aligned.
-<span class="fc" id="L3933">        List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;(colStopIndex+1);</span>
-<span class="fc bfc" id="L3934" title="All 2 branches covered.">        for(int j=0; j&lt;colStopIndex; j++) {</span>
-<span class="fc" id="L3935">            maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));</span>
-<span class="fc" id="L3936">            totalRowLength += maxList.get(maxList.size()-1);</span>
+            // Find maximum entry string width in each column so columns can be aligned.
+<span class="fc" id="L3936">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;(colStopIndex + 1);</span>
+<span class="fc bfc" id="L3937" title="All 2 branches covered.">            for (int j = 0; j &lt; colStopIndex; j++) {</span>
+<span class="fc" id="L3938">                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));</span>
+<span class="fc" id="L3939">                totalRowLength += maxList.get(maxList.size() - 1);</span>
+            }
+
+<span class="pc bpc" id="L3942" title="1 of 2 branches missed.">            if (colStopIndex &lt; this.numCols) {</span>
+<span class="fc" id="L3943">                maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols - 1).entries));</span>
+<span class="fc" id="L3944">                totalRowLength += maxList.get(maxList.size() - 1);</span>
+            }
+
+<span class="fc bfc" id="L3947" title="All 2 branches covered.">            if (colStopIndex &lt; this.numCols - 1) {</span>
+<span class="fc" id="L3948">                totalRowLength += 3 + PrintOptions.getPadding(); // Account for '...' element with padding in each column.</span>
+            }
+
+<span class="fc" id="L3951">            totalRowLength += maxList.size() * PrintOptions.getPadding(); // Account for column padding</span>
+
+            // Get each row as a string.
+<span class="fc bfc" id="L3954" title="All 2 branches covered.">            for (int i = 0; i &lt; rowStopIndex; i++) {</span>
+<span class="fc" id="L3955">                result.append(rowToString(i, colStopIndex, maxList));</span>
+<span class="fc" id="L3956">                result.append(&quot;\n&quot;);</span>
+            }
+
+<span class="fc bfc" id="L3959" title="All 2 branches covered.">            if (PrintOptions.getMaxRows() &lt; this.numRows) {</span>
+<span class="fc" id="L3960">                width = totalRowLength;</span>
+<span class="fc" id="L3961">                value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L3962" title="1 of 2 branches missed.">                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L3963">                result.append(String.format(&quot; [%-&quot; + width + &quot;s]\n&quot;, value));</span>
+            }
+
+            // Get Last row as a string.
+<span class="fc" id="L3967">            result.append(rowToString(this.numRows - 1, colStopIndex, maxList));</span>
         }
 
-<span class="pc bpc" id="L3939" title="1 of 2 branches missed.">        if(colStopIndex &lt; this.numCols) {</span>
-<span class="fc" id="L3940">            maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols-1).entries));</span>
-<span class="fc" id="L3941">            totalRowLength += maxList.get(maxList.size()-1);</span>
-        }
+<span class="fc" id="L3970">        result.append(&quot;]&quot;);</span>
 
-<span class="fc bfc" id="L3944" title="All 2 branches covered.">        if(colStopIndex &lt; this.numCols-1) {</span>
-<span class="fc" id="L3945">            totalRowLength += 3+PrintOptions.getPadding(); // Account for '...' element with padding in each column.</span>
-        }
-
-<span class="fc" id="L3948">        totalRowLength += maxList.size()*PrintOptions.getPadding(); // Account for column padding</span>
-
-        // Get each row as a string.
-<span class="fc bfc" id="L3951" title="All 2 branches covered.">        for(int i=0; i&lt;rowStopIndex; i++) {</span>
-<span class="fc" id="L3952">            result.append(rowToString(i, colStopIndex, maxList));</span>
-<span class="fc" id="L3953">            result.append(&quot;\n&quot;);</span>
-        }
-
-<span class="fc bfc" id="L3956" title="All 2 branches covered.">        if(PrintOptions.getMaxRows() &lt; this.numRows) {</span>
-<span class="fc" id="L3957">            width = totalRowLength;</span>
-<span class="fc" id="L3958">            value = &quot;...&quot;;</span>
-<span class="pc bpc" id="L3959" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L3960">            result.append(String.format(&quot; [%-&quot; + width + &quot;s]\n&quot;, value));</span>
-        }
-
-        // Get Last row as a string.
-<span class="fc" id="L3964">        result.append(rowToString(this.numRows-1, colStopIndex, maxList));</span>
-<span class="fc" id="L3965">        result.append(&quot;]&quot;);</span>
-
-<span class="fc" id="L3967">        return result.toString();</span>
+<span class="fc" id="L3972">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

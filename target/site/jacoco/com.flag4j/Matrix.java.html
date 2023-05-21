@@ -3422,7 +3422,7 @@ public class Matrix
      */
     @Override
     public boolean isSymmetric() {
-<span class="fc" id="L3425">        return RealDenseProperties.isSymmetric(entries, shape);</span>
+<span class="nc" id="L3425">        return RealDenseProperties.isSymmetric(entries, shape);</span>
     }
 
 
@@ -3481,48 +3481,53 @@ public class Matrix
 
 <span class="fc" id="L3482">        result.append(&quot;[&quot;);</span>
 
-<span class="fc" id="L3484">        int rowStopIndex = Math.min(PrintOptions.getMaxRows()-1, this.numRows-1);</span>
-<span class="fc" id="L3485">        int colStopIndex = Math.min(PrintOptions.getMaxColumns()-1, this.numCols-1);</span>
-        int width;
-<span class="fc" id="L3487">        int totalRowLength = 0; // Total string length of each row (not including brackets)</span>
-        String value;
+<span class="pc bpc" id="L3484" title="1 of 2 branches missed.">        if(entries.length==0) {</span>
+<span class="nc" id="L3485">            result.append(&quot;[]&quot;); // No entries in this matrix.</span>
+        } else {
+<span class="fc" id="L3487">            int rowStopIndex = Math.min(PrintOptions.getMaxRows() - 1, this.numRows - 1);</span>
+<span class="fc" id="L3488">            int colStopIndex = Math.min(PrintOptions.getMaxColumns() - 1, this.numCols - 1);</span>
+            int width;
+<span class="fc" id="L3490">            int totalRowLength = 0; // Total string length of each row (not including brackets)</span>
+            String value;
 
-        // Find maximum entry string width in each column so columns can be aligned.
-<span class="fc" id="L3491">        List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;(colStopIndex+1);</span>
-<span class="fc bfc" id="L3492" title="All 2 branches covered.">        for(int j=0; j&lt;colStopIndex; j++) {</span>
-<span class="fc" id="L3493">            maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));</span>
-<span class="fc" id="L3494">            totalRowLength += maxList.get(maxList.size()-1);</span>
+            // Find maximum entry string width in each column so columns can be aligned.
+<span class="fc" id="L3494">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;(colStopIndex + 1);</span>
+<span class="fc bfc" id="L3495" title="All 2 branches covered.">            for (int j = 0; j &lt; colStopIndex; j++) {</span>
+<span class="fc" id="L3496">                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));</span>
+<span class="fc" id="L3497">                totalRowLength += maxList.get(maxList.size() - 1);</span>
+            }
+
+<span class="pc bpc" id="L3500" title="1 of 2 branches missed.">            if (colStopIndex &lt; this.numCols) {</span>
+<span class="fc" id="L3501">                maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols - 1).entries));</span>
+<span class="fc" id="L3502">                totalRowLength += maxList.get(maxList.size() - 1);</span>
+            }
+
+<span class="fc bfc" id="L3505" title="All 2 branches covered.">            if (colStopIndex &lt; this.numCols - 1) {</span>
+<span class="fc" id="L3506">                totalRowLength += 3 + PrintOptions.getPadding(); // Account for '...' element with padding in each column.</span>
+            }
+
+<span class="fc" id="L3509">            totalRowLength += maxList.size() * PrintOptions.getPadding(); // Account for column padding</span>
+
+            // Get each row as a string.
+<span class="fc bfc" id="L3512" title="All 2 branches covered.">            for (int i = 0; i &lt; rowStopIndex; i++) {</span>
+<span class="fc" id="L3513">                result.append(rowToString(i, colStopIndex, maxList));</span>
+<span class="fc" id="L3514">                result.append(&quot;\n&quot;);</span>
+            }
+
+<span class="fc bfc" id="L3517" title="All 2 branches covered.">            if (PrintOptions.getMaxRows() &lt; this.numRows) {</span>
+<span class="fc" id="L3518">                width = totalRowLength;</span>
+<span class="fc" id="L3519">                value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L3520" title="1 of 2 branches missed.">                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L3521">                result.append(String.format(&quot; [%-&quot; + width + &quot;s]\n&quot;, value));</span>
+            }
+
+            // Get Last row as a string.
+<span class="fc" id="L3525">            result.append(rowToString(this.numRows - 1, colStopIndex, maxList));</span>
         }
 
-<span class="pc bpc" id="L3497" title="1 of 2 branches missed.">        if(colStopIndex &lt; this.numCols) {</span>
-<span class="fc" id="L3498">            maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols-1).entries));</span>
-<span class="fc" id="L3499">            totalRowLength += maxList.get(maxList.size()-1);</span>
-        }
+<span class="fc" id="L3528">        result.append(&quot;]&quot;);</span>
 
-<span class="fc bfc" id="L3502" title="All 2 branches covered.">        if(colStopIndex &lt; this.numCols-1) {</span>
-<span class="fc" id="L3503">            totalRowLength += 3+PrintOptions.getPadding(); // Account for '...' element with padding in each column.</span>
-        }
-
-<span class="fc" id="L3506">        totalRowLength += maxList.size()*PrintOptions.getPadding(); // Account for column padding</span>
-
-        // Get each row as a string.
-<span class="fc bfc" id="L3509" title="All 2 branches covered.">        for(int i=0; i&lt;rowStopIndex; i++) {</span>
-<span class="fc" id="L3510">            result.append(rowToString(i, colStopIndex, maxList));</span>
-<span class="fc" id="L3511">            result.append(&quot;\n&quot;);</span>
-        }
-
-<span class="fc bfc" id="L3514" title="All 2 branches covered.">        if(PrintOptions.getMaxRows() &lt; this.numRows) {</span>
-<span class="fc" id="L3515">            width = totalRowLength;</span>
-<span class="fc" id="L3516">            value = &quot;...&quot;;</span>
-<span class="pc bpc" id="L3517" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L3518">            result.append(String.format(&quot; [%-&quot; + width + &quot;s]\n&quot;, value));</span>
-        }
-
-        // Get Last row as a string.
-<span class="fc" id="L3522">        result.append(rowToString(this.numRows-1, colStopIndex, maxList));</span>
-<span class="fc" id="L3523">        result.append(&quot;]&quot;);</span>
-
-<span class="fc" id="L3525">        return result.toString();</span>
+<span class="fc" id="L3530">        return result.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
