@@ -64,8 +64,9 @@ public abstract class RealSparseTensorBase&lt;T, U, W, Z&gt;
 <span class="fc bfc" id="L64" title="All 2 branches covered.">        if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) &lt; 0) {</span>
 <span class="fc" id="L65">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));</span>
         }
-<span class="fc" id="L67">        ParameterChecks.assertArrayLengthsEq(nonZeroEntries, indices.length);</span>
-<span class="fc" id="L68">    }</span>
+
+<span class="fc" id="L68">        ParameterChecks.assertArrayLengthsEq(nonZeroEntries, indices.length);</span>
+<span class="fc" id="L69">    }</span>
 
 
      /**
@@ -73,8 +74,8 @@ public abstract class RealSparseTensorBase&lt;T, U, W, Z&gt;
       */
      @Override
      public void sparseSort() {
-<span class="nc" id="L76">         SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);</span>
-<span class="nc" id="L77">     }</span>
+<span class="nc" id="L77">         SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);</span>
+<span class="nc" id="L78">     }</span>
 
 
     /**
@@ -83,55 +84,55 @@ public abstract class RealSparseTensorBase&lt;T, U, W, Z&gt;
      */
     @Override
     public int nonZeroEntries() {
-<span class="fc" id="L86">        return entries.length;</span>
+<span class="fc" id="L87">        return entries.length;</span>
     }
 
 
      @Override
      public double min() {
-<span class="nc" id="L92">        return AggregateReal.min(entries);</span>
+<span class="nc" id="L93">        return AggregateReal.min(entries);</span>
     }
 
 
      @Override
      public double max() {
-<span class="nc" id="L98">        return AggregateReal.max(entries);</span>
+<span class="nc" id="L99">        return AggregateReal.max(entries);</span>
     }
 
 
      @Override
      public double minAbs() {
-<span class="nc" id="L104">        return AggregateReal.minAbs(entries);</span>
+<span class="nc" id="L105">        return AggregateReal.minAbs(entries);</span>
     }
 
 
      @Override
      public double maxAbs() {
-<span class="nc" id="L110">        return AggregateReal.maxAbs(entries);</span>
+<span class="nc" id="L111">        return AggregateReal.maxAbs(entries);</span>
     }
 
 
      @Override
      public double infNorm() {
-<span class="nc" id="L116">        return AggregateReal.maxAbs(entries);</span>
+<span class="nc" id="L117">        return AggregateReal.maxAbs(entries);</span>
     }
 
 
      @Override
      public boolean isPos() {
-<span class="nc" id="L122">        return RealProperties.isPos(entries);</span>
+<span class="nc" id="L123">        return RealProperties.isPos(entries);</span>
     }
 
 
      @Override
      public boolean isNeg() {
-<span class="nc" id="L128">        return RealProperties.isNeg(entries);</span>
+<span class="nc" id="L129">        return RealProperties.isNeg(entries);</span>
     }
 
 
      @Override
      public boolean isZeros() {
-<span class="nc bnc" id="L134" title="All 4 branches missed.">         return entries.length==0 || ArrayUtils.isZeros(entries);</span>
+<span class="nc bnc" id="L135" title="All 4 branches missed.">         return entries.length==0 || ArrayUtils.isZeros(entries);</span>
     }
 
 
@@ -141,7 +142,7 @@ public abstract class RealSparseTensorBase&lt;T, U, W, Z&gt;
      */
     @Override
     public boolean isOnes() {
-<span class="nc" id="L144">        return RealDenseProperties.isOnes(entries);</span>
+<span class="nc" id="L145">        return RealDenseProperties.isOnes(entries);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -25,8 +25,8 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.sparse.RealSparseTensorBase;
 import com.flag4j.core.VectorMixin;
+import com.flag4j.core.sparse.RealSparseTensorBase;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
@@ -35,9 +35,13 @@ import com.flag4j.operations.common.real.VectorNorms;
 import com.flag4j.operations.dense.real.AggregateDenseReal;
 import com.flag4j.operations.dense.real.RealDenseOperations;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
+import com.flag4j.operations.sparse.real.RealSparseEquals;
 import com.flag4j.operations.sparse.real.RealSparseVectorOperations;
+import com.flag4j.operations.sparse.real_complex.RealComplexSparseEquals;
 import com.flag4j.operations.sparse.real_complex.RealComplexSparseVectorOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
@@ -131,6 +135,37 @@ public class SparseVector
 
 
     /**
+     * Checks if an object is equal to this vector. The object must be a vector (real, complex, dense or sparse).
+     * @param b Object to compare to this vector. Valid types are {@link Vector}, {@link SparseVector},
+     * {@link CVector}, or {@link SparseCVector}.
+     * @return True if {@code b} is a vector and is element-wise equal to this vector.
+     */
+    @Override
+    public boolean equals(Object b) {
+        boolean equal = false;
+
+        if(b instanceof SparseVector) {
+            SparseVector vec = (SparseVector) b;
+            equal = RealSparseEquals.vectorEquals(this, vec);
+
+        } else if(b instanceof Vector) {
+            Vector vec = (Vector) b;
+            equal = RealDenseSparseEquals.vectorEquals(vec.entries, this.entries, this.indices, this.size);
+
+        } else if(b instanceof SparseCVector) {
+            SparseCVector vec = (SparseCVector) b;
+            equal = RealComplexSparseEquals.vectorEquals(this, vec);
+
+        } else if(b instanceof CVector) {
+            CVector vec = (CVector) b;
+            equal = RealComplexDenseSparseEquals.vectorEquals(vec.entries, this.entries, this.indices, this.size);
+        }
+
+        return equal;
+    }
+
+
+    /**
      * Sets an index of a copy of this vector to a specified value.
      *
      * Creates a copy of this vector and sets an index to the specified value. Note, unlike the dense version of this
@@ -158,7 +193,7 @@ public class SparseVector
             destEntries[idx] = value;
 
         } else{
-            // Then the index was Not found int the sparse vector.
+            // Then the index was not found int the sparse vector.
             destIndices = new int[this.indices.length+1];
             destEntries = new double[entries.length+1];
             idx = -(idx+1);

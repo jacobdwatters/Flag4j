@@ -34,9 +34,13 @@ import com.flag4j.operations.dense.complex.AggregateDenseComplex;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseVectorOperations;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
+import com.flag4j.operations.sparse.complex.ComplexSparseEquals;
 import com.flag4j.operations.sparse.complex.ComplexSparseVectorOperations;
+import com.flag4j.operations.sparse.real_complex.RealComplexSparseEquals;
 import com.flag4j.operations.sparse.real_complex.RealComplexSparseVectorOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
@@ -148,6 +152,37 @@ public class SparseCVector
         ArrayUtils.copy2CNumber(a.entries, super.entries);
         this.size = a.size;
         this.indices = a.indices.clone();
+    }
+
+
+    /**
+     * Checks if an object is equal to this vector. The object must be a vector (real, complex, dense or sparse).
+     * @param b Object to compare to this vector. Valid types are {@link Vector}, {@link SparseVector},
+     * {@link CVector}, or {@link SparseCVector}.
+     * @return True if {@code b} is a vector and is element-wise equal to this vector.
+     */
+    @Override
+    public boolean equals(Object b) {
+        boolean equal = false;
+
+        if(b instanceof SparseVector) {
+            SparseVector vec = (SparseVector) b;
+            equal = RealComplexSparseEquals.vectorEquals(vec, this);
+
+        } else if(b instanceof Vector) {
+            Vector vec = (Vector) b;
+            equal = RealComplexDenseSparseEquals.vectorEquals(vec.entries, this.entries, this.indices, this.size);
+
+        } else if(b instanceof SparseCVector) {
+            SparseCVector vec = (SparseCVector) b;
+            equal = ComplexSparseEquals.vectorEquals(this, vec);
+
+        } else if(b instanceof CVector) {
+            CVector vec = (CVector) b;
+            equal = ComplexDenseSparseEquals.vectorEquals(vec.entries, this.entries, this.indices, this.size);
+        }
+
+        return equal;
     }
 
 

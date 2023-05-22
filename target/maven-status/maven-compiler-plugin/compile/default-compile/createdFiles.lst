@@ -94,7 +94,9 @@ com\flag4j\complex_numbers\CNumberToken.class
 com\flag4j\operations\dense_sparse\real\RealDenseSparseMatrixMultTranspose.class
 com\flag4j\SparseTensor.class
 com\flag4j\operations\dense\complex\ComplexDenseTranspose.class
+com\flag4j\operations\sparse\real_complex\RealComplexSparseEquals.class
 com\flag4j\operations\dense\real\AggregateDenseReal.class
+com\flag4j\operations\sparse\real\RealSparseEquals.class
 com\flag4j\io\TensorReader.class
 com\flag4j\operations\dense\real\RealDenseElemMult.class
 com\flag4j\core\MatrixOperationsMixin.class
@@ -134,6 +136,7 @@ com\flag4j\linalg\decompositions\RealCholeskyDecomposition.class
 com\flag4j\util\ErrorMessages.class
 com\flag4j\operations\dense\real\RealDenseVectorOperations.class
 com\flag4j\linalg\solvers\MatrixBackSolver.class
+com\flag4j\operations\sparse\complex\ComplexSparseEquals.class
 com\flag4j\core\sparse\ComplexSparseTensorBase.class
 com\flag4j\complex_numbers\CNumberParser.class
 com\flag4j\SparseMatrix.class

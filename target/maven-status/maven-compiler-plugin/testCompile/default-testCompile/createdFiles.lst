@@ -27,6 +27,7 @@ com\flag4j\CVectorEqualsTests.class
 com\flag4j\io\PrintOptionsTests.class
 com\flag4j\VectorExtendTests.class
 com\flag4j\VectorScaleMultDivTests.class
+com\flag4j\sparse_vector\SparseVectorReshapeTests.class
 com\flag4j\MatrixAddSubEqTests.class
 com\flag4j\CMatrixRoundTests.class
 com\flag4j\MatrixScalMultTests.class
@@ -47,6 +48,7 @@ com\flag4j\MatrixSumRowsColsTests.class
 com\flag4j\VectorSetTests.class
 com\flag4j\CVectorConstructorTests.class
 com\flag4j\VectorElemMultDivTests.class
+com\flag4j\sparse_vector\SparseVectorAddTests.class
 com\flag4j\operations\dense\complex\ComplexDenseSetOperationsTests.class
 com\flag4j\MatrixDetTests.class
 com\flag4j\CMatrixRemoveRowColTests.class
@@ -153,6 +155,7 @@ com\flag4j\complex_numbers\CNumberBinaryOperationsTest.class
 com\flag4j\operations\dense_sparse\real\RealDenseSparseMatMultTests.class
 com\flag4j\MatrixPropertiesTests.class
 com\flag4j\CTensorElemMultTests.class
+com\flag4j\sparse_vector\SparseVectorSetTests.class
 com\flag4j\operations\dense\complex\CMatrixMultiplyTests.class
 com\flag4j\complex_numbers\CNumberConversionTest.class
 com\flag4j\operations\RealDenseMatrixMultiplyDispatcherTests.class

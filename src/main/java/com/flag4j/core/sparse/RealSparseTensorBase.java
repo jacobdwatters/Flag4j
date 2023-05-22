@@ -64,6 +64,7 @@ public abstract class RealSparseTensorBase<T, U, W, Z>
         if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) < 0) {
             throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));
         }
+
         ParameterChecks.assertArrayLengthsEq(nonZeroEntries, indices.length);
     }
 

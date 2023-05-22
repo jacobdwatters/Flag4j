@@ -372,9 +372,9 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If {@code value} is not within the range {@code [lowerBound, upperBound]}
      */
     public static void assertInRange(double value, double lowerBound, double upperBound, String paramName) {
-<span class="nc bnc" id="L375" title="All 4 branches missed.">        if(value &lt; lowerBound || value &gt; upperBound) {</span>
+<span class="pc bpc" id="L375" title="2 of 4 branches missed.">        if(value &lt; lowerBound || value &gt; upperBound) {</span>
 <span class="nc" id="L376">            throw new IllegalArgumentException();</span>
         }
-<span class="nc" id="L378">    }</span>
+<span class="fc" id="L378">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

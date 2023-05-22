@@ -25,8 +25,8 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.dense.RealDenseTensorBase;
 import com.flag4j.core.VectorMixin;
+import com.flag4j.core.dense.RealDenseTensorBase;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.real.VectorNorms;
 import com.flag4j.operations.dense.real.RealDenseEquals;
@@ -150,15 +150,19 @@ public class Vector
         if(b instanceof Vector) {
             Vector vec = (Vector) b;
             equal = RealDenseEquals.vectorEquals(this.entries, vec.entries);
+
         } else if(b instanceof CVector) {
             CVector vec = (CVector) b;
             equal = ArrayUtils.equals(this.entries, vec.entries);
+
         } else if(b instanceof SparseVector) {
             SparseVector vec = (SparseVector) b;
             equal = RealDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);
+
         } else if(b instanceof SparseCVector) {
             SparseCVector vec = (SparseCVector) b;
             equal = RealComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);
+
         }
 
         return equal;

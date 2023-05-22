@@ -114,7 +114,7 @@ public class ComplexSchurDecomposition extends SchurDecomposition&lt;CMatrix&gt;
     public ComplexSchurDecomposition decompose(CMatrix src) {
 <span class="nc" id="L115">        ParameterChecks.assertSquare(src.shape);</span>
 <span class="nc" id="L116">        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).</span>
-<span class="nc" id="L117">        doubleShiftImplicitQR(hess.getH());</span>
+<span class="nc" id="L117">        shiftedExplicitQR(hess.getH()); // Use the shifted QR algorithm.</span>
 
 <span class="nc bnc" id="L119" title="All 2 branches missed.">        if(computeU) {</span>
 <span class="nc" id="L120">            U = hess.Q.mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.</span>
