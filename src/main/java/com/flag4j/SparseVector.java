@@ -1050,7 +1050,7 @@ public class SparseVector
      */
     @Override
     public CNumber inner(CVector b) {
-        return RealComplexDenseSparseVectorOperations.inner(b.entries, this.entries, this.indices, this.size);
+        return RealComplexDenseSparseVectorOperations.inner(this.entries, this.indices, this.size, b.entries);
     }
 
 

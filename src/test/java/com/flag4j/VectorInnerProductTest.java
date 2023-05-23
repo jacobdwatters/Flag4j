@@ -12,7 +12,6 @@ class VectorInnerProductTest {
     double[] aEntries = {1.0, 5.6, -9.355, 215.0};
     Vector a = new Vector(aEntries);
 
-
     @Test
     void realDenseTest() {
         double[] bEntries;

@@ -234,7 +234,7 @@ public class ComplexDenseSparseVectorOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         CNumber[] dest = new CNumber[src1.entries.length];
 
-        for(int i=0; i<src2.entries.length; i++) {
+        for(int i=0; i<src1.entries.length; i++) {
             dest[i] = src1.entries[i].div(src2.entries[src1.indices[i]]);
         }
 

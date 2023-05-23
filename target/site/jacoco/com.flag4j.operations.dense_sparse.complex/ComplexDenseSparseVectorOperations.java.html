@@ -231,14 +231,14 @@ public class ComplexDenseSparseVectorOperations {
      * @return The result of the element-wise vector division.
      */
     public static SparseCVector elemDiv(SparseCVector src1, CVector src2) {
-<span class="nc" id="L234">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
-<span class="nc" id="L235">        CNumber[] dest = new CNumber[src1.entries.length];</span>
+<span class="fc" id="L234">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L235">        CNumber[] dest = new CNumber[src1.entries.length];</span>
 
-<span class="nc bnc" id="L237" title="All 2 branches missed.">        for(int i=0; i&lt;src2.entries.length; i++) {</span>
-<span class="nc" id="L238">            dest[i] = src1.entries[i].div(src2.entries[src1.indices[i]]);</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        for(int i=0; i&lt;src1.entries.length; i++) {</span>
+<span class="fc" id="L238">            dest[i] = src1.entries[i].div(src2.entries[src1.indices[i]]);</span>
         }
 
-<span class="nc" id="L241">        return new SparseCVector(src1.size, dest, src1.indices.clone());</span>
+<span class="fc" id="L241">        return new SparseCVector(src1.size, dest, src1.indices.clone());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

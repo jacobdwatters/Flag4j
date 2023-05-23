@@ -200,7 +200,7 @@ public class RealSparseVectorOperations {
      * @return The result of the vector multiplication.
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
-    public static SparseVector elemMult(SparseVector src1,SparseVector src2) {
+    public static SparseVector elemMult(SparseVector src1, SparseVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         List<Double> values = new ArrayList<>(src1.entries.length);
         List<Integer> indices = new ArrayList<>(src1.entries.length);
@@ -213,6 +213,8 @@ public class RealSparseVectorOperations {
                 // Then indices match, add product of elements.
                 values.add(src1.entries[src1Counter]*src2.entries[src2Counter]);
                 indices.add(src1.indices[src1Counter]);
+                src1Counter++;
+                src2Counter++;
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
                 src1Counter++;
             } else {
@@ -247,6 +249,8 @@ public class RealSparseVectorOperations {
             if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
                 // Then indices match, add product of elements.
                 product += src1.entries[src1Counter]*src2.entries[src2Counter];
+                src1Counter++;
+                src2Counter++;
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
                 src1Counter++;
             } else {

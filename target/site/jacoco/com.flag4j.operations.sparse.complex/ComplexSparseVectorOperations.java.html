@@ -246,17 +246,19 @@ public class ComplexSparseVectorOperations {
                 // Then indices match, add product of elements.
 <span class="nc" id="L247">                values.add(src1.entries[src1Counter].mult(src2.entries[src2Counter]));</span>
 <span class="nc" id="L248">                indices.add(src1.indices[src1Counter]);</span>
-<span class="nc bnc" id="L249" title="All 2 branches missed.">            } else if(src1.indices[src1Counter] &lt; src2.indices[src2Counter]) {</span>
-<span class="nc" id="L250">                src1Counter++;</span>
+<span class="nc" id="L249">                src1Counter++;</span>
+<span class="nc" id="L250">                src2Counter++;</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">            } else if(src1.indices[src1Counter] &lt; src2.indices[src2Counter]) {</span>
+<span class="nc" id="L252">                src1Counter++;</span>
             } else {
-<span class="nc" id="L252">                src2Counter++;</span>
+<span class="nc" id="L254">                src2Counter++;</span>
             }
         }
 
-<span class="nc" id="L256">        return new SparseCVector(</span>
+<span class="nc" id="L258">        return new SparseCVector(</span>
                 src1.size,
-<span class="nc" id="L258">                values.toArray(CNumber[]::new),</span>
-<span class="nc" id="L259">                indices.stream().mapToInt(Integer::intValue).toArray()</span>
+<span class="nc" id="L260">                values.toArray(CNumber[]::new),</span>
+<span class="nc" id="L261">                indices.stream().mapToInt(Integer::intValue).toArray()</span>
         );
     }
 
@@ -270,24 +272,24 @@ public class ComplexSparseVectorOperations {
      * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
      */
     public static CNumber inner(SparseCVector src1, SparseCVector src2) {
-<span class="nc" id="L273">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
-<span class="nc" id="L274">        CNumber product = new CNumber();</span>
+<span class="nc" id="L275">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="nc" id="L276">        CNumber product = new CNumber();</span>
 
-<span class="nc" id="L276">        int src1Counter = 0;</span>
-<span class="nc" id="L277">        int src2Counter = 0;</span>
+<span class="nc" id="L278">        int src1Counter = 0;</span>
+<span class="nc" id="L279">        int src2Counter = 0;</span>
 
-<span class="nc bnc" id="L279" title="All 4 branches missed.">        while(src1Counter &lt; src1.entries.length &amp;&amp; src2Counter &lt; src2.entries.length) {</span>
-<span class="nc bnc" id="L280" title="All 2 branches missed.">            if(src1.indices[src1Counter]==src2.indices[src2Counter]) {</span>
+<span class="nc bnc" id="L281" title="All 4 branches missed.">        while(src1Counter &lt; src1.entries.length &amp;&amp; src2Counter &lt; src2.entries.length) {</span>
+<span class="nc bnc" id="L282" title="All 2 branches missed.">            if(src1.indices[src1Counter]==src2.indices[src2Counter]) {</span>
                 // Then indices match, add product of elements.
-<span class="nc" id="L282">                product.addEq(src1.entries[src1Counter].mult(src2.entries[src2Counter].conj()));</span>
-<span class="nc bnc" id="L283" title="All 2 branches missed.">            } else if(src1.indices[src1Counter] &lt; src2.indices[src2Counter]) {</span>
-<span class="nc" id="L284">                src1Counter++;</span>
+<span class="nc" id="L284">                product.addEq(src1.entries[src1Counter].mult(src2.entries[src2Counter].conj()));</span>
+<span class="nc bnc" id="L285" title="All 2 branches missed.">            } else if(src1.indices[src1Counter] &lt; src2.indices[src2Counter]) {</span>
+<span class="nc" id="L286">                src1Counter++;</span>
             } else {
-<span class="nc" id="L286">                src2Counter++;</span>
+<span class="nc" id="L288">                src2Counter++;</span>
             }
         }
 
-<span class="nc" id="L290">        return product;</span>
+<span class="nc" id="L292">        return product;</span>
     }
 
 
@@ -298,25 +300,25 @@ public class ComplexSparseVectorOperations {
      * @return The matrix resulting from the vector outer product.
      */
     public static CMatrix outerProduct(SparseCVector src1, SparseCVector src2) {
-<span class="nc" id="L301">        CNumber[] dest = new CNumber[src2.size*src1.size];</span>
-<span class="nc" id="L302">        ArrayUtils.fillZeros(dest);</span>
+<span class="nc" id="L303">        CNumber[] dest = new CNumber[src2.size*src1.size];</span>
+<span class="nc" id="L304">        ArrayUtils.fillZeros(dest);</span>
 
         int destRow;
         int index1;
         int index2;
 
-<span class="nc bnc" id="L308" title="All 2 branches missed.">        for(int i=0; i&lt;src1.entries.length; i++) {</span>
-<span class="nc" id="L309">            index1 = src1.indices[i];</span>
-<span class="nc" id="L310">            destRow = index1*src1.size;</span>
+<span class="nc bnc" id="L310" title="All 2 branches missed.">        for(int i=0; i&lt;src1.entries.length; i++) {</span>
+<span class="nc" id="L311">            index1 = src1.indices[i];</span>
+<span class="nc" id="L312">            destRow = index1*src1.size;</span>
 
-<span class="nc bnc" id="L312" title="All 2 branches missed.">            for(int j=0; j&lt;src2.entries.length; j++) {</span>
-<span class="nc" id="L313">                index2 = src2.indices[j];</span>
+<span class="nc bnc" id="L314" title="All 2 branches missed.">            for(int j=0; j&lt;src2.entries.length; j++) {</span>
+<span class="nc" id="L315">                index2 = src2.indices[j];</span>
 
-<span class="nc" id="L315">                dest[destRow + index2] = src1.entries[i].mult(src2.entries[j]);</span>
+<span class="nc" id="L317">                dest[destRow + index2] = src1.entries[i].mult(src2.entries[j]);</span>
             }
         }
 
-<span class="nc" id="L319">        return new CMatrix(src1.size, src2.size, dest);</span>
+<span class="nc" id="L321">        return new CMatrix(src1.size, src2.size, dest);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

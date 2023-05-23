@@ -24,7 +24,10 @@
 
 package com.flag4j.operations.sparse.real_complex;
 
-import com.flag4j.*;
+import com.flag4j.CMatrix;
+import com.flag4j.CVector;
+import com.flag4j.SparseCVector;
+import com.flag4j.SparseVector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
@@ -285,6 +288,9 @@ public class RealComplexSparseVectorOperations {
                 // Then indices match, add product of elements.
                 values.add(src1.entries[src1Counter].mult(src2.entries[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
+                src1Counter++;
+                src2Counter++;
+
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
                 src1Counter++;
             } else {
@@ -349,6 +355,8 @@ public class RealComplexSparseVectorOperations {
             if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
                 // Then indices match, add product of elements.
                 product.addEq(src2.entries[src2Counter].conj().mult(src1.entries[src1Counter]));
+                src1Counter++;
+                src2Counter++;
             } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
                 src1Counter++;
             } else {

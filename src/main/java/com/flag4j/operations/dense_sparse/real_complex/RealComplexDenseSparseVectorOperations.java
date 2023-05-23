@@ -96,6 +96,29 @@ public class RealComplexDenseSparseVectorOperations {
 
 
     /**
+     * Computes the vector inner product between a complex dense vector and a real sparse vector.
+     * @param src1 Non-zero entries of the sparse vector.
+     * @param src2 Entries of the dense vector.
+     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param sparseSize The size of the sparse vector (including zero entries).
+     * @return The inner product of the two vectors.
+     * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
+     */
+    public static CNumber inner(double[] src1, int[] indices, int sparseSize, CNumber[] src2) {
+        ParameterChecks.assertArrayLengthsEq(src2.length, sparseSize);
+        CNumber innerProd = new CNumber();
+        int index;
+
+        for(int i=0; i<src1.length; i++) {
+            index = indices[i];
+            innerProd.addEq(src2[index].conj().mult(src1[i]));
+        }
+
+        return innerProd;
+    }
+
+
+    /**
      * Computes the vector outer product between a real dense vector and a complex sparse vector.
      * @param src1 Entries of the dense vector.
      * @param src2 Non-zero entries of the sparse vector.
@@ -403,7 +426,7 @@ public class RealComplexDenseSparseVectorOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         CNumber[] dest = new CNumber[src1.entries.length];
 
-        for(int i=0; i<src2.entries.length; i++) {
+        for(int i=0; i<src1.entries.length; i++) {
             dest[i] = src1.entries[i].div(src2.entries[src1.indices[i]]);
         }
 
@@ -421,7 +444,7 @@ public class RealComplexDenseSparseVectorOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
         CNumber[] dest = new CNumber[src1.entries.length];
 
-        for(int i=0; i<src2.entries.length; i++) {
+        for(int i=0; i<src1.entries.length; i++) {
             dest[i] = new CNumber(src1.entries[i]).div(src2.entries[src1.indices[i]]);
         }
 

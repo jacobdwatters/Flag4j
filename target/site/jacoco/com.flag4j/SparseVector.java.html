@@ -25,8 +25,8 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.sparse.RealSparseTensorBase;
 import com.flag4j.core.VectorMixin;
+import com.flag4j.core.sparse.RealSparseTensorBase;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
@@ -658,7 +658,7 @@ import java.util.List;
      */
     @Override
     public Vector sub(Vector B) {
-<span class="nc" id="L661">        return RealDenseSparseVectorOperations.sub(this, B);</span>
+<span class="fc" id="L661">        return RealDenseSparseVectorOperations.sub(this, B);</span>
     }
 
 
@@ -695,7 +695,7 @@ import java.util.List;
      */
     @Override
     public SparseVector sub(SparseVector B) {
-<span class="nc" id="L698">        return RealSparseVectorOperations.sub(this, B);</span>
+<span class="fc" id="L698">        return RealSparseVectorOperations.sub(this, B);</span>
     }
 
 
@@ -708,7 +708,7 @@ import java.util.List;
      */
     @Override
     public CVector sub(CVector B) {
-<span class="nc" id="L711">        return RealComplexDenseSparseVectorOperations.sub(this, B);</span>
+<span class="fc" id="L711">        return RealComplexDenseSparseVectorOperations.sub(this, B);</span>
     }
 
 
@@ -721,7 +721,7 @@ import java.util.List;
      */
     @Override
     public SparseCVector sub(SparseCVector B) {
-<span class="nc" id="L724">        return RealComplexSparseVectorOperations.sub(this, B);</span>
+<span class="fc" id="L724">        return RealComplexSparseVectorOperations.sub(this, B);</span>
     }
 
 
@@ -733,7 +733,7 @@ import java.util.List;
      */
     @Override
     public Vector sub(double a) {
-<span class="nc" id="L736">        return RealSparseVectorOperations.sub(this, a);</span>
+<span class="fc" id="L736">        return RealSparseVectorOperations.sub(this, a);</span>
     }
 
 
@@ -745,7 +745,7 @@ import java.util.List;
      */
     @Override
     public CVector sub(CNumber a) {
-<span class="nc" id="L748">        return RealComplexSparseVectorOperations.sub(this, a);</span>
+<span class="fc" id="L748">        return RealComplexSparseVectorOperations.sub(this, a);</span>
     }
 
 
@@ -782,7 +782,7 @@ import java.util.List;
      */
     @Override
     public SparseVector elemMult(Vector B) {
-<span class="nc" id="L785">        return RealDenseSparseVectorOperations.elemMult(B, this);</span>
+<span class="fc" id="L785">        return RealDenseSparseVectorOperations.elemMult(B, this);</span>
     }
 
 
@@ -819,7 +819,7 @@ import java.util.List;
      */
     @Override
     public SparseVector div(double divisor) {
-<span class="nc" id="L822">        return new SparseVector(size, RealOperations.scalDiv(entries, divisor), indices.clone());</span>
+<span class="fc" id="L822">        return new SparseVector(size, RealOperations.scalDiv(entries, divisor), indices.clone());</span>
     }
 
 
@@ -946,7 +946,7 @@ import java.util.List;
      */
     @Override
     public SparseVector elemMult(SparseVector B) {
-<span class="nc" id="L949">        return RealSparseVectorOperations.elemMult(this, B);</span>
+<span class="fc" id="L949">        return RealSparseVectorOperations.elemMult(this, B);</span>
     }
 
 
@@ -959,7 +959,7 @@ import java.util.List;
      */
     @Override
     public SparseCVector elemMult(CVector B) {
-<span class="nc" id="L962">        return RealComplexDenseSparseVectorOperations.elemMult(B, this);</span>
+<span class="fc" id="L962">        return RealComplexDenseSparseVectorOperations.elemMult(B, this);</span>
     }
 
 
@@ -972,7 +972,7 @@ import java.util.List;
      */
     @Override
     public SparseCVector elemMult(SparseCVector B) {
-<span class="nc" id="L975">        return RealComplexSparseVectorOperations.elemMult(B, this);</span>
+<span class="fc" id="L975">        return RealComplexSparseVectorOperations.elemMult(B, this);</span>
     }
 
 
@@ -985,7 +985,7 @@ import java.util.List;
      */
     @Override
     public SparseVector elemDiv(Vector b) {
-<span class="nc" id="L988">        return RealDenseSparseVectorOperations.elemDiv(this, b);</span>
+<span class="fc" id="L988">        return RealDenseSparseVectorOperations.elemDiv(this, b);</span>
     }
 
 
@@ -998,7 +998,7 @@ import java.util.List;
      */
     @Override
     public SparseCVector elemDiv(CVector b) {
-<span class="nc" id="L1001">        return RealComplexDenseSparseVectorOperations.elemDiv(this, b);</span>
+<span class="fc" id="L1001">        return RealComplexDenseSparseVectorOperations.elemDiv(this, b);</span>
     }
 
 
@@ -1011,8 +1011,8 @@ import java.util.List;
      */
     @Override
     public Double inner(Vector b) {
-<span class="nc" id="L1014">        ParameterChecks.assertEqualShape(shape, b.shape);</span>
-<span class="nc" id="L1015">        return RealDenseSparseVectorOperations.inner(b.entries, this.entries, this.indices, this.size);</span>
+<span class="fc" id="L1014">        ParameterChecks.assertEqualShape(shape, b.shape);</span>
+<span class="fc" id="L1015">        return RealDenseSparseVectorOperations.inner(b.entries, this.entries, this.indices, this.size);</span>
     }
 
 
@@ -1025,7 +1025,7 @@ import java.util.List;
      */
     @Override
     public Double inner(SparseVector b) {
-<span class="nc" id="L1028">        return RealSparseVectorOperations.inner(this, b);</span>
+<span class="fc" id="L1028">        return RealSparseVectorOperations.inner(this, b);</span>
     }
 
 
@@ -1036,8 +1036,8 @@ import java.util.List;
      */
     @Override
     public SparseVector normalize() {
-<span class="nc" id="L1039">        double norm = this.norm();</span>
-<span class="nc bnc" id="L1040" title="All 2 branches missed.">        return norm==0 ? new SparseVector(size) : this.div(norm);</span>
+<span class="fc" id="L1039">        double norm = this.norm();</span>
+<span class="pc bpc" id="L1040" title="1 of 2 branches missed.">        return norm==0 ? new SparseVector(size) : this.div(norm);</span>
     }
 
 
@@ -1050,7 +1050,7 @@ import java.util.List;
      */
     @Override
     public CNumber inner(CVector b) {
-<span class="nc" id="L1053">        return RealComplexDenseSparseVectorOperations.inner(b.entries, this.entries, this.indices, this.size);</span>
+<span class="fc" id="L1053">        return RealComplexDenseSparseVectorOperations.inner(this.entries, this.indices, this.size, b.entries);</span>
     }
 
 
@@ -1063,7 +1063,7 @@ import java.util.List;
      */
     @Override
     public CNumber inner(SparseCVector b) {
-<span class="nc" id="L1066">        return RealComplexSparseVectorOperations.inner(this, b);</span>
+<span class="fc" id="L1066">        return RealComplexSparseVectorOperations.inner(this, b);</span>
     }
 
 
@@ -1267,7 +1267,7 @@ import java.util.List;
      */
     @Override
     public double norm() {
-<span class="nc" id="L1270">        return VectorNorms.norm(entries);</span>
+<span class="fc" id="L1270">        return VectorNorms.norm(entries);</span>
     }
 
 
