@@ -103,13 +103,13 @@ public class RealDenseSparseVectorOperations {
         ParameterChecks.assertEquals(sparseSize, src2.length);
 
         double[] dest = new double[src2.length*sparseSize];
-        int index;
+        int destIndex;
 
-        for(int i=0; i<src2.length; i++) {
-            for(int j=0; j<src1.length; j++) {
-                index = indices[j];
+        for(int i=0; i<src1.length; i++) {
+            destIndex = indices[i]*src2.length;
 
-                dest[i*src2.length + index] = src2[i]*src1[j];
+            for(double v : src2) {
+                dest[destIndex++] = src1[i]*v;
             }
         }
 

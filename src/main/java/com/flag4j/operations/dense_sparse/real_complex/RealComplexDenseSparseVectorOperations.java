@@ -178,14 +178,15 @@ public class RealComplexDenseSparseVectorOperations {
     public static CNumber[] outerProduct(double[] src1, int[] indices, int sparseSize, CNumber[] src2) {
         ParameterChecks.assertEquals(sparseSize, src2.length);
 
-        CNumber[] dest = new CNumber[sparseSize*src2.length];
+        CNumber[] dest = new CNumber[src2.length*sparseSize];
         ArrayUtils.fillZeros(dest);
-        int index;
+        int destIndex;
 
-        for(int i=0; i<src2.length; i++) {
-            for(int j=0; j<src1.length; j++) {
-                index = indices[j];
-                dest[i*sparseSize + index] = src2[i].mult(src1[j]);
+        for(int i=0; i<src1.length; i++) {
+            destIndex = indices[i]*src2.length;
+
+            for(CNumber v : src2) {
+                dest[destIndex++] = v.mult(src1[i]);
             }
         }
 
