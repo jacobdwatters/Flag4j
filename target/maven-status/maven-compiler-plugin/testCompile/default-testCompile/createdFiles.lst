@@ -60,6 +60,7 @@ com\flag4j\operations\common\real\MatrixNormTests.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseOperationsTests.class
 com\flag4j\complex_numbers\CNumberTrigTest.class
 com\flag4j\CVectorAggregateTests.class
+com\flag4j\sparse_vector\SparseVectorOuterProductTest.class
 com\flag4j\TensorGetSetTests.class
 com\flag4j\util\StringUtilsTests.class
 com\flag4j\CTensorTransposeTests.class

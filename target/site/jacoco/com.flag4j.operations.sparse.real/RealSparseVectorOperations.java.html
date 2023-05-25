@@ -269,23 +269,25 @@ public class RealSparseVectorOperations {
      * @return The matrix resulting from the vector outer product.
      */
     public static Matrix outerProduct(SparseVector src1, SparseVector src2) {
-<span class="nc" id="L272">        double[] dest = new double[src2.size*src1.size];</span>
+<span class="fc" id="L272">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc" id="L274">        double[] dest = new double[src2.size*src1.size];</span>
         int destRow;
         int index1;
         int index2;
 
-<span class="nc bnc" id="L277" title="All 2 branches missed.">        for(int i=0; i&lt;src1.entries.length; i++) {</span>
-<span class="nc" id="L278">            index1 = src1.indices[i];</span>
-<span class="nc" id="L279">            destRow = index1*src1.size;</span>
+<span class="fc bfc" id="L279" title="All 2 branches covered.">        for(int i=0; i&lt;src1.entries.length; i++) {</span>
+<span class="fc" id="L280">            index1 = src1.indices[i];</span>
+<span class="fc" id="L281">            destRow = index1*src1.size;</span>
 
-<span class="nc bnc" id="L281" title="All 2 branches missed.">            for(int j=0; j&lt;src2.entries.length; j++) {</span>
-<span class="nc" id="L282">                index2 = src2.indices[j];</span>
+<span class="fc bfc" id="L283" title="All 2 branches covered.">            for(int j=0; j&lt;src2.entries.length; j++) {</span>
+<span class="fc" id="L284">                index2 = src2.indices[j];</span>
 
-<span class="nc" id="L284">                dest[destRow + index2] = src1.entries[i]*src2.entries[j];</span>
+<span class="fc" id="L286">                dest[destRow + index2] = src1.entries[i]*src2.entries[j];</span>
             }
         }
 
-<span class="nc" id="L288">        return new Matrix(src1.size, src2.size, dest);</span>
+<span class="fc" id="L290">        return new Matrix(src1.size, src2.size, dest);</span>
     }
 }
 

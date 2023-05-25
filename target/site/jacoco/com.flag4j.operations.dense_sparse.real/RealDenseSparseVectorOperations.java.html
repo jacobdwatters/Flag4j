@@ -100,18 +100,20 @@ public class RealDenseSparseVectorOperations {
      * @return The matrix resulting from the vector outer product.
      */
     public static double[] outerProduct(double[] src1, int[] indices, int sparseSize, double[] src2) {
-<span class="nc" id="L103">        double[] dest = new double[src2.length*sparseSize];</span>
+<span class="nc" id="L103">        ParameterChecks.assertEquals(sparseSize, src2.length);</span>
+
+<span class="nc" id="L105">        double[] dest = new double[src2.length*sparseSize];</span>
         int index;
 
-<span class="nc bnc" id="L106" title="All 2 branches missed.">        for(int i=0; i&lt;src2.length; i++) {</span>
-<span class="nc bnc" id="L107" title="All 2 branches missed.">            for(int j=0; j&lt;src1.length; j++) {</span>
-<span class="nc" id="L108">                index = indices[j];</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        for(int i=0; i&lt;src2.length; i++) {</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">            for(int j=0; j&lt;src1.length; j++) {</span>
+<span class="nc" id="L110">                index = indices[j];</span>
 
-<span class="nc" id="L110">                dest[i*src2.length + index] = src2[i]*src1[j];</span>
+<span class="nc" id="L112">                dest[i*src2.length + index] = src2[i]*src1[j];</span>
             }
         }
 
-<span class="nc" id="L114">        return dest;</span>
+<span class="nc" id="L116">        return dest;</span>
     }
 
 
@@ -123,14 +125,14 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static Vector sub(Vector src1, SparseVector src2) {
-<span class="fc" id="L126">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
-<span class="fc" id="L127">        Vector dest = new Vector(src1);</span>
+<span class="fc" id="L128">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L129">        Vector dest = new Vector(src1);</span>
 
-<span class="fc bfc" id="L129" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L130">            dest.entries[src2.indices[i]] -= src2.entries[i];</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L132">            dest.entries[src2.indices[i]] -= src2.entries[i];</span>
         }
 
-<span class="fc" id="L133">        return dest;</span>
+<span class="fc" id="L135">        return dest;</span>
     }
 
 
@@ -142,14 +144,14 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static Vector sub(SparseVector src1, Vector src2) {
-<span class="fc" id="L145">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
-<span class="fc" id="L146">        Vector dest = new Vector(RealOperations.scalMult(src2.entries, -1));</span>
+<span class="fc" id="L147">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L148">        Vector dest = new Vector(RealOperations.scalMult(src2.entries, -1));</span>
 
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        for(int i=0; i&lt;src1.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L149">            dest.entries[src1.indices[i]] += src1.entries[i];</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        for(int i=0; i&lt;src1.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L151">            dest.entries[src1.indices[i]] += src1.entries[i];</span>
         }
 
-<span class="fc" id="L152">        return dest;</span>
+<span class="fc" id="L154">        return dest;</span>
     }
 
 
@@ -160,12 +162,12 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static void addEq(Vector src1, SparseVector src2) {
-<span class="fc" id="L163">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L165">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
-<span class="fc bfc" id="L165" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L166">            src1.entries[src2.indices[i]] += src2.entries[i];</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L168">            src1.entries[src2.indices[i]] += src2.entries[i];</span>
         }
-<span class="fc" id="L168">    }</span>
+<span class="fc" id="L170">    }</span>
 
 
     /**
@@ -175,12 +177,12 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static void subEq(Vector src1, SparseVector src2) {
-<span class="fc" id="L178">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L180">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
-<span class="fc bfc" id="L180" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L181">            src1.entries[src2.indices[i]] -= src2.entries[i];</span>
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L183">            src1.entries[src2.indices[i]] -= src2.entries[i];</span>
         }
-<span class="fc" id="L183">    }</span>
+<span class="fc" id="L185">    }</span>
 
 
     /**
@@ -191,15 +193,15 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the two vectors are not the same size.
      */
     public static SparseVector elemMult(Vector src1, SparseVector src2) {
-<span class="fc" id="L194">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L196">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
 
-<span class="fc" id="L196">        double[] entries = new double[src2.entries.length];</span>
+<span class="fc" id="L198">        double[] entries = new double[src2.entries.length];</span>
 
-<span class="fc bfc" id="L198" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L199">            entries[i] = src1.entries[src2.indices[i]]*src2.entries[i];</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L201">            entries[i] = src1.entries[src2.indices[i]]*src2.entries[i];</span>
         }
 
-<span class="fc" id="L202">        return new SparseVector(src1.size, entries, src2.indices.clone());</span>
+<span class="fc" id="L204">        return new SparseVector(src1.size, entries, src2.indices.clone());</span>
     }
 
 
@@ -211,14 +213,14 @@ public class RealDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static Vector add(Vector src1, SparseVector src2) {
-<span class="fc" id="L214">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
-<span class="fc" id="L215">        Vector dest = new Vector(src1);</span>
+<span class="fc" id="L216">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L217">        Vector dest = new Vector(src1);</span>
 
-<span class="fc bfc" id="L217" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L218">            dest.entries[src2.indices[i]] += src2.entries[i];</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L220">            dest.entries[src2.indices[i]] += src2.entries[i];</span>
         }
 
-<span class="fc" id="L221">        return dest;</span>
+<span class="fc" id="L223">        return dest;</span>
     }
 
 
@@ -229,14 +231,14 @@ public class RealDenseSparseVectorOperations {
      * @return The result of the element-wise vector division.
      */
     public static SparseVector elemDiv(SparseVector src1, Vector src2) {
-<span class="fc" id="L232">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
-<span class="fc" id="L233">        double[] dest = new double[src1.entries.length];</span>
+<span class="fc" id="L234">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L235">        double[] dest = new double[src1.entries.length];</span>
 
-<span class="fc bfc" id="L235" title="All 2 branches covered.">        for(int i=0; i&lt;src1.entries.length; i++) {</span>
-<span class="fc" id="L236">            dest[i] = src1.entries[i]/src2.entries[src1.indices[i]];</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        for(int i=0; i&lt;src1.entries.length; i++) {</span>
+<span class="fc" id="L238">            dest[i] = src1.entries[i]/src2.entries[src1.indices[i]];</span>
         }
 
-<span class="fc" id="L239">        return new SparseVector(src1.size, dest, src1.indices.clone());</span>
+<span class="fc" id="L241">        return new SparseVector(src1.size, dest, src1.indices.clone());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
