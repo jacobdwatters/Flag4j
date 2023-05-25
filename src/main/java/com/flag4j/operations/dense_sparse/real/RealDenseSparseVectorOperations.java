@@ -100,6 +100,8 @@ public class RealDenseSparseVectorOperations {
      * @return The matrix resulting from the vector outer product.
      */
     public static double[] outerProduct(double[] src1, int[] indices, int sparseSize, double[] src2) {
+        ParameterChecks.assertEquals(sparseSize, src2.length);
+
         double[] dest = new double[src2.length*sparseSize];
         int index;
 

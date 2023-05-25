@@ -176,6 +176,8 @@ public class RealComplexDenseSparseVectorOperations {
      * @return The matrix resulting from the vector outer product.
      */
     public static CNumber[] outerProduct(double[] src1, int[] indices, int sparseSize, CNumber[] src2) {
+        ParameterChecks.assertEquals(sparseSize, src2.length);
+
         CNumber[] dest = new CNumber[sparseSize*src2.length];
         ArrayUtils.fillZeros(dest);
         int index;

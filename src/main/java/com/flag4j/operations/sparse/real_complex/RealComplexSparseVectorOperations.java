@@ -404,6 +404,8 @@ public class RealComplexSparseVectorOperations {
      * @return The matrix resulting from the vector outer product.
      */
     public static CMatrix outerProduct(SparseVector src1, SparseCVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
         CNumber[] dest = new CNumber[src2.size*src1.size];
         ArrayUtils.fillZeros(dest);
 

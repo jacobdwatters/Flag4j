@@ -269,6 +269,8 @@ public class RealSparseVectorOperations {
      * @return The matrix resulting from the vector outer product.
      */
     public static Matrix outerProduct(SparseVector src1, SparseVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
         double[] dest = new double[src2.size*src1.size];
         int destRow;
         int index1;
