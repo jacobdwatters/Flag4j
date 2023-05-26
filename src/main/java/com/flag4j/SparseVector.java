@@ -1136,21 +1136,30 @@ public class SparseVector
      */
     @Override
     public boolean isParallel(Vector b) {
+        final double tol = 1.0e-12; // Tolerance to accommodate floating point arithmetic error in scaling.
         boolean result;
 
         if(this.size!=b.size) {
             result = false;
-        } else if(this.size==1 || this.size==0) {
+        } else if(this.size<=1) {
             result = true;
         } else if(this.isZeros() || b.isZeros()) {
             result = true; // Any vector is parallel to zero vector.
         } else {
             result = true;
             int sparseIndex = 0;
-            double scale = this.entries[0]/b.entries[this.indices[0]];
+            double scale = 0;
+
+            // Find first non-zero entry in b and compute the scaling factor (we know there is at least one from else-if).
+            for(int i=0; i<b.size; i++) {
+                if(b.entries[i]!=0) {
+                    scale = this.entries[i]/b.entries[this.indices[i]];
+                    break;
+                }
+            }
 
             for(int i=0; i<b.size; i++) {
-                if(i!=this.indices[sparseIndex]) {
+                if(sparseIndex >= this.entries.length || i!=this.indices[sparseIndex]) {
                     // Then this index is not in the sparse vector.
                     if(b.entries[i] != 0) {
                         result = false;
@@ -1158,7 +1167,8 @@ public class SparseVector
                     }
 
                 } else {
-                    if(b.entries[i]*scale != this.entries[sparseIndex]) {
+                    // Ensure the scaled entry is approximately equal to the entry in this vector.
+                    if(Math.abs(b.entries[i]*scale - this.entries[sparseIndex]) > tol) {
                         result = false;
                         break;
                     }

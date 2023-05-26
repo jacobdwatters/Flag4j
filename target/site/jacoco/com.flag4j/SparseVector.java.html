@@ -1076,10 +1076,10 @@ import java.util.List;
      */
     @Override
     public Matrix outer(Vector b) {
-<span class="nc" id="L1079">        return new Matrix(</span>
+<span class="fc" id="L1079">        return new Matrix(</span>
                 this.size,
                 b.size,
-<span class="nc" id="L1082">                RealDenseSparseVectorOperations.outerProduct(this.entries, this.indices, this.size, b.entries)</span>
+<span class="fc" id="L1082">                RealDenseSparseVectorOperations.outerProduct(this.entries, this.indices, this.size, b.entries)</span>
         );
     }
 
@@ -1106,10 +1106,10 @@ import java.util.List;
      */
     @Override
     public CMatrix outer(CVector b) {
-<span class="nc" id="L1109">        return new CMatrix(</span>
+<span class="fc" id="L1109">        return new CMatrix(</span>
                 this.size,
                 b.size,
-<span class="nc" id="L1112">                RealComplexDenseSparseVectorOperations.outerProduct(this.entries, this.indices, this.size, b.entries)</span>
+<span class="fc" id="L1112">                RealComplexDenseSparseVectorOperations.outerProduct(this.entries, this.indices, this.size, b.entries)</span>
         );
     }
 
@@ -1136,39 +1136,49 @@ import java.util.List;
      */
     @Override
     public boolean isParallel(Vector b) {
+<span class="fc" id="L1139">        final double tol = 1.0e-12; // Tolerance to accommodate floating point arithmetic error in scaling.</span>
         boolean result;
 
-<span class="nc bnc" id="L1141" title="All 2 branches missed.">        if(this.size!=b.size) {</span>
-<span class="nc" id="L1142">            result = false;</span>
-<span class="nc bnc" id="L1143" title="All 4 branches missed.">        } else if(this.size==1 || this.size==0) {</span>
-<span class="nc" id="L1144">            result = true;</span>
-<span class="nc bnc" id="L1145" title="All 4 branches missed.">        } else if(this.isZeros() || b.isZeros()) {</span>
-<span class="nc" id="L1146">            result = true; // Any vector is parallel to zero vector.</span>
+<span class="fc bfc" id="L1142" title="All 2 branches covered.">        if(this.size!=b.size) {</span>
+<span class="fc" id="L1143">            result = false;</span>
+<span class="fc bfc" id="L1144" title="All 2 branches covered.">        } else if(this.size&lt;=1) {</span>
+<span class="fc" id="L1145">            result = true;</span>
+<span class="pc bpc" id="L1146" title="1 of 4 branches missed.">        } else if(this.isZeros() || b.isZeros()) {</span>
+<span class="fc" id="L1147">            result = true; // Any vector is parallel to zero vector.</span>
         } else {
-<span class="nc" id="L1148">            result = true;</span>
-<span class="nc" id="L1149">            int sparseIndex = 0;</span>
-<span class="nc" id="L1150">            double scale = this.entries[0]/b.entries[this.indices[0]];</span>
+<span class="fc" id="L1149">            result = true;</span>
+<span class="fc" id="L1150">            int sparseIndex = 0;</span>
+<span class="fc" id="L1151">            double scale = 0;</span>
 
-<span class="nc bnc" id="L1152" title="All 2 branches missed.">            for(int i=0; i&lt;b.size; i++) {</span>
-<span class="nc bnc" id="L1153" title="All 2 branches missed.">                if(i!=this.indices[sparseIndex]) {</span>
+            // Find first non-zero entry in b and compute the scaling factor (we know there is at least one from else-if).
+<span class="pc bpc" id="L1154" title="1 of 2 branches missed.">            for(int i=0; i&lt;b.size; i++) {</span>
+<span class="fc bfc" id="L1155" title="All 2 branches covered.">                if(b.entries[i]!=0) {</span>
+<span class="fc" id="L1156">                    scale = this.entries[i]/b.entries[this.indices[i]];</span>
+<span class="fc" id="L1157">                    break;</span>
+                }
+            }
+
+<span class="fc bfc" id="L1161" title="All 2 branches covered.">            for(int i=0; i&lt;b.size; i++) {</span>
+<span class="fc bfc" id="L1162" title="All 4 branches covered.">                if(sparseIndex &gt;= this.entries.length || i!=this.indices[sparseIndex]) {</span>
                     // Then this index is not in the sparse vector.
-<span class="nc bnc" id="L1155" title="All 2 branches missed.">                    if(b.entries[i] != 0) {</span>
-<span class="nc" id="L1156">                        result = false;</span>
-<span class="nc" id="L1157">                        break;</span>
+<span class="fc bfc" id="L1164" title="All 2 branches covered.">                    if(b.entries[i] != 0) {</span>
+<span class="fc" id="L1165">                        result = false;</span>
+<span class="fc" id="L1166">                        break;</span>
                     }
 
                 } else {
-<span class="nc bnc" id="L1161" title="All 2 branches missed.">                    if(b.entries[i]*scale != this.entries[sparseIndex]) {</span>
-<span class="nc" id="L1162">                        result = false;</span>
-<span class="nc" id="L1163">                        break;</span>
+                    // Ensure the scaled entry is approximately equal to the entry in this vector.
+<span class="fc bfc" id="L1171" title="All 2 branches covered.">                    if(Math.abs(b.entries[i]*scale - this.entries[sparseIndex]) &gt; tol) {</span>
+<span class="fc" id="L1172">                        result = false;</span>
+<span class="fc" id="L1173">                        break;</span>
                     }
 
-<span class="nc" id="L1166">                    sparseIndex++;</span>
+<span class="fc" id="L1176">                    sparseIndex++;</span>
                 }
             }
         }
 
-<span class="nc" id="L1171">        return result;</span>
+<span class="fc" id="L1181">        return result;</span>
     }
 
 
@@ -1182,13 +1192,13 @@ import java.util.List;
     public boolean isPerp(Vector b) {
         boolean result;
 
-<span class="nc bnc" id="L1185" title="All 2 branches missed.">        if(this.size!=b.size) {</span>
-<span class="nc" id="L1186">            result = false;</span>
+<span class="nc bnc" id="L1195" title="All 2 branches missed.">        if(this.size!=b.size) {</span>
+<span class="nc" id="L1196">            result = false;</span>
         } else {
-<span class="nc bnc" id="L1188" title="All 2 branches missed.">            result = this.inner(b)==0;</span>
+<span class="nc bnc" id="L1198" title="All 2 branches missed.">            result = this.inner(b)==0;</span>
         }
 
-<span class="nc" id="L1191">        return result;</span>
+<span class="nc" id="L1201">        return result;</span>
     }
 
 
@@ -1200,10 +1210,10 @@ import java.util.List;
      */
     @Override
     public SparseMatrix toMatrix() {
-<span class="nc" id="L1203">        int[] rowIndices = indices.clone();</span>
-<span class="nc" id="L1204">        int[] colIndices = new int[entries.length];</span>
+<span class="nc" id="L1213">        int[] rowIndices = indices.clone();</span>
+<span class="nc" id="L1214">        int[] colIndices = new int[entries.length];</span>
 
-<span class="nc" id="L1206">        return new SparseMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);</span>
+<span class="nc" id="L1216">        return new SparseMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);</span>
     }
 
 
@@ -1218,18 +1228,18 @@ import java.util.List;
      */
     @Override
     public SparseMatrix toMatrix(boolean columVector) {
-<span class="nc bnc" id="L1221" title="All 2 branches missed.">        if(columVector) {</span>
+<span class="nc bnc" id="L1231" title="All 2 branches missed.">        if(columVector) {</span>
             // Convert to column vector
-<span class="nc" id="L1223">            int[] rowIndices = indices.clone();</span>
-<span class="nc" id="L1224">            int[] colIndices = new int[entries.length];</span>
+<span class="nc" id="L1233">            int[] rowIndices = indices.clone();</span>
+<span class="nc" id="L1234">            int[] colIndices = new int[entries.length];</span>
 
-<span class="nc" id="L1226">            return new SparseMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);</span>
+<span class="nc" id="L1236">            return new SparseMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);</span>
         } else {
             // Convert to row vector.
-<span class="nc" id="L1229">            int[] rowIndices = new int[entries.length];</span>
-<span class="nc" id="L1230">            int[] colIndices = indices.clone();</span>
+<span class="nc" id="L1239">            int[] rowIndices = new int[entries.length];</span>
+<span class="nc" id="L1240">            int[] colIndices = indices.clone();</span>
 
-<span class="nc" id="L1232">            return new SparseMatrix(1, this.size, entries.clone(), rowIndices, colIndices);</span>
+<span class="nc" id="L1242">            return new SparseMatrix(1, this.size, entries.clone(), rowIndices, colIndices);</span>
         }
     }
 
@@ -1242,8 +1252,8 @@ import java.util.List;
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L1245">        int idx = AggregateDenseReal.argMin(entries);</span>
-<span class="nc" id="L1246">        return new int[]{indices[idx]};</span>
+<span class="nc" id="L1255">        int idx = AggregateDenseReal.argMin(entries);</span>
+<span class="nc" id="L1256">        return new int[]{indices[idx]};</span>
     }
 
 
@@ -1255,8 +1265,8 @@ import java.util.List;
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L1258">        int idx = AggregateDenseReal.argMax(entries);</span>
-<span class="nc" id="L1259">        return new int[]{indices[idx]};</span>
+<span class="nc" id="L1268">        int idx = AggregateDenseReal.argMax(entries);</span>
+<span class="nc" id="L1269">        return new int[]{indices[idx]};</span>
     }
 
 
@@ -1267,7 +1277,7 @@ import java.util.List;
      */
     @Override
     public double norm() {
-<span class="fc" id="L1270">        return VectorNorms.norm(entries);</span>
+<span class="fc" id="L1280">        return VectorNorms.norm(entries);</span>
     }
 
 
@@ -1281,7 +1291,7 @@ import java.util.List;
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L1284">        return VectorNorms.norm(entries, p);</span>
+<span class="nc" id="L1294">        return VectorNorms.norm(entries, p);</span>
     }
 
 
@@ -1292,7 +1302,7 @@ import java.util.List;
      */
     @Override
     public double infNorm() {
-<span class="nc" id="L1295">        return maxAbs();</span>
+<span class="nc" id="L1305">        return maxAbs();</span>
     }
 
 
@@ -1306,39 +1316,39 @@ import java.util.List;
      */
     @Override
     public SparseMatrix extend(int n, int axis) {
-<span class="nc" id="L1309">        ParameterChecks.assertAxis2D(axis);</span>
+<span class="nc" id="L1319">        ParameterChecks.assertAxis2D(axis);</span>
 
-<span class="nc" id="L1311">        int[][] matIndices = new int[2][n*nonZeroEntries];</span>
-<span class="nc" id="L1312">        double[] matEntries = new double[n*nonZeroEntries];</span>
+<span class="nc" id="L1321">        int[][] matIndices = new int[2][n*nonZeroEntries];</span>
+<span class="nc" id="L1322">        double[] matEntries = new double[n*nonZeroEntries];</span>
         Shape matShape;
 
-<span class="nc bnc" id="L1315" title="All 2 branches missed.">        if(axis==0) {</span>
-<span class="nc" id="L1316">            matShape = new Shape(n, this.size);</span>
-<span class="nc" id="L1317">            int[] rowIndices = new int[indices.length];</span>
+<span class="nc bnc" id="L1325" title="All 2 branches missed.">        if(axis==0) {</span>
+<span class="nc" id="L1326">            matShape = new Shape(n, this.size);</span>
+<span class="nc" id="L1327">            int[] rowIndices = new int[indices.length];</span>
 
-<span class="nc bnc" id="L1319" title="All 2 branches missed.">            for(int i=0; i&lt;n; i++) {</span>
-<span class="nc" id="L1320">                Arrays.fill(rowIndices, i);</span>
+<span class="nc bnc" id="L1329" title="All 2 branches missed.">            for(int i=0; i&lt;n; i++) {</span>
+<span class="nc" id="L1330">                Arrays.fill(rowIndices, i);</span>
 
-<span class="nc" id="L1322">                System.arraycopy(entries, 0, matEntries, n*i, entries.length);</span>
-<span class="nc" id="L1323">                System.arraycopy(rowIndices, 0, matIndices[0], n*i, indices.length);</span>
-<span class="nc" id="L1324">                System.arraycopy(indices, 0, matIndices[1], n*i, indices.length);</span>
+<span class="nc" id="L1332">                System.arraycopy(entries, 0, matEntries, n*i, entries.length);</span>
+<span class="nc" id="L1333">                System.arraycopy(rowIndices, 0, matIndices[0], n*i, indices.length);</span>
+<span class="nc" id="L1334">                System.arraycopy(indices, 0, matIndices[1], n*i, indices.length);</span>
             }
 
-<span class="nc" id="L1327">        } else {</span>
-<span class="nc" id="L1328">            matShape = new Shape(this.size, n);</span>
-<span class="nc" id="L1329">            int[] rowIndices = new int[n];</span>
-<span class="nc" id="L1330">            int[] colIndices = ArrayUtils.rangeInt(0, n);</span>
+<span class="nc" id="L1337">        } else {</span>
+<span class="nc" id="L1338">            matShape = new Shape(this.size, n);</span>
+<span class="nc" id="L1339">            int[] rowIndices = new int[n];</span>
+<span class="nc" id="L1340">            int[] colIndices = ArrayUtils.rangeInt(0, n);</span>
 
-<span class="nc bnc" id="L1332" title="All 2 branches missed.">            for(int i=0; i&lt;entries.length; i++) {</span>
-<span class="nc" id="L1333">                Arrays.fill(rowIndices, indices[i]);</span>
+<span class="nc bnc" id="L1342" title="All 2 branches missed.">            for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="nc" id="L1343">                Arrays.fill(rowIndices, indices[i]);</span>
 
-<span class="nc" id="L1335">                Arrays.fill(matEntries, entries.length*i, entries.length*i + n, entries[i]);</span>
-<span class="nc" id="L1336">                System.arraycopy(rowIndices, 0, matIndices[0], entries.length*i, n);</span>
-<span class="nc" id="L1337">                System.arraycopy(colIndices, 0, matIndices[1], entries.length*i, n);</span>
+<span class="nc" id="L1345">                Arrays.fill(matEntries, entries.length*i, entries.length*i + n, entries[i]);</span>
+<span class="nc" id="L1346">                System.arraycopy(rowIndices, 0, matIndices[0], entries.length*i, n);</span>
+<span class="nc" id="L1347">                System.arraycopy(colIndices, 0, matIndices[1], entries.length*i, n);</span>
             }
         }
 
-<span class="nc" id="L1341">        return new SparseMatrix(matShape, matEntries, matIndices[0], matIndices[1]);</span>
+<span class="nc" id="L1351">        return new SparseMatrix(matShape, matEntries, matIndices[0], matIndices[1]);</span>
     }
 
 
@@ -1349,7 +1359,7 @@ import java.util.List;
      */
     @Override
     public int length() {
-<span class="nc" id="L1352">        return this.size;</span>
+<span class="nc" id="L1362">        return this.size;</span>
     }
 
 
@@ -1358,8 +1368,8 @@ import java.util.List;
      */
     @Override
     public void sparseSort() {
-<span class="nc" id="L1361">        SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);</span>
-<span class="nc" id="L1362">    }</span>
+<span class="nc" id="L1371">        SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);</span>
+<span class="nc" id="L1372">    }</span>
 
 
     /**
@@ -1370,13 +1380,13 @@ import java.util.List;
      */
     @Override
     public SparseCVector toComplex() {
-<span class="nc" id="L1373">        CNumber[] destEntries = new CNumber[entries.length];</span>
-<span class="nc" id="L1374">        ArrayUtils.copy2CNumber(entries, destEntries);</span>
+<span class="nc" id="L1383">        CNumber[] destEntries = new CNumber[entries.length];</span>
+<span class="nc" id="L1384">        ArrayUtils.copy2CNumber(entries, destEntries);</span>
 
-<span class="nc" id="L1376">        return new SparseCVector(</span>
+<span class="nc" id="L1386">        return new SparseCVector(</span>
                 this.size,
                 destEntries,
-<span class="nc" id="L1379">                indices.clone()</span>
+<span class="nc" id="L1389">                indices.clone()</span>
         );
     }
 
@@ -1389,8 +1399,8 @@ import java.util.List;
      */
     @Override
     public SparseVector flatten(int axis) {
-<span class="pc bpc" id="L1392" title="1 of 4 branches missed.">        assert(axis==0) : &quot;Axis must be zero but got &quot; + axis;</span>
-<span class="fc" id="L1393">        return this.copy();</span>
+<span class="pc bpc" id="L1402" title="1 of 4 branches missed.">        assert(axis==0) : &quot;Axis must be zero but got &quot; + axis;</span>
+<span class="fc" id="L1403">        return this.copy();</span>
     }
 
 
@@ -1401,7 +1411,7 @@ import java.util.List;
      */
     @Override
     public int size() {
-<span class="fc" id="L1404">        return this.size;</span>
+<span class="fc" id="L1414">        return this.size;</span>
     }
 
 
@@ -1412,7 +1422,7 @@ import java.util.List;
      */
     @Override
     protected SparseVector getSelf() {
-<span class="nc" id="L1415">        return this;</span>
+<span class="nc" id="L1425">        return this;</span>
     }
 
 
@@ -1423,13 +1433,13 @@ import java.util.List;
      */
     @Override
     public Vector toDense() {
-<span class="nc" id="L1426">        double[] entries = new double[size];</span>
+<span class="nc" id="L1436">        double[] entries = new double[size];</span>
 
-<span class="nc bnc" id="L1428" title="All 2 branches missed.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
-<span class="nc" id="L1429">            entries[indices[i]] = this.entries[i];</span>
+<span class="nc bnc" id="L1438" title="All 2 branches missed.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
+<span class="nc" id="L1439">            entries[indices[i]] = this.entries[i];</span>
         }
 
-<span class="nc" id="L1432">        return new Vector(entries);</span>
+<span class="nc" id="L1442">        return new Vector(entries);</span>
     }
 
 
@@ -1440,21 +1450,21 @@ import java.util.List;
      * @return A sparse tensor which is equivalent to the {@code src} dense tensor.
      */
     public static SparseVector fromDense(Vector src) {
-<span class="nc" id="L1443">        List&lt;Double&gt; nonZeroEntries = new ArrayList&lt;&gt;((int) (src.entries.length*0.8));</span>
-<span class="nc" id="L1444">        List&lt;Integer&gt; indices = new ArrayList&lt;&gt;((int) (src.entries.length*0.8));</span>
+<span class="nc" id="L1453">        List&lt;Double&gt; nonZeroEntries = new ArrayList&lt;&gt;((int) (src.entries.length*0.8));</span>
+<span class="nc" id="L1454">        List&lt;Integer&gt; indices = new ArrayList&lt;&gt;((int) (src.entries.length*0.8));</span>
 
         // Fill entries with non-zero values.
-<span class="nc bnc" id="L1447" title="All 2 branches missed.">        for(int i=0; i&lt;src.entries.length; i++) {</span>
-<span class="nc bnc" id="L1448" title="All 2 branches missed.">            if(src.entries[i]!=0) {</span>
-<span class="nc" id="L1449">                nonZeroEntries.add(src.entries[i]);</span>
-<span class="nc" id="L1450">                indices.add(i);</span>
+<span class="nc bnc" id="L1457" title="All 2 branches missed.">        for(int i=0; i&lt;src.entries.length; i++) {</span>
+<span class="nc bnc" id="L1458" title="All 2 branches missed.">            if(src.entries[i]!=0) {</span>
+<span class="nc" id="L1459">                nonZeroEntries.add(src.entries[i]);</span>
+<span class="nc" id="L1460">                indices.add(i);</span>
             }
         }
 
-<span class="nc" id="L1454">        return new SparseVector(</span>
+<span class="nc" id="L1464">        return new SparseVector(</span>
                 src.size,
-<span class="nc" id="L1456">                nonZeroEntries.stream().mapToDouble(Double::doubleValue).toArray(),</span>
-<span class="nc" id="L1457">                indices.stream().mapToInt(Integer::intValue).toArray()</span>
+<span class="nc" id="L1466">                nonZeroEntries.stream().mapToDouble(Double::doubleValue).toArray(),</span>
+<span class="nc" id="L1467">                indices.stream().mapToInt(Integer::intValue).toArray()</span>
         );
     }
 
@@ -1465,39 +1475,39 @@ import java.util.List;
      * @return A human-readable string representing this tensor.
      */
     public String toString() {
-<span class="fc" id="L1468">        int size = nonZeroEntries;</span>
-<span class="fc" id="L1469">        StringBuilder result = new StringBuilder(String.format(&quot;Full Shape: %s\n&quot;, shape));</span>
-<span class="fc" id="L1470">        result.append(&quot;Non-zero entries: [&quot;);</span>
+<span class="fc" id="L1478">        int size = nonZeroEntries;</span>
+<span class="fc" id="L1479">        StringBuilder result = new StringBuilder(String.format(&quot;Full Shape: %s\n&quot;, shape));</span>
+<span class="fc" id="L1480">        result.append(&quot;Non-zero entries: [&quot;);</span>
 
-<span class="fc" id="L1472">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
+<span class="fc" id="L1482">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
         int width;
         String value;
 
         // Get entries up until the stopping point.
-<span class="fc bfc" id="L1477" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
-<span class="fc" id="L1478">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
-<span class="fc" id="L1479">            width = PrintOptions.getPadding() + value.length();</span>
-<span class="fc bfc" id="L1480" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1481">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L1487" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="fc" id="L1488">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
+<span class="fc" id="L1489">            width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L1490" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1491">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="fc bfc" id="L1484" title="All 2 branches covered.">        if(stopIndex &lt; size-1) {</span>
-<span class="fc" id="L1485">            width = PrintOptions.getPadding() + 3;</span>
-<span class="fc" id="L1486">            value = &quot;...&quot;;</span>
-<span class="pc bpc" id="L1487" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1488">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L1494" title="All 2 branches covered.">        if(stopIndex &lt; size-1) {</span>
+<span class="fc" id="L1495">            width = PrintOptions.getPadding() + 3;</span>
+<span class="fc" id="L1496">            value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L1497" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1498">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
         // Get last entry now
-<span class="fc" id="L1492">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
-<span class="fc" id="L1493">        width = PrintOptions.getPadding() + value.length();</span>
-<span class="fc bfc" id="L1494" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1495">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc" id="L1502">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
+<span class="fc" id="L1503">        width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L1504" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1505">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
 
-<span class="fc" id="L1497">        result.append(&quot;]\n&quot;);</span>
-<span class="fc" id="L1498">        result.append(&quot;Indices: &quot;).append(Arrays.toString(indices));</span>
+<span class="fc" id="L1507">        result.append(&quot;]\n&quot;);</span>
+<span class="fc" id="L1508">        result.append(&quot;Indices: &quot;).append(Arrays.toString(indices));</span>
 
-<span class="fc" id="L1500">        return result.toString();</span>
+<span class="fc" id="L1510">        return result.toString();</span>
     }
 }
 

@@ -74,6 +74,7 @@ com\flag4j\MatrixPropertiesTests.class
 com\flag4j\CTensorElemMultTests.class
 com\flag4j\sparse_vector\SparseVectorSetTests.class
 com\flag4j\operations\RealDenseMatrixMultiplyDispatcherTests.class
+com\flag4j\sparse_vector\SparseVectorParPerpTests.class
 com\flag4j\CTensorDotTests.class
 com\flag4j\CMatrixUnaryOperationsTests.class
 com\flag4j\RemoveRowColTests.class

@@ -54,6 +54,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixSubTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CVectorOuterProductTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseTensorConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixAddToEachRowTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\sparse_vector\SparseVectorParPerpTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\complex\ComplexMatrixMultiplyTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CTensorReshapeTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\sparse\real\RealSparseMatMultTests.java
@@ -81,6 +82,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixDirectSumTest
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\complex\CMatrixMultiplyTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CVectorConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberExponentialTest.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\sparse_vector\SparseVectorOuterProductTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixElementScalarTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\VectorAddSubEqTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\VectorPerpParallelTests.java

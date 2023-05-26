@@ -100,20 +100,20 @@ public class RealDenseSparseVectorOperations {
      * @return The matrix resulting from the vector outer product.
      */
     public static double[] outerProduct(double[] src1, int[] indices, int sparseSize, double[] src2) {
-<span class="nc" id="L103">        ParameterChecks.assertEquals(sparseSize, src2.length);</span>
+<span class="fc" id="L103">        ParameterChecks.assertEquals(sparseSize, src2.length);</span>
 
-<span class="nc" id="L105">        double[] dest = new double[src2.length*sparseSize];</span>
-        int index;
+<span class="fc" id="L105">        double[] dest = new double[src2.length*sparseSize];</span>
+        int destIndex;
 
-<span class="nc bnc" id="L108" title="All 2 branches missed.">        for(int i=0; i&lt;src2.length; i++) {</span>
-<span class="nc bnc" id="L109" title="All 2 branches missed.">            for(int j=0; j&lt;src1.length; j++) {</span>
-<span class="nc" id="L110">                index = indices[j];</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L109">            destIndex = indices[i]*src2.length;</span>
 
-<span class="nc" id="L112">                dest[i*src2.length + index] = src2[i]*src1[j];</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">            for(double v : src2) {</span>
+<span class="fc" id="L112">                dest[destIndex++] = src1[i]*v;</span>
             }
         }
 
-<span class="nc" id="L116">        return dest;</span>
+<span class="fc" id="L116">        return dest;</span>
     }
 
 
