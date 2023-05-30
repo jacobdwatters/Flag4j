@@ -24,8 +24,7 @@
 
 package com.flag4j.operations.sparse.real_complex;
 
-import com.flag4j.SparseCVector;
-import com.flag4j.SparseVector;
+import com.flag4j.*;
 import com.flag4j.util.ArrayUtils;
 
 import java.util.Arrays;
@@ -34,6 +33,31 @@ import java.util.Arrays;
  * This class contains methods for checking the equality of real/complex sparse tensors.
  */
 public class RealComplexSparseEquals {
+
+
+    /**
+     * Checks if a real sparse tensor and complex sparse tensor are equal.
+     * @param a First tensor in the equality check.
+     * @param b Second tensor in the equality check.
+     * @return True if the tensors are equal. False otherwise.
+     */
+    public static boolean tensorEquals(SparseTensor a, SparseCTensor b) {
+        return a.shape.equals(b.shape) && ArrayUtils.equals(a.entries, b.entries)
+                && Arrays.deepEquals(a.indices, b.indices);
+    }
+
+
+    /**
+     * Checks if a real sparse matrix and complex sparse matrix are equal.
+     * @param a First vector in the equality check.
+     * @param b Second vector in the equality check.
+     * @return True if the vectors are equal. False otherwise.
+     */
+    public static boolean matrixEquals(SparseMatrix a, SparseCMatrix b) {
+        return a.shape.equals(b.shape) && ArrayUtils.equals(a.entries, b.entries)
+                && Arrays.equals(a.rowIndices, b.rowIndices)
+                && Arrays.equals(a.colIndices, b.colIndices);
+    }
 
 
     /**

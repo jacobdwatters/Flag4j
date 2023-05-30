@@ -280,6 +280,7 @@ public class SparseVector
     @Override
     public CVector join(CVector b) {
         CNumber[] newEntries = new CNumber[this.size + b.entries.length];
+        ArrayUtils.fillZeros(newEntries);
 
         // Copy over sparse values.
         for(int i=0; i<this.entries.length; i++) {
@@ -437,7 +438,7 @@ public class SparseVector
         int[] rowIndices = new int[b.size];
         Arrays.fill(rowIndices, 1);
         ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
-        System.arraycopy(rowIndices, 0, indices[1], entries.length,  b.size);
+        System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
         System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);
 
         return new SparseCMatrix(2, b.size, destEntries, indices[0], indices[1]);
@@ -1190,12 +1191,13 @@ public class SparseVector
      */
     @Override
     public boolean isPerp(Vector b) {
+        final double tol = 1.0e-12; // Tolerance to accommodate floating point arithmetic error in scaling.
         boolean result;
 
         if(this.size!=b.size) {
             result = false;
         } else {
-            result = this.inner(b)==0;
+            result = Math.abs(this.inner(b)) < tol;
         }
 
         return result;
@@ -1241,6 +1243,19 @@ public class SparseVector
 
             return new SparseMatrix(1, this.size, entries.clone(), rowIndices, colIndices);
         }
+    }
+
+
+    /**
+     * Converts this vector to an equivalent tensor.
+     * @return A tensor which is equivalent to this vector.
+     */
+    public SparseTensor toTensor() {
+        return new SparseTensor(
+                this.shape.copy(),
+                this.entries.clone(),
+                RealDenseTranspose.blockedIntMatrix(new int[][]{this.indices.clone()})
+        );
     }
 
 

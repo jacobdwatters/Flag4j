@@ -57,34 +57,35 @@ public final class SparseDataWrapper&lt;T&gt; {
     /**
      * Non-zero values of the sparse tensor to wrap.
      */
-    List&lt;T&gt; values;
+    private final List&lt;T&gt; values;
     /**
      * Stores wrapped indices. Each list is a single index for the {@code values} data. If the tensor is of rank {@code N}, then
      * each List in {@code keys} will have {@code N} entries. If there are {@code M} non-zero entries in the
      * sparse tensor, then there will be {@code M} lists in the array.
      */
-    List&lt;Integer&gt;[] keys;
+    private final List&lt;Integer&gt;[] keys;
 
 
     /**
      * Wraps the data, and it's associated indices, of a sparse tensor.
      * @param values Non-zero values of the sparse tensor.
      * @param indices Indices of non-zero values in the sparse tensor.
+     * @param transpose Indicates if a transpose should be applied to the indices array.
      */
-<span class="nc" id="L74">    private SparseDataWrapper(T[] values, int[][] indices) {</span>
-<span class="nc" id="L75">        this.values = Arrays.asList(values);</span>
-<span class="nc" id="L76">        this.keys = new List[indices[0].length];</span>
-<span class="nc" id="L77">        int[][] indicesT = RealDenseTranspose.blockedIntMatrix(indices);</span>
+<span class="fc" id="L75">    private SparseDataWrapper(T[] values, int[][] indices, boolean transpose) {</span>
+<span class="fc" id="L76">        this.values = Arrays.asList(values);</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        this.keys = transpose ? new List[indices[0].length] : new List[indices.length];</span>
 
-        // The indices array must be transposed.
-<span class="nc bnc" id="L80" title="All 2 branches missed.">        for(int i=0; i&lt;indicesT.length; i++) {</span>
-<span class="nc bnc" id="L81" title="All 2 branches missed.">            if(values.length != indicesT[i].length) {</span>
-<span class="nc" id="L82">                throw new IllegalArgumentException(&quot;All lists must have the same length.&quot;);</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        int[][] indicesT = transpose ? RealDenseTranspose.blockedIntMatrix(indices) : indices;</span>
+
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        for(int i=0; i&lt;indicesT.length; i++) {</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">            if(values.length != indicesT[i].length) {</span>
+<span class="nc" id="L83">                throw new IllegalArgumentException(&quot;All lists must have the same length.&quot;);</span>
             }
 
-<span class="nc" id="L85">            this.keys[i] = IntStream.of(indicesT[i]).boxed().collect(Collectors.toList());</span>
+<span class="fc" id="L86">            this.keys[i] = IntStream.of(indicesT[i]).boxed().collect(Collectors.toList());</span>
         }
-<span class="nc" id="L87">    }</span>
+<span class="fc" id="L88">    }</span>
 
 
     /**
@@ -95,7 +96,7 @@ public final class SparseDataWrapper&lt;T&gt; {
      * @return A new instance of {@link SparseDataWrapper} which wraps the specified {@code values} and {@code indices}.
      */
     public static &lt;T extends Number&gt; SparseDataWrapper&lt;T&gt; wrap(T[] values, int[][] indices) {
-<span class="nc" id="L98">        return new SparseDataWrapper&lt;&gt;(values, indices);</span>
+<span class="nc" id="L99">        return new SparseDataWrapper&lt;&gt;(values, indices, true);</span>
     }
 
 
@@ -107,7 +108,7 @@ public final class SparseDataWrapper&lt;T&gt; {
      * @return A new instance of {@link SparseDataWrapper} which wraps the specified {@code values} and {@code indices}.
      */
     public static &lt;T extends Number&gt; SparseDataWrapper&lt;T&gt; wrap(T[] values, int[] indices) {
-<span class="nc" id="L110">        return new SparseDataWrapper&lt;&gt;(values, new int[][]{indices});</span>
+<span class="nc" id="L111">        return new SparseDataWrapper&lt;&gt;(values, new int[][]{indices}, false);</span>
     }
 
 
@@ -119,7 +120,7 @@ public final class SparseDataWrapper&lt;T&gt; {
      */
     public static SparseDataWrapper&lt;Double&gt; wrap(double[] values, int[][] indices) {
         // Wrap the primitive array.
-<span class="nc" id="L122">        return new SparseDataWrapper&lt;&gt;(Arrays.stream(values).boxed().toArray(Double[]::new), indices);</span>
+<span class="nc" id="L123">        return new SparseDataWrapper&lt;&gt;(Arrays.stream(values).boxed().toArray(Double[]::new), indices, true);</span>
     }
 
 
@@ -131,7 +132,7 @@ public final class SparseDataWrapper&lt;T&gt; {
      */
     public static SparseDataWrapper&lt;Double&gt; wrap(double[] values, int[] indices) {
         // Wrap the primitive array.
-<span class="nc" id="L134">        return new SparseDataWrapper&lt;&gt;(Arrays.stream(values).boxed().toArray(Double[]::new), new int[][]{indices});</span>
+<span class="fc" id="L135">        return new SparseDataWrapper&lt;&gt;(Arrays.stream(values).boxed().toArray(Double[]::new), new int[][]{indices}, false);</span>
     }
 
 
@@ -141,12 +142,12 @@ public final class SparseDataWrapper&lt;T&gt; {
      * @return A reference to this sparse data wrapper.
      */
     public SparseDataWrapper&lt;T&gt; sparseSort() {
-<span class="nc bnc" id="L144" title="All 2 branches missed.">        if(values.size() &gt; 2) {</span>
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">        if(values.size() &gt; 2) {</span>
             // Only need to sort list with more than 1 entry.
-<span class="nc" id="L146">            sparseSortHelper(0, 0, values.size());</span>
+<span class="fc" id="L147">            sparseSortHelper(0, 0, values.size());</span>
         }
 
-<span class="nc" id="L149">        return this;</span>
+<span class="fc" id="L150">        return this;</span>
     }
 
 
@@ -158,75 +159,75 @@ public final class SparseDataWrapper&lt;T&gt; {
      * @param stop Stopping index of range to sort the key list over (exclusive).
      */
     private void sparseSortHelper(int keyIdx, int start, int stop) {
-<span class="nc bnc" id="L161" title="All 6 branches missed.">        if(start&gt;=stop-1 || keyIdx&gt;=keys.length || keyIdx&lt;0) {</span>
-<span class="nc" id="L162">            return; // No sorting to do.</span>
+<span class="pc bpc" id="L162" title="3 of 6 branches missed.">        if(start&gt;=stop-1 || keyIdx&gt;=keys.length || keyIdx&lt;0) {</span>
+<span class="nc" id="L163">            return; // No sorting to do.</span>
         }
 
-<span class="nc" id="L165">        List&lt;Integer&gt; key = keys[keyIdx].subList(start, stop);</span>
+<span class="fc" id="L166">        List&lt;Integer&gt; key = keys[keyIdx].subList(start, stop);</span>
 
         // Create a List of indices.
-<span class="nc" id="L168">        List&lt;Integer&gt; indices = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L169" title="All 2 branches missed.">        for(int i=0; i&lt;key.size(); i++) {</span>
-<span class="nc" id="L170">            indices.add(i);</span>
+<span class="fc" id="L169">        List&lt;Integer&gt; indices = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        for(int i=0; i&lt;key.size(); i++) {</span>
+<span class="fc" id="L171">            indices.add(i);</span>
         }
 
         // Sort the indices list based on the key list.
-<span class="nc" id="L174">        indices.sort(Comparator.comparingInt(key::get));</span>
+<span class="fc" id="L175">        indices.sort(Comparator.comparingInt(key::get));</span>
 
-<span class="nc" id="L176">        Map&lt;Integer, Integer&gt; swapMap = new HashMap&lt;&gt;(indices.size());</span>
-<span class="nc" id="L177">        List&lt;Integer&gt; swapFrom = new ArrayList&lt;&gt;(indices.size()),</span>
-<span class="nc" id="L178">                swapTo = new ArrayList&lt;&gt;(indices.size());</span>
+<span class="fc" id="L177">        Map&lt;Integer, Integer&gt; swapMap = new HashMap&lt;&gt;(indices.size());</span>
+<span class="fc" id="L178">        List&lt;Integer&gt; swapFrom = new ArrayList&lt;&gt;(indices.size()),</span>
+<span class="fc" id="L179">                swapTo = new ArrayList&lt;&gt;(indices.size());</span>
 
         // Create map to facilitate reordering list to match sorted indices.
-<span class="nc bnc" id="L181" title="All 2 branches missed.">        for(int i=0; i&lt;key.size(); i++) {</span>
-<span class="nc" id="L182">            int k = indices.get(i);</span>
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        for(int i=0; i&lt;key.size(); i++) {</span>
+<span class="fc" id="L183">            int k = indices.get(i);</span>
 
-<span class="nc bnc" id="L184" title="All 4 branches missed.">            while(i != k &amp;&amp; swapMap.containsKey(k)) {</span>
-<span class="nc" id="L185">                k = swapMap.get(k);</span>
+<span class="fc bfc" id="L185" title="All 4 branches covered.">            while(i != k &amp;&amp; swapMap.containsKey(k)) {</span>
+<span class="fc" id="L186">                k = swapMap.get(k);</span>
             }
 
-<span class="nc" id="L188">            swapFrom.add(i);</span>
-<span class="nc" id="L189">            swapTo.add(k);</span>
-<span class="nc" id="L190">            swapMap.put(i, k);</span>
+<span class="fc" id="L189">            swapFrom.add(i);</span>
+<span class="fc" id="L190">            swapTo.add(k);</span>
+<span class="fc" id="L191">            swapMap.put(i, k);</span>
         }
 
         // Use map to reorder values sub-list.
-<span class="nc" id="L194">        List&lt;T&gt; valuesSubList = values.subList(start, stop);</span>
-<span class="nc bnc" id="L195" title="All 2 branches missed.">        for(int i=0; i&lt;key.size(); i++) {</span>
-<span class="nc" id="L196">            Collections.swap(valuesSubList, swapFrom.get(i), swapTo.get(i));</span>
+<span class="fc" id="L195">        List&lt;T&gt; valuesSubList = values.subList(start, stop);</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        for(int i=0; i&lt;key.size(); i++) {</span>
+<span class="fc" id="L197">            Collections.swap(valuesSubList, swapFrom.get(i), swapTo.get(i));</span>
         }
 
         // Use map to reorder each key sub-list.
-<span class="nc bnc" id="L200" title="All 2 branches missed.">        for(List&lt;Integer&gt; list : keys) {</span>
-<span class="nc" id="L201">            List&lt;Integer&gt; subList = list.subList(start, stop);</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        for(List&lt;Integer&gt; list : keys) {</span>
+<span class="fc" id="L202">            List&lt;Integer&gt; subList = list.subList(start, stop);</span>
 
-<span class="nc bnc" id="L203" title="All 2 branches missed.">            for (int i = 0; i &lt; key.size(); i++) {</span>
-<span class="nc" id="L204">                Collections.swap(subList, swapFrom.get(i), swapTo.get(i));</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">            for (int i = 0; i &lt; key.size(); i++) {</span>
+<span class="fc" id="L205">                Collections.swap(subList, swapFrom.get(i), swapTo.get(i));</span>
             }
         }
 
         // Find ranges which have the same value in the sorted key list.
-<span class="nc" id="L209">        int startCounter = 0;</span>
-<span class="nc" id="L210">        int endCounter = 1;</span>
-<span class="nc bnc" id="L211" title="All 2 branches missed.">        while(endCounter&lt;key.size()) {</span>
-<span class="nc bnc" id="L212" title="All 2 branches missed.">            if(!key.get(startCounter).equals(key.get(endCounter))) {</span>
-<span class="nc bnc" id="L213" title="All 2 branches missed.">                if(endCounter-startCounter &gt; 1) {</span>
+<span class="fc" id="L210">        int startCounter = 0;</span>
+<span class="fc" id="L211">        int endCounter = 1;</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        while(endCounter&lt;key.size()) {</span>
+<span class="pc bpc" id="L213" title="1 of 2 branches missed.">            if(!key.get(startCounter).equals(key.get(endCounter))) {</span>
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">                if(endCounter-startCounter &gt; 1) {</span>
                     // Sort the range of the next key list.
-<span class="nc" id="L215">                    sparseSortHelper(keyIdx+1, startCounter+start, endCounter+start);</span>
+<span class="nc" id="L216">                    sparseSortHelper(keyIdx+1, startCounter+start, endCounter+start);</span>
                 }
 
-<span class="nc" id="L218">                startCounter=endCounter;</span>
+<span class="fc" id="L219">                startCounter=endCounter;</span>
             }
 
-<span class="nc" id="L221">            endCounter++;</span>
+<span class="fc" id="L222">            endCounter++;</span>
         }
 
         // Check for final range of same values.
-<span class="nc bnc" id="L225" title="All 2 branches missed.">        if(startCounter!=endCounter-1) {</span>
+<span class="pc bpc" id="L226" title="1 of 2 branches missed.">        if(startCounter!=endCounter-1) {</span>
             // Sort the range of the next key list.
-<span class="nc" id="L227">            sparseSortHelper(keyIdx+1, startCounter+start, endCounter+start);</span>
+<span class="nc" id="L228">            sparseSortHelper(keyIdx+1, startCounter+start, endCounter+start);</span>
         }
-<span class="nc" id="L229">    }</span>
+<span class="fc" id="L230">    }</span>
 
 
     /**
@@ -236,17 +237,17 @@ public final class SparseDataWrapper&lt;T&gt; {
      */
     public void unwrap(T[] values, int[][] indices) {
         // Copy over data values.
-<span class="nc bnc" id="L239" title="All 2 branches missed.">        for(int i=0; i&lt;this.values.size(); i++) {</span>
-<span class="nc" id="L240">            values[i] = this.values.get(i);</span>
+<span class="nc bnc" id="L240" title="All 2 branches missed.">        for(int i=0; i&lt;this.values.size(); i++) {</span>
+<span class="nc" id="L241">            values[i] = this.values.get(i);</span>
         }
 
         // Copy over indices (must be transposed).
-<span class="nc bnc" id="L244" title="All 2 branches missed.">        for(int i=0; i&lt;indices.length; i++) {</span>
-<span class="nc bnc" id="L245" title="All 2 branches missed.">            for(int j=0; j&lt;indices[0].length; j++) {</span>
-<span class="nc" id="L246">                indices[i][j] = this.keys[j].get(i);</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">        for(int i=0; i&lt;indices.length; i++) {</span>
+<span class="nc bnc" id="L246" title="All 2 branches missed.">            for(int j=0; j&lt;indices[0].length; j++) {</span>
+<span class="nc" id="L247">                indices[i][j] = this.keys[j].get(i);</span>
             }
         }
-<span class="nc" id="L249">    }</span>
+<span class="nc" id="L250">    }</span>
 
 
     /**
@@ -256,15 +257,15 @@ public final class SparseDataWrapper&lt;T&gt; {
      */
     public void unwrap(T[] values, int[] indices) {
         // Copy over data values.
-<span class="nc bnc" id="L259" title="All 2 branches missed.">        for(int i=0; i&lt;this.values.size(); i++) {</span>
-<span class="nc" id="L260">            values[i] = this.values.get(i);</span>
+<span class="nc bnc" id="L260" title="All 2 branches missed.">        for(int i=0; i&lt;this.values.size(); i++) {</span>
+<span class="nc" id="L261">            values[i] = this.values.get(i);</span>
         }
 
         // Copy over indices (must be transposed).
-<span class="nc bnc" id="L264" title="All 2 branches missed.">        for(int i=0; i&lt;indices.length; i++) {</span>
-<span class="nc" id="L265">            indices[i] = this.keys[0].get(i);</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">        for(int i=0; i&lt;indices.length; i++) {</span>
+<span class="nc" id="L266">            indices[i] = this.keys[0].get(i);</span>
         }
-<span class="nc" id="L267">    }</span>
+<span class="nc" id="L268">    }</span>
 
 
     /**
@@ -274,17 +275,17 @@ public final class SparseDataWrapper&lt;T&gt; {
      */
     public void unwrap(double[] values, int[][] indices) {
         // Copy over data values.
-<span class="nc bnc" id="L277" title="All 2 branches missed.">        for(int i=0; i&lt;this.values.size(); i++) {</span>
-<span class="nc" id="L278">            values[i] = (double) this.values.get(i);</span>
+<span class="nc bnc" id="L278" title="All 2 branches missed.">        for(int i=0; i&lt;this.values.size(); i++) {</span>
+<span class="nc" id="L279">            values[i] = (double) this.values.get(i);</span>
         }
 
         // Copy over indices (must be transposed).
-<span class="nc bnc" id="L282" title="All 2 branches missed.">        for(int i=0; i&lt;indices.length; i++) {</span>
-<span class="nc bnc" id="L283" title="All 2 branches missed.">            for(int j=0; j&lt;indices[0].length; j++) {</span>
-<span class="nc" id="L284">                indices[i][j] = this.keys[j].get(i);</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">        for(int i=0; i&lt;indices.length; i++) {</span>
+<span class="nc bnc" id="L284" title="All 2 branches missed.">            for(int j=0; j&lt;indices[0].length; j++) {</span>
+<span class="nc" id="L285">                indices[i][j] = this.keys[j].get(i);</span>
             }
         }
-<span class="nc" id="L287">    }</span>
+<span class="nc" id="L288">    }</span>
 
 
     /**
@@ -294,14 +295,14 @@ public final class SparseDataWrapper&lt;T&gt; {
      */
     public void unwrap(double[] values, int[] indices) {
         // Copy over data values.
-<span class="nc bnc" id="L297" title="All 2 branches missed.">        for(int i=0; i&lt;this.values.size(); i++) {</span>
-<span class="nc" id="L298">            values[i] = (double) this.values.get(i);</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">        for(int i=0; i&lt;this.values.size(); i++) {</span>
+<span class="fc" id="L299">            values[i] = (double) this.values.get(i);</span>
         }
 
         // Copy over indices (must be transposed).
-<span class="nc bnc" id="L302" title="All 2 branches missed.">        for(int i=0; i&lt;indices.length; i++) {</span>
-<span class="nc" id="L303">            indices[i] = this.keys[0].get(i);</span>
+<span class="fc bfc" id="L303" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L304">            indices[i] = this.keys[0].get(i);</span>
         }
-<span class="nc" id="L305">    }</span>
+<span class="fc" id="L306">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

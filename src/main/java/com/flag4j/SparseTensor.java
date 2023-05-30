@@ -27,6 +27,10 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.sparse.RealSparseTensorBase;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.sparse.real.RealSparseEquals;
+import com.flag4j.operations.sparse.real_complex.RealComplexSparseEquals;
 
 import java.util.Arrays;
 
@@ -80,6 +84,42 @@ public class SparseTensor
         for(int i=0; i<indices.length; i++) {
             super.indices[i] = A.indices[i].clone();
         }
+    }
+
+
+    /**
+     * Checks if an object is equal to this sparse tensor object. Valid object types are: {@link Tensor}, {@link CTensor},
+     * {@link SparseTensor}, and {@link SparseCTensor}. These tensors are equal to this tensor if all entries are
+     * numerically equal to the corresponding element of this tensor.
+     *
+     * @param object Object to check equality with this tensor.
+     * @return True if the two tensors are numerically equivalent and false otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        boolean equal = false;
+
+        if(object instanceof Tensor) {
+            Tensor tensor = (Tensor) object;
+            equal = RealDenseSparseEquals.tensorEquals(tensor, this);
+
+        } else if(object instanceof CTensor) {
+            CTensor tensor = (CTensor) object;
+            equal = RealComplexDenseSparseEquals.tensorEquals(tensor, this);
+
+        } else if(object instanceof SparseTensor) {
+            SparseTensor tensor = (SparseTensor) object;
+            equal = RealSparseEquals.tensorEquals(this, tensor);
+
+        } else if(object instanceof SparseCTensor) {
+            SparseCTensor tensor = (SparseCTensor) object;
+            equal = RealComplexSparseEquals.tensorEquals(this, tensor);
+
+        } else {
+            equal = false;
+        }
+
+        return equal;
     }
 
 

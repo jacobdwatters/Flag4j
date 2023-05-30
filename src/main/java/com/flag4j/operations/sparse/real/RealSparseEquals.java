@@ -25,6 +25,8 @@
 package com.flag4j.operations.sparse.real;
 
 
+import com.flag4j.SparseMatrix;
+import com.flag4j.SparseTensor;
 import com.flag4j.SparseVector;
 
 import java.util.Arrays;
@@ -36,12 +38,37 @@ public class RealSparseEquals {
 
 
     /**
-     * Checks if two real sparse vectors are real.
+     * Checks if two real sparse tensors are real. Assumes the indices of each sparse tensor are sorted.
+     * @param a First tensor in the equality check.
+     * @param b Second tensor in the equality check.
+     * @return True if the tensors are equal. False otherwise.
+     */
+    public static boolean tensorEquals(SparseTensor a, SparseTensor b) {
+        return a.shape.equals(b.shape) && Arrays.equals(a.entries, b.entries)
+                && Arrays.deepEquals(a.indices, b.indices);
+    }
+
+
+    /**
+     * Checks if two real sparse matrices are real. Assumes the indices of each sparse matrix are sorted.
+     * @param a First matrix in the equality check.
+     * @param b Second matrix in the equality check.
+     * @return True if the matrices are equal. False otherwise.
+     */
+    public static boolean matrixEquals(SparseMatrix a, SparseMatrix b) {
+        return a.shape.equals(b.shape) && Arrays.equals(a.entries, b.entries)
+                && Arrays.equals(a.rowIndices, b.rowIndices) && Arrays.equals(a.colIndices, b.colIndices);
+    }
+
+
+    /**
+     * Checks if two real sparse vectors are real. Assumes the indices of each sparse vector are sorted.
      * @param a First vector in the equality check.
      * @param b Second vector in the equality check.
      * @return True if the vectors are equal. False otherwise.
      */
     public static boolean vectorEquals(SparseVector a, SparseVector b) {
-        return a.size == b.size && Arrays.equals(a.indices, b.indices) && Arrays.equals(a.entries, b.entries);
+        return a.size == b.size && Arrays.equals(a.indices, b.indices)
+                && Arrays.equals(a.entries, b.entries);
     }
 }

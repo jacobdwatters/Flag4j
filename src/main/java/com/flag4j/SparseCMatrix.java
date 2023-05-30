@@ -27,6 +27,10 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.sparse.ComplexSparseTensorBase;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.sparse.complex.ComplexSparseEquals;
+import com.flag4j.operations.sparse.real_complex.RealComplexSparseEquals;
 import com.flag4j.util.ArrayUtils;
 
 /**
@@ -320,6 +324,40 @@ public class SparseCMatrix
         this.colIndices = A.colIndices.clone();
         this.numRows = shape.dims[0];
         this.numCols = shape.dims[1];
+    }
+
+
+    /**
+     * Checks if an object is equal to this sparse matrix.
+     * @param object Object to compare this sparse matrix to.
+     * @return True if the object is a matrix (real or complex, dense or sparse) and is element-wise equal to this
+     * matrix.
+     */
+    @Override
+    public boolean equals(Object object) {
+        boolean equal;
+
+        if(object instanceof Matrix) {
+            Matrix mat = (Matrix) object;
+            equal = RealComplexDenseSparseEquals.matrixEquals(mat, this);
+
+        } else if(object instanceof CMatrix) {
+            CMatrix mat = (CMatrix) object;
+            equal = ComplexDenseSparseEquals.matrixEquals(mat, this);
+
+        } else if(object instanceof SparseMatrix) {
+            SparseMatrix mat = (SparseMatrix) object;
+            equal = RealComplexSparseEquals.matrixEquals(mat, this);
+
+        } else if(object instanceof SparseCMatrix) {
+            SparseCMatrix mat = (SparseCMatrix) object;
+            equal = ComplexSparseEquals.matrixEquals(this, mat);
+
+        } else {
+            equal = false;
+        }
+
+        return equal;
     }
 
 

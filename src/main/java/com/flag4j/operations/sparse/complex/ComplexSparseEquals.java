@@ -24,14 +24,34 @@
 
 package com.flag4j.operations.sparse.complex;
 
+import com.flag4j.SparseCMatrix;
 import com.flag4j.SparseCVector;
 
 import java.util.Arrays;
 
+
+/**
+ * This class contains low-level implementations to check if a pair of complex sparse tensors/matrices/vectors
+ * are element-wise equivalent.
+ */
 public class ComplexSparseEquals {
 
+
     /**
-     * Checks if two real sparse vectors are real.
+     * Checks if two complex sparse matrices are equal.
+     * @param a First matrix in the equality check.
+     * @param b First matrix in the equality check.
+     * @return True if the matrices are equal. False otherwise.
+     */
+    public static boolean matrixEquals(SparseCMatrix a, SparseCMatrix b) {
+        return a.shape.equals(b.shape) && Arrays.equals(a.entries, b.entries)
+                && Arrays.equals(a.rowIndices, b.rowIndices)
+                && Arrays.equals(a.colIndices, b.colIndices);
+    }
+
+
+    /**
+     * Checks if two complex sparse vectors are equal.
      * @param a First vector in the equality check.
      * @param b Second vector in the equality check.
      * @return True if the vectors are equal. False otherwise.

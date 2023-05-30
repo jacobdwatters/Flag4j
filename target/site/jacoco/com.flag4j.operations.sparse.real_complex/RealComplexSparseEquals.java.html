@@ -24,8 +24,7 @@
 
 package com.flag4j.operations.sparse.real_complex;
 
-import com.flag4j.SparseCVector;
-import com.flag4j.SparseVector;
+import com.flag4j.*;
 import com.flag4j.util.ArrayUtils;
 
 import java.util.Arrays;
@@ -33,7 +32,32 @@ import java.util.Arrays;
 /**
  * This class contains methods for checking the equality of real/complex sparse tensors.
  */
-<span class="nc" id="L36">public class RealComplexSparseEquals {</span>
+<span class="nc" id="L35">public class RealComplexSparseEquals {</span>
+
+
+    /**
+     * Checks if a real sparse tensor and complex sparse tensor are equal.
+     * @param a First tensor in the equality check.
+     * @param b Second tensor in the equality check.
+     * @return True if the tensors are equal. False otherwise.
+     */
+    public static boolean tensorEquals(SparseTensor a, SparseCTensor b) {
+<span class="nc bnc" id="L45" title="All 4 branches missed.">        return a.shape.equals(b.shape) &amp;&amp; ArrayUtils.equals(a.entries, b.entries)</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">                &amp;&amp; Arrays.deepEquals(a.indices, b.indices);</span>
+    }
+
+
+    /**
+     * Checks if a real sparse matrix and complex sparse matrix are equal.
+     * @param a First vector in the equality check.
+     * @param b Second vector in the equality check.
+     * @return True if the vectors are equal. False otherwise.
+     */
+    public static boolean matrixEquals(SparseMatrix a, SparseCMatrix b) {
+<span class="nc bnc" id="L57" title="All 4 branches missed.">        return a.shape.equals(b.shape) &amp;&amp; ArrayUtils.equals(a.entries, b.entries)</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                &amp;&amp; Arrays.equals(a.rowIndices, b.rowIndices)</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">                &amp;&amp; Arrays.equals(a.colIndices, b.colIndices);</span>
+    }
 
 
     /**
@@ -43,7 +67,7 @@ import java.util.Arrays;
      * @return True if the vectors are equal. False otherwise.
      */
     public static boolean vectorEquals(SparseVector a, SparseCVector b) {
-<span class="nc bnc" id="L46" title="All 6 branches missed.">        return a.size==b.size &amp;&amp; Arrays.equals(a.indices, b.indices) &amp;&amp; ArrayUtils.equals(a.entries, b.entries);</span>
+<span class="nc bnc" id="L70" title="All 6 branches missed.">        return a.size==b.size &amp;&amp; Arrays.equals(a.indices, b.indices) &amp;&amp; ArrayUtils.equals(a.entries, b.entries);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

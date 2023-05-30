@@ -54,6 +54,7 @@ com\flag4j\TensorReshapeTests.class
 com\flag4j\CMatrixReshapeTests.class
 com\flag4j\CustomAssertions.class
 com\flag4j\linalg\decompositions\RealCholeskyTests.class
+com\flag4j\sparse_vector\SparseVectorSparseSortTest.class
 com\flag4j\linalg\decompositions\RealQRTests.class
 com\flag4j\TensorElemDivTests.class
 com\flag4j\operations\common\real\MatrixNormTests.class
@@ -78,6 +79,7 @@ com\flag4j\sparse_vector\SparseVectorParPerpTests.class
 com\flag4j\CTensorDotTests.class
 com\flag4j\CMatrixUnaryOperationsTests.class
 com\flag4j\RemoveRowColTests.class
+com\flag4j\sparse_vector\SparseVectorConversionTests.class
 com\flag4j\CMatrixConversionTests.class
 com\flag4j\TensorDotTests.class
 com\flag4j\SparseCMatrixConstructorTests.class
@@ -181,6 +183,7 @@ com\flag4j\MatrixElemDivTests.class
 com\flag4j\CMatrixZeroOnesTests.class
 com\flag4j\MatrixVectorTests.class
 com\flag4j\operations\dense\complex\CMatrixMultiplyTests.class
+com\flag4j\sparse_vector\SparseVectorJoinTests.class
 com\flag4j\complex_numbers\CNumberConversionTest.class
 com\flag4j\SparseVectorConstructorTests.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatrixMultiplicationTests.class

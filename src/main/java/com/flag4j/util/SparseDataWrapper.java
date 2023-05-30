@@ -57,26 +57,27 @@ public final class SparseDataWrapper<T> {
     /**
      * Non-zero values of the sparse tensor to wrap.
      */
-    List<T> values;
+    private final List<T> values;
     /**
      * Stores wrapped indices. Each list is a single index for the {@code values} data. If the tensor is of rank {@code N}, then
      * each List in {@code keys} will have {@code N} entries. If there are {@code M} non-zero entries in the
      * sparse tensor, then there will be {@code M} lists in the array.
      */
-    List<Integer>[] keys;
+    private final List<Integer>[] keys;
 
 
     /**
      * Wraps the data, and it's associated indices, of a sparse tensor.
      * @param values Non-zero values of the sparse tensor.
      * @param indices Indices of non-zero values in the sparse tensor.
+     * @param transpose Indicates if a transpose should be applied to the indices array.
      */
-    private SparseDataWrapper(T[] values, int[][] indices) {
+    private SparseDataWrapper(T[] values, int[][] indices, boolean transpose) {
         this.values = Arrays.asList(values);
-        this.keys = new List[indices[0].length];
-        int[][] indicesT = RealDenseTranspose.blockedIntMatrix(indices);
+        this.keys = transpose ? new List[indices[0].length] : new List[indices.length];
 
-        // The indices array must be transposed.
+        int[][] indicesT = transpose ? RealDenseTranspose.blockedIntMatrix(indices) : indices;
+
         for(int i=0; i<indicesT.length; i++) {
             if(values.length != indicesT[i].length) {
                 throw new IllegalArgumentException("All lists must have the same length.");
@@ -95,7 +96,7 @@ public final class SparseDataWrapper<T> {
      * @return A new instance of {@link SparseDataWrapper} which wraps the specified {@code values} and {@code indices}.
      */
     public static <T extends Number> SparseDataWrapper<T> wrap(T[] values, int[][] indices) {
-        return new SparseDataWrapper<>(values, indices);
+        return new SparseDataWrapper<>(values, indices, true);
     }
 
 
@@ -107,7 +108,7 @@ public final class SparseDataWrapper<T> {
      * @return A new instance of {@link SparseDataWrapper} which wraps the specified {@code values} and {@code indices}.
      */
     public static <T extends Number> SparseDataWrapper<T> wrap(T[] values, int[] indices) {
-        return new SparseDataWrapper<>(values, new int[][]{indices});
+        return new SparseDataWrapper<>(values, new int[][]{indices}, false);
     }
 
 
@@ -119,7 +120,7 @@ public final class SparseDataWrapper<T> {
      */
     public static SparseDataWrapper<Double> wrap(double[] values, int[][] indices) {
         // Wrap the primitive array.
-        return new SparseDataWrapper<>(Arrays.stream(values).boxed().toArray(Double[]::new), indices);
+        return new SparseDataWrapper<>(Arrays.stream(values).boxed().toArray(Double[]::new), indices, true);
     }
 
 
@@ -131,7 +132,7 @@ public final class SparseDataWrapper<T> {
      */
     public static SparseDataWrapper<Double> wrap(double[] values, int[] indices) {
         // Wrap the primitive array.
-        return new SparseDataWrapper<>(Arrays.stream(values).boxed().toArray(Double[]::new), new int[][]{indices});
+        return new SparseDataWrapper<>(Arrays.stream(values).boxed().toArray(Double[]::new), new int[][]{indices}, false);
     }
 
 
@@ -299,7 +300,7 @@ public final class SparseDataWrapper<T> {
         }
 
         // Copy over indices (must be transposed).
-        for(int i=0; i<indices.length; i++) {
+        for(int i=0; i<values.length; i++) {
             indices[i] = this.keys[0].get(i);
         }
     }

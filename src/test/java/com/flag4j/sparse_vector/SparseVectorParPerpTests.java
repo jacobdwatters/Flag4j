@@ -125,4 +125,61 @@ class SparseVectorParPerpTests {
 
         assertFalse(a.isParallel(b));
     }
+
+
+    @Test
+    void perpTest() {
+        double[] bEntries;
+        Vector b;
+
+        // --------------- Sub-case 1 ---------------
+        aEntries = new double[]{1, 1, 1};
+        aIndices = new int[]{1, 3, 7};
+        sparseSize = 8;
+        a = new SparseVector(sparseSize, aEntries, aIndices);
+        bEntries = new double[]{1, 0, 1, 0, 1, 1, 1, 0};
+        b = new Vector(bEntries);
+
+        assertTrue(a.isPerp(b));
+
+        // --------------- Sub-case 2 ---------------
+        aEntries = new double[]{1, 1, 1};
+        aIndices = new int[]{1, 3, 7};
+        sparseSize = 8;
+        a = new SparseVector(sparseSize, aEntries, aIndices);
+        bEntries = new double[]{1, 0, 0, 0, 0, 1, 0, 0};
+        b = new Vector(bEntries);
+
+        assertTrue(a.isPerp(b));
+
+        // --------------- Sub-case 3 ---------------
+        aEntries = new double[]{1, 1, 1};
+        aIndices = new int[]{1, 3, 7};
+        sparseSize = 8;
+        a = new SparseVector(sparseSize, aEntries, aIndices);
+        bEntries = new double[]{1, 1, 0, 0, 0, 1, 0, 0};
+        b = new Vector(bEntries);
+
+        assertFalse(a.isPerp(b));
+
+        // --------------- Sub-case 4 ---------------
+        aEntries = new double[]{1, 1, 1};
+        aIndices = new int[]{1, 3, 7};
+        sparseSize = 1845;
+        a = new SparseVector(sparseSize, aEntries, aIndices);
+        bEntries = new double[]{1, 1, 0, 0, 0, 1, 0, 0};
+        b = new Vector(bEntries);
+
+        assertFalse(a.isPerp(b));
+
+        // --------------- Sub-case 5 ---------------
+        aEntries = new double[]{2.4, -99.24};
+        aIndices = new int[]{0, 2};
+        sparseSize = 3;
+        a = new SparseVector(sparseSize, aEntries, aIndices);
+        bEntries = new double[]{5.3, 349.51145, 106.0/827.0};
+        b = new Vector(bEntries);
+
+        assertTrue(a.isPerp(b));
+    }
 }
