@@ -1114,7 +1114,7 @@ implements VectorMixin&lt;CVector, CVector, SparseCVector, CVector, CNumber, CMa
      */
     @Override
     public int length() {
-<span class="nc" id="L1117">        return this.size;</span>
+<span class="fc" id="L1117">        return this.size;</span>
     }
 
 
@@ -1222,9 +1222,9 @@ implements VectorMixin&lt;CVector, CVector, SparseCVector, CVector, CNumber, CMa
     public String toString() {
 <span class="fc" id="L1223">        StringBuilder result = new StringBuilder();</span>
 
-<span class="pc bpc" id="L1225" title="1 of 2 branches missed.">        if(PrintOptions.getMaxColumns()&lt;size) {</span>
+<span class="fc bfc" id="L1225" title="All 2 branches covered.">        if(PrintOptions.getMaxColumns()&lt;size) {</span>
             // Then also get the full size of the vector.
-<span class="nc" id="L1227">            result.append(String.format(&quot;Full Size: %d\n&quot;, size));</span>
+<span class="fc" id="L1227">            result.append(String.format(&quot;Full Size: %d\n&quot;, size));</span>
         }
 
 <span class="fc" id="L1230">        result.append(&quot;[&quot;);</span>
@@ -1241,11 +1241,11 @@ implements VectorMixin&lt;CVector, CVector, SparseCVector, CVector, CNumber, CMa
 <span class="fc" id="L1241">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="pc bpc" id="L1244" title="1 of 2 branches missed.">        if(stopIndex &lt; size-1) {</span>
-<span class="nc" id="L1245">            width = PrintOptions.getPadding() + 3;</span>
-<span class="nc" id="L1246">            value = &quot;...&quot;;</span>
-<span class="nc bnc" id="L1247" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="nc" id="L1248">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L1244" title="All 2 branches covered.">        if(stopIndex &lt; size-1) {</span>
+<span class="fc" id="L1245">            width = PrintOptions.getPadding() + 3;</span>
+<span class="fc" id="L1246">            value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L1247" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1248">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
         // Get last entry.

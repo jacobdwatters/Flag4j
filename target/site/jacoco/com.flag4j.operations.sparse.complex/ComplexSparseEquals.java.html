@@ -24,20 +24,40 @@
 
 package com.flag4j.operations.sparse.complex;
 
+import com.flag4j.SparseCMatrix;
 import com.flag4j.SparseCVector;
 
 import java.util.Arrays;
 
-<span class="nc" id="L31">public class ComplexSparseEquals {</span>
+
+/**
+ * This class contains low-level implementations to check if a pair of complex sparse tensors/matrices/vectors
+ * are element-wise equivalent.
+ */
+<span class="nc" id="L37">public class ComplexSparseEquals {</span>
+
 
     /**
-     * Checks if two real sparse vectors are real.
+     * Checks if two complex sparse matrices are equal.
+     * @param a First matrix in the equality check.
+     * @param b First matrix in the equality check.
+     * @return True if the matrices are equal. False otherwise.
+     */
+    public static boolean matrixEquals(SparseCMatrix a, SparseCMatrix b) {
+<span class="pc bpc" id="L47" title="2 of 4 branches missed.">        return a.shape.equals(b.shape) &amp;&amp; Arrays.equals(a.entries, b.entries)</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">                &amp;&amp; Arrays.equals(a.rowIndices, b.rowIndices)</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">                &amp;&amp; Arrays.equals(a.colIndices, b.colIndices);</span>
+    }
+
+
+    /**
+     * Checks if two complex sparse vectors are equal.
      * @param a First vector in the equality check.
      * @param b Second vector in the equality check.
      * @return True if the vectors are equal. False otherwise.
      */
     public static boolean vectorEquals(SparseCVector a, SparseCVector b) {
-<span class="pc bpc" id="L40" title="2 of 6 branches missed.">        return a.size == b.size &amp;&amp; Arrays.equals(a.indices, b.indices) &amp;&amp; Arrays.equals(a.entries, b.entries);</span>
+<span class="pc bpc" id="L60" title="3 of 6 branches missed.">        return a.size == b.size &amp;&amp; Arrays.equals(a.indices, b.indices) &amp;&amp; Arrays.equals(a.entries, b.entries);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
