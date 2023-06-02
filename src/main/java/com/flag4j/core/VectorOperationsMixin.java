@@ -299,24 +299,6 @@ public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW>
 
 
     /**
-     * Computes the element-wise addition between this vector and the specified vector and stores the result
-     * in this vector.
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    void addEq(SparseVector B);
-
-
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
-     * in this vector.
-     * @param B Vector to subtract from this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    void subEq(SparseVector B);
-
-
-    /**
      * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
      * @param B Vector to element-wise multiply to this vector.
      * @return The vector resulting from the element-wise multiplication.

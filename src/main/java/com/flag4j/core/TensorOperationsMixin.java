@@ -88,24 +88,6 @@ interface TensorOperationsMixin<T, U, W, Z, Y, X extends Number> {
 
 
     /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    void addEq(T B);
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    void subEq(T B);
-
-
-    /**
      * Computes scalar multiplication of a tensor.
      * @param factor Scalar value to multiply with tensor.
      * @return The result of multiplying this tensor by the specified scalar.

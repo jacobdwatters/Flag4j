@@ -61,4 +61,22 @@ public abstract class DenseTensorBase<T, W, Y, D extends Serializable, X extends
      * @return A new tensor with the specified shape and entries.
      */
     protected abstract T makeTensor(Shape shape, D entries);
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    abstract void addEq(T B);
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    abstract void subEq(T B);
 }

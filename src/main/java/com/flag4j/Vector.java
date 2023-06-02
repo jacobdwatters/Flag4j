@@ -26,6 +26,7 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.VectorMixin;
+import com.flag4j.core.dense.DenseVectorMixin;
 import com.flag4j.core.dense.RealDenseTensorBase;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.real.VectorNorms;
@@ -49,7 +50,8 @@ import java.util.Arrays;
  */
 public class Vector
         extends RealDenseTensorBase<Vector, CVector>
-        implements VectorMixin<Vector, Vector, SparseVector, CVector, Double, Matrix, Matrix, CMatrix> {
+        implements VectorMixin<Vector, Vector, SparseVector, CVector, Double, Matrix, Matrix, CMatrix>,
+        DenseVectorMixin {
 
     /**
      * The size of this vector. That is, the number of entries in this vector.

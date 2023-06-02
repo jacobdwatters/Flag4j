@@ -24,6 +24,7 @@
 
 package com.flag4j.core.dense;
 
+import com.flag4j.SparseVector;
 import com.flag4j.Vector;
 
 
@@ -42,10 +43,28 @@ public interface DenseVectorMixin {
 
 
     /**
+     * Computes the element-wise addition between this vector and the specified vector and stores the result
+     * in this vector.
+     * @param B Vector to add to this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    void addEq(SparseVector B);
+
+
+    /**
      * Computes the element-wise subtraction between this vector and the specified vector and stores the result
      * in this vector.
      * @param B Vector to subtract this vector.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     void subEq(Vector B);
+
+
+    /**
+     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
+     * in this vector.
+     * @param B Vector to subtract this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    void subEq(SparseVector B);
 }

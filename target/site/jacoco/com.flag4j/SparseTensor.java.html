@@ -259,30 +259,6 @@ public class SparseTensor
 
 
     /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void addEq(SparseTensor B) {
-
-<span class="nc" id="L270">    }</span>
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void subEq(SparseTensor B) {
-
-<span class="nc" id="L282">    }</span>
-
-
-    /**
      * Computes scalar multiplication of a tensor.
      *
      * @param factor Scalar value to multiply with tensor.
@@ -290,7 +266,7 @@ public class SparseTensor
      */
     @Override
     public SparseTensor mult(double factor) {
-<span class="nc" id="L293">        return null;</span>
+<span class="nc" id="L269">        return null;</span>
     }
 
 
@@ -302,7 +278,7 @@ public class SparseTensor
      */
     @Override
     public SparseCTensor mult(CNumber factor) {
-<span class="nc" id="L305">        return null;</span>
+<span class="nc" id="L281">        return null;</span>
     }
 
 
@@ -315,7 +291,7 @@ public class SparseTensor
      */
     @Override
     public SparseTensor div(double divisor) {
-<span class="nc" id="L318">        return null;</span>
+<span class="nc" id="L294">        return null;</span>
     }
 
 
@@ -328,7 +304,7 @@ public class SparseTensor
      */
     @Override
     public SparseCTensor div(CNumber divisor) {
-<span class="nc" id="L331">        return null;</span>
+<span class="nc" id="L307">        return null;</span>
     }
 
 
@@ -339,7 +315,7 @@ public class SparseTensor
      */
     @Override
     public Double sum() {
-<span class="nc" id="L342">        return null;</span>
+<span class="nc" id="L318">        return null;</span>
     }
 
 
@@ -351,7 +327,7 @@ public class SparseTensor
      */
     @Override
     public SparseTensor sqrt() {
-<span class="nc" id="L354">        return null;</span>
+<span class="nc" id="L330">        return null;</span>
     }
 
 
@@ -363,7 +339,7 @@ public class SparseTensor
      */
     @Override
     public SparseTensor abs() {
-<span class="nc" id="L366">        return null;</span>
+<span class="nc" id="L342">        return null;</span>
     }
 
 
@@ -374,7 +350,7 @@ public class SparseTensor
      */
     @Override
     public SparseTensor transpose() {
-<span class="nc" id="L377">        return null;</span>
+<span class="nc" id="L353">        return null;</span>
     }
 
 
@@ -385,7 +361,7 @@ public class SparseTensor
      */
     @Override
     public SparseTensor T() {
-<span class="nc" id="L388">        return null;</span>
+<span class="nc" id="L364">        return null;</span>
     }
 
 
@@ -397,7 +373,7 @@ public class SparseTensor
      */
     @Override
     public SparseTensor recip() {
-<span class="nc" id="L400">        return null;</span>
+<span class="nc" id="L376">        return null;</span>
     }
 
 
@@ -410,7 +386,7 @@ public class SparseTensor
      */
     @Override
     public Double get(int... indices) {
-<span class="nc" id="L413">        return null;</span>
+<span class="nc" id="L389">        return null;</span>
     }
 
 
@@ -421,7 +397,7 @@ public class SparseTensor
      */
     @Override
     public SparseTensor copy() {
-<span class="nc" id="L424">        return null;</span>
+<span class="nc" id="L400">        return null;</span>
     }
 
 
@@ -434,7 +410,7 @@ public class SparseTensor
      */
     @Override
     public SparseTensor elemMult(SparseTensor B) {
-<span class="nc" id="L437">        return null;</span>
+<span class="nc" id="L413">        return null;</span>
     }
 
 
@@ -447,7 +423,7 @@ public class SparseTensor
      */
     @Override
     public SparseTensor elemDiv(Tensor B) {
-<span class="nc" id="L450">        return null;</span>
+<span class="nc" id="L426">        return null;</span>
     }
 
 
@@ -461,7 +437,7 @@ public class SparseTensor
      */
     @Override
     public SparseTensor reshape(int... shape) {
-<span class="nc" id="L464">        return null;</span>
+<span class="nc" id="L440">        return null;</span>
     }
 
 
@@ -473,7 +449,7 @@ public class SparseTensor
      */
     @Override
     public int[] argMin() {
-<span class="nc" id="L476">        return new int[0];</span>
+<span class="nc" id="L452">        return new int[0];</span>
     }
 
 
@@ -485,7 +461,7 @@ public class SparseTensor
      */
     @Override
     public int[] argMax() {
-<span class="nc" id="L488">        return new int[0];</span>
+<span class="nc" id="L464">        return new int[0];</span>
     }
 
 
@@ -496,7 +472,7 @@ public class SparseTensor
      */
     @Override
     public double norm() {
-<span class="nc" id="L499">        return 0;</span>
+<span class="nc" id="L475">        return 0;</span>
     }
 
 
@@ -510,7 +486,7 @@ public class SparseTensor
      */
     @Override
     public double norm(double p) {
-<span class="nc" id="L513">        return 0;</span>
+<span class="nc" id="L489">        return 0;</span>
     }
 
 
@@ -523,7 +499,7 @@ public class SparseTensor
     @Override
     public SparseTensor flatten(int axis) {
         // TODO: Implementation
-<span class="nc" id="L526">        return null;</span>
+<span class="nc" id="L502">        return null;</span>
     }
 
 
@@ -534,7 +510,7 @@ public class SparseTensor
      */
     @Override
     protected SparseTensor getSelf() {
-<span class="nc" id="L537">        return this;</span>
+<span class="nc" id="L513">        return this;</span>
     }
 
 
@@ -545,13 +521,13 @@ public class SparseTensor
      */
     @Override
     public Tensor toDense() {
-<span class="nc" id="L548">        double[] entries = new double[totalEntries().intValueExact()];</span>
+<span class="nc" id="L524">        double[] entries = new double[totalEntries().intValueExact()];</span>
 
-<span class="nc bnc" id="L550" title="All 2 branches missed.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
-<span class="nc" id="L551">            entries[shape.entriesIndex(indices[i])] = this.entries[i];</span>
+<span class="nc bnc" id="L526" title="All 2 branches missed.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
+<span class="nc" id="L527">            entries[shape.entriesIndex(indices[i])] = this.entries[i];</span>
         }
 
-<span class="nc" id="L554">        return new Tensor(shape.copy(), entries);</span>
+<span class="nc" id="L530">        return new Tensor(shape.copy(), entries);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

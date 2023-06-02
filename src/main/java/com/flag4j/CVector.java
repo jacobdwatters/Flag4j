@@ -25,8 +25,8 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.dense.ComplexDenseTensorBase;
 import com.flag4j.core.VectorMixin;
+import com.flag4j.core.dense.ComplexDenseTensorBase;
 import com.flag4j.core.dense.DenseVectorMixin;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.real.VectorNorms;
@@ -47,7 +47,7 @@ import java.util.Arrays;
  * Complex dense vector. This class is mostly equivalent to a rank 1 complex tensor.
  */
 public class CVector extends ComplexDenseTensorBase<CVector, Vector>
-implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatrix, CMatrix, CMatrix>,
+        implements VectorMixin<CVector, CVector, SparseCVector, CVector, CNumber, CMatrix, CMatrix, CMatrix>,
         DenseVectorMixin {
 
     /**

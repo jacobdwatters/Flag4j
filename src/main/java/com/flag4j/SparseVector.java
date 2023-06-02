@@ -751,30 +751,6 @@ public class SparseVector
 
 
     /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void addEq(SparseVector B) {
-        // TODO: This does not make since for sparse tensors since the entries array is final.
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void subEq(SparseVector B) {
-        // TODO: This does not make since for sparse tensors since the entries array is final.
-    }
-
-
-    /**
      * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
      *
      * @param B Vector to element-wise multiply to this vector.

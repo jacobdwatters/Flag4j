@@ -873,32 +873,6 @@ public class SparseCVector
 
 
     /**
-     * Computes the element-wise addition between this vector and the specified vector and stores the result
-     * in this vector.
-     *
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public void addEq(SparseVector B) {
-        // TODO: This does not make since for sparse tensors since the entries array is final.
-    }
-
-
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
-     * in this vector.
-     *
-     * @param B Vector to subtract from this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public void subEq(SparseVector B) {
-        // TODO: This does not make since for sparse tensors since the entries array is final.
-    }
-
-
-    /**
      * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
      *
      * @param B Vector to element-wise multiply to this vector.
@@ -958,30 +932,6 @@ public class SparseCVector
     @Override
     public CVector sub(CNumber a) {
         return ComplexSparseVectorOperations.sub(this, a);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void addEq(SparseCVector B) {
-        // TODO: This does not make since for sparse tensors since the entries array is final.
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void subEq(SparseCVector B) {
-        // TODO: This does not make since for sparse tensors since the entries array is final.
     }
 
 

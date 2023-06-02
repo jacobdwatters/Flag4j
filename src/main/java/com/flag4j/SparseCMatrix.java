@@ -553,28 +553,6 @@ public class SparseCMatrix
 
 
     /**
-     * Adds a complex sparse matrix to this matrix and stores the result in this matrix.
-     *
-     * @param B Complex sparse matrix to add to this matrix,
-     */
-    @Override
-    public void addEq(SparseCMatrix B) {
-
-    }
-
-
-    /**
-     * Subtracts a complex sparse matrix from this matrix and stores the result in this matrix.
-     *
-     * @param B Complex sparse matrix to subtract from this matrix,
-     */
-    @Override
-    public void subEq(SparseCMatrix B) {
-
-    }
-
-
-    /**
      * Computes scalar multiplication of a tensor.
      *
      * @param factor Scalar value to multiply with tensor.
