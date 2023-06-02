@@ -294,13 +294,13 @@ public final class ComplexDenseOperations {
      * @return The element-wise reciprocals of the tensor.
      */
     public static CNumber[] recip(CNumber[] src) {
-        CNumber[] receps = new CNumber[src.length];
+        CNumber[] recips = new CNumber[src.length];
 
-        for(int i=0; i<receps.length; i++) {
-            receps[i] = src[i].addInv();
+        for(int i=0; i<recips.length; i++) {
+            recips[i] = src[i].multInv();
         }
 
-        return receps;
+        return recips;
     }
 
 

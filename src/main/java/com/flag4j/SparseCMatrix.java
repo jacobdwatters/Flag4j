@@ -32,6 +32,7 @@ import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEqu
 import com.flag4j.operations.sparse.complex.ComplexSparseEquals;
 import com.flag4j.operations.sparse.real_complex.RealComplexSparseEquals;
 import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.SparseDataWrapper;
 
 /**
  * Complex sparse matrix. Stored in coordinate list (COO) format.
@@ -665,7 +666,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix transpose() {
-        return null;
+        return T();
     }
 
 
@@ -686,6 +687,15 @@ public class SparseCMatrix
         transpose.sparseSort(); // Ensure the indices are sorted correctly.
 
         return transpose;
+    }
+
+
+    /**
+     * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
+     */
+    @Override
+    public void sparseSort() {
+        SparseDataWrapper.wrap(entries, rowIndices, colIndices).sparseSort().unwrap(entries, rowIndices, colIndices);
     }
 
 

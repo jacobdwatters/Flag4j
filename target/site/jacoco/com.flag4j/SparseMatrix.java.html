@@ -268,15 +268,15 @@ public class SparseMatrix
 <span class="nc" id="L268">            CMatrix mat = (CMatrix) object;</span>
 <span class="nc" id="L269">            equal = RealComplexDenseSparseEquals.matrixEquals(mat, this);</span>
 
-<span class="pc bpc" id="L271" title="1 of 2 branches missed.">        } else if(object instanceof SparseMatrix) {</span>
+<span class="pc bfc" id="L271" title="All 2 branches covered.">        } else if(object instanceof SparseMatrix) {</span>
 <span class="fc" id="L272">            SparseMatrix mat = (SparseMatrix) object;</span>
 <span class="fc" id="L273">            equal = RealSparseEquals.matrixEquals(this, mat);</span>
 
-<span class="pc bnc" id="L275" title="All 2 branches missed.">        } else if(object instanceof SparseCMatrix) {</span>
-<span class="nc" id="L276">            SparseCMatrix mat = (SparseCMatrix) object;</span>
-<span class="nc" id="L277">            equal = RealComplexSparseEquals.matrixEquals(this, mat);</span>
+<span class="pc bpc" id="L275" title="1 of 2 branches missed.">        } else if(object instanceof SparseCMatrix) {</span>
+<span class="fc" id="L276">            SparseCMatrix mat = (SparseCMatrix) object;</span>
+<span class="fc" id="L277">            equal = RealComplexSparseEquals.matrixEquals(this, mat);</span>
 
-<span class="nc" id="L279">        } else {</span>
+<span class="fc" id="L279">        } else {</span>
 <span class="nc" id="L280">            equal = false;</span>
         }
 

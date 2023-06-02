@@ -97,7 +97,7 @@ public class SparseTensor
      */
     @Override
     public boolean equals(Object object) {
-        boolean equal = false;
+        boolean equal;
 
         if(object instanceof Tensor) {
             Tensor tensor = (Tensor) object;

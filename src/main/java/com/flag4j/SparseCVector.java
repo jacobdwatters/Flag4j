@@ -198,7 +198,7 @@ public class SparseCVector
 
         // Fill entries with non-zero values.
         for(int i=0; i<src.entries.length; i++) {
-            if(src.entries[i].equals(CNumber.ZERO)) {
+            if(!src.entries[i].equals(CNumber.ZERO)) {
                 nonZeroEntries.add(src.entries[i]);
                 indices.add(i);
             }
@@ -321,7 +321,20 @@ public class SparseCVector
     public SparseVector toReal() {
         return new SparseVector(size, ComplexOperations.toReal(entries), indices.clone());
     }
-    
+
+
+    /**
+     * Converts this vector to an equivalent tensor.
+     * @return A tensor which is equivalent to this vector.
+     */
+    public SparseCTensor toTensor() {
+        return new SparseCTensor(
+                this.shape.copy(),
+                ArrayUtils.copyOf(entries),
+                RealDenseTranspose.blockedIntMatrix(new int[][]{this.indices.clone()})
+        );
+    }
+
 
     /**
      * Sets an index of this tensor to a specified value.
@@ -388,6 +401,7 @@ public class SparseCVector
     @Override
     public CVector join(Vector b) {
         CNumber[] newEntries = new CNumber[this.size + b.entries.length];
+        ArrayUtils.fillZeros(newEntries);
 
         // Copy over sparse values.
         for(int i=0; i<this.entries.length; i++) {
@@ -410,6 +424,7 @@ public class SparseCVector
     @Override
     public CVector join(CVector b) {
         CNumber[] newEntries = new CNumber[this.size + b.entries.length];
+        ArrayUtils.fillZeros(newEntries);
 
         // Copy over sparse values.
         for(int i=0; i<this.entries.length; i++) {
@@ -432,6 +447,7 @@ public class SparseCVector
     @Override
     public SparseCVector join(SparseVector b) {
         CNumber[] newEntries = new CNumber[this.entries.length + b.entries.length];
+        ArrayUtils.fillZeros(newEntries);
         int[] newIndices = new int[this.indices.length + b.indices.length];
 
         // Copy values from this vector.
@@ -460,6 +476,7 @@ public class SparseCVector
     @Override
     public SparseCVector join(SparseCVector b) {
         CNumber[] newEntries = new CNumber[this.entries.length + b.entries.length];
+        ArrayUtils.fillZeros(newEntries);
         int[] newIndices = new int[this.indices.length + b.indices.length];
 
         // Copy values from this vector.
@@ -567,7 +584,7 @@ public class SparseCVector
         int[] rowIndices = new int[b.size];
         Arrays.fill(rowIndices, 1);
         ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
-        System.arraycopy(rowIndices, 0, indices[1], entries.length,  b.size);
+        System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
         System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);
 
         return new SparseCMatrix(2, b.size, destEntries, indices[0], indices[1]);
@@ -1089,10 +1106,10 @@ public class SparseCVector
 
 
     /**
-     * Computes the reciprocals, element-wise, of a tensor. Computes the reciprocals, element-wise, of this sparse vector.
+     * Computes the reciprocals, element-wise, of this sparse vector.
      * However, all zero entries will remain zero.
      *
-     * @return A tensor containing the reciprocal elements of this tensor.
+     * @return A sparse vector containing the reciprocal non-zero elements of this tensor.
      * @throws ArithmeticException If this tensor contains any zeros.
      */
     @Override
@@ -1466,6 +1483,7 @@ public class SparseCVector
      */
     @Override
     public SparseCVector flatten(int axis) {
+        ParameterChecks.assertInRange(axis, 0, 0, "axis");
         return new SparseCVector(this);
     }
 
@@ -1505,7 +1523,41 @@ public class SparseCVector
      */
     @Override
     public SparseCMatrix extend(int n, int axis) {
-        return null;
+        ParameterChecks.assertGreaterEq(1, n, "n");
+        ParameterChecks.assertAxis2D(axis);
+
+        int[][] matIndices = new int[2][n*nonZeroEntries];
+        CNumber[] matEntries = new CNumber[n*nonZeroEntries];
+        Shape matShape;
+
+        if(axis==0) {
+            matShape = new Shape(n, this.size);
+            int[] rowIndices = new int[indices.length];
+
+            for(int i=0; i<n; i++) {
+                Arrays.fill(rowIndices, i);
+                System.arraycopy(entries, 0, matEntries, (n-1)*i, nonZeroEntries);
+                System.arraycopy(rowIndices, 0, matIndices[0], (n-1)*i, nonZeroEntries);
+                System.arraycopy(indices, 0, matIndices[1], (n-1)*i, nonZeroEntries);
+            }
+
+        } else {
+            matShape = new Shape(this.size, n);
+            int[] rowIndices = new int[n];
+            int[] colIndices = ArrayUtils.rangeInt(0, n);
+
+            for(int i=0; i<entries.length; i++) {
+                Arrays.fill(rowIndices, indices[i]);
+
+                ArrayUtils.fill(matEntries, (entries.length+1)*i, (entries.length+1)*i + n, entries[i]);
+                System.arraycopy(rowIndices, 0, matIndices[0], (entries.length+1)*i, n);
+                System.arraycopy(colIndices, 0, matIndices[1], (entries.length+1)*i, n);
+            }
+
+            System.out.println("\n\n\n");
+        }
+
+        return new SparseCMatrix(matShape, matEntries, matIndices[0], matIndices[1]);
     }
 
 

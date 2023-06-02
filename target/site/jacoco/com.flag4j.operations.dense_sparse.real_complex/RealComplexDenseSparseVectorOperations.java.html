@@ -292,14 +292,14 @@ public class RealComplexDenseSparseVectorOperations {
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static CVector sub(SparseCVector src1, Vector src2) {
-<span class="nc" id="L295">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
-<span class="nc" id="L296">        CVector dest = new CVector(RealOperations.scalMult(src2.entries, -1));</span>
+<span class="fc" id="L295">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L296">        CVector dest = new CVector(RealOperations.scalMult(src2.entries, -1));</span>
 
-<span class="nc bnc" id="L298" title="All 2 branches missed.">        for(int i=0; i&lt;src1.nonZeroEntries(); i++) {</span>
-<span class="nc" id="L299">            dest.entries[src1.indices[i]].addEq(src1.entries[i]);</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">        for(int i=0; i&lt;src1.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L299">            dest.entries[src1.indices[i]].addEq(src1.entries[i]);</span>
         }
 
-<span class="nc" id="L302">        return dest;</span>
+<span class="fc" id="L302">        return dest;</span>
     }
 
 

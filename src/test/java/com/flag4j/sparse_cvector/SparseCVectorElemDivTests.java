@@ -85,4 +85,58 @@ class SparseCVectorElemDivTests {
         CVector finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.elemDiv(finalB));
     }
+
+
+    @Test
+    void complexScalarDivTest() {
+        CNumber[] aValues = {
+                new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
+                new CNumber(25.612, 0.0245)};
+        int[] aIndices = {0, 2, 5};
+        size = 7;
+        a = new SparseCVector(size, aValues, aIndices);
+
+        CNumber[] expValues;
+        int[] expIndices;
+        CNumber b;
+        SparseCVector exp;
+
+        // -------------------- Sub-case 1 --------------------
+        b = new CNumber(23.55, -984.2);
+
+        expValues = new CNumber[]{
+                new CNumber(1.3345, -9.25).div(b),
+                new CNumber(0, -45.62).div(b),
+                new CNumber(25.612, 0.0245).div(b)};
+        expIndices = new int[]{0, 2, 5};
+        exp = new SparseCVector(size, expValues, expIndices);
+        assertEquals(exp, a.div(b));
+    }
+
+
+    @Test
+    void realScalarDivTest() {
+        CNumber[] aValues = {
+                new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
+                new CNumber(25.612, 0.0245)};
+        int[] aIndices = {0, 2, 5};
+        size = 7;
+        a = new SparseCVector(size, aValues, aIndices);
+
+        CNumber[] expValues;
+        int[] expIndices;
+        double b;
+        SparseCVector exp;
+
+        // -------------------- Sub-case 1 --------------------
+        b = 24.5;
+
+        expValues = new CNumber[]{
+                new CNumber(1.3345, -9.25).div(b),
+                new CNumber(0, -45.62).div(b),
+                new CNumber(25.612, 0.0245).div(b)};
+        expIndices = new int[]{0, 2, 5};
+        exp = new SparseCVector(size, expValues, expIndices);
+        assertEquals(exp, a.div(b));
+    }
 }

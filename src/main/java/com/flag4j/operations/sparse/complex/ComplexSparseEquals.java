@@ -25,7 +25,9 @@
 package com.flag4j.operations.sparse.complex;
 
 import com.flag4j.SparseCMatrix;
+import com.flag4j.SparseCTensor;
 import com.flag4j.SparseCVector;
+import com.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
@@ -35,6 +37,22 @@ import java.util.Arrays;
  * are element-wise equivalent.
  */
 public class ComplexSparseEquals {
+
+    private ComplexSparseEquals() {
+        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+    }
+
+    /**
+     * Checks if two complex sparse matrices are equal.
+     * @param a First matrix in the equality check.
+     * @param b First matrix in the equality check.
+     * @return True if the matrices are equal. False otherwise.
+     */
+    public static boolean tensorEquals(SparseCTensor a, SparseCTensor b) {
+        return a.shape.equals(b.shape)
+                && Arrays.equals(a.entries, b.entries)
+                && Arrays.deepEquals(a.indices, b.indices);
+    }
 
 
     /**

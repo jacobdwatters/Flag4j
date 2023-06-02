@@ -144,19 +144,19 @@ import java.util.List;
     public boolean equals(Object b) {
 <span class="fc" id="L145">        boolean equal = false;</span>
 
-<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if(b instanceof SparseVector) {</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if(b instanceof SparseVector) {</span>
 <span class="fc" id="L148">            SparseVector vec = (SparseVector) b;</span>
 <span class="fc" id="L149">            equal = RealSparseEquals.vectorEquals(this, vec);</span>
 
-<span class="pc bnc" id="L151" title="All 2 branches missed.">        } else if(b instanceof Vector) {</span>
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        } else if(b instanceof Vector) {</span>
 <span class="nc" id="L152">            Vector vec = (Vector) b;</span>
 <span class="nc" id="L153">            equal = RealDenseSparseEquals.vectorEquals(vec.entries, this.entries, this.indices, this.size);</span>
 
-<span class="nc bnc" id="L155" title="All 2 branches missed.">        } else if(b instanceof SparseCVector) {</span>
-<span class="nc" id="L156">            SparseCVector vec = (SparseCVector) b;</span>
-<span class="nc" id="L157">            equal = RealComplexSparseEquals.vectorEquals(this, vec);</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        } else if(b instanceof SparseCVector) {</span>
+<span class="fc" id="L156">            SparseCVector vec = (SparseCVector) b;</span>
+<span class="fc" id="L157">            equal = RealComplexSparseEquals.vectorEquals(this, vec);</span>
 
-<span class="nc bnc" id="L159" title="All 2 branches missed.">        } else if(b instanceof CVector) {</span>
+<span class="pc bnc" id="L159" title="All 2 branches missed.">        } else if(b instanceof CVector) {</span>
 <span class="nc" id="L160">            CVector vec = (CVector) b;</span>
 <span class="nc" id="L161">            equal = RealComplexDenseSparseEquals.vectorEquals(vec.entries, this.entries, this.indices, this.size);</span>
         }

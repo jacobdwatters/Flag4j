@@ -22,6 +22,7 @@ com\flag4j\cmatrix\CMatrixEqualsTest.class
 com\flag4j\ctensor\CTensorConstructorTests.class
 com\flag4j\matrix\MatrixAggregationTests.class
 com\flag4j\SparseMatrixConstructorTests.class
+com\flag4j\sparse_cvector\SparseCVectorJoinTests.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatMultTransposeTests.class
 com\flag4j\ctensor\CTensorDotTests.class
 com\flag4j\cmatrix\CMatrixStackTests.class
@@ -40,6 +41,7 @@ com\flag4j\cvector\CVectorScalMultDivTests.class
 com\flag4j\matrix\MatrixSumRowsColsTests.class
 com\flag4j\sparse_vector\SparseVectorInnerProdTests.class
 com\flag4j\complex_numbers\CNumberConstructorTest.class
+com\flag4j\sparse_cvector\SparseCVectorConversionTests.class
 com\flag4j\complex_numbers\CNumberExponentialTest.class
 com\flag4j\matrix\MatrixAddToEachColTests.class
 com\flag4j\tensor\TensorGetSetTests.class
@@ -96,6 +98,7 @@ com\flag4j\cmatrix\CMatrixElemMultTests.class
 com\flag4j\RemoveRowColTests.class
 com\flag4j\ctensor\CTensorTransposeTests.class
 com\flag4j\tensor\TensorAddTests.class
+com\flag4j\sparse_cvector\SparseCVectorReshapeTests.class
 com\flag4j\sparse_vector\SparseVectorConversionTests.class
 com\flag4j\vector\VectorOuterProductTests.class
 com\flag4j\cvector\CVectorElemOppTests.class
@@ -140,6 +143,7 @@ com\flag4j\vector\VectorPerpParallelTests.class
 com\flag4j\operations\dense\real\RoundTests.class
 com\flag4j\linalg\decompositions\RealSchurTests.class
 com\flag4j\tensor\TensorDotTests.class
+com\flag4j\sparse_cvector\SparseCVectorSubTests.class
 com\flag4j\cmatrix\CMatrixElemDivTests.class
 com\flag4j\util\ParameterChecksTests.class
 com\flag4j\matrix\MatrixZerosOnesTests.class
@@ -151,6 +155,7 @@ com\flag4j\sparse_vector\SparseVectorElemMultTests.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseMatMultTransposeTests.class
 com\flag4j\cmatrix\CMatrixReshapeTests.class
 com\flag4j\cmatrix\CMatrixScaleOperationsTests.class
+com\flag4j\sparse_cvector\SparseCVectorAddTests.class
 com\flag4j\cmatrix\CMatrixDirectSumTests.class
 com\flag4j\linalg\decompositions\ComplexCholeskyTests.class
 com\flag4j\complex_numbers\CNumberRoundTest.class
@@ -172,6 +177,7 @@ com\flag4j\vector\VectorZeroOnesTests.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseMatMultTests.class
 com\flag4j\cmatrix\CMatrixUnaryOperationsTests.class
 com\flag4j\matrix\MatrixTriangularTests.class
+com\flag4j\sparse_cvector\SparseCVectorUnaryOpTests.class
 com\flag4j\vector\VectorNormTest.class
 com\flag4j\operations\dense\real\RealDenseMatMultTransposeTests.class
 com\flag4j\cvector\CVectorElemDivTests.class
@@ -184,6 +190,7 @@ com\flag4j\matrix\MatrixSetOperationTests.class
 com\flag4j\vector\VectorEqualsTests.class
 com\flag4j\vector\VectorExtendTests.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatrixMultiplicationTests.class
+com\flag4j\sparse_cvector\SparseCVectorElemMultTests.class
 com\flag4j\ctensor\CTensorToStringTests.class
 com\flag4j\cvector\CVectorOuterProductTests.class
 com\flag4j\cmatrix\CMatrixPropertiesTests.class

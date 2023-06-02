@@ -458,6 +458,22 @@ public final class ArrayUtils {
 
 
     /**
+     * Fills an array with specified value.
+     * @param dest Array to fill.
+     * @param start Starting index of range to fill (Inclusive).
+     * @param end Ending index of range to fill (Exclusive).
+     * @param fillValue Value to fill array with. Each index of the {@code dest} array will be filled with a deep copy
+     *                  of this value.
+     * @throws ArrayIndexOutOfBoundsException If {@code start} or {@code end} is not within the destination array.
+     */
+    public static void fill(CNumber[] dest, int start, int end, CNumber fillValue) {
+        for(int i=start; i<end; i++) {
+            dest[i] = fillValue.copy();
+        }
+    }
+
+
+    /**
      * Fills an array with the specified value;
      * @param dest Array to fill.
      * @param fillValue Value to fill array with.
