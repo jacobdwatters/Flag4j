@@ -1220,43 +1220,43 @@ implements VectorMixin&lt;CVector, CVector, SparseCVector, CVector, CNumber, CMa
      * @return A human-readable string representation of this vector.
      */
     public String toString() {
-<span class="fc" id="L1223">        StringBuilder result = new StringBuilder();</span>
+<span class="nc" id="L1223">        StringBuilder result = new StringBuilder();</span>
 
-<span class="fc bfc" id="L1225" title="All 2 branches covered.">        if(PrintOptions.getMaxColumns()&lt;size) {</span>
+<span class="nc bnc" id="L1225" title="All 2 branches missed.">        if(PrintOptions.getMaxColumns()&lt;size) {</span>
             // Then also get the full size of the vector.
-<span class="fc" id="L1227">            result.append(String.format(&quot;Full Size: %d\n&quot;, size));</span>
+<span class="nc" id="L1227">            result.append(String.format(&quot;Full Size: %d\n&quot;, size));</span>
         }
 
-<span class="fc" id="L1230">        result.append(&quot;[&quot;);</span>
+<span class="nc" id="L1230">        result.append(&quot;[&quot;);</span>
 
-<span class="fc" id="L1232">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
+<span class="nc" id="L1232">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
         int width;
         String value;
 
         // Get entries up until the stopping point.
-<span class="fc bfc" id="L1237" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
-<span class="fc" id="L1238">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
-<span class="fc" id="L1239">            width = PrintOptions.getPadding() + value.length();</span>
-<span class="pc bpc" id="L1240" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1241">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc bnc" id="L1237" title="All 2 branches missed.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="nc" id="L1238">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
+<span class="nc" id="L1239">            width = PrintOptions.getPadding() + value.length();</span>
+<span class="nc bnc" id="L1240" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1241">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="fc bfc" id="L1244" title="All 2 branches covered.">        if(stopIndex &lt; size-1) {</span>
-<span class="fc" id="L1245">            width = PrintOptions.getPadding() + 3;</span>
-<span class="fc" id="L1246">            value = &quot;...&quot;;</span>
-<span class="pc bpc" id="L1247" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1248">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc bnc" id="L1244" title="All 2 branches missed.">        if(stopIndex &lt; size-1) {</span>
+<span class="nc" id="L1245">            width = PrintOptions.getPadding() + 3;</span>
+<span class="nc" id="L1246">            value = &quot;...&quot;;</span>
+<span class="nc bnc" id="L1247" title="All 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1248">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
         // Get last entry.
-<span class="fc" id="L1252">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
-<span class="fc" id="L1253">        width = PrintOptions.getPadding() + value.length();</span>
-<span class="pc bpc" id="L1254" title="1 of 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1255">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="nc" id="L1252">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
+<span class="nc" id="L1253">        width = PrintOptions.getPadding() + value.length();</span>
+<span class="nc bnc" id="L1254" title="All 2 branches missed.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="nc" id="L1255">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
 
-<span class="fc" id="L1257">        result.append(&quot;]&quot;);</span>
+<span class="nc" id="L1257">        result.append(&quot;]&quot;);</span>
 
-<span class="fc" id="L1259">        return result.toString();</span>
+<span class="nc" id="L1259">        return result.toString();</span>
     }
 
 

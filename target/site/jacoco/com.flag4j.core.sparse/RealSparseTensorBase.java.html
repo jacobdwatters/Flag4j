@@ -74,8 +74,8 @@ public abstract class RealSparseTensorBase&lt;T, U, W, Z&gt;
       */
      @Override
      public void sparseSort() {
-<span class="fc" id="L77">         SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);</span>
-<span class="fc" id="L78">     }</span>
+<span class="nc" id="L77">         SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);</span>
+<span class="nc" id="L78">     }</span>
 
 
     /**
@@ -96,7 +96,7 @@ public abstract class RealSparseTensorBase&lt;T, U, W, Z&gt;
 
      @Override
      public double max() {
-<span class="fc" id="L99">        return AggregateReal.max(entries);</span>
+<span class="nc" id="L99">        return AggregateReal.max(entries);</span>
     }
 
 

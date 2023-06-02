@@ -9,13 +9,17 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\io\TensorReader.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\solvers\MatrixLUSolver.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\RealDenseTensorBinaryOperation.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\Tensor.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\sparse\real_complex\RealComplexSparseEquals.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\RealDenseMatrixMultiplyDispatcher.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\real\RealDenseElemDiv.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\sparse\complex\ComplexSparseVectorOperations.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\sparse\real\RealSparseEquals.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\complex_numbers\package-info.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\RealTensorMixin.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\sparse\complex\ComplexSparseEquals.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\dense\DenseMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\complex\ComplexDenseTranspose.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\solvers\ComplexBackSolver.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\common\complex\AggregateComplex.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\real\RealDenseProperties.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\VectorOperationsMixin.java

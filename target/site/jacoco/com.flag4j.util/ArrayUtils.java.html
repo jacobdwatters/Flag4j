@@ -767,7 +767,7 @@ public final class ArrayUtils {
 <span class="fc bfc" id="L767" title="All 2 branches covered.">        for(CNumber value : src) {</span>
 <span class="fc" id="L768">            currLength = CNumber.round(value, PrintOptions.getPrecision()).toString().length();</span>
 
-<span class="fc bfc" id="L770" title="All 2 branches covered.">            if(currLength&gt;maxLength) {</span>
+<span class="pc bpc" id="L770" title="1 of 2 branches missed.">            if(currLength&gt;maxLength) {</span>
                 // Then update the maximum length.
 <span class="fc" id="L772">                maxLength=currLength;</span>
             }
@@ -796,7 +796,7 @@ public final class ArrayUtils {
                     new CNumber(src[i]),
 <span class="fc" id="L797">                    PrintOptions.getPrecision()).toString().length();</span>
 
-<span class="fc bfc" id="L799" title="All 2 branches covered.">            if(currLength&gt;maxLength) {</span>
+<span class="pc bpc" id="L799" title="1 of 2 branches missed.">            if(currLength&gt;maxLength) {</span>
                 // Then update the maximum length.
 <span class="fc" id="L801">                maxLength=currLength;</span>
             }
@@ -837,7 +837,7 @@ public final class ArrayUtils {
                     src[i],
 <span class="fc" id="L838">                    PrintOptions.getPrecision()).toString().length();</span>
 
-<span class="fc bfc" id="L840" title="All 2 branches covered.">            if(currLength&gt;maxLength) {</span>
+<span class="pc bpc" id="L840" title="1 of 2 branches missed.">            if(currLength&gt;maxLength) {</span>
                 // Then update the maximum length.
 <span class="fc" id="L842">                maxLength=currLength;</span>
             }
