@@ -91,7 +91,7 @@ public class AggregateDenseReal {
         int currIndex = -1;
 
         for(int i=0; i<entries.length; i++) {
-            if(entries[i]==0) {
+            if(entries[i]==value) {
                 currIndex = i;
                 break;
             }
@@ -112,7 +112,7 @@ public class AggregateDenseReal {
         int currIndex = -1;
 
         for(int i=0; i<entries.length; i++) {
-            if(entries[i]==0) {
+            if(entries[i]==value) {
                 currIndex = i;
                 break;
             }

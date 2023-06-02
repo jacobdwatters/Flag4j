@@ -791,7 +791,7 @@ public class CTensor
      */
     public String toString() {
 <span class="fc" id="L793">        int size = shape.totalEntries().intValueExact();</span>
-<span class="fc" id="L794">        StringBuilder result = new StringBuilder(String.format(&quot;Full Shape: %s\n&quot;, shape));</span>
+<span class="fc" id="L794">        StringBuilder result = new StringBuilder(String.format(&quot;Full Shape: %s%n&quot;, shape));</span>
 <span class="fc" id="L795">        result.append(&quot;[&quot;);</span>
 
 <span class="fc" id="L797">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>

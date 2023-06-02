@@ -25,8 +25,8 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.dense.ComplexDenseTensorBase;
 import com.flag4j.core.ComplexTensorExclusiveMixin;
+import com.flag4j.core.dense.ComplexDenseTensorBase;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.AggregateComplex;
@@ -791,7 +791,7 @@ public class CTensor
      */
     public String toString() {
         int size = shape.totalEntries().intValueExact();
-        StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
+        StringBuilder result = new StringBuilder(String.format("Full Shape: %s%n", shape));
         result.append("[");
 
         int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
