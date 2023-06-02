@@ -137,6 +137,19 @@ public final class SparseDataWrapper<T> {
 
 
     /**
+     * Factory method which wraps data in an instance of {@link SparseDataWrapper} and returns that instance.
+     * @param values Non-zero values of the sparse tensor.
+     * @param rowIndices Row indices of non-zero entries of the sparse tensor.
+     * @param colIndices Column indices of non-zero entries of the sparse tensor.
+     * @return A new instance of {@link SparseDataWrapper} which wraps the specified {@code values} and {@code indices}.
+     */
+    public static SparseDataWrapper<Double> wrap(double[] values, int[] rowIndices, int[] colIndices) {
+        // Wrap the primitive array.
+        return new SparseDataWrapper<>(Arrays.stream(values).boxed().toArray(Double[]::new), new int[][]{rowIndices, colIndices}, false);
+    }
+
+
+    /**
      * Sorts the wrapped indices in lexicographical order while maintaining the order of the non-zero values so that
      * their order matches the order of the indices.
      * @return A reference to this sparse data wrapper.
@@ -291,16 +304,28 @@ public final class SparseDataWrapper<T> {
     /**
      * Unwraps sparse data values and indices.
      * @param values Storage for unwrapped values. Must have the same length as that passed to the constructor. Modified.
+     * @param rowIndices Storage for unwrapped row indices. Must have the same shape as that passed to the constructor. Modified.
+     * @param colIndices Storage for unwrapped column indices. Must have the same shape as that passed to the constructor. Modified.
+     */
+    public void unwrap(double[] values, int[] rowIndices, int[] colIndices) {
+        // Copy over data values and indices.
+        for(int i=0; i<this.values.size(); i++) {
+            values[i] = (double) this.values.get(i);
+            rowIndices[i] = this.keys[0].get(i);
+            colIndices[i] = this.keys[1].get(i);
+        }
+    }
+
+
+    /**
+     * Unwraps sparse data values and indices.
+     * @param values Storage for unwrapped values. Must have the same length as that passed to the constructor. Modified.
      * @param indices Storage for unwrapped indices. Must have the same shape as that passed to the constructor. Modified.
      */
     public void unwrap(double[] values, int[] indices) {
-        // Copy over data values.
+        // Copy over data values and indices.
         for(int i=0; i<this.values.size(); i++) {
             values[i] = (double) this.values.get(i);
-        }
-
-        // Copy over indices (must be transposed).
-        for(int i=0; i<values.length; i++) {
             indices[i] = this.keys[0].get(i);
         }
     }

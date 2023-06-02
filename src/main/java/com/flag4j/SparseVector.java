@@ -1324,13 +1324,14 @@ public class SparseVector
     /**
      * Extends a vector a specified number of times to a matrix.
      *
-     * @param n    The number of times to extend this vector.
+     * @param n    The number of times to extend this vector. Must be a positive value.
      * @param axis Axis along which to extend. If {@code axis=0}, then the vector will be treated as a row vector. If
      *    {@code axis=1} then the vector will be treated as a column vector.
      * @return A matrix which is the result of extending a vector {@code n} times.
      */
     @Override
     public SparseMatrix extend(int n, int axis) {
+        ParameterChecks.assertGreaterEq(1, n, "n");
         ParameterChecks.assertAxis2D(axis);
 
         int[][] matIndices = new int[2][n*nonZeroEntries];
@@ -1343,10 +1344,9 @@ public class SparseVector
 
             for(int i=0; i<n; i++) {
                 Arrays.fill(rowIndices, i);
-
-                System.arraycopy(entries, 0, matEntries, n*i, entries.length);
-                System.arraycopy(rowIndices, 0, matIndices[0], n*i, indices.length);
-                System.arraycopy(indices, 0, matIndices[1], n*i, indices.length);
+                System.arraycopy(entries, 0, matEntries, (n-1)*i, nonZeroEntries);
+                System.arraycopy(rowIndices, 0, matIndices[0], (n-1)*i, nonZeroEntries);
+                System.arraycopy(indices, 0, matIndices[1], (n-1)*i, nonZeroEntries);
             }
 
         } else {
@@ -1357,10 +1357,12 @@ public class SparseVector
             for(int i=0; i<entries.length; i++) {
                 Arrays.fill(rowIndices, indices[i]);
 
-                Arrays.fill(matEntries, entries.length*i, entries.length*i + n, entries[i]);
-                System.arraycopy(rowIndices, 0, matIndices[0], entries.length*i, n);
-                System.arraycopy(colIndices, 0, matIndices[1], entries.length*i, n);
+                Arrays.fill(matEntries, (entries.length+1)*i, (entries.length+1)*i + n, entries[i]);
+                System.arraycopy(rowIndices, 0, matIndices[0], (entries.length+1)*i, n);
+                System.arraycopy(colIndices, 0, matIndices[1], (entries.length+1)*i, n);
             }
+
+            System.out.println("\n\n\n");
         }
 
         return new SparseMatrix(matShape, matEntries, matIndices[0], matIndices[1]);

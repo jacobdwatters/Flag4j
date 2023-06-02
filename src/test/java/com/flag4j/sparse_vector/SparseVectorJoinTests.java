@@ -112,6 +112,8 @@ class SparseVectorJoinTests {
         exp = new SparseMatrix(shape, expEntries, rowIndices, colIndices);
 
         assertEquals(exp, a.stack(b));
+        assertEquals(exp, a.stack(b, 0));
+        assertEquals(exp.T(), a.stack(b, 1));
 
         // ------------------- Sub-case 2 -------------------
         bEntries = new double[]{24.53, 66.1, -234.5, 0.0, 1.4, 51.6};
@@ -119,6 +121,8 @@ class SparseVectorJoinTests {
 
         Vector finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, 3));
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, -2));
     }
 
 
@@ -149,6 +153,8 @@ class SparseVectorJoinTests {
         exp = new SparseCMatrix(shape, expEntries, rowIndices, colIndices);
 
         assertEquals(exp, a.stack(b));
+        assertEquals(exp, a.stack(b, 0));
+        assertEquals(exp.T(), a.stack(b, 1));
 
         // ------------------- Sub-case 2 -------------------
         bEntries = new CNumber[]{new CNumber(24.5, -0.12), new CNumber(24.5, 3.4),
@@ -158,6 +164,8 @@ class SparseVectorJoinTests {
 
         CVector finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, 3));
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, -2));
     }
 
 
@@ -181,6 +189,8 @@ class SparseVectorJoinTests {
         exp = new SparseMatrix(shape, expEntries, rowIndices, colIndices);
 
         assertEquals(exp, a.stack(b));
+        assertEquals(exp, a.stack(b, 0));
+        assertEquals(exp.T(), a.stack(b, 1));
 
         // ------------------- Sub-case 2 -------------------
         bEntries = new double[]{24.53, 66.1, -234.5, 1.3};
@@ -190,5 +200,76 @@ class SparseVectorJoinTests {
 
         SparseVector finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, 3));
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, -2));
+    }
+
+
+    @Test
+    void sparseComplexStackTest() {
+        CNumber[] bEntries, expEntries;
+        int[] rowIndices, colIndices;
+        Shape shape;
+        SparseCVector b;
+        SparseCMatrix exp;
+
+        // ------------------- Sub-case 1 -------------------
+        bEntries = new CNumber[]{new CNumber(24.5, -0.12), new CNumber(24.5, 3.4),
+                new CNumber(-0.20015), new CNumber(9825.4, -85.126)};
+        bIndices = new int[]{0, 5, 6, 7};
+        bSize = 8;
+        b = new SparseCVector(bSize, bEntries, bIndices);
+        expEntries = new CNumber[]{new CNumber(1.34), new CNumber(-8781.5),
+                new CNumber(145.4), new CNumber(24.5, -0.12), new CNumber(24.5, 3.4),
+                new CNumber(-0.20015), new CNumber(9825.4, -85.126)};
+        shape = new Shape(2, 8);
+        rowIndices = new int[]{0, 0, 0, 1, 1, 1, 1};
+        colIndices = new int[]{0, 1, 6, 0, 5, 6, 7};
+        exp = new SparseCMatrix(shape, expEntries, rowIndices, colIndices);
+
+        assertEquals(exp, a.stack(b));
+        assertEquals(exp, a.stack(b, 0));
+        assertEquals(exp.T(), a.stack(b, 1));
+
+        // ------------------- Sub-case 2 -------------------
+        bEntries = new CNumber[]{new CNumber(24.5, -0.12), new CNumber(24.5, 3.4),
+                new CNumber(-0.20015), new CNumber(9825.4, -85.126)};
+        bIndices = new int[]{0, 5, 68, 995};
+        bSize = 2325;
+        b = new SparseCVector(bSize, bEntries, bIndices);
+
+        SparseCVector finalB = b;
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, 3));
+        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, -2));
+    }
+
+
+    @Test
+    void extendTest() {
+        double[] expEntries;
+        int[] rowIndices, colIndices;
+        Shape shape;
+        SparseVector b;
+        SparseMatrix exp;
+
+        // ------------------- Sub-case 1 -------------------
+        expEntries = new double[]{1.34, -8781.5, 145.4,
+                1.34, -8781.5, 145.4,
+                1.34, -8781.5, 145.4,
+                1.34, -8781.5, 145.4};
+        shape = new Shape(4, 8);
+        rowIndices = new int[]{0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3};
+        colIndices = new int[]{0, 1, 6, 0, 1, 6, 0, 1, 6, 0, 1, 6};
+        exp = new SparseMatrix(shape, expEntries, rowIndices, colIndices);
+
+        assertEquals(exp, a.extend(4, 0));
+        assertEquals(exp.T(), a.extend(4, 1));
+
+        // ------------------- Sub-case 2 -------------------
+        assertThrows(IllegalArgumentException.class, ()->a.extend(4, -1));
+        assertThrows(IllegalArgumentException.class, ()->a.extend(4, 235));
+        assertThrows(IllegalArgumentException.class, ()->a.extend(0, 0));
+        assertThrows(IllegalArgumentException.class, ()->a.extend(-1, 0));
     }
 }

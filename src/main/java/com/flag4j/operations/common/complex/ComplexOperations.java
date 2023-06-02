@@ -206,17 +206,23 @@ public class ComplexOperations {
     /**
      * Computes the scalar division of a tensor.
      * @param entries Entries of the tensor.
-     * @param factor Scalar value to divide each element ot the tensor by.
+     * @param divisor Scalar value to divide each element ot the tensor by.
      * @return The scalar division of the tensor.
      */
-    public static CNumber[] scalDiv(double[] entries, CNumber factor) {
-        CNumber[] product = new CNumber[entries.length];
+    public static CNumber[] scalDiv(double[] entries, CNumber divisor) {
+        CNumber[] quotient = new CNumber[entries.length];
 
-        for(int i=0; i<product.length; i++) {
-            product[i] = factor.mult(entries[i]);
+        double denom = divisor.re*divisor.re + divisor.im*divisor.im;
+
+        for(int i=0; i<quotient.length; i++) {
+            double a = entries[i];
+
+            quotient[i] = new CNumber(
+                    a*divisor.re / denom,
+                    -a*divisor.im / denom);
         }
 
-        return product;
+        return quotient;
     }
 
 

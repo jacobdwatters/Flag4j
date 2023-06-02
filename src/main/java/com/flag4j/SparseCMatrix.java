@@ -676,7 +676,16 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix T() {
-        return null;
+        SparseCMatrix transpose = new SparseCMatrix(
+                shape.copy().swapAxes(0, 1),
+                ArrayUtils.copyOf(entries),
+                colIndices.clone(),
+                rowIndices.clone()
+        );
+
+        transpose.sparseSort(); // Ensure the indices are sorted correctly.
+
+        return transpose;
     }
 
 

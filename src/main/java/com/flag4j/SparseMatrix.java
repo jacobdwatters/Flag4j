@@ -33,6 +33,7 @@ import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEqu
 import com.flag4j.operations.sparse.real.RealSparseEquals;
 import com.flag4j.operations.sparse.real_complex.RealComplexSparseEquals;
 import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.SparseDataWrapper;
 
 import java.util.Arrays;
 
@@ -604,7 +605,25 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix T() {
-        return null;
+        SparseMatrix transpose = new SparseMatrix(
+                shape.copy().swapAxes(0, 1),
+                entries.clone(),
+                colIndices.clone(),
+                rowIndices.clone()
+        );
+
+        transpose.sparseSort(); // Ensure the indices are sorted correctly.
+
+        return transpose;
+    }
+
+
+    /**
+     * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
+     */
+    @Override
+    public void sparseSort() {
+        SparseDataWrapper.wrap(entries, rowIndices, colIndices).sparseSort().unwrap(entries, rowIndices, colIndices);
     }
 
 

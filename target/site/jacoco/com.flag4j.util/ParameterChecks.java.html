@@ -257,10 +257,10 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If any of the values are less than the threshold.
      */
     public static void assertGreaterEq(double threshold, double value, String name) {
-<span class="nc bnc" id="L260" title="All 2 branches missed.">        if(value&lt;threshold) {</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">        if(value&lt;threshold) {</span>
 <span class="nc" id="L261">            throw new IllegalArgumentException(ErrorMessages.getNamedGreaterEqErr(threshold, value, name));</span>
         }
-<span class="nc" id="L263">    }</span>
+<span class="fc" id="L263">    }</span>
 
 
     /**
@@ -338,8 +338,8 @@ public final class ParameterChecks {
      * @throws IllegalArgumentException If the axis is not a valid 2D axis.
      */
     public static void assertAxis2D(int axis) {
-<span class="pc bpc" id="L341" title="1 of 4 branches missed.">        if(!(axis == 0 || axis==1)) {</span>
-<span class="nc" id="L342">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));</span>
+<span class="fc bfc" id="L341" title="All 4 branches covered.">        if(!(axis == 0 || axis==1)) {</span>
+<span class="fc" id="L342">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));</span>
         }
 <span class="fc" id="L344">    }</span>
 

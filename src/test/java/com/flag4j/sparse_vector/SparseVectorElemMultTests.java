@@ -140,4 +140,50 @@ class SparseVectorElemMultTests {
         CVector finalB = b;
         assertThrows(IllegalArgumentException.class, ()->a.elemMult(finalB));
     }
+
+
+    @Test
+    void doubleScalarElemMultTest() {
+        double[] aValues = {1.34, 51.6, -0.00245, 99.2456, -1005.6};
+        int[] aIndices = {2, 5, 81, 102, 104};
+        size = 151;
+        a = new SparseVector(size, aValues, aIndices);
+
+        double b;
+
+        double[] expValues;
+        int[] expIndices;
+        SparseVector exp;
+
+        // -------------------- Sub-case 1 --------------------
+        b = 24.56;
+
+        expValues = new double[]{1.34*b, 51.6*b, -0.00245*b, 99.2456*b, -1005.6*b};
+        expIndices = new int[]{2, 5, 81, 102, 104};
+        exp = new SparseVector(151, expValues, expIndices);
+        assertEquals(exp, a.mult(b));
+    }
+
+
+    @Test
+    void complexScalarElemMultTest() {
+        double[] aValues = {1.34, 51.6, -0.00245, 99.2456, -1005.6};
+        int[] aIndices = {2, 5, 81, 102, 104};
+        size = 151;
+        a = new SparseVector(size, aValues, aIndices);
+
+        CNumber b;
+
+        CNumber[] expValues;
+        int[] expIndices;
+        SparseCVector exp;
+
+        // -------------------- Sub-case 1 --------------------
+        b = new CNumber(234.6677, -9.35);
+
+        expValues = new CNumber[]{b.mult(1.34), b.mult(51.6), b.mult(-0.00245), b.mult(99.2456), b.mult(-1005.6)};
+        expIndices = new int[]{2, 5, 81, 102, 104};
+        exp = new SparseCVector(151, expValues, expIndices);
+        assertEquals(exp, a.mult(b));
+    }
 }

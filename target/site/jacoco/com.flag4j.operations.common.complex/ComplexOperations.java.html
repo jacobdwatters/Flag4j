@@ -206,17 +206,23 @@ public class ComplexOperations {
     /**
      * Computes the scalar division of a tensor.
      * @param entries Entries of the tensor.
-     * @param factor Scalar value to divide each element ot the tensor by.
+     * @param divisor Scalar value to divide each element ot the tensor by.
      * @return The scalar division of the tensor.
      */
-    public static CNumber[] scalDiv(double[] entries, CNumber factor) {
-<span class="nc" id="L213">        CNumber[] product = new CNumber[entries.length];</span>
+    public static CNumber[] scalDiv(double[] entries, CNumber divisor) {
+<span class="fc" id="L213">        CNumber[] quotient = new CNumber[entries.length];</span>
 
-<span class="nc bnc" id="L215" title="All 2 branches missed.">        for(int i=0; i&lt;product.length; i++) {</span>
-<span class="nc" id="L216">            product[i] = factor.mult(entries[i]);</span>
+<span class="fc" id="L215">        double denom = divisor.re*divisor.re + divisor.im*divisor.im;</span>
+
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
+<span class="fc" id="L218">            double a = entries[i];</span>
+
+<span class="fc" id="L220">            quotient[i] = new CNumber(</span>
+                    a*divisor.re / denom,
+                    -a*divisor.im / denom);
         }
 
-<span class="nc" id="L219">        return product;</span>
+<span class="fc" id="L225">        return quotient;</span>
     }
 
 
@@ -226,13 +232,13 @@ public class ComplexOperations {
      * @return The element-wise complex conjugate of the tensor
      */
     public static CNumber[] conj(CNumber[] src) {
-<span class="fc" id="L229">        CNumber[] conjugate = new CNumber[src.length];</span>
+<span class="fc" id="L235">        CNumber[] conjugate = new CNumber[src.length];</span>
 
-<span class="fc bfc" id="L231" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc" id="L232">            conjugate[i] = src[i].conj();</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L238">            conjugate[i] = src[i].conj();</span>
         }
 
-<span class="fc" id="L235">        return conjugate;</span>
+<span class="fc" id="L241">        return conjugate;</span>
     }
 
 
@@ -242,13 +248,13 @@ public class ComplexOperations {
      * @return Equivalent real entries for complex tensor.
      */
     public static double[] toReal(CNumber[] src) {
-<span class="fc" id="L245">        double[] real = new double[src.length];</span>
+<span class="fc" id="L251">        double[] real = new double[src.length];</span>
 
-<span class="fc bfc" id="L247" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc" id="L248">            real[i] = src[i].re;</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L254">            real[i] = src[i].re;</span>
         }
 
-<span class="fc" id="L251">        return real;</span>
+<span class="fc" id="L257">        return real;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

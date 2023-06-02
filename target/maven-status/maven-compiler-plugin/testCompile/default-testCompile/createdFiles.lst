@@ -168,6 +168,7 @@ com\flag4j\operations\dense\complex\ComplexMatrixMultiplyTests.class
 com\flag4j\MatrixAddTests.class
 com\flag4j\CMatrixRowColSumTests.class
 com\flag4j\VectorEqualsTests.class
+com\flag4j\sparse_vector\SparseVectorAggregateTests.class
 com\flag4j\complex_numbers\CNumberUnaryOperationsTest.class
 com\flag4j\complex_numbers\CNumberMinMaxSumTest.class
 com\flag4j\operations\sparse\complex\ComplexSparseMatMultTests.class
