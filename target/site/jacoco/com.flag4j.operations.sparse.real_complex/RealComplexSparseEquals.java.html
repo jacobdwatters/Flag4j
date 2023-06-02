@@ -54,9 +54,9 @@ import java.util.Arrays;
      * @return True if the vectors are equal. False otherwise.
      */
     public static boolean matrixEquals(SparseMatrix a, SparseCMatrix b) {
-<span class="pc bpc" id="L57" title="2 of 4 branches missed.">        return a.shape.equals(b.shape) &amp;&amp; ArrayUtils.equals(a.entries, b.entries)</span>
+<span class="nc bnc" id="L57" title="All 4 branches missed.">        return a.shape.equals(b.shape) &amp;&amp; ArrayUtils.equals(a.entries, b.entries)</span>
 <span class="nc bnc" id="L58" title="All 2 branches missed.">                &amp;&amp; Arrays.equals(a.rowIndices, b.rowIndices)</span>
-<span class="pc bnc" id="L59" title="All 2 branches missed.">                &amp;&amp; Arrays.equals(a.colIndices, b.colIndices);</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">                &amp;&amp; Arrays.equals(a.colIndices, b.colIndices);</span>
     }
 
 
@@ -67,7 +67,7 @@ import java.util.Arrays;
      * @return True if the vectors are equal. False otherwise.
      */
     public static boolean vectorEquals(SparseVector a, SparseCVector b) {
-<span class="pc bpc" id="L70" title="3 of 6 branches missed.">        return a.size==b.size &amp;&amp; Arrays.equals(a.indices, b.indices) &amp;&amp; ArrayUtils.equals(a.entries, b.entries);</span>
+<span class="nc bnc" id="L70" title="All 6 branches missed.">        return a.size==b.size &amp;&amp; Arrays.equals(a.indices, b.indices) &amp;&amp; ArrayUtils.equals(a.entries, b.entries);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

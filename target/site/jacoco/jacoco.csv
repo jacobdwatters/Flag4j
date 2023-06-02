@@ -38,9 +38,9 @@ Flag4j,com.flag4j.operations.dense.real,RealDenseEquals,7,40,0,4,2,4,1,6,1,4
 Flag4j,com.flag4j.operations.dense.real,RealDenseElemDiv,41,37,1,3,8,7,4,3,3,2
 Flag4j,com.flag4j.operations.dense.real,RealDenseVectorOperations,7,82,0,6,2,11,1,5,1,2
 Flag4j,com.flag4j.operations.dense.real,RealDenseMatrixMultiplication,7,1139,0,84,2,208,1,60,1,18
-Flag4j,com.flag4j.operations.sparse.complex,ComplexSparseVectorOperations,166,613,20,40,24,91,14,28,2,10
+Flag4j,com.flag4j.operations.sparse.complex,ComplexSparseVectorOperations,199,580,25,35,28,87,17,25,2,10
 Flag4j,com.flag4j.operations.sparse.complex,ComplexSparseMatrixMultiplication,7,260,0,20,2,50,1,16,1,6
-Flag4j,com.flag4j.operations.sparse.complex,ComplexSparseEquals,8,76,7,13,2,7,8,6,1,3
+Flag4j,com.flag4j.operations.sparse.complex,ComplexSparseEquals,10,74,10,10,2,7,11,3,1,3
 Flag4j,com.flag4j.linalg.transformations,Householder,7,123,0,2,2,17,1,3,1,2
 Flag4j,com.flag4j.linalg.transformations,Projection,19,435,5,5,2,58,6,7,1,7
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseOperations,7,312,0,24,2,50,1,24,1,12
@@ -52,7 +52,7 @@ Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseElemDiv,114,116,
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseElemMult,41,37,1,3,8,7,4,3,3,2
 Flag4j,com.flag4j.operations.sparse.real_complex,RealComplexSparseMatrixMultiplication,541,0,40,0,98,0,33,0,13,0
 Flag4j,com.flag4j.operations.sparse.real_complex,RealComplexSparseVectorOperations,260,840,32,54,37,127,25,31,4,9
-Flag4j,com.flag4j.operations.sparse.real_complex,RealComplexSparseEquals,43,37,15,5,4,3,12,2,2,2
+Flag4j,com.flag4j.operations.sparse.real_complex,RealComplexSparseEquals,80,0,20,0,7,0,14,0,4,0
 Flag4j,com.flag4j.concurrency,ThreadManager,22,67,2,2,8,12,3,6,1,6
 Flag4j,com.flag4j.concurrency,Configurations,49,10,0,0,16,4,8,2,8,2
 Flag4j,com.flag4j.operations,MatrixMultiplyDispatcher,992,416,116,31,181,88,97,17,6,13
@@ -80,13 +80,13 @@ Flag4j,com.flag4j.complex_numbers,CNumber,207,1672,8,176,40,316,26,172,19,87
 Flag4j,com.flag4j.operations.sparse.real,RealSparseMatrixMultiplication,7,258,0,20,2,47,1,16,1,6
 Flag4j,com.flag4j.operations.sparse.real,RealSparseVectorOperations,63,660,12,44,8,101,11,25,1,7
 Flag4j,com.flag4j.operations.sparse.real,RealSparseManipulations,7,0,0,0,2,0,1,0,1,0
-Flag4j,com.flag4j.operations.sparse.real,RealSparseEquals,5,75,9,11,1,6,10,4,1,3
+Flag4j,com.flag4j.operations.sparse.real,RealSparseEquals,6,74,10,10,1,6,11,3,1,3
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseMatrixMultTranspose,7,140,0,8,2,26,1,6,1,2
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseOperations,154,640,6,28,22,85,7,28,4,14
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseEquals,85,365,11,43,17,75,8,26,2,5
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseMatrixMultiplication,7,1276,8,76,2,218,9,64,1,30
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseVectorOperations,51,750,4,42,9,104,4,39,2,18
-Flag4j,com.flag4j,CVector,275,1639,29,49,49,221,30,79,13,57
+Flag4j,com.flag4j,CVector,383,1531,35,43,65,205,32,77,14,56
 Flag4j,com.flag4j,SparseTensor,130,89,7,5,44,17,38,6,33,5
 Flag4j,com.flag4j,Tensor,33,665,5,29,4,117,5,55,0,43
 Flag4j,com.flag4j,SparseCTensor,152,142,6,10,56,25,51,9,46,6
@@ -120,7 +120,7 @@ Flag4j,com.flag4j.operations.common.real,AggregateReal,7,150,0,24,2,30,1,17,1,5
 Flag4j,com.flag4j.operations.common.real,VectorNorms,9,142,1,15,3,24,2,11,1,4
 Flag4j,com.flag4j.operations.common.real,RealProperties,7,54,0,8,2,12,1,6,1,2
 Flag4j,com.flag4j.operations.common.real,RealOperations,7,191,0,20,2,36,1,17,1,7
-Flag4j,com.flag4j.core.sparse,ComplexSparseTensorBase,36,52,0,2,8,8,8,4,8,3
+Flag4j,com.flag4j.core.sparse,ComplexSparseTensorBase,50,38,0,2,10,6,9,3,9,2
 Flag4j,com.flag4j.core.sparse,RealSparseTensorBase,49,57,1,5,9,8,9,6,8,4
 Flag4j,com.flag4j.core.sparse,SparseTensorBase,43,31,0,2,7,6,3,2,3,1
 Flag4j,com.flag4j.linalg.decompositions,ComplexSchurDecomposition,70,0,2,0,18,0,6,0,5,0

@@ -133,7 +133,7 @@ public class ComplexSparseVectorOperations {
 <span class="fc" id="L133">        int src1Counter = 0;</span>
 <span class="fc" id="L134">        int src2Counter = 0;</span>
 
-<span class="fc bfc" id="L136" title="All 4 branches covered.">        while(src1Counter &lt; src1.entries.length &amp;&amp; src2Counter &lt; src2.entries.length) {</span>
+<span class="pc bpc" id="L136" title="1 of 4 branches missed.">        while(src1Counter &lt; src1.entries.length &amp;&amp; src2Counter &lt; src2.entries.length) {</span>
 <span class="fc bfc" id="L137" title="All 2 branches covered.">            if(src1.indices[src1Counter] == src2.indices[src2Counter]) {</span>
 <span class="fc" id="L138">                values.add(src1.entries[src1Counter].add(src2.entries[src2Counter]));</span>
 <span class="fc" id="L139">                indices.add(src1.indices[src1Counter]);</span>
@@ -152,15 +152,15 @@ public class ComplexSparseVectorOperations {
         }
 
         // Finish inserting the rest of the values.
-<span class="fc bfc" id="L155" title="All 2 branches covered.">        if(src1Counter &lt; src1.entries.length) {</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        if(src1Counter &lt; src1.entries.length) {</span>
 <span class="fc bfc" id="L156" title="All 2 branches covered.">            for(int i=src1Counter; i&lt;src1.entries.length; i++) {</span>
 <span class="fc" id="L157">                values.add(src1.entries[i].copy());</span>
 <span class="fc" id="L158">                indices.add(src1.indices[i]);</span>
             }
-<span class="pc bpc" id="L160" title="1 of 2 branches missed.">        } else if(src2Counter &lt; src2.entries.length) {</span>
-<span class="fc bfc" id="L161" title="All 2 branches covered.">            for(int i=src2Counter; i&lt;src2.entries.length; i++) {</span>
-<span class="fc" id="L162">                values.add(src2.entries[i].copy());</span>
-<span class="fc" id="L163">                indices.add(src2.indices[i]);</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">        } else if(src2Counter &lt; src2.entries.length) {</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">            for(int i=src2Counter; i&lt;src2.entries.length; i++) {</span>
+<span class="nc" id="L162">                values.add(src2.entries[i].copy());</span>
+<span class="nc" id="L163">                indices.add(src2.indices[i]);</span>
             }
         }
 
