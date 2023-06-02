@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.flag4j.MatrixElemMultTests" time="0.002" tests="4" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="16"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.class.path" value="C:\Users\jacob\IdeaProjects\Flag4j\target\test-classes;C:\Users\jacob\IdeaProjects\Flag4j\target\classes;C:\Users\jacob\.m2\repository\org\junit\platform\junit-platform-surefire-provider\1.3.2\junit-platform-surefire-provider-1.3.2.jar;C:\Users\jacob\.m2\repository\org\apiguardian\apiguardian-api\1.0.0\apiguardian-api-1.0.0.jar;C:\Users\jacob\.m2\repository\org\junit\platform\junit-platform-launcher\1.3.2\junit-platform-launcher-1.3.2.jar;C:\Users\jacob\.m2\repository\org\apache\maven\surefire\surefire-api\2.22.0\surefire-api-2.22.0.jar;C:\Users\jacob\.m2\repository\org\apache\maven\surefire\surefire-logger-api\2.22.0\surefire-logger-api-2.22.0.jar;C:\Users\jacob\.m2\repository\org\apache\maven\surefire\common-java5\2.22.0\common-java5-2.22.0.jar;C:\Users\jacob\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.9.2\junit-jupiter-engine-5.9.2.jar;C:\Users\jacob\.m2\repository\org\junit\platform\junit-platform-engine\1.9.2\junit-platform-engine-1.9.2.jar;C:\Users\jacob\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\jacob\.m2\repository\org\junit\platform\junit-platform-commons\1.9.2\junit-platform-commons-1.9.2.jar;C:\Users\jacob\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.9.2\junit-jupiter-api-5.9.2.jar;C:\Users\jacob\.m2\repository\org\jacoco\jacoco-maven-plugin\0.8.8\jacoco-maven-plugin-0.8.8.jar;C:\Users\jacob\.m2\repository\org\codehaus\plexus\plexus-utils\3.0.22\plexus-utils-3.0.22.jar;C:\Users\jacob\.m2\repository\org\apache\maven\shared\file-management\1.2.1\file-management-1.2.1.jar;C:\Users\jacob\.m2\repository\org\apache\maven\maven-plugin-api\2.0.6\maven-plugin-api-2.0.6.jar;C:\Users\jacob\.m2\repository\org\apache\maven\shared\maven-shared-io\1.1\maven-shared-io-1.1.jar;C:\Users\jacob\.m2\repository\org\apache\maven\maven-artifact\2.0.2\maven-artifact-2.0.2.jar;C:\Users\jacob\.m2\repository\org\apache\maven\maven-artifact-manager\2.0.2\maven-artifact-manager-2.0.2.jar;C:\Users\jacob\.m2\repository\org\apache\maven\maven-repository-metadata\2.0.2\maven-repository-metadata-2.0.2.jar;C:\Users\jacob\.m2\repository\org\apache\maven\wagon\wagon-provider-api\1.0-alpha-6\wagon-provider-api-1.0-alpha-6.jar;C:\Users\jacob\.m2\repository\org\codehaus\plexus\plexus-container-default\1.0-alpha-9\plexus-container-default-1.0-alpha-9.jar;C:\Users\jacob\.m2\repository\junit\junit\3.8.1\junit-3.8.1.jar;C:\Users\jacob\.m2\repository\classworlds\classworlds\1.1-alpha-2\classworlds-1.1-alpha-2.jar;C:\Users\jacob\.m2\repository\org\apache\maven\reporting\maven-reporting-api\3.0\maven-reporting-api-3.0.jar;C:\Users\jacob\.m2\repository\org\apache\maven\doxia\doxia-sink-api\1.0\doxia-sink-api-1.0.jar;C:\Users\jacob\.m2\repository\org\jacoco\org.jacoco.agent\0.8.8\org.jacoco.agent-0.8.8-runtime.jar;C:\Users\jacob\.m2\repository\org\jacoco\org.jacoco.core\0.8.8\org.jacoco.core-0.8.8.jar;C:\Users\jacob\.m2\repository\org\ow2\asm\asm\9.2\asm-9.2.jar;C:\Users\jacob\.m2\repository\org\ow2\asm\asm-commons\9.2\asm-commons-9.2.jar;C:\Users\jacob\.m2\repository\org\ow2\asm\asm-analysis\9.2\asm-analysis-9.2.jar;C:\Users\jacob\.m2\repository\org\ow2\asm\asm-tree\9.2\asm-tree-9.2.jar;C:\Users\jacob\.m2\repository\org\jacoco\org.jacoco.report\0.8.8\org.jacoco.report-0.8.8.jar;C:\Users\jacob\.m2\repository\org\jetbrains\annotations\24.0.1\annotations-24.0.1.jar;"/>
+    <property name="java.vm.vendor" value="Amazon.com Inc."/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="user.variant" value=""/>
+    <property name="java.vendor.url" value="https://aws.amazon.com/corretto/"/>
+    <property name="user.timezone" value="America/Denver"/>
+    <property name="os.name" value="Windows 10"/>
+    <property name="java.vm.specification.version" value="16"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.boot.library.path" value="C:\Users\jacob\.jdks\corretto-16.0.2\bin"/>
+    <property name="sun.java.command" value="C:\Users\jacob\AppData\Local\Temp\surefire6396463606136621201\surefirebooter12786344591421383346.jar C:\Users\jacob\AppData\Local\Temp\surefire6396463606136621201 2023-06-02T17-49-05_281-jvmRun1 surefire9456609248815757275tmp surefire_017231484321448696901tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="C:\Users\jacob\IdeaProjects\Flag4j\target\test-classes;C:\Users\jacob\IdeaProjects\Flag4j\target\classes;C:\Users\jacob\.m2\repository\org\junit\platform\junit-platform-surefire-provider\1.3.2\junit-platform-surefire-provider-1.3.2.jar;C:\Users\jacob\.m2\repository\org\apiguardian\apiguardian-api\1.0.0\apiguardian-api-1.0.0.jar;C:\Users\jacob\.m2\repository\org\junit\platform\junit-platform-launcher\1.3.2\junit-platform-launcher-1.3.2.jar;C:\Users\jacob\.m2\repository\org\apache\maven\surefire\surefire-api\2.22.0\surefire-api-2.22.0.jar;C:\Users\jacob\.m2\repository\org\apache\maven\surefire\surefire-logger-api\2.22.0\surefire-logger-api-2.22.0.jar;C:\Users\jacob\.m2\repository\org\apache\maven\surefire\common-java5\2.22.0\common-java5-2.22.0.jar;C:\Users\jacob\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.9.2\junit-jupiter-engine-5.9.2.jar;C:\Users\jacob\.m2\repository\org\junit\platform\junit-platform-engine\1.9.2\junit-platform-engine-1.9.2.jar;C:\Users\jacob\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\jacob\.m2\repository\org\junit\platform\junit-platform-commons\1.9.2\junit-platform-commons-1.9.2.jar;C:\Users\jacob\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.9.2\junit-jupiter-api-5.9.2.jar;C:\Users\jacob\.m2\repository\org\jacoco\jacoco-maven-plugin\0.8.8\jacoco-maven-plugin-0.8.8.jar;C:\Users\jacob\.m2\repository\org\codehaus\plexus\plexus-utils\3.0.22\plexus-utils-3.0.22.jar;C:\Users\jacob\.m2\repository\org\apache\maven\shared\file-management\1.2.1\file-management-1.2.1.jar;C:\Users\jacob\.m2\repository\org\apache\maven\maven-plugin-api\2.0.6\maven-plugin-api-2.0.6.jar;C:\Users\jacob\.m2\repository\org\apache\maven\shared\maven-shared-io\1.1\maven-shared-io-1.1.jar;C:\Users\jacob\.m2\repository\org\apache\maven\maven-artifact\2.0.2\maven-artifact-2.0.2.jar;C:\Users\jacob\.m2\repository\org\apache\maven\maven-artifact-manager\2.0.2\maven-artifact-manager-2.0.2.jar;C:\Users\jacob\.m2\repository\org\apache\maven\maven-repository-metadata\2.0.2\maven-repository-metadata-2.0.2.jar;C:\Users\jacob\.m2\repository\org\apache\maven\wagon\wagon-provider-api\1.0-alpha-6\wagon-provider-api-1.0-alpha-6.jar;C:\Users\jacob\.m2\repository\org\codehaus\plexus\plexus-container-default\1.0-alpha-9\plexus-container-default-1.0-alpha-9.jar;C:\Users\jacob\.m2\repository\junit\junit\3.8.1\junit-3.8.1.jar;C:\Users\jacob\.m2\repository\classworlds\classworlds\1.1-alpha-2\classworlds-1.1-alpha-2.jar;C:\Users\jacob\.m2\repository\org\apache\maven\reporting\maven-reporting-api\3.0\maven-reporting-api-3.0.jar;C:\Users\jacob\.m2\repository\org\apache\maven\doxia\doxia-sink-api\1.0\doxia-sink-api-1.0.jar;C:\Users\jacob\.m2\repository\org\jacoco\org.jacoco.agent\0.8.8\org.jacoco.agent-0.8.8-runtime.jar;C:\Users\jacob\.m2\repository\org\jacoco\org.jacoco.core\0.8.8\org.jacoco.core-0.8.8.jar;C:\Users\jacob\.m2\repository\org\ow2\asm\asm\9.2\asm-9.2.jar;C:\Users\jacob\.m2\repository\org\ow2\asm\asm-commons\9.2\asm-commons-9.2.jar;C:\Users\jacob\.m2\repository\org\ow2\asm\asm-analysis\9.2\asm-analysis-9.2.jar;C:\Users\jacob\.m2\repository\org\ow2\asm\asm-tree\9.2\asm-tree-9.2.jar;C:\Users\jacob\.m2\repository\org\jacoco\org.jacoco.report\0.8.8\org.jacoco.report-0.8.8.jar;C:\Users\jacob\.m2\repository\org\jetbrains\annotations\24.0.1\annotations-24.0.1.jar;"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="C:\Users\jacob"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2021-07-20"/>
+    <property name="java.home" value="C:\Users\jacob\.jdks\corretto-16.0.2"/>
+    <property name="file.separator" value="\"/>
+    <property name="basedir" value="C:\Users\jacob\IdeaProjects\Flag4j"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="C:\Users\jacob\AppData\Local\Temp\surefire6396463606136621201\surefirebooter12786344591421383346.jar"/>
+    <property name="user.script" value=""/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="16.0.2+7"/>
+    <property name="user.name" value="jacob"/>
+    <property name="path.separator" value=";"/>
+    <property name="os.version" value="10.0"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="Cp1252"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="java.vendor.version" value="Corretto-16.0.2.7.1"/>
+    <property name="localRepository" value="C:\Users\jacob\.m2\repository"/>
+    <property name="java.vendor.url.bug" value="https://github.com/corretto/corretto-jdk/issues/"/>
+    <property name="java.io.tmpdir" value="C:\Users\jacob\AppData\Local\Temp\"/>
+    <property name="idea.version" value="2021.3.2"/>
+    <property name="java.version" value="16.0.2"/>
+    <property name="user.dir" value="C:\Users\jacob\IdeaProjects\Flag4j"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="java.library.path" value="C:\Users\jacob\.jdks\corretto-16.0.2\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.7\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.7\libnvvp;C:\ffmpeg\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\libnvvp;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\NVIDIA\CUDNN\v8.3\bin;C:\Program Files\Git\cmd;C:\Users\jacob\AppData\Local\Microsoft\WindowsApps;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\WorldPainter;C:\Program Files\dotnet\;\w64devkit\bin;C:\Program Files\CMake\bin;C:\Program Files (x86)\Gpg4win\..\GnuPG\bin;C:\Program Files\NVIDIA Corporation\Nsight Compute 2022.2.0\;C:\Users\jacob\AppData\Local\Microsoft\WindowsApps;C:\texlive\2022\bin\win32;C:\Users\jacob\AppData\Local\Pandoc\;\w64devkit\bin;;C:\Program Files\JetBrains\CLion 2022.3.1\bin;;."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.vendor" value="Amazon.com Inc."/>
+    <property name="java.vm.version" value="16.0.2+7"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="60.0"/>
+  </properties>
+  <testcase name="elemMultTest" classname="com.flag4j.MatrixElemMultTests" time="0.001"/>
+  <testcase name="elemMultSparseComplexTest" classname="com.flag4j.MatrixElemMultTests" time="0"/>
+  <testcase name="elemMultComplexTest" classname="com.flag4j.MatrixElemMultTests" time="0.001"/>
+  <testcase name="elemMultSparseTest" classname="com.flag4j.MatrixElemMultTests" time="0"/>
+</testsuite>
