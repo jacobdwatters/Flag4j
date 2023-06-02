@@ -250,7 +250,6 @@ class SparseVectorJoinTests {
         double[] expEntries;
         int[] rowIndices, colIndices;
         Shape shape;
-        SparseVector b;
         SparseMatrix exp;
 
         // ------------------- Sub-case 1 -------------------

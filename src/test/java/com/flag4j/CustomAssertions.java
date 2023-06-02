@@ -2,6 +2,8 @@ package com.flag4j;
 
 import junit.framework.Assert;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+
 public final class CustomAssertions extends Assert {
 
 
@@ -42,6 +44,42 @@ public final class CustomAssertions extends Assert {
                 } else {
                     assertEquals(exp.entries[i].im, act.entries[i].im);
                 }
+            } else {
+                assertEquals(exp.entries[i], act.entries[i]);
+            }
+        }
+    }
+
+
+    /**
+     * Checks if sparse matrices are equal counting NaN equal to NaN.
+     * @param exp Expected Matrix.
+     * @param act Actual Matrix.
+     */
+    public static void assertEqualsNaN(SparseMatrix exp, SparseMatrix act) {
+        assertEquals(exp.shape, act.shape);
+        assertArrayEquals(exp.rowIndices, act.colIndices);
+        for(int i=0; i<exp.entries.length; i++) {
+            if(Double.isNaN(exp.entries[i])) {
+                assertTrue(Double.isNaN(act.entries[i]));
+            } else {
+                assertEquals(exp.entries[i], act.entries[i]);
+            }
+        }
+    }
+
+
+    /**
+     * Checks if sparse vectors are equal counting NaN equal to NaN.
+     * @param exp Expected vector.
+     * @param act Actual vector.
+     */
+    public static void assertEqualsNaN(SparseVector exp, SparseVector act) {
+        assertEquals(exp.shape, act.shape);
+        assertArrayEquals(exp.indices, act.indices);
+        for(int i=0; i<exp.entries.length; i++) {
+            if(Double.isNaN(exp.entries[i])) {
+                assertTrue(Double.isNaN(act.entries[i]));
             } else {
                 assertEquals(exp.entries[i], act.entries[i]);
             }

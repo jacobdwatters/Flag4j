@@ -856,7 +856,7 @@ import java.util.List;
      */
     @Override
     public SparseVector sqrt() {
-<span class="nc" id="L859">        return new SparseVector(this.size, RealOperations.sqrt(entries), indices.clone());</span>
+<span class="fc" id="L859">        return new SparseVector(this.size, RealOperations.sqrt(entries), indices.clone());</span>
     }
 
 
@@ -868,7 +868,7 @@ import java.util.List;
      */
     @Override
     public SparseVector abs() {
-<span class="nc" id="L871">        return new SparseVector(this.size, RealOperations.abs(entries), indices.clone());</span>
+<span class="fc" id="L871">        return new SparseVector(this.size, RealOperations.abs(entries), indices.clone());</span>
     }
 
 
@@ -880,7 +880,7 @@ import java.util.List;
      */
     @Override
     public SparseVector transpose() {
-<span class="nc" id="L883">        return this.copy();</span>
+<span class="fc" id="L883">        return this.copy();</span>
     }
 
 
@@ -892,7 +892,7 @@ import java.util.List;
      */
     @Override
     public SparseVector T() {
-<span class="nc" id="L895">        return this.copy();</span>
+<span class="fc" id="L895">        return this.copy();</span>
     }
 
 
@@ -904,7 +904,7 @@ import java.util.List;
      */
     @Override
     public SparseVector recip() {
-<span class="nc" id="L907">        return new SparseVector(size, RealDenseOperations.recip(entries), indices.clone());</span>
+<span class="fc" id="L907">        return new SparseVector(size, RealDenseOperations.recip(entries), indices.clone());</span>
     }
 
 

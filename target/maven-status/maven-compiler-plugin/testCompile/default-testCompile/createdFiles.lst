@@ -38,6 +38,7 @@ com\flag4j\MatrixSetOperationTests.class
 com\flag4j\MatrixConstructorTests.class
 com\flag4j\operations\dense\complex\ComplexDenseOperationsTests.class
 com\flag4j\operations\dense\real\MatrixMultiplyTests.class
+com\flag4j\sparse_vector\SparseVectorUnaryOpTests.class
 com\flag4j\CMatrixMultTests.class
 com\flag4j\TensorTransposeTests.class
 com\flag4j\MatrixStackTests.class
