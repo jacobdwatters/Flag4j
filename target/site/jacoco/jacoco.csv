@@ -91,14 +91,14 @@ Flag4j,com.flag4j,SparseTensor,130,89,7,5,44,17,38,6,33,5
 Flag4j,com.flag4j,Tensor,33,665,5,29,4,117,5,55,0,43
 Flag4j,com.flag4j,SparseCTensor,152,142,6,10,56,25,51,9,46,6
 Flag4j,com.flag4j,CMatrix,790,7493,61,389,109,822,79,337,46,145
-Flag4j,com.flag4j,SparseVector,106,2111,15,71,14,283,14,110,3,78
+Flag4j,com.flag4j,SparseVector,106,2108,15,71,14,282,14,110,3,78
 Flag4j,com.flag4j,Shape,35,465,5,37,5,75,5,34,2,16
 Flag4j,com.flag4j,Matrix,56,6977,10,408,11,794,17,361,8,161
 Flag4j,com.flag4j,SparseMatrix,147,516,7,3,49,88,41,13,36,13
 Flag4j,com.flag4j,Vector,25,1773,3,79,4,241,6,97,3,59
 Flag4j,com.flag4j,CTensor,37,702,4,20,9,128,8,55,4,47
 Flag4j,com.flag4j,SparseCMatrix,165,702,6,4,58,116,51,16,46,16
-Flag4j,com.flag4j,SparseCVector,463,1640,33,33,75,221,40,77,22,62
+Flag4j,com.flag4j,SparseCVector,463,1637,33,33,75,220,40,77,22,62
 Flag4j,com.flag4j.core.dense,ComplexDenseTensorBase,10,455,0,0,1,69,1,41,1,41
 Flag4j,com.flag4j.core.dense,RealDenseTensorBase,10,432,0,4,1,62,1,40,1,38
 Flag4j,com.flag4j.core.dense,DenseTensorBase,0,5,0,0,0,2,0,1,0,1

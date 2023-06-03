@@ -1503,11 +1503,9 @@ public class SparseCVector
 <span class="fc" id="L1503">                System.arraycopy(rowIndices, 0, matIndices[0], (entries.length+1)*i, n);</span>
 <span class="fc" id="L1504">                System.arraycopy(colIndices, 0, matIndices[1], (entries.length+1)*i, n);</span>
             }
-
-<span class="fc" id="L1507">            System.out.println(&quot;\n\n\n&quot;);</span>
         }
 
-<span class="fc" id="L1510">        return new SparseCMatrix(matShape, matEntries, matIndices[0], matIndices[1]);</span>
+<span class="fc" id="L1508">        return new SparseCMatrix(matShape, matEntries, matIndices[0], matIndices[1]);</span>
     }
 
 
@@ -1518,7 +1516,7 @@ public class SparseCVector
      */
     @Override
     public int length() {
-<span class="nc" id="L1521">        return size;</span>
+<span class="nc" id="L1519">        return size;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

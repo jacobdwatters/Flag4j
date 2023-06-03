@@ -1337,11 +1337,9 @@ import java.util.List;
 <span class="fc" id="L1337">                System.arraycopy(rowIndices, 0, matIndices[0], (entries.length+1)*i, n);</span>
 <span class="fc" id="L1338">                System.arraycopy(colIndices, 0, matIndices[1], (entries.length+1)*i, n);</span>
             }
-
-<span class="fc" id="L1341">            System.out.println(&quot;\n\n\n&quot;);</span>
         }
 
-<span class="fc" id="L1344">        return new SparseMatrix(matShape, matEntries, matIndices[0], matIndices[1]);</span>
+<span class="fc" id="L1342">        return new SparseMatrix(matShape, matEntries, matIndices[0], matIndices[1]);</span>
     }
 
 
@@ -1352,7 +1350,7 @@ import java.util.List;
      */
     @Override
     public int length() {
-<span class="nc" id="L1355">        return this.size;</span>
+<span class="nc" id="L1353">        return this.size;</span>
     }
 
 
@@ -1361,8 +1359,8 @@ import java.util.List;
      */
     @Override
     public void sparseSort() {
-<span class="fc" id="L1364">        SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);</span>
-<span class="fc" id="L1365">    }</span>
+<span class="fc" id="L1362">        SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);</span>
+<span class="fc" id="L1363">    }</span>
 
 
     /**
@@ -1373,13 +1371,13 @@ import java.util.List;
      */
     @Override
     public SparseCVector toComplex() {
-<span class="fc" id="L1376">        CNumber[] destEntries = new CNumber[entries.length];</span>
-<span class="fc" id="L1377">        ArrayUtils.copy2CNumber(entries, destEntries);</span>
+<span class="fc" id="L1374">        CNumber[] destEntries = new CNumber[entries.length];</span>
+<span class="fc" id="L1375">        ArrayUtils.copy2CNumber(entries, destEntries);</span>
 
-<span class="fc" id="L1379">        return new SparseCVector(</span>
+<span class="fc" id="L1377">        return new SparseCVector(</span>
                 this.size,
                 destEntries,
-<span class="fc" id="L1382">                indices.clone()</span>
+<span class="fc" id="L1380">                indices.clone()</span>
         );
     }
 
@@ -1392,8 +1390,8 @@ import java.util.List;
      */
     @Override
     public SparseVector flatten(int axis) {
-<span class="pc bpc" id="L1395" title="1 of 4 branches missed.">        assert(axis==0) : &quot;Axis must be zero but got &quot; + axis;</span>
-<span class="fc" id="L1396">        return this.copy();</span>
+<span class="pc bpc" id="L1393" title="1 of 4 branches missed.">        assert(axis==0) : &quot;Axis must be zero but got &quot; + axis;</span>
+<span class="fc" id="L1394">        return this.copy();</span>
     }
 
 
@@ -1404,7 +1402,7 @@ import java.util.List;
      */
     @Override
     public int size() {
-<span class="fc" id="L1407">        return this.size;</span>
+<span class="fc" id="L1405">        return this.size;</span>
     }
 
 
@@ -1415,7 +1413,7 @@ import java.util.List;
      */
     @Override
     protected SparseVector getSelf() {
-<span class="nc" id="L1418">        return this;</span>
+<span class="nc" id="L1416">        return this;</span>
     }
 
 
@@ -1426,13 +1424,13 @@ import java.util.List;
      */
     @Override
     public Vector toDense() {
-<span class="fc" id="L1429">        double[] entries = new double[size];</span>
+<span class="fc" id="L1427">        double[] entries = new double[size];</span>
 
-<span class="fc bfc" id="L1431" title="All 2 branches covered.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
-<span class="fc" id="L1432">            entries[indices[i]] = this.entries[i];</span>
+<span class="fc bfc" id="L1429" title="All 2 branches covered.">        for(int i=0; i&lt;nonZeroEntries; i++) {</span>
+<span class="fc" id="L1430">            entries[indices[i]] = this.entries[i];</span>
         }
 
-<span class="fc" id="L1435">        return new Vector(entries);</span>
+<span class="fc" id="L1433">        return new Vector(entries);</span>
     }
 
 
@@ -1443,21 +1441,21 @@ import java.util.List;
      * @return A sparse tensor which is equivalent to the {@code src} dense tensor.
      */
     public static SparseVector fromDense(Vector src) {
-<span class="fc" id="L1446">        List&lt;Double&gt; nonZeroEntries = new ArrayList&lt;&gt;((int) (src.entries.length*0.8));</span>
-<span class="fc" id="L1447">        List&lt;Integer&gt; indices = new ArrayList&lt;&gt;((int) (src.entries.length*0.8));</span>
+<span class="fc" id="L1444">        List&lt;Double&gt; nonZeroEntries = new ArrayList&lt;&gt;((int) (src.entries.length*0.8));</span>
+<span class="fc" id="L1445">        List&lt;Integer&gt; indices = new ArrayList&lt;&gt;((int) (src.entries.length*0.8));</span>
 
         // Fill entries with non-zero values.
-<span class="fc bfc" id="L1450" title="All 2 branches covered.">        for(int i=0; i&lt;src.entries.length; i++) {</span>
-<span class="fc bfc" id="L1451" title="All 2 branches covered.">            if(src.entries[i]!=0) {</span>
-<span class="fc" id="L1452">                nonZeroEntries.add(src.entries[i]);</span>
-<span class="fc" id="L1453">                indices.add(i);</span>
+<span class="fc bfc" id="L1448" title="All 2 branches covered.">        for(int i=0; i&lt;src.entries.length; i++) {</span>
+<span class="fc bfc" id="L1449" title="All 2 branches covered.">            if(src.entries[i]!=0) {</span>
+<span class="fc" id="L1450">                nonZeroEntries.add(src.entries[i]);</span>
+<span class="fc" id="L1451">                indices.add(i);</span>
             }
         }
 
-<span class="fc" id="L1457">        return new SparseVector(</span>
+<span class="fc" id="L1455">        return new SparseVector(</span>
                 src.size,
-<span class="fc" id="L1459">                nonZeroEntries.stream().mapToDouble(Double::doubleValue).toArray(),</span>
-<span class="fc" id="L1460">                indices.stream().mapToInt(Integer::intValue).toArray()</span>
+<span class="fc" id="L1457">                nonZeroEntries.stream().mapToDouble(Double::doubleValue).toArray(),</span>
+<span class="fc" id="L1458">                indices.stream().mapToInt(Integer::intValue).toArray()</span>
         );
     }
 
@@ -1468,39 +1466,39 @@ import java.util.List;
      * @return A human-readable string representing this tensor.
      */
     public String toString() {
-<span class="fc" id="L1471">        int size = nonZeroEntries;</span>
-<span class="fc" id="L1472">        StringBuilder result = new StringBuilder(String.format(&quot;Full Shape: %s\n&quot;, shape));</span>
-<span class="fc" id="L1473">        result.append(&quot;Non-zero entries: [&quot;);</span>
+<span class="fc" id="L1469">        int size = nonZeroEntries;</span>
+<span class="fc" id="L1470">        StringBuilder result = new StringBuilder(String.format(&quot;Full Shape: %s\n&quot;, shape));</span>
+<span class="fc" id="L1471">        result.append(&quot;Non-zero entries: [&quot;);</span>
 
-<span class="fc" id="L1475">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
+<span class="fc" id="L1473">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
         int width;
         String value;
 
         // Get entries up until the stopping point.
-<span class="fc bfc" id="L1480" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
-<span class="fc" id="L1481">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
-<span class="fc" id="L1482">            width = PrintOptions.getPadding() + value.length();</span>
-<span class="fc bfc" id="L1483" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1484">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L1478" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="fc" id="L1479">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
+<span class="fc" id="L1480">            width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L1481" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1482">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="fc bfc" id="L1487" title="All 2 branches covered.">        if(stopIndex &lt; size-1) {</span>
-<span class="fc" id="L1488">            width = PrintOptions.getPadding() + 3;</span>
-<span class="fc" id="L1489">            value = &quot;...&quot;;</span>
-<span class="pc bpc" id="L1490" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1491">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L1485" title="All 2 branches covered.">        if(stopIndex &lt; size-1) {</span>
+<span class="fc" id="L1486">            width = PrintOptions.getPadding() + 3;</span>
+<span class="fc" id="L1487">            value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L1488" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1489">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
         // Get last entry now
-<span class="fc" id="L1495">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
-<span class="fc" id="L1496">        width = PrintOptions.getPadding() + value.length();</span>
-<span class="fc bfc" id="L1497" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L1498">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc" id="L1493">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
+<span class="fc" id="L1494">        width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L1495" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1496">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
 
-<span class="fc" id="L1500">        result.append(&quot;]\n&quot;);</span>
-<span class="fc" id="L1501">        result.append(&quot;Indices: &quot;).append(Arrays.toString(indices));</span>
+<span class="fc" id="L1498">        result.append(&quot;]\n&quot;);</span>
+<span class="fc" id="L1499">        result.append(&quot;Indices: &quot;).append(Arrays.toString(indices));</span>
 
-<span class="fc" id="L1503">        return result.toString();</span>
+<span class="fc" id="L1501">        return result.toString();</span>
     }
 }
 
