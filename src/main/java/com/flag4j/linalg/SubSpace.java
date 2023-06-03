@@ -25,7 +25,9 @@
 package com.flag4j.linalg;
 
 
+import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
+import com.flag4j.linalg.decompositions.ComplexSVD;
 import com.flag4j.linalg.decompositions.RealSVD;
 import com.flag4j.util.ErrorMessages;
 
@@ -84,6 +86,55 @@ public class SubSpace {
      */
     public static Matrix getLeftNullSpace(Matrix src) {
         RealSVD svd = new RealSVD().decompose(src);
+        int rank = rankFromSVD(svd.getS());
+        return svd.getU().getSlice(0, src.numRows, rank+1, src.numRows);
+    }
+
+    // -------------------------------------------------------------------------------
+
+    /**
+     * Computes an orthonormal basis of the column space of a specified matrix.
+     * @param src Matrix to compute orthonormal basis of the column space.
+     * @return A matrix containing as its columns, an orthonormal basis for the column space of the {@code src} matrix.
+     */
+    public static CMatrix getColumnSpace(CMatrix src) {
+        ComplexSVD svd = new ComplexSVD().decompose(src);
+        int rank = rankFromSVD(svd.getS());
+        return svd.getU().getSlice(0, src.numRows, 0, rank);
+    }
+
+
+    /**
+     * Computes an orthonormal basis of the row space of a specified matrix.
+     * @param src Matrix to compute orthonormal basis of the row space.
+     * @return A matrix containing as its columns, an orthonormal basis for the row space of the {@code src} matrix.
+     */
+    public static CMatrix getRowSpace(CMatrix src) {
+        ComplexSVD svd = new ComplexSVD().decompose(src);
+        int rank = rankFromSVD(svd.getS());
+        return svd.getV().getSlice(0, src.numRows, 0, rank);
+    }
+
+
+    /**
+     * Computes an orthonormal basis of the null space of a specified matrix.
+     * @param src Matrix to compute orthonormal basis of the null space.
+     * @return A matrix containing as its columns, an orthonormal basis for the null space of the {@code src} matrix.
+     */
+    public static CMatrix getNullSpace(CMatrix src) {
+        ComplexSVD svd = new ComplexSVD().decompose(src);
+        int rank = rankFromSVD(svd.getS());
+        return svd.getV().getSlice(0, src.numCols, rank+1, src.numCols);
+    }
+
+
+    /**
+     * Computes an orthonormal basis of the left null space of a specified matrix.
+     * @param src Matrix to compute orthonormal basis of the left null space.
+     * @return A matrix containing as its columns, an orthonormal basis for the left null space of the {@code src} matrix.
+     */
+    public static CMatrix getLeftNullSpace(CMatrix src) {
+        ComplexSVD svd = new ComplexSVD().decompose(src);
         int rank = rankFromSVD(svd.getS());
         return svd.getU().getSlice(0, src.numRows, rank+1, src.numRows);
     }
