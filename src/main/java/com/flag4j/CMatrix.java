@@ -29,10 +29,15 @@ import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.dense.ComplexDenseTensorBase;
 import com.flag4j.io.PrintOptions;
+import com.flag4j.linalg.Invert;
+import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
 import com.flag4j.linalg.decompositions.ComplexSVD;
+import com.flag4j.linalg.decompositions.LUDecomposition;
+import com.flag4j.linalg.solvers.ComplexLUSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.dense.complex.ComplexDenseDeterminant;
 import com.flag4j.operations.dense.complex.ComplexDenseEquals;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
 import com.flag4j.operations.dense.complex.ComplexDenseSetOperations;
@@ -493,7 +498,15 @@ public class CMatrix
      */
     @Override
     public boolean isInv(CMatrix B) {
-        return this.mult(B).round().isI();
+        boolean result;
+
+        if(!this.isSquare() || !B.isSquare() || !shape.equals(B.shape)) {
+            result = false;
+        } else {
+            result = this.mult(B).round().isI();
+        }
+
+        return result;
     }
 
 
@@ -3501,6 +3514,43 @@ public class CMatrix
     @Override
     public CNumber tr() {
         return trace();
+    }
+
+
+    /**
+     * Computes the inverse of this matrix. This is done by computing the {@link LUDecomposition LU decomposition} of
+     * this matrix, inverting {@code U} using a back-solve algorithm, then solving {@code inv(this)*L=inv(U)}
+     * for {@code inv(this)}.
+     *
+     * @return The inverse of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     * @throws RuntimeException If this matrix is singular (i.e. not invertible).
+     * @see #isInvertible()
+     */
+    @Override
+    public CMatrix inv() {
+        ParameterChecks.assertSquare(shape);
+        LUDecomposition<CMatrix> lu = new ComplexLUDecomposition().decompose(this);
+
+        double tol = 1.0E-12; // Tolerance for determining if determinant is zero.
+        CNumber det = ComplexDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
+
+        if(det.magAsDouble() < tol) {
+            throw new RuntimeException("Cannot invert. Matrix is singular.");
+        }
+
+        // Solve inv(A)*L = inv(U) for inv(A) by solving L^H*inv(A)^H = inv(U)^H
+        ComplexLUSolver solver = new ComplexLUSolver(); // TODO: Need to add solve(CMatrix, CMatrix) to the class for more efficient solving.
+        CMatrix UinvT = Invert.invTriU(lu.getU()).H();
+        CMatrix LT = lu.getL().H();
+        CMatrix inverse = new CMatrix(shape);
+
+        for(int i=0; i<UinvT.numCols; i++) {
+            CVector col = solver.solve(LT, UinvT.getColAsVector(i));
+            inverse.setRow(col.conj().entries, i); // Implicit transpose here.
+        }
+
+        return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.
     }
 
 

@@ -54,6 +54,7 @@ com\flag4j\complex_numbers\CNumberExponentialTest.class
 com\flag4j\CTensorToStringTests.class
 com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseMatMultTransposeTests.class
 com\flag4j\linalg\decompositions\RealLUTests.class
+com\flag4j\CMatrixInversionTests.class
 com\flag4j\complex_numbers\CNumberGettersSettersTest.class
 com\flag4j\TensorReshapeTests.class
 com\flag4j\CMatrixReshapeTests.class
@@ -176,6 +177,7 @@ com\flag4j\linalg\decompositions\RealSVDTests.class
 com\flag4j\operations\dense\complex\ComplexMatrixMultiplyTests.class
 com\flag4j\MatrixAddTests.class
 com\flag4j\CMatrixRowColSumTests.class
+com\flag4j\MatrixInversionTests.class
 com\flag4j\VectorEqualsTests.class
 com\flag4j\complex_numbers\CNumberUnaryOperationsTest.class
 com\flag4j\complex_numbers\CNumberMinMaxSumTest.class

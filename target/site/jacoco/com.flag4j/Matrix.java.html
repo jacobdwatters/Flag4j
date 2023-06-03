@@ -26,10 +26,14 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.MatrixMixin;
-import com.flag4j.core.dense.RealDenseTensorBase;
 import com.flag4j.core.RealMatrixMixin;
+import com.flag4j.core.dense.RealDenseTensorBase;
 import com.flag4j.io.PrintOptions;
+import com.flag4j.linalg.Invert;
+import com.flag4j.linalg.decompositions.LUDecomposition;
+import com.flag4j.linalg.decompositions.RealLUDecomposition;
 import com.flag4j.linalg.decompositions.RealSVD;
+import com.flag4j.linalg.solvers.RealLUSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
@@ -75,10 +79,10 @@ public class Matrix
      * @throws IllegalArgumentException if size negative.
      */
     public Matrix(int size) {
-<span class="fc" id="L78">        super(new Shape(size, size), new double[size*size]);</span>
-<span class="fc" id="L79">        this.numRows = shape.dims[0];</span>
-<span class="fc" id="L80">        this.numCols = shape.dims[1];</span>
-<span class="fc" id="L81">    }</span>
+<span class="fc" id="L82">        super(new Shape(size, size), new double[size*size]);</span>
+<span class="fc" id="L83">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L84">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L85">    }</span>
 
 
     /**
@@ -88,11 +92,11 @@ public class Matrix
      * @throws IllegalArgumentException if size negative.
      */
     public Matrix(int size, double value) {
-<span class="fc" id="L91">        super(new Shape(size, size), new double[size*size]);</span>
-<span class="fc" id="L92">        Arrays.fill(super.entries, value);</span>
-<span class="fc" id="L93">        this.numRows = shape.dims[0];</span>
-<span class="fc" id="L94">        this.numCols = shape.dims[1];</span>
-<span class="fc" id="L95">    }</span>
+<span class="fc" id="L95">        super(new Shape(size, size), new double[size*size]);</span>
+<span class="fc" id="L96">        Arrays.fill(super.entries, value);</span>
+<span class="fc" id="L97">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L98">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L99">    }</span>
 
 
     /**
@@ -102,10 +106,10 @@ public class Matrix
      * @throws IllegalArgumentException if either m or n is negative.
      */
     public Matrix(int rows, int cols) {
-<span class="fc" id="L105">        super(new Shape(rows, cols), new double[rows*cols]);</span>
-<span class="fc" id="L106">        this.numRows = shape.dims[0];</span>
-<span class="fc" id="L107">        this.numCols = shape.dims[1];</span>
-<span class="fc" id="L108">    }</span>
+<span class="fc" id="L109">        super(new Shape(rows, cols), new double[rows*cols]);</span>
+<span class="fc" id="L110">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L111">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L112">    }</span>
 
 
     /**
@@ -116,11 +120,11 @@ public class Matrix
      * @throws IllegalArgumentException if either m or n is negative.
      */
     public Matrix(int rows, int cols, double value) {
-<span class="fc" id="L119">        super(new Shape(rows, cols), new double[rows*cols]);</span>
-<span class="fc" id="L120">        Arrays.fill(super.entries, value);</span>
-<span class="fc" id="L121">        this.numRows = shape.dims[0];</span>
-<span class="fc" id="L122">        this.numCols = shape.dims[1];</span>
-<span class="fc" id="L123">    }</span>
+<span class="fc" id="L123">        super(new Shape(rows, cols), new double[rows*cols]);</span>
+<span class="fc" id="L124">        Arrays.fill(super.entries, value);</span>
+<span class="fc" id="L125">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L126">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L127">    }</span>
 
 
     /**
@@ -128,18 +132,18 @@ public class Matrix
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(Double[][] entries) {
-<span class="fc" id="L131">        super(new Shape(entries.length, entries[0].length),</span>
+<span class="fc" id="L135">        super(new Shape(entries.length, entries[0].length),</span>
                 new double[entries.length*entries[0].length]);
-<span class="fc" id="L133">        this.numRows = shape.dims[0];</span>
-<span class="fc" id="L134">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L137">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L138">        this.numCols = shape.dims[1];</span>
 
-<span class="fc" id="L136">        int index = 0;</span>
-<span class="fc bfc" id="L137" title="All 2 branches covered.">        for(Double[] row : entries) {</span>
-<span class="fc bfc" id="L138" title="All 2 branches covered.">            for(Double value : row) {</span>
-<span class="fc" id="L139">                super.entries[index++] = value;</span>
+<span class="fc" id="L140">        int index = 0;</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        for(Double[] row : entries) {</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">            for(Double value : row) {</span>
+<span class="fc" id="L143">                super.entries[index++] = value;</span>
             }
         }
-<span class="fc" id="L142">    }</span>
+<span class="fc" id="L146">    }</span>
 
 
     /**
@@ -147,18 +151,18 @@ public class Matrix
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(Integer[][] entries) {
-<span class="fc" id="L150">        super(new Shape(entries.length, entries[0].length),</span>
+<span class="fc" id="L154">        super(new Shape(entries.length, entries[0].length),</span>
                 new double[entries.length*entries[0].length]);
-<span class="fc" id="L152">        this.numRows = shape.dims[0];</span>
-<span class="fc" id="L153">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L156">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L157">        this.numCols = shape.dims[1];</span>
 
-<span class="fc" id="L155">        int index = 0;</span>
-<span class="fc bfc" id="L156" title="All 2 branches covered.">        for(Integer[] row : entries) {</span>
-<span class="fc bfc" id="L157" title="All 2 branches covered.">            for(Integer value : row) {</span>
-<span class="fc" id="L158">                super.entries[index++] = value;</span>
+<span class="fc" id="L159">        int index = 0;</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        for(Integer[] row : entries) {</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">            for(Integer value : row) {</span>
+<span class="fc" id="L162">                super.entries[index++] = value;</span>
             }
         }
-<span class="fc" id="L161">    }</span>
+<span class="fc" id="L165">    }</span>
 
 
     /**
@@ -166,18 +170,18 @@ public class Matrix
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(double[][] entries) {
-<span class="fc" id="L169">        super(new Shape(entries.length, entries[0].length),</span>
+<span class="fc" id="L173">        super(new Shape(entries.length, entries[0].length),</span>
                 new double[entries.length*entries[0].length]);
-<span class="fc" id="L171">        this.numRows = shape.dims[0];</span>
-<span class="fc" id="L172">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L175">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L176">        this.numCols = shape.dims[1];</span>
 
-<span class="fc" id="L174">        int index = 0;</span>
-<span class="fc bfc" id="L175" title="All 2 branches covered.">        for(double[] row : entries) {</span>
-<span class="fc bfc" id="L176" title="All 2 branches covered.">            for(double value : row) {</span>
-<span class="fc" id="L177">                super.entries[index++] = value;</span>
+<span class="fc" id="L178">        int index = 0;</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        for(double[] row : entries) {</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">            for(double value : row) {</span>
+<span class="fc" id="L181">                super.entries[index++] = value;</span>
             }
         }
-<span class="fc" id="L180">    }</span>
+<span class="fc" id="L184">    }</span>
 
 
     /**
@@ -185,18 +189,18 @@ public class Matrix
      * @param entries Entries of the real dense matrix.
      */
     public Matrix(int[][] entries) {
-<span class="fc" id="L188">        super(new Shape(entries.length, entries[0].length), new double[entries.length*entries[0].length]);</span>
-<span class="fc" id="L189">        this.numRows = shape.dims[0];</span>
-<span class="fc" id="L190">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L192">        super(new Shape(entries.length, entries[0].length), new double[entries.length*entries[0].length]);</span>
+<span class="fc" id="L193">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L194">        this.numCols = shape.dims[1];</span>
 
         // Copy the int array
-<span class="fc" id="L193">        int index=0;</span>
-<span class="fc bfc" id="L194" title="All 2 branches covered.">        for(int[] row : entries) {</span>
-<span class="fc bfc" id="L195" title="All 2 branches covered.">            for(int value : row) {</span>
-<span class="fc" id="L196">                super.entries[index++] = value;</span>
+<span class="fc" id="L197">        int index=0;</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        for(int[] row : entries) {</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">            for(int value : row) {</span>
+<span class="fc" id="L200">                super.entries[index++] = value;</span>
             }
         }
-<span class="fc" id="L199">    }</span>
+<span class="fc" id="L203">    }</span>
 
 
     /**
@@ -204,10 +208,10 @@ public class Matrix
      * @param A The matrix defining the entries for this matrix.
      */
     public Matrix(Matrix A) {
-<span class="fc" id="L207">        super(A.shape.copy(), A.entries.clone());</span>
-<span class="fc" id="L208">        this.numRows = shape.dims[0];</span>
-<span class="fc" id="L209">        this.numCols = shape.dims[1];</span>
-<span class="fc" id="L210">    }</span>
+<span class="fc" id="L211">        super(A.shape.copy(), A.entries.clone());</span>
+<span class="fc" id="L212">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L213">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L214">    }</span>
 
 
     /**
@@ -216,11 +220,11 @@ public class Matrix
      * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
      */
     public Matrix(Shape shape) {
-<span class="fc" id="L219">        super(shape, new double[shape.totalEntries().intValue()]);</span>
-<span class="fc" id="L220">        ParameterChecks.assertRank(2, shape);</span>
-<span class="fc" id="L221">        this.numRows = shape.dims[0];</span>
-<span class="fc" id="L222">        this.numCols = shape.dims[1];</span>
-<span class="fc" id="L223">    }</span>
+<span class="fc" id="L223">        super(shape, new double[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L224">        ParameterChecks.assertRank(2, shape);</span>
+<span class="fc" id="L225">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L226">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L227">    }</span>
 
 
     /**
@@ -230,12 +234,12 @@ public class Matrix
      * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
      */
     public Matrix(Shape shape, double value) {
-<span class="fc" id="L233">        super(shape, new double[shape.totalEntries().intValue()]);</span>
-<span class="fc" id="L234">        Arrays.fill(super.entries, value);</span>
-<span class="fc" id="L235">        ParameterChecks.assertRank(2, shape);</span>
-<span class="fc" id="L236">        this.numRows = shape.dims[0];</span>
-<span class="fc" id="L237">        this.numCols = shape.dims[1];</span>
-<span class="fc" id="L238">    }</span>
+<span class="fc" id="L237">        super(shape, new double[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L238">        Arrays.fill(super.entries, value);</span>
+<span class="fc" id="L239">        ParameterChecks.assertRank(2, shape);</span>
+<span class="fc" id="L240">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L241">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L242">    }</span>
 
 
     /**
@@ -246,11 +250,11 @@ public class Matrix
      * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
      */
     public Matrix(Shape shape, double[] entries) {
-<span class="fc" id="L249">        super(shape, entries);</span>
-<span class="fc" id="L250">        ParameterChecks.assertRank(2, shape);</span>
-<span class="fc" id="L251">        this.numRows = shape.dims[0];</span>
-<span class="fc" id="L252">        this.numCols = shape.dims[1];</span>
-<span class="fc" id="L253">    }</span>
+<span class="fc" id="L253">        super(shape, entries);</span>
+<span class="fc" id="L254">        ParameterChecks.assertRank(2, shape);</span>
+<span class="fc" id="L255">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L256">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L257">    }</span>
 
 
     /**
@@ -262,7 +266,7 @@ public class Matrix
      */
     @Override
     protected Matrix makeTensor(Shape shape, double[] entries) {
-<span class="fc" id="L265">        return new Matrix(shape, entries);</span>
+<span class="fc" id="L269">        return new Matrix(shape, entries);</span>
     }
 
 
@@ -275,7 +279,7 @@ public class Matrix
      */
     @Override
     protected CMatrix makeComplexTensor(Shape shape, double[] entries) {
-<span class="fc" id="L278">        return new CMatrix(shape, entries);</span>
+<span class="fc" id="L282">        return new CMatrix(shape, entries);</span>
     }
 
 
@@ -288,7 +292,7 @@ public class Matrix
      */
     @Override
     protected CMatrix makeComplexTensor(Shape shape, CNumber[] entries) {
-<span class="fc" id="L291">        return new CMatrix(shape, entries);</span>
+<span class="fc" id="L295">        return new CMatrix(shape, entries);</span>
     }
 
 
@@ -299,7 +303,7 @@ public class Matrix
      */
     @Override
     protected Matrix getSelf() {
-<span class="fc" id="L302">        return this;</span>
+<span class="fc" id="L306">        return this;</span>
     }
 
 
@@ -311,10 +315,10 @@ public class Matrix
      * @param entries Entries of the matrix.
      */
     public Matrix(int numRows, int numCols, double[] entries) {
-<span class="fc" id="L314">        super(new Shape(numRows, numCols), entries);</span>
-<span class="fc" id="L315">        this.numRows = shape.dims[0];</span>
-<span class="fc" id="L316">        this.numCols = shape.dims[1];</span>
-<span class="fc" id="L317">    }</span>
+<span class="fc" id="L318">        super(new Shape(numRows, numCols), entries);</span>
+<span class="fc" id="L319">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L320">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L321">    }</span>
 
 
     /**
@@ -322,7 +326,7 @@ public class Matrix
      * @return The number of rows in this matrix.
      */
     public int numRows() {
-<span class="fc" id="L325">        return numRows;</span>
+<span class="fc" id="L329">        return numRows;</span>
     }
 
 
@@ -331,7 +335,7 @@ public class Matrix
      * @return The number of columns in this matrix.
      */
     public int numCols() {
-<span class="fc" id="L334">        return numCols;</span>
+<span class="fc" id="L338">        return numCols;</span>
     }
 
 
@@ -340,7 +344,7 @@ public class Matrix
      * @return A tensor which is equivalent to this matrix.
      */
     public Tensor toTensor() {
-<span class="fc" id="L343">        return new Tensor(this.shape.copy(), this.entries.clone());</span>
+<span class="fc" id="L347">        return new Tensor(this.shape.copy(), this.entries.clone());</span>
     }
 
 
@@ -350,7 +354,7 @@ public class Matrix
      * @return A vector equivalent to this matrix.
      */
     public Vector toVector() {
-<span class="fc" id="L353">        return new Vector(this.entries.clone());</span>
+<span class="fc" id="L357">        return new Vector(this.entries.clone());</span>
     }
 
 
@@ -362,24 +366,24 @@ public class Matrix
      */
     @Override
     public boolean isI() {
-<span class="fc bfc" id="L365" title="All 2 branches covered.">        if(isSquare()) {</span>
-<span class="fc bfc" id="L366" title="All 2 branches covered.">            for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L367" title="All 2 branches covered.">                for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc bfc" id="L368" title="All 4 branches covered.">                    if(i==j &amp;&amp; entries[i*numCols + j]!=1) {</span>
-<span class="fc" id="L369">                        return false; // No need to continue</span>
-<span class="fc bfc" id="L370" title="All 4 branches covered.">                    } else if(i!=j &amp;&amp; entries[i*numCols + j]!=0) {</span>
-<span class="fc" id="L371">                        return false; // No need to continue</span>
+<span class="fc bfc" id="L369" title="All 2 branches covered.">        if(isSquare()) {</span>
+<span class="fc bfc" id="L370" title="All 2 branches covered.">            for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L371" title="All 2 branches covered.">                for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc bfc" id="L372" title="All 4 branches covered.">                    if(i==j &amp;&amp; entries[i*numCols + j]!=1) {</span>
+<span class="fc" id="L373">                        return false; // No need to continue</span>
+<span class="fc bfc" id="L374" title="All 4 branches covered.">                    } else if(i!=j &amp;&amp; entries[i*numCols + j]!=0) {</span>
+<span class="fc" id="L375">                        return false; // No need to continue</span>
                     }
                 }
             }
 
         } else {
             // An identity matrix must be square.
-<span class="fc" id="L378">            return false;</span>
+<span class="fc" id="L382">            return false;</span>
         }
 
         // If we make it to this point this matrix must be an identity matrix.
-<span class="fc" id="L382">        return true;</span>
+<span class="fc" id="L386">        return true;</span>
     }
 
 
@@ -395,26 +399,26 @@ public class Matrix
     public boolean equals(Object object) {
         boolean equal;
 
-<span class="fc bfc" id="L398" title="All 2 branches covered.">        if(object instanceof Matrix) {</span>
-<span class="fc" id="L399">            Matrix mat = (Matrix) object;</span>
-<span class="fc" id="L400">            equal = RealDenseEquals.matrixEquals(this, mat);</span>
-<span class="fc bfc" id="L401" title="All 2 branches covered.">        } else if(object instanceof CMatrix) {</span>
-<span class="fc" id="L402">            CMatrix mat = (CMatrix) object;</span>
-<span class="fc" id="L403">            equal = RealComplexDenseEquals.matrixEquals(this, mat);</span>
+<span class="fc bfc" id="L402" title="All 2 branches covered.">        if(object instanceof Matrix) {</span>
+<span class="fc" id="L403">            Matrix mat = (Matrix) object;</span>
+<span class="fc" id="L404">            equal = RealDenseEquals.matrixEquals(this, mat);</span>
+<span class="fc bfc" id="L405" title="All 2 branches covered.">        } else if(object instanceof CMatrix) {</span>
+<span class="fc" id="L406">            CMatrix mat = (CMatrix) object;</span>
+<span class="fc" id="L407">            equal = RealComplexDenseEquals.matrixEquals(this, mat);</span>
 
-<span class="fc bfc" id="L405" title="All 2 branches covered.">        } else if(object instanceof SparseMatrix) {</span>
-<span class="fc" id="L406">            SparseMatrix mat = (SparseMatrix) object;</span>
-<span class="fc" id="L407">            equal = RealDenseSparseEquals.matrixEquals(this, mat);</span>
+<span class="fc bfc" id="L409" title="All 2 branches covered.">        } else if(object instanceof SparseMatrix) {</span>
+<span class="fc" id="L410">            SparseMatrix mat = (SparseMatrix) object;</span>
+<span class="fc" id="L411">            equal = RealDenseSparseEquals.matrixEquals(this, mat);</span>
 
-<span class="pc bpc" id="L409" title="1 of 2 branches missed.">        } else if(object instanceof SparseCMatrix) {</span>
-<span class="fc" id="L410">            SparseCMatrix mat = (SparseCMatrix) object;</span>
-<span class="fc" id="L411">            equal = RealComplexDenseSparseEquals.matrixEquals(this, mat);</span>
+<span class="pc bpc" id="L413" title="1 of 2 branches missed.">        } else if(object instanceof SparseCMatrix) {</span>
+<span class="fc" id="L414">            SparseCMatrix mat = (SparseCMatrix) object;</span>
+<span class="fc" id="L415">            equal = RealComplexDenseSparseEquals.matrixEquals(this, mat);</span>
 
-<span class="fc" id="L413">        } else {</span>
-<span class="nc" id="L414">            equal = false;</span>
+<span class="fc" id="L417">        } else {</span>
+<span class="nc" id="L418">            equal = false;</span>
         }
 
-<span class="fc" id="L417">        return equal;</span>
+<span class="fc" id="L421">        return equal;</span>
     }
 
 
@@ -429,13 +433,13 @@ public class Matrix
     public boolean isInv(Matrix B) {
         boolean result;
 
-<span class="pc bpc" id="L432" title="1 of 4 branches missed.">        if(!this.isSquare() || !B.isSquare()) {</span>
-<span class="fc" id="L433">            result = false;</span>
+<span class="pc bpc" id="L436" title="2 of 6 branches missed.">        if(!this.isSquare() || !B.isSquare() || !shape.equals(B.shape)) {</span>
+<span class="fc" id="L437">            result = false;</span>
         } else {
-<span class="fc" id="L435">            result = this.mult(B).roundToZero().isI();</span>
+<span class="fc" id="L439">            result = this.mult(B).round().isI();</span>
         }
 
-<span class="fc" id="L438">        return result;</span>
+<span class="fc" id="L442">        return result;</span>
     }
 
 
@@ -446,7 +450,7 @@ public class Matrix
      */
     @Override
     public Matrix flatten() {
-<span class="fc" id="L449">        return reshape(new Shape(1, entries.length));</span>
+<span class="fc" id="L453">        return reshape(new Shape(1, entries.length));</span>
     }
 
 
@@ -459,15 +463,15 @@ public class Matrix
      */
     @Override
     public Matrix flatten(int axis) {
-<span class="fc bfc" id="L462" title="All 2 branches covered.">        if(axis==Axis2D.row()) {</span>
+<span class="fc bfc" id="L466" title="All 2 branches covered.">        if(axis==Axis2D.row()) {</span>
             // Flatten to single row
-<span class="fc" id="L464">            return reshape(new Shape(1, entries.length));</span>
-<span class="fc bfc" id="L465" title="All 2 branches covered.">        } else if(axis==Axis2D.col()) {</span>
+<span class="fc" id="L468">            return reshape(new Shape(1, entries.length));</span>
+<span class="fc bfc" id="L469" title="All 2 branches covered.">        } else if(axis==Axis2D.col()) {</span>
             // Flatten to single column
-<span class="fc" id="L467">            return reshape(new Shape(entries.length, 1));</span>
+<span class="fc" id="L471">            return reshape(new Shape(entries.length, 1));</span>
         } else {
             // Unknown axis
-<span class="fc" id="L470">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));</span>
+<span class="fc" id="L474">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));</span>
         }
     }
 
@@ -481,9 +485,9 @@ public class Matrix
      */
     @Override
     public Matrix setValues(Double[][] values) {
-<span class="fc" id="L484">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
-<span class="fc" id="L485">        RealDenseSetOperations.setValues(values, this.entries);</span>
-<span class="fc" id="L486">        return this;</span>
+<span class="fc" id="L488">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
+<span class="fc" id="L489">        RealDenseSetOperations.setValues(values, this.entries);</span>
+<span class="fc" id="L490">        return this;</span>
     }
 
 
@@ -496,9 +500,9 @@ public class Matrix
      */
     @Override
     public Matrix setValues(double[][] values) {
-<span class="fc" id="L499">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
-<span class="fc" id="L500">        RealDenseSetOperations.setValues(values, this.entries);</span>
-<span class="fc" id="L501">        return this;</span>
+<span class="fc" id="L503">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
+<span class="fc" id="L504">        RealDenseSetOperations.setValues(values, this.entries);</span>
+<span class="fc" id="L505">        return this;</span>
     }
 
 
@@ -509,9 +513,9 @@ public class Matrix
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
     public Matrix setValues(Integer[][] values) {
-<span class="fc" id="L512">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
-<span class="fc" id="L513">        RealDenseSetOperations.setValues(values, this.entries);</span>
-<span class="fc" id="L514">        return this;</span>
+<span class="fc" id="L516">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
+<span class="fc" id="L517">        RealDenseSetOperations.setValues(values, this.entries);</span>
+<span class="fc" id="L518">        return this;</span>
     }
 
 
@@ -524,9 +528,9 @@ public class Matrix
      */
     @Override
     public Matrix setValues(int[][] values) {
-<span class="fc" id="L527">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
-<span class="fc" id="L528">        RealDenseSetOperations.setValues(values, this.entries);</span>
-<span class="fc" id="L529">        return this;</span>
+<span class="fc" id="L531">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
+<span class="fc" id="L532">        RealDenseSetOperations.setValues(values, this.entries);</span>
+<span class="fc" id="L533">        return this;</span>
     }
 
 
@@ -540,13 +544,13 @@ public class Matrix
      */
     @Override
     public Matrix setCol(Double[] values, int colIndex) {
-<span class="fc" id="L543">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
+<span class="fc" id="L547">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
 
-<span class="fc bfc" id="L545" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L546">            super.entries[i*numCols + colIndex] = values[i];</span>
+<span class="fc bfc" id="L549" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L550">            super.entries[i*numCols + colIndex] = values[i];</span>
         }
 
-<span class="fc" id="L549">        return this;</span>
+<span class="fc" id="L553">        return this;</span>
     }
 
 
@@ -560,13 +564,13 @@ public class Matrix
      */
     @Override
     public Matrix setCol(Integer[] values, int colIndex) {
-<span class="fc" id="L563">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
+<span class="fc" id="L567">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
 
-<span class="fc bfc" id="L565" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L566">            super.entries[i*numCols + colIndex] = values[i];</span>
+<span class="fc bfc" id="L569" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L570">            super.entries[i*numCols + colIndex] = values[i];</span>
         }
 
-<span class="fc" id="L569">        return this;</span>
+<span class="fc" id="L573">        return this;</span>
     }
 
 
@@ -580,13 +584,13 @@ public class Matrix
      */
     @Override
     public Matrix setCol(double[] values, int colIndex) {
-<span class="fc" id="L583">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
+<span class="fc" id="L587">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
 
-<span class="fc bfc" id="L585" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L586">            super.entries[i*numCols + colIndex] = values[i];</span>
+<span class="fc bfc" id="L589" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L590">            super.entries[i*numCols + colIndex] = values[i];</span>
         }
 
-<span class="fc" id="L589">        return this;</span>
+<span class="fc" id="L593">        return this;</span>
     }
 
 
@@ -600,13 +604,13 @@ public class Matrix
      */
     @Override
     public Matrix setCol(int[] values, int colIndex) {
-<span class="fc" id="L603">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
+<span class="fc" id="L607">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
 
-<span class="fc bfc" id="L605" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L606">            super.entries[i*numCols + colIndex] = values[i];</span>
+<span class="fc bfc" id="L609" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L610">            super.entries[i*numCols + colIndex] = values[i];</span>
         }
 
-<span class="fc" id="L609">        return this;</span>
+<span class="fc" id="L613">        return this;</span>
     }
 
 
@@ -620,13 +624,13 @@ public class Matrix
      */
     @Override
     public Matrix setRow(Double[] values, int rowIndex) {
-<span class="fc" id="L623">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);</span>
+<span class="fc" id="L627">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);</span>
 
-<span class="fc bfc" id="L625" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L626">            super.entries[rowIndex*numCols + i] = values[i];</span>
+<span class="fc bfc" id="L629" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L630">            super.entries[rowIndex*numCols + i] = values[i];</span>
         }
 
-<span class="fc" id="L629">        return this;</span>
+<span class="fc" id="L633">        return this;</span>
     }
 
 
@@ -640,13 +644,13 @@ public class Matrix
      */
     @Override
     public Matrix setRow(Integer[] values, int rowIndex) {
-<span class="fc" id="L643">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);</span>
+<span class="fc" id="L647">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);</span>
 
-<span class="fc bfc" id="L645" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L646">            super.entries[rowIndex*numCols + i] = values[i];</span>
+<span class="fc bfc" id="L649" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L650">            super.entries[rowIndex*numCols + i] = values[i];</span>
         }
 
-<span class="fc" id="L649">        return this;</span>
+<span class="fc" id="L653">        return this;</span>
     }
 
 
@@ -660,9 +664,9 @@ public class Matrix
      */
     @Override
     public Matrix setRow(double[] values, int rowIndex) {
-<span class="fc" id="L663">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);</span>
-<span class="fc" id="L664">        System.arraycopy(values, 0, super.entries, rowIndex*numCols, values.length);</span>
-<span class="fc" id="L665">        return this;</span>
+<span class="fc" id="L667">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);</span>
+<span class="fc" id="L668">        System.arraycopy(values, 0, super.entries, rowIndex*numCols, values.length);</span>
+<span class="fc" id="L669">        return this;</span>
     }
 
 
@@ -676,13 +680,13 @@ public class Matrix
      */
     @Override
     public Matrix setRow(int[] values, int rowIndex) {
-<span class="fc" id="L679">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);</span>
+<span class="fc" id="L683">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);</span>
 
-<span class="fc bfc" id="L681" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc" id="L682">            super.entries[rowIndex*numCols + i] = values[i];</span>
+<span class="fc bfc" id="L685" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L686">            super.entries[rowIndex*numCols + i] = values[i];</span>
         }
 
-<span class="fc" id="L685">        return this;</span>
+<span class="fc" id="L689">        return this;</span>
     }
 
 
@@ -699,21 +703,21 @@ public class Matrix
      */
     @Override
     public Matrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
-<span class="fc" id="L702">        Matrix slice = new Matrix(rowEnd-rowStart, colEnd-colStart);</span>
-<span class="fc" id="L703">        int destPos = 0;</span>
+<span class="fc" id="L706">        Matrix slice = new Matrix(rowEnd-rowStart, colEnd-colStart);</span>
+<span class="fc" id="L707">        int destPos = 0;</span>
         int srcPos;
         int end;
 
-<span class="fc bfc" id="L707" title="All 2 branches covered.">        for(int i=rowStart; i&lt;rowEnd; i++) {</span>
-<span class="fc" id="L708">            srcPos = i*this.numCols + colStart;</span>
-<span class="fc" id="L709">            end = srcPos + colEnd - colStart;</span>
+<span class="fc bfc" id="L711" title="All 2 branches covered.">        for(int i=rowStart; i&lt;rowEnd; i++) {</span>
+<span class="fc" id="L712">            srcPos = i*this.numCols + colStart;</span>
+<span class="fc" id="L713">            end = srcPos + colEnd - colStart;</span>
 
-<span class="fc bfc" id="L711" title="All 2 branches covered.">            while(srcPos &lt; end) {</span>
-<span class="fc" id="L712">                slice.entries[destPos++] = this.entries[srcPos++];</span>
+<span class="fc bfc" id="L715" title="All 2 branches covered.">            while(srcPos &lt; end) {</span>
+<span class="fc" id="L716">                slice.entries[destPos++] = this.entries[srcPos++];</span>
             }
         }
 
-<span class="fc" id="L716">        return slice;</span>
+<span class="fc" id="L720">        return slice;</span>
     }
 
 
@@ -731,18 +735,18 @@ public class Matrix
      */
     @Override
     public Matrix setSlice(Matrix values, int rowStart, int colStart) {
-<span class="fc" id="L734">        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);</span>
-<span class="fc" id="L735">        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);</span>
-<span class="fc" id="L736">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
+<span class="fc" id="L738">        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);</span>
+<span class="fc" id="L739">        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);</span>
+<span class="fc" id="L740">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
 
-<span class="fc bfc" id="L738" title="All 2 branches covered.">        for(int i=0; i&lt;values.numRows; i++) {</span>
-<span class="fc bfc" id="L739" title="All 2 branches covered.">            for(int j=0; j&lt;values.numCols; j++) {</span>
-<span class="fc" id="L740">                this.entries[(i+rowStart)*numCols + j+colStart] =</span>
+<span class="fc bfc" id="L742" title="All 2 branches covered.">        for(int i=0; i&lt;values.numRows; i++) {</span>
+<span class="fc bfc" id="L743" title="All 2 branches covered.">            for(int j=0; j&lt;values.numCols; j++) {</span>
+<span class="fc" id="L744">                this.entries[(i+rowStart)*numCols + j+colStart] =</span>
                         values.entries[i*values.numCols + j];
             }
         }
 
-<span class="fc" id="L745">        return this;</span>
+<span class="fc" id="L749">        return this;</span>
     }
 
 
@@ -760,12 +764,12 @@ public class Matrix
      */
     @Override
     public Matrix setSlice(SparseMatrix values, int rowStart, int colStart) {
-<span class="fc" id="L763">        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);</span>
-<span class="fc" id="L764">        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);</span>
-<span class="fc" id="L765">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
+<span class="fc" id="L767">        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);</span>
+<span class="fc" id="L768">        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);</span>
+<span class="fc" id="L769">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
 
         // Fill slice with zeros
-<span class="fc" id="L768">        ArrayUtils.stridedFillZerosRange(</span>
+<span class="fc" id="L772">        ArrayUtils.stridedFillZerosRange(</span>
                 this.entries,
                 rowStart*this.numCols+colStart,
                 values.numCols,
@@ -774,14 +778,14 @@ public class Matrix
 
         // Copy sparse values
         int rowIndex, colIndex;
-<span class="fc bfc" id="L777" title="All 2 branches covered.">        for(int i=0; i&lt;values.entries.length; i++) {</span>
-<span class="fc" id="L778">            rowIndex = values.rowIndices[i];</span>
-<span class="fc" id="L779">            colIndex = values.colIndices[i];</span>
+<span class="fc bfc" id="L781" title="All 2 branches covered.">        for(int i=0; i&lt;values.entries.length; i++) {</span>
+<span class="fc" id="L782">            rowIndex = values.rowIndices[i];</span>
+<span class="fc" id="L783">            colIndex = values.colIndices[i];</span>
 
-<span class="fc" id="L781">            this.entries[(rowIndex+rowStart)*this.numCols + colIndex + colStart] = values.entries[i];</span>
+<span class="fc" id="L785">            this.entries[(rowIndex+rowStart)*this.numCols + colIndex + colStart] = values.entries[i];</span>
         }
 
-<span class="fc" id="L784">        return this;</span>
+<span class="fc" id="L788">        return this;</span>
     }
 
 
@@ -799,17 +803,17 @@ public class Matrix
      */
     @Override
     public Matrix setSlice(Double[][] values, int rowStart, int colStart) {
-<span class="fc" id="L802">        ParameterChecks.assertLessEq(numRows, rowStart+values.length);</span>
-<span class="fc" id="L803">        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);</span>
-<span class="fc" id="L804">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
+<span class="fc" id="L806">        ParameterChecks.assertLessEq(numRows, rowStart+values.length);</span>
+<span class="fc" id="L807">        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);</span>
+<span class="fc" id="L808">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
 
-<span class="fc bfc" id="L806" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L807" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L808">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L810" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L811" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L812">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
 
-<span class="fc" id="L812">        return this;</span>
+<span class="fc" id="L816">        return this;</span>
     }
 
 
@@ -827,17 +831,17 @@ public class Matrix
      */
     @Override
     public Matrix setSlice(Integer[][] values, int rowStart, int colStart) {
-<span class="fc" id="L830">        ParameterChecks.assertLessEq(numRows, rowStart+values.length);</span>
-<span class="fc" id="L831">        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);</span>
-<span class="fc" id="L832">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
+<span class="fc" id="L834">        ParameterChecks.assertLessEq(numRows, rowStart+values.length);</span>
+<span class="fc" id="L835">        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);</span>
+<span class="fc" id="L836">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
 
-<span class="fc bfc" id="L834" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L835" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L836">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L838" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L839" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L840">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
 
-<span class="fc" id="L840">        return this;</span>
+<span class="fc" id="L844">        return this;</span>
     }
 
 
@@ -855,17 +859,17 @@ public class Matrix
      */
     @Override
     public Matrix setSlice(double[][] values, int rowStart, int colStart) {
-<span class="fc" id="L858">        ParameterChecks.assertLessEq(numRows, rowStart+values.length);</span>
-<span class="fc" id="L859">        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);</span>
-<span class="fc" id="L860">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
+<span class="fc" id="L862">        ParameterChecks.assertLessEq(numRows, rowStart+values.length);</span>
+<span class="fc" id="L863">        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);</span>
+<span class="fc" id="L864">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
 
-<span class="fc bfc" id="L862" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L863" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L864">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L866" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L867" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L868">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
 
-<span class="fc" id="L868">        return this;</span>
+<span class="fc" id="L872">        return this;</span>
     }
 
 
@@ -883,17 +887,17 @@ public class Matrix
      */
     @Override
     public Matrix setSlice(int[][] values, int rowStart, int colStart) {
-<span class="fc" id="L886">        ParameterChecks.assertLessEq(numRows, rowStart+values.length);</span>
-<span class="fc" id="L887">        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);</span>
-<span class="fc" id="L888">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
+<span class="fc" id="L890">        ParameterChecks.assertLessEq(numRows, rowStart+values.length);</span>
+<span class="fc" id="L891">        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);</span>
+<span class="fc" id="L892">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
 
-<span class="fc bfc" id="L890" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L891" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L892">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L894" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L895" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L896">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
 
-<span class="fc" id="L896">        return this;</span>
+<span class="fc" id="L900">        return this;</span>
     }
 
 
@@ -911,15 +915,15 @@ public class Matrix
      */
     @Override
     public Matrix setSliceCopy(Matrix values, int rowStart, int colStart) {
-<span class="fc" id="L914">        Matrix copy = new Matrix(this);</span>
+<span class="fc" id="L918">        Matrix copy = new Matrix(this);</span>
 
-<span class="fc bfc" id="L916" title="All 2 branches covered.">        for(int i=0; i&lt;values.numRows; i++) {</span>
-<span class="fc bfc" id="L917" title="All 2 branches covered.">            for(int j=0; j&lt;values.numCols; j++) {</span>
-<span class="fc" id="L918">                copy.entries[(i+rowStart)*numCols + j+colStart] = values.entries[values.shape.entriesIndex(i, j)];</span>
+<span class="fc bfc" id="L920" title="All 2 branches covered.">        for(int i=0; i&lt;values.numRows; i++) {</span>
+<span class="fc bfc" id="L921" title="All 2 branches covered.">            for(int j=0; j&lt;values.numCols; j++) {</span>
+<span class="fc" id="L922">                copy.entries[(i+rowStart)*numCols + j+colStart] = values.entries[values.shape.entriesIndex(i, j)];</span>
             }
         }
 
-<span class="fc" id="L922">        return copy;</span>
+<span class="fc" id="L926">        return copy;</span>
     }
 
 
@@ -937,10 +941,10 @@ public class Matrix
      */
     @Override
     public Matrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
-<span class="fc" id="L940">        Matrix copy = this.copy();</span>
+<span class="fc" id="L944">        Matrix copy = this.copy();</span>
 
         // Fill slice with zeros
-<span class="fc" id="L943">        ArrayUtils.stridedFillZerosRange(</span>
+<span class="fc" id="L947">        ArrayUtils.stridedFillZerosRange(</span>
                 copy.entries,
                 rowStart*copy.numCols+colStart,
                 values.numCols,
@@ -949,14 +953,14 @@ public class Matrix
 
         // Copy sparse values
         int rowIndex, colIndex;
-<span class="fc bfc" id="L952" title="All 2 branches covered.">        for(int i=0; i&lt;values.entries.length; i++) {</span>
-<span class="fc" id="L953">            rowIndex = values.rowIndices[i];</span>
-<span class="fc" id="L954">            colIndex = values.colIndices[i];</span>
+<span class="fc bfc" id="L956" title="All 2 branches covered.">        for(int i=0; i&lt;values.entries.length; i++) {</span>
+<span class="fc" id="L957">            rowIndex = values.rowIndices[i];</span>
+<span class="fc" id="L958">            colIndex = values.colIndices[i];</span>
 
-<span class="fc" id="L956">            copy.entries[(rowIndex+rowStart)*copy.numCols + colIndex + colStart] = values.entries[i];</span>
+<span class="fc" id="L960">            copy.entries[(rowIndex+rowStart)*copy.numCols + colIndex + colStart] = values.entries[i];</span>
         }
 
-<span class="fc" id="L959">        return copy;</span>
+<span class="fc" id="L963">        return copy;</span>
     }
 
 
@@ -974,15 +978,15 @@ public class Matrix
      */
     @Override
     public Matrix setSliceCopy(Double[][] values, int rowStart, int colStart) {
-<span class="fc" id="L977">        Matrix copy = new Matrix(this);</span>
+<span class="fc" id="L981">        Matrix copy = new Matrix(this);</span>
 
-<span class="fc bfc" id="L979" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L980" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L981">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L983" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L984" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L985">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
 
-<span class="fc" id="L985">        return copy;</span>
+<span class="fc" id="L989">        return copy;</span>
     }
 
 
@@ -1000,15 +1004,15 @@ public class Matrix
      */
     @Override
     public Matrix setSliceCopy(Integer[][] values, int rowStart, int colStart) {
-<span class="fc" id="L1003">        Matrix copy = new Matrix(this);</span>
+<span class="fc" id="L1007">        Matrix copy = new Matrix(this);</span>
 
-<span class="fc bfc" id="L1005" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L1006" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L1007">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L1009" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L1010" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L1011">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
 
-<span class="fc" id="L1011">        return copy;</span>
+<span class="fc" id="L1015">        return copy;</span>
     }
 
 
@@ -1026,15 +1030,15 @@ public class Matrix
      */
     @Override
     public Matrix setSliceCopy(double[][] values, int rowStart, int colStart) {
-<span class="fc" id="L1029">        Matrix copy = new Matrix(this);</span>
+<span class="fc" id="L1033">        Matrix copy = new Matrix(this);</span>
 
-<span class="fc bfc" id="L1031" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L1032" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L1033">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L1035" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L1036" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L1037">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
 
-<span class="fc" id="L1037">        return copy;</span>
+<span class="fc" id="L1041">        return copy;</span>
     }
 
 
@@ -1052,15 +1056,15 @@ public class Matrix
      */
     @Override
     public Matrix setSliceCopy(int[][] values, int rowStart, int colStart) {
-<span class="fc" id="L1055">        Matrix copy = new Matrix(this);</span>
+<span class="fc" id="L1059">        Matrix copy = new Matrix(this);</span>
 
-<span class="fc bfc" id="L1057" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
-<span class="fc bfc" id="L1058" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
-<span class="fc" id="L1059">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+<span class="fc bfc" id="L1061" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L1062" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L1063">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
             }
         }
 
-<span class="fc" id="L1063">        return copy;</span>
+<span class="fc" id="L1067">        return copy;</span>
     }
 
 
@@ -1071,18 +1075,18 @@ public class Matrix
      */
     @Override
     public Matrix removeRow(int rowIndex) {
-<span class="fc" id="L1074">        Matrix copy = new Matrix(this.numRows-1, this.numCols);</span>
+<span class="fc" id="L1078">        Matrix copy = new Matrix(this.numRows-1, this.numCols);</span>
 
-<span class="fc" id="L1076">        int row = 0;</span>
+<span class="fc" id="L1080">        int row = 0;</span>
 
-<span class="fc bfc" id="L1078" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc bfc" id="L1079" title="All 2 branches covered.">            if(i!=rowIndex) {</span>
-<span class="fc" id="L1080">                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);</span>
-<span class="fc" id="L1081">                row++;</span>
+<span class="fc bfc" id="L1082" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1083" title="All 2 branches covered.">            if(i!=rowIndex) {</span>
+<span class="fc" id="L1084">                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);</span>
+<span class="fc" id="L1085">                row++;</span>
             }
         }
 
-<span class="fc" id="L1085">        return copy;</span>
+<span class="fc" id="L1089">        return copy;</span>
     }
 
 
@@ -1094,18 +1098,18 @@ public class Matrix
      */
     @Override
     public Matrix removeRows(int... rowIndices) {
-<span class="fc" id="L1097">        Matrix copy = new Matrix(this.numRows-rowIndices.length, this.numCols);</span>
+<span class="fc" id="L1101">        Matrix copy = new Matrix(this.numRows-rowIndices.length, this.numCols);</span>
 
-<span class="fc" id="L1099">        int row = 0;</span>
+<span class="fc" id="L1103">        int row = 0;</span>
 
-<span class="fc bfc" id="L1101" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc bfc" id="L1102" title="All 2 branches covered.">            if(ArrayUtils.notInArray(rowIndices, i)) {</span>
-<span class="fc" id="L1103">                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);</span>
-<span class="fc" id="L1104">                row++;</span>
+<span class="fc bfc" id="L1105" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1106" title="All 2 branches covered.">            if(ArrayUtils.notInArray(rowIndices, i)) {</span>
+<span class="fc" id="L1107">                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);</span>
+<span class="fc" id="L1108">                row++;</span>
             }
         }
 
-<span class="fc" id="L1108">        return copy;</span>
+<span class="fc" id="L1112">        return copy;</span>
     }
 
 
@@ -1117,21 +1121,21 @@ public class Matrix
      */
     @Override
     public Matrix removeCol(int colIndex) {
-<span class="fc" id="L1120">        Matrix copy = new Matrix(this.numRows, this.numCols-1);</span>
+<span class="fc" id="L1124">        Matrix copy = new Matrix(this.numRows, this.numCols-1);</span>
 
         int col;
 
-<span class="fc bfc" id="L1124" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc" id="L1125">            col = 0;</span>
-<span class="fc bfc" id="L1126" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="fc bfc" id="L1127" title="All 2 branches covered.">                if(j!=colIndex) {</span>
-<span class="fc" id="L1128">                    copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];</span>
-<span class="fc" id="L1129">                    col++;</span>
+<span class="fc bfc" id="L1128" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1129">            col = 0;</span>
+<span class="fc bfc" id="L1130" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc bfc" id="L1131" title="All 2 branches covered.">                if(j!=colIndex) {</span>
+<span class="fc" id="L1132">                    copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];</span>
+<span class="fc" id="L1133">                    col++;</span>
                 }
             }
         }
 
-<span class="fc" id="L1134">        return copy;</span>
+<span class="fc" id="L1138">        return copy;</span>
     }
 
 
@@ -1143,21 +1147,21 @@ public class Matrix
      */
     @Override
     public Matrix removeCols(int... colIndices) {
-<span class="fc" id="L1146">        Matrix copy = new Matrix(this.numRows, this.numCols-colIndices.length);</span>
+<span class="fc" id="L1150">        Matrix copy = new Matrix(this.numRows, this.numCols-colIndices.length);</span>
 
         int col;
 
-<span class="fc bfc" id="L1150" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc" id="L1151">            col = 0;</span>
-<span class="fc bfc" id="L1152" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="fc bfc" id="L1153" title="All 2 branches covered.">                if(ArrayUtils.notInArray(colIndices, j)) {</span>
-<span class="fc" id="L1154">                    copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];</span>
-<span class="fc" id="L1155">                    col++;</span>
+<span class="fc bfc" id="L1154" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1155">            col = 0;</span>
+<span class="fc bfc" id="L1156" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc bfc" id="L1157" title="All 2 branches covered.">                if(ArrayUtils.notInArray(colIndices, j)) {</span>
+<span class="fc" id="L1158">                    copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];</span>
+<span class="fc" id="L1159">                    col++;</span>
                 }
             }
         }
 
-<span class="fc" id="L1160">        return copy;</span>
+<span class="fc" id="L1164">        return copy;</span>
     }
 
 
@@ -1169,7 +1173,7 @@ public class Matrix
      */
     @Override
     public Matrix round() {
-<span class="fc" id="L1172">        return new Matrix(this.shape, RealOperations.round(this.entries));</span>
+<span class="fc" id="L1176">        return new Matrix(this.shape, RealOperations.round(this.entries));</span>
     }
 
 
@@ -1183,7 +1187,7 @@ public class Matrix
      */
     @Override
     public Matrix round(int precision) {
-<span class="fc" id="L1186">        return new Matrix(this.shape, RealOperations.round(this.entries, precision));</span>
+<span class="fc" id="L1190">        return new Matrix(this.shape, RealOperations.round(this.entries, precision));</span>
     }
 
 
@@ -1196,8 +1200,8 @@ public class Matrix
      */
     @Override
     public Matrix roundToZero() {
-<span class="fc" id="L1199">        this.abs();</span>
-<span class="fc" id="L1200">        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD));</span>
+<span class="fc" id="L1203">        this.abs();</span>
+<span class="fc" id="L1204">        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD));</span>
     }
 
 
@@ -1212,7 +1216,7 @@ public class Matrix
      */
     @Override
     public Matrix roundToZero(double threshold) {
-<span class="fc" id="L1215">        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, threshold));</span>
+<span class="fc" id="L1219">        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, threshold));</span>
     }
 
 
@@ -1225,7 +1229,7 @@ public class Matrix
      */
     @Override
     public Matrix add(SparseMatrix B) {
-<span class="fc" id="L1228">        return RealDenseSparseOperations.add(this, B);</span>
+<span class="fc" id="L1232">        return RealDenseSparseOperations.add(this, B);</span>
     }
 
 
@@ -1238,8 +1242,8 @@ public class Matrix
      */
     @Override
     public CMatrix add(CMatrix B) {
-<span class="fc" id="L1241">        return new CMatrix(this.shape.copy(),</span>
-<span class="fc" id="L1242">                RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape)</span>
+<span class="fc" id="L1245">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1246">                RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape)</span>
         );
     }
 
@@ -1253,7 +1257,7 @@ public class Matrix
      */
     @Override
     public CMatrix add(SparseCMatrix B) {
-<span class="fc" id="L1256">        return RealComplexDenseSparseOperations.add(this, B);</span>
+<span class="fc" id="L1260">        return RealComplexDenseSparseOperations.add(this, B);</span>
     }
 
 
@@ -1265,8 +1269,8 @@ public class Matrix
      */
     @Override
     public void subEq(SparseMatrix B) {
-<span class="fc" id="L1268">        RealDenseSparseOperations.subEq(this, B);</span>
-<span class="fc" id="L1269">    }</span>
+<span class="fc" id="L1272">        RealDenseSparseOperations.subEq(this, B);</span>
+<span class="fc" id="L1273">    }</span>
 
 
     /**
@@ -1277,8 +1281,8 @@ public class Matrix
      */
     @Override
     public void addEq(SparseMatrix B) {
-<span class="fc" id="L1280">        RealDenseSparseOperations.addEq(this, B);</span>
-<span class="fc" id="L1281">    }</span>
+<span class="fc" id="L1284">        RealDenseSparseOperations.addEq(this, B);</span>
+<span class="fc" id="L1285">    }</span>
 
 
     /**
@@ -1288,7 +1292,7 @@ public class Matrix
      */
     @Override
     public Matrix transpose() {
-<span class="fc" id="L1291">        return TransposeDispatcher.dispatch(this);</span>
+<span class="fc" id="L1295">        return TransposeDispatcher.dispatch(this);</span>
     }
 
 
@@ -1299,7 +1303,7 @@ public class Matrix
      */
     @Override
     public Matrix T() {
-<span class="fc" id="L1302">        return transpose();</span>
+<span class="fc" id="L1306">        return transpose();</span>
     }
 
 
@@ -1312,7 +1316,7 @@ public class Matrix
      */
     @Override
     public Matrix sub(SparseMatrix B) {
-<span class="fc" id="L1315">        return RealDenseSparseOperations.sub(this, B);</span>
+<span class="fc" id="L1319">        return RealDenseSparseOperations.sub(this, B);</span>
     }
 
 
@@ -1325,9 +1329,9 @@ public class Matrix
      */
     @Override
     public CMatrix sub(CMatrix B) {
-<span class="fc" id="L1328">        return new CMatrix(</span>
-<span class="fc" id="L1329">                shape.copy(),</span>
-<span class="fc" id="L1330">                RealComplexDenseOperations.sub(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L1332">        return new CMatrix(</span>
+<span class="fc" id="L1333">                shape.copy(),</span>
+<span class="fc" id="L1334">                RealComplexDenseOperations.sub(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1341,7 +1345,7 @@ public class Matrix
      */
     @Override
     public CMatrix sub(SparseCMatrix B) {
-<span class="fc" id="L1344">        return RealComplexDenseSparseOperations.sub(this, B);</span>
+<span class="fc" id="L1348">        return RealComplexDenseSparseOperations.sub(this, B);</span>
     }
 
 
@@ -1354,10 +1358,10 @@ public class Matrix
      */
     @Override
     public Matrix mult(Matrix B) {
-<span class="fc" id="L1357">        double[] entries = RealDenseMatrixMultiplyDispatcher.dispatch(this, B);</span>
-<span class="fc" id="L1358">        Shape shape = new Shape(this.numRows, B.numCols);</span>
+<span class="fc" id="L1361">        double[] entries = RealDenseMatrixMultiplyDispatcher.dispatch(this, B);</span>
+<span class="fc" id="L1362">        Shape shape = new Shape(this.numRows, B.numCols);</span>
 
-<span class="fc" id="L1360">        return new Matrix(shape, entries);</span>
+<span class="fc" id="L1364">        return new Matrix(shape, entries);</span>
     }
 
 
@@ -1370,13 +1374,13 @@ public class Matrix
      */
     @Override
     public Matrix mult(SparseMatrix B) {
-<span class="fc" id="L1373">        ParameterChecks.assertMatMultShapes(this.shape, B.shape);</span>
-<span class="fc" id="L1374">        double[] entries = RealDenseSparseMatrixMultiplication.standard(</span>
+<span class="fc" id="L1377">        ParameterChecks.assertMatMultShapes(this.shape, B.shape);</span>
+<span class="fc" id="L1378">        double[] entries = RealDenseSparseMatrixMultiplication.standard(</span>
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
         );
-<span class="fc" id="L1377">        Shape shape = new Shape(this.numRows, B.numCols);</span>
+<span class="fc" id="L1381">        Shape shape = new Shape(this.numRows, B.numCols);</span>
 
-<span class="fc" id="L1379">        return new Matrix(shape, entries);</span>
+<span class="fc" id="L1383">        return new Matrix(shape, entries);</span>
     }
 
 
@@ -1389,10 +1393,10 @@ public class Matrix
      */
     @Override
     public CMatrix mult(CMatrix B) {
-<span class="fc" id="L1392">        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, B);</span>
-<span class="fc" id="L1393">        Shape shape = new Shape(this.numRows, B.numCols);</span>
+<span class="fc" id="L1396">        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, B);</span>
+<span class="fc" id="L1397">        Shape shape = new Shape(this.numRows, B.numCols);</span>
 
-<span class="fc" id="L1395">        return new CMatrix(shape, entries);</span>
+<span class="fc" id="L1399">        return new CMatrix(shape, entries);</span>
     }
 
 
@@ -1405,13 +1409,13 @@ public class Matrix
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
-<span class="fc" id="L1408">        ParameterChecks.assertMatMultShapes(this.shape, B.shape);</span>
-<span class="fc" id="L1409">        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(</span>
+<span class="fc" id="L1412">        ParameterChecks.assertMatMultShapes(this.shape, B.shape);</span>
+<span class="fc" id="L1413">        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(</span>
                 this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
         );
-<span class="fc" id="L1412">        Shape shape = new Shape(this.numRows, B.numCols);</span>
+<span class="fc" id="L1416">        Shape shape = new Shape(this.numRows, B.numCols);</span>
 
-<span class="fc" id="L1414">        return new CMatrix(shape, entries);</span>
+<span class="fc" id="L1418">        return new CMatrix(shape, entries);</span>
     }
 
 
@@ -1424,11 +1428,11 @@ public class Matrix
      */
     @Override
     public Matrix mult(Vector b) {
-<span class="fc" id="L1427">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
-<span class="fc" id="L1428">        double[] entries = MatrixMultiplyDispatcher.dispatch(this, b);</span>
-<span class="fc" id="L1429">        Shape shape = new Shape(this.numRows, 1);</span>
+<span class="fc" id="L1431">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
+<span class="fc" id="L1432">        double[] entries = MatrixMultiplyDispatcher.dispatch(this, b);</span>
+<span class="fc" id="L1433">        Shape shape = new Shape(this.numRows, 1);</span>
 
-<span class="fc" id="L1431">        return new Matrix(shape, entries);</span>
+<span class="fc" id="L1435">        return new Matrix(shape, entries);</span>
     }
 
 
@@ -1441,13 +1445,13 @@ public class Matrix
      */
     @Override
     public Matrix mult(SparseVector b) {
-<span class="fc" id="L1444">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
-<span class="fc" id="L1445">        double[] entries = RealDenseSparseMatrixMultiplication.standardVector(</span>
+<span class="fc" id="L1448">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
+<span class="fc" id="L1449">        double[] entries = RealDenseSparseMatrixMultiplication.standardVector(</span>
                 this.entries, this.shape, b.entries, b.indices
         );
-<span class="fc" id="L1448">        Shape shape = new Shape(this.numRows, 1);</span>
+<span class="fc" id="L1452">        Shape shape = new Shape(this.numRows, 1);</span>
 
-<span class="fc" id="L1450">        return new Matrix(shape, entries);</span>
+<span class="fc" id="L1454">        return new Matrix(shape, entries);</span>
     }
 
 
@@ -1460,13 +1464,13 @@ public class Matrix
      */
     @Override
     public CMatrix mult(CVector b) {
-<span class="fc" id="L1463">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
-<span class="fc" id="L1464">        CNumber[] entries = RealComplexDenseMatrixMultiplication.standardVector(</span>
+<span class="fc" id="L1467">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
+<span class="fc" id="L1468">        CNumber[] entries = RealComplexDenseMatrixMultiplication.standardVector(</span>
                 this.entries, this.shape, b.entries, b.shape
         );
-<span class="fc" id="L1467">        Shape shape = new Shape(this.numRows, 1);</span>
+<span class="fc" id="L1471">        Shape shape = new Shape(this.numRows, 1);</span>
 
-<span class="fc" id="L1469">        return new CMatrix(shape, entries);</span>
+<span class="fc" id="L1473">        return new CMatrix(shape, entries);</span>
     }
 
 
@@ -1479,13 +1483,13 @@ public class Matrix
      */
     @Override
     public CMatrix mult(SparseCVector b) {
-<span class="fc" id="L1482">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
-<span class="fc" id="L1483">        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standardVector(</span>
+<span class="fc" id="L1486">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
+<span class="fc" id="L1487">        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standardVector(</span>
                 this.entries, this.shape, b.entries, b.indices
         );
-<span class="fc" id="L1486">        Shape shape = new Shape(this.numRows, 1);</span>
+<span class="fc" id="L1490">        Shape shape = new Shape(this.numRows, 1);</span>
 
-<span class="fc" id="L1488">        return new CMatrix(shape, entries);</span>
+<span class="fc" id="L1492">        return new CMatrix(shape, entries);</span>
     }
 
 
@@ -1502,11 +1506,11 @@ public class Matrix
     @Override
     public Matrix multTranspose(Matrix B) {
         // Ensure this matrix can be multiplied to the transpose of B.
-<span class="fc" id="L1505">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
+<span class="fc" id="L1509">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
 
-<span class="fc" id="L1507">        return new Matrix(</span>
+<span class="fc" id="L1511">        return new Matrix(</span>
                 new Shape(this.numRows, B.numRows),
-<span class="fc" id="L1509">                RealDenseMatrixMultiplyDispatcher.dispatchTranspose(this, B)</span>
+<span class="fc" id="L1513">                RealDenseMatrixMultiplyDispatcher.dispatchTranspose(this, B)</span>
         );
     }
 
@@ -1524,11 +1528,11 @@ public class Matrix
     @Override
     public Matrix multTranspose(SparseMatrix B) {
         // Ensure this matrix can be multiplied to the transpose of B.
-<span class="fc" id="L1527">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
+<span class="fc" id="L1531">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
 
-<span class="fc" id="L1529">        return new Matrix(</span>
+<span class="fc" id="L1533">        return new Matrix(</span>
                 new Shape(this.numRows, B.numRows),
-<span class="fc" id="L1531">                RealDenseSparseMatrixMultTranspose.multTranspose(</span>
+<span class="fc" id="L1535">                RealDenseSparseMatrixMultTranspose.multTranspose(</span>
                         this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
                 )
         );
@@ -1548,11 +1552,11 @@ public class Matrix
     @Override
     public CMatrix multTranspose(CMatrix B) {
         // Ensure this matrix can be multiplied to the transpose of B.
-<span class="fc" id="L1551">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
+<span class="fc" id="L1555">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
 
-<span class="fc" id="L1553">        return new CMatrix(</span>
+<span class="fc" id="L1557">        return new CMatrix(</span>
                 new Shape(this.numRows, B.numRows),
-<span class="fc" id="L1555">                MatrixMultiplyDispatcher.dispatchTranspose(this, B)</span>
+<span class="fc" id="L1559">                MatrixMultiplyDispatcher.dispatchTranspose(this, B)</span>
         );
     }
 
@@ -1570,12 +1574,12 @@ public class Matrix
     @Override
     public CMatrix multTranspose(SparseCMatrix B) {
         // Ensure this matrix can be multiplied to the transpose of B.
-<span class="fc" id="L1573">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
+<span class="fc" id="L1577">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
 
         // TODO: Add dispatcher for various methods in RealComplexDenseSparseMatrixMultTranspose
-<span class="fc" id="L1576">        return new CMatrix(</span>
+<span class="fc" id="L1580">        return new CMatrix(</span>
                 new Shape(this.numRows, B.numRows),
-<span class="fc" id="L1578">                RealComplexDenseSparseMatrixMultTranspose.multTranspose(</span>
+<span class="fc" id="L1582">                RealComplexDenseSparseMatrixMultTranspose.multTranspose(</span>
                         this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
                 )
         );
@@ -1594,21 +1598,21 @@ public class Matrix
      */
     @Override
     public Matrix pow(int exponent) {
-<span class="fc" id="L1597">        ParameterChecks.assertGreaterEq(0, exponent);</span>
-<span class="fc" id="L1598">        ParameterChecks.assertSquare(this.shape);</span>
+<span class="fc" id="L1601">        ParameterChecks.assertGreaterEq(0, exponent);</span>
+<span class="fc" id="L1602">        ParameterChecks.assertSquare(this.shape);</span>
         Matrix result;
 
-<span class="fc bfc" id="L1601" title="All 2 branches covered.">        if(exponent==0) {</span>
-<span class="fc" id="L1602">            result = I(this.shape);</span>
+<span class="fc bfc" id="L1605" title="All 2 branches covered.">        if(exponent==0) {</span>
+<span class="fc" id="L1606">            result = I(this.shape);</span>
         } else {
-<span class="fc" id="L1604">            result = new Matrix(this);</span>
+<span class="fc" id="L1608">            result = new Matrix(this);</span>
 
-<span class="fc bfc" id="L1606" title="All 2 branches covered.">            for(int i=1; i&lt;exponent; i++) {</span>
-<span class="fc" id="L1607">                result = result.mult(this);</span>
+<span class="fc bfc" id="L1610" title="All 2 branches covered.">            for(int i=1; i&lt;exponent; i++) {</span>
+<span class="fc" id="L1611">                result = result.mult(this);</span>
             }
         }
 
-<span class="fc" id="L1611">        return result;</span>
+<span class="fc" id="L1615">        return result;</span>
     }
 
 
@@ -1621,7 +1625,7 @@ public class Matrix
      */
     @Override
     public SparseMatrix elemMult(SparseMatrix B) {
-<span class="fc" id="L1624">        return RealDenseSparseOperations.elemMult(this, B);</span>
+<span class="fc" id="L1628">        return RealDenseSparseOperations.elemMult(this, B);</span>
     }
 
 
@@ -1634,9 +1638,9 @@ public class Matrix
      */
     @Override
     public CMatrix elemMult(CMatrix B) {
-<span class="fc" id="L1637">        return new CMatrix(</span>
-<span class="fc" id="L1638">                shape.copy(),</span>
-<span class="fc" id="L1639">                RealComplexDenseElemMult.dispatch(B.entries, B.shape, entries, shape)</span>
+<span class="fc" id="L1641">        return new CMatrix(</span>
+<span class="fc" id="L1642">                shape.copy(),</span>
+<span class="fc" id="L1643">                RealComplexDenseElemMult.dispatch(B.entries, B.shape, entries, shape)</span>
         );
     }
 
@@ -1650,7 +1654,7 @@ public class Matrix
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
-<span class="fc" id="L1653">        return RealComplexDenseSparseOperations.elemMult(this, B);</span>
+<span class="fc" id="L1657">        return RealComplexDenseSparseOperations.elemMult(this, B);</span>
     }
 
 
@@ -1664,9 +1668,9 @@ public class Matrix
      */
     @Override
     public CMatrix elemDiv(CMatrix B) {
-<span class="fc" id="L1667">        return new CMatrix(</span>
-<span class="fc" id="L1668">                shape.copy(),</span>
-<span class="fc" id="L1669">                RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)</span>
+<span class="fc" id="L1671">        return new CMatrix(</span>
+<span class="fc" id="L1672">                shape.copy(),</span>
+<span class="fc" id="L1673">                RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)</span>
         );
     }
 
@@ -1679,7 +1683,7 @@ public class Matrix
      */
     @Override
     public Double det() {
-<span class="fc" id="L1682">        return RealDenseDeterminant.det(this);</span>
+<span class="fc" id="L1686">        return RealDenseDeterminant.det(this);</span>
     }
 
 
@@ -1692,8 +1696,8 @@ public class Matrix
      */
     @Override
     public Double fib(Matrix B) {
-<span class="fc" id="L1695">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
-<span class="fc" id="L1696">        return this.T().mult(B).tr();</span>
+<span class="fc" id="L1699">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
+<span class="fc" id="L1700">        return this.T().mult(B).tr();</span>
     }
 
 
@@ -1706,8 +1710,8 @@ public class Matrix
      */
     @Override
     public Double fib(SparseMatrix B) {
-<span class="fc" id="L1709">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
-<span class="fc" id="L1710">        return this.T().mult(B).tr();</span>
+<span class="fc" id="L1713">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
+<span class="fc" id="L1714">        return this.T().mult(B).tr();</span>
     }
 
 
@@ -1720,8 +1724,8 @@ public class Matrix
      */
     @Override
     public CNumber fib(CMatrix B) {
-<span class="fc" id="L1723">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
-<span class="fc" id="L1724">        return this.T().mult(B).tr();</span>
+<span class="fc" id="L1727">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
+<span class="fc" id="L1728">        return this.T().mult(B).tr();</span>
     }
 
 
@@ -1734,8 +1738,8 @@ public class Matrix
      */
     @Override
     public CNumber fib(SparseCMatrix B) {
-<span class="fc" id="L1737">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
-<span class="fc" id="L1738">        return this.T().mult(B).tr();</span>
+<span class="fc" id="L1741">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
+<span class="fc" id="L1742">        return this.T().mult(B).tr();</span>
     }
 
 
@@ -1747,19 +1751,19 @@ public class Matrix
      */
     @Override
     public Matrix directSum(Matrix B) {
-<span class="fc" id="L1750">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1754">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L1753" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc" id="L1754">            System.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
+<span class="fc bfc" id="L1757" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1758">            System.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
         }
 
         // Copy over second matrix.
-<span class="fc bfc" id="L1758" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="fc" id="L1759">            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i + numRows)*sum.numCols + numCols, B.numCols);</span>
+<span class="fc bfc" id="L1762" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc" id="L1763">            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i + numRows)*sum.numCols + numCols, B.numCols);</span>
         }
 
-<span class="fc" id="L1762">        return sum;</span>
+<span class="fc" id="L1766">        return sum;</span>
     }
 
 
@@ -1771,23 +1775,23 @@ public class Matrix
      */
     @Override
     public Matrix directSum(SparseMatrix B) {
-<span class="fc" id="L1774">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1778">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L1777" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc" id="L1778">            System.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
+<span class="fc bfc" id="L1781" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1782">            System.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
         }
 
         // Copy over second matrix.
         int row, col;
-<span class="fc bfc" id="L1783" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L1784">            row = B.rowIndices[i];</span>
-<span class="fc" id="L1785">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L1787" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L1788">            row = B.rowIndices[i];</span>
+<span class="fc" id="L1789">            col = B.colIndices[i];</span>
 
-<span class="fc" id="L1787">            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i];</span>
+<span class="fc" id="L1791">            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i];</span>
         }
 
-<span class="fc" id="L1790">        return sum;</span>
+<span class="fc" id="L1794">        return sum;</span>
     }
 
 
@@ -1799,21 +1803,21 @@ public class Matrix
      */
     @Override
     public CMatrix directSum(CMatrix B) {
-<span class="fc" id="L1802">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1806">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L1805" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc bfc" id="L1806" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="fc" id="L1807">                sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
+<span class="fc bfc" id="L1809" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1810" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1811">                sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
             }
         }
 
         // Copy over second matrix.
-<span class="fc bfc" id="L1812" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="fc" id="L1813">            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i+numRows)*sum.numCols+(numCols), B.numCols);</span>
+<span class="fc bfc" id="L1816" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc" id="L1817">            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i+numRows)*sum.numCols+(numCols), B.numCols);</span>
         }
 
-<span class="fc" id="L1816">        return sum;</span>
+<span class="fc" id="L1820">        return sum;</span>
     }
 
 
@@ -1825,25 +1829,25 @@ public class Matrix
      */
     @Override
     public CMatrix directSum(SparseCMatrix B) {
-<span class="fc" id="L1828">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1832">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L1831" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc bfc" id="L1832" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="fc" id="L1833">                sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
+<span class="fc bfc" id="L1835" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1836" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1837">                sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
             }
         }
 
         // Copy over second matrix.
         int row, col;
-<span class="fc bfc" id="L1839" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L1840">            row = B.rowIndices[i];</span>
-<span class="fc" id="L1841">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L1843" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L1844">            row = B.rowIndices[i];</span>
+<span class="fc" id="L1845">            col = B.colIndices[i];</span>
 
-<span class="fc" id="L1843">            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i].copy();</span>
+<span class="fc" id="L1847">            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i].copy();</span>
         }
 
-<span class="fc" id="L1846">        return sum;</span>
+<span class="fc" id="L1850">        return sum;</span>
     }
 
 
@@ -1855,19 +1859,19 @@ public class Matrix
      */
     @Override
     public Matrix invDirectSum(Matrix B) {
-<span class="fc" id="L1858">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1862">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L1861" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc" id="L1862">            System.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);</span>
+<span class="fc bfc" id="L1865" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1866">            System.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);</span>
         }
 
         // Copy over second matrix.
-<span class="fc bfc" id="L1866" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="fc" id="L1867">            System.arraycopy(B.entries, i*B.numCols, sum.entries, i*sum.numCols+this.numCols, B.numCols);</span>
+<span class="fc bfc" id="L1870" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc" id="L1871">            System.arraycopy(B.entries, i*B.numCols, sum.entries, i*sum.numCols+this.numCols, B.numCols);</span>
         }
 
-<span class="fc" id="L1870">        return sum;</span>
+<span class="fc" id="L1874">        return sum;</span>
     }
 
 
@@ -1879,23 +1883,23 @@ public class Matrix
      */
     @Override
     public Matrix invDirectSum(SparseMatrix B) {
-<span class="fc" id="L1882">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1886">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L1885" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc" id="L1886">            System.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);</span>
+<span class="fc bfc" id="L1889" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1890">            System.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);</span>
         }
 
         // Copy over second matrix.
         int row, col;
-<span class="fc bfc" id="L1891" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L1892">            row = B.rowIndices[i];</span>
-<span class="fc" id="L1893">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L1895" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L1896">            row = B.rowIndices[i];</span>
+<span class="fc" id="L1897">            col = B.colIndices[i];</span>
 
-<span class="fc" id="L1895">            sum.entries[row*sum.numCols + col + this.numCols] = B.entries[i];</span>
+<span class="fc" id="L1899">            sum.entries[row*sum.numCols + col + this.numCols] = B.entries[i];</span>
         }
 
-<span class="fc" id="L1898">        return sum;</span>
+<span class="fc" id="L1902">        return sum;</span>
     }
 
 
@@ -1907,23 +1911,23 @@ public class Matrix
      */
     @Override
     public CMatrix invDirectSum(CMatrix B) {
-<span class="fc" id="L1910">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1914">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L1913" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc bfc" id="L1914" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="fc" id="L1915">                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
+<span class="fc bfc" id="L1917" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1918" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1919">                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
             }
         }
 
         // Copy over second matrix.
-<span class="fc bfc" id="L1920" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="fc bfc" id="L1921" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
-<span class="fc" id="L1922">                sum.entries[i*sum.numCols + j + this.numCols] = B.entries[i*B.numCols + j].copy();</span>
+<span class="fc bfc" id="L1924" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L1925" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L1926">                sum.entries[i*sum.numCols + j + this.numCols] = B.entries[i*B.numCols + j].copy();</span>
             }
         }
 
-<span class="fc" id="L1926">        return sum;</span>
+<span class="fc" id="L1930">        return sum;</span>
     }
 
 
@@ -1935,25 +1939,25 @@ public class Matrix
      */
     @Override
     public CMatrix invDirectSum(SparseCMatrix B) {
-<span class="fc" id="L1938">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+<span class="fc" id="L1942">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
 
         // Copy over first matrix.
-<span class="fc bfc" id="L1941" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc bfc" id="L1942" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="fc" id="L1943">                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
+<span class="fc bfc" id="L1945" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1946" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1947">                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
             }
         }
 
         // Copy over second matrix.
         int row, col;
-<span class="fc bfc" id="L1949" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L1950">            row = B.rowIndices[i];</span>
-<span class="fc" id="L1951">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L1953" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L1954">            row = B.rowIndices[i];</span>
+<span class="fc" id="L1955">            col = B.colIndices[i];</span>
 
-<span class="fc" id="L1953">            sum.entries[row*sum.numCols + col + this.numCols] = B.entries[i].copy();</span>
+<span class="fc" id="L1957">            sum.entries[row*sum.numCols + col + this.numCols] = B.entries[i].copy();</span>
         }
 
-<span class="fc" id="L1956">        return sum;</span>
+<span class="fc" id="L1960">        return sum;</span>
     }
 
 
@@ -1965,15 +1969,15 @@ public class Matrix
      */
     @Override
     public Matrix sumCols() {
-<span class="fc" id="L1968">        Matrix sum = new Matrix(this.numRows, 1);</span>
+<span class="fc" id="L1972">        Matrix sum = new Matrix(this.numRows, 1);</span>
 
-<span class="fc bfc" id="L1970" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc bfc" id="L1971" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="fc" id="L1972">                sum.entries[i] += this.entries[i*numCols + j];</span>
+<span class="fc bfc" id="L1974" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1975" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1976">                sum.entries[i] += this.entries[i*numCols + j];</span>
             }
         }
 
-<span class="fc" id="L1976">        return sum;</span>
+<span class="fc" id="L1980">        return sum;</span>
     }
 
 
@@ -1985,15 +1989,15 @@ public class Matrix
      */
     @Override
     public Matrix sumRows() {
-<span class="fc" id="L1988">        Matrix sum = new Matrix(1, this.numCols);</span>
+<span class="fc" id="L1992">        Matrix sum = new Matrix(1, this.numCols);</span>
 
-<span class="fc bfc" id="L1990" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc bfc" id="L1991" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
-<span class="fc" id="L1992">                sum.entries[j] += this.entries[i*numCols + j];</span>
+<span class="fc bfc" id="L1994" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1995" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1996">                sum.entries[j] += this.entries[i*numCols + j];</span>
             }
         }
 
-<span class="fc" id="L1996">        return sum;</span>
+<span class="fc" id="L2000">        return sum;</span>
     }
 
 
@@ -2007,16 +2011,16 @@ public class Matrix
      */
     @Override
     public Matrix addToEachCol(Vector b) {
-<span class="fc" id="L2010">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
-<span class="fc" id="L2011">        Matrix sum = new Matrix(this);</span>
+<span class="fc" id="L2014">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
+<span class="fc" id="L2015">        Matrix sum = new Matrix(this);</span>
 
-<span class="fc bfc" id="L2013" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
-<span class="fc bfc" id="L2014" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
-<span class="fc" id="L2015">                sum.entries[i*sum.numCols + j] += b.entries[i];</span>
+<span class="fc bfc" id="L2017" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2018" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2019">                sum.entries[i*sum.numCols + j] += b.entries[i];</span>
             }
         }
 
-<span class="fc" id="L2019">        return sum;</span>
+<span class="fc" id="L2023">        return sum;</span>
     }
 
 
@@ -2029,20 +2033,20 @@ public class Matrix
      */
     @Override
     public Matrix addToEachCol(SparseVector b) {
-<span class="fc" id="L2032">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
-<span class="fc" id="L2033">        Matrix sum = new Matrix(this);</span>
+<span class="fc" id="L2036">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
+<span class="fc" id="L2037">        Matrix sum = new Matrix(this);</span>
 
         int index;
 
-<span class="fc bfc" id="L2037" title="All 2 branches covered.">        for(int i=0; i&lt;b.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L2038">            index = b.indices[i];</span>
+<span class="fc bfc" id="L2041" title="All 2 branches covered.">        for(int i=0; i&lt;b.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L2042">            index = b.indices[i];</span>
 
-<span class="fc bfc" id="L2040" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
-<span class="fc" id="L2041">                sum.entries[index*sum.numCols + j] += b.entries[i];</span>
+<span class="fc bfc" id="L2044" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2045">                sum.entries[index*sum.numCols + j] += b.entries[i];</span>
             }
         }
 
-<span class="fc" id="L2045">        return sum;</span>
+<span class="fc" id="L2049">        return sum;</span>
     }
 
 
@@ -2055,16 +2059,16 @@ public class Matrix
      */
     @Override
     public CMatrix addToEachCol(CVector b) {
-<span class="fc" id="L2058">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
-<span class="fc" id="L2059">        CMatrix sum = new CMatrix(this);</span>
+<span class="fc" id="L2062">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
+<span class="fc" id="L2063">        CMatrix sum = new CMatrix(this);</span>
 
-<span class="fc bfc" id="L2061" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
-<span class="fc bfc" id="L2062" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
-<span class="fc" id="L2063">                sum.entries[i*sum.numCols + j].addEq(b.entries[i]);</span>
+<span class="fc bfc" id="L2065" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2066" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2067">                sum.entries[i*sum.numCols + j].addEq(b.entries[i]);</span>
             }
         }
 
-<span class="fc" id="L2067">        return sum;</span>
+<span class="fc" id="L2071">        return sum;</span>
     }
 
 
@@ -2077,20 +2081,20 @@ public class Matrix
      */
     @Override
     public CMatrix addToEachCol(SparseCVector b) {
-<span class="fc" id="L2080">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
-<span class="fc" id="L2081">        CMatrix sum = new CMatrix(this);</span>
+<span class="fc" id="L2084">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
+<span class="fc" id="L2085">        CMatrix sum = new CMatrix(this);</span>
 
         int index;
 
-<span class="fc bfc" id="L2085" title="All 2 branches covered.">        for(int i=0; i&lt;b.nonZeroEntries(); i++) {</span>
-<span class="fc" id="L2086">            index = b.indices[i];</span>
+<span class="fc bfc" id="L2089" title="All 2 branches covered.">        for(int i=0; i&lt;b.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L2090">            index = b.indices[i];</span>
 
-<span class="fc bfc" id="L2088" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
-<span class="fc" id="L2089">                sum.entries[index*sum.numCols + j].addEq(b.entries[i]);</span>
+<span class="fc bfc" id="L2092" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2093">                sum.entries[index*sum.numCols + j].addEq(b.entries[i]);</span>
             }
         }
 
-<span class="fc" id="L2093">        return sum;</span>
+<span class="fc" id="L2097">        return sum;</span>
     }
 
 
@@ -2103,16 +2107,16 @@ public class Matrix
      */
     @Override
     public Matrix addToEachRow(Vector b) {
-<span class="fc" id="L2106">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
-<span class="fc" id="L2107">        Matrix sum = new Matrix(this);</span>
+<span class="fc" id="L2110">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
+<span class="fc" id="L2111">        Matrix sum = new Matrix(this);</span>
 
-<span class="fc bfc" id="L2109" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
-<span class="fc bfc" id="L2110" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
-<span class="fc" id="L2111">                sum.entries[i*sum.numCols + j] += b.entries[j];</span>
+<span class="fc bfc" id="L2113" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2114" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2115">                sum.entries[i*sum.numCols + j] += b.entries[j];</span>
             }
         }
 
-<span class="fc" id="L2115">        return sum;</span>
+<span class="fc" id="L2119">        return sum;</span>
     }
 
 
@@ -2125,18 +2129,18 @@ public class Matrix
      */
     @Override
     public Matrix addToEachRow(SparseVector b) {
-<span class="fc" id="L2128">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
-<span class="fc" id="L2129">        Matrix sum = new Matrix(this);</span>
+<span class="fc" id="L2132">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
+<span class="fc" id="L2133">        Matrix sum = new Matrix(this);</span>
 
         int col;
-<span class="fc bfc" id="L2132" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
-<span class="fc bfc" id="L2133" title="All 2 branches covered.">            for(int j=0; j&lt;b.nonZeroEntries(); j++) {</span>
-<span class="fc" id="L2134">                col = b.indices[j];</span>
-<span class="fc" id="L2135">                sum.entries[i*sum.numCols + col] += b.entries[j];</span>
+<span class="fc bfc" id="L2136" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2137" title="All 2 branches covered.">            for(int j=0; j&lt;b.nonZeroEntries(); j++) {</span>
+<span class="fc" id="L2138">                col = b.indices[j];</span>
+<span class="fc" id="L2139">                sum.entries[i*sum.numCols + col] += b.entries[j];</span>
             }
         }
 
-<span class="fc" id="L2139">        return sum;</span>
+<span class="fc" id="L2143">        return sum;</span>
     }
 
 
@@ -2149,16 +2153,16 @@ public class Matrix
      */
     @Override
     public CMatrix addToEachRow(CVector b) {
-<span class="fc" id="L2152">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
-<span class="fc" id="L2153">        CMatrix sum = new CMatrix(this);</span>
+<span class="fc" id="L2156">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
+<span class="fc" id="L2157">        CMatrix sum = new CMatrix(this);</span>
 
-<span class="fc bfc" id="L2155" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
-<span class="fc bfc" id="L2156" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
-<span class="fc" id="L2157">                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);</span>
+<span class="fc bfc" id="L2159" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2160" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2161">                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);</span>
             }
         }
 
-<span class="fc" id="L2161">        return sum;</span>
+<span class="fc" id="L2165">        return sum;</span>
     }
 
 
@@ -2171,18 +2175,18 @@ public class Matrix
      */
     @Override
     public CMatrix addToEachRow(SparseCVector b) {
-<span class="fc" id="L2174">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
-<span class="fc" id="L2175">        CMatrix sum = new CMatrix(this);</span>
+<span class="fc" id="L2178">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
+<span class="fc" id="L2179">        CMatrix sum = new CMatrix(this);</span>
 
         int col;
-<span class="fc bfc" id="L2178" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
-<span class="fc bfc" id="L2179" title="All 2 branches covered.">            for(int j=0; j&lt;b.nonZeroEntries(); j++) {</span>
-<span class="fc" id="L2180">                col = b.indices[j];</span>
-<span class="fc" id="L2181">                sum.entries[i*sum.numCols + col].addEq(b.entries[j]);</span>
+<span class="fc bfc" id="L2182" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2183" title="All 2 branches covered.">            for(int j=0; j&lt;b.nonZeroEntries(); j++) {</span>
+<span class="fc" id="L2184">                col = b.indices[j];</span>
+<span class="fc" id="L2185">                sum.entries[i*sum.numCols + col].addEq(b.entries[j]);</span>
             }
         }
 
-<span class="fc" id="L2185">        return sum;</span>
+<span class="fc" id="L2189">        return sum;</span>
     }
 
 
@@ -2196,13 +2200,13 @@ public class Matrix
      */
     @Override
     public Matrix stack(Matrix B) {
-<span class="fc" id="L2199">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
-<span class="fc" id="L2200">        Matrix stacked = new Matrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
+<span class="fc" id="L2203">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
+<span class="fc" id="L2204">        Matrix stacked = new Matrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
 
-<span class="fc" id="L2202">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
-<span class="fc" id="L2203">        System.arraycopy(B.entries, 0, stacked.entries, this.entries.length, B.entries.length);</span>
+<span class="fc" id="L2206">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+<span class="fc" id="L2207">        System.arraycopy(B.entries, 0, stacked.entries, this.entries.length, B.entries.length);</span>
 
-<span class="fc" id="L2205">        return stacked;</span>
+<span class="fc" id="L2209">        return stacked;</span>
     }
 
 
@@ -2216,21 +2220,21 @@ public class Matrix
      */
     @Override
     public Matrix stack(SparseMatrix B) {
-<span class="fc" id="L2219">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
-<span class="fc" id="L2220">        Matrix stacked = new Matrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
+<span class="fc" id="L2223">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
+<span class="fc" id="L2224">        Matrix stacked = new Matrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
 
-<span class="fc" id="L2222">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+<span class="fc" id="L2226">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
 
         int row, col;
 
-<span class="fc bfc" id="L2226" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
-<span class="fc" id="L2227">            row = B.rowIndices[i];</span>
-<span class="fc" id="L2228">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L2230" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="fc" id="L2231">            row = B.rowIndices[i];</span>
+<span class="fc" id="L2232">            col = B.colIndices[i];</span>
             // Offset the row index for destination matrix. i.e. row+this.numRows
-<span class="fc" id="L2230">            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i];</span>
+<span class="fc" id="L2234">            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i];</span>
         }
 
-<span class="fc" id="L2233">        return stacked;</span>
+<span class="fc" id="L2237">        return stacked;</span>
     }
 
 
@@ -2244,22 +2248,22 @@ public class Matrix
      */
     @Override
     public CMatrix stack(CMatrix B) {
-<span class="fc" id="L2247">        ParameterChecks.assertArrayLengthsEq(numCols, B.numCols);</span>
-<span class="fc" id="L2248">        CMatrix stacked = new CMatrix(new Shape(numRows+B.numRows, numCols));</span>
+<span class="fc" id="L2251">        ParameterChecks.assertArrayLengthsEq(numCols, B.numCols);</span>
+<span class="fc" id="L2252">        CMatrix stacked = new CMatrix(new Shape(numRows+B.numRows, numCols));</span>
 
-<span class="fc bfc" id="L2250" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L2251" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L2252">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+<span class="fc bfc" id="L2254" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2255" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2256">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
             }
         }
 
-<span class="fc bfc" id="L2256" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="fc bfc" id="L2257" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
-<span class="fc" id="L2258">                stacked.entries[(i + numRows)*stacked.numCols + j] = B.entries[i*B.numCols+j].copy();</span>
+<span class="fc bfc" id="L2260" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L2261" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L2262">                stacked.entries[(i + numRows)*stacked.numCols + j] = B.entries[i*B.numCols+j].copy();</span>
             }
         }
 
-<span class="fc" id="L2262">        return stacked;</span>
+<span class="fc" id="L2266">        return stacked;</span>
     }
 
 
@@ -2273,24 +2277,24 @@ public class Matrix
      */
     @Override
     public CMatrix stack(SparseCMatrix B) {
-<span class="fc" id="L2276">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
-<span class="fc" id="L2277">        CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
+<span class="fc" id="L2280">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
+<span class="fc" id="L2281">        CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
 
-<span class="fc bfc" id="L2279" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L2280" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L2281">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+<span class="fc bfc" id="L2283" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2284" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2285">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
             }
         }
 
         int row, col;
-<span class="fc bfc" id="L2286" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
-<span class="fc" id="L2287">            row = B.rowIndices[i];</span>
-<span class="fc" id="L2288">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L2290" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="fc" id="L2291">            row = B.rowIndices[i];</span>
+<span class="fc" id="L2292">            col = B.colIndices[i];</span>
             // Offset the row index for destination matrix. i.e. row+this.numRows
-<span class="fc" id="L2290">            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i].copy();</span>
+<span class="fc" id="L2294">            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i].copy();</span>
         }
 
-<span class="fc" id="L2293">        return stacked;</span>
+<span class="fc" id="L2297">        return stacked;</span>
     }
 
 
@@ -2310,15 +2314,15 @@ public class Matrix
     public Matrix stack(Matrix B, int axis) {
         Matrix stacked;
 
-<span class="fc bfc" id="L2313" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L2314">            stacked = this.augment(B);</span>
-<span class="fc bfc" id="L2315" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L2316">            stacked = this.stack(B);</span>
+<span class="fc bfc" id="L2317" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2318">            stacked = this.augment(B);</span>
+<span class="fc bfc" id="L2319" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2320">            stacked = this.stack(B);</span>
         } else {
-<span class="fc" id="L2318">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="fc" id="L2322">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L2321">        return stacked;</span>
+<span class="fc" id="L2325">        return stacked;</span>
     }
 
 
@@ -2338,15 +2342,15 @@ public class Matrix
     public Matrix stack(SparseMatrix B, int axis) {
         Matrix stacked;
 
-<span class="fc bfc" id="L2341" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L2342">            stacked = this.augment(B);</span>
-<span class="fc bfc" id="L2343" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L2344">            stacked = this.stack(B);</span>
+<span class="fc bfc" id="L2345" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2346">            stacked = this.augment(B);</span>
+<span class="fc bfc" id="L2347" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2348">            stacked = this.stack(B);</span>
         } else {
-<span class="fc" id="L2346">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="fc" id="L2350">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L2349">        return stacked;</span>
+<span class="fc" id="L2353">        return stacked;</span>
     }
 
 
@@ -2366,15 +2370,15 @@ public class Matrix
     public CMatrix stack(CMatrix B, int axis) {
         CMatrix stacked;
 
-<span class="fc bfc" id="L2369" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L2370">            stacked = this.augment(B);</span>
-<span class="fc bfc" id="L2371" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L2372">            stacked = this.stack(B);</span>
+<span class="fc bfc" id="L2373" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2374">            stacked = this.augment(B);</span>
+<span class="fc bfc" id="L2375" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2376">            stacked = this.stack(B);</span>
         } else {
-<span class="fc" id="L2374">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="fc" id="L2378">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L2377">        return stacked;</span>
+<span class="fc" id="L2381">        return stacked;</span>
     }
 
 
@@ -2394,15 +2398,15 @@ public class Matrix
     public CMatrix stack(SparseCMatrix B, int axis) {
         CMatrix stacked;
 
-<span class="fc bfc" id="L2397" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L2398">            stacked = this.augment(B);</span>
-<span class="fc bfc" id="L2399" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L2400">            stacked = this.stack(B);</span>
+<span class="fc bfc" id="L2401" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2402">            stacked = this.augment(B);</span>
+<span class="fc bfc" id="L2403" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2404">            stacked = this.stack(B);</span>
         } else {
-<span class="fc" id="L2402">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="fc" id="L2406">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L2405">        return stacked;</span>
+<span class="fc" id="L2409">        return stacked;</span>
     }
 
 
@@ -2416,22 +2420,22 @@ public class Matrix
      */
     @Override
     public Matrix augment(Matrix B) {
-<span class="fc" id="L2419">        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);</span>
-<span class="fc" id="L2420">        Matrix augmented = new Matrix(new Shape(numRows, numCols+B.numCols));</span>
+<span class="fc" id="L2423">        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);</span>
+<span class="fc" id="L2424">        Matrix augmented = new Matrix(new Shape(numRows, numCols+B.numCols));</span>
 
         // Copy entries from this matrix.
-<span class="fc bfc" id="L2423" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc" id="L2424">            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);</span>
+<span class="fc bfc" id="L2427" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L2428">            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);</span>
         }
 
         // Copy entries from the B matrix.
-<span class="fc bfc" id="L2428" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="fc bfc" id="L2429" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
-<span class="fc" id="L2430">                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j];</span>
+<span class="fc bfc" id="L2432" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L2433" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L2434">                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j];</span>
             }
         }
 
-<span class="fc" id="L2434">        return augmented;</span>
+<span class="fc" id="L2438">        return augmented;</span>
     }
 
 
@@ -2445,23 +2449,23 @@ public class Matrix
      */
     @Override
     public Matrix augment(SparseMatrix B) {
-<span class="fc" id="L2448">        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);</span>
-<span class="fc" id="L2449">        Matrix augmented = new Matrix(new Shape(this.numRows, this.numCols+B.numCols));</span>
+<span class="fc" id="L2452">        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);</span>
+<span class="fc" id="L2453">        Matrix augmented = new Matrix(new Shape(this.numRows, this.numCols+B.numCols));</span>
 
         // Copy entries from this matrix.
-<span class="fc bfc" id="L2452" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc" id="L2453">            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);</span>
+<span class="fc bfc" id="L2456" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L2457">            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);</span>
         }
 
         int row, col;
-<span class="fc bfc" id="L2457" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
-<span class="fc" id="L2458">            row = B.rowIndices[i];</span>
-<span class="fc" id="L2459">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L2461" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="fc" id="L2462">            row = B.rowIndices[i];</span>
+<span class="fc" id="L2463">            col = B.colIndices[i];</span>
             // Offset the col index for destination matrix. i.e. col+this.numCols
-<span class="fc" id="L2461">            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i];</span>
+<span class="fc" id="L2465">            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i];</span>
         }
 
-<span class="fc" id="L2464">        return augmented;</span>
+<span class="fc" id="L2468">        return augmented;</span>
     }
 
 
@@ -2475,24 +2479,24 @@ public class Matrix
      */
     @Override
     public CMatrix augment(CMatrix B) {
-<span class="fc" id="L2478">        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);</span>
-<span class="fc" id="L2479">        CMatrix augmented = new CMatrix(new Shape(numRows, numCols+B.numCols));</span>
+<span class="fc" id="L2482">        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);</span>
+<span class="fc" id="L2483">        CMatrix augmented = new CMatrix(new Shape(numRows, numCols+B.numCols));</span>
 
         // Copy entries from this matrix.
-<span class="fc bfc" id="L2482" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L2483" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L2484">                augmented.entries[i*augmented.numCols + j].re = entries[i*numCols + j];</span>
+<span class="fc bfc" id="L2486" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2487" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2488">                augmented.entries[i*augmented.numCols + j].re = entries[i*numCols + j];</span>
             }
         }
 
         // Copy entries from the B matrix.
-<span class="fc bfc" id="L2489" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
-<span class="fc bfc" id="L2490" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
-<span class="fc" id="L2491">                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j].copy();</span>
+<span class="fc bfc" id="L2493" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L2494" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L2495">                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j].copy();</span>
             }
         }
 
-<span class="fc" id="L2495">        return augmented;</span>
+<span class="fc" id="L2499">        return augmented;</span>
     }
 
 
@@ -2506,25 +2510,25 @@ public class Matrix
      */
     @Override
     public CMatrix augment(SparseCMatrix B) {
-<span class="fc" id="L2509">        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);</span>
-<span class="fc" id="L2510">        CMatrix augmented = new CMatrix(new Shape(this.numRows, this.numCols+B.numCols));</span>
+<span class="fc" id="L2513">        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);</span>
+<span class="fc" id="L2514">        CMatrix augmented = new CMatrix(new Shape(this.numRows, this.numCols+B.numCols));</span>
 
         // Copy entries from this matrix.
-<span class="fc bfc" id="L2513" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L2514" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L2515">                augmented.entries[i*augmented.numCols + j].re = entries[i*numCols + j];</span>
+<span class="fc bfc" id="L2517" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2518" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2519">                augmented.entries[i*augmented.numCols + j].re = entries[i*numCols + j];</span>
             }
         }
 
         int row, col;
-<span class="fc bfc" id="L2520" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
-<span class="fc" id="L2521">            row = B.rowIndices[i];</span>
-<span class="fc" id="L2522">            col = B.colIndices[i];</span>
+<span class="fc bfc" id="L2524" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="fc" id="L2525">            row = B.rowIndices[i];</span>
+<span class="fc" id="L2526">            col = B.colIndices[i];</span>
             // Offset the col index for destination matrix. i.e. col+this.numCols
-<span class="fc" id="L2524">            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i].copy();</span>
+<span class="fc" id="L2528">            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i].copy();</span>
         }
 
-<span class="fc" id="L2527">        return augmented;</span>
+<span class="fc" id="L2531">        return augmented;</span>
     }
 
 
@@ -2540,13 +2544,13 @@ public class Matrix
      */
     @Override
     public Matrix stack(Vector b) {
-<span class="fc" id="L2543">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);</span>
-<span class="fc" id="L2544">        Matrix stacked = new Matrix(this.numRows+1, this.numCols);</span>
+<span class="fc" id="L2547">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);</span>
+<span class="fc" id="L2548">        Matrix stacked = new Matrix(this.numRows+1, this.numCols);</span>
 
-<span class="fc" id="L2546">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
-<span class="fc" id="L2547">        System.arraycopy(b.entries, 0, stacked.entries, this.entries.length, b.entries.length);</span>
+<span class="fc" id="L2550">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+<span class="fc" id="L2551">        System.arraycopy(b.entries, 0, stacked.entries, this.entries.length, b.entries.length);</span>
 
-<span class="fc" id="L2549">        return stacked;</span>
+<span class="fc" id="L2553">        return stacked;</span>
     }
 
 
@@ -2562,19 +2566,19 @@ public class Matrix
      */
     @Override
     public Matrix stack(SparseVector b) {
-<span class="fc" id="L2565">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());</span>
-<span class="fc" id="L2566">        Matrix stacked = new Matrix(this.numRows+1, this.numCols);</span>
+<span class="fc" id="L2569">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());</span>
+<span class="fc" id="L2570">        Matrix stacked = new Matrix(this.numRows+1, this.numCols);</span>
 
-<span class="fc" id="L2568">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+<span class="fc" id="L2572">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
 
         int index;
 
-<span class="fc bfc" id="L2572" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L2573">            index = b.indices[i];</span>
-<span class="fc" id="L2574">            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[i];</span>
+<span class="fc bfc" id="L2576" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L2577">            index = b.indices[i];</span>
+<span class="fc" id="L2578">            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[i];</span>
         }
 
-<span class="fc" id="L2577">        return stacked;</span>
+<span class="fc" id="L2581">        return stacked;</span>
     }
 
 
@@ -2590,20 +2594,20 @@ public class Matrix
      */
     @Override
     public CMatrix stack(CVector b) {
-<span class="fc" id="L2593">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);</span>
-<span class="fc" id="L2594">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
+<span class="fc" id="L2597">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);</span>
+<span class="fc" id="L2598">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
 
-<span class="fc bfc" id="L2596" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L2597" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L2598">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+<span class="fc bfc" id="L2600" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2601" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2602">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
             }
         }
 
-<span class="fc bfc" id="L2602" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L2603">            stacked.entries[(stacked.numRows-1)*numCols + i] = b.entries[i].copy();</span>
+<span class="fc bfc" id="L2606" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L2607">            stacked.entries[(stacked.numRows-1)*numCols + i] = b.entries[i].copy();</span>
         }
 
-<span class="fc" id="L2606">        return stacked;</span>
+<span class="fc" id="L2610">        return stacked;</span>
     }
 
 
@@ -2619,22 +2623,22 @@ public class Matrix
      */
     @Override
     public CMatrix stack(SparseCVector b) {
-<span class="fc" id="L2622">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());</span>
-<span class="fc" id="L2623">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
+<span class="fc" id="L2626">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());</span>
+<span class="fc" id="L2627">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
 
-<span class="fc bfc" id="L2625" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L2626" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L2627">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+<span class="fc bfc" id="L2629" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2630" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2631">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
             }
         }
 
         int index;
-<span class="fc bfc" id="L2632" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L2633">            index = b.indices[i];</span>
-<span class="fc" id="L2634">            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[i];</span>
+<span class="fc bfc" id="L2636" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L2637">            index = b.indices[i];</span>
+<span class="fc" id="L2638">            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[i];</span>
         }
 
-<span class="fc" id="L2637">        return stacked;</span>
+<span class="fc" id="L2641">        return stacked;</span>
     }
 
 
@@ -2656,15 +2660,15 @@ public class Matrix
     public Matrix stack(Vector b, int axis) {
         Matrix stacked;
 
-<span class="fc bfc" id="L2659" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L2660">            stacked = this.augment(b);</span>
-<span class="fc bfc" id="L2661" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L2662">            stacked = this.stack(b);</span>
+<span class="fc bfc" id="L2663" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2664">            stacked = this.augment(b);</span>
+<span class="fc bfc" id="L2665" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2666">            stacked = this.stack(b);</span>
         } else {
-<span class="fc" id="L2664">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="fc" id="L2668">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L2667">        return stacked;</span>
+<span class="fc" id="L2671">        return stacked;</span>
     }
 
 
@@ -2686,15 +2690,15 @@ public class Matrix
     public Matrix stack(SparseVector b, int axis) {
         Matrix stacked;
 
-<span class="fc bfc" id="L2689" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L2690">            stacked = this.augment(b);</span>
-<span class="fc bfc" id="L2691" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L2692">            stacked = this.stack(b);</span>
+<span class="fc bfc" id="L2693" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2694">            stacked = this.augment(b);</span>
+<span class="fc bfc" id="L2695" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2696">            stacked = this.stack(b);</span>
         } else {
-<span class="fc" id="L2694">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="fc" id="L2698">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L2697">        return stacked;</span>
+<span class="fc" id="L2701">        return stacked;</span>
     }
 
 
@@ -2716,15 +2720,15 @@ public class Matrix
     public CMatrix stack(CVector b, int axis) {
         CMatrix stacked;
 
-<span class="fc bfc" id="L2719" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L2720">            stacked = this.augment(b);</span>
-<span class="pc bpc" id="L2721" title="1 of 2 branches missed.">        } else if(axis==1) {</span>
-<span class="fc" id="L2722">            stacked = this.stack(b);</span>
+<span class="fc bfc" id="L2723" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2724">            stacked = this.augment(b);</span>
+<span class="pc bpc" id="L2725" title="1 of 2 branches missed.">        } else if(axis==1) {</span>
+<span class="fc" id="L2726">            stacked = this.stack(b);</span>
         } else {
-<span class="nc" id="L2724">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="nc" id="L2728">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L2727">        return stacked;</span>
+<span class="fc" id="L2731">        return stacked;</span>
     }
 
 
@@ -2746,15 +2750,15 @@ public class Matrix
     public CMatrix stack(SparseCVector b, int axis) {
         CMatrix stacked;
 
-<span class="fc bfc" id="L2749" title="All 2 branches covered.">        if(axis==0) {</span>
-<span class="fc" id="L2750">            stacked = this.augment(b);</span>
-<span class="fc bfc" id="L2751" title="All 2 branches covered.">        } else if(axis==1) {</span>
-<span class="fc" id="L2752">            stacked = this.stack(b);</span>
+<span class="fc bfc" id="L2753" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2754">            stacked = this.augment(b);</span>
+<span class="fc bfc" id="L2755" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2756">            stacked = this.stack(b);</span>
         } else {
-<span class="fc" id="L2754">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+<span class="fc" id="L2758">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
         }
 
-<span class="fc" id="L2757">        return stacked;</span>
+<span class="fc" id="L2761">        return stacked;</span>
     }
 
 
@@ -2770,20 +2774,20 @@ public class Matrix
      */
     @Override
     public Matrix augment(Vector b) {
-<span class="fc" id="L2773">        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);</span>
-<span class="fc" id="L2774">        Matrix stacked = new Matrix(numRows, numCols+1);</span>
+<span class="fc" id="L2777">        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);</span>
+<span class="fc" id="L2778">        Matrix stacked = new Matrix(numRows, numCols+1);</span>
 
         // Copy elements of this matrix.
-<span class="fc bfc" id="L2777" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc" id="L2778">            System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);</span>
+<span class="fc bfc" id="L2781" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L2782">            System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);</span>
         }
 
         // Copy elements from b vector.
-<span class="fc bfc" id="L2782" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L2783">            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i];</span>
+<span class="fc bfc" id="L2786" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L2787">            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i];</span>
         }
 
-<span class="fc" id="L2786">        return stacked;</span>
+<span class="fc" id="L2790">        return stacked;</span>
     }
 
 
@@ -2799,21 +2803,21 @@ public class Matrix
      */
     @Override
     public Matrix augment(SparseVector b) {
-<span class="fc" id="L2802">        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());</span>
-<span class="fc" id="L2803">        Matrix stacked = new Matrix(numRows, numCols+1);</span>
+<span class="fc" id="L2806">        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());</span>
+<span class="fc" id="L2807">        Matrix stacked = new Matrix(numRows, numCols+1);</span>
 
         // Copy elements of this matrix.
-<span class="fc bfc" id="L2806" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="pc bpc" id="L2807" title="1 of 2 branches missed.">            if (numCols &gt;= 0)</span>
-<span class="fc" id="L2808">                System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);</span>
+<span class="fc bfc" id="L2810" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="pc bpc" id="L2811" title="1 of 2 branches missed.">            if (numCols &gt;= 0)</span>
+<span class="fc" id="L2812">                System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);</span>
         }
 
         // Copy elements from b vector.
-<span class="fc bfc" id="L2812" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L2813">            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i];</span>
+<span class="fc bfc" id="L2816" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L2817">            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i];</span>
         }
 
-<span class="fc" id="L2816">        return stacked;</span>
+<span class="fc" id="L2820">        return stacked;</span>
     }
 
 
@@ -2829,22 +2833,22 @@ public class Matrix
      */
     @Override
     public CMatrix augment(CVector b) {
-<span class="fc" id="L2832">        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);</span>
-<span class="fc" id="L2833">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
+<span class="fc" id="L2836">        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);</span>
+<span class="fc" id="L2837">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
 
         // Copy elements of this matrix.
-<span class="fc bfc" id="L2836" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L2837" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L2838">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+<span class="fc bfc" id="L2840" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2841" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2842">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
             }
         }
 
         // Copy elements from b vector.
-<span class="fc bfc" id="L2843" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L2844">            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();</span>
+<span class="fc bfc" id="L2847" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L2848">            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();</span>
         }
 
-<span class="fc" id="L2847">        return stacked;</span>
+<span class="fc" id="L2851">        return stacked;</span>
     }
 
 
@@ -2860,22 +2864,22 @@ public class Matrix
      */
     @Override
     public CMatrix augment(SparseCVector b) {
-<span class="fc" id="L2863">        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());</span>
-<span class="fc" id="L2864">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
+<span class="fc" id="L2867">        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());</span>
+<span class="fc" id="L2868">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
 
         // Copy elements of this matrix.
-<span class="fc bfc" id="L2867" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L2868" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
-<span class="fc" id="L2869">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+<span class="fc bfc" id="L2871" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2872" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2873">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
             }
         }
 
         // Copy elements from b vector.
-<span class="fc bfc" id="L2874" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
-<span class="fc" id="L2875">            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();</span>
+<span class="fc bfc" id="L2878" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L2879">            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();</span>
         }
 
-<span class="fc" id="L2878">        return stacked;</span>
+<span class="fc" id="L2882">        return stacked;</span>
     }
 
 
@@ -2889,12 +2893,12 @@ public class Matrix
      */
     @Override
     public Matrix getRow(int rowIdx) {
-<span class="fc" id="L2892">        int start = rowIdx*numCols;</span>
-<span class="fc" id="L2893">        int stop = start+numCols;</span>
+<span class="fc" id="L2896">        int start = rowIdx*numCols;</span>
+<span class="fc" id="L2897">        int stop = start+numCols;</span>
 
-<span class="fc" id="L2895">        double[] row = Arrays.copyOfRange(this.entries, start, stop);</span>
+<span class="fc" id="L2899">        double[] row = Arrays.copyOfRange(this.entries, start, stop);</span>
 
-<span class="fc" id="L2897">        return new Matrix(new Shape(1, numCols), row);</span>
+<span class="fc" id="L2901">        return new Matrix(new Shape(1, numCols), row);</span>
     }
 
 
@@ -2907,9 +2911,9 @@ public class Matrix
      * the number of rows in this matrix.
      */
     public Vector getRowAsVector(int rowIdx) {
-<span class="fc" id="L2910">        int start = rowIdx*numCols;</span>
-<span class="fc" id="L2911">        int stop = start+numCols;</span>
-<span class="fc" id="L2912">        return new Vector(Arrays.copyOfRange(this.entries, start, stop));</span>
+<span class="fc" id="L2914">        int start = rowIdx*numCols;</span>
+<span class="fc" id="L2915">        int stop = start+numCols;</span>
+<span class="fc" id="L2916">        return new Vector(Arrays.copyOfRange(this.entries, start, stop));</span>
     }
 
 
@@ -2923,13 +2927,13 @@ public class Matrix
      */
     @Override
     public Matrix getCol(int colIdx) {
-<span class="fc" id="L2926">        double[] col = new double[numRows];</span>
+<span class="fc" id="L2930">        double[] col = new double[numRows];</span>
 
-<span class="fc bfc" id="L2928" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc" id="L2929">            col[i] = entries[i*numCols + colIdx];</span>
+<span class="fc bfc" id="L2932" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L2933">            col[i] = entries[i*numCols + colIdx];</span>
         }
 
-<span class="fc" id="L2932">        return new Matrix(new Shape(numRows, 1), col);</span>
+<span class="fc" id="L2936">        return new Matrix(new Shape(numRows, 1), col);</span>
     }
 
 
@@ -2944,13 +2948,13 @@ public class Matrix
      */
     @Override
     public Matrix getColBelow(int rowStart, int colIdx) {
-<span class="fc" id="L2947">        double[] col = new double[numRows-rowStart];</span>
+<span class="fc" id="L2951">        double[] col = new double[numRows-rowStart];</span>
 
-<span class="fc bfc" id="L2949" title="All 2 branches covered.">        for(int i=rowStart; i&lt;numRows; i++) {</span>
-<span class="fc" id="L2950">            col[i-rowStart] = entries[i*numCols + colIdx];</span>
+<span class="fc bfc" id="L2953" title="All 2 branches covered.">        for(int i=rowStart; i&lt;numRows; i++) {</span>
+<span class="fc" id="L2954">            col[i-rowStart] = entries[i*numCols + colIdx];</span>
         }
 
-<span class="fc" id="L2953">        return new Matrix(new Shape(col.length, 1), col);</span>
+<span class="fc" id="L2957">        return new Matrix(new Shape(col.length, 1), col);</span>
     }
 
 
@@ -2965,12 +2969,12 @@ public class Matrix
      */
     @Override
     public Matrix getRowAfter(int colStart, int rowIdx) {
-<span class="fc bfc" id="L2968" title="All 8 branches covered.">        if(rowIdx &gt; this.numRows ||  rowIdx &lt; 0 || colStart &gt; this.numCols || colStart &lt; 0) {</span>
-<span class="fc" id="L2969">            throw new ArrayIndexOutOfBoundsException(String.format(&quot;Index (%d, %d) not in matrix.&quot;, rowIdx, colStart));</span>
+<span class="fc bfc" id="L2972" title="All 8 branches covered.">        if(rowIdx &gt; this.numRows ||  rowIdx &lt; 0 || colStart &gt; this.numCols || colStart &lt; 0) {</span>
+<span class="fc" id="L2973">            throw new ArrayIndexOutOfBoundsException(String.format(&quot;Index (%d, %d) not in matrix.&quot;, rowIdx, colStart));</span>
         }
 
-<span class="fc" id="L2972">        double[] row = Arrays.copyOfRange(this.entries, rowIdx*this.numCols + colStart, (rowIdx+1)*this.numCols);</span>
-<span class="fc" id="L2973">        return new Matrix(new Shape(1, row.length), row);</span>
+<span class="fc" id="L2976">        double[] row = Arrays.copyOfRange(this.entries, rowIdx*this.numCols + colStart, (rowIdx+1)*this.numCols);</span>
+<span class="fc" id="L2977">        return new Matrix(new Shape(1, row.length), row);</span>
     }
 
 
@@ -2984,13 +2988,13 @@ public class Matrix
      * the number of rows in this matrix.
      */
     public Vector getColAsVector(int colIdx) {
-<span class="fc" id="L2987">        double[] col = new double[numRows];</span>
+<span class="fc" id="L2991">        double[] col = new double[numRows];</span>
 
-<span class="fc bfc" id="L2989" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc" id="L2990">            col[i] = entries[i*numCols + colIdx];</span>
+<span class="fc bfc" id="L2993" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L2994">            col[i] = entries[i*numCols + colIdx];</span>
         }
 
-<span class="fc" id="L2993">        return new Vector(col);</span>
+<span class="fc" id="L2997">        return new Vector(col);</span>
     }
 
 
@@ -3004,15 +3008,15 @@ public class Matrix
      */
     @Override
     public Double trace() {
-<span class="fc" id="L3007">        ParameterChecks.assertSquare(this.shape);</span>
-<span class="fc" id="L3008">        double sum = 0;</span>
-<span class="fc" id="L3009">        int colsOffset = this.numCols+1;</span>
+<span class="fc" id="L3011">        ParameterChecks.assertSquare(this.shape);</span>
+<span class="fc" id="L3012">        double sum = 0;</span>
+<span class="fc" id="L3013">        int colsOffset = this.numCols+1;</span>
 
-<span class="fc bfc" id="L3011" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
-<span class="fc" id="L3012">            sum += this.entries[i*colsOffset];</span>
+<span class="fc bfc" id="L3015" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L3016">            sum += this.entries[i*colsOffset];</span>
         }
 
-<span class="fc" id="L3015">        return sum;</span>
+<span class="fc" id="L3019">        return sum;</span>
     }
 
 
@@ -3025,7 +3029,44 @@ public class Matrix
      */
     @Override
     public Double tr() {
-<span class="fc" id="L3028">        return trace();</span>
+<span class="fc" id="L3032">        return trace();</span>
+    }
+
+
+    /**
+     * Computes the inverse of this matrix. This is done by computing the {@link LUDecomposition LU decomposition} of
+     * this matrix, inverting {@code U} using a back-solve algorithm, then solving {@code inv(this)*L=inv(U)}
+     * for {@code inv(this)}.
+     *
+     * @return The inverse of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     * @throws RuntimeException If this matrix is singular (i.e. not invertible).
+     * @see #isInvertible()
+     */
+    @Override
+    public Matrix inv() {
+<span class="fc" id="L3048">        ParameterChecks.assertSquare(shape);</span>
+<span class="fc" id="L3049">        LUDecomposition&lt;Matrix&gt; lu = new RealLUDecomposition().decompose(this);</span>
+
+<span class="fc" id="L3051">        double tol = 1.0E-12; // Tolerance for determining if determinant is zero.</span>
+<span class="fc" id="L3052">        double det = RealDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());</span>
+
+<span class="fc bfc" id="L3054" title="All 2 branches covered.">        if(Math.abs(det) &lt; tol) {</span>
+<span class="fc" id="L3055">            throw new RuntimeException(&quot;Cannot invert. Matrix is singular.&quot;);</span>
+        }
+
+        // Solve inv(A)*L = inv(U) for inv(A) by solving L^T*inv(A)^T = inv(U)^T
+<span class="fc" id="L3059">        RealLUSolver solver = new RealLUSolver(); // TODO: Need to add solve(Matrix, Matrix) to the class for more efficient solving.</span>
+<span class="fc" id="L3060">        Matrix UinvT = Invert.invTriU(lu.getU()).T();</span>
+<span class="fc" id="L3061">        Matrix LT = lu.getL().T();</span>
+<span class="fc" id="L3062">        Matrix inverse = new Matrix(shape);</span>
+
+<span class="fc bfc" id="L3064" title="All 2 branches covered.">        for(int i=0; i&lt;UinvT.numCols; i++) {</span>
+<span class="fc" id="L3065">            Vector col = solver.solve(LT, UinvT.getColAsVector(i));</span>
+<span class="fc" id="L3066">            inverse.setRow(col.entries, i); // Implicit transpose here.</span>
+        }
+
+<span class="fc" id="L3069">        return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.</span>
     }
 
 
@@ -3037,7 +3078,7 @@ public class Matrix
      * @throws IllegalArgumentException If the specified size is less than 1.
      */
     public static Matrix I(int size) {
-<span class="fc" id="L3040">        return I(size, size);</span>
+<span class="fc" id="L3081">        return I(size, size);</span>
     }
 
 
@@ -3051,15 +3092,15 @@ public class Matrix
      * @throws IllegalArgumentException If the specified number of rows or columns is less than 1.
      */
     public static Matrix I(int numRows, int numCols) {
-<span class="fc" id="L3054">        ParameterChecks.assertGreaterEq(1, numRows, numCols);</span>
-<span class="fc" id="L3055">        Matrix I = new Matrix(numRows, numCols);</span>
-<span class="fc" id="L3056">        int stop = Math.min(numRows, numCols);</span>
+<span class="fc" id="L3095">        ParameterChecks.assertGreaterEq(1, numRows, numCols);</span>
+<span class="fc" id="L3096">        Matrix I = new Matrix(numRows, numCols);</span>
+<span class="fc" id="L3097">        int stop = Math.min(numRows, numCols);</span>
 
-<span class="fc bfc" id="L3058" title="All 2 branches covered.">        for(int i=0; i&lt;stop; i++) {</span>
-<span class="fc" id="L3059">            I.entries[i*numCols+i] = 1;</span>
+<span class="fc bfc" id="L3099" title="All 2 branches covered.">        for(int i=0; i&lt;stop; i++) {</span>
+<span class="fc" id="L3100">            I.entries[i*numCols+i] = 1;</span>
         }
 
-<span class="fc" id="L3062">        return I;</span>
+<span class="fc" id="L3103">        return I;</span>
     }
 
 
@@ -3072,8 +3113,8 @@ public class Matrix
      * @throws IllegalArgumentException If the specified shape is not rank 2.
      */
     public static Matrix I(Shape shape) {
-<span class="fc" id="L3075">        ParameterChecks.assertRank(2, shape);</span>
-<span class="fc" id="L3076">        return I(shape.get(0), shape.get(1));</span>
+<span class="fc" id="L3116">        ParameterChecks.assertRank(2, shape);</span>
+<span class="fc" id="L3117">        return I(shape.get(0), shape.get(1));</span>
     }
 
 
@@ -3084,7 +3125,7 @@ public class Matrix
      */
     @Override
     public boolean isSquare() {
-<span class="fc bfc" id="L3087" title="All 2 branches covered.">        return numRows==numCols;</span>
+<span class="fc bfc" id="L3128" title="All 2 branches covered.">        return numRows==numCols;</span>
     }
 
 
@@ -3095,7 +3136,7 @@ public class Matrix
      */
     @Override
     public boolean isVector() {
-<span class="fc bfc" id="L3098" title="All 4 branches covered.">        return numRows&lt;=1 || numCols&lt;=1;</span>
+<span class="fc bfc" id="L3139" title="All 4 branches covered.">        return numRows&lt;=1 || numCols&lt;=1;</span>
     }
 
 
@@ -3111,21 +3152,21 @@ public class Matrix
     public int vectorType() {
         int type;
 
-<span class="fc bfc" id="L3114" title="All 4 branches covered.">        if(numRows==1 || numCols==1) {</span>
-<span class="fc bfc" id="L3115" title="All 4 branches covered.">            if(numRows==1 &amp;&amp; numCols==1) {</span>
-<span class="fc" id="L3116">                type = 0;</span>
-<span class="fc bfc" id="L3117" title="All 2 branches covered.">            } else if(numRows==1) {</span>
-<span class="fc" id="L3118">                type = 1;</span>
+<span class="fc bfc" id="L3155" title="All 4 branches covered.">        if(numRows==1 || numCols==1) {</span>
+<span class="fc bfc" id="L3156" title="All 4 branches covered.">            if(numRows==1 &amp;&amp; numCols==1) {</span>
+<span class="fc" id="L3157">                type = 0;</span>
+<span class="fc bfc" id="L3158" title="All 2 branches covered.">            } else if(numRows==1) {</span>
+<span class="fc" id="L3159">                type = 1;</span>
             } else {
                 // Then this matrix is equivalent to a column vector.
-<span class="fc" id="L3121">                type = 2;</span>
+<span class="fc" id="L3162">                type = 2;</span>
             }
         } else {
             // Then this matrix is not equivalent to any vector.
-<span class="fc" id="L3125">            type = -1;</span>
+<span class="fc" id="L3166">            type = -1;</span>
         }
 
-<span class="fc" id="L3128">        return type;</span>
+<span class="fc" id="L3169">        return type;</span>
     }
 
 
@@ -3136,7 +3177,7 @@ public class Matrix
      */
     @Override
     public boolean isTri() {
-<span class="fc bfc" id="L3139" title="All 4 branches covered.">        return isTriL() || isTriU();</span>
+<span class="fc bfc" id="L3180" title="All 4 branches covered.">        return isTriL() || isTriU();</span>
     }
 
 
@@ -3147,20 +3188,20 @@ public class Matrix
      */
     @Override
     public boolean isTriL() {
-<span class="fc" id="L3150">        boolean result = isSquare();</span>
+<span class="fc" id="L3191">        boolean result = isSquare();</span>
 
-<span class="fc bfc" id="L3152" title="All 2 branches covered.">        if(result) {</span>
+<span class="fc bfc" id="L3193" title="All 2 branches covered.">        if(result) {</span>
             // Ensure upper half is zeros.
-<span class="fc bfc" id="L3154" title="All 2 branches covered.">            for(int i=0; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L3155" title="All 2 branches covered.">                for(int j=i+1; j&lt;numCols; j++) {</span>
-<span class="fc bfc" id="L3156" title="All 2 branches covered.">                    if(entries[i*numCols + j] != 0) {</span>
-<span class="fc" id="L3157">                        return false; // No need to continue.</span>
+<span class="fc bfc" id="L3195" title="All 2 branches covered.">            for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L3196" title="All 2 branches covered.">                for(int j=i+1; j&lt;numCols; j++) {</span>
+<span class="fc bfc" id="L3197" title="All 2 branches covered.">                    if(entries[i*numCols + j] != 0) {</span>
+<span class="fc" id="L3198">                        return false; // No need to continue.</span>
                     }
                 }
             }
         }
 
-<span class="fc" id="L3163">        return result;</span>
+<span class="fc" id="L3204">        return result;</span>
     }
 
 
@@ -3171,20 +3212,20 @@ public class Matrix
      */
     @Override
     public boolean isTriU() {
-<span class="fc" id="L3174">        boolean result = isSquare();</span>
+<span class="fc" id="L3215">        boolean result = isSquare();</span>
 
-<span class="fc bfc" id="L3176" title="All 2 branches covered.">        if(result) {</span>
+<span class="fc bfc" id="L3217" title="All 2 branches covered.">        if(result) {</span>
             // Ensure lower half is zeros.
-<span class="fc bfc" id="L3178" title="All 2 branches covered.">            for(int i=1; i&lt;numRows; i++) {</span>
-<span class="fc bfc" id="L3179" title="All 2 branches covered.">                for(int j=0; j&lt;i; j++) {</span>
-<span class="fc bfc" id="L3180" title="All 2 branches covered.">                    if(entries[i*numCols + j] != 0) {</span>
-<span class="fc" id="L3181">                        return false; // No need to continue.</span>
+<span class="fc bfc" id="L3219" title="All 2 branches covered.">            for(int i=1; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L3220" title="All 2 branches covered.">                for(int j=0; j&lt;i; j++) {</span>
+<span class="fc bfc" id="L3221" title="All 2 branches covered.">                    if(entries[i*numCols + j] != 0) {</span>
+<span class="fc" id="L3222">                        return false; // No need to continue.</span>
                     }
                 }
             }
         }
 
-<span class="fc" id="L3187">        return result;</span>
+<span class="fc" id="L3228">        return result;</span>
     }
 
 
@@ -3195,7 +3236,7 @@ public class Matrix
      */
     @Override
     public boolean isDiag() {
-<span class="fc bfc" id="L3198" title="All 4 branches covered.">        return isTriL() &amp;&amp; isTriU();</span>
+<span class="fc bfc" id="L3239" title="All 4 branches covered.">        return isTriL() &amp;&amp; isTriU();</span>
     }
 
 
@@ -3206,8 +3247,7 @@ public class Matrix
      */
     @Override
     public boolean isFullRank() {
-        // TODO: Implementation
-<span class="nc" id="L3210">        return false;</span>
+<span class="nc bnc" id="L3250" title="All 2 branches missed.">        return matrixRank() == Math.min(numRows, numCols);</span>
     }
 
 
@@ -3220,7 +3260,7 @@ public class Matrix
     @Override
     public boolean isSingular() {
         // TODO: Implementation
-<span class="nc" id="L3223">        return false;</span>
+<span class="nc" id="L3263">        return false;</span>
     }
 
 
@@ -3232,7 +3272,7 @@ public class Matrix
      */
     @Override
     public boolean isInvertible() {
-<span class="nc bnc" id="L3235" title="All 2 branches missed.">        return !isSingular();</span>
+<span class="nc bnc" id="L3275" title="All 2 branches missed.">        return !isSingular();</span>
     }
 
 
@@ -3245,7 +3285,7 @@ public class Matrix
      */
     @Override
     public double norm(double p, double q) {
-<span class="fc" id="L3248">        return RealDenseOperations.matrixNormLpq(entries, shape, p, q);</span>
+<span class="fc" id="L3288">        return RealDenseOperations.matrixNormLpq(entries, shape, p, q);</span>
     }
 
 
@@ -3258,7 +3298,7 @@ public class Matrix
     @Override
     public boolean isDiagonalizable() {
         // TODO: Implementation
-<span class="nc" id="L3261">        return false;</span>
+<span class="nc" id="L3301">        return false;</span>
     }
 
 
@@ -3271,19 +3311,19 @@ public class Matrix
      */
     @Override
     public Matrix swapRows(int rowIndex1, int rowIndex2) {
-<span class="fc" id="L3274">        ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);</span>
-<span class="fc" id="L3275">        ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);</span>
-<span class="fc" id="L3276">        ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);</span>
+<span class="fc" id="L3314">        ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);</span>
+<span class="fc" id="L3315">        ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);</span>
+<span class="fc" id="L3316">        ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);</span>
 
         double temp;
-<span class="fc bfc" id="L3279" title="All 2 branches covered.">        for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc bfc" id="L3319" title="All 2 branches covered.">        for(int j=0; j&lt;numCols; j++) {</span>
             // Swap elements.
-<span class="fc" id="L3281">            temp = entries[rowIndex1*numCols + j];</span>
-<span class="fc" id="L3282">            entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];</span>
-<span class="fc" id="L3283">            entries[rowIndex2*numCols + j] = temp;</span>
+<span class="fc" id="L3321">            temp = entries[rowIndex1*numCols + j];</span>
+<span class="fc" id="L3322">            entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];</span>
+<span class="fc" id="L3323">            entries[rowIndex2*numCols + j] = temp;</span>
         }
 
-<span class="fc" id="L3286">        return this;</span>
+<span class="fc" id="L3326">        return this;</span>
     }
 
 
@@ -3296,19 +3336,19 @@ public class Matrix
      */
     @Override
     public Matrix swapCols(int colIndex1, int colIndex2) {
-<span class="fc" id="L3299">        ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);</span>
-<span class="fc" id="L3300">        ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);</span>
-<span class="fc" id="L3301">        ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);</span>
+<span class="fc" id="L3339">        ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);</span>
+<span class="fc" id="L3340">        ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);</span>
+<span class="fc" id="L3341">        ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);</span>
 
         double temp;
-<span class="fc bfc" id="L3304" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L3344" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
             // Swap elements.
-<span class="fc" id="L3306">            temp = entries[i*numCols + colIndex1];</span>
-<span class="fc" id="L3307">            entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];</span>
-<span class="fc" id="L3308">            entries[i*numCols + colIndex2] = temp;</span>
+<span class="fc" id="L3346">            temp = entries[i*numCols + colIndex1];</span>
+<span class="fc" id="L3347">            entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];</span>
+<span class="fc" id="L3348">            entries[i*numCols + colIndex2] = temp;</span>
         }
 
-<span class="fc" id="L3311">        return this;</span>
+<span class="fc" id="L3351">        return this;</span>
     }
 
 
@@ -3319,7 +3359,7 @@ public class Matrix
      */
     @Override
     public double norm() {
-<span class="fc" id="L3322">        return RealDenseOperations.matrixNormL2(entries, shape);</span>
+<span class="fc" id="L3362">        return RealDenseOperations.matrixNormL2(entries, shape);</span>
     }
 
 
@@ -3333,7 +3373,7 @@ public class Matrix
      */
     @Override
     public double norm(double p) {
-<span class="fc" id="L3336">        return RealDenseOperations.matrixNormLp(entries, shape, p);</span>
+<span class="fc" id="L3376">        return RealDenseOperations.matrixNormLp(entries, shape, p);</span>
     }
 
 
@@ -3345,7 +3385,7 @@ public class Matrix
      */
     @Override
     public double maxNorm() {
-<span class="fc" id="L3348">        return RealDenseOperations.matrixMaxNorm(entries);</span>
+<span class="fc" id="L3388">        return RealDenseOperations.matrixMaxNorm(entries);</span>
     }
 
 
@@ -3357,7 +3397,7 @@ public class Matrix
      */
     @Override
     public double infNorm() {
-<span class="fc" id="L3360">        return RealDenseOperations.matrixInfNorm(entries, shape);</span>
+<span class="fc" id="L3400">        return RealDenseOperations.matrixInfNorm(entries, shape);</span>
     }
 
 
@@ -3369,22 +3409,19 @@ public class Matrix
      */
     @Override
     public int matrixRank() {
-<span class="nc" id="L3372">        Matrix S = new RealSVD(false).decompose(this).getS();</span>
-<span class="nc" id="L3373">        int stopIdx = Math.min(numRows, numCols);</span>
+<span class="nc" id="L3412">        Matrix S = new RealSVD(false).decompose(this).getS();</span>
+<span class="nc" id="L3413">        int stopIdx = Math.min(numRows, numCols);</span>
 
-<span class="nc" id="L3375">        double tol = 1.0E-8;</span>
-<span class="nc" id="L3376">        System.out.println(&quot;tol: &quot; + tol);</span>
-<span class="nc" id="L3377">        int rank = 0;</span>
-<span class="nc" id="L3378">        PrintOptions.setPrecision(100);</span>
-<span class="nc" id="L3379">        System.out.println(S);</span>
+<span class="nc" id="L3415">        double tol = 1.0E-8; // Tolerance for determining if a singular value should be considered zero.</span>
+<span class="nc" id="L3416">        int rank = 0;</span>
 
-<span class="nc bnc" id="L3381" title="All 2 branches missed.">        for(int i=0; i&lt;stopIdx; i++) {</span>
-<span class="nc bnc" id="L3382" title="All 2 branches missed.">            if(S.get(i, i)&gt;tol) {</span>
-<span class="nc" id="L3383">                rank++;</span>
+<span class="nc bnc" id="L3418" title="All 2 branches missed.">        for(int i=0; i&lt;stopIdx; i++) {</span>
+<span class="nc bnc" id="L3419" title="All 2 branches missed.">            if(S.get(i, i)&gt;tol) {</span>
+<span class="nc" id="L3420">                rank++;</span>
             }
         }
 
-<span class="nc" id="L3387">        return rank;</span>
+<span class="nc" id="L3424">        return rank;</span>
     }
 
 
@@ -3399,35 +3436,35 @@ public class Matrix
     private String rowToString(int i, int colStopIndex, List&lt;Integer&gt; maxList) {
         int width;
         String value;
-<span class="fc" id="L3402">        StringBuilder result = new StringBuilder();</span>
+<span class="fc" id="L3439">        StringBuilder result = new StringBuilder();</span>
 
-<span class="fc bfc" id="L3404" title="All 2 branches covered.">        if(i&gt;0) {</span>
-<span class="fc" id="L3405">            result.append(&quot; [&quot;);</span>
+<span class="fc bfc" id="L3441" title="All 2 branches covered.">        if(i&gt;0) {</span>
+<span class="fc" id="L3442">            result.append(&quot; [&quot;);</span>
         }  else {
-<span class="fc" id="L3407">            result.append(&quot;[&quot;);</span>
+<span class="fc" id="L3444">            result.append(&quot;[&quot;);</span>
         }
 
-<span class="fc bfc" id="L3410" title="All 2 branches covered.">        for(int j=0; j&lt;colStopIndex; j++) {</span>
-<span class="fc" id="L3411">            value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());</span>
-<span class="fc" id="L3412">            width = PrintOptions.getPadding() + maxList.get(j);</span>
-<span class="fc bfc" id="L3413" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L3414">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L3447" title="All 2 branches covered.">        for(int j=0; j&lt;colStopIndex; j++) {</span>
+<span class="fc" id="L3448">            value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());</span>
+<span class="fc" id="L3449">            width = PrintOptions.getPadding() + maxList.get(j);</span>
+<span class="fc bfc" id="L3450" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L3451">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
-<span class="fc bfc" id="L3417" title="All 2 branches covered.">        if(PrintOptions.getMaxColumns() &lt; this.numCols) {</span>
-<span class="fc" id="L3418">            width = PrintOptions.getPadding() + 3;</span>
-<span class="fc" id="L3419">            value = &quot;...&quot;;</span>
-<span class="pc bpc" id="L3420" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L3421">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+<span class="fc bfc" id="L3454" title="All 2 branches covered.">        if(PrintOptions.getMaxColumns() &lt; this.numCols) {</span>
+<span class="fc" id="L3455">            width = PrintOptions.getPadding() + 3;</span>
+<span class="fc" id="L3456">            value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L3457" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L3458">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
         }
 
         // Get last entry in the column now
-<span class="fc" id="L3425">        value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());</span>
-<span class="fc" id="L3426">        width = PrintOptions.getPadding() + maxList.get(maxList.size()-1);</span>
-<span class="fc bfc" id="L3427" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L3428">        result.append(String.format(&quot;%-&quot; + width + &quot;s]&quot;, value));</span>
+<span class="fc" id="L3462">        value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());</span>
+<span class="fc" id="L3463">        width = PrintOptions.getPadding() + maxList.get(maxList.size()-1);</span>
+<span class="fc bfc" id="L3464" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L3465">        result.append(String.format(&quot;%-&quot; + width + &quot;s]&quot;, value));</span>
 
-<span class="fc" id="L3430">        return result.toString();</span>
+<span class="fc" id="L3467">        return result.toString();</span>
     }
 
 
@@ -3437,7 +3474,7 @@ public class Matrix
      */
     @Override
     public boolean isSymmetric() {
-<span class="fc" id="L3440">        return RealDenseProperties.isSymmetric(entries, shape);</span>
+<span class="fc" id="L3477">        return RealDenseProperties.isSymmetric(entries, shape);</span>
     }
 
 
@@ -3448,7 +3485,7 @@ public class Matrix
      */
     @Override
     public boolean isAntiSymmetric() {
-<span class="nc" id="L3451">        return RealDenseProperties.isAntiSymmetric(entries, shape);</span>
+<span class="nc" id="L3488">        return RealDenseProperties.isAntiSymmetric(entries, shape);</span>
     }
 
 
@@ -3460,10 +3497,10 @@ public class Matrix
     @Override
     public boolean isOrthogonal() {
         // TODO: Add approxEq(Object A, double threshold) method to check for approximate equivalence.
-<span class="fc bfc" id="L3463" title="All 2 branches covered.">        if(isSquare()) {</span>
-<span class="fc" id="L3464">            return this.mult(this.T()).round().equals(I(numRows));</span>
+<span class="fc bfc" id="L3500" title="All 2 branches covered.">        if(isSquare()) {</span>
+<span class="fc" id="L3501">            return this.mult(this.T()).round().equals(I(numRows));</span>
         } else {
-<span class="fc" id="L3466">            return false;</span>
+<span class="fc" id="L3503">            return false;</span>
         }
     }
 
@@ -3477,7 +3514,7 @@ public class Matrix
      */
     @Override
     public CMatrix sqrtComplex() {
-<span class="fc" id="L3480">        return new CMatrix(shape, ComplexOperations.sqrt(entries));</span>
+<span class="fc" id="L3517">        return new CMatrix(shape, ComplexOperations.sqrt(entries));</span>
     }
 
 
@@ -3487,70 +3524,75 @@ public class Matrix
      * @return Matrix represented as a human-readable String
      */
     public String toString() {
-<span class="fc" id="L3490">        StringBuilder result  = new StringBuilder();</span>
+<span class="fc" id="L3527">        StringBuilder result  = new StringBuilder();</span>
 
-<span class="fc bfc" id="L3492" title="All 4 branches covered.">        if(PrintOptions.getMaxRows() &lt; this.numRows || PrintOptions.getMaxColumns() &lt; this.numCols) {</span>
+<span class="fc bfc" id="L3529" title="All 4 branches covered.">        if(PrintOptions.getMaxRows() &lt; this.numRows || PrintOptions.getMaxColumns() &lt; this.numCols) {</span>
             // Then also get the full size of the matrix.
-<span class="fc" id="L3494">            result.append(String.format(&quot;Full Shape: %s\n&quot;, this.shape));</span>
+<span class="fc" id="L3531">            result.append(String.format(&quot;Full Shape: %s\n&quot;, this.shape));</span>
         }
 
-<span class="fc" id="L3497">        result.append(&quot;[&quot;);</span>
+<span class="fc" id="L3534">        result.append(&quot;[&quot;);</span>
 
-<span class="pc bpc" id="L3499" title="1 of 2 branches missed.">        if(entries.length==0) {</span>
-<span class="nc" id="L3500">            result.append(&quot;[]&quot;); // No entries in this matrix.</span>
+<span class="pc bpc" id="L3536" title="1 of 2 branches missed.">        if(entries.length==0) {</span>
+<span class="nc" id="L3537">            result.append(&quot;[]&quot;); // No entries in this matrix.</span>
         } else {
-<span class="fc" id="L3502">            int rowStopIndex = Math.min(PrintOptions.getMaxRows() - 1, this.numRows - 1);</span>
-<span class="fc" id="L3503">            int colStopIndex = Math.min(PrintOptions.getMaxColumns() - 1, this.numCols - 1);</span>
+<span class="fc" id="L3539">            int rowStopIndex = Math.min(PrintOptions.getMaxRows() - 1, this.numRows - 1);</span>
+<span class="fc" id="L3540">            int colStopIndex = Math.min(PrintOptions.getMaxColumns() - 1, this.numCols - 1);</span>
             int width;
-<span class="fc" id="L3505">            int totalRowLength = 0; // Total string length of each row (not including brackets)</span>
+<span class="fc" id="L3542">            int totalRowLength = 0; // Total string length of each row (not including brackets)</span>
             String value;
 
             // Find maximum entry string width in each column so columns can be aligned.
-<span class="fc" id="L3509">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;(colStopIndex + 1);</span>
-<span class="fc bfc" id="L3510" title="All 2 branches covered.">            for (int j = 0; j &lt; colStopIndex; j++) {</span>
-<span class="fc" id="L3511">                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));</span>
-<span class="fc" id="L3512">                totalRowLength += maxList.get(maxList.size() - 1);</span>
+<span class="fc" id="L3546">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;(colStopIndex + 1);</span>
+<span class="fc bfc" id="L3547" title="All 2 branches covered.">            for (int j = 0; j &lt; colStopIndex; j++) {</span>
+<span class="fc" id="L3548">                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));</span>
+<span class="fc" id="L3549">                totalRowLength += maxList.get(maxList.size() - 1);</span>
             }
 
-<span class="pc bpc" id="L3515" title="1 of 2 branches missed.">            if (colStopIndex &lt; this.numCols) {</span>
-<span class="fc" id="L3516">                maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols - 1).entries));</span>
-<span class="fc" id="L3517">                totalRowLength += maxList.get(maxList.size() - 1);</span>
+<span class="pc bpc" id="L3552" title="1 of 2 branches missed.">            if (colStopIndex &lt; this.numCols) {</span>
+<span class="fc" id="L3553">                maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols - 1).entries));</span>
+<span class="fc" id="L3554">                totalRowLength += maxList.get(maxList.size() - 1);</span>
             }
 
-<span class="fc bfc" id="L3520" title="All 2 branches covered.">            if (colStopIndex &lt; this.numCols - 1) {</span>
-<span class="fc" id="L3521">                totalRowLength += 3 + PrintOptions.getPadding(); // Account for '...' element with padding in each column.</span>
+<span class="fc bfc" id="L3557" title="All 2 branches covered.">            if (colStopIndex &lt; this.numCols - 1) {</span>
+<span class="fc" id="L3558">                totalRowLength += 3 + PrintOptions.getPadding(); // Account for '...' element with padding in each column.</span>
             }
 
-<span class="fc" id="L3524">            totalRowLength += maxList.size() * PrintOptions.getPadding(); // Account for column padding</span>
+<span class="fc" id="L3561">            totalRowLength += maxList.size() * PrintOptions.getPadding(); // Account for column padding</span>
 
             // Get each row as a string.
-<span class="fc bfc" id="L3527" title="All 2 branches covered.">            for (int i = 0; i &lt; rowStopIndex; i++) {</span>
-<span class="fc" id="L3528">                result.append(rowToString(i, colStopIndex, maxList));</span>
-<span class="fc" id="L3529">                result.append(&quot;\n&quot;);</span>
+<span class="fc bfc" id="L3564" title="All 2 branches covered.">            for (int i = 0; i &lt; rowStopIndex; i++) {</span>
+<span class="fc" id="L3565">                result.append(rowToString(i, colStopIndex, maxList));</span>
+<span class="fc" id="L3566">                result.append(&quot;\n&quot;);</span>
             }
 
-<span class="fc bfc" id="L3532" title="All 2 branches covered.">            if (PrintOptions.getMaxRows() &lt; this.numRows) {</span>
-<span class="fc" id="L3533">                width = totalRowLength;</span>
-<span class="fc" id="L3534">                value = &quot;...&quot;;</span>
-<span class="pc bpc" id="L3535" title="1 of 2 branches missed.">                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
-<span class="fc" id="L3536">                result.append(String.format(&quot; [%-&quot; + width + &quot;s]\n&quot;, value));</span>
+<span class="fc bfc" id="L3569" title="All 2 branches covered.">            if (PrintOptions.getMaxRows() &lt; this.numRows) {</span>
+<span class="fc" id="L3570">                width = totalRowLength;</span>
+<span class="fc" id="L3571">                value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L3572" title="1 of 2 branches missed.">                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L3573">                result.append(String.format(&quot; [%-&quot; + width + &quot;s]\n&quot;, value));</span>
             }
 
             // Get Last row as a string.
-<span class="fc" id="L3540">            result.append(rowToString(this.numRows - 1, colStopIndex, maxList));</span>
+<span class="fc" id="L3577">            result.append(rowToString(this.numRows - 1, colStopIndex, maxList));</span>
         }
 
-<span class="fc" id="L3543">        result.append(&quot;]&quot;);</span>
+<span class="fc" id="L3580">        result.append(&quot;]&quot;);</span>
 
-<span class="fc" id="L3545">        return result.toString();</span>
+<span class="fc" id="L3582">        return result.toString();</span>
     }
 
 
     public static void main(String[] args) {
-<span class="nc" id="L3550">        double[][] a = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};</span>
-<span class="nc" id="L3551">        Matrix A = new Matrix(a);</span>
+<span class="nc" id="L3587">        double[][] a = {</span>
+                {2, 55, 8},
+                {3, 1, 1},
+                {5, 4, 4}};
+<span class="nc" id="L3591">        Matrix A = new Matrix(a);</span>
 
-<span class="nc" id="L3553">        System.out.println(A.matrixRank());</span>
-<span class="nc" id="L3554">    }</span>
+<span class="nc" id="L3593">        PrintOptions.setPrecision(100);</span>
+<span class="nc" id="L3594">        System.out.println(A.inv());</span>
+<span class="nc" id="L3595">        System.out.println(A.mult(A.inv()));</span>
+<span class="nc" id="L3596">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

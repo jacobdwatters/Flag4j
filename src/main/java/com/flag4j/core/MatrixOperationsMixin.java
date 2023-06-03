@@ -913,4 +913,11 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @throws IllegalArgumentException If this matrix is not square.
      */
     X tr();
+
+
+    /**
+     * Computes the inverse of this matrix.
+     * @return The inverse of this matrix.
+     */
+    T inv();
 }

@@ -97,6 +97,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\VectorPerpParallelTe
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\decompositions\RealLUTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\decompositions\ComplexSchurTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense_sparse\real\RealDenseSparseMatMultTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixInversionTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixZerosOnesTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixStackTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\ShapeTests.java
@@ -135,6 +136,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\VectorNormTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CVectorElemMultTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\real_complex\RealComplexDenseOperationsTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseCVectorReshapeTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixInversionTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixMultTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense_sparse\real\RealDenseSparseMatMultTransposeTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\sparse\complex\ComplexSparseMatMultTests.java

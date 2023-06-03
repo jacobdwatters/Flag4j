@@ -29,7 +29,11 @@ import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.RealMatrixMixin;
 import com.flag4j.core.dense.RealDenseTensorBase;
 import com.flag4j.io.PrintOptions;
+import com.flag4j.linalg.Invert;
+import com.flag4j.linalg.decompositions.LUDecomposition;
+import com.flag4j.linalg.decompositions.RealLUDecomposition;
 import com.flag4j.linalg.decompositions.RealSVD;
+import com.flag4j.linalg.solvers.RealLUSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
@@ -429,10 +433,10 @@ public class Matrix
     public boolean isInv(Matrix B) {
         boolean result;
 
-        if(!this.isSquare() || !B.isSquare()) {
+        if(!this.isSquare() || !B.isSquare() || !shape.equals(B.shape)) {
             result = false;
         } else {
-            result = this.mult(B).roundToZero().isI();
+            result = this.mult(B).round().isI();
         }
 
         return result;
@@ -3026,6 +3030,43 @@ public class Matrix
     @Override
     public Double tr() {
         return trace();
+    }
+
+
+    /**
+     * Computes the inverse of this matrix. This is done by computing the {@link LUDecomposition LU decomposition} of
+     * this matrix, inverting {@code U} using a back-solve algorithm, then solving {@code inv(this)*L=inv(U)}
+     * for {@code inv(this)}.
+     *
+     * @return The inverse of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     * @throws RuntimeException If this matrix is singular (i.e. not invertible).
+     * @see #isInvertible()
+     */
+    @Override
+    public Matrix inv() {
+        ParameterChecks.assertSquare(shape);
+        LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(this);
+
+        double tol = 1.0E-12; // Tolerance for determining if determinant is zero.
+        double det = RealDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
+
+        if(Math.abs(det) < tol) {
+            throw new RuntimeException("Cannot invert. Matrix is singular.");
+        }
+
+        // Solve inv(A)*L = inv(U) for inv(A) by solving L^T*inv(A)^T = inv(U)^T
+        RealLUSolver solver = new RealLUSolver(); // TODO: Need to add solve(Matrix, Matrix) to the class for more efficient solving.
+        Matrix UinvT = Invert.invTriU(lu.getU()).T();
+        Matrix LT = lu.getL().T();
+        Matrix inverse = new Matrix(shape);
+
+        for(int i=0; i<UinvT.numCols; i++) {
+            Vector col = solver.solve(LT, UinvT.getColAsVector(i));
+            inverse.setRow(col.entries, i); // Implicit transpose here.
+        }
+
+        return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.
     }
 
 
