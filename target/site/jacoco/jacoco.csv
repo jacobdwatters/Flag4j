@@ -132,10 +132,12 @@ Flag4j,com.flag4j.linalg.decompositions,RealLUDecomposition,10,555,5,41,3,73,6,2
 Flag4j,com.flag4j.linalg.decompositions,ComplexQRDecomposition,102,115,0,4,13,22,1,6,1,4
 Flag4j,com.flag4j.linalg.decompositions,RealCholeskyDecomposition,5,139,1,9,1,16,2,6,1,2
 Flag4j,com.flag4j.linalg.decompositions,RealHessenburgDecomposition,0,97,0,8,0,20,0,8,0,4
+Flag4j,com.flag4j.linalg.decompositions,SingularValueDecomposition,21,0,0,0,9,0,5,0,5,0
+Flag4j,com.flag4j.linalg.decompositions,RealSVD,228,0,8,0,32,0,9,0,5,0
 Flag4j,com.flag4j.linalg.decompositions,QRDecomposition,0,30,0,2,0,12,0,6,0,5
 Flag4j,com.flag4j.linalg.decompositions,ComplexCholeskyDecomposition,5,141,1,9,1,16,2,6,1,2
 Flag4j,com.flag4j.linalg.decompositions,ComplexHessenburgDecomposition,3,91,3,5,1,17,3,4,0,3
 Flag4j,com.flag4j.linalg.decompositions,LUDecomposition.Pivoting,0,35,0,4,0,7,0,4,0,2
-Flag4j,com.flag4j.linalg.decompositions,SchurDecomposition,464,0,22,0,65,0,20,0,9,0
+Flag4j,com.flag4j.linalg.decompositions,SchurDecomposition,428,0,22,0,63,0,20,0,9,0
 Flag4j,com.flag4j.linalg.decompositions,CholeskyDecomposition,0,6,0,0,0,2,0,2,0,2
 Flag4j,com.flag4j.linalg.decompositions,HessenburgDecomposition,0,12,0,0,0,5,0,3,0,3

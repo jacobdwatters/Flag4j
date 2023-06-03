@@ -83,21 +83,17 @@ public abstract class SchurDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?,
      * Decomposer to compute the Hessenburg matrix similar to the source matrix. This Hessenburg
      * matrix will be the actual matrix that the Schur decomposition is computed for.
      */
-    protected HessenburgDecomposition&lt;T&gt; hess;
-
-    // TODO: Temporary
-<span class="nc" id="L89">    protected boolean debug = false;</span>
-<span class="nc" id="L90">    protected Scanner in = new Scanner(System.in);</span>
+    protected HessenburgDecomposition&lt;T&gt; hess;;
 
 
     /**
      * Creates a decomposer to compute the Schur decomposition.
      */
-<span class="nc" id="L96">    protected SchurDecomposition() {</span>
-<span class="nc" id="L97">        maxIterations = -1;</span>
-<span class="nc" id="L98">        useDefaultMaxIterations = true;</span>
-<span class="nc" id="L99">        computeU = true;</span>
-<span class="nc" id="L100">    }</span>
+<span class="nc" id="L92">    protected SchurDecomposition() {</span>
+<span class="nc" id="L93">        maxIterations = -1;</span>
+<span class="nc" id="L94">        useDefaultMaxIterations = true;</span>
+<span class="nc" id="L95">        computeU = true;</span>
+<span class="nc" id="L96">    }</span>
 
 
     /**
@@ -105,11 +101,11 @@ public abstract class SchurDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?,
      * iterations.
      * @param maxIterations Maximum number of iterations to run when computing the Schur decomposition.
      */
-<span class="nc" id="L108">    protected SchurDecomposition(int maxIterations) {</span>
-<span class="nc" id="L109">        this.maxIterations = maxIterations;</span>
-<span class="nc" id="L110">        useDefaultMaxIterations = false;</span>
-<span class="nc" id="L111">        computeU = true;</span>
-<span class="nc" id="L112">    }</span>
+<span class="nc" id="L104">    protected SchurDecomposition(int maxIterations) {</span>
+<span class="nc" id="L105">        this.maxIterations = maxIterations;</span>
+<span class="nc" id="L106">        useDefaultMaxIterations = false;</span>
+<span class="nc" id="L107">        computeU = true;</span>
+<span class="nc" id="L108">    }</span>
 
 
     /**
@@ -121,11 +117,11 @@ public abstract class SchurDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?,
      *                 - If false, the {@code Q} matrix will &lt;b&gt;not&lt;/b&gt; be computed. If it is not needed, this may
      *                 provide a performance improvement.
      */
-<span class="nc" id="L124">    protected SchurDecomposition(boolean computeU, int maxIterations) {</span>
-<span class="nc" id="L125">        this.maxIterations = maxIterations;</span>
-<span class="nc" id="L126">        this.computeU = computeU;</span>
-<span class="nc" id="L127">        useDefaultMaxIterations = false;</span>
-<span class="nc" id="L128">    }</span>
+<span class="nc" id="L120">    protected SchurDecomposition(boolean computeU, int maxIterations) {</span>
+<span class="nc" id="L121">        this.maxIterations = maxIterations;</span>
+<span class="nc" id="L122">        this.computeU = computeU;</span>
+<span class="nc" id="L123">        useDefaultMaxIterations = false;</span>
+<span class="nc" id="L124">    }</span>
 
 
     /**
@@ -135,11 +131,11 @@ public abstract class SchurDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?,
      *                 - If false, the {@code Q} matrix will &lt;b&gt;not&lt;/b&gt; be computed. If it is not needed, this may
      *                 provide a performance improvement.
      */
-<span class="nc" id="L138">    protected SchurDecomposition(boolean computeU) {</span>
-<span class="nc" id="L139">        maxIterations = -1;</span>
-<span class="nc" id="L140">        this.computeU = computeU;</span>
-<span class="nc" id="L141">        useDefaultMaxIterations = true;</span>
-<span class="nc" id="L142">    }</span>
+<span class="nc" id="L134">    protected SchurDecomposition(boolean computeU) {</span>
+<span class="nc" id="L135">        maxIterations = -1;</span>
+<span class="nc" id="L136">        this.computeU = computeU;</span>
+<span class="nc" id="L137">        useDefaultMaxIterations = true;</span>
+<span class="nc" id="L138">    }</span>
 
 
     /**
@@ -152,47 +148,47 @@ public abstract class SchurDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?,
     //  this may also only work for real symmetric matrices...
     //  Currently, only computes the real schur form.
     protected void doubleShiftImplicitQR(CMatrix H) {
-<span class="nc bnc" id="L155" title="All 2 branches missed.">        if(useDefaultMaxIterations) {</span>
-<span class="nc" id="L156">            maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        if(useDefaultMaxIterations) {</span>
+<span class="nc" id="L152">            maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);</span>
         }
 
-<span class="nc" id="L159">        ComplexHessenburgDecomposition hess = new ComplexHessenburgDecomposition(computeU); // Would need to compute Q to compute eigenvectors as well.</span>
+<span class="nc" id="L155">        ComplexHessenburgDecomposition hess = new ComplexHessenburgDecomposition(computeU); // Would need to compute Q to compute eigenvectors as well.</span>
 
-<span class="nc" id="L161">        T = H;</span>
-<span class="nc bnc" id="L162" title="All 2 branches missed.">        if(computeU) U = CMatrix.I(T.numRows);</span>
+<span class="nc" id="L157">        T = H;</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">        if(computeU) U = CMatrix.I(T.numRows);</span>
 
-<span class="nc bnc" id="L164" title="All 2 branches missed.">        for(int i=0; i&lt;maxIterations; i++) {</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">        for(int i=0; i&lt;maxIterations; i++) {</span>
             // Compute shifts as eigenvalues of lower right 2x2 block.
             // TODO: Ensure this is numerically stable. Also, add random shifts as noted in Fundamentals of Matrix Computations Vol. 3.
-<span class="nc" id="L167">            CVector rho = Eigen.get2x2LowerLeftBlockEigenValues(T);</span>
+<span class="nc" id="L163">            CVector rho = Eigen.get2x2LowerLeftBlockEigenValues(T);</span>
 
-<span class="nc" id="L169">            CNumber[] pEntries = {</span>
-<span class="nc" id="L170">                    T.entries[0].sub(rho.entries[0]).mult(T.entries[0].sub(rho.entries[1])).add(T.entries[1].mult(T.entries[T.numCols])),</span>
-<span class="nc" id="L171">                    T.entries[T.numCols].mult( T.entries[0].add(T.entries[T.numCols + 1]).sub(rho.entries[0]).sub(rho.entries[1]) ),</span>
-<span class="nc" id="L172">                    T.entries[2*T.numCols+1].mult(T.entries[T.numCols])</span>
+<span class="nc" id="L165">            CNumber[] pEntries = {</span>
+<span class="nc" id="L166">                    T.entries[0].sub(rho.entries[0]).mult(T.entries[0].sub(rho.entries[1])).add(T.entries[1].mult(T.entries[T.numCols])),</span>
+<span class="nc" id="L167">                    T.entries[T.numCols].mult( T.entries[0].add(T.entries[T.numCols + 1]).sub(rho.entries[0]).sub(rho.entries[1]) ),</span>
+<span class="nc" id="L168">                    T.entries[2*T.numCols+1].mult(T.entries[T.numCols])</span>
             };
-<span class="nc" id="L174">            Vector p = new CVector(pEntries).toReal(); // Should be real anyway</span>
-<span class="nc" id="L175">            Matrix Q = Householder.getReflector(p);</span>
+<span class="nc" id="L170">            Vector p = new CVector(pEntries).toReal(); // Should be real anyway</span>
+<span class="nc" id="L171">            Matrix Q = Householder.getReflector(p);</span>
 
             // Apply the Householder reflector to T.
-<span class="nc" id="L178">            T.setSlice(Q.T().mult(T.getSlice(0, Q.numRows, 0, T.numCols)), 0, 0);</span>
-<span class="nc" id="L179">            T.setSlice(T.getSlice(0, T.numRows, 0, Q.numCols).mult(Q), 0, 0);</span>
+<span class="nc" id="L174">            T.setSlice(Q.T().mult(T.getSlice(0, Q.numRows, 0, T.numCols)), 0, 0);</span>
+<span class="nc" id="L175">            T.setSlice(T.getSlice(0, T.numRows, 0, Q.numCols).mult(Q), 0, 0);</span>
 
             // TODO: A crude bulge chase using Hessenberg decomposition. Since we know A is nearly in Hessenberg already, this
             //  will perform a lot of superfluous computations. Use Householder transformations instead.
-<span class="nc" id="L183">            T = hess.decompose(T).getH();</span>
+<span class="nc" id="L179">            T = hess.decompose(T).getH();</span>
 
-<span class="nc bnc" id="L185" title="All 2 branches missed.">            if(computeU) {</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">            if(computeU) {</span>
                 // Apply the Householder reflectors to U.
-<span class="nc" id="L187">                U.setSlice(U.getSlice(0, U.numRows, 0, Q.numCols).mult(Q), 0, 0);</span>
-<span class="nc" id="L188">                U = U.mult(hess.getQ());</span>
+<span class="nc" id="L183">                U.setSlice(U.getSlice(0, U.numRows, 0, Q.numCols).mult(Q), 0, 0);</span>
+<span class="nc" id="L184">                U = U.mult(hess.getQ());</span>
             }
 
-<span class="nc bnc" id="L191" title="All 2 branches missed.">            if(T.roundToZero().isTriU()) {</span>
-<span class="nc" id="L192">                break; // We have converged (approximately) to an upper triangular matrix.</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">            if(T.roundToZero().isTriU()) {</span>
+<span class="nc" id="L188">                break; // We have converged (approximately) to an upper triangular matrix.</span>
             }
         }
-<span class="nc" id="L195">    }</span>
+<span class="nc" id="L191">    }</span>
 
 
     /**
@@ -200,33 +196,33 @@ public abstract class SchurDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?,
      * @param H - The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
      */
     protected void shiftedExplicitQR(CMatrix H) {
-<span class="nc bnc" id="L203" title="All 2 branches missed.">        if(useDefaultMaxIterations) {</span>
-<span class="nc" id="L204">            maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">        if(useDefaultMaxIterations) {</span>
+<span class="nc" id="L200">            maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);</span>
         }
 
-<span class="nc" id="L207">        QRDecomposition&lt;CMatrix&gt; qr = new ComplexQRDecomposition();</span>
+<span class="nc" id="L203">        QRDecomposition&lt;CMatrix&gt; qr = new ComplexQRDecomposition();</span>
 
         // Initialize matrices.
-<span class="nc" id="L210">        T = H;</span>
-<span class="nc bnc" id="L211" title="All 2 branches missed.">        if(computeU) U = CMatrix.I(T.numRows);</span>
+<span class="nc" id="L206">        T = H;</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">        if(computeU) U = CMatrix.I(T.numRows);</span>
 
-<span class="nc bnc" id="L213" title="All 2 branches missed.">        for(int i=0; i&lt;maxIterations; i++) {</span>
-<span class="nc" id="L214">            CNumber lam = getWilkinsonShift(T);</span>
-<span class="nc" id="L215">            CMatrix mu = Matrix.I(T.numRows).mult(lam);</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">        for(int i=0; i&lt;maxIterations; i++) {</span>
+<span class="nc" id="L210">            CNumber lam = getWilkinsonShift(T);</span>
+<span class="nc" id="L211">            CMatrix mu = Matrix.I(T.numRows).mult(lam);</span>
 
             // Compute the QR decomposition with a shift.
-<span class="nc" id="L218">            qr.decompose(T.sub(mu));</span>
+<span class="nc" id="L214">            qr.decompose(T.sub(mu));</span>
 
             // Update T and undo the shift.
-<span class="nc" id="L221">            T = qr.R.mult(qr.Q).add(mu);</span>
+<span class="nc" id="L217">            T = qr.R.mult(qr.Q).add(mu);</span>
 
-<span class="nc bnc" id="L223" title="All 2 branches missed.">            if(computeU) U = U.mult(qr.Q);</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">            if(computeU) U = U.mult(qr.Q);</span>
 
-<span class="nc bnc" id="L225" title="All 2 branches missed.">            if(T.roundToZero().isTriU()) {</span>
-<span class="nc" id="L226">                break; // We have converged (approximately) to an upper triangular matrix. No need to continue.</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">            if(T.roundToZero().isTriU()) {</span>
+<span class="nc" id="L222">                break; // We have converged (approximately) to an upper triangular matrix. No need to continue.</span>
             }
         }
-<span class="nc" id="L229">    }</span>
+<span class="nc" id="L225">    }</span>
 
 
     /**
@@ -237,13 +233,13 @@ public abstract class SchurDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?,
      */
     private CNumber getWilkinsonShift(CMatrix src) {
         // Compute eigenvalues of lower 2x2 block.
-<span class="nc" id="L240">        CVector lambdas = Eigen.get2x2LowerLeftBlockEigenValues(src);</span>
-<span class="nc" id="L241">        CNumber v = src.entries[src.entries.length-1];</span>
+<span class="nc" id="L236">        CVector lambdas = Eigen.get2x2LowerLeftBlockEigenValues(src);</span>
+<span class="nc" id="L237">        CNumber v = src.entries[src.entries.length-1];</span>
 
-<span class="nc bnc" id="L243" title="All 2 branches missed.">        if(v.sub(lambdas.entries[0]).magAsDouble() &lt; v.sub(lambdas.entries[1]).magAsDouble()) {</span>
-<span class="nc" id="L244">            return lambdas.entries[0];</span>
+<span class="nc bnc" id="L239" title="All 2 branches missed.">        if(v.sub(lambdas.entries[0]).magAsDouble() &lt; v.sub(lambdas.entries[1]).magAsDouble()) {</span>
+<span class="nc" id="L240">            return lambdas.entries[0];</span>
         } else {
-<span class="nc" id="L246">            return lambdas.entries[1];</span>
+<span class="nc" id="L242">            return lambdas.entries[1];</span>
         }
     }
 
@@ -253,7 +249,7 @@ public abstract class SchurDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?,
      * @return The {@code T} from the Schur decomposition corresponding to {@code A=UTU&lt;sup&gt;H&lt;/sup&gt;}.
      */
     public CMatrix getT() {
-<span class="nc" id="L256">        return T;</span>
+<span class="nc" id="L252">        return T;</span>
     }
 
 
@@ -262,7 +258,7 @@ public abstract class SchurDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?,
      * @return The {@code U} from the Schur decomposition corresponding to {@code A=UTU&lt;sup&gt;H&lt;/sup&gt;}.
      */
     public CMatrix getU() {
-<span class="nc" id="L265">        return U;</span>
+<span class="nc" id="L261">        return U;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

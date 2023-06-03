@@ -195,7 +195,8 @@ public class Eigen {
      * Computes the eigenvalues and eigenvectors of a square real matrix.
      * @param src The matrix to compute the eigenvalues and vectors of.
      * @return An array containing two matrices. The first matrix has shape {@code 1xsrc.numCols} and contains the eigenvalues
-     * of the {@code src} matrix. The second matrix has shape {@code src.numRowsxsrc.numCols}.
+     * of the {@code src} matrix. The second matrix has shape {@code src.numRowsxsrc.numCols} and contains the
+     * eigenvectors of the {@code src} matrix as its columns.
      */
     public static CMatrix[] getEigenPairs(Matrix src) {
         CMatrix lambdas = new CMatrix(1, src.numRows);

@@ -195,27 +195,28 @@ import com.flag4j.linalg.solvers.ComplexBackSolver;
      * Computes the eigenvalues and eigenvectors of a square real matrix.
      * @param src The matrix to compute the eigenvalues and vectors of.
      * @return An array containing two matrices. The first matrix has shape {@code 1xsrc.numCols} and contains the eigenvalues
-     * of the {@code src} matrix. The second matrix has shape {@code src.numRowsxsrc.numCols}.
+     * of the {@code src} matrix. The second matrix has shape {@code src.numRowsxsrc.numCols} and contains the
+     * eigenvectors of the {@code src} matrix as its columns.
      */
     public static CMatrix[] getEigenPairs(Matrix src) {
-<span class="nc" id="L201">        CMatrix lambdas = new CMatrix(1, src.numRows);</span>
+<span class="nc" id="L202">        CMatrix lambdas = new CMatrix(1, src.numRows);</span>
 
-<span class="nc" id="L203">        SchurDecomposition&lt;Matrix&gt; schur = new RealSchurDecomposition(true).decompose(src);</span>
-<span class="nc" id="L204">        CMatrix T = schur.getT();</span>
-<span class="nc" id="L205">        CMatrix U = schur.getU();</span>
+<span class="nc" id="L204">        SchurDecomposition&lt;Matrix&gt; schur = new RealSchurDecomposition(true).decompose(src);</span>
+<span class="nc" id="L205">        CMatrix T = schur.getT();</span>
+<span class="nc" id="L206">        CMatrix U = schur.getU();</span>
 
         // Extract diagonal of T.
-<span class="nc bnc" id="L208" title="All 2 branches missed.">        for(int i=0; i&lt;T.numRows; i++) {</span>
-<span class="nc" id="L209">            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">        for(int i=0; i&lt;T.numRows; i++) {</span>
+<span class="nc" id="L210">            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];</span>
         }
 
-<span class="nc bnc" id="L212" title="All 2 branches missed.">        if(src.isSymmetric()) {</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">        if(src.isSymmetric()) {</span>
             // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
-<span class="nc" id="L214">            return new CMatrix[]{lambdas, U};</span>
+<span class="nc" id="L215">            return new CMatrix[]{lambdas, U};</span>
         } else {
             // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
-<span class="nc" id="L217">            U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.</span>
-<span class="nc" id="L218">            return new CMatrix[]{lambdas, U};</span>
+<span class="nc" id="L218">            U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.</span>
+<span class="nc" id="L219">            return new CMatrix[]{lambdas, U};</span>
         }
     }
 }
