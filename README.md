@@ -63,7 +63,7 @@ ___
 - Non-singular Linear System
 - Least Squares
 
-### Linear and Homogeneous Transformations
+### Linear and Homography Transformations
 - Scale
 - Shift
 - Rotate
