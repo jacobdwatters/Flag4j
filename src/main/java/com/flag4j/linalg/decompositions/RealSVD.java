@@ -43,19 +43,21 @@ public class RealSVD extends SingularValueDecomposition<Matrix> {
     //  algorithm should be used to compute the SVD directly without forming M^T*M explicitly.
 
     /**
-     * Creates a decomposer to compute the singular value decomposition of a real matrix.
+     * Creates a decomposer to compute the singular value decomposition of a real matrix. The left and right singular
+     * vectors will be computed.
      */
     public RealSVD() {
-        super();
+        super(true);
     }
 
 
     /**
      * Creates a decomposer to compute the singular value decomposition of a real matrix.
-     * @param computeUV A flag which indicates if the unitary matrices {@code Q} and {@code V} should be computed.<br>
-     *                 - If true, the {@code Q} and {@code V} matrices will be computed.
-     *                 - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If it is not needed, this may
-     *                 provide a performance improvement.
+     * @param computeUV A flag which indicates if the orthogonal matrices {@code Q} and {@code V} should be computed
+     *                  (i.e. the singular vectors).<br>
+     *                 - If true, the {@code Q} and {@code V} matrices will be computed.<br>
+     *                 - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If they are not
+     *                 needed, this may provide a performance improvement.
      */
     public RealSVD(boolean computeUV) {
         super(computeUV);
@@ -92,9 +94,9 @@ public class RealSVD extends SingularValueDecomposition<Matrix> {
         for(int i=0; i<S1.size; i++) {
             S.set(S1.entries[i], i, i);
 
-            if(S1.entries[i] != 0) {
+            if(computeUV && S1.entries[i] != 0) {
                 // Properly scale the left singular vectors so that Mv = su.
-                divCols(U, i, S1.entries[i]);
+                divCols(i, S1.entries[i]);
             }
         }
 
@@ -103,14 +105,15 @@ public class RealSVD extends SingularValueDecomposition<Matrix> {
 
 
     /**
-     * Divides a specified column of a matrix by a scalar value.
-     * @param src Matrix of interest.
+     * Divides a specified column of the {@code U} matrix in the SVD by a scalar value.
      * @param colIdx Index of column to divide.
      * @param scalValue Value to divide column by.
      */
-    private void divCols(Matrix src, int colIdx, double scalValue) {
-        for(int i=0; i<src.numRows; i++) {
-            src.entries[i*src.numCols + colIdx] /= scalValue;
+    private void divCols(int colIdx, double scalValue) {
+        int idx = colIdx;
+        for(int i=0; i<U.numRows; i++) {
+            U.entries[idx] /= scalValue;
+            idx+=U.numCols;
         }
     }
 }

@@ -4,7 +4,6 @@ com\flag4j\operations\dense\real\RealDenseEquals.class
 com\flag4j\util\StringUtils.class
 com\flag4j\linalg\decompositions\RealHessenburgDecomposition.class
 com\flag4j\core\dense\DenseTensorMixin.class
-com\flag4j\linalg\solvers\MatrixLUSolver.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseMatrixMultiplication.class
 com\flag4j\operations\dense\complex\ComplexDenseTensorDot.class
 com\flag4j\operations\dense\real\RealDenseMatrixMultTranspose.class
@@ -28,12 +27,15 @@ com\flag4j\core\TensorComparisonsMixin.class
 com\flag4j\operations\RealDenseTensorBinaryOperation.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseOperations.class
 com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseVectorOperations.class
+com\flag4j\linalg\solvers\RealForwardSolver.class
 com\flag4j\linalg\decompositions\HessenburgDecomposition.class
 com\flag4j\operations\common\complex\ComplexOperations.class
 com\flag4j\operations\common\complex\ComplexProperties.class
 com\flag4j\linalg\decompositions\ComplexQRDecomposition.class
 com\flag4j\core\dense\RealDenseTensorBase.class
 com\flag4j\core\VectorMixin.class
+com\flag4j\linalg\solvers\RealBackSolver.class
+com\flag4j\linalg\solvers\RealLstsqSolver.class
 com\flag4j\linalg\transformations\Projection.class
 com\flag4j\operations\common\real\RealProperties.class
 com\flag4j\SparseCTensor.class
@@ -46,7 +48,6 @@ com\flag4j\util\RandomTensor.class
 com\flag4j\core\dense\DenseMatrixMixin.class
 com\flag4j\CTensor.class
 com\flag4j\linalg\solvers\LstsqSolver.class
-com\flag4j\linalg\solvers\MatrixLstsqSolver.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatrixMultiplication.class
 com\flag4j\core\MatrixManipulationsMixin.class
 com\flag4j\core\TensorManipulationsMixin.class
@@ -84,6 +85,7 @@ com\flag4j\operations\sparse\real_complex\RealComplexSparseMatrixMultiplication.
 com\flag4j\core\sparse\SparseTensorMixin.class
 com\flag4j\operations\common\complex\AggregateComplex.class
 com\flag4j\CMatrix.class
+com\flag4j\linalg\decompositions\ComplexSVD.class
 com\flag4j\linalg\PositiveDefiniteness.class
 com\flag4j\linalg\decompositions\RealSchurDecomposition.class
 com\flag4j\linalg\decompositions\RealSVD.class
@@ -125,7 +127,6 @@ com\flag4j\core\TensorOperationsMixin.class
 com\flag4j\operations\dense\complex\ComplexDenseMatrixMultiplication.class
 com\flag4j\Vector.class
 com\flag4j\linalg\solvers\ComplexBackSolver.class
-com\flag4j\linalg\solvers\MatrixForwardSolver.class
 com\flag4j\operations\MatrixMultiplyDispatcher$AlgorithmName.class
 com\flag4j\operations\common\real\AggregateReal.class
 com\flag4j\linalg\decompositions\ComplexCholeskyDecomposition.class
@@ -135,9 +136,9 @@ com\flag4j\linalg\Eigen.class
 com\flag4j\core\VectorPropertiesMixin.class
 com\flag4j\linalg\Decompose.class
 com\flag4j\linalg\decompositions\RealCholeskyDecomposition.class
+com\flag4j\linalg\solvers\RealLUSolver.class
 com\flag4j\util\ErrorMessages.class
 com\flag4j\operations\dense\real\RealDenseVectorOperations.class
-com\flag4j\linalg\solvers\MatrixBackSolver.class
 com\flag4j\operations\sparse\complex\ComplexSparseEquals.class
 com\flag4j\core\sparse\ComplexSparseTensorBase.class
 com\flag4j\complex_numbers\CNumberParser.class

@@ -36,10 +36,10 @@ import static com.flag4j.operations.dense.real.RealDenseDeterminant.detLU;
  * Solver for solving a well determined system of linear equations in an exact sense using the
  * {@link com.flag4j.linalg.decompositions.LUDecomposition LU decomposition.}
  */
-public class MatrixLUSolver extends LUSolver<Matrix, Vector, Vector> {
+public class RealLUSolver extends LUSolver<Matrix, Vector, Vector> {
 
-    private final MatrixForwardSolver forwardSolver;
-    private final MatrixBackSolver backSolver;
+    private final RealForwardSolver forwardSolver;
+    private final RealBackSolver backSolver;
 
     /**
      * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is
@@ -50,11 +50,11 @@ public class MatrixLUSolver extends LUSolver<Matrix, Vector, Vector> {
     /**
      * Constructs an exact LU solver where the coefficient matrix is real dense.
      */
-    public MatrixLUSolver() {
+    public RealLUSolver() {
         super(new RealLUDecomposition());
 
-        forwardSolver = new MatrixForwardSolver();
-        backSolver = new MatrixBackSolver();
+        forwardSolver = new RealForwardSolver();
+        backSolver = new RealBackSolver();
     }
 
 

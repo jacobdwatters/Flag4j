@@ -29,9 +29,11 @@ import com.flag4j.CVector;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.linalg.decompositions.ComplexSchurDecomposition;
 import com.flag4j.linalg.decompositions.RealSchurDecomposition;
 import com.flag4j.linalg.decompositions.SchurDecomposition;
 import com.flag4j.linalg.solvers.ComplexBackSolver;
+import com.flag4j.linalg.solvers.RealBackSolver;
 
 /**
  * This class provides several methods useful for computing eigen values, eigen vectors, as well as singular values and
@@ -140,6 +142,26 @@ public class Eigen {
 
 
     /**
+     * Computes the eigenvalues of a square complex dense matrix.
+     * @param src The matrix to compute the eigenvalues of.
+     * @return The eigenvalues of the {@code src} matrix.
+     */
+    public static CVector getEigenValues(CMatrix src) {
+        CVector lambdas = new CVector(src.numRows);
+
+        SchurDecomposition<CMatrix> schur = new ComplexSchurDecomposition(false).decompose(src);
+        CMatrix T = schur.getT();
+
+        // Extract diagonal of T.
+        for(int i=0; i<T.numRows; i++) {
+            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];
+        }
+
+        return lambdas;
+    }
+
+
+    /**
      * Computes the eigenvectors of a square real dense matrix.
      * @param src The matrix to compute the eigenvectors of.
      * @return A matrix containing the eigenvectors of {@code src} as its columns.
@@ -160,6 +182,58 @@ public class Eigen {
 
 
     /**
+     * Computes the eigenvectors of a square complex dense matrix.
+     * @param src The matrix to compute the eigenvectors of.
+     * @return A matrix containing the eigenvectors of {@code src} as its columns.
+     */
+    public static CMatrix getEigenVectors(CMatrix src) {
+        SchurDecomposition<CMatrix> schur = new ComplexSchurDecomposition(true).decompose(src);
+        CMatrix U = schur.getU();
+
+        if(src.isHermitian()) {
+            // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
+            return U;
+        } else {
+            // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
+            CMatrix Q = getEigenVectorsTriu(schur.getT()); // Compute the eigenvectors of T.
+            return U.mult(Q); // Convert the eigenvectors of T to the eigenvectors of the src matrix.
+        }
+    }
+
+
+    /**
+     * Computes the eigenvectors of an upper triangular matrix.
+     * @param T The upper triangular matrix to compute the eigenvectors of.
+     * @return A matrix containing the eigenvectors of {@code T} as its columns.
+     */
+    public static CMatrix getEigenVectorsTriu(Matrix T) {
+        RealBackSolver backSolver = new RealBackSolver();
+        Matrix I = Matrix.I(T.numRows);
+        CMatrix Q = new CMatrix(T.numRows);
+
+        for(int j=0; j<T.numRows; j++) {
+            Matrix t = I.mult(T.get(j, j)); // TODO: add diag(...) method so this scalar multiplication doesnt need to be computed.
+            Matrix S = T.sub(t).getSlice(0, j+1, 0, j+1);
+            Matrix S_hat = S.getSlice(0, j, 0, j);
+            Vector r = S.getSlice(0, j, S.numCols-1, S.numCols).toVector();
+            Vector v;
+
+            if(S_hat.entries.length > 0) {
+                v = backSolver.solve(S_hat, r.mult(-1));
+                v = v.join(new Vector(1.0));
+            } else {
+                v = new Vector(1.0);
+            }
+
+            v = v.normalize().join(new Vector(T.numRows-v.size));
+            Q.setCol(v.entries, j);
+        }
+
+        return Q;
+    }
+
+
+    /**
      * Computes the eigenvectors of an upper triangular matrix.
      * @param T The upper triangular matrix to compute the eigenvectors of.
      * @return A matrix containing the eigenvectors of {@code T} as its columns.
@@ -170,7 +244,7 @@ public class Eigen {
         CMatrix Q = new CMatrix(T.numRows);
 
         for(int j=0; j<T.numRows; j++) {
-            CMatrix t = I.mult(T.get(j, j));
+            CMatrix t = I.mult(T.get(j, j)); // TODO: add diag(...) method so this scalar multiplication doesnt need to be computed.
             CMatrix S = T.sub(t).getSlice(0, j+1, 0, j+1);
             CMatrix S_hat = S.getSlice(0, j, 0, j);
             CVector r = S.getSlice(0, j, S.numCols-1, S.numCols).toVector();
@@ -211,6 +285,36 @@ public class Eigen {
         }
 
         if(src.isSymmetric()) {
+            // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
+            return new CMatrix[]{lambdas, U};
+        } else {
+            // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
+            U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.
+            return new CMatrix[]{lambdas, U};
+        }
+    }
+
+
+    /**
+     * Computes the eigenvalues and eigenvectors of a square real matrix.
+     * @param src The matrix to compute the eigenvalues and vectors of.
+     * @return An array containing two matrices. The first matrix has shape {@code 1xsrc.numCols} and contains the eigenvalues
+     * of the {@code src} matrix. The second matrix has shape {@code src.numRowsxsrc.numCols} and contains the
+     * eigenvectors of the {@code src} matrix as its columns.
+     */
+    public static CMatrix[] getEigenPairs(CMatrix src) {
+        CMatrix lambdas = new CMatrix(1, src.numRows);
+
+        SchurDecomposition<CMatrix> schur = new ComplexSchurDecomposition(true).decompose(src);
+        CMatrix T = schur.getT();
+        CMatrix U = schur.getU();
+
+        // Extract diagonal of T.
+        for(int i=0; i<T.numRows; i++) {
+            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];
+        }
+
+        if(src.isHermitian()) {
             // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
             return new CMatrix[]{lambdas, U};
         } else {

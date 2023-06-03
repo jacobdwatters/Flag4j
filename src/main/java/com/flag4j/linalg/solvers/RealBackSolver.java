@@ -32,7 +32,7 @@ import com.flag4j.Vector;
  * This solver solves linear systems of equations where the coefficient matrix in an upper triangular real dense matrix
  * and the constant vector is a real dense vector.
  */
-public class MatrixBackSolver implements LinearSolver<Matrix, Vector, Vector> {
+public class RealBackSolver implements LinearSolver<Matrix, Vector, Vector> {
 
     // TODO: If a diagonal entry is zero, back-solve fails, add error should be thrown (system is singular).
 

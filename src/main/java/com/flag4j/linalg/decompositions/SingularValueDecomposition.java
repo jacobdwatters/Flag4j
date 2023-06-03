@@ -58,15 +58,8 @@ public abstract class SingularValueDecomposition<T extends MatrixMixin<T, ?, ?, 
 
     /**
      * Creates a decomposer to compute the Schur decomposition.
-     */
-    protected SingularValueDecomposition() {
-        this.computeUV = true;
-    }
-
-
-    /**
-     * Creates a decomposer to compute the Schur decomposition.
-     * @param computeUV A flag which indicates if the unitary matrices {@code Q} and {@code V} should be computed.<br>
+     * @param computeUV A flag which indicates if the unitary matrices {@code Q} and {@code V} should be computed
+     *                  (i.e. the singular vectors).<br>
      *                 - If true, the {@code Q} and {@code V} matrices will be computed.
      *                 - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If it is not needed, this may
      *                 provide a performance improvement.
@@ -96,7 +89,8 @@ public abstract class SingularValueDecomposition<T extends MatrixMixin<T, ?, ?, 
 
     /**
      * Gets the unitary matrix {@code V} corresponding to {@code M=USV<sup>H</sup>} in the SVD.
-     * @return {@code V} corresponding to {@code M=USV<sup>H</sup>} in the SVD.
+     * @return {@code V} corresponding to {@code M=USV<sup>H</sup>} in the SVD. Note that the hermation transpose has
+     * <b>not</b> been computed.
      */
     public T getV() {
         return V;

@@ -32,7 +32,7 @@ import com.flag4j.Vector;
  * This solver solves linear systems of equations where the coefficient matrix in a lower triangular real dense matrix
  * and the constant vector is a real dense vector.
  */
-public class MatrixForwardSolver implements LinearSolver<Matrix, Vector, Vector> {
+public class RealForwardSolver implements LinearSolver<Matrix, Vector, Vector> {
 
     /**
      * Performs forward substitution for a unit lower triangular matrix {@code L} and a vector {@code b}.
