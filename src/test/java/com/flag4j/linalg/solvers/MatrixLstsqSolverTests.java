@@ -24,7 +24,7 @@ class MatrixLstsqSolverTests {
 
     @Test
     void solveTest() {
-        MatrixLstsqSolver solver = new MatrixLstsqSolver();
+        RealLstsqSolver solver = new RealLstsqSolver();
 
         // ----------------- Sub-case 1 -----------------
         aEntries = new double[][]{

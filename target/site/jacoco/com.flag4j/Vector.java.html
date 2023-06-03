@@ -1,0 +1,1196 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Vector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">Vector.java</span></div><h1>Vector.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j;
+
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.VectorMixin;
+import com.flag4j.core.dense.DenseVectorMixin;
+import com.flag4j.core.dense.RealDenseTensorBase;
+import com.flag4j.io.PrintOptions;
+import com.flag4j.operations.common.real.VectorNorms;
+import com.flag4j.operations.dense.real.RealDenseEquals;
+import com.flag4j.operations.dense.real.RealDenseVectorOperations;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseVectorOperations;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseVectorOperations;
+import com.flag4j.util.*;
+
+import java.util.Arrays;
+
+
+/**
+ * Real dense vector. This class is mostly Equivalent to a real dense tensor with rank 1.
+ */
+public class Vector
+        extends RealDenseTensorBase&lt;Vector, CVector&gt;
+        implements VectorMixin&lt;Vector, Vector, SparseVector, CVector, Double, Matrix, Matrix, CMatrix&gt;,
+        DenseVectorMixin {
+
+    /**
+     * The size of this vector. That is, the number of entries in this vector.
+     */
+    public final int size;
+
+    /**
+     * Creates a vector of specified size filled with zeros.
+     * @param size Size of the vector.
+     */
+    public Vector(int size) {
+<span class="fc" id="L66">        super(new Shape(size), new double[size]);</span>
+<span class="fc" id="L67">        this.size = shape.dims[0];</span>
+<span class="fc" id="L68">    }</span>
+
+
+    /**
+     * Creates a vector of specified size filled with a specified value.
+     * @param size Size of the vector.
+     * @param fillValue Value to fill vector with.
+     */
+    public Vector(int size, double fillValue) {
+<span class="fc" id="L77">        super(new Shape(size), new double[size]);</span>
+<span class="fc" id="L78">        Arrays.fill(super.entries, fillValue);</span>
+<span class="fc" id="L79">        this.size = shape.dims[0];</span>
+<span class="fc" id="L80">    }</span>
+
+
+    /**
+     * Creates a vector of the specified shape filled with zeros.
+     * @param shape Shape of this vector.
+     * @throws IllegalArgumentException If the shapes is not rank 1.
+     */
+    public Vector(Shape shape) {
+<span class="fc" id="L89">        super(shape, new double[shape.dims[0]]);</span>
+<span class="fc" id="L90">        this.size = shape.dims[0];</span>
+<span class="fc" id="L91">    }</span>
+
+
+    /**
+     * Creates a vector of specified size filled with a specified value.
+     * @param shape Shape of the vector.
+     * @param fillValue Value to fill vector with.
+     * @throws IllegalArgumentException If the shapes is not rank 1.
+     */
+    public Vector(Shape shape, double fillValue) {
+<span class="fc" id="L101">        super(shape, new double[shape.dims[0]]);</span>
+<span class="fc" id="L102">        Arrays.fill(super.entries, fillValue);</span>
+<span class="fc" id="L103">        this.size = shape.dims[0];</span>
+<span class="fc" id="L104">    }</span>
+
+
+    /**
+     * Creates a vector with specified entries.
+     * @param entries Entries for this column vector.
+     */
+    public Vector(double... entries) {
+<span class="fc" id="L112">        super(new Shape(entries.length), entries.clone());</span>
+<span class="fc" id="L113">        this.size = shape.dims[0];</span>
+<span class="fc" id="L114">    }</span>
+
+
+    /**
+     * Creates a vector with specified entries.
+     * @param entries Entries for this column vector.
+     */
+    public Vector(int... entries) {
+<span class="fc" id="L122">        super(new Shape(entries.length), new double[entries.length]);</span>
+<span class="fc" id="L123">        this.size = shape.dims[0];</span>
+
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        for(int i=0; i&lt;entries.length; i++) {</span>
+<span class="fc" id="L126">            super.entries[i] = entries[i];</span>
+        }
+<span class="fc" id="L128">    }</span>
+
+
+    /**
+     * Creates a vector from another vector. This essentially copies the vector.
+     * @param a Vector to make copy of.
+     */
+    public Vector(Vector a) {
+<span class="fc" id="L136">        super(a.shape.copy(), a.entries.clone());</span>
+<span class="fc" id="L137">        this.size = shape.dims[0];</span>
+<span class="fc" id="L138">    }</span>
+
+
+    /**
+     * Checks if two this vector is numerically element-wise equal to another object. Objects which can be equal are, {@link Vector},
+     * {@link CVector}, {@link SparseVector}, {@link SparseCVector}.
+     *
+     * @param b Object to compare to this vector.
+     * @return True if this vector and object {@code b} are equivalent element-wise. Otherwise, returns false.
+     */
+    @Override
+    public boolean equals(Object b) {
+<span class="fc" id="L150">        boolean equal = false;</span>
+
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        if(b instanceof Vector) {</span>
+<span class="fc" id="L153">            Vector vec = (Vector) b;</span>
+<span class="fc" id="L154">            equal = RealDenseEquals.vectorEquals(this.entries, vec.entries);</span>
+
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        } else if(b instanceof CVector) {</span>
+<span class="fc" id="L157">            CVector vec = (CVector) b;</span>
+<span class="fc" id="L158">            equal = ArrayUtils.equals(this.entries, vec.entries);</span>
+
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        } else if(b instanceof SparseVector) {</span>
+<span class="fc" id="L161">            SparseVector vec = (SparseVector) b;</span>
+<span class="fc" id="L162">            equal = RealDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);</span>
+
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        } else if(b instanceof SparseCVector) {</span>
+<span class="fc" id="L165">            SparseCVector vec = (SparseCVector) b;</span>
+<span class="fc" id="L166">            equal = RealComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);</span>
+
+        }
+
+<span class="fc" id="L170">        return equal;</span>
+    }
+
+
+    /**
+     * Since vectors are rank 1 tensors, this method simply copies the vector.
+     *
+     * @return The flattened tensor.
+     */
+    @Override
+    public Vector flatten() {
+<span class="nc" id="L181">        ParameterChecks.assertBroadcastable(this.shape, shape);</span>
+<span class="nc" id="L182">        return this.copy();</span>
+    }
+
+
+    /**
+     * Extends a vector a specified number of times to a matrix.
+     *
+     * @param n The number of times to extend this vector.
+     * @param axis Axis along which to extend. If {@code axis=0}, then the vector will be treated as a row vector. If
+     *             {@code axis=1} then the vector will be treated as a column vector.
+     * @return A matrix which is the result of extending a vector {@code n} times.
+     * @throws IllegalArgumentException If axis is not 0 or 1.
+     */
+    @Override
+    public Matrix extend(int n, int axis) {
+        Matrix extended;
+
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L200">            extended = new Matrix(n, this.size);</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">            for(int i=0; i&lt;n; i++) {</span>
+<span class="fc" id="L202">                System.arraycopy(this.entries, 0, extended.entries, i*extended.numCols, this.size);</span>
+            }
+
+<span class="fc bfc" id="L205" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L206">            extended = new Matrix(this.size, n);</span>
+<span class="fc" id="L207">            double[] row = new double[n];</span>
+
+<span class="fc bfc" id="L209" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
+<span class="fc" id="L210">                Arrays.fill(row, this.entries[i]);</span>
+<span class="fc" id="L211">                System.arraycopy(row, 0, extended.entries, i*extended.numCols, row.length);</span>
+            }
+<span class="fc" id="L213">        } else {</span>
+<span class="fc" id="L214">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));</span>
+        }
+
+<span class="fc" id="L217">        return extended;</span>
+    }
+
+
+    // TODO: Add append(double v) to append a single scalar to the end of a vector.
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     *
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public Vector add(SparseVector B) {
+<span class="fc" id="L233">        return RealDenseSparseVectorOperations.add(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     *
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public CVector add(CVector B) {
+<span class="fc" id="L246">        return new CVector(RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape));</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     *
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public CVector add(SparseCVector B) {
+<span class="fc" id="L259">        return RealComplexDenseSparseVectorOperations.add(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     *
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public Vector sub(SparseVector B) {
+<span class="fc" id="L272">        return RealDenseSparseVectorOperations.sub(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     *
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public CVector sub(CVector B) {
+<span class="fc" id="L285">        return new CVector(RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape));</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector.
+     *
+     * @param B Vector to add to this vector.
+     * @return The result of the element-wise vector addition.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public CVector sub(SparseCVector B) {
+<span class="fc" id="L298">        return RealComplexDenseSparseVectorOperations.sub(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector. The result is stored in this
+     * vector.
+     *
+     * @param B Vector to add to this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public void addEq(SparseVector B) {
+<span class="fc" id="L311">        RealDenseSparseVectorOperations.addEq(this, B);</span>
+<span class="fc" id="L312">    }</span>
+
+
+    /**
+     * Computes the element-wise addition between this vector and the specified vector. The result is stored in this
+     * vector.
+     * @param B Vector to add to this vector.
+     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+     */
+    @Override
+    public void subEq(SparseVector B) {
+<span class="fc" id="L323">        RealDenseSparseVectorOperations.subEq(this, B);</span>
+<span class="fc" id="L324">    }</span>
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
+     *
+     * @param B Vector to element-wise multiply to this vector.
+     * @return The vector resulting from the element-wise multiplication.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    @Override
+    public SparseVector elemMult(SparseVector B) {
+<span class="fc" id="L336">        return RealDenseSparseVectorOperations.elemMult(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
+     *
+     * @param B Vector to element-wise multiply to this vector.
+     * @return The vector resulting from the element-wise multiplication.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    @Override
+    public CVector elemMult(CVector B) {
+<span class="fc" id="L349">        return new CVector(RealComplexDenseElemMult.dispatch(B.entries, B.shape, this.entries, this.shape));</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
+     *
+     * @param B Vector to element-wise multiply to this vector.
+     * @return The vector resulting from the element-wise multiplication.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    @Override
+    public SparseCVector elemMult(SparseCVector B) {
+<span class="fc" id="L362">        return RealComplexDenseSparseVectorOperations.elemMult(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
+     *
+     * @param B Vector to element-wise divide this vector by.
+     * @return The vector resulting from the element-wise division.
+     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
+     */
+    @Override
+    public CVector elemDiv(CVector B) {
+<span class="fc" id="L375">        return new CVector(RealComplexDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));</span>
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #T()}. For a vector, this just copies the vector.
+     *
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public Vector transpose() {
+<span class="fc" id="L386">        return new Vector(this);</span>
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. For a vector, this just copies the vector. &lt;br&gt;
+     * Same as {@link #transpose()}.
+     *
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public Vector T() {
+<span class="fc" id="L398">        return new Vector(this);</span>
+    }
+
+
+    /**
+     * Joints specified vector with this vector.
+     *
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    @Override
+    public Vector join(Vector b) {
+<span class="fc" id="L410">        Vector joined = new Vector(this.size+b.size);</span>
+<span class="fc" id="L411">        System.arraycopy(this.entries, 0, joined.entries, 0, this.size);</span>
+<span class="fc" id="L412">        System.arraycopy(b.entries, 0, joined.entries, this.size, b.size);</span>
+
+<span class="fc" id="L414">        return joined;</span>
+    }
+
+
+    /**
+     * Joints specified vector with this vector.
+     *
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    @Override
+    public CVector join(CVector b) {
+<span class="fc" id="L426">        CNumber[] entries = new CNumber[this.size+b.size];</span>
+<span class="fc" id="L427">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
+<span class="fc" id="L428">        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);</span>
+
+<span class="fc" id="L430">        return new CVector(entries);</span>
+    }
+
+
+    /**
+     * Joints specified vector with this vector.
+     *
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    @Override
+    public Vector join(SparseVector b) {
+<span class="fc" id="L442">        Vector joined = new Vector(this.size+b.size);</span>
+<span class="fc" id="L443">        System.arraycopy(this.entries, 0, joined.entries, 0, this.size);</span>
+
+        // Copy entries from sparse vector.
+        int index;
+<span class="fc bfc" id="L447" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L448">            index = b.indices[i];</span>
+<span class="fc" id="L449">            joined.entries[this.size+index] = b.entries[i];</span>
+        }
+
+<span class="fc" id="L452">        return joined;</span>
+    }
+
+
+    /**
+     * Joints specified vector with this vector.
+     *
+     * @param b Vector to join with this vector.
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    @Override
+    public CVector join(SparseCVector b) {
+<span class="fc" id="L464">        CVector joined = new CVector(this.size+b.size);</span>
+<span class="fc" id="L465">        ArrayUtils.arraycopy(this.entries, 0, joined.entries, 0, this.size);</span>
+
+        // Copy entries from sparse vector.
+        int index;
+<span class="fc bfc" id="L469" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L470">            index = b.indices[i];</span>
+<span class="fc" id="L471">            joined.entries[this.size+index] = b.entries[i].copy();</span>
+        }
+
+<span class="fc" id="L474">        return joined;</span>
+    }
+
+
+    /**
+     * Stacks two vectors along columns as if they were row vectors.
+     *
+     * @param b Vector to stack to the bottom of this vector.
+     * @return The result of stacking this vector and vector b.&lt;br&gt;
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public Matrix stack(Vector b) {
+<span class="fc" id="L488">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L489">        Matrix stacked = new Matrix(2, this.size);</span>
+
+        // Copy entries from each vector to the matrix.
+<span class="fc" id="L492">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.size);</span>
+<span class="fc" id="L493">        System.arraycopy(b.entries, 0, stacked.entries, this.size, b.size);</span>
+
+<span class="fc" id="L495">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks two vectors along columns.
+     *
+     * @param b Vector to stack to the bottom of this vector.
+     * @return The result of stacking this vector and vector b.&lt;br&gt;
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public Matrix stack(SparseVector b) {
+<span class="fc" id="L509">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L510">        Matrix stacked = new Matrix(2, this.size);</span>
+
+        // Copy entries from dense vector to the matrix.
+<span class="fc" id="L513">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.size);</span>
+
+        // Copy entries from sparse vector to the matrix.
+        int index;
+<span class="fc bfc" id="L517" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L518">            index = b.indices[i];</span>
+<span class="fc" id="L519">            stacked.entries[stacked.numCols + index] = b.entries[i];</span>
+        }
+
+<span class="fc" id="L522">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks two vectors along columns.
+     *
+     * @param b Vector to stack to the bottom of this vector.
+     * @return The result of stacking this vector and vector b.&lt;br&gt;
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public CMatrix stack(CVector b) {
+<span class="fc" id="L536">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L537">        CNumber[] entries = new CNumber[this.size+b.size];</span>
+
+        // Copy entries from each vector to the matrix.
+<span class="fc" id="L540">        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.size);</span>
+<span class="fc" id="L541">        ArrayUtils.arraycopy(b.entries, 0, entries, this.size, b.size);</span>
+
+<span class="fc" id="L543">        return new CMatrix(2, this.size, entries);</span>
+    }
+
+
+    /**
+     * Stacks two vectors along columns.
+     *
+     * @param b Vector to stack to the bottom of this vector.
+     * @return The result of stacking this vector and vector b.&lt;br&gt;
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public CMatrix stack(SparseCVector b) {
+<span class="fc" id="L557">        ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L558">        CMatrix stacked = new CMatrix(2, this.size);</span>
+
+        // Copy entries from dense vector to the matrix.
+<span class="fc" id="L561">        ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.size);</span>
+
+        // Copy entries from sparse vector to the matrix.
+        int index;
+<span class="fc bfc" id="L565" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L566">            index = b.indices[i];</span>
+<span class="fc" id="L567">            stacked.entries[stacked.numCols + index] = b.entries[i].copy();</span>
+        }
+
+<span class="fc" id="L570">        return stacked;</span>
+    }
+
+
+    /**
+     * &lt;p&gt;
+     * Stacks two vectors along specified axis.
+     * &lt;/p&gt;
+     *
+     * &lt;p&gt;
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * &lt;/p&gt;
+     *
+     * &lt;p&gt;
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * &lt;/p&gt;
+     *
+     * @param b    Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public Matrix stack(Vector b, int axis) {
+<span class="fc" id="L599">        ParameterChecks.assertAxis2D(axis);</span>
+        Matrix stacked;
+
+<span class="fc bfc" id="L602" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L603">            stacked = stack(b);</span>
+        } else {
+<span class="fc" id="L605">            ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L606">            double[] stackedEntries = new double[2*this.size];</span>
+
+<span class="fc" id="L608">            int count = 0;</span>
+<span class="fc bfc" id="L609" title="All 2 branches covered.">            for(int i=0; i&lt;stackedEntries.length; i+=2) {</span>
+<span class="fc" id="L610">                stackedEntries[i] = this.entries[count];</span>
+<span class="fc" id="L611">                stackedEntries[i+1] = b.entries[count++];</span>
+            }
+
+<span class="fc" id="L614">            stacked = new Matrix(this.size, 2, stackedEntries);</span>
+        }
+
+<span class="fc" id="L617">        return stacked;</span>
+    }
+
+
+    /**
+     * &lt;p&gt;
+     * Stacks two vectors along specified axis.
+     * &lt;/p&gt;
+     *
+     * &lt;p&gt;
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * &lt;/p&gt;
+     *
+     * &lt;p&gt;
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * &lt;/p&gt;
+     *
+     * @param b    Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public Matrix stack(SparseVector b, int axis) {
+<span class="fc" id="L646">        ParameterChecks.assertAxis2D(axis);</span>
+        Matrix stacked;
+
+<span class="fc bfc" id="L649" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L650">            stacked = stack(b);</span>
+        } else {
+<span class="fc" id="L652">            ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L653">            double[] stackedEntries = new double[2*this.size];</span>
+
+            // Copy dense values.
+<span class="fc bfc" id="L656" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
+<span class="fc" id="L657">                stackedEntries[i*2] = this.entries[i];</span>
+            }
+
+            // Copy sparse values.
+            int index;
+<span class="fc bfc" id="L662" title="All 2 branches covered.">            for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L663">                index = b.indices[i];</span>
+<span class="fc" id="L664">                stackedEntries[index*2 + 1] = b.entries[i];</span>
+            }
+
+<span class="fc" id="L667">            stacked = new Matrix(this.size, 2, stackedEntries);</span>
+        }
+
+<span class="fc" id="L670">        return stacked;</span>
+    }
+
+
+    /**
+     * &lt;p&gt;
+     * Stacks two vectors along specified axis.
+     * &lt;/p&gt;
+     *
+     * &lt;p&gt;
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * &lt;/p&gt;
+     *
+     * &lt;p&gt;
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * &lt;/p&gt;
+     *
+     * @param b    Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(CVector b, int axis) {
+<span class="fc" id="L699">        ParameterChecks.assertAxis2D(axis);</span>
+        CMatrix stacked;
+
+<span class="fc bfc" id="L702" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L703">            stacked = stack(b);</span>
+        } else {
+<span class="fc" id="L705">            ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L706">            CNumber[] stackedEntries = new CNumber[2*this.size];</span>
+
+<span class="fc" id="L708">            int count = 0;</span>
+
+<span class="fc bfc" id="L710" title="All 2 branches covered.">            for(int i=0; i&lt;stackedEntries.length; i+=2) {</span>
+<span class="fc" id="L711">                stackedEntries[i] = new CNumber(this.entries[count]);</span>
+<span class="fc" id="L712">                stackedEntries[i+1] = b.entries[count++].copy();</span>
+            }
+
+<span class="fc" id="L715">            stacked = new CMatrix(this.size, 2, stackedEntries);</span>
+        }
+
+<span class="fc" id="L718">        return stacked;</span>
+    }
+
+
+    /**
+     * &lt;p&gt;
+     * Stacks two vectors along specified axis.
+     * &lt;/p&gt;
+     *
+     * &lt;p&gt;
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * &lt;/p&gt;
+     *
+     * &lt;p&gt;
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * &lt;/p&gt;
+     *
+     * @param b    Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     * @return The result of stacking this vector and the vector {@code b}.
+     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
+     *                                  entries in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(SparseCVector b, int axis) {
+<span class="fc" id="L747">        ParameterChecks.assertAxis2D(axis);</span>
+        CMatrix stacked;
+
+<span class="fc bfc" id="L750" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L751">            stacked = stack(b);</span>
+        } else {
+<span class="fc" id="L753">            ParameterChecks.assertArrayLengthsEq(this.size, b.size);</span>
+<span class="fc" id="L754">            CNumber[] stackedEntries = new CNumber[2*this.size];</span>
+<span class="fc" id="L755">            ArrayUtils.fillZeros(stackedEntries);</span>
+
+            // Copy dense values.
+<span class="fc bfc" id="L758" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
+<span class="fc" id="L759">                stackedEntries[i*2] = new CNumber(this.entries[i]);</span>
+            }
+
+            // Copy sparse values.
+            int index;
+<span class="fc bfc" id="L764" title="All 2 branches covered.">            for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L765">                index = b.indices[i];</span>
+<span class="fc" id="L766">                stackedEntries[index*2 + 1] = b.entries[i].copy();</span>
+            }
+
+<span class="fc" id="L769">            stacked = new CMatrix(this.size, 2, stackedEntries);</span>
+        }
+
+<span class="fc" id="L772">        return stacked;</span>
+    }
+
+
+    /**
+     * Computes the inner product between two vectors.
+     *
+     * @param b Second vector in the inner product.
+     * @return The inner product between this vector and the vector b.
+     * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
+     */
+    @Override
+    public Double inner(Vector b) {
+<span class="fc" id="L785">        return RealDenseVectorOperations.innerProduct(this.entries, b.entries);</span>
+    }
+
+
+    /**
+     * Computes the inner product between two vectors.
+     *
+     * @param b Second vector in the inner product.
+     * @return The inner product between this vector and the vector b.
+     * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
+     */
+    @Override
+    public Double inner(SparseVector b) {
+<span class="fc" id="L798">        return RealDenseSparseVectorOperations.inner(this.entries, b.entries, b.indices, b.size);</span>
+    }
+
+
+    /**
+     * Computes a unit vector in the same direction as this vector.
+     *
+     * @return A unit vector with the same direction as this vector. If this vector is zeros, then an equivalently sized
+     * zero vector will be returned.
+     */
+    @Override
+    public Vector normalize() {
+<span class="fc" id="L810">        double norm = this.norm();</span>
+<span class="pc bpc" id="L811" title="1 of 2 branches missed.">        return norm==0 ? new Vector(size) : this.div(norm);</span>
+    }
+
+
+    /**
+     * Computes the inner product between two vectors.
+     *
+     * @param b Second vector in the inner product.
+     * @return The inner product between this vector and the vector b.
+     * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
+     */
+    @Override
+    public CNumber inner(CVector b) {
+<span class="fc" id="L824">        return RealComplexDenseVectorOperations.innerProduct(this.entries, b.entries);</span>
+    }
+
+
+    /**
+     * Computes the inner product between two vectors.
+     *
+     * @param b Second vector in the inner product.
+     * @return The inner product between this vector and the vector b.
+     * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
+     */
+    @Override
+    public CNumber inner(SparseCVector b) {
+<span class="fc" id="L837">        return RealComplexDenseSparseVectorOperations.inner(this.entries, b.entries, b.indices, b.size);</span>
+    }
+
+
+    /**
+     * Computes the vector cross product between two vectors.
+     *
+     * @param b Second vector in the cross product.
+     * @return The result of the vector cross product between this vector and b.
+     * @throws IllegalArgumentException If either this vector or b do not have exactly 3 entries.
+     */
+    public Vector cross(Vector b) {
+<span class="fc" id="L849">        ParameterChecks.assertArrayLengthsEq(3, b.size);</span>
+<span class="fc" id="L850">        ParameterChecks.assertArrayLengthsEq(3, this.size);</span>
+<span class="fc" id="L851">        double[] entries = new double[3];</span>
+
+<span class="fc" id="L853">        entries[0] = this.entries[1]*b.entries[2]-this.entries[2]*b.entries[1];</span>
+<span class="fc" id="L854">        entries[1] = this.entries[2]*b.entries[0]-this.entries[0]*b.entries[2];</span>
+<span class="fc" id="L855">        entries[2] = this.entries[0]*b.entries[1]-this.entries[1]*b.entries[0];</span>
+
+<span class="fc" id="L857">        return new Vector(entries);</span>
+    }
+
+
+    /**
+     * Computes the vector cross product between two vectors.
+     *
+     * @param b Second vector in the cross product.
+     * @return The result of the vector cross product between this vector and b.
+     * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
+     */
+    public CVector cross(CVector b) {
+<span class="fc" id="L869">        ParameterChecks.assertArrayLengthsEq(3, b.size);</span>
+<span class="fc" id="L870">        ParameterChecks.assertArrayLengthsEq(3, this.size);</span>
+<span class="fc" id="L871">        CNumber[] entries = new CNumber[3];</span>
+
+<span class="fc" id="L873">        entries[0] = b.entries[2].mult(this.entries[1]).sub(b.entries[1].mult(this.entries[2]));</span>
+<span class="fc" id="L874">        entries[1] = b.entries[0].mult(this.entries[2]).sub(b.entries[2].mult(this.entries[0]));</span>
+<span class="fc" id="L875">        entries[2] = b.entries[1].mult(this.entries[0]).sub(b.entries[0].mult(this.entries[1]));</span>
+
+<span class="fc" id="L877">        return new CVector(entries);</span>
+    }
+
+
+    /**
+     * Computes the outer product of two vectors.
+     *
+     * @param b Second vector in the outer product.
+     * @return The result of the vector outer product between this vector and b.
+     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     */
+    @Override
+    public Matrix outer(Vector b) {
+<span class="fc" id="L890">        return new Matrix(this.size, b.size,</span>
+<span class="fc" id="L891">                RealDenseVectorOperations.outerProduct(this.entries, b.entries));</span>
+    }
+
+
+    /**
+     * Computes the outer product of two vectors.
+     *
+     * @param b Second vector in the outer product.
+     * @return The result of the vector outer product between this vector and b.
+     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     */
+    @Override
+    public Matrix outer(SparseVector b) {
+<span class="fc" id="L904">        return new Matrix(this.size, b.size,</span>
+<span class="fc" id="L905">                RealDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));</span>
+    }
+
+
+    /**
+     * Computes the outer product of two vectors.
+     *
+     * @param b Second vector in the outer product.
+     * @return The result of the vector outer product between this vector and b.
+     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     */
+    @Override
+    public CMatrix outer(CVector b) {
+<span class="fc" id="L918">        return new CMatrix(this.size, b.size,</span>
+<span class="fc" id="L919">                RealComplexDenseVectorOperations.outerProduct(this.entries, b.entries));</span>
+    }
+
+
+    /**
+     * Computes the outer product of two vectors.
+     *
+     * @param b Second vector in the outer product.
+     * @return The result of the vector outer product between this vector and b.
+     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
+     */
+    @Override
+    public CMatrix outer(SparseCVector b) {
+<span class="fc" id="L932">        return new CMatrix(this.size, b.size,</span>
+<span class="fc" id="L933">                RealComplexDenseSparseVectorOperations.outerProduct(this.entries, b.entries, b.indices, b.size));</span>
+    }
+
+
+    /**
+     * Checks if a vector is parallel to this vector.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
+     */
+    @Override
+    public boolean isParallel(Vector b) {
+        // TODO: Add overloaded methods for other vector types.
+        boolean result;
+
+<span class="fc bfc" id="L948" title="All 2 branches covered.">        if(this.size!=b.size) {</span>
+<span class="fc" id="L949">            result = false;</span>
+<span class="fc bfc" id="L950" title="All 2 branches covered.">        } else if(this.size==1) {</span>
+<span class="fc" id="L951">            result = true;</span>
+<span class="fc bfc" id="L952" title="All 4 branches covered.">        } else if(this.isZeros() || b.isZeros()) {</span>
+<span class="fc" id="L953">            result = true; // Any vector is parallel to zero vector.</span>
+        } else {
+<span class="fc" id="L955">            result = true;</span>
+<span class="fc" id="L956">            double scale = 0;</span>
+
+            // Find first non-zero entry of b to compute the scaling factor.
+<span class="pc bpc" id="L959" title="1 of 2 branches missed.">            for(int i=0; i&lt;b.size; i++) {</span>
+<span class="fc bfc" id="L960" title="All 2 branches covered.">                if(b.entries[i]!=0) {</span>
+<span class="fc" id="L961">                    scale = this.entries[i]/b.entries[i];</span>
+<span class="fc" id="L962">                    break;</span>
+                }
+            }
+
+            // Ensure all entries of b are the same scalar multiple of the entries in this vector.
+<span class="fc bfc" id="L967" title="All 2 branches covered.">            for(int i=0; i&lt;this.size; i++) {</span>
+<span class="fc bfc" id="L968" title="All 2 branches covered.">                if(b.entries[i]*scale != this.entries[i]) {</span>
+<span class="fc" id="L969">                    result = false;</span>
+<span class="fc" id="L970">                    break;</span>
+                }
+            }
+        }
+
+<span class="fc" id="L975">        return result;</span>
+    }
+
+
+    /**
+     * Checks if a vector is perpendicular to this vector.
+     *
+     * @param b Vector to compare to this vector.
+     * @return True if the vector {@code b} is perpendicular to this vector and the same size. Otherwise, returns false.
+     */
+    @Override
+    public boolean isPerp(Vector b) {
+        // TODO: Add overloaded methods for other vector types.
+        boolean result;
+
+<span class="fc bfc" id="L990" title="All 2 branches covered.">        if(this.size!=b.size) {</span>
+<span class="fc" id="L991">            result = false;</span>
+        } else {
+<span class="fc bfc" id="L993" title="All 2 branches covered.">            result = this.inner(b)==0;</span>
+        }
+
+<span class="fc" id="L996">        return result;</span>
+    }
+
+
+    /**
+     * Converts a vector to an equivalent matrix representing the vector as a column.
+     *
+     * @return A matrix equivalent to this vector.
+     */
+    @Override
+    public Matrix toMatrix() {
+<span class="fc" id="L1007">        return new Matrix(this.entries.length, 1, this.entries.clone());</span>
+    }
+
+
+    /**
+     * Converts a vector to an equivalent matrix representing either a row or column vector.
+     * @param columVector Flag for choosing whether to convert this vector to a matrix representing a row or column vector.
+     *                    &lt;p&gt;If true, the vector will be converted to a matrix representing a column vector.&lt;/p&gt;
+     *                    &lt;p&gt;If false, The vector will be converted to a matrix representing a row vector.&lt;/p&gt;
+     * @return A matrix equivalent to this vector.
+     */
+    @Override
+    public Matrix toMatrix(boolean columVector) {
+<span class="fc bfc" id="L1020" title="All 2 branches covered.">        if(columVector) {</span>
+            // Convert to column vector
+<span class="fc" id="L1022">            return new Matrix(this.entries.length, 1, this.entries.clone());</span>
+        } else {
+            // Convert to row vector.
+<span class="fc" id="L1025">            return new Matrix(1, this.entries.length, this.entries.clone());</span>
+        }
+    }
+
+
+    /**
+     * Converts this vector to an equivalent tensor.
+     * @return A tensor which is equivalent to this vector.
+     */
+    public Tensor toTensor() {
+<span class="fc" id="L1035">        return new Tensor(this.shape.copy(), this.entries.clone());</span>
+    }
+
+
+    /**
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
+     *
+     * @return the 2-norm of this tensor.
+     */
+    @Override
+    public double norm() {
+<span class="fc" id="L1046">        return VectorNorms.norm(entries);</span>
+    }
+
+
+    /**
+     * Computes the p-norm of this tensor. Warning, if p is large in absolute value, overflow errors may occur.
+     *
+     * @param p The p value in the p-norm. &lt;br&gt;
+     *          - If p is {@link Double#POSITIVE_INFINITY}, then this method computes the maximum/infinite norm.
+     *          - If p is {@link Double#NEGATIVE_INFINITY}, then this method computes the minimum norm.
+     * @return The p-norm of this tensor.
+     */
+    @Override
+    public double norm(double p) {
+<span class="fc" id="L1060">        return VectorNorms.norm(entries, p);</span>
+    }
+
+
+    /**
+     * Factory to create a tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected Vector makeTensor(Shape shape, double[] entries) {
+        // Shape not needed to construct a dense vector.
+<span class="fc" id="L1074">        return new Vector(entries);</span>
+    }
+
+
+    /**
+     * Factory to create a complex tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected CVector makeComplexTensor(Shape shape, double[] entries) {
+        // Shape not needed to construct a dense vector.
+<span class="nc" id="L1088">        return new CVector(entries);</span>
+    }
+
+
+    /**
+     * Factory to create a complex tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected CVector makeComplexTensor(Shape shape, CNumber[] entries) {
+        // Shape not needed to construct a dense vector.
+<span class="fc" id="L1102">        return new CVector(entries);</span>
+    }
+
+
+    /**
+     * Simply returns this tensor.
+     *
+     * @return A reference to this tensor.
+     */
+    @Override
+    protected Vector getSelf() {
+<span class="fc" id="L1113">        return this;</span>
+    }
+
+
+    /**
+     * Gets the length of a vector. Same as {@link #size()}
+     *
+     * @return The length, i.e. the number of entries, in this vector.
+     */
+    @Override
+    public int length() {
+<span class="fc" id="L1124">        return this.size;</span>
+    }
+
+
+    /**
+     * gets the size of this vector.
+     *
+     * @return The total number of entries in this vector.
+     */
+    @Override
+    public int size() {
+<span class="fc" id="L1135">        return size;</span>
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis. For a vector, this simply copies the vector.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is not positive or larger than &lt;code&gt;this.{@link #getRank()}-1&lt;/code&gt;.
+     */
+    @Override
+    public Vector flatten(int axis) {
+<span class="nc" id="L1147">        return this.copy();</span>
+    }
+
+
+    /**
+     * Converts this vector to a human-readable string format. To specify the maximum number of entries to print, use
+     * {@link PrintOptions#setMaxColumns(int)}.
+     * @return A human-readable string representation of this vector.
+     */
+    public String toString() {
+<span class="fc" id="L1157">        StringBuilder result = new StringBuilder();</span>
+
+<span class="fc bfc" id="L1159" title="All 2 branches covered.">        if(PrintOptions.getMaxColumns()&lt;size) {</span>
+            // Then also get the full size of the vector.
+<span class="fc" id="L1161">            result.append(String.format(&quot;Full Size: %d\n&quot;, size));</span>
+        }
+
+<span class="fc" id="L1164">        result.append(&quot;[&quot;);</span>
+
+<span class="fc" id="L1166">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
+        int width;
+        String value;
+
+        // Get entries up until the stopping point.
+<span class="fc bfc" id="L1171" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="fc" id="L1172">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
+<span class="fc" id="L1173">            width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L1174" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1175">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+        }
+
+<span class="fc bfc" id="L1178" title="All 2 branches covered.">        if(stopIndex &lt; size-1) {</span>
+<span class="fc" id="L1179">            width = PrintOptions.getPadding() + 3;</span>
+<span class="fc" id="L1180">            value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L1181" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1182">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+        }
+
+        // Get last entry now
+<span class="fc" id="L1186">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
+<span class="fc" id="L1187">        width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L1188" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L1189">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+
+<span class="fc" id="L1191">        result.append(&quot;]&quot;);</span>
+
+<span class="fc" id="L1193">        return result.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
