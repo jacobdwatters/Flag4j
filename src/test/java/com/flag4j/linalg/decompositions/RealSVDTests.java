@@ -13,29 +13,6 @@ class RealSVDTests {
 
     Matrix A, expS, expU, expV;
 
-    private void printJava(String name, Matrix src) {
-        System.out.println(name + " = new double[][]{");
-
-        for(int i=0; i<src.numRows; i++) {
-            System.out.print("\t\t{");
-            for(int j=0; j<src.numCols; j++) {
-                System.out.print(src.get(i, j));
-                if(j<src.numCols-1) {
-                    System.out.print(", ");
-                }
-            }
-            System.out.print("}");
-            if(i<src.numRows-1) {
-                System.out.print(", ");
-            }
-            System.out.println();
-        }
-
-        System.out.println("};");
-        System.out.println(name.replace("Entries", "") + " = new Matrix(" + name + ");");
-    }
-
-
     @Test
     void svdTest() {
         // -------------------- Sub-case 1 --------------------
