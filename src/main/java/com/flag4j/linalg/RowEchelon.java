@@ -46,17 +46,6 @@ public class RowEchelon {
     }
 
 
-//    /**
-//     * Computes row echelon form of a Matrix.
-//     * @param A The matrix for which to compute the row echelon form.
-//     * @return A matrix in row echelon form which is row-equivalent to this matrix.
-//     */
-//    public static SparseMatrix ref(SparseMatrix A) {
-//        /*TODO*/
-//        return null;
-//    }
-
-
     /**
      * Computes a row echelon form of a Matrix. For a reduced row echelon form use {@link #rref(CMatrix)}.
      * @param A The matrix for which to compute the row echelon form.
@@ -65,17 +54,6 @@ public class RowEchelon {
     public static CMatrix ref(CMatrix A) {
         return new ComplexLUDecomposition().decompose(A).getU();
     }
-
-
-//    /**
-//     * Computes row echelon form of a Matrix.
-//     * @param A The matrix for which to compute the row echelon form.
-//     * @return A matrix in row echelon form which is row-equivalent to this matrix.
-//     */
-//    public static SparseCMatrix ref(SparseCMatrix A) {
-//        // TODO:
-//        return null;
-//    }
 
 
     /**
@@ -115,15 +93,6 @@ public class RowEchelon {
     }
 
 
-//    /**
-//     * Computes the reduced row echelon form of a matrix. By default, this method uses partial pivoting.
-//     * To use full or no pivoting see {@link #rref(Matrix, int)}.
-//     * @param A The matrix for which to compute the reduced row echelon form.
-//     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
-//     */
-//    public static SparseMatrix rref(SparseMatrix A) {/*TODO*/return null;}
-
-
     /**
      * Computes the reduced row echelon form of a matrix. For a non-reduced row echelon form see {@link #ref(CMatrix)}.
      * @param A The matrix for which to compute the reduced row echelon form.
@@ -160,15 +129,6 @@ public class RowEchelon {
     }
 
 
-//    /**
-//     * Computes the reduced row echelon form of a matrix. By default, this method uses partial pivoting.
-//     * To use full or no pivoting see {@link #rref(SparseCMatrix, int)}.
-//     * @param A The matrix for which to compute the reduced row echelon form.
-//     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
-//     */
-//    public static SparseCMatrix rref(SparseCMatrix A) {/*TODO*/return null;}
-
-
     /**
      * Computes the extended reduced row echelon form of a matrix. This is equivalent to <code>{@link #rref(Matrix) rref(A.augment(Matrix.I(A.numRows())))}</code>
      * @param A Matrix for which to compute extended reduced row echelon form of.
@@ -180,15 +140,6 @@ public class RowEchelon {
     }
 
 
-//    /**
-//     * Computes the extended reduced row echelon form of a matrix. This is equivalent to <code>{@link #rref(SparseMatrix) rref(A.augment(Matrix.I(A.numRows())))}</code>
-//     * @param A Matrix for which to compute extended reduced row echelon form of.
-//     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
-//     * appropriately sized identity matrix.
-//     */
-//    public static SparseMatrix erref(SparseMatrix A) {/*TODO*/return null;}
-
-
     /**
      * Computes the extended reduced row echelon form of a matrix. This is equivalent to <code>{@link #rref(CMatrix) rref(A.augment(Matrix.I(A.numRows())))}</code>
      * @param A Matrix for which to compute extended reduced row echelon form of.
@@ -198,13 +149,4 @@ public class RowEchelon {
     public static CMatrix erref(CMatrix A) {
         return rref(A.augment(Matrix.I(A.numRows)));
     }
-
-
-//    /**
-//     * Computes the extended reduced row echelon form of a matrix. This is equivalent to <code>{@link #rref(SparseCMatrix) rref(A.augment(Matrix.I(A.numRows())))}</code>
-//     * @param A Matrix for which to compute extended reduced row echelon form of.
-//     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
-//     * appropriately sized identity matrix.
-//     */
-//    public static SparseCMatrix erref(SparseCMatrix A) {/*TODO*/return null;}
 }
