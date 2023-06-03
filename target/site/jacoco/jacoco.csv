@@ -133,8 +133,8 @@ Flag4j,com.flag4j.linalg.decompositions,ComplexQRDecomposition,102,115,0,4,13,22
 Flag4j,com.flag4j.linalg.decompositions,RealCholeskyDecomposition,5,139,1,9,1,16,2,6,1,2
 Flag4j,com.flag4j.linalg.decompositions,RealHessenburgDecomposition,0,97,0,8,0,20,0,8,0,4
 Flag4j,com.flag4j.linalg.decompositions,SingularValueDecomposition,0,15,0,0,0,6,0,4,0,4
-Flag4j,com.flag4j.linalg.decompositions,ComplexSVD,143,0,10,0,21,0,8,0,3,0
-Flag4j,com.flag4j.linalg.decompositions,RealSVD,12,183,3,11,3,26,4,7,1,3
+Flag4j,com.flag4j.linalg.decompositions,ComplexSVD,186,0,14,0,26,0,10,0,3,0
+Flag4j,com.flag4j.linalg.decompositions,RealSVD,12,175,3,11,3,25,4,7,1,3
 Flag4j,com.flag4j.linalg.decompositions,QRDecomposition,0,30,0,2,0,12,0,6,0,5
 Flag4j,com.flag4j.linalg.decompositions,ComplexCholeskyDecomposition,5,141,1,9,1,16,2,6,1,2
 Flag4j,com.flag4j.linalg.decompositions,ComplexHessenburgDecomposition,3,91,3,5,1,17,3,4,0,3

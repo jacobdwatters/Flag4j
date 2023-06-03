@@ -83,6 +83,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixConversionTes
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixRowColSumTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberBinaryOperationsTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\RealComplexDenseSparseMatMultTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\decompositions\RealSVDTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseMatMultTransposeTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixDirectSumTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\complex\CMatrixMultiplyTests.java
