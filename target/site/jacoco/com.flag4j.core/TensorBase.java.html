@@ -34,15 +34,30 @@ import java.math.BigInteger;
 /**
  * The base class for all tensors. A tensor is an algebraic object equivalent to a multidimensional array with a single
  * data type.
- * @param &lt;T&gt; Type of the storage data structure for the tensor.
+ * @param &lt;T&gt; Type of this tensor.
+ * @param &lt;U&gt; Dense Tensor type.
+ * @param &lt;W&gt; Complex Tensor type.
+ * @param &lt;Z&gt; Dense complex tensor type.
+ * @param &lt;Y&gt; Real Tensor type.
+ * @param &lt;D&gt; Type of the storage data structure for the tensor.
  *           This common use case will be an array or list-like data structure.
+ * @param &lt;X&gt; The type of individual entry within the {@code D} data structure
  */
-public abstract class TensorBase&lt;T&gt; implements Serializable {
+public abstract class TensorBase&lt;T, U, W, Z, Y, D extends Serializable, X extends Number&gt; implements Serializable,
+        TensorComparisonsMixin,
+        TensorPropertiesMixin,
+        TensorManipulationsMixin&lt;T&gt;,
+        TensorOperationsMixin&lt;T, U, W, Z, Y, X&gt; {
+
+    /**
+     * Default value for rounding to zero.
+     */
+    protected static final double DEFAULT_ROUND_TO_ZERO_THRESHOLD = 1e-12;
 
     /**
      * Entry data for this tensor.
      */
-    public final T entries;
+    public final D entries;
     /**
      * The shape of this tensor
      */
@@ -50,14 +65,15 @@ public abstract class TensorBase&lt;T&gt; implements Serializable {
 
 
     /**
-     * Creates an empty tensor with given shape.
+     * Creates a tensor with specified entries and shape.
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor.
+     * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
+     *                If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-<span class="fc" id="L57">    public TensorBase(Shape shape, T entries) {</span>
-<span class="fc" id="L58">        this.shape = shape;</span>
-<span class="fc" id="L59">        this.entries = entries;</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L73">    public TensorBase(Shape shape, D entries) {</span>
+<span class="fc" id="L74">        this.shape = shape;</span>
+<span class="fc" id="L75">        this.entries = entries;</span>
+<span class="fc" id="L76">    }</span>
 
 
     /**
@@ -65,7 +81,7 @@ public abstract class TensorBase&lt;T&gt; implements Serializable {
      * @return The shape of this tensor.
      */
     public Shape getShape() {
-<span class="fc" id="L68">        return this.shape;</span>
+<span class="fc" id="L84">        return this.shape;</span>
     }
 
 
@@ -83,7 +99,7 @@ public abstract class TensorBase&lt;T&gt; implements Serializable {
      * @return The rank of this tensor.
      */
     public int getRank() {
-<span class="fc" id="L86">        return this.shape.getRank();</span>
+<span class="fc" id="L102">        return this.shape.getRank();</span>
     }
 
 
@@ -91,8 +107,8 @@ public abstract class TensorBase&lt;T&gt; implements Serializable {
      * Gets the entries of this tensor as a 1D array.
      * @return The entries of this tensor.
      */
-    public T getEntries() {
-<span class="nc" id="L95">        return this.entries;</span>
+    public D getEntries() {
+<span class="nc" id="L111">        return this.entries;</span>
     }
 
 
@@ -102,7 +118,7 @@ public abstract class TensorBase&lt;T&gt; implements Serializable {
      */
     public BigInteger totalEntries() {
         // Using the shape to compute the total number of entries ensures the correct result for sparse tensors.
-<span class="fc" id="L105">        return shape.totalEntries();</span>
+<span class="fc" id="L121">        return shape.totalEntries();</span>
     }
 
 
@@ -111,8 +127,8 @@ public abstract class TensorBase&lt;T&gt; implements Serializable {
      * @param B Second tensor.
      * @return True if this tensor and B have the same shape. False otherwise.
      */
-    public boolean sameShape(TensorBase&lt;?&gt; B) {
-<span class="nc" id="L115">        return this.shape.equals(B.shape);</span>
+    public boolean sameShape(TensorBase&lt;?, ?, ?, ?, ?, ?, ?&gt; B) {
+<span class="fc" id="L131">        return this.shape.equals(B.shape);</span>
     }
 
 
@@ -124,14 +140,21 @@ public abstract class TensorBase&lt;T&gt; implements Serializable {
      * @return True if tensor A and tensor B have the same length along the specified axis. Otherwise, returns false.
      * @throws IllegalArgumentException If axis is negative or unspecified for either tensor.
      */
-    public static boolean sameLength(TensorBase&lt;?&gt; A, TensorBase&lt;?&gt; B, int axis) {
-<span class="nc bnc" id="L128" title="All 4 branches missed.">        if(axis &lt; 0 || axis&gt;=Math.min(A.shape.getRank(), B.shape.getRank())) {</span>
-<span class="nc" id="L129">            throw new IllegalArgumentException(</span>
-<span class="nc" id="L130">                    ErrorMessages.getAxisErr(axis)</span>
+    public static boolean sameLength(TensorBase&lt;?, ?, ?, ?, ?, ?, ?&gt; A, TensorBase&lt;?, ?, ?, ?, ?, ?, ?&gt; B, int axis) {
+<span class="nc bnc" id="L144" title="All 4 branches missed.">        if(axis &lt; 0 || axis&gt;=Math.min(A.shape.getRank(), B.shape.getRank())) {</span>
+<span class="nc" id="L145">            throw new IllegalArgumentException(</span>
+<span class="nc" id="L146">                    ErrorMessages.getAxisErr(axis)</span>
             );
         }
 
-<span class="nc bnc" id="L134" title="All 2 branches missed.">        return A.shape.dims[axis]==B.shape.dims[axis];</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">        return A.shape.dims[axis]==B.shape.dims[axis];</span>
     }
+
+
+    /**
+     * Simply returns a reference of this tensor.
+     * @return A reference to this tensor.
+     */
+    protected abstract T getSelf();
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

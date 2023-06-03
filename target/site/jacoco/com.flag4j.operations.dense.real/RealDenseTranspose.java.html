@@ -300,5 +300,35 @@ public final class RealDenseTranspose {
 
 <span class="fc" id="L301">        return dest;</span>
     }
+
+
+    /**
+     * Transposes an integer matrix using a blocked algorithm.
+     * @param src Entries of the matrix to transpose.
+     * @return The transpose of the matrix.
+     */
+    public static int[][] blockedIntMatrix(final int[][] src) {
+<span class="fc" id="L311">        int[][] dest = new int[src[0].length][src.length];</span>
+<span class="fc" id="L312">        int blockSize = Configurations.getBlockSize();</span>
+
+        int iBound;
+        int jBound;
+
+<span class="fc bfc" id="L317" title="All 2 branches covered.">        for(int ii=0; ii&lt;src[0].length; ii+=blockSize) {</span>
+<span class="fc" id="L318">            iBound = Math.min(src[0].length, ii+blockSize);</span>
+
+<span class="fc bfc" id="L320" title="All 2 branches covered.">            for(int jj=0; jj&lt;src.length; jj+=blockSize) {</span>
+<span class="fc" id="L321">                jBound = Math.min(src.length, jj+blockSize);</span>
+
+<span class="fc bfc" id="L323" title="All 2 branches covered.">                for(int i=ii; i&lt;iBound; i++) {</span>
+<span class="fc bfc" id="L324" title="All 2 branches covered.">                    for(int j=jj; j&lt;jBound; j++) {</span>
+<span class="fc" id="L325">                        dest[i][j] = src[j][i];</span>
+                    }
+                }
+            }
+        }
+
+<span class="fc" id="L331">        return dest;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

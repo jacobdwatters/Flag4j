@@ -34,6 +34,8 @@ import com.flag4j.Vector;
  */
 <span class="fc" id="L35">public class MatrixBackSolver implements LinearSolver&lt;Matrix, Vector, Vector&gt; {</span>
 
+    // TODO: If a diagonal entry is zero, back-solve fails, add error should be thrown (system is singular).
+
     /**
      * Solves the linear system of equations given by {@code U*x=b} where the coefficient matrix {@code U}
      * is an upper triangular matrix.
@@ -47,23 +49,23 @@ import com.flag4j.Vector;
     public Vector solve(Matrix U, Vector b) {
         double sum;
         int uIndex;
-<span class="fc" id="L50">        int n = b.size;</span>
-<span class="fc" id="L51">        Vector x = new Vector(U.numRows);</span>
+<span class="fc" id="L52">        int n = b.size;</span>
+<span class="fc" id="L53">        Vector x = new Vector(U.numRows);</span>
 
-<span class="fc" id="L53">        x.entries[n-1] = b.entries[n-1]/U.entries[n*n-1];</span>
+<span class="fc" id="L55">        x.entries[n-1] = b.entries[n-1]/U.entries[n*n-1];</span>
 
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        for(int i=n-2; i&gt;-1; i--) {</span>
-<span class="fc" id="L56">            sum = 0;</span>
-<span class="fc" id="L57">            uIndex = i*U.numCols;</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        for(int i=n-2; i&gt;-1; i--) {</span>
+<span class="fc" id="L58">            sum = 0;</span>
+<span class="fc" id="L59">            uIndex = i*U.numCols;</span>
 
-<span class="fc bfc" id="L59" title="All 2 branches covered.">            for(int j=i+1; j&lt;n; j++) {</span>
-<span class="fc" id="L60">                sum += U.entries[uIndex + j]*x.entries[j];</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">            for(int j=i+1; j&lt;n; j++) {</span>
+<span class="fc" id="L62">                sum += U.entries[uIndex + j]*x.entries[j];</span>
             }
 
-<span class="fc" id="L63">            x.entries[i] = (b.entries[i]-sum)/U.entries[i*(n+1)];</span>
+<span class="fc" id="L65">            x.entries[i] = (b.entries[i]-sum)/U.entries[i*(n+1)];</span>
         }
 
-<span class="fc" id="L66">        return x;</span>
+<span class="fc" id="L68">        return x;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

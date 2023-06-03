@@ -27,7 +27,8 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
-import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.io.PrintOptions;
+import com.flag4j.linalg.transformations.Householder;
 
 
 /**
@@ -82,17 +83,21 @@ public class ComplexQRDecomposition extends QRDecomposition<CMatrix> {
         int m = R.numRows, n = R.numCols;
         int stop = Math.min(n, m-1);
 
-        CMatrix H, col;
+        double eps = 1.0e-12;
+
+        CMatrix H;
+        CVector col;
 
         // Initialize Q to the identity matrix.
         Q = CMatrix.I(R.numRows);
 
         for(int i=0; i<stop; i++) {
-            H = CMatrix.I(m);
-            col = R.getColBelow(i, i);
+            col = R.getColBelow(i, i).toVector();
 
-            if(!col.isZeros()) { // Then a householder transform must be applied
-                H.setSlice(getHouseholder(col), i, i);
+            // If the column has zeros below the diagonal it is in the correct form. No need to compute reflector.
+            if(col.maxAbs() > eps) {
+                H = CMatrix.I(m);
+                H.setSlice(Householder.getReflector(col), i, i);
 
                 Q = Q.mult(H); // Apply Householder reflector to Q
                 R = H.mult(R); // Apply Householder reflector to R
@@ -101,25 +106,26 @@ public class ComplexQRDecomposition extends QRDecomposition<CMatrix> {
     }
 
 
-    /**
-     * Computes the Householder reflector for the specified column vector.
-     * @param col Column vector to compute Householder reflector for.
-     * @return The Householder transformation matrix.
-     */
-    private CMatrix getHouseholder(CMatrix col) {
-        CMatrix H = CMatrix.I(col.numRows);
-        CVector v = col.toVector();
+    // TODO: TEMPORARY FOR TESTING
+    public static void main(String[] args) {
+        PrintOptions.setPrecision(100);
 
-        CNumber signedNorm = v.entries[0].equals(CNumber.ZERO) ?
-                new CNumber(-v.norm()) : CNumber.sgn(v.entries[0]).mult(-v.norm());
+        double[][] aEntries = {
+                {7.778479611705531, 0.8494918994733043, -6.125644861374033E-9},
+                {0.849491899473305, -4.06778802619038, 2.420785828428717E-8},
+                {-6.125644498503208E-9, 2.4207858080244343E-8, -0.7106915855151509}};
+        CMatrix A = new CMatrix(aEntries);
 
-        v = v.scalDiv(v.entries[0].add(signedNorm));
-        v.entries[0] = new CNumber(1.0);
+        ComplexQRDecomposition qr = new ComplexQRDecomposition();
+        qr.decompose(A);
 
-        // Create projection matrix
-        CMatrix P = v.outer(v).mult(CNumber.TWO.div(v.inner(v)));
-        H.subEq(P);
+        CMatrix Q = qr.getQ();
+        CMatrix R = qr.getR();
 
-        return H;
+        System.out.println("\n\n" + "-".repeat(100) + "\n");
+        System.out.println("A:\n" + A + "\n");
+        System.out.println("Q:\n" + Q + "\n");
+        System.out.println("R:\n" + R + "\n");
+        System.out.println("QR:\n" + Q.mult(R) + "\n");
     }
 }

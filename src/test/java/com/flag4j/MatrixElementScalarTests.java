@@ -26,8 +26,8 @@ class MatrixElementScalarTests {
                 {4.13/1.44, -35.33/1.44, 6/1.44}};
         expResult = new Matrix(expEntries);
 
-        assertArrayEquals(expResult.entries, A.scalDiv(scalar).entries);
-        assertEquals(expResult.shape, A.scalDiv(scalar).shape);
+        assertArrayEquals(expResult.entries, A.div(scalar).entries);
+        assertEquals(expResult.shape, A.div(scalar).shape);
 
         // -------------- Sub-case 2 --------------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
@@ -41,8 +41,8 @@ class MatrixElementScalarTests {
                         new CNumber(6).div(scalarC)}};
         expResultC = new CMatrix(expEntriesC);
 
-        assertArrayEquals(expResultC.entries, A.scalDiv(scalarC).entries);
-        assertEquals(expResultC.shape, A.scalDiv(scalarC).shape);
+        assertArrayEquals(expResultC.entries, A.div(scalarC).entries);
+        assertEquals(expResultC.shape, A.div(scalarC).shape);
     }
 
 

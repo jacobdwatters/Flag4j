@@ -34,15 +34,30 @@ import java.math.BigInteger;
 /**
  * The base class for all tensors. A tensor is an algebraic object equivalent to a multidimensional array with a single
  * data type.
- * @param <T> Type of the storage data structure for the tensor.
+ * @param <T> Type of this tensor.
+ * @param <U> Dense Tensor type.
+ * @param <W> Complex Tensor type.
+ * @param <Z> Dense complex tensor type.
+ * @param <Y> Real Tensor type.
+ * @param <D> Type of the storage data structure for the tensor.
  *           This common use case will be an array or list-like data structure.
+ * @param <X> The type of individual entry within the {@code D} data structure
  */
-public abstract class TensorBase<T> implements Serializable {
+public abstract class TensorBase<T, U, W, Z, Y, D extends Serializable, X extends Number> implements Serializable,
+        TensorComparisonsMixin,
+        TensorPropertiesMixin,
+        TensorManipulationsMixin<T>,
+        TensorOperationsMixin<T, U, W, Z, Y, X> {
+
+    /**
+     * Default value for rounding to zero.
+     */
+    protected static final double DEFAULT_ROUND_TO_ZERO_THRESHOLD = 1e-12;
 
     /**
      * Entry data for this tensor.
      */
-    public final T entries;
+    public final D entries;
     /**
      * The shape of this tensor
      */
@@ -50,11 +65,12 @@ public abstract class TensorBase<T> implements Serializable {
 
 
     /**
-     * Creates an empty tensor with given shape.
+     * Creates a tensor with specified entries and shape.
      * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor.
+     * @param entries Entries of this tensor. If this tensor is dense, this specifies all entries within the tensor.
+     *                If this tensor is sparse, this specifies only the non-zero entries of the tensor.
      */
-    public TensorBase(Shape shape, T entries) {
+    public TensorBase(Shape shape, D entries) {
         this.shape = shape;
         this.entries = entries;
     }
@@ -91,7 +107,7 @@ public abstract class TensorBase<T> implements Serializable {
      * Gets the entries of this tensor as a 1D array.
      * @return The entries of this tensor.
      */
-    public T getEntries() {
+    public D getEntries() {
         return this.entries;
     }
 
@@ -111,7 +127,7 @@ public abstract class TensorBase<T> implements Serializable {
      * @param B Second tensor.
      * @return True if this tensor and B have the same shape. False otherwise.
      */
-    public boolean sameShape(TensorBase<?> B) {
+    public boolean sameShape(TensorBase<?, ?, ?, ?, ?, ?, ?> B) {
         return this.shape.equals(B.shape);
     }
 
@@ -124,7 +140,7 @@ public abstract class TensorBase<T> implements Serializable {
      * @return True if tensor A and tensor B have the same length along the specified axis. Otherwise, returns false.
      * @throws IllegalArgumentException If axis is negative or unspecified for either tensor.
      */
-    public static boolean sameLength(TensorBase<?> A, TensorBase<?> B, int axis) {
+    public static boolean sameLength(TensorBase<?, ?, ?, ?, ?, ?, ?> A, TensorBase<?, ?, ?, ?, ?, ?, ?> B, int axis) {
         if(axis < 0 || axis>=Math.min(A.shape.getRank(), B.shape.getRank())) {
             throw new IllegalArgumentException(
                     ErrorMessages.getAxisErr(axis)
@@ -133,4 +149,11 @@ public abstract class TensorBase<T> implements Serializable {
 
         return A.shape.dims[axis]==B.shape.dims[axis];
     }
+
+
+    /**
+     * Simply returns a reference of this tensor.
+     * @return A reference to this tensor.
+     */
+    protected abstract T getSelf();
 }

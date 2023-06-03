@@ -63,13 +63,13 @@ public class ComplexOperations {
      * @return The element-wise square root of the tensor.
      */
     public static CNumber[] sqrt(double[] src) {
-<span class="nc" id="L66">        CNumber[] roots = new CNumber[src.length];</span>
+<span class="fc" id="L66">        CNumber[] roots = new CNumber[src.length];</span>
 
-<span class="nc bnc" id="L68" title="All 2 branches missed.">        for(int i=0; i&lt;roots.length; i++) {</span>
-<span class="nc" id="L69">            roots[i] = CNumber.sqrt(src[i]);</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        for(int i=0; i&lt;roots.length; i++) {</span>
+<span class="fc" id="L69">            roots[i] = CNumber.sqrt(src[i]);</span>
         }
 
-<span class="nc" id="L72">        return roots;</span>
+<span class="fc" id="L72">        return roots;</span>
     }
 
 
@@ -78,11 +78,11 @@ public class ComplexOperations {
      * @param src Elements of the tensor.
      * @return The element-wise absolute value of the tensor.
      */
-    public static CNumber[] abs(CNumber[] src) {
-<span class="fc" id="L82">        CNumber[] abs = new CNumber[src.length];</span>
+    public static double[] abs(CNumber[] src) {
+<span class="fc" id="L82">        double[] abs = new double[src.length];</span>
 
 <span class="fc bfc" id="L84" title="All 2 branches covered.">        for(int i=0; i&lt;abs.length; i++) {</span>
-<span class="fc" id="L85">            abs[i] = src[i].mag();</span>
+<span class="fc" id="L85">            abs[i] = src[i].magAsDouble();</span>
         }
 
 <span class="fc" id="L88">        return abs;</span>
@@ -204,18 +204,41 @@ public class ComplexOperations {
 
 
     /**
+     * Computes the scalar division of a tensor.
+     * @param entries Entries of the tensor.
+     * @param divisor Scalar value to divide each element ot the tensor by.
+     * @return The scalar division of the tensor.
+     */
+    public static CNumber[] scalDiv(double[] entries, CNumber divisor) {
+<span class="fc" id="L213">        CNumber[] quotient = new CNumber[entries.length];</span>
+
+<span class="fc" id="L215">        double denom = divisor.re*divisor.re + divisor.im*divisor.im;</span>
+
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
+<span class="fc" id="L218">            double a = entries[i];</span>
+
+<span class="fc" id="L220">            quotient[i] = new CNumber(</span>
+                    a*divisor.re / denom,
+                    -a*divisor.im / denom);
+        }
+
+<span class="fc" id="L225">        return quotient;</span>
+    }
+
+
+    /**
      * Computes the element-wise complex conjugate of a tensor.
      * @param src Entries of the tensor.
      * @return The element-wise complex conjugate of the tensor
      */
     public static CNumber[] conj(CNumber[] src) {
-<span class="fc" id="L212">        CNumber[] conjugate = new CNumber[src.length];</span>
+<span class="fc" id="L235">        CNumber[] conjugate = new CNumber[src.length];</span>
 
-<span class="fc bfc" id="L214" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc" id="L215">            conjugate[i] = src[i].conj();</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L238">            conjugate[i] = src[i].conj();</span>
         }
 
-<span class="fc" id="L218">        return conjugate;</span>
+<span class="fc" id="L241">        return conjugate;</span>
     }
 
 
@@ -225,13 +248,13 @@ public class ComplexOperations {
      * @return Equivalent real entries for complex tensor.
      */
     public static double[] toReal(CNumber[] src) {
-<span class="fc" id="L228">        double[] real = new double[src.length];</span>
+<span class="fc" id="L251">        double[] real = new double[src.length];</span>
 
-<span class="fc bfc" id="L230" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
-<span class="fc" id="L231">            real[i] = src[i].re;</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L254">            real[i] = src[i].re;</span>
         }
 
-<span class="fc" id="L234">        return real;</span>
+<span class="fc" id="L257">        return real;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

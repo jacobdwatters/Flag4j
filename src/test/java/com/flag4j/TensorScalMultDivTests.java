@@ -1,5 +1,8 @@
 package com.flag4j;
 
+import com.flag4j.CTensor;
+import com.flag4j.Shape;
+import com.flag4j.Tensor;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,7 +76,7 @@ class TensorScalMultDivTests {
         expShape = new Shape(2, 3, 2);
         exp = new Tensor(expShape, expEntries);
 
-        assertEquals(exp, A.scalDiv(b));
+        assertEquals(exp, A.div(b));
     }
 
 
@@ -102,6 +105,6 @@ class TensorScalMultDivTests {
         expShape = new Shape(2, 3, 2);
         exp = new CTensor(expShape, expEntries);
 
-        assertEquals(exp, A.scalDiv(b));
+        assertEquals(exp, A.div(b));
     }
 }

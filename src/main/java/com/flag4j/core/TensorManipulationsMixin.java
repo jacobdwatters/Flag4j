@@ -31,20 +31,16 @@ import com.flag4j.Shape;
  * This interface specifies manipulations which all tensors (i.e. matrices and vectors) should implement.
  *
  * @param <T> Tensor type.
- * @param <U> Dense Tensor type.
- * @param <V> Sparse Tensor type.
- * @param <W> Complex Tensor type.
- * @param <Y> Real Tensor type.
- * @param <X> Tensor entry type.
  */
-interface TensorManipulationsMixin<T, U, V, W, Y, X extends Number> {
+interface TensorManipulationsMixin<T> {
 
     /**
      * Sets an index of this tensor to a specified value.
      * @param value Value to set.
      * @param indices The indices of this tensor for which to set the value.
+     * @return A reference to this tensor.
      */
-    void set(double value, int... indices);
+    T set(double value, int... indices);
 
 
     /**
@@ -58,8 +54,26 @@ interface TensorManipulationsMixin<T, U, V, W, Y, X extends Number> {
 
 
     /**
+     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
+     * in the reshaped tensor.
+     * @param shape Shape of the new tensor.
+     * @return A tensor which is equivalent to this tensor but with the specified shape.
+     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     */
+    T reshape(int... shape);
+
+
+    /**
      * Flattens tensor to single dimension. To flatten tensor along a single axis.
      * @return The flattened tensor.
      */
     T flatten();
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is not positive or larger than the rank of this tensor.
+     */
+    T flatten(int axis);
 }

@@ -27,6 +27,7 @@ package com.flag4j.operations.dense_sparse.real;
 
 import com.flag4j.SparseVector;
 import com.flag4j.Vector;
+import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -52,14 +53,13 @@ public class RealDenseSparseVectorOperations {
      * @return The inner product of the two vectors.
      * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
      */
-    public static double innerProduct(double[] src1, double[] src2, int[] indices, int sparseSize) {
+    public static double inner(double[] src1, double[] src2, int[] indices, int sparseSize) {
         ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);
         double innerProd = 0;
         int index;
 
         for(int i=0; i<src2.length; i++) {
             index = indices[i];
-
             innerProd += src1[index]*src2[i];
         }
 
@@ -92,10 +92,36 @@ public class RealDenseSparseVectorOperations {
 
 
     /**
+     * Computes the vector outer product between a real dense vector and a real sparse vector.
+     * @param src1 Non-zero entries of the sparse vector.
+     * @param src2 Entries of the dense vector.
+     * @param indices Indices of non-zero entries of sparse vector.
+     * @param sparseSize Full size of the sparse vector including zero entries.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static double[] outerProduct(double[] src1, int[] indices, int sparseSize, double[] src2) {
+        ParameterChecks.assertEquals(sparseSize, src2.length);
+
+        double[] dest = new double[src2.length*sparseSize];
+        int destIndex;
+
+        for(int i=0; i<src1.length; i++) {
+            destIndex = indices[i]*src2.length;
+
+            for(double v : src2) {
+                dest[destIndex++] = src1[i]*v;
+            }
+        }
+
+        return dest;
+    }
+
+
+    /**
      * Subtracts a real sparse vector from a real dense vector.
      * @param src1 Dense vector.
      * @param src2 Sparse vector.
-     * @return The result of the vector addition.
+     * @return The result of the vector subtraction.
      * @throws IllegalArgumentException If the vectors do not have the same shape.
      */
     public static Vector sub(Vector src1, SparseVector src2) {
@@ -104,6 +130,25 @@ public class RealDenseSparseVectorOperations {
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             dest.entries[src2.indices[i]] -= src2.entries[i];
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Subtracts a real dense vector from a real sparse vector.
+     * @param src1 Sparse vector.
+     * @param src2 Dense vector.
+     * @return The result of the vector subtraction.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static Vector sub(SparseVector src1, Vector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        Vector dest = new Vector(RealOperations.scalMult(src2.entries, -1));
+
+        for(int i=0; i<src1.nonZeroEntries(); i++) {
+            dest.entries[src1.indices[i]] += src1.entries[i];
         }
 
         return dest;
@@ -176,5 +221,23 @@ public class RealDenseSparseVectorOperations {
         }
 
         return dest;
+    }
+
+
+    /**
+     * Compute the element-wise division between a sparse vector and a dense vector.
+     * @param src1 First vector in the element-wise division.
+     * @param src2 Second vector in the element-wise division.
+     * @return The result of the element-wise vector division.
+     */
+    public static SparseVector elemDiv(SparseVector src1, Vector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        double[] dest = new double[src1.entries.length];
+
+        for(int i=0; i<src1.entries.length; i++) {
+            dest[i] = src1.entries[i]/src2.entries[src1.indices[i]];
+        }
+
+        return new SparseVector(src1.size, dest, src1.indices.clone());
     }
 }

@@ -34,6 +34,8 @@ import com.flag4j.Vector;
  */
 public class MatrixBackSolver implements LinearSolver<Matrix, Vector, Vector> {
 
+    // TODO: If a diagonal entry is zero, back-solve fails, add error should be thrown (system is singular).
+
     /**
      * Solves the linear system of equations given by {@code U*x=b} where the coefficient matrix {@code U}
      * is an upper triangular matrix.

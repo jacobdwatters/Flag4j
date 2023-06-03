@@ -34,7 +34,7 @@ package com.flag4j.core;
  * @param <Y> Real Matrix type.
  * @param <X> Matrix entry type.
  */
-public interface MatrixPropertiesMixin<T, U, V, W, Y, X extends Number> extends TensorPropertiesMixin<T, U, V, W, Y, X> {
+public interface MatrixPropertiesMixin {
 
 
     /**

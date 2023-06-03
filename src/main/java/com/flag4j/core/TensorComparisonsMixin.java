@@ -24,18 +24,10 @@
 
 package com.flag4j.core;
 
-
 /**
  * This interface specifies comparisons which all tensors (i.e. matrices and vectors) should implement.
- *
- * @param <T> Tensor type.
- * @param <U> Dense Tensor type.
- * @param <V> Sparse Tensor type.
- * @param <W> Complex Tensor type.
- * @param <Y> Real Tensor type.
- * @param <X> Tensor entry type.
  */
-public interface TensorComparisonsMixin<T, U, V, W, Y, X extends Number> {
+public interface TensorComparisonsMixin {
 
 
     /**

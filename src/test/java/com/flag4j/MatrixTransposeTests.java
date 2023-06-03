@@ -1,6 +1,5 @@
 package com.flag4j;
 
-import com.flag4j.util.RandomTensor;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -9,8 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class MatrixTransposeTests {
     Matrix A, expT, AT;
     double[][] aEntries, expEntries;
-    int numRows, numCols;
-    RandomTensor rng = new RandomTensor(42l);
 
 
     @Test

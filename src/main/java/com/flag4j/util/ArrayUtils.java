@@ -185,7 +185,26 @@ public final class ArrayUtils {
 
         int count=0;
         for(int i=start; i<stop; i++) {
-            dest[count++] = src[i];
+            dest[count++] = src[i].copy();
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Copies the full array. Similar to {@link Arrays#copyOfRange(Object[], int, int)} but
+     * performs a deep copy.
+     * @param src Source array to copy from.
+     * @return An array of length {@code stop-start} containing a deep copy of the specified range of the source array.
+     * @throws NegativeArraySizeException If stop is less than start.
+     */
+    public static CNumber[] copyOf(CNumber[] src) {
+        CNumber[] dest = new CNumber[src.length];
+
+        int count=0;
+        for(int i=0; i<dest.length; i++) {
+            dest[count++] = src[i].copy();
         }
 
         return dest;
@@ -432,8 +451,23 @@ public final class ArrayUtils {
      * @param fillValue Value to fill array with.
      */
     public static void fill(CNumber[] dest, CNumber fillValue) {
-        // TODO: Investigate speed of using Arrays.setAll(...) and Arrays.parallelSetAll(...)
         for(int i=0; i<dest.length; i++) {
+            dest[i] = fillValue.copy();
+        }
+    }
+
+
+    /**
+     * Fills an array with specified value.
+     * @param dest Array to fill.
+     * @param start Starting index of range to fill (Inclusive).
+     * @param end Ending index of range to fill (Exclusive).
+     * @param fillValue Value to fill array with. Each index of the {@code dest} array will be filled with a deep copy
+     *                  of this value.
+     * @throws ArrayIndexOutOfBoundsException If {@code start} or {@code end} is not within the destination array.
+     */
+    public static void fill(CNumber[] dest, int start, int end, CNumber fillValue) {
+        for(int i=start; i<end; i++) {
             dest[i] = fillValue.copy();
         }
     }
@@ -522,6 +556,24 @@ public final class ArrayUtils {
      */
     public static double[] range(int start, int end) {
         double[] rangeArr = new double[end-start];
+
+        int j=0;
+        for(int i=start; i<end; i++) {
+            rangeArr[j++]=i;
+        }
+
+        return rangeArr;
+    }
+
+
+    /**
+     * Gets an array filled with integers from {@code start} (inclusive) to {@code end} (exclusive)
+     * @param start Staring value (inclusive).
+     * @param end Stopping value (exclusive).
+     * @return An array containing the integer range {@code [start, end)}.
+     */
+    public static int[] rangeInt(int start, int end) {
+        int[] rangeArr = new int[end-start];
 
         int j=0;
         for(int i=start; i<end; i++) {

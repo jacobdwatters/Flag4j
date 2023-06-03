@@ -26,8 +26,7 @@ package com.flag4j.linalg.solvers;
 
 
 import com.flag4j.Matrix;
-import com.flag4j.core.MatrixBase;
-import com.flag4j.core.VectorBase;
+import com.flag4j.core.MatrixMixin;
 import com.flag4j.linalg.decompositions.LUDecomposition;
 
 /**
@@ -35,8 +34,8 @@ import com.flag4j.linalg.decompositions.LUDecomposition;
  * <p>If the system is not well determined, i.e. {@code A} is square and full rank, then use a
  * {@link LstsqSolver least-squares solver}.</p>
  */
-public abstract class LUSolver<T extends MatrixBase<?>,
-        U extends VectorBase<?>, V extends VectorBase<?>> implements LinearSolver<T, U, V> {
+public abstract class LUSolver<T extends MatrixMixin<T, ?, ?, ?, ?, ?>, U, V>
+        implements LinearSolver<T, U, V> {
 
     /**
      * Decomposer to compute {@code LU} decomposition.

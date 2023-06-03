@@ -1,5 +1,9 @@
 package com.flag4j;
 
+import com.flag4j.CVector;
+import com.flag4j.SparseCVector;
+import com.flag4j.SparseVector;
+import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +15,6 @@ class VectorInnerProductTest {
     int sparseSize;
     double[] aEntries = {1.0, 5.6, -9.355, 215.0};
     Vector a = new Vector(aEntries);
-
 
     @Test
     void realDenseTest() {

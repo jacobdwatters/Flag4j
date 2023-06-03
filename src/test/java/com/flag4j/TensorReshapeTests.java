@@ -1,11 +1,14 @@
 package com.flag4j;
 
+import com.flag4j.Shape;
+import com.flag4j.Tensor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TensorReshapeTests {
 
@@ -60,5 +63,29 @@ class TensorReshapeTests {
         exp = new Tensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
         assertEquals(exp, A.flatten());
+
+        // -------------------------- Sub-case 2 --------------------------
+        expShape = new Shape(1, 1, 12);
+        exp = new Tensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
+
+        assertEquals(exp, A.flatten(2));
+
+        // -------------------------- Sub-case 3 --------------------------
+        expShape = new Shape(1, 12, 1);
+        exp = new Tensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
+
+        assertEquals(exp, A.flatten(1));
+
+        // -------------------------- Sub-case 4 --------------------------
+        expShape = new Shape(12, 1, 1);
+        exp = new Tensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
+
+        assertEquals(exp, A.flatten(0));
+
+        // -------------------------- Sub-case 5 --------------------------
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.flatten(-1));
+
+        // -------------------------- Sub-case 6 --------------------------
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.flatten(5));
     }
 }

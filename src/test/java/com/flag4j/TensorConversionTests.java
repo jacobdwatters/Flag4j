@@ -1,5 +1,6 @@
 package com.flag4j;
 
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TensorConversionTests {
 
     static double[] aEntries;
-    static Shape shape, expShape;
+    static Shape shape;
     static Tensor A;
     static CTensor exp;
     static CNumber[] expEntries;
@@ -65,7 +66,6 @@ class TensorConversionTests {
     @Test
     void toVectorTest() {
         double[] expEntries;
-        Shape expShape;
         Vector exp;
 
         // ----------------------- Sub-case 1 -----------------------

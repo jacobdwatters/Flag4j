@@ -24,9 +24,7 @@
 
 package com.flag4j.operations.dense_sparse.real;
 
-import com.flag4j.Matrix;
 import com.flag4j.Shape;
-import com.flag4j.SparseMatrix;
 import com.flag4j.util.Axis2D;
 import com.flag4j.util.ErrorMessages;
 

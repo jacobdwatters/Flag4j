@@ -27,6 +27,8 @@ package com.flag4j.util;
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.Decompose;
+import com.flag4j.linalg.decompositions.ComplexQRDecomposition;
+import com.flag4j.linalg.decompositions.RealQRDecomposition;
 
 /**
  * An instance of this class is used for generating streams of pseudorandom tensors, matrices, and vectors.
@@ -403,7 +405,7 @@ public class RandomTensor {
      */
     public Matrix randomOrthogonalMatrix(int size) {
         Matrix randMat = new Matrix(size, size, genUniformRealArray(size));
-        return Decompose.qr(randMat)[0];
+        return new RealQRDecomposition().decompose(randMat).getQ();
     }
 
 
@@ -520,7 +522,19 @@ public class RandomTensor {
         return randnCMatrix(shape.get(0), shape.get(1), mean, std);
     }
 
-    // TODO: Once the QR decomposition is implemented for complex matrices, add randomUnitaryMatrix(int size) method.
+
+    /**
+     * Gets a pseudorandom unitary matrix. From an implementation point of view, a pseudorandom complex matrix is generated
+     * as if by {@link #randomCMatrix(int, int) getRandomMatrix(size, size)}. Then, a {@link Decompose#qr(CMatrix) QR}
+     * decomposition is computed on this pseudorandom matrix and the {@code Q} matrix from this decomposition is returned.
+     * @param size Size of the unitary matrix (i.e. the number rows and columns for the square matrix).
+     * @return A pseudorandom unitary matrix.
+     */
+    public CMatrix randomUnitaryMatrix(int size) {
+        CMatrix randMat = new CMatrix(size, size, genUniformComplexArray(size));
+        return new ComplexQRDecomposition().decompose(randMat).getQ();
+    }
+
 
     /**
      * Generates an array of doubles filled with uniformly distributed pseudorandom values in {@code [0.0, 1.0)}.

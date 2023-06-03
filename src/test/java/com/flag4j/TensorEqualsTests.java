@@ -1,6 +1,7 @@
 package com.flag4j;
 
 
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 

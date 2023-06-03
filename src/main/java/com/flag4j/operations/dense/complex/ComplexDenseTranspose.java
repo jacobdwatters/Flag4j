@@ -348,6 +348,36 @@ public class ComplexDenseTranspose {
     }
 
 
+    /**
+     * Computes the conjugate transpose of a tensor using a concurrent implementation. That is, interchanges the axes of the
+     * tensor so that it matches the specified axes permutation and so that the axis which are swapped and complex conjugated.
+     * @param src Entries of the tensor.
+     * @param shape Shape of the tensor to transpose.
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return The transpose of the tensor along the specified axes.
+     * @throws IllegalArgumentException If the {@code axes} array is not a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
+     */
+    public static CNumber[] standardConcurrentHerm(final CNumber[] src, final Shape shape, final int[] axes) {
+        if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
+            throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
+                    " tensor.");
+        }
+
+        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];
+        Shape destShape = shape.copy().swapAxes(axes);
+
+        ThreadManager.concurrentLoop(0, src.length, (i) -> {
+            int[] destIndices = shape.getIndices(i);
+            ArrayUtils.swap(destIndices, axes); // Compute destination indices.
+            dest[destShape.entriesIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element
+        });
+
+        return dest;
+    }
+
+
 
     /**
      * Computes complex conjugate transpose of a matrix using the standard algorithm.

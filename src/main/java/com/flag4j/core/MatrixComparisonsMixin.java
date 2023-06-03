@@ -24,7 +24,6 @@
 
 package com.flag4j.core;
 
-
 /**
  * This interface specifies comparisons which all matrices should implement.
  *
@@ -35,7 +34,7 @@ package com.flag4j.core;
  * @param <Y> Real matrix type.
  * @param <X> matrix entry type.
  */
-public interface MatrixComparisonsMixin<T, U, V, W, Y, X extends Number> extends TensorComparisonsMixin<T, U, V, W, Y, X> {
+public interface MatrixComparisonsMixin<T> {
 
     /**
      * Checks if this matrix is the identity matrix.

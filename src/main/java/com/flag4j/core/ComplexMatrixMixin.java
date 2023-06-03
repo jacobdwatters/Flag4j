@@ -24,7 +24,6 @@
 
 package com.flag4j.core;
 
-import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.SparseCMatrix;
 import com.flag4j.SparseCVector;
@@ -36,11 +35,7 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <T> Matrix type.
  * @param <Y> Real matrix type.
  */
-public interface ComplexMatrixMixin<T, Y> extends
-        MatrixPropertiesMixin<T, CMatrix, SparseCMatrix, T, Y, CNumber>,
-        MatrixOperationsMixin<T, CMatrix, SparseCMatrix, T, Y, CNumber>,
-        MatrixComparisonsMixin<T, CMatrix, SparseCMatrix, CMatrix, Y, CNumber>,
-        MatrixManipulationsMixin<T, CMatrix, SparseCMatrix, CMatrix, Y, CNumber> {
+public interface ComplexMatrixMixin<T, Y> {
 
 
     /**
@@ -54,7 +49,7 @@ public interface ComplexMatrixMixin<T, Y> extends
     /**
      * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
      * Same as {@link #conjT()} and {@link #H()}.
-     * @return he complex conjugate transpose (Hermitian transpose) of this tensor.
+     * @return The complex conjugate transpose (Hermitian transpose) of this tensor.
      */
     T hermTranspose();
 
@@ -62,7 +57,7 @@ public interface ComplexMatrixMixin<T, Y> extends
     /**
      * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
      * Same as {@link #conjT()} and {@link #hermTranspose()}.
-     * @return he complex conjugate transpose (Hermitian transpose) of this tensor.
+     * @return The complex conjugate transpose (Hermitian transpose) of this tensor.
      */
     T H();
 
@@ -109,7 +104,7 @@ public interface ComplexMatrixMixin<T, Y> extends
      *
      * @return The complex conjugate of this tensor.
      */
-    CMatrix conj();
+    T conj();
 
 
     /**
@@ -117,33 +112,29 @@ public interface ComplexMatrixMixin<T, Y> extends
      * @param values New values of the matrix.
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
-    void setValues(CNumber[][] values);
-
-
-    /**
-     * Sets an index of this tensor to a specified value.
-     * @param value Value to set.
-     * @param indices The indices of this tensor for which to set the value.
-     */
-    void set(CNumber value, int... indices);
+    T setValues(CNumber[][] values);
 
 
     /**
      * Sets a column of this matrix at the given index to the specified values.
      * @param values New values for the column.
      * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     * @throws IndexOutOfBoundsException If {@code colIndex} is not within the matrix.
      */
-    void setCol(CNumber[] values, int colIndex);
+    T setCol(CNumber[] values, int colIndex);
 
 
     /**
      * Sets a row of this matrix at the given index to the specified values.
      * @param values New values for the row.
      * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+     * @throws IndexOutOfBoundsException If {@code rowIndex} is not within the matrix.
      */
-    void setRow(CNumber[] values, int rowIndex);
+    T setRow(CNumber[] values, int rowIndex);
 
 
     /**
@@ -151,9 +142,11 @@ public interface ComplexMatrixMixin<T, Y> extends
      * vector is <b>NOT</b> taken into account.
      * @param values New values for the column.
      * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+     * @throws IndexOutOfBoundsException If {@code colIndex} is not within the matrix.
      */
-    void setCol(CVector values, int colIndex);
+    T setCol(CVector values, int colIndex);
 
 
     /**
@@ -161,9 +154,11 @@ public interface ComplexMatrixMixin<T, Y> extends
      * vector is <b>NOT</b> taken into account.
      * @param values New values for the column.
      * @param colIndex The index of the columns which is to be set.
+     * @return A reference to this matrix.
      * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+     * @throws IndexOutOfBoundsException If {@code colIndex} is not within the matrix.
      */
-    void setCol(SparseCVector values, int colIndex);
+    T setCol(SparseCVector values, int colIndex);
 
 
     /**
@@ -171,9 +166,11 @@ public interface ComplexMatrixMixin<T, Y> extends
      * vector is <b>NOT</b> taken into account.
      * @param values New values for the row.
      * @param rowIndex The index of the row which is to be set.
-     * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of columns of this matrix.
+     * @throws IndexOutOfBoundsException If {@code rowIndex} is not within the matrix.
      */
-    void setRow(CVector values, int rowIndex);
+    T setRow(CVector values, int rowIndex);
 
 
     /**
@@ -181,9 +178,11 @@ public interface ComplexMatrixMixin<T, Y> extends
      * vector is <b>NOT</b> taken into account.
      * @param values New values for the row.
      * @param rowIndex The index of the row which is to be set.
-     * @throws IllegalArgumentException If the values vector has a different length than the number of columns of this matrix.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of columns of this matrix.
+     * @throws IndexOutOfBoundsException If {@code rowIndex} is not within the matrix.
      */
-    void setRow(SparseCVector values, int rowIndex);
+    T setRow(SparseCVector values, int rowIndex);
 
 
     /**
@@ -192,11 +191,12 @@ public interface ComplexMatrixMixin<T, Y> extends
      * @param values New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @return A reference to this matrix.
+     * @throws IndexOutOfBoundsException If {@code rowStart} or {@code colStart} are not within the matrix.
      * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
      * fit completely within this matrix.
      */
-    void setSlice(SparseCMatrix values, int rowStart, int colStart);
+    T setSlice(SparseCMatrix values, int rowStart, int colStart);
 
 
     /**
@@ -206,10 +206,26 @@ public interface ComplexMatrixMixin<T, Y> extends
      * @param values   New values for the specified slice.
      * @param rowStart Starting row index for the slice (inclusive).
      * @param colStart Starting column index for the slice (inclusive).
-     * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     * @return A copy of this matrix with the given slice set to the specified {@code values}.
+     * @throws IndexOutOfBoundsException If {@code rowStart} or {@code colStart} are not within the matrix.
+     * @throws IllegalArgumentException  If the {@code values} slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
-    CMatrix setSliceCopy(SparseCMatrix values, int rowStart, int colStart);
+    T setSliceCopy(SparseCMatrix values, int rowStart, int colStart);
+
+
+    /**
+     * Adds a complex sparse matrix to this matrix and stores the result in this matrix.
+     *
+     * @param B Complex sparse matrix to add to this matrix,
+     */
+    void addEq(SparseCMatrix B);
+
+
+    /**
+     * Subtracts a complex sparse matrix from this matrix and stores the result in this matrix.
+     *
+     * @param B Complex sparse matrix to subtract from this matrix,
+     */
+    void subEq(SparseCMatrix B);
 }

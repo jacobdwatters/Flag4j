@@ -1,5 +1,9 @@
 package com.flag4j;
 
+import com.flag4j.CVector;
+import com.flag4j.SparseCVector;
+import com.flag4j.SparseVector;
+import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -40,7 +44,7 @@ class VectorShapeTests {
         B = new Vector(bEntries);
 
         assertTrue(A.sameShape(B));
-        assertTrue(A.sameSize(B));
+        assertTrue(A.sameShape(B));
 
         // ------------------ Sub-case 2 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
@@ -49,7 +53,7 @@ class VectorShapeTests {
         B = new Vector(bEntries);
 
         assertFalse(A.sameShape(B));
-        assertFalse(A.sameSize(B));
+        assertFalse(A.sameShape(B));
     }
 
 
@@ -65,7 +69,7 @@ class VectorShapeTests {
         B = new CVector(bEntries);
 
         assertTrue(A.sameShape(B));
-        assertTrue(A.sameSize(B));
+        assertTrue(A.sameShape(B));
 
         // ------------------ Sub-case 2 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
@@ -74,7 +78,7 @@ class VectorShapeTests {
         B = new CVector(bEntries);
 
         assertFalse(A.sameShape(B));
-        assertFalse(A.sameSize(B));
+        assertFalse(A.sameShape(B));
     }
 
 
@@ -92,7 +96,7 @@ class VectorShapeTests {
         B = new SparseVector(size, bEntries, indices);
 
         assertTrue(A.sameShape(B));
-        assertTrue(A.sameSize(B));
+        assertTrue(A.sameShape(B));
 
         // ------------------ Sub-case 2 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
@@ -103,7 +107,7 @@ class VectorShapeTests {
         B = new SparseVector(size, bEntries, indices);
 
         assertFalse(A.sameShape(B));
-        assertFalse(A.sameSize(B));
+        assertFalse(A.sameShape(B));
     }
 
 
@@ -121,7 +125,7 @@ class VectorShapeTests {
         B = new SparseCVector(size, bEntries, indices);
 
         assertTrue(A.sameShape(B));
-        assertTrue(A.sameSize(B));
+        assertTrue(A.sameShape(B));
 
         // ------------------ Sub-case 2 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
@@ -132,6 +136,6 @@ class VectorShapeTests {
         B = new SparseCVector(size, bEntries, indices);
 
         assertFalse(A.sameShape(B));
-        assertFalse(A.sameSize(B));
+        assertFalse(A.sameShape(B));
     }
 }

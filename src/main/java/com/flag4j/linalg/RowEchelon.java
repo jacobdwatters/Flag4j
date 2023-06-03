@@ -24,23 +24,28 @@
 
 package com.flag4j.linalg;
 
+import com.flag4j.CMatrix;
+import com.flag4j.Matrix;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
+import com.flag4j.linalg.decompositions.RealLUDecomposition;
+
 /**
  * This class contains several methods for computing row echelon, reduced row echelon, and extended reduced row echelon
  * forms of a matrix.
  */
 public class RowEchelon {
 
-//    /**
-//     * Computes row echelon form of a Matrix.
-//     * @param A The matrix for which to compute the row echelon form.
-//     * @return A matrix in row echelon form which is row-equivalent to this matrix.
-//     */
-//    public static Matrix ref(Matrix A) {
-//        // TODO:
-//        return null;
-//    }
-//
-//
+    /**
+     * Computes a row echelon form of a Matrix. For a reduced row echelon form use {@link #rref(Matrix)}.
+     * @param A The matrix for which to compute the row echelon form.
+     * @return A matrix in row echelon form which is row-equivalent to the matrix {@code A}.
+     */
+    public static Matrix ref(Matrix A) {
+        return new RealLUDecomposition().decompose(A).getU();
+    }
+
+
 //    /**
 //     * Computes row echelon form of a Matrix.
 //     * @param A The matrix for which to compute the row echelon form.
@@ -50,19 +55,18 @@ public class RowEchelon {
 //        /*TODO*/
 //        return null;
 //    }
-//
-//
-//    /**
-//     * Computes row echelon form of a Matrix.
-//     * @param A The matrix for which to compute the row echelon form.
-//     * @return A matrix in row echelon form which is row-equivalent to this matrix.
-//     */
-//    public static CMatrix ref(CMatrix A) {
-//        // TODO:
-//        return null;
-//    }
-//
-//
+
+
+    /**
+     * Computes a row echelon form of a Matrix. For a reduced row echelon form use {@link #rref(CMatrix)}.
+     * @param A The matrix for which to compute the row echelon form.
+     * @return A matrix in row echelon form which is row-equivalent to the matrix {@code A}.
+     */
+    public static CMatrix ref(CMatrix A) {
+        return new ComplexLUDecomposition().decompose(A).getU();
+    }
+
+
 //    /**
 //     * Computes row echelon form of a Matrix.
 //     * @param A The matrix for which to compute the row echelon form.
@@ -72,17 +76,45 @@ public class RowEchelon {
 //        // TODO:
 //        return null;
 //    }
-//
-//
-//    /**
-//     * Computes the reduced row echelon form of a matrix. By default, this method uses partial pivoting.
-//     * To use full or no pivoting see {@link #rref(Matrix, int)}.
-//     * @param A The matrix for which to compute the reduced row echelon form.
-//     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
-//     */
-//    public static Matrix rref(Matrix A) {/*TODO*/return null;}
-//
-//
+
+
+    /**
+     * Computes the reduced row echelon form of a matrix. For a non-reduced row echelon form see {@link #ref(Matrix)}.
+     * @param A The matrix for which to compute the reduced row echelon form.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
+     */
+    public static Matrix rref(Matrix A) {
+        Matrix U = new RealLUDecomposition().decompose(A).getU();
+        int colStop = Math.min(U.numCols, U.numRows);
+        int pivotRow;
+        int iRow;
+        double m;
+        double pivotValue;
+
+        for(int j=0; j<colStop; j++) {
+            pivotRow = j*U.numCols;
+            pivotValue = U.entries[pivotRow + j];
+
+            // Scale row so pivot is 1.
+            for(int k=j; k<U.numCols; k++) {
+                U.entries[pivotRow + k] = U.entries[pivotRow + k]/pivotValue;
+            }
+
+            // Zero out column above pivot.
+            for(int i=0; i<j; i++) {
+                iRow = i*U.numCols;
+                m = U.entries[iRow + j];
+
+                for(int k=j; k<U.numCols; k++) {
+                    U.entries[iRow + k] -= m*U.entries[pivotRow + k];
+                }
+            }
+        }
+
+        return U;
+    }
+
+
 //    /**
 //     * Computes the reduced row echelon form of a matrix. By default, this method uses partial pivoting.
 //     * To use full or no pivoting see {@link #rref(Matrix, int)}.
@@ -90,17 +122,44 @@ public class RowEchelon {
 //     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
 //     */
 //    public static SparseMatrix rref(SparseMatrix A) {/*TODO*/return null;}
-//
-//
-//    /**
-//     * Computes the reduced row echelon form of a matrix. By default, this method uses partial pivoting.
-//     * To use full or no pivoting see {@link #rref(CMatrix, int)}.
-//     * @param A The matrix for which to compute the reduced row echelon form.
-//     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
-//     */
-//    public static CMatrix rref(CMatrix A) {/*TODO*/return null;}
-//
-//
+
+
+    /**
+     * Computes the reduced row echelon form of a matrix. For a non-reduced row echelon form see {@link #ref(CMatrix)}.
+     * @param A The matrix for which to compute the reduced row echelon form.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
+     */
+    public static CMatrix rref(CMatrix A) {
+        CMatrix U = new ComplexLUDecomposition().decompose(A).getU();
+        int colStop = Math.min(U.numCols, U.numRows);
+        int pivotRow;
+        int iRow;
+        CNumber m;
+
+        for(int j=0; j<colStop; j++) {
+            pivotRow = j*U.numCols;
+            m = U.entries[pivotRow + j];
+
+            // Scale row so pivot is 1.
+            for(int k=j; k<U.numCols; k++) {
+                U.entries[pivotRow + k] = U.entries[pivotRow + k].div(m);
+            }
+
+            // Zero out column above pivot.
+            for(int i=0; i<j; i++) {
+                iRow = i*U.numCols;
+                m = U.entries[iRow + j];
+
+                for(int k=j; k<U.numCols; k++) {
+                    U.entries[iRow + k].subEq(m.mult(U.entries[pivotRow + k]));
+                }
+            }
+        }
+
+        return U;
+    }
+
+
 //    /**
 //     * Computes the reduced row echelon form of a matrix. By default, this method uses partial pivoting.
 //     * To use full or no pivoting see {@link #rref(SparseCMatrix, int)}.
@@ -108,73 +167,19 @@ public class RowEchelon {
 //     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
 //     */
 //    public static SparseCMatrix rref(SparseCMatrix A) {/*TODO*/return null;}
-//
-//
-//    /**
-//     * Computes the reduced row echelon form of a matrix possibly with partial or full pivoting.
-//     * Also see {@link #rref(Matrix, int)} for partial pivoting.
-//     * @param A The matrix for which to compute the reduced row echelon form.
-//     * @param pivoting Indicates what pivoting method to use. <br>
-//     *        - If pivoting=0, no pivoting is used.<br>
-//     *        - If pivoting=1, partial pivoting is used.<br>
-//     *        - If pivoting=2, full pivoting is used.
-//     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
-//     * @throws IllegalArgumentException if pivoting is not 0, 1, or 2.
-//     */
-//    public static Matrix rref(Matrix A, int pivoting) {/*TODO*/return null;}
-//
-//
-//    /**
-//     * Computes the reduced row echelon form of a matrix possibly with partial or full pivoting.
-//     * Also see {@link #rref(SparseMatrix, int)} for partial pivoting.
-//     * @param A The matrix for which to compute the reduced row echelon form.
-//     * @param pivoting Indicates what pivoting method to use. <br>
-//     *        - If pivoting=0, no pivoting is used.<br>
-//     *        - If pivoting=1, partial pivoting is used.<br>
-//     *        - If pivoting=2, full pivoting is used.
-//     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
-//     * @throws IllegalArgumentException if pivoting is not 0, 1, or 2.
-//     */
-//    public static SparseMatrix rref(SparseMatrix A, int pivoting) {/*TODO*/return null;}
-//
-//
-//    /**
-//     * Computes the reduced row echelon form of a matrix possibly with partial or full pivoting.
-//     * Also see {@link #rref(CMatrix, int)} for partial pivoting.
-//     * @param A The matrix for which to compute the reduced row echelon form.
-//     * @param pivoting Indicates what pivoting method to use. <br>
-//     *        - If pivoting=0, no pivoting is used.<br>
-//     *        - If pivoting=1, partial pivoting is used.<br>
-//     *        - If pivoting=2, full pivoting is used.
-//     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
-//     * @throws IllegalArgumentException if pivoting is not 0, 1, or 2.
-//     */
-//    public static CMatrix rref(CMatrix A, int pivoting) {/*TODO*/return null;}
-//
-//
-//    /**
-//     * Computes the reduced row echelon form of a matrix possibly with partial or full pivoting.
-//     * Also see {@link #rref(SparseCMatrix, int)} for partial pivoting.
-//     * @param A The matrix for which to compute the reduced row echelon form.
-//     * @param pivoting Indicates what pivoting method to use. <br>
-//     *        - If pivoting=0, no pivoting is used.<br>
-//     *        - If pivoting=1, partial pivoting is used.<br>
-//     *        - If pivoting=2, full pivoting is used.
-//     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
-//     * @throws IllegalArgumentException if pivoting is not 0, 1, or 2.
-//     */
-//    public static SparseCMatrix rref(SparseCMatrix A, int pivoting) {/*TODO*/return null;}
-//
-//
-//    /**
-//     * Computes the extended reduced row echelon form of a matrix. This is equivalent to <code>{@link #rref(Matrix) rref(A.augment(Matrix.I(A.numRows())))}</code>
-//     * @param A Matrix for which to compute extended reduced row echelon form of.
-//     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
-//     * appropriately sized identity matrix.
-//     */
-//    public static Matrix erref(Matrix A) {/*TODO*/return null;}
-//
-//
+
+
+    /**
+     * Computes the extended reduced row echelon form of a matrix. This is equivalent to <code>{@link #rref(Matrix) rref(A.augment(Matrix.I(A.numRows())))}</code>
+     * @param A Matrix for which to compute extended reduced row echelon form of.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
+     * appropriately sized identity matrix.
+     */
+    public static Matrix erref(Matrix A) {
+        return rref(A.augment(Matrix.I(A.numRows)));
+    }
+
+
 //    /**
 //     * Computes the extended reduced row echelon form of a matrix. This is equivalent to <code>{@link #rref(SparseMatrix) rref(A.augment(Matrix.I(A.numRows())))}</code>
 //     * @param A Matrix for which to compute extended reduced row echelon form of.
@@ -182,17 +187,19 @@ public class RowEchelon {
 //     * appropriately sized identity matrix.
 //     */
 //    public static SparseMatrix erref(SparseMatrix A) {/*TODO*/return null;}
-//
-//
-//    /**
-//     * Computes the extended reduced row echelon form of a matrix. This is equivalent to <code>{@link #rref(CMatrix) rref(A.augment(Matrix.I(A.numRows())))}</code>
-//     * @param A Matrix for which to compute extended reduced row echelon form of.
-//     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
-//     * appropriately sized identity matrix.
-//     */
-//    public static CMatrix erref(CMatrix A) {/*TODO*/return null;}
-//
-//
+
+
+    /**
+     * Computes the extended reduced row echelon form of a matrix. This is equivalent to <code>{@link #rref(CMatrix) rref(A.augment(Matrix.I(A.numRows())))}</code>
+     * @param A Matrix for which to compute extended reduced row echelon form of.
+     * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
+     * appropriately sized identity matrix.
+     */
+    public static CMatrix erref(CMatrix A) {
+        return rref(A.augment(Matrix.I(A.numRows)));
+    }
+
+
 //    /**
 //     * Computes the extended reduced row echelon form of a matrix. This is equivalent to <code>{@link #rref(SparseCMatrix) rref(A.augment(Matrix.I(A.numRows())))}</code>
 //     * @param A Matrix for which to compute extended reduced row echelon form of.

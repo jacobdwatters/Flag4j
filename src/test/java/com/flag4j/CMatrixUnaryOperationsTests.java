@@ -156,8 +156,8 @@ class CMatrixUnaryOperationsTests {
                 {new CNumber(-9841, -85.13), new CNumber(0, 84.1), new CNumber(-5.234, 234)}};
         A = new CMatrix(aEntries);
         expEntries = new CNumber[][]{
-                {new CNumber(234.66, -9923.1).addInv(), new CNumber(32.4).addInv(), new CNumber(394728.1).addInv()},
-                {new CNumber(-9841, -85.13).addInv(), new CNumber(0, 84.1).addInv(), new CNumber(-5.234, 234).addInv()}};
+                {new CNumber(234.66, -9923.1).multInv(), new CNumber(32.4).multInv(), new CNumber(394728.1).multInv()},
+                {new CNumber(-9841, -85.13).multInv(), new CNumber(0, 84.1).multInv(), new CNumber(-5.234, 234).multInv()}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, A.recip());

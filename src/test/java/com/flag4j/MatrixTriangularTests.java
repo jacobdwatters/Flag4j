@@ -2,7 +2,8 @@ package com.flag4j;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MatrixTriangularTests {
     double[][] aEntries;
@@ -13,10 +14,10 @@ class MatrixTriangularTests {
         // ----------------- Sub-case 1 -----------------
         aEntries = new double[][]{{1, 3, 4}, {4, 5, 6}};
         A = new Matrix(aEntries);
-        assertEquals(false, A.isTri());
-        assertEquals(false, A.isTriL());
-        assertEquals(false, A.isTriU());
-        assertEquals(false, A.isDiag());
+        assertFalse(A.isTri());
+        assertFalse(A.isTriL());
+        assertFalse(A.isTriU());
+        assertFalse(A.isDiag());
 
         // ----------------- Sub-case 2 -----------------
         aEntries = new double[][]{
@@ -24,10 +25,10 @@ class MatrixTriangularTests {
                 {4, 5, 6},
                 {9, 13.334, -8.123}};
         A = new Matrix(aEntries);
-        assertEquals(false, A.isTri());
-        assertEquals(false, A.isTriL());
-        assertEquals(false, A.isTriU());
-        assertEquals(false, A.isDiag());
+        assertFalse(A.isTri());
+        assertFalse(A.isTriL());
+        assertFalse(A.isTriU());
+        assertFalse(A.isDiag());
 
         // ----------------- Sub-case 3 -----------------
         aEntries = new double[][]{
@@ -35,10 +36,10 @@ class MatrixTriangularTests {
                 {4, 5, 0},
                 {9, 13.334, -8.123}};
         A = new Matrix(aEntries);
-        assertEquals(true, A.isTri());
-        assertEquals(true, A.isTriL());
-        assertEquals(false, A.isTriU());
-        assertEquals(false, A.isDiag());
+        assertTrue(A.isTri());
+        assertTrue(A.isTriL());
+        assertFalse(A.isTriU());
+        assertFalse(A.isDiag());
 
         // ----------------- Sub-case 4 -----------------
         aEntries = new double[][]{
@@ -46,10 +47,10 @@ class MatrixTriangularTests {
                 {0, 5, 6},
                 {0, 0, -8.123}};
         A = new Matrix(aEntries);
-        assertEquals(true, A.isTri());
-        assertEquals(false, A.isTriL());
-        assertEquals(true, A.isTriU());
-        assertEquals(false, A.isDiag());
+        assertTrue(A.isTri());
+        assertFalse(A.isTriL());
+        assertTrue(A.isTriU());
+        assertFalse(A.isDiag());
 
         // ----------------- Sub-case 5 -----------------
         aEntries = new double[][]{
@@ -57,9 +58,9 @@ class MatrixTriangularTests {
                 {0, 5, 0},
                 {0, 0, -8.123}};
         A = new Matrix(aEntries);
-        assertEquals(true, A.isTri());
-        assertEquals(true, A.isTriL());
-        assertEquals(true, A.isTriU());
-        assertEquals(true, A.isDiag());
+        assertTrue(A.isTri());
+        assertTrue(A.isTriL());
+        assertTrue(A.isTriU());
+        assertTrue(A.isDiag());
     }
 }

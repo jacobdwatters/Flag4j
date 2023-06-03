@@ -59,6 +59,7 @@ public class RealSparseMatrixMultiplication {
 
         int rows1 = shape1.dims[Axis2D.row()];
         int cols2 = shape2.dims[Axis2D.col()];
+        int rowIdx;
 
         double[] dest = new double[rows1*cols2];
 
@@ -67,6 +68,7 @@ public class RealSparseMatrixMultiplication {
 
         for(int i=0; i<src1.length; i++) {
             r1 = rowIndices1[i]; // = i
+            rowIdx = r1*cols2;
             c1 = colIndices1[i]; // = k
 
             for(int j=0; j<src2.length; j++) {
@@ -74,7 +76,7 @@ public class RealSparseMatrixMultiplication {
                 c2 = colIndices2[j]; // = j
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1*cols2 + c2] += src1[i]*src2[j];
+                    dest[rowIdx + c2] += src1[i]*src2[j];
                 }
             }
         }
@@ -135,11 +137,8 @@ public class RealSparseMatrixMultiplication {
      */
     public static double[] standardVector(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                     double[] src2, int[] indices, Shape shape2) {
-
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
-
-        double[] dest = new double[rows1*cols2];
+        double[] dest = new double[rows1];
 
         // r1, c1, r2, and store the indices for non-zero values in src1 and src2.
         int r1, c1, r2;
@@ -152,7 +151,7 @@ public class RealSparseMatrixMultiplication {
                 r2 = indices[j]; // = k
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1*cols2] += src1[i]*src2[j];
+                    dest[r1] += src1[i]*src2[j];
                 }
             }
         }
@@ -175,11 +174,8 @@ public class RealSparseMatrixMultiplication {
      */
     public static double[] concurrentStandardVector(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
                                           double[] src2, int[] indices, Shape shape2) {
-
         int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
-
-        double[] dest = new double[rows1*cols2];
+        double[] dest = new double[rows1];
 
         ThreadManager.concurrentLoop(0, src1.length, (i) -> {
             int r1 = rowIndices1[i]; // = i
@@ -189,7 +185,7 @@ public class RealSparseMatrixMultiplication {
                 int r2 = indices[j]; // = k
 
                 if(c1==r2) { // Then we multiply and add to sum.
-                    dest[r1*cols2] += src1[i]*src2[j];
+                    dest[r1] += src1[i]*src2[j];
                 }
             }
         });

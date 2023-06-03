@@ -67,9 +67,8 @@ class MatrixSetOperationTests {
         exp = new Matrix(values);
         entriesA = new double[][]{{0, 0}, {1, 4}, {1331.14, -1334.5}};
         A = new Matrix(entriesA);
-        A.setValues(values);
 
-        assertEquals(exp, A);
+        assertEquals(exp, A.setValues(values));
 
         // -------------- Sub-case 2 --------------
         values = new Integer[][]{{1, 55}, {-44, 0}, {13, -9}};

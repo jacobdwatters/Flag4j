@@ -59,20 +59,20 @@ public class AggregateComplex {
      * @param entries Entries of the tensor.
      * @return The minimum absolute value in the tensor.
      */
-    public static CNumber minAbs(final CNumber[] entries) {
-        CNumber currMin;
+    public static double minAbs(final CNumber[] entries) {
+        double currMin;
 
         if(entries.length!=0) {
-            currMin = new CNumber(Double.MAX_VALUE);
+            currMin = Double.MAX_VALUE;
 
             for(CNumber value : entries) {
-                if(value.mag().re < currMin.re) {
-                    currMin = value.mag(); // Update current minimum.
+                if(value.magAsDouble() < currMin) {
+                    currMin = value.magAsDouble(); // Update current minimum.
                 }
             }
 
         } else {
-            currMin = new CNumber();
+            currMin = 0;
         }
 
         return currMin;
@@ -85,12 +85,12 @@ public class AggregateComplex {
      * @param entries Entries of the tensor.
      * @return The maximum absolute value in the tensor.
      */
-    public static CNumber maxAbs(final CNumber[] entries) {
-        CNumber currMax = new CNumber();
+    public static double maxAbs(final CNumber[] entries) {
+        double currMax = 0;
 
         for(CNumber value : entries) {
-            if(value.mag().re > currMax.re) {
-                currMax = value.mag(); // Update current maximum.
+            if(value.magAsDouble() > currMax) {
+                currMax = value.magAsDouble(); // Update current maximum.
             }
         }
 

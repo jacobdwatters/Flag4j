@@ -78,11 +78,11 @@ public class ComplexOperations {
      * @param src Elements of the tensor.
      * @return The element-wise absolute value of the tensor.
      */
-    public static CNumber[] abs(CNumber[] src) {
-        CNumber[] abs = new CNumber[src.length];
+    public static double[] abs(CNumber[] src) {
+        double[] abs = new double[src.length];
 
         for(int i=0; i<abs.length; i++) {
-            abs[i] = src[i].mag();
+            abs[i] = src[i].magAsDouble();
         }
 
         return abs;
@@ -200,6 +200,29 @@ public class ComplexOperations {
         }
 
         return product;
+    }
+
+
+    /**
+     * Computes the scalar division of a tensor.
+     * @param entries Entries of the tensor.
+     * @param divisor Scalar value to divide each element ot the tensor by.
+     * @return The scalar division of the tensor.
+     */
+    public static CNumber[] scalDiv(double[] entries, CNumber divisor) {
+        CNumber[] quotient = new CNumber[entries.length];
+
+        double denom = divisor.re*divisor.re + divisor.im*divisor.im;
+
+        for(int i=0; i<quotient.length; i++) {
+            double a = entries[i];
+
+            quotient[i] = new CNumber(
+                    a*divisor.re / denom,
+                    -a*divisor.im / denom);
+        }
+
+        return quotient;
     }
 
 

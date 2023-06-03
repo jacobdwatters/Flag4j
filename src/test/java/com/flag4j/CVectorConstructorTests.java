@@ -20,7 +20,7 @@ class CVectorConstructorTests {
     void sizeTest() {
         // ----------- Sub-case 1 ------------
         expSize = 5;
-        expShape = new Shape(new int[]{expSize});
+        expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber();
@@ -52,7 +52,7 @@ class CVectorConstructorTests {
 
         // ----------- Sub-case 3 ------------
         expSize = -1;
-        assertThrows(NegativeArraySizeException.class, () -> new Vector(expSize));
+        assertThrows(IllegalArgumentException.class, () -> new Vector(expSize));
     }
 
     @Test
@@ -60,7 +60,7 @@ class CVectorConstructorTests {
         // ----------- Sub-case 1 ------------
         expSize = 5;
         fillValue = new CNumber(-10.23423, 100.2);
-        expShape = new Shape(new int[]{expSize});
+        expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(fillValue);
@@ -77,7 +77,7 @@ class CVectorConstructorTests {
         // ----------- Sub-case 2 ------------
         expSize = 0;
         fillValue = new CNumber(-10.23423, 100.2);
-        expShape = new Shape(new int[]{expSize});
+        expShape = new Shape(expSize);
         expEntries = new CNumber[expSize];
         for(int i=0; i<expEntries.length; i++) {
             expEntries[i] = new CNumber(fillValue);
@@ -94,7 +94,7 @@ class CVectorConstructorTests {
         // ----------- Sub-case 3 ------------
         expSize = -1;
         fillValue = new CNumber(-10.23423, 100.2);
-        assertThrows(NegativeArraySizeException.class, () -> new CVector(expSize, fillValue));
+        assertThrows(IllegalArgumentException.class, () -> new CVector(expSize, fillValue));
     }
 
 
@@ -137,7 +137,7 @@ class CVectorConstructorTests {
         // ----------- Sub-case 3 ------------
         expSize = -1;
         fillValueD = -10.234;
-        assertThrows(NegativeArraySizeException.class, () -> new CVector(expSize, fillValueD));
+        assertThrows(IllegalArgumentException.class, () -> new CVector(expSize, fillValueD));
     }
 
 

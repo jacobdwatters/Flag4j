@@ -24,8 +24,8 @@
 
 package com.flag4j.linalg.decompositions;
 
-import com.flag4j.core.MatrixBase;
 
+import com.flag4j.core.MatrixMixin;
 
 /**
  * &lt;p&gt;This abstract class specifies methods for computing the Cholesky decomposition of a positive-definite matrix.&lt;/p&gt;
@@ -39,7 +39,8 @@ import com.flag4j.core.MatrixBase;
  *
  * @param &lt;T&gt; The type of matrix to compute the Cholesky decomposition of.
  */
-<span class="fc" id="L42">public abstract class CholeskyDecomposition&lt;T extends MatrixBase&lt;?&gt;&gt; implements Decomposition&lt;T&gt; {</span>
+<span class="fc" id="L42">public abstract class CholeskyDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?, ?, ?&gt;&gt;</span>
+        implements Decomposition&lt;T&gt; {
 
     /**
      * The lower triangular matrix resulting from the Cholesky decomposition {@code A=LL&lt;sup&gt;*&lt;/sup&gt;}.
@@ -52,7 +53,7 @@ import com.flag4j.core.MatrixBase;
      * @return The {@code L} matrix from the Cholesky decomposition {@code A=LL&lt;sup&gt;*&lt;/sup&gt;}.
      */
     public T getL() {
-<span class="fc" id="L55">        return L;</span>
+<span class="fc" id="L56">        return L;</span>
     }
 
 

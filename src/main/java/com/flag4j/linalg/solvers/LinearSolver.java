@@ -25,10 +25,6 @@
 package com.flag4j.linalg.solvers;
 
 
-import com.flag4j.core.MatrixBase;
-import com.flag4j.core.VectorBase;
-
-
 /**
  * This interface specifies methods which all linear system solvers should implement. Solvers
  * may solve in an exact sense or in a least squares sense.
@@ -36,8 +32,7 @@ import com.flag4j.core.VectorBase;
  * @param <U> Type of the vector containing the constants in the linear system.
  * @param <V> Type of the vector to hold the solution to the linear system.
  */
-public interface LinearSolver<T extends MatrixBase<?>,
-        U extends VectorBase<?>, V extends VectorBase<?>> {
+public interface LinearSolver<T, U, V> {
 
 
     /**

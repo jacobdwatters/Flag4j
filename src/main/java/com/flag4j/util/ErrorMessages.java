@@ -128,6 +128,10 @@ public abstract class ErrorMessages {
      * Error message for parameters which are expected to be square.
      */
     private static final String SQUARE_SHAPE_ERR = "Expecting matrix to be square but got shape %s";
+    /**
+     * Error message for a parameter which is not within the expected range.
+     */
+    private static final String RANGE_ERR = "Expecting parameter %s to be in the range [%f, %f] but got %f";
 
 
 
@@ -349,6 +353,19 @@ public abstract class ErrorMessages {
      */
     public static String getSquareShapeErr(Shape shape) {
         return String.format(SQUARE_SHAPE_ERR, shape.toString());
+    }
+
+
+    /**
+     * Gets an error message for a value which is not within the expected range.
+     * @param value Value of interest.
+     * @param lowerBound Lower bound of expected range.
+     * @param upperBound Upper bound of expected range.
+     * @param paramName Name of the parameter which has the specified {@code value}.
+     * @return An error message for the parameter being out of the expected range.
+     */
+    public static String getRangeErr(double value, double lowerBound, double upperBound, String paramName) {
+        return String.format(RANGE_ERR, paramName, lowerBound, upperBound, value);
     }
 }
 

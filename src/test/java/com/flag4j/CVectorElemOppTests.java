@@ -36,7 +36,6 @@ class CVectorElemOppTests {
         expEntries = new CNumber[]{aEntries[0].mag(), aEntries[1].mag(), aEntries[2].mag(),
                 aEntries[3].mag(), aEntries[4].mag()};
         exp = new CVector(expEntries);
-
         assertEquals(exp, a.abs());
     }
 
@@ -44,8 +43,8 @@ class CVectorElemOppTests {
     @Test
     void recipTest() {
         // ---------------------- Sub-case 1 ----------------------
-        expEntries = new CNumber[]{aEntries[0].addInv(), aEntries[1].addInv(), aEntries[2].addInv(),
-                aEntries[3].addInv(), aEntries[4].addInv()};
+        expEntries = new CNumber[]{aEntries[0].multInv(), aEntries[1].multInv(), aEntries[2].multInv(),
+                aEntries[3].multInv(), aEntries[4].multInv()};
         exp = new CVector(expEntries);
 
         assertEquals(exp, a.recip());

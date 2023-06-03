@@ -24,23 +24,12 @@
 
 package com.flag4j.core;
 
-
 /**
  * This interface specifies manipulations which all vectors should implement.
  *
- * @param <T> Vectors type.
- * @param <U> Dense vectors type.
- * @param <V> Sparse vectors type.
- * @param <W> Complex vectors type.
- * @param <Y> Real vectors type.
- * @param <X> Vectors entry type.
  * @param <TT> Matrix type equivalent.
- * @param <UU> Dense Matrix type equivalent.
- * @param <VV> Sparse Matrix type equivalent.
- * @param <WW> Complex Matrix type equivalent.
  */
-public interface VectorManipulationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW>
-        extends TensorManipulationsMixin<T, U, V, W, Y, X> {
+public interface VectorManipulationsMixin<TT> {
 
 
     /**

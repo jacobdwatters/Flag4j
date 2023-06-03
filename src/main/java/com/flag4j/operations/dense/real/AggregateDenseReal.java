@@ -78,4 +78,46 @@ public class AggregateDenseReal {
 
         return currMaxIndex;
     }
+
+
+    /**
+     * Computes the index of the first entry in a tensor which is equal to the specified {@code value}.
+     * @param entries Entries of this tensor.
+     * @param value Value to find index of.
+     * @return The index of the first entry in {@code entries} which is equal to {@code value}. If no such value exists,
+     * then -1 is returned.
+     */
+    public static int argEq(double[] entries, double value) {
+        int currIndex = -1;
+
+        for(int i=0; i<entries.length; i++) {
+            if(entries[i]==value) {
+                currIndex = i;
+                break;
+            }
+        }
+
+        return currIndex;
+    }
+
+
+    /**
+     * Computes the index of the first entry in a tensor which is equal to the specified {@code value}.
+     * @param entries Entries of this tensor.
+     * @param value Value to find index of.
+     * @return The index of the first entry in {@code entries} which is equal to {@code value}. If no such value exists,
+     * then -1 is returned.
+     */
+    public static int argEq(int[] entries, int value) {
+        int currIndex = -1;
+
+        for(int i=0; i<entries.length; i++) {
+            if(entries[i]==value) {
+                currIndex = i;
+                break;
+            }
+        }
+
+        return currIndex;
+    }
 }

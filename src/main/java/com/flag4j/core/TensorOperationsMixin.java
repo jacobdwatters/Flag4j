@@ -29,13 +29,13 @@ import com.flag4j.complex_numbers.CNumber;
  * This interface specifies operations which all tensors (i.e. matrices and vectors) should implement.
  *
  * @param <T> Tensor type.
- * @param <U> Dense Tensor type.
- * @param <V> Sparse Tensor type.
- * @param <W> Complex Tensor type.
- * @param <Y> Real Tensor type.
+ * @param <U> Dense tensor type.
+ * @param <W> Complex tensor type.
+ * @param <Z> Dense complex tensor type.
+ * @param <Y> Real tensor type.
  * @param <X> Tensor entry type.
  */
-interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
+interface TensorOperationsMixin<T, U, W, Z, Y, X extends Number> {
 
     /**
      * Computes the element-wise addition between two tensors of the same rank.
@@ -59,7 +59,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @param a Value to add to all entries of this tensor.
      * @return The result of adding the specified value to each entry of this tensor.
      */
-    W add(CNumber a);
+    Z add(CNumber a);
 
 
     /**
@@ -84,57 +84,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @param a Value to subtract from all entries of this tensor.
      * @return The result of subtracting the specified value from each entry of this tensor.
      */
-    W sub(CNumber a);
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    void addEq(T B);
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    void addEq(X b);
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    void addEq(Double b);
-
-
-    /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    void subEq(T B);
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    void subEq(X b);
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    void subEq(Double b);
+    Z sub(CNumber a);
 
 
     /**
@@ -159,7 +109,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @return The result of dividing this tensor by the specified scalar.
      * @throws ArithmeticException If divisor is zero.
      */
-    T scalDiv(double divisor);
+    T div(double divisor);
 
 
     /**
@@ -168,7 +118,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @return The result of dividing this tensor by the specified scalar.
      * @throws ArithmeticException If divisor is zero.
      */
-    W scalDiv(CNumber divisor);
+    W div(CNumber divisor);
 
 
     /**
@@ -191,7 +141,7 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * be computed.
      * @return The result of applying an element-wise absolute value/magnitude to this tensor.
      */
-    T abs();
+    Y abs();
 
 
     /**
@@ -247,5 +197,5 @@ interface TensorOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @return The result of the element-wise tensor multiplication.
      * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
      */
-    T elemDiv(T B);
+    T elemDiv(U B);
 }

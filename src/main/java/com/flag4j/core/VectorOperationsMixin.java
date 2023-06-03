@@ -33,15 +33,12 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <U> Dense Vector type.
  * @param <V> Sparse Vector type.
  * @param <W> Complex Vector type.
- * @param <Y> Real Vector type.
  * @param <X> Vector entry type.
  * @param <TT> Matrix type equivalent.
  * @param <UU> Dense Matrix type equivalent.
- * @param <VV> Sparse Matrix type equivalent.
  * @param <WW> Complex Matrix type equivalent.
  */
-public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, VV, WW>
-        extends TensorOperationsMixin<T, U, V, W, Y, X> {
+public interface VectorOperationsMixin<T, U, V, W, X extends Number, TT, UU, WW> {
 
 
     /**
@@ -49,7 +46,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * @param b Vector to join with this vector.
      * @return A vector resulting from joining the specified vector with this vector.
      */
-    T join(Vector b);
+    U join(Vector b);
 
 
     /**
@@ -74,7 +71,6 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * @return A vector resulting from joining the specified vector with this vector.
      */
     W join(SparseCVector b);
-
 
     // TODO: Add stack(vec, axis) methods so vectors can be stacked as if column vectors.
 
@@ -254,7 +250,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * @return The result of the element-wise vector addition.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    W add(CVector B);
+    CVector add(CVector B);
 
 
     /**
@@ -268,8 +264,8 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
+     * @param B Vector to subtract from this vector.
+     * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     U sub(Vector B);
@@ -277,8 +273,8 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
+     * @param B Vector to subtract from this vector.
+     * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     T sub(SparseVector B);
@@ -286,56 +282,20 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
+     * @param B Vector to subtract from this vector.
+     * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
-    W sub(CVector B);
+    CVector sub(CVector B);
 
 
     /**
      * Computes the element-wise subtraction between this vector and the specified vector.
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
+     * @param B Vector to subtract from this vector.
+     * @return The result of the element-wise vector subtraction.
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     W sub(SparseCVector B);
-
-
-    /**
-     * Computes the element-wise addition between this vector and the specified vector and stores the result
-     * in this vector.
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    void addEq(SparseVector B);
-
-
-    /**
-     * Computes the element-wise addition between this vector and the specified vector and stores the result
-     * in this vector.
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    void addEq(Vector B);
-
-
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
-     * in this vector.
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    void subEq(Vector B);
-
-
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
-     * in this vector.
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    void subEq(SparseVector B);
 
 
     /**
@@ -412,7 +372,9 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
 
     /**
      * Computes a unit vector in the same direction as this vector.
-     * @return A unit vector with the same direction as this vector.
+     *
+     * @return A unit vector with the same direction as this vector. If this vector is zeros, then an equivalently sized
+     * zero vector will be returned.
      */
     T normalize();
 
@@ -433,24 +395,6 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
      */
     CNumber inner(SparseCVector b);
-
-
-    /**
-     * Computes the vector cross product between two vectors.
-     * @param b Second vector in the cross product.
-     * @return The result of the vector cross product between this vector and b.
-     * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
-     */
-    U cross(Vector b);
-
-
-    /**
-     * Computes the vector cross product between two vectors.
-     * @param b Second vector in the cross product.
-     * @return The result of the vector cross product between this vector and b.
-     * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
-     */
-    CVector cross(CVector b);
 
 
     /**
@@ -499,7 +443,7 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
     boolean isParallel(Vector b);
 
 
-    // TODO: ADD isPerp(CVector b), isPerp(SparseVector b), and isPerp(sparseCVector)
+    // TODO: Add isPerp(CVector b), isPerp(SparseVector b), and isPerp(sparseCVector)
     /**
      * Checks if a vector is perpendicular to this vector.
      *
@@ -509,13 +453,15 @@ public interface VectorOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU, 
     boolean isPerp(Vector b);
 
 
+    // TODO: Add toTensor methods.
+
     /**
      * Converts a vector to an equivalent matrix.
      * @return A matrix equivalent to this vector. This method will respect the orientation of the vector. That is, if
      * this vector is a row vector, then the resulting matrix will have a single row. If this vector is a column vector, then the
      * resulting matrix will have a single column.
      */
-    UU toMatrix();
+    TT toMatrix();
 
 
     /**

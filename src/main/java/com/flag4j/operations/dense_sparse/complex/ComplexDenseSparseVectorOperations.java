@@ -28,6 +28,7 @@ package com.flag4j.operations.dense_sparse.complex;
 import com.flag4j.CVector;
 import com.flag4j.SparseCVector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -61,6 +62,29 @@ public class ComplexDenseSparseVectorOperations {
         for(int i=0; i<src2.length; i++) {
             index = indices[i];
             innerProd.addEq(src2[i].conj().mult(src1[index]));
+        }
+
+        return innerProd;
+    }
+
+
+    /**
+     * Computes the vector inner product between a complex dense vector and a complex sparse vector.
+     * @param src1 Entries of the dense vector.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of nonzero values in sparse vector.
+     * @param sparseSize Full size of the sparse vector (i.e. total number of entries including zeros).
+     * @return The inner product of the two vectors.
+     * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
+     */
+    public static CNumber innerProduct(CNumber[] src1, int[] indices, int sparseSize, CNumber[] src2) {
+        ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);
+        CNumber innerProd = new CNumber();
+        int index;
+
+        for(int i=0; i<src1.length; i++) {
+            index = indices[i];
+            innerProd.addEq(src1[i].mult(src2[index].conj()));
         }
 
         return innerProd;
@@ -147,6 +171,25 @@ public class ComplexDenseSparseVectorOperations {
 
 
     /**
+     * Subtracts a complex dense vector from a complex sparse vector.
+     * @param src1 Sparse vector.
+     * @param src2 Dense vector.
+     * @return The result of the vector subtraction.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static CVector sub(SparseCVector src1, CVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CVector dest = new CVector(ComplexOperations.scalMult(src2.entries, -1));
+
+        for(int i=0; i<src1.nonZeroEntries(); i++) {
+            dest.entries[src1.indices[i]].addEq(src1.entries[i]);
+        }
+
+        return dest;
+    }
+
+
+    /**
      * Computes the element-wise subtraction between a dense complex vector and sparse complex vectors.
      * The result is stored in the first vector.
      * @param src1 Dense vector. Modified.
@@ -178,5 +221,23 @@ public class ComplexDenseSparseVectorOperations {
         }
 
         return new SparseCVector(src1.size, entries, src2.indices.clone());
+    }
+
+
+    /**
+     * Compute the element-wise division between a complex sparse vector and a complex dense vector.
+     * @param src1 First vector in the element-wise division.
+     * @param src2 Second vector in the element-wise division.
+     * @return The result of the element-wise vector division.
+     */
+    public static SparseCVector elemDiv(SparseCVector src1, CVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CNumber[] dest = new CNumber[src1.entries.length];
+
+        for(int i=0; i<src1.entries.length; i++) {
+            dest[i] = src1.entries[i].div(src2.entries[src1.indices[i]]);
+        }
+
+        return new SparseCVector(src1.size, dest, src1.indices.clone());
     }
 }

@@ -24,19 +24,12 @@
 
 package com.flag4j.core;
 
-import com.flag4j.SparseTensor;
-import com.flag4j.Tensor;
-
 /**
  * This interface specifies methods which all real tensors should implement.
  * @param <T> Tensor type.
  * @param <W> Complex tensor type.
  */
-public interface RealTensorMixin<T, W> extends
-        TensorComparisonsMixin<T, Tensor, SparseTensor, W, T, Double>,
-        TensorManipulationsMixin<T, Tensor, SparseTensor, W, T, Double>,
-        TensorOperationsMixin<T, Tensor, SparseTensor, W, T, Double>,
-        TensorPropertiesMixin<T, Tensor, SparseTensor, W, T, Double> {
+public interface RealTensorMixin<T, W> {
 
 
     /**

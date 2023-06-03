@@ -27,19 +27,19 @@ package com.flag4j.core;
 import com.flag4j.CTensor;
 import com.flag4j.SparseCTensor;
 import com.flag4j.SparseTensor;
+import com.flag4j.Tensor;
 
 
 /**
- * This interface contains several methods which should be implemented by any class extending {@link TensorBase} but
- * does <b>not</b> extend either {@link MatrixBase} or {@link VectorBase}. This is either
- * because an equivalent method with a different name is already defined for {@link MatrixBase matrices} and/or
- * {@link VectorBase vectors} or the methods do not apply to rank 1 and/or 2 tensors.
+ * This interface contains several methods which should be implemented by all tensors which are <b>NOT</b> a matrix or
+ * vector.
  *
  * @param <T> Tensor type.
- * @param <U> Dense Tensor type.
- * @param <V> Sparse Tensor type.
+ * @param <U> Dense tensor type.
+ * @param <V> Sparse tensor type.
+ * @param <W> Complex tensor type.
  */
-public interface TensorExclusiveMixin<T, U, V> {
+public interface TensorExclusiveMixin<T, U, V, W> {
 
     // TODO: add toVector() and toMatrix() methods.
     // TODO: Add tensorDot(...) methods for Tensor, CTensor, SparseTensor, SparseCTensor.
@@ -140,7 +140,27 @@ public interface TensorExclusiveMixin<T, U, V> {
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    U add(SparseTensor B);
+    T add(SparseTensor B);
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    U add(Tensor B);
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    U sub(Tensor B);
 
 
     /**
@@ -160,7 +180,7 @@ public interface TensorExclusiveMixin<T, U, V> {
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    CTensor add(SparseCTensor B);
+    W add(SparseCTensor B);
 
 
     /**
@@ -170,7 +190,7 @@ public interface TensorExclusiveMixin<T, U, V> {
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    U sub(SparseTensor B);
+    T sub(SparseTensor B);
 
 
     /**
@@ -190,7 +210,7 @@ public interface TensorExclusiveMixin<T, U, V> {
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
-    CTensor sub(SparseCTensor B);
+    W sub(SparseCTensor B);
 
 
     /**
@@ -209,6 +229,15 @@ public interface TensorExclusiveMixin<T, U, V> {
      * @throws IllegalArgumentException If this tensor and B have different shapes.
      */
     void subEq(SparseTensor B);
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    T elemMult(Tensor B);
 
 
     /**
@@ -248,11 +277,10 @@ public interface TensorExclusiveMixin<T, U, V> {
 
 
     /**
-     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
-     * in the reshaped tensor.
-     * @param shape Shape of the new tensor.
-     * @return A tensor which is equivalent to this tensor but with the specified shape.
-     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
+     * Computes the element-wise division between two tensors.
+     * @param B Tensor to element-wise divide from this tensor.
+     * @return The result of the element-wise tensor division.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
      */
-    T reshape(int... shape);
+    T elemDiv(Tensor B);
 }

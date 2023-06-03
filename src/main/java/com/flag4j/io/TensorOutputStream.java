@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Jacob Watters
+ * Copyright (c) 2022-2023 Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,11 +40,11 @@ public class TensorOutputStream extends OutputStream {
     /**
      * Stream for writing data to a file.
      */
-    private FileOutputStream fileOut;
+    private final FileOutputStream fileOut;
     /**
      * Stream for serializing object.
      */
-    private ObjectOutputStream objectOut;
+    private final ObjectOutputStream objectOut;
 
 
     /**
@@ -63,7 +63,7 @@ public class TensorOutputStream extends OutputStream {
      * Writes a {@link TensorBase} object to a file by serializing the object.
      * @param A Object to write to file. This may be a real/complex dense or sparse tensor, matrix, or vector.
      */
-    public void write(TensorBase<?> A) throws IOException {
+    public void write(TensorBase<?, ?, ?, ?, ?, ?, ?> A) throws IOException {
         objectOut.writeObject(A);
     }
 

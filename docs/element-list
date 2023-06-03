@@ -2,10 +2,13 @@ com.flag4j
 com.flag4j.complex_numbers
 com.flag4j.concurrency
 com.flag4j.core
+com.flag4j.core.dense
+com.flag4j.core.sparse
 com.flag4j.io
 com.flag4j.linalg
 com.flag4j.linalg.decompositions
 com.flag4j.linalg.solvers
+com.flag4j.linalg.transformations
 com.flag4j.operations
 com.flag4j.operations.common.complex
 com.flag4j.operations.common.real

@@ -27,6 +27,7 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
+import com.flag4j.linalg.transformations.Householder;
 
 
 /**
@@ -41,8 +42,8 @@ public final class RealQRDecomposition extends QRDecomposition&lt;Matrix&gt; {
      * Constructs a {@code QR} decomposer which computes the full {@code QR} decomposition.
      */
     public RealQRDecomposition() {
-<span class="fc" id="L44">        super();</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L45">        super();</span>
+<span class="fc" id="L46">    }</span>
 
 
     /**
@@ -52,9 +53,8 @@ public final class RealQRDecomposition extends QRDecomposition&lt;Matrix&gt; {
      *               the reduced {@code QR} decomposition will be computed.
      */
     public RealQRDecomposition(boolean fullQR) {
-<span class="nc" id="L55">        super(fullQR);</span>
-<span class="nc" id="L56">    }</span>
-
+<span class="nc" id="L56">        super(fullQR);</span>
+<span class="nc" id="L57">    }</span>
 
 
     /**
@@ -83,43 +83,24 @@ public final class RealQRDecomposition extends QRDecomposition&lt;Matrix&gt; {
 <span class="fc" id="L83">        int m = R.numRows, n = R.numCols;</span>
 <span class="fc" id="L84">        int stop = Math.min(n, m-1);</span>
 
-        Matrix H, col;
+        Matrix H;
+        Vector col;
 
         // Initialize Q to the identity matrix.
-<span class="fc" id="L89">        Q = Matrix.I(R.numRows);</span>
+<span class="fc" id="L90">        Q = Matrix.I(R.numRows);</span>
 
-<span class="fc bfc" id="L91" title="All 2 branches covered.">        for(int i=0; i&lt;stop; i++) {</span>
-<span class="fc" id="L92">            H = Matrix.I(m);</span>
-<span class="fc" id="L93">            col = R.getColBelow(i, i);</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        for(int i=0; i&lt;stop; i++) {</span>
+<span class="fc" id="L93">            col = R.getColBelow(i, i).toVector();</span>
 
-<span class="pc bpc" id="L95" title="1 of 2 branches missed.">            if(!col.isZeros()) { // Then a householder transform must be applied</span>
-<span class="fc" id="L96">                H.setSlice(getHouseholder(col), i, i);</span>
+            // If the column has zeros below the diagonal it is in the correct form. No need to compute reflector.
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">            if(!col.isZeros()) {</span>
+<span class="fc" id="L97">                H = Matrix.I(m);</span>
+<span class="fc" id="L98">                H.setSlice(Householder.getReflector(col), i, i);</span>
 
-<span class="fc" id="L98">                Q = Q.mult(H); // Apply Householder reflector to Q</span>
-<span class="fc" id="L99">                R = H.mult(R); // Apply Householder reflector to R</span>
+<span class="fc" id="L100">                Q = Q.mult(H); // Apply Householder reflector to Q</span>
+<span class="fc" id="L101">                R = H.mult(R); // Apply Householder reflector to R</span>
             }
         }
-<span class="fc" id="L102">    }</span>
-
-
-    /**
-     * Computes the Householder reflector for the specified column vector.
-     * @param col Column vector to compute Householder reflector for.
-     * @return The Householder transformation matrix.
-     */
-    private Matrix getHouseholder(Matrix col) {
-<span class="fc" id="L111">        Matrix H = Matrix.I(col.numRows);</span>
-<span class="fc" id="L112">        Vector v = col.toVector();</span>
-
-<span class="fc" id="L114">        double signedNorm = -Math.copySign(v.norm(), v.entries[0]);</span>
-<span class="fc" id="L115">        v = v.scalDiv(v.entries[0] + signedNorm);</span>
-<span class="fc" id="L116">        v.entries[0] = 1;</span>
-
-        // Create projection matrix
-<span class="fc" id="L119">        Matrix P = v.outer(v).mult(2/v.inner(v));</span>
-<span class="fc" id="L120">        H.subEq(P);</span>
-
-<span class="fc" id="L122">        return H;</span>
-    }
+<span class="fc" id="L104">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

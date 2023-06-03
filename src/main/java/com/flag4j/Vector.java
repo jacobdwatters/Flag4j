@@ -25,12 +25,13 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.*;
+import com.flag4j.core.VectorMixin;
+import com.flag4j.core.dense.DenseVectorMixin;
+import com.flag4j.core.dense.RealDenseTensorBase;
 import com.flag4j.io.PrintOptions;
-import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.common.real.AggregateReal;
-import com.flag4j.operations.common.real.RealOperations;
-import com.flag4j.operations.dense.real.*;
+import com.flag4j.operations.common.real.VectorNorms;
+import com.flag4j.operations.dense.real.RealDenseEquals;
+import com.flag4j.operations.dense.real.RealDenseVectorOperations;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
@@ -47,21 +48,23 @@ import java.util.Arrays;
 /**
  * Real dense vector. This class is mostly Equivalent to a real dense tensor with rank 1.
  */
-public class Vector extends VectorBase<double[]> implements
-        VectorComparisonsMixin<Vector, Vector, SparseVector, CVector, Vector, Double>,
-        VectorManipulationsMixin<Vector, Vector, SparseVector, CVector, Vector, Double,
-                    Matrix, Matrix, SparseMatrix, CMatrix>,
-        VectorOperationsMixin<Vector, Vector, SparseVector, CVector, Vector, Double,
-                    Matrix, Matrix, SparseMatrix, CMatrix>,
-        VectorPropertiesMixin<Vector, Vector, SparseVector, CVector, Vector, Double> {
-    
+public class Vector
+        extends RealDenseTensorBase<Vector, CVector>
+        implements VectorMixin<Vector, Vector, SparseVector, CVector, Double, Matrix, Matrix, CMatrix>,
+        DenseVectorMixin {
+
+    /**
+     * The size of this vector. That is, the number of entries in this vector.
+     */
+    public final int size;
 
     /**
      * Creates a vector of specified size filled with zeros.
      * @param size Size of the vector.
      */
     public Vector(int size) {
-        super(size, new double[size]);
+        super(new Shape(size), new double[size]);
+        this.size = shape.dims[0];
     }
 
 
@@ -71,8 +74,9 @@ public class Vector extends VectorBase<double[]> implements
      * @param fillValue Value to fill vector with.
      */
     public Vector(int size, double fillValue) {
-        super(size, new double[size]);
+        super(new Shape(size), new double[size]);
         Arrays.fill(super.entries, fillValue);
+        this.size = shape.dims[0];
     }
 
 
@@ -83,6 +87,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     public Vector(Shape shape) {
         super(shape, new double[shape.dims[0]]);
+        this.size = shape.dims[0];
     }
 
 
@@ -95,6 +100,7 @@ public class Vector extends VectorBase<double[]> implements
     public Vector(Shape shape, double fillValue) {
         super(shape, new double[shape.dims[0]]);
         Arrays.fill(super.entries, fillValue);
+        this.size = shape.dims[0];
     }
 
 
@@ -102,8 +108,9 @@ public class Vector extends VectorBase<double[]> implements
      * Creates a vector with specified entries.
      * @param entries Entries for this column vector.
      */
-    public Vector(double[] entries) {
-        super(entries.length, entries.clone());
+    public Vector(double... entries) {
+        super(new Shape(entries.length), entries.clone());
+        this.size = shape.dims[0];
     }
 
 
@@ -111,8 +118,9 @@ public class Vector extends VectorBase<double[]> implements
      * Creates a vector with specified entries.
      * @param entries Entries for this column vector.
      */
-    public Vector(int[] entries) {
-        super(entries.length, new double[entries.length]);
+    public Vector(int... entries) {
+        super(new Shape(entries.length), new double[entries.length]);
+        this.size = shape.dims[0];
 
         for(int i=0; i<entries.length; i++) {
             super.entries[i] = entries[i];
@@ -125,30 +133,8 @@ public class Vector extends VectorBase<double[]> implements
      * @param a Vector to make copy of.
      */
     public Vector(Vector a) {
-        super(a.entries.length, a.entries.clone());
-    }
-
-
-
-    /**
-     * Checks if this tensor only contains zeros.
-     *
-     * @return True if this tensor only contains zeros. Otherwise, returns false.
-     */
-    @Override
-    public boolean isZeros() {
-        return ArrayUtils.isZeros(this.entries);
-    }
-
-
-    /**
-     * Checks if this tensor only contains ones.
-     *
-     * @return True if this tensor only contains ones. Otherwise, returns false.
-     */
-    @Override
-    public boolean isOnes() {
-        return RealDenseProperties.isOnes(this.entries);
+        super(a.shape.copy(), a.entries.clone());
+        this.size = shape.dims[0];
     }
 
 
@@ -166,45 +152,22 @@ public class Vector extends VectorBase<double[]> implements
         if(b instanceof Vector) {
             Vector vec = (Vector) b;
             equal = RealDenseEquals.vectorEquals(this.entries, vec.entries);
+
         } else if(b instanceof CVector) {
             CVector vec = (CVector) b;
             equal = ArrayUtils.equals(this.entries, vec.entries);
+
         } else if(b instanceof SparseVector) {
             SparseVector vec = (SparseVector) b;
             equal = RealDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);
+
         } else if(b instanceof SparseCVector) {
             SparseCVector vec = (SparseCVector) b;
             equal = RealComplexDenseSparseEquals.vectorEquals(this.entries, vec.entries, vec.indices, vec.size);
+
         }
 
         return equal;
-    }
-
-
-    /**
-     * Sets an index of this tensor to a specified value.
-     *
-     * @param value   Value to set.
-     * @param indices The indices of this tensor for which to set the value.
-     */
-    @Override
-    public void set(double value, int... indices) {
-        ParameterChecks.assertArrayLengthsEq(1, indices.length);
-        this.entries[indices[0]] = value;
-    }
-
-
-    /**
-     * Since vectors are rank 1 tensors, this method simply copies the vector.
-     *
-     * @param shape Shape of the new tensor.
-     * @return A tensor which is equivalent to this tensor but with the specified shape.
-     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
-     */
-    @Override
-    public Vector reshape(Shape shape) {
-        ParameterChecks.assertBroadcastable(this.shape, shape);
-        return this.copy();
     }
 
 
@@ -255,17 +218,7 @@ public class Vector extends VectorBase<double[]> implements
     }
 
 
-    /**
-     * Computes the element-wise addition between two tensors of the same rank.
-     *
-     * @param B Second tensor in the addition.
-     * @return The result of adding the tensor B to this tensor element-wise.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public Vector add(Vector B) {
-        return new Vector(RealDenseOperations.add(this.entries, this.shape, B.entries, B.shape));
-    }
+    // TODO: Add append(double v) to append a single scalar to the end of a vector.
 
 
     /**
@@ -304,43 +257,6 @@ public class Vector extends VectorBase<double[]> implements
     @Override
     public CVector add(SparseCVector B) {
         return RealComplexDenseSparseVectorOperations.add(this, B);
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public Vector add(double a) {
-        return new Vector(RealDenseOperations.add(this.entries, a));
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CVector add(CNumber a) {
-        return new CVector(RealComplexDenseVectorOperations.add(this.entries, a));
-    }
-
-
-    /**
-     * Computes the element-wise subtraction between two tensors of the same rank.
-     *
-     * @param B Second tensor in element-wise subtraction.
-     * @return The result of subtracting the tensor B from this tensor element-wise.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public Vector sub(Vector B) {
-        return new Vector(RealDenseOperations.sub(this.entries, this.shape, B.entries, B.shape));
     }
 
 
@@ -403,45 +319,8 @@ public class Vector extends VectorBase<double[]> implements
      * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
      */
     @Override
-    public void addEq(Vector B) {
-        RealDenseOperations.addEq(this.entries, this.shape, B.entries, B.shape);
-    }
-
-
-    /**
-     * Computes the element-wise addition between this vector and the specified vector. The result is stored in this
-     * vector.
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public void subEq(Vector B) {
-        RealDenseOperations.subEq(this.entries, this.shape, B.entries, B.shape);
-    }
-    
-
-    /**
-     * Computes the element-wise addition between this vector and the specified vector. The result is stored in this
-     * vector.
-     * @param B Vector to add to this vector.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
     public void subEq(SparseVector B) {
         RealDenseSparseVectorOperations.subEq(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
-     *
-     * @param B Vector to element-wise multiply to this vector.
-     * @return The vector resulting from the element-wise multiplication.
-     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
-     */
-    @Override
-    public Vector elemMult(Vector B) {
-        return new Vector(RealDenseElemMult.dispatch(this.entries, this.shape, B.entries, B.shape));
     }
 
 
@@ -492,152 +371,8 @@ public class Vector extends VectorBase<double[]> implements
      * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
      */
     @Override
-    public Vector elemDiv(Vector B) {
-        return new Vector(RealDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));
-    }
-
-
-    /**
-     * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
-     *
-     * @param B Vector to element-wise divide this vector by.
-     * @return The vector resulting from the element-wise division.
-     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
-     */
-    @Override
     public CVector elemDiv(CVector B) {
         return new CVector(RealComplexDenseElemDiv.dispatch(this.entries, this.shape, B.entries, B.shape));
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public Vector sub(double a) {
-        return new Vector(RealDenseOperations.sub(this.entries, a));
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor.
-     *
-     * @param a Value to subtract from all entries of this tensor.
-     * @return The result of subtracting the specified value from each entry of this tensor.
-     */
-    @Override
-    public CVector sub(CNumber a) {
-        return new CVector(RealComplexDenseOperations.sub(this.entries, a));
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void addEq(Double b) {
-        RealDenseOperations.addEq(this.entries, b);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor and stores the result in this tensor.
-     *
-     * @param b Value to subtract from all entries of this tensor.
-     */
-    @Override
-    public void subEq(Double b) {
-        RealDenseOperations.subEq(this.entries, b);
-    }
-
-
-    /**
-     * Computes scalar multiplication of a tensor.
-     *
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    @Override
-    public Vector mult(double factor) {
-        return new Vector(RealOperations.scalMult(this.entries, factor));
-    }
-
-
-    /**
-     * Computes scalar multiplication of a tensor.
-     *
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    @Override
-    public CVector mult(CNumber factor) {
-        return new CVector(ComplexOperations.scalMult(this.entries, factor));
-    }
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    @Override
-    public Vector scalDiv(double divisor) {
-        return new Vector(RealDenseOperations.scalDiv(this.entries, divisor));
-    }
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    @Override
-    public CVector scalDiv(CNumber divisor) {
-        return new CVector(RealComplexDenseOperations.scalDiv(this.entries, divisor));
-    }
-
-
-    /**
-     * Sums together all entries in the tensor.
-     *
-     * @return The sum of all entries in this tensor.
-     */
-    @Override
-    public Double sum() {
-        return AggregateReal.sum(this.entries);
-    }
-
-
-    /**
-     * Computes the element-wise square root of a tensor.
-     *
-     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
-     * the principle square root i.e. the square root with positive real part.
-     */
-    @Override
-    public Vector sqrt() {
-        return new Vector(RealOperations.sqrt(this.entries));
-    }
-
-
-    /**
-     * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
-     * be computed.
-     *
-     * @return The result of applying an element-wise absolute value/magnitude to this tensor.
-     */
-    @Override
-    public Vector abs() {
-        return new Vector(RealOperations.abs(this.entries));
     }
 
 
@@ -660,43 +395,6 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Vector T() {
-        return new Vector(this);
-    }
-
-
-    /**
-     * Computes the reciprocals, element-wise, of a tensor.
-     *
-     * @return A tensor containing the reciprocal elements of this tensor.
-     * @throws ArithmeticException If this tensor contains any zeros.
-     */
-    @Override
-    public Vector recip() {
-        return new Vector(RealDenseOperations.recip(this.entries));
-    }
-
-
-    /**
-     * Gets the element in this tensor at the specified indices.
-     *
-     * @param indices Indices of element.
-     * @return The element at the specified indices.
-     * @throws IllegalArgumentException If the number of indices does not match the rank of this tensor.
-     */
-    @Override
-    public Double get(int... indices) {
-        ParameterChecks.assertArrayLengthsEq(1, indices.length);
-        return this.entries[indices[0]];
-    }
-
-
-    /**
-     * Creates a copy of this tensor.
-     *
-     * @return A copy of this tensor.
-     */
-    @Override
-    public Vector copy() {
         return new Vector(this);
     }
 
@@ -1097,18 +795,20 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public Double inner(SparseVector b) {
-        return RealDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);
+        return RealDenseSparseVectorOperations.inner(this.entries, b.entries, b.indices, b.size);
     }
 
 
     /**
      * Computes a unit vector in the same direction as this vector.
      *
-     * @return A unit vector with the same direction as this vector.
+     * @return A unit vector with the same direction as this vector. If this vector is zeros, then an equivalently sized
+     * zero vector will be returned.
      */
     @Override
     public Vector normalize() {
-        return this.scalDiv(this.norm());
+        double norm = this.norm();
+        return norm==0 ? new Vector(size) : this.div(norm);
     }
 
 
@@ -1134,7 +834,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public CNumber inner(SparseCVector b) {
-        return RealComplexDenseSparseVectorOperations.innerProduct(this.entries, b.entries, b.indices, b.size);
+        return RealComplexDenseSparseVectorOperations.inner(this.entries, b.entries, b.indices, b.size);
     }
 
 
@@ -1145,7 +845,6 @@ public class Vector extends VectorBase<double[]> implements
      * @return The result of the vector cross product between this vector and b.
      * @throws IllegalArgumentException If either this vector or b do not have exactly 3 entries.
      */
-    @Override
     public Vector cross(Vector b) {
         ParameterChecks.assertArrayLengthsEq(3, b.size);
         ParameterChecks.assertArrayLengthsEq(3, this.size);
@@ -1166,7 +865,6 @@ public class Vector extends VectorBase<double[]> implements
      * @return The result of the vector cross product between this vector and b.
      * @throws IllegalArgumentException If either this vector or b do not have 3 entries.
      */
-    @Override
     public CVector cross(CVector b) {
         ParameterChecks.assertArrayLengthsEq(3, b.size);
         ParameterChecks.assertArrayLengthsEq(3, this.size);
@@ -1244,6 +942,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public boolean isParallel(Vector b) {
+        // TODO: Add overloaded methods for other vector types.
         boolean result;
 
         if(this.size!=b.size) {
@@ -1285,6 +984,7 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public boolean isPerp(Vector b) {
+        // TODO: Add overloaded methods for other vector types.
         boolean result;
 
         if(this.size!=b.size) {
@@ -1337,89 +1037,13 @@ public class Vector extends VectorBase<double[]> implements
 
 
     /**
-     * Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.
-     *
-     * @return The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public Double min() {
-        return AggregateReal.min(this.entries);
-    }
-
-
-    /**
-     * Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.
-     *
-     * @return The maximum value (largest in magnitude for a complex valued tensor) in this tensor.
-     */
-    @Override
-    public Double max() {
-        return AggregateReal.max(this.entries);
-    }
-
-
-    /**
-     * Finds the minimum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #min()}.
-     *
-     * @return The minimum value, in absolute value, in this tensor.
-     */
-    @Override
-    public Double minAbs() {
-        return AggregateReal.minAbs(this.entries);
-    }
-
-
-    /**
-     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
-     * to {@link #max()}.
-     *
-     * @return The maximum value, in absolute value, in this tensor.
-     */
-    @Override
-    public Double maxAbs() {
-        return AggregateReal.maxAbs(this.entries);
-    }
-
-
-    /**
-     * Finds the indices of the minimum value in this tensor.
-     *
-     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMin() {
-        return new int[]{AggregateDenseReal.argMin(this.entries)};
-    }
-
-
-    /**
-     * Finds the indices of the maximum value in this tensor.
-     *
-     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMax() {
-        return new int[]{AggregateDenseReal.argMax(this.entries)};
-    }
-
-
-    /**
      * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
      *
      * @return the 2-norm of this tensor.
      */
     @Override
     public double norm() {
-        double norm = 0;
-
-        for(int i=0; i<this.size; i++) {
-            norm += this.entries[i]*this.entries[i];
-        }
-
-        return Math.sqrt(norm);
+        return VectorNorms.norm(entries);
     }
 
 
@@ -1433,33 +1057,60 @@ public class Vector extends VectorBase<double[]> implements
      */
     @Override
     public double norm(double p) {
-
-        if(Double.isInfinite(p)) {
-            if(p > 0) {
-                return maxAbs(); // Maximum / infinite norm.
-            } else {
-                return minAbs(); // Minimum norm.
-            }
-        } else {
-            double norm = 0;
-
-            for(int i=0; i<this.size; i++) {
-                norm += Math.pow(Math.abs(this.entries[i]), p);
-            }
-
-            return Math.pow(norm, 1.0/p);
-        }
+        return VectorNorms.norm(entries, p);
     }
 
 
     /**
-     * Computes the maximum/infinite norm of this tensor.
+     * Factory to create a tensor with the specified shape and size.
      *
-     * @return The maximum/infinite norm of this tensor.
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
      */
     @Override
-    public double infNorm() {
-        return AggregateReal.maxAbs(this.entries);
+    protected Vector makeTensor(Shape shape, double[] entries) {
+        // Shape not needed to construct a dense vector.
+        return new Vector(entries);
+    }
+
+
+    /**
+     * Factory to create a complex tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected CVector makeComplexTensor(Shape shape, double[] entries) {
+        // Shape not needed to construct a dense vector.
+        return new CVector(entries);
+    }
+
+
+    /**
+     * Factory to create a complex tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected CVector makeComplexTensor(Shape shape, CNumber[] entries) {
+        // Shape not needed to construct a dense vector.
+        return new CVector(entries);
+    }
+
+
+    /**
+     * Simply returns this tensor.
+     *
+     * @return A reference to this tensor.
+     */
+    @Override
+    protected Vector getSelf() {
+        return this;
     }
 
 
@@ -1471,6 +1122,29 @@ public class Vector extends VectorBase<double[]> implements
     @Override
     public int length() {
         return this.size;
+    }
+
+
+    /**
+     * gets the size of this vector.
+     *
+     * @return The total number of entries in this vector.
+     */
+    @Override
+    public int size() {
+        return size;
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis. For a vector, this simply copies the vector.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     */
+    @Override
+    public Vector flatten(int axis) {
+        return this.copy();
     }
 
 

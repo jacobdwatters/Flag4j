@@ -1,5 +1,7 @@
 package com.flag4j;
 
+import com.flag4j.CVector;
+import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -59,7 +61,7 @@ public class VectorScaleMultDivTests {
         expEntries = new double[]{aEntries[0]/b, aEntries[1]/b, aEntries[2]/b};
         exp = new Vector(expEntries);
 
-        assertEquals(exp, a.scalDiv(b));
+        assertEquals(exp, a.div(b));
     }
 
 
@@ -77,6 +79,6 @@ public class VectorScaleMultDivTests {
                 new CNumber(aEntries[2]).div(b)};
         exp = new CVector(expEntries);
 
-        assertEquals(exp, a.scalDiv(b));
+        assertEquals(exp, a.div(b));
     }
 }

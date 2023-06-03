@@ -217,22 +217,6 @@ public final class ComplexDenseOperations {
 
 
     /**
-     * Sums all entries in a tensor.
-     * @param src Entries of tensor to sum.
-     * @return The sum of all entries in the tensor.
-     */
-    public static CNumber sum(CNumber[] src) {
-        CNumber sum = new CNumber();
-
-        for(CNumber value : src) {
-           sum = sum.add(value);
-        }
-
-        return sum;
-    }
-
-
-    /**
      * Multiplies all entries in a tensor.
      * @param src Entries of tensor to compute product of.
      * @return The product of all src in the tensor.
@@ -309,14 +293,14 @@ public final class ComplexDenseOperations {
      * @param src Elements of the tensor.
      * @return The element-wise reciprocals of the tensor.
      */
-    public static CNumber[] recep(CNumber[] src) {
-        CNumber[] receps = new CNumber[src.length];
+    public static CNumber[] recip(CNumber[] src) {
+        CNumber[] recips = new CNumber[src.length];
 
-        for(int i=0; i<receps.length; i++) {
-            receps[i] = src[i].addInv();
+        for(int i=0; i<recips.length; i++) {
+            recips[i] = src[i].multInv();
         }
 
-        return receps;
+        return recips;
     }
 
 
@@ -411,7 +395,7 @@ public final class ComplexDenseOperations {
      * @return The infinity norm of the matrix.
      */
     public static double matrixMaxNorm(CNumber[] src) {
-        return maxAbs(src).re;
+        return maxAbs(src);
     }
 
 

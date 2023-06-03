@@ -29,6 +29,8 @@ import com.flag4j.SparseCVector;
 import com.flag4j.SparseVector;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -56,7 +58,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @return The inner product of the two vectors.
      * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
      */
-    public static CNumber innerProduct(double[] src1, CNumber[] src2, int[] indices, int sparseSize) {
+    public static CNumber inner(double[] src1, CNumber[] src2, int[] indices, int sparseSize) {
         ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);
         CNumber innerProd = new CNumber();
         int index;
@@ -79,7 +81,7 @@ public class RealComplexDenseSparseVectorOperations {
      * @return The inner product of the two vectors.
      * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
      */
-    public static CNumber innerProduct(CNumber[] src1, double[] src2, int[] indices, int sparseSize) {
+    public static CNumber inner(CNumber[] src1, double[] src2, int[] indices, int sparseSize) {
         ParameterChecks.assertArrayLengthsEq(src1.length, sparseSize);
         CNumber innerProd = new CNumber();
         int index;
@@ -87,6 +89,29 @@ public class RealComplexDenseSparseVectorOperations {
         for(int i=0; i<src2.length; i++) {
             index = indices[i];
             innerProd.addEq(src1[index].mult(src2[i]));
+        }
+
+        return innerProd;
+    }
+
+
+    /**
+     * Computes the vector inner product between a complex dense vector and a real sparse vector.
+     * @param src1 Non-zero entries of the sparse vector.
+     * @param src2 Entries of the dense vector.
+     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param sparseSize The size of the sparse vector (including zero entries).
+     * @return The inner product of the two vectors.
+     * @throws IllegalArgumentException If the number of entries in the two vectors is not equivalent.
+     */
+    public static CNumber inner(double[] src1, int[] indices, int sparseSize, CNumber[] src2) {
+        ParameterChecks.assertArrayLengthsEq(src2.length, sparseSize);
+        CNumber innerProd = new CNumber();
+        int index;
+
+        for(int i=0; i<src1.length; i++) {
+            index = indices[i];
+            innerProd.addEq(src2[index].conj().mult(src1[i]));
         }
 
         return innerProd;
@@ -135,6 +160,57 @@ public class RealComplexDenseSparseVectorOperations {
             for(int j=0; j<src2.length; j++) {
                 index = indices[j];
                 dest[i*sparseSize + index] = src1[i].mult(src2[j]);
+            }
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Computes the vector outer product between a complex dense vector and a real sparse vector.
+     * @param src1 Non-zero entries of the real sparse vector.
+     * @param indices Indices of non-zero entries of sparse vector.
+     * @param sparseSize Full size of the sparse vector including zero entries.
+     * @param src2 Entries of the complex dense vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static CNumber[] outerProduct(double[] src1, int[] indices, int sparseSize, CNumber[] src2) {
+        ParameterChecks.assertEquals(sparseSize, src2.length);
+
+        CNumber[] dest = new CNumber[src2.length*sparseSize];
+        ArrayUtils.fillZeros(dest);
+        int destIndex;
+
+        for(int i=0; i<src1.length; i++) {
+            destIndex = indices[i]*src2.length;
+
+            for(CNumber v : src2) {
+                dest[destIndex++] = v.mult(src1[i]);
+            }
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Computes the vector outer product between a rea; dense vector and a complex sparse vector.
+     * @param src1 Non-zero entries of the complex sparse vector.
+     * @param indices Indices of non-zero entries of sparse vector.
+     * @param sparseSize Full size of the sparse vector including zero entries.
+     * @param src2 Entries of the real dense vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static CNumber[] outerProduct(CNumber[] src1, int[] indices, int sparseSize, double[] src2) {
+        CNumber[] dest = new CNumber[sparseSize*src2.length];
+        ArrayUtils.fillZeros(dest);
+        int index;
+
+        for(int i=0; i<src2.length; i++) {
+            for(int j=0; j<src1.length; j++) {
+                index = indices[j];
+                dest[i*sparseSize + index] = src1[j].mult(src2[i]);
             }
         }
 
@@ -202,6 +278,44 @@ public class RealComplexDenseSparseVectorOperations {
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             index = src2.indices[i];
             dest.entries[index].subEq(src2.entries[i]);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Subtracts a complex dense vector from a complex sparse vector.
+     * @param src1 Sparse vector.
+     * @param src2 Dense vector.
+     * @return The result of the vector subtraction.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static CVector sub(SparseCVector src1, Vector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CVector dest = new CVector(RealOperations.scalMult(src2.entries, -1));
+
+        for(int i=0; i<src1.nonZeroEntries(); i++) {
+            dest.entries[src1.indices[i]].addEq(src1.entries[i]);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Subtracts a complex dense vector from a complex sparse vector.
+     * @param src1 Sparse vector.
+     * @param src2 Dense vector.
+     * @return The result of the vector subtraction.
+     * @throws IllegalArgumentException If the vectors do not have the same shape.
+     */
+    public static CVector sub(SparseVector src1, CVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CVector dest = new CVector(ComplexOperations.scalMult(src2.entries, -1));
+
+        for(int i=0; i<src1.nonZeroEntries(); i++) {
+            dest.entries[src1.indices[i]].addEq(src1.entries[i]);
         }
 
         return dest;
@@ -302,5 +416,41 @@ public class RealComplexDenseSparseVectorOperations {
         }
 
         return new SparseCVector(src1.size, entries, src2.indices.clone());
+    }
+
+
+    /**
+     * Compute the element-wise division between a sparse vector and a dense vector.
+     * @param src1 First vector in the element-wise division.
+     * @param src2 Second vector in the element-wise division.
+     * @return The result of the element-wise vector division.
+     */
+    public static SparseCVector elemDiv(SparseCVector src1, Vector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CNumber[] dest = new CNumber[src1.entries.length];
+
+        for(int i=0; i<src1.entries.length; i++) {
+            dest[i] = src1.entries[i].div(src2.entries[src1.indices[i]]);
+        }
+
+        return new SparseCVector(src1.size, dest, src1.indices.clone());
+    }
+
+
+    /**
+     * Compute the element-wise division between a sparse vector and a dense vector.
+     * @param src1 First vector in the element-wise division.
+     * @param src2 Second vector in the element-wise division.
+     * @return The result of the element-wise vector division.
+     */
+    public static SparseCVector elemDiv(SparseVector src1, CVector src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+        CNumber[] dest = new CNumber[src1.entries.length];
+
+        for(int i=0; i<src1.entries.length; i++) {
+            dest[i] = new CNumber(src1.entries[i]).div(src2.entries[src1.indices[i]]);
+        }
+
+        return new SparseCVector(src1.size, dest, src1.indices.clone());
     }
 }

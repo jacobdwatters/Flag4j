@@ -26,14 +26,7 @@ package com.flag4j.core;
 
 /**
  * This interface specifies comparisons which all vectors should implement.
- *
- * @param <T> Vector type.
- * @param <U> Dense vector type.
- * @param <V> Sparse vector type.
- * @param <W> Complex vector type.
- * @param <Y> Real vector type.
- * @param <X> Vector entry type.
  */
-public interface VectorComparisonsMixin<T, U, V, W, Y, X extends Number> extends TensorComparisonsMixin<T, U, V, W, Y, X> {
+public interface VectorComparisonsMixin {
     // TODO: Should this interface be removed?
 }
