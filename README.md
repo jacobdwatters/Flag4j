@@ -9,7 +9,7 @@ Flag4j is currently in the initial steps of development.
 
 ___
 
-## Features and Functionality
+## Planed Features and Functionality
 ### Algebraic Objects
 - Complex Numbers
 - Vectors
