@@ -129,11 +129,11 @@ public abstract class SchurDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?,
      *                 - If false, the {@code Q} matrix will &lt;b&gt;not&lt;/b&gt; be computed. If it is not needed, this may
      *                 provide a performance improvement.
      */
-<span class="nc" id="L132">    protected SchurDecomposition(boolean computeU) {</span>
-<span class="nc" id="L133">        maxIterations = -1;</span>
-<span class="nc" id="L134">        this.computeU = computeU;</span>
-<span class="nc" id="L135">        useDefaultMaxIterations = true;</span>
-<span class="nc" id="L136">    }</span>
+<span class="fc" id="L132">    protected SchurDecomposition(boolean computeU) {</span>
+<span class="fc" id="L133">        maxIterations = -1;</span>
+<span class="fc" id="L134">        this.computeU = computeU;</span>
+<span class="fc" id="L135">        useDefaultMaxIterations = true;</span>
+<span class="fc" id="L136">    }</span>
 
 
     /**
@@ -194,33 +194,33 @@ public abstract class SchurDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?,
      * @param H - The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
      */
     protected void shiftedExplicitQR(CMatrix H) {
-<span class="nc bnc" id="L197" title="All 2 branches missed.">        if(useDefaultMaxIterations) {</span>
-<span class="nc" id="L198">            maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);</span>
+<span class="pc bpc" id="L197" title="1 of 2 branches missed.">        if(useDefaultMaxIterations) {</span>
+<span class="fc" id="L198">            maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);</span>
         }
 
-<span class="nc" id="L201">        QRDecomposition&lt;CMatrix&gt; qr = new ComplexQRDecomposition();</span>
+<span class="fc" id="L201">        QRDecomposition&lt;CMatrix&gt; qr = new ComplexQRDecomposition();</span>
 
         // Initialize matrices.
-<span class="nc" id="L204">        T = H;</span>
-<span class="nc bnc" id="L205" title="All 2 branches missed.">        if(computeU) U = CMatrix.I(T.numRows);</span>
+<span class="fc" id="L204">        T = H;</span>
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">        if(computeU) U = CMatrix.I(T.numRows);</span>
 
-<span class="nc bnc" id="L207" title="All 2 branches missed.">        for(int i=0; i&lt;maxIterations; i++) {</span>
-<span class="nc" id="L208">            CNumber lam = getWilkinsonShift(T);</span>
-<span class="nc" id="L209">            CMatrix mu = Matrix.I(T.numRows).mult(lam);</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">        for(int i=0; i&lt;maxIterations; i++) {</span>
+<span class="fc" id="L208">            CNumber lam = getWilkinsonShift(T);</span>
+<span class="fc" id="L209">            CMatrix mu = Matrix.I(T.numRows).mult(lam);</span>
 
             // Compute the QR decomposition with a shift.
-<span class="nc" id="L212">            qr.decompose(T.sub(mu));</span>
+<span class="fc" id="L212">            qr.decompose(T.sub(mu));</span>
 
             // Update T and undo the shift.
-<span class="nc" id="L215">            T = qr.R.mult(qr.Q).add(mu);</span>
+<span class="fc" id="L215">            T = qr.R.mult(qr.Q).add(mu);</span>
 
-<span class="nc bnc" id="L217" title="All 2 branches missed.">            if(computeU) U = U.mult(qr.Q);</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">            if(computeU) U = U.mult(qr.Q);</span>
 
-<span class="nc bnc" id="L219" title="All 2 branches missed.">            if(T.roundToZero().isTriU()) {</span>
-<span class="nc" id="L220">                break; // We have converged (approximately) to an upper triangular matrix. No need to continue.</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">            if(T.roundToZero().isTriU()) {</span>
+<span class="fc" id="L220">                break; // We have converged (approximately) to an upper triangular matrix. No need to continue.</span>
             }
         }
-<span class="nc" id="L223">    }</span>
+<span class="fc" id="L223">    }</span>
 
 
     /**
@@ -231,13 +231,13 @@ public abstract class SchurDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?,
      */
     private CNumber getWilkinsonShift(CMatrix src) {
         // Compute eigenvalues of lower 2x2 block.
-<span class="nc" id="L234">        CVector lambdas = Eigen.get2x2LowerLeftBlockEigenValues(src);</span>
-<span class="nc" id="L235">        CNumber v = src.entries[src.entries.length-1];</span>
+<span class="fc" id="L234">        CVector lambdas = Eigen.get2x2LowerLeftBlockEigenValues(src);</span>
+<span class="fc" id="L235">        CNumber v = src.entries[src.entries.length-1];</span>
 
-<span class="nc bnc" id="L237" title="All 2 branches missed.">        if(v.sub(lambdas.entries[0]).magAsDouble() &lt; v.sub(lambdas.entries[1]).magAsDouble()) {</span>
-<span class="nc" id="L238">            return lambdas.entries[0];</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        if(v.sub(lambdas.entries[0]).magAsDouble() &lt; v.sub(lambdas.entries[1]).magAsDouble()) {</span>
+<span class="fc" id="L238">            return lambdas.entries[0];</span>
         } else {
-<span class="nc" id="L240">            return lambdas.entries[1];</span>
+<span class="fc" id="L240">            return lambdas.entries[1];</span>
         }
     }
 
@@ -247,7 +247,7 @@ public abstract class SchurDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?,
      * @return The {@code T} from the Schur decomposition corresponding to {@code A=UTU&lt;sup&gt;H&lt;/sup&gt;}.
      */
     public CMatrix getT() {
-<span class="nc" id="L250">        return T;</span>
+<span class="fc" id="L250">        return T;</span>
     }
 
 
@@ -256,7 +256,7 @@ public abstract class SchurDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?,
      * @return The {@code U} from the Schur decomposition corresponding to {@code A=UTU&lt;sup&gt;H&lt;/sup&gt;}.
      */
     public CMatrix getU() {
-<span class="nc" id="L259">        return U;</span>
+<span class="fc" id="L259">        return U;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

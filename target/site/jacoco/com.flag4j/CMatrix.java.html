@@ -3645,20 +3645,20 @@ public class CMatrix
      */
     @Override
     public boolean isTriU() {
-<span class="nc" id="L3648">        boolean result = isSquare();</span>
+<span class="fc" id="L3648">        boolean result = isSquare();</span>
 
-<span class="nc bnc" id="L3650" title="All 2 branches missed.">        if(result) {</span>
+<span class="pc bpc" id="L3650" title="1 of 2 branches missed.">        if(result) {</span>
             // Ensure lower half is zeros.
-<span class="nc bnc" id="L3652" title="All 2 branches missed.">            for(int i=1; i&lt;numRows; i++) {</span>
-<span class="nc bnc" id="L3653" title="All 2 branches missed.">                for(int j=0; j&lt;i; j++) {</span>
-<span class="nc bnc" id="L3654" title="All 2 branches missed.">                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {</span>
-<span class="nc" id="L3655">                        return false; // No need to continue.</span>
+<span class="fc bfc" id="L3652" title="All 2 branches covered.">            for(int i=1; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L3653" title="All 2 branches covered.">                for(int j=0; j&lt;i; j++) {</span>
+<span class="fc bfc" id="L3654" title="All 2 branches covered.">                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {</span>
+<span class="fc" id="L3655">                        return false; // No need to continue.</span>
                     }
                 }
             }
         }
 
-<span class="nc" id="L3661">        return result;</span>
+<span class="fc" id="L3661">        return result;</span>
     }
 
 

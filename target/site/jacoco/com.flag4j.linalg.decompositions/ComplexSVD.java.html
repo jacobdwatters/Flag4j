@@ -30,6 +30,7 @@ import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.linalg.Eigen;
 
+
 /**
  * Instances of this class can be used to compute the singular value decomposition (SVD) of a real dense matrix.
  * That is, decompose a rectangular matrix {@code M} as {@code M=USV&lt;sup&gt;H&lt;/sup&gt;} where {@code U} and {@code V} are
@@ -49,8 +50,8 @@ public class ComplexSVD extends SingularValueDecomposition&lt;CMatrix&gt; {
      *                  provide a performance improvement.
      */
     protected ComplexSVD(boolean computeUV) {
-<span class="nc" id="L52">        super(computeUV);</span>
-<span class="nc" id="L53">    }</span>
+<span class="nc" id="L53">        super(computeUV);</span>
+<span class="nc" id="L54">    }</span>
 
 
     /**
@@ -63,33 +64,34 @@ public class ComplexSVD extends SingularValueDecomposition&lt;CMatrix&gt; {
     public Decomposition&lt;CMatrix&gt; decompose(CMatrix src) {
         Vector S1;
 
-<span class="nc bnc" id="L66" title="All 2 branches missed.">        if(computeUV) {</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if(computeUV) {</span>
             // Compute right singular vectors.
-<span class="nc" id="L68">            CMatrix[] pairs = Eigen.getEigenPairs(src.H().mult(src));</span>
-<span class="nc" id="L69">            V = pairs[1];</span>
+<span class="nc" id="L69">            CMatrix[] pairs = Eigen.getEigenPairs(src.H().mult(src));</span>
+<span class="nc" id="L70">            V = pairs[1];</span>
 
             // Compute left singular vectors.
-<span class="nc" id="L72">            U = src.mult(V);</span>
+<span class="nc" id="L73">            U = src.mult(V);</span>
 
             // Compute singular values.
-<span class="nc" id="L75">            S1 = pairs[0].toVector().toReal().abs().sqrt();</span>
+<span class="nc" id="L76">            S1 = pairs[0].toVector().toReal().abs().sqrt();</span>
 
             // Copy singular values to diagonal of S and scale left singular vectors properly.
-<span class="nc" id="L78">        } else {</span>
-<span class="nc" id="L79">            S1 = Eigen.getEigenValues(src.H().mult(src)).toReal();</span>
+<span class="nc" id="L79">        } else {</span>
+<span class="nc" id="L80">            S1 = Eigen.getEigenValues(src.H().mult(src)).toReal();</span>
         }
 
-<span class="nc" id="L82">        S = new Matrix(src.shape);</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        for(int i=0; i&lt;S1.size; i++) {</span>
-<span class="nc" id="L84">            S.set(S1.entries[i], i, i);</span>
+<span class="nc" id="L83">        S = new Matrix(src.shape);</span>
+<span class="nc" id="L84">        int stopIdx = Math.min(S.numRows, S.numCols);</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        for(int i=0; i&lt;stopIdx; i++) {</span>
+<span class="nc" id="L86">            S.set(S1.entries[i], i, i);</span>
 
-<span class="nc bnc" id="L86" title="All 4 branches missed.">            if(computeUV &amp;&amp; S1.entries[i] != 0) {</span>
+<span class="nc bnc" id="L88" title="All 4 branches missed.">            if(computeUV &amp;&amp; S1.entries[i] != 0) {</span>
                 // Properly scale the left singular vectors so that Mv = su.
-<span class="nc" id="L88">                divCols(i, S1.entries[i]);</span>
+<span class="nc" id="L90">                divCols(i, S1.entries[i]);</span>
             }
         }
 
-<span class="nc" id="L92">        return this;</span>
+<span class="nc" id="L94">        return this;</span>
     }
 
 
@@ -99,11 +101,11 @@ public class ComplexSVD extends SingularValueDecomposition&lt;CMatrix&gt; {
      * @param scalValue Value to divide column by.
      */
     private void divCols(int colIdx, double scalValue) {
-<span class="nc" id="L102">        int idx = colIdx;</span>
-<span class="nc bnc" id="L103" title="All 2 branches missed.">        for(int i=0; i&lt;U.numRows; i++) {</span>
-<span class="nc" id="L104">            U.entries[idx] = U.entries[idx].div(scalValue);</span>
-<span class="nc" id="L105">            idx+=U.numCols;</span>
+<span class="nc" id="L104">        int idx = colIdx;</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        for(int i=0; i&lt;U.numRows; i++) {</span>
+<span class="nc" id="L106">            U.entries[idx] = U.entries[idx].div(scalValue);</span>
+<span class="nc" id="L107">            idx+=U.numCols;</span>
         }
-<span class="nc" id="L107">    }</span>
+<span class="nc" id="L109">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -30,6 +30,7 @@ import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.linalg.Eigen;
 
+
 /**
  * Instances of this class can be used to compute the singular value decomposition (SVD) of a real dense matrix.
  * That is, decompose a rectangular matrix {@code M} as {@code M=USV<sup>H</sup>} where {@code U} and {@code V} are
@@ -69,7 +70,14 @@ public class ComplexSVD extends SingularValueDecomposition<CMatrix> {
             V = pairs[1];
 
             // Compute left singular vectors.
-            U = src.mult(V);
+            if(src.isSquare()) {
+                U = src.mult(V);
+            } else if(src.numCols > src.numRows) {
+                U = src.mult(V).getSlice(0, src.numRows, 0, src.numRows);
+            } else {
+                U = new CMatrix(src.numRows);
+                U.setSlice(src.mult(V), 0, 0);
+            }
 
             // Compute singular values.
             S1 = pairs[0].toVector().toReal().abs().sqrt();
@@ -80,7 +88,8 @@ public class ComplexSVD extends SingularValueDecomposition<CMatrix> {
         }
 
         S = new Matrix(src.shape);
-        for(int i=0; i<S1.size; i++) {
+        int stopIdx = Math.min(S.numRows, S.numCols);
+        for(int i=0; i<stopIdx; i++) {
             S.set(S1.entries[i], i, i);
 
             if(computeUV && S1.entries[i] != 0) {

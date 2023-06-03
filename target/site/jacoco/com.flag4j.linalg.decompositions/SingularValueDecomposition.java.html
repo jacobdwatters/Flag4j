@@ -64,9 +64,9 @@ public abstract class SingularValueDecomposition&lt;T extends MatrixMixin&lt;T, 
      *                 - If false, the {@code Q} and {@code V} matrices  will &lt;b&gt;not&lt;/b&gt; be computed. If it is not needed, this may
      *                 provide a performance improvement.
      */
-<span class="nc" id="L67">    protected SingularValueDecomposition(boolean computeUV) {</span>
-<span class="nc" id="L68">        this.computeUV = computeUV;</span>
-<span class="nc" id="L69">    }</span>
+<span class="fc" id="L67">    protected SingularValueDecomposition(boolean computeUV) {</span>
+<span class="fc" id="L68">        this.computeUV = computeUV;</span>
+<span class="fc" id="L69">    }</span>
 
 
     /**
@@ -74,7 +74,7 @@ public abstract class SingularValueDecomposition&lt;T extends MatrixMixin&lt;T, 
      * @return {@code U} corresponding to {@code M=USV&lt;sup&gt;H&lt;/sup&gt;} in the SVD.
      */
     public T getU() {
-<span class="nc" id="L77">        return U;</span>
+<span class="fc" id="L77">        return U;</span>
     }
 
 
@@ -83,7 +83,7 @@ public abstract class SingularValueDecomposition&lt;T extends MatrixMixin&lt;T, 
      * @return {@code S} corresponding to {@code M=USV&lt;sup&gt;H&lt;/sup&gt;} in the SVD.
      */
     public Matrix getS() {
-<span class="nc" id="L86">        return S;</span>
+<span class="fc" id="L86">        return S;</span>
     }
 
 
@@ -93,7 +93,7 @@ public abstract class SingularValueDecomposition&lt;T extends MatrixMixin&lt;T, 
      * &lt;b&gt;not&lt;/b&gt; been computed.
      */
     public T getV() {
-<span class="nc" id="L96">        return V;</span>
+<span class="fc" id="L96">        return V;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

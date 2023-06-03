@@ -80,7 +80,14 @@ public class RealSVD extends SingularValueDecomposition<Matrix> {
             V = pairs[1].toReal();
 
             // Compute left singular vectors.
-            U = src.mult(V);
+            if(src.isSquare()) {
+                U = src.mult(V);
+            } else if(src.numCols > src.numRows) {
+                U = src.mult(V).getSlice(0, src.numRows, 0, src.numRows);
+            } else {
+                U = new Matrix(src.numRows);
+                U.setSlice(src.mult(V), 0, 0);
+            }
 
             // Compute singular values.
             S1 = pairs[0].toVector().toReal().abs().sqrt();
@@ -91,7 +98,8 @@ public class RealSVD extends SingularValueDecomposition<Matrix> {
         }
 
         S = new Matrix(src.shape);
-        for(int i=0; i<S1.size; i++) {
+        int stopIdx = Math.min(S.numRows, S.numCols);
+        for(int i=0; i<stopIdx; i++) {
             S.set(S1.entries[i], i, i);
 
             if(computeUV && S1.entries[i] != 0) {

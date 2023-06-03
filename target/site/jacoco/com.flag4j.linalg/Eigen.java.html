@@ -101,23 +101,23 @@ import com.flag4j.linalg.solvers.RealBackSolver;
     public static CVector get2x2LowerLeftBlockEigenValues(CMatrix src) {
         // TODO: While theoretically correct, there are some numerical
         //  issues here.
-<span class="nc" id="L104">        CVector lambdas = new CVector(2);</span>
-<span class="nc" id="L105">        int n = src.numRows-1;</span>
+<span class="fc" id="L104">        CVector lambdas = new CVector(2);</span>
+<span class="fc" id="L105">        int n = src.numRows-1;</span>
 
         // Get the four entries from lower right 2x2 sub-matrix.
-<span class="nc" id="L108">        CNumber a = src.entries[(n-1)*(src.numCols + 1)];</span>
-<span class="nc" id="L109">        CNumber b = src.entries[(n-1)*src.numCols + n];</span>
-<span class="nc" id="L110">        CNumber c = src.entries[n*(src.numCols + 1) - 1];</span>
-<span class="nc" id="L111">        CNumber d = src.entries[n*(src.numCols + 1)];</span>
+<span class="fc" id="L108">        CNumber a = src.entries[(n-1)*(src.numCols + 1)];</span>
+<span class="fc" id="L109">        CNumber b = src.entries[(n-1)*src.numCols + n];</span>
+<span class="fc" id="L110">        CNumber c = src.entries[n*(src.numCols + 1) - 1];</span>
+<span class="fc" id="L111">        CNumber d = src.entries[n*(src.numCols + 1)];</span>
 
-<span class="nc" id="L113">        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.</span>
-<span class="nc" id="L114">        CNumber htr = a.add(d).div(2); // Half of the 2x2 trace.</span>
+<span class="fc" id="L113">        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.</span>
+<span class="fc" id="L114">        CNumber htr = a.add(d).div(2); // Half of the 2x2 trace.</span>
 
         // 2x2 block eigenvalues.
-<span class="nc" id="L117">        lambdas.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
-<span class="nc" id="L118">        lambdas.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+<span class="fc" id="L117">        lambdas.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+<span class="fc" id="L118">        lambdas.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
 
-<span class="nc" id="L120">        return lambdas;</span>
+<span class="fc" id="L120">        return lambdas;</span>
     }
 
 
@@ -273,20 +273,20 @@ import com.flag4j.linalg.solvers.RealBackSolver;
      * eigenvectors of the {@code src} matrix as its columns.
      */
     public static CMatrix[] getEigenPairs(Matrix src) {
-<span class="nc" id="L276">        CMatrix lambdas = new CMatrix(1, src.numRows);</span>
+<span class="fc" id="L276">        CMatrix lambdas = new CMatrix(1, src.numRows);</span>
 
-<span class="nc" id="L278">        SchurDecomposition&lt;Matrix&gt; schur = new RealSchurDecomposition(true).decompose(src);</span>
-<span class="nc" id="L279">        CMatrix T = schur.getT();</span>
-<span class="nc" id="L280">        CMatrix U = schur.getU();</span>
+<span class="fc" id="L278">        SchurDecomposition&lt;Matrix&gt; schur = new RealSchurDecomposition(true).decompose(src);</span>
+<span class="fc" id="L279">        CMatrix T = schur.getT();</span>
+<span class="fc" id="L280">        CMatrix U = schur.getU();</span>
 
         // Extract diagonal of T.
-<span class="nc bnc" id="L283" title="All 2 branches missed.">        for(int i=0; i&lt;T.numRows; i++) {</span>
-<span class="nc" id="L284">            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];</span>
+<span class="fc bfc" id="L283" title="All 2 branches covered.">        for(int i=0; i&lt;T.numRows; i++) {</span>
+<span class="fc" id="L284">            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];</span>
         }
 
-<span class="nc bnc" id="L287" title="All 2 branches missed.">        if(src.isSymmetric()) {</span>
+<span class="pc bpc" id="L287" title="1 of 2 branches missed.">        if(src.isSymmetric()) {</span>
             // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
-<span class="nc" id="L289">            return new CMatrix[]{lambdas, U};</span>
+<span class="fc" id="L289">            return new CMatrix[]{lambdas, U};</span>
         } else {
             // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
 <span class="nc" id="L292">            U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.</span>

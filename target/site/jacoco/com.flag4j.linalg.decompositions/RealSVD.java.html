@@ -47,8 +47,8 @@ public class RealSVD extends SingularValueDecomposition&lt;Matrix&gt; {
      * vectors will be computed.
      */
     public RealSVD() {
-<span class="nc" id="L50">        super(true);</span>
-<span class="nc" id="L51">    }</span>
+<span class="fc" id="L50">        super(true);</span>
+<span class="fc" id="L51">    }</span>
 
 
     /**
@@ -74,33 +74,42 @@ public class RealSVD extends SingularValueDecomposition&lt;Matrix&gt; {
     public Decomposition&lt;Matrix&gt; decompose(Matrix src) {
         Vector S1;
 
-<span class="nc bnc" id="L77" title="All 2 branches missed.">        if(computeUV) {</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        if(computeUV) {</span>
             // Compute right singular vectors.
-<span class="nc" id="L79">            CMatrix[] pairs = Eigen.getEigenPairs(src.T().mult(src));</span>
-<span class="nc" id="L80">            V = pairs[1].toReal();</span>
+<span class="fc" id="L79">            CMatrix[] pairs = Eigen.getEigenPairs(src.T().mult(src));</span>
+<span class="fc" id="L80">            V = pairs[1].toReal();</span>
 
             // Compute left singular vectors.
-<span class="nc" id="L83">            U = src.mult(V);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            if(src.isSquare()) {</span>
+<span class="fc" id="L84">                U = src.mult(V);</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">            } else if(src.numCols &gt; src.numRows) {</span>
+<span class="fc" id="L86">                System.out.println(src.mult(V).shape);</span>
+<span class="fc" id="L87">                U = src.mult(V).getSlice(0, src.numRows, 0, src.numRows);</span>
+            } else {
+<span class="fc" id="L89">                U = new Matrix(src.numRows);</span>
+<span class="fc" id="L90">                U.setSlice(src.mult(V), 0, 0);</span>
+            }
 
             // Compute singular values.
-<span class="nc" id="L86">            S1 = pairs[0].toVector().toReal().abs().sqrt();</span>
+<span class="fc" id="L94">            S1 = pairs[0].toVector().toReal().abs().sqrt();</span>
 
             // Copy singular values to diagonal of S and scale left singular vectors properly.
-<span class="nc" id="L89">        } else {</span>
-<span class="nc" id="L90">            S1 = Eigen.getEigenValues(src.T().mult(src)).toReal();</span>
+<span class="fc" id="L97">        } else {</span>
+<span class="nc" id="L98">            S1 = Eigen.getEigenValues(src.T().mult(src)).toReal();</span>
         }
 
-<span class="nc" id="L93">        S = new Matrix(src.shape);</span>
-<span class="nc bnc" id="L94" title="All 2 branches missed.">        for(int i=0; i&lt;S1.size; i++) {</span>
-<span class="nc" id="L95">            S.set(S1.entries[i], i, i);</span>
+<span class="fc" id="L101">        S = new Matrix(src.shape);</span>
+<span class="fc" id="L102">        int stopIdx = Math.min(S.numRows, S.numCols);</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        for(int i=0; i&lt;stopIdx; i++) {</span>
+<span class="fc" id="L104">            S.set(S1.entries[i], i, i);</span>
 
-<span class="nc bnc" id="L97" title="All 4 branches missed.">            if(computeUV &amp;&amp; S1.entries[i] != 0) {</span>
+<span class="pc bpc" id="L106" title="2 of 4 branches missed.">            if(computeUV &amp;&amp; S1.entries[i] != 0) {</span>
                 // Properly scale the left singular vectors so that Mv = su.
-<span class="nc" id="L99">                divCols(i, S1.entries[i]);</span>
+<span class="fc" id="L108">                divCols(i, S1.entries[i]);</span>
             }
         }
 
-<span class="nc" id="L103">        return this;</span>
+<span class="fc" id="L112">        return this;</span>
     }
 
 
@@ -110,11 +119,11 @@ public class RealSVD extends SingularValueDecomposition&lt;Matrix&gt; {
      * @param scalValue Value to divide column by.
      */
     private void divCols(int colIdx, double scalValue) {
-<span class="nc" id="L113">        int idx = colIdx;</span>
-<span class="nc bnc" id="L114" title="All 2 branches missed.">        for(int i=0; i&lt;U.numRows; i++) {</span>
-<span class="nc" id="L115">            U.entries[idx] /= scalValue;</span>
-<span class="nc" id="L116">            idx+=U.numCols;</span>
+<span class="fc" id="L122">        int idx = colIdx;</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        for(int i=0; i&lt;U.numRows; i++) {</span>
+<span class="fc" id="L124">            U.entries[idx] /= scalValue;</span>
+<span class="fc" id="L125">            idx+=U.numCols;</span>
         }
-<span class="nc" id="L118">    }</span>
+<span class="fc" id="L127">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

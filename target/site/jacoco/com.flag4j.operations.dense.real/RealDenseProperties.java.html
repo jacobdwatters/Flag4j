@@ -64,27 +64,27 @@ public class RealDenseProperties {
      * @return True if this matrix is symmetric
      */
     public static boolean isSymmetric(double[] src, Shape shape) {
-<span class="nc bnc" id="L67" title="All 2 branches missed.">        if(shape.dims[0]!=shape.dims[1]) {</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if(shape.dims[0]!=shape.dims[1]) {</span>
 <span class="nc" id="L68">            return false;</span>
         }
 
         int count1, count2, stop;
 
-<span class="nc bnc" id="L73" title="All 2 branches missed.">        for(int i=0; i&lt;shape.dims[0]; i++) {</span>
-<span class="nc" id="L74">            count1 = i*shape.dims[1];</span>
-<span class="nc" id="L75">            count2 = i;</span>
-<span class="nc" id="L76">            stop = count1 + i;</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for(int i=0; i&lt;shape.dims[0]; i++) {</span>
+<span class="fc" id="L74">            count1 = i*shape.dims[1];</span>
+<span class="fc" id="L75">            count2 = i;</span>
+<span class="fc" id="L76">            stop = count1 + i;</span>
 
-<span class="nc bnc" id="L78" title="All 2 branches missed.">            while(count1 &lt; stop) {</span>
-<span class="nc bnc" id="L79" title="All 2 branches missed.">                if(src[count1++] != src[count2]) {</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">            while(count1 &lt; stop) {</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">                if(src[count1++] != src[count2]) {</span>
 <span class="nc" id="L80">                    return false;</span>
                 }
 
-<span class="nc" id="L83">                count2+=shape.dims[1];</span>
+<span class="fc" id="L83">                count2+=shape.dims[1];</span>
             }
         }
 
-<span class="nc" id="L87">        return true;</span>
+<span class="fc" id="L87">        return true;</span>
     }
 
 
