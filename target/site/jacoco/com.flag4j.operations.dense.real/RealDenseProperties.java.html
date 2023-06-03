@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealDenseProperties.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense.real</a> &gt; <span class="el_source">RealDenseProperties.java</span></div><h1>RealDenseProperties.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022-2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense.real;
+
+import com.flag4j.Shape;
+import com.flag4j.util.ErrorMessages;
+
+/**
+ * This class contains low-level implementations for operations which check if a tensor satisfies some property.
+ */
+public class RealDenseProperties {
+
+<span class="nc" id="L35">    private RealDenseProperties() {</span>
+        // Hide default constructor.
+<span class="nc" id="L37">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Checks if this tensor only contains ones.
+     * @param src Elements of the tensor.
+     * @return True if this tensor only contains ones. Otherwise, returns false.
+     */
+    public static boolean isOnes(double[] src) {
+<span class="fc" id="L47">        boolean allZeros = true;</span>
+
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for(double value : src) {</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if(value != 1) {</span>
+<span class="fc" id="L51">                allZeros = false;</span>
+<span class="fc" id="L52">                break; // No need to look further.</span>
+            }
+        }
+
+<span class="fc" id="L56">        return allZeros;</span>
+    }
+
+
+    /**
+     * Checks if a real dense matrix is symmetric. That is, if the and equal to its transpose.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return True if this matrix is symmetric
+     */
+    public static boolean isSymmetric(double[] src, Shape shape) {
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if(shape.dims[0]!=shape.dims[1]) {</span>
+<span class="nc" id="L68">            return false;</span>
+        }
+
+        int count1, count2, stop;
+
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        for(int i=0; i&lt;shape.dims[0]; i++) {</span>
+<span class="nc" id="L74">            count1 = i*shape.dims[1];</span>
+<span class="nc" id="L75">            count2 = i;</span>
+<span class="nc" id="L76">            stop = count1 + i;</span>
+
+<span class="nc bnc" id="L78" title="All 2 branches missed.">            while(count1 &lt; stop) {</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">                if(src[count1++] != src[count2]) {</span>
+<span class="nc" id="L80">                    return false;</span>
+                }
+
+<span class="nc" id="L83">                count2+=shape.dims[1];</span>
+            }
+        }
+
+<span class="nc" id="L87">        return true;</span>
+    }
+
+
+    /**
+     * Checks if a real dense matrix is anti-symmetric. That is, if the and equal to its negative transpose.
+     * @param src Entries of the matrix.
+     * @param shape Shape of the matrix.
+     * @return True if this matrix is anti-symmetric
+     */
+    public static boolean isAntiSymmetric(double[] src, Shape shape) {
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        if(shape.dims[0]!=shape.dims[1]) {</span>
+<span class="nc" id="L99">            return false;</span>
+        }
+
+        int count1, count2, stop;
+
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        for(int i=0; i&lt;shape.dims[0]; i++) {</span>
+<span class="nc" id="L105">            count1 = i*shape.dims[1];</span>
+<span class="nc" id="L106">            count2 = i;</span>
+<span class="nc" id="L107">            stop = count1 + i;</span>
+
+<span class="nc bnc" id="L109" title="All 2 branches missed.">            while(count1 &lt; stop) {</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">                if(src[count1++] != -src[count2]) {</span>
+<span class="nc" id="L111">                    return false;</span>
+                }
+
+<span class="nc" id="L114">                count2+=shape.dims[1];</span>
+            }
+        }
+
+<span class="nc" id="L118">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

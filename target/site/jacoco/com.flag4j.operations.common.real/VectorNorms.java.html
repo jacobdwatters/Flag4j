@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VectorNorms.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.common.real</a> &gt; <span class="el_source">VectorNorms.java</span></div><h1>VectorNorms.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.common.real;
+
+
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.operations.common.complex.AggregateComplex;
+
+/**
+ * This class contains low level implementations of vector norms for real valued vectors.
+ */
+public class VectorNorms {
+
+<span class="nc" id="L36">    private VectorNorms() {</span>
+        // Hide default constructor for utility class.
+<span class="nc" id="L38">        throw new IllegalStateException();</span>
+    }
+
+
+    /**
+     * Computes the 2-norm of a vector.
+     * @param src Entries of the vector (or non-zero entries if vector is sparse).
+     * @return The 2-norm of the vector.
+     */
+    public static double norm(double[] src) {
+<span class="fc" id="L48">        double norm = 0;</span>
+
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        for(double v : src) {</span>
+<span class="fc" id="L51">            norm += v*v;</span>
+        }
+
+<span class="fc" id="L54">        return Math.sqrt(norm);</span>
+    }
+
+
+    /**
+     * Computes the 2-norm of a vector.
+     * @param src Entries of the vector (or non-zero entries if vector is sparse).
+     * @return The 2-norm of the vector.
+     */
+    public static double norm(CNumber[] src) {
+<span class="fc" id="L64">        double norm = 0;</span>
+        double mag;
+
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        for(CNumber cNumber : src) {</span>
+<span class="fc" id="L68">            mag = cNumber.magAsDouble();</span>
+<span class="fc" id="L69">            norm += mag * mag;</span>
+        }
+
+<span class="fc" id="L72">        return Math.sqrt(norm);</span>
+    }
+
+
+    /**
+     * Computes the {@code p}-norm of a vector.
+     * @param src Entries of the vector (or non-zero entries if vector is sparse).
+     * @param p The {@code p} value in the {@code p}-norm. &lt;br&gt;
+     *          - If {@code p} is {@link Double#POSITIVE_INFINITY}, then this method computes the maximum/infinite norm. &lt;br&gt;
+     *          - If {@code p} is {@link Double#NEGATIVE_INFINITY}, then this method computes the minimum norm. &lt;br&gt;
+     *          Warning, if {@code p} is large in absolute value, overflow errors may occur.
+     * @return The {@code p}-norm of the vector.
+     */
+    public static double norm(double[] src, double p) {
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if(Double.isInfinite(p)) {</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">            if(p &gt; 0) {</span>
+<span class="fc" id="L88">                return AggregateReal.maxAbs(src); // Maximum / infinite norm.</span>
+            } else {
+<span class="nc" id="L90">                return AggregateReal.minAbs(src); // Minimum norm.</span>
+            }
+        } else {
+<span class="fc" id="L93">            double norm = 0;</span>
+
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            for(double v : src) {</span>
+<span class="fc" id="L96">                norm += Math.pow(Math.abs(v), p);</span>
+            }
+
+<span class="fc" id="L99">            return Math.pow(norm, 1.0/p);</span>
+        }
+    }
+
+
+    /**
+     * Computes the {@code p}-norm of a vector.
+     * @param src Entries of the vector (or non-zero entries if vector is sparse).
+     * @param p The {@code p} value in the {@code p}-norm. &lt;br&gt;
+     *          - If {@code p} is {@link Double#POSITIVE_INFINITY}, then this method computes the maximum/infinite norm. &lt;br&gt;
+     *          - If {@code p} is {@link Double#NEGATIVE_INFINITY}, then this method computes the minimum norm. &lt;br&gt;
+     *          Warning, if {@code p} is large in absolute value, overflow errors may occur.
+     * @return The {@code p}-norm of the vector.
+     */
+    public static double norm(CNumber[] src, double p) {
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if(Double.isInfinite(p)) {</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">            if(p &gt; 0) {</span>
+<span class="fc" id="L116">                return AggregateComplex.maxAbs(src); // Maximum / infinite norm.</span>
+            } else {
+<span class="fc" id="L118">                return AggregateComplex.minAbs(src); // Minimum norm.</span>
+            }
+        } else {
+<span class="fc" id="L121">            double norm = 0;</span>
+
+<span class="fc bfc" id="L123" title="All 2 branches covered.">            for(CNumber cNumber : src) {</span>
+<span class="fc" id="L124">                norm += Math.pow(cNumber.magAsDouble(), p);</span>
+            }
+
+<span class="fc" id="L127">            return Math.pow(norm, 1.0/p);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

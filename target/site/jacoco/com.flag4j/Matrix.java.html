@@ -1,0 +1,3533 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Matrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">Matrix.java</span></div><h1>Matrix.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j;
+
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.MatrixMixin;
+import com.flag4j.core.dense.RealDenseTensorBase;
+import com.flag4j.core.RealMatrixMixin;
+import com.flag4j.io.PrintOptions;
+import com.flag4j.operations.MatrixMultiplyDispatcher;
+import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
+import com.flag4j.operations.TransposeDispatcher;
+import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.common.real.RealOperations;
+import com.flag4j.operations.dense.real.*;
+import com.flag4j.operations.dense.real_complex.*;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultTranspose;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultTranspose;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
+import com.flag4j.util.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * Real dense matrix. Stored in row major format. This class is mostly equivalent to a real dense tensor of rank 2.
+ */
+public class Matrix
+        extends RealDenseTensorBase&lt;Matrix, CMatrix&gt;
+        implements MatrixMixin&lt;Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double&gt;,
+        RealMatrixMixin&lt;Matrix, CMatrix&gt; {
+
+    /**
+     * The number of rows in this matrix.
+     */
+    public final int numRows;
+    /**
+     * The number of columns in this matrix.
+     */
+    public final int numCols;
+
+
+    /**
+     * Constructs a square real dense matrix of a specified size. The entries of the matrix will default to zero.
+     * @param size Size of the square matrix.
+     * @throws IllegalArgumentException if size negative.
+     */
+    public Matrix(int size) {
+<span class="fc" id="L77">        super(new Shape(size, size), new double[size*size]);</span>
+<span class="fc" id="L78">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L79">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L80">    }</span>
+
+
+    /**
+     * Creates a square real dense matrix with a specified fill value.
+     * @param size Size of the square matrix.
+     * @param value Value to fill this matrix with.
+     * @throws IllegalArgumentException if size negative.
+     */
+    public Matrix(int size, double value) {
+<span class="fc" id="L90">        super(new Shape(size, size), new double[size*size]);</span>
+<span class="fc" id="L91">        Arrays.fill(super.entries, value);</span>
+<span class="fc" id="L92">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L93">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L94">    }</span>
+
+
+    /**
+     * Creates a real dense matrix of a specified shape filled with zeros.
+     * @param rows The number of rows in the matrix.
+     * @param cols The number of columns in the matrix.
+     * @throws IllegalArgumentException if either m or n is negative.
+     */
+    public Matrix(int rows, int cols) {
+<span class="fc" id="L104">        super(new Shape(rows, cols), new double[rows*cols]);</span>
+<span class="fc" id="L105">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L106">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L107">    }</span>
+
+
+    /**
+     * Creates a real dense matrix with a specified shape and fills the matrix with the specified value.
+     * @param rows Number of rows in the matrix.
+     * @param cols Number of columns in the matrix.
+     * @param value Value to fill this matrix with.
+     * @throws IllegalArgumentException if either m or n is negative.
+     */
+    public Matrix(int rows, int cols, double value) {
+<span class="fc" id="L118">        super(new Shape(rows, cols), new double[rows*cols]);</span>
+<span class="fc" id="L119">        Arrays.fill(super.entries, value);</span>
+<span class="fc" id="L120">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L121">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L122">    }</span>
+
+
+    /**
+     * Creates a real dense matrix whose entries are specified by a double array.
+     * @param entries Entries of the real dense matrix.
+     */
+    public Matrix(Double[][] entries) {
+<span class="fc" id="L130">        super(new Shape(entries.length, entries[0].length),</span>
+                new double[entries.length*entries[0].length]);
+<span class="fc" id="L132">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L133">        this.numCols = shape.dims[1];</span>
+
+<span class="fc" id="L135">        int index = 0;</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">        for(Double[] row : entries) {</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">            for(Double value : row) {</span>
+<span class="fc" id="L138">                super.entries[index++] = value;</span>
+            }
+        }
+<span class="fc" id="L141">    }</span>
+
+
+    /**
+     * Creates a real dense matrix whose entries are specified by a double array.
+     * @param entries Entries of the real dense matrix.
+     */
+    public Matrix(Integer[][] entries) {
+<span class="fc" id="L149">        super(new Shape(entries.length, entries[0].length),</span>
+                new double[entries.length*entries[0].length]);
+<span class="fc" id="L151">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L152">        this.numCols = shape.dims[1];</span>
+
+<span class="fc" id="L154">        int index = 0;</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        for(Integer[] row : entries) {</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">            for(Integer value : row) {</span>
+<span class="fc" id="L157">                super.entries[index++] = value;</span>
+            }
+        }
+<span class="fc" id="L160">    }</span>
+
+
+    /**
+     * Creates a real dense matrix whose entries are specified by a double array.
+     * @param entries Entries of the real dense matrix.
+     */
+    public Matrix(double[][] entries) {
+<span class="fc" id="L168">        super(new Shape(entries.length, entries[0].length),</span>
+                new double[entries.length*entries[0].length]);
+<span class="fc" id="L170">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L171">        this.numCols = shape.dims[1];</span>
+
+<span class="fc" id="L173">        int index = 0;</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">        for(double[] row : entries) {</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">            for(double value : row) {</span>
+<span class="fc" id="L176">                super.entries[index++] = value;</span>
+            }
+        }
+<span class="fc" id="L179">    }</span>
+
+
+    /**
+     * Creates a real dense matrix whose entries are specified by a double array.
+     * @param entries Entries of the real dense matrix.
+     */
+    public Matrix(int[][] entries) {
+<span class="fc" id="L187">        super(new Shape(entries.length, entries[0].length), new double[entries.length*entries[0].length]);</span>
+<span class="fc" id="L188">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L189">        this.numCols = shape.dims[1];</span>
+
+        // Copy the int array
+<span class="fc" id="L192">        int index=0;</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        for(int[] row : entries) {</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">            for(int value : row) {</span>
+<span class="fc" id="L195">                super.entries[index++] = value;</span>
+            }
+        }
+<span class="fc" id="L198">    }</span>
+
+
+    /**
+     * Creates a real dense matrix which is a copy of a specified matrix.
+     * @param A The matrix defining the entries for this matrix.
+     */
+    public Matrix(Matrix A) {
+<span class="fc" id="L206">        super(A.shape.copy(), A.entries.clone());</span>
+<span class="fc" id="L207">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L208">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L209">    }</span>
+
+
+    /**
+     * Creates a real dense matrix with specified shape filled with zeros.
+     * @param shape Shape of matrix.
+     * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
+     */
+    public Matrix(Shape shape) {
+<span class="fc" id="L218">        super(shape, new double[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L219">        ParameterChecks.assertRank(2, shape);</span>
+<span class="fc" id="L220">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L221">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L222">    }</span>
+
+
+    /**
+     * Creates a real dense matrix with specified shape filled with a specific value.
+     * @param shape Shape of matrix.
+     * @param value Value to fill matrix with.
+     * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
+     */
+    public Matrix(Shape shape, double value) {
+<span class="fc" id="L232">        super(shape, new double[shape.totalEntries().intValue()]);</span>
+<span class="fc" id="L233">        Arrays.fill(super.entries, value);</span>
+<span class="fc" id="L234">        ParameterChecks.assertRank(2, shape);</span>
+<span class="fc" id="L235">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L236">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L237">    }</span>
+
+
+    /**
+     * Constructs a matrix with specified shape and entries. Note, unlike other constructors, the entries' parameter
+     * is not copied.
+     * @param shape Shape of the matrix
+     * @param entries Entries of the matrix.
+     * @throws IllegalArgumentException If the {@code shape} is not of rank 2.
+     */
+    public Matrix(Shape shape, double[] entries) {
+<span class="fc" id="L248">        super(shape, entries);</span>
+<span class="fc" id="L249">        ParameterChecks.assertRank(2, shape);</span>
+<span class="fc" id="L250">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L251">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L252">    }</span>
+
+
+    /**
+     * Factory to create a tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected Matrix makeTensor(Shape shape, double[] entries) {
+<span class="fc" id="L264">        return new Matrix(shape, entries);</span>
+    }
+
+
+    /**
+     * Factory to create a complex tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected CMatrix makeComplexTensor(Shape shape, double[] entries) {
+<span class="fc" id="L277">        return new CMatrix(shape, entries);</span>
+    }
+
+
+    /**
+     * Factory to create a complex tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected CMatrix makeComplexTensor(Shape shape, CNumber[] entries) {
+<span class="fc" id="L290">        return new CMatrix(shape, entries);</span>
+    }
+
+
+    /**
+     * Simply returns this tensor.
+     *
+     * @return A reference to this tensor.
+     */
+    @Override
+    protected Matrix getSelf() {
+<span class="nc" id="L301">        return this;</span>
+    }
+
+
+    /**
+     * Constructs a matrix with specified shape and entries. Note, unlike other constructors, the entries' parameter
+     * is not copied.
+     * @param numRows Number of rows in this matrix.
+     * @param numCols Number of columns in this matrix.
+     * @param entries Entries of the matrix.
+     */
+    public Matrix(int numRows, int numCols, double[] entries) {
+<span class="fc" id="L313">        super(new Shape(numRows, numCols), entries);</span>
+<span class="fc" id="L314">        this.numRows = shape.dims[0];</span>
+<span class="fc" id="L315">        this.numCols = shape.dims[1];</span>
+<span class="fc" id="L316">    }</span>
+
+
+    /**
+     * Gets the number of rows in this matrix.
+     * @return The number of rows in this matrix.
+     */
+    public int numRows() {
+<span class="fc" id="L324">        return numRows;</span>
+    }
+
+
+    /**
+     * Gets the number of columns in this matrix.
+     * @return The number of columns in this matrix.
+     */
+    public int numCols() {
+<span class="fc" id="L333">        return numCols;</span>
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent complex tensor.
+     * @return A tensor which is equivalent to this matrix.
+     */
+    public Tensor toTensor() {
+<span class="fc" id="L342">        return new Tensor(this.shape.copy(), this.entries.clone());</span>
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent vector. If this matrix is not shaped as a row/column vector,
+     * it will be flattened then converted to a vector.
+     * @return A vector equivalent to this matrix.
+     */
+    public Vector toVector() {
+<span class="fc" id="L352">        return new Vector(this.entries.clone());</span>
+    }
+
+
+    /**
+     * Checks if this matrix is the identity matrix. That is, checks if this matrix is square and contains
+     * only ones along the principle diagonal and zeros everywhere else.
+     *
+     * @return True if this matrix is the identity matrix. Otherwise, returns false.
+     */
+    @Override
+    public boolean isI() {
+<span class="fc bfc" id="L364" title="All 2 branches covered.">        if(isSquare()) {</span>
+<span class="fc bfc" id="L365" title="All 2 branches covered.">            for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L366" title="All 2 branches covered.">                for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc bfc" id="L367" title="All 4 branches covered.">                    if(i==j &amp;&amp; entries[i*numCols + j]!=1) {</span>
+<span class="fc" id="L368">                        return false; // No need to continue</span>
+<span class="fc bfc" id="L369" title="All 4 branches covered.">                    } else if(i!=j &amp;&amp; entries[i*numCols + j]!=0) {</span>
+<span class="fc" id="L370">                        return false; // No need to continue</span>
+                    }
+                }
+            }
+
+        } else {
+            // An identity matrix must be square.
+<span class="fc" id="L377">            return false;</span>
+        }
+
+        // If we make it to this point this matrix must be an identity matrix.
+<span class="fc" id="L381">        return true;</span>
+    }
+
+
+    /**
+     * Checks if an object is equal to this matrix object. Valid object types are: {@link Matrix}, {@link CMatrix},
+     * {@link SparseMatrix}, and {@link SparseCMatrix}. These matrices are equal to this matrix if all entries are
+     * numerically equal to the corresponding element of this matrix. If the matrix is complex, then the imaginary
+     * component must be zero to be equal.
+     * @param object Object to check equality with this matrix.
+     * @return True if the two matrices are numerically equivalent and false otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        boolean equal;
+
+<span class="fc bfc" id="L397" title="All 2 branches covered.">        if(object instanceof Matrix) {</span>
+<span class="fc" id="L398">            Matrix mat = (Matrix) object;</span>
+<span class="fc" id="L399">            equal = RealDenseEquals.matrixEquals(this, mat);</span>
+<span class="fc bfc" id="L400" title="All 2 branches covered.">        } else if(object instanceof CMatrix) {</span>
+<span class="fc" id="L401">            CMatrix mat = (CMatrix) object;</span>
+<span class="fc" id="L402">            equal = RealComplexDenseEquals.matrixEquals(this, mat);</span>
+
+<span class="fc bfc" id="L404" title="All 2 branches covered.">        } else if(object instanceof SparseMatrix) {</span>
+<span class="fc" id="L405">            SparseMatrix mat = (SparseMatrix) object;</span>
+<span class="fc" id="L406">            equal = RealDenseSparseEquals.matrixEquals(this, mat);</span>
+
+<span class="pc bpc" id="L408" title="1 of 2 branches missed.">        } else if(object instanceof SparseCMatrix) {</span>
+<span class="fc" id="L409">            SparseCMatrix mat = (SparseCMatrix) object;</span>
+<span class="fc" id="L410">            equal = RealComplexDenseSparseEquals.matrixEquals(this, mat);</span>
+
+<span class="fc" id="L412">        } else {</span>
+<span class="nc" id="L413">            equal = false;</span>
+        }
+
+<span class="fc" id="L416">        return equal;</span>
+    }
+
+
+    /**
+     * Checks if matrices are inverses of each other. This method rounds values near zero to zero when checking
+     * if the two matrices are inverses to account for floating point precision loss.
+     *
+     * @param B Second matrix.
+     * @return True if matrix B is an inverse of this matrix. Otherwise, returns false. Otherwise, returns false.
+     */
+    @Override
+    public boolean isInv(Matrix B) {
+        boolean result;
+
+<span class="pc bpc" id="L431" title="1 of 4 branches missed.">        if(!this.isSquare() || !B.isSquare()) {</span>
+<span class="fc" id="L432">            result = false;</span>
+        } else {
+<span class="fc" id="L434">            result = this.mult(B).roundToZero().isI();</span>
+        }
+
+<span class="fc" id="L437">        return result;</span>
+    }
+
+
+    /**
+     * Flattens a matrix to have a single row. To flatten matrix to a single column, see {@link #flatten(int)}.
+     *
+     * @return The flat version of this matrix.
+     */
+    @Override
+    public Matrix flatten() {
+<span class="fc" id="L448">        return reshape(new Shape(1, entries.length));</span>
+    }
+
+
+    /**
+     * Flattens a matrix along a specified axis. Also see {@link #flatten()}.
+     *
+     * @param axis - If axis=0, flattens to a row vector.&lt;br&gt;
+     *             - If axis=1, flattens to a column vector.
+     * @return The flat version of this matrix.
+     */
+    @Override
+    public Matrix flatten(int axis) {
+<span class="fc bfc" id="L461" title="All 2 branches covered.">        if(axis==Axis2D.row()) {</span>
+            // Flatten to single row
+<span class="fc" id="L463">            return reshape(new Shape(1, entries.length));</span>
+<span class="fc bfc" id="L464" title="All 2 branches covered.">        } else if(axis==Axis2D.col()) {</span>
+            // Flatten to single column
+<span class="fc" id="L466">            return reshape(new Shape(entries.length, 1));</span>
+        } else {
+            // Unknown axis
+<span class="fc" id="L469">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));</span>
+        }
+    }
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+     */
+    @Override
+    public Matrix setValues(Double[][] values) {
+<span class="fc" id="L483">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
+<span class="fc" id="L484">        RealDenseSetOperations.setValues(values, this.entries);</span>
+<span class="fc" id="L485">        return this;</span>
+    }
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+     */
+    @Override
+    public Matrix setValues(double[][] values) {
+<span class="fc" id="L498">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
+<span class="fc" id="L499">        RealDenseSetOperations.setValues(values, this.entries);</span>
+<span class="fc" id="L500">        return this;</span>
+    }
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+     */
+    public Matrix setValues(Integer[][] values) {
+<span class="fc" id="L511">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
+<span class="fc" id="L512">        RealDenseSetOperations.setValues(values, this.entries);</span>
+<span class="fc" id="L513">        return this;</span>
+    }
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+     */
+    @Override
+    public Matrix setValues(int[][] values) {
+<span class="fc" id="L526">        ParameterChecks.assertEqualShape(shape, new Shape(values.length, values[0].length));</span>
+<span class="fc" id="L527">        RealDenseSetOperations.setValues(values, this.entries);</span>
+<span class="fc" id="L528">        return this;</span>
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public Matrix setCol(Double[] values, int colIndex) {
+<span class="fc" id="L542">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
+
+<span class="fc bfc" id="L544" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L545">            super.entries[i*numCols + colIndex] = values[i];</span>
+        }
+
+<span class="fc" id="L548">        return this;</span>
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public Matrix setCol(Integer[] values, int colIndex) {
+<span class="fc" id="L562">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
+
+<span class="fc bfc" id="L564" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L565">            super.entries[i*numCols + colIndex] = values[i];</span>
+        }
+
+<span class="fc" id="L568">        return this;</span>
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public Matrix setCol(double[] values, int colIndex) {
+<span class="fc" id="L582">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
+
+<span class="fc bfc" id="L584" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L585">            super.entries[i*numCols + colIndex] = values[i];</span>
+        }
+
+<span class="fc" id="L588">        return this;</span>
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public Matrix setCol(int[] values, int colIndex) {
+<span class="fc" id="L602">        ParameterChecks.assertArrayLengthsEq(values.length, this.numRows);</span>
+
+<span class="fc bfc" id="L604" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L605">            super.entries[i*numCols + colIndex] = values[i];</span>
+        }
+
+<span class="fc" id="L608">        return this;</span>
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public Matrix setRow(Double[] values, int rowIndex) {
+<span class="fc" id="L622">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);</span>
+
+<span class="fc bfc" id="L624" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L625">            super.entries[rowIndex*numCols + i] = values[i];</span>
+        }
+
+<span class="fc" id="L628">        return this;</span>
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public Matrix setRow(Integer[] values, int rowIndex) {
+<span class="fc" id="L642">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);</span>
+
+<span class="fc bfc" id="L644" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L645">            super.entries[rowIndex*numCols + i] = values[i];</span>
+        }
+
+<span class="fc" id="L648">        return this;</span>
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public Matrix setRow(double[] values, int rowIndex) {
+<span class="fc" id="L662">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);</span>
+<span class="fc" id="L663">        System.arraycopy(values, 0, super.entries, rowIndex*numCols, values.length);</span>
+<span class="fc" id="L664">        return this;</span>
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public Matrix setRow(int[] values, int rowIndex) {
+<span class="fc" id="L678">        ParameterChecks.assertArrayLengthsEq(values.length, this.numCols);</span>
+
+<span class="fc bfc" id="L680" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc" id="L681">            super.entries[rowIndex*numCols + i] = values[i];</span>
+        }
+
+<span class="fc" id="L684">        return this;</span>
+    }
+
+
+    /**
+     * Gets a specified slice of this matrix.
+     *
+     * @param rowStart Starting row index of slice (inclusive).
+     * @param rowEnd Ending row index of slice (exclusive).
+     * @param colStart Starting column index of slice (inclusive).
+     * @param colEnd Ending row index of slice (exclusive).
+     * @return The specified slice of this matrix. This is a completely new matrix and &lt;b&gt;NOT&lt;/b&gt; a view into the matrix.
+     * @throws ArrayIndexOutOfBoundsException If any of the indices are out of bounds of this matrix.
+     * @throws IllegalArgumentException If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
+     */
+    @Override
+    public Matrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
+<span class="fc" id="L701">        Matrix slice = new Matrix(rowEnd-rowStart, colEnd-colStart);</span>
+<span class="fc" id="L702">        int destPos = 0;</span>
+        int srcPos;
+        int end;
+
+<span class="fc bfc" id="L706" title="All 2 branches covered.">        for(int i=rowStart; i&lt;rowEnd; i++) {</span>
+<span class="fc" id="L707">            srcPos = i*this.numCols + colStart;</span>
+<span class="fc" id="L708">            end = srcPos + colEnd - colStart;</span>
+
+<span class="fc bfc" id="L710" title="All 2 branches covered.">            while(srcPos &lt; end) {</span>
+<span class="fc" id="L711">                slice.entries[destPos++] = this.entries[srcPos++];</span>
+            }
+        }
+
+<span class="fc" id="L715">        return slice;</span>
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set within this matrix.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSlice(Matrix values, int rowStart, int colStart) {
+<span class="fc" id="L733">        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);</span>
+<span class="fc" id="L734">        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);</span>
+<span class="fc" id="L735">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
+
+<span class="fc bfc" id="L737" title="All 2 branches covered.">        for(int i=0; i&lt;values.numRows; i++) {</span>
+<span class="fc bfc" id="L738" title="All 2 branches covered.">            for(int j=0; j&lt;values.numCols; j++) {</span>
+<span class="fc" id="L739">                this.entries[(i+rowStart)*numCols + j+colStart] =</span>
+                        values.entries[i*values.numCols + j];
+            }
+        }
+
+<span class="fc" id="L744">        return this;</span>
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSlice(SparseMatrix values, int rowStart, int colStart) {
+<span class="fc" id="L762">        ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);</span>
+<span class="fc" id="L763">        ParameterChecks.assertLessEq(numCols, colStart+values.numCols);</span>
+<span class="fc" id="L764">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
+
+        // Fill slice with zeros
+<span class="fc" id="L767">        ArrayUtils.stridedFillZerosRange(</span>
+                this.entries,
+                rowStart*this.numCols+colStart,
+                values.numCols,
+                this.numCols-values.numCols
+        );
+
+        // Copy sparse values
+        int rowIndex, colIndex;
+<span class="fc bfc" id="L776" title="All 2 branches covered.">        for(int i=0; i&lt;values.entries.length; i++) {</span>
+<span class="fc" id="L777">            rowIndex = values.rowIndices[i];</span>
+<span class="fc" id="L778">            colIndex = values.colIndices[i];</span>
+
+<span class="fc" id="L780">            this.entries[(rowIndex+rowStart)*this.numCols + colIndex + colStart] = values.entries[i];</span>
+        }
+
+<span class="fc" id="L783">        return this;</span>
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSlice(Double[][] values, int rowStart, int colStart) {
+<span class="fc" id="L801">        ParameterChecks.assertLessEq(numRows, rowStart+values.length);</span>
+<span class="fc" id="L802">        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);</span>
+<span class="fc" id="L803">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
+
+<span class="fc bfc" id="L805" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L806" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L807">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+            }
+        }
+
+<span class="fc" id="L811">        return this;</span>
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSlice(Integer[][] values, int rowStart, int colStart) {
+<span class="fc" id="L829">        ParameterChecks.assertLessEq(numRows, rowStart+values.length);</span>
+<span class="fc" id="L830">        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);</span>
+<span class="fc" id="L831">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
+
+<span class="fc bfc" id="L833" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L834" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L835">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+            }
+        }
+
+<span class="fc" id="L839">        return this;</span>
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSlice(double[][] values, int rowStart, int colStart) {
+<span class="fc" id="L857">        ParameterChecks.assertLessEq(numRows, rowStart+values.length);</span>
+<span class="fc" id="L858">        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);</span>
+<span class="fc" id="L859">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
+
+<span class="fc bfc" id="L861" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L862" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L863">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+            }
+        }
+
+<span class="fc" id="L867">        return this;</span>
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSlice(int[][] values, int rowStart, int colStart) {
+<span class="fc" id="L885">        ParameterChecks.assertLessEq(numRows, rowStart+values.length);</span>
+<span class="fc" id="L886">        ParameterChecks.assertLessEq(numCols, colStart+values[0].length);</span>
+<span class="fc" id="L887">        ParameterChecks.assertGreaterEq(0, rowStart, colStart);</span>
+
+<span class="fc bfc" id="L889" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L890" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L891">                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+            }
+        }
+
+<span class="fc" id="L895">        return this;</span>
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSliceCopy(Matrix values, int rowStart, int colStart) {
+<span class="fc" id="L913">        Matrix copy = new Matrix(this);</span>
+
+<span class="fc bfc" id="L915" title="All 2 branches covered.">        for(int i=0; i&lt;values.numRows; i++) {</span>
+<span class="fc bfc" id="L916" title="All 2 branches covered.">            for(int j=0; j&lt;values.numCols; j++) {</span>
+<span class="fc" id="L917">                copy.entries[(i+rowStart)*numCols + j+colStart] = values.entries[values.shape.entriesIndex(i, j)];</span>
+            }
+        }
+
+<span class="fc" id="L921">        return copy;</span>
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
+<span class="fc" id="L939">        Matrix copy = this.copy();</span>
+
+        // Fill slice with zeros
+<span class="fc" id="L942">        ArrayUtils.stridedFillZerosRange(</span>
+                copy.entries,
+                rowStart*copy.numCols+colStart,
+                values.numCols,
+                copy.numCols-values.numCols
+        );
+
+        // Copy sparse values
+        int rowIndex, colIndex;
+<span class="fc bfc" id="L951" title="All 2 branches covered.">        for(int i=0; i&lt;values.entries.length; i++) {</span>
+<span class="fc" id="L952">            rowIndex = values.rowIndices[i];</span>
+<span class="fc" id="L953">            colIndex = values.colIndices[i];</span>
+
+<span class="fc" id="L955">            copy.entries[(rowIndex+rowStart)*copy.numCols + colIndex + colStart] = values.entries[i];</span>
+        }
+
+<span class="fc" id="L958">        return copy;</span>
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSliceCopy(Double[][] values, int rowStart, int colStart) {
+<span class="fc" id="L976">        Matrix copy = new Matrix(this);</span>
+
+<span class="fc bfc" id="L978" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L979" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L980">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+            }
+        }
+
+<span class="fc" id="L984">        return copy;</span>
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSliceCopy(Integer[][] values, int rowStart, int colStart) {
+<span class="fc" id="L1002">        Matrix copy = new Matrix(this);</span>
+
+<span class="fc bfc" id="L1004" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L1005" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L1006">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+            }
+        }
+
+<span class="fc" id="L1010">        return copy;</span>
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSliceCopy(double[][] values, int rowStart, int colStart) {
+<span class="fc" id="L1028">        Matrix copy = new Matrix(this);</span>
+
+<span class="fc bfc" id="L1030" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L1031" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L1032">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+            }
+        }
+
+<span class="fc" id="L1036">        return copy;</span>
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public Matrix setSliceCopy(int[][] values, int rowStart, int colStart) {
+<span class="fc" id="L1054">        Matrix copy = new Matrix(this);</span>
+
+<span class="fc bfc" id="L1056" title="All 2 branches covered.">        for(int i=0; i&lt;values.length; i++) {</span>
+<span class="fc bfc" id="L1057" title="All 2 branches covered.">            for(int j=0; j&lt;values[0].length; j++) {</span>
+<span class="fc" id="L1058">                copy.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];</span>
+            }
+        }
+
+<span class="fc" id="L1062">        return copy;</span>
+    }
+
+
+    /**
+     * Removes a specified row from this matrix.
+     * @param rowIndex Index of the row to remove from this matrix.
+     * @return A copy of this matrix with the specified column removed.
+     */
+    @Override
+    public Matrix removeRow(int rowIndex) {
+<span class="fc" id="L1073">        Matrix copy = new Matrix(this.numRows-1, this.numCols);</span>
+
+<span class="fc" id="L1075">        int row = 0;</span>
+
+<span class="fc bfc" id="L1077" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1078" title="All 2 branches covered.">            if(i!=rowIndex) {</span>
+<span class="fc" id="L1079">                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);</span>
+<span class="fc" id="L1080">                row++;</span>
+            }
+        }
+
+<span class="fc" id="L1084">        return copy;</span>
+    }
+
+
+    /**
+     * Removes a specified set of rows from this matrix.
+     *
+     * @param rowIndices The indices of the rows to remove from this matrix. Assumed to contain unique values.
+     * @return a copy of this matrix with the specified column removed.
+     */
+    @Override
+    public Matrix removeRows(int... rowIndices) {
+<span class="fc" id="L1096">        Matrix copy = new Matrix(this.numRows-rowIndices.length, this.numCols);</span>
+
+<span class="fc" id="L1098">        int row = 0;</span>
+
+<span class="fc bfc" id="L1100" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1101" title="All 2 branches covered.">            if(ArrayUtils.notInArray(rowIndices, i)) {</span>
+<span class="fc" id="L1102">                System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);</span>
+<span class="fc" id="L1103">                row++;</span>
+            }
+        }
+
+<span class="fc" id="L1107">        return copy;</span>
+    }
+
+
+    /**
+     * Removes a specified column from this matrix.
+     *
+     * @param colIndex Index of the column to remove from this matrix.
+     * @return a copy of this matrix with the specified column removed.
+     */
+    @Override
+    public Matrix removeCol(int colIndex) {
+<span class="fc" id="L1119">        Matrix copy = new Matrix(this.numRows, this.numCols-1);</span>
+
+        int col;
+
+<span class="fc bfc" id="L1123" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1124">            col = 0;</span>
+<span class="fc bfc" id="L1125" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc bfc" id="L1126" title="All 2 branches covered.">                if(j!=colIndex) {</span>
+<span class="fc" id="L1127">                    copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];</span>
+<span class="fc" id="L1128">                    col++;</span>
+                }
+            }
+        }
+
+<span class="fc" id="L1133">        return copy;</span>
+    }
+
+
+    /**
+     * Removes a specified set of columns from this matrix.
+     *
+     * @param colIndices Indices of the columns to remove from this matrix. Assumed to contain unique values.
+     * @return a copy of this matrix with the specified column removed.
+     */
+    @Override
+    public Matrix removeCols(int... colIndices) {
+<span class="fc" id="L1145">        Matrix copy = new Matrix(this.numRows, this.numCols-colIndices.length);</span>
+
+        int col;
+
+<span class="fc bfc" id="L1149" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1150">            col = 0;</span>
+<span class="fc bfc" id="L1151" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc bfc" id="L1152" title="All 2 branches covered.">                if(ArrayUtils.notInArray(colIndices, j)) {</span>
+<span class="fc" id="L1153">                    copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];</span>
+<span class="fc" id="L1154">                    col++;</span>
+                }
+            }
+        }
+
+<span class="fc" id="L1159">        return copy;</span>
+    }
+
+
+    /**
+     * Rounds this matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
+     * be rounded independently.
+     *
+     * @return A copy of this matrix with each entry rounded to the nearest whole number.
+     */
+    @Override
+    public Matrix round() {
+<span class="fc" id="L1171">        return new Matrix(this.shape, RealOperations.round(this.entries));</span>
+    }
+
+
+    /**
+     * Rounds a matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
+     * be rounded independently.
+     *
+     * @param precision The number of decimal places to round to. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If &lt;code&gt;precision&lt;/code&gt; is negative.
+     */
+    @Override
+    public Matrix round(int precision) {
+<span class="fc" id="L1185">        return new Matrix(this.shape, RealOperations.round(this.entries, precision));</span>
+    }
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
+     * independently. By default, the values must be within 1.0*E^-12 of zero. To specify a threshold value see
+     * {@link #roundToZero(double)}.
+     *
+     * @return A copy of this matrix with rounded values.
+     */
+    @Override
+    public Matrix roundToZero() {
+<span class="fc" id="L1198">        this.abs();</span>
+<span class="fc" id="L1199">        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD));</span>
+    }
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
+     * independently.
+     *
+     * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
+     *                  will be rounded to zero. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If threshold is negative.
+     */
+    @Override
+    public Matrix roundToZero(double threshold) {
+<span class="fc" id="L1214">        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, threshold));</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public Matrix add(SparseMatrix B) {
+<span class="fc" id="L1227">        return RealDenseSparseOperations.add(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CMatrix add(CMatrix B) {
+<span class="fc" id="L1240">        return new CMatrix(this.shape.copy(),</span>
+<span class="fc" id="L1241">                RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape)</span>
+        );
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CMatrix add(SparseCMatrix B) {
+<span class="fc" id="L1255">        return RealComplexDenseSparseOperations.add(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void subEq(SparseMatrix B) {
+<span class="fc" id="L1267">        RealDenseSparseOperations.subEq(this, B);</span>
+<span class="fc" id="L1268">    }</span>
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void addEq(SparseMatrix B) {
+<span class="fc" id="L1279">        RealDenseSparseOperations.addEq(this, B);</span>
+<span class="fc" id="L1280">    }</span>
+
+
+    /**
+     * Computes the transpose of the matrix. Same as {@link #T()}.
+     *
+     * @return The transpose of this matrix.
+     */
+    @Override
+    public Matrix transpose() {
+<span class="fc" id="L1290">        return TransposeDispatcher.dispatch(this);</span>
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #transpose()}.
+     *
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public Matrix T() {
+<span class="fc" id="L1301">        return transpose();</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public Matrix sub(SparseMatrix B) {
+<span class="fc" id="L1314">        return RealDenseSparseOperations.sub(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CMatrix sub(CMatrix B) {
+<span class="fc" id="L1327">        return new CMatrix(</span>
+<span class="fc" id="L1328">                shape.copy(),</span>
+<span class="fc" id="L1329">                RealComplexDenseOperations.sub(entries, shape, B.entries, B.shape)</span>
+        );
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CMatrix sub(SparseCMatrix B) {
+<span class="fc" id="L1343">        return RealComplexDenseSparseOperations.sub(this, B);</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix B.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public Matrix mult(Matrix B) {
+<span class="fc" id="L1356">        double[] entries = RealDenseMatrixMultiplyDispatcher.dispatch(this, B);</span>
+<span class="fc" id="L1357">        Shape shape = new Shape(this.numRows, B.numCols);</span>
+
+<span class="fc" id="L1359">        return new Matrix(shape, entries);</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix B.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public Matrix mult(SparseMatrix B) {
+<span class="fc" id="L1372">        ParameterChecks.assertMatMultShapes(this.shape, B.shape);</span>
+<span class="fc" id="L1373">        double[] entries = RealDenseSparseMatrixMultiplication.standard(</span>
+                this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
+        );
+<span class="fc" id="L1376">        Shape shape = new Shape(this.numRows, B.numCols);</span>
+
+<span class="fc" id="L1378">        return new Matrix(shape, entries);</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix B.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public CMatrix mult(CMatrix B) {
+<span class="fc" id="L1391">        CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, B);</span>
+<span class="fc" id="L1392">        Shape shape = new Shape(this.numRows, B.numCols);</span>
+
+<span class="fc" id="L1394">        return new CMatrix(shape, entries);</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix B.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public CMatrix mult(SparseCMatrix B) {
+<span class="fc" id="L1407">        ParameterChecks.assertMatMultShapes(this.shape, B.shape);</span>
+<span class="fc" id="L1408">        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standard(</span>
+                this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
+        );
+<span class="fc" id="L1411">        Shape shape = new Shape(this.numRows, B.numCols);</span>
+
+<span class="fc" id="L1413">        return new CMatrix(shape, entries);</span>
+    }
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     * @return The result of matrix multiplying this matrix with vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
+     */
+    @Override
+    public Matrix mult(Vector b) {
+<span class="fc" id="L1426">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
+<span class="fc" id="L1427">        double[] entries = MatrixMultiplyDispatcher.dispatch(this, b);</span>
+<span class="fc" id="L1428">        Shape shape = new Shape(this.numRows, 1);</span>
+
+<span class="fc" id="L1430">        return new Matrix(shape, entries);</span>
+    }
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     * @return The result of matrix multiplying this matrix with vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
+     */
+    @Override
+    public Matrix mult(SparseVector b) {
+<span class="fc" id="L1443">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
+<span class="fc" id="L1444">        double[] entries = RealDenseSparseMatrixMultiplication.standardVector(</span>
+                this.entries, this.shape, b.entries, b.indices
+        );
+<span class="fc" id="L1447">        Shape shape = new Shape(this.numRows, 1);</span>
+
+<span class="fc" id="L1449">        return new Matrix(shape, entries);</span>
+    }
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     * @return The result of matrix multiplying this matrix with vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
+     */
+    @Override
+    public CMatrix mult(CVector b) {
+<span class="fc" id="L1462">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
+<span class="fc" id="L1463">        CNumber[] entries = RealComplexDenseMatrixMultiplication.standardVector(</span>
+                this.entries, this.shape, b.entries, b.shape
+        );
+<span class="fc" id="L1466">        Shape shape = new Shape(this.numRows, 1);</span>
+
+<span class="fc" id="L1468">        return new CMatrix(shape, entries);</span>
+    }
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     * @return The result of matrix multiplying this matrix with vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
+     */
+    @Override
+    public CMatrix mult(SparseCVector b) {
+<span class="fc" id="L1481">        ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));</span>
+<span class="fc" id="L1482">        CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standardVector(</span>
+                this.entries, this.shape, b.entries, b.indices
+        );
+<span class="fc" id="L1485">        Shape shape = new Shape(this.numRows, 1);</span>
+
+<span class="fc" id="L1487">        return new CMatrix(shape, entries);</span>
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.}{@link #mult(Matrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public Matrix multTranspose(Matrix B) {
+        // Ensure this matrix can be multiplied to the transpose of B.
+<span class="fc" id="L1504">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
+
+<span class="fc" id="L1506">        return new Matrix(</span>
+                new Shape(this.numRows, B.numRows),
+<span class="fc" id="L1508">                RealDenseMatrixMultiplyDispatcher.dispatchTranspose(this, B)</span>
+        );
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.}{@link #mult(SparseMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public Matrix multTranspose(SparseMatrix B) {
+        // Ensure this matrix can be multiplied to the transpose of B.
+<span class="fc" id="L1526">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
+
+<span class="fc" id="L1528">        return new Matrix(</span>
+                new Shape(this.numRows, B.numRows),
+<span class="fc" id="L1530">                RealDenseSparseMatrixMultTranspose.multTranspose(</span>
+                        this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
+                )
+        );
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.}{@link #mult(CMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public CMatrix multTranspose(CMatrix B) {
+        // Ensure this matrix can be multiplied to the transpose of B.
+<span class="fc" id="L1550">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
+
+<span class="fc" id="L1552">        return new CMatrix(</span>
+                new Shape(this.numRows, B.numRows),
+<span class="fc" id="L1554">                MatrixMultiplyDispatcher.dispatchTranspose(this, B)</span>
+        );
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.}{@link #mult(SparseCMatrix) mult}{@code (B.}{@link #T() T}{@code ())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public CMatrix multTranspose(SparseCMatrix B) {
+        // Ensure this matrix can be multiplied to the transpose of B.
+<span class="fc" id="L1572">        ParameterChecks.assertEquals(this.numCols, B.numCols);</span>
+
+        // TODO: Add dispatcher for various methods in RealComplexDenseSparseMatrixMultTranspose
+<span class="fc" id="L1575">        return new CMatrix(</span>
+                new Shape(this.numRows, B.numRows),
+<span class="fc" id="L1577">                RealComplexDenseSparseMatrixMultTranspose.multTranspose(</span>
+                        this.entries, this.shape, B.entries, B.rowIndices, B.colIndices, B.shape
+                )
+        );
+    }
+
+
+    /**
+     * Computes the matrix power with a given exponent. This is equivalent to multiplying a matrix to itself 'exponent'
+     * times. Note, this method is preferred over repeated multiplication of a matrix as this method will be significantly
+     * faster.
+     *
+     * @param exponent The exponent in the matrix power.
+     * @return The result of multiplying this matrix with itself 'exponent' times. If the exponent is zero, then the
+     * identity matrix is returned.
+     * @throws IllegalArgumentException If this matrix is not square or if exponent is negative.
+     */
+    @Override
+    public Matrix pow(int exponent) {
+<span class="fc" id="L1596">        ParameterChecks.assertGreaterEq(0, exponent);</span>
+<span class="fc" id="L1597">        ParameterChecks.assertSquare(this.shape);</span>
+        Matrix result;
+
+<span class="fc bfc" id="L1600" title="All 2 branches covered.">        if(exponent==0) {</span>
+<span class="fc" id="L1601">            result = I(this.shape);</span>
+        } else {
+<span class="fc" id="L1603">            result = new Matrix(this);</span>
+
+<span class="fc bfc" id="L1605" title="All 2 branches covered.">            for(int i=1; i&lt;exponent; i++) {</span>
+<span class="fc" id="L1606">                result = result.mult(this);</span>
+            }
+        }
+
+<span class="fc" id="L1610">        return result;</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard product) between two matrices.
+     *
+     * @param B Second matrix in the element-wise multiplication.
+     * @return The result of element-wise multiplication of this matrix with the matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public SparseMatrix elemMult(SparseMatrix B) {
+<span class="fc" id="L1623">        return RealDenseSparseOperations.elemMult(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard product) between two matrices.
+     *
+     * @param B Second matrix in the element-wise multiplication.
+     * @return The result of element-wise multiplication of this matrix with the matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public CMatrix elemMult(CMatrix B) {
+<span class="fc" id="L1636">        return new CMatrix(</span>
+<span class="fc" id="L1637">                shape.copy(),</span>
+<span class="fc" id="L1638">                RealComplexDenseElemMult.dispatch(B.entries, B.shape, entries, shape)</span>
+        );
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard product) between two matrices.
+     *
+     * @param B Second matrix in the element-wise multiplication.
+     * @return The result of element-wise multiplication of this matrix with the matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public SparseCMatrix elemMult(SparseCMatrix B) {
+<span class="fc" id="L1652">        return RealComplexDenseSparseOperations.elemMult(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise division between two matrices.
+     *
+     * @param B Second matrix in the element-wise division.
+     * @return The result of element-wise division of this matrix with the matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     * @throws ArithmeticException      If B contains any zero entries.
+     */
+    @Override
+    public CMatrix elemDiv(CMatrix B) {
+<span class="fc" id="L1666">        return new CMatrix(</span>
+<span class="fc" id="L1667">                shape.copy(),</span>
+<span class="fc" id="L1668">                RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)</span>
+        );
+    }
+
+
+    /**
+     * Computes the determinant of a square matrix.
+     *
+     * @return The determinant of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    @Override
+    public Double det() {
+<span class="fc" id="L1681">        return RealDenseDeterminant.det(this);</span>
+    }
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     *
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public Double fib(Matrix B) {
+<span class="fc" id="L1694">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
+<span class="fc" id="L1695">        return this.T().mult(B).tr();</span>
+    }
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     *
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public Double fib(SparseMatrix B) {
+<span class="fc" id="L1708">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
+<span class="fc" id="L1709">        return this.T().mult(B).tr();</span>
+    }
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     *
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public CNumber fib(CMatrix B) {
+<span class="fc" id="L1722">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
+<span class="fc" id="L1723">        return this.T().mult(B).tr();</span>
+    }
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     *
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public CNumber fib(SparseCMatrix B) {
+<span class="fc" id="L1736">        ParameterChecks.assertEqualShape(this.shape, B.shape);</span>
+<span class="fc" id="L1737">        return this.T().mult(B).tr();</span>
+    }
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     *
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    @Override
+    public Matrix directSum(Matrix B) {
+<span class="fc" id="L1749">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+
+        // Copy over first matrix.
+<span class="fc bfc" id="L1752" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1753">            System.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
+        }
+
+        // Copy over second matrix.
+<span class="fc bfc" id="L1757" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc" id="L1758">            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i + numRows)*sum.numCols + numCols, B.numCols);</span>
+        }
+
+<span class="fc" id="L1761">        return sum;</span>
+    }
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     *
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    @Override
+    public Matrix directSum(SparseMatrix B) {
+<span class="fc" id="L1773">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+
+        // Copy over first matrix.
+<span class="fc bfc" id="L1776" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1777">            System.arraycopy(entries, i*numCols, sum.entries, i*sum.numCols, this.numCols);</span>
+        }
+
+        // Copy over second matrix.
+        int row, col;
+<span class="fc bfc" id="L1782" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L1783">            row = B.rowIndices[i];</span>
+<span class="fc" id="L1784">            col = B.colIndices[i];</span>
+
+<span class="fc" id="L1786">            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i];</span>
+        }
+
+<span class="fc" id="L1789">        return sum;</span>
+    }
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     *
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    @Override
+    public CMatrix directSum(CMatrix B) {
+<span class="fc" id="L1801">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+
+        // Copy over first matrix.
+<span class="fc bfc" id="L1804" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1805" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1806">                sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
+            }
+        }
+
+        // Copy over second matrix.
+<span class="fc bfc" id="L1811" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc" id="L1812">            System.arraycopy(B.entries, i*B.numCols, sum.entries, (i+numRows)*sum.numCols+(numCols), B.numCols);</span>
+        }
+
+<span class="fc" id="L1815">        return sum;</span>
+    }
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     *
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    @Override
+    public CMatrix directSum(SparseCMatrix B) {
+<span class="fc" id="L1827">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+
+        // Copy over first matrix.
+<span class="fc bfc" id="L1830" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1831" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1832">                sum.entries[i*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
+            }
+        }
+
+        // Copy over second matrix.
+        int row, col;
+<span class="fc bfc" id="L1838" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L1839">            row = B.rowIndices[i];</span>
+<span class="fc" id="L1840">            col = B.colIndices[i];</span>
+
+<span class="fc" id="L1842">            sum.entries[(row+numRows)*sum.numCols + (col+numCols)] = B.entries[i].copy();</span>
+        }
+
+<span class="fc" id="L1845">        return sum;</span>
+    }
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     *
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    @Override
+    public Matrix invDirectSum(Matrix B) {
+<span class="fc" id="L1857">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+
+        // Copy over first matrix.
+<span class="fc bfc" id="L1860" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1861">            System.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);</span>
+        }
+
+        // Copy over second matrix.
+<span class="fc bfc" id="L1865" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc" id="L1866">            System.arraycopy(B.entries, i*B.numCols, sum.entries, i*sum.numCols+this.numCols, B.numCols);</span>
+        }
+
+<span class="fc" id="L1869">        return sum;</span>
+    }
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     *
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    @Override
+    public Matrix invDirectSum(SparseMatrix B) {
+<span class="fc" id="L1881">        Matrix sum = new Matrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+
+        // Copy over first matrix.
+<span class="fc bfc" id="L1884" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L1885">            System.arraycopy(entries, i*numCols, sum.entries, (i+B.numRows)*sum.numCols, this.numCols);</span>
+        }
+
+        // Copy over second matrix.
+        int row, col;
+<span class="fc bfc" id="L1890" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L1891">            row = B.rowIndices[i];</span>
+<span class="fc" id="L1892">            col = B.colIndices[i];</span>
+
+<span class="fc" id="L1894">            sum.entries[row*sum.numCols + col + this.numCols] = B.entries[i];</span>
+        }
+
+<span class="fc" id="L1897">        return sum;</span>
+    }
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     *
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    @Override
+    public CMatrix invDirectSum(CMatrix B) {
+<span class="fc" id="L1909">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+
+        // Copy over first matrix.
+<span class="fc bfc" id="L1912" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1913" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1914">                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
+            }
+        }
+
+        // Copy over second matrix.
+<span class="fc bfc" id="L1919" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L1920" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L1921">                sum.entries[i*sum.numCols + j + this.numCols] = B.entries[i*B.numCols + j].copy();</span>
+            }
+        }
+
+<span class="fc" id="L1925">        return sum;</span>
+    }
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     *
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    @Override
+    public CMatrix invDirectSum(SparseCMatrix B) {
+<span class="fc" id="L1937">        CMatrix sum = new CMatrix(this.numRows+B.numRows, this.numCols+B.numCols);</span>
+
+        // Copy over first matrix.
+<span class="fc bfc" id="L1940" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1941" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1942">                sum.entries[(i+B.numRows)*sum.numCols + j] = new CNumber(entries[i*numCols + j]);</span>
+            }
+        }
+
+        // Copy over second matrix.
+        int row, col;
+<span class="fc bfc" id="L1948" title="All 2 branches covered.">        for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L1949">            row = B.rowIndices[i];</span>
+<span class="fc" id="L1950">            col = B.colIndices[i];</span>
+
+<span class="fc" id="L1952">            sum.entries[row*sum.numCols + col + this.numCols] = B.entries[i].copy();</span>
+        }
+
+<span class="fc" id="L1955">        return sum;</span>
+    }
+
+
+    /**
+     * Sums together the columns of a matrix as if each column was a column vector.
+     *
+     * @return The result of summing together all columns of the matrix as column vectors. If this matrix is an m-by-n matrix, then the result will be
+     * an m-by-1 matrix.
+     */
+    @Override
+    public Matrix sumCols() {
+<span class="fc" id="L1967">        Matrix sum = new Matrix(this.numRows, 1);</span>
+
+<span class="fc bfc" id="L1969" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1970" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1971">                sum.entries[i] += this.entries[i*numCols + j];</span>
+            }
+        }
+
+<span class="fc" id="L1975">        return sum;</span>
+    }
+
+
+    /**
+     * Sums together the rows of a matrix as if each row was a row vector.
+     *
+     * @return The result of summing together all rows of the matrix as row vectors. If this matrix is an m-by-n matrix, then the result will be
+     * an 1-by-n matrix.
+     */
+    @Override
+    public Matrix sumRows() {
+<span class="fc" id="L1987">        Matrix sum = new Matrix(1, this.numCols);</span>
+
+<span class="fc bfc" id="L1989" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc bfc" id="L1990" title="All 2 branches covered.">            for(int j=0; j&lt;this.numCols; j++) {</span>
+<span class="fc" id="L1991">                sum.entries[j] += this.entries[i*numCols + j];</span>
+            }
+        }
+
+<span class="fc" id="L1995">        return sum;</span>
+    }
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     *
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     * @throws IllegalArgumentException If the vector has a different number of entries as rows in the matrix.
+     */
+    @Override
+    public Matrix addToEachCol(Vector b) {
+<span class="fc" id="L2009">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
+<span class="fc" id="L2010">        Matrix sum = new Matrix(this);</span>
+
+<span class="fc bfc" id="L2012" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2013" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2014">                sum.entries[i*sum.numCols + j] += b.entries[i];</span>
+            }
+        }
+
+<span class="fc" id="L2018">        return sum;</span>
+    }
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     *
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    @Override
+    public Matrix addToEachCol(SparseVector b) {
+<span class="fc" id="L2031">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
+<span class="fc" id="L2032">        Matrix sum = new Matrix(this);</span>
+
+        int index;
+
+<span class="fc bfc" id="L2036" title="All 2 branches covered.">        for(int i=0; i&lt;b.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L2037">            index = b.indices[i];</span>
+
+<span class="fc bfc" id="L2039" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2040">                sum.entries[index*sum.numCols + j] += b.entries[i];</span>
+            }
+        }
+
+<span class="fc" id="L2044">        return sum;</span>
+    }
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     *
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    @Override
+    public CMatrix addToEachCol(CVector b) {
+<span class="fc" id="L2057">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
+<span class="fc" id="L2058">        CMatrix sum = new CMatrix(this);</span>
+
+<span class="fc bfc" id="L2060" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2061" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2062">                sum.entries[i*sum.numCols + j].addEq(b.entries[i]);</span>
+            }
+        }
+
+<span class="fc" id="L2066">        return sum;</span>
+    }
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     *
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    @Override
+    public CMatrix addToEachCol(SparseCVector b) {
+<span class="fc" id="L2079">        ParameterChecks.assertArrayLengthsEq(numRows, b.size);</span>
+<span class="fc" id="L2080">        CMatrix sum = new CMatrix(this);</span>
+
+        int index;
+
+<span class="fc bfc" id="L2084" title="All 2 branches covered.">        for(int i=0; i&lt;b.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L2085">            index = b.indices[i];</span>
+
+<span class="fc bfc" id="L2087" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2088">                sum.entries[index*sum.numCols + j].addEq(b.entries[i]);</span>
+            }
+        }
+
+<span class="fc" id="L2092">        return sum;</span>
+    }
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     *
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    @Override
+    public Matrix addToEachRow(Vector b) {
+<span class="fc" id="L2105">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
+<span class="fc" id="L2106">        Matrix sum = new Matrix(this);</span>
+
+<span class="fc bfc" id="L2108" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2109" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2110">                sum.entries[i*sum.numCols + j] += b.entries[j];</span>
+            }
+        }
+
+<span class="fc" id="L2114">        return sum;</span>
+    }
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     *
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    @Override
+    public Matrix addToEachRow(SparseVector b) {
+<span class="fc" id="L2127">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
+<span class="fc" id="L2128">        Matrix sum = new Matrix(this);</span>
+
+        int col;
+<span class="fc bfc" id="L2131" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2132" title="All 2 branches covered.">            for(int j=0; j&lt;b.nonZeroEntries(); j++) {</span>
+<span class="fc" id="L2133">                col = b.indices[j];</span>
+<span class="fc" id="L2134">                sum.entries[i*sum.numCols + col] += b.entries[j];</span>
+            }
+        }
+
+<span class="fc" id="L2138">        return sum;</span>
+    }
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     *
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    @Override
+    public CMatrix addToEachRow(CVector b) {
+<span class="fc" id="L2151">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
+<span class="fc" id="L2152">        CMatrix sum = new CMatrix(this);</span>
+
+<span class="fc bfc" id="L2154" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2155" title="All 2 branches covered.">            for(int j=0; j&lt;sum.numCols; j++) {</span>
+<span class="fc" id="L2156">                sum.entries[i*sum.numCols + j].addEq(b.entries[j]);</span>
+            }
+        }
+
+<span class="fc" id="L2160">        return sum;</span>
+    }
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     *
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    @Override
+    public CMatrix addToEachRow(SparseCVector b) {
+<span class="fc" id="L2173">        ParameterChecks.assertArrayLengthsEq(numCols, b.size);</span>
+<span class="fc" id="L2174">        CMatrix sum = new CMatrix(this);</span>
+
+        int col;
+<span class="fc bfc" id="L2177" title="All 2 branches covered.">        for(int i=0; i&lt;sum.numRows; i++) {</span>
+<span class="fc bfc" id="L2178" title="All 2 branches covered.">            for(int j=0; j&lt;b.nonZeroEntries(); j++) {</span>
+<span class="fc" id="L2179">                col = b.indices[j];</span>
+<span class="fc" id="L2180">                sum.entries[i*sum.numCols + col].addEq(b.entries[j]);</span>
+            }
+        }
+
+<span class="fc" id="L2184">        return sum;</span>
+    }
+
+
+    /**
+     * Stacks matrices along columns. &lt;br&gt;
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    @Override
+    public Matrix stack(Matrix B) {
+<span class="fc" id="L2198">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
+<span class="fc" id="L2199">        Matrix stacked = new Matrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
+
+<span class="fc" id="L2201">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+<span class="fc" id="L2202">        System.arraycopy(B.entries, 0, stacked.entries, this.entries.length, B.entries.length);</span>
+
+<span class="fc" id="L2204">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks matrices along columns. &lt;br&gt;
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    @Override
+    public Matrix stack(SparseMatrix B) {
+<span class="fc" id="L2218">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
+<span class="fc" id="L2219">        Matrix stacked = new Matrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
+
+<span class="fc" id="L2221">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+
+        int row, col;
+
+<span class="fc bfc" id="L2225" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="fc" id="L2226">            row = B.rowIndices[i];</span>
+<span class="fc" id="L2227">            col = B.colIndices[i];</span>
+            // Offset the row index for destination matrix. i.e. row+this.numRows
+<span class="fc" id="L2229">            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i];</span>
+        }
+
+<span class="fc" id="L2232">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks matrices along columns. &lt;br&gt;
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    @Override
+    public CMatrix stack(CMatrix B) {
+<span class="fc" id="L2246">        ParameterChecks.assertArrayLengthsEq(numCols, B.numCols);</span>
+<span class="fc" id="L2247">        CMatrix stacked = new CMatrix(new Shape(numRows+B.numRows, numCols));</span>
+
+<span class="fc bfc" id="L2249" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2250" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2251">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+            }
+        }
+
+<span class="fc bfc" id="L2255" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L2256" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L2257">                stacked.entries[(i + numRows)*stacked.numCols + j] = B.entries[i*B.numCols+j].copy();</span>
+            }
+        }
+
+<span class="fc" id="L2261">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks matrices along columns. &lt;br&gt;
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    @Override
+    public CMatrix stack(SparseCMatrix B) {
+<span class="fc" id="L2275">        ParameterChecks.assertArrayLengthsEq(this.numCols, B.numCols);</span>
+<span class="fc" id="L2276">        CMatrix stacked = new CMatrix(new Shape(this.numRows + B.numRows, this.numCols));</span>
+
+<span class="fc bfc" id="L2278" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2279" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2280">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+            }
+        }
+
+        int row, col;
+<span class="fc bfc" id="L2285" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="fc" id="L2286">            row = B.rowIndices[i];</span>
+<span class="fc" id="L2287">            col = B.colIndices[i];</span>
+            // Offset the row index for destination matrix. i.e. row+this.numRows
+<span class="fc" id="L2289">            stacked.entries[(row+this.numRows)*stacked.numCols + col] = B.entries[i].copy();</span>
+        }
+
+<span class="fc" id="L2292">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks matrices along specified axis. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
+     *
+     * @param B    Matrix to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public Matrix stack(Matrix B, int axis) {
+        Matrix stacked;
+
+<span class="fc bfc" id="L2312" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2313">            stacked = this.augment(B);</span>
+<span class="fc bfc" id="L2314" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2315">            stacked = this.stack(B);</span>
+        } else {
+<span class="fc" id="L2317">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+        }
+
+<span class="fc" id="L2320">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks matrices along specified axis. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
+     *
+     * @param B    Matrix to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public Matrix stack(SparseMatrix B, int axis) {
+        Matrix stacked;
+
+<span class="fc bfc" id="L2340" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2341">            stacked = this.augment(B);</span>
+<span class="fc bfc" id="L2342" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2343">            stacked = this.stack(B);</span>
+        } else {
+<span class="fc" id="L2345">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+        }
+
+<span class="fc" id="L2348">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks matrices along specified axis. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
+     *
+     * @param B    Matrix to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(CMatrix B, int axis) {
+        CMatrix stacked;
+
+<span class="fc bfc" id="L2368" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2369">            stacked = this.augment(B);</span>
+<span class="fc bfc" id="L2370" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2371">            stacked = this.stack(B);</span>
+        } else {
+<span class="fc" id="L2373">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+        }
+
+<span class="fc" id="L2376">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks matrices along specified axis. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
+     *
+     * @param B    Matrix to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(SparseCMatrix B, int axis) {
+        CMatrix stacked;
+
+<span class="fc bfc" id="L2396" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2397">            stacked = this.augment(B);</span>
+<span class="fc bfc" id="L2398" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2399">            stacked = this.stack(B);</span>
+        } else {
+<span class="fc" id="L2401">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+        }
+
+<span class="fc" id="L2404">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks matrices along rows. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    @Override
+    public Matrix augment(Matrix B) {
+<span class="fc" id="L2418">        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);</span>
+<span class="fc" id="L2419">        Matrix augmented = new Matrix(new Shape(numRows, numCols+B.numCols));</span>
+
+        // Copy entries from this matrix.
+<span class="fc bfc" id="L2422" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L2423">            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);</span>
+        }
+
+        // Copy entries from the B matrix.
+<span class="fc bfc" id="L2427" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L2428" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L2429">                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j];</span>
+            }
+        }
+
+<span class="fc" id="L2433">        return augmented;</span>
+    }
+
+
+    /**
+     * Stacks matrices along rows. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    @Override
+    public Matrix augment(SparseMatrix B) {
+<span class="fc" id="L2447">        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);</span>
+<span class="fc" id="L2448">        Matrix augmented = new Matrix(new Shape(this.numRows, this.numCols+B.numCols));</span>
+
+        // Copy entries from this matrix.
+<span class="fc bfc" id="L2451" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L2452">            System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);</span>
+        }
+
+        int row, col;
+<span class="fc bfc" id="L2456" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="fc" id="L2457">            row = B.rowIndices[i];</span>
+<span class="fc" id="L2458">            col = B.colIndices[i];</span>
+            // Offset the col index for destination matrix. i.e. col+this.numCols
+<span class="fc" id="L2460">            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i];</span>
+        }
+
+<span class="fc" id="L2463">        return augmented;</span>
+    }
+
+
+    /**
+     * Stacks matrices along rows. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    @Override
+    public CMatrix augment(CMatrix B) {
+<span class="fc" id="L2477">        ParameterChecks.assertArrayLengthsEq(numRows, B.numRows);</span>
+<span class="fc" id="L2478">        CMatrix augmented = new CMatrix(new Shape(numRows, numCols+B.numCols));</span>
+
+        // Copy entries from this matrix.
+<span class="fc bfc" id="L2481" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2482" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2483">                augmented.entries[i*augmented.numCols + j].re = entries[i*numCols + j];</span>
+            }
+        }
+
+        // Copy entries from the B matrix.
+<span class="fc bfc" id="L2488" title="All 2 branches covered.">        for(int i=0; i&lt;B.numRows; i++) {</span>
+<span class="fc bfc" id="L2489" title="All 2 branches covered.">            for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L2490">                augmented.entries[i*augmented.numCols + j + numCols] = B.entries[i*B.numCols + j].copy();</span>
+            }
+        }
+
+<span class="fc" id="L2494">        return augmented;</span>
+    }
+
+
+    /**
+     * Stacks matrices along rows. &lt;br&gt;
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    @Override
+    public CMatrix augment(SparseCMatrix B) {
+<span class="fc" id="L2508">        ParameterChecks.assertArrayLengthsEq(this.numRows, B.numRows);</span>
+<span class="fc" id="L2509">        CMatrix augmented = new CMatrix(new Shape(this.numRows, this.numCols+B.numCols));</span>
+
+        // Copy entries from this matrix.
+<span class="fc bfc" id="L2512" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2513" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2514">                augmented.entries[i*augmented.numCols + j].re = entries[i*numCols + j];</span>
+            }
+        }
+
+        int row, col;
+<span class="fc bfc" id="L2519" title="All 2 branches covered.">        for(int i=0; i&lt;B.entries.length; i++) {</span>
+<span class="fc" id="L2520">            row = B.rowIndices[i];</span>
+<span class="fc" id="L2521">            col = B.colIndices[i];</span>
+            // Offset the col index for destination matrix. i.e. col+this.numCols
+<span class="fc" id="L2523">            augmented.entries[row*augmented.numCols + (col + numCols)] = B.entries[i].copy();</span>
+        }
+
+<span class="fc" id="L2526">        return augmented;</span>
+    }
+
+
+    /**
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.&lt;br&gt;
+     * Also see {@link #stack(Vector, int)} and {@link #augment(Vector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public Matrix stack(Vector b) {
+<span class="fc" id="L2542">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);</span>
+<span class="fc" id="L2543">        Matrix stacked = new Matrix(this.numRows+1, this.numCols);</span>
+
+<span class="fc" id="L2545">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+<span class="fc" id="L2546">        System.arraycopy(b.entries, 0, stacked.entries, this.entries.length, b.entries.length);</span>
+
+<span class="fc" id="L2548">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.&lt;br&gt;
+     * Also see {@link #stack(SparseVector, int)} and {@link #augment(SparseVector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public Matrix stack(SparseVector b) {
+<span class="fc" id="L2564">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());</span>
+<span class="fc" id="L2565">        Matrix stacked = new Matrix(this.numRows+1, this.numCols);</span>
+
+<span class="fc" id="L2567">        System.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);</span>
+
+        int index;
+
+<span class="fc bfc" id="L2571" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L2572">            index = b.indices[i];</span>
+<span class="fc" id="L2573">            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[i];</span>
+        }
+
+<span class="fc" id="L2576">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.&lt;br&gt;
+     * Also see {@link #stack(CVector, int)} and {@link #augment(CVector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public CMatrix stack(CVector b) {
+<span class="fc" id="L2592">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.entries.length);</span>
+<span class="fc" id="L2593">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
+
+<span class="fc bfc" id="L2595" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2596" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2597">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+            }
+        }
+
+<span class="fc bfc" id="L2601" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L2602">            stacked.entries[(stacked.numRows-1)*numCols + i] = b.entries[i].copy();</span>
+        }
+
+<span class="fc" id="L2605">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.&lt;br&gt;
+     * Also see {@link #stack(SparseCVector, int)} and {@link #augment(SparseCVector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public CMatrix stack(SparseCVector b) {
+<span class="fc" id="L2621">        ParameterChecks.assertArrayLengthsEq(this.numCols, b.totalEntries().intValue());</span>
+<span class="fc" id="L2622">        CMatrix stacked = new CMatrix(this.numRows+1, this.numCols);</span>
+
+<span class="fc bfc" id="L2624" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2625" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2626">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+            }
+        }
+
+        int index;
+<span class="fc bfc" id="L2631" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L2632">            index = b.indices[i];</span>
+<span class="fc" id="L2633">            stacked.entries[(stacked.numRows-1)*numCols + index] = b.entries[i];</span>
+        }
+
+<span class="fc" id="L2636">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.&lt;br&gt;
+     *
+     * @param b    Vector to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Vector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. &lt;br&gt;
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Vector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public Matrix stack(Vector b, int axis) {
+        Matrix stacked;
+
+<span class="fc bfc" id="L2658" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2659">            stacked = this.augment(b);</span>
+<span class="fc bfc" id="L2660" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2661">            stacked = this.stack(b);</span>
+        } else {
+<span class="fc" id="L2663">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+        }
+
+<span class="fc" id="L2666">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.&lt;br&gt;
+     *
+     * @param b    Vector to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseVector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. &lt;br&gt;
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseVector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public Matrix stack(SparseVector b, int axis) {
+        Matrix stacked;
+
+<span class="fc bfc" id="L2688" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2689">            stacked = this.augment(b);</span>
+<span class="fc bfc" id="L2690" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2691">            stacked = this.stack(b);</span>
+        } else {
+<span class="fc" id="L2693">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+        }
+
+<span class="fc" id="L2696">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.&lt;br&gt;
+     *
+     * @param b    Vector to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(CVector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. &lt;br&gt;
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(CVector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(CVector b, int axis) {
+        CMatrix stacked;
+
+<span class="fc bfc" id="L2718" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2719">            stacked = this.augment(b);</span>
+<span class="pc bpc" id="L2720" title="1 of 2 branches missed.">        } else if(axis==1) {</span>
+<span class="fc" id="L2721">            stacked = this.stack(b);</span>
+        } else {
+<span class="nc" id="L2723">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+        }
+
+<span class="fc" id="L2726">        return stacked;</span>
+    }
+
+
+    /**
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.&lt;br&gt;
+     *
+     * @param b    Vector to stack to this matrix.
+     * @param axis Axis along which to stack. &lt;br&gt;
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseCVector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. &lt;br&gt;
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseCVector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(SparseCVector b, int axis) {
+        CMatrix stacked;
+
+<span class="fc bfc" id="L2748" title="All 2 branches covered.">        if(axis==0) {</span>
+<span class="fc" id="L2749">            stacked = this.augment(b);</span>
+<span class="fc bfc" id="L2750" title="All 2 branches covered.">        } else if(axis==1) {</span>
+<span class="fc" id="L2751">            stacked = this.stack(b);</span>
+        } else {
+<span class="fc" id="L2753">            throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));</span>
+        }
+
+<span class="fc" id="L2756">        return stacked;</span>
+    }
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.&lt;br&gt;
+     * Also see {@link #stack(Vector)} and {@link #stack(Vector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    @Override
+    public Matrix augment(Vector b) {
+<span class="fc" id="L2772">        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);</span>
+<span class="fc" id="L2773">        Matrix stacked = new Matrix(numRows, numCols+1);</span>
+
+        // Copy elements of this matrix.
+<span class="fc bfc" id="L2776" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L2777">            System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);</span>
+        }
+
+        // Copy elements from b vector.
+<span class="fc bfc" id="L2781" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L2782">            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i];</span>
+        }
+
+<span class="fc" id="L2785">        return stacked;</span>
+    }
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.&lt;br&gt;
+     * Also see {@link #stack(SparseVector)} and {@link #stack(SparseVector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    @Override
+    public Matrix augment(SparseVector b) {
+<span class="fc" id="L2801">        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());</span>
+<span class="fc" id="L2802">        Matrix stacked = new Matrix(numRows, numCols+1);</span>
+
+        // Copy elements of this matrix.
+<span class="fc bfc" id="L2805" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="pc bpc" id="L2806" title="1 of 2 branches missed.">            if (numCols &gt;= 0)</span>
+<span class="fc" id="L2807">                System.arraycopy(entries, i*numCols, stacked.entries, i*stacked.numCols, numCols);</span>
+        }
+
+        // Copy elements from b vector.
+<span class="fc bfc" id="L2811" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L2812">            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i];</span>
+        }
+
+<span class="fc" id="L2815">        return stacked;</span>
+    }
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.&lt;br&gt;
+     * Also see {@link #stack(CVector)} and {@link #stack(CVector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    @Override
+    public CMatrix augment(CVector b) {
+<span class="fc" id="L2831">        ParameterChecks.assertArrayLengthsEq(numRows, b.entries.length);</span>
+<span class="fc" id="L2832">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
+
+        // Copy elements of this matrix.
+<span class="fc bfc" id="L2835" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2836" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2837">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+            }
+        }
+
+        // Copy elements from b vector.
+<span class="fc bfc" id="L2842" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L2843">            stacked.entries[i*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();</span>
+        }
+
+<span class="fc" id="L2846">        return stacked;</span>
+    }
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.&lt;br&gt;
+     * Also see {@link #stack(SparseCVector)} and {@link #stack(SparseCVector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    @Override
+    public CMatrix augment(SparseCVector b) {
+<span class="fc" id="L2862">        ParameterChecks.assertArrayLengthsEq(numRows, b.totalEntries().intValue());</span>
+<span class="fc" id="L2863">        CMatrix stacked = new CMatrix(numRows, numCols+1);</span>
+
+        // Copy elements of this matrix.
+<span class="fc bfc" id="L2866" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L2867" title="All 2 branches covered.">            for(int j=0; j&lt;numCols; j++) {</span>
+<span class="fc" id="L2868">                stacked.entries[i*stacked.numCols + j].re = entries[i*numCols+j];</span>
+            }
+        }
+
+        // Copy elements from b vector.
+<span class="fc bfc" id="L2873" title="All 2 branches covered.">        for(int i=0; i&lt;b.entries.length; i++) {</span>
+<span class="fc" id="L2874">            stacked.entries[b.indices[i]*stacked.numCols + stacked.numCols-1] = b.entries[i].copy();</span>
+        }
+
+<span class="fc" id="L2877">        return stacked;</span>
+    }
+
+
+    /**
+     * Get the row of this matrix at the specified index.
+     *
+     * @param rowIdx Index of row to get.
+     * @return The specified row of this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} is less than zero or greater than/equal to
+     * the number of rows in this matrix.
+     */
+    @Override
+    public Matrix getRow(int rowIdx) {
+<span class="fc" id="L2891">        int start = rowIdx*numCols;</span>
+<span class="fc" id="L2892">        int stop = start+numCols;</span>
+
+<span class="fc" id="L2894">        double[] row = Arrays.copyOfRange(this.entries, start, stop);</span>
+
+<span class="fc" id="L2896">        return new Matrix(new Shape(1, numCols), row);</span>
+    }
+
+
+    /**
+     * Get the row of this matrix at the specified index.
+     *
+     * @param rowIdx Index of row to get.
+     * @return The specified row of this matrix as a vector.
+     * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} is less than zero or greater than/equal to
+     * the number of rows in this matrix.
+     */
+    public Vector getRowAsVector(int rowIdx) {
+<span class="fc" id="L2909">        int start = rowIdx*numCols;</span>
+<span class="fc" id="L2910">        int stop = start+numCols;</span>
+<span class="fc" id="L2911">        return new Vector(Arrays.copyOfRange(this.entries, start, stop));</span>
+    }
+
+
+    /**
+     * Get the column of this matrix at the specified index.
+     *
+     * @param colIdx Index of column to get.
+     * @return The specified column of this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code colIdx} is less than zero or greater than/equal to
+     * the number of columns in this matrix.
+     */
+    @Override
+    public Matrix getCol(int colIdx) {
+<span class="fc" id="L2925">        double[] col = new double[numRows];</span>
+
+<span class="fc bfc" id="L2927" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L2928">            col[i] = entries[i*numCols + colIdx];</span>
+        }
+
+<span class="fc" id="L2931">        return new Matrix(new Shape(numRows, 1), col);</span>
+    }
+
+
+    /**
+     * Get a specified column of this matrix at and below a specified row.
+     *
+     * @param rowStart Index of the row to begin at.
+     * @param colIdx Index of column to get.
+     * @return The specified column of this matrix beginning at the specified row.
+     * @throws NegativeArraySizeException If {@code rowStart} is larger than the number of rows in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code colIdx} is outside the bounds of this matrix.
+     */
+    @Override
+    public Matrix getColBelow(int rowStart, int colIdx) {
+<span class="fc" id="L2946">        double[] col = new double[numRows-rowStart];</span>
+
+<span class="fc bfc" id="L2948" title="All 2 branches covered.">        for(int i=rowStart; i&lt;numRows; i++) {</span>
+<span class="fc" id="L2949">            col[i-rowStart] = entries[i*numCols + colIdx];</span>
+        }
+
+<span class="fc" id="L2952">        return new Matrix(new Shape(col.length, 1), col);</span>
+    }
+
+
+    /**
+     * Get a specified row of this matrix at and after a specified column.
+     *
+     * @param colStart Index of the row to begin at.
+     * @param rowIdx Index of the row to get.
+     * @return The specified row of this matrix beginning at the specified column.
+     * @throws NegativeArraySizeException If {@code colStart} is larger than the number of columns in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} or {@code colStart} is outside the bounds of this matrix.
+     */
+    @Override
+    public Matrix getRowAfter(int colStart, int rowIdx) {
+<span class="fc bfc" id="L2967" title="All 8 branches covered.">        if(rowIdx &gt; this.numRows ||  rowIdx &lt; 0 || colStart &gt; this.numCols || colStart &lt; 0) {</span>
+<span class="fc" id="L2968">            throw new ArrayIndexOutOfBoundsException(String.format(&quot;Index (%d, %d) not in matrix.&quot;, rowIdx, colStart));</span>
+        }
+
+<span class="fc" id="L2971">        double[] row = Arrays.copyOfRange(this.entries, rowIdx*this.numCols + colStart, (rowIdx+1)*this.numCols);</span>
+<span class="fc" id="L2972">        return new Matrix(new Shape(1, row.length), row);</span>
+    }
+
+
+    // TODO: Pull row/colAsVector methods up to matrix operations interface.
+    /**
+     * Get the column of this matrix at the specified index.
+     *
+     * @param colIdx Index of column to get.
+     * @return The specified column of this matrix as a vector.
+     * @throws ArrayIndexOutOfBoundsException If {@code colIdx} is less than zero or greater than/equal to
+     * the number of rows in this matrix.
+     */
+    public Vector getColAsVector(int colIdx) {
+<span class="fc" id="L2986">        double[] col = new double[numRows];</span>
+
+<span class="fc bfc" id="L2988" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc" id="L2989">            col[i] = entries[i*numCols + colIdx];</span>
+        }
+
+<span class="fc" id="L2992">        return new Vector(col);</span>
+    }
+
+
+
+    /**
+     * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
+     * Same as {@link #tr()}
+     *
+     * @return The trace of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    @Override
+    public Double trace() {
+<span class="fc" id="L3006">        ParameterChecks.assertSquare(this.shape);</span>
+<span class="fc" id="L3007">        double sum = 0;</span>
+<span class="fc" id="L3008">        int colsOffset = this.numCols+1;</span>
+
+<span class="fc bfc" id="L3010" title="All 2 branches covered.">        for(int i=0; i&lt;this.numRows; i++) {</span>
+<span class="fc" id="L3011">            sum += this.entries[i*colsOffset];</span>
+        }
+
+<span class="fc" id="L3014">        return sum;</span>
+    }
+
+
+    /**
+     * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
+     * Same as {@link #trace()}.
+     *
+     * @return The trace of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    @Override
+    public Double tr() {
+<span class="fc" id="L3027">        return trace();</span>
+    }
+
+
+    /**
+     * Constructs an identity matrix of the specified size.
+     *
+     * @param size Size of the identity matrix.
+     * @return An identity matrix of specified size.
+     * @throws IllegalArgumentException If the specified size is less than 1.
+     */
+    public static Matrix I(int size) {
+<span class="fc" id="L3039">        return I(size, size);</span>
+    }
+
+
+    /**
+     * Constructs an identity-like matrix of the specified shape. That is, a matrix of zeros with ones along the
+     * principle diagonal.
+     *
+     * @param numRows Number of rows in the identity-like matrix.
+     * @param numCols Number of columns in the identity-like matrix.
+     * @return An identity matrix of specified shape.
+     * @throws IllegalArgumentException If the specified number of rows or columns is less than 1.
+     */
+    public static Matrix I(int numRows, int numCols) {
+<span class="fc" id="L3053">        ParameterChecks.assertGreaterEq(1, numRows, numCols);</span>
+<span class="fc" id="L3054">        Matrix I = new Matrix(numRows, numCols);</span>
+<span class="fc" id="L3055">        int stop = Math.min(numRows, numCols);</span>
+
+<span class="fc bfc" id="L3057" title="All 2 branches covered.">        for(int i=0; i&lt;stop; i++) {</span>
+<span class="fc" id="L3058">            I.entries[i*numCols+i] = 1;</span>
+        }
+
+<span class="fc" id="L3061">        return I;</span>
+    }
+
+
+    /**
+     * Constructs an identity-like matrix of the specified shape. That is, a matrix of zeros with ones along the
+     * principle diagonal.
+     *
+     * @param shape Shape of the identity-like matrix.
+     * @return An identity matrix of specified size.
+     * @throws IllegalArgumentException If the specified shape is not rank 2.
+     */
+    public static Matrix I(Shape shape) {
+<span class="fc" id="L3074">        ParameterChecks.assertRank(2, shape);</span>
+<span class="fc" id="L3075">        return I(shape.get(0), shape.get(1));</span>
+    }
+
+
+    /**
+     * Checks if this matrix is square.
+     *
+     * @return True if the matrix is square (i.e. the number of rows equals the number of columns). Otherwise, returns false.
+     */
+    @Override
+    public boolean isSquare() {
+<span class="fc bfc" id="L3086" title="All 2 branches covered.">        return numRows==numCols;</span>
+    }
+
+
+    /**
+     * Checks if a matrix can be represented as a vector. That is, if a matrix has only one row or one column.
+     *
+     * @return True if this matrix can be represented as either a row or column vector.
+     */
+    @Override
+    public boolean isVector() {
+<span class="fc bfc" id="L3097" title="All 4 branches covered.">        return numRows&lt;=1 || numCols&lt;=1;</span>
+    }
+
+
+    /**
+     * Checks what type of vector this matrix is. i.e. not a vector, a 1x1 matrix, a row vector, or a column vector.
+     *
+     * @return - If this matrix can not be represented as a vector, then returns -1. &lt;br&gt;
+     * - If this matrix is a 1x1 matrix, then returns 0. &lt;br&gt;
+     * - If this matrix is a row vector, then returns 1. &lt;br&gt;
+     * - If this matrix is a column vector, then returns 2.
+     */
+    @Override
+    public int vectorType() {
+        int type;
+
+<span class="fc bfc" id="L3113" title="All 4 branches covered.">        if(numRows==1 || numCols==1) {</span>
+<span class="fc bfc" id="L3114" title="All 4 branches covered.">            if(numRows==1 &amp;&amp; numCols==1) {</span>
+<span class="fc" id="L3115">                type = 0;</span>
+<span class="fc bfc" id="L3116" title="All 2 branches covered.">            } else if(numRows==1) {</span>
+<span class="fc" id="L3117">                type = 1;</span>
+            } else {
+                // Then this matrix is equivalent to a column vector.
+<span class="fc" id="L3120">                type = 2;</span>
+            }
+        } else {
+            // Then this matrix is not equivalent to any vector.
+<span class="fc" id="L3124">            type = -1;</span>
+        }
+
+<span class="fc" id="L3127">        return type;</span>
+    }
+
+
+    /**
+     * Checks if this matrix is triangular (i.e. upper triangular, diagonal, lower triangular).
+     *
+     * @return True is this matrix is triangular. Otherwise, returns false.
+     */
+    @Override
+    public boolean isTri() {
+<span class="fc bfc" id="L3138" title="All 4 branches covered.">        return isTriL() || isTriU();</span>
+    }
+
+
+    /**
+     * Checks if this matrix is lower triangular.
+     *
+     * @return True is this matrix is lower triangular. Otherwise, returns false.
+     */
+    @Override
+    public boolean isTriL() {
+<span class="fc" id="L3149">        boolean result = isSquare();</span>
+
+<span class="fc bfc" id="L3151" title="All 2 branches covered.">        if(result) {</span>
+            // Ensure upper half is zeros.
+<span class="fc bfc" id="L3153" title="All 2 branches covered.">            for(int i=0; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L3154" title="All 2 branches covered.">                for(int j=i+1; j&lt;numCols; j++) {</span>
+<span class="fc bfc" id="L3155" title="All 2 branches covered.">                    if(entries[i*numCols + j] != 0) {</span>
+<span class="fc" id="L3156">                        return false; // No need to continue.</span>
+                    }
+                }
+            }
+        }
+
+<span class="fc" id="L3162">        return result;</span>
+    }
+
+
+    /**
+     * Checks if this matrix is upper triangular.
+     *
+     * @return True is this matrix is upper triangular. Otherwise, returns false.
+     */
+    @Override
+    public boolean isTriU() {
+<span class="fc" id="L3173">        boolean result = isSquare();</span>
+
+<span class="fc bfc" id="L3175" title="All 2 branches covered.">        if(result) {</span>
+            // Ensure lower half is zeros.
+<span class="fc bfc" id="L3177" title="All 2 branches covered.">            for(int i=1; i&lt;numRows; i++) {</span>
+<span class="fc bfc" id="L3178" title="All 2 branches covered.">                for(int j=0; j&lt;i; j++) {</span>
+<span class="fc bfc" id="L3179" title="All 2 branches covered.">                    if(entries[i*numCols + j] != 0) {</span>
+<span class="fc" id="L3180">                        return false; // No need to continue.</span>
+                    }
+                }
+            }
+        }
+
+<span class="fc" id="L3186">        return result;</span>
+    }
+
+
+    /**
+     * Checks if this matrix is diagonal.
+     *
+     * @return True is this matrix is diagonal. Otherwise, returns false.
+     */
+    @Override
+    public boolean isDiag() {
+<span class="fc bfc" id="L3197" title="All 4 branches covered.">        return isTriL() &amp;&amp; isTriU();</span>
+    }
+
+
+    /**
+     * Checks if a matrix has full rank. That is, if a matrices rank is equal to the number of rows in the matrix.
+     *
+     * @return True if this matrix has full rank. Otherwise, returns false.
+     */
+    @Override
+    public boolean isFullRank() {
+        // TODO: Implementation
+<span class="nc" id="L3209">        return false;</span>
+    }
+
+
+    /**
+     * Checks if a matrix is singular. That is, if the matrix is &lt;b&gt;NOT&lt;/b&gt; invertible.&lt;br&gt;
+     * Also see {@link #isInvertible()}.
+     *
+     * @return True if this matrix is singular. Otherwise, returns false.
+     */
+    @Override
+    public boolean isSingular() {
+        // TODO: Implementation
+<span class="nc" id="L3222">        return false;</span>
+    }
+
+
+    /**
+     * Checks if a matrix is invertible.&lt;br&gt;
+     * Also see {@link #isSingular()}.
+     *
+     * @return True if this matrix is invertible.
+     */
+    @Override
+    public boolean isInvertible() {
+<span class="nc bnc" id="L3234" title="All 2 branches missed.">        return !isSingular();</span>
+    }
+
+
+    /**
+     * Computes the L&lt;sub&gt;p, q&lt;/sub&gt; norm of this matrix.
+     *
+     * @param p P value in the L&lt;sub&gt;p, q&lt;/sub&gt; norm.
+     * @param q Q value in the L&lt;sub&gt;p, q&lt;/sub&gt; norm.
+     * @return The L&lt;sub&gt;p, q&lt;/sub&gt; norm of this matrix.
+     */
+    @Override
+    public double norm(double p, double q) {
+<span class="fc" id="L3247">        return RealDenseOperations.matrixNormLpq(entries, shape, p, q);</span>
+    }
+
+
+    /**
+     * Checks if a matrix is diagonalizable. A matrix is diagonalizable if and only if
+     * the multiplicity for each eigenvalue is equivalent to the eigenspace for that eigenvalue.
+     *
+     * @return True if the matrix is diagonalizable. Otherwise, returns false.
+     */
+    @Override
+    public boolean isDiagonalizable() {
+        // TODO: Implementation
+<span class="nc" id="L3260">        return false;</span>
+    }
+
+
+    /**
+     * Swaps specified rows in the matrix. This is done in place.
+     * @param rowIndex1 Index of the first row to swap.
+     * @param rowIndex2 Index of the second row to swap.
+     * @return A reference to this matrix.
+     * @throws ArrayIndexOutOfBoundsException If either index is outside the matrix bounds.
+     */
+    @Override
+    public Matrix swapRows(int rowIndex1, int rowIndex2) {
+<span class="fc" id="L3273">        ParameterChecks.assertGreaterEq(0, rowIndex1, rowIndex2);</span>
+<span class="fc" id="L3274">        ParameterChecks.assertGreaterEq(rowIndex1, this.numRows-1);</span>
+<span class="fc" id="L3275">        ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);</span>
+
+        double temp;
+<span class="fc bfc" id="L3278" title="All 2 branches covered.">        for(int j=0; j&lt;numCols; j++) {</span>
+            // Swap elements.
+<span class="fc" id="L3280">            temp = entries[rowIndex1*numCols + j];</span>
+<span class="fc" id="L3281">            entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];</span>
+<span class="fc" id="L3282">            entries[rowIndex2*numCols + j] = temp;</span>
+        }
+
+<span class="fc" id="L3285">        return this;</span>
+    }
+
+
+    /**
+     * Swaps specified columns in the matrix. This is done in place.
+     * @param colIndex1 Index of the first column to swap.
+     * @param colIndex2 Index of the second column to swap.
+     * @return A reference to this matrix.
+     * @throws ArrayIndexOutOfBoundsException If either index is outside the matrix bounds.
+     */
+    @Override
+    public Matrix swapCols(int colIndex1, int colIndex2) {
+<span class="fc" id="L3298">        ParameterChecks.assertGreaterEq(0, colIndex1, colIndex2);</span>
+<span class="fc" id="L3299">        ParameterChecks.assertGreaterEq(colIndex1, this.numCols-1);</span>
+<span class="fc" id="L3300">        ParameterChecks.assertGreaterEq(colIndex2, this.numCols-1);</span>
+
+        double temp;
+<span class="fc bfc" id="L3303" title="All 2 branches covered.">        for(int i=0; i&lt;numRows; i++) {</span>
+            // Swap elements.
+<span class="fc" id="L3305">            temp = entries[i*numCols + colIndex1];</span>
+<span class="fc" id="L3306">            entries[i*numCols + colIndex1] = entries[i*numCols + colIndex2];</span>
+<span class="fc" id="L3307">            entries[i*numCols + colIndex2] = temp;</span>
+        }
+
+<span class="fc" id="L3310">        return this;</span>
+    }
+
+
+    /**
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
+     *
+     * @return the 2-norm of this tensor.
+     */
+    @Override
+    public double norm() {
+<span class="fc" id="L3321">        return RealDenseOperations.matrixNormL2(entries, shape);</span>
+    }
+
+
+    /**
+     * Computes the p-norm of this tensor.
+     *
+     * @param p The p value in the p-norm. &lt;br&gt;
+     *          - If p is inf, then this method computes the maximum/infinite norm.
+     * @return The p-norm of this tensor.
+     * @throws IllegalArgumentException If p is less than 1.
+     */
+    @Override
+    public double norm(double p) {
+<span class="fc" id="L3335">        return RealDenseOperations.matrixNormLp(entries, shape, p);</span>
+    }
+
+
+    /**
+     * Computes the maximum norm of this matrix. That is, the maximum value in the matrix.
+     *
+     * @return The maximum norm of this matrix.
+     * @see #infNorm()
+     */
+    @Override
+    public double maxNorm() {
+<span class="fc" id="L3347">        return RealDenseOperations.matrixMaxNorm(entries);</span>
+    }
+
+
+    /**
+     * Computes the infinite norm of this matrix. that is the maximum row sum in the matrix.
+     *
+     * @return The infinite norm of this matrix.
+     * @see #maxNorm()
+     */
+    @Override
+    public double infNorm() {
+<span class="fc" id="L3359">        return RealDenseOperations.matrixInfNorm(entries, shape);</span>
+    }
+
+
+    /**
+     * Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
+     * Note that here, rank is &lt;b&gt;NOT&lt;/b&gt; the same as a tensor rank.
+     *
+     * @return The matrix rank of this matrix.
+     */
+    @Override
+    public int matrixRank() {
+        // TODO: Implementation
+<span class="nc" id="L3372">        return 0;</span>
+    }
+
+
+    /**
+     * Gets row of matrix formatted as a human-readable String. Helper method for {@link #toString} method.
+     * @param i Index of row to get.
+     * @param colStopIndex Stopping index for printing columns.
+     * @param maxList List of maximum string representation lengths for each column of this matrix. This
+     *                is used to align columns when printing.
+     * @return A human-readable String representation of the specified row.
+     */
+    private String rowToString(int i, int colStopIndex, List&lt;Integer&gt; maxList) {
+        int width;
+        String value;
+<span class="fc" id="L3387">        StringBuilder result = new StringBuilder();</span>
+
+<span class="fc bfc" id="L3389" title="All 2 branches covered.">        if(i&gt;0) {</span>
+<span class="fc" id="L3390">            result.append(&quot; [&quot;);</span>
+        }  else {
+<span class="fc" id="L3392">            result.append(&quot;[&quot;);</span>
+        }
+
+<span class="fc bfc" id="L3395" title="All 2 branches covered.">        for(int j=0; j&lt;colStopIndex; j++) {</span>
+<span class="fc" id="L3396">            value = StringUtils.ValueOfRound(this.get(i, j), PrintOptions.getPrecision());</span>
+<span class="fc" id="L3397">            width = PrintOptions.getPadding() + maxList.get(j);</span>
+<span class="fc bfc" id="L3398" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L3399">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+        }
+
+<span class="fc bfc" id="L3402" title="All 2 branches covered.">        if(PrintOptions.getMaxColumns() &lt; this.numCols) {</span>
+<span class="fc" id="L3403">            width = PrintOptions.getPadding() + 3;</span>
+<span class="fc" id="L3404">            value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L3405" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L3406">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+        }
+
+        // Get last entry in the column now
+<span class="fc" id="L3410">        value = StringUtils.ValueOfRound(this.get(i, this.numCols-1), PrintOptions.getPrecision());</span>
+<span class="fc" id="L3411">        width = PrintOptions.getPadding() + maxList.get(maxList.size()-1);</span>
+<span class="fc bfc" id="L3412" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L3413">        result.append(String.format(&quot;%-&quot; + width + &quot;s]&quot;, value));</span>
+
+<span class="fc" id="L3415">        return result.toString();</span>
+    }
+
+
+    /**
+     * Checks if a matrix is symmetric. That is, if the matrix is square and equal to its transpose.
+     * @return True if this matrix is symmetric. Otherwise, returns false.
+     */
+    @Override
+    public boolean isSymmetric() {
+<span class="nc" id="L3425">        return RealDenseProperties.isSymmetric(entries, shape);</span>
+    }
+
+
+    /**
+     * Checks if a matrix is anti-symmetric. That is, if the matrix is equal to the negative of its transpose.
+     *
+     * @return True if this matrix is anti-symmetric. Otherwise, returns false.
+     */
+    @Override
+    public boolean isAntiSymmetric() {
+<span class="nc" id="L3436">        return RealDenseProperties.isAntiSymmetric(entries, shape);</span>
+    }
+
+
+    /**
+     * Checks if this matrix is orthogonal. That is, if the inverse of this matrix is equal to its transpose.
+     *
+     * @return True if this matrix it is orthogonal. Otherwise, returns false.
+     */
+    @Override
+    public boolean isOrthogonal() {
+        // TODO: Add approxEq(Object A, double threshold) method to check for approximate equivalence.
+<span class="fc bfc" id="L3448" title="All 2 branches covered.">        if(isSquare()) {</span>
+<span class="fc" id="L3449">            return this.mult(this.T()).round().equals(I(numRows));</span>
+        } else {
+<span class="fc" id="L3451">            return false;</span>
+        }
+    }
+
+
+    /**
+     * Computes the complex element-wise square root of a tensor. That is, ff this tensor contains negative values, the
+     * resulting root will be complex rather then {@link Double#NaN}.
+     *
+     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
+     * the principle square root i.e. the square root with positive real part.
+     */
+    @Override
+    public CMatrix sqrtComplex() {
+<span class="fc" id="L3465">        return new CMatrix(shape, ComplexOperations.sqrt(entries));</span>
+    }
+
+
+
+    /**
+     * Formats matrix contents as a human-readable String.
+     * @return Matrix represented as a human-readable String
+     */
+    public String toString() {
+<span class="fc" id="L3475">        StringBuilder result  = new StringBuilder();</span>
+
+<span class="fc bfc" id="L3477" title="All 4 branches covered.">        if(PrintOptions.getMaxRows() &lt; this.numRows || PrintOptions.getMaxColumns() &lt; this.numCols) {</span>
+            // Then also get the full size of the matrix.
+<span class="fc" id="L3479">            result.append(String.format(&quot;Full Shape: %s\n&quot;, this.shape));</span>
+        }
+
+<span class="fc" id="L3482">        result.append(&quot;[&quot;);</span>
+
+<span class="pc bpc" id="L3484" title="1 of 2 branches missed.">        if(entries.length==0) {</span>
+<span class="nc" id="L3485">            result.append(&quot;[]&quot;); // No entries in this matrix.</span>
+        } else {
+<span class="fc" id="L3487">            int rowStopIndex = Math.min(PrintOptions.getMaxRows() - 1, this.numRows - 1);</span>
+<span class="fc" id="L3488">            int colStopIndex = Math.min(PrintOptions.getMaxColumns() - 1, this.numCols - 1);</span>
+            int width;
+<span class="fc" id="L3490">            int totalRowLength = 0; // Total string length of each row (not including brackets)</span>
+            String value;
+
+            // Find maximum entry string width in each column so columns can be aligned.
+<span class="fc" id="L3494">            List&lt;Integer&gt; maxList = new ArrayList&lt;&gt;(colStopIndex + 1);</span>
+<span class="fc bfc" id="L3495" title="All 2 branches covered.">            for (int j = 0; j &lt; colStopIndex; j++) {</span>
+<span class="fc" id="L3496">                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));</span>
+<span class="fc" id="L3497">                totalRowLength += maxList.get(maxList.size() - 1);</span>
+            }
+
+<span class="pc bpc" id="L3500" title="1 of 2 branches missed.">            if (colStopIndex &lt; this.numCols) {</span>
+<span class="fc" id="L3501">                maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols - 1).entries));</span>
+<span class="fc" id="L3502">                totalRowLength += maxList.get(maxList.size() - 1);</span>
+            }
+
+<span class="fc bfc" id="L3505" title="All 2 branches covered.">            if (colStopIndex &lt; this.numCols - 1) {</span>
+<span class="fc" id="L3506">                totalRowLength += 3 + PrintOptions.getPadding(); // Account for '...' element with padding in each column.</span>
+            }
+
+<span class="fc" id="L3509">            totalRowLength += maxList.size() * PrintOptions.getPadding(); // Account for column padding</span>
+
+            // Get each row as a string.
+<span class="fc bfc" id="L3512" title="All 2 branches covered.">            for (int i = 0; i &lt; rowStopIndex; i++) {</span>
+<span class="fc" id="L3513">                result.append(rowToString(i, colStopIndex, maxList));</span>
+<span class="fc" id="L3514">                result.append(&quot;\n&quot;);</span>
+            }
+
+<span class="fc bfc" id="L3517" title="All 2 branches covered.">            if (PrintOptions.getMaxRows() &lt; this.numRows) {</span>
+<span class="fc" id="L3518">                width = totalRowLength;</span>
+<span class="fc" id="L3519">                value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L3520" title="1 of 2 branches missed.">                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L3521">                result.append(String.format(&quot; [%-&quot; + width + &quot;s]\n&quot;, value));</span>
+            }
+
+            // Get Last row as a string.
+<span class="fc" id="L3525">            result.append(rowToString(this.numRows - 1, colStopIndex, maxList));</span>
+        }
+
+<span class="fc" id="L3528">        result.append(&quot;]&quot;);</span>
+
+<span class="fc" id="L3530">        return result.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

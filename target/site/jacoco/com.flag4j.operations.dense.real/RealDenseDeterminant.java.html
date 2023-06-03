@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealDenseDeterminant.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense.real</a> &gt; <span class="el_source">RealDenseDeterminant.java</span></div><h1>RealDenseDeterminant.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense.real;
+
+import com.flag4j.Matrix;
+import com.flag4j.Shape;
+import com.flag4j.linalg.Decompose;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
+
+/**
+ * This class contains methods for computing the determinant of a real dense matrix.
+ */
+public class RealDenseDeterminant {
+
+<span class="nc" id="L38">    private RealDenseDeterminant() {</span>
+        // Hide default constructor in utility class.
+<span class="nc" id="L40">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Computes the determinant of a square matrix using the LU factorization.
+     * @param A Matrix to compute the determinant of.
+     * @return The determinant of the matrix.
+     * @throws IllegalArgumentException If matrix is not square.
+     */
+    public static double det(Matrix A) {
+<span class="fc" id="L51">        ParameterChecks.assertSquare(A.shape);</span>
+        double det;
+
+<span class="fc bfc" id="L54" title="All 4 branches covered.">        switch (A.numRows) {</span>
+            case 1:
+<span class="fc" id="L56">                det = det1(A);</span>
+<span class="fc" id="L57">                break;</span>
+            case 2:
+<span class="fc" id="L59">                det = det2(A);</span>
+<span class="fc" id="L60">                break;</span>
+            case 3:
+<span class="fc" id="L62">                det = det3(A);</span>
+<span class="fc" id="L63">                break;</span>
+            default:
+<span class="fc" id="L65">                det = detLU(A);</span>
+                break;
+        }
+
+<span class="fc" id="L69">        return det;</span>
+    }
+
+
+    /**
+     * Computes the determinant of a square matrix using the LU factorization.
+     * @param A Matrix to compute the determinant of.
+     * @return The determinant of the matrix.
+     * @throws IllegalArgumentException If matrix is not square.
+     */
+    public static double detLU(Matrix A) {
+<span class="fc" id="L80">        ParameterChecks.assertSquare(A.shape);</span>
+<span class="fc" id="L81">        Matrix[] LU = Decompose.lu(A);</span>
+
+<span class="fc" id="L83">        return detLU(LU[0], LU[1], LU[2]);</span>
+    }
+
+
+    /**
+     * Computes the determinant for a matrix which has been factored into a unit lower triangular matrix {@code L}
+     * and an upper triangular matrix {@code U} using partial pivoting (i.e. row swaps).
+     * @param P Row permutation matrix in the {@code LU} decomposition.
+     * @param L Unit lower triangular matrix.
+     * @param U Upper triangular matrix.
+     * @return The determinant of the matrix which has been factored into a unit lower triangular matrix {@code L}
+     * and an upper triangular matrix {@code U} using partial pivoting.
+     */
+    public static double detLU(Matrix P, Matrix L, Matrix U) {
+<span class="fc" id="L97">        int numSwaps = (int) (L.numRows - P.trace()) - 1; // Number of swaps in permutation matrix.</span>
+<span class="fc" id="L98">        double detP = Math.pow(-1, numSwaps); // Compute the determinant of P.</span>
+<span class="fc" id="L99">        return detP*detLU(L, U);</span>
+    }
+
+
+    /**
+     * Computes the determinant for a matrix which has been factored into a unit lower triangular matrix {@code L}
+     * and an upper triangular matrix {@code U} with no pivoting.
+     * @param L Unit lower triangular matrix.
+     * @param U Upper triangular matrix.
+     * @return The determinant of the matrix which has been factored into a unit lower triangular matrix {@code L}
+     * and an upper triangular matrix {@code U}.
+     */
+    public static double detLU(Matrix L, Matrix U) {
+<span class="fc" id="L112">        double detU = 1;</span>
+
+        // Compute the determinant of U
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        for(int i=0; i&lt;U.numRows; i++) {</span>
+<span class="fc" id="L116">            detU *= U.entries[i*U.numCols + i];</span>
+        }
+
+<span class="fc" id="L119">        return detU;</span>
+    }
+
+
+    /**
+     * Explicitly computes the determinant of a 3x3 matrix.
+     * @param A Matrix to compute the determinant of.
+     * @return The determinant of the 3x3 matrix.
+     */
+    public static double det3(Matrix A) {
+<span class="fc" id="L129">        ParameterChecks.assertEqualShape(A.shape, new Shape(3, 3));</span>
+<span class="fc" id="L130">        double det = A.entries[0]*(A.entries[4]*A.entries[8] - A.entries[5]*A.entries[7]);</span>
+<span class="fc" id="L131">        det -= A.entries[1]*(A.entries[3]*A.entries[8] - A.entries[5]*A.entries[6]);</span>
+<span class="fc" id="L132">        det += A.entries[2]*(A.entries[3]*A.entries[7] - A.entries[4]*A.entries[6]);</span>
+<span class="fc" id="L133">        return det;</span>
+    }
+
+
+    /**
+     * Explicitly computes the determinant of a 2x2 matrix.
+     * @param A Matrix to compute the determinant of.
+     * @return The determinant of the 2x2 matrix.
+     */
+    public static double det2(Matrix A) {
+<span class="fc" id="L143">        ParameterChecks.assertEqualShape(A.shape, new Shape(2, 2));</span>
+<span class="fc" id="L144">        return A.entries[0]*A.entries[3] - A.entries[1]*A.entries[2];</span>
+    }
+
+
+    /**
+     * Explicitly computes the determinant of a 1x1 matrix.
+     * @param A Matrix to compute the determinant of.
+     * @return The determinant of the 1x1 matrix.
+     */
+    public static double det1(Matrix A) {
+<span class="fc" id="L154">        ParameterChecks.assertEqualShape(A.shape, new Shape(1, 1));</span>
+<span class="fc" id="L155">        return A.entries[0];</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
