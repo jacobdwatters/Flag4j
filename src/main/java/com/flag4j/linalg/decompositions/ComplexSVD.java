@@ -41,6 +41,15 @@ public class ComplexSVD extends SingularValueDecomposition<CMatrix> {
 
 
     /**
+     * Creates a decomposer to compute the singular value decomposition of a real matrix. The left and right singular
+     * vectors will be computed.
+     */
+    public ComplexSVD() {
+        super(true);
+    }
+
+
+    /**
      * Creates a decomposer to compute the Schur decomposition.
      *
      * @param computeUV A flag which indicates if the unitary matrices {@code Q} and {@code V} should be computed
@@ -49,7 +58,7 @@ public class ComplexSVD extends SingularValueDecomposition<CMatrix> {
      *                  - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If it is not needed, this may
      *                  provide a performance improvement.
      */
-    protected ComplexSVD(boolean computeUV) {
+    public ComplexSVD(boolean computeUV) {
         super(computeUV);
     }
 
@@ -61,7 +70,7 @@ public class ComplexSVD extends SingularValueDecomposition<CMatrix> {
      * @return A reference to this decomposer.
      */
     @Override
-    public Decomposition<CMatrix> decompose(CMatrix src) {
+    public ComplexSVD decompose(CMatrix src) {
         Vector S1;
 
         if(computeUV) {
@@ -84,7 +93,7 @@ public class ComplexSVD extends SingularValueDecomposition<CMatrix> {
 
             // Copy singular values to diagonal of S and scale left singular vectors properly.
         } else {
-            S1 = Eigen.getEigenValues(src.H().mult(src)).toReal();
+            S1 = Eigen.getEigenValues(src.H().mult(src)).toReal().abs().sqrt();
         }
 
         S = new Matrix(src.shape);

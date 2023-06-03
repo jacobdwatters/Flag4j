@@ -71,7 +71,7 @@ public class RealSVD extends SingularValueDecomposition&lt;Matrix&gt; {
      * @return A reference to this decomposer.
      */
     @Override
-    public Decomposition&lt;Matrix&gt; decompose(Matrix src) {
+    public RealSVD decompose(Matrix src) {
         Vector S1;
 
 <span class="pc bpc" id="L77" title="1 of 2 branches missed.">        if(computeUV) {</span>
@@ -94,7 +94,7 @@ public class RealSVD extends SingularValueDecomposition&lt;Matrix&gt; {
 
             // Copy singular values to diagonal of S and scale left singular vectors properly.
 <span class="fc" id="L96">        } else {</span>
-<span class="nc" id="L97">            S1 = Eigen.getEigenValues(src.T().mult(src)).toReal();</span>
+<span class="nc" id="L97">            S1 = Eigen.getEigenValues(src.T().mult(src)).toReal().abs().sqrt();</span>
         }
 
 <span class="fc" id="L100">        S = new Matrix(src.shape);</span>

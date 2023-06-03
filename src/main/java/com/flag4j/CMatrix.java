@@ -25,10 +25,11 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.dense.ComplexDenseTensorBase;
 import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.core.MatrixMixin;
+import com.flag4j.core.dense.ComplexDenseTensorBase;
 import com.flag4j.io.PrintOptions;
+import com.flag4j.linalg.decompositions.ComplexSVD;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
@@ -3680,8 +3681,7 @@ public class CMatrix
      */
     @Override
     public boolean isFullRank() {
-        // TODO: Implementation
-        return false;
+        return matrixRank() == Math.min(numRows, numCols);
     }
 
 
@@ -3755,7 +3755,19 @@ public class CMatrix
      */
     @Override
     public int matrixRank() {
-        return 0;
+        Matrix S = new ComplexSVD(false).decompose(this).getS();
+        int stopIdx = Math.min(numRows, numCols);
+
+        double tol = 1.0E-8; // Tolerance for determining if a singular value should be considered zero.
+        int rank = 0;
+
+        for(int i=0; i<stopIdx; i++) {
+            if(S.get(i, i)>tol) {
+                rank++;
+            }
+        }
+
+        return rank;
     }
 
 

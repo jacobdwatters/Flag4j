@@ -61,7 +61,7 @@ public class ComplexSVD extends SingularValueDecomposition&lt;CMatrix&gt; {
      * @return A reference to this decomposer.
      */
     @Override
-    public Decomposition&lt;CMatrix&gt; decompose(CMatrix src) {
+    public ComplexSVD decompose(CMatrix src) {
         Vector S1;
 
 <span class="nc bnc" id="L67" title="All 2 branches missed.">        if(computeUV) {</span>
@@ -84,7 +84,7 @@ public class ComplexSVD extends SingularValueDecomposition&lt;CMatrix&gt; {
 
             // Copy singular values to diagonal of S and scale left singular vectors properly.
 <span class="nc" id="L86">        } else {</span>
-<span class="nc" id="L87">            S1 = Eigen.getEigenValues(src.H().mult(src)).toReal();</span>
+<span class="nc" id="L87">            S1 = Eigen.getEigenValues(src.H().mult(src)).toReal().abs().sqrt();</span>
         }
 
 <span class="nc" id="L90">        S = new Matrix(src.shape);</span>

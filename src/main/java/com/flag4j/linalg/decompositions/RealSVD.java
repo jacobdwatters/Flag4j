@@ -71,7 +71,7 @@ public class RealSVD extends SingularValueDecomposition<Matrix> {
      * @return A reference to this decomposer.
      */
     @Override
-    public Decomposition<Matrix> decompose(Matrix src) {
+    public RealSVD decompose(Matrix src) {
         Vector S1;
 
         if(computeUV) {
@@ -94,7 +94,7 @@ public class RealSVD extends SingularValueDecomposition<Matrix> {
 
             // Copy singular values to diagonal of S and scale left singular vectors properly.
         } else {
-            S1 = Eigen.getEigenValues(src.T().mult(src)).toReal();
+            S1 = Eigen.getEigenValues(src.T().mult(src)).toReal().abs().sqrt();
         }
 
         S = new Matrix(src.shape);

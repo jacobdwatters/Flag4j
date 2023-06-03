@@ -26,9 +26,10 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.MatrixMixin;
-import com.flag4j.core.dense.RealDenseTensorBase;
 import com.flag4j.core.RealMatrixMixin;
+import com.flag4j.core.dense.RealDenseTensorBase;
 import com.flag4j.io.PrintOptions;
+import com.flag4j.linalg.decompositions.RealSVD;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
@@ -3205,8 +3206,7 @@ public class Matrix
      */
     @Override
     public boolean isFullRank() {
-        // TODO: Implementation
-        return false;
+        return matrixRank() == Math.min(numRows, numCols);
     }
 
 
@@ -3361,15 +3361,26 @@ public class Matrix
 
 
     /**
-     * Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
+     * Computes the rank of this matrix (i.e. the number of linearly independent rows/columns in this matrix).
      * Note that here, rank is <b>NOT</b> the same as a tensor rank.
      *
      * @return The matrix rank of this matrix.
      */
     @Override
     public int matrixRank() {
-        // TODO: Implementation
-        return 0;
+        Matrix S = new RealSVD(false).decompose(this).getS();
+        int stopIdx = Math.min(numRows, numCols);
+
+        double tol = 1.0E-8; // Tolerance for determining if a singular value should be considered zero.
+        int rank = 0;
+
+        for(int i=0; i<stopIdx; i++) {
+            if(S.get(i, i)>tol) {
+                rank++;
+            }
+        }
+
+        return rank;
     }
 
 

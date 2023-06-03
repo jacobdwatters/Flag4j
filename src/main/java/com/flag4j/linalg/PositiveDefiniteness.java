@@ -23,30 +23,103 @@
  */
 
 package com.flag4j.linalg;
+import com.flag4j.CMatrix;
+import com.flag4j.Matrix;
 
 
 /**
  * This class contains several methods for determining the positive definiteness of a matrix.
  */
 public class PositiveDefiniteness {
-//    /**
-//     * Checks if the matrix is positive definite.
-//     *
-//     * @return True if the matrix is positive definite. Otherwise, returns false.
-//     */
-//    @Override
-//    public boolean isPosDef() {
-//        return false;
-//    }
-//
-//
-//    /**
-//     * Checks if the matrix is positive semi-definite.
-//     *
-//     * @return True if the matrix is positive semi-definite. Otherwise, returns false.
-//     */
-//    @Override
-//    public boolean isPosSemiDef() {
-//        return false;
-//    }
+
+    /**
+     * Checks if the matrix is positive definite. A matrix {@code M} is positive definite iff
+     * {@code x<sup>T</sup>Mx &gt 0} for any vector {@code x}, or equivalently, if the matrix is symmetric and
+     * all eigenvalues are strictly greater than zero.
+     *
+     * @param src Matrix to check if it is positive definite.
+     * @return True if the matrix is positive definite. Otherwise, returns false.
+     * @see #isPosSemiDef(Matrix) 
+     */
+    public boolean isPosDef(Matrix src) {
+        boolean result;
+        double tol = 1.0E-8; // Tolerance for considering eigenvalues positive.
+
+        if(src.isSymmetric()) {
+            result = Eigen.getEigenValues(src).min() > tol;
+        } else {
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Checks if the matrix is positive definite. A matrix {@code M} is positive definite iff
+     * {@code x<sup>T</sup>Mx &gt 0} for any vector {@code x}, or equivalently, if the matrix is hermation and
+     * all eigenvalues are strictly greater than zero.
+     *
+     * @param src Matrix to check if it is positive definite.
+     * @return True if the matrix is positive definite. Otherwise, returns false.
+     * @see #isPosSemiDef(CMatrix)
+     */
+    public boolean isPosDef(CMatrix src) {
+        boolean result;
+        double tol = 1.0E-8; // Tolerance for considering eigenvalues positive.
+
+        if(src.isHermitian()) {
+            result = Eigen.getEigenValues(src).toReal().min() > tol;
+        } else {
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Checks if the matrix is positive semi-definite. A matrix {@code M} is positive semi-definite iff
+     * {@code x<sup>T</sup>Mx &ge 0} for any vector {@code x}, or equivalently, if the matrix is symmetric and
+     * all eigenvalues are greater than or equal to zero.
+     *
+     * @param src Matrix to check if it is positive semi-definite.
+     * @return True if the matrix is positive semi-definite. Otherwise, returns false.
+     * @see #isPosSemiDef(Matrix) 
+     */
+    public boolean isPosSemiDef(Matrix src) {
+        boolean result;
+        double tol = -1.0E-8; // Tolerance for considering eigenvalues non-negative.
+
+        if(src.isSymmetric()) {
+            result = Eigen.getEigenValues(src).toReal().min() > tol;
+        } else {
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Checks if the matrix is positive semi-definite. A matrix {@code M} is positive semi-definite iff
+     * {@code x<sup>T</sup>Mx &ge 0} for any vector {@code x}, or equivalently, if the matrix is hermation and
+     * all eigenvalues are greater than or equal to zero.
+     *
+     * @param src Matrix to check if it is positive semi-definite.
+     * @return True if the matrix is positive semi-definite. Otherwise, returns false.
+     * @see #isPosSemiDef(CMatrix)
+     */
+    public boolean isPosSemiDef(CMatrix src) {
+        boolean result;
+        double tol = -1.0E-8; // Tolerance for considering eigenvalues non-negative.
+
+        if(src.isHermitian()) {
+            result = Eigen.getEigenValues(src).toReal().min() > tol;
+        } else {
+            result = false;
+        }
+
+        return result;
+    }
 }
