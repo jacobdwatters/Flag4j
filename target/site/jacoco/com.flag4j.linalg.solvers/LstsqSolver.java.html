@@ -36,7 +36,7 @@ import com.flag4j.linalg.decompositions.QRDecomposition;
  * minimizes {@code ||Ax-b||&lt;sub&gt;2&lt;/sub&gt;} which is equivalent to solving the normal equations {@code A&lt;sup&gt;T&lt;/sup&gt;Ax=A&lt;sup&gt;T&lt;/sup&gt;b}.
  * This is done using a {@link QRDecomposition}.
  */
-public abstract class LstsqSolver&lt;T extends MatrixMixin&lt;T, ?, ?, ?, ?, ?&gt;, U, V&gt;
+public abstract class LstsqSolver&lt;T extends MatrixMixin&lt;T, ?, ?, ?, ?, ?, ?&gt;, U, V&gt;
         implements LinearSolver&lt;T, U, V&gt; {
 
     /**

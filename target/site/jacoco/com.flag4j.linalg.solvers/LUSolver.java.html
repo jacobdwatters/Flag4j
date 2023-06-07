@@ -34,7 +34,7 @@ import com.flag4j.linalg.decompositions.LUDecomposition;
  * &lt;p&gt;If the system is not well determined, i.e. {@code A} is square and full rank, then use a
  * {@link LstsqSolver least-squares solver}.&lt;/p&gt;
  */
-public abstract class LUSolver&lt;T extends MatrixMixin&lt;T, ?, ?, ?, ?, ?&gt;, U, V&gt;
+public abstract class LUSolver&lt;T extends MatrixMixin&lt;T, ?, ?, ?, ?, ?, ?&gt;, U, V&gt;
         implements LinearSolver&lt;T, U, V&gt; {
 
     /**
