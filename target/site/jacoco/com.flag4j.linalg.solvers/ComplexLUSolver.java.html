@@ -26,9 +26,7 @@ package com.flag4j.linalg.solvers;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
-import com.flag4j.Vector;
 import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
-import com.flag4j.linalg.decompositions.RealLUDecomposition;
 import com.flag4j.util.ParameterChecks;
 
 import static com.flag4j.operations.dense.real.RealDenseDeterminant.detLU;
@@ -48,11 +46,11 @@ public class ComplexLUSolver extends LUSolver&lt;CMatrix, CVector, CVector&gt; {
      * Constructs an exact LU solver where the coefficient matrix is real dense.
      */
     public ComplexLUSolver() {
-<span class="fc" id="L51">        super(new ComplexLUDecomposition());</span>
+<span class="fc" id="L49">        super(new ComplexLUDecomposition());</span>
 
-<span class="fc" id="L53">        forwardSolver = new ComplexForwardSolver();</span>
-<span class="fc" id="L54">        backSolver = new ComplexBackSolver();</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L51">        forwardSolver = new ComplexForwardSolver();</span>
+<span class="fc" id="L52">        backSolver = new ComplexBackSolver();</span>
+<span class="fc" id="L53">    }</span>
 
 
     /**
@@ -64,18 +62,18 @@ public class ComplexLUSolver extends LUSolver&lt;CMatrix, CVector, CVector&gt; {
      */
     @Override
     public CVector solve(CMatrix A, CVector b) {
-<span class="fc" id="L67">        ParameterChecks.assertSquare(A.shape); // Ensure A is square.</span>
-<span class="fc" id="L68">        ParameterChecks.assertEquals(A.numCols, b.size); // b must have the same number of entries as columns in A.</span>
-<span class="fc" id="L69">        decompose(A); // Compute the decomposition of the coefficient matrix.</span>
+<span class="fc" id="L65">        ParameterChecks.assertSquare(A.shape); // Ensure A is square.</span>
+<span class="fc" id="L66">        ParameterChecks.assertEquals(A.numCols, b.size); // b must have the same number of entries as columns in A.</span>
+<span class="fc" id="L67">        decompose(A); // Compute the decomposition of the coefficient matrix.</span>
 
-<span class="fc" id="L71">        double det = detLU(L, U).magAsDouble();</span>
+<span class="fc" id="L69">        double det = detLU(L, U).magAsDouble();</span>
 
-<span class="pc bpc" id="L73" title="2 of 4 branches missed.">        if(det &lt;= RANK_THRESHOLD || Double.isNaN(det)) {</span>
-<span class="nc" id="L74">            throw new IllegalArgumentException(&quot;Matrix expected to have full rank but did not.&quot;);</span>
+<span class="pc bpc" id="L71" title="2 of 4 branches missed.">        if(det &lt;= RANK_THRESHOLD || Double.isNaN(det)) {</span>
+<span class="nc" id="L72">            throw new IllegalArgumentException(&quot;Matrix expected to have full rank but did not.&quot;);</span>
         }
 
-<span class="fc" id="L77">        CVector y = forwardSolver.solve(L, P.mult(b).toVector());</span>
-<span class="fc" id="L78">        return backSolver.solve(U, y);</span>
+<span class="fc" id="L75">        CVector y = forwardSolver.solve(L, P.mult(b).toVector());</span>
+<span class="fc" id="L76">        return backSolver.solve(U, y);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -30,9 +30,8 @@ class CMatrixInversionTests {
 
         // --------------------- Sub-case 2 ---------------------
         aEntries = new CNumber[][]{
-                {new CNumber(1), new CNumber(2), new CNumber(3)},
-                {new CNumber(4), new CNumber(5), new CNumber(6)},
-                {new CNumber(7), new CNumber(8), new CNumber(9)}
+                {new CNumber(1), new CNumber(2)},
+                {new CNumber(-2), new CNumber(-4)}
         }; // This matrix is singular.
         A = new CMatrix(aEntries);
 

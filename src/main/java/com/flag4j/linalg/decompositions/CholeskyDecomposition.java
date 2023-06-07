@@ -39,7 +39,7 @@ import com.flag4j.core.MatrixMixin;
  *
  * @param <T> The type of matrix to compute the Cholesky decomposition of.
  */
-public abstract class CholeskyDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?>>
+public abstract class CholeskyDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>>
         implements Decomposition<T> {
 
     /**

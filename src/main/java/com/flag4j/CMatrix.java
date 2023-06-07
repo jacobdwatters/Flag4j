@@ -63,7 +63,7 @@ import java.util.List;
  */
 public class CMatrix
         extends ComplexDenseTensorBase<CMatrix, Matrix>
-        implements MatrixMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber>,
+        implements MatrixMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber, CVector>,
         ComplexMatrixMixin<CMatrix, Matrix> {
 
     /**
@@ -846,7 +846,6 @@ public class CMatrix
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
-        // TODO: Algorithm could be improved if we assume sparse indices are sorted.
         // Fill slice with zeros
         ArrayUtils.stridedFillZerosRange(
                 this.entries,
@@ -956,7 +955,6 @@ public class CMatrix
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
-        // TODO: Algorithm could be improved if we assume sparse indices are sorted.
         // Fill slice with zeros
         ArrayUtils.stridedFillZerosRange(
                 this.entries,
@@ -2141,7 +2139,7 @@ public class CMatrix
      */
     @Override
     public CNumber det() {
-        return null;
+        return ComplexDenseDeterminant.det(this);
     }
 
 
@@ -3532,7 +3530,7 @@ public class CMatrix
         ParameterChecks.assertSquare(shape);
         LUDecomposition<CMatrix> lu = new ComplexLUDecomposition().decompose(this);
 
-        double tol = 1.0E-12; // Tolerance for determining if determinant is zero.
+        double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
         CNumber det = ComplexDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
 
         if(det.magAsDouble() < tol) {
@@ -3551,6 +3549,67 @@ public class CMatrix
         }
 
         return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.
+    }
+
+
+    /**
+     * Computes the condition number of this matrix using the 2-norm.
+     * Specifically, the condition number is computed as the norm of this matrix multiplied by the norm
+     * of the inverse of this matrix.
+     *
+     * @return The condition number of this matrix (Assuming 2-norm). This value may be
+     * {@link Double#POSITIVE_INFINITY infinite}.
+     */
+    @Override
+    public double cond() {
+        return cond(2);
+    }
+
+
+    /**
+     * Computes the condition number of this matrix using a specified norm. The condition number of a matrix is defined
+     * as the norm of a matrix multiplied by the norm of the inverse of the matrix.
+     * @param p Specifies the order of the norm to be used when computing the condition number.
+     *          Common {@code p} values include:<br>
+     *          - {@code p} = {@link Double#POSITIVE_INFINITY}, {@link #infNorm()}.<br>
+     *          - {@code p} = 2, The standard matrix 2-norm (the largest singular value).<br>
+     *          - {@code p} = -2, The Smallest singular value.<br>
+     *          - {@code p} = 1, Maximum absolute row sum.<br>
+     * @return The condition number of this matrix using the specified norm. This value may be
+     * {@link Double#POSITIVE_INFINITY infinite}.
+     */
+    // TODO Pull up to matrix mixin
+    public double cond(double p) {
+        double cond;
+
+        if(p==2 || p==-2) {
+            // Compute the singular value decomposition of the matrix.
+            Vector s = new ComplexSVD(false).decompose(this).getS().getDiag();
+            cond = p==2 ? s.max()/s.min() : s.min()/s.max();
+        } else {
+            cond = norm(p)*inv().norm(p);
+        }
+
+        return cond;
+    }
+
+
+    /**
+     * Extracts the diagonal elements of this matrix and returns them as a vector.
+     * @return A vector containing the diagonal entries of this matrix.
+     */
+    // TODO: Pull up to a matrix mixin interface
+    public CVector getDiag() {
+        final int newSize = Math.min(numRows, numCols);
+        CNumber[] diag = new CNumber[newSize];
+
+        int idx = 0;
+        for(int i=0; i<newSize; i++) {
+            diag[i] = this.entries[idx];
+            idx += numCols + 1;
+        }
+
+        return new CVector(diag);
     }
 
 
@@ -3743,8 +3802,19 @@ public class CMatrix
      */
     @Override
     public boolean isSingular() {
-        // TODO: Implementation
-        return false;
+        boolean result = true;
+
+        if(isSquare()) {
+            // Compute the LU decomposition.
+            LUDecomposition<CMatrix> lu = new ComplexLUDecomposition().decompose(this);
+
+            double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
+            CNumber det = ComplexDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
+
+            result = det.magAsDouble() < tol;
+        }
+
+        return result;
     }
 
 
@@ -3913,7 +3983,19 @@ public class CMatrix
      */
     @Override
     public double norm(double p) {
-        return ComplexDenseOperations.matrixNormLp(entries, shape, p);
+        double norm;
+
+        if(Double.isInfinite(p)) {
+            if(p > 0) {
+                norm = maxNorm();
+            } else {
+                norm = minAbs();
+            }
+        } else {
+            norm = ComplexDenseOperations.matrixNormLp(entries, shape, p);
+        }
+
+        return norm;
     }
 
 

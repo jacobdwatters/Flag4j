@@ -44,7 +44,7 @@ import com.flag4j.core.MatrixMixin;
  *      [ 0 0 0 x x ]]</pre>
  * </p>
  */
-public abstract class HessenburgDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class HessenburgDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
 
     /**
      * A flag for determining if {@code Q} should be computed in the Hessenburg decomposition.

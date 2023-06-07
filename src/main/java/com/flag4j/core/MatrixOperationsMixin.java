@@ -37,8 +37,9 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <W> Complex Matrix type.
  * @param <Y> Real Matrix type.
  * @param <X> Matrix entry type.
+ * @param <TT> Vector type equivalent.
  */
-public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> {
+public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number, TT> {
 
     /**
      * Computes the element-wise addition between two matrices.
@@ -920,4 +921,20 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number> {
      * @return The inverse of this matrix.
      */
     T inv();
+
+
+    /**
+     * Computes the condition number of this matrix using {@link com.flag4j.linalg.decompositions.SingularValueDecomposition SVD}.
+     * Specifically, the condition number is computed as the maximum singular value divided by the minimum singular
+     * value of this matrix.
+     *
+     * @return The condition number of this matrix (Assuming Frobenius norm).
+     */
+    double cond();
+
+    /**
+     * Extracts the diagonal elements of this matrix and returns them as a vector.
+     * @return A vector containing the diagonal entries of this matrix.
+     */
+    TT getDiag();
 }
