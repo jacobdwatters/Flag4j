@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > RealMatrixMixin</title>
+  <title>Coverage Report > VectorComparisonsMixin</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,14 +20,14 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.flag4j.core</a>
 </div>
 
-<h1>Coverage Summary for Class: RealMatrixMixin (com.flag4j.core)</h1>
+<h1>Coverage Summary for Class: VectorComparisonsMixin (com.flag4j.core)</h1>
 
 <table class="coverageStats">
 <tr>
   <th class="name">Class</th>
 </tr>
 <tr>
-  <td class="name">RealMatrixMixin</td>
+  <td class="name">VectorComparisonsMixin</td>
 </tr>
 
 </table>
@@ -64,41 +64,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">25</i>&nbsp;package com.flag4j.core;
 <i class="no-highlight">26</i>&nbsp;
 <i class="no-highlight">27</i>&nbsp;/**
-<i class="no-highlight">28</i>&nbsp; * This interface specifies methods which all real matrices should implement.
-<i class="no-highlight">29</i>&nbsp; * @param &lt;T&gt; Matrix type.
-<i class="no-highlight">30</i>&nbsp; * @param &lt;W&gt; Complex matrix type.
-<i class="no-highlight">31</i>&nbsp; */
-<i class="no-highlight">32</i>&nbsp;public interface RealMatrixMixin&lt;T, W&gt; {
-<i class="no-highlight">33</i>&nbsp;
-<i class="no-highlight">34</i>&nbsp;    /**
-<i class="no-highlight">35</i>&nbsp;     * Checks if a matrix is symmetric. That is, if the matrix is equal to its transpose.
-<i class="no-highlight">36</i>&nbsp;     * @return True if this matrix is symmetric. Otherwise, returns false.
-<i class="no-highlight">37</i>&nbsp;     */
-<i class="no-highlight">38</i>&nbsp;    boolean isSymmetric();
-<i class="no-highlight">39</i>&nbsp;
-<i class="no-highlight">40</i>&nbsp;
-<i class="no-highlight">41</i>&nbsp;    /**
-<i class="no-highlight">42</i>&nbsp;     * Checks if a matrix is anti-symmetric. That is, if the matrix is equal to the negative of its transpose.
-<i class="no-highlight">43</i>&nbsp;     * @return True if this matrix is anti-symmetric. Otherwise, returns false.
-<i class="no-highlight">44</i>&nbsp;     */
-<i class="no-highlight">45</i>&nbsp;    boolean isAntiSymmetric();
-<i class="no-highlight">46</i>&nbsp;
-<i class="no-highlight">47</i>&nbsp;
-<i class="no-highlight">48</i>&nbsp;    /**
-<i class="no-highlight">49</i>&nbsp;     * Checks if this matrix is orthogonal. That is, if the inverse of this matrix is equal to its transpose.
-<i class="no-highlight">50</i>&nbsp;     * @return True if this matrix it is orthogonal. Otherwise, returns false.
-<i class="no-highlight">51</i>&nbsp;     */
-<i class="no-highlight">52</i>&nbsp;    boolean isOrthogonal();
-<i class="no-highlight">53</i>&nbsp;
-<i class="no-highlight">54</i>&nbsp;
-<i class="no-highlight">55</i>&nbsp;    /**
-<i class="no-highlight">56</i>&nbsp;     * Computes the complex element-wise square root of a tensor.
-<i class="no-highlight">57</i>&nbsp;     *
-<i class="no-highlight">58</i>&nbsp;     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
-<i class="no-highlight">59</i>&nbsp;     * the principle square root i.e. the square root with positive real part.
-<i class="no-highlight">60</i>&nbsp;     */
-<i class="no-highlight">61</i>&nbsp;    W sqrtComplex();
-<i class="no-highlight">62</i>&nbsp;}
+<i class="no-highlight">28</i>&nbsp; * This interface specifies comparisons which all vectors should implement.
+<i class="no-highlight">29</i>&nbsp; */
+<i class="no-highlight">30</i>&nbsp;public interface VectorComparisonsMixin {
+<i class="no-highlight">31</i>&nbsp;    // TODO: Should this interface be removed?
+<i class="no-highlight">32</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -125,7 +95,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-06-07 18:56</div>
+    <div style="float:right;">generated on 2023-06-07 19:20</div>
 </div>
 </body>
 </html>
