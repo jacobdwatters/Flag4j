@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > VectorComparisonsMixin</title>
+  <title>Coverage Report > TensorComparisonsMixin</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,14 +20,14 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.flag4j.core</a>
 </div>
 
-<h1>Coverage Summary for Class: VectorComparisonsMixin (com.flag4j.core)</h1>
+<h1>Coverage Summary for Class: TensorComparisonsMixin (com.flag4j.core)</h1>
 
 <table class="coverageStats">
 <tr>
   <th class="name">Class</th>
 </tr>
 <tr>
-  <td class="name">VectorComparisonsMixin</td>
+  <td class="name">TensorComparisonsMixin</td>
 </tr>
 
 </table>
@@ -64,11 +64,32 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">25</i>&nbsp;package com.flag4j.core;
 <i class="no-highlight">26</i>&nbsp;
 <i class="no-highlight">27</i>&nbsp;/**
-<i class="no-highlight">28</i>&nbsp; * This interface specifies comparisons which all vectors should implement.
+<i class="no-highlight">28</i>&nbsp; * This interface specifies comparisons which all tensors (i.e. matrices and vectors) should implement.
 <i class="no-highlight">29</i>&nbsp; */
-<i class="no-highlight">30</i>&nbsp;public interface VectorComparisonsMixin {
-<i class="no-highlight">31</i>&nbsp;    // TODO: Should this interface be removed?
-<i class="no-highlight">32</i>&nbsp;}
+<i class="no-highlight">30</i>&nbsp;public interface TensorComparisonsMixin {
+<i class="no-highlight">31</i>&nbsp;
+<i class="no-highlight">32</i>&nbsp;
+<i class="no-highlight">33</i>&nbsp;    /**
+<i class="no-highlight">34</i>&nbsp;     * Checks if this tensor only contains zeros.
+<i class="no-highlight">35</i>&nbsp;     * @return True if this tensor only contains zeros. Otherwise, returns false.
+<i class="no-highlight">36</i>&nbsp;     */
+<i class="no-highlight">37</i>&nbsp;    boolean isZeros();
+<i class="no-highlight">38</i>&nbsp;
+<i class="no-highlight">39</i>&nbsp;
+<i class="no-highlight">40</i>&nbsp;    /**
+<i class="no-highlight">41</i>&nbsp;     * Checks if this tensor only contains ones.
+<i class="no-highlight">42</i>&nbsp;     * @return True if this tensor only contains ones. Otherwise, returns false.
+<i class="no-highlight">43</i>&nbsp;     */
+<i class="no-highlight">44</i>&nbsp;    boolean isOnes();
+<i class="no-highlight">45</i>&nbsp;
+<i class="no-highlight">46</i>&nbsp;
+<i class="no-highlight">47</i>&nbsp;    /**
+<i class="no-highlight">48</i>&nbsp;     * Checks if this tensor is equal to a specified Object.
+<i class="no-highlight">49</i>&nbsp;     * @param B Object to compare this tensor to.
+<i class="no-highlight">50</i>&nbsp;     */
+<i class="no-highlight">51</i>&nbsp;    @Override
+<i class="no-highlight">52</i>&nbsp;    boolean equals(Object B);
+<i class="no-highlight">53</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -95,7 +116,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-06-07 18:56</div>
+    <div style="float:right;">generated on 2023-06-07 19:20</div>
 </div>
 </body>
 </html>
