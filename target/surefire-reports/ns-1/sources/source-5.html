@@ -1,0 +1,433 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Shape</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j</a>
+</div>
+
+<h1>Coverage Summary for Class: Shape (com.flag4j)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Shape</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.2%
+  </span>
+  <span class="absValue">
+    (15/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    94.8%
+  </span>
+  <span class="absValue">
+    (73/77)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;/*
+<i class="no-highlight">2</i>&nbsp; * MIT License
+<i class="no-highlight">3</i>&nbsp; *
+<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2022 Jacob Watters
+<i class="no-highlight">5</i>&nbsp; *
+<i class="no-highlight">6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i class="no-highlight">7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i class="no-highlight">8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i class="no-highlight">9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i class="no-highlight">10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i class="no-highlight">11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i class="no-highlight">12</i>&nbsp; *
+<i class="no-highlight">13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i class="no-highlight">14</i>&nbsp; * copies or substantial portions of the Software.
+<i class="no-highlight">15</i>&nbsp; *
+<i class="no-highlight">16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i class="no-highlight">17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i class="no-highlight">18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i class="no-highlight">19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i class="no-highlight">20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i class="no-highlight">21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i class="no-highlight">22</i>&nbsp; * SOFTWARE.
+<i class="no-highlight">23</i>&nbsp; */
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;package com.flag4j;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;import com.flag4j.util.ErrorMessages;
+<i class="no-highlight">28</i>&nbsp;import com.flag4j.util.ParameterChecks;
+<i class="no-highlight">29</i>&nbsp;
+<i class="no-highlight">30</i>&nbsp;import java.io.Serializable;
+<i class="no-highlight">31</i>&nbsp;import java.math.BigInteger;
+<i class="no-highlight">32</i>&nbsp;import java.util.Arrays;
+<i class="no-highlight">33</i>&nbsp;
+<i class="no-highlight">34</i>&nbsp;/**
+<i class="no-highlight">35</i>&nbsp; * An object to store the shape of a tensor. Note that this object is mutable.
+<i class="no-highlight">36</i>&nbsp; */
+<i class="no-highlight">37</i>&nbsp;public class Shape implements Serializable {
+<i class="no-highlight">38</i>&nbsp;    /**
+<i class="no-highlight">39</i>&nbsp;     * An array containing the size of each dimension of this shape.
+<i class="no-highlight">40</i>&nbsp;     */
+<i class="no-highlight">41</i>&nbsp;    public int[] dims;
+<i class="no-highlight">42</i>&nbsp;    /**
+<i class="no-highlight">43</i>&nbsp;     * An array containing the strides of all dimensions within this shape.
+<i class="no-highlight">44</i>&nbsp;     */
+<i class="no-highlight">45</i>&nbsp;    public int[] strides;
+<i class="no-highlight">46</i>&nbsp;
+<i class="no-highlight">47</i>&nbsp;
+<i class="no-highlight">48</i>&nbsp;    /**
+<i class="no-highlight">49</i>&nbsp;     * Constructs a shape object from specified dimension measurements.
+<i class="no-highlight">50</i>&nbsp;     * @param dims A list of the dimension measurements for this shape object. All entries must be non-negative.
+<i class="no-highlight">51</i>&nbsp;     * @throws IllegalArgumentException If any dimension is negative.
+<i class="no-highlight">52</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">53</i>&nbsp;    public Shape(int... dims) {</b>
+<i class="no-highlight">54</i>&nbsp;        // Ensure all dimensions for the shape object are non-negative.
+<b class="fc"><i class="no-highlight">55</i>&nbsp;        if(Arrays.stream(dims).anyMatch(i -&gt; i &lt; 0)) {</b>
+<b class="fc"><i class="no-highlight">56</i>&nbsp;            throw new IllegalArgumentException(ErrorMessages.negativeDimErrMsg(dims));</b>
+<i class="no-highlight">57</i>&nbsp;        }
+<i class="no-highlight">58</i>&nbsp;
+<b class="fc"><i class="no-highlight">59</i>&nbsp;        this.dims = dims.clone();</b>
+<b class="fc"><i class="no-highlight">60</i>&nbsp;        this.strides = this.createNewStrides();</b>
+<i class="no-highlight">61</i>&nbsp;    }
+<i class="no-highlight">62</i>&nbsp;
+<i class="no-highlight">63</i>&nbsp;
+<i class="no-highlight">64</i>&nbsp;    /**
+<i class="no-highlight">65</i>&nbsp;     * Copy constructor which creates a copy of the specified shape.
+<i class="no-highlight">66</i>&nbsp;     * @param shape Shape to copy.
+<i class="no-highlight">67</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">68</i>&nbsp;    public Shape(Shape shape) {</b>
+<b class="fc"><i class="no-highlight">69</i>&nbsp;        this.dims = shape.dims.clone();</b>
+<b class="fc"><i class="no-highlight">70</i>&nbsp;        this.strides = shape.strides.clone();</b>
+<i class="no-highlight">71</i>&nbsp;    }
+<i class="no-highlight">72</i>&nbsp;
+<i class="no-highlight">73</i>&nbsp;
+<i class="no-highlight">74</i>&nbsp;    /**
+<i class="no-highlight">75</i>&nbsp;     * Gets the rank of a tensor with this shape.
+<i class="no-highlight">76</i>&nbsp;     * @return The rank for a tensor with this shape.
+<i class="no-highlight">77</i>&nbsp;     */
+<i class="no-highlight">78</i>&nbsp;    public int getRank() {
+<b class="fc"><i class="no-highlight">79</i>&nbsp;        return dims.length;</b>
+<i class="no-highlight">80</i>&nbsp;    }
+<i class="no-highlight">81</i>&nbsp;
+<i class="no-highlight">82</i>&nbsp;
+<i class="no-highlight">83</i>&nbsp;    /**
+<i class="no-highlight">84</i>&nbsp;     * Gets the shape of a tensor as an array.
+<i class="no-highlight">85</i>&nbsp;     * @return Shape of a tensor as an integer array.
+<i class="no-highlight">86</i>&nbsp;     */
+<i class="no-highlight">87</i>&nbsp;    public int[] getDims() {
+<b class="fc"><i class="no-highlight">88</i>&nbsp;        return this.dims;</b>
+<i class="no-highlight">89</i>&nbsp;    }
+<i class="no-highlight">90</i>&nbsp;
+<i class="no-highlight">91</i>&nbsp;
+<i class="no-highlight">92</i>&nbsp;    /**
+<i class="no-highlight">93</i>&nbsp;     * Gets the shape of a tensor as an array.
+<i class="no-highlight">94</i>&nbsp;     * @return Shape of a tensor as an integer array.
+<i class="no-highlight">95</i>&nbsp;     */
+<i class="no-highlight">96</i>&nbsp;    public int[] getStrides() {
+<b class="fc"><i class="no-highlight">97</i>&nbsp;        return this.strides;</b>
+<i class="no-highlight">98</i>&nbsp;    }
+<i class="no-highlight">99</i>&nbsp;
+<i class="no-highlight">100</i>&nbsp;
+<i class="no-highlight">101</i>&nbsp;    /**
+<i class="no-highlight">102</i>&nbsp;     * Get the size of the shape object in the specified dimension.
+<i class="no-highlight">103</i>&nbsp;     * @param i Dimension to get the size of.
+<i class="no-highlight">104</i>&nbsp;     * @return The size of this shape object in the specified dimension.
+<i class="no-highlight">105</i>&nbsp;     */
+<i class="no-highlight">106</i>&nbsp;    public int get(int i) {
+<b class="fc"><i class="no-highlight">107</i>&nbsp;        return this.dims[i];</b>
+<i class="no-highlight">108</i>&nbsp;    }
+<i class="no-highlight">109</i>&nbsp;
+<i class="no-highlight">110</i>&nbsp;
+<i class="no-highlight">111</i>&nbsp;    /**
+<i class="no-highlight">112</i>&nbsp;     * Constructs strides for each dimension of this shape as if for a newly constructed tensor.
+<i class="no-highlight">113</i>&nbsp;     * i.e. Strides will be a decreasing sequence with the last stride being 1.
+<i class="no-highlight">114</i>&nbsp;     * @return The strides for all dimensions of a newly constructed tensor with this shape.
+<i class="no-highlight">115</i>&nbsp;     */
+<i class="no-highlight">116</i>&nbsp;    public int[] createNewStrides() {
+<b class="fc"><i class="no-highlight">117</i>&nbsp;        int[] strides = new int[dims.length];</b>
+<i class="no-highlight">118</i>&nbsp;
+<b class="fc"><i class="no-highlight">119</i>&nbsp;        if(strides.length&gt;0) {</b>
+<i class="no-highlight">120</i>&nbsp;            // Stride along last axis is always one for new strides.
+<b class="fc"><i class="no-highlight">121</i>&nbsp;            strides[strides.length-1] = 1;</b>
+<i class="no-highlight">122</i>&nbsp;
+<b class="fc"><i class="no-highlight">123</i>&nbsp;            for(int i=strides.length-2; i&gt;=0; i--) {</b>
+<b class="fc"><i class="no-highlight">124</i>&nbsp;                strides[i] = dims[i+1]*strides[i+1];</b>
+<i class="no-highlight">125</i>&nbsp;            }
+<i class="no-highlight">126</i>&nbsp;        }
+<i class="no-highlight">127</i>&nbsp;
+<b class="fc"><i class="no-highlight">128</i>&nbsp;        return strides;</b>
+<i class="no-highlight">129</i>&nbsp;    }
+<i class="no-highlight">130</i>&nbsp;
+<i class="no-highlight">131</i>&nbsp;
+<i class="no-highlight">132</i>&nbsp;    /**
+<i class="no-highlight">133</i>&nbsp;     * Computes the index of the 1D data array for a dense tensor from tensor indices with this shape.
+<i class="no-highlight">134</i>&nbsp;     * @param indices Indices of tensor with this shape.
+<i class="no-highlight">135</i>&nbsp;     * @return The index of the element at the specified indices in the 1D data array of a dense tensor.
+<i class="no-highlight">136</i>&nbsp;     * @throws IllegalArgumentException If the number of indices does not match the rank of this shape.
+<i class="no-highlight">137</i>&nbsp;     * @throws IndexOutOfBoundsException If any index does not fit within a tensor with this shape.
+<i class="no-highlight">138</i>&nbsp;     */
+<i class="no-highlight">139</i>&nbsp;    public int entriesIndex(int... indices) {
+<b class="fc"><i class="no-highlight">140</i>&nbsp;        if(indices.length != dims.length) {</b>
+<b class="fc"><i class="no-highlight">141</i>&nbsp;            throw new IllegalArgumentException(ErrorMessages.getIndicesRankErr(indices.length, dims.length));</b>
+<i class="no-highlight">142</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">143</i>&nbsp;        if(indices.length&gt;0 &amp;&amp; indices[indices.length-1] &gt;= dims[dims.length-1]) {</b>
+<b class="fc"><i class="no-highlight">144</i>&nbsp;            throw new IndexOutOfBoundsException(&quot;Index &quot; + indices[indices.length-1] + &quot; out of bounds for axis &quot; +</b>
+<i class="no-highlight">145</i>&nbsp;                    (indices.length-1) + &quot; of tensor with shape &quot; + this);
+<i class="no-highlight">146</i>&nbsp;        }
+<i class="no-highlight">147</i>&nbsp;
+<b class="fc"><i class="no-highlight">148</i>&nbsp;        int index = 0;</b>
+<i class="no-highlight">149</i>&nbsp;
+<b class="fc"><i class="no-highlight">150</i>&nbsp;        for(int i=0; i&lt;indices.length-1; i++) {</b>
+<b class="fc"><i class="no-highlight">151</i>&nbsp;            if(indices[i] &lt; 0 || indices[i] &gt;= dims[i]) {</b>
+<b class="fc"><i class="no-highlight">152</i>&nbsp;                throw new IndexOutOfBoundsException(&quot;Index &quot; + indices[i] + &quot; out of bounds for axis &quot; + i +</b>
+<i class="no-highlight">153</i>&nbsp;                        &quot; of tensor with shape &quot; + this);
+<i class="no-highlight">154</i>&nbsp;            }
+<i class="no-highlight">155</i>&nbsp;
+<b class="fc"><i class="no-highlight">156</i>&nbsp;            index += indices[i]*strides[i];</b>
+<i class="no-highlight">157</i>&nbsp;        }
+<i class="no-highlight">158</i>&nbsp;
+<b class="fc"><i class="no-highlight">159</i>&nbsp;        return index + indices[indices.length-1];</b>
+<i class="no-highlight">160</i>&nbsp;    }
+<i class="no-highlight">161</i>&nbsp;
+<i class="no-highlight">162</i>&nbsp;
+<i class="no-highlight">163</i>&nbsp;    /**
+<i class="no-highlight">164</i>&nbsp;     * Computes the tensor indices based on an index from the internal 1D data array.
+<i class="no-highlight">165</i>&nbsp;     * @param index Index of internal 1D data array.
+<i class="no-highlight">166</i>&nbsp;     * @return The multidimensional indices corresponding to the 1D data array index. This will be an array of integers
+<i class="no-highlight">167</i>&nbsp;     * with size equal to the rank of this shape.
+<i class="no-highlight">168</i>&nbsp;     */
+<i class="no-highlight">169</i>&nbsp;    public int[] getIndices(int index) {
+<b class="fc"><i class="no-highlight">170</i>&nbsp;        int[] indices = new int[this.getRank()];</b>
+<b class="fc"><i class="no-highlight">171</i>&nbsp;        indices[indices.length-1] = index % dims[dims.length-1];</b>
+<b class="fc"><i class="no-highlight">172</i>&nbsp;        int upStream = index;</b>
+<i class="no-highlight">173</i>&nbsp;
+<b class="fc"><i class="no-highlight">174</i>&nbsp;        for(int i=indices.length-2; i&gt;=0; i--) {</b>
+<b class="fc"><i class="no-highlight">175</i>&nbsp;            upStream = (upStream-indices[i+1]) / dims[i+1];</b>
+<b class="fc"><i class="no-highlight">176</i>&nbsp;            indices[i] = upStream%dims[i];</b>
+<i class="no-highlight">177</i>&nbsp;        }
+<i class="no-highlight">178</i>&nbsp;
+<b class="fc"><i class="no-highlight">179</i>&nbsp;        return indices;</b>
+<i class="no-highlight">180</i>&nbsp;    }
+<i class="no-highlight">181</i>&nbsp;
+<i class="no-highlight">182</i>&nbsp;
+<i class="no-highlight">183</i>&nbsp;    /**
+<i class="no-highlight">184</i>&nbsp;     * Swaps two axes of this shape. New strides are constructed for this shape.
+<i class="no-highlight">185</i>&nbsp;     * @param axis1 First axis to swap.
+<i class="no-highlight">186</i>&nbsp;     * @param axis2 Second axis to swap.
+<i class="no-highlight">187</i>&nbsp;     * @return Returns this shape.
+<i class="no-highlight">188</i>&nbsp;     * @throws ArrayIndexOutOfBoundsException If either axis is not within [0, {@link #getRank() rank}-1].
+<i class="no-highlight">189</i>&nbsp;     */
+<i class="no-highlight">190</i>&nbsp;    public Shape swapAxes(int axis1, int axis2) {
+<b class="fc"><i class="no-highlight">191</i>&nbsp;        int temp = dims[axis1];</b>
+<b class="fc"><i class="no-highlight">192</i>&nbsp;        dims[axis1] = dims[axis2];</b>
+<b class="fc"><i class="no-highlight">193</i>&nbsp;        dims[axis2] = temp;</b>
+<i class="no-highlight">194</i>&nbsp;
+<b class="fc"><i class="no-highlight">195</i>&nbsp;        this.strides = this.createNewStrides();</b>
+<i class="no-highlight">196</i>&nbsp;
+<b class="fc"><i class="no-highlight">197</i>&nbsp;        return this;</b>
+<i class="no-highlight">198</i>&nbsp;    }
+<i class="no-highlight">199</i>&nbsp;
+<i class="no-highlight">200</i>&nbsp;
+<i class="no-highlight">201</i>&nbsp;    /**
+<i class="no-highlight">202</i>&nbsp;     * Permutes the axes of this shape.
+<i class="no-highlight">203</i>&nbsp;     * @param axes New axes permutation for the shape. This must be a permutation of {@code {1, 2, 3, ... N}} where
+<i class="no-highlight">204</i>&nbsp;     *             {@code N} is the rank of this shape.
+<i class="no-highlight">205</i>&nbsp;     * @return Returns this shape.
+<i class="no-highlight">206</i>&nbsp;     * @throws ArrayIndexOutOfBoundsException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N}}.
+<i class="no-highlight">207</i>&nbsp;     */
+<i class="no-highlight">208</i>&nbsp;    public Shape swapAxes(int... axes) {
+<b class="fc"><i class="no-highlight">209</i>&nbsp;        ParameterChecks.assertEquals(getRank(), axes.length);</b>
+<b class="fc"><i class="no-highlight">210</i>&nbsp;        ParameterChecks.assertPermutation(axes);</b>
+<i class="no-highlight">211</i>&nbsp;
+<b class="fc"><i class="no-highlight">212</i>&nbsp;        int[] tempDims = new int[dims.length];</b>
+<b class="fc"><i class="no-highlight">213</i>&nbsp;        int i=0;</b>
+<i class="no-highlight">214</i>&nbsp;
+<i class="no-highlight">215</i>&nbsp;        // Permute axes.
+<b class="fc"><i class="no-highlight">216</i>&nbsp;        for(int axis : axes) {</b>
+<b class="fc"><i class="no-highlight">217</i>&nbsp;            tempDims[i++] = dims[axis];</b>
+<i class="no-highlight">218</i>&nbsp;        }
+<i class="no-highlight">219</i>&nbsp;
+<b class="fc"><i class="no-highlight">220</i>&nbsp;        this.dims = tempDims;</b>
+<b class="fc"><i class="no-highlight">221</i>&nbsp;        this.strides = this.createNewStrides();</b>
+<i class="no-highlight">222</i>&nbsp;
+<b class="fc"><i class="no-highlight">223</i>&nbsp;        return this;</b>
+<i class="no-highlight">224</i>&nbsp;    }
+<i class="no-highlight">225</i>&nbsp;
+<i class="no-highlight">226</i>&nbsp;
+<i class="no-highlight">227</i>&nbsp;    /**
+<i class="no-highlight">228</i>&nbsp;     * Gets the total number of entries for a tensor with this shape.
+<i class="no-highlight">229</i>&nbsp;     * @return The total number of entries for a tensor with this shape.
+<i class="no-highlight">230</i>&nbsp;     */
+<i class="no-highlight">231</i>&nbsp;    public BigInteger totalEntries() {
+<i class="no-highlight">232</i>&nbsp;        BigInteger product;
+<i class="no-highlight">233</i>&nbsp;
+<b class="fc"><i class="no-highlight">234</i>&nbsp;        if(dims.length&gt;0) {</b>
+<b class="fc"><i class="no-highlight">235</i>&nbsp;            product = BigInteger.ONE;</b>
+<i class="no-highlight">236</i>&nbsp;
+<b class="fc"><i class="no-highlight">237</i>&nbsp;            for(int dim : dims) {</b>
+<b class="fc"><i class="no-highlight">238</i>&nbsp;                product = product.multiply(BigInteger.valueOf(dim));</b>
+<i class="no-highlight">239</i>&nbsp;            }
+<i class="no-highlight">240</i>&nbsp;        } else {
+<b class="fc"><i class="no-highlight">241</i>&nbsp;            product = BigInteger.ZERO;</b>
+<i class="no-highlight">242</i>&nbsp;        }
+<i class="no-highlight">243</i>&nbsp;
+<b class="fc"><i class="no-highlight">244</i>&nbsp;        return product;</b>
+<i class="no-highlight">245</i>&nbsp;    }
+<i class="no-highlight">246</i>&nbsp;
+<i class="no-highlight">247</i>&nbsp;
+<i class="no-highlight">248</i>&nbsp;    /**
+<i class="no-highlight">249</i>&nbsp;     * Creates a deep copy of this shape object. This is a distinct object not a reference to the same object.
+<i class="no-highlight">250</i>&nbsp;     * @return A deep copy of this shape object.
+<i class="no-highlight">251</i>&nbsp;     */
+<i class="no-highlight">252</i>&nbsp;    public Shape copy() {
+<b class="fc"><i class="no-highlight">253</i>&nbsp;        return new Shape(dims.clone());</b>
+<i class="no-highlight">254</i>&nbsp;    }
+<i class="no-highlight">255</i>&nbsp;
+<i class="no-highlight">256</i>&nbsp;
+<i class="no-highlight">257</i>&nbsp;    /**
+<i class="no-highlight">258</i>&nbsp;     * Checks if an object is equal to this shape.
+<i class="no-highlight">259</i>&nbsp;     * @param b Object to compare with this shape.
+<i class="no-highlight">260</i>&nbsp;     * @return True if d is a Shape object and equal to this shape.
+<i class="no-highlight">261</i>&nbsp;     */
+<i class="no-highlight">262</i>&nbsp;    @Override
+<i class="no-highlight">263</i>&nbsp;    public boolean equals(Object b) {
+<b class="fc"><i class="no-highlight">264</i>&nbsp;        boolean result = true;</b>
+<i class="no-highlight">265</i>&nbsp;
+<i class="no-highlight">266</i>&nbsp;        // Ensure the object is the same type
+<b class="fc"><i class="no-highlight">267</i>&nbsp;        if(b instanceof Shape) {</b>
+<b class="fc"><i class="no-highlight">268</i>&nbsp;            Shape bCopy = (Shape) b;</b>
+<i class="no-highlight">269</i>&nbsp;
+<b class="fc"><i class="no-highlight">270</i>&nbsp;            if(this.dims.length == bCopy.dims.length) {</b>
+<b class="fc"><i class="no-highlight">271</i>&nbsp;                for(int i=0; i&lt;dims.length; i++) {</b>
+<b class="fc"><i class="no-highlight">272</i>&nbsp;                    if(dims[i] != bCopy.dims[i]) {</b>
+<b class="fc"><i class="no-highlight">273</i>&nbsp;                        result = false;</b>
+<b class="fc"><i class="no-highlight">274</i>&nbsp;                        break;</b>
+<i class="no-highlight">275</i>&nbsp;                    }
+<i class="no-highlight">276</i>&nbsp;                }
+<i class="no-highlight">277</i>&nbsp;            } else {
+<b class="fc"><i class="no-highlight">278</i>&nbsp;                result = false;</b>
+<i class="no-highlight">279</i>&nbsp;            }
+<i class="no-highlight">280</i>&nbsp;
+<b class="fc"><i class="no-highlight">281</i>&nbsp;        } else {</b>
+<b class="fc"><i class="no-highlight">282</i>&nbsp;            result = false;</b>
+<i class="no-highlight">283</i>&nbsp;        }
+<i class="no-highlight">284</i>&nbsp;
+<b class="fc"><i class="no-highlight">285</i>&nbsp;        return result;</b>
+<i class="no-highlight">286</i>&nbsp;    }
+<i class="no-highlight">287</i>&nbsp;
+<i class="no-highlight">288</i>&nbsp;
+<i class="no-highlight">289</i>&nbsp;    /**
+<i class="no-highlight">290</i>&nbsp;     * Gets the next indices for a tensor with this shape.
+<i class="no-highlight">291</i>&nbsp;     * @param currentIndices Current indices. This array is modified.
+<i class="no-highlight">292</i>&nbsp;     * @param i Index of 1d data array.
+<i class="no-highlight">293</i>&nbsp;     */
+<i class="no-highlight">294</i>&nbsp;    public void getNextIndices(int[] currentIndices, int i) {
+<b class="nc"><i class="no-highlight">295</i>&nbsp;        for(int j=0; j&lt;currentIndices.length; j++) {</b>
+<b class="nc"><i class="no-highlight">296</i>&nbsp;            if((i+1)%strides[j]==0) {</b>
+<b class="nc"><i class="no-highlight">297</i>&nbsp;                currentIndices[j] = (currentIndices[j]+1) % dims[j];</b>
+<i class="no-highlight">298</i>&nbsp;            }
+<i class="no-highlight">299</i>&nbsp;        }
+<i class="no-highlight">300</i>&nbsp;    }
+<i class="no-highlight">301</i>&nbsp;
+<i class="no-highlight">302</i>&nbsp;
+<i class="no-highlight">303</i>&nbsp;    /**
+<i class="no-highlight">304</i>&nbsp;     * Generates the hashcode for this shape object. This is computed by passing the dims array of this shape object to
+<i class="no-highlight">305</i>&nbsp;     * {@link java.util.Arrays#hashCode(int[])}.
+<i class="no-highlight">306</i>&nbsp;     * @return The hashcode for this array object.
+<i class="no-highlight">307</i>&nbsp;     */
+<i class="no-highlight">308</i>&nbsp;    @Override
+<i class="no-highlight">309</i>&nbsp;    public int hashCode() {
+<b class="nc"><i class="no-highlight">310</i>&nbsp;        return Arrays.hashCode(this.dims);</b>
+<i class="no-highlight">311</i>&nbsp;    }
+<i class="no-highlight">312</i>&nbsp;
+<i class="no-highlight">313</i>&nbsp;
+<i class="no-highlight">314</i>&nbsp;    /**
+<i class="no-highlight">315</i>&nbsp;     * Converts this Shape object to a string format.
+<i class="no-highlight">316</i>&nbsp;     * @return The string representation for this Shape object.
+<i class="no-highlight">317</i>&nbsp;     */
+<i class="no-highlight">318</i>&nbsp;    public String toString() {
+<b class="fc"><i class="no-highlight">319</i>&nbsp;        StringBuilder result = new StringBuilder();</b>
+<i class="no-highlight">320</i>&nbsp;
+<b class="fc"><i class="no-highlight">321</i>&nbsp;        for(int d : dims) {</b>
+<b class="fc"><i class="no-highlight">322</i>&nbsp;            result.append(d).append(&quot;x&quot;);</b>
+<i class="no-highlight">323</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">324</i>&nbsp;        result.deleteCharAt(result.length()-1); // Remove excess &#39;x&#39; character.</b>
+<i class="no-highlight">325</i>&nbsp;
+<b class="fc"><i class="no-highlight">326</i>&nbsp;        return result.toString();</b>
+<i class="no-highlight">327</i>&nbsp;    }
+<i class="no-highlight">328</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-07 18:21</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,787 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > RealComplexDenseSparseMatrixMultiplication</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j.operations.dense_sparse.real_complex</a>
+</div>
+
+<h1>Coverage Summary for Class: RealComplexDenseSparseMatrixMultiplication (com.flag4j.operations.dense_sparse.real_complex)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RealComplexDenseSparseMatrixMultiplication</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96.8%
+  </span>
+  <span class="absValue">
+    (30/31)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    99%
+  </span>
+  <span class="absValue">
+    (208/210)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;/*
+<i class="no-highlight">2</i>&nbsp; * MIT License
+<i class="no-highlight">3</i>&nbsp; *
+<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2023 Jacob Watters
+<i class="no-highlight">5</i>&nbsp; *
+<i class="no-highlight">6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i class="no-highlight">7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i class="no-highlight">8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i class="no-highlight">9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i class="no-highlight">10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i class="no-highlight">11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i class="no-highlight">12</i>&nbsp; *
+<i class="no-highlight">13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i class="no-highlight">14</i>&nbsp; * copies or substantial portions of the Software.
+<i class="no-highlight">15</i>&nbsp; *
+<i class="no-highlight">16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i class="no-highlight">17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i class="no-highlight">18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i class="no-highlight">19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i class="no-highlight">20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i class="no-highlight">21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i class="no-highlight">22</i>&nbsp; * SOFTWARE.
+<i class="no-highlight">23</i>&nbsp; */
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;package com.flag4j.operations.dense_sparse.real_complex;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;
+<i class="no-highlight">28</i>&nbsp;import com.flag4j.Shape;
+<i class="no-highlight">29</i>&nbsp;import com.flag4j.complex_numbers.CNumber;
+<i class="no-highlight">30</i>&nbsp;import com.flag4j.concurrency.Configurations;
+<i class="no-highlight">31</i>&nbsp;import com.flag4j.concurrency.ThreadManager;
+<i class="no-highlight">32</i>&nbsp;import com.flag4j.util.ArrayUtils;
+<i class="no-highlight">33</i>&nbsp;import com.flag4j.util.Axis2D;
+<i class="no-highlight">34</i>&nbsp;import com.flag4j.util.ErrorMessages;
+<i class="no-highlight">35</i>&nbsp;
+<i class="no-highlight">36</i>&nbsp;/**
+<i class="no-highlight">37</i>&nbsp; * This class contains low level methods for computing the matrix multiplication (and matrix vector multiplication) between
+<i class="no-highlight">38</i>&nbsp; * a real dense/sparse matrix and a real sparse/dense matrix or vector.
+<i class="no-highlight">39</i>&nbsp; */
+<i class="no-highlight">40</i>&nbsp;public class RealComplexDenseSparseMatrixMultiplication {
+<i class="no-highlight">41</i>&nbsp;
+<b class="nc"><i class="no-highlight">42</i>&nbsp;    private RealComplexDenseSparseMatrixMultiplication() {</b>
+<i class="no-highlight">43</i>&nbsp;        // Hide default constructor.
+<b class="nc"><i class="no-highlight">44</i>&nbsp;        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</b>
+<i class="no-highlight">45</i>&nbsp;    }
+<i class="no-highlight">46</i>&nbsp;
+<i class="no-highlight">47</i>&nbsp;
+<i class="no-highlight">48</i>&nbsp;    /**
+<i class="no-highlight">49</i>&nbsp;     * Computes the matrix multiplication between a real dense matrix and a complex sparse matrix using a standard algorithm.
+<i class="no-highlight">50</i>&nbsp;     * @param src1 Entries of the dense matrix.
+<i class="no-highlight">51</i>&nbsp;     * @param shape1 Shape of the dense matrix.
+<i class="no-highlight">52</i>&nbsp;     * @param src2 Non-zero entries of the sparse matrix.
+<i class="no-highlight">53</i>&nbsp;     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">54</i>&nbsp;     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">55</i>&nbsp;     * @param shape2 Shape of the sparse matrix.
+<i class="no-highlight">56</i>&nbsp;     * @return The result of the matrix multiplication.
+<i class="no-highlight">57</i>&nbsp;     */
+<i class="no-highlight">58</i>&nbsp;    public static CNumber[] standard(double[] src1, Shape shape1, CNumber[] src2,
+<i class="no-highlight">59</i>&nbsp;                                    int[] rowIndices, int[] colIndices, Shape shape2) {
+<b class="fc"><i class="no-highlight">60</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">61</i>&nbsp;        int cols1 = shape1.dims[Axis2D.col()];</b>
+<b class="fc"><i class="no-highlight">62</i>&nbsp;        int cols2 = shape2.dims[Axis2D.col()];</b>
+<i class="no-highlight">63</i>&nbsp;
+<b class="fc"><i class="no-highlight">64</i>&nbsp;        CNumber[] dest = new CNumber[rows1*cols2];</b>
+<b class="fc"><i class="no-highlight">65</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">66</i>&nbsp;
+<i class="no-highlight">67</i>&nbsp;        int row, col;
+<i class="no-highlight">68</i>&nbsp;
+<b class="fc"><i class="no-highlight">69</i>&nbsp;        for(int i=0; i&lt;rows1; i++) {</b>
+<i class="no-highlight">70</i>&nbsp;            // Loop over non-zero entries of sparse matrix.
+<b class="fc"><i class="no-highlight">71</i>&nbsp;            for(int j=0; j&lt;src2.length; j++) {</b>
+<b class="fc"><i class="no-highlight">72</i>&nbsp;                row = rowIndices[j];</b>
+<b class="fc"><i class="no-highlight">73</i>&nbsp;                col = colIndices[j];</b>
+<i class="no-highlight">74</i>&nbsp;
+<b class="fc"><i class="no-highlight">75</i>&nbsp;                dest[i*cols2 + col].addEq(src2[j].mult(src1[i*cols1 + row]));</b>
+<i class="no-highlight">76</i>&nbsp;            }
+<i class="no-highlight">77</i>&nbsp;        }
+<i class="no-highlight">78</i>&nbsp;
+<b class="fc"><i class="no-highlight">79</i>&nbsp;        return dest;</b>
+<i class="no-highlight">80</i>&nbsp;    }
+<i class="no-highlight">81</i>&nbsp;
+<i class="no-highlight">82</i>&nbsp;
+<i class="no-highlight">83</i>&nbsp;    /**
+<i class="no-highlight">84</i>&nbsp;     * Computes the matrix multiplication between a real sparse matrix and a complex dense matrix using a standard algorithm.
+<i class="no-highlight">85</i>&nbsp;     *
+<i class="no-highlight">86</i>&nbsp;     * @param src1 Non-zero entries of the sparse matrix.
+<i class="no-highlight">87</i>&nbsp;     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">88</i>&nbsp;     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">89</i>&nbsp;     * @param shape1 Shape of the sparse matrix.
+<i class="no-highlight">90</i>&nbsp;     * @param src2 Entries of the dense matrix.
+<i class="no-highlight">91</i>&nbsp;     * @param shape2 Shape of the dense matrix.
+<i class="no-highlight">92</i>&nbsp;     * @return The result of the matrix multiplication.
+<i class="no-highlight">93</i>&nbsp;     */
+<i class="no-highlight">94</i>&nbsp;    public static CNumber[] standard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
+<i class="no-highlight">95</i>&nbsp;                                    CNumber[] src2, Shape shape2) {
+<b class="fc"><i class="no-highlight">96</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">97</i>&nbsp;        int cols2 = shape2.dims[Axis2D.col()];</b>
+<i class="no-highlight">98</i>&nbsp;
+<b class="fc"><i class="no-highlight">99</i>&nbsp;        CNumber[] dest = new CNumber[rows1*cols2];</b>
+<b class="fc"><i class="no-highlight">100</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">101</i>&nbsp;
+<i class="no-highlight">102</i>&nbsp;        int row, col;
+<i class="no-highlight">103</i>&nbsp;
+<b class="fc"><i class="no-highlight">104</i>&nbsp;        for(int i=0; i&lt;src1.length; i++) {</b>
+<b class="fc"><i class="no-highlight">105</i>&nbsp;            row = rowIndices[i];</b>
+<b class="fc"><i class="no-highlight">106</i>&nbsp;            col = colIndices[i];</b>
+<i class="no-highlight">107</i>&nbsp;
+<b class="fc"><i class="no-highlight">108</i>&nbsp;            for(int j=0; j&lt;cols2; j++) {</b>
+<b class="fc"><i class="no-highlight">109</i>&nbsp;                dest[row*cols2 + j].addEq(src2[col*cols2 + j].mult(src1[i]));</b>
+<i class="no-highlight">110</i>&nbsp;            }
+<i class="no-highlight">111</i>&nbsp;        }
+<i class="no-highlight">112</i>&nbsp;
+<b class="fc"><i class="no-highlight">113</i>&nbsp;        return dest;</b>
+<i class="no-highlight">114</i>&nbsp;    }
+<i class="no-highlight">115</i>&nbsp;
+<i class="no-highlight">116</i>&nbsp;
+<i class="no-highlight">117</i>&nbsp;    /**
+<i class="no-highlight">118</i>&nbsp;     * Computes the matrix multiplication between a real dense matrix and a complex sparse matrix using a concurrent standard algorithm.
+<i class="no-highlight">119</i>&nbsp;     * @param src1 Entries of the dense matrix.
+<i class="no-highlight">120</i>&nbsp;     * @param shape1 Shape of the dense matrix.
+<i class="no-highlight">121</i>&nbsp;     * @param src2 Non-zero entries of the sparse matrix.
+<i class="no-highlight">122</i>&nbsp;     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">123</i>&nbsp;     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">124</i>&nbsp;     * @param shape2 Shape of the sparse matrix.
+<i class="no-highlight">125</i>&nbsp;     * @return The result of the matrix multiplication.
+<i class="no-highlight">126</i>&nbsp;     */
+<i class="no-highlight">127</i>&nbsp;    public static CNumber[] concurrentStandard(double[] src1, Shape shape1, CNumber[] src2,
+<i class="no-highlight">128</i>&nbsp;                                              int[] rowIndices, int[] colIndices, Shape shape2) {
+<b class="fc"><i class="no-highlight">129</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">130</i>&nbsp;        int cols1 = shape1.dims[Axis2D.col()];</b>
+<b class="fc"><i class="no-highlight">131</i>&nbsp;        int cols2 = shape2.dims[Axis2D.col()];</b>
+<i class="no-highlight">132</i>&nbsp;
+<b class="fc"><i class="no-highlight">133</i>&nbsp;        CNumber[] dest = new CNumber[rows1*cols2];</b>
+<b class="fc"><i class="no-highlight">134</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">135</i>&nbsp;
+<b class="fc"><i class="no-highlight">136</i>&nbsp;        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</b>
+<i class="no-highlight">137</i>&nbsp;            // Loop over non-zero entries of sparse matrix.
+<b class="fc"><i class="no-highlight">138</i>&nbsp;            for(int j=0; j&lt;src2.length; j++) {</b>
+<b class="fc"><i class="no-highlight">139</i>&nbsp;                int row = rowIndices[j];</b>
+<b class="fc"><i class="no-highlight">140</i>&nbsp;                int col = colIndices[j];</b>
+<i class="no-highlight">141</i>&nbsp;
+<b class="fc"><i class="no-highlight">142</i>&nbsp;                dest[i*cols2 + col].addEq(src2[j].mult(src1[i*cols1 + row]));</b>
+<i class="no-highlight">143</i>&nbsp;            }
+<i class="no-highlight">144</i>&nbsp;        });
+<i class="no-highlight">145</i>&nbsp;
+<b class="fc"><i class="no-highlight">146</i>&nbsp;        return dest;</b>
+<i class="no-highlight">147</i>&nbsp;    }
+<i class="no-highlight">148</i>&nbsp;
+<i class="no-highlight">149</i>&nbsp;
+<i class="no-highlight">150</i>&nbsp;    /**
+<i class="no-highlight">151</i>&nbsp;     * Computes the matrix multiplication between a real sparse matrix and a complex dense matrix
+<i class="no-highlight">152</i>&nbsp;     * using a concurrent standard algorithm.
+<i class="no-highlight">153</i>&nbsp;     *
+<i class="no-highlight">154</i>&nbsp;     * @param src1 Non-zero entries of the sparse matrix.
+<i class="no-highlight">155</i>&nbsp;     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">156</i>&nbsp;     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">157</i>&nbsp;     * @param shape1 Shape of the sparse matrix.
+<i class="no-highlight">158</i>&nbsp;     * @param src2 Entries of the dense matrix.
+<i class="no-highlight">159</i>&nbsp;     * @param shape2 Shape of the dense matrix.
+<i class="no-highlight">160</i>&nbsp;     * @return The result of the matrix multiplication.
+<i class="no-highlight">161</i>&nbsp;     */
+<i class="no-highlight">162</i>&nbsp;    public static CNumber[] concurrentStandard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
+<i class="no-highlight">163</i>&nbsp;                                              CNumber[] src2, Shape shape2) {
+<b class="fc"><i class="no-highlight">164</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">165</i>&nbsp;        int cols2 = shape2.dims[Axis2D.col()];</b>
+<i class="no-highlight">166</i>&nbsp;
+<b class="fc"><i class="no-highlight">167</i>&nbsp;        CNumber[] dest = new CNumber[rows1*cols2];</b>
+<b class="fc"><i class="no-highlight">168</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">169</i>&nbsp;
+<b class="fc"><i class="no-highlight">170</i>&nbsp;        ThreadManager.concurrentLoop(0, src1.length, (i) -&gt; {</b>
+<b class="fc"><i class="no-highlight">171</i>&nbsp;            int row = rowIndices[i];</b>
+<b class="fc"><i class="no-highlight">172</i>&nbsp;            int col = colIndices[i];</b>
+<i class="no-highlight">173</i>&nbsp;
+<b class="fc"><i class="no-highlight">174</i>&nbsp;            for(int j=0; j&lt;cols2; j++) {</b>
+<b class="fc"><i class="no-highlight">175</i>&nbsp;                dest[row*cols2 + j].addEq(src2[col*cols2 + j].mult(src1[i]));</b>
+<i class="no-highlight">176</i>&nbsp;            }
+<i class="no-highlight">177</i>&nbsp;        });
+<i class="no-highlight">178</i>&nbsp;
+<b class="fc"><i class="no-highlight">179</i>&nbsp;        return dest;</b>
+<i class="no-highlight">180</i>&nbsp;    }
+<i class="no-highlight">181</i>&nbsp;
+<i class="no-highlight">182</i>&nbsp;
+<i class="no-highlight">183</i>&nbsp;    /**
+<i class="no-highlight">184</i>&nbsp;     * Computes the matrix multiplication between a real dense matrix and a complex sparse matrix using a standard algorithm.
+<i class="no-highlight">185</i>&nbsp;     * @param src1 Entries of the dense matrix.
+<i class="no-highlight">186</i>&nbsp;     * @param shape1 Shape of the dense matrix.
+<i class="no-highlight">187</i>&nbsp;     * @param src2 Non-zero entries of the sparse matrix.
+<i class="no-highlight">188</i>&nbsp;     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">189</i>&nbsp;     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">190</i>&nbsp;     * @param shape2 Shape of the sparse matrix.
+<i class="no-highlight">191</i>&nbsp;     * @return The result of the matrix multiplication.
+<i class="no-highlight">192</i>&nbsp;     */
+<i class="no-highlight">193</i>&nbsp;    public static CNumber[] standard(CNumber[] src1, Shape shape1, double[] src2,
+<i class="no-highlight">194</i>&nbsp;                                     int[] rowIndices, int[] colIndices, Shape shape2) {
+<b class="fc"><i class="no-highlight">195</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">196</i>&nbsp;        int cols1 = shape1.dims[Axis2D.col()];</b>
+<b class="fc"><i class="no-highlight">197</i>&nbsp;        int cols2 = shape2.dims[Axis2D.col()];</b>
+<i class="no-highlight">198</i>&nbsp;
+<b class="fc"><i class="no-highlight">199</i>&nbsp;        CNumber[] dest = new CNumber[rows1*cols2];</b>
+<b class="fc"><i class="no-highlight">200</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">201</i>&nbsp;
+<i class="no-highlight">202</i>&nbsp;        int row, col;
+<i class="no-highlight">203</i>&nbsp;
+<b class="fc"><i class="no-highlight">204</i>&nbsp;        for(int i=0; i&lt;rows1; i++) {</b>
+<i class="no-highlight">205</i>&nbsp;            // Loop over non-zero entries of sparse matrix.
+<b class="fc"><i class="no-highlight">206</i>&nbsp;            for(int j=0; j&lt;src2.length; j++) {</b>
+<b class="fc"><i class="no-highlight">207</i>&nbsp;                row = rowIndices[j];</b>
+<b class="fc"><i class="no-highlight">208</i>&nbsp;                col = colIndices[j];</b>
+<i class="no-highlight">209</i>&nbsp;
+<b class="fc"><i class="no-highlight">210</i>&nbsp;                dest[i*cols2 + col].addEq(src1[i*cols1 + row].mult(src2[j]));</b>
+<i class="no-highlight">211</i>&nbsp;            }
+<i class="no-highlight">212</i>&nbsp;        }
+<i class="no-highlight">213</i>&nbsp;
+<b class="fc"><i class="no-highlight">214</i>&nbsp;        return dest;</b>
+<i class="no-highlight">215</i>&nbsp;    }
+<i class="no-highlight">216</i>&nbsp;
+<i class="no-highlight">217</i>&nbsp;
+<i class="no-highlight">218</i>&nbsp;    /**
+<i class="no-highlight">219</i>&nbsp;     * Computes the matrix multiplication between a real sparse matrix and a complex dense matrix using a standard algorithm.
+<i class="no-highlight">220</i>&nbsp;     *
+<i class="no-highlight">221</i>&nbsp;     * @param src1 Non-zero entries of the sparse matrix.
+<i class="no-highlight">222</i>&nbsp;     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">223</i>&nbsp;     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">224</i>&nbsp;     * @param shape1 Shape of the sparse matrix.
+<i class="no-highlight">225</i>&nbsp;     * @param src2 Entries of the dense matrix.
+<i class="no-highlight">226</i>&nbsp;     * @param shape2 Shape of the dense matrix.
+<i class="no-highlight">227</i>&nbsp;     * @return The result of the matrix multiplication.
+<i class="no-highlight">228</i>&nbsp;     */
+<i class="no-highlight">229</i>&nbsp;    public static CNumber[] standard(CNumber[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
+<i class="no-highlight">230</i>&nbsp;                                     double[] src2, Shape shape2) {
+<b class="fc"><i class="no-highlight">231</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">232</i>&nbsp;        int cols2 = shape2.dims[Axis2D.col()];</b>
+<i class="no-highlight">233</i>&nbsp;
+<b class="fc"><i class="no-highlight">234</i>&nbsp;        CNumber[] dest = new CNumber[rows1*cols2];</b>
+<b class="fc"><i class="no-highlight">235</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">236</i>&nbsp;
+<i class="no-highlight">237</i>&nbsp;        int row, col;
+<i class="no-highlight">238</i>&nbsp;
+<b class="fc"><i class="no-highlight">239</i>&nbsp;        for(int i=0; i&lt;src1.length; i++) {</b>
+<b class="fc"><i class="no-highlight">240</i>&nbsp;            row = rowIndices[i];</b>
+<b class="fc"><i class="no-highlight">241</i>&nbsp;            col = colIndices[i];</b>
+<i class="no-highlight">242</i>&nbsp;
+<b class="fc"><i class="no-highlight">243</i>&nbsp;            for(int j=0; j&lt;cols2; j++) {</b>
+<b class="fc"><i class="no-highlight">244</i>&nbsp;                dest[row*cols2 + j].addEq(src1[i].mult(src2[col*cols2 + j]));</b>
+<i class="no-highlight">245</i>&nbsp;            }
+<i class="no-highlight">246</i>&nbsp;        }
+<i class="no-highlight">247</i>&nbsp;
+<b class="fc"><i class="no-highlight">248</i>&nbsp;        return dest;</b>
+<i class="no-highlight">249</i>&nbsp;    }
+<i class="no-highlight">250</i>&nbsp;
+<i class="no-highlight">251</i>&nbsp;
+<i class="no-highlight">252</i>&nbsp;    /**
+<i class="no-highlight">253</i>&nbsp;     * Computes the matrix multiplication between a real dense matrix and a complex sparse matrix using a concurrent standard algorithm.
+<i class="no-highlight">254</i>&nbsp;     * @param src1 Entries of the dense matrix.
+<i class="no-highlight">255</i>&nbsp;     * @param shape1 Shape of the dense matrix.
+<i class="no-highlight">256</i>&nbsp;     * @param src2 Non-zero entries of the sparse matrix.
+<i class="no-highlight">257</i>&nbsp;     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">258</i>&nbsp;     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">259</i>&nbsp;     * @param shape2 Shape of the sparse matrix.
+<i class="no-highlight">260</i>&nbsp;     * @return The result of the matrix multiplication.
+<i class="no-highlight">261</i>&nbsp;     */
+<i class="no-highlight">262</i>&nbsp;    public static CNumber[] concurrentStandard(CNumber[] src1, Shape shape1, double[] src2,
+<i class="no-highlight">263</i>&nbsp;                                               int[] rowIndices, int[] colIndices, Shape shape2) {
+<b class="fc"><i class="no-highlight">264</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">265</i>&nbsp;        int cols1 = shape1.dims[Axis2D.col()];</b>
+<b class="fc"><i class="no-highlight">266</i>&nbsp;        int cols2 = shape2.dims[Axis2D.col()];</b>
+<i class="no-highlight">267</i>&nbsp;
+<b class="fc"><i class="no-highlight">268</i>&nbsp;        CNumber[] dest = new CNumber[rows1*cols2];</b>
+<b class="fc"><i class="no-highlight">269</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">270</i>&nbsp;
+<b class="fc"><i class="no-highlight">271</i>&nbsp;        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</b>
+<i class="no-highlight">272</i>&nbsp;            // Loop over non-zero entries of sparse matrix.
+<b class="fc"><i class="no-highlight">273</i>&nbsp;            for(int j=0; j&lt;src2.length; j++) {</b>
+<b class="fc"><i class="no-highlight">274</i>&nbsp;                int row = rowIndices[j];</b>
+<b class="fc"><i class="no-highlight">275</i>&nbsp;                int col = colIndices[j];</b>
+<i class="no-highlight">276</i>&nbsp;
+<b class="fc"><i class="no-highlight">277</i>&nbsp;                dest[i*cols2 + col].addEq(src1[i*cols1 + row].mult(src2[j]));</b>
+<i class="no-highlight">278</i>&nbsp;            }
+<i class="no-highlight">279</i>&nbsp;        });
+<i class="no-highlight">280</i>&nbsp;
+<b class="fc"><i class="no-highlight">281</i>&nbsp;        return dest;</b>
+<i class="no-highlight">282</i>&nbsp;    }
+<i class="no-highlight">283</i>&nbsp;
+<i class="no-highlight">284</i>&nbsp;
+<i class="no-highlight">285</i>&nbsp;    /**
+<i class="no-highlight">286</i>&nbsp;     * Computes the matrix multiplication between a real sparse matrix and a complex dense matrix
+<i class="no-highlight">287</i>&nbsp;     * using a concurrent standard algorithm.
+<i class="no-highlight">288</i>&nbsp;     *
+<i class="no-highlight">289</i>&nbsp;     * @param src1 Non-zero entries of the sparse matrix.
+<i class="no-highlight">290</i>&nbsp;     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">291</i>&nbsp;     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+<i class="no-highlight">292</i>&nbsp;     * @param shape1 Shape of the sparse matrix.
+<i class="no-highlight">293</i>&nbsp;     * @param src2 Entries of the dense matrix.
+<i class="no-highlight">294</i>&nbsp;     * @param shape2 Shape of the dense matrix.
+<i class="no-highlight">295</i>&nbsp;     * @return The result of the matrix multiplication.
+<i class="no-highlight">296</i>&nbsp;     */
+<i class="no-highlight">297</i>&nbsp;    public static CNumber[] concurrentStandard(CNumber[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
+<i class="no-highlight">298</i>&nbsp;                                               double[] src2, Shape shape2) {
+<b class="fc"><i class="no-highlight">299</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">300</i>&nbsp;        int cols2 = shape2.dims[Axis2D.col()];</b>
+<i class="no-highlight">301</i>&nbsp;
+<b class="fc"><i class="no-highlight">302</i>&nbsp;        CNumber[] dest = new CNumber[rows1*cols2];</b>
+<b class="fc"><i class="no-highlight">303</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">304</i>&nbsp;
+<b class="fc"><i class="no-highlight">305</i>&nbsp;        ThreadManager.concurrentLoop(0, src1.length, (i) -&gt; {</b>
+<b class="fc"><i class="no-highlight">306</i>&nbsp;            int row = rowIndices[i];</b>
+<b class="fc"><i class="no-highlight">307</i>&nbsp;            int col = colIndices[i];</b>
+<i class="no-highlight">308</i>&nbsp;
+<b class="fc"><i class="no-highlight">309</i>&nbsp;            for(int j=0; j&lt;cols2; j++) {</b>
+<b class="fc"><i class="no-highlight">310</i>&nbsp;                dest[row*cols2 + j].addEq(src1[i].mult(src2[col*cols2 + j]));</b>
+<i class="no-highlight">311</i>&nbsp;            }
+<i class="no-highlight">312</i>&nbsp;        });
+<i class="no-highlight">313</i>&nbsp;
+<b class="fc"><i class="no-highlight">314</i>&nbsp;        return dest;</b>
+<i class="no-highlight">315</i>&nbsp;    }
+<i class="no-highlight">316</i>&nbsp;
+<i class="no-highlight">317</i>&nbsp;
+<i class="no-highlight">318</i>&nbsp;    // -------------------- Below are the matrix-vector multiplication algorithms --------------------
+<i class="no-highlight">319</i>&nbsp;
+<i class="no-highlight">320</i>&nbsp;    /**
+<i class="no-highlight">321</i>&nbsp;     * Computes the dense matrix sparse vector multiplication using a standard algorithm.
+<i class="no-highlight">322</i>&nbsp;     * @param src1 Entries of the dense matrix.
+<i class="no-highlight">323</i>&nbsp;     * @param shape1 Shape of the dense matrix.
+<i class="no-highlight">324</i>&nbsp;     * @param src2 Non-zero entries of the sparse vector.
+<i class="no-highlight">325</i>&nbsp;     * @param indices Indices of non-zero entries in sparse vector.
+<i class="no-highlight">326</i>&nbsp;     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+<i class="no-highlight">327</i>&nbsp;     */
+<i class="no-highlight">328</i>&nbsp;    public static CNumber[] standardVector(double[] src1, Shape shape1, CNumber[] src2, int[] indices) {
+<b class="fc"><i class="no-highlight">329</i>&nbsp;        int denseRows = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">330</i>&nbsp;        int denseCols = shape1.dims[Axis2D.col()];</b>
+<b class="fc"><i class="no-highlight">331</i>&nbsp;        int nonZeros = src2.length;</b>
+<i class="no-highlight">332</i>&nbsp;
+<b class="fc"><i class="no-highlight">333</i>&nbsp;        CNumber[] dest = new CNumber[denseRows];</b>
+<b class="fc"><i class="no-highlight">334</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">335</i>&nbsp;        int k;
+<i class="no-highlight">336</i>&nbsp;
+<b class="fc"><i class="no-highlight">337</i>&nbsp;        for(int i=0; i&lt;denseRows; i++) {</b>
+<b class="fc"><i class="no-highlight">338</i>&nbsp;            for(int j=0; j&lt;nonZeros; j++) {</b>
+<b class="fc"><i class="no-highlight">339</i>&nbsp;                k = indices[j];</b>
+<b class="fc"><i class="no-highlight">340</i>&nbsp;                dest[i].addEq(src2[j].mult(src1[i*denseCols + k]));</b>
+<i class="no-highlight">341</i>&nbsp;            }
+<i class="no-highlight">342</i>&nbsp;        }
+<i class="no-highlight">343</i>&nbsp;
+<b class="fc"><i class="no-highlight">344</i>&nbsp;        return dest;</b>
+<i class="no-highlight">345</i>&nbsp;    }
+<i class="no-highlight">346</i>&nbsp;
+<i class="no-highlight">347</i>&nbsp;
+<i class="no-highlight">348</i>&nbsp;    /**
+<i class="no-highlight">349</i>&nbsp;     * Computes the sparse matrix dense vector multiplication using a standard algorithm.
+<i class="no-highlight">350</i>&nbsp;     * @param src1 Entries of the sparse matrix.
+<i class="no-highlight">351</i>&nbsp;     * @param rowIndices Row indices of non-zero entries in sparse matrix.
+<i class="no-highlight">352</i>&nbsp;     * @param colIndices Column indices of non-zero entries in sparse matrix.
+<i class="no-highlight">353</i>&nbsp;     * @param shape1 Shape of the sparse matrix.
+<i class="no-highlight">354</i>&nbsp;     * @param src2 Entries of the dense vector.
+<i class="no-highlight">355</i>&nbsp;     * @param shape2 Shape of the dense vector.
+<i class="no-highlight">356</i>&nbsp;     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+<i class="no-highlight">357</i>&nbsp;     */
+<i class="no-highlight">358</i>&nbsp;    public static CNumber[] standardVector(double[] src1, int[] rowIndices, int[] colIndices,
+<i class="no-highlight">359</i>&nbsp;                                          Shape shape1, CNumber[] src2, Shape shape2) {
+<b class="fc"><i class="no-highlight">360</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">361</i>&nbsp;        CNumber[] dest = new CNumber[rows1];</b>
+<b class="fc"><i class="no-highlight">362</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">363</i>&nbsp;        int row, col;
+<i class="no-highlight">364</i>&nbsp;
+<b class="fc"><i class="no-highlight">365</i>&nbsp;        for(int i=0; i&lt;src1.length; i++) {</b>
+<b class="fc"><i class="no-highlight">366</i>&nbsp;            row = rowIndices[i];</b>
+<b class="fc"><i class="no-highlight">367</i>&nbsp;            col = colIndices[i];</b>
+<i class="no-highlight">368</i>&nbsp;
+<b class="fc"><i class="no-highlight">369</i>&nbsp;            dest[row].addEq(src2[col].mult(src1[i]));</b>
+<i class="no-highlight">370</i>&nbsp;        }
+<i class="no-highlight">371</i>&nbsp;
+<b class="fc"><i class="no-highlight">372</i>&nbsp;        return dest;</b>
+<i class="no-highlight">373</i>&nbsp;    }
+<i class="no-highlight">374</i>&nbsp;
+<i class="no-highlight">375</i>&nbsp;
+<i class="no-highlight">376</i>&nbsp;    /**
+<i class="no-highlight">377</i>&nbsp;     * Computes the dense matrix sparse vector multiplication using a blocked algorithm.
+<i class="no-highlight">378</i>&nbsp;     * @param src1 Entries of the dense matrix.
+<i class="no-highlight">379</i>&nbsp;     * @param shape1 Shape of the dense matrix.
+<i class="no-highlight">380</i>&nbsp;     * @param src2 Non-zero entries of the sparse vector.
+<i class="no-highlight">381</i>&nbsp;     * @param indices Indices of non-zero entries in sparse vector.
+<i class="no-highlight">382</i>&nbsp;     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+<i class="no-highlight">383</i>&nbsp;     */
+<i class="no-highlight">384</i>&nbsp;    public static CNumber[] blockedVector(double[] src1, Shape shape1, CNumber[] src2, int[] indices) {
+<b class="fc"><i class="no-highlight">385</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">386</i>&nbsp;        int cols1 = shape1.dims[Axis2D.col()];</b>
+<b class="fc"><i class="no-highlight">387</i>&nbsp;        int rows2 = src2.length;</b>
+<i class="no-highlight">388</i>&nbsp;
+<b class="fc"><i class="no-highlight">389</i>&nbsp;        int bsize = Configurations.getBlockSize(); // Get the block size to use.</b>
+<i class="no-highlight">390</i>&nbsp;
+<b class="fc"><i class="no-highlight">391</i>&nbsp;        CNumber[] dest = new CNumber[rows1];</b>
+<b class="fc"><i class="no-highlight">392</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">393</i>&nbsp;
+<i class="no-highlight">394</i>&nbsp;        int k;
+<i class="no-highlight">395</i>&nbsp;
+<i class="no-highlight">396</i>&nbsp;        // Blocked matrix-vector multiply
+<b class="fc"><i class="no-highlight">397</i>&nbsp;        for(int ii=0; ii&lt;rows1; ii += bsize) {</b>
+<b class="fc"><i class="no-highlight">398</i>&nbsp;            for(int jj=0; jj&lt;rows2; jj += bsize) {</b>
+<i class="no-highlight">399</i>&nbsp;                // Multiply the current blocks
+<b class="fc"><i class="no-highlight">400</i>&nbsp;                for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</b>
+<b class="fc"><i class="no-highlight">401</i>&nbsp;                    for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;rows2; j++) {</b>
+<b class="fc"><i class="no-highlight">402</i>&nbsp;                        k = indices[j];</b>
+<b class="fc"><i class="no-highlight">403</i>&nbsp;                        dest[i].addEq(src2[j].mult(src1[i*cols1 + k]));</b>
+<i class="no-highlight">404</i>&nbsp;                    }
+<i class="no-highlight">405</i>&nbsp;                }
+<i class="no-highlight">406</i>&nbsp;            }
+<i class="no-highlight">407</i>&nbsp;        }
+<i class="no-highlight">408</i>&nbsp;
+<b class="fc"><i class="no-highlight">409</i>&nbsp;        return dest;</b>
+<i class="no-highlight">410</i>&nbsp;    }
+<i class="no-highlight">411</i>&nbsp;
+<i class="no-highlight">412</i>&nbsp;
+<i class="no-highlight">413</i>&nbsp;    /**
+<i class="no-highlight">414</i>&nbsp;     * Computes the dense matrix sparse vector multiplication using a concurrent standard algorithm.
+<i class="no-highlight">415</i>&nbsp;     * @param src1 Entries of the dense matrix.
+<i class="no-highlight">416</i>&nbsp;     * @param shape1 Shape of the dense matrix.
+<i class="no-highlight">417</i>&nbsp;     * @param src2 Non-zero entries of the sparse vector.
+<i class="no-highlight">418</i>&nbsp;     * @param indices Indices of non-zero entries in sparse vector.
+<i class="no-highlight">419</i>&nbsp;     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+<i class="no-highlight">420</i>&nbsp;     */
+<i class="no-highlight">421</i>&nbsp;    public static CNumber[] concurrentStandardVector(double[] src1, Shape shape1, CNumber[] src2, int[] indices) {
+<b class="fc"><i class="no-highlight">422</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">423</i>&nbsp;        int cols1 = shape1.dims[Axis2D.col()];</b>
+<b class="fc"><i class="no-highlight">424</i>&nbsp;        int rows2 = src2.length;</b>
+<i class="no-highlight">425</i>&nbsp;
+<b class="fc"><i class="no-highlight">426</i>&nbsp;        CNumber[] dest = new CNumber[rows1];</b>
+<b class="fc"><i class="no-highlight">427</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">428</i>&nbsp;
+<b class="fc"><i class="no-highlight">429</i>&nbsp;        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</b>
+<b class="fc"><i class="no-highlight">430</i>&nbsp;            for(int j=0; j&lt;rows2; j++) {</b>
+<b class="fc"><i class="no-highlight">431</i>&nbsp;                int k = indices[j];</b>
+<b class="fc"><i class="no-highlight">432</i>&nbsp;                dest[i].addEq(src2[j].mult(src1[i*cols1 + k]));</b>
+<i class="no-highlight">433</i>&nbsp;            }
+<i class="no-highlight">434</i>&nbsp;        });
+<i class="no-highlight">435</i>&nbsp;
+<b class="fc"><i class="no-highlight">436</i>&nbsp;        return dest;</b>
+<i class="no-highlight">437</i>&nbsp;    }
+<i class="no-highlight">438</i>&nbsp;
+<i class="no-highlight">439</i>&nbsp;
+<i class="no-highlight">440</i>&nbsp;    /**
+<i class="no-highlight">441</i>&nbsp;     * Computes the sparse matrix dense vector multiplication using a concurrent standard algorithm.
+<i class="no-highlight">442</i>&nbsp;     * @param src1 Entries of the sparse matrix.
+<i class="no-highlight">443</i>&nbsp;     * @param rowIndices Row indices of non-zero entries in sparse matrix.
+<i class="no-highlight">444</i>&nbsp;     * @param colIndices Column indices of non-zero entries in sparse matrix.
+<i class="no-highlight">445</i>&nbsp;     * @param shape1 Shape of the sparse matrix.
+<i class="no-highlight">446</i>&nbsp;     * @param src2 Entries of the dense vector.
+<i class="no-highlight">447</i>&nbsp;     * @param shape2 Shape of the dense vector.
+<i class="no-highlight">448</i>&nbsp;     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+<i class="no-highlight">449</i>&nbsp;     */
+<i class="no-highlight">450</i>&nbsp;    public static CNumber[] concurrentStandardVector(double[] src1, int[] rowIndices, int[] colIndices,
+<i class="no-highlight">451</i>&nbsp;                                                    Shape shape1, CNumber[] src2, Shape shape2) {
+<b class="fc"><i class="no-highlight">452</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">453</i>&nbsp;        CNumber[] dest = new CNumber[rows1];</b>
+<b class="fc"><i class="no-highlight">454</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">455</i>&nbsp;
+<i class="no-highlight">456</i>&nbsp;
+<b class="fc"><i class="no-highlight">457</i>&nbsp;        ThreadManager.concurrentLoop(0, src1.length, (i) -&gt; {</b>
+<b class="fc"><i class="no-highlight">458</i>&nbsp;            int row = rowIndices[i];</b>
+<b class="fc"><i class="no-highlight">459</i>&nbsp;            int col = colIndices[i];</b>
+<i class="no-highlight">460</i>&nbsp;
+<b class="fc"><i class="no-highlight">461</i>&nbsp;            dest[row].addEq(src2[col].mult(src1[i]));</b>
+<i class="no-highlight">462</i>&nbsp;        });
+<i class="no-highlight">463</i>&nbsp;
+<b class="fc"><i class="no-highlight">464</i>&nbsp;        return dest;</b>
+<i class="no-highlight">465</i>&nbsp;    }
+<i class="no-highlight">466</i>&nbsp;
+<i class="no-highlight">467</i>&nbsp;
+<i class="no-highlight">468</i>&nbsp;    /**
+<i class="no-highlight">469</i>&nbsp;     * Computes the dense matrix sparse vector multiplication using a blocked algorithm.
+<i class="no-highlight">470</i>&nbsp;     * @param src1 Entries of the dense matrix.
+<i class="no-highlight">471</i>&nbsp;     * @param shape1 Shape of the dense matrix.
+<i class="no-highlight">472</i>&nbsp;     * @param src2 Non-zero entries of the sparse vector.
+<i class="no-highlight">473</i>&nbsp;     * @param indices Indices of non-zero entries in sparse vector.
+<i class="no-highlight">474</i>&nbsp;     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+<i class="no-highlight">475</i>&nbsp;     */
+<i class="no-highlight">476</i>&nbsp;    public static CNumber[] concurrentBlockedVector(double[] src1, Shape shape1, CNumber[] src2, int[] indices) {
+<b class="fc"><i class="no-highlight">477</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">478</i>&nbsp;        int cols1 = shape1.dims[Axis2D.col()];</b>
+<b class="fc"><i class="no-highlight">479</i>&nbsp;        int rows2 = src2.length;</b>
+<i class="no-highlight">480</i>&nbsp;
+<b class="fc"><i class="no-highlight">481</i>&nbsp;        final int bsize = Configurations.getBlockSize(); // Get the block size to use.</b>
+<i class="no-highlight">482</i>&nbsp;
+<b class="fc"><i class="no-highlight">483</i>&nbsp;        CNumber[] dest = new CNumber[rows1];</b>
+<b class="fc"><i class="no-highlight">484</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">485</i>&nbsp;
+<i class="no-highlight">486</i>&nbsp;        // Blocked matrix-vector multiply
+<b class="fc"><i class="no-highlight">487</i>&nbsp;        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -&gt; {</b>
+<b class="fc"><i class="no-highlight">488</i>&nbsp;            for(int jj=0; jj&lt;rows2; jj += bsize) {</b>
+<i class="no-highlight">489</i>&nbsp;                // Multiply the current blocks
+<b class="fc"><i class="no-highlight">490</i>&nbsp;                for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</b>
+<b class="fc"><i class="no-highlight">491</i>&nbsp;                    for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;rows2; j++) {</b>
+<b class="fc"><i class="no-highlight">492</i>&nbsp;                        int k = indices[j];</b>
+<b class="fc"><i class="no-highlight">493</i>&nbsp;                        dest[i].addEq(src2[j].mult(src1[i*cols1 + k]));</b>
+<i class="no-highlight">494</i>&nbsp;                    }
+<i class="no-highlight">495</i>&nbsp;                }
+<i class="no-highlight">496</i>&nbsp;            }
+<i class="no-highlight">497</i>&nbsp;        });
+<i class="no-highlight">498</i>&nbsp;
+<b class="fc"><i class="no-highlight">499</i>&nbsp;        return dest;</b>
+<i class="no-highlight">500</i>&nbsp;    }
+<i class="no-highlight">501</i>&nbsp;
+<i class="no-highlight">502</i>&nbsp;
+<i class="no-highlight">503</i>&nbsp;    /**
+<i class="no-highlight">504</i>&nbsp;     * Computes the dense matrix sparse vector multiplication using a standard algorithm.
+<i class="no-highlight">505</i>&nbsp;     * @param src1 Entries of the dense matrix.
+<i class="no-highlight">506</i>&nbsp;     * @param shape1 Shape of the dense matrix.
+<i class="no-highlight">507</i>&nbsp;     * @param src2 Non-zero entries of the sparse vector.
+<i class="no-highlight">508</i>&nbsp;     * @param indices Indices of non-zero entries in sparse vector.
+<i class="no-highlight">509</i>&nbsp;     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+<i class="no-highlight">510</i>&nbsp;     */
+<i class="no-highlight">511</i>&nbsp;    public static CNumber[] standardVector(CNumber[] src1, Shape shape1, double[] src2, int[] indices) {
+<b class="fc"><i class="no-highlight">512</i>&nbsp;        int denseRows = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">513</i>&nbsp;        int denseCols = shape1.dims[Axis2D.col()];</b>
+<b class="fc"><i class="no-highlight">514</i>&nbsp;        int nonZeros = src2.length;</b>
+<i class="no-highlight">515</i>&nbsp;
+<b class="fc"><i class="no-highlight">516</i>&nbsp;        CNumber[] dest = new CNumber[denseRows];</b>
+<b class="fc"><i class="no-highlight">517</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">518</i>&nbsp;        int k;
+<i class="no-highlight">519</i>&nbsp;
+<b class="fc"><i class="no-highlight">520</i>&nbsp;        for(int i=0; i&lt;denseRows; i++) {</b>
+<b class="fc"><i class="no-highlight">521</i>&nbsp;            for(int j=0; j&lt;nonZeros; j++) {</b>
+<b class="fc"><i class="no-highlight">522</i>&nbsp;                k = indices[j];</b>
+<b class="fc"><i class="no-highlight">523</i>&nbsp;                dest[i].addEq(src1[i*denseCols + k].mult(src2[j]));</b>
+<i class="no-highlight">524</i>&nbsp;            }
+<i class="no-highlight">525</i>&nbsp;        }
+<i class="no-highlight">526</i>&nbsp;
+<b class="fc"><i class="no-highlight">527</i>&nbsp;        return dest;</b>
+<i class="no-highlight">528</i>&nbsp;    }
+<i class="no-highlight">529</i>&nbsp;
+<i class="no-highlight">530</i>&nbsp;
+<i class="no-highlight">531</i>&nbsp;    /**
+<i class="no-highlight">532</i>&nbsp;     * Computes the sparse matrix dense vector multiplication using a standard algorithm.
+<i class="no-highlight">533</i>&nbsp;     * @param src1 Entries of the sparse matrix.
+<i class="no-highlight">534</i>&nbsp;     * @param rowIndices Row indices of non-zero entries in sparse matrix.
+<i class="no-highlight">535</i>&nbsp;     * @param colIndices Column indices of non-zero entries in sparse matrix.
+<i class="no-highlight">536</i>&nbsp;     * @param shape1 Shape of the sparse matrix.
+<i class="no-highlight">537</i>&nbsp;     * @param src2 Entries of the dense vector.
+<i class="no-highlight">538</i>&nbsp;     * @param shape2 Shape of the dense vector.
+<i class="no-highlight">539</i>&nbsp;     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+<i class="no-highlight">540</i>&nbsp;     */
+<i class="no-highlight">541</i>&nbsp;    public static CNumber[] standardVector(CNumber[] src1, int[] rowIndices, int[] colIndices,
+<i class="no-highlight">542</i>&nbsp;                                           Shape shape1, double[] src2, Shape shape2) {
+<b class="fc"><i class="no-highlight">543</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">544</i>&nbsp;        CNumber[] dest = new CNumber[rows1];</b>
+<b class="fc"><i class="no-highlight">545</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">546</i>&nbsp;        int row, col;
+<i class="no-highlight">547</i>&nbsp;
+<b class="fc"><i class="no-highlight">548</i>&nbsp;        for(int i=0; i&lt;src1.length; i++) {</b>
+<b class="fc"><i class="no-highlight">549</i>&nbsp;            row = rowIndices[i];</b>
+<b class="fc"><i class="no-highlight">550</i>&nbsp;            col = colIndices[i];</b>
+<i class="no-highlight">551</i>&nbsp;
+<b class="fc"><i class="no-highlight">552</i>&nbsp;            dest[row].addEq(src1[i].mult(src2[col]));</b>
+<i class="no-highlight">553</i>&nbsp;        }
+<i class="no-highlight">554</i>&nbsp;
+<b class="fc"><i class="no-highlight">555</i>&nbsp;        return dest;</b>
+<i class="no-highlight">556</i>&nbsp;    }
+<i class="no-highlight">557</i>&nbsp;
+<i class="no-highlight">558</i>&nbsp;
+<i class="no-highlight">559</i>&nbsp;    /**
+<i class="no-highlight">560</i>&nbsp;     * Computes the dense matrix sparse vector multiplication using a blocked algorithm.
+<i class="no-highlight">561</i>&nbsp;     * @param src1 Entries of the dense matrix.
+<i class="no-highlight">562</i>&nbsp;     * @param shape1 Shape of the dense matrix.
+<i class="no-highlight">563</i>&nbsp;     * @param src2 Non-zero entries of the sparse vector.
+<i class="no-highlight">564</i>&nbsp;     * @param indices Indices of non-zero entries in sparse vector.
+<i class="no-highlight">565</i>&nbsp;     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+<i class="no-highlight">566</i>&nbsp;     */
+<i class="no-highlight">567</i>&nbsp;    public static CNumber[] blockedVector(CNumber[] src1, Shape shape1, double[] src2, int[] indices) {
+<b class="fc"><i class="no-highlight">568</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">569</i>&nbsp;        int cols1 = shape1.dims[Axis2D.col()];</b>
+<b class="fc"><i class="no-highlight">570</i>&nbsp;        int rows2 = src2.length;</b>
+<i class="no-highlight">571</i>&nbsp;
+<b class="fc"><i class="no-highlight">572</i>&nbsp;        int bsize = Configurations.getBlockSize(); // Get the block size to use.</b>
+<i class="no-highlight">573</i>&nbsp;
+<b class="fc"><i class="no-highlight">574</i>&nbsp;        CNumber[] dest = new CNumber[rows1];</b>
+<b class="fc"><i class="no-highlight">575</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">576</i>&nbsp;        int k;
+<i class="no-highlight">577</i>&nbsp;
+<i class="no-highlight">578</i>&nbsp;        // Blocked matrix-vector multiply
+<b class="fc"><i class="no-highlight">579</i>&nbsp;        for(int ii=0; ii&lt;rows1; ii += bsize) {</b>
+<b class="fc"><i class="no-highlight">580</i>&nbsp;            for(int jj=0; jj&lt;rows2; jj += bsize) {</b>
+<i class="no-highlight">581</i>&nbsp;                // Multiply the current blocks
+<b class="fc"><i class="no-highlight">582</i>&nbsp;                for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</b>
+<b class="fc"><i class="no-highlight">583</i>&nbsp;                    for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;rows2; j++) {</b>
+<b class="fc"><i class="no-highlight">584</i>&nbsp;                        k = indices[j];</b>
+<b class="fc"><i class="no-highlight">585</i>&nbsp;                        dest[i].addEq(src1[i*cols1 + k].mult(src2[j]));</b>
+<i class="no-highlight">586</i>&nbsp;                    }
+<i class="no-highlight">587</i>&nbsp;                }
+<i class="no-highlight">588</i>&nbsp;            }
+<i class="no-highlight">589</i>&nbsp;        }
+<i class="no-highlight">590</i>&nbsp;
+<b class="fc"><i class="no-highlight">591</i>&nbsp;        return dest;</b>
+<i class="no-highlight">592</i>&nbsp;    }
+<i class="no-highlight">593</i>&nbsp;
+<i class="no-highlight">594</i>&nbsp;
+<i class="no-highlight">595</i>&nbsp;    /**
+<i class="no-highlight">596</i>&nbsp;     * Computes the dense matrix sparse vector multiplication using a concurrent standard algorithm.
+<i class="no-highlight">597</i>&nbsp;     * @param src1 Entries of the dense matrix.
+<i class="no-highlight">598</i>&nbsp;     * @param shape1 Shape of the dense matrix.
+<i class="no-highlight">599</i>&nbsp;     * @param src2 Non-zero entries of the sparse vector.
+<i class="no-highlight">600</i>&nbsp;     * @param indices Indices of non-zero entries in sparse vector.
+<i class="no-highlight">601</i>&nbsp;     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+<i class="no-highlight">602</i>&nbsp;     */
+<i class="no-highlight">603</i>&nbsp;    public static CNumber[] concurrentStandardVector(CNumber[] src1, Shape shape1, double[] src2, int[] indices) {
+<b class="fc"><i class="no-highlight">604</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">605</i>&nbsp;        int cols1 = shape1.dims[Axis2D.col()];</b>
+<b class="fc"><i class="no-highlight">606</i>&nbsp;        int rows2 = src2.length;</b>
+<i class="no-highlight">607</i>&nbsp;
+<b class="fc"><i class="no-highlight">608</i>&nbsp;        CNumber[] dest = new CNumber[rows1];</b>
+<b class="fc"><i class="no-highlight">609</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">610</i>&nbsp;
+<b class="fc"><i class="no-highlight">611</i>&nbsp;        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</b>
+<b class="fc"><i class="no-highlight">612</i>&nbsp;            for(int j=0; j&lt;rows2; j++) {</b>
+<b class="fc"><i class="no-highlight">613</i>&nbsp;                int k = indices[j];</b>
+<b class="fc"><i class="no-highlight">614</i>&nbsp;                dest[i].addEq(src1[i*cols1 + k].mult(src2[j]));</b>
+<i class="no-highlight">615</i>&nbsp;            }
+<i class="no-highlight">616</i>&nbsp;        });
+<i class="no-highlight">617</i>&nbsp;
+<b class="fc"><i class="no-highlight">618</i>&nbsp;        return dest;</b>
+<i class="no-highlight">619</i>&nbsp;    }
+<i class="no-highlight">620</i>&nbsp;
+<i class="no-highlight">621</i>&nbsp;
+<i class="no-highlight">622</i>&nbsp;    /**
+<i class="no-highlight">623</i>&nbsp;     * Computes the sparse matrix dense vector multiplication using a concurrent standard algorithm.
+<i class="no-highlight">624</i>&nbsp;     * @param src1 Entries of the sparse matrix.
+<i class="no-highlight">625</i>&nbsp;     * @param rowIndices Row indices of non-zero entries in sparse matrix.
+<i class="no-highlight">626</i>&nbsp;     * @param colIndices Column indices of non-zero entries in sparse matrix.
+<i class="no-highlight">627</i>&nbsp;     * @param shape1 Shape of the sparse matrix.
+<i class="no-highlight">628</i>&nbsp;     * @param src2 Entries of the dense vector.
+<i class="no-highlight">629</i>&nbsp;     * @param shape2 Shape of the dense vector.
+<i class="no-highlight">630</i>&nbsp;     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+<i class="no-highlight">631</i>&nbsp;     */
+<i class="no-highlight">632</i>&nbsp;    public static CNumber[] concurrentStandardVector(CNumber[] src1, int[] rowIndices, int[] colIndices,
+<i class="no-highlight">633</i>&nbsp;                                                     Shape shape1, double[] src2, Shape shape2) {
+<b class="fc"><i class="no-highlight">634</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">635</i>&nbsp;        CNumber[] dest = new CNumber[rows1];</b>
+<b class="fc"><i class="no-highlight">636</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">637</i>&nbsp;
+<b class="fc"><i class="no-highlight">638</i>&nbsp;        ThreadManager.concurrentLoop(0, src1.length, (i) -&gt; {</b>
+<b class="fc"><i class="no-highlight">639</i>&nbsp;            int row = rowIndices[i];</b>
+<b class="fc"><i class="no-highlight">640</i>&nbsp;            int col = colIndices[i];</b>
+<i class="no-highlight">641</i>&nbsp;
+<b class="fc"><i class="no-highlight">642</i>&nbsp;            dest[row].addEq(src1[i].mult(src2[col]));</b>
+<i class="no-highlight">643</i>&nbsp;        });
+<i class="no-highlight">644</i>&nbsp;
+<b class="fc"><i class="no-highlight">645</i>&nbsp;        return dest;</b>
+<i class="no-highlight">646</i>&nbsp;    }
+<i class="no-highlight">647</i>&nbsp;
+<i class="no-highlight">648</i>&nbsp;
+<i class="no-highlight">649</i>&nbsp;    /**
+<i class="no-highlight">650</i>&nbsp;     * Computes the dense matrix sparse vector multiplication using a blocked algorithm.
+<i class="no-highlight">651</i>&nbsp;     * @param src1 Entries of the dense matrix.
+<i class="no-highlight">652</i>&nbsp;     * @param shape1 Shape of the dense matrix.
+<i class="no-highlight">653</i>&nbsp;     * @param src2 Non-zero entries of the sparse vector.
+<i class="no-highlight">654</i>&nbsp;     * @param indices Indices of non-zero entries in sparse vector.
+<i class="no-highlight">655</i>&nbsp;     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+<i class="no-highlight">656</i>&nbsp;     */
+<i class="no-highlight">657</i>&nbsp;    public static CNumber[] concurrentBlockedVector(CNumber[] src1, Shape shape1, double[] src2, int[] indices) {
+<b class="fc"><i class="no-highlight">658</i>&nbsp;        int rows1 = shape1.dims[Axis2D.row()];</b>
+<b class="fc"><i class="no-highlight">659</i>&nbsp;        int cols1 = shape1.dims[Axis2D.col()];</b>
+<b class="fc"><i class="no-highlight">660</i>&nbsp;        int rows2 = src2.length;</b>
+<i class="no-highlight">661</i>&nbsp;
+<b class="fc"><i class="no-highlight">662</i>&nbsp;        final int bsize = Configurations.getBlockSize(); // Get the block size to use.</b>
+<i class="no-highlight">663</i>&nbsp;
+<b class="fc"><i class="no-highlight">664</i>&nbsp;        CNumber[] dest = new CNumber[rows1];</b>
+<b class="fc"><i class="no-highlight">665</i>&nbsp;        ArrayUtils.fill(dest, CNumber.ZERO);</b>
+<i class="no-highlight">666</i>&nbsp;
+<i class="no-highlight">667</i>&nbsp;        // Blocked matrix-vector multiply
+<b class="fc"><i class="no-highlight">668</i>&nbsp;        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -&gt; {</b>
+<b class="fc"><i class="no-highlight">669</i>&nbsp;            for(int jj=0; jj&lt;rows2; jj += bsize) {</b>
+<i class="no-highlight">670</i>&nbsp;                // Multiply the current blocks
+<b class="fc"><i class="no-highlight">671</i>&nbsp;                for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</b>
+<b class="fc"><i class="no-highlight">672</i>&nbsp;                    for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;rows2; j++) {</b>
+<b class="fc"><i class="no-highlight">673</i>&nbsp;                        int k = indices[j];</b>
+<b class="fc"><i class="no-highlight">674</i>&nbsp;                        dest[i].addEq(src1[i*cols1 + k].mult(src2[j]));</b>
+<i class="no-highlight">675</i>&nbsp;                    }
+<i class="no-highlight">676</i>&nbsp;                }
+<i class="no-highlight">677</i>&nbsp;            }
+<i class="no-highlight">678</i>&nbsp;        });
+<i class="no-highlight">679</i>&nbsp;
+<b class="fc"><i class="no-highlight">680</i>&nbsp;        return dest;</b>
+<i class="no-highlight">681</i>&nbsp;    }
+<i class="no-highlight">682</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-07 18:21</div>
+</div>
+</body>
+</html>

@@ -35,11 +35,9 @@ import com.flag4j.util.ErrorMessages;
  * This class contains several methods for computing the subspace of a matrix.
  */
 public class SubSpace {
-    // TODO: Implementation of rowSpace, colSpace, nullSpace and leftNullSpace for each matrix type.
-
-<span class="nc" id="L40">    private SubSpace() {</span>
+<span class="nc" id="L38">    private SubSpace() {</span>
         // Hide default constructor for utility class.
-<span class="nc" id="L42">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+<span class="nc" id="L40">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
     }
 
 
@@ -49,9 +47,9 @@ public class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the column space of the {@code src} matrix.
      */
     public static Matrix getColumnSpace(Matrix src) {
-<span class="nc" id="L52">        RealSVD svd = new RealSVD().decompose(src);</span>
-<span class="nc" id="L53">        int rank = rankFromSVD(svd.getS());</span>
-<span class="nc" id="L54">        return svd.getU().getSlice(0, src.numRows, 0, rank);</span>
+<span class="nc" id="L50">        RealSVD svd = new RealSVD().decompose(src);</span>
+<span class="nc" id="L51">        int rank = rankFromSVD(svd.getS());</span>
+<span class="nc" id="L52">        return svd.getU().getSlice(0, src.numRows, 0, rank);</span>
     }
 
 
@@ -61,9 +59,9 @@ public class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the row space of the {@code src} matrix.
      */
     public static Matrix getRowSpace(Matrix src) {
-<span class="nc" id="L64">        RealSVD svd = new RealSVD().decompose(src);</span>
-<span class="nc" id="L65">        int rank = rankFromSVD(svd.getS());</span>
-<span class="nc" id="L66">        return svd.getV().getSlice(0, src.numRows, 0, rank);</span>
+<span class="nc" id="L62">        RealSVD svd = new RealSVD().decompose(src);</span>
+<span class="nc" id="L63">        int rank = rankFromSVD(svd.getS());</span>
+<span class="nc" id="L64">        return svd.getV().getSlice(0, src.numRows, 0, rank);</span>
     }
 
 
@@ -73,9 +71,9 @@ public class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the null space of the {@code src} matrix.
      */
     public static Matrix getNullSpace(Matrix src) {
-<span class="nc" id="L76">        RealSVD svd = new RealSVD().decompose(src);</span>
-<span class="nc" id="L77">        int rank = rankFromSVD(svd.getS());</span>
-<span class="nc" id="L78">        return svd.getV().getSlice(0, src.numCols, rank+1, src.numCols);</span>
+<span class="nc" id="L74">        RealSVD svd = new RealSVD().decompose(src);</span>
+<span class="nc" id="L75">        int rank = rankFromSVD(svd.getS());</span>
+<span class="nc" id="L76">        return svd.getV().getSlice(0, src.numCols, rank+1, src.numCols);</span>
     }
 
 
@@ -85,12 +83,11 @@ public class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the left null space of the {@code src} matrix.
      */
     public static Matrix getLeftNullSpace(Matrix src) {
-<span class="nc" id="L88">        RealSVD svd = new RealSVD().decompose(src);</span>
-<span class="nc" id="L89">        int rank = rankFromSVD(svd.getS());</span>
-<span class="nc" id="L90">        return svd.getU().getSlice(0, src.numRows, rank+1, src.numRows);</span>
+<span class="nc" id="L86">        RealSVD svd = new RealSVD().decompose(src);</span>
+<span class="nc" id="L87">        int rank = rankFromSVD(svd.getS());</span>
+<span class="nc" id="L88">        return svd.getU().getSlice(0, src.numRows, rank+1, src.numRows);</span>
     }
 
-    // -------------------------------------------------------------------------------
 
     /**
      * Computes an orthonormal basis of the column space of a specified matrix.
@@ -98,9 +95,9 @@ public class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the column space of the {@code src} matrix.
      */
     public static CMatrix getColumnSpace(CMatrix src) {
-<span class="nc" id="L101">        ComplexSVD svd = new ComplexSVD().decompose(src);</span>
-<span class="nc" id="L102">        int rank = rankFromSVD(svd.getS());</span>
-<span class="nc" id="L103">        return svd.getU().getSlice(0, src.numRows, 0, rank);</span>
+<span class="nc" id="L98">        ComplexSVD svd = new ComplexSVD().decompose(src);</span>
+<span class="nc" id="L99">        int rank = rankFromSVD(svd.getS());</span>
+<span class="nc" id="L100">        return svd.getU().getSlice(0, src.numRows, 0, rank);</span>
     }
 
 
@@ -110,9 +107,9 @@ public class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the row space of the {@code src} matrix.
      */
     public static CMatrix getRowSpace(CMatrix src) {
-<span class="nc" id="L113">        ComplexSVD svd = new ComplexSVD().decompose(src);</span>
-<span class="nc" id="L114">        int rank = rankFromSVD(svd.getS());</span>
-<span class="nc" id="L115">        return svd.getV().getSlice(0, src.numRows, 0, rank);</span>
+<span class="nc" id="L110">        ComplexSVD svd = new ComplexSVD().decompose(src);</span>
+<span class="nc" id="L111">        int rank = rankFromSVD(svd.getS());</span>
+<span class="nc" id="L112">        return svd.getV().getSlice(0, src.numRows, 0, rank);</span>
     }
 
 
@@ -122,9 +119,9 @@ public class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the null space of the {@code src} matrix.
      */
     public static CMatrix getNullSpace(CMatrix src) {
-<span class="nc" id="L125">        ComplexSVD svd = new ComplexSVD().decompose(src);</span>
-<span class="nc" id="L126">        int rank = rankFromSVD(svd.getS());</span>
-<span class="nc" id="L127">        return svd.getV().getSlice(0, src.numCols, rank+1, src.numCols);</span>
+<span class="nc" id="L122">        ComplexSVD svd = new ComplexSVD().decompose(src);</span>
+<span class="nc" id="L123">        int rank = rankFromSVD(svd.getS());</span>
+<span class="nc" id="L124">        return svd.getV().getSlice(0, src.numCols, rank+1, src.numCols);</span>
     }
 
 
@@ -134,9 +131,9 @@ public class SubSpace {
      * @return A matrix containing as its columns, an orthonormal basis for the left null space of the {@code src} matrix.
      */
     public static CMatrix getLeftNullSpace(CMatrix src) {
-<span class="nc" id="L137">        ComplexSVD svd = new ComplexSVD().decompose(src);</span>
-<span class="nc" id="L138">        int rank = rankFromSVD(svd.getS());</span>
-<span class="nc" id="L139">        return svd.getU().getSlice(0, src.numRows, rank+1, src.numRows);</span>
+<span class="nc" id="L134">        ComplexSVD svd = new ComplexSVD().decompose(src);</span>
+<span class="nc" id="L135">        int rank = rankFromSVD(svd.getS());</span>
+<span class="nc" id="L136">        return svd.getU().getSlice(0, src.numRows, rank+1, src.numRows);</span>
     }
 
 
@@ -146,18 +143,18 @@ public class SubSpace {
      * @return the rank of the matrix {@code M} from the SVD {@code M=USV&lt;sup&gt;T&lt;/sup&gt;}.
      */
     private static int rankFromSVD(Matrix S) {
-<span class="nc" id="L149">        int stopIdx = Math.min(S.numRows, S.numCols);</span>
+<span class="nc" id="L146">        int stopIdx = Math.min(S.numRows, S.numCols);</span>
 
-<span class="nc" id="L151">        double tol = 1.0E-8; // Tolerance for determining if a singular value should be considered zero.</span>
-<span class="nc" id="L152">        int rank = 0;</span>
+<span class="nc" id="L148">        double tol = 1.0E-8; // Tolerance for determining if a singular value should be considered zero.</span>
+<span class="nc" id="L149">        int rank = 0;</span>
 
-<span class="nc bnc" id="L154" title="All 2 branches missed.">        for(int i=0; i&lt;stopIdx; i++) {</span>
-<span class="nc bnc" id="L155" title="All 2 branches missed.">            if(S.get(i, i)&gt;tol) {</span>
-<span class="nc" id="L156">                rank++;</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        for(int i=0; i&lt;stopIdx; i++) {</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">            if(S.get(i, i)&gt;tol) {</span>
+<span class="nc" id="L153">                rank++;</span>
             }
         }
 
-<span class="nc" id="L160">        return rank;</span>
+<span class="nc" id="L157">        return rank;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
