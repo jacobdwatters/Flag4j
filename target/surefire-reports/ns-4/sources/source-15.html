@@ -1,0 +1,270 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > TensorOperationsMixin</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j.core</a>
+</div>
+
+<h1>Coverage Summary for Class: TensorOperationsMixin (com.flag4j.core)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">TensorOperationsMixin</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;/*
+<i class="no-highlight">2</i>&nbsp; * MIT License
+<i class="no-highlight">3</i>&nbsp; *
+<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2022-2023 Jacob Watters
+<i class="no-highlight">5</i>&nbsp; *
+<i class="no-highlight">6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i class="no-highlight">7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i class="no-highlight">8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i class="no-highlight">9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i class="no-highlight">10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i class="no-highlight">11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i class="no-highlight">12</i>&nbsp; *
+<i class="no-highlight">13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i class="no-highlight">14</i>&nbsp; * copies or substantial portions of the Software.
+<i class="no-highlight">15</i>&nbsp; *
+<i class="no-highlight">16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i class="no-highlight">17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i class="no-highlight">18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i class="no-highlight">19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i class="no-highlight">20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i class="no-highlight">21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i class="no-highlight">22</i>&nbsp; * SOFTWARE.
+<i class="no-highlight">23</i>&nbsp; */
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;package com.flag4j.core;
+<i class="no-highlight">26</i>&nbsp;import com.flag4j.complex_numbers.CNumber;
+<i class="no-highlight">27</i>&nbsp;
+<i class="no-highlight">28</i>&nbsp;/**
+<i class="no-highlight">29</i>&nbsp; * This interface specifies operations which all tensors (i.e. matrices and vectors) should implement.
+<i class="no-highlight">30</i>&nbsp; *
+<i class="no-highlight">31</i>&nbsp; * @param &lt;T&gt; Tensor type.
+<i class="no-highlight">32</i>&nbsp; * @param &lt;U&gt; Dense tensor type.
+<i class="no-highlight">33</i>&nbsp; * @param &lt;W&gt; Complex tensor type.
+<i class="no-highlight">34</i>&nbsp; * @param &lt;Z&gt; Dense complex tensor type.
+<i class="no-highlight">35</i>&nbsp; * @param &lt;Y&gt; Real tensor type.
+<i class="no-highlight">36</i>&nbsp; * @param &lt;X&gt; Tensor entry type.
+<i class="no-highlight">37</i>&nbsp; */
+<i class="no-highlight">38</i>&nbsp;interface TensorOperationsMixin&lt;T, U, W, Z, Y, X extends Number&gt; {
+<i class="no-highlight">39</i>&nbsp;
+<i class="no-highlight">40</i>&nbsp;    /**
+<i class="no-highlight">41</i>&nbsp;     * Computes the element-wise addition between two tensors of the same rank.
+<i class="no-highlight">42</i>&nbsp;     * @param B Second tensor in the addition.
+<i class="no-highlight">43</i>&nbsp;     * @return The result of adding the tensor B to this tensor element-wise.
+<i class="no-highlight">44</i>&nbsp;     * @throws IllegalArgumentException If this tensor and B have different shapes.
+<i class="no-highlight">45</i>&nbsp;     */
+<i class="no-highlight">46</i>&nbsp;    T add(T B);
+<i class="no-highlight">47</i>&nbsp;
+<i class="no-highlight">48</i>&nbsp;
+<i class="no-highlight">49</i>&nbsp;    /**
+<i class="no-highlight">50</i>&nbsp;     * Adds specified value to all entries of this tensor.
+<i class="no-highlight">51</i>&nbsp;     * @param a Value to add to all entries of this tensor.
+<i class="no-highlight">52</i>&nbsp;     * @return The result of adding the specified value to each entry of this tensor.
+<i class="no-highlight">53</i>&nbsp;     */
+<i class="no-highlight">54</i>&nbsp;    U add(double a);
+<i class="no-highlight">55</i>&nbsp;
+<i class="no-highlight">56</i>&nbsp;
+<i class="no-highlight">57</i>&nbsp;    /**
+<i class="no-highlight">58</i>&nbsp;     * Adds specified value to all entries of this tensor.
+<i class="no-highlight">59</i>&nbsp;     * @param a Value to add to all entries of this tensor.
+<i class="no-highlight">60</i>&nbsp;     * @return The result of adding the specified value to each entry of this tensor.
+<i class="no-highlight">61</i>&nbsp;     */
+<i class="no-highlight">62</i>&nbsp;    Z add(CNumber a);
+<i class="no-highlight">63</i>&nbsp;
+<i class="no-highlight">64</i>&nbsp;
+<i class="no-highlight">65</i>&nbsp;    /**
+<i class="no-highlight">66</i>&nbsp;     * Computes the element-wise subtraction between two tensors of the same rank.
+<i class="no-highlight">67</i>&nbsp;     * @param B Second tensor in element-wise subtraction.
+<i class="no-highlight">68</i>&nbsp;     * @return The result of subtracting the tensor B from this tensor element-wise.
+<i class="no-highlight">69</i>&nbsp;     * @throws IllegalArgumentException If this tensor and B have different shapes.
+<i class="no-highlight">70</i>&nbsp;     */
+<i class="no-highlight">71</i>&nbsp;    T sub(T B);
+<i class="no-highlight">72</i>&nbsp;
+<i class="no-highlight">73</i>&nbsp;
+<i class="no-highlight">74</i>&nbsp;    /**
+<i class="no-highlight">75</i>&nbsp;     * Adds specified value to all entries of this tensor.
+<i class="no-highlight">76</i>&nbsp;     * @param a Value to add to all entries of this tensor.
+<i class="no-highlight">77</i>&nbsp;     * @return The result of adding the specified value to each entry of this tensor.
+<i class="no-highlight">78</i>&nbsp;     */
+<i class="no-highlight">79</i>&nbsp;    U sub(double a);
+<i class="no-highlight">80</i>&nbsp;
+<i class="no-highlight">81</i>&nbsp;
+<i class="no-highlight">82</i>&nbsp;    /**
+<i class="no-highlight">83</i>&nbsp;     * Subtracts a specified value from all entries of this tensor.
+<i class="no-highlight">84</i>&nbsp;     * @param a Value to subtract from all entries of this tensor.
+<i class="no-highlight">85</i>&nbsp;     * @return The result of subtracting the specified value from each entry of this tensor.
+<i class="no-highlight">86</i>&nbsp;     */
+<i class="no-highlight">87</i>&nbsp;    Z sub(CNumber a);
+<i class="no-highlight">88</i>&nbsp;
+<i class="no-highlight">89</i>&nbsp;
+<i class="no-highlight">90</i>&nbsp;    /**
+<i class="no-highlight">91</i>&nbsp;     * Computes scalar multiplication of a tensor.
+<i class="no-highlight">92</i>&nbsp;     * @param factor Scalar value to multiply with tensor.
+<i class="no-highlight">93</i>&nbsp;     * @return The result of multiplying this tensor by the specified scalar.
+<i class="no-highlight">94</i>&nbsp;     */
+<i class="no-highlight">95</i>&nbsp;    T mult(double factor);
+<i class="no-highlight">96</i>&nbsp;
+<i class="no-highlight">97</i>&nbsp;
+<i class="no-highlight">98</i>&nbsp;    /**
+<i class="no-highlight">99</i>&nbsp;     * Computes scalar multiplication of a tensor.
+<i class="no-highlight">100</i>&nbsp;     * @param factor Scalar value to multiply with tensor.
+<i class="no-highlight">101</i>&nbsp;     * @return The result of multiplying this tensor by the specified scalar.
+<i class="no-highlight">102</i>&nbsp;     */
+<i class="no-highlight">103</i>&nbsp;    W mult(CNumber factor);
+<i class="no-highlight">104</i>&nbsp;
+<i class="no-highlight">105</i>&nbsp;
+<i class="no-highlight">106</i>&nbsp;    /**
+<i class="no-highlight">107</i>&nbsp;     * Computes the scalar division of a tensor.
+<i class="no-highlight">108</i>&nbsp;     * @param divisor The scalar value to divide tensor by.
+<i class="no-highlight">109</i>&nbsp;     * @return The result of dividing this tensor by the specified scalar.
+<i class="no-highlight">110</i>&nbsp;     * @throws ArithmeticException If divisor is zero.
+<i class="no-highlight">111</i>&nbsp;     */
+<i class="no-highlight">112</i>&nbsp;    T div(double divisor);
+<i class="no-highlight">113</i>&nbsp;
+<i class="no-highlight">114</i>&nbsp;
+<i class="no-highlight">115</i>&nbsp;    /**
+<i class="no-highlight">116</i>&nbsp;     * Computes the scalar division of a tensor.
+<i class="no-highlight">117</i>&nbsp;     * @param divisor The scalar value to divide tensor by.
+<i class="no-highlight">118</i>&nbsp;     * @return The result of dividing this tensor by the specified scalar.
+<i class="no-highlight">119</i>&nbsp;     * @throws ArithmeticException If divisor is zero.
+<i class="no-highlight">120</i>&nbsp;     */
+<i class="no-highlight">121</i>&nbsp;    W div(CNumber divisor);
+<i class="no-highlight">122</i>&nbsp;
+<i class="no-highlight">123</i>&nbsp;
+<i class="no-highlight">124</i>&nbsp;    /**
+<i class="no-highlight">125</i>&nbsp;     * Sums together all entries in the tensor.
+<i class="no-highlight">126</i>&nbsp;     * @return The sum of all entries in this tensor.
+<i class="no-highlight">127</i>&nbsp;     */
+<i class="no-highlight">128</i>&nbsp;    X sum();
+<i class="no-highlight">129</i>&nbsp;
+<i class="no-highlight">130</i>&nbsp;
+<i class="no-highlight">131</i>&nbsp;    /**
+<i class="no-highlight">132</i>&nbsp;     * Computes the element-wise square root of a tensor.
+<i class="no-highlight">133</i>&nbsp;     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
+<i class="no-highlight">134</i>&nbsp;     * the principle square root i.e. the square root with positive real part.
+<i class="no-highlight">135</i>&nbsp;     */
+<i class="no-highlight">136</i>&nbsp;    T sqrt();
+<i class="no-highlight">137</i>&nbsp;
+<i class="no-highlight">138</i>&nbsp;
+<i class="no-highlight">139</i>&nbsp;    /**
+<i class="no-highlight">140</i>&nbsp;     * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
+<i class="no-highlight">141</i>&nbsp;     * be computed.
+<i class="no-highlight">142</i>&nbsp;     * @return The result of applying an element-wise absolute value/magnitude to this tensor.
+<i class="no-highlight">143</i>&nbsp;     */
+<i class="no-highlight">144</i>&nbsp;    Y abs();
+<i class="no-highlight">145</i>&nbsp;
+<i class="no-highlight">146</i>&nbsp;
+<i class="no-highlight">147</i>&nbsp;    /**
+<i class="no-highlight">148</i>&nbsp;     * Computes the transpose of a tensor. Same as {@link #T()}.
+<i class="no-highlight">149</i>&nbsp;     * @return The transpose of this tensor.
+<i class="no-highlight">150</i>&nbsp;     */
+<i class="no-highlight">151</i>&nbsp;    T transpose();
+<i class="no-highlight">152</i>&nbsp;
+<i class="no-highlight">153</i>&nbsp;
+<i class="no-highlight">154</i>&nbsp;    /**
+<i class="no-highlight">155</i>&nbsp;     * Computes the transpose of a tensor. Same as {@link #transpose()}.
+<i class="no-highlight">156</i>&nbsp;     * @return The transpose of this tensor.
+<i class="no-highlight">157</i>&nbsp;     */
+<i class="no-highlight">158</i>&nbsp;    T T();
+<i class="no-highlight">159</i>&nbsp;
+<i class="no-highlight">160</i>&nbsp;
+<i class="no-highlight">161</i>&nbsp;    /**
+<i class="no-highlight">162</i>&nbsp;     * Computes the reciprocals, element-wise, of a tensor.
+<i class="no-highlight">163</i>&nbsp;     * @return A tensor containing the reciprocal elements of this tensor.
+<i class="no-highlight">164</i>&nbsp;     * @throws ArithmeticException If this tensor contains any zeros.
+<i class="no-highlight">165</i>&nbsp;     */
+<i class="no-highlight">166</i>&nbsp;    T recip();
+<i class="no-highlight">167</i>&nbsp;
+<i class="no-highlight">168</i>&nbsp;
+<i class="no-highlight">169</i>&nbsp;    /**
+<i class="no-highlight">170</i>&nbsp;     * Gets the element in this tensor at the specified indices.
+<i class="no-highlight">171</i>&nbsp;     * @param indices Indices of element.
+<i class="no-highlight">172</i>&nbsp;     * @return The element at the specified indices.
+<i class="no-highlight">173</i>&nbsp;     * @throws IllegalArgumentException If the number of indices does not match the rank of this tensor.
+<i class="no-highlight">174</i>&nbsp;     */
+<i class="no-highlight">175</i>&nbsp;    X get(int... indices);
+<i class="no-highlight">176</i>&nbsp;
+<i class="no-highlight">177</i>&nbsp;
+<i class="no-highlight">178</i>&nbsp;    /**
+<i class="no-highlight">179</i>&nbsp;     * Creates a copy of this tensor.
+<i class="no-highlight">180</i>&nbsp;     * @return A copy of this tensor.
+<i class="no-highlight">181</i>&nbsp;     */
+<i class="no-highlight">182</i>&nbsp;    T copy();
+<i class="no-highlight">183</i>&nbsp;
+<i class="no-highlight">184</i>&nbsp;
+<i class="no-highlight">185</i>&nbsp;    /**
+<i class="no-highlight">186</i>&nbsp;     * Computes the element-wise multiplication between two tensors.
+<i class="no-highlight">187</i>&nbsp;     * @param B Tensor to element-wise multiply to this tensor.
+<i class="no-highlight">188</i>&nbsp;     * @return The result of the element-wise tensor multiplication.
+<i class="no-highlight">189</i>&nbsp;     * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
+<i class="no-highlight">190</i>&nbsp;     */
+<i class="no-highlight">191</i>&nbsp;    T elemMult(T B);
+<i class="no-highlight">192</i>&nbsp;
+<i class="no-highlight">193</i>&nbsp;
+<i class="no-highlight">194</i>&nbsp;    /**
+<i class="no-highlight">195</i>&nbsp;     * Computes the element-wise division between two tensors.
+<i class="no-highlight">196</i>&nbsp;     * @param B Tensor to element-wise divide with this tensor.
+<i class="no-highlight">197</i>&nbsp;     * @return The result of the element-wise tensor multiplication.
+<i class="no-highlight">198</i>&nbsp;     * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
+<i class="no-highlight">199</i>&nbsp;     */
+<i class="no-highlight">200</i>&nbsp;    T elemDiv(U B);
+<i class="no-highlight">201</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-07 18:56</div>
+</div>
+</body>
+</html>
