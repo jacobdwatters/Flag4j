@@ -35,8 +35,6 @@ import com.flag4j.util.ErrorMessages;
  * This class contains several methods for computing the subspace of a matrix.
  */
 public class SubSpace {
-    // TODO: Implementation of rowSpace, colSpace, nullSpace and leftNullSpace for each matrix type.
-
     private SubSpace() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
@@ -90,7 +88,6 @@ public class SubSpace {
         return svd.getU().getSlice(0, src.numRows, rank+1, src.numRows);
     }
 
-    // -------------------------------------------------------------------------------
 
     /**
      * Computes an orthonormal basis of the column space of a specified matrix.
