@@ -1,0 +1,198 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > HessenburgDecomposition</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j.linalg.decompositions</a>
+</div>
+
+<h1>Coverage Summary for Class: HessenburgDecomposition (com.flag4j.linalg.decompositions)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">HessenburgDecomposition</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;/*
+<i class="no-highlight">2</i>&nbsp; * MIT License
+<i class="no-highlight">3</i>&nbsp; *
+<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2023 Jacob Watters
+<i class="no-highlight">5</i>&nbsp; *
+<i class="no-highlight">6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i class="no-highlight">7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i class="no-highlight">8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i class="no-highlight">9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i class="no-highlight">10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i class="no-highlight">11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i class="no-highlight">12</i>&nbsp; *
+<i class="no-highlight">13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i class="no-highlight">14</i>&nbsp; * copies or substantial portions of the Software.
+<i class="no-highlight">15</i>&nbsp; *
+<i class="no-highlight">16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i class="no-highlight">17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i class="no-highlight">18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i class="no-highlight">19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i class="no-highlight">20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i class="no-highlight">21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i class="no-highlight">22</i>&nbsp; * SOFTWARE.
+<i class="no-highlight">23</i>&nbsp; */
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;package com.flag4j.linalg.decompositions;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;
+<i class="no-highlight">28</i>&nbsp;import com.flag4j.core.MatrixMixin;
+<i class="no-highlight">29</i>&nbsp;
+<i class="no-highlight">30</i>&nbsp;/**
+<i class="no-highlight">31</i>&nbsp; * &lt;p&gt;This abstract class specifies methods for computing the Hessenburg decomposition of a square matrix. That is, for a square matrix
+<i class="no-highlight">32</i>&nbsp; * {@code A}, computes the decomposition {@code A=QHQ&lt;sup&gt;H&lt;/sup&gt;} where {@code Q} is a unitary matrix and
+<i class="no-highlight">33</i>&nbsp; * {@code H} is a matrix in upper Hessenburg form which is similar to {@code A} (i.e. has the same eigenvalues/vectors).&lt;/p&gt;
+<i class="no-highlight">34</i>&nbsp; *
+<i class="no-highlight">35</i>&nbsp; * &lt;p&gt;A matrix {@code H} is in upper Hessenburg form if it is nearly upper triangular. Specifically, if {@code H} has
+<i class="no-highlight">36</i>&nbsp; * all zeros below the first sub-diagonal.&lt;/p&gt;
+<i class="no-highlight">37</i>&nbsp; *
+<i class="no-highlight">38</i>&nbsp; * &lt;p&gt;For example, the following matrix is in upper Hessenburg form where each {@code x} may hold a different value:
+<i class="no-highlight">39</i>&nbsp; * &lt;pre&gt;
+<i class="no-highlight">40</i>&nbsp; *     [[ x x x x x ]
+<i class="no-highlight">41</i>&nbsp; *      [ x x x x x ]
+<i class="no-highlight">42</i>&nbsp; *      [ 0 x x x x ]
+<i class="no-highlight">43</i>&nbsp; *      [ 0 0 x x x ]
+<i class="no-highlight">44</i>&nbsp; *      [ 0 0 0 x x ]]&lt;/pre&gt;
+<i class="no-highlight">45</i>&nbsp; * &lt;/p&gt;
+<i class="no-highlight">46</i>&nbsp; */
+<i class="no-highlight">47</i>&nbsp;public abstract class HessenburgDecomposition&lt;T extends MatrixMixin&lt;T, ?, ?, ?, ?, ?, ?&gt;&gt; implements Decomposition&lt;T&gt; {
+<i class="no-highlight">48</i>&nbsp;
+<i class="no-highlight">49</i>&nbsp;    /**
+<i class="no-highlight">50</i>&nbsp;     * A flag for determining if {@code Q} should be computed in the Hessenburg decomposition.
+<i class="no-highlight">51</i>&nbsp;     */
+<i class="no-highlight">52</i>&nbsp;    protected boolean computeQ;
+<i class="no-highlight">53</i>&nbsp;
+<i class="no-highlight">54</i>&nbsp;    /**
+<i class="no-highlight">55</i>&nbsp;     * Storage for the {@code Q} matrix in the Hessenburg decomposition corresponding to {@code A=QHQ&lt;sup&gt;H&lt;/sup&gt;}.
+<i class="no-highlight">56</i>&nbsp;     */
+<i class="no-highlight">57</i>&nbsp;    protected T Q;
+<i class="no-highlight">58</i>&nbsp;    /**
+<i class="no-highlight">59</i>&nbsp;     * Storage for the {@code H} matrix in the Hessenburg decomposition corresponding to {@code A=QHQ&lt;sup&gt;H&lt;/sup&gt;}.
+<i class="no-highlight">60</i>&nbsp;     */
+<i class="no-highlight">61</i>&nbsp;    protected T H;
+<i class="no-highlight">62</i>&nbsp;
+<i class="no-highlight">63</i>&nbsp;
+<i class="no-highlight">64</i>&nbsp;    /**
+<i class="no-highlight">65</i>&nbsp;     * Constructs a Hessenburg decomposer which specifies if the unitary matrix {@code Q} in the decomposition should
+<i class="no-highlight">66</i>&nbsp;     * be computed.
+<i class="no-highlight">67</i>&nbsp;     * @param computeQ Flag for determining if the {@code Q} in the decomposition should be computed.&lt;br&gt;
+<i class="no-highlight">68</i>&nbsp;     *                 - If true, the unitary {@code Q} matrix will be computed.&lt;br&gt;
+<i class="no-highlight">69</i>&nbsp;     *                 - If false, the unitary {@code Q} matrix will not be computed which may give a performance
+<i class="no-highlight">70</i>&nbsp;     *                 increase if it is not needed.
+<i class="no-highlight">71</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">72</i>&nbsp;    protected HessenburgDecomposition(boolean computeQ) {</b>
+<b class="fc"><i class="no-highlight">73</i>&nbsp;        this.computeQ = computeQ;</b>
+<i class="no-highlight">74</i>&nbsp;    }
+<i class="no-highlight">75</i>&nbsp;
+<i class="no-highlight">76</i>&nbsp;
+<i class="no-highlight">77</i>&nbsp;    /**
+<i class="no-highlight">78</i>&nbsp;     * Gets the unitary {@code Q} matrix from the Hessenburg decomposition corresponding to {@code A=QHQ&lt;sup&gt;*&lt;/sup&gt;}.
+<i class="no-highlight">79</i>&nbsp;     * @return The unitary {@code Q} matrix from the Hessenburg decomposition corresponding to {@code A=QHQ&lt;sup&gt;*&lt;/sup&gt;}.
+<i class="no-highlight">80</i>&nbsp;     */
+<i class="no-highlight">81</i>&nbsp;    public T getQ() {
+<b class="fc"><i class="no-highlight">82</i>&nbsp;        return Q;</b>
+<i class="no-highlight">83</i>&nbsp;    }
+<i class="no-highlight">84</i>&nbsp;
+<i class="no-highlight">85</i>&nbsp;
+<i class="no-highlight">86</i>&nbsp;    /**
+<i class="no-highlight">87</i>&nbsp;     * Gets the upper Hessenburg {@code H} matrix from the Hessenburg decomposition corresponding to {@code A=QHQ&lt;sup&gt;H&lt;/sup&gt;}.
+<i class="no-highlight">88</i>&nbsp;     * @return The upper Hessenburg {@code H} matrix from the Hessenburg decomposition corresponding to {@code A=QHQ&lt;sup&gt;H&lt;/sup&gt;}.
+<i class="no-highlight">89</i>&nbsp;     */
+<i class="no-highlight">90</i>&nbsp;    public T getH() {
+<b class="fc"><i class="no-highlight">91</i>&nbsp;        return H;</b>
+<i class="no-highlight">92</i>&nbsp;    }
+<i class="no-highlight">93</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-07 18:56</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,405 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > TransposeDispatcher</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j.operations</a>
+</div>
+
+<h1>Coverage Summary for Class: TransposeDispatcher (com.flag4j.operations)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TransposeDispatcher</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (8/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (27/45)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TransposeDispatcher$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">TransposeDispatcher$Algorithm</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    84.6%
+  </span>
+  <span class="absValue">
+    (11/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    64.7%
+  </span>
+  <span class="absValue">
+    (33/51)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;/*
+<i class="no-highlight">2</i>&nbsp; * MIT License
+<i class="no-highlight">3</i>&nbsp; *
+<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2023 Jacob Watters
+<i class="no-highlight">5</i>&nbsp; *
+<i class="no-highlight">6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i class="no-highlight">7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i class="no-highlight">8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i class="no-highlight">9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i class="no-highlight">10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i class="no-highlight">11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i class="no-highlight">12</i>&nbsp; *
+<i class="no-highlight">13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i class="no-highlight">14</i>&nbsp; * copies or substantial portions of the Software.
+<i class="no-highlight">15</i>&nbsp; *
+<i class="no-highlight">16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i class="no-highlight">17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i class="no-highlight">18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i class="no-highlight">19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i class="no-highlight">20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i class="no-highlight">21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i class="no-highlight">22</i>&nbsp; * SOFTWARE.
+<i class="no-highlight">23</i>&nbsp; */
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;package com.flag4j.operations;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;import com.flag4j.*;
+<i class="no-highlight">28</i>&nbsp;import com.flag4j.complex_numbers.CNumber;
+<i class="no-highlight">29</i>&nbsp;import com.flag4j.operations.dense.complex.ComplexDenseTranspose;
+<i class="no-highlight">30</i>&nbsp;import com.flag4j.operations.dense.real.RealDenseTranspose;
+<i class="no-highlight">31</i>&nbsp;import com.flag4j.util.ErrorMessages;
+<i class="no-highlight">32</i>&nbsp;
+<i class="no-highlight">33</i>&nbsp;
+<i class="no-highlight">34</i>&nbsp;/**
+<i class="no-highlight">35</i>&nbsp; * Provides a dispatch method for dynamically choosing the best matrix transpose algorithm.
+<i class="no-highlight">36</i>&nbsp; */
+<i class="no-highlight">37</i>&nbsp;public final class TransposeDispatcher {
+<i class="no-highlight">38</i>&nbsp;
+<i class="no-highlight">39</i>&nbsp;    // TODO: These thresholds need to be updated. Perform some benchmarks to get empirical values.
+<i class="no-highlight">40</i>&nbsp;
+<i class="no-highlight">41</i>&nbsp;    /**
+<i class="no-highlight">42</i>&nbsp;     * Threshold for using complex blocked algorithm.
+<i class="no-highlight">43</i>&nbsp;     */
+<i class="no-highlight">44</i>&nbsp;    private static final int COMPLEX_BLOCKED_THRESHOLD = 5_000;
+<i class="no-highlight">45</i>&nbsp;    /**
+<i class="no-highlight">46</i>&nbsp;     * Threshold for using blocked hermation algorithm
+<i class="no-highlight">47</i>&nbsp;     */
+<i class="no-highlight">48</i>&nbsp;    private static final int HERMATION_BLOCKED_THRESHOLD = 50_000;
+<i class="no-highlight">49</i>&nbsp;    /**
+<i class="no-highlight">50</i>&nbsp;     * Threshold for using standard transpose implementation.
+<i class="no-highlight">51</i>&nbsp;     */
+<i class="no-highlight">52</i>&nbsp;    private static final int STANDARD_THRESHOLD = 1500;
+<i class="no-highlight">53</i>&nbsp;    /**
+<i class="no-highlight">54</i>&nbsp;     * Threshold for number of elements in matrix to use concurrent implementation.
+<i class="no-highlight">55</i>&nbsp;     */
+<i class="no-highlight">56</i>&nbsp;    private static final int CONCURRENT_THRESHOLD = 4_250_000;
+<i class="no-highlight">57</i>&nbsp;
+<i class="no-highlight">58</i>&nbsp;
+<b class="nc"><i class="no-highlight">59</i>&nbsp;    private TransposeDispatcher() {</b>
+<i class="no-highlight">60</i>&nbsp;        // Hide default constructor.
+<b class="nc"><i class="no-highlight">61</i>&nbsp;        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</b>
+<i class="no-highlight">62</i>&nbsp;    }
+<i class="no-highlight">63</i>&nbsp;
+<i class="no-highlight">64</i>&nbsp;
+<i class="no-highlight">65</i>&nbsp;    /**
+<i class="no-highlight">66</i>&nbsp;     * Dispatches a matrix transpose problem to the appropriate algorithm based in its shape and size.
+<i class="no-highlight">67</i>&nbsp;     * @param src Matrix to transpose.
+<i class="no-highlight">68</i>&nbsp;     * @return The transpose of the source matrix.
+<i class="no-highlight">69</i>&nbsp;     */
+<i class="no-highlight">70</i>&nbsp;    public static Matrix dispatch(Matrix src) {
+<i class="no-highlight">71</i>&nbsp;
+<i class="no-highlight">72</i>&nbsp;        double[] dest;
+<i class="no-highlight">73</i>&nbsp;
+<b class="fc"><i class="no-highlight">74</i>&nbsp;        Algorithm algorithm = chooseAlgorithm(src.shape);</b>
+<i class="no-highlight">75</i>&nbsp;
+<b class="fc"><i class="no-highlight">76</i>&nbsp;        switch(algorithm) {</b>
+<i class="no-highlight">77</i>&nbsp;            case STANDARD:
+<b class="nc"><i class="no-highlight">78</i>&nbsp;                dest = RealDenseTranspose.standardMatrix(src.entries, src.numRows, src.numCols);</b>
+<b class="nc"><i class="no-highlight">79</i>&nbsp;                break;</b>
+<i class="no-highlight">80</i>&nbsp;            case BLOCKED:
+<b class="fc"><i class="no-highlight">81</i>&nbsp;                dest = RealDenseTranspose.blockedMatrix(src.entries, src.numRows, src.numCols);</b>
+<b class="fc"><i class="no-highlight">82</i>&nbsp;                break;</b>
+<i class="no-highlight">83</i>&nbsp;            case CONCURRENT_STANDARD:
+<b class="nc"><i class="no-highlight">84</i>&nbsp;                dest = RealDenseTranspose.standardMatrixConcurrent(src.entries, src.numRows, src.numCols);</b>
+<b class="nc"><i class="no-highlight">85</i>&nbsp;                break;</b>
+<i class="no-highlight">86</i>&nbsp;            default:
+<b class="nc"><i class="no-highlight">87</i>&nbsp;                dest = RealDenseTranspose.blockedMatrixConcurrent(src.entries, src.numRows, src.numCols);</b>
+<i class="no-highlight">88</i>&nbsp;                break;
+<i class="no-highlight">89</i>&nbsp;        }
+<i class="no-highlight">90</i>&nbsp;
+<b class="fc"><i class="no-highlight">91</i>&nbsp;        return new Matrix(src.numCols, src.numRows, dest);</b>
+<i class="no-highlight">92</i>&nbsp;    }
+<i class="no-highlight">93</i>&nbsp;
+<i class="no-highlight">94</i>&nbsp;
+<i class="no-highlight">95</i>&nbsp;    /**
+<i class="no-highlight">96</i>&nbsp;     * Dispatches a matrix transpose problem to the appropriate algorithm based in its shape and size.
+<i class="no-highlight">97</i>&nbsp;     * @param src Matrix to transpose.
+<i class="no-highlight">98</i>&nbsp;     * @return The transpose of the source matrix.
+<i class="no-highlight">99</i>&nbsp;     */
+<i class="no-highlight">100</i>&nbsp;    public static CMatrix dispatch(CMatrix src) {
+<i class="no-highlight">101</i>&nbsp;        CNumber[] dest;
+<i class="no-highlight">102</i>&nbsp;
+<b class="fc"><i class="no-highlight">103</i>&nbsp;        Algorithm algorithm = chooseAlgorithm(src.shape);</b>
+<i class="no-highlight">104</i>&nbsp;
+<b class="fc"><i class="no-highlight">105</i>&nbsp;        if(algorithm==Algorithm.BLOCKED) {</b>
+<b class="fc"><i class="no-highlight">106</i>&nbsp;            dest = ComplexDenseTranspose.blockedMatrix(src.entries, src.numRows, src.numCols);</b>
+<i class="no-highlight">107</i>&nbsp;        } else {
+<b class="nc"><i class="no-highlight">108</i>&nbsp;            dest = ComplexDenseTranspose.blockedMatrixConcurrent(src.entries, src.numRows, src.numCols);</b>
+<i class="no-highlight">109</i>&nbsp;        }
+<i class="no-highlight">110</i>&nbsp;
+<b class="fc"><i class="no-highlight">111</i>&nbsp;        return new CMatrix(src.numCols, src.numRows, dest);</b>
+<i class="no-highlight">112</i>&nbsp;    }
+<i class="no-highlight">113</i>&nbsp;
+<i class="no-highlight">114</i>&nbsp;
+<i class="no-highlight">115</i>&nbsp;    /**
+<i class="no-highlight">116</i>&nbsp;     * Dispatches a matrix hermation transpose problem to the appropriate algorithm based on its shape and size.
+<i class="no-highlight">117</i>&nbsp;     * @param src Matrix to transpose.
+<i class="no-highlight">118</i>&nbsp;     * @return The transpose of the source matrix.
+<i class="no-highlight">119</i>&nbsp;     */
+<i class="no-highlight">120</i>&nbsp;    public static CMatrix dispatchHermation(CMatrix src) {
+<i class="no-highlight">121</i>&nbsp;        CNumber[] dest;
+<i class="no-highlight">122</i>&nbsp;
+<b class="fc"><i class="no-highlight">123</i>&nbsp;        Algorithm algorithm = chooseAlgorithmHermation(src.shape);</b>
+<i class="no-highlight">124</i>&nbsp;
+<b class="fc"><i class="no-highlight">125</i>&nbsp;        if(algorithm==Algorithm.BLOCKED) {</b>
+<b class="fc"><i class="no-highlight">126</i>&nbsp;            dest = ComplexDenseTranspose.blockedMatrixHerm(src.entries, src.numRows, src.numCols);</b>
+<i class="no-highlight">127</i>&nbsp;        } else {
+<b class="nc"><i class="no-highlight">128</i>&nbsp;            dest = ComplexDenseTranspose.blockedMatrixConcurrentHerm(src.entries, src.numRows, src.numCols);</b>
+<i class="no-highlight">129</i>&nbsp;        }
+<i class="no-highlight">130</i>&nbsp;
+<b class="fc"><i class="no-highlight">131</i>&nbsp;        return new CMatrix(src.numCols, src.numRows, dest);</b>
+<i class="no-highlight">132</i>&nbsp;    }
+<i class="no-highlight">133</i>&nbsp;
+<i class="no-highlight">134</i>&nbsp;
+<i class="no-highlight">135</i>&nbsp;    /**
+<i class="no-highlight">136</i>&nbsp;     * Dispatches a tensor transpose problem to the appropriate algorithm based on its shape and size.
+<i class="no-highlight">137</i>&nbsp;     * @param src Tensor to transpose.
+<i class="no-highlight">138</i>&nbsp;     * @param axis1 First axis in tensor transpose.
+<i class="no-highlight">139</i>&nbsp;     * @param axis2 Second axis in tensor transpose.
+<i class="no-highlight">140</i>&nbsp;     * @return The result of the tensor transpose.
+<i class="no-highlight">141</i>&nbsp;     * @throws ArrayIndexOutOfBoundsException If either axis is not within the {@code src} tensor.
+<i class="no-highlight">142</i>&nbsp;     */
+<i class="no-highlight">143</i>&nbsp;    public static Tensor dispatchTensor(Tensor src, int axis1, int axis2) {
+<i class="no-highlight">144</i>&nbsp;        double[] dest;
+<b class="fc"><i class="no-highlight">145</i>&nbsp;        Algorithm algorithm = chooseAlgorithmTensor(src.shape.get(axis1), src.shape.get(axis2));</b>
+<i class="no-highlight">146</i>&nbsp;
+<b class="fc"><i class="no-highlight">147</i>&nbsp;        dest = algorithm == Algorithm.STANDARD ?</b>
+<b class="fc"><i class="no-highlight">148</i>&nbsp;                RealDenseTranspose.standard(src.entries, src.shape, axis1, axis2):</b>
+<b class="nc"><i class="no-highlight">149</i>&nbsp;                RealDenseTranspose.standardConcurrent(src.entries, src.shape, axis1, axis2);</b>
+<i class="no-highlight">150</i>&nbsp;
+<b class="fc"><i class="no-highlight">151</i>&nbsp;        return new Tensor(src.shape.copy().swapAxes(axis1, axis2), dest);</b>
+<i class="no-highlight">152</i>&nbsp;    }
+<i class="no-highlight">153</i>&nbsp;
+<i class="no-highlight">154</i>&nbsp;
+<i class="no-highlight">155</i>&nbsp;    /**
+<i class="no-highlight">156</i>&nbsp;     * Dispatches a tensor transpose problem to the appropriate algorithm based on its shape and size.
+<i class="no-highlight">157</i>&nbsp;     * @param src Tensor to transpose.
+<i class="no-highlight">158</i>&nbsp;     * @param axis1 First axis in tensor transpose.
+<i class="no-highlight">159</i>&nbsp;     * @param axis2 Second axis in tensor transpose.
+<i class="no-highlight">160</i>&nbsp;     * @return
+<i class="no-highlight">161</i>&nbsp;     */
+<i class="no-highlight">162</i>&nbsp;    public static CTensor dispatchTensor(CTensor src, int axis1, int axis2) {
+<i class="no-highlight">163</i>&nbsp;        CNumber[] dest;
+<b class="fc"><i class="no-highlight">164</i>&nbsp;        Algorithm algorithm = chooseAlgorithmTensor(src.shape.get(axis1), src.shape.get(axis2));</b>
+<i class="no-highlight">165</i>&nbsp;
+<b class="fc"><i class="no-highlight">166</i>&nbsp;        dest = algorithm == Algorithm.STANDARD ?</b>
+<b class="fc"><i class="no-highlight">167</i>&nbsp;                ComplexDenseTranspose.standard(src.entries, src.shape, axis1, axis2):</b>
+<b class="nc"><i class="no-highlight">168</i>&nbsp;                ComplexDenseTranspose.standardConcurrent(src.entries, src.shape, axis1, axis2);</b>
+<i class="no-highlight">169</i>&nbsp;
+<b class="fc"><i class="no-highlight">170</i>&nbsp;        return new CTensor(src.shape.copy().swapAxes(axis1, axis2), dest);</b>
+<i class="no-highlight">171</i>&nbsp;    }
+<i class="no-highlight">172</i>&nbsp;
+<i class="no-highlight">173</i>&nbsp;
+<i class="no-highlight">174</i>&nbsp;    /**
+<i class="no-highlight">175</i>&nbsp;     * Chooses the appropriate algorithm for computing a tensor transpose.
+<i class="no-highlight">176</i>&nbsp;     * @param length1 Length of first axis in tensor transpose.
+<i class="no-highlight">177</i>&nbsp;     * @param length2 Length of second axis in tensor transpose.
+<i class="no-highlight">178</i>&nbsp;     * @return
+<i class="no-highlight">179</i>&nbsp;     */
+<i class="no-highlight">180</i>&nbsp;    private static Algorithm chooseAlgorithmTensor(int length1, int length2) {
+<b class="fc"><i class="no-highlight">181</i>&nbsp;        int numEntries = length1*length2; // Number of entries involved in transpose.</b>
+<b class="fc"><i class="no-highlight">182</i>&nbsp;        return numEntries &lt; CONCURRENT_THRESHOLD ? Algorithm.STANDARD : Algorithm.CONCURRENT_STANDARD;</b>
+<i class="no-highlight">183</i>&nbsp;    }
+<i class="no-highlight">184</i>&nbsp;
+<i class="no-highlight">185</i>&nbsp;
+<i class="no-highlight">186</i>&nbsp;
+<i class="no-highlight">187</i>&nbsp;    /**
+<i class="no-highlight">188</i>&nbsp;     * Chooses the appropriate matrix transpose algorithm based on the shape of a matrix.
+<i class="no-highlight">189</i>&nbsp;     * @param shape Shape of matrix to transpose.
+<i class="no-highlight">190</i>&nbsp;     * @return The appropriate matrix transpose algorithm.
+<i class="no-highlight">191</i>&nbsp;     */
+<i class="no-highlight">192</i>&nbsp;    private static Algorithm chooseAlgorithm(Shape shape) {
+<b class="fc"><i class="no-highlight">193</i>&nbsp;        int numEntries = shape.totalEntries().intValueExact();</b>
+<b class="fc"><i class="no-highlight">194</i>&nbsp;        return numEntries &lt; CONCURRENT_THRESHOLD ? Algorithm.BLOCKED : Algorithm.CONCURRENT_BLOCKED;</b>
+<i class="no-highlight">195</i>&nbsp;    }
+<i class="no-highlight">196</i>&nbsp;
+<i class="no-highlight">197</i>&nbsp;
+<i class="no-highlight">198</i>&nbsp;    /**
+<i class="no-highlight">199</i>&nbsp;     * Chooses the appropriate matrix hermation transpose algorithm based on the shape of a matrix.
+<i class="no-highlight">200</i>&nbsp;     * @param shape Shape of matrix to transpose.
+<i class="no-highlight">201</i>&nbsp;     * @return The appropriate matrix transpose algorithm.
+<i class="no-highlight">202</i>&nbsp;     */
+<i class="no-highlight">203</i>&nbsp;    private static Algorithm chooseAlgorithmHermation(Shape shape) {
+<b class="fc"><i class="no-highlight">204</i>&nbsp;        int numEntries = shape.totalEntries().intValueExact();</b>
+<b class="fc"><i class="no-highlight">205</i>&nbsp;        return numEntries &lt; HERMATION_BLOCKED_THRESHOLD ? Algorithm.BLOCKED : Algorithm.CONCURRENT_BLOCKED;</b>
+<i class="no-highlight">206</i>&nbsp;    }
+<i class="no-highlight">207</i>&nbsp;
+<i class="no-highlight">208</i>&nbsp;
+<i class="no-highlight">209</i>&nbsp;    /**
+<i class="no-highlight">210</i>&nbsp;     * Chooses the appropriate matrix transpose algorithm based on the shape of a matrix.
+<i class="no-highlight">211</i>&nbsp;     * @param shape Shape of matrix to transpose.
+<i class="no-highlight">212</i>&nbsp;     * @return The appropriate matrix transpose algorithm.
+<i class="no-highlight">213</i>&nbsp;     */
+<i class="no-highlight">214</i>&nbsp;    private static Algorithm chooseAlgorithmComplex(Shape shape) {
+<i class="no-highlight">215</i>&nbsp;        Algorithm algorithm;
+<i class="no-highlight">216</i>&nbsp;
+<b class="nc"><i class="no-highlight">217</i>&nbsp;        int numEntries = shape.totalEntries().intValueExact();</b>
+<i class="no-highlight">218</i>&nbsp;
+<b class="nc"><i class="no-highlight">219</i>&nbsp;        if(numEntries &lt; STANDARD_THRESHOLD) {</b>
+<i class="no-highlight">220</i>&nbsp;            // Use standard algorithm.
+<b class="nc"><i class="no-highlight">221</i>&nbsp;            algorithm = Algorithm.STANDARD;</b>
+<b class="nc"><i class="no-highlight">222</i>&nbsp;        } else if(numEntries &lt; CONCURRENT_THRESHOLD) {</b>
+<i class="no-highlight">223</i>&nbsp;            // Use blocked algorithm
+<b class="nc"><i class="no-highlight">224</i>&nbsp;            algorithm = Algorithm.BLOCKED;</b>
+<i class="no-highlight">225</i>&nbsp;        } else {
+<i class="no-highlight">226</i>&nbsp;            // Use concurrent blocked implementation.
+<b class="nc"><i class="no-highlight">227</i>&nbsp;            algorithm = Algorithm.CONCURRENT_BLOCKED;</b>
+<i class="no-highlight">228</i>&nbsp;        }
+<i class="no-highlight">229</i>&nbsp;
+<b class="nc"><i class="no-highlight">230</i>&nbsp;        return algorithm;</b>
+<i class="no-highlight">231</i>&nbsp;    }
+<i class="no-highlight">232</i>&nbsp;
+<i class="no-highlight">233</i>&nbsp;
+<i class="no-highlight">234</i>&nbsp;    /**
+<i class="no-highlight">235</i>&nbsp;     * Simple enum class containing available algorithms for computing a matrix transpose.
+<i class="no-highlight">236</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">237</i>&nbsp;    private enum Algorithm {</b>
+<i class="no-highlight">238</i>&nbsp;        /**
+<i class="no-highlight">239</i>&nbsp;         * Standard transpose algorithm
+<i class="no-highlight">240</i>&nbsp;         */
+<b class="fc"><i class="no-highlight">241</i>&nbsp;        STANDARD,</b>
+<i class="no-highlight">242</i>&nbsp;        /**
+<i class="no-highlight">243</i>&nbsp;         * Blocked transpose algorithm
+<i class="no-highlight">244</i>&nbsp;         */
+<b class="fc"><i class="no-highlight">245</i>&nbsp;        BLOCKED,</b>
+<i class="no-highlight">246</i>&nbsp;        /**
+<i class="no-highlight">247</i>&nbsp;         * A concurrent implementation of the standard algorithm
+<i class="no-highlight">248</i>&nbsp;         */
+<b class="fc"><i class="no-highlight">249</i>&nbsp;        CONCURRENT_STANDARD,</b>
+<i class="no-highlight">250</i>&nbsp;        /**
+<i class="no-highlight">251</i>&nbsp;         * A concurrent implementation of the blocked algorithm
+<i class="no-highlight">252</i>&nbsp;         */
+<b class="fc"><i class="no-highlight">253</i>&nbsp;        CONCURRENT_BLOCKED</b>
+<i class="no-highlight">254</i>&nbsp;    }
+<i class="no-highlight">255</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-07 18:56</div>
+</div>
+</body>
+</html>
