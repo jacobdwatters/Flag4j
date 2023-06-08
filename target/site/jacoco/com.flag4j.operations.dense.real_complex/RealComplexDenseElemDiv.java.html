@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealComplexDenseElemDiv.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense.real_complex</a> &gt; <span class="el_source">RealComplexDenseElemDiv.java</span></div><h1>RealComplexDenseElemDiv.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense.real_complex;
+
+import com.flag4j.Shape;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.concurrency.ThreadManager;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
+
+/**
+ * This class contains low-level implementations of element-wise tensor division for a real dense and complex dense
+ * tensor.
+ */
+public class RealComplexDenseElemDiv {
+
+    /**
+     * Minimum number of entries in each tensor to apply concurrent algorithm.
+     */
+    private static final int CONCURRENT_THRESHOLD = 15_625;
+
+<span class="nc" id="L44">    private RealComplexDenseElemDiv() {</span>
+        // Hide default constructor for utility class.
+<span class="nc" id="L46">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Computes the element-wise division of two tensors.
+     * @param src1 First tensor in element-wise division.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise division.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise division of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CNumber[] elemDiv(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="fc" id="L60">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L61">        CNumber[] product = new CNumber[src1.length];</span>
+
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for(int i=0; i&lt;product.length; i++) {</span>
+<span class="fc" id="L64">            product[i] = src1[i].div(src2[i]);</span>
+        }
+
+<span class="fc" id="L67">        return product;</span>
+    }
+
+
+    /**
+     * Computes the element-wise division of two tensors using a concurrent algorithm.
+     * @param src1 First tensor in element-wise division.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise division.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise division of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CNumber[] elemDivConcurrent(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="nc" id="L81">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="nc" id="L82">        CNumber[] product = new CNumber[src1.length];</span>
+
+<span class="nc" id="L84">        ThreadManager.concurrentLoop(0, product.length,</span>
+<span class="nc" id="L85">                (i)-&gt;product[i] = src1[i].div(src2[i])</span>
+        );
+
+<span class="nc" id="L88">        return product;</span>
+    }
+
+
+    /**
+     * Computes the element-wise division of two tensors.
+     * @param src1 First tensor in element-wise division.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise division.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise division of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CNumber[] elemDiv(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="fc" id="L102">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="fc" id="L103">        CNumber[] quotient = new CNumber[src1.length];</span>
+        double divisor;
+
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        for(int i=0; i&lt;quotient.length; i++) {</span>
+<span class="fc" id="L107">            divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;</span>
+<span class="fc" id="L108">            quotient[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);</span>
+        }
+
+<span class="fc" id="L111">        return quotient;</span>
+    }
+
+
+    /**
+     * Computes the element-wise division of two tensors using a concurrent algorithm.
+     * @param src1 First tensor in element-wise division.
+     * @param shape1 Shape of the first tensor.
+     * @param src2 Second tensor in element-wise division.
+     * @param shape2 Shape of the second tensor.
+     * @return The element-wise division of the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static CNumber[] elemDivConcurrent(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="nc" id="L125">        ParameterChecks.assertEqualShape(shape1, shape2);</span>
+<span class="nc" id="L126">        CNumber[] quotient = new CNumber[src1.length];</span>
+
+<span class="nc" id="L128">        ThreadManager.concurrentLoop(0, quotient.length, (i)-&gt; {</span>
+<span class="nc" id="L129">            double divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;</span>
+<span class="nc" id="L130">            quotient[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);</span>
+<span class="nc" id="L131">        });</span>
+
+<span class="nc" id="L133">        return quotient;</span>
+    }
+
+
+    /**
+     * Chooses if a concurrent algorithm for element-wise multiplication should be used based on the shape of the two tensors.
+     * @param numEntries Total entries in the tensors to multiply.
+     * @return True if a concurrent algorithm should be used for element-wise multiplication. Otherwise, returns false.
+     */
+    private static boolean useConcurrent(int numEntries) {
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">        return numEntries &gt;= CONCURRENT_THRESHOLD;</span>
+    }
+
+
+    /**
+     * Dynamically chooses and applies the appropriate algorithm for element-wise tensor multiplication.
+     * @param src1 Entries of first tensor.
+     * @param shape1 Shape of first tensor.
+     * @param src2 Entries of second tensor.
+     * @param shape2 Shape of second tensor.
+     * @return The result of the element-wise tensor multiplication.
+     */
+    public static CNumber[] dispatch(double[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="pc bpc" id="L156" title="1 of 2 branches missed.">        if(useConcurrent(src1.length)) {</span>
+            // Use concurrent algorithm.
+<span class="nc" id="L158">            return elemDivConcurrent(src1, shape1, src2, shape2);</span>
+        } else {
+            // Then use standard algorithm
+<span class="fc" id="L161">            return elemDiv(src1, shape1, src2, shape2);</span>
+        }
+    }
+
+
+    /**
+     * Dynamically chooses and applies the appropriate algorithm for element-wise tensor multiplication.
+     * @param src1 Entries of first tensor.
+     * @param shape1 Shape of first tensor.
+     * @param src2 Entries of second tensor.
+     * @param shape2 Shape of second tensor.
+     * @return The result of the element-wise tensor multiplication.
+     */
+    public static CNumber[] dispatch(CNumber[] src1, Shape shape1, double[] src2, Shape shape2) {
+<span class="pc bpc" id="L175" title="1 of 2 branches missed.">        if(useConcurrent(src1.length)) {</span>
+            // Use concurrent algorithm.
+<span class="nc" id="L177">            return elemDivConcurrent(src1, shape1, src2, shape2);</span>
+        } else {
+            // Then use standard algorithm
+<span class="fc" id="L180">            return elemDiv(src1, shape1, src2, shape2);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

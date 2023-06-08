@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Eigen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.linalg</a> &gt; <span class="el_source">Eigen.java</span></div><h1>Eigen.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022-2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.linalg;
+
+import com.flag4j.CMatrix;
+import com.flag4j.CVector;
+import com.flag4j.Matrix;
+import com.flag4j.Vector;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.linalg.decompositions.ComplexSchurDecomposition;
+import com.flag4j.linalg.decompositions.RealSchurDecomposition;
+import com.flag4j.linalg.decompositions.SchurDecomposition;
+import com.flag4j.linalg.solvers.ComplexBackSolver;
+import com.flag4j.linalg.solvers.RealBackSolver;
+
+/**
+ * This class provides several methods useful for computing eigen values, eigen vectors, as well as singular values and
+ * singular vectors.
+ */
+<span class="nc" id="L42">public class Eigen {</span>
+
+    /**
+     * Computes the eigenvalues of a 2x2 matrix explicitly.
+     * @param src The 2x2 matrix to compute the eigenvalues of.
+     * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
+     */
+    public static CVector get2x2EigenValues(Matrix src) {
+        // TODO: While theoretically correct, there are some numerical issues here.
+<span class="nc" id="L51">        CVector lambda = new CVector(2);</span>
+
+        // Get the four entries from lower right 2x2 sub-matrix.
+<span class="nc" id="L54">        double a = src.entries[0];</span>
+<span class="nc" id="L55">        double b = src.entries[1];</span>
+<span class="nc" id="L56">        double c = src.entries[2];</span>
+<span class="nc" id="L57">        double d = src.entries[3];</span>
+
+<span class="nc" id="L59">        double det = a*d - b*c; // 2x2 determinant.</span>
+<span class="nc" id="L60">        double htr = (a+d)/2; // Half of the 2x2 trace.</span>
+
+        // 2x2 block eigenvalues.
+<span class="nc" id="L63">        lambda.entries[0] = CNumber.sqrt(CNumber.pow(htr, 2).sub(det)).add(htr);</span>
+<span class="nc" id="L64">        lambda.entries[1] = CNumber.sqrt(CNumber.pow(htr, 2).sub(det)).add(htr);</span>
+
+<span class="nc" id="L66">        return lambda;</span>
+    }
+
+
+    /**
+     * Computes the eigenvalues of a 2x2 matrix explicitly.
+     * @param src The 2x2 matrix to compute the eigenvalues of.
+     * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
+     */
+    public static CVector get2x2EigenValues(CMatrix src) {
+        // TODO: While theoretically correct, there are some numerical issues here.
+<span class="nc" id="L77">        CVector lambda = new CVector(2);</span>
+
+        // Get the four entries from lower right 2x2 sub-matrix.
+<span class="nc" id="L80">        CNumber a = src.entries[0];</span>
+<span class="nc" id="L81">        CNumber b = src.entries[1];</span>
+<span class="nc" id="L82">        CNumber c = src.entries[2];</span>
+<span class="nc" id="L83">        CNumber d = src.entries[3];</span>
+
+<span class="nc" id="L85">        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.</span>
+<span class="nc" id="L86">        CNumber htr = a.add(d).div(2); // Half of the 2x2 trace.</span>
+
+        // 2x2 block eigenvalues.
+<span class="nc" id="L89">        lambda.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+<span class="nc" id="L90">        lambda.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+
+<span class="nc" id="L92">        return lambda;</span>
+    }
+
+
+    /**
+     * Computes the eigenvalues for the lower right 2x2 block matrix of a larger matrix.
+     * @param src Source matrix to compute eigenvalues of lower right 2x2 block.
+     * @return A vector of length 2 containing the eigenvalues of the lower right 2x2 block of {@code src}.
+     */
+    public static CVector get2x2LowerLeftBlockEigenValues(CMatrix src) {
+        // TODO: While theoretically correct, there are some numerical
+        //  issues here.
+<span class="fc" id="L104">        CVector lambdas = new CVector(2);</span>
+<span class="fc" id="L105">        int n = src.numRows-1;</span>
+
+        // Get the four entries from lower right 2x2 sub-matrix.
+<span class="fc" id="L108">        CNumber a = src.entries[(n-1)*(src.numCols + 1)];</span>
+<span class="fc" id="L109">        CNumber b = src.entries[(n-1)*src.numCols + n];</span>
+<span class="fc" id="L110">        CNumber c = src.entries[n*(src.numCols + 1) - 1];</span>
+<span class="fc" id="L111">        CNumber d = src.entries[n*(src.numCols + 1)];</span>
+
+<span class="fc" id="L113">        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.</span>
+<span class="fc" id="L114">        CNumber htr = a.add(d).div(2); // Half of the 2x2 trace.</span>
+
+        // 2x2 block eigenvalues.
+<span class="fc" id="L117">        lambdas.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+<span class="fc" id="L118">        lambdas.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));</span>
+
+<span class="fc" id="L120">        return lambdas;</span>
+    }
+
+
+    /**
+     * Computes the eigenvalues of a square real dense matrix.
+     * @param src The matrix to compute the eigenvalues of.
+     * @return The eigenvalues of the {@code src} matrix.
+     */
+    public static CVector getEigenValues(Matrix src) {
+<span class="nc" id="L130">        CVector lambdas = new CVector(src.numRows);</span>
+
+<span class="nc" id="L132">        SchurDecomposition&lt;Matrix&gt; schur = new RealSchurDecomposition(false).decompose(src);</span>
+<span class="nc" id="L133">        CMatrix T = schur.getT();</span>
+
+        // Extract diagonal of T.
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        for(int i=0; i&lt;T.numRows; i++) {</span>
+<span class="nc" id="L137">            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];</span>
+        }
+
+<span class="nc" id="L140">        return lambdas;</span>
+    }
+
+
+    /**
+     * Computes the eigenvalues of a square complex dense matrix.
+     * @param src The matrix to compute the eigenvalues of.
+     * @return The eigenvalues of the {@code src} matrix.
+     */
+    public static CVector getEigenValues(CMatrix src) {
+<span class="nc" id="L150">        CVector lambdas = new CVector(src.numRows);</span>
+
+<span class="nc" id="L152">        SchurDecomposition&lt;CMatrix&gt; schur = new ComplexSchurDecomposition(false).decompose(src);</span>
+<span class="nc" id="L153">        CMatrix T = schur.getT();</span>
+
+        // Extract diagonal of T.
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        for(int i=0; i&lt;T.numRows; i++) {</span>
+<span class="nc" id="L157">            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];</span>
+        }
+
+<span class="nc" id="L160">        return lambdas;</span>
+    }
+
+
+    /**
+     * Computes the eigenvectors of a square real dense matrix.
+     * @param src The matrix to compute the eigenvectors of.
+     * @return A matrix containing the eigenvectors of {@code src} as its columns.
+     */
+    public static CMatrix getEigenVectors(Matrix src) {
+<span class="nc" id="L170">        SchurDecomposition&lt;Matrix&gt; schur = new RealSchurDecomposition(true).decompose(src);</span>
+<span class="nc" id="L171">        CMatrix U = schur.getU();</span>
+
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        if(src.isSymmetric()) {</span>
+            // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
+<span class="nc" id="L175">            return U;</span>
+        } else {
+            // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
+<span class="nc" id="L178">            CMatrix Q = getEigenVectorsTriu(schur.getT()); // Compute the eigenvectors of T.</span>
+<span class="nc" id="L179">            return U.mult(Q); // Convert the eigenvectors of T to the eigenvectors of the src matrix.</span>
+        }
+    }
+
+
+    /**
+     * Computes the eigenvectors of a square complex dense matrix.
+     * @param src The matrix to compute the eigenvectors of.
+     * @return A matrix containing the eigenvectors of {@code src} as its columns.
+     */
+    public static CMatrix getEigenVectors(CMatrix src) {
+<span class="nc" id="L190">        SchurDecomposition&lt;CMatrix&gt; schur = new ComplexSchurDecomposition(true).decompose(src);</span>
+<span class="nc" id="L191">        CMatrix U = schur.getU();</span>
+
+<span class="nc bnc" id="L193" title="All 2 branches missed.">        if(src.isHermitian()) {</span>
+            // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
+<span class="nc" id="L195">            return U;</span>
+        } else {
+            // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
+<span class="nc" id="L198">            CMatrix Q = getEigenVectorsTriu(schur.getT()); // Compute the eigenvectors of T.</span>
+<span class="nc" id="L199">            return U.mult(Q); // Convert the eigenvectors of T to the eigenvectors of the src matrix.</span>
+        }
+    }
+
+
+    /**
+     * Computes the eigenvectors of an upper triangular matrix.
+     * @param T The upper triangular matrix to compute the eigenvectors of.
+     * @return A matrix containing the eigenvectors of {@code T} as its columns.
+     */
+    public static CMatrix getEigenVectorsTriu(Matrix T) {
+<span class="nc" id="L210">        RealBackSolver backSolver = new RealBackSolver();</span>
+<span class="nc" id="L211">        Matrix I = Matrix.I(T.numRows);</span>
+<span class="nc" id="L212">        CMatrix Q = new CMatrix(T.numRows);</span>
+
+<span class="nc bnc" id="L214" title="All 2 branches missed.">        for(int j=0; j&lt;T.numRows; j++) {</span>
+<span class="nc" id="L215">            Matrix t = I.mult(T.get(j, j)); // TODO: add diag(...) method so this scalar multiplication doesnt need to be computed.</span>
+<span class="nc" id="L216">            Matrix S = T.sub(t).getSlice(0, j+1, 0, j+1);</span>
+<span class="nc" id="L217">            Matrix S_hat = S.getSlice(0, j, 0, j);</span>
+<span class="nc" id="L218">            Vector r = S.getSlice(0, j, S.numCols-1, S.numCols).toVector();</span>
+            Vector v;
+
+<span class="nc bnc" id="L221" title="All 2 branches missed.">            if(S_hat.entries.length &gt; 0) {</span>
+<span class="nc" id="L222">                v = backSolver.solve(S_hat, r.mult(-1));</span>
+<span class="nc" id="L223">                v = v.join(new Vector(1.0));</span>
+            } else {
+<span class="nc" id="L225">                v = new Vector(1.0);</span>
+            }
+
+<span class="nc" id="L228">            v = v.normalize().join(new Vector(T.numRows-v.size));</span>
+<span class="nc" id="L229">            Q.setCol(v.entries, j);</span>
+        }
+
+<span class="nc" id="L232">        return Q;</span>
+    }
+
+
+    /**
+     * Computes the eigenvectors of an upper triangular matrix.
+     * @param T The upper triangular matrix to compute the eigenvectors of.
+     * @return A matrix containing the eigenvectors of {@code T} as its columns.
+     */
+    public static CMatrix getEigenVectorsTriu(CMatrix T) {
+<span class="nc" id="L242">        ComplexBackSolver backSolver = new ComplexBackSolver();</span>
+<span class="nc" id="L243">        Matrix I = Matrix.I(T.numRows);</span>
+<span class="nc" id="L244">        CMatrix Q = new CMatrix(T.numRows);</span>
+
+<span class="nc bnc" id="L246" title="All 2 branches missed.">        for(int j=0; j&lt;T.numRows; j++) {</span>
+<span class="nc" id="L247">            CMatrix t = I.mult(T.get(j, j)); // TODO: add diag(...) method so this scalar multiplication doesnt need to be computed.</span>
+<span class="nc" id="L248">            CMatrix S = T.sub(t).getSlice(0, j+1, 0, j+1);</span>
+<span class="nc" id="L249">            CMatrix S_hat = S.getSlice(0, j, 0, j);</span>
+<span class="nc" id="L250">            CVector r = S.getSlice(0, j, S.numCols-1, S.numCols).toVector();</span>
+            CVector v;
+
+<span class="nc bnc" id="L253" title="All 2 branches missed.">            if(S_hat.entries.length &gt; 0) {</span>
+<span class="nc" id="L254">                v = backSolver.solve(S_hat, r.mult(-1));</span>
+<span class="nc" id="L255">                v = v.join(new CVector(1.0));</span>
+            } else {
+<span class="nc" id="L257">                v = new CVector(1.0);</span>
+            }
+
+<span class="nc" id="L260">            v = v.normalize().join(new Vector(T.numRows-v.size));</span>
+<span class="nc" id="L261">            Q.setCol(v, j);</span>
+        }
+
+<span class="nc" id="L264">        return Q;</span>
+    }
+
+
+    /**
+     * Computes the eigenvalues and eigenvectors of a square real matrix.
+     * @param src The matrix to compute the eigenvalues and vectors of.
+     * @return An array containing two matrices. The first matrix has shape {@code 1xsrc.numCols} and contains the eigenvalues
+     * of the {@code src} matrix. The second matrix has shape {@code src.numRowsxsrc.numCols} and contains the
+     * eigenvectors of the {@code src} matrix as its columns.
+     */
+    public static CMatrix[] getEigenPairs(Matrix src) {
+<span class="fc" id="L276">        CMatrix lambdas = new CMatrix(1, src.numRows);</span>
+
+<span class="fc" id="L278">        SchurDecomposition&lt;Matrix&gt; schur = new RealSchurDecomposition(true).decompose(src);</span>
+<span class="fc" id="L279">        CMatrix T = schur.getT();</span>
+<span class="fc" id="L280">        CMatrix U = schur.getU();</span>
+
+        // Extract diagonal of T.
+<span class="fc bfc" id="L283" title="All 2 branches covered.">        for(int i=0; i&lt;T.numRows; i++) {</span>
+<span class="fc" id="L284">            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];</span>
+        }
+
+<span class="pc bpc" id="L287" title="1 of 2 branches missed.">        if(src.isSymmetric()) {</span>
+            // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
+<span class="fc" id="L289">            return new CMatrix[]{lambdas, U};</span>
+        } else {
+            // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
+<span class="nc" id="L292">            U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.</span>
+<span class="nc" id="L293">            return new CMatrix[]{lambdas, U};</span>
+        }
+    }
+
+
+    /**
+     * Computes the eigenvalues and eigenvectors of a square real matrix.
+     * @param src The matrix to compute the eigenvalues and vectors of.
+     * @return An array containing two matrices. The first matrix has shape {@code 1xsrc.numCols} and contains the eigenvalues
+     * of the {@code src} matrix. The second matrix has shape {@code src.numRowsxsrc.numCols} and contains the
+     * eigenvectors of the {@code src} matrix as its columns.
+     */
+    public static CMatrix[] getEigenPairs(CMatrix src) {
+<span class="nc" id="L306">        CMatrix lambdas = new CMatrix(1, src.numRows);</span>
+
+<span class="nc" id="L308">        SchurDecomposition&lt;CMatrix&gt; schur = new ComplexSchurDecomposition(true).decompose(src);</span>
+<span class="nc" id="L309">        CMatrix T = schur.getT();</span>
+<span class="nc" id="L310">        CMatrix U = schur.getU();</span>
+
+        // Extract diagonal of T.
+<span class="nc bnc" id="L313" title="All 2 branches missed.">        for(int i=0; i&lt;T.numRows; i++) {</span>
+<span class="nc" id="L314">            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];</span>
+        }
+
+<span class="nc bnc" id="L317" title="All 2 branches missed.">        if(src.isHermitian()) {</span>
+            // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
+<span class="nc" id="L319">            return new CMatrix[]{lambdas, U};</span>
+        } else {
+            // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
+<span class="nc" id="L322">            U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.</span>
+<span class="nc" id="L323">            return new CMatrix[]{lambdas, U};</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

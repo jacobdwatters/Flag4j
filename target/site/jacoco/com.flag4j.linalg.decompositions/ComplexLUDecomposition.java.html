@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComplexLUDecomposition.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.linalg.decompositions</a> &gt; <span class="el_source">ComplexLUDecomposition.java</span></div><h1>ComplexLUDecomposition.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.linalg.decompositions;
+
+import com.flag4j.CMatrix;
+import com.flag4j.Matrix;
+import com.flag4j.complex_numbers.CNumber;
+
+
+/**
+ * &lt;p&gt;This class provides methods for computing the LU decomposition of a complex dense matrix.&lt;/p&gt;
+ * &lt;p&gt;The following decompositions are provided: {@code A=LU}, {@code PA=LU}, and {@code PAQ=LU}.&lt;/p&gt;
+ */
+public final class ComplexLUDecomposition extends LUDecomposition&lt;CMatrix&gt; {
+
+    /**
+     * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
+     */
+    public ComplexLUDecomposition() {
+<span class="fc" id="L42">        super(Pivoting.PARTIAL.ordinal());</span>
+<span class="fc" id="L43">    }</span>
+
+
+    /**
+     * Constructs a LU decomposer to decompose the specified matrix.
+     *
+     * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
+     *                 will be used. If pivoting is any other value, no pivoting will be used.
+     */
+    public ComplexLUDecomposition(int pivoting) {
+<span class="fc" id="L53">        super(pivoting);</span>
+<span class="fc" id="L54">    }</span>
+
+
+    /**
+     * Constructs a LU decomposer to decompose the specified matrix.
+     *
+     * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
+     *                 will be used. If pivoting is any other value, no pivoting will be used.
+     * @param zeroPivotTol Value for determining if a zero pivot value is detected when computing the LU decomposition with
+     *                     no pivoting. If a pivot value (value along the principle diagonal of U) is within this tolerance
+     *                     from zero, then an exception will be thrown if solving with no pivoting.
+     */
+    public ComplexLUDecomposition(int pivoting, double zeroPivotTol) {
+<span class="nc" id="L67">        super(pivoting, zeroPivotTol);</span>
+<span class="nc" id="L68">    }</span>
+
+
+    /**
+     * Initializes the {@code LU} matrix by copying the source matrix to decompose.
+     * @param src Source matrix to decompose.
+     */
+    @Override
+    protected void initLU(CMatrix src) {
+<span class="fc" id="L77">        LU = new CMatrix(src);</span>
+<span class="fc" id="L78">    }</span>
+
+
+    /**
+     * Computes the LU decomposition using no pivoting (i.e. rows and columns are not swapped).
+     */
+    @Override
+    protected void noPivot() {
+<span class="fc" id="L86">        P = Q = null; // P and Q are not used here.</span>
+
+        // Using Gaussian elimination and no pivoting
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        for(int j=0; j&lt;LU.numCols; j++) {</span>
+<span class="pc bpc" id="L90" title="1 of 4 branches missed.">            if(j&lt;LU.numRows &amp;&amp; (LU.entries[j*LU.numCols + j]).magAsDouble() &lt; zeroPivotTol) {</span>
+<span class="nc" id="L91">                throw new ArithmeticException(&quot;Zero pivot encountered in decomposition.&quot; +</span>
+                        &quot; Consider using LU decomposition with partial pivoting.&quot;);
+            }
+
+<span class="fc" id="L95">            computeRows(j);</span>
+        }
+<span class="fc" id="L97">    }</span>
+
+
+    /**
+     * Computes the LU decomposition using partial pivoting (i.e. row swapping).
+     */
+    @Override
+    protected void partialPivot() {
+<span class="fc" id="L105">        P = Matrix.I(LU.numRows);</span>
+<span class="fc" id="L106">        Q = null; // Q is not used here.</span>
+        int maxIndex;
+
+        // Using Gaussian elimination with row pivoting.
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for(int j=0; j&lt;LU.numCols; j++) {</span>
+<span class="fc" id="L111">            maxIndex = maxColIndex(j); // Find row index of max value (in absolute value) in column j so that the index &gt;= j.</span>
+
+            // Make the appropriate swaps in LU and P (This is the partial pivoting step).
+<span class="fc bfc" id="L114" title="All 4 branches covered.">            if(j!=maxIndex &amp;&amp; maxIndex&gt;=0) {</span>
+<span class="fc" id="L115">                LU.swapRows(j, maxIndex);</span>
+<span class="fc" id="L116">                P.swapRows(j, maxIndex);</span>
+            }
+
+<span class="fc" id="L119">            computeRows(j);</span>
+        }
+<span class="fc" id="L121">    }</span>
+
+
+    /**
+     * Computes the LU decomposition using full/rook pivoting (i.e. row and column swapping).
+     */
+    @Override
+    protected void fullPivot() {
+<span class="fc" id="L129">        P = Matrix.I(LU.numRows);</span>
+<span class="fc" id="L130">        Q = Matrix.I(LU.numCols);</span>
+        int[] maxIndex;
+
+        // Using Gaussian elimination with row and column (rook) pivoting.
+<span class="fc bfc" id="L134" title="All 2 branches covered.">        for(int j=0; j&lt;LU.numCols; j++) {</span>
+<span class="fc" id="L135">            maxIndex = maxIndex(j);</span>
+
+            // Make the appropriate swaps in LU, P and Q (This is the full pivoting step).
+<span class="fc bfc" id="L138" title="All 4 branches covered.">            if(j!=maxIndex[0] &amp;&amp; maxIndex[0]!=-1) {</span>
+<span class="fc" id="L139">                LU.swapRows(j, maxIndex[0]);</span>
+<span class="fc" id="L140">                P.swapRows(j, maxIndex[0]);</span>
+            }
+<span class="fc bfc" id="L142" title="All 4 branches covered.">            if(j!=maxIndex[1] &amp;&amp; maxIndex[1]!=-1) {</span>
+<span class="fc" id="L143">                LU.swapCols(j, maxIndex[1]);</span>
+<span class="fc" id="L144">                Q.swapCols(j, maxIndex[1]);</span>
+            }
+
+<span class="fc" id="L147">            computeRows(j);</span>
+        }
+<span class="fc" id="L149">    }</span>
+
+
+    /**
+     * Helper method which computes rows in the gaussian elimination algorithm.
+     * @param j Column for which to compute values to the right of.
+     */
+    private void computeRows(int j) {
+        CNumber m;
+
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        for(int i=j+1; i&lt;LU.numRows; i++) {</span>
+<span class="fc" id="L160">            m = LU.entries[i*LU.numCols + j];</span>
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">            m = LU.entries[j*LU.numCols + j].equals(CNumber.ZERO) ? m.copy() : m.div(LU.entries[j*LU.numCols + j]);</span>
+
+<span class="fc bfc" id="L163" title="All 2 branches covered.">            for(int k=j; k&lt;LU.numCols; k++) {</span>
+<span class="fc" id="L164">                LU.entries[i*LU.numCols + k] = LU.entries[i*LU.numCols + k].sub(m.mult(LU.entries[j*LU.numCols + k]));</span>
+<span class="fc" id="L165">                LU.entries[i*LU.numCols + j] = m;</span>
+            }
+        }
+<span class="fc" id="L168">    }</span>
+
+
+    /**
+     * Computes the max absolute value in a column so that the row is &gt;= j.
+     * @param j column index.
+     * @return The index of the maximum absolute value in the specified column such that the row is &gt;= j.
+     */
+    private int maxColIndex(int j) {
+<span class="fc" id="L177">        int maxIndex = -1;</span>
+<span class="fc" id="L178">        double currentMax = -1;</span>
+        double value;
+
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        for(int i=j; i&lt;LU.numRows; i++) {</span>
+<span class="fc" id="L182">            value = LU.entries[i*LU.numCols+j].magAsDouble();</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">            if(value &gt; currentMax) {</span>
+<span class="fc" id="L184">                currentMax = value;</span>
+<span class="fc" id="L185">                maxIndex = i;</span>
+            }
+        }
+
+<span class="fc" id="L189">        return maxIndex;</span>
+    }
+
+
+    /**
+     * Computes maximum absolute value in sub portion of LU matrix below and right of {@code startIndex, startIndex}.
+     * @param startIndex Top left index of row and column of sub matrix.
+     * @return Index of maximum absolute value in specified sub matrix.
+     */
+    private int[] maxIndex(int startIndex) {
+<span class="fc" id="L199">        double currentMax = -1;</span>
+<span class="fc" id="L200">        int[] index = {-1, -1};</span>
+        double value;
+        int idx;
+
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        for(int i=startIndex; i&lt;LU.numRows; i++) {</span>
+<span class="fc" id="L205">            idx = i*LU.numCols;</span>
+
+<span class="fc bfc" id="L207" title="All 2 branches covered.">            for(int j=startIndex; j&lt;LU.numCols; j++) {</span>
+<span class="fc" id="L208">                value = LU.entries[idx+j].magAsDouble();</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">                if(value &gt; currentMax) {</span>
+<span class="fc" id="L210">                    currentMax = value;</span>
+<span class="fc" id="L211">                    index[0] = i;</span>
+<span class="fc" id="L212">                    index[1] = j;</span>
+                }
+            }
+        }
+
+<span class="fc" id="L217">        return index;</span>
+    }
+
+
+    /**
+     * Gets the unit lower triangular matrix of the decomposition.
+     *
+     * @return The lower triangular matrix of the decomposition.
+     */
+    @Override
+    public CMatrix getL() {
+<span class="fc" id="L228">        CMatrix L = new CMatrix(LU.numRows, Math.min(LU.numRows, LU.numCols));</span>
+
+        // Copy L values from LU matrix.
+<span class="fc bfc" id="L231" title="All 2 branches covered.">        for(int i=0; i&lt;LU.numRows; i++) {</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">            if(i&lt;LU.numCols) {</span>
+<span class="fc" id="L233">                L.entries[i*L.numCols+i] = new CNumber(1); // Set principle diagonal to be ones.</span>
+            }
+
+<span class="fc" id="L236">            System.arraycopy(LU.entries, i*LU.numCols, L.entries, i*L.numCols, i);</span>
+        }
+
+<span class="fc" id="L239">        return L;</span>
+    }
+
+
+    /**
+     * Gets the upper triangular matrix of the decomposition.
+     *
+     * @return The lower triangular matrix of the decomposition.
+     */
+    @Override
+    public CMatrix getU() {
+<span class="fc" id="L250">        CMatrix U = new CMatrix(Math.min(LU.numRows, LU.numCols), LU.numCols);</span>
+
+        // Copy U values from LU matrix.
+<span class="fc bfc" id="L253" title="All 4 branches covered.">        for(int i=0; i&lt;LU.numRows &amp;&amp; i&lt;LU.numCols; i++) {</span>
+<span class="fc" id="L254">            System.arraycopy(LU.entries, i*(LU.numCols+1),</span>
+                    U.entries, i*(LU.numCols+1), LU.numCols-i);
+        }
+
+<span class="fc" id="L258">        return U;</span>
+    }
+
+
+    /**
+     * Gets the row permutation matrix of the decomposition.
+     * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
+     */
+    @Override
+    public Matrix getP() {
+<span class="fc" id="L268">        return P;</span>
+    }
+
+
+    /**
+     * Gets the column permutation matrix of the decomposition.
+     * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
+     */
+    public Matrix getQ() {
+<span class="fc" id="L277">        return Q;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
