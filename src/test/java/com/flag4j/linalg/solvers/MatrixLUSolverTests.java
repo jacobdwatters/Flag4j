@@ -27,7 +27,7 @@ class MatrixLUSolverTests {
 
     @Test
     void solveTest() {
-        MatrixLUSolver solver = new MatrixLUSolver();
+        RealLUSolver solver = new RealLUSolver();
 
         // ----------------- Sub-case 1 -----------------
         aEntries = new double[][]{

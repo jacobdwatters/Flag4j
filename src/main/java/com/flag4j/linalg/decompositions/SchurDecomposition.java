@@ -33,8 +33,6 @@ import com.flag4j.core.MatrixMixin;
 import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.transformations.Householder;
 
-import java.util.Scanner;
-
 /**
  * <p>This abstract class specifies methods for computing the Schur decomposition of a square matrix.
  * That is, decompose a square matrix {@code A} into {@code A=UTU<sup>H</sup>} where {@code U} is a unitary
@@ -46,7 +44,7 @@ import java.util.Scanner;
  *
  * @param <T> The type of matrix to compute the Schur decomposition of.
  */
-public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
 
     /**
      * The maximum number of iterations to run the {@code QR} algorithm when computing the Schur decomposition. This
@@ -83,11 +81,7 @@ public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?>
      * Decomposer to compute the Hessenburg matrix similar to the source matrix. This Hessenburg
      * matrix will be the actual matrix that the Schur decomposition is computed for.
      */
-    protected HessenburgDecomposition<T> hess;
-
-    // TODO: Temporary
-    protected boolean debug = false;
-    protected Scanner in = new Scanner(System.in);
+    protected HessenburgDecomposition<T> hess;;
 
 
     /**

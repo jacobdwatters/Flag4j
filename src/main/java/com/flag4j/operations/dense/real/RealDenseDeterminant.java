@@ -24,8 +24,10 @@
 
 package com.flag4j.operations.dense.real;
 
+import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
+import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.Decompose;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -107,6 +109,8 @@ public class RealDenseDeterminant {
      * @param U Upper triangular matrix.
      * @return The determinant of the matrix which has been factored into a unit lower triangular matrix {@code L}
      * and an upper triangular matrix {@code U}.
+     * @see com.flag4j.linalg.decompositions.LUDecomposition
+     * @see com.flag4j.linalg.decompositions.RealLUDecomposition
      */
     public static double detLU(Matrix L, Matrix U) {
         double detU = 1;
@@ -114,6 +118,28 @@ public class RealDenseDeterminant {
         // Compute the determinant of U
         for(int i=0; i<U.numRows; i++) {
             detU *= U.entries[i*U.numCols + i];
+        }
+
+        return detU;
+    }
+
+
+    /**
+     * Computes the determinant for a matrix which has been factored into a unit lower triangular matrix {@code L}
+     * and an upper triangular matrix {@code U} with no pivoting.
+     * @param L Unit lower triangular matrix.
+     * @param U Upper triangular matrix.
+     * @return The determinant of the matrix which has been factored into a unit lower triangular matrix {@code L}
+     * and an upper triangular matrix {@code U}.
+     * @see com.flag4j.linalg.decompositions.LUDecomposition
+     * @see com.flag4j.linalg.decompositions.ComplexLUDecomposition
+     */
+    public static CNumber detLU(CMatrix L, CMatrix U) {
+        CNumber detU = new CNumber(1);
+
+        // Compute the determinant of U
+        for(int i=0; i<U.numRows; i++) {
+            detU.multEq(U.entries[i*U.numCols + i]);
         }
 
         return detU;

@@ -1,0 +1,224 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > TensorInputStream</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j.io</a>
+</div>
+
+<h1>Coverage Summary for Class: TensorInputStream (com.flag4j.io)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TensorInputStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;/*
+<i class="no-highlight">2</i>&nbsp; * MIT License
+<i class="no-highlight">3</i>&nbsp; *
+<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2022-2023 Jacob Watters
+<i class="no-highlight">5</i>&nbsp; *
+<i class="no-highlight">6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i class="no-highlight">7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i class="no-highlight">8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i class="no-highlight">9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i class="no-highlight">10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i class="no-highlight">11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i class="no-highlight">12</i>&nbsp; *
+<i class="no-highlight">13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i class="no-highlight">14</i>&nbsp; * copies or substantial portions of the Software.
+<i class="no-highlight">15</i>&nbsp; *
+<i class="no-highlight">16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i class="no-highlight">17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i class="no-highlight">18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i class="no-highlight">19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i class="no-highlight">20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i class="no-highlight">21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i class="no-highlight">22</i>&nbsp; * SOFTWARE.
+<i class="no-highlight">23</i>&nbsp; */
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;package com.flag4j.io;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;import com.flag4j.Matrix;
+<i class="no-highlight">28</i>&nbsp;import com.flag4j.Tensor;
+<i class="no-highlight">29</i>&nbsp;import com.flag4j.Vector;
+<i class="no-highlight">30</i>&nbsp;
+<i class="no-highlight">31</i>&nbsp;import java.io.FileInputStream;
+<i class="no-highlight">32</i>&nbsp;import java.io.IOException;
+<i class="no-highlight">33</i>&nbsp;import java.io.InputStream;
+<i class="no-highlight">34</i>&nbsp;import java.io.ObjectInputStream;
+<i class="no-highlight">35</i>&nbsp;
+<i class="no-highlight">36</i>&nbsp;
+<i class="no-highlight">37</i>&nbsp;/**
+<i class="no-highlight">38</i>&nbsp; * A {@code TensorInputStream} obtains bytes from a system file using a {@link FileInputStream} containing a serialized
+<i class="no-highlight">39</i>&nbsp; * tensor, matrix, or vector. Then, deserializes that object using an {@link ObjectInputStream}.
+<i class="no-highlight">40</i>&nbsp; */
+<i class="no-highlight">41</i>&nbsp;public class TensorInputStream extends InputStream {
+<i class="no-highlight">42</i>&nbsp;
+<i class="no-highlight">43</i>&nbsp;    /**
+<i class="no-highlight">44</i>&nbsp;     * Stream for loading bytes from a system file.
+<i class="no-highlight">45</i>&nbsp;     */
+<i class="no-highlight">46</i>&nbsp;    private final FileInputStream fileIn;
+<i class="no-highlight">47</i>&nbsp;    /**
+<i class="no-highlight">48</i>&nbsp;     * Stream for deserializing an object.
+<i class="no-highlight">49</i>&nbsp;     */
+<i class="no-highlight">50</i>&nbsp;    private final ObjectInputStream objectIn;
+<i class="no-highlight">51</i>&nbsp;
+<i class="no-highlight">52</i>&nbsp;
+<i class="no-highlight">53</i>&nbsp;    /**
+<i class="no-highlight">54</i>&nbsp;     * Creates {@link TensorInputStream} which will open a connection with a file through an {@link ObjectInputStream}
+<i class="no-highlight">55</i>&nbsp;     * and a {@link FileInputStream}. This {@link TensorInputStream} can be used to deserialize a tensor,
+<i class="no-highlight">56</i>&nbsp;     * matrix, or vector which is stored in a system file.
+<i class="no-highlight">57</i>&nbsp;     * @param fileName File name, including extension, of tensor, matrix, or vector to read.
+<i class="no-highlight">58</i>&nbsp;     * @throws IOException If an I/O error occurs while reading the stream header.
+<i class="no-highlight">59</i>&nbsp;     */
+<b class="nc"><i class="no-highlight">60</i>&nbsp;    public TensorInputStream(String fileName) throws IOException {</b>
+<b class="nc"><i class="no-highlight">61</i>&nbsp;        fileIn = new FileInputStream(fileName);</b>
+<b class="nc"><i class="no-highlight">62</i>&nbsp;        objectIn = new ObjectInputStream(fileIn);</b>
+<i class="no-highlight">63</i>&nbsp;    }
+<i class="no-highlight">64</i>&nbsp;
+<i class="no-highlight">65</i>&nbsp;
+<i class="no-highlight">66</i>&nbsp;    /**
+<i class="no-highlight">67</i>&nbsp;     * Reads a serialized {@link Tensor tesnor} from a file.
+<i class="no-highlight">68</i>&nbsp;     * @return The deserialized {@link Tensor tensor object} stored in the specified file.
+<i class="no-highlight">69</i>&nbsp;     */
+<i class="no-highlight">70</i>&nbsp;    public Tensor readTensor() throws IOException, ClassNotFoundException {
+<i class="no-highlight">71</i>&nbsp;        // Deserialize tensor.
+<b class="nc"><i class="no-highlight">72</i>&nbsp;        return (Tensor) objectIn.readObject();</b>
+<i class="no-highlight">73</i>&nbsp;    }
+<i class="no-highlight">74</i>&nbsp;
+<i class="no-highlight">75</i>&nbsp;
+<i class="no-highlight">76</i>&nbsp;    /**
+<i class="no-highlight">77</i>&nbsp;     * Reads a serialized {@link Matrix matrix} from a file.
+<i class="no-highlight">78</i>&nbsp;     * @return The deserialized {@link Matrix matrix object} stored in the specified file.
+<i class="no-highlight">79</i>&nbsp;     */
+<i class="no-highlight">80</i>&nbsp;    public Matrix readMatrix() throws IOException, ClassNotFoundException {
+<i class="no-highlight">81</i>&nbsp;        // Deserialize matrix.
+<b class="nc"><i class="no-highlight">82</i>&nbsp;        return (Matrix) objectIn.readObject();</b>
+<i class="no-highlight">83</i>&nbsp;    }
+<i class="no-highlight">84</i>&nbsp;
+<i class="no-highlight">85</i>&nbsp;
+<i class="no-highlight">86</i>&nbsp;    /**
+<i class="no-highlight">87</i>&nbsp;     * Reads a serialized {@link Vector vector} from a file.
+<i class="no-highlight">88</i>&nbsp;     * @return The deserialized {@link Vector vector object} stored in the specified file.
+<i class="no-highlight">89</i>&nbsp;     */
+<i class="no-highlight">90</i>&nbsp;    public Vector readVector() throws IOException, ClassNotFoundException {
+<i class="no-highlight">91</i>&nbsp;        // Deserialize vector.
+<b class="nc"><i class="no-highlight">92</i>&nbsp;        return (Vector) objectIn.readObject();</b>
+<i class="no-highlight">93</i>&nbsp;    }
+<i class="no-highlight">94</i>&nbsp;
+<i class="no-highlight">95</i>&nbsp;
+<i class="no-highlight">96</i>&nbsp;    /**
+<i class="no-highlight">97</i>&nbsp;     * Reads a byte of data. This method will block if no input is available. The read operation is forwarded
+<i class="no-highlight">98</i>&nbsp;     * to {@link ObjectInputStream#read()}.
+<i class="no-highlight">99</i>&nbsp;     *
+<i class="no-highlight">100</i>&nbsp;     * @return the next byte of data, or {@code -1} if the end of the
+<i class="no-highlight">101</i>&nbsp;     * stream is reached.
+<i class="no-highlight">102</i>&nbsp;     * @throws IOException If an I/O error occurs.
+<i class="no-highlight">103</i>&nbsp;     */
+<i class="no-highlight">104</i>&nbsp;    @Override
+<i class="no-highlight">105</i>&nbsp;    public int read() throws IOException {
+<b class="nc"><i class="no-highlight">106</i>&nbsp;        return objectIn.read();</b>
+<i class="no-highlight">107</i>&nbsp;    }
+<i class="no-highlight">108</i>&nbsp;
+<i class="no-highlight">109</i>&nbsp;
+<i class="no-highlight">110</i>&nbsp;    /**
+<i class="no-highlight">111</i>&nbsp;     * Closes the stream. This method must be called to release any resources associated with the stream.
+<i class="no-highlight">112</i>&nbsp;     * @throws IOException If an I/O exception has occurred.
+<i class="no-highlight">113</i>&nbsp;     */
+<i class="no-highlight">114</i>&nbsp;    @Override
+<i class="no-highlight">115</i>&nbsp;    public void close() throws IOException {
+<b class="nc"><i class="no-highlight">116</i>&nbsp;        objectIn.close();</b>
+<b class="nc"><i class="no-highlight">117</i>&nbsp;        fileIn.close();</b>
+<i class="no-highlight">118</i>&nbsp;    }
+<i class="no-highlight">119</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-07 18:21</div>
+</div>
+</body>
+</html>

@@ -1337,8 +1337,6 @@ public class SparseVector
                 System.arraycopy(rowIndices, 0, matIndices[0], (entries.length+1)*i, n);
                 System.arraycopy(colIndices, 0, matIndices[1], (entries.length+1)*i, n);
             }
-
-            System.out.println("\n\n\n");
         }
 
         return new SparseMatrix(matShape, matEntries, matIndices[0], matIndices[1]);

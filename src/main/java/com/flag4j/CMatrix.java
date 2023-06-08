@@ -25,13 +25,19 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.core.dense.ComplexDenseTensorBase;
 import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.core.MatrixMixin;
+import com.flag4j.core.dense.ComplexDenseTensorBase;
 import com.flag4j.io.PrintOptions;
+import com.flag4j.linalg.Invert;
+import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
+import com.flag4j.linalg.decompositions.ComplexSVD;
+import com.flag4j.linalg.decompositions.LUDecomposition;
+import com.flag4j.linalg.solvers.ComplexLUSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.dense.complex.ComplexDenseDeterminant;
 import com.flag4j.operations.dense.complex.ComplexDenseEquals;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
 import com.flag4j.operations.dense.complex.ComplexDenseSetOperations;
@@ -57,7 +63,7 @@ import java.util.List;
  */
 public class CMatrix
         extends ComplexDenseTensorBase<CMatrix, Matrix>
-        implements MatrixMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber>,
+        implements MatrixMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber, CVector>,
         ComplexMatrixMixin<CMatrix, Matrix> {
 
     /**
@@ -492,7 +498,15 @@ public class CMatrix
      */
     @Override
     public boolean isInv(CMatrix B) {
-        return this.mult(B).round().isI();
+        boolean result;
+
+        if(!this.isSquare() || !B.isSquare() || !shape.equals(B.shape)) {
+            result = false;
+        } else {
+            result = this.mult(B).round().isI();
+        }
+
+        return result;
     }
 
 
@@ -832,7 +846,6 @@ public class CMatrix
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
-        // TODO: Algorithm could be improved if we assume sparse indices are sorted.
         // Fill slice with zeros
         ArrayUtils.stridedFillZerosRange(
                 this.entries,
@@ -942,7 +955,6 @@ public class CMatrix
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
-        // TODO: Algorithm could be improved if we assume sparse indices are sorted.
         // Fill slice with zeros
         ArrayUtils.stridedFillZerosRange(
                 this.entries,
@@ -2127,7 +2139,7 @@ public class CMatrix
      */
     @Override
     public CNumber det() {
-        return null;
+        return ComplexDenseDeterminant.det(this);
     }
 
 
@@ -3504,6 +3516,104 @@ public class CMatrix
 
 
     /**
+     * Computes the inverse of this matrix. This is done by computing the {@link LUDecomposition LU decomposition} of
+     * this matrix, inverting {@code U} using a back-solve algorithm, then solving {@code inv(this)*L=inv(U)}
+     * for {@code inv(this)}.
+     *
+     * @return The inverse of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     * @throws RuntimeException If this matrix is singular (i.e. not invertible).
+     * @see #isInvertible()
+     */
+    @Override
+    public CMatrix inv() {
+        ParameterChecks.assertSquare(shape);
+        LUDecomposition<CMatrix> lu = new ComplexLUDecomposition().decompose(this);
+
+        double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
+        CNumber det = ComplexDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
+
+        if(det.magAsDouble() < tol) {
+            throw new RuntimeException("Cannot invert. Matrix is singular.");
+        }
+
+        // Solve inv(A)*L = inv(U) for inv(A) by solving L^H*inv(A)^H = inv(U)^H
+        ComplexLUSolver solver = new ComplexLUSolver(); // TODO: Need to add solve(CMatrix, CMatrix) to the class for more efficient solving.
+        CMatrix UinvT = Invert.invTriU(lu.getU()).H();
+        CMatrix LT = lu.getL().H();
+        CMatrix inverse = new CMatrix(shape);
+
+        for(int i=0; i<UinvT.numCols; i++) {
+            CVector col = solver.solve(LT, UinvT.getColAsVector(i));
+            inverse.setRow(col.conj().entries, i); // Implicit transpose here.
+        }
+
+        return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.
+    }
+
+
+    /**
+     * Computes the condition number of this matrix using the 2-norm.
+     * Specifically, the condition number is computed as the norm of this matrix multiplied by the norm
+     * of the inverse of this matrix.
+     *
+     * @return The condition number of this matrix (Assuming 2-norm). This value may be
+     * {@link Double#POSITIVE_INFINITY infinite}.
+     */
+    @Override
+    public double cond() {
+        return cond(2);
+    }
+
+
+    /**
+     * Computes the condition number of this matrix using a specified norm. The condition number of a matrix is defined
+     * as the norm of a matrix multiplied by the norm of the inverse of the matrix.
+     * @param p Specifies the order of the norm to be used when computing the condition number.
+     *          Common {@code p} values include:<br>
+     *          - {@code p} = {@link Double#POSITIVE_INFINITY}, {@link #infNorm()}.<br>
+     *          - {@code p} = 2, The standard matrix 2-norm (the largest singular value).<br>
+     *          - {@code p} = -2, The Smallest singular value.<br>
+     *          - {@code p} = 1, Maximum absolute row sum.<br>
+     * @return The condition number of this matrix using the specified norm. This value may be
+     * {@link Double#POSITIVE_INFINITY infinite}.
+     */
+    // TODO Pull up to matrix mixin
+    public double cond(double p) {
+        double cond;
+
+        if(p==2 || p==-2) {
+            // Compute the singular value decomposition of the matrix.
+            Vector s = new ComplexSVD(false).decompose(this).getS().getDiag();
+            cond = p==2 ? s.max()/s.min() : s.min()/s.max();
+        } else {
+            cond = norm(p)*inv().norm(p);
+        }
+
+        return cond;
+    }
+
+
+    /**
+     * Extracts the diagonal elements of this matrix and returns them as a vector.
+     * @return A vector containing the diagonal entries of this matrix.
+     */
+    // TODO: Pull up to a matrix mixin interface
+    public CVector getDiag() {
+        final int newSize = Math.min(numRows, numCols);
+        CNumber[] diag = new CNumber[newSize];
+
+        int idx = 0;
+        for(int i=0; i<newSize; i++) {
+            diag[i] = this.entries[idx];
+            idx += numCols + 1;
+        }
+
+        return new CVector(diag);
+    }
+
+
+    /**
      * Constructs an identity matrix of the specified size.
      *
      * @param size Size of the identity matrix.
@@ -3680,8 +3790,7 @@ public class CMatrix
      */
     @Override
     public boolean isFullRank() {
-        // TODO: Implementation
-        return false;
+        return matrixRank() == Math.min(numRows, numCols);
     }
 
 
@@ -3693,8 +3802,19 @@ public class CMatrix
      */
     @Override
     public boolean isSingular() {
-        // TODO: Implementation
-        return false;
+        boolean result = true;
+
+        if(isSquare()) {
+            // Compute the LU decomposition.
+            LUDecomposition<CMatrix> lu = new ComplexLUDecomposition().decompose(this);
+
+            double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
+            CNumber det = ComplexDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
+
+            result = det.magAsDouble() < tol;
+        }
+
+        return result;
     }
 
 
@@ -3755,7 +3875,19 @@ public class CMatrix
      */
     @Override
     public int matrixRank() {
-        return 0;
+        Matrix S = new ComplexSVD(false).decompose(this).getS();
+        int stopIdx = Math.min(numRows, numCols);
+
+        double tol = 1.0E-8; // Tolerance for determining if a singular value should be considered zero.
+        int rank = 0;
+
+        for(int i=0; i<stopIdx; i++) {
+            if(S.get(i, i)>tol) {
+                rank++;
+            }
+        }
+
+        return rank;
     }
 
 
@@ -3851,7 +3983,19 @@ public class CMatrix
      */
     @Override
     public double norm(double p) {
-        return ComplexDenseOperations.matrixNormLp(entries, shape, p);
+        double norm;
+
+        if(Double.isInfinite(p)) {
+            if(p > 0) {
+                norm = maxNorm();
+            } else {
+                norm = minAbs();
+            }
+        } else {
+            norm = ComplexDenseOperations.matrixNormLp(entries, shape, p);
+        }
+
+        return norm;
     }
 
 

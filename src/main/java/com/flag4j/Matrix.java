@@ -26,9 +26,14 @@ package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.MatrixMixin;
-import com.flag4j.core.dense.RealDenseTensorBase;
 import com.flag4j.core.RealMatrixMixin;
+import com.flag4j.core.dense.RealDenseTensorBase;
 import com.flag4j.io.PrintOptions;
+import com.flag4j.linalg.Invert;
+import com.flag4j.linalg.decompositions.LUDecomposition;
+import com.flag4j.linalg.decompositions.RealLUDecomposition;
+import com.flag4j.linalg.decompositions.RealSVD;
+import com.flag4j.linalg.solvers.RealLUSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
@@ -55,7 +60,7 @@ import java.util.List;
  */
 public class Matrix
         extends RealDenseTensorBase<Matrix, CMatrix>
-        implements MatrixMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double>,
+        implements MatrixMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double, Vector>,
         RealMatrixMixin<Matrix, CMatrix> {
 
     /**
@@ -428,10 +433,10 @@ public class Matrix
     public boolean isInv(Matrix B) {
         boolean result;
 
-        if(!this.isSquare() || !B.isSquare()) {
+        if(!this.isSquare() || !B.isSquare() || !shape.equals(B.shape)) {
             result = false;
         } else {
-            result = this.mult(B).roundToZero().isI();
+            result = this.mult(B).round().isI();
         }
 
         return result;
@@ -3029,6 +3034,105 @@ public class Matrix
 
 
     /**
+     * Computes the inverse of this matrix. This is done by computing the {@link LUDecomposition LU decomposition} of
+     * this matrix, inverting {@code U} using a back-solve algorithm, then solving {@code inv(this)*L=inv(U)}
+     * for {@code inv(this)}.
+     *
+     * @return The inverse of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     * @throws RuntimeException If this matrix is singular (i.e. not invertible).
+     * @see #isInvertible()
+     */
+    @Override
+    public Matrix inv() {
+        ParameterChecks.assertSquare(shape);
+        LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(this);
+
+        double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
+        double det = RealDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
+
+        if(Math.abs(det) < tol) {
+            throw new RuntimeException("Cannot invert. Matrix is singular.");
+        }
+
+        // Solve inv(A)*L = inv(U) for inv(A) by solving L^T*inv(A)^T = inv(U)^T
+        RealLUSolver solver = new RealLUSolver(); // TODO: Need to add solve(Matrix, Matrix) to the class for more efficient solving.
+        Matrix UinvT = Invert.invTriU(lu.getU()).T();
+        Matrix LT = lu.getL().T();
+        Matrix inverse = new Matrix(shape);
+
+        for(int i=0; i<UinvT.numCols; i++) {
+            Vector col = solver.solve(LT, UinvT.getColAsVector(i));
+            inverse.setRow(col.entries, i); // Implicit transpose here.
+        }
+
+        return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.
+    }
+
+
+    /**
+     * Computes the condition number of this matrix using the 2-norm.
+     * Specifically, the condition number is computed as the norm of this matrix multiplied by the norm
+     * of the inverse of this matrix.
+     *
+     * @return The condition number of this matrix (Assuming 2-norm). This value may be
+     * {@link Double#POSITIVE_INFINITY infinite}.
+     */
+    @Override
+    public double cond() {
+        return cond(2);
+    }
+
+
+    /**
+     * Computes the condition number of this matrix using a specified norm. The condition number of a matrix is defined
+     * as the norm of a matrix multiplied by the norm of the inverse of the matrix.
+     * @param p Specifies the order of the norm to be used when computing the condition number.
+     *          Common {@code p} values include:<br>
+     *          - {@code p} = {@link Double#POSITIVE_INFINITY}, {@link #infNorm()}.<br>
+     *          - {@code p} = 2, The standard matrix 2-norm (the largest singular value).<br>
+     *          - {@code p} = -2, The Smallest singular value.<br>
+     *          - {@code p} = 1, Maximum absolute row sum.<br>
+     * @return The condition number of this matrix using the specified norm. This value may be
+     * {@link Double#POSITIVE_INFINITY infinite}.
+     */
+    // TODO Pull up to matrix mixin
+    public double cond(double p) {
+        double cond;
+
+        if(p==2 || p==-2) {
+            // Compute the singular value decomposition of the matrix.
+            Vector s = new RealSVD(false).decompose(this).getS().getDiag();
+            cond = p==2 ? s.max()/s.min() : s.min()/s.max();
+        } else {
+            cond = norm(p)*inv().norm(p);
+        }
+
+        return cond;
+    }
+
+
+    /**
+     * Extracts the diagonal elements of this matrix and returns them as a vector.
+     * @return A vector containing the diagonal entries of this matrix.
+     */
+    // TODO: Pull up to a matrix mixin interface
+    @Override
+    public Vector getDiag() {
+        final int newSize = Math.min(numRows, numCols);
+        double[] diag = new double[newSize];
+
+        int idx = 0;
+        for(int i=0; i<newSize; i++) {
+            diag[i] = this.entries[idx];
+            idx += numCols + 1;
+        }
+
+        return new Vector(diag);
+    }
+
+
+    /**
      * Constructs an identity matrix of the specified size.
      *
      * @param size Size of the identity matrix.
@@ -3205,8 +3309,7 @@ public class Matrix
      */
     @Override
     public boolean isFullRank() {
-        // TODO: Implementation
-        return false;
+        return matrixRank() == Math.min(numRows, numCols);
     }
 
 
@@ -3214,12 +3317,23 @@ public class Matrix
      * Checks if a matrix is singular. That is, if the matrix is <b>NOT</b> invertible.<br>
      * Also see {@link #isInvertible()}.
      *
-     * @return True if this matrix is singular. Otherwise, returns false.
+     * @return True if this matrix is singular or non-square. Otherwise, returns false.
      */
     @Override
     public boolean isSingular() {
-        // TODO: Implementation
-        return false;
+        boolean result = true;
+
+        if(isSquare()) {
+            // Compute the LU decomposition.
+            LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(this);
+
+            double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
+            double det = RealDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
+
+            result = Math.abs(det) < tol;
+        }
+
+        return result;
     }
 
 
@@ -3332,7 +3446,19 @@ public class Matrix
      */
     @Override
     public double norm(double p) {
-        return RealDenseOperations.matrixNormLp(entries, shape, p);
+        double norm;
+
+        if(Double.isInfinite(p)) {
+            if(p > 0) {
+                norm = maxNorm();
+            } else {
+                norm = minAbs();
+            }
+        } else {
+            norm = RealDenseOperations.matrixNormLp(entries, shape, p);
+        }
+
+        return norm;
     }
 
 
@@ -3361,15 +3487,26 @@ public class Matrix
 
 
     /**
-     * Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
+     * Computes the rank of this matrix (i.e. the number of linearly independent rows/columns in this matrix).
      * Note that here, rank is <b>NOT</b> the same as a tensor rank.
      *
      * @return The matrix rank of this matrix.
      */
     @Override
     public int matrixRank() {
-        // TODO: Implementation
-        return 0;
+        Matrix S = new RealSVD(false).decompose(this).getS();
+        int stopIdx = Math.min(numRows, numCols);
+
+        double tol = 1.0E-8; // Tolerance for determining if a singular value should be considered zero.
+        int rank = 0;
+
+        for(int i=0; i<stopIdx; i++) {
+            if(S.get(i, i)>tol) {
+                rank++;
+            }
+        }
+
+        return rank;
     }
 
 
@@ -3518,7 +3655,7 @@ public class Matrix
                 width = totalRowLength;
                 value = "...";
                 value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-                result.append(String.format(" [%-" + width + "s]\n", value));
+                result.append(String.format(" [%-" + width + "s]%n", value));
             }
 
             // Get Last row as a string.
@@ -3528,5 +3665,26 @@ public class Matrix
         result.append("]");
 
         return result.toString();
+    }
+
+
+    public static void main(String[] args) {
+        double[][] a = {{1, 0, -1}, {0, 1, 0} ,{1, 0, 1}};
+        double[][] b = {
+                { 1,          14.5523,    23634},
+                {-9345.235,   1.4,        0.0035},
+                { 10.3,       0,          1252.6},
+                { 36.24,     -31,         77.2}
+        };
+        double[][] c = {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        };
+        Matrix A = new Matrix(a);
+        Matrix B = new Matrix(b);
+        Matrix C = new Matrix(c);
+
+        System.out.println(C.inv());
     }
 }

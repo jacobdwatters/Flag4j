@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Householder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.linalg.transformations</a> &gt; <span class="el_source">Householder.java</span></div><h1>Householder.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.linalg.transformations;
+
+import com.flag4j.CMatrix;
+import com.flag4j.CVector;
+import com.flag4j.Matrix;
+import com.flag4j.Vector;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ErrorMessages;
+
+/**
+ * This class contains methods for computing real or complex Householder reflectors (also known as elementary reflectors).
+ * A Householder reflector is a transformation matrix which reflects a vector about a hyperplane containing the origin.
+ */
+public class Householder {
+
+<span class="nc" id="L40">    private Householder() {</span>
+        // Hide default constructor for utility class.
+<span class="nc" id="L42">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Computes the Householder reflector which describes a reflection through a hyperplane containing the origin which
+     * is normal to the specified {@code normal} vector.
+     * @param normal The vector normal to the plane the Householder reflector will reflect through\.
+     * @return A transformation matrix which describes a reflection through a plane containing the origin with the
+     * specified {@code normal} vector, i.e. a Householder reflector.
+     */
+    public static Matrix getReflector(Vector normal) {
+<span class="fc" id="L54">        Matrix H = Matrix.I(normal.size);</span>
+<span class="fc" id="L55">        Vector v = normal.copy();</span>
+
+<span class="fc" id="L57">        double signedNorm = -Math.copySign(v.norm(), v.entries[0]);</span>
+<span class="fc" id="L58">        v = v.div(v.entries[0] - signedNorm);</span>
+<span class="fc" id="L59">        v.entries[0] = 1;</span>
+
+        // Create projection matrix
+<span class="fc" id="L62">        Matrix P = v.outer(v).mult(2.0/v.inner(v));</span>
+<span class="fc" id="L63">        H.subEq(P);</span>
+
+<span class="fc" id="L65">        return H;</span>
+    }
+
+
+    /**
+     * Computes the Householder reflector which describes a reflection through a hyperplane containing the origin which
+     * is normal to the specified {@code normal} vector.
+     * @param normal The vector normal to the plane the Householder reflector will reflect through\.
+     * @return A transformation matrix which describes a reflection through a plane containing the origin with the
+     * specified {@code normal} vector, i.e. a Householder reflector.
+     */
+    public static CMatrix getReflector(CVector normal) {
+<span class="fc" id="L77">        CMatrix H = CMatrix.I(normal.size);</span>
+<span class="fc" id="L78">        CVector v = normal.copy();</span>
+
+        // Compute signed norm using modified sgn function.
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        CNumber signedNorm = v.entries[0].equals(CNumber.ZERO) ?</span>
+<span class="fc" id="L82">                new CNumber(-v.norm()) : CNumber.sgn(v.entries[0]).mult(-v.norm());</span>
+
+<span class="fc" id="L84">        v = v.div(v.entries[0].sub(signedNorm));</span>
+<span class="fc" id="L85">        v.entries[0] = new CNumber(1);</span>
+
+        // Create projection matrix
+<span class="fc" id="L88">        CMatrix P = v.outer(v).mult(2.0/v.inner(v).re);</span>
+<span class="fc" id="L89">        H.subEq(P);</span>
+
+<span class="fc" id="L91">        return H;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

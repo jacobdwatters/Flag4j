@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComplexDenseEquals.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense.complex</a> &gt; <span class="el_source">ComplexDenseEquals.java</span></div><h1>ComplexDenseEquals.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense.complex;
+
+import com.flag4j.CMatrix;
+import com.flag4j.Shape;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ErrorMessages;
+
+import java.util.Arrays;
+
+/**
+ * This class provides methods for checking the equality of complex dense tensors.
+ */
+public class ComplexDenseEquals {
+
+<span class="nc" id="L39">    private ComplexDenseEquals() {</span>
+        // Hide constructor for utility class.
+<span class="nc" id="L41">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+
+    /**
+     * Checks if two real dense matrices are equal.
+     * @param A First matrix.
+     * @param B Second matrix.
+     * @return True if the two matrices are element-wise equivalent.
+     */
+    public static boolean matrixEquals(CMatrix A, CMatrix B) {
+<span class="fc" id="L53">        return tensorEquals(A.entries, A.shape, B.entries, B.shape);</span>
+    }
+
+
+    /**
+     * Checks if two dense tensors are equal.
+     * @param src1 Entries of first tensor.
+     * @param shape1 Shape of first tensor.
+     * @param src2 Entries of second tensor.
+     * @param shape2 Shape of second tensor.
+     * @return True if the two tensors are numerically element-wise equivalent.
+     */
+    public static boolean tensorEquals(CNumber[] src1, Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="fc bfc" id="L66" title="All 4 branches covered.">        return shape1.equals(shape2) &amp;&amp; Arrays.equals(src1, src2);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

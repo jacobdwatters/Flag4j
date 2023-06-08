@@ -33,12 +33,13 @@ package com.flag4j.core;
  * @param <W> Complex Matrix type.
  * @param <Y> Real Matrix type.
  * @param <X> Matrix entry type.
+ * @param <TT> Vector type equivalent.
  */
-public interface MatrixMixin<T, U, V, W, Y, X extends Number>
+public interface MatrixMixin<T, U, V, W, Y, X extends Number, TT>
         extends MatrixPropertiesMixin,
         MatrixComparisonsMixin<T>,
         MatrixManipulationsMixin<T, X>,
-        MatrixOperationsMixin<T, U, V, W, Y, X> {
+        MatrixOperationsMixin<T, U, V, W, Y, X, TT> {
 
     /**
      * Gets the number of rows in this matrix.
