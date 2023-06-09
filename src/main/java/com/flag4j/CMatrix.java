@@ -34,7 +34,7 @@ import com.flag4j.linalg.Invert;
 import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
 import com.flag4j.linalg.decompositions.ComplexSVD;
 import com.flag4j.linalg.decompositions.LUDecomposition;
-import com.flag4j.linalg.solvers.ComplexLUSolver;
+import com.flag4j.linalg.solvers.ComplexExactSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
@@ -3539,7 +3539,7 @@ public class CMatrix
         }
 
         // Solve inv(A)*L = inv(U) for inv(A) by solving L^H*inv(A)^H = inv(U)^H
-        ComplexLUSolver solver = new ComplexLUSolver(); // TODO: Need to add solve(CMatrix, CMatrix) to the class for more efficient solving.
+        ComplexExactSolver solver = new ComplexExactSolver(); // TODO: Need to add solve(CMatrix, CMatrix) to the class for more efficient solving.
         CMatrix UinvT = Invert.invTriU(lu.getU()).H();
         CMatrix LT = lu.getL().H();
         CMatrix inverse = new CMatrix(shape);

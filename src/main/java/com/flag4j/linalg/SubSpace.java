@@ -29,11 +29,9 @@ import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
-import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.decompositions.ComplexSVD;
 import com.flag4j.linalg.decompositions.RealSVD;
 import com.flag4j.linalg.solvers.ComplexLstsqSolver;
-import com.flag4j.linalg.solvers.RealLUSolver;
 import com.flag4j.linalg.solvers.RealLstsqSolver;
 import com.flag4j.util.ErrorMessages;
 
