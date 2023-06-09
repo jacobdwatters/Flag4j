@@ -66,7 +66,7 @@
       <option name="presentableId" value="Default" />
       <updated>1686330332024</updated>
       <workItem from="1686330335051" duration="43000" />
-      <workItem from="1686330398985" duration="865000" />
+      <workItem from="1686330398985" duration="1153000" />
     </task>
     <task id="LOCAL-00001" summary="Update target directory.">
       <created>1686330688969</created>
@@ -124,7 +124,14 @@
       <option name="project" value="LOCAL" />
       <updated>1686331257637</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Update target directory">
+      <created>1686331548935</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1686331548935</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
