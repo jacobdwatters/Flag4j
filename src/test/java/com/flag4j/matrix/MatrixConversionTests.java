@@ -1,6 +1,10 @@
-package com.flag4j;
+package com.flag4j.matrix;
 
 
+import com.flag4j.CMatrix;
+import com.flag4j.Matrix;
+import com.flag4j.Tensor;
+import com.flag4j.Vector;
 import com.flag4j.util.ArrayUtils;
 import org.junit.jupiter.api.Test;
 
