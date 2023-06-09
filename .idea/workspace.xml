@@ -424,7 +424,7 @@
       <workItem from="1686348520846" duration="413000" />
       <workItem from="1686348941530" duration="8000" />
       <workItem from="1686348958137" duration="27000" />
-      <workItem from="1686348990983" duration="441000" />
+      <workItem from="1686348990983" duration="461000" />
     </task>
     <task id="LOCAL-00001" summary="Update the target.">
       <created>1686345238390</created>
@@ -537,7 +537,8 @@
     <MESSAGE value="Update name for SubSpace method." />
     <MESSAGE value="Refactor test directory." />
     <MESSAGE value="Update target." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update target." />
+    <MESSAGE value="add getignore." />
+    <option name="LAST_COMMIT_MESSAGE" value="add getignore." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Flag4j$All_Tests.ic" NAME="All Tests Coverage Results" MODIFIED="1686348572033" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
