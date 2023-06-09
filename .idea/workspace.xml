@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AnalysisUIOptions">
-    <option name="ANALYZE_TEST_SOURCES" value="false" />
-    <option name="SCOPE_TYPE" value="8" />
-    <option name="CUSTOM_SCOPE_NAME" value="Src" />
-  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="18d8fd57-c47c-4bc5-92e6-c97a9e6854b5" name="Changes" comment="">
+    <list default="true" id="c8143ba7-020c-4c64-a78b-eee9dde4b564" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/Flag4j-v0.0.1-beta.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/Flag4j-v0.0.1-beta.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/jacoco.exec" beforeDir="false" afterPath="$PROJECT_DIR$/target/jacoco.exec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/site/jacoco/jacoco-sessions.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/jacoco/jacoco-sessions.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/site/jacoco/jacoco.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/jacoco/jacoco.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CMatrixAddTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CMatrixAddTests.xml" afterDir="false" />
@@ -226,18 +227,14 @@
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.util.StringUtilsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.util.StringUtilsTests.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixAddTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixAddTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixConstructorTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixConstructorTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixConversionTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixConversionTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixDirectSumTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixDirectSumTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixElemDivTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixElemDivTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixElemMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixElemMultTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixEqualsTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixEqualsTest.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixInversionTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixInversionTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixMatVecMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixMatVecMultTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixMultTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixPropertiesTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixPropertiesTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixReshapeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixReshapeTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixRoundTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixRoundTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixRowColSumTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixRowColSumTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixScaleOperationsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixScaleOperationsTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixSetOperationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixSetOperationTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixStackTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CMatrixStackTests.txt" afterDir="false" />
@@ -249,15 +246,15 @@
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorDotTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorDotTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorElemDivTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorElemDivTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorElemMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorElemMultTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorToStringTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorToStringTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorReshapeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorReshapeTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorTransposeTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorTransposeTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorTransposeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorTransposeTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorElemDivTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorElemDivTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorAddTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorAddTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorEqualsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorEqualsTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorInnerProductTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorInnerProductTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorNormTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorNormTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorOuterProductTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorOuterProductTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorStackJoinExtendTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorStackJoinExtendTest.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorSubTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorSubTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorZeroOneTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorZeroOneTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixAddSubEqTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixAddSubEqTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixAddTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixAddTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixAddToEachColTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixAddToEachColTests.txt" afterDir="false" />
@@ -267,133 +264,107 @@
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixDetTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixDetTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixDirectSumTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixDirectSumTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixElemDivTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixElemDivTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixElemMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixElemMultTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixFibTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixFibTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixGetTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixGetTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixInversionTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixInversionTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixEqualsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixEqualsTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixMultTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixReshapeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixReshapeTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixScalMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixScalMultTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixSetOperationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixSetOperationTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixStackTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixStackTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixSumRowsColsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixSumRowsColsTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixTransposeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixTransposeTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixTriangularTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixTriangularTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixToStringTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.MatrixToStringTest.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.RealComplexDenseSparseMatMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.RealComplexDenseSparseMatMultTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.RemoveRowColTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.RemoveRowColTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.ShapeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.ShapeTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCMatrixConstructorTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCMatrixConstructorTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorConstructorTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorConstructorTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorAddTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorAddTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorConversionTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorConversionTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorElemDivTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorElemDivTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorElemMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorElemMultTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorJoinTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorJoinTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorReshapeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorReshapeTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorSubTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorSubTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorUnaryOpTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorUnaryOpTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseMatrixConstructorTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseMatrixConstructorTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseTensorConstructorTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseTensorConstructorTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorAddTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorAddTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorConstructorTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorConstructorTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorConversionTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorConversionTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorElemDivTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorElemDivTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorElemMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorElemMultTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorInnerProdTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorInnerProdTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorParPerpTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorParPerpTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorReshapeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorReshapeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorSetTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorSetTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorSparseSortTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorSparseSortTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorToStringTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorToStringTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorSubTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorSubTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorAggregateTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorAggregateTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorConversionTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorConversionTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorDotTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorDotTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorElemDivTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorElemDivTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorElemMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorElemMultTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorEqualsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorEqualsTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorGetSetTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorGetSetTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorPropertiesTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorPropertiesTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorScalMultDivTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorScalMultDivTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorUnitaryOperationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorUnitaryOperationTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorAddSubEqTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorAddSubEqTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorAddSubTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorAddSubTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorCrossProductTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorCrossProductTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorElemMultDivTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorElemMultDivTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorElementwiseTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorElementwiseTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorEqualsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorEqualsTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorExtendTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorExtendTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorInnerProductTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorInnerProductTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorNormTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorNormTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorPerpParallelTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorPerpParallelTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorScaleMultDivTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorScaleMultDivTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorShapeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorShapeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorToStringTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorToStringTest.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberBinaryOperationsTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberBinaryOperationsTest.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberComparisonTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberComparisonTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberConversionTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberConversionTest.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberExponentialTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberExponentialTest.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberGettersSettersTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberGettersSettersTest.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberMinMaxSumTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberMinMaxSumTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberSqrtTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberSqrtTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberRoundTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberRoundTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberToStringTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberToStringTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberTrigTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberTrigTest.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberUnaryOperationsTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberUnaryOperationsTest.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.io.PrintOptionsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.io.PrintOptionsTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.DecomposeTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.DecomposeTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexCholeskyTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexCholeskyTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexLUTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexLUTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexSchurTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexSchurTest.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealLUTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealLUTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealQRTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealQRTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealSVDTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealSVDTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealSchurTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealSchurTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.solvers.MatrixLUSolverTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.solvers.MatrixLUSolverTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.common.real.MatrixNormTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.common.real.MatrixNormTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.solvers.MatrixLstsqSolverTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.solvers.MatrixLstsqSolverTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.transformations.ProjectionTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.transformations.ProjectionTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.common.real.unaryOperationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.common.real.unaryOperationTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.CMatrixMultiplyTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.CMatrixMultiplyTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseMatMultTransposeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseMatMultTransposeTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseOperationsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseOperationsTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseSetOperationsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseSetOperationsTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseTransposeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseTransposeTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexMatrixMultiplyTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexMatrixMultiplyTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.MatrixMultiplyTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.MatrixMultiplyTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.RealDenseMatMultTransposeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.RealDenseMatMultTransposeTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.RealDenseOperationsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.RealDenseOperationsTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real_complex.RealComplexDenseMatMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real_complex.RealComplexDenseMatMultTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real_complex.RealComplexDenseMatMultTransposeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real_complex.RealComplexDenseMatMultTransposeTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real_complex.RealComplexDenseOperationsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real_complex.RealComplexDenseOperationsTests.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.real.RealDenseSparseMatMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.real.RealDenseSparseMatMultTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.sparse.complex.ComplexSparseMatMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.sparse.complex.ComplexSparseMatMultTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.sparse.real.RealSparseMatMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.sparse.real.RealSparseMatMultTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.real.RealDenseSparseMatMultTransposeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.real.RealDenseSparseMatMultTransposeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatMultTests.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExportToHTMLSettings">
-    <option name="OUTPUT_DIRECTORY" value="C:\Users\jacob\IdeaProjects\Flag4j\target\surefire-reports" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Interface" />
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
-  <component name="Git.Rebase.Settings">
-    <option name="NEW_BASE" value="develop" />
-  </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="singular-value-decomposition" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
-  </component>
-  <component name="GitSEFilterConfiguration">
-    <file-type-list>
-      <filtered-out-file-type name="LOCAL_BRANCH" />
-      <filtered-out-file-type name="REMOTE_BRANCH" />
-      <filtered-out-file-type name="TAG" />
-      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
-    </file-type-list>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
   <component name="MavenRunner">
     <option name="delegateBuildToMaven" value="true" />
   </component>
-  <component name="NamedScopeManager">
-    <scope name="Src" pattern="file[Flag4j]:src/main//*" />
-  </component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
-  </component>
-  <component name="ProjectId" id="2MNZ0bN6JndqyLL0tUPpkRqFsmJ" />
+  <component name="ProjectId" id="2QyecbnaK2Yany20MTHRsAjJPkb" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
@@ -405,758 +376,26 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="ToolWindowCommit.ShowToolbar" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/target/surefire-reports" />
-    <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Libraries" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.39983845" />
-    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="editing.templates" />
-  </component>
-  <component name="RecentsManager">
-    <key name="MoveMembersDialog.RECENTS_KEY">
-      <recent name="com.flag4j.util.ArrayUtils" />
-      <recent name="com.flag4j.operations.dense.real_complex.RealComplexDenseOperations" />
-      <recent name="com.flag4j.operations.dense.complex.ComplexDenseElemDiv" />
-      <recent name="com.flag4j.operations.dense.complex.ComplexDenseElemMult" />
-      <recent name="com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv" />
-    </key>
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="com.flag4j" />
-      <recent name="com.flag4j.util" />
-      <recent name="com.flag4j.operations.dense.real_complex" />
-      <recent name="com.flag4j.operations.dense.complex" />
-      <recent name="com.flag4j.operations" />
-    </key>
-  </component>
-  <component name="RunManager" selected="JUnit.All Tests">
-    <configuration name="All Tests" type="JUnit" factoryName="JUnit">
-      <module name="Flag4j" />
-      <option name="MAIN_CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="TEST_OBJECT" value="directory" />
-      <dir value="$PROJECT_DIR$/src/test" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CMatrixInversionTests.invTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Flag4j" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.flag4j.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.flag4j" />
-      <option name="MAIN_CLASS_NAME" value="com.flag4j.CMatrixInversionTests" />
-      <option name="METHOD_NAME" value="invTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="MatrixInversionTests.invTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Flag4j" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.flag4j.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.flag4j" />
-      <option name="MAIN_CLASS_NAME" value="com.flag4j.MatrixInversionTests" />
-      <option name="METHOD_NAME" value="invTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CMatrix.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Flag4j/target/site/jacoco/com.flag4j/CMatrix.html" useBuiltInWebServerPort="true">
-      <method v="2" />
-    </configuration>
-    <configuration name="CreateMatrix.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Flag4j/target/site/jacoco/com.flag4j.linalg/CreateMatrix.html" useBuiltInWebServerPort="true">
-      <method v="2" />
-    </configuration>
-    <configuration name="RealComplexDenseMatrixMultiplication.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Flag4j/target/site/jacoco/com.flag4j.operations.dense.real_complex/RealComplexDenseMatrixMultiplication.html" useBuiltInWebServerPort="true">
-      <method v="2" />
-    </configuration>
-    <list>
-      <item itemvalue="JUnit.All Tests" />
-      <item itemvalue="JUnit.MatrixInversionTests.invTest" />
-      <item itemvalue="JUnit.CMatrixInversionTests.invTest" />
-      <item itemvalue="JavaScript Debug.CreateMatrix.html" />
-      <item itemvalue="JavaScript Debug.CMatrix.html" />
-      <item itemvalue="JavaScript Debug.RealComplexDenseMatrixMultiplication.html" />
-    </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="JavaScript Debug.RealComplexDenseMatrixMultiplication.html" />
-        <item itemvalue="JavaScript Debug.CMatrix.html" />
-        <item itemvalue="JavaScript Debug.CreateMatrix.html" />
-        <item itemvalue="JUnit.CMatrixInversionTests.invTest" />
-        <item itemvalue="JUnit.MatrixInversionTests.invTest" />
-      </list>
-    </recent_temporary>
+    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.runner" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="18d8fd57-c47c-4bc5-92e6-c97a9e6854b5" name="Changes" comment="" />
-      <created>1677609780765</created>
+      <changelist id="c8143ba7-020c-4c64-a78b-eee9dde4b564" name="Changes" comment="" />
+      <created>1686330332024</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1677609780765</updated>
-      <workItem from="1677609784401" duration="14027000" />
-      <workItem from="1677690755153" duration="2470000" />
-      <workItem from="1677959546914" duration="12320000" />
-      <workItem from="1678045797525" duration="9292000" />
-      <workItem from="1678209468263" duration="2959000" />
-      <workItem from="1678296524956" duration="3511000" />
-      <workItem from="1678311032480" duration="4271000" />
-      <workItem from="1678404994108" duration="13289000" />
-      <workItem from="1678468145572" duration="3343000" />
-      <workItem from="1678480899918" duration="14526000" />
-      <workItem from="1678563564414" duration="7893000" />
-      <workItem from="1678584137991" duration="8345000" />
-      <workItem from="1678649128983" duration="6431000" />
-      <workItem from="1678900171211" duration="7259000" />
-      <workItem from="1679000317106" duration="5810000" />
-      <workItem from="1679025065872" duration="3382000" />
-      <workItem from="1679075918511" duration="6869000" />
-      <workItem from="1679089148375" duration="554000" />
-      <workItem from="1679165489702" duration="15464000" />
-      <workItem from="1679256902659" duration="805000" />
-      <workItem from="1679330852971" duration="12950000" />
-      <workItem from="1679354085880" duration="8543000" />
-      <workItem from="1679418881478" duration="14160000" />
-      <workItem from="1679446945363" duration="516000" />
-      <workItem from="1679447944078" duration="4510000" />
-      <workItem from="1679516388201" duration="10267000" />
-      <workItem from="1679589980271" duration="10777000" />
-      <workItem from="1679606598198" duration="543000" />
-      <workItem from="1679678546910" duration="11192000" />
-      <workItem from="1679777284965" duration="7316000" />
-      <workItem from="1679784827096" duration="752000" />
-      <workItem from="1679856945977" duration="10412000" />
-      <workItem from="1679962324282" duration="6750000" />
-      <workItem from="1680531622629" duration="6774000" />
-      <workItem from="1680568468947" duration="3320000" />
-      <workItem from="1680582522947" duration="15000" />
-      <workItem from="1680623478472" duration="12181000" />
-      <workItem from="1680712323655" duration="7712000" />
-      <workItem from="1680721916564" duration="901000" />
-      <workItem from="1680738246041" duration="5560000" />
-      <workItem from="1680799270642" duration="570000" />
-      <workItem from="1680822762521" duration="1591000" />
-      <workItem from="1680981233756" duration="10542000" />
-      <workItem from="1681063020029" duration="4446000" />
-      <workItem from="1681139332584" duration="2000" />
-      <workItem from="1681140355948" duration="3873000" />
-      <workItem from="1681172210725" duration="4120000" />
-      <workItem from="1681230243065" duration="5690000" />
-      <workItem from="1681346513755" duration="3462000" />
-      <workItem from="1681402152810" duration="8117000" />
-      <workItem from="1681412851374" duration="464000" />
-      <workItem from="1681415440043" duration="5471000" />
-      <workItem from="1681427744921" duration="5619000" />
-      <workItem from="1681449822452" duration="682000" />
-      <workItem from="1681490449449" duration="8160000" />
-      <workItem from="1681498938346" duration="515000" />
-      <workItem from="1681526326775" duration="1131000" />
-      <workItem from="1681576200705" duration="18267000" />
-      <workItem from="1681599452628" duration="740000" />
-      <workItem from="1681604184781" duration="694000" />
-      <workItem from="1681658785411" duration="17938000" />
-      <workItem from="1681701622087" duration="608000" />
-      <workItem from="1681704822460" duration="546000" />
-      <workItem from="1681708930470" duration="983000" />
-      <workItem from="1681709937323" duration="108000" />
-      <workItem from="1681744423567" duration="5544000" />
-      <workItem from="1681830742048" duration="1315000" />
-      <workItem from="1681847819990" duration="1867000" />
-      <workItem from="1681853939153" duration="2279000" />
-      <workItem from="1681859084676" duration="3878000" />
-      <workItem from="1681875854793" duration="6541000" />
-      <workItem from="1681919318966" duration="20235000" />
-      <workItem from="1681952400553" duration="4927000" />
-      <workItem from="1681961461218" duration="891000" />
-      <workItem from="1681970925869" duration="2437000" />
-      <workItem from="1682018040356" duration="10705000" />
-      <workItem from="1682029741830" duration="820000" />
-      <workItem from="1682034034343" duration="4436000" />
-      <workItem from="1682042458086" duration="6206000" />
-      <workItem from="1682055982367" duration="2573000" />
-      <workItem from="1682090696094" duration="22915000" />
-      <workItem from="1682120113422" duration="19275000" />
-      <workItem from="1682145144553" duration="321000" />
-      <workItem from="1682181248124" duration="14580000" />
-      <workItem from="1682217295944" duration="718000" />
-      <workItem from="1682265493974" duration="7484000" />
-      <workItem from="1682294630426" duration="10812000" />
-      <workItem from="1682350880950" duration="6044000" />
-      <workItem from="1682383128698" duration="13867000" />
-      <workItem from="1682449185964" duration="4197000" />
-      <workItem from="1682468285555" duration="11882000" />
-      <workItem from="1682524909918" duration="9788000" />
-      <workItem from="1682572344738" duration="1560000" />
-      <workItem from="1682610716916" duration="7885000" />
-      <workItem from="1682697340108" duration="9050000" />
-      <workItem from="1682708578776" duration="372000" />
-      <workItem from="1682727218157" duration="4192000" />
-      <workItem from="1682788746003" duration="5154000" />
-      <workItem from="1682872419364" duration="7706000" />
-      <workItem from="1682961366083" duration="149000" />
-      <workItem from="1683069774324" duration="8708000" />
-      <workItem from="1683090280349" duration="4022000" />
-      <workItem from="1683129634953" duration="2747000" />
-      <workItem from="1683165857417" duration="268000" />
-      <workItem from="1683220681372" duration="28178000" />
-      <workItem from="1683306989893" duration="10159000" />
-      <workItem from="1683401336952" duration="8705000" />
-      <workItem from="1683425586468" duration="5952000" />
-      <workItem from="1683567933644" duration="10008000" />
-      <workItem from="1683605755263" duration="6279000" />
-      <workItem from="1683646261054" duration="10821000" />
-      <workItem from="1683677996081" duration="3678000" />
-      <workItem from="1683824450309" duration="8636000" />
-      <workItem from="1683920781986" duration="5914000" />
-      <workItem from="1683936179959" duration="2692000" />
-      <workItem from="1683952107074" duration="6050000" />
-      <workItem from="1684000351233" duration="13979000" />
-      <workItem from="1684023754131" duration="2727000" />
-      <workItem from="1684095197094" duration="780000" />
-      <workItem from="1684523163108" duration="1547000" />
-      <workItem from="1684534859889" duration="9565000" />
-      <workItem from="1684553301761" duration="1645000" />
-      <workItem from="1684617119850" duration="12525000" />
-      <workItem from="1684642306519" duration="3225000" />
-      <workItem from="1684685447096" duration="5221000" />
-      <workItem from="1684722676999" duration="7058000" />
-      <workItem from="1684794406488" duration="7315000" />
-      <workItem from="1684812051185" duration="2839000" />
-      <workItem from="1684814919791" duration="41000" />
-      <workItem from="1684893523578" duration="597000" />
-      <workItem from="1684972437181" duration="4085000" />
-      <workItem from="1684985372653" duration="4201000" />
-      <workItem from="1685074134851" duration="53000" />
-      <workItem from="1685121605735" duration="3449000" />
-      <workItem from="1685211527276" duration="16615000" />
-      <workItem from="1685409198959" duration="6633000" />
-      <workItem from="1685488776453" duration="8034000" />
-      <workItem from="1685667462819" duration="5611000" />
-      <workItem from="1685729352477" duration="22210000" />
-      <workItem from="1685751706140" duration="46000" />
-      <workItem from="1685751816876" duration="15476000" />
-      <workItem from="1685811300499" duration="25216000" />
-      <workItem from="1685902366387" duration="1007000" />
-      <workItem from="1686092043693" duration="6326000" />
-      <workItem from="1686098671595" duration="132000" />
-      <workItem from="1686182519728" duration="2431000" />
-      <workItem from="1686184977463" duration="2608000" />
-      <workItem from="1686268541597" duration="2899000" />
+      <updated>1686330332024</updated>
+      <workItem from="1686330335051" duration="43000" />
+      <workItem from="1686330398985" duration="85000" />
     </task>
-    <task id="LOCAL-00227" summary="Added tests for the SparseVector class.">
-      <created>1685415154730</created>
-      <option name="number" value="00227" />
-      <option name="presentableId" value="LOCAL-00227" />
-      <option name="project" value="LOCAL" />
-      <updated>1685415154730</updated>
-    </task>
-    <task id="LOCAL-00228" summary="Added tests for the SparseVector class.&#10;&#10;Small fix for SparseDataWrapper that allows matrix indices to be sorted.">
-      <created>1685668472008</created>
-      <option name="number" value="00228" />
-      <option name="presentableId" value="LOCAL-00228" />
-      <option name="project" value="LOCAL" />
-      <updated>1685668472008</updated>
-    </task>
-    <task id="LOCAL-00229" summary="Added tests for the SparseVector class.&#10;&#10;Small fix for SparseDataWrapper that allows matrix indices to be sorted.">
-      <created>1685668503030</created>
-      <option name="number" value="00229" />
-      <option name="presentableId" value="LOCAL-00229" />
-      <option name="project" value="LOCAL" />
-      <updated>1685668503030</updated>
-    </task>
-    <task id="LOCAL-00230" summary="Added tests for the SparseVector class.">
-      <created>1685670427809</created>
-      <option name="number" value="00230" />
-      <option name="presentableId" value="LOCAL-00230" />
-      <option name="project" value="LOCAL" />
-      <updated>1685670427809</updated>
-    </task>
-    <task id="LOCAL-00231" summary="Added tests for the SparseVector class.">
-      <created>1685670512367</created>
-      <option name="number" value="00231" />
-      <option name="presentableId" value="LOCAL-00231" />
-      <option name="project" value="LOCAL" />
-      <updated>1685670512368</updated>
-    </task>
-    <task id="LOCAL-00232" summary="Added tests for the SparseVector class.">
-      <created>1685670517849</created>
-      <option name="number" value="00232" />
-      <option name="presentableId" value="LOCAL-00232" />
-      <option name="project" value="LOCAL" />
-      <updated>1685670517849</updated>
-    </task>
-    <task id="LOCAL-00233" summary="Restructure test directories.">
-      <created>1685672300663</created>
-      <option name="number" value="00233" />
-      <option name="presentableId" value="LOCAL-00233" />
-      <option name="project" value="LOCAL" />
-      <updated>1685672300663</updated>
-    </task>
-    <task id="LOCAL-00234" summary="Fix for argEq methods for real dense tensors.">
-      <created>1685673165399</created>
-      <option name="number" value="00234" />
-      <option name="presentableId" value="LOCAL-00234" />
-      <option name="project" value="LOCAL" />
-      <updated>1685673165399</updated>
-    </task>
-    <task id="LOCAL-00235" summary="Add several tests to the SparseCVector class.&#10;&#10;Several fixes for bugs discovered by the tests.">
-      <created>1685747222504</created>
-      <option name="number" value="00235" />
-      <option name="presentableId" value="LOCAL-00235" />
-      <option name="project" value="LOCAL" />
-      <updated>1685747222505</updated>
-    </task>
-    <task id="LOCAL-00236" summary="Add several tests to the SparseCVector class.&#10;&#10;Several fixes for bugs discovered by the tests.">
-      <created>1685747284682</created>
-      <option name="number" value="00236" />
-      <option name="presentableId" value="LOCAL-00236" />
-      <option name="project" value="LOCAL" />
-      <updated>1685747284682</updated>
-    </task>
-    <task id="LOCAL-00237" summary="Sparse tensors/matrices/vectors no longer implement addEq or subEq methods.&#10;&#10;These methods do not make sense for sparse objects as adding/subtracting two sparse objects should result in a dense object.">
-      <created>1685748245185</created>
-      <option name="number" value="00237" />
-      <option name="presentableId" value="LOCAL-00237" />
-      <option name="project" value="LOCAL" />
-      <updated>1685748245185</updated>
-    </task>
-    <task id="LOCAL-00238" summary="Sparse tensors/matrices/vectors no longer implement addEq or subEq methods.&#10;&#10;These methods do not make sense for sparse objects as adding/subtracting two sparse objects should result in a dense object.">
-      <created>1685748721956</created>
-      <option name="number" value="00238" />
-      <option name="presentableId" value="LOCAL-00238" />
-      <option name="project" value="LOCAL" />
-      <updated>1685748721956</updated>
-    </task>
-    <task id="LOCAL-00239" summary="Update coverage reports.">
-      <created>1685749288017</created>
-      <option name="number" value="00239" />
-      <option name="presentableId" value="LOCAL-00239" />
-      <option name="project" value="LOCAL" />
-      <updated>1685749288017</updated>
-    </task>
-    <task id="LOCAL-00240" summary="Update coverage reports.">
-      <created>1685749774477</created>
-      <option name="number" value="00240" />
-      <option name="presentableId" value="LOCAL-00240" />
-      <option name="project" value="LOCAL" />
-      <updated>1685749774477</updated>
-    </task>
-    <task id="LOCAL-00241" summary="Update coverage reports.">
-      <created>1685750162169</created>
-      <option name="number" value="00241" />
-      <option name="presentableId" value="LOCAL-00241" />
-      <option name="project" value="LOCAL" />
-      <updated>1685750162169</updated>
-    </task>
-    <task id="LOCAL-00242" summary="Update JavaDoc.">
-      <created>1685750559359</created>
-      <option name="number" value="00242" />
-      <option name="presentableId" value="LOCAL-00242" />
-      <option name="project" value="LOCAL" />
-      <updated>1685750559359</updated>
-    </task>
-    <task id="LOCAL-00243" summary="Update JavaDoc.">
-      <created>1685750577689</created>
-      <option name="number" value="00243" />
-      <option name="presentableId" value="LOCAL-00243" />
-      <option name="project" value="LOCAL" />
-      <updated>1685750577689</updated>
-    </task>
-    <task id="LOCAL-00244" summary="Update JavaDoc.">
-      <created>1685750777748</created>
-      <option name="number" value="00244" />
-      <option name="presentableId" value="LOCAL-00244" />
-      <option name="project" value="LOCAL" />
-      <updated>1685750777748</updated>
-    </task>
-    <task id="LOCAL-00245" summary="Update target directory.">
-      <created>1685751596803</created>
-      <option name="number" value="00245" />
-      <option name="presentableId" value="LOCAL-00245" />
-      <option name="project" value="LOCAL" />
-      <updated>1685751596803</updated>
-    </task>
-    <task id="LOCAL-00246" summary="Update target directory.">
-      <created>1685752193949</created>
-      <option name="number" value="00246" />
-      <option name="presentableId" value="LOCAL-00246" />
-      <option name="project" value="LOCAL" />
-      <updated>1685752193949</updated>
-    </task>
-    <task id="LOCAL-00247" summary="Update target directory.">
-      <created>1685752258501</created>
-      <option name="number" value="00247" />
-      <option name="presentableId" value="LOCAL-00247" />
-      <option name="project" value="LOCAL" />
-      <updated>1685752258501</updated>
-    </task>
-    <task id="LOCAL-00248" summary="Update target directory.">
-      <created>1685752335773</created>
-      <option name="number" value="00248" />
-      <option name="presentableId" value="LOCAL-00248" />
-      <option name="project" value="LOCAL" />
-      <updated>1685752335773</updated>
-    </task>
-    <task id="LOCAL-00249" summary="Initial implementation of the singular value decomposition for real dense matrices.">
-      <created>1685772490288</created>
-      <option name="number" value="00249" />
-      <option name="presentableId" value="LOCAL-00249" />
-      <option name="project" value="LOCAL" />
-      <updated>1685772490288</updated>
-    </task>
-    <task id="LOCAL-00250" summary="Added SVD for complex matrices.">
-      <created>1685814440760</created>
-      <option name="number" value="00250" />
-      <option name="presentableId" value="LOCAL-00250" />
-      <option name="project" value="LOCAL" />
-      <updated>1685814440760</updated>
-    </task>
-    <task id="LOCAL-00251" summary="Fix for SVD when the matrix is rectangular.">
-      <created>1685817635140</created>
-      <option name="number" value="00251" />
-      <option name="presentableId" value="LOCAL-00251" />
-      <option name="project" value="LOCAL" />
-      <updated>1685817635140</updated>
-    </task>
-    <task id="LOCAL-00252" summary="Added tests for SVD.">
-      <created>1685818530045</created>
-      <option name="number" value="00252" />
-      <option name="presentableId" value="LOCAL-00252" />
-      <option name="project" value="LOCAL" />
-      <updated>1685818530045</updated>
-    </task>
-    <task id="LOCAL-00253" summary="Added tests for SVD.">
-      <created>1685818732343</created>
-      <option name="number" value="00253" />
-      <option name="presentableId" value="LOCAL-00253" />
-      <option name="project" value="LOCAL" />
-      <updated>1685818732343</updated>
-    </task>
-    <task id="LOCAL-00254" summary="Update JavaDoc.">
-      <created>1685818831830</created>
-      <option name="number" value="00254" />
-      <option name="presentableId" value="LOCAL-00254" />
-      <option name="project" value="LOCAL" />
-      <updated>1685818831830</updated>
-    </task>
-    <task id="LOCAL-00255" summary="Added implementations for matrix sub-spaces and positive definiteness.">
-      <created>1685822830376</created>
-      <option name="number" value="00255" />
-      <option name="presentableId" value="LOCAL-00255" />
-      <option name="project" value="LOCAL" />
-      <updated>1685822830376</updated>
-    </task>
-    <task id="LOCAL-00256" summary="Added implementations for complex matrix sub-spaces.">
-      <created>1685822942999</created>
-      <option name="number" value="00256" />
-      <option name="presentableId" value="LOCAL-00256" />
-      <option name="project" value="LOCAL" />
-      <updated>1685822942999</updated>
-    </task>
-    <task id="LOCAL-00257" summary="Removed unneeded commented out code.">
-      <created>1685823095858</created>
-      <option name="number" value="00257" />
-      <option name="presentableId" value="LOCAL-00257" />
-      <option name="project" value="LOCAL" />
-      <updated>1685823095858</updated>
-    </task>
-    <task id="LOCAL-00258" summary="Remove unneeded main method in matrix class.">
-      <created>1685833710074</created>
-      <option name="number" value="00258" />
-      <option name="presentableId" value="LOCAL-00258" />
-      <option name="project" value="LOCAL" />
-      <updated>1685833710075</updated>
-    </task>
-    <task id="LOCAL-00259" summary="Remove unneeded main method in matrix class.">
-      <created>1685833718004</created>
-      <option name="number" value="00259" />
-      <option name="presentableId" value="LOCAL-00259" />
-      <option name="project" value="LOCAL" />
-      <updated>1685833718004</updated>
-    </task>
-    <task id="LOCAL-00260" summary="Fix for matrix inversion and related methods.&#10;&#10;Also added a getDiag() method to the matrix operations mixin interface which extracts the diagonal of a matrix.">
-      <created>1686097907009</created>
-      <option name="number" value="00260" />
-      <option name="presentableId" value="LOCAL-00260" />
-      <option name="project" value="LOCAL" />
-      <updated>1686097907010</updated>
-    </task>
-    <task id="LOCAL-00261" summary="Fix for matrix inversion and related methods.&#10;&#10;Also added a getDiag() method to the matrix operations mixin interface which extracts the diagonal of a matrix.">
-      <created>1686097971614</created>
-      <option name="number" value="00261" />
-      <option name="presentableId" value="LOCAL-00261" />
-      <option name="project" value="LOCAL" />
-      <updated>1686097971614</updated>
-    </task>
-    <task id="LOCAL-00262" summary="Fix for matrix inversion and related methods.&#10;&#10;Also added a getDiag() method to the matrix operations mixin interface which extracts the diagonal of a matrix.">
-      <created>1686183429412</created>
-      <option name="number" value="00262" />
-      <option name="presentableId" value="LOCAL-00262" />
-      <option name="project" value="LOCAL" />
-      <updated>1686183429412</updated>
-    </task>
-    <task id="LOCAL-00263" summary="Update JavaDoc and coverage reports.">
-      <created>1686183815511</created>
-      <option name="number" value="00263" />
-      <option name="presentableId" value="LOCAL-00263" />
-      <option name="project" value="LOCAL" />
-      <updated>1686183815511</updated>
-    </task>
-    <task id="LOCAL-00264" summary="Update JavaDoc and coverage reports.">
-      <created>1686183855335</created>
-      <option name="number" value="00264" />
-      <option name="presentableId" value="LOCAL-00264" />
-      <option name="project" value="LOCAL" />
-      <updated>1686183855335</updated>
-    </task>
-    <task id="LOCAL-00265" summary="Remove target files.">
-      <created>1686184677685</created>
-      <option name="number" value="00265" />
-      <option name="presentableId" value="LOCAL-00265" />
-      <option name="project" value="LOCAL" />
-      <updated>1686184677685</updated>
-    </task>
-    <task id="LOCAL-00266" summary="Remove target files.">
-      <created>1686185027948</created>
-      <option name="number" value="00266" />
-      <option name="presentableId" value="LOCAL-00266" />
-      <option name="project" value="LOCAL" />
-      <updated>1686185027948</updated>
-    </task>
-    <task id="LOCAL-00267" summary="Remove target files.">
-      <created>1686185057848</created>
-      <option name="number" value="00267" />
-      <option name="presentableId" value="LOCAL-00267" />
-      <option name="project" value="LOCAL" />
-      <updated>1686185057848</updated>
-    </task>
-    <task id="LOCAL-00268" summary="Remove target files.">
-      <created>1686185813710</created>
-      <option name="number" value="00268" />
-      <option name="presentableId" value="LOCAL-00268" />
-      <option name="project" value="LOCAL" />
-      <updated>1686185813710</updated>
-    </task>
-    <task id="LOCAL-00269" summary="Remove target files.">
-      <created>1686186196851</created>
-      <option name="number" value="00269" />
-      <option name="presentableId" value="LOCAL-00269" />
-      <option name="project" value="LOCAL" />
-      <updated>1686186196851</updated>
-    </task>
-    <task id="LOCAL-00270" summary="Remove target files.">
-      <created>1686187282424</created>
-      <option name="number" value="00270" />
-      <option name="presentableId" value="LOCAL-00270" />
-      <option name="project" value="LOCAL" />
-      <updated>1686187282424</updated>
-    </task>
-    <task id="LOCAL-00271" summary="Update target directory.">
-      <created>1686269350878</created>
-      <option name="number" value="00271" />
-      <option name="presentableId" value="LOCAL-00271" />
-      <option name="project" value="LOCAL" />
-      <updated>1686269350878</updated>
-    </task>
-    <task id="LOCAL-00272" summary="Update target directory.">
-      <created>1686270499525</created>
-      <option name="number" value="00272" />
-      <option name="presentableId" value="LOCAL-00272" />
-      <option name="project" value="LOCAL" />
-      <updated>1686270499525</updated>
-    </task>
-    <task id="LOCAL-00273" summary="Update target directory.">
-      <created>1686270522844</created>
-      <option name="number" value="00273" />
-      <option name="presentableId" value="LOCAL-00273" />
-      <option name="project" value="LOCAL" />
-      <updated>1686270522844</updated>
-    </task>
-    <task id="LOCAL-00274" summary="Update target directory.">
-      <created>1686270544241</created>
-      <option name="number" value="00274" />
-      <option name="presentableId" value="LOCAL-00274" />
-      <option name="project" value="LOCAL" />
-      <updated>1686270544241</updated>
-    </task>
-    <task id="LOCAL-00275" summary="Update target directory.">
-      <created>1686271577589</created>
-      <option name="number" value="00275" />
-      <option name="presentableId" value="LOCAL-00275" />
-      <option name="project" value="LOCAL" />
-      <updated>1686271577589</updated>
-    </task>
-    <option name="localTasksCounter" value="276" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
   <component name="VcsManagerConfiguration">
-    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Implemented several methods in the SparseVector class.&#10;&#10;Also implemented toDense method for all sparse vectors, matrices, tensors." />
-    <MESSAGE value="Implemented several methods in the SparseCVector class." />
-    <MESSAGE value="Fixed issues in the Eigen class.&#10;&#10;Eigen values and eigenvectors are now correctly computed. Further, the Schur decomposition is also correctly computed and utilized to compute the eigenvalues and eigenvectors." />
-    <MESSAGE value="Fixed small issue in the computation of complex schur decomposition.&#10;&#10;The Schur decomposition for complex matrices is now computed using the shifted QR algorithm." />
-    <MESSAGE value="Added tests for the SparseVector class.&#10;&#10;Fixed issue with the isParallel() method in both the SparseVector and SparseCVector class." />
-    <MESSAGE value="Added tests for the SparseVector class.&#10;&#10;Small fix for SparseDataWrapper that allows matrix indices to be sorted." />
-    <MESSAGE value="Added tests for the SparseVector class." />
-    <MESSAGE value="Restructure test directories." />
-    <MESSAGE value="Fix for argEq methods for real dense tensors." />
-    <MESSAGE value="Add several tests to the SparseCVector class.&#10;&#10;Several fixes for bugs discovered by the tests." />
-    <MESSAGE value="Sparse tensors/matrices/vectors no longer implement addEq or subEq methods.&#10;&#10;These methods do not make sense for sparse objects as adding/subtracting two sparse objects should result in a dense object." />
-    <MESSAGE value="Update coverage reports." />
-    <MESSAGE value="Initial implementation of the singular value decomposition for real dense matrices." />
-    <MESSAGE value="Added SVD for complex matrices." />
-    <MESSAGE value="Fix for SVD when the matrix is rectangular." />
-    <MESSAGE value="Added tests for SVD." />
-    <MESSAGE value="Update JavaDoc." />
-    <MESSAGE value="Added implementations for matrix sub-spaces and positive definiteness." />
-    <MESSAGE value="Added implementations for complex matrix sub-spaces." />
-    <MESSAGE value="Removed unneeded commented out code." />
-    <MESSAGE value="Remove unneeded main method in matrix class." />
-    <MESSAGE value="Fix for matrix inversion and related methods.&#10;&#10;Also added a getDiag() method to the matrix operations mixin interface which extracts the diagonal of a matrix." />
-    <MESSAGE value="Update JavaDoc and coverage reports." />
-    <MESSAGE value="Remove target files." />
-    <MESSAGE value="Update target directory." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update target directory." />
-  </component>
-  <component name="XSLT-Support.FileAssociations.UIState">
-    <expand />
-    <select />
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Flag4j$SparseVectorInnerProdTests_denseComplexInnerProdTest.ic" NAME="SparseVectorInnerProdTests.denseComplexInnerProdTest Coverage Results" MODIFIED="1684814644488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.sparse_vector.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$RealDenseMatrixMultTranspose.ic" NAME="RealDenseMatrixMultTranspose Coverage Results" MODIFIED="1681684102659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.operations.dense.real.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$SparseVectorSetTests_setTests.ic" NAME="SparseVectorSetTests.setTests Coverage Results" MODIFIED="1684726234245" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.sparse_vector.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$ComplexDenseSparseMatrixMultiplicationTests_matMatMultTest.ic" NAME="ComplexDenseSparseMatrixMultiplicationTests.matMatMultTest Coverage Results" MODIFIED="1678587347534" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.operations.dense_sparse.complex.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$SparseCVectorConversionTests_fromDenseTest.ic" NAME="SparseCVectorConversionTests.fromDenseTest Coverage Results" MODIFIED="1685733604331" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.sparse_cvector.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$TensorReader.ic" NAME="TensorReader Coverage Results" MODIFIED="1680742700346" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.io.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$SparseVectorConversionTests_toTensor.ic" NAME="SparseVectorConversionTests.toTensor Coverage Results" MODIFIED="1685220195980" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.sparse_vector.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$TensorReshapeTests_flattenTests.ic" NAME="TensorReshapeTests.flattenTests Coverage Results" MODIFIED="1683411008871" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$CVectorAddTests_realSparseTest.ic" NAME="CVectorAddTests.realSparseTest Coverage Results" MODIFIED="1678296543376" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.complex_vector.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$SparseVectorParPerpTests_denseParallelTest.ic" NAME="SparseVectorParPerpTests.denseParallelTest Coverage Results" MODIFIED="1685127203846" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.sparse_vector.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$All_Tests.ic" NAME="All Tests Coverage Results" MODIFIED="1686270489334" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/Flag4j$CVectorElemDivTests_complexDenseTest.ic" NAME="CVectorElemDivTests.complexDenseTest Coverage Results" MODIFIED="1678313735644" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.complex_vector.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$SparseVectorToStringTests_toStringTest.ic" NAME="SparseVectorToStringTests.toStringTest Coverage Results" MODIFIED="1684006795658" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$ComplexDenseSparseMatrixMultiplicationTests.ic" NAME="ComplexDenseSparseMatrixMultiplicationTests Coverage Results" MODIFIED="1678587952575" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.operations.dense_sparse.complex.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$MatrixSetOperationTests_setSliceSparseMatrixTest.ic" NAME="MatrixSetOperationTests.setSliceSparseMatrixTest Coverage Results" MODIFIED="1678906012289" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.matrix.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$ProjectionTests.ic" NAME="ProjectionTests Coverage Results" MODIFIED="1683409474570" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.linalg.transformations.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$CMatrix.ic" NAME="CMatrix Coverage Results" MODIFIED="1678570325311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$VectorCrossProductTests_complexCrossTest.ic" NAME="VectorCrossProductTests.complexCrossTest Coverage Results" MODIFIED="1677960936652" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.vector.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$RealComplexDenseMatMultTransposeTests_matMultTest.ic" NAME="RealComplexDenseMatMultTransposeTests.matMultTest Coverage Results" MODIFIED="1681879906566" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.operations.dense.real_complex.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$RealDenseTensorDot.ic" NAME="RealDenseTensorDot Coverage Results" MODIFIED="1681427762287" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.operations.dense.real.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$VectorOuterProductTests_complexDenseOuterTest.ic" NAME="VectorOuterProductTests.complexDenseOuterTest Coverage Results" MODIFIED="1677963558800" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.vector.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$ReshapeTests_flattenTests.ic" NAME="ReshapeTests.flattenTests Coverage Results" MODIFIED="1679965688610" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.tensor.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$TensorConversionTests_toVectorTest.ic" NAME="TensorConversionTests.toVectorTest Coverage Results" MODIFIED="1681497406967" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.tensor.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$Unnamed.ic" NAME="Unnamed Coverage Results" MODIFIED="1677609895541" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/Flag4j$TensorAggregateTests_sumTest.ic" NAME="TensorAggregateTests.sumTest Coverage Results" MODIFIED="1679420944797" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.tensor.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$CVectorSubTests.ic" NAME="CVectorSubTests Coverage Results" MODIFIED="1678297241914" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.complex_vector.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$TensorDotTests_noAxesTest.ic" NAME="TensorDotTests.noAxesTest Coverage Results" MODIFIED="1681588914134" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.tensor.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$SparseVectorJoinTests_denseRealStackTest.ic" NAME="SparseVectorJoinTests.denseRealStackTest Coverage Results" MODIFIED="1685490574261" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.sparse_vector.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$ComplexQRTests.ic" NAME="ComplexQRTests Coverage Results" MODIFIED="1682037805629" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.linalg.decompositions.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$SparseVectorParPerpTests_perpTest.ic" NAME="SparseVectorParPerpTests.perpTest Coverage Results" MODIFIED="1685212432352" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.sparse_vector.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$MatrixConversionTests_toTensorTest.ic" NAME="MatrixConversionTests.toTensorTest Coverage Results" MODIFIED="1683411645669" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$TensorConstructorTests_shapeEntriesDoubleTest.ic" NAME="TensorConstructorTests.shapeEntriesDoubleTest Coverage Results" MODIFIED="1679424517671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.tensor.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$RealDenseMatrixMultiplyDispatcherTests_selectAlgorithmTests.ic" NAME="RealDenseMatrixMultiplyDispatcherTests.selectAlgorithmTests Coverage Results" MODIFIED="1681972102147" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.operations.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$CTensorTransposeTest.ic" NAME="CTensorTransposeTest Coverage Results" MODIFIED="1681584080338" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.complex_tensor.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$CMatrixInversionTests_invTest.ic" NAME="CMatrixInversionTests.invTest Coverage Results" MODIFIED="1685833602547" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/Flag4j$CMatrixMultiplyTests_squareTestCase.ic" NAME="CMatrixMultiplyTests.squareTestCase Coverage Results" MODIFIED="1681434704457" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.flag4j.operations.dense.complex.*</FILTER>
-    </SUITE>
   </component>
 </project>
