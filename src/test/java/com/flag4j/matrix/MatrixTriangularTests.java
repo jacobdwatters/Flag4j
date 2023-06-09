@@ -11,7 +11,7 @@ class MatrixTriangularTests {
     Matrix A;
 
     @Test
-    void triangularTests() {
+    void triangularTest() {
         // ----------------- Sub-case 1 -----------------
         aEntries = new double[][]{{1, 3, 4}, {4, 5, 6}};
         A = new Matrix(aEntries);

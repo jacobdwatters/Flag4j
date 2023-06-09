@@ -17,7 +17,7 @@ class MatrixScalMultTests {
 
 
     @Test
-    void realTests() {
+    void realTest() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3.3434}, {-0.221, 81.346, 90.234}};
         A = new Matrix(aEntries);
@@ -41,7 +41,7 @@ class MatrixScalMultTests {
 
 
     @Test
-    void complexTests() {
+    void complexTest() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3.3434}, {-0.221, 81.346, 90.234}};
         A = new Matrix(aEntries);

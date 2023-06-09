@@ -184,7 +184,7 @@ class MatrixAddTests {
     }
 
     @Test
-    void realSparseAdd() {
+    void realSparseAddTest() {
         double[] bEntries;
         int[] bRowIndices;
         int[] bColIndices;
@@ -223,7 +223,7 @@ class MatrixAddTests {
 
 
     @Test
-    void complexSparseAdd() {
+    void complexSparseAddTest() {
         CNumber[] bEntries;
         int[] bRowIndices;
         int[] bColIndices;

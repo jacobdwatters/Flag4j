@@ -17,7 +17,7 @@ class MatrixVectorTests {
 
 
     @Test
-    void matVecMultTests() {
+    void matVecMultTest() {
         double[] bEntries;
         Vector B;
 
@@ -53,7 +53,7 @@ class MatrixVectorTests {
 
 
     @Test
-    void matVecMultComplexTests() {
+    void matVecMultComplexTest() {
         CNumber[] bEntries;
         CVector B;
 
@@ -92,7 +92,7 @@ class MatrixVectorTests {
 
 
     @Test
-    void matVecMultSparseTests() {
+    void matVecMultSparseTest() {
         double[] bEntries;
         int[] indices;
         SparseVector B;
@@ -131,7 +131,7 @@ class MatrixVectorTests {
 
 
     @Test
-    void matVecMultSparseComplexTests() {
+    void matVecMultSparseComplexTest() {
         CNumber[] bEntries;
         int[] indices;
         SparseCVector B;

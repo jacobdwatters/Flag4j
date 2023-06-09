@@ -10,7 +10,7 @@ class MatrixVectorCheckTests {
     Matrix A;
 
     @Test
-    void isVectorTests() {
+    void isVectorTest() {
         // ------------------ Sub-case 1 ------------------
         aEntries = new double[][]{{1.123, 5325.123}, {1.566, -2354.5767}};
         A = new Matrix(aEntries);
