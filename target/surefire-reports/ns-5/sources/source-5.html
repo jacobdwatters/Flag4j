@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > DenseMatrixMixin</title>
+  <title>Coverage Report > DenseVectorMixin</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,14 +20,14 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.flag4j.core.dense</a>
 </div>
 
-<h1>Coverage Summary for Class: DenseMatrixMixin (com.flag4j.core.dense)</h1>
+<h1>Coverage Summary for Class: DenseVectorMixin (com.flag4j.core.dense)</h1>
 
 <table class="coverageStats">
 <tr>
   <th class="name">Class</th>
 </tr>
 <tr>
-  <td class="name">DenseMatrixMixin</td>
+  <td class="name">DenseVectorMixin</td>
 </tr>
 
 </table>
@@ -63,30 +63,50 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">24</i>&nbsp;
 <i class="no-highlight">25</i>&nbsp;package com.flag4j.core.dense;
 <i class="no-highlight">26</i>&nbsp;
-<i class="no-highlight">27</i>&nbsp;import com.flag4j.Matrix;
-<i class="no-highlight">28</i>&nbsp;
-<i class="no-highlight">29</i>&nbsp;/**
-<i class="no-highlight">30</i>&nbsp; * This interface specifies methods which all dense matrices should implement.
-<i class="no-highlight">31</i>&nbsp; */
-<i class="no-highlight">32</i>&nbsp;public interface DenseMatrixMixin {
-<i class="no-highlight">33</i>&nbsp;
-<i class="no-highlight">34</i>&nbsp;    /**
-<i class="no-highlight">35</i>&nbsp;     * Computes the element-wise addition between this matrix and the specified matrix and stores the result
-<i class="no-highlight">36</i>&nbsp;     * in this matrix.
-<i class="no-highlight">37</i>&nbsp;     * @param B matrix to add to this matrix.
-<i class="no-highlight">38</i>&nbsp;     * @throws IllegalArgumentException If this matrix and the specified matrix have different .
-<i class="no-highlight">39</i>&nbsp;     */
-<i class="no-highlight">40</i>&nbsp;    void addEq(Matrix B);
-<i class="no-highlight">41</i>&nbsp;
-<i class="no-highlight">42</i>&nbsp;
-<i class="no-highlight">43</i>&nbsp;    /**
-<i class="no-highlight">44</i>&nbsp;     * Computes the element-wise subtraction between this matrix and the specified matrix and stores the result
-<i class="no-highlight">45</i>&nbsp;     * in this matrix.
-<i class="no-highlight">46</i>&nbsp;     * @param B matrix to subtract this matrix.
-<i class="no-highlight">47</i>&nbsp;     * @throws IllegalArgumentException If this matrix and the specified matrix have different shapes.
-<i class="no-highlight">48</i>&nbsp;     */
-<i class="no-highlight">49</i>&nbsp;    void subEq(Matrix B);
-<i class="no-highlight">50</i>&nbsp;}
+<i class="no-highlight">27</i>&nbsp;import com.flag4j.SparseVector;
+<i class="no-highlight">28</i>&nbsp;import com.flag4j.Vector;
+<i class="no-highlight">29</i>&nbsp;
+<i class="no-highlight">30</i>&nbsp;
+<i class="no-highlight">31</i>&nbsp;/**
+<i class="no-highlight">32</i>&nbsp; * Interface which specifies methods which any dense vector should implement.
+<i class="no-highlight">33</i>&nbsp; */
+<i class="no-highlight">34</i>&nbsp;public interface DenseVectorMixin {
+<i class="no-highlight">35</i>&nbsp;
+<i class="no-highlight">36</i>&nbsp;    /**
+<i class="no-highlight">37</i>&nbsp;     * Computes the element-wise addition between this vector and the specified vector and stores the result
+<i class="no-highlight">38</i>&nbsp;     * in this vector.
+<i class="no-highlight">39</i>&nbsp;     * @param B Vector to add to this vector.
+<i class="no-highlight">40</i>&nbsp;     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+<i class="no-highlight">41</i>&nbsp;     */
+<i class="no-highlight">42</i>&nbsp;    void addEq(Vector B);
+<i class="no-highlight">43</i>&nbsp;
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;    /**
+<i class="no-highlight">46</i>&nbsp;     * Computes the element-wise addition between this vector and the specified vector and stores the result
+<i class="no-highlight">47</i>&nbsp;     * in this vector.
+<i class="no-highlight">48</i>&nbsp;     * @param B Vector to add to this vector.
+<i class="no-highlight">49</i>&nbsp;     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+<i class="no-highlight">50</i>&nbsp;     */
+<i class="no-highlight">51</i>&nbsp;    void addEq(SparseVector B);
+<i class="no-highlight">52</i>&nbsp;
+<i class="no-highlight">53</i>&nbsp;
+<i class="no-highlight">54</i>&nbsp;    /**
+<i class="no-highlight">55</i>&nbsp;     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
+<i class="no-highlight">56</i>&nbsp;     * in this vector.
+<i class="no-highlight">57</i>&nbsp;     * @param B Vector to subtract this vector.
+<i class="no-highlight">58</i>&nbsp;     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+<i class="no-highlight">59</i>&nbsp;     */
+<i class="no-highlight">60</i>&nbsp;    void subEq(Vector B);
+<i class="no-highlight">61</i>&nbsp;
+<i class="no-highlight">62</i>&nbsp;
+<i class="no-highlight">63</i>&nbsp;    /**
+<i class="no-highlight">64</i>&nbsp;     * Computes the element-wise subtraction between this vector and the specified vector and stores the result
+<i class="no-highlight">65</i>&nbsp;     * in this vector.
+<i class="no-highlight">66</i>&nbsp;     * @param B Vector to subtract this vector.
+<i class="no-highlight">67</i>&nbsp;     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
+<i class="no-highlight">68</i>&nbsp;     */
+<i class="no-highlight">69</i>&nbsp;    void subEq(SparseVector B);
+<i class="no-highlight">70</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -113,7 +133,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-06-07 19:20</div>
+    <div style="float:right;">generated on 2023-06-08 18:08</div>
 </div>
 </body>
 </html>
