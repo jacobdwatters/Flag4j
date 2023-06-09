@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Tensor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">com.flag4j</a> &gt; <span class="el_source">Tensor.java</span></div><h1>Tensor.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j;
+
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.dense.RealDenseTensorBase;
+import com.flag4j.core.TensorExclusiveMixin;
+import com.flag4j.io.PrintOptions;
+import com.flag4j.operations.TransposeDispatcher;
+import com.flag4j.operations.dense.real.RealDenseEquals;
+import com.flag4j.operations.dense.real.RealDenseOperations;
+import com.flag4j.operations.dense.real.RealDenseTensorDot;
+import com.flag4j.operations.dense.real.RealDenseTranspose;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
+import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.StringUtils;
+
+import java.util.Arrays;
+
+
+/**
+ * Real Dense Tensor. May have any rank (that is, may have any number of unique axes/dimensions).
+ */
+public class Tensor
+        extends RealDenseTensorBase&lt;Tensor, CTensor&gt;
+        implements TensorExclusiveMixin&lt;Tensor, Tensor, SparseTensor, CTensor&gt; {
+
+
+    /**
+     * Constructs a tensor with given shape filled with zeros.
+     * @param shape Shape of the tensor.
+     */
+    public Tensor(Shape shape) {
+<span class="fc" id="L63">        super(shape, new double[shape.totalEntries().intValueExact()]);</span>
+<span class="fc" id="L64">    }</span>
+
+
+    /**
+     * Constructs a tensor with given shape filled with specified values.
+     * @param shape Shape of the tensor.
+     * @param fillValue Value to fill tensor with.
+     */
+    public Tensor(Shape shape, double fillValue) {
+<span class="fc" id="L73">        super(shape, new double[shape.totalEntries().intValueExact()]);</span>
+
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        for(int i=0; i&lt;super.totalEntries().intValueExact(); i++) {</span>
+<span class="fc" id="L76">            super.entries[i] = fillValue;</span>
+        }
+<span class="fc" id="L78">    }</span>
+
+
+    /**
+     * Constructs a tensor with given shape filled with specified values.
+     * @param shape Shape of the tensor.
+     * @param entries Entries of the vector.
+     * @throws IllegalArgumentException If the shape does not match the number of entries.
+     */
+    public Tensor(Shape shape, double[] entries) {
+<span class="fc" id="L88">        super(shape, entries);</span>
+
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if(entries.length != super.totalEntries().intValueExact()) {</span>
+<span class="nc" id="L91">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+        }
+<span class="fc" id="L93">    }</span>
+
+
+    /**
+     * Constructs a tensor with given shape filled with specified values.
+     * @param shape Shape of the tensor.
+     * @param entries Entries of the vector.
+     * @throws IllegalArgumentException If the shape does not match the number of entries.
+     */
+    public Tensor(Shape shape, int[] entries) {
+<span class="fc" id="L103">        super(shape, Arrays.stream(entries).asDoubleStream().toArray());</span>
+
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if(entries.length != super.totalEntries().intValueExact()) {</span>
+<span class="nc" id="L106">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+        }
+<span class="fc" id="L108">    }</span>
+
+
+    /**
+     * Constructs a tensor with given shape filled with specified values.
+     * @param shape Shape of the tensor.
+     * @param entries Entries of the vector.
+     * @throws IllegalArgumentException If the shape does not match the number of entries.
+     */
+    public Tensor(Shape shape, Double[] entries) {
+<span class="fc" id="L118">        super(shape, new double[entries.length]);</span>
+
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        if(entries.length != super.totalEntries().intValueExact()) {</span>
+<span class="nc" id="L121">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+        }
+
+        // Copy entries to tensor.
+<span class="fc" id="L125">        int index = 0;</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        for(Double value : entries) {</span>
+<span class="fc" id="L127">            super.entries[index++] = value;</span>
+        }
+<span class="fc" id="L129">    }</span>
+
+
+    /**
+     * Constructs a tensor with given shape filled with specified values.
+     * @param shape Shape of the tensor.
+     * @param entries Entries of the vector.
+     * @throws IllegalArgumentException If the shape does not match the number of entries.
+     */
+    public Tensor(Shape shape, Integer[] entries) {
+<span class="fc" id="L139">        super(shape, new double[entries.length]);</span>
+
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        if(entries.length != super.totalEntries().intValueExact()) {</span>
+<span class="nc" id="L142">            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, entries.length));</span>
+        }
+
+        // Copy entries to tensor.
+<span class="fc" id="L146">        int index = 0;</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        for(Integer value : entries) {</span>
+<span class="fc" id="L148">            super.entries[index++] = value;</span>
+        }
+<span class="fc" id="L150">    }</span>
+
+
+    /**
+     * Constructs a tensor from another tensor. This effectively copies the tensor.
+     * @param A tensor to copy.
+     */
+    public Tensor(Tensor A) {
+<span class="fc" id="L158">        super(A.shape.copy(), A.entries.clone());</span>
+<span class="fc" id="L159">    }</span>
+
+
+    /**
+     * Constructs a tensor whose shape and entries are specified by a matrix.
+     * @param A Matrix to copy to tensor.
+     */
+    public Tensor(Matrix A) {
+<span class="fc" id="L167">        super(A.shape.copy(), A.entries.clone());</span>
+<span class="fc" id="L168">    }</span>
+
+
+    /**
+     * Constructs a tensor whose shape and entries are specified by a vector.
+     * @param A Vector to copy to tensor.
+     */
+    public Tensor(Vector A) {
+<span class="fc" id="L176">        super(A.shape.copy(), A.entries.clone());</span>
+<span class="fc" id="L177">    }</span>
+
+
+    /**
+     * Factory to create a tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected Tensor makeTensor(Shape shape, double[] entries) {
+<span class="fc" id="L189">        return new Tensor(shape, entries);</span>
+    }
+
+
+    /**
+     * Factory to create a complex tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected CTensor makeComplexTensor(Shape shape, double[] entries) {
+<span class="fc" id="L202">        return new CTensor(shape, entries);</span>
+    }
+
+
+    /**
+     * Factory to create a complex tensor with the specified shape and size.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the tensor to make.
+     * @return A new tensor with the specified shape and entries.
+     */
+    @Override
+    protected CTensor makeComplexTensor(Shape shape, CNumber[] entries) {
+<span class="fc" id="L215">        return new CTensor(shape, entries);</span>
+    }
+
+
+    /**
+     * Simply returns this tensor.
+     *
+     * @return A reference to this tensor.
+     */
+    @Override
+    protected Tensor getSelf() {
+<span class="fc" id="L226">        return this;</span>
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than &lt;code&gt;this.{@link #getRank()}-1&lt;/code&gt;.
+     */
+    @Override
+    public Tensor flatten(int axis) {
+<span class="fc" id="L238">        int[] dims = new int[this.getRank()];</span>
+<span class="fc" id="L239">        Arrays.fill(dims, 1);</span>
+<span class="fc" id="L240">        dims[axis] = shape.totalEntries().intValueExact();</span>
+<span class="fc" id="L241">        Shape flatShape = new Shape(dims);</span>
+
+<span class="fc" id="L243">        return new Tensor(flatShape, entries.clone());</span>
+    }
+
+
+    /**
+     * Checks if an object is equal to this tensor object. Valid object types are: {@link Tensor}, {@link CTensor},
+     * {@link SparseTensor}, and {@link SparseCTensor}. These tensors are equal to this tensor if all entries are
+     * numerically equal to the corresponding element of this tensor. If the tensor is complex, then the imaginary
+     * component must be zero to be equal.
+     * @param object Object to check equality with this tensor.
+     * @return True if the two tensors are numerically equivalent and false otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        boolean equal;
+
+<span class="fc bfc" id="L259" title="All 2 branches covered.">        if(object instanceof Tensor) {</span>
+<span class="fc" id="L260">            Tensor tensor = (Tensor) object;</span>
+<span class="fc" id="L261">            equal = RealDenseEquals.tensorEquals(this, tensor);</span>
+<span class="fc bfc" id="L262" title="All 2 branches covered.">        } else if(object instanceof CTensor) {</span>
+<span class="fc" id="L263">            CTensor tensor = (CTensor) object;</span>
+<span class="fc" id="L264">            equal = RealComplexDenseEquals.tensorEquals(this, tensor);</span>
+
+<span class="fc bfc" id="L266" title="All 2 branches covered.">        } else if(object instanceof SparseTensor) {</span>
+<span class="fc" id="L267">            SparseTensor tensor = (SparseTensor) object;</span>
+<span class="fc" id="L268">            equal = RealDenseSparseEquals.tensorEquals(this, tensor);</span>
+
+<span class="fc bfc" id="L270" title="All 2 branches covered.">        } else if(object instanceof SparseCTensor) {</span>
+<span class="fc" id="L271">            SparseCTensor tensor = (SparseCTensor) object;</span>
+<span class="fc" id="L272">            equal = RealComplexDenseSparseEquals.tensorEquals(this, tensor);</span>
+
+<span class="fc" id="L274">        } else {</span>
+<span class="fc" id="L275">            equal = false;</span>
+        }
+
+<span class="fc" id="L278">        return equal;</span>
+    }
+
+
+    /**
+     * Flattens tensor to single dimension.
+     *
+     * @return The flattened tensor.
+     */
+    @Override
+    public Tensor flatten() {
+<span class="fc" id="L289">        return new Tensor(new Shape(entries.length), this.entries.clone());</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the addition.
+     * @throws IllegalArgumentException If this tensor and {@code B} have different shapes.
+     */
+    @Override
+    public void addEq(SparseTensor B) {
+<span class="fc" id="L301">        RealDenseSparseOperations.addEq(this, B);</span>
+<span class="fc" id="L302">    }</span>
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void subEq(Tensor B) {
+<span class="fc" id="L313">        RealDenseOperations.subEq(entries, shape, B.entries, B.shape);</span>
+<span class="fc" id="L314">    }</span>
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #T()}.
+     * In the context of a tensor, this exchanges the first and last axis of the tensor.
+     * Also see {@link #transpose(int, int)} and {@link #T(int, int)}.
+     *
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public Tensor transpose() {
+<span class="fc" id="L326">        return T();</span>
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #transpose()}.
+     * In the context of a tensor, this exchanges the first and last axis of the tensor.
+     * Also see {@link #transpose(int, int)} and {@link #T(int, int)}.
+     *
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public Tensor T() {
+<span class="fc" id="L339">        return TransposeDispatcher.dispatchTensor(this, 0, shape.getRank()-1);</span>
+    }
+
+
+    /**
+     * Computes the tensor contraction of this tensor with a specified tensor over the specified axes. That is,
+     * computes the sum of products between the two tensors along the specified axes.
+     *
+     * @param src2  Tensor to contract with this tensor.
+     * @param aAxis Axis along which to compute products for this tensor.
+     * @param bAxis Axis along which to compute products for {@code src2} tensor.
+     * @return The tensor dot product over the specified axes.
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes {@code aAxis}
+     *                                  and {@code bAxis}.
+     * @throws IllegalArgumentException If either axis is out of bounds of the corresponding tensor.
+     */
+    @Override
+    public Tensor tensorDot(Tensor src2, int aAxis, int bAxis) {
+<span class="fc" id="L357">        return RealDenseTensorDot.tensorDot(this, src2, new int[]{aAxis}, new int[]{bAxis});</span>
+    }
+
+
+    /**
+     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
+     * computes the sum of products between the two tensors along the specified set of axes.
+     *
+     * @param src2  Tensor to contract with this tensor.
+     * @param aAxes Axes along which to compute products for this tensor.
+     * @param bAxes Axes along which to compute products for {@code src2} tensor.
+     * @return The tensor dot product over the specified axes.
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
+     *                                  {@code aAxes} and {@code bAxes}.
+     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
+     *                                  are out of bounds for the corresponding tensor.
+     */
+    @Override
+    public Tensor tensorDot(Tensor src2, int[] aAxes, int[] bAxes) {
+<span class="fc" id="L376">        return RealDenseTensorDot.tensorDot(this, src2, aAxes, bAxes);</span>
+    }
+
+
+    /**
+     * Computes the tensor dot product of this tensor with a second tensor. That is, sums the product of two tensor
+     * elements over the last axis of this tensor and the second-to-last axis of {@code src2}. If both tensors are
+     * rank 2, this is equivalent to matrix multiplication.
+     *
+     * @param src2 Tensor to compute dot product with this tensor.
+     * @return The tensor dot product over the last axis of this tensor and the second to last axis of {@code src2}.
+     * @throws IllegalArgumentException If this tensors shape along the last axis does not match {@code src2} shape
+     *                                  along the second-to-last axis.
+     */
+    @Override
+    public Tensor dot(Tensor src2) {
+<span class="fc" id="L392">        return RealDenseTensorDot.dot(this, src2);</span>
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #T(int, int)}.
+     * In the context of a tensor, this exchanges the specified axes.
+     * Also see {@link #transpose()} and {@link #T()} to exchange first and last axes.
+     *
+     * @param axis1 First axis to exchange.
+     * @param axis2 Second axis to exchange.
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public Tensor transpose(int axis1, int axis2) {
+<span class="fc" id="L407">        return T(axis1, axis2);</span>
+    }
+
+
+    /**
+     * Computes the transpose of a tensor. Same as {@link #transpose(int, int)}.
+     * In the context of a tensor, this exchanges the specified axes.
+     * Also see {@link #transpose()} and {@link #T()} to exchange first and last axes.
+     *
+     * @param axis1 First axis to exchange.
+     * @param axis2 Second axis to exchange.
+     * @return The transpose of this tensor.
+     */
+    @Override
+    public Tensor T(int axis1, int axis2) {
+<span class="fc" id="L422">        return TransposeDispatcher.dispatchTensor(this, axis1, axis2);</span>
+    }
+
+
+    /**
+     * Computes the transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
+     * the specified axes permutation. Same as {@link #T(int[])}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
+     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     */
+    @Override
+    public Tensor transpose(int... axes) {
+<span class="fc" id="L437">        return T(axes);</span>
+    }
+
+
+    /**
+     * Computes the transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
+     * the specified axes permutation. Same as {@link #transpose(int[])}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
+     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     */
+    @Override
+    public Tensor T(int... axes) {
+        // TODO: Add dispatcher for this method to choose between concurrent and sequential implementations.
+<span class="fc" id="L453">        return new Tensor(</span>
+<span class="fc" id="L454">                shape.copy().swapAxes(axes),</span>
+<span class="fc" id="L455">                RealDenseTranspose.standardConcurrent(this.entries, this.shape, axes)</span>
+        );
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public Tensor add(SparseTensor B) {
+<span class="fc" id="L469">        return RealDenseSparseOperations.add(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor add(CTensor B) {
+<span class="fc" id="L482">        return new CTensor(</span>
+<span class="fc" id="L483">                shape.copy(),</span>
+<span class="fc" id="L484">                RealComplexDenseOperations.add(B.entries, B.shape, this.entries, this.shape)</span>
+        );
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor add(SparseCTensor B) {
+<span class="fc" id="L498">        return RealComplexDenseSparseOperations.add(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between two tensors of the same rank.
+     *
+     * @param B Second tensor in element-wise subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public Tensor sub(SparseTensor B) {
+<span class="fc" id="L511">        return RealDenseSparseOperations.sub(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between two tensors of the same rank.
+     *
+     * @param B Second tensor in element-wise subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor sub(CTensor B) {
+<span class="fc" id="L524">        return new CTensor(</span>
+<span class="fc" id="L525">                shape.copy(),</span>
+<span class="fc" id="L526">                RealComplexDenseOperations.sub(this.entries, this.shape, B.entries, B.shape)</span>
+        );
+    }
+
+
+    /**
+     * Computes the element-wise subtraction between two tensors of the same rank.
+     *
+     * @param B Second tensor in element-wise subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public CTensor sub(SparseCTensor B) {
+<span class="fc" id="L540">        return RealComplexDenseSparseOperations.sub(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
+     *
+     * @param B Second tensor in the subtraction.
+     * @throws IllegalArgumentException If this tensor and B have different shapes.
+     */
+    @Override
+    public void subEq(SparseTensor B) {
+<span class="fc" id="L552">        RealDenseSparseOperations.subEq(this, B);</span>
+<span class="fc" id="L553">    }</span>
+
+
+    /**
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
+     *
+     * @return the 2-norm of this tensor.
+     */
+    @Override
+    public double norm() {
+<span class="fc" id="L563">        return RealDenseOperations.tensorNormL2(entries);</span>
+    }
+
+
+    /**
+     * Computes the p-norm of this tensor.
+     *
+     * @param p The p value in the p-norm. &lt;br&gt;
+     *          - If p is inf, then this method computes the maximum/infinite norm.
+     * @return The p-norm of this tensor.
+     * @throws IllegalArgumentException If p is less than 1.
+     */
+    @Override
+    public double norm(double p) {
+<span class="fc" id="L577">        return RealDenseOperations.tensorNormLp(entries, p);</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public SparseTensor elemMult(SparseTensor B) {
+<span class="fc" id="L589">        return RealDenseSparseOperations.elemMult(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public CTensor elemMult(CTensor B) {
+<span class="fc" id="L601">        return new CTensor(</span>
+<span class="fc" id="L602">                this.shape.copy(),</span>
+<span class="fc" id="L603">                RealComplexDenseElemMult.dispatch(B.entries, B.shape, this.entries, this.shape)</span>
+        );
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between two tensors.
+     * @param B Tensor to element-wise multiply to this tensor.
+     * @return The result of the element-wise tensor multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public SparseCTensor elemMult(SparseCTensor B) {
+<span class="fc" id="L616">        return RealComplexDenseSparseOperations.elemMult(this, B);</span>
+    }
+
+
+    /**
+     * Computes the element-wise division between two tensors.
+     * @param B Tensor to element-wise divide with this tensor.
+     * @return The result of the element-wise tensor division.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    @Override
+    public CTensor elemDiv(CTensor B) {
+<span class="fc" id="L628">        return new CTensor(</span>
+<span class="fc" id="L629">                shape.copy(),</span>
+<span class="fc" id="L630">                RealComplexDenseElemDiv.dispatch(entries, shape, B.entries, B.shape)</span>
+        );
+    }
+
+
+    /**
+     * Converts this tensor to an equivalent vector. If this tensor is not rank 1, then it will be flattened.
+     * @return A vector equivalent of this tensor.
+     */
+    public Vector toVector() {
+<span class="fc" id="L640">        return new Vector(this.entries.clone());</span>
+    }
+
+
+    /**
+     * Converts this tensor to an equivalent matrix.
+     * @return If this tensor is rank 2, then the equivalent matrix will be returned.
+     * If the tensor is rank 1, then a matrix with a single row will be returned. If the rank is larger than 2, it will
+     * be flattened to a single row.
+     */
+    public Matrix toMatrix() {
+        Matrix mat;
+
+<span class="fc bfc" id="L653" title="All 2 branches covered.">        if(this.getRank()==2) {</span>
+<span class="fc" id="L654">            mat = new Matrix(this.shape.copy(), this.entries.clone());</span>
+        } else {
+<span class="fc" id="L656">            mat = new Matrix(1, this.entries.length, this.entries.clone());</span>
+        }
+
+<span class="fc" id="L659">        return mat;</span>
+    }
+
+
+    /**
+     * Formats this tensor as a human-readable string. Specifically, a string containing the
+     * shape and flatten entries of this tensor.
+     * @return A human-readable string representing this tensor.
+     */
+    public String toString() {
+<span class="fc" id="L669">        int size = shape.totalEntries().intValueExact();</span>
+<span class="fc" id="L670">        StringBuilder result = new StringBuilder(String.format(&quot;Full Shape: %s\n&quot;, shape));</span>
+<span class="fc" id="L671">        result.append(&quot;[&quot;);</span>
+
+<span class="fc" id="L673">        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);</span>
+        int width;
+        String value;
+
+        // Get entries up until the stopping point.
+<span class="fc bfc" id="L678" title="All 2 branches covered.">        for(int i=0; i&lt;stopIndex; i++) {</span>
+<span class="fc" id="L679">            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());</span>
+<span class="fc" id="L680">            width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L681" title="All 2 branches covered.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L682">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+        }
+
+<span class="fc bfc" id="L685" title="All 2 branches covered.">        if(stopIndex &lt; size-1) {</span>
+<span class="fc" id="L686">            width = PrintOptions.getPadding() + 3;</span>
+<span class="fc" id="L687">            value = &quot;...&quot;;</span>
+<span class="pc bpc" id="L688" title="1 of 2 branches missed.">            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L689">            result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+        }
+
+        // Get last entry now
+<span class="fc" id="L693">        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());</span>
+<span class="fc" id="L694">        width = PrintOptions.getPadding() + value.length();</span>
+<span class="fc bfc" id="L695" title="All 2 branches covered.">        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;</span>
+<span class="fc" id="L696">        result.append(String.format(&quot;%-&quot; + width + &quot;s&quot;, value));</span>
+
+<span class="fc" id="L698">        result.append(&quot;]&quot;);</span>
+
+<span class="fc" id="L700">        return result.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

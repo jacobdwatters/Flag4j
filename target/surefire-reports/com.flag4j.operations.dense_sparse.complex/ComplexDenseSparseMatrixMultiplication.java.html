@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComplexDenseSparseMatrixMultiplication.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense_sparse.complex</a> &gt; <span class="el_source">ComplexDenseSparseMatrixMultiplication.java</span></div><h1>ComplexDenseSparseMatrixMultiplication.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense_sparse.complex;
+
+import com.flag4j.Shape;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.concurrency.Configurations;
+import com.flag4j.concurrency.ThreadManager;
+import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.Axis2D;
+import com.flag4j.util.ErrorMessages;
+
+/**
+ * This class provides low level methods for computing the matrix multiplication between
+ * a sparse/dense matrix and dense/sparse matrix/vector.
+ */
+public class ComplexDenseSparseMatrixMultiplication {
+
+<span class="nc" id="L41">    private ComplexDenseSparseMatrixMultiplication() {</span>
+        // Hide default constructor in utility class.
+<span class="nc" id="L43">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    // TODO: Investigate if blocked algorithms provide any speedup for multiplying a sparse/dense matrix to a dense/sparse matrix.
+
+    /**
+     * Computes the matrix multiplication between a complex dense matrix and a complex sparse matrix using a standard algorithm.
+     * @param src1 Entries of the dense matrix.
+     * @param shape1 Shape of the dense matrix.
+     * @param src2 Non-zero entries of the sparse matrix.
+     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param shape2 Shape of the sparse matrix.
+     * @return The result of the matrix multiplication.
+     */
+    public static CNumber[] standard(CNumber[] src1, Shape shape1, CNumber[] src2,
+                                    int[] rowIndices, int[] colIndices, Shape shape2) {
+<span class="fc" id="L61">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L62">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L63">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L65">        CNumber[] dest = new CNumber[rows1*cols2];</span>
+<span class="fc" id="L66">        ArrayUtils.fillZeros(dest);</span>
+
+        int row, col;
+
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        for(int i=0; i&lt;rows1; i++) {</span>
+            // Loop over non-zero entries of sparse matrix.
+<span class="fc bfc" id="L72" title="All 2 branches covered.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="fc" id="L73">                row = rowIndices[j];</span>
+<span class="fc" id="L74">                col = colIndices[j];</span>
+
+<span class="fc" id="L76">                dest[i*cols2 + col].addEq(src1[i*cols1 + row].mult(src2[j]));</span>
+            }
+        }
+
+<span class="fc" id="L80">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between a complex sparse matrix and a complex dense matrix using a standard algorithm.
+     *
+     * @param src1 Non-zero entries of the sparse matrix.
+     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param shape1 Shape of the sparse matrix.
+     * @param src2 Entries of the dense matrix.
+     * @param shape2 Shape of the dense matrix.
+     * @return The result of the matrix multiplication.
+     */
+    public static CNumber[] standard(CNumber[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
+                                     CNumber[] src2, Shape shape2) {
+<span class="fc" id="L97">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L98">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L100">        CNumber[] dest = new CNumber[rows1*cols2];</span>
+<span class="fc" id="L101">        ArrayUtils.fillZeros(dest); // Initialize to zeros</span>
+
+        int row, col;
+
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L106">            row = rowIndices[i];</span>
+<span class="fc" id="L107">            col = colIndices[i];</span>
+
+<span class="fc bfc" id="L109" title="All 2 branches covered.">            for(int j=0; j&lt;cols2; j++) {</span>
+<span class="fc" id="L110">                dest[row*cols2 + j].addEq(src1[i].mult(src2[col*cols2 + j]));</span>
+            }
+        }
+
+<span class="fc" id="L114">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between a real dense matrix and a real sparse matrix using a concurrent standard algorithm.
+     * @param src1 Entries of the dense matrix.
+     * @param shape1 Shape of the dense matrix.
+     * @param src2 Non-zero entries of the sparse matrix.
+     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param shape2 Shape of the sparse matrix.
+     * @return The result of the matrix multiplication.
+     */
+    public static CNumber[] concurrentStandard(CNumber[] src1, Shape shape1, CNumber[] src2,
+                                              int[] rowIndices, int[] colIndices, Shape shape2) {
+<span class="fc" id="L130">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L131">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L132">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L134">        CNumber[] dest = new CNumber[rows1*cols2];</span>
+<span class="fc" id="L135">        ArrayUtils.fillZeros(dest); // Initialize to zeros</span>
+
+<span class="fc" id="L137">        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</span>
+            // Loop over non-zero entries of sparse matrix.
+<span class="fc bfc" id="L139" title="All 2 branches covered.">            for(int j=0; j&lt;src2.length; j++) {</span>
+<span class="fc" id="L140">                int row = rowIndices[j];</span>
+<span class="fc" id="L141">                int col = colIndices[j];</span>
+
+<span class="fc" id="L143">                dest[i*cols2 + col].addEq(src1[i*cols1 + row].mult(src2[j]));</span>
+            }
+<span class="fc" id="L145">        });</span>
+
+<span class="fc" id="L147">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the matrix multiplication between a real sparse matrix and a real dense matrix
+     * using a concurrent standard algorithm.
+     *
+     * @param src1 Non-zero entries of the sparse matrix.
+     * @param rowIndices Row indices for non-zero entries of the sparse matrix.
+     * @param colIndices Column indices for non-zero entries of the sparse matrix.
+     * @param shape1 Shape of the sparse matrix.
+     * @param src2 Entries of the dense matrix.
+     * @param shape2 Shape of the dense matrix.
+     * @return The result of the matrix multiplication.
+     */
+    public static CNumber[] concurrentStandard(CNumber[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
+                                              CNumber[] src2, Shape shape2) {
+<span class="fc" id="L165">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L166">        int cols2 = shape2.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L168">        CNumber[] dest = new CNumber[rows1*cols2];</span>
+<span class="fc" id="L169">        ArrayUtils.fillZeros(dest); // Initialize to zeros</span>
+
+<span class="fc" id="L171">        ThreadManager.concurrentLoop(0, src1.length, (i) -&gt; {</span>
+<span class="fc" id="L172">            int row = rowIndices[i];</span>
+<span class="fc" id="L173">            int col = colIndices[i];</span>
+
+<span class="fc bfc" id="L175" title="All 2 branches covered.">            for(int j=0; j&lt;cols2; j++) {</span>
+<span class="fc" id="L176">                dest[row*cols2 + j].addEq(src1[i].mult(src2[col*cols2 + j]));</span>
+            }
+<span class="fc" id="L178">        });</span>
+
+<span class="fc" id="L180">        return dest;</span>
+    }
+
+
+    // -------------------- Below are the matrix-vector multiplication algorithms --------------------
+
+    /**
+     * Computes the dense matrix sparse vector multiplication using a standard algorithm.
+     * @param src1 Entries of the dense matrix.
+     * @param shape1 Shape of the dense matrix.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries in sparse vector.
+     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+     */
+    public static CNumber[] standardVector(CNumber[] src1, Shape shape1, CNumber[] src2, int[] indices) {
+<span class="fc" id="L195">        int denseRows = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L196">        int denseCols = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L197">        int nonZeros = src2.length;</span>
+
+<span class="fc" id="L199">        CNumber[] dest = new CNumber[denseRows];</span>
+<span class="fc" id="L200">        ArrayUtils.fillZeros(dest); // Initialize to zeros</span>
+
+        int k;
+
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        for(int i=0; i&lt;denseRows; i++) {</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">            for(int j=0; j&lt;nonZeros; j++) {</span>
+<span class="fc" id="L206">                k = indices[j];</span>
+<span class="fc" id="L207">                dest[i].addEq(src1[i*denseCols + k].mult(src2[j]));</span>
+            }
+        }
+
+<span class="fc" id="L211">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the sparse matrix dense vector multiplication using a standard algorithm.
+     * @param src1 Entries of the sparse matrix.
+     * @param rowIndices Row indices of non-zero entries in sparse matrix.
+     * @param colIndices Column indices of non-zero entries in sparse matrix.
+     * @param shape1 Shape of the sparse matrix.
+     * @param src2 Entries of the dense vector.
+     * @param shape2 Shape of the dense vector.
+     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+     */
+    public static CNumber[] standardVector(CNumber[] src1, int[] rowIndices, int[] colIndices,
+                                          Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="fc" id="L227">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L228">        CNumber[] dest = new CNumber[rows1];</span>
+<span class="fc" id="L229">        ArrayUtils.fillZeros(dest); // Initialize to zeros</span>
+
+        int row, col;
+
+<span class="fc bfc" id="L233" title="All 2 branches covered.">        for(int i=0; i&lt;src1.length; i++) {</span>
+<span class="fc" id="L234">            row = rowIndices[i];</span>
+<span class="fc" id="L235">            col = colIndices[i];</span>
+
+<span class="fc" id="L237">            dest[row].addEq(src1[i].mult(src2[col]));</span>
+        }
+
+<span class="fc" id="L240">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the dense matrix sparse vector multiplication using a blocked algorithm.
+     * @param src1 Entries of the dense matrix.
+     * @param shape1 Shape of the dense matrix.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries in sparse vector.
+     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+     */
+    public static CNumber[] blockedVector(CNumber[] src1, Shape shape1, CNumber[] src2, int[] indices) {
+<span class="fc" id="L253">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L254">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L255">        int rows2 = src2.length;</span>
+
+<span class="fc" id="L257">        int bsize = Configurations.getBlockSize(); // Get the block size to use.</span>
+
+<span class="fc" id="L259">        CNumber[] dest = new CNumber[rows1];</span>
+<span class="fc" id="L260">        ArrayUtils.fillZeros(dest);</span>
+        int k;
+
+        // Blocked matrix-vector multiply
+<span class="fc bfc" id="L264" title="All 2 branches covered.">        for(int ii=0; ii&lt;rows1; ii += bsize) {</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">            for(int jj=0; jj&lt;rows2; jj += bsize) {</span>
+                // Multiply the current blocks
+<span class="pc bpc" id="L267" title="1 of 4 branches missed.">                for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
+<span class="pc bpc" id="L268" title="1 of 4 branches missed.">                    for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;rows2; j++) {</span>
+<span class="fc" id="L269">                        k = indices[j];</span>
+<span class="fc" id="L270">                        dest[i].addEq(src1[i*cols1 + k].mult(src2[j]));</span>
+                    }
+                }
+            }
+        }
+
+<span class="fc" id="L276">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the dense matrix sparse vector multiplication using a concurrent standard algorithm.
+     * @param src1 Entries of the dense matrix.
+     * @param shape1 Shape of the dense matrix.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries in sparse vector.
+     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+     */
+    public static CNumber[] concurrentStandardVector(CNumber[] src1, Shape shape1, CNumber[] src2, int[] indices) {
+<span class="fc" id="L289">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L290">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L291">        int rows2 = src2.length;</span>
+
+<span class="fc" id="L293">        CNumber[] dest = new CNumber[rows1];</span>
+<span class="fc" id="L294">        ArrayUtils.fillZeros(dest); // Initialize to zeros</span>
+
+<span class="fc" id="L296">        ThreadManager.concurrentLoop(0, rows1, (i) -&gt; {</span>
+<span class="fc bfc" id="L297" title="All 2 branches covered.">            for(int j=0; j&lt;rows2; j++) {</span>
+<span class="fc" id="L298">                int k = indices[j];</span>
+<span class="fc" id="L299">                dest[i].addEq(src1[i*cols1 + k].mult(src2[j]));</span>
+            }
+<span class="fc" id="L301">        });</span>
+
+<span class="fc" id="L303">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the sparse matrix dense vector multiplication using a concurrent standard algorithm.
+     * @param src1 Entries of the sparse matrix.
+     * @param rowIndices Row indices of non-zero entries in sparse matrix.
+     * @param colIndices Column indices of non-zero entries in sparse matrix.
+     * @param shape1 Shape of the sparse matrix.
+     * @param src2 Entries of the dense vector.
+     * @param shape2 Shape of the dense vector.
+     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+     */
+    public static CNumber[] concurrentStandardVector(CNumber[] src1, int[] rowIndices, int[] colIndices,
+                                                    Shape shape1, CNumber[] src2, Shape shape2) {
+<span class="fc" id="L319">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L320">        CNumber[] dest = new CNumber[rows1];</span>
+<span class="fc" id="L321">        ArrayUtils.fillZeros(dest); // Initialize to zeros</span>
+
+<span class="fc" id="L323">        ThreadManager.concurrentLoop(0, src1.length, (i) -&gt; {</span>
+<span class="fc" id="L324">            int row = rowIndices[i];</span>
+<span class="fc" id="L325">            int col = colIndices[i];</span>
+
+<span class="fc" id="L327">            dest[row].addEq(src1[i].mult(src2[col]));</span>
+<span class="fc" id="L328">        });</span>
+
+<span class="fc" id="L330">        return dest;</span>
+    }
+
+
+    /**
+     * Computes the dense matrix sparse vector multiplication using a blocked algorithm.
+     * @param src1 Entries of the dense matrix.
+     * @param shape1 Shape of the dense matrix.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries in sparse vector.
+     * @return Entries of the dense matrix resulting from the matrix vector multiplication.
+     */
+    public static CNumber[] concurrentBlockedVector(CNumber[] src1, Shape shape1, CNumber[] src2, int[] indices) {
+<span class="fc" id="L343">        int rows1 = shape1.dims[Axis2D.row()];</span>
+<span class="fc" id="L344">        int cols1 = shape1.dims[Axis2D.col()];</span>
+<span class="fc" id="L345">        int rows2 = src2.length;</span>
+
+<span class="fc" id="L347">        final int bsize = Configurations.getBlockSize(); // Get the block size to use.</span>
+
+<span class="fc" id="L349">        CNumber[] dest = new CNumber[rows1];</span>
+<span class="fc" id="L350">        ArrayUtils.fillZeros(dest); // Initialize to zeros</span>
+
+        // Blocked matrix-vector multiply
+<span class="fc" id="L353">        ThreadManager.concurrentLoop(0, rows1, bsize, (ii) -&gt; {</span>
+<span class="fc bfc" id="L354" title="All 2 branches covered.">            for(int jj=0; jj&lt;rows2; jj += bsize) {</span>
+                // Multiply the current blocks
+<span class="pc bpc" id="L356" title="1 of 4 branches missed.">                for(int i=ii; i&lt;ii+bsize &amp;&amp; i&lt;rows1; i++) {</span>
+<span class="pc bpc" id="L357" title="1 of 4 branches missed.">                    for(int j=jj; j&lt;jj+bsize &amp;&amp; j&lt;rows2; j++) {</span>
+<span class="fc" id="L358">                        int k = indices[j];</span>
+<span class="fc" id="L359">                        dest[i].addEq(src1[i*cols1 + k].mult(src2[j]));</span>
+                    }
+                }
+            }
+<span class="fc" id="L363">        });</span>
+
+<span class="fc" id="L365">        return dest;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
