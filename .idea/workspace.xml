@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c8143ba7-020c-4c64-a78b-eee9dde4b564" name="Changes" comment="" />
+    <list default="true" id="c8143ba7-020c-4c64-a78b-eee9dde4b564" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -179,7 +181,7 @@
       <option name="presentableId" value="Default" />
       <updated>1686330332024</updated>
       <workItem from="1686330335051" duration="43000" />
-      <workItem from="1686330398985" duration="11445000" />
+      <workItem from="1686330398985" duration="11461000" />
     </task>
     <task id="LOCAL-00001" summary="Update target directory.">
       <created>1686330688969</created>
@@ -265,7 +267,14 @@
       <option name="project" value="LOCAL" />
       <updated>1686343023903</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Added tests for matrix subspaces.&#10;&#10;AlsoL:&#10;- Implemented complex least squares solver.&#10;- Fixed small issue with least squares solvers where the full QR decomposition was being computed for m &gt; n when only the reduced decomposition is needed.">
+      <created>1686343036298</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1686343036298</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
