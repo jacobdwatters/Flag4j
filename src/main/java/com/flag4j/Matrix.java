@@ -28,6 +28,7 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.RealMatrixMixin;
 import com.flag4j.core.dense.RealDenseTensorBase;
+import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.linalg.Invert;
 import com.flag4j.linalg.decompositions.LUDecomposition;
@@ -3040,7 +3041,7 @@ public class Matrix
      *
      * @return The inverse of this matrix.
      * @throws IllegalArgumentException If this matrix is not square.
-     * @throws RuntimeException If this matrix is singular (i.e. not invertible).
+     * @throws SingularMatrixException If this matrix is singular (i.e. not invertible).
      * @see #isInvertible()
      */
     @Override
@@ -3052,7 +3053,7 @@ public class Matrix
         double det = RealDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
 
         if(Math.abs(det) < tol) {
-            throw new RuntimeException("Cannot invert. Matrix is singular.");
+            throw new SingularMatrixException("Cannot invert.");
         }
 
         // Solve inv(A)*L = inv(U) for inv(A) by solving L^T*inv(A)^T = inv(U)^T
@@ -3665,26 +3666,5 @@ public class Matrix
         result.append("]");
 
         return result.toString();
-    }
-
-
-    public static void main(String[] args) {
-        double[][] a = {{1, 0, -1}, {0, 1, 0} ,{1, 0, 1}};
-        double[][] b = {
-                { 1,          14.5523,    23634},
-                {-9345.235,   1.4,        0.0035},
-                { 10.3,       0,          1252.6},
-                { 36.24,     -31,         77.2}
-        };
-        double[][] c = {
-                {1, 2, 3},
-                {4, 5, 6},
-                {7, 8, 9}
-        };
-        Matrix A = new Matrix(a);
-        Matrix B = new Matrix(b);
-        Matrix C = new Matrix(c);
-
-        System.out.println(C.inv());
     }
 }

@@ -67,4 +67,14 @@ public class RealBackSolver implements LinearSolver<Matrix, Vector, Vector> {
 
         return x;
     }
+
+
+
+    public Vector solveRect(Matrix U, Vector b) {
+        Vector x = new Vector(U.numRows);
+
+
+
+        return x;
+    }
 }

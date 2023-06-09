@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c8143ba7-020c-4c64-a78b-eee9dde4b564" name="Changes" comment="" />
+    <list default="true" id="c8143ba7-020c-4c64-a78b-eee9dde4b564" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,8 +15,23 @@
   <component name="ExportToHTMLSettings">
     <option name="OUTPUT_DIRECTORY" value="C:\Users\jacob\IdeaProjects\Flag4j\target\surefire-reports" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -41,11 +58,12 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/target/surefire-reports" />
     <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.runner" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.All Tests">
     <configuration name="All Tests" type="JUnit" factoryName="JUnit">
       <module name="Flag4j" />
       <option name="MAIN_CLASS_NAME" value="" />
@@ -56,6 +74,103 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="SubSpaceTests.colSpaceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Flag4j" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.flag4j.linalg.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.flag4j.linalg" />
+      <option name="MAIN_CLASS_NAME" value="com.flag4j.linalg.SubSpaceTests" />
+      <option name="METHOD_NAME" value="colSpaceTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SubSpaceTests.hasEqualSpan" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Flag4j" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.flag4j.linalg.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.flag4j.linalg" />
+      <option name="MAIN_CLASS_NAME" value="com.flag4j.linalg.SubSpaceTests" />
+      <option name="METHOD_NAME" value="hasEqualSpan" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SubSpaceTests.leftNullSpaceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Flag4j" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.flag4j.linalg.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.flag4j.linalg" />
+      <option name="MAIN_CLASS_NAME" value="com.flag4j.linalg.SubSpaceTests" />
+      <option name="METHOD_NAME" value="leftNullSpaceTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SubSpaceTests.nullSpaceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Flag4j" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.flag4j.linalg.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.flag4j.linalg" />
+      <option name="MAIN_CLASS_NAME" value="com.flag4j.linalg.SubSpaceTests" />
+      <option name="METHOD_NAME" value="nullSpaceTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SubSpaceTests.rowSpaceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Flag4j" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.flag4j.linalg.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.flag4j.linalg" />
+      <option name="MAIN_CLASS_NAME" value="com.flag4j.linalg.SubSpaceTests" />
+      <option name="METHOD_NAME" value="rowSpaceTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="JUnit.All Tests" />
+      <item itemvalue="JUnit.SubSpaceTests.colSpaceTest" />
+      <item itemvalue="JUnit.SubSpaceTests.rowSpaceTest" />
+      <item itemvalue="JUnit.SubSpaceTests.nullSpaceTest" />
+      <item itemvalue="JUnit.SubSpaceTests.leftNullSpaceTest" />
+      <item itemvalue="JUnit.SubSpaceTests.hasEqualSpan" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.SubSpaceTests.hasEqualSpan" />
+        <item itemvalue="JUnit.SubSpaceTests.leftNullSpaceTest" />
+        <item itemvalue="JUnit.SubSpaceTests.nullSpaceTest" />
+        <item itemvalue="JUnit.SubSpaceTests.rowSpaceTest" />
+        <item itemvalue="JUnit.SubSpaceTests.colSpaceTest" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -66,7 +181,7 @@
       <option name="presentableId" value="Default" />
       <updated>1686330332024</updated>
       <workItem from="1686330335051" duration="43000" />
-      <workItem from="1686330398985" duration="1171000" />
+      <workItem from="1686330398985" duration="11461000" />
     </task>
     <task id="LOCAL-00001" summary="Update target directory.">
       <created>1686330688969</created>
@@ -138,7 +253,28 @@
       <option name="project" value="LOCAL" />
       <updated>1686331564939</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Update target directory">
+      <created>1686331584376</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1686331584376</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Added tests for matrix subspaces.&#10;&#10;AlsoL:&#10;- Implemented complex least squares solver.&#10;- Fixed small issue with least squares solvers where the full QR decomposition was being computed for m &gt; n when only the reduced decomposition is needed.">
+      <created>1686343023903</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1686343023903</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Added tests for matrix subspaces.&#10;&#10;AlsoL:&#10;- Implemented complex least squares solver.&#10;- Fixed small issue with least squares solvers where the full QR decomposition was being computed for m &gt; n when only the reduced decomposition is needed.">
+      <created>1686343036298</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1686343036298</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -150,9 +286,10 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Update target directory." />
     <MESSAGE value="Update target directory" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update target directory" />
+    <MESSAGE value="Added tests for matrix subspaces.&#10;&#10;AlsoL:&#10;- Implemented complex least squares solver.&#10;- Fixed small issue with least squares solvers where the full QR decomposition was being computed for m &gt; n when only the reduced decomposition is needed." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added tests for matrix subspaces.&#10;&#10;AlsoL:&#10;- Implemented complex least squares solver.&#10;- Fixed small issue with least squares solvers where the full QR decomposition was being computed for m &gt; n when only the reduced decomposition is needed." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Flag4j$All_Tests.ic" NAME="All Tests Coverage Results" MODIFIED="1686330936406" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/Flag4j$All_Tests.ic" NAME="All Tests Coverage Results" MODIFIED="1686342903552" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

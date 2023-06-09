@@ -29,6 +29,7 @@ import com.flag4j.CVector;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.solvers.ComplexBackSolver;
 import com.flag4j.linalg.solvers.ComplexForwardSolver;
 import com.flag4j.linalg.solvers.RealBackSolver;
@@ -52,13 +53,13 @@ public class Invert {
      * upper triangular.
      * @param src Upper triangular matrix to compute the inverse of.
      * @return The inverse of the upper triangular matrix.
-     * @throws RuntimeException If the matrix is singular (i.e. has at least one zero along the diagonal).
+     * @throws SingularMatrixException If the matrix is singular (i.e. has at least one zero along the diagonal).
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static Matrix invTriU(Matrix src) {
         ParameterChecks.assertSquare(src.shape);
         if(zeroOnDiag(src)) {
-            throw new RuntimeException("Cannot invert, matrix is singular.");
+            throw new SingularMatrixException("Cannot invert.");
         }
 
         RealBackSolver backSolver = new RealBackSolver();
@@ -79,13 +80,13 @@ public class Invert {
      * lower triangular.
      * @param src Lower triangular matrix to compute the inverse of.
      * @return The inverse of the lower triangular matrix.
-     * @throws RuntimeException If the matrix is singular (i.e. has at least one zero along the diagonal).
+     * @throws SingularMatrixException If the matrix is singular (i.e. has at least one zero along the diagonal).
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static Matrix invTriL(Matrix src) {
         ParameterChecks.assertSquare(src.shape);
         if(zeroOnDiag(src)) {
-            throw new RuntimeException("Cannot invert, matrix is singular.");
+            throw new SingularMatrixException("Cannot invert.");
         }
 
         RealForwardSolver forwardSolver = new RealForwardSolver();
@@ -106,7 +107,7 @@ public class Invert {
      * diagonal.
      * @param src Diagonal matrix to compute the inverse of.
      * @return The inverse of the diagonal matrix.
-     * @throws RuntimeException If the matrix is singular (i.e. has at least one zero along the diagonal).
+     * @throws SingularMatrixException If the matrix is singular (i.e. has at least one zero along the diagonal).
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static Matrix invDiag(Matrix src) {
@@ -123,7 +124,7 @@ public class Invert {
             idx += step;
 
             if(value==0) {
-                throw new RuntimeException("Cannot invert, matrix is singular.");
+                throw new SingularMatrixException("Cannot invert.");
             }
 
             inverse.entries[idx] = 1.0/value;
@@ -138,13 +139,13 @@ public class Invert {
      * upper triangular.
      * @param src Upper triangular matrix to compute the inverse of.
      * @return The inverse of the upper triangular matrix.
-     * @throws RuntimeException If the matrix is singular (i.e. has at least one zero along the diagonal).
+     * @throws SingularMatrixException If the matrix is singular (i.e. has at least one zero along the diagonal).
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static CMatrix invTriU(CMatrix src) {
         ParameterChecks.assertSquare(src.shape);
         if(zeroOnDiag(src)) {
-            throw new RuntimeException("Cannot invert, matrix is singular.");
+            throw new SingularMatrixException("Cannot invert.");
         }
 
         ComplexBackSolver backSolver = new ComplexBackSolver();
@@ -165,13 +166,13 @@ public class Invert {
      * lower triangular.
      * @param src Lower triangular matrix to compute the inverse of.
      * @return The inverse of the lower triangular matrix.
-     * @throws RuntimeException If the matrix is singular (i.e. has at least one zero along the diagonal).
+     * @throws SingularMatrixException If the matrix is singular (i.e. has at least one zero along the diagonal).
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static CMatrix invTriL(CMatrix src) {
         ParameterChecks.assertSquare(src.shape);
         if(zeroOnDiag(src)) {
-            throw new RuntimeException("Cannot invert, matrix is singular.");
+            throw new SingularMatrixException("Cannot invert.");
         }
 
         ComplexForwardSolver forwardSolver = new ComplexForwardSolver();
@@ -192,7 +193,7 @@ public class Invert {
      * diagonal.
      * @param src Diagonal matrix to compute the inverse of.
      * @return The inverse of the diagonal matrix.
-     * @throws RuntimeException If the matrix is singular (i.e. has at least one zero along the diagonal).
+     * @throws SingularMatrixException If the matrix is singular (i.e. has at least one zero along the diagonal).
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static CMatrix invDiag(CMatrix src) {
@@ -209,7 +210,7 @@ public class Invert {
             idx += step;
 
             if(value.re==0 && value.im==0) {
-                throw new RuntimeException("Cannot invert, matrix is singular.");
+                throw new SingularMatrixException("Cannot invert.");
             }
 
             inverse.entries[idx] = value.multInv();

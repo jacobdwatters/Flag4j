@@ -29,7 +29,6 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseVectorJoinTest
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixPropertiesTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberPropertiesTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\util\StringUtilsTests.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixEqualsTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixRemoveRowColTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\TensorConversionTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixElemDivTests.java
@@ -105,6 +104,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\MatrixAddSubEqTests.
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\TensorGetSetTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CTensorAddTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\VectorConstructorTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\SubSpaceTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\TensorAddTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\decompositions\RealSchurTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\VectorZeroOnesTests.java
@@ -152,6 +152,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\VectorElementwiseTes
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixUnaryOperationsTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberComparisonTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CustomAssertions.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\CMatrixEqualsTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberUnaryOperationsTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\complex\ComplexDenseMatMultTransposeTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\SparseMatrixConstructorTests.java

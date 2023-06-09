@@ -3,6 +3,7 @@ package com.flag4j.linalg.solvers;
 
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
+import com.flag4j.exceptions.SingularMatrixException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -83,6 +84,6 @@ class MatrixLUSolverTests {
         expEntries = new double[]{};
         setMatrices();
 
-        assertThrows(IllegalArgumentException.class, ()->solver.solve(A, b));
+        assertThrows(SingularMatrixException.class, ()->solver.solve(A, b));
     }
 }
