@@ -1,0 +1,1041 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ArrayUtils</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j.util</a>
+</div>
+
+<h1>Coverage Summary for Class: ArrayUtils (com.flag4j.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ArrayUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    78.7%
+  </span>
+  <span class="absValue">
+    (37/47)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    81.1%
+  </span>
+  <span class="absValue">
+    (172/212)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;/*
+<i class="no-highlight">2</i>&nbsp; * MIT License
+<i class="no-highlight">3</i>&nbsp; *
+<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2022-2023 Jacob Watters
+<i class="no-highlight">5</i>&nbsp; *
+<i class="no-highlight">6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i class="no-highlight">7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i class="no-highlight">8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i class="no-highlight">9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i class="no-highlight">10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i class="no-highlight">11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i class="no-highlight">12</i>&nbsp; *
+<i class="no-highlight">13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i class="no-highlight">14</i>&nbsp; * copies or substantial portions of the Software.
+<i class="no-highlight">15</i>&nbsp; *
+<i class="no-highlight">16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i class="no-highlight">17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i class="no-highlight">18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i class="no-highlight">19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i class="no-highlight">20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i class="no-highlight">21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i class="no-highlight">22</i>&nbsp; * SOFTWARE.
+<i class="no-highlight">23</i>&nbsp; */
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;package com.flag4j.util;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;import com.flag4j.complex_numbers.CNumber;
+<i class="no-highlight">28</i>&nbsp;import com.flag4j.io.PrintOptions;
+<i class="no-highlight">29</i>&nbsp;import org.jetbrains.annotations.NotNull;
+<i class="no-highlight">30</i>&nbsp;
+<i class="no-highlight">31</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">32</i>&nbsp;import java.util.Arrays;
+<i class="no-highlight">33</i>&nbsp;
+<i class="no-highlight">34</i>&nbsp;
+<i class="no-highlight">35</i>&nbsp;/**
+<i class="no-highlight">36</i>&nbsp; * This class provides several methods useful for array manipulation and copying.
+<i class="no-highlight">37</i>&nbsp; */
+<i class="no-highlight">38</i>&nbsp;public final class ArrayUtils {
+<i class="no-highlight">39</i>&nbsp;
+<b class="nc"><i class="no-highlight">40</i>&nbsp;    private ArrayUtils() {</b>
+<i class="no-highlight">41</i>&nbsp;        // Hide Constructor
+<b class="nc"><i class="no-highlight">42</i>&nbsp;        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</b>
+<i class="no-highlight">43</i>&nbsp;    }
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;
+<i class="no-highlight">46</i>&nbsp;    /**
+<i class="no-highlight">47</i>&nbsp;     * Creates a deep copy of a 2D array.
+<i class="no-highlight">48</i>&nbsp;     * @param src Source array to copy.
+<i class="no-highlight">49</i>&nbsp;     * @param dest Destination array of copy.
+<i class="no-highlight">50</i>&nbsp;     * @throws IllegalArgumentException If the two arrays are not the same shape.
+<i class="no-highlight">51</i>&nbsp;     */
+<i class="no-highlight">52</i>&nbsp;    public static void deepCopy(int[][] src, int[][] dest) {
+<b class="fc"><i class="no-highlight">53</i>&nbsp;        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</b>
+<b class="fc"><i class="no-highlight">54</i>&nbsp;        ParameterChecks.assertArrayLengthsEq(src[0].length, dest[0].length);</b>
+<i class="no-highlight">55</i>&nbsp;
+<b class="fc"><i class="no-highlight">56</i>&nbsp;        for(int i=0; i&lt;src.length; i++) {</b>
+<b class="fc"><i class="no-highlight">57</i>&nbsp;            System.arraycopy(src[i], 0, dest[i], 0, src[i].length);</b>
+<i class="no-highlight">58</i>&nbsp;        }
+<i class="no-highlight">59</i>&nbsp;    }
+<i class="no-highlight">60</i>&nbsp;
+<i class="no-highlight">61</i>&nbsp;
+<i class="no-highlight">62</i>&nbsp;    /**
+<i class="no-highlight">63</i>&nbsp;     * Converts array to an array of {@link CNumber complex numbers}.
+<i class="no-highlight">64</i>&nbsp;     * @param src Array to convert.
+<i class="no-highlight">65</i>&nbsp;     * @param dest Destination array.
+<i class="no-highlight">66</i>&nbsp;     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+<i class="no-highlight">67</i>&nbsp;     */
+<i class="no-highlight">68</i>&nbsp;    public static void copy2CNumber(int[] src, CNumber[] dest) {
+<b class="fc"><i class="no-highlight">69</i>&nbsp;        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</b>
+<i class="no-highlight">70</i>&nbsp;
+<b class="fc"><i class="no-highlight">71</i>&nbsp;        for(int i=0; i&lt;dest.length; i++) {</b>
+<b class="fc"><i class="no-highlight">72</i>&nbsp;            dest[i] = new CNumber(src[i]);</b>
+<i class="no-highlight">73</i>&nbsp;        }
+<i class="no-highlight">74</i>&nbsp;    }
+<i class="no-highlight">75</i>&nbsp;
+<i class="no-highlight">76</i>&nbsp;
+<i class="no-highlight">77</i>&nbsp;    /**
+<i class="no-highlight">78</i>&nbsp;     * Converts array to an array of {@link CNumber complex numbers}.
+<i class="no-highlight">79</i>&nbsp;     * @param src Array to convert.
+<i class="no-highlight">80</i>&nbsp;     * @param dest Destination array.
+<i class="no-highlight">81</i>&nbsp;     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+<i class="no-highlight">82</i>&nbsp;     */
+<i class="no-highlight">83</i>&nbsp;    public static void copy2CNumber(double[] src, CNumber[] dest) {
+<b class="fc"><i class="no-highlight">84</i>&nbsp;        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</b>
+<i class="no-highlight">85</i>&nbsp;
+<b class="fc"><i class="no-highlight">86</i>&nbsp;        for(int i=0; i&lt;dest.length; i++) {</b>
+<b class="fc"><i class="no-highlight">87</i>&nbsp;            dest[i] = new CNumber(src[i]);</b>
+<i class="no-highlight">88</i>&nbsp;        }
+<i class="no-highlight">89</i>&nbsp;    }
+<i class="no-highlight">90</i>&nbsp;
+<i class="no-highlight">91</i>&nbsp;
+<i class="no-highlight">92</i>&nbsp;    /**
+<i class="no-highlight">93</i>&nbsp;     * Converts array to an array of {@link CNumber complex numbers}.
+<i class="no-highlight">94</i>&nbsp;     * @param src Array to convert.
+<i class="no-highlight">95</i>&nbsp;     * @param dest Destination array.
+<i class="no-highlight">96</i>&nbsp;     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+<i class="no-highlight">97</i>&nbsp;     */
+<i class="no-highlight">98</i>&nbsp;    public static void copy2CNumber(Integer[] src, CNumber[] dest) {
+<b class="fc"><i class="no-highlight">99</i>&nbsp;        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</b>
+<i class="no-highlight">100</i>&nbsp;
+<b class="fc"><i class="no-highlight">101</i>&nbsp;        for(int i=0; i&lt;dest.length; i++) {</b>
+<b class="fc"><i class="no-highlight">102</i>&nbsp;            dest[i] = new CNumber(src[i]);</b>
+<i class="no-highlight">103</i>&nbsp;        }
+<i class="no-highlight">104</i>&nbsp;    }
+<i class="no-highlight">105</i>&nbsp;
+<i class="no-highlight">106</i>&nbsp;
+<i class="no-highlight">107</i>&nbsp;    /**
+<i class="no-highlight">108</i>&nbsp;     * Converts array to an array of {@link CNumber complex numbers}.
+<i class="no-highlight">109</i>&nbsp;     * @param src Array to convert.
+<i class="no-highlight">110</i>&nbsp;     * @param dest Destination array.
+<i class="no-highlight">111</i>&nbsp;     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+<i class="no-highlight">112</i>&nbsp;     */
+<i class="no-highlight">113</i>&nbsp;    public static void copy2CNumber(Double[] src, CNumber[] dest) {
+<b class="fc"><i class="no-highlight">114</i>&nbsp;        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</b>
+<i class="no-highlight">115</i>&nbsp;
+<b class="fc"><i class="no-highlight">116</i>&nbsp;        for(int i=0; i&lt;dest.length; i++) {</b>
+<b class="fc"><i class="no-highlight">117</i>&nbsp;            dest[i] = new CNumber(src[i]);</b>
+<i class="no-highlight">118</i>&nbsp;        }
+<i class="no-highlight">119</i>&nbsp;    }
+<i class="no-highlight">120</i>&nbsp;
+<i class="no-highlight">121</i>&nbsp;
+<i class="no-highlight">122</i>&nbsp;    /**
+<i class="no-highlight">123</i>&nbsp;     * Converts array to an array of {@link CNumber complex numbers}.
+<i class="no-highlight">124</i>&nbsp;     * @param src Array to convert.
+<i class="no-highlight">125</i>&nbsp;     * @param dest Destination array.
+<i class="no-highlight">126</i>&nbsp;     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+<i class="no-highlight">127</i>&nbsp;     */
+<i class="no-highlight">128</i>&nbsp;    public static void copy2CNumber(String[] src, CNumber[] dest) {
+<b class="fc"><i class="no-highlight">129</i>&nbsp;        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</b>
+<i class="no-highlight">130</i>&nbsp;
+<b class="fc"><i class="no-highlight">131</i>&nbsp;        for(int i=0; i&lt;dest.length; i++) {</b>
+<b class="fc"><i class="no-highlight">132</i>&nbsp;            dest[i] = new CNumber(src[i]);</b>
+<i class="no-highlight">133</i>&nbsp;        }
+<i class="no-highlight">134</i>&nbsp;    }
+<i class="no-highlight">135</i>&nbsp;
+<i class="no-highlight">136</i>&nbsp;
+<i class="no-highlight">137</i>&nbsp;    /**
+<i class="no-highlight">138</i>&nbsp;     * Performs an array copy similar to {@link System#arraycopy(Object, int, Object, int, int)} but creates a deep copy
+<i class="no-highlight">139</i>&nbsp;     * of each element in the source array.
+<i class="no-highlight">140</i>&nbsp;     * @param src The source array.
+<i class="no-highlight">141</i>&nbsp;     * @param srcPos The starting position from which to copy elements of the source array.
+<i class="no-highlight">142</i>&nbsp;     * @param dest The destination array for the copy.
+<i class="no-highlight">143</i>&nbsp;     * @param destPos Starting index to place copied elements in the destination array.
+<i class="no-highlight">144</i>&nbsp;     * @param length The number of array elements to be copied.
+<i class="no-highlight">145</i>&nbsp;     * @throws ArrayIndexOutOfBoundsException If the destPos parameter plus the length parameter exceeds the length of the
+<i class="no-highlight">146</i>&nbsp;     * source array length or the destination array length.
+<i class="no-highlight">147</i>&nbsp;     */
+<i class="no-highlight">148</i>&nbsp;    public static void arraycopy(@NotNull CNumber[] src, int srcPos, @NotNull CNumber[] dest, int destPos, int length) {
+<b class="fc"><i class="no-highlight">149</i>&nbsp;        for(int i=0; i&lt;length; i++) {</b>
+<b class="fc"><i class="no-highlight">150</i>&nbsp;            dest[i+destPos] = src[i+srcPos].copy();</b>
+<i class="no-highlight">151</i>&nbsp;        }
+<i class="no-highlight">152</i>&nbsp;    }
+<i class="no-highlight">153</i>&nbsp;
+<i class="no-highlight">154</i>&nbsp;
+<i class="no-highlight">155</i>&nbsp;
+<i class="no-highlight">156</i>&nbsp;    /**
+<i class="no-highlight">157</i>&nbsp;     * Performs an array copy similar to {@link System#arraycopy(Object, int, Object, int, int)} but creates a deep copy
+<i class="no-highlight">158</i>&nbsp;     * of each element in the source array.
+<i class="no-highlight">159</i>&nbsp;     * @param src The source array.
+<i class="no-highlight">160</i>&nbsp;     * @param srcPos The starting position from which to copy elements of the source array.
+<i class="no-highlight">161</i>&nbsp;     * @param dest The destination array for the copy.
+<i class="no-highlight">162</i>&nbsp;     * @param destPos Starting index to place copied elements in the destination array.
+<i class="no-highlight">163</i>&nbsp;     * @param length The number of array elements to be copied.
+<i class="no-highlight">164</i>&nbsp;     * @throws ArrayIndexOutOfBoundsException If the destPos parameter plus the length parameter exceeds the length of the
+<i class="no-highlight">165</i>&nbsp;     * source array length or the destination array length.
+<i class="no-highlight">166</i>&nbsp;     */
+<i class="no-highlight">167</i>&nbsp;    public static void arraycopy(double[] src, int srcPos, CNumber[] dest, int destPos, int length) {
+<b class="fc"><i class="no-highlight">168</i>&nbsp;        for(int i=0; i&lt;length; i++) {</b>
+<b class="fc"><i class="no-highlight">169</i>&nbsp;            dest[i+destPos] = new CNumber(src[i+srcPos]);</b>
+<i class="no-highlight">170</i>&nbsp;        }
+<i class="no-highlight">171</i>&nbsp;    }
+<i class="no-highlight">172</i>&nbsp;
+<i class="no-highlight">173</i>&nbsp;
+<i class="no-highlight">174</i>&nbsp;    /**
+<i class="no-highlight">175</i>&nbsp;     * Copies a range of an array into a new array. Similar to {@link Arrays#copyOfRange(Object[], int, int)} but
+<i class="no-highlight">176</i>&nbsp;     * performs a deep copy.
+<i class="no-highlight">177</i>&nbsp;     * @param src Source array to copy from.
+<i class="no-highlight">178</i>&nbsp;     * @param start Staring index of range to copy (inclusive).
+<i class="no-highlight">179</i>&nbsp;     * @param stop Stopping index of range to copy (Exclusive).
+<i class="no-highlight">180</i>&nbsp;     * @return An array of length {@code stop-start} containing a deep copy of the specified range of the source array.
+<i class="no-highlight">181</i>&nbsp;     * @throws NegativeArraySizeException If stop is less than start.
+<i class="no-highlight">182</i>&nbsp;     */
+<i class="no-highlight">183</i>&nbsp;    public static CNumber[] copyOfRange(CNumber[] src, int start, int stop) {
+<b class="fc"><i class="no-highlight">184</i>&nbsp;        CNumber[] dest = new CNumber[stop-start];</b>
+<i class="no-highlight">185</i>&nbsp;
+<b class="fc"><i class="no-highlight">186</i>&nbsp;        int count=0;</b>
+<b class="fc"><i class="no-highlight">187</i>&nbsp;        for(int i=start; i&lt;stop; i++) {</b>
+<b class="fc"><i class="no-highlight">188</i>&nbsp;            dest[count++] = src[i].copy();</b>
+<i class="no-highlight">189</i>&nbsp;        }
+<i class="no-highlight">190</i>&nbsp;
+<b class="fc"><i class="no-highlight">191</i>&nbsp;        return dest;</b>
+<i class="no-highlight">192</i>&nbsp;    }
+<i class="no-highlight">193</i>&nbsp;
+<i class="no-highlight">194</i>&nbsp;
+<i class="no-highlight">195</i>&nbsp;    /**
+<i class="no-highlight">196</i>&nbsp;     * Copies the full array. Similar to {@link Arrays#copyOfRange(Object[], int, int)} but
+<i class="no-highlight">197</i>&nbsp;     * performs a deep copy.
+<i class="no-highlight">198</i>&nbsp;     * @param src Source array to copy from.
+<i class="no-highlight">199</i>&nbsp;     * @return An array of length {@code stop-start} containing a deep copy of the specified range of the source array.
+<i class="no-highlight">200</i>&nbsp;     * @throws NegativeArraySizeException If stop is less than start.
+<i class="no-highlight">201</i>&nbsp;     */
+<i class="no-highlight">202</i>&nbsp;    public static CNumber[] copyOf(CNumber[] src) {
+<b class="fc"><i class="no-highlight">203</i>&nbsp;        CNumber[] dest = new CNumber[src.length];</b>
+<i class="no-highlight">204</i>&nbsp;
+<b class="fc"><i class="no-highlight">205</i>&nbsp;        int count=0;</b>
+<b class="fc"><i class="no-highlight">206</i>&nbsp;        for(int i=0; i&lt;dest.length; i++) {</b>
+<b class="fc"><i class="no-highlight">207</i>&nbsp;            dest[count++] = src[i].copy();</b>
+<i class="no-highlight">208</i>&nbsp;        }
+<i class="no-highlight">209</i>&nbsp;
+<b class="fc"><i class="no-highlight">210</i>&nbsp;        return dest;</b>
+<i class="no-highlight">211</i>&nbsp;    }
+<i class="no-highlight">212</i>&nbsp;
+<i class="no-highlight">213</i>&nbsp;
+<i class="no-highlight">214</i>&nbsp;    // TODO: Add the following methods:
+<i class="no-highlight">215</i>&nbsp;    //  stridedCopy(double[] src, int length, int stride);
+<i class="no-highlight">216</i>&nbsp;    //  stridedCopy(CNumber[] src, int length, int stride);
+<i class="no-highlight">217</i>&nbsp;    //  stridedCopyOfRange(double[] src, int start, int end, int length, int stride)
+<i class="no-highlight">218</i>&nbsp;    //  stridedCopyOfRange(CNumber[] src, int start, int end, int length, int stride)
+<i class="no-highlight">219</i>&nbsp;
+<i class="no-highlight">220</i>&nbsp;
+<i class="no-highlight">221</i>&nbsp;    /**
+<i class="no-highlight">222</i>&nbsp;     * Converts array to an array of {@link CNumber complex numbers}.
+<i class="no-highlight">223</i>&nbsp;     * @param src Source array to convert.
+<i class="no-highlight">224</i>&nbsp;     * @param dest Destination array.
+<i class="no-highlight">225</i>&nbsp;     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+<i class="no-highlight">226</i>&nbsp;     */
+<i class="no-highlight">227</i>&nbsp;    public static void copy2CNumber(CNumber[] src, CNumber[] dest) {
+<b class="fc"><i class="no-highlight">228</i>&nbsp;        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</b>
+<b class="fc"><i class="no-highlight">229</i>&nbsp;        for(int i=0; i&lt;dest.length; i++) {</b>
+<b class="fc"><i class="no-highlight">230</i>&nbsp;            dest[i] = new CNumber(src[i]);</b>
+<i class="no-highlight">231</i>&nbsp;        }
+<i class="no-highlight">232</i>&nbsp;    }
+<i class="no-highlight">233</i>&nbsp;
+<i class="no-highlight">234</i>&nbsp;
+<i class="no-highlight">235</i>&nbsp;    /**
+<i class="no-highlight">236</i>&nbsp;     * Fills an array of complex numbers with zeros.
+<i class="no-highlight">237</i>&nbsp;     * @param dest Array to fill with zeros.
+<i class="no-highlight">238</i>&nbsp;     */
+<i class="no-highlight">239</i>&nbsp;    public static void fillZeros(CNumber[] dest) {
+<b class="fc"><i class="no-highlight">240</i>&nbsp;        for(int i=0; i&lt;dest.length; i++) {</b>
+<b class="fc"><i class="no-highlight">241</i>&nbsp;            dest[i] = new CNumber();</b>
+<i class="no-highlight">242</i>&nbsp;        }
+<i class="no-highlight">243</i>&nbsp;    }
+<i class="no-highlight">244</i>&nbsp;
+<i class="no-highlight">245</i>&nbsp;
+<i class="no-highlight">246</i>&nbsp;    /**
+<i class="no-highlight">247</i>&nbsp;     * Fills a specified range of an array of complex numbers with zeros.
+<i class="no-highlight">248</i>&nbsp;     * @param start Starting index of range to fill (inclusive).
+<i class="no-highlight">249</i>&nbsp;     * @param end Ending index of range to fill (Exclusive).
+<i class="no-highlight">250</i>&nbsp;     * @param dest Array to fill specified range with zeros.
+<i class="no-highlight">251</i>&nbsp;     */
+<i class="no-highlight">252</i>&nbsp;    public static void fillZerosRange(CNumber[] dest, int start, int end) {
+<b class="fc"><i class="no-highlight">253</i>&nbsp;        for(int i=start; i&lt;end; i++) {</b>
+<b class="fc"><i class="no-highlight">254</i>&nbsp;            dest[i] = new CNumber();</b>
+<i class="no-highlight">255</i>&nbsp;        }
+<i class="no-highlight">256</i>&nbsp;    }
+<i class="no-highlight">257</i>&nbsp;
+<i class="no-highlight">258</i>&nbsp;
+<i class="no-highlight">259</i>&nbsp;    /**
+<i class="no-highlight">260</i>&nbsp;     * Fills a specified range of an array with zeros.
+<i class="no-highlight">261</i>&nbsp;     * @param start Starting index of range to fill (inclusive).
+<i class="no-highlight">262</i>&nbsp;     * @param end Ending index of range to fill (Exclusive).
+<i class="no-highlight">263</i>&nbsp;     * @param dest Array to fill specified range with zeros.
+<i class="no-highlight">264</i>&nbsp;     */
+<i class="no-highlight">265</i>&nbsp;    public static void fillZerosRange(double[] dest, int start, int end) {
+<b class="nc"><i class="no-highlight">266</i>&nbsp;        System.arraycopy(new double[end-start], 0, dest, start, end-start);</b>
+<i class="no-highlight">267</i>&nbsp;    }
+<i class="no-highlight">268</i>&nbsp;
+<i class="no-highlight">269</i>&nbsp;
+<i class="no-highlight">270</i>&nbsp;    /**
+<i class="no-highlight">271</i>&nbsp;     * &lt;p&gt;
+<i class="no-highlight">272</i>&nbsp;     * Fills an array with zeros seperated by the given stride.
+<i class="no-highlight">273</i>&nbsp;     * &lt;/p&gt;
+<i class="no-highlight">274</i>&nbsp;     *
+<i class="no-highlight">275</i>&nbsp;     * &lt;p&gt;
+<i class="no-highlight">276</i>&nbsp;     * If {@code stride=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}} then the result will be {@code {1, 0, 3, 4, 0, 6, 7, 0, 9}}.
+<i class="no-highlight">277</i>&nbsp;     * &lt;/p&gt;
+<i class="no-highlight">278</i>&nbsp;     *
+<i class="no-highlight">279</i>&nbsp;     * @param dest Array to fill with strided zeros.
+<i class="no-highlight">280</i>&nbsp;     * @param start Staring point in array to apply strided zero fill.
+<i class="no-highlight">281</i>&nbsp;     * @param stride Number of elements between each value to set to zero within the destination array.
+<i class="no-highlight">282</i>&nbsp;     * @throws IllegalArgumentException If stride is less than 1.
+<i class="no-highlight">283</i>&nbsp;     * @throws IllegalArgumentException If start is less than 0.
+<i class="no-highlight">284</i>&nbsp;     */
+<i class="no-highlight">285</i>&nbsp;    public static void stridedFillZeros(double[] dest, int start, int stride) {
+<b class="nc"><i class="no-highlight">286</i>&nbsp;        ParameterChecks.assertGreaterEq(1, stride);</b>
+<b class="nc"><i class="no-highlight">287</i>&nbsp;        ParameterChecks.assertGreaterEq(0, start);</b>
+<i class="no-highlight">288</i>&nbsp;
+<b class="nc"><i class="no-highlight">289</i>&nbsp;        for(int i=start; i&lt;dest.length; i+=stride) {</b>
+<b class="nc"><i class="no-highlight">290</i>&nbsp;            dest[i] = 0;</b>
+<i class="no-highlight">291</i>&nbsp;        }
+<i class="no-highlight">292</i>&nbsp;    }
+<i class="no-highlight">293</i>&nbsp;
+<i class="no-highlight">294</i>&nbsp;
+<i class="no-highlight">295</i>&nbsp;    /**
+<i class="no-highlight">296</i>&nbsp;     * &lt;p&gt;
+<i class="no-highlight">297</i>&nbsp;     * Fills an array with zeros seperated by the given stride.
+<i class="no-highlight">298</i>&nbsp;     * &lt;/p&gt;
+<i class="no-highlight">299</i>&nbsp;     *
+<i class="no-highlight">300</i>&nbsp;     * &lt;p&gt;
+<i class="no-highlight">301</i>&nbsp;     * If {@code stride=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}} then the result will be {@code {1, 0, 3, 4, 0, 6, 7, 0, 9}}.
+<i class="no-highlight">302</i>&nbsp;     * &lt;/p&gt;
+<i class="no-highlight">303</i>&nbsp;     *
+<i class="no-highlight">304</i>&nbsp;     * @param dest Array to fill with strided zeros.
+<i class="no-highlight">305</i>&nbsp;     * @param start Staring point in array to apply strided zero fill.
+<i class="no-highlight">306</i>&nbsp;     * @param stride Number of elements between each value to set to zero within the destination array.
+<i class="no-highlight">307</i>&nbsp;     * @throws IllegalArgumentException If stride is less than 1.
+<i class="no-highlight">308</i>&nbsp;     * @throws IllegalArgumentException If start is less than 0.
+<i class="no-highlight">309</i>&nbsp;     */
+<i class="no-highlight">310</i>&nbsp;    public static void stridedFillZeros(CNumber[] dest, int start, int stride) {
+<b class="nc"><i class="no-highlight">311</i>&nbsp;        ParameterChecks.assertGreaterEq(1, stride);</b>
+<b class="nc"><i class="no-highlight">312</i>&nbsp;        ParameterChecks.assertGreaterEq(0, start);</b>
+<i class="no-highlight">313</i>&nbsp;
+<b class="nc"><i class="no-highlight">314</i>&nbsp;        for(int i=start; i&lt;dest.length; i+=stride) {</b>
+<b class="nc"><i class="no-highlight">315</i>&nbsp;            dest[i] = new CNumber();</b>
+<i class="no-highlight">316</i>&nbsp;        }
+<i class="no-highlight">317</i>&nbsp;    }
+<i class="no-highlight">318</i>&nbsp;
+<i class="no-highlight">319</i>&nbsp;
+<i class="no-highlight">320</i>&nbsp;    /**
+<i class="no-highlight">321</i>&nbsp;     * &lt;p&gt;
+<i class="no-highlight">322</i>&nbsp;     * Fills an array with a range of zeros, each seperated by the given stride. Specifically, the destination array will
+<i class="no-highlight">323</i>&nbsp;     * be filled with several sequential ranges of zeros of specified length. Each range of zeros will be seperated by
+<i class="no-highlight">324</i>&nbsp;     * the stride.
+<i class="no-highlight">325</i>&nbsp;     * &lt;/p&gt;
+<i class="no-highlight">326</i>&nbsp;     *
+<i class="no-highlight">327</i>&nbsp;     * &lt;p&gt;
+<i class="no-highlight">328</i>&nbsp;     * If {@code stride=2}, {@code length=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}}
+<i class="no-highlight">329</i>&nbsp;     * then the result will be {1, 0, 0, 0, 5, 0, 0, 0, 9}.
+<i class="no-highlight">330</i>&nbsp;     * &lt;/p&gt;
+<i class="no-highlight">331</i>&nbsp;     *
+<i class="no-highlight">332</i>&nbsp;     * @param dest Array to fill with strided zeros.
+<i class="no-highlight">333</i>&nbsp;     * @param start Starting point to apply strided zero fill.
+<i class="no-highlight">334</i>&nbsp;     * @param length Number of sequential zeros to fill per stride.
+<i class="no-highlight">335</i>&nbsp;     * @param stride Number of elements between each value to set to zero within the destination array.
+<i class="no-highlight">336</i>&nbsp;     * @throws IllegalArgumentException If stride or length is less than one.
+<i class="no-highlight">337</i>&nbsp;     * @throws IllegalArgumentException If start is less than zero.
+<i class="no-highlight">338</i>&nbsp;     */
+<i class="no-highlight">339</i>&nbsp;    public static void stridedFillZerosRange(CNumber[] dest, int start, int length, int stride) {
+<b class="fc"><i class="no-highlight">340</i>&nbsp;        ParameterChecks.assertGreaterEq(1, stride, length);</b>
+<b class="fc"><i class="no-highlight">341</i>&nbsp;        ParameterChecks.assertGreaterEq(0, start);</b>
+<i class="no-highlight">342</i>&nbsp;
+<b class="fc"><i class="no-highlight">343</i>&nbsp;        for(int i=start; i&lt;dest.length; i+=stride+length) {</b>
+<b class="fc"><i class="no-highlight">344</i>&nbsp;            for(int j=0; j&lt;length; j++) {</b>
+<b class="fc"><i class="no-highlight">345</i>&nbsp;                dest[i+j] = new CNumber();</b>
+<i class="no-highlight">346</i>&nbsp;            }
+<i class="no-highlight">347</i>&nbsp;        }
+<i class="no-highlight">348</i>&nbsp;    }
+<i class="no-highlight">349</i>&nbsp;
+<i class="no-highlight">350</i>&nbsp;
+<i class="no-highlight">351</i>&nbsp;    /**
+<i class="no-highlight">352</i>&nbsp;     * &lt;p&gt;
+<i class="no-highlight">353</i>&nbsp;     * Fills an array with a range of zeros, each seperated by the given stride. Specifically, the destination array will
+<i class="no-highlight">354</i>&nbsp;     * be filled with several sequential ranges of zeros of specified length. Each range of zeros will be seperated by
+<i class="no-highlight">355</i>&nbsp;     * the stride.
+<i class="no-highlight">356</i>&nbsp;     * &lt;/p&gt;
+<i class="no-highlight">357</i>&nbsp;     *
+<i class="no-highlight">358</i>&nbsp;     * &lt;p&gt;
+<i class="no-highlight">359</i>&nbsp;     * If {@code stride=2}, {@code length=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}}
+<i class="no-highlight">360</i>&nbsp;     * then the result will be {1, 0, 0, 0, 5, 0, 0, 0, 9}.
+<i class="no-highlight">361</i>&nbsp;     * &lt;/p&gt;
+<i class="no-highlight">362</i>&nbsp;     *
+<i class="no-highlight">363</i>&nbsp;     * @param dest Array to fill with strided zeros.
+<i class="no-highlight">364</i>&nbsp;     * @param start Starting point to apply strided zero fill.
+<i class="no-highlight">365</i>&nbsp;     * @param length Number of sequential zeros to fill per stride.
+<i class="no-highlight">366</i>&nbsp;     * @param stride Number of elements between each value to set to zero within the destination array.
+<i class="no-highlight">367</i>&nbsp;     * @throws IllegalArgumentException If stride or length is less than one.
+<i class="no-highlight">368</i>&nbsp;     * @throws IllegalArgumentException If start is less than zero.
+<i class="no-highlight">369</i>&nbsp;     */
+<i class="no-highlight">370</i>&nbsp;    public static void stridedFillZerosRange(double[] dest, int start, int length, int stride) {
+<b class="fc"><i class="no-highlight">371</i>&nbsp;        ParameterChecks.assertGreaterEq(1, stride, length);</b>
+<b class="fc"><i class="no-highlight">372</i>&nbsp;        ParameterChecks.assertGreaterEq(0, start);</b>
+<i class="no-highlight">373</i>&nbsp;
+<b class="fc"><i class="no-highlight">374</i>&nbsp;        for(int i=start; i&lt;dest.length; i+=stride+length) {</b>
+<b class="fc"><i class="no-highlight">375</i>&nbsp;            for(int j=0; j&lt;length; j++) {</b>
+<b class="fc"><i class="no-highlight">376</i>&nbsp;                dest[i+j] = 0;</b>
+<i class="no-highlight">377</i>&nbsp;            }
+<i class="no-highlight">378</i>&nbsp;        }
+<i class="no-highlight">379</i>&nbsp;    }
+<i class="no-highlight">380</i>&nbsp;
+<i class="no-highlight">381</i>&nbsp;
+<i class="no-highlight">382</i>&nbsp;    /**
+<i class="no-highlight">383</i>&nbsp;     * Checks if an array contains only zeros.
+<i class="no-highlight">384</i>&nbsp;     * @param src Array to check if it only contains zeros.
+<i class="no-highlight">385</i>&nbsp;     * @return True if the {@code src} array contains only zeros.
+<i class="no-highlight">386</i>&nbsp;     */
+<i class="no-highlight">387</i>&nbsp;    public static boolean isZeros(double[] src) {
+<b class="fc"><i class="no-highlight">388</i>&nbsp;        boolean allZeros = true;</b>
+<i class="no-highlight">389</i>&nbsp;
+<b class="fc"><i class="no-highlight">390</i>&nbsp;        for(double value : src) {</b>
+<b class="fc"><i class="no-highlight">391</i>&nbsp;            if(value!=0) {</b>
+<b class="fc"><i class="no-highlight">392</i>&nbsp;                allZeros = false;</b>
+<b class="fc"><i class="no-highlight">393</i>&nbsp;                break;</b>
+<i class="no-highlight">394</i>&nbsp;            }
+<i class="no-highlight">395</i>&nbsp;        }
+<i class="no-highlight">396</i>&nbsp;
+<b class="fc"><i class="no-highlight">397</i>&nbsp;        return allZeros;</b>
+<i class="no-highlight">398</i>&nbsp;    }
+<i class="no-highlight">399</i>&nbsp;
+<i class="no-highlight">400</i>&nbsp;
+<i class="no-highlight">401</i>&nbsp;    /**
+<i class="no-highlight">402</i>&nbsp;     * Checks if an array contains only zeros.
+<i class="no-highlight">403</i>&nbsp;     * @param src Array to check if it only contains zeros.
+<i class="no-highlight">404</i>&nbsp;     * @return True if the {@code src} array contains only zeros.
+<i class="no-highlight">405</i>&nbsp;     */
+<i class="no-highlight">406</i>&nbsp;    public static boolean isZeros(CNumber[] src) {
+<b class="fc"><i class="no-highlight">407</i>&nbsp;        boolean allZeros = true;</b>
+<i class="no-highlight">408</i>&nbsp;
+<b class="fc"><i class="no-highlight">409</i>&nbsp;        for(CNumber value : src) {</b>
+<b class="fc"><i class="no-highlight">410</i>&nbsp;            if(value.re!=0 || value.im!=0) {</b>
+<b class="fc"><i class="no-highlight">411</i>&nbsp;                allZeros = false;</b>
+<b class="fc"><i class="no-highlight">412</i>&nbsp;                break;</b>
+<i class="no-highlight">413</i>&nbsp;            }
+<i class="no-highlight">414</i>&nbsp;        }
+<i class="no-highlight">415</i>&nbsp;
+<b class="fc"><i class="no-highlight">416</i>&nbsp;        return allZeros;</b>
+<i class="no-highlight">417</i>&nbsp;    }
+<i class="no-highlight">418</i>&nbsp;
+<i class="no-highlight">419</i>&nbsp;
+<i class="no-highlight">420</i>&nbsp;    /**
+<i class="no-highlight">421</i>&nbsp;     * Fills an array with specified value.
+<i class="no-highlight">422</i>&nbsp;     * @param dest Array to fill.
+<i class="no-highlight">423</i>&nbsp;     * @param fillValue Value to fill array with.
+<i class="no-highlight">424</i>&nbsp;     */
+<i class="no-highlight">425</i>&nbsp;    public static void fill(CNumber[] dest, double fillValue) {
+<b class="fc"><i class="no-highlight">426</i>&nbsp;        for(int i=0; i&lt;dest.length; i++) {</b>
+<b class="fc"><i class="no-highlight">427</i>&nbsp;            dest[i] = new CNumber(fillValue);</b>
+<i class="no-highlight">428</i>&nbsp;        }
+<i class="no-highlight">429</i>&nbsp;    }
+<i class="no-highlight">430</i>&nbsp;
+<i class="no-highlight">431</i>&nbsp;
+<i class="no-highlight">432</i>&nbsp;    /**
+<i class="no-highlight">433</i>&nbsp;     * Converts an array of doubles to an {@link ArrayList array list}.
+<i class="no-highlight">434</i>&nbsp;     * @param src Array to convert.
+<i class="no-highlight">435</i>&nbsp;     * @return An equivalent array list.
+<i class="no-highlight">436</i>&nbsp;     */
+<i class="no-highlight">437</i>&nbsp;    public static ArrayList&lt;Double&gt; toArrayList(double[] src) {
+<b class="nc"><i class="no-highlight">438</i>&nbsp;        ArrayList&lt;Double&gt; list = new ArrayList&lt;&gt;(src.length);</b>
+<i class="no-highlight">439</i>&nbsp;
+<b class="nc"><i class="no-highlight">440</i>&nbsp;        for(double value : src) {</b>
+<b class="nc"><i class="no-highlight">441</i>&nbsp;            list.add(value);</b>
+<i class="no-highlight">442</i>&nbsp;        }
+<i class="no-highlight">443</i>&nbsp;
+<b class="nc"><i class="no-highlight">444</i>&nbsp;        return list;</b>
+<i class="no-highlight">445</i>&nbsp;    }
+<i class="no-highlight">446</i>&nbsp;
+<i class="no-highlight">447</i>&nbsp;
+<i class="no-highlight">448</i>&nbsp;    /**
+<i class="no-highlight">449</i>&nbsp;     * Fills an array with specified value.
+<i class="no-highlight">450</i>&nbsp;     * @param dest Array to fill.
+<i class="no-highlight">451</i>&nbsp;     * @param fillValue Value to fill array with.
+<i class="no-highlight">452</i>&nbsp;     */
+<i class="no-highlight">453</i>&nbsp;    public static void fill(CNumber[] dest, CNumber fillValue) {
+<b class="fc"><i class="no-highlight">454</i>&nbsp;        for(int i=0; i&lt;dest.length; i++) {</b>
+<b class="fc"><i class="no-highlight">455</i>&nbsp;            dest[i] = fillValue.copy();</b>
+<i class="no-highlight">456</i>&nbsp;        }
+<i class="no-highlight">457</i>&nbsp;    }
+<i class="no-highlight">458</i>&nbsp;
+<i class="no-highlight">459</i>&nbsp;
+<i class="no-highlight">460</i>&nbsp;    /**
+<i class="no-highlight">461</i>&nbsp;     * Fills an array with specified value.
+<i class="no-highlight">462</i>&nbsp;     * @param dest Array to fill.
+<i class="no-highlight">463</i>&nbsp;     * @param start Starting index of range to fill (Inclusive).
+<i class="no-highlight">464</i>&nbsp;     * @param end Ending index of range to fill (Exclusive).
+<i class="no-highlight">465</i>&nbsp;     * @param fillValue Value to fill array with. Each index of the {@code dest} array will be filled with a deep copy
+<i class="no-highlight">466</i>&nbsp;     *                  of this value.
+<i class="no-highlight">467</i>&nbsp;     * @throws ArrayIndexOutOfBoundsException If {@code start} or {@code end} is not within the destination array.
+<i class="no-highlight">468</i>&nbsp;     */
+<i class="no-highlight">469</i>&nbsp;    public static void fill(CNumber[] dest, int start, int end, CNumber fillValue) {
+<b class="fc"><i class="no-highlight">470</i>&nbsp;        for(int i=start; i&lt;end; i++) {</b>
+<b class="fc"><i class="no-highlight">471</i>&nbsp;            dest[i] = fillValue.copy();</b>
+<i class="no-highlight">472</i>&nbsp;        }
+<i class="no-highlight">473</i>&nbsp;    }
+<i class="no-highlight">474</i>&nbsp;
+<i class="no-highlight">475</i>&nbsp;
+<i class="no-highlight">476</i>&nbsp;    /**
+<i class="no-highlight">477</i>&nbsp;     * Fills an array with the specified value;
+<i class="no-highlight">478</i>&nbsp;     * @param dest Array to fill.
+<i class="no-highlight">479</i>&nbsp;     * @param fillValue Value to fill array with.
+<i class="no-highlight">480</i>&nbsp;     */
+<i class="no-highlight">481</i>&nbsp;    public static void fill(double[][] dest, double fillValue) {
+<b class="fc"><i class="no-highlight">482</i>&nbsp;        for (double[] doubles : dest) {</b>
+<b class="fc"><i class="no-highlight">483</i>&nbsp;            Arrays.fill(doubles, 1);</b>
+<i class="no-highlight">484</i>&nbsp;        }
+<i class="no-highlight">485</i>&nbsp;    }
+<i class="no-highlight">486</i>&nbsp;
+<i class="no-highlight">487</i>&nbsp;
+<i class="no-highlight">488</i>&nbsp;    /**
+<i class="no-highlight">489</i>&nbsp;     * Swaps to elements in an array. This is done in place.
+<i class="no-highlight">490</i>&nbsp;     * @param arr Array to swap elements in. This array is modified.
+<i class="no-highlight">491</i>&nbsp;     * @param i Index of first value to swap.
+<i class="no-highlight">492</i>&nbsp;     * @param j Index of second value to swap.
+<i class="no-highlight">493</i>&nbsp;     * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
+<i class="no-highlight">494</i>&nbsp;     */
+<i class="no-highlight">495</i>&nbsp;    public static void swap(int[] arr, int i, int j) {
+<b class="fc"><i class="no-highlight">496</i>&nbsp;        int temp = arr[i];</b>
+<b class="fc"><i class="no-highlight">497</i>&nbsp;        arr[i] = arr[j];</b>
+<b class="fc"><i class="no-highlight">498</i>&nbsp;        arr[j] = temp;</b>
+<i class="no-highlight">499</i>&nbsp;    }
+<i class="no-highlight">500</i>&nbsp;
+<i class="no-highlight">501</i>&nbsp;
+<i class="no-highlight">502</i>&nbsp;    /**
+<i class="no-highlight">503</i>&nbsp;     * Swaps elements in an array according to a specified permutation.
+<i class="no-highlight">504</i>&nbsp;     * @param src Array to swap elements within.
+<i class="no-highlight">505</i>&nbsp;     * @param indices Array containing indices of the permutation. If the {@code src} array has length {@code N}, then
+<i class="no-highlight">506</i>&nbsp;     *                the array must be a permutation of {@code {0, 1, 2, ..., N-1}}.
+<i class="no-highlight">507</i>&nbsp;     * @throws IllegalArgumentException If {@code indices} is not a permutation of {@code {0, 1, 2, ..., N-1}}.
+<i class="no-highlight">508</i>&nbsp;     */
+<i class="no-highlight">509</i>&nbsp;    public static void swap(int[] src, int[] indices) {
+<b class="fc"><i class="no-highlight">510</i>&nbsp;        ParameterChecks.assertPermutation(indices);</b>
+<i class="no-highlight">511</i>&nbsp;
+<b class="fc"><i class="no-highlight">512</i>&nbsp;        int[] swapped = new int[src.length];</b>
+<b class="fc"><i class="no-highlight">513</i>&nbsp;        int i=0;</b>
+<i class="no-highlight">514</i>&nbsp;
+<b class="fc"><i class="no-highlight">515</i>&nbsp;        for(int value : indices) {</b>
+<b class="fc"><i class="no-highlight">516</i>&nbsp;            swapped[i++] = src[value];</b>
+<i class="no-highlight">517</i>&nbsp;        }
+<i class="no-highlight">518</i>&nbsp;
+<b class="fc"><i class="no-highlight">519</i>&nbsp;        System.arraycopy(swapped, 0, src, 0, swapped.length);</b>
+<i class="no-highlight">520</i>&nbsp;    }
+<i class="no-highlight">521</i>&nbsp;
+<i class="no-highlight">522</i>&nbsp;
+<i class="no-highlight">523</i>&nbsp;    /**
+<i class="no-highlight">524</i>&nbsp;     * Swaps to elements in an array. This is done in place.
+<i class="no-highlight">525</i>&nbsp;     * @param arr Array to swap elements in. This array is modified.
+<i class="no-highlight">526</i>&nbsp;     * @param i Index of first value to swap.
+<i class="no-highlight">527</i>&nbsp;     * @param j Index of second value to swap.
+<i class="no-highlight">528</i>&nbsp;     * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
+<i class="no-highlight">529</i>&nbsp;     */
+<i class="no-highlight">530</i>&nbsp;    public static void swap(double[] arr, int i, int j) {
+<b class="fc"><i class="no-highlight">531</i>&nbsp;        double temp = arr[i];</b>
+<b class="fc"><i class="no-highlight">532</i>&nbsp;        arr[i] = arr[j];</b>
+<b class="fc"><i class="no-highlight">533</i>&nbsp;        arr[j] = temp;</b>
+<i class="no-highlight">534</i>&nbsp;    }
+<i class="no-highlight">535</i>&nbsp;
+<i class="no-highlight">536</i>&nbsp;
+<i class="no-highlight">537</i>&nbsp;    /**
+<i class="no-highlight">538</i>&nbsp;     * Swaps to elements in an array. This is done in place.
+<i class="no-highlight">539</i>&nbsp;     * @param arr Array to swap elements in. This array is modified.
+<i class="no-highlight">540</i>&nbsp;     * @param i Index of first value to swap.
+<i class="no-highlight">541</i>&nbsp;     * @param j Index of second value to swap.
+<i class="no-highlight">542</i>&nbsp;     * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
+<i class="no-highlight">543</i>&nbsp;     */
+<i class="no-highlight">544</i>&nbsp;    public static void swap(Object[] arr, int i, int j) {
+<b class="fc"><i class="no-highlight">545</i>&nbsp;        Object temp = arr[i];</b>
+<b class="fc"><i class="no-highlight">546</i>&nbsp;        arr[i] = arr[j];</b>
+<b class="fc"><i class="no-highlight">547</i>&nbsp;        arr[j] = temp;</b>
+<i class="no-highlight">548</i>&nbsp;    }
+<i class="no-highlight">549</i>&nbsp;
+<i class="no-highlight">550</i>&nbsp;
+<i class="no-highlight">551</i>&nbsp;    /**
+<i class="no-highlight">552</i>&nbsp;     * Gets an array filled with integers from {@code start} (inclusive) to {@code end} (exclusive)
+<i class="no-highlight">553</i>&nbsp;     * @param start Staring value (inclusive).
+<i class="no-highlight">554</i>&nbsp;     * @param end Stopping value (exclusive).
+<i class="no-highlight">555</i>&nbsp;     * @return An array containing the integer range {@code [start, end)}.
+<i class="no-highlight">556</i>&nbsp;     */
+<i class="no-highlight">557</i>&nbsp;    public static double[] range(int start, int end) {
+<b class="fc"><i class="no-highlight">558</i>&nbsp;        double[] rangeArr = new double[end-start];</b>
+<i class="no-highlight">559</i>&nbsp;
+<b class="fc"><i class="no-highlight">560</i>&nbsp;        int j=0;</b>
+<b class="fc"><i class="no-highlight">561</i>&nbsp;        for(int i=start; i&lt;end; i++) {</b>
+<b class="fc"><i class="no-highlight">562</i>&nbsp;            rangeArr[j++]=i;</b>
+<i class="no-highlight">563</i>&nbsp;        }
+<i class="no-highlight">564</i>&nbsp;
+<b class="fc"><i class="no-highlight">565</i>&nbsp;        return rangeArr;</b>
+<i class="no-highlight">566</i>&nbsp;    }
+<i class="no-highlight">567</i>&nbsp;
+<i class="no-highlight">568</i>&nbsp;
+<i class="no-highlight">569</i>&nbsp;    /**
+<i class="no-highlight">570</i>&nbsp;     * Gets an array filled with integers from {@code start} (inclusive) to {@code end} (exclusive)
+<i class="no-highlight">571</i>&nbsp;     * @param start Staring value (inclusive).
+<i class="no-highlight">572</i>&nbsp;     * @param end Stopping value (exclusive).
+<i class="no-highlight">573</i>&nbsp;     * @return An array containing the integer range {@code [start, end)}.
+<i class="no-highlight">574</i>&nbsp;     */
+<i class="no-highlight">575</i>&nbsp;    public static int[] rangeInt(int start, int end) {
+<b class="fc"><i class="no-highlight">576</i>&nbsp;        int[] rangeArr = new int[end-start];</b>
+<i class="no-highlight">577</i>&nbsp;
+<b class="fc"><i class="no-highlight">578</i>&nbsp;        int j=0;</b>
+<b class="fc"><i class="no-highlight">579</i>&nbsp;        for(int i=start; i&lt;end; i++) {</b>
+<b class="fc"><i class="no-highlight">580</i>&nbsp;            rangeArr[j++]=i;</b>
+<i class="no-highlight">581</i>&nbsp;        }
+<i class="no-highlight">582</i>&nbsp;
+<b class="fc"><i class="no-highlight">583</i>&nbsp;        return rangeArr;</b>
+<i class="no-highlight">584</i>&nbsp;    }
+<i class="no-highlight">585</i>&nbsp;
+<i class="no-highlight">586</i>&nbsp;
+<i class="no-highlight">587</i>&nbsp;    /**
+<i class="no-highlight">588</i>&nbsp;     * Checks if a double array is numerically equal to a {@link CNumber complex number} array.
+<i class="no-highlight">589</i>&nbsp;     * @param src1 Double array.
+<i class="no-highlight">590</i>&nbsp;     * @param src2 Complex number array.
+<i class="no-highlight">591</i>&nbsp;     * @return True if all entries in {@code src2} have zero imaginary component and real component equal to the
+<i class="no-highlight">592</i>&nbsp;     * corresponding entry in {@code src1}. Otherwise, returns false.
+<i class="no-highlight">593</i>&nbsp;     */
+<i class="no-highlight">594</i>&nbsp;    public static boolean equals(double[] src1, CNumber[] src2) {
+<b class="fc"><i class="no-highlight">595</i>&nbsp;        boolean equal = true;</b>
+<i class="no-highlight">596</i>&nbsp;
+<b class="fc"><i class="no-highlight">597</i>&nbsp;        if(src1.length != src2.length) {</b>
+<b class="fc"><i class="no-highlight">598</i>&nbsp;            equal = false;</b>
+<i class="no-highlight">599</i>&nbsp;        } else {
+<b class="fc"><i class="no-highlight">600</i>&nbsp;            for(int i=0; i&lt;src1.length; i++) {</b>
+<b class="fc"><i class="no-highlight">601</i>&nbsp;                if(src1[i]!=src2[i].re || src2[i].im != 0) {</b>
+<b class="fc"><i class="no-highlight">602</i>&nbsp;                    equal = false;</b>
+<b class="fc"><i class="no-highlight">603</i>&nbsp;                    break; // No need to continue.</b>
+<i class="no-highlight">604</i>&nbsp;                }
+<i class="no-highlight">605</i>&nbsp;            }
+<i class="no-highlight">606</i>&nbsp;        }
+<i class="no-highlight">607</i>&nbsp;
+<b class="fc"><i class="no-highlight">608</i>&nbsp;        return equal;</b>
+<i class="no-highlight">609</i>&nbsp;    }
+<i class="no-highlight">610</i>&nbsp;
+<i class="no-highlight">611</i>&nbsp;
+<i class="no-highlight">612</i>&nbsp;    /**
+<i class="no-highlight">613</i>&nbsp;     * Checks if a set of values is in an array.
+<i class="no-highlight">614</i>&nbsp;     * @param src Source array.
+<i class="no-highlight">615</i>&nbsp;     * @param values Values to check if they are in the source array.
+<i class="no-highlight">616</i>&nbsp;     * @return A boolean array with the same length as {@code values} describing if the associated values are in the
+<i class="no-highlight">617</i>&nbsp;     * array.
+<i class="no-highlight">618</i>&nbsp;     */
+<i class="no-highlight">619</i>&nbsp;    public static boolean[] inArray(double[] src, double... values) {
+<b class="nc"><i class="no-highlight">620</i>&nbsp;        boolean[] result = new boolean[values.length];</b>
+<i class="no-highlight">621</i>&nbsp;
+<b class="nc"><i class="no-highlight">622</i>&nbsp;        for(double entry : src) {</b>
+<b class="nc"><i class="no-highlight">623</i>&nbsp;            for(int i=0; i&lt;values.length; i++) {</b>
+<b class="nc"><i class="no-highlight">624</i>&nbsp;                if(entry==values[i]) {</b>
+<b class="nc"><i class="no-highlight">625</i>&nbsp;                    result[i]=true;</b>
+<i class="no-highlight">626</i>&nbsp;                }
+<i class="no-highlight">627</i>&nbsp;            }
+<i class="no-highlight">628</i>&nbsp;        }
+<i class="no-highlight">629</i>&nbsp;
+<b class="nc"><i class="no-highlight">630</i>&nbsp;        return result;</b>
+<i class="no-highlight">631</i>&nbsp;    }
+<i class="no-highlight">632</i>&nbsp;
+<i class="no-highlight">633</i>&nbsp;
+<i class="no-highlight">634</i>&nbsp;    /**
+<i class="no-highlight">635</i>&nbsp;     * Checks if a value is in an array.
+<i class="no-highlight">636</i>&nbsp;     * @param src Source array.
+<i class="no-highlight">637</i>&nbsp;     * @param value Values to check if they are in the source array.
+<i class="no-highlight">638</i>&nbsp;     * @return A boolean describing if the specified value is in the array or not.
+<i class="no-highlight">639</i>&nbsp;     */
+<i class="no-highlight">640</i>&nbsp;    public static boolean inArray(double[] src, double value) {
+<b class="nc"><i class="no-highlight">641</i>&nbsp;        boolean result = false;</b>
+<i class="no-highlight">642</i>&nbsp;
+<b class="nc"><i class="no-highlight">643</i>&nbsp;        for(double entry : src) {</b>
+<b class="nc"><i class="no-highlight">644</i>&nbsp;            if(entry==value) {</b>
+<b class="nc"><i class="no-highlight">645</i>&nbsp;                result=true;</b>
+<b class="nc"><i class="no-highlight">646</i>&nbsp;                break;</b>
+<i class="no-highlight">647</i>&nbsp;            }
+<i class="no-highlight">648</i>&nbsp;        }
+<i class="no-highlight">649</i>&nbsp;
+<b class="nc"><i class="no-highlight">650</i>&nbsp;        return result;</b>
+<i class="no-highlight">651</i>&nbsp;    }
+<i class="no-highlight">652</i>&nbsp;
+<i class="no-highlight">653</i>&nbsp;
+<i class="no-highlight">654</i>&nbsp;    /**
+<i class="no-highlight">655</i>&nbsp;     * Checks if a value is in an array.
+<i class="no-highlight">656</i>&nbsp;     * @param src Source array.
+<i class="no-highlight">657</i>&nbsp;     * @param value Values to check if they are in the source array.
+<i class="no-highlight">658</i>&nbsp;     * @return A boolean describing if the specified value is in the array or not.
+<i class="no-highlight">659</i>&nbsp;     */
+<i class="no-highlight">660</i>&nbsp;    public static boolean notInArray(int[] src, int value) {
+<b class="fc"><i class="no-highlight">661</i>&nbsp;        boolean result = true;</b>
+<i class="no-highlight">662</i>&nbsp;
+<b class="fc"><i class="no-highlight">663</i>&nbsp;        for(double entry : src) {</b>
+<b class="fc"><i class="no-highlight">664</i>&nbsp;            if(entry == value) {</b>
+<b class="fc"><i class="no-highlight">665</i>&nbsp;                result = false;</b>
+<b class="fc"><i class="no-highlight">666</i>&nbsp;                break;</b>
+<i class="no-highlight">667</i>&nbsp;            }
+<i class="no-highlight">668</i>&nbsp;        }
+<i class="no-highlight">669</i>&nbsp;
+<b class="fc"><i class="no-highlight">670</i>&nbsp;        return result;</b>
+<i class="no-highlight">671</i>&nbsp;    }
+<i class="no-highlight">672</i>&nbsp;
+<i class="no-highlight">673</i>&nbsp;
+<i class="no-highlight">674</i>&nbsp;    /**
+<i class="no-highlight">675</i>&nbsp;     * Checks if a set of values is in an array.
+<i class="no-highlight">676</i>&nbsp;     * @param src Source array.
+<i class="no-highlight">677</i>&nbsp;     * @param values Values to check if they are in the source array.
+<i class="no-highlight">678</i>&nbsp;     * @return A boolean array with the same length as {@code values} describing if the associated values are in the
+<i class="no-highlight">679</i>&nbsp;     * array.
+<i class="no-highlight">680</i>&nbsp;     */
+<i class="no-highlight">681</i>&nbsp;    public static boolean[] inArray(int[] src, int... values) {
+<b class="nc"><i class="no-highlight">682</i>&nbsp;        boolean[] result = new boolean[values.length];</b>
+<i class="no-highlight">683</i>&nbsp;
+<b class="nc"><i class="no-highlight">684</i>&nbsp;        for(double entry : src) {</b>
+<b class="nc"><i class="no-highlight">685</i>&nbsp;            for(int i=0; i&lt;values.length; i++) {</b>
+<b class="nc"><i class="no-highlight">686</i>&nbsp;                if(entry==values[i]) {</b>
+<b class="nc"><i class="no-highlight">687</i>&nbsp;                    result[i]=true;</b>
+<i class="no-highlight">688</i>&nbsp;                }
+<i class="no-highlight">689</i>&nbsp;            }
+<i class="no-highlight">690</i>&nbsp;        }
+<i class="no-highlight">691</i>&nbsp;
+<b class="nc"><i class="no-highlight">692</i>&nbsp;        return result;</b>
+<i class="no-highlight">693</i>&nbsp;    }
+<i class="no-highlight">694</i>&nbsp;
+<i class="no-highlight">695</i>&nbsp;
+<i class="no-highlight">696</i>&nbsp;    /**
+<i class="no-highlight">697</i>&nbsp;     * Flattens a two-dimensional array.
+<i class="no-highlight">698</i>&nbsp;     * @param src Array to flatten.
+<i class="no-highlight">699</i>&nbsp;     * @return The flattened array.
+<i class="no-highlight">700</i>&nbsp;     */
+<i class="no-highlight">701</i>&nbsp;    public static double[] flatten(double[][] src) {
+<b class="fc"><i class="no-highlight">702</i>&nbsp;        double[] flat = new double[src.length*src[0].length];</b>
+<i class="no-highlight">703</i>&nbsp;
+<i class="no-highlight">704</i>&nbsp;        // Copy 2D array to 1D array.
+<b class="fc"><i class="no-highlight">705</i>&nbsp;        int i=0;</b>
+<b class="fc"><i class="no-highlight">706</i>&nbsp;        for(double[] row : src) {</b>
+<b class="fc"><i class="no-highlight">707</i>&nbsp;            for(double value : row) {</b>
+<b class="fc"><i class="no-highlight">708</i>&nbsp;                flat[i++] = value;</b>
+<i class="no-highlight">709</i>&nbsp;            }
+<i class="no-highlight">710</i>&nbsp;        }
+<i class="no-highlight">711</i>&nbsp;
+<b class="fc"><i class="no-highlight">712</i>&nbsp;        return flat;</b>
+<i class="no-highlight">713</i>&nbsp;    }
+<i class="no-highlight">714</i>&nbsp;
+<i class="no-highlight">715</i>&nbsp;
+<i class="no-highlight">716</i>&nbsp;    /**
+<i class="no-highlight">717</i>&nbsp;     * Flattens a two-dimensional array.
+<i class="no-highlight">718</i>&nbsp;     * @param src Array to flatten.
+<i class="no-highlight">719</i>&nbsp;     * @return The flattened array.
+<i class="no-highlight">720</i>&nbsp;     */
+<i class="no-highlight">721</i>&nbsp;    public static CNumber[] flatten(CNumber[][] src) {
+<b class="fc"><i class="no-highlight">722</i>&nbsp;        CNumber[] flat = new CNumber[src.length*src[0].length];</b>
+<i class="no-highlight">723</i>&nbsp;
+<i class="no-highlight">724</i>&nbsp;        // Copy 2D array to 1D array.
+<b class="fc"><i class="no-highlight">725</i>&nbsp;        int i=0;</b>
+<b class="fc"><i class="no-highlight">726</i>&nbsp;        for(CNumber[] row : src) {</b>
+<b class="fc"><i class="no-highlight">727</i>&nbsp;            for(CNumber value : row) {</b>
+<b class="fc"><i class="no-highlight">728</i>&nbsp;                flat[i++] = value.copy();</b>
+<i class="no-highlight">729</i>&nbsp;            }
+<i class="no-highlight">730</i>&nbsp;        }
+<i class="no-highlight">731</i>&nbsp;
+<b class="fc"><i class="no-highlight">732</i>&nbsp;        return flat;</b>
+<i class="no-highlight">733</i>&nbsp;    }
+<i class="no-highlight">734</i>&nbsp;
+<i class="no-highlight">735</i>&nbsp;
+<i class="no-highlight">736</i>&nbsp;    /**
+<i class="no-highlight">737</i>&nbsp;     * Constructs a double array from the real components of a complex valued array.
+<i class="no-highlight">738</i>&nbsp;     * @param src Complex array.
+<i class="no-highlight">739</i>&nbsp;     * @return An array containing the real components of the source array.
+<i class="no-highlight">740</i>&nbsp;     */
+<i class="no-highlight">741</i>&nbsp;    public static double[] getReals(CNumber[] src) {
+<b class="nc"><i class="no-highlight">742</i>&nbsp;        double[] reals = new double[src.length];</b>
+<i class="no-highlight">743</i>&nbsp;
+<b class="nc"><i class="no-highlight">744</i>&nbsp;        for(int i=0; i&lt;src.length; i++) {</b>
+<b class="nc"><i class="no-highlight">745</i>&nbsp;            reals[i] = src[i].re;</b>
+<i class="no-highlight">746</i>&nbsp;        }
+<i class="no-highlight">747</i>&nbsp;
+<b class="nc"><i class="no-highlight">748</i>&nbsp;        return reals;</b>
+<i class="no-highlight">749</i>&nbsp;    }
+<i class="no-highlight">750</i>&nbsp;
+<i class="no-highlight">751</i>&nbsp;
+<i class="no-highlight">752</i>&nbsp;    /**
+<i class="no-highlight">753</i>&nbsp;     * Computes the maximum length of the string representation of a double in an array of doubles.
+<i class="no-highlight">754</i>&nbsp;     * @param src Array for which to compute the max string representation length of a double in.
+<i class="no-highlight">755</i>&nbsp;     * @return The maximum length of the string representation of the doubles in the array.
+<i class="no-highlight">756</i>&nbsp;     */
+<i class="no-highlight">757</i>&nbsp;    public static int maxStringLength(double[] src) {
+<b class="fc"><i class="no-highlight">758</i>&nbsp;        int maxLength = -1;</b>
+<i class="no-highlight">759</i>&nbsp;        int currLength;
+<i class="no-highlight">760</i>&nbsp;
+<b class="fc"><i class="no-highlight">761</i>&nbsp;        for(double value : src) {</b>
+<b class="fc"><i class="no-highlight">762</i>&nbsp;            currLength = CNumber.round(new CNumber(value), PrintOptions.getPrecision()).toString().length();</b>
+<i class="no-highlight">763</i>&nbsp;
+<b class="fc"><i class="no-highlight">764</i>&nbsp;            if(currLength&gt;maxLength) {</b>
+<i class="no-highlight">765</i>&nbsp;                // Then update the maximum length.
+<b class="fc"><i class="no-highlight">766</i>&nbsp;                maxLength=currLength;</b>
+<i class="no-highlight">767</i>&nbsp;            }
+<i class="no-highlight">768</i>&nbsp;        }
+<i class="no-highlight">769</i>&nbsp;
+<b class="fc"><i class="no-highlight">770</i>&nbsp;        return maxLength;</b>
+<i class="no-highlight">771</i>&nbsp;    }
+<i class="no-highlight">772</i>&nbsp;
+<i class="no-highlight">773</i>&nbsp;
+<i class="no-highlight">774</i>&nbsp;    /**
+<i class="no-highlight">775</i>&nbsp;     * Computes the maximum length of the string representation of a double in an array of doubles.
+<i class="no-highlight">776</i>&nbsp;     * @param src Array for which to compute the max string representation length of a double in.
+<i class="no-highlight">777</i>&nbsp;     * @return The maximum length of the string representation of the doubles in the array.
+<i class="no-highlight">778</i>&nbsp;     */
+<i class="no-highlight">779</i>&nbsp;    public static int maxStringLength(CNumber[] src) {
+<b class="fc"><i class="no-highlight">780</i>&nbsp;        int maxLength = -1;</b>
+<i class="no-highlight">781</i>&nbsp;        int currLength;
+<i class="no-highlight">782</i>&nbsp;
+<b class="fc"><i class="no-highlight">783</i>&nbsp;        for(CNumber value : src) {</b>
+<b class="fc"><i class="no-highlight">784</i>&nbsp;            currLength = CNumber.round(value, PrintOptions.getPrecision()).toString().length();</b>
+<i class="no-highlight">785</i>&nbsp;
+<b class="fc"><i class="no-highlight">786</i>&nbsp;            if(currLength&gt;maxLength) {</b>
+<i class="no-highlight">787</i>&nbsp;                // Then update the maximum length.
+<b class="fc"><i class="no-highlight">788</i>&nbsp;                maxLength=currLength;</b>
+<i class="no-highlight">789</i>&nbsp;            }
+<i class="no-highlight">790</i>&nbsp;        }
+<i class="no-highlight">791</i>&nbsp;
+<b class="fc"><i class="no-highlight">792</i>&nbsp;        return maxLength;</b>
+<i class="no-highlight">793</i>&nbsp;    }
+<i class="no-highlight">794</i>&nbsp;
+<i class="no-highlight">795</i>&nbsp;
+<i class="no-highlight">796</i>&nbsp;    /**
+<i class="no-highlight">797</i>&nbsp;     * Computes the maximum length of the string representation of a double in an array of doubles up until stopping index.
+<i class="no-highlight">798</i>&nbsp;     * The length of the last element is always considered.
+<i class="no-highlight">799</i>&nbsp;     * @param src Array for which to compute the max string representation length of a double in.
+<i class="no-highlight">800</i>&nbsp;     * @param stopIndex Stopping index for finding max length.
+<i class="no-highlight">801</i>&nbsp;     * @return The maximum length of the string representation of the doubles in the array.
+<i class="no-highlight">802</i>&nbsp;     */
+<i class="no-highlight">803</i>&nbsp;    public static int maxStringLength(double[] src, int stopIndex) {
+<b class="fc"><i class="no-highlight">804</i>&nbsp;        int maxLength = -1;</b>
+<i class="no-highlight">805</i>&nbsp;        int currLength;
+<i class="no-highlight">806</i>&nbsp;
+<i class="no-highlight">807</i>&nbsp;        // Ensure no index out of bound exceptions.
+<b class="fc"><i class="no-highlight">808</i>&nbsp;        stopIndex = Math.min(stopIndex, src.length);</b>
+<i class="no-highlight">809</i>&nbsp;
+<b class="fc"><i class="no-highlight">810</i>&nbsp;        for(int i=0; i&lt;stopIndex; i++) {</b>
+<b class="fc"><i class="no-highlight">811</i>&nbsp;            currLength = CNumber.round(</b>
+<i class="no-highlight">812</i>&nbsp;                    new CNumber(src[i]),
+<b class="fc"><i class="no-highlight">813</i>&nbsp;                    PrintOptions.getPrecision()).toString().length();</b>
+<i class="no-highlight">814</i>&nbsp;
+<b class="fc"><i class="no-highlight">815</i>&nbsp;            if(currLength&gt;maxLength) {</b>
+<i class="no-highlight">816</i>&nbsp;                // Then update the maximum length.
+<b class="fc"><i class="no-highlight">817</i>&nbsp;                maxLength=currLength;</b>
+<i class="no-highlight">818</i>&nbsp;            }
+<i class="no-highlight">819</i>&nbsp;        }
+<i class="no-highlight">820</i>&nbsp;
+<i class="no-highlight">821</i>&nbsp;        // Always get last elements&#39; length.
+<b class="fc"><i class="no-highlight">822</i>&nbsp;        if(stopIndex &lt; src.length) {</b>
+<b class="fc"><i class="no-highlight">823</i>&nbsp;            currLength = CNumber.round(</b>
+<i class="no-highlight">824</i>&nbsp;                    new CNumber(src[src.length-1]),
+<b class="fc"><i class="no-highlight">825</i>&nbsp;                    PrintOptions.getPrecision()).toString().length();</b>
+<i class="no-highlight">826</i>&nbsp;
+<b class="fc"><i class="no-highlight">827</i>&nbsp;            if(currLength&gt;maxLength) {</b>
+<i class="no-highlight">828</i>&nbsp;                // Then update the maximum length.
+<b class="fc"><i class="no-highlight">829</i>&nbsp;                maxLength=currLength;</b>
+<i class="no-highlight">830</i>&nbsp;            }
+<i class="no-highlight">831</i>&nbsp;        }
+<i class="no-highlight">832</i>&nbsp;
+<b class="fc"><i class="no-highlight">833</i>&nbsp;        return maxLength;</b>
+<i class="no-highlight">834</i>&nbsp;    }
+<i class="no-highlight">835</i>&nbsp;
+<i class="no-highlight">836</i>&nbsp;
+<i class="no-highlight">837</i>&nbsp;    /**
+<i class="no-highlight">838</i>&nbsp;     * Computes the maximum length of the string representation of a double in an array of doubles up until stopping index.
+<i class="no-highlight">839</i>&nbsp;     * The length of the last element is always considered.
+<i class="no-highlight">840</i>&nbsp;     * @param src Array for which to compute the max string representation length of a double in.
+<i class="no-highlight">841</i>&nbsp;     * @param stopIndex Stopping index for finding max length.
+<i class="no-highlight">842</i>&nbsp;     * @return The maximum length of the string representation of the doubles in the array.
+<i class="no-highlight">843</i>&nbsp;     */
+<i class="no-highlight">844</i>&nbsp;    public static int maxStringLength(CNumber[] src, int stopIndex) {
+<b class="fc"><i class="no-highlight">845</i>&nbsp;        int maxLength = -1;</b>
+<i class="no-highlight">846</i>&nbsp;        int currLength;
+<i class="no-highlight">847</i>&nbsp;
+<i class="no-highlight">848</i>&nbsp;        // Ensure no index out of bound exceptions.
+<b class="fc"><i class="no-highlight">849</i>&nbsp;        stopIndex = Math.min(stopIndex, src.length);</b>
+<i class="no-highlight">850</i>&nbsp;
+<b class="fc"><i class="no-highlight">851</i>&nbsp;        for(int i=0; i&lt;stopIndex; i++) {</b>
+<b class="fc"><i class="no-highlight">852</i>&nbsp;            currLength = CNumber.round(</b>
+<i class="no-highlight">853</i>&nbsp;                    src[i],
+<b class="fc"><i class="no-highlight">854</i>&nbsp;                    PrintOptions.getPrecision()).toString().length();</b>
+<i class="no-highlight">855</i>&nbsp;
+<b class="fc"><i class="no-highlight">856</i>&nbsp;            if(currLength&gt;maxLength) {</b>
+<i class="no-highlight">857</i>&nbsp;                // Then update the maximum length.
+<b class="fc"><i class="no-highlight">858</i>&nbsp;                maxLength=currLength;</b>
+<i class="no-highlight">859</i>&nbsp;            }
+<i class="no-highlight">860</i>&nbsp;        }
+<i class="no-highlight">861</i>&nbsp;
+<i class="no-highlight">862</i>&nbsp;        // Always get last elements&#39; length.
+<b class="fc"><i class="no-highlight">863</i>&nbsp;        if(stopIndex &lt; src.length) {</b>
+<b class="fc"><i class="no-highlight">864</i>&nbsp;            currLength = CNumber.round(</b>
+<i class="no-highlight">865</i>&nbsp;                    src[src.length-1],
+<b class="fc"><i class="no-highlight">866</i>&nbsp;                    PrintOptions.getPrecision()).toString().length();</b>
+<i class="no-highlight">867</i>&nbsp;
+<b class="fc"><i class="no-highlight">868</i>&nbsp;            if(currLength&gt;maxLength) {</b>
+<i class="no-highlight">869</i>&nbsp;                // Then update the maximum length.
+<b class="fc"><i class="no-highlight">870</i>&nbsp;                maxLength=currLength;</b>
+<i class="no-highlight">871</i>&nbsp;            }
+<i class="no-highlight">872</i>&nbsp;        }
+<i class="no-highlight">873</i>&nbsp;
+<b class="fc"><i class="no-highlight">874</i>&nbsp;        return maxLength;</b>
+<i class="no-highlight">875</i>&nbsp;    }
+<i class="no-highlight">876</i>&nbsp;
+<i class="no-highlight">877</i>&nbsp;
+<i class="no-highlight">878</i>&nbsp;    /**
+<i class="no-highlight">879</i>&nbsp;     * Joins two arrays together.
+<i class="no-highlight">880</i>&nbsp;     * @param src1 First array to join.
+<i class="no-highlight">881</i>&nbsp;     * @param src2 Second array to join.
+<i class="no-highlight">882</i>&nbsp;     * @return A single array of length {@code src1.length + src2.length} containing the elements of {@code src1}
+<i class="no-highlight">883</i>&nbsp;     * followed by the elements of {@code src2}.
+<i class="no-highlight">884</i>&nbsp;     */
+<i class="no-highlight">885</i>&nbsp;    public static double[] join(double[] src1, double[] src2) {
+<b class="nc"><i class="no-highlight">886</i>&nbsp;        double[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);</b>
+<b class="nc"><i class="no-highlight">887</i>&nbsp;        System.arraycopy(src2, 0, concatenate, src1.length, src2.length);</b>
+<i class="no-highlight">888</i>&nbsp;
+<b class="nc"><i class="no-highlight">889</i>&nbsp;        return concatenate;</b>
+<i class="no-highlight">890</i>&nbsp;    }
+<i class="no-highlight">891</i>&nbsp;
+<i class="no-highlight">892</i>&nbsp;
+<i class="no-highlight">893</i>&nbsp;    /**
+<i class="no-highlight">894</i>&nbsp;     * Joins two arrays together.
+<i class="no-highlight">895</i>&nbsp;     * @param src1 First array to join.
+<i class="no-highlight">896</i>&nbsp;     * @param src2 Second array to join.
+<i class="no-highlight">897</i>&nbsp;     * @return A single array of length {@code src1.length + src2.length} containing the elements of {@code src1}
+<i class="no-highlight">898</i>&nbsp;     * followed by the elements of {@code src2}.
+<i class="no-highlight">899</i>&nbsp;     */
+<i class="no-highlight">900</i>&nbsp;    public static int[] join(int[] src1, int[] src2) {
+<b class="fc"><i class="no-highlight">901</i>&nbsp;        int[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);</b>
+<b class="fc"><i class="no-highlight">902</i>&nbsp;        System.arraycopy(src2, 0, concatenate, src1.length, src2.length);</b>
+<i class="no-highlight">903</i>&nbsp;
+<b class="fc"><i class="no-highlight">904</i>&nbsp;        return concatenate;</b>
+<i class="no-highlight">905</i>&nbsp;    }
+<i class="no-highlight">906</i>&nbsp;
+<i class="no-highlight">907</i>&nbsp;
+<i class="no-highlight">908</i>&nbsp;    /**
+<i class="no-highlight">909</i>&nbsp;     * Given a list of integers, {@code srcAxes}, which is a subset of {@code {0, 1, 2, ...., dim-1}}
+<i class="no-highlight">910</i>&nbsp;     * in no particular order, compute the integers which are in {@code {0, 1, 2, ...., dim-1}} but not in
+<i class="no-highlight">911</i>&nbsp;     * {@code srcAxes}.
+<i class="no-highlight">912</i>&nbsp;     * @param srcAxes Source axes which contains a subset of {@code {0, 1, 2, ...., dim-1}} in no particular order.
+<i class="no-highlight">913</i>&nbsp;     * @param dim Dimension of space which contains the axes of interest.
+<i class="no-highlight">914</i>&nbsp;     * @return An array containing the set subtraction {@code {0, 1, 2, ...., dim-1}} - srcAxes.
+<i class="no-highlight">915</i>&nbsp;     */
+<i class="no-highlight">916</i>&nbsp;    public static int[] notinAxes(int[] srcAxes, int dim) {
+<b class="fc"><i class="no-highlight">917</i>&nbsp;        int[] notin = new int[dim-srcAxes.length];</b>
+<i class="no-highlight">918</i>&nbsp;
+<i class="no-highlight">919</i>&nbsp;        // Copy and sort array.
+<b class="fc"><i class="no-highlight">920</i>&nbsp;        int[] srcAxesCopy = srcAxes.clone();</b>
+<b class="fc"><i class="no-highlight">921</i>&nbsp;        Arrays.sort(srcAxesCopy);</b>
+<i class="no-highlight">922</i>&nbsp;
+<b class="fc"><i class="no-highlight">923</i>&nbsp;        int srcIndex = 0;</b>
+<b class="fc"><i class="no-highlight">924</i>&nbsp;        int notinIndex = 0;</b>
+<i class="no-highlight">925</i>&nbsp;
+<b class="fc"><i class="no-highlight">926</i>&nbsp;        for(int i=0; i&lt;dim; i++) {</b>
+<b class="fc"><i class="no-highlight">927</i>&nbsp;            if(srcIndex&lt;srcAxesCopy.length &amp;&amp; srcAxesCopy[srcIndex]==i) {</b>
+<b class="fc"><i class="no-highlight">928</i>&nbsp;                srcIndex++;</b>
+<i class="no-highlight">929</i>&nbsp;            } else {
+<b class="fc"><i class="no-highlight">930</i>&nbsp;                notin[notinIndex++] = i;</b>
+<i class="no-highlight">931</i>&nbsp;            }
+<i class="no-highlight">932</i>&nbsp;        }
+<i class="no-highlight">933</i>&nbsp;
+<b class="fc"><i class="no-highlight">934</i>&nbsp;        return notin;</b>
+<i class="no-highlight">935</i>&nbsp;    }
+<i class="no-highlight">936</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-09 11:17</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,611 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ComplexDenseTranspose</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j.operations.dense.complex</a>
+</div>
+
+<h1>Coverage Summary for Class: ComplexDenseTranspose (com.flag4j.operations.dense.complex)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ComplexDenseTranspose</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    79.2%
+  </span>
+  <span class="absValue">
+    (19/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    79%
+  </span>
+  <span class="absValue">
+    (124/157)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;/*
+<i class="no-highlight">2</i>&nbsp; * MIT License
+<i class="no-highlight">3</i>&nbsp; *
+<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2022-2023 Jacob Watters
+<i class="no-highlight">5</i>&nbsp; *
+<i class="no-highlight">6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i class="no-highlight">7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i class="no-highlight">8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i class="no-highlight">9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i class="no-highlight">10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i class="no-highlight">11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i class="no-highlight">12</i>&nbsp; *
+<i class="no-highlight">13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i class="no-highlight">14</i>&nbsp; * copies or substantial portions of the Software.
+<i class="no-highlight">15</i>&nbsp; *
+<i class="no-highlight">16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i class="no-highlight">17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i class="no-highlight">18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i class="no-highlight">19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i class="no-highlight">20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i class="no-highlight">21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i class="no-highlight">22</i>&nbsp; * SOFTWARE.
+<i class="no-highlight">23</i>&nbsp; */
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;package com.flag4j.operations.dense.complex;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;import com.flag4j.Shape;
+<i class="no-highlight">28</i>&nbsp;import com.flag4j.complex_numbers.CNumber;
+<i class="no-highlight">29</i>&nbsp;import com.flag4j.concurrency.Configurations;
+<i class="no-highlight">30</i>&nbsp;import com.flag4j.concurrency.ThreadManager;
+<i class="no-highlight">31</i>&nbsp;import com.flag4j.util.ArrayUtils;
+<i class="no-highlight">32</i>&nbsp;import com.flag4j.util.ErrorMessages;
+<i class="no-highlight">33</i>&nbsp;
+<i class="no-highlight">34</i>&nbsp;/**
+<i class="no-highlight">35</i>&nbsp; * This class contains several algorithms for computing the transpose of a complex dense tensor.
+<i class="no-highlight">36</i>&nbsp; */
+<i class="no-highlight">37</i>&nbsp;public class ComplexDenseTranspose {
+<i class="no-highlight">38</i>&nbsp;
+<i class="no-highlight">39</i>&nbsp;
+<b class="nc"><i class="no-highlight">40</i>&nbsp;    private ComplexDenseTranspose() {</b>
+<i class="no-highlight">41</i>&nbsp;        // Hide constructor
+<b class="nc"><i class="no-highlight">42</i>&nbsp;        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</b>
+<i class="no-highlight">43</i>&nbsp;    }
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;
+<i class="no-highlight">46</i>&nbsp;    /**
+<i class="no-highlight">47</i>&nbsp;     * Transposes tensor along specified axes using a standard transpose algorithm. In this context, transposing a
+<i class="no-highlight">48</i>&nbsp;     * tensor is equivalent to swapping a pair of axes.
+<i class="no-highlight">49</i>&nbsp;     * @param src Entries of the tensor.
+<i class="no-highlight">50</i>&nbsp;     * @param shape Shape of the tensor to transpose.
+<i class="no-highlight">51</i>&nbsp;     * @param axis1 First axis to swap in transpose.
+<i class="no-highlight">52</i>&nbsp;     * @param axis2 Second axis to swap in transpose.
+<i class="no-highlight">53</i>&nbsp;     * @return The transpose of the tensor along the specified axes.
+<i class="no-highlight">54</i>&nbsp;     */
+<i class="no-highlight">55</i>&nbsp;    public static CNumber[] standard(final CNumber[] src, final Shape shape, final int axis1, final int axis2) {
+<b class="fc"><i class="no-highlight">56</i>&nbsp;        if(shape.getRank() &lt; 2) { // Can&#39;t transpose tensor with less than 2 axes.</b>
+<b class="nc"><i class="no-highlight">57</i>&nbsp;            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</b>
+<i class="no-highlight">58</i>&nbsp;                    &quot; tensor.&quot;);
+<i class="no-highlight">59</i>&nbsp;        }
+<i class="no-highlight">60</i>&nbsp;
+<b class="fc"><i class="no-highlight">61</i>&nbsp;        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];</b>
+<b class="fc"><i class="no-highlight">62</i>&nbsp;        Shape destShape = shape.copy().swapAxes(axis1, axis2);</b>
+<i class="no-highlight">63</i>&nbsp;        int[] destIndices;
+<i class="no-highlight">64</i>&nbsp;
+<b class="fc"><i class="no-highlight">65</i>&nbsp;        for(int i=0; i&lt;src.length; i++) {</b>
+<b class="fc"><i class="no-highlight">66</i>&nbsp;            destIndices = shape.getIndices(i);</b>
+<b class="fc"><i class="no-highlight">67</i>&nbsp;            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.</b>
+<b class="fc"><i class="no-highlight">68</i>&nbsp;            dest[destShape.entriesIndex(destIndices)] = src[i].copy(); // Apply transpose for the element</b>
+<i class="no-highlight">69</i>&nbsp;        }
+<i class="no-highlight">70</i>&nbsp;
+<b class="fc"><i class="no-highlight">71</i>&nbsp;        return dest;</b>
+<i class="no-highlight">72</i>&nbsp;    }
+<i class="no-highlight">73</i>&nbsp;
+<i class="no-highlight">74</i>&nbsp;
+<i class="no-highlight">75</i>&nbsp;    /**
+<i class="no-highlight">76</i>&nbsp;     * Transposes tensor along specified axes using a standard concurrent transpose algorithm.
+<i class="no-highlight">77</i>&nbsp;     * In this context, transposing a tensor is equivalent to swapping a pair of axes.
+<i class="no-highlight">78</i>&nbsp;     * @param src Entries of the tensor.
+<i class="no-highlight">79</i>&nbsp;     * @param shape Shape of the tensor to transpose.
+<i class="no-highlight">80</i>&nbsp;     * @param axis1 First axis to swap in transpose.
+<i class="no-highlight">81</i>&nbsp;     * @param axis2 Second axis to swap in transpose.
+<i class="no-highlight">82</i>&nbsp;     * @return The transpose of the tensor along the specified axes.
+<i class="no-highlight">83</i>&nbsp;     */
+<i class="no-highlight">84</i>&nbsp;    public static CNumber[] standardConcurrent(final CNumber[] src, final Shape shape, final int axis1, final int axis2) {
+<b class="nc"><i class="no-highlight">85</i>&nbsp;        if(shape.getRank() &lt; 2) { // Can&#39;t transpose tensor with less than 2 axes.</b>
+<b class="nc"><i class="no-highlight">86</i>&nbsp;            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</b>
+<i class="no-highlight">87</i>&nbsp;                    &quot; tensor.&quot;);
+<i class="no-highlight">88</i>&nbsp;        }
+<i class="no-highlight">89</i>&nbsp;
+<b class="nc"><i class="no-highlight">90</i>&nbsp;        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];</b>
+<b class="nc"><i class="no-highlight">91</i>&nbsp;        Shape destShape = shape.copy().swapAxes(axis1, axis2);</b>
+<i class="no-highlight">92</i>&nbsp;
+<i class="no-highlight">93</i>&nbsp;        // Compute transpose concurrently
+<b class="nc"><i class="no-highlight">94</i>&nbsp;        ThreadManager.concurrentLoop(0, src.length, (i) -&gt; {</b>
+<b class="nc"><i class="no-highlight">95</i>&nbsp;            int[] destIndices = shape.getIndices(i);</b>
+<b class="nc"><i class="no-highlight">96</i>&nbsp;            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.</b>
+<b class="nc"><i class="no-highlight">97</i>&nbsp;            dest[destShape.entriesIndex(destIndices)] = src[i].copy(); // Apply transpose for the element</b>
+<i class="no-highlight">98</i>&nbsp;        });
+<i class="no-highlight">99</i>&nbsp;
+<b class="nc"><i class="no-highlight">100</i>&nbsp;        return dest;</b>
+<i class="no-highlight">101</i>&nbsp;    }
+<i class="no-highlight">102</i>&nbsp;
+<i class="no-highlight">103</i>&nbsp;
+<i class="no-highlight">104</i>&nbsp;    /**
+<i class="no-highlight">105</i>&nbsp;     * Computes the transpose of a tensor. That is, interchanges the axes of the tensor so that it matches
+<i class="no-highlight">106</i>&nbsp;     * the specified axes permutation.
+<i class="no-highlight">107</i>&nbsp;     * @param src Entries of the tensor.
+<i class="no-highlight">108</i>&nbsp;     * @param shape Shape of the tensor to transpose.
+<i class="no-highlight">109</i>&nbsp;     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+<i class="no-highlight">110</i>&nbsp;     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+<i class="no-highlight">111</i>&nbsp;     * @return The transpose of the tensor along the specified axes.
+<i class="no-highlight">112</i>&nbsp;     * @throws IllegalArgumentException If the {@code axes} array is not a permutation of {@code {0, 1, 2, ..., N-1}}.
+<i class="no-highlight">113</i>&nbsp;     * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
+<i class="no-highlight">114</i>&nbsp;     */
+<i class="no-highlight">115</i>&nbsp;    public static CNumber[] standard(final CNumber[] src, final Shape shape, final int[] axes) {
+<b class="nc"><i class="no-highlight">116</i>&nbsp;        if(shape.getRank() &lt; 2) { // Can&#39;t transpose tensor with less than 2 axes.</b>
+<b class="nc"><i class="no-highlight">117</i>&nbsp;            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</b>
+<i class="no-highlight">118</i>&nbsp;                    &quot; tensor.&quot;);
+<i class="no-highlight">119</i>&nbsp;        }
+<i class="no-highlight">120</i>&nbsp;
+<b class="nc"><i class="no-highlight">121</i>&nbsp;        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];</b>
+<b class="nc"><i class="no-highlight">122</i>&nbsp;        Shape destShape = shape.copy().swapAxes(axes);</b>
+<i class="no-highlight">123</i>&nbsp;        int[] destIndices;
+<i class="no-highlight">124</i>&nbsp;
+<b class="nc"><i class="no-highlight">125</i>&nbsp;        for(int i=0; i&lt;src.length; i++) {</b>
+<b class="nc"><i class="no-highlight">126</i>&nbsp;            destIndices = shape.getIndices(i);</b>
+<b class="nc"><i class="no-highlight">127</i>&nbsp;            ArrayUtils.swap(destIndices, axes); // Compute destination indices.</b>
+<b class="nc"><i class="no-highlight">128</i>&nbsp;            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element</b>
+<i class="no-highlight">129</i>&nbsp;        }
+<i class="no-highlight">130</i>&nbsp;
+<b class="nc"><i class="no-highlight">131</i>&nbsp;        return dest;</b>
+<i class="no-highlight">132</i>&nbsp;    }
+<i class="no-highlight">133</i>&nbsp;
+<i class="no-highlight">134</i>&nbsp;
+<i class="no-highlight">135</i>&nbsp;    /**
+<i class="no-highlight">136</i>&nbsp;     * Computes the transpose of a tensor using a concurrent implementation. That is, interchanges the axes of the
+<i class="no-highlight">137</i>&nbsp;     * tensor so that it matches the specified axes permutation.
+<i class="no-highlight">138</i>&nbsp;     * @param src Entries of the tensor.
+<i class="no-highlight">139</i>&nbsp;     * @param shape Shape of the tensor to transpose.
+<i class="no-highlight">140</i>&nbsp;     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+<i class="no-highlight">141</i>&nbsp;     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+<i class="no-highlight">142</i>&nbsp;     * @return The transpose of the tensor along the specified axes.
+<i class="no-highlight">143</i>&nbsp;     * @throws IllegalArgumentException If the {@code axes} array is not a permutation of {@code {0, 1, 2, ..., N-1}}.
+<i class="no-highlight">144</i>&nbsp;     * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
+<i class="no-highlight">145</i>&nbsp;     */
+<i class="no-highlight">146</i>&nbsp;    public static CNumber[] standardConcurrent(final CNumber[] src, final Shape shape, final int[] axes) {
+<b class="fc"><i class="no-highlight">147</i>&nbsp;        if(shape.getRank() &lt; 2) { // Can&#39;t transpose tensor with less than 2 axes.</b>
+<b class="nc"><i class="no-highlight">148</i>&nbsp;            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</b>
+<i class="no-highlight">149</i>&nbsp;                    &quot; tensor.&quot;);
+<i class="no-highlight">150</i>&nbsp;        }
+<i class="no-highlight">151</i>&nbsp;
+<b class="fc"><i class="no-highlight">152</i>&nbsp;        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];</b>
+<b class="fc"><i class="no-highlight">153</i>&nbsp;        Shape destShape = shape.copy().swapAxes(axes);</b>
+<i class="no-highlight">154</i>&nbsp;
+<b class="fc"><i class="no-highlight">155</i>&nbsp;        ThreadManager.concurrentLoop(0, src.length, (i) -&gt; {</b>
+<b class="fc"><i class="no-highlight">156</i>&nbsp;            int[] destIndices = shape.getIndices(i);</b>
+<b class="fc"><i class="no-highlight">157</i>&nbsp;            ArrayUtils.swap(destIndices, axes); // Compute destination indices.</b>
+<b class="fc"><i class="no-highlight">158</i>&nbsp;            dest[destShape.entriesIndex(destIndices)] = src[i]; // Apply transpose for the element</b>
+<i class="no-highlight">159</i>&nbsp;        });
+<i class="no-highlight">160</i>&nbsp;
+<b class="fc"><i class="no-highlight">161</i>&nbsp;        return dest;</b>
+<i class="no-highlight">162</i>&nbsp;    }
+<i class="no-highlight">163</i>&nbsp;
+<i class="no-highlight">164</i>&nbsp;
+<i class="no-highlight">165</i>&nbsp;
+<i class="no-highlight">166</i>&nbsp;    /**
+<i class="no-highlight">167</i>&nbsp;     * Transposes a matrix using the standard algorithm.
+<i class="no-highlight">168</i>&nbsp;     * @param src Entries of the matrix to transpose.
+<i class="no-highlight">169</i>&nbsp;     * @param numRows Number of rows in the matrix.
+<i class="no-highlight">170</i>&nbsp;     * @param numCols Number of columns in the matrix.
+<i class="no-highlight">171</i>&nbsp;     * @return The transpose of the matrix.
+<i class="no-highlight">172</i>&nbsp;     */
+<i class="no-highlight">173</i>&nbsp;    public static CNumber[] standardMatrix(final CNumber[] src, final int numRows, final int numCols) {
+<b class="fc"><i class="no-highlight">174</i>&nbsp;        CNumber[] dest = new CNumber[numRows*numCols];</b>
+<i class="no-highlight">175</i>&nbsp;
+<i class="no-highlight">176</i>&nbsp;        int destIndex, srcIndex, end;
+<i class="no-highlight">177</i>&nbsp;
+<b class="fc"><i class="no-highlight">178</i>&nbsp;        for (int i=0; i&lt;numCols; i++) {</b>
+<b class="fc"><i class="no-highlight">179</i>&nbsp;            srcIndex = i;</b>
+<b class="fc"><i class="no-highlight">180</i>&nbsp;            destIndex = i*numRows;</b>
+<b class="fc"><i class="no-highlight">181</i>&nbsp;            end = destIndex + numRows;</b>
+<i class="no-highlight">182</i>&nbsp;
+<b class="fc"><i class="no-highlight">183</i>&nbsp;            while (destIndex &lt; end) {</b>
+<b class="fc"><i class="no-highlight">184</i>&nbsp;                dest[destIndex++] = src[srcIndex].copy();</b>
+<b class="fc"><i class="no-highlight">185</i>&nbsp;                srcIndex += numCols;</b>
+<i class="no-highlight">186</i>&nbsp;            }
+<i class="no-highlight">187</i>&nbsp;        }
+<i class="no-highlight">188</i>&nbsp;
+<b class="fc"><i class="no-highlight">189</i>&nbsp;        return dest;</b>
+<i class="no-highlight">190</i>&nbsp;    }
+<i class="no-highlight">191</i>&nbsp;
+<i class="no-highlight">192</i>&nbsp;
+<i class="no-highlight">193</i>&nbsp;    /**
+<i class="no-highlight">194</i>&nbsp;     * Transposes a matrix using a blocked algorithm. To get or set the block size see
+<i class="no-highlight">195</i>&nbsp;     * {@link Configurations#getBlockSize()} or {@link Configurations#setBlockSize(int)}.
+<i class="no-highlight">196</i>&nbsp;     * @param src Source matrix in the transpose.
+<i class="no-highlight">197</i>&nbsp;     * @param numRows Number of rows in the matrix.
+<i class="no-highlight">198</i>&nbsp;     * @param numCols Number of columns in the matrix.
+<i class="no-highlight">199</i>&nbsp;     * @return The transpose of this tensor along specified axes
+<i class="no-highlight">200</i>&nbsp;     */
+<i class="no-highlight">201</i>&nbsp;    public static CNumber[] blockedMatrix(final CNumber[] src, final int numRows, final int numCols) {
+<b class="fc"><i class="no-highlight">202</i>&nbsp;        CNumber[] dest = new CNumber[numRows*numCols];</b>
+<b class="fc"><i class="no-highlight">203</i>&nbsp;        final int blockSize = Configurations.getBlockSize();</b>
+<i class="no-highlight">204</i>&nbsp;        int blockRowEnd;
+<i class="no-highlight">205</i>&nbsp;        int blockColEnd;
+<i class="no-highlight">206</i>&nbsp;        int srcIndex, destIndex, end;
+<i class="no-highlight">207</i>&nbsp;
+<b class="fc"><i class="no-highlight">208</i>&nbsp;        for(int i=0; i&lt;numCols; i+=blockSize) {</b>
+<b class="fc"><i class="no-highlight">209</i>&nbsp;            for(int j=0; j&lt;numRows; j+=blockSize) {</b>
+<b class="fc"><i class="no-highlight">210</i>&nbsp;                blockRowEnd = Math.min(j+blockSize, numRows);</b>
+<b class="fc"><i class="no-highlight">211</i>&nbsp;                blockColEnd = Math.min(i+blockSize, numCols);</b>
+<i class="no-highlight">212</i>&nbsp;
+<i class="no-highlight">213</i>&nbsp;                // Transpose the block beginning at (i, j)
+<b class="fc"><i class="no-highlight">214</i>&nbsp;                for(int blockI=i; blockI&lt;blockColEnd; blockI++) {</b>
+<b class="fc"><i class="no-highlight">215</i>&nbsp;                    srcIndex = blockI;</b>
+<b class="fc"><i class="no-highlight">216</i>&nbsp;                    destIndex = blockI*numRows;</b>
+<b class="fc"><i class="no-highlight">217</i>&nbsp;                    end = destIndex + blockRowEnd;</b>
+<i class="no-highlight">218</i>&nbsp;
+<b class="fc"><i class="no-highlight">219</i>&nbsp;                    while (destIndex &lt; end) {</b>
+<b class="fc"><i class="no-highlight">220</i>&nbsp;                        dest[destIndex++] = src[srcIndex].copy();</b>
+<b class="fc"><i class="no-highlight">221</i>&nbsp;                        srcIndex += numCols;</b>
+<i class="no-highlight">222</i>&nbsp;                    }
+<i class="no-highlight">223</i>&nbsp;                }
+<i class="no-highlight">224</i>&nbsp;            }
+<i class="no-highlight">225</i>&nbsp;        }
+<i class="no-highlight">226</i>&nbsp;
+<b class="fc"><i class="no-highlight">227</i>&nbsp;        return dest;</b>
+<i class="no-highlight">228</i>&nbsp;    }
+<i class="no-highlight">229</i>&nbsp;
+<i class="no-highlight">230</i>&nbsp;
+<i class="no-highlight">231</i>&nbsp;    /**
+<i class="no-highlight">232</i>&nbsp;     * Computes the transpose of a matrix using a standard concurrent algorithm.
+<i class="no-highlight">233</i>&nbsp;     * @param src Entries of the matrix to transpose.
+<i class="no-highlight">234</i>&nbsp;     * @param numRows Number of rows in source matrix.
+<i class="no-highlight">235</i>&nbsp;     * @param numCols Number of columns in source matrix.
+<i class="no-highlight">236</i>&nbsp;     * @return The transpose of the source matrix.
+<i class="no-highlight">237</i>&nbsp;     */
+<i class="no-highlight">238</i>&nbsp;    public static CNumber[] standardMatrixConcurrent(final CNumber[] src, final int numRows, final int numCols) {
+<b class="fc"><i class="no-highlight">239</i>&nbsp;        CNumber[] dest = new CNumber[src.length];</b>
+<i class="no-highlight">240</i>&nbsp;
+<i class="no-highlight">241</i>&nbsp;        // Compute transpose concurrently.
+<b class="fc"><i class="no-highlight">242</i>&nbsp;        ThreadManager.concurrentLoop(0, numCols, (i) -&gt; {</b>
+<b class="fc"><i class="no-highlight">243</i>&nbsp;            int srcIndex = i;</b>
+<b class="fc"><i class="no-highlight">244</i>&nbsp;            int destIndex = i*numRows;</b>
+<b class="fc"><i class="no-highlight">245</i>&nbsp;            int end = destIndex + numRows;</b>
+<i class="no-highlight">246</i>&nbsp;
+<b class="fc"><i class="no-highlight">247</i>&nbsp;            while (destIndex &lt; end) {</b>
+<b class="fc"><i class="no-highlight">248</i>&nbsp;                dest[destIndex++] = src[srcIndex].copy();</b>
+<b class="fc"><i class="no-highlight">249</i>&nbsp;                srcIndex += numCols;</b>
+<i class="no-highlight">250</i>&nbsp;            }
+<i class="no-highlight">251</i>&nbsp;        });
+<i class="no-highlight">252</i>&nbsp;
+<b class="fc"><i class="no-highlight">253</i>&nbsp;        return dest;</b>
+<i class="no-highlight">254</i>&nbsp;    }
+<i class="no-highlight">255</i>&nbsp;
+<i class="no-highlight">256</i>&nbsp;
+<i class="no-highlight">257</i>&nbsp;    /**
+<i class="no-highlight">258</i>&nbsp;     * Computes the transpose of a matrix using a blocked concurrent algorithm.
+<i class="no-highlight">259</i>&nbsp;     * @param src Entries of the matrix to transpose.
+<i class="no-highlight">260</i>&nbsp;     * @param numRows Number of rows in source matrix.
+<i class="no-highlight">261</i>&nbsp;     * @param numCols Number of columns in source matrix.
+<i class="no-highlight">262</i>&nbsp;     * @return The transpose of the source matrix.
+<i class="no-highlight">263</i>&nbsp;     */
+<i class="no-highlight">264</i>&nbsp;    public static CNumber[] blockedMatrixConcurrent(final CNumber[] src, final int numRows, final int numCols) {
+<b class="fc"><i class="no-highlight">265</i>&nbsp;        CNumber[] dest = new CNumber[src.length];</b>
+<b class="fc"><i class="no-highlight">266</i>&nbsp;        final int blockSize = Configurations.getBlockSize();</b>
+<i class="no-highlight">267</i>&nbsp;
+<i class="no-highlight">268</i>&nbsp;        // Compute transpose concurrently.
+<b class="fc"><i class="no-highlight">269</i>&nbsp;        ThreadManager.concurrentLoop(0, numCols, blockSize, (i) -&gt; {</b>
+<b class="fc"><i class="no-highlight">270</i>&nbsp;            for(int j=0; j&lt;numRows; j+=blockSize) {</b>
+<b class="fc"><i class="no-highlight">271</i>&nbsp;                int blockRowEnd = Math.min(j+blockSize, numRows);</b>
+<b class="fc"><i class="no-highlight">272</i>&nbsp;                int blockColEnd = Math.min(i+blockSize, numCols);</b>
+<i class="no-highlight">273</i>&nbsp;
+<i class="no-highlight">274</i>&nbsp;                // Transpose the block beginning at (i, j)
+<b class="fc"><i class="no-highlight">275</i>&nbsp;                for(int blockI=i; blockI&lt;blockColEnd; blockI++) {</b>
+<b class="fc"><i class="no-highlight">276</i>&nbsp;                    int srcIndex = blockI;</b>
+<b class="fc"><i class="no-highlight">277</i>&nbsp;                    int destIndex = blockI*numRows;</b>
+<b class="fc"><i class="no-highlight">278</i>&nbsp;                    int end = destIndex + blockRowEnd;</b>
+<i class="no-highlight">279</i>&nbsp;
+<b class="fc"><i class="no-highlight">280</i>&nbsp;                    while (destIndex &lt; end) {</b>
+<b class="fc"><i class="no-highlight">281</i>&nbsp;                        dest[destIndex++] = src[srcIndex].copy();</b>
+<b class="fc"><i class="no-highlight">282</i>&nbsp;                        srcIndex += numCols;</b>
+<i class="no-highlight">283</i>&nbsp;                    }
+<i class="no-highlight">284</i>&nbsp;                }
+<i class="no-highlight">285</i>&nbsp;            }
+<i class="no-highlight">286</i>&nbsp;        });
+<i class="no-highlight">287</i>&nbsp;
+<b class="fc"><i class="no-highlight">288</i>&nbsp;        return dest;</b>
+<i class="no-highlight">289</i>&nbsp;    }
+<i class="no-highlight">290</i>&nbsp;
+<i class="no-highlight">291</i>&nbsp;    // ----------------------- Below are the Hermation transposes (i.e. conjugate transpose) -----------------------
+<i class="no-highlight">292</i>&nbsp;
+<i class="no-highlight">293</i>&nbsp;    /**
+<i class="no-highlight">294</i>&nbsp;     * Computes complex conjugate transpose of a tensor along specified axes using a standard transpose algorithm.
+<i class="no-highlight">295</i>&nbsp;     * In this context, transposing a tensor is equivalent to swapping a pair of axes.
+<i class="no-highlight">296</i>&nbsp;     * @param src Entries of the tensor.
+<i class="no-highlight">297</i>&nbsp;     * @param shape Shape of the tensor to transpose.
+<i class="no-highlight">298</i>&nbsp;     * @param axis1 First axis to swap in transpose.
+<i class="no-highlight">299</i>&nbsp;     * @param axis2 Second axis to swap in transpose.
+<i class="no-highlight">300</i>&nbsp;     * @return The transpose of the tensor along the specified axes.
+<i class="no-highlight">301</i>&nbsp;     */
+<i class="no-highlight">302</i>&nbsp;    public static CNumber[] standardHerm(final CNumber[] src, final Shape shape, final int axis1, final int axis2) {
+<b class="nc"><i class="no-highlight">303</i>&nbsp;        if(shape.getRank() &lt; 2) { // Can&#39;t transpose tensor with less than 2 axes.</b>
+<b class="nc"><i class="no-highlight">304</i>&nbsp;            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</b>
+<i class="no-highlight">305</i>&nbsp;                    &quot; tensor.&quot;);
+<i class="no-highlight">306</i>&nbsp;        }
+<i class="no-highlight">307</i>&nbsp;
+<b class="nc"><i class="no-highlight">308</i>&nbsp;        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];</b>
+<b class="nc"><i class="no-highlight">309</i>&nbsp;        Shape destShape = shape.copy().swapAxes(axis1, axis2);</b>
+<i class="no-highlight">310</i>&nbsp;        int[] destIndices;
+<i class="no-highlight">311</i>&nbsp;
+<b class="nc"><i class="no-highlight">312</i>&nbsp;        for(int i=0; i&lt;src.length; i++) {</b>
+<b class="nc"><i class="no-highlight">313</i>&nbsp;            destIndices = shape.getIndices(i);</b>
+<b class="nc"><i class="no-highlight">314</i>&nbsp;            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.</b>
+<b class="nc"><i class="no-highlight">315</i>&nbsp;            dest[destShape.entriesIndex(destIndices)] = src[i].conj(); // Apply transpose for the element</b>
+<i class="no-highlight">316</i>&nbsp;        }
+<i class="no-highlight">317</i>&nbsp;
+<b class="nc"><i class="no-highlight">318</i>&nbsp;        return dest;</b>
+<i class="no-highlight">319</i>&nbsp;    }
+<i class="no-highlight">320</i>&nbsp;
+<i class="no-highlight">321</i>&nbsp;
+<i class="no-highlight">322</i>&nbsp;    /**
+<i class="no-highlight">323</i>&nbsp;     * Computes complex conjugate transpose of a tensor along specified axes using a standard concurrent transpose algorithm.
+<i class="no-highlight">324</i>&nbsp;     * In this context, transposing a tensor is equivalent to swapping a pair of axes.
+<i class="no-highlight">325</i>&nbsp;     * @param src Entries of the tensor.
+<i class="no-highlight">326</i>&nbsp;     * @param shape Shape of the tensor to transpose.
+<i class="no-highlight">327</i>&nbsp;     * @param axis1 First axis to swap in transpose.
+<i class="no-highlight">328</i>&nbsp;     * @param axis2 Second axis to swap in transpose.
+<i class="no-highlight">329</i>&nbsp;     * @return The complex conjugate transpose of the tensor along the specified axes.
+<i class="no-highlight">330</i>&nbsp;     */
+<i class="no-highlight">331</i>&nbsp;    public static CNumber[] standardConcurrentHerm(final CNumber[] src, final Shape shape, final int axis1, final int axis2) {
+<b class="fc"><i class="no-highlight">332</i>&nbsp;        if(shape.getRank() &lt; 2) { // Can&#39;t transpose tensor with less than 2 axes.</b>
+<b class="nc"><i class="no-highlight">333</i>&nbsp;            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</b>
+<i class="no-highlight">334</i>&nbsp;                    &quot; tensor.&quot;);
+<i class="no-highlight">335</i>&nbsp;        }
+<i class="no-highlight">336</i>&nbsp;
+<b class="fc"><i class="no-highlight">337</i>&nbsp;        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];</b>
+<b class="fc"><i class="no-highlight">338</i>&nbsp;        Shape destShape = shape.copy().swapAxes(axis1, axis2);</b>
+<i class="no-highlight">339</i>&nbsp;
+<i class="no-highlight">340</i>&nbsp;        // Compute transpose concurrently
+<b class="fc"><i class="no-highlight">341</i>&nbsp;        ThreadManager.concurrentLoop(0, src.length, (i) -&gt; {</b>
+<b class="fc"><i class="no-highlight">342</i>&nbsp;            int[] destIndices = shape.getIndices(i);</b>
+<b class="fc"><i class="no-highlight">343</i>&nbsp;            ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.</b>
+<b class="fc"><i class="no-highlight">344</i>&nbsp;            dest[destShape.entriesIndex(destIndices)] = src[i].conj(); // Apply transpose for the element</b>
+<i class="no-highlight">345</i>&nbsp;        });
+<i class="no-highlight">346</i>&nbsp;
+<b class="fc"><i class="no-highlight">347</i>&nbsp;        return dest;</b>
+<i class="no-highlight">348</i>&nbsp;    }
+<i class="no-highlight">349</i>&nbsp;
+<i class="no-highlight">350</i>&nbsp;
+<i class="no-highlight">351</i>&nbsp;    /**
+<i class="no-highlight">352</i>&nbsp;     * Computes the conjugate transpose of a tensor using a concurrent implementation. That is, interchanges the axes of the
+<i class="no-highlight">353</i>&nbsp;     * tensor so that it matches the specified axes permutation and so that the axis which are swapped and complex conjugated.
+<i class="no-highlight">354</i>&nbsp;     * @param src Entries of the tensor.
+<i class="no-highlight">355</i>&nbsp;     * @param shape Shape of the tensor to transpose.
+<i class="no-highlight">356</i>&nbsp;     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+<i class="no-highlight">357</i>&nbsp;     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+<i class="no-highlight">358</i>&nbsp;     * @return The transpose of the tensor along the specified axes.
+<i class="no-highlight">359</i>&nbsp;     * @throws IllegalArgumentException If the {@code axes} array is not a permutation of {@code {0, 1, 2, ..., N-1}}.
+<i class="no-highlight">360</i>&nbsp;     * @throws IllegalArgumentException If the {@code shape} rank is less than 2.
+<i class="no-highlight">361</i>&nbsp;     */
+<i class="no-highlight">362</i>&nbsp;    public static CNumber[] standardConcurrentHerm(final CNumber[] src, final Shape shape, final int[] axes) {
+<b class="fc"><i class="no-highlight">363</i>&nbsp;        if(shape.getRank() &lt; 2) { // Can&#39;t transpose tensor with less than 2 axes.</b>
+<b class="nc"><i class="no-highlight">364</i>&nbsp;            throw new IllegalArgumentException(&quot;Tensor transpose not defined for rank &quot; + shape.getRank() +</b>
+<i class="no-highlight">365</i>&nbsp;                    &quot; tensor.&quot;);
+<i class="no-highlight">366</i>&nbsp;        }
+<i class="no-highlight">367</i>&nbsp;
+<b class="fc"><i class="no-highlight">368</i>&nbsp;        CNumber[] dest = new CNumber[shape.totalEntries().intValue()];</b>
+<b class="fc"><i class="no-highlight">369</i>&nbsp;        Shape destShape = shape.copy().swapAxes(axes);</b>
+<i class="no-highlight">370</i>&nbsp;
+<b class="fc"><i class="no-highlight">371</i>&nbsp;        ThreadManager.concurrentLoop(0, src.length, (i) -&gt; {</b>
+<b class="fc"><i class="no-highlight">372</i>&nbsp;            int[] destIndices = shape.getIndices(i);</b>
+<b class="fc"><i class="no-highlight">373</i>&nbsp;            ArrayUtils.swap(destIndices, axes); // Compute destination indices.</b>
+<b class="fc"><i class="no-highlight">374</i>&nbsp;            dest[destShape.entriesIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element</b>
+<i class="no-highlight">375</i>&nbsp;        });
+<i class="no-highlight">376</i>&nbsp;
+<b class="fc"><i class="no-highlight">377</i>&nbsp;        return dest;</b>
+<i class="no-highlight">378</i>&nbsp;    }
+<i class="no-highlight">379</i>&nbsp;
+<i class="no-highlight">380</i>&nbsp;
+<i class="no-highlight">381</i>&nbsp;
+<i class="no-highlight">382</i>&nbsp;    /**
+<i class="no-highlight">383</i>&nbsp;     * Computes complex conjugate transpose of a matrix using the standard algorithm.
+<i class="no-highlight">384</i>&nbsp;     * @param src Entries of the matrix to transpose.
+<i class="no-highlight">385</i>&nbsp;     * @param numRows Number of rows in the matrix.
+<i class="no-highlight">386</i>&nbsp;     * @param numCols Number of columns in the matrix.
+<i class="no-highlight">387</i>&nbsp;     * @return The transpose of the matrix.
+<i class="no-highlight">388</i>&nbsp;     */
+<i class="no-highlight">389</i>&nbsp;    public static CNumber[] standardMatrixHerm(final CNumber[] src, final int numRows, final int numCols) {
+<b class="fc"><i class="no-highlight">390</i>&nbsp;        CNumber[] dest = new CNumber[numRows*numCols];</b>
+<i class="no-highlight">391</i>&nbsp;
+<i class="no-highlight">392</i>&nbsp;        int destIndex, srcIndex, end;
+<i class="no-highlight">393</i>&nbsp;
+<b class="fc"><i class="no-highlight">394</i>&nbsp;        for (int i=0; i&lt;numCols; i++) {</b>
+<b class="fc"><i class="no-highlight">395</i>&nbsp;            srcIndex = i;</b>
+<b class="fc"><i class="no-highlight">396</i>&nbsp;            destIndex = i*numRows;</b>
+<b class="fc"><i class="no-highlight">397</i>&nbsp;            end = destIndex + numRows;</b>
+<i class="no-highlight">398</i>&nbsp;
+<b class="fc"><i class="no-highlight">399</i>&nbsp;            while (destIndex &lt; end) {</b>
+<b class="fc"><i class="no-highlight">400</i>&nbsp;                dest[destIndex++] = src[srcIndex].conj();</b>
+<b class="fc"><i class="no-highlight">401</i>&nbsp;                srcIndex += numCols;</b>
+<i class="no-highlight">402</i>&nbsp;            }
+<i class="no-highlight">403</i>&nbsp;        }
+<i class="no-highlight">404</i>&nbsp;
+<b class="fc"><i class="no-highlight">405</i>&nbsp;        return dest;</b>
+<i class="no-highlight">406</i>&nbsp;    }
+<i class="no-highlight">407</i>&nbsp;
+<i class="no-highlight">408</i>&nbsp;
+<i class="no-highlight">409</i>&nbsp;    /**
+<i class="no-highlight">410</i>&nbsp;     * Computes complex conjugate transpose of a matrix using a blocked algorithm. To get or set the block size see
+<i class="no-highlight">411</i>&nbsp;     * {@link Configurations#getBlockSize()} or {@link Configurations#setBlockSize(int)}.
+<i class="no-highlight">412</i>&nbsp;     * @param src Source matrix in the transpose.
+<i class="no-highlight">413</i>&nbsp;     * @param numRows Number of rows in the matrix.
+<i class="no-highlight">414</i>&nbsp;     * @param numCols Number of columns in the matrix.
+<i class="no-highlight">415</i>&nbsp;     * @return The complex conjugate transpose of this matrix.
+<i class="no-highlight">416</i>&nbsp;     */
+<i class="no-highlight">417</i>&nbsp;    public static CNumber[] blockedMatrixHerm(final CNumber[] src, final int numRows, final int numCols) {
+<b class="fc"><i class="no-highlight">418</i>&nbsp;        CNumber[] dest = new CNumber[numRows*numCols];</b>
+<b class="fc"><i class="no-highlight">419</i>&nbsp;        final int blockSize = Configurations.getBlockSize();</b>
+<i class="no-highlight">420</i>&nbsp;        int blockRowEnd;
+<i class="no-highlight">421</i>&nbsp;        int blockColEnd;
+<i class="no-highlight">422</i>&nbsp;        int srcIndex, destIndex, end;
+<i class="no-highlight">423</i>&nbsp;
+<b class="fc"><i class="no-highlight">424</i>&nbsp;        for(int i=0; i&lt;numCols; i+=blockSize) {</b>
+<b class="fc"><i class="no-highlight">425</i>&nbsp;            for(int j=0; j&lt;numRows; j+=blockSize) {</b>
+<b class="fc"><i class="no-highlight">426</i>&nbsp;                blockRowEnd = Math.min(j+blockSize, numRows);</b>
+<b class="fc"><i class="no-highlight">427</i>&nbsp;                blockColEnd = Math.min(i+blockSize, numCols);</b>
+<i class="no-highlight">428</i>&nbsp;
+<i class="no-highlight">429</i>&nbsp;                // Transpose the block beginning at (i, j)
+<b class="fc"><i class="no-highlight">430</i>&nbsp;                for(int blockI=i; blockI&lt;blockColEnd; blockI++) {</b>
+<b class="fc"><i class="no-highlight">431</i>&nbsp;                    srcIndex = blockI;</b>
+<b class="fc"><i class="no-highlight">432</i>&nbsp;                    destIndex = blockI*numRows;</b>
+<b class="fc"><i class="no-highlight">433</i>&nbsp;                    end = destIndex + blockRowEnd;</b>
+<i class="no-highlight">434</i>&nbsp;
+<b class="fc"><i class="no-highlight">435</i>&nbsp;                    while (destIndex &lt; end) {</b>
+<b class="fc"><i class="no-highlight">436</i>&nbsp;                        dest[destIndex++] = src[srcIndex].conj();</b>
+<b class="fc"><i class="no-highlight">437</i>&nbsp;                        srcIndex += numCols;</b>
+<i class="no-highlight">438</i>&nbsp;                    }
+<i class="no-highlight">439</i>&nbsp;                }
+<i class="no-highlight">440</i>&nbsp;            }
+<i class="no-highlight">441</i>&nbsp;        }
+<i class="no-highlight">442</i>&nbsp;
+<b class="fc"><i class="no-highlight">443</i>&nbsp;        return dest;</b>
+<i class="no-highlight">444</i>&nbsp;    }
+<i class="no-highlight">445</i>&nbsp;
+<i class="no-highlight">446</i>&nbsp;
+<i class="no-highlight">447</i>&nbsp;    /**
+<i class="no-highlight">448</i>&nbsp;     * Computes the complex conjugate transpose of a matrix using a standard concurrent algorithm.
+<i class="no-highlight">449</i>&nbsp;     * @param src Entries of the matrix to transpose.
+<i class="no-highlight">450</i>&nbsp;     * @param numRows Number of rows in source matrix.
+<i class="no-highlight">451</i>&nbsp;     * @param numCols Number of columns in source matrix.
+<i class="no-highlight">452</i>&nbsp;     * @return The complex conjugate transpose of the source matrix.
+<i class="no-highlight">453</i>&nbsp;     */
+<i class="no-highlight">454</i>&nbsp;    public static CNumber[] standardMatrixConcurrentHerm(final CNumber[] src, final int numRows, final int numCols) {
+<b class="fc"><i class="no-highlight">455</i>&nbsp;        CNumber[] dest = new CNumber[src.length];</b>
+<i class="no-highlight">456</i>&nbsp;
+<i class="no-highlight">457</i>&nbsp;        // Compute transpose concurrently.
+<b class="fc"><i class="no-highlight">458</i>&nbsp;        ThreadManager.concurrentLoop(0, numCols, (i) -&gt; {</b>
+<b class="fc"><i class="no-highlight">459</i>&nbsp;            int srcIndex = i;</b>
+<b class="fc"><i class="no-highlight">460</i>&nbsp;            int destIndex = i*numRows;</b>
+<b class="fc"><i class="no-highlight">461</i>&nbsp;            int end = destIndex + numRows;</b>
+<i class="no-highlight">462</i>&nbsp;
+<b class="fc"><i class="no-highlight">463</i>&nbsp;            while (destIndex &lt; end) {</b>
+<b class="fc"><i class="no-highlight">464</i>&nbsp;                dest[destIndex++] = src[srcIndex].conj();</b>
+<b class="fc"><i class="no-highlight">465</i>&nbsp;                srcIndex += numCols;</b>
+<i class="no-highlight">466</i>&nbsp;            }
+<i class="no-highlight">467</i>&nbsp;        });
+<i class="no-highlight">468</i>&nbsp;
+<b class="fc"><i class="no-highlight">469</i>&nbsp;        return dest;</b>
+<i class="no-highlight">470</i>&nbsp;    }
+<i class="no-highlight">471</i>&nbsp;
+<i class="no-highlight">472</i>&nbsp;
+<i class="no-highlight">473</i>&nbsp;    /**
+<i class="no-highlight">474</i>&nbsp;     * Computes the complex conjugate transpose of a matrix using a blocked concurrent algorithm.
+<i class="no-highlight">475</i>&nbsp;     * @param src Entries of the matrix to transpose.
+<i class="no-highlight">476</i>&nbsp;     * @param numRows Number of rows in source matrix.
+<i class="no-highlight">477</i>&nbsp;     * @param numCols Number of columns in source matrix.
+<i class="no-highlight">478</i>&nbsp;     * @return The complex conjugate transpose of the source matrix.
+<i class="no-highlight">479</i>&nbsp;     */
+<i class="no-highlight">480</i>&nbsp;    public static CNumber[] blockedMatrixConcurrentHerm(final CNumber[] src, final int numRows, final int numCols) {
+<b class="fc"><i class="no-highlight">481</i>&nbsp;        CNumber[] dest = new CNumber[src.length];</b>
+<b class="fc"><i class="no-highlight">482</i>&nbsp;        final int blockSize = Configurations.getBlockSize();</b>
+<i class="no-highlight">483</i>&nbsp;
+<i class="no-highlight">484</i>&nbsp;        // Compute transpose concurrently.
+<b class="fc"><i class="no-highlight">485</i>&nbsp;        ThreadManager.concurrentLoop(0, numCols, blockSize, (i) -&gt; {</b>
+<b class="fc"><i class="no-highlight">486</i>&nbsp;            for(int j=0; j&lt;numRows; j+=blockSize) {</b>
+<b class="fc"><i class="no-highlight">487</i>&nbsp;                int blockRowEnd = Math.min(j+blockSize, numRows);</b>
+<b class="fc"><i class="no-highlight">488</i>&nbsp;                int blockColEnd = Math.min(i+blockSize, numCols);</b>
+<i class="no-highlight">489</i>&nbsp;
+<i class="no-highlight">490</i>&nbsp;                // Transpose the block beginning at (i, j)
+<b class="fc"><i class="no-highlight">491</i>&nbsp;                for(int blockI=i; blockI&lt;blockColEnd; blockI++) {</b>
+<b class="fc"><i class="no-highlight">492</i>&nbsp;                    int srcIndex = blockI;</b>
+<b class="fc"><i class="no-highlight">493</i>&nbsp;                    int destIndex = blockI*numRows;</b>
+<b class="fc"><i class="no-highlight">494</i>&nbsp;                    int end = destIndex + blockRowEnd;</b>
+<i class="no-highlight">495</i>&nbsp;
+<b class="fc"><i class="no-highlight">496</i>&nbsp;                    while (destIndex &lt; end) {</b>
+<b class="fc"><i class="no-highlight">497</i>&nbsp;                        dest[destIndex++] = src[srcIndex].conj();</b>
+<b class="fc"><i class="no-highlight">498</i>&nbsp;                        srcIndex += numCols;</b>
+<i class="no-highlight">499</i>&nbsp;                    }
+<i class="no-highlight">500</i>&nbsp;                }
+<i class="no-highlight">501</i>&nbsp;            }
+<i class="no-highlight">502</i>&nbsp;        });
+<i class="no-highlight">503</i>&nbsp;
+<b class="fc"><i class="no-highlight">504</i>&nbsp;        return dest;</b>
+<i class="no-highlight">505</i>&nbsp;    }
+<i class="no-highlight">506</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-09 11:17</div>
+</div>
+</body>
+</html>
