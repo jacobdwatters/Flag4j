@@ -12,7 +12,7 @@ class MatrixTransposeTests {
 
 
     @Test
-    void transposeTests() {
+    void transposeTest() {
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{
                 {1, 2, 3},

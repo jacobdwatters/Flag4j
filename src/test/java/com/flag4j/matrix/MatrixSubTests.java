@@ -183,7 +183,7 @@ public class MatrixSubTests {
     }
 
     @Test
-    void realSparseSub() {
+    void realSparseSubTest() {
         double[] bEntries;
         int[] bRowIndices;
         int[] bColIndices;
@@ -222,7 +222,7 @@ public class MatrixSubTests {
 
 
     @Test
-    void complexSparseSub() {
+    void complexSparseSubTest() {
         CNumber[] bEntries;
         int[] bRowIndices;
         int[] bColIndices;

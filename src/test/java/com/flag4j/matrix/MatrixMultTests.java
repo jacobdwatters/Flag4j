@@ -17,7 +17,7 @@ class MatrixMultTests {
 
 
     @Test
-    void matMultTests() {
+    void matMultTest() {
         double[][] bEntries;
         Matrix B;
 
