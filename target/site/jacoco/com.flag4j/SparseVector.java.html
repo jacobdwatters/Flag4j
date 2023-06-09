@@ -55,7 +55,7 @@ import java.util.List;
 /**
  * Real sparse vector of arbitrary size.
  */
-<span class="pc bpc" id="L58" title="1 of 2 branches missed.">public class SparseVector</span>
+<span class="fc" id="L58">public class SparseVector</span>
         extends RealSparseTensorBase&lt;SparseVector, Vector, SparseCVector, CVector&gt;
         implements VectorMixin&lt;SparseVector, Vector, SparseVector, SparseCVector, Double, SparseMatrix, Matrix, SparseCMatrix&gt; {
 
@@ -1390,7 +1390,7 @@ import java.util.List;
      */
     @Override
     public SparseVector flatten(int axis) {
-<span class="pc bpc" id="L1393" title="1 of 4 branches missed.">        assert(axis==0) : &quot;Axis must be zero but got &quot; + axis;</span>
+<span class="fc bfc" id="L1393" title="All 2 branches covered.">        assert(axis==0) : &quot;Axis must be zero but got &quot; + axis;</span>
 <span class="fc" id="L1394">        return this.copy();</span>
     }
 
@@ -1503,4 +1503,4 @@ import java.util.List;
 }
 
 
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

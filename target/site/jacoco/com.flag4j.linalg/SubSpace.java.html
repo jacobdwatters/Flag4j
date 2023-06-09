@@ -183,7 +183,7 @@ public class SubSpace {
     public static boolean hasEqualSpan(Matrix src1, Matrix src2) {
         boolean result;
 
-<span class="fc bfc" id="L186" title="All 2 branches covered.">        if(src1.shape.equals(src2.shape)) {</span>
+<span class="pc bpc" id="L186" title="1 of 2 branches missed.">        if(src1.shape.equals(src2.shape)) {</span>
 <span class="fc" id="L187">            RealLstsqSolver lstsq = new RealLstsqSolver();</span>
 <span class="fc" id="L188">            double tol = 1.0E-12; // Tolerance for considering a norm zero.</span>
             Vector solution, col;
@@ -204,8 +204,8 @@ public class SubSpace {
             }
 
 <span class="fc" id="L206">        } else {</span>
-<span class="fc" id="L207">            System.out.println(&quot;HERE&quot;);</span>
-<span class="fc" id="L208">            result = false;</span>
+<span class="nc" id="L207">            System.out.println(&quot;HERE&quot;);</span>
+<span class="nc" id="L208">            result = false;</span>
         }
 
 <span class="fc" id="L211">        return result;</span>
@@ -249,4 +249,4 @@ public class SubSpace {
 <span class="fc" id="L249">        return result;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
