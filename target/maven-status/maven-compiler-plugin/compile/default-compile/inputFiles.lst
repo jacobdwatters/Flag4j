@@ -36,6 +36,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\io\TensorWriter.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseEquals.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\RealMatrixMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\RowEchelon.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\solvers\ExactSolver.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\decompositions\RealHessenburgDecomposition.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\sparse\SparseTensorBase.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\CreateMatrix.java
@@ -87,7 +88,6 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\common\pa
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\io\PrintOptions.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\complex_numbers\CNumberLexer.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\common\real\RealProperties.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\solvers\ComplexLUSolver.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\real\RealDenseElemMult.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseVectorOperations.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\package-info.java
@@ -117,11 +117,10 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\TensorCompariso
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\decompositions\QRDecomposition.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\sparse\real\RealSparseManipulations.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\dense\DenseVectorMixin.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\solvers\RealLUSolver.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\transformations\Projection.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\solvers\LinearSolver.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\solvers\ComplexExactSolver.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\common\real\VectorNorms.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\solvers\LUSolver.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\sparse\real\RealSparseVectorOperations.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\decompositions\ComplexLUDecomposition.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\complex\ComplexDenseSetOperations.java
@@ -173,5 +172,6 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\complex_numbers\CNum
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\sparse\SparseTensorMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\decompositions\Decomposition.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\decompositions\SingularValueDecomposition.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\solvers\RealExactSolver.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\decompositions\ComplexSchurDecomposition.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\TransposeDispatcher.java
