@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > VectorMixin</title>
+  <title>Coverage Report > VectorManipulationsMixin</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,14 +20,14 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.flag4j.core</a>
 </div>
 
-<h1>Coverage Summary for Class: VectorMixin (com.flag4j.core)</h1>
+<h1>Coverage Summary for Class: VectorManipulationsMixin (com.flag4j.core)</h1>
 
 <table class="coverageStats">
 <tr>
   <th class="name">Class</th>
 </tr>
 <tr>
-  <td class="name">VectorMixin</td>
+  <td class="name">VectorManipulationsMixin</td>
 </tr>
 
 </table>
@@ -40,7 +40,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;/*
 <i class="no-highlight">2</i>&nbsp; * MIT License
 <i class="no-highlight">3</i>&nbsp; *
-<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2023 Jacob Watters
+<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2022-2023 Jacob Watters
 <i class="no-highlight">5</i>&nbsp; *
 <i class="no-highlight">6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
 <i class="no-highlight">7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -63,32 +63,22 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">24</i>&nbsp;
 <i class="no-highlight">25</i>&nbsp;package com.flag4j.core;
 <i class="no-highlight">26</i>&nbsp;
-<i class="no-highlight">27</i>&nbsp;
-<i class="no-highlight">28</i>&nbsp;/**
-<i class="no-highlight">29</i>&nbsp; * This interface specifies methods which all vectors should implement.
-<i class="no-highlight">30</i>&nbsp; * @param &lt;T&gt; Type of this vector.
-<i class="no-highlight">31</i>&nbsp; * @param &lt;U&gt; Dense vector type.
-<i class="no-highlight">32</i>&nbsp; * @param &lt;V&gt; Sparse Vector type.
-<i class="no-highlight">33</i>&nbsp; * @param &lt;W&gt; Complex vector type.
-<i class="no-highlight">34</i>&nbsp; * @param &lt;X&gt; The type of individual entry within the vector.
-<i class="no-highlight">35</i>&nbsp; * @param &lt;TT&gt; The matrix type equivalent to this vector.
-<i class="no-highlight">36</i>&nbsp; * @param &lt;UU&gt; Dense Matrix type equivalent.
-<i class="no-highlight">37</i>&nbsp; * @param &lt;WW&gt; Complex matrix type equivalent.
-<i class="no-highlight">38</i>&nbsp; */
-<i class="no-highlight">39</i>&nbsp;public interface VectorMixin&lt;T, U, V, W, X extends Number, TT, UU, WW&gt;
-<i class="no-highlight">40</i>&nbsp;        extends VectorPropertiesMixin,
-<i class="no-highlight">41</i>&nbsp;        VectorManipulationsMixin&lt;TT&gt;,
-<i class="no-highlight">42</i>&nbsp;        VectorComparisonsMixin,
-<i class="no-highlight">43</i>&nbsp;        VectorOperationsMixin&lt;T, U, V, W, X, TT, UU, WW&gt; {
-<i class="no-highlight">44</i>&nbsp;
-<i class="no-highlight">45</i>&nbsp;    // TODO: Add default methods for methods which are the same for all vectors.
-<i class="no-highlight">46</i>&nbsp;
-<i class="no-highlight">47</i>&nbsp;    /**
-<i class="no-highlight">48</i>&nbsp;     * gets the size of this vector.
-<i class="no-highlight">49</i>&nbsp;     * @return
-<i class="no-highlight">50</i>&nbsp;     */
-<i class="no-highlight">51</i>&nbsp;    int size();
-<i class="no-highlight">52</i>&nbsp;}
+<i class="no-highlight">27</i>&nbsp;/**
+<i class="no-highlight">28</i>&nbsp; * This interface specifies manipulations which all vectors should implement.
+<i class="no-highlight">29</i>&nbsp; *
+<i class="no-highlight">30</i>&nbsp; * @param &lt;TT&gt; Matrix type equivalent.
+<i class="no-highlight">31</i>&nbsp; */
+<i class="no-highlight">32</i>&nbsp;public interface VectorManipulationsMixin&lt;TT&gt; {
+<i class="no-highlight">33</i>&nbsp;
+<i class="no-highlight">34</i>&nbsp;
+<i class="no-highlight">35</i>&nbsp;    /**
+<i class="no-highlight">36</i>&nbsp;     * Extends a vector a specified number of times to a matrix.
+<i class="no-highlight">37</i>&nbsp;     * @param n The number of times to extend this vector.
+<i class="no-highlight">38</i>&nbsp;     * @param axis Axis along which to extend vector.
+<i class="no-highlight">39</i>&nbsp;     * @return A matrix which is the result of extending a vector {@code n} times.
+<i class="no-highlight">40</i>&nbsp;     */
+<i class="no-highlight">41</i>&nbsp;    TT extend(int n, int axis);
+<i class="no-highlight">42</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -115,7 +105,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-06-07 19:20</div>
+    <div style="float:right;">generated on 2023-06-08 18:08</div>
 </div>
 </body>
 </html>
