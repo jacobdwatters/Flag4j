@@ -11,6 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="18d8fd57-c47c-4bc5-92e6-c97a9e6854b5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -323,14 +324,7 @@
       <workItem from="1686098671595" duration="132000" />
       <workItem from="1686182519728" duration="2431000" />
       <workItem from="1686184977463" duration="2608000" />
-      <workItem from="1686268541597" duration="1975000" />
-    </task>
-    <task id="LOCAL-00225" summary="Added tests for the SparseVector class.&#10;&#10;Fixed issue with the isParallel() method in both the SparseVector and SparseCVector class.">
-      <created>1685127907782</created>
-      <option name="number" value="00225" />
-      <option name="presentableId" value="LOCAL-00225" />
-      <option name="project" value="LOCAL" />
-      <updated>1685127907782</updated>
+      <workItem from="1686268541597" duration="2860000" />
     </task>
     <task id="LOCAL-00226" summary="Added tests for the SparseVector class.">
       <created>1685415146149</created>
@@ -668,7 +662,14 @@
       <option name="project" value="LOCAL" />
       <updated>1686270522844</updated>
     </task>
-    <option name="localTasksCounter" value="274" />
+    <task id="LOCAL-00274" summary="Update target directory.">
+      <created>1686270544241</created>
+      <option name="number" value="00274" />
+      <option name="presentableId" value="LOCAL-00274" />
+      <option name="project" value="LOCAL" />
+      <updated>1686270544241</updated>
+    </task>
+    <option name="localTasksCounter" value="275" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
