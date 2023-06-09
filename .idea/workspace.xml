@@ -5,830 +5,342 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="819e92db-83ba-421e-bbb4-9d6317d842bd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/Flag4j-v0.0.1-beta.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/CMatrix.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/CTensor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/CVector.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/Matrix.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/Shape.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/SparseCMatrix.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/SparseCTensor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/SparseCVector.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/SparseMatrix.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/SparseTensor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/SparseVector.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/Tensor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/Vector.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/complex_numbers/CNumber.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/complex_numbers/CNumberLexer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/complex_numbers/CNumberParser.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/complex_numbers/CNumberToken.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/concurrency/Configurations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/concurrency/ThreadManager.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/ComplexMatrixMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/ComplexTensorExclusiveMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/ComplexTensorMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/MatrixComparisonsMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/MatrixManipulationsMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/MatrixMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/MatrixOperationsMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/MatrixPropertiesMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/RealMatrixMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/RealTensorMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/TensorBase.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/TensorComparisonsMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/TensorExclusiveMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/TensorManipulationsMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/TensorOperationsMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/TensorPropertiesMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/VectorComparisonsMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/VectorManipulationsMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/VectorMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/VectorOperationsMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/VectorPropertiesMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/dense/ComplexDenseTensorBase.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/dense/DenseMatrixMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/dense/DenseMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/dense/DenseTensorBase.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/dense/DenseTensorMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/dense/DenseVectorMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/dense/RealDenseTensorBase.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/sparse/ComplexSparseTensorBase.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/sparse/RealSparseTensorBase.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/sparse/SparseTensorBase.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/core/sparse/SparseTensorMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/exceptions/SingularMatrixException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/io/PrintOptions.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/io/TensorInputStream.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/io/TensorOutputStream.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/io/TensorReader.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/io/TensorWriter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/CreateMatrix.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/Decompose.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/Eigen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/Invert.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/PositiveDefiniteness.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/RowEchelon.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/SubSpace.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/CholeskyDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/ComplexCholeskyDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/ComplexHessenburgDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/ComplexLUDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/ComplexQRDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/ComplexSVD.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/ComplexSchurDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/Decomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/HessenburgDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/LUDecomposition$Pivoting.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/LUDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/QRDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/RealCholeskyDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/RealHessenburgDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/RealLUDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/RealQRDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/RealSVD.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/RealSchurDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/SchurDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/decompositions/SingularValueDecomposition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/solvers/ComplexBackSolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/solvers/ComplexExactSolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/solvers/ComplexForwardSolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/solvers/ComplexLstsqSolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/solvers/ExactSolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/solvers/LinearSolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/solvers/LstsqSolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/solvers/RealBackSolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/solvers/RealExactSolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/solvers/RealForwardSolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/solvers/RealLstsqSolver.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/transformations/Householder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/linalg/transformations/Projection.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/MatrixMultiplyDispatcher$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/MatrixMultiplyDispatcher$AlgorithmName.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/MatrixMultiplyDispatcher.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/RealDenseMatrixMultiplyDispatcher$AlgorithmNames.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/RealDenseMatrixMultiplyDispatcher.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/RealDenseTensorBinaryOperation.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/TransposeDispatcher$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/TransposeDispatcher$Algorithm.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/TransposeDispatcher.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/common/complex/AggregateComplex.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/common/complex/ComplexOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/common/complex/ComplexProperties.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/common/real/AggregateReal.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/common/real/RealOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/common/real/RealProperties.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/common/real/VectorNorms.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/complex/AggregateDenseComplex.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/complex/ComplexDenseDeterminant.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/complex/ComplexDenseElemDiv.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/complex/ComplexDenseElemMult.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/complex/ComplexDenseEquals.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/complex/ComplexDenseMatrixMultTranspose.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/complex/ComplexDenseMatrixMultiplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/complex/ComplexDenseOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/complex/ComplexDenseProperties.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/complex/ComplexDenseSetOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/complex/ComplexDenseTensorDot.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/complex/ComplexDenseTranspose.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/complex/ComplexDenseVectorOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real/AggregateDenseReal.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real/RealDenseDeterminant.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real/RealDenseElemDiv.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real/RealDenseElemMult.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real/RealDenseEquals.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real/RealDenseMatrixMultTranspose.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real/RealDenseMatrixMultiplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real/RealDenseOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real/RealDenseProperties.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real/RealDenseSetOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real/RealDenseTensorDot.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real/RealDenseTranspose.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real/RealDenseVectorOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real_complex/RealComplexDenseElemDiv.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real_complex/RealComplexDenseElemMult.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real_complex/RealComplexDenseEquals.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real_complex/RealComplexDenseMatrixMultTranspose.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real_complex/RealComplexDenseMatrixMultiplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real_complex/RealComplexDenseOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense/real_complex/RealComplexDenseVectorOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense_sparse/complex/ComplexDenseSparseEquals.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense_sparse/complex/ComplexDenseSparseMatrixMultTranspose.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense_sparse/complex/ComplexDenseSparseMatrixMultiplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense_sparse/complex/ComplexDenseSparseOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense_sparse/complex/ComplexDenseSparseVectorOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense_sparse/real/RealDenseSparseEquals.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense_sparse/real/RealDenseSparseMatrixMultTranspose.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense_sparse/real/RealDenseSparseMatrixMultiplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense_sparse/real/RealDenseSparseOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense_sparse/real/RealDenseSparseVectorOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense_sparse/real_complex/RealComplexDenseSparseEquals.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense_sparse/real_complex/RealComplexDenseSparseMatrixMultTranspose.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense_sparse/real_complex/RealComplexDenseSparseMatrixMultiplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense_sparse/real_complex/RealComplexDenseSparseOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/dense_sparse/real_complex/RealComplexDenseSparseVectorOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/sparse/complex/ComplexSparseEquals.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/sparse/complex/ComplexSparseMatrixMultiplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/sparse/complex/ComplexSparseVectorOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/sparse/real/RealSparseEquals.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/sparse/real/RealSparseManipulations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/sparse/real/RealSparseMatrixMultiplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/sparse/real/RealSparseVectorOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/sparse/real_complex/RealComplexSparseEquals.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/sparse/real_complex/RealComplexSparseMatrixMultiplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/operations/sparse/real_complex/RealComplexSparseVectorOperations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/util/ArrayUtils.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/util/Axis2D.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/util/ErrorMessages.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/util/ParameterChecks.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/util/RandomCNumber.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/util/RandomTensor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/util/SparseDataWrapper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/flag4j/util/StringUtils.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/jacoco.exec" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/site/jacoco/jacoco.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorAddTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorConstructorTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorConversionTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorDotTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorElemDivTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorElemMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorReshapeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorSubTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorToStringTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorTransposeTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorTransposeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorAddTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorAggregateTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorConstructorTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorCrossTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorElemDivTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorElemMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorElemOppTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorEqualsTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorInnerProductTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorNormTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorOuterProductTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorScalMultDivTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorSetTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorStackJoinExtendTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorSubTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorZeroOneTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.RealComplexDenseSparseMatMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.RemoveRowColTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.ShapeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCMatrixConstructorTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCTensorConstructorTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorAddTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorConstructorTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorConversionTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorElemDivTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorElemMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorJoinTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorReshapeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorSubTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorUnaryOpTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseMatrixConstructorTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseTensorConstructorTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorAddTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorAggregateTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorConstructorTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorConversionTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorElemDivTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorElemMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorInnerProdTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorJoinTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorOuterProductTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorParPerpTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorReshapeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorSetTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorSparseSortTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorSubTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorToStringTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorUnaryOpTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorAddTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorAggregateTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorConstructorTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorConversionTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorDotTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorElemDivTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorElemMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorEqualsTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorGetSetTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorNormTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorPropertiesTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorReshapeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorScalMultDivTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorSubTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorToStringTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorTransposeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorUnitaryOperationTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorAddSubEqTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorAddSubTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorAggregateTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorConstructorTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorConversionTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorCopyTransposeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorCrossProductTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorElemMultDivTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorElementwiseTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorEqualsTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorExtendTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorInnerProductTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorNormTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorOuterProductTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorPerpParallelTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorScaleMultDivTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorSetTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorShapeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorStackJoinTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorToStringTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorZeroOnesTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixAddTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixConstructorTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixConversionTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixDirectSumTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixElemDivTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixElemMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixEqualsTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixInversionTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixMatVecMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixPropertiesTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixRemoveRowColTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixReshapeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixRoundTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixRowColSumTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixScaleOperationsTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixSetOperationTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixStackTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixSubTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixToStringTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixUnaryOperationsTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixZeroOnesTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberBinaryOperationsTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberComparisonTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberConstructorTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberConversionTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberExponentialTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberGettersSettersTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberMinMaxSumTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberPropertiesTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberRoundTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberSqrtTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberToStringTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberTrigTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberUnaryOperationsTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.io.PrintOptionsTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.DecomposeTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.SubSpaceTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.ComplexCholeskyTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.ComplexHessenburgTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.ComplexLUTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.ComplexQRTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.ComplexSchurTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealCholeskyTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealHessenburgTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealLUTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealQRTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealSVDTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealSchurTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.solvers.MatrixLUSolverTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.solvers.MatrixLstsqSolverTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.transformations.ProjectionTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixAddSubEqTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixAddTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixAddToEachColTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixAddToEachRowTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixAggregationTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixConstructorTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixConversionTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixDetTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixDirectSumTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixElemDivTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixElemMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixElemOppTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixElementScalarTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixEqualsTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixFibTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixGetTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixInversionTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixPropertiesTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixReshapeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixScalMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixSetOperationTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixStackTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixSubTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixSumRowsColsTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixToStringTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixTransposeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixTriangularTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixVectorCheckTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixVectorTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixZerosOnesTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.RealDenseMatrixMultiplyDispatcherTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.common.real.MatrixNormTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.common.real.unaryOperationTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.CMatrixMultiplyTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.ComplexDenseMatMultTransposeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.ComplexDenseOperationsTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.ComplexDenseSetOperationsTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.ComplexDenseTransposeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.ComplexMatrixMultiplyTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.MatrixMultiplyTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.RealDenseMatMultTransposeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.RealDenseOperationsTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.RealDenseSetOperationsTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.RealDenseTransposeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.RoundTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real_complex.RealComplexDenseMatMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real_complex.RealComplexDenseMatMultTransposeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real_complex.RealComplexDenseOperationsTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatMultTransposeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplicationTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.real.RealDenseSparseMatMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.real.RealDenseSparseMatMultTransposeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatMultTransposeTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.sparse.complex.ComplexSparseMatMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.sparse.real.RealSparseMatMultTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.util.ArrayUtilTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.util.ErrorMessagesTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.util.ParameterChecksTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.util.StringUtilsTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorAddTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorConstructorTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorConversionTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorDotTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorElemDivTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorElemMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorReshapeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorSubTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorToStringTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorTransposeTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorTransposeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorAddTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorAggregateTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorConstructorTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorCrossTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorElemDivTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorElemMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorElemOppTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorEqualsTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorInnerProductTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorNormTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorOuterProductTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorScalMultDivTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorSetTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorStackJoinExtendTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorSubTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorZeroOneTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.RealComplexDenseSparseMatMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.RemoveRowColTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.ShapeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCMatrixConstructorTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCTensorConstructorTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorAddTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorConstructorTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorConversionTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorElemDivTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorElemMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorJoinTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorReshapeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorSubTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorUnaryOpTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseMatrixConstructorTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseTensorConstructorTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorAddTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorAggregateTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorConstructorTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorConversionTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorElemDivTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorElemMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorInnerProdTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorJoinTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorOuterProductTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorParPerpTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorReshapeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorSetTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorSparseSortTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorSubTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorToStringTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorUnaryOpTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorAddTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorAggregateTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorConstructorTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorConversionTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorDotTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorElemDivTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorElemMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorEqualsTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorGetSetTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorNormTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorPropertiesTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorReshapeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorScalMultDivTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorSubTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorToStringTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorTransposeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorUnitaryOperationTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorAddSubEqTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorAddSubTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorAggregateTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorConstructorTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorConversionTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorCopyTransposeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorCrossProductTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorElemMultDivTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorElementwiseTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorEqualsTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorExtendTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorInnerProductTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorNormTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorOuterProductTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorPerpParallelTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorScaleMultDivTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorSetTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorShapeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorStackJoinTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorToStringTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorZeroOnesTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixAddTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixConstructorTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixConversionTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixDirectSumTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixElemDivTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixElemMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixEqualsTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixInversionTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixMatVecMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixPropertiesTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixRemoveRowColTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixReshapeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixRoundTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixRowColSumTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixScaleOperationsTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixSetOperationTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixStackTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixSubTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixToStringTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixUnaryOperationsTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixZeroOnesTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberBinaryOperationsTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberComparisonTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberConstructorTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberConversionTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberExponentialTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberGettersSettersTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberMinMaxSumTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberPropertiesTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberRoundTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberSqrtTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberToStringTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberTrigTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberUnaryOperationsTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.io.PrintOptionsTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.DecomposeTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.SubSpaceTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexCholeskyTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexHessenburgTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexLUTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexQRTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexSchurTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealCholeskyTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealHessenburgTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealLUTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealQRTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealSVDTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealSchurTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.solvers.MatrixLUSolverTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.solvers.MatrixLstsqSolverTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.transformations.ProjectionTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixAddSubEqTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixAddTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixAddToEachColTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixAddToEachRowTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixAggregationTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixConstructorTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixConversionTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixDetTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixDirectSumTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixElemDivTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixElemMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixElemOppTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixElementScalarTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixEqualsTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixFibTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixGetTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixInversionTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixPropertiesTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixReshapeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixScalMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixSetOperationTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixStackTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixSubTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixSumRowsColsTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixToStringTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixTransposeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixTriangularTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixVectorCheckTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixVectorTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixZerosOnesTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.RealDenseMatrixMultiplyDispatcherTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.common.real.MatrixNormTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.common.real.unaryOperationTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.CMatrixMultiplyTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseMatMultTransposeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseOperationsTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseSetOperationsTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseTransposeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexMatrixMultiplyTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.MatrixMultiplyTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.RealDenseMatMultTransposeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.RealDenseOperationsTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.RealDenseSetOperationsTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.RealDenseTransposeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.RoundTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real_complex.RealComplexDenseMatMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real_complex.RealComplexDenseMatMultTransposeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real_complex.RealComplexDenseOperationsTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatMultTransposeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplicationTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.real.RealDenseSparseMatMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.real.RealDenseSparseMatMultTransposeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatMultTransposeTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.sparse.complex.ComplexSparseMatMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.sparse.real.RealSparseMatMultTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.util.ArrayUtilTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.util.ErrorMessagesTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.util.ParameterChecksTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.util.StringUtilsTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CTensorAddTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CTensorConstructorTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CTensorConversionTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CTensorDotTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CTensorElemDivTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CTensorElemMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CTensorReshapeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CTensorSubTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CTensorToStringTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CTensorTransposeTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CTensorTransposeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorAddTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorAggregateTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorConstructorTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorCrossTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorElemDivTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorElemMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorElemOppTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorEqualsTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorInnerProductTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorNormTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorOuterProductTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorScalMultDivTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorSetTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorStackJoinExtendTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorSubTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CVectorZeroOneTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/CustomAssertions.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/RealComplexDenseSparseMatMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/RemoveRowColTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/ShapeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseCMatrixConstructorTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseCTensorConstructorTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseCVectorAddTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseCVectorConstructorTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseCVectorConversionTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseCVectorElemDivTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseCVectorElemMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseCVectorJoinTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseCVectorReshapeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseCVectorSubTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseCVectorUnaryOpTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseMatrixConstructorTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseTensorConstructorTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorAddTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorAggregateTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorConstructorTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorConversionTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorElemDivTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorElemMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorInnerProdTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorJoinTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorOuterProductTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorParPerpTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorReshapeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorSetTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorSparseSortTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorSubTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorToStringTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/SparseVectorUnaryOpTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorAddTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorAggregateTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorConstructorTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorConversionTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorDotTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorElemDivTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorElemMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorEqualsTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorGetSetTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorNormTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorPropertiesTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorReshapeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorScalMultDivTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorSubTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorToStringTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorTransposeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/TensorUnitaryOperationTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorAddSubEqTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorAddSubTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorAggregateTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorConstructorTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorConversionTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorCopyTransposeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorCrossProductTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorElemMultDivTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorElementwiseTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorEqualsTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorExtendTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorInnerProductTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorNormTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorOuterProductTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorPerpParallelTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorScaleMultDivTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorSetTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorShapeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorStackJoinTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorToStringTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/VectorZeroOnesTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixAddTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixConstructorTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixConversionTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixDirectSumTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixElemDivTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixElemMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixEqualsTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixInversionTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixMatVecMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixPropertiesTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixRemoveRowColTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixReshapeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixRoundTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixRowColSumTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixScaleOperationsTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixSetOperationTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixStackTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixSubTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixToStringTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixUnaryOperationsTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_matrix/CMatrixZeroOnesTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_numbers/CNumberBinaryOperationsTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_numbers/CNumberComparisonTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_numbers/CNumberConstructorTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_numbers/CNumberConversionTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_numbers/CNumberExponentialTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_numbers/CNumberGettersSettersTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_numbers/CNumberMinMaxSumTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_numbers/CNumberPropertiesTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_numbers/CNumberRoundTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_numbers/CNumberSqrtTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_numbers/CNumberToStringTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_numbers/CNumberTrigTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/complex_numbers/CNumberUnaryOperationsTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/io/PrintOptionsTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/DecomposeTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/SubSpaceTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/decompositions/ComplexCholeskyTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/decompositions/ComplexHessenburgTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/decompositions/ComplexLUTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/decompositions/ComplexQRTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/decompositions/ComplexSchurTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/decompositions/RealCholeskyTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/decompositions/RealHessenburgTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/decompositions/RealLUTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/decompositions/RealQRTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/decompositions/RealSVDTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/decompositions/RealSchurTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/solvers/MatrixLUSolverTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/solvers/MatrixLstsqSolverTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/linalg/transformations/ProjectionTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixAddSubEqTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixAddTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixAddToEachColTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixAddToEachRowTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixAggregationTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixConstructorTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixConversionTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixDetTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixDirectSumTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixElemDivTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixElemMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixElemOppTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixElementScalarTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixEqualsTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixFibTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixGetTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixInversionTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixPropertiesTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixReshapeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixScalMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixSetOperationTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixStackTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixSubTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixSumRowsColsTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixToStringTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixTransposeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixTriangularTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixVectorCheckTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixVectorTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/matrix/MatrixZerosOnesTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/RealDenseMatrixMultiplyDispatcherTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/common/real/MatrixNormTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/common/real/unaryOperationTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense/complex/CMatrixMultiplyTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense/complex/ComplexDenseMatMultTransposeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense/complex/ComplexDenseOperationsTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense/complex/ComplexDenseSetOperationsTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense/complex/ComplexDenseTransposeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense/complex/ComplexMatrixMultiplyTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense/real/MatrixMultiplyTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense/real/RealDenseMatMultTransposeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense/real/RealDenseOperationsTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense/real/RealDenseSetOperationsTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense/real/RealDenseTransposeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense/real/RoundTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense/real_complex/RealComplexDenseMatMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense/real_complex/RealComplexDenseMatMultTransposeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense/real_complex/RealComplexDenseOperationsTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense_sparse/complex/ComplexDenseSparseMatMultTransposeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense_sparse/complex/ComplexDenseSparseMatrixMultiplicationTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense_sparse/real/RealDenseSparseMatMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense_sparse/real/RealDenseSparseMatMultTransposeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense_sparse/real_complex/RealComplexDenseSparseMatMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/dense_sparse/real_complex/RealComplexDenseSparseMatMultTransposeTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/sparse/complex/ComplexSparseMatMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/operations/sparse/real/RealSparseMatMultTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/util/ArrayUtilTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/util/ErrorMessagesTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/util/ParameterChecksTests.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/flag4j/util/StringUtilsTests.class" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/.github/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/Flag4j-v0.0.1-beta.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/Flag4j-v0.0.1-beta.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/jacoco.exec" beforeDir="false" afterPath="$PROJECT_DIR$/target/jacoco.exec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/site/jacoco/jacoco.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/site/jacoco/jacoco.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorAddTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorAddTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorConstructorTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorConstructorTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorConversionTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorConversionTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorDotTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorDotTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorElemDivTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorElemDivTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorElemMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorElemMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorReshapeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorReshapeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorSubTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorSubTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorToStringTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorToStringTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorTransposeTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorTransposeTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorTransposeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CTensorTransposeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorAddTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorAddTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorAggregateTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorAggregateTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorConstructorTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorConstructorTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorCrossTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorCrossTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorElemDivTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorElemDivTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorElemMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorElemMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorElemOppTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorElemOppTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorEqualsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorEqualsTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorInnerProductTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorInnerProductTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorNormTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorNormTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorOuterProductTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorOuterProductTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorScalMultDivTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorScalMultDivTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorSetTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorSetTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorStackJoinExtendTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorStackJoinExtendTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorSubTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorSubTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorZeroOneTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.CVectorZeroOneTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.RealComplexDenseSparseMatMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.RealComplexDenseSparseMatMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.RemoveRowColTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.RemoveRowColTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.ShapeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.ShapeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCMatrixConstructorTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCMatrixConstructorTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCTensorConstructorTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCTensorConstructorTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorAddTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorAddTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorConstructorTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorConstructorTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorConversionTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorConversionTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorElemDivTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorElemDivTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorElemMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorElemMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorJoinTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorJoinTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorReshapeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorReshapeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorSubTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorSubTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorUnaryOpTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseCVectorUnaryOpTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseMatrixConstructorTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseMatrixConstructorTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseTensorConstructorTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseTensorConstructorTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorAddTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorAddTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorAggregateTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorAggregateTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorConstructorTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorConstructorTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorConversionTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorConversionTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorElemDivTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorElemDivTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorElemMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorElemMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorInnerProdTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorInnerProdTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorJoinTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorJoinTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorOuterProductTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorOuterProductTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorParPerpTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorParPerpTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorReshapeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorReshapeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorSetTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorSetTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorSparseSortTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorSparseSortTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorSubTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorSubTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorToStringTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorToStringTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorUnaryOpTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.SparseVectorUnaryOpTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorAddTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorAddTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorAggregateTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorAggregateTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorConstructorTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorConstructorTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorConversionTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorConversionTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorDotTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorDotTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorElemDivTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorElemDivTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorElemMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorElemMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorEqualsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorEqualsTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorGetSetTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorGetSetTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorNormTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorNormTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorPropertiesTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorPropertiesTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorReshapeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorReshapeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorScalMultDivTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorScalMultDivTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorSubTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorSubTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorToStringTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorToStringTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorTransposeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorTransposeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorUnitaryOperationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.TensorUnitaryOperationTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorAddSubEqTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorAddSubEqTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorAddSubTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorAddSubTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorAggregateTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorAggregateTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorConstructorTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorConstructorTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorConversionTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorConversionTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorCopyTransposeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorCopyTransposeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorCrossProductTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorCrossProductTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorElemMultDivTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorElemMultDivTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorElementwiseTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorElementwiseTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorEqualsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorEqualsTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorExtendTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorExtendTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorInnerProductTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorInnerProductTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorNormTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorNormTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorOuterProductTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorOuterProductTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorPerpParallelTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorPerpParallelTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorScaleMultDivTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorScaleMultDivTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorSetTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorSetTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorShapeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorShapeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorStackJoinTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorStackJoinTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorToStringTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorToStringTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorZeroOnesTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.VectorZeroOnesTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixAddTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixAddTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixConstructorTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixConstructorTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixConversionTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixConversionTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixDirectSumTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixDirectSumTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixElemDivTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixElemDivTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixElemMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixElemMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixEqualsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixEqualsTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixInversionTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixInversionTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixMatVecMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixMatVecMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixPropertiesTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixPropertiesTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixRemoveRowColTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixRemoveRowColTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixReshapeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixReshapeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixRoundTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixRoundTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixRowColSumTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixRowColSumTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixScaleOperationsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixScaleOperationsTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixSetOperationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixSetOperationTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixStackTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixStackTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixSubTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixSubTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixToStringTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixToStringTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixUnaryOperationsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixUnaryOperationsTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixZeroOnesTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_matrix.CMatrixZeroOnesTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberBinaryOperationsTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberBinaryOperationsTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberComparisonTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberComparisonTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberConstructorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberConstructorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberConversionTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberConversionTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberExponentialTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberExponentialTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberGettersSettersTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberGettersSettersTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberMinMaxSumTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberMinMaxSumTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberPropertiesTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberPropertiesTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberRoundTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberRoundTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberSqrtTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberSqrtTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberToStringTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberToStringTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberTrigTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberTrigTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberUnaryOperationsTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.complex_numbers.CNumberUnaryOperationsTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.io.PrintOptionsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.io.PrintOptionsTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.DecomposeTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.DecomposeTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.SubSpaceTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.SubSpaceTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.ComplexCholeskyTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.ComplexCholeskyTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.ComplexHessenburgTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.ComplexHessenburgTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.ComplexLUTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.ComplexLUTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.ComplexQRTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.ComplexQRTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.ComplexSchurTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.ComplexSchurTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealCholeskyTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealCholeskyTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealHessenburgTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealHessenburgTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealLUTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealLUTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealQRTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealQRTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealSVDTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealSVDTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealSchurTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.decompositions.RealSchurTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.solvers.MatrixLUSolverTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.solvers.MatrixLUSolverTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.solvers.MatrixLstsqSolverTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.solvers.MatrixLstsqSolverTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.transformations.ProjectionTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.linalg.transformations.ProjectionTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixAddSubEqTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixAddSubEqTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixAddTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixAddTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixAddToEachColTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixAddToEachColTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixAddToEachRowTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixAddToEachRowTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixAggregationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixAggregationTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixConstructorTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixConstructorTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixConversionTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixConversionTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixDetTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixDetTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixDirectSumTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixDirectSumTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixElemDivTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixElemDivTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixElemMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixElemMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixElemOppTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixElemOppTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixElementScalarTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixElementScalarTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixEqualsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixEqualsTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixFibTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixFibTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixGetTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixGetTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixInversionTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixInversionTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixPropertiesTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixPropertiesTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixReshapeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixReshapeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixScalMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixScalMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixSetOperationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixSetOperationTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixStackTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixStackTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixSubTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixSubTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixSumRowsColsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixSumRowsColsTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixToStringTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixToStringTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixTransposeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixTransposeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixTriangularTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixTriangularTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixVectorCheckTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixVectorCheckTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixVectorTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixVectorTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixZerosOnesTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.matrix.MatrixZerosOnesTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.RealDenseMatrixMultiplyDispatcherTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.RealDenseMatrixMultiplyDispatcherTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.common.real.MatrixNormTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.common.real.MatrixNormTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.common.real.unaryOperationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.common.real.unaryOperationTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.CMatrixMultiplyTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.CMatrixMultiplyTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.ComplexDenseMatMultTransposeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.ComplexDenseMatMultTransposeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.ComplexDenseOperationsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.ComplexDenseOperationsTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.ComplexDenseSetOperationsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.ComplexDenseSetOperationsTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.ComplexDenseTransposeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.ComplexDenseTransposeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.ComplexMatrixMultiplyTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.complex.ComplexMatrixMultiplyTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.MatrixMultiplyTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.MatrixMultiplyTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.RealDenseMatMultTransposeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.RealDenseMatMultTransposeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.RealDenseOperationsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.RealDenseOperationsTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.RealDenseSetOperationsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.RealDenseSetOperationsTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.RealDenseTransposeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.RealDenseTransposeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.RoundTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real.RoundTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real_complex.RealComplexDenseMatMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real_complex.RealComplexDenseMatMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real_complex.RealComplexDenseMatMultTransposeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real_complex.RealComplexDenseMatMultTransposeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real_complex.RealComplexDenseOperationsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense.real_complex.RealComplexDenseOperationsTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatMultTransposeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatMultTransposeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplicationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplicationTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.real.RealDenseSparseMatMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.real.RealDenseSparseMatMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.real.RealDenseSparseMatMultTransposeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.real.RealDenseSparseMatMultTransposeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatMultTransposeTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatMultTransposeTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.sparse.complex.ComplexSparseMatMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.sparse.complex.ComplexSparseMatMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.sparse.real.RealSparseMatMultTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.operations.sparse.real.RealSparseMatMultTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.util.ArrayUtilTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.util.ArrayUtilTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.util.ErrorMessagesTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.util.ErrorMessagesTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.util.ParameterChecksTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.util.ParameterChecksTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.util.StringUtilsTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.flag4j.util.StringUtilsTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorAddTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorAddTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorConstructorTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorConstructorTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorConversionTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorConversionTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorDotTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorDotTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorElemMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorElemMultTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorReshapeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorReshapeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorSubTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CTensorSubTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorAddTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorAddTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorAggregateTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorAggregateTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorCrossTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorCrossTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorElemOppTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorElemOppTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorEqualsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorEqualsTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorInnerProductTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorInnerProductTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorZeroOneTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.CVectorZeroOneTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.RemoveRowColTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.RemoveRowColTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.ShapeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.ShapeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCTensorConstructorTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCTensorConstructorTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorAddTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorAddTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorConstructorTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorConstructorTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorConversionTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorConversionTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorElemMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorElemMultTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorJoinTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorJoinTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorReshapeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseCVectorReshapeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseTensorConstructorTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseTensorConstructorTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorAddTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorAddTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorAggregateTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorAggregateTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorElemMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorElemMultTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorParPerpTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorParPerpTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorReshapeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorReshapeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorUnaryOpTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.SparseVectorUnaryOpTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorAddTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorAddTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorAggregateTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorAggregateTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorConversionTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorConversionTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorDotTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorDotTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorElemMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorElemMultTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorEqualsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorEqualsTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorGetSetTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorGetSetTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorNormTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorNormTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorPropertiesTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorPropertiesTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorToStringTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorToStringTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorTransposeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.TensorTransposeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorAddSubEqTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorAddSubEqTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorAddSubTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorAddSubTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorConstructorTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorConstructorTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorConversionTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorConversionTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorEqualsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorEqualsTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorInnerProductTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorInnerProductTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorNormTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorNormTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorOuterProductTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorOuterProductTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorScaleMultDivTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorScaleMultDivTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorShapeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorShapeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorToStringTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.VectorToStringTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixAddTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixAddTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixConstructorTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixConstructorTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixConversionTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixConversionTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixDirectSumTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixDirectSumTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixElemDivTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixElemDivTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixElemMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixElemMultTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixEqualsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixEqualsTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixInversionTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixInversionTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixMatVecMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixMatVecMultTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixMultTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixPropertiesTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixPropertiesTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixRemoveRowColTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixRemoveRowColTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixReshapeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixReshapeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixScaleOperationsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixScaleOperationsTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixStackTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixStackTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixToStringTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixToStringTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixUnaryOperationsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixUnaryOperationsTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixZeroOnesTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_matrix.CMatrixZeroOnesTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberBinaryOperationsTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberBinaryOperationsTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberComparisonTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberComparisonTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberConstructorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberConstructorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberExponentialTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberExponentialTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberMinMaxSumTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberMinMaxSumTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberPropertiesTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberPropertiesTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberRoundTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberRoundTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberSqrtTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberSqrtTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberUnaryOperationsTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.complex_numbers.CNumberUnaryOperationsTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.DecomposeTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.DecomposeTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.SubSpaceTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.SubSpaceTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexCholeskyTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexCholeskyTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexHessenburgTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexHessenburgTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexLUTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexLUTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexQRTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexQRTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexSchurTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.ComplexSchurTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealQRTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealQRTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealSVDTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.decompositions.RealSVDTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.solvers.MatrixLstsqSolverTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.solvers.MatrixLstsqSolverTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.transformations.ProjectionTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.linalg.transformations.ProjectionTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixAddSubEqTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixAddSubEqTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixAddToEachColTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixAddToEachColTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixAggregationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixAggregationTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixConstructorTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixConstructorTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixDetTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixDetTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixDirectSumTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixDirectSumTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixElemDivTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixElemDivTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixElemMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixElemMultTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixElementScalarTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixElementScalarTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixEqualsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixEqualsTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixMultTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixSetOperationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixSetOperationTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixSumRowsColsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixSumRowsColsTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixTransposeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixTransposeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixTriangularTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.matrix.MatrixTriangularTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.common.real.MatrixNormTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.common.real.MatrixNormTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.common.real.unaryOperationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.common.real.unaryOperationTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseMatMultTransposeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseMatMultTransposeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseSetOperationsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexDenseSetOperationsTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexMatrixMultiplyTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.complex.ComplexMatrixMultiplyTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.RealDenseTransposeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.RealDenseTransposeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.RoundTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real.RoundTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real_complex.RealComplexDenseMatMultTransposeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real_complex.RealComplexDenseMatMultTransposeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real_complex.RealComplexDenseOperationsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense.real_complex.RealComplexDenseOperationsTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatMultTransposeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatMultTransposeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplicationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplicationTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.real.RealDenseSparseMatMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.real.RealDenseSparseMatMultTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatMultTransposeTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatMultTransposeTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.sparse.complex.ComplexSparseMatMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.sparse.complex.ComplexSparseMatMultTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.sparse.real.RealSparseMatMultTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.operations.sparse.real.RealSparseMatMultTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.util.StringUtilsTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.flag4j.util.StringUtilsTests.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -912,7 +424,7 @@
       <workItem from="1686348520846" duration="413000" />
       <workItem from="1686348941530" duration="8000" />
       <workItem from="1686348958137" duration="27000" />
-      <workItem from="1686348990983" duration="62000" />
+      <workItem from="1686348990983" duration="441000" />
     </task>
     <task id="LOCAL-00001" summary="Update the target.">
       <created>1686345238390</created>
@@ -998,7 +510,21 @@
       <option name="project" value="LOCAL" />
       <updated>1686348597807</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Update target.">
+      <created>1686349073466</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1686349073466</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Update target.">
+      <created>1686349082063</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1686349082063</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
