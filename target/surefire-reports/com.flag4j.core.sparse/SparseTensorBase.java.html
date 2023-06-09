@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseTensorBase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.core.sparse</a> &gt; <span class="el_source">SparseTensorBase.java</span></div><h1>SparseTensorBase.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.core.sparse;
+import com.flag4j.Shape;
+import com.flag4j.core.TensorBase;
+import com.flag4j.util.ParameterChecks;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+
+/**
+ * The base class for all sparse tensors. This includes sparse matrices and vectors.
+ * @param &lt;T&gt; Type of this tensor.
+ * @param &lt;U&gt; Dense Tensor type.
+ * @param &lt;W&gt; Complex Tensor type.
+ * @param &lt;Z&gt; Dense complex tensor type.
+ * @param &lt;Y&gt; Real Tensor type.
+ * @param &lt;D&gt; Type of the storage data structure for the tensor.
+ *           This common use case will be an array or list-like data structure.
+ * @param &lt;X&gt; The type of individual entry within the {@code D} data structure
+ */
+public abstract class SparseTensorBase&lt;T, U, W, Z, Y, D extends Serializable, X extends Number&gt;
+        extends TensorBase&lt;T, U, W, Z, Y, D, X&gt;
+        implements SparseTensorMixin {
+
+    /**
+     * Indices for non-zero entries of this tensor. Will have shape {@code (nonZeroEntries-by-rank)}.
+     */
+    public final int[][] indices;
+    /**
+     * The number of non-zero entries in this sparse tensor.
+     */
+    protected final int nonZeroEntries;
+
+    /**
+     * Creates a sparse tensor with specified shape, non-zero entries, and non-zero indices.
+     *
+     * @param shape   Shape of this tensor.
+     * @param entries Non-zero entries of this tensor.
+     * @param indices Indices of non-zero entries in this tensor. Must have shape {@code (nonZeroEntries-by-rank)}.
+     * @throws IllegalArgumentException If the rank of {@code shape} does not match the number of columns in {@code indices}.
+     */
+    public SparseTensorBase(Shape shape, int nonZeroEntries, D entries, int[][] indices) {
+<span class="fc" id="L68">        super(shape, entries);</span>
+
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if(indices.length &gt; 0) {</span>
+<span class="fc" id="L71">            ParameterChecks.assertEquals(indices[0].length, shape.getRank());</span>
+        }
+
+<span class="fc" id="L74">        this.indices = indices;</span>
+<span class="fc" id="L75">        this.nonZeroEntries = nonZeroEntries;</span>
+<span class="fc" id="L76">    }</span>
+
+
+    /**
+     * Gets the number of non-zero entries in this sparse tensor.
+     * @return The number of non-zero entries in this sparse tensor.
+     */
+    public int nonZeroEntries() {
+<span class="nc" id="L84">        return nonZeroEntries;</span>
+    }
+
+
+    /**
+     * Gets the sparsity of this tensor as a decimal percentage.
+     * @return The sparsity of this tensor.
+     */
+    public double sparsity() {
+<span class="nc" id="L93">        BigDecimal sparsity = new BigDecimal(this.totalEntries()).subtract(BigDecimal.valueOf(this.nonZeroEntries()));</span>
+<span class="nc" id="L94">        sparsity = sparsity.divide(new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP);</span>
+
+<span class="nc" id="L96">        return sparsity.doubleValue();</span>
+    }
+
+
+    /**
+     * Gets the density of this tensor as a decimal percentage.
+     * @return The density of this tensor.
+     */
+    public double density() {
+<span class="nc" id="L105">        BigDecimal density = BigDecimal.valueOf(this.nonZeroEntries).divide(</span>
+<span class="nc" id="L106">                new BigDecimal(this.totalEntries()), 50, RoundingMode.HALF_UP</span>
+        );
+
+<span class="nc" id="L109">        return density.doubleValue();</span>
+    }
+
+
+    /**
+     * Converts this sparse tensor to an equivalent dense tensor.
+     * @return A dense tensor which is equivalent to this sparse tensor.
+     */
+    public abstract U toDense();
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

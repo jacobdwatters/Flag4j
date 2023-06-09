@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Decompose.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.linalg</a> &gt; <span class="el_source">Decompose.java</span></div><h1>Decompose.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022-2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.linalg;
+
+import com.flag4j.CMatrix;
+import com.flag4j.Matrix;
+import com.flag4j.linalg.decompositions.*;
+import com.flag4j.util.ErrorMessages;
+
+
+/**
+ * This class provides methods for several matrix decompositions.
+ */
+public final class Decompose {
+
+<span class="nc" id="L38">    private Decompose() {</span>
+        // Hide default constructor in utility class.
+<span class="nc" id="L40">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * &lt;p&gt;Computes the {@link RealLUDecomposition LU factorization} of a matrix using partial pivoting. That is, decomposes an m-by-n matrix {@code A} into {@code PA=LU}
+     * where {@code P} is a permutation matrix, {@code L} is a unit lower triangular matrix, and U is an upper triangular matrix.&lt;/p&gt;
+     * @param A Matrix to decompose.
+     * @return Returns an array of matrices containing in order {@code {P, L, U}} corresponding to {@code PA=LU}.
+     */
+    public static Matrix[] lu(Matrix A) {
+<span class="fc" id="L51">        RealLUDecomposition LU = new RealLUDecomposition();</span>
+<span class="fc" id="L52">        LU.decompose(A);</span>
+<span class="fc" id="L53">        return new Matrix[]{LU.getP(), LU.getL(), LU.getU()};</span>
+    }
+
+
+    /**
+     * &lt;p&gt;Computes the {@link ComplexLUDecomposition LU factorization} of a complex matrix using partial pivoting.
+     * That is, decomposes an m-by-n matrix {@code A} into {@code PA=LU} where {@code P} is a permutation matrix,
+     * {@code L} is a unit lower triangular matrix, and U is an upper triangular matrix.&lt;/p&gt;
+     * @param A Matrix to decompose.
+     * @return Returns an array of matrices containing in order {@code {P, L, U}} corresponding to {@code PA=LU}. Note,
+     * although {@code P} is always real, it will be wrapped in a complex Matrix.
+     */
+    public static CMatrix[] lu(CMatrix A) {
+<span class="fc" id="L66">        ComplexLUDecomposition LU = new ComplexLUDecomposition();</span>
+<span class="fc" id="L67">        LU.decompose(A);</span>
+<span class="fc" id="L68">        return new CMatrix[]{LU.getP().toComplex(), LU.getL(), LU.getU()};</span>
+    }
+
+
+    /**
+     * Compute the full {@link RealQRDecomposition QR factorization} of a matrix using Householder reflectors. That is, decomposes an m-by-n matrix
+     * {@code A} into {@code A=QR} where {@code Q} is an {@link Matrix#isOrthogonal() orthogonal} matrix and {@code R} is an {@link Matrix#isTriU() upper triangular} matrix.
+     * @param A Matrix to decompose.
+     * @return Returns an array of matrices containing in order {@code {Q, R}} corresponding to {@code A=QR}.
+     */
+    public static Matrix[] qr(Matrix A) {
+<span class="fc" id="L79">        RealQRDecomposition QR = new RealQRDecomposition();</span>
+<span class="fc" id="L80">        QR.decompose(A);</span>
+<span class="fc" id="L81">        return new Matrix[]{QR.getQ(), QR.getR()};</span>
+    }
+
+
+    /**
+     * Compute the full {@link ComplexQRDecomposition QR factorization} of a matrix using Householder reflectors. That is, decomposes an m-by-n matrix
+     * {@code A} into {@code A=QR} where {@code Q} is {@link CMatrix#isUnitary() unitary} matrix and {@code R} is an {@link CMatrix#isTriU() upper triangular} matrix.
+     * @param A Matrix to decompose.
+     * @return Returns an array of matrices containing in order {@code {Q, R}} corresponding to {@code A=QR}.
+     */
+    public static CMatrix[] qr(CMatrix A) {
+<span class="fc" id="L92">        ComplexQRDecomposition QR = new ComplexQRDecomposition();</span>
+<span class="fc" id="L93">        QR.decompose(A);</span>
+<span class="fc" id="L94">        return new CMatrix[]{QR.getQ(), QR.getR()};</span>
+    }
+
+
+    /**
+     * Computes the {@link RealCholeskyDecomposition cholescky decomposition} of a
+     * symmetric positive-definite matrix. That is, decomposes a symmetric positive-definite matrix {@code A} into
+     * {@code A=LL&lt;sup&gt;T&lt;/sup&gt;} where {@code L} is a {@link Matrix#isTriL() lower triangular}.
+     * @param src The matrix to decompose. Must be symmetric positive-definite.
+     * @return The {@code L} matrix corresponding to {@code A=LL&lt;sup&gt;T&lt;/sup&gt;}.
+     * @throws IllegalArgumentException If {@code src} is not symmetric positive-definite.
+     */
+    public static Matrix cholesky(Matrix src) {
+<span class="fc" id="L107">        RealCholeskyDecomposition cholesky = new RealCholeskyDecomposition();</span>
+<span class="fc" id="L108">        return cholesky.decompose(src).getL();</span>
+    }
+
+
+    /**
+     * Computes the {@link ComplexCholeskyDecomposition cholescky decomposition} of a
+     * symmetric positive-definite matrix. That is, decomposes a symmetric positive-definite matrix {@code A} into
+     * {@code A=LL&lt;sup&gt;*&lt;/sup&gt;} where {@code L} is {@link CMatrix#isTriL() lower triangular}.
+     * @param src The matrix to decompose. Must be symmetric positive-definite.
+     * @return The {@code L} matrix corresponding to {@code A=LL&lt;sup&gt;*&lt;/sup&gt;}.
+     * @throws IllegalArgumentException If {@code src} is not symmetric positive-definite.
+     */
+    public static CMatrix cholesky(CMatrix src) {
+<span class="fc" id="L121">        ComplexCholeskyDecomposition cholesky = new ComplexCholeskyDecomposition();</span>
+<span class="fc" id="L122">        return cholesky.decompose(src).getL();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

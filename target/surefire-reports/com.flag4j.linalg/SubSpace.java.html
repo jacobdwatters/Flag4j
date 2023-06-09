@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SubSpace.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.linalg</a> &gt; <span class="el_source">SubSpace.java</span></div><h1>SubSpace.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022-2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.linalg;
+
+
+import com.flag4j.CMatrix;
+import com.flag4j.CVector;
+import com.flag4j.Matrix;
+import com.flag4j.Vector;
+import com.flag4j.linalg.decompositions.ComplexSVD;
+import com.flag4j.linalg.decompositions.RealSVD;
+import com.flag4j.linalg.solvers.ComplexLstsqSolver;
+import com.flag4j.linalg.solvers.RealLstsqSolver;
+import com.flag4j.util.ErrorMessages;
+
+/**
+ * This class contains several methods for computing the subspace of a matrix.
+ */
+public class SubSpace {
+<span class="nc" id="L42">    private SubSpace() {</span>
+        // Hide default constructor for utility class.
+<span class="nc" id="L44">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Computes an orthonormal basis of the column space of a specified matrix.
+     * @param src Matrix to compute orthonormal basis of the column space.
+     * @return A matrix containing as its columns, an orthonormal basis for the column space of the {@code src} matrix.
+     */
+    public static Matrix getColSpace(Matrix src) {
+<span class="fc" id="L54">        RealSVD svd = new RealSVD().decompose(src);</span>
+<span class="fc" id="L55">        int rank = rankFromSVD(svd.getS());</span>
+<span class="fc" id="L56">        return svd.getU().getSlice(0, src.numRows, 0, rank);</span>
+    }
+
+
+    /**
+     * Computes an orthonormal basis of the row space of a specified matrix.
+     * @param src Matrix to compute orthonormal basis of the row space.
+     * @return A matrix containing as its columns, an orthonormal basis for the row space of the {@code src} matrix.
+     */
+    public static Matrix getRowSpace(Matrix src) {
+<span class="fc" id="L66">        RealSVD svd = new RealSVD().decompose(src);</span>
+<span class="fc" id="L67">        int rank = rankFromSVD(svd.getS());</span>
+<span class="fc" id="L68">        return svd.getV().getSlice(0, src.numRows, 0, rank);</span>
+    }
+
+
+    /**
+     * Computes an orthonormal basis of the null space of a specified matrix.
+     * @param src Matrix to compute orthonormal basis of the null space.
+     * @return A matrix containing as its columns, an orthonormal basis for the null space of the {@code src} matrix.
+     */
+    public static Matrix getNullSpace(Matrix src) {
+<span class="fc" id="L78">        RealSVD svd = new RealSVD().decompose(src);</span>
+<span class="fc" id="L79">        int rank = rankFromSVD(svd.getS());</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        return src.numCols-rank==0 ?</span>
+<span class="nc" id="L81">                new Matrix(src.numCols, 1) :</span>
+<span class="fc" id="L82">                svd.getV().getSlice(0, src.numCols, rank, src.numCols);</span>
+    }
+
+
+    /**
+     * Computes an orthonormal basis of the left null space of a specified matrix.
+     * @param src Matrix to compute orthonormal basis of the left null space.
+     * @return A matrix containing as its columns, an orthonormal basis for the left null space of the {@code src} matrix.
+     */
+    public static Matrix getLeftNullSpace(Matrix src) {
+<span class="fc" id="L92">        RealSVD svd = new RealSVD().decompose(src);</span>
+<span class="fc" id="L93">        int rank = rankFromSVD(svd.getS());</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        return src.numRows-rank==0 ?</span>
+<span class="fc" id="L95">                new Matrix(src.numCols, 1) :</span>
+<span class="nc" id="L96">                svd.getU().getSlice(0, src.numRows, rank, src.numRows);</span>
+    }
+
+
+    /**
+     * Computes an orthonormal basis of the column space of a specified matrix.
+     * @param src Matrix to compute orthonormal basis of the column space.
+     * @return A matrix containing as its columns, an orthonormal basis for the column space of the {@code src} matrix.
+     */
+    public static CMatrix getColSpace(CMatrix src) {
+<span class="fc" id="L106">        ComplexSVD svd = new ComplexSVD().decompose(src);</span>
+<span class="fc" id="L107">        int rank = rankFromSVD(svd.getS());</span>
+<span class="fc" id="L108">        return svd.getU().getSlice(0, src.numRows, 0, rank);</span>
+    }
+
+
+    /**
+     * Computes an orthonormal basis of the row space of a specified matrix.
+     * @param src Matrix to compute orthonormal basis of the row space.
+     * @return A matrix containing as its columns, an orthonormal basis for the row space of the {@code src} matrix.
+     */
+    public static CMatrix getRowSpace(CMatrix src) {
+<span class="fc" id="L118">        ComplexSVD svd = new ComplexSVD().decompose(src);</span>
+<span class="fc" id="L119">        int rank = rankFromSVD(svd.getS());</span>
+<span class="fc" id="L120">        return svd.getV().getSlice(0, src.numRows, 0, rank);</span>
+    }
+
+
+    /**
+     * Computes an orthonormal basis of the null space of a specified matrix.
+     * @param src Matrix to compute orthonormal basis of the null space.
+     * @return A matrix containing as its columns, an orthonormal basis for the null space of the {@code src} matrix.
+     */
+    public static CMatrix getNullSpace(CMatrix src) {
+<span class="fc" id="L130">        ComplexSVD svd = new ComplexSVD().decompose(src);</span>
+<span class="fc" id="L131">        int rank = rankFromSVD(svd.getS());</span>
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        return src.numCols-rank==0 ?</span>
+<span class="fc" id="L133">                new CMatrix(src.numCols, 1) :</span>
+<span class="nc" id="L134">                svd.getV().getSlice(0, src.numCols, rank, src.numCols);</span>
+    }
+
+
+    /**
+     * Computes an orthonormal basis of the left null space of a specified matrix.
+     * @param src Matrix to compute orthonormal basis of the left null space.
+     * @return A matrix containing as its columns, an orthonormal basis for the left null space of the {@code src} matrix.
+     */
+    public static CMatrix getLeftNullSpace(CMatrix src) {
+<span class="fc" id="L144">        ComplexSVD svd = new ComplexSVD().decompose(src);</span>
+<span class="fc" id="L145">        int rank = rankFromSVD(svd.getS());</span>
+
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        return src.numRows-rank==0 ?</span>
+<span class="fc" id="L148">                new CMatrix(src.numCols, 1) :</span>
+<span class="nc" id="L149">                svd.getU().getSlice(0, src.numRows, rank, src.numRows);</span>
+    }
+
+
+    /**
+     * Computes the rank of a matrix given the matrix {@code S} from the SVD {@code M=USV&lt;sup&gt;T&lt;/sup&gt;}.
+     * @param S The matrix {@code S} from the SVD {@code M=USV&lt;sup&gt;T&lt;/sup&gt;}.
+     * @return the rank of the matrix {@code M} from the SVD {@code M=USV&lt;sup&gt;T&lt;/sup&gt;}.
+     */
+    private static int rankFromSVD(Matrix S) {
+<span class="fc" id="L159">        int stopIdx = Math.min(S.numRows, S.numCols);</span>
+
+<span class="fc" id="L161">        double tol = 1.0E-8; // Tolerance for determining if a singular value should be considered zero.</span>
+<span class="fc" id="L162">        int rank = 0;</span>
+
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        for(int i=0; i&lt;stopIdx; i++) {</span>
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">            if(S.get(i, i)&gt;tol) {</span>
+<span class="fc" id="L166">                rank++;</span>
+            }
+        }
+
+<span class="fc" id="L170">        return rank;</span>
+    }
+
+
+    /**
+     * Checks if two sets of vectors, stored as the columns of matrices, span the same space. That is,
+     * if each column of both matrices can be expressed as a linear combination of the columns of the other matrix.
+     * @param src1 Matrix containing as its columns the first set of vectors.
+     * @param src2 Matrix containing as its columns the second set of vectors.
+     * @return True if the column vectors of {@code src1} and {@code src2} span the same space.
+     */
+    public static boolean hasEqualSpan(Matrix src1, Matrix src2) {
+        boolean result;
+
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        if(src1.shape.equals(src2.shape)) {</span>
+<span class="fc" id="L185">            RealLstsqSolver lstsq = new RealLstsqSolver();</span>
+<span class="fc" id="L186">            double tol = 1.0E-12; // Tolerance for considering a norm zero.</span>
+            Vector solution, col;
+<span class="fc" id="L188">            result = true;</span>
+
+            // Check that each column of src2 is a linear combination of the columns in src1.
+<span class="fc bfc" id="L191" title="All 2 branches covered.">            for(int j=0; j&lt;src2.numCols; j++) {</span>
+<span class="fc" id="L192">                col = src2.getColAsVector(j);</span>
+<span class="fc" id="L193">                solution = lstsq.solve(src1, col);</span>
+
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">                if(src1.mult(solution).toVector().sub(col).norm() &gt; tol) {</span>
+                    // Then the least squares solution does not provide an &quot;exact&quot; solution.
+                    // Hence, the column of src2 cannot be expressed as a linear combination of the columns of src1
+<span class="nc" id="L198">                    System.out.println(&quot;norm: &quot; + src1.mult(solution).toVector().sub(col).norm());</span>
+<span class="nc" id="L199">                    result = false;</span>
+<span class="nc" id="L200">                    break;</span>
+                }
+            }
+
+<span class="fc" id="L204">        } else {</span>
+<span class="nc" id="L205">            System.out.println(&quot;HERE&quot;);</span>
+<span class="nc" id="L206">            result = false;</span>
+        }
+
+<span class="fc" id="L209">        return result;</span>
+    }
+
+
+    /**
+     * Checks if two sets of vectors, stored as the columns of matrices, span the same space. That is,
+     * if each column of both matrices can be expressed as a linear combination of the columns of the other matrix.
+     * @param src1 Matrix containing as its columns the first set of vectors.
+     * @param src2 Matrix containing as its columns the second set of vectors.
+     * @return True if the column vectors of {@code src1} and {@code src2} span the same space.
+     */
+    public static boolean hasEqualSpan(CMatrix src1, CMatrix src2) {
+        boolean result;
+
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">        if(src1.shape.equals(src2.shape)) {</span>
+<span class="fc" id="L224">            ComplexLstsqSolver lstsq = new ComplexLstsqSolver();</span>
+<span class="fc" id="L225">            double tol = 1.0E-12; // Tolerance for considering a norm zero.</span>
+            CVector solution, col;
+<span class="fc" id="L227">            result = true;</span>
+
+            // Check that each column of src2 is a linear combination of the columns in src1.
+<span class="fc bfc" id="L230" title="All 2 branches covered.">            for(int j=0; j&lt;src2.numCols; j++) {</span>
+<span class="fc" id="L231">                col = src2.getColAsVector(j);</span>
+<span class="fc" id="L232">                solution = lstsq.solve(src1, col);</span>
+
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">                if(src1.mult(solution).toVector().sub(col).norm() &gt; tol) {</span>
+                    // Then the least squares solution does not provide an &quot;exact&quot; solution.
+                    // Hence, the column of src2 cannot be expressed as a linear combination of the columns of src1
+<span class="nc" id="L237">                    System.out.println(&quot;norm: &quot; + src1.mult(solution).toVector().sub(col).norm());</span>
+<span class="nc" id="L238">                    result = false;</span>
+<span class="nc" id="L239">                    break;</span>
+                }
+            }
+
+<span class="fc" id="L243">        } else {</span>
+<span class="nc" id="L244">            result = false;</span>
+        }
+
+<span class="fc" id="L247">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

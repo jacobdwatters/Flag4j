@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealDenseSparseEquals.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All Tests Coverage Results</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense_sparse.real</a> &gt; <span class="el_source">RealDenseSparseEquals.java</span></div><h1>RealDenseSparseEquals.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022-2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense_sparse.real;
+
+import com.flag4j.Matrix;
+import com.flag4j.SparseMatrix;
+import com.flag4j.SparseTensor;
+import com.flag4j.Tensor;
+import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.ErrorMessages;
+
+import java.util.Arrays;
+
+/**
+ * This class contains methods for checking the equality of a real dense and real sparse tensors.
+ */
+public class RealDenseSparseEquals {
+
+<span class="nc" id="L41">    private RealDenseSparseEquals() {</span>
+        // Hide default constructor.
+<span class="nc" id="L43">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Checks if a real dense vector is equal to a sparse vector equals.
+     * @param src1 Entries of dense vector.
+     * @param src2 Non-zero Entries of sparse vector.
+     * @param indices Indices of non-zero entries in the sparse vector.
+     * @param sparseSize Size of the sparse vector.
+     * @return True if the two matrices are equal. Returns false otherwise.
+     */
+    public static boolean vectorEquals(double[] src1, double[] src2, int[] indices, int sparseSize) {
+<span class="fc" id="L56">        boolean equal = true;</span>
+
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if(src1.length==sparseSize) {</span>
+            int index;
+<span class="fc" id="L60">            double[] src1Copy = Arrays.copyOf(src1, src1.length);</span>
+
+<span class="fc bfc" id="L62" title="All 2 branches covered.">            for(int i=0; i&lt;src2.length; i++) {</span>
+<span class="fc" id="L63">                index = indices[i];</span>
+
+<span class="fc bfc" id="L65" title="All 2 branches covered.">                if(src1[index]!=src2[i]) {</span>
+<span class="fc" id="L66">                    equal=false;</span>
+<span class="fc" id="L67">                    break;</span>
+
+                } else {
+<span class="fc" id="L70">                    src1Copy[index] = 0;</span>
+                }
+            }
+
+<span class="fc bfc" id="L74" title="All 2 branches covered.">            if(equal) {</span>
+                // Now, if this vector is equal to the sparse vector, there should only be zeros left in the entriesStack
+<span class="fc" id="L76">                equal = ArrayUtils.isZeros(src1Copy);</span>
+            }
+
+<span class="fc" id="L79">        } else {</span>
+<span class="fc" id="L80">            equal = false;</span>
+        }
+
+<span class="fc" id="L83">        return equal;</span>
+    }
+
+
+
+    /**
+     * Checks if a real dense matrix is equal to a real sparse matrix.
+     * @param A Real dense matrix.
+     * @param B Real sparse matrix.
+     * @return True if the two matrices are element-wise equivalent (as if both were dense).
+     */
+    public static boolean matrixEquals(Matrix A, SparseMatrix B) {
+<span class="fc" id="L95">        boolean equal = true;</span>
+
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if(A.shape.equals(B.shape)) {</span>
+<span class="fc" id="L98">            double[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);</span>
+
+            int rowIndex, colIndex;
+            int entriesIndex;
+
+            // Remove all nonZero entries from the entries of this matrix.
+<span class="fc bfc" id="L104" title="All 2 branches covered.">            for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L105">                rowIndex = B.rowIndices[i];</span>
+<span class="fc" id="L106">                colIndex = B.colIndices[i];</span>
+<span class="fc" id="L107">                entriesIndex = A.shape.entriesIndex(rowIndex, colIndex);</span>
+
+<span class="fc bfc" id="L109" title="All 2 branches covered.">                if(entriesCopy[entriesIndex] != B.entries[i]) {</span>
+<span class="fc" id="L110">                    equal = false;</span>
+<span class="fc" id="L111">                    break;</span>
+                }
+
+<span class="fc" id="L114">                entriesCopy[A.shape.entriesIndex(rowIndex, colIndex)] = 0;</span>
+            }
+
+<span class="fc bfc" id="L117" title="All 2 branches covered.">            if(equal) {</span>
+                // Now, if this matrix is equal to the sparse matrix, there should only be zeros left in the entriesStack
+<span class="fc" id="L119">                equal = ArrayUtils.isZeros(entriesCopy);</span>
+            }
+
+<span class="fc" id="L122">        } else {</span>
+<span class="fc" id="L123">            equal = false;</span>
+        }
+
+<span class="fc" id="L126">        return equal;</span>
+    }
+
+
+    /**
+     * Checks if a real dense tensor is equal to a real sparse tensor.
+     * @param A Real dense tensor.
+     * @param B Real sparse tensor.
+     * @return True if the two matrices are element-wise equivalent.
+     */
+    public static boolean tensorEquals(Tensor A, SparseTensor B) {
+<span class="fc" id="L137">        boolean equal = true;</span>
+
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        if(A.shape.equals(B.shape)) {</span>
+<span class="fc" id="L140">            double[] entriesCopy = Arrays.copyOf(A.entries, A.entries.length);</span>
+
+            int entriesIndex;
+
+            // Remove all nonZero entries from the entries of this matrix.
+<span class="fc bfc" id="L145" title="All 2 branches covered.">            for(int i=0; i&lt;B.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L146">                entriesIndex = A.shape.entriesIndex(B.indices[i]);</span>
+
+<span class="fc bfc" id="L148" title="All 2 branches covered.">                if(entriesCopy[entriesIndex] != B.entries[i]) {</span>
+<span class="fc" id="L149">                    equal = false;</span>
+<span class="fc" id="L150">                    break;</span>
+                }
+
+<span class="fc" id="L153">                entriesCopy[A.shape.entriesIndex(B.indices[i])] = 0;</span>
+            }
+
+<span class="fc bfc" id="L156" title="All 2 branches covered.">            if(equal) {</span>
+                // Now, if this matrix is equal to the sparse matrix, there should only be zeros left in the entriesStack
+<span class="fc" id="L158">                equal = ArrayUtils.isZeros(entriesCopy);</span>
+            }
+
+<span class="fc" id="L161">        } else {</span>
+<span class="fc" id="L162">            equal = false;</span>
+        }
+
+<span class="fc" id="L165">        return equal;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
