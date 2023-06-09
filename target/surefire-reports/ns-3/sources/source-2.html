@@ -1,0 +1,191 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ThreadManager</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.flag4j.concurrency</a>
+</div>
+
+<h1>Coverage Summary for Class: ThreadManager (com.flag4j.concurrency)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ThreadManager</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55.6%
+  </span>
+  <span class="absValue">
+    (10/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;/*
+<i class="no-highlight">2</i>&nbsp; * MIT License
+<i class="no-highlight">3</i>&nbsp; *
+<i class="no-highlight">4</i>&nbsp; * Copyright (c) 2022-2023 Jacob Watters
+<i class="no-highlight">5</i>&nbsp; *
+<i class="no-highlight">6</i>&nbsp; * Permission is hereby granted, free of charge, to any person obtaining a copy
+<i class="no-highlight">7</i>&nbsp; * of this software and associated documentation files (the &quot;Software&quot;), to deal
+<i class="no-highlight">8</i>&nbsp; * in the Software without restriction, including without limitation the rights
+<i class="no-highlight">9</i>&nbsp; * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<i class="no-highlight">10</i>&nbsp; * copies of the Software, and to permit persons to whom the Software is
+<i class="no-highlight">11</i>&nbsp; * furnished to do so, subject to the following conditions:
+<i class="no-highlight">12</i>&nbsp; *
+<i class="no-highlight">13</i>&nbsp; * The above copyright notice and this permission notice shall be included in all
+<i class="no-highlight">14</i>&nbsp; * copies or substantial portions of the Software.
+<i class="no-highlight">15</i>&nbsp; *
+<i class="no-highlight">16</i>&nbsp; * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<i class="no-highlight">17</i>&nbsp; * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<i class="no-highlight">18</i>&nbsp; * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<i class="no-highlight">19</i>&nbsp; * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<i class="no-highlight">20</i>&nbsp; * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<i class="no-highlight">21</i>&nbsp; * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<i class="no-highlight">22</i>&nbsp; * SOFTWARE.
+<i class="no-highlight">23</i>&nbsp; */
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;package com.flag4j.concurrency;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;import com.flag4j.util.ErrorMessages;
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;import java.util.concurrent.ExecutionException;
+<i class="no-highlight">30</i>&nbsp;import java.util.concurrent.ForkJoinPool;
+<i class="no-highlight">31</i>&nbsp;import java.util.function.IntConsumer;
+<i class="no-highlight">32</i>&nbsp;import java.util.stream.IntStream;
+<i class="no-highlight">33</i>&nbsp;
+<i class="no-highlight">34</i>&nbsp;/**
+<i class="no-highlight">35</i>&nbsp; * This class contains the base thread pool for all concurrent operations and several methods for managing the
+<i class="no-highlight">36</i>&nbsp; * pool.
+<i class="no-highlight">37</i>&nbsp; */
+<b class="nc"><i class="no-highlight">38</i>&nbsp;public class ThreadManager {</b>
+<i class="no-highlight">39</i>&nbsp;
+<i class="no-highlight">40</i>&nbsp;    /**
+<i class="no-highlight">41</i>&nbsp;     * Thread pool for managing threads executing concurrent operations.
+<i class="no-highlight">42</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">43</i>&nbsp;    protected static ForkJoinPool threadPool = new ForkJoinPool();</b>
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;
+<i class="no-highlight">46</i>&nbsp;    /**
+<i class="no-highlight">47</i>&nbsp;     * Applies a concurrent loop to a function.
+<i class="no-highlight">48</i>&nbsp;     * @param startIndex Starting index for concurrent loop.
+<i class="no-highlight">49</i>&nbsp;     * @param endIndex Ending index for concurrent loop (exclusive).
+<i class="no-highlight">50</i>&nbsp;     * @param function Function to apply each iteration. Function may be dependent on iteration index but should
+<i class="no-highlight">51</i>&nbsp;     *                 individual iterations should be independent of each other.
+<i class="no-highlight">52</i>&nbsp;     */
+<i class="no-highlight">53</i>&nbsp;    public static void concurrentLoop(int startIndex, int endIndex, IntConsumer function) {
+<i class="no-highlight">54</i>&nbsp;        try {
+<b class="fc"><i class="no-highlight">55</i>&nbsp;            threadPool.submit(() -&gt; IntStream.range(startIndex, endIndex).parallel().forEach(function)).get();</b>
+<b class="nc"><i class="no-highlight">56</i>&nbsp;        } catch (InterruptedException | ExecutionException e) {</b>
+<b class="nc"><i class="no-highlight">57</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i class="no-highlight">58</i>&nbsp;            Thread.currentThread().interrupt();</b>
+<b class="fc"><i class="no-highlight">59</i>&nbsp;        }</b>
+<i class="no-highlight">60</i>&nbsp;    }
+<i class="no-highlight">61</i>&nbsp;
+<i class="no-highlight">62</i>&nbsp;
+<i class="no-highlight">63</i>&nbsp;
+<i class="no-highlight">64</i>&nbsp;    /**
+<i class="no-highlight">65</i>&nbsp;     * Applies a concurrent loop to a function.
+<i class="no-highlight">66</i>&nbsp;     * @param startIndex Starting index for concurrent loop.
+<i class="no-highlight">67</i>&nbsp;     * @param endIndex Ending index for concurrent loop (exclusive).
+<i class="no-highlight">68</i>&nbsp;     * @param step Step size for the index variable of the loop.
+<i class="no-highlight">69</i>&nbsp;     * @param function Function to apply each iteration. Function may be dependent on iteration index but should
+<i class="no-highlight">70</i>&nbsp;     *      individual iterations should be independent of each other.
+<i class="no-highlight">71</i>&nbsp;     */
+<i class="no-highlight">72</i>&nbsp;    public static void concurrentLoop(int startIndex, int endIndex, int step, IntConsumer function ) {
+<b class="fc"><i class="no-highlight">73</i>&nbsp;        if (step &lt;= 0)</b>
+<b class="nc"><i class="no-highlight">74</i>&nbsp;            throw new IllegalArgumentException(ErrorMessages.negValueErr(startIndex));</b>
+<i class="no-highlight">75</i>&nbsp;        try {
+<b class="fc"><i class="no-highlight">76</i>&nbsp;            int range = endIndex - startIndex;</b>
+<b class="fc"><i class="no-highlight">77</i>&nbsp;            int iterations = range/step + ((range%step == 0) ? 0 : 1);</b>
+<b class="fc"><i class="no-highlight">78</i>&nbsp;            threadPool.submit(() -&gt; IntStream.range(0, iterations).parallel().forEach(</b>
+<b class="fc"><i class="no-highlight">79</i>&nbsp;                    i -&gt; function.accept(startIndex + i*step))</b>
+<b class="fc"><i class="no-highlight">80</i>&nbsp;            ).get();</b>
+<b class="nc"><i class="no-highlight">81</i>&nbsp;        } catch (InterruptedException | ExecutionException e) {</b>
+<b class="nc"><i class="no-highlight">82</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i class="no-highlight">83</i>&nbsp;            Thread.currentThread().interrupt();</b>
+<b class="fc"><i class="no-highlight">84</i>&nbsp;        }</b>
+<i class="no-highlight">85</i>&nbsp;    }
+<i class="no-highlight">86</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-06-09 11:17</div>
+</div>
+</body>
+</html>
