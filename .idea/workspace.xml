@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="819e92db-83ba-421e-bbb4-9d6317d842bd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flag4j/linalg/SubSpace.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/flag4j/linalg/SubSpace.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/flag4j/linalg/SubSpaceTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/flag4j/linalg/SubSpaceTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +84,7 @@
       <option name="presentableId" value="Default" />
       <updated>1686345049274</updated>
       <workItem from="1686345049922" duration="567000" />
-      <workItem from="1686345633353" duration="348000" />
+      <workItem from="1686345633353" duration="438000" />
     </task>
     <task id="LOCAL-00001" summary="Update the target.">
       <created>1686345238390</created>
@@ -101,7 +100,14 @@
       <option name="project" value="LOCAL" />
       <updated>1686345955626</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Update name for SubSpace method.">
+      <created>1686346000054</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1686346000054</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -111,7 +117,8 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="Update the target." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update the target." />
+    <MESSAGE value="Update name for SubSpace method." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update name for SubSpace method." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Flag4j$All_Tests.ic" NAME="All Tests Coverage Results" MODIFIED="1686345757169" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
