@@ -90,7 +90,7 @@ class SubSpaceTests {
                 {-0.9992828454629634, -0.01200603782545714, 0.03591169474107905}};
         expA = new Matrix(expAEntries);
 
-        assertEquals(expA, SubSpace.getColumnSpace(A));
+        assertEquals(expA, SubSpace.getColSpace(A));
 
         // -------------------- Sub-case 2 --------------------
         expBEntries = new CNumber[][]{
@@ -100,7 +100,7 @@ class SubSpaceTests {
                         new CNumber(-0.011999083504397993, 0.9999236253664996)}};
         expB = new CMatrix(expBEntries);
 
-        assertEquals(expB, SubSpace.getColumnSpace(B));
+        assertEquals(expB, SubSpace.getColSpace(B));
     }
 
 
@@ -171,13 +171,13 @@ class SubSpaceTests {
         // -------------------- Sub-case 1 --------------------
         assertTrue(
                 SubSpace.hasEqualSpan(A.getSlice(0, A.numRows, 0, A.numRows),
-                        SubSpace.getColumnSpace(A))
+                        SubSpace.getColSpace(A))
         );
 
         // -------------------- Sub-case 2 --------------------
         assertTrue(
                 SubSpace.hasEqualSpan(B.getSlice(0, B.numRows, 0, B.numRows),
-                        SubSpace.getColumnSpace(B))
+                        SubSpace.getColSpace(B))
         );
     }
 }

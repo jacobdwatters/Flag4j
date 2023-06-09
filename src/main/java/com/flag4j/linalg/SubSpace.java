@@ -50,7 +50,7 @@ public class SubSpace {
      * @param src Matrix to compute orthonormal basis of the column space.
      * @return A matrix containing as its columns, an orthonormal basis for the column space of the {@code src} matrix.
      */
-    public static Matrix getColumnSpace(Matrix src) {
+    public static Matrix getColSpace(Matrix src) {
         RealSVD svd = new RealSVD().decompose(src);
         int rank = rankFromSVD(svd.getS());
         return svd.getU().getSlice(0, src.numRows, 0, rank);
@@ -102,7 +102,7 @@ public class SubSpace {
      * @param src Matrix to compute orthonormal basis of the column space.
      * @return A matrix containing as its columns, an orthonormal basis for the column space of the {@code src} matrix.
      */
-    public static CMatrix getColumnSpace(CMatrix src) {
+    public static CMatrix getColSpace(CMatrix src) {
         ComplexSVD svd = new ComplexSVD().decompose(src);
         int rank = rankFromSVD(svd.getS());
         return svd.getU().getSlice(0, src.numRows, 0, rank);
