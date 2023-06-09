@@ -34,7 +34,7 @@ import com.flag4j.linalg.Invert;
 import com.flag4j.linalg.decompositions.LUDecomposition;
 import com.flag4j.linalg.decompositions.RealLUDecomposition;
 import com.flag4j.linalg.decompositions.RealSVD;
-import com.flag4j.linalg.solvers.RealLUSolver;
+import com.flag4j.linalg.solvers.RealExactSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
@@ -3057,7 +3057,7 @@ public class Matrix
         }
 
         // Solve inv(A)*L = inv(U) for inv(A) by solving L^T*inv(A)^T = inv(U)^T
-<span class="fc" id="L3060">        RealLUSolver solver = new RealLUSolver(); // TODO: Need to add solve(Matrix, Matrix) to the class for more efficient solving.</span>
+<span class="fc" id="L3060">        RealExactSolver solver = new RealExactSolver(); // TODO: Need to add solve(Matrix, Matrix) to the class for more efficient solving.</span>
 <span class="fc" id="L3061">        Matrix UinvT = Invert.invTriU(lu.getU()).T();</span>
 <span class="fc" id="L3062">        Matrix LT = lu.getL().T();</span>
 <span class="fc" id="L3063">        Matrix inverse = new Matrix(shape);</span>

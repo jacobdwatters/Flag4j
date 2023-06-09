@@ -24,66 +24,55 @@
 
 package com.flag4j.linalg.solvers;
 
-import com.flag4j.Matrix;
-import com.flag4j.Vector;
-import com.flag4j.exceptions.SingularMatrixException;
-import com.flag4j.linalg.decompositions.RealLUDecomposition;
+import com.flag4j.CMatrix;
+import com.flag4j.CVector;
+import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
 import com.flag4j.util.ParameterChecks;
 
 import static com.flag4j.operations.dense.real.RealDenseDeterminant.detLU;
 
+public class ComplexExactSolver extends ExactSolver<CMatrix, CVector, CVector> {
 
-/**
- * Solver for solving a well determined system of linear equations in an exact sense using the
- * {@link com.flag4j.linalg.decompositions.LUDecomposition LU decomposition.}
- */
-public class RealLUSolver extends LUSolver<Matrix, Vector, Vector> {
-
-    private final RealForwardSolver forwardSolver;
-    private final RealBackSolver backSolver;
+    private final ComplexForwardSolver forwardSolver;
+    private final ComplexBackSolver backSolver;
 
     /**
      * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is
      * full rank.
      */
-    private static final double RANK_THRESHOLD = 1.0e-12;
+    private static final double RANK_THRESHOLD = 1.0e-8;
 
     /**
      * Constructs an exact LU solver where the coefficient matrix is real dense.
      */
-    public RealLUSolver() {
-        super(new RealLUDecomposition());
+    public ComplexExactSolver() {
+        super(new ComplexLUDecomposition());
 
-        forwardSolver = new RealForwardSolver();
-        backSolver = new RealBackSolver();
+        forwardSolver = new ComplexForwardSolver();
+        backSolver = new ComplexBackSolver();
     }
 
 
     /**
      * Solves the linear system of equations given by {@code A*x=b} for {@code x}.
      *
-     * @param A Coefficient matrix in the linear system. Must be square and have full rank
-     *          (i.e. all rows, or equivalently columns, must be linearly independent).
+     * @param A Coefficient matrix in the linear system.
      * @param b Vector of constants in the linear system.
      * @return The solution to {@code x} in the linear system {@code A*x=b}.
-     * @throws IllegalArgumentException If the number of columns in {@code A} is not equal to the number of entries in
-     * {@code b}.
-     * @throws IllegalArgumentException If {@code A} is not square.
-     * @throws com.flag4j.exceptions.SingularMatrixException If {@code A} is singular.
      */
     @Override
-    public Vector solve(Matrix A, Vector b) {
+    public CVector solve(CMatrix A, CVector b) {
         ParameterChecks.assertSquare(A.shape); // Ensure A is square.
         ParameterChecks.assertEquals(A.numCols, b.size); // b must have the same number of entries as columns in A.
         decompose(A); // Compute the decomposition of the coefficient matrix.
 
-        double det = Math.abs(detLU(L, U));
+        double det = detLU(L, U).magAsDouble();
 
         if(det <= RANK_THRESHOLD || Double.isNaN(det)) {
-            throw new SingularMatrixException("Could not solve system.");
+            throw new IllegalArgumentException("Matrix expected to have full rank but did not.");
         }
 
-        Vector y = forwardSolver.solve(L, P.mult(b).toVector());
+        CVector y = forwardSolver.solve(L, P.mult(b).toVector());
         return backSolver.solve(U, y);
     }
 }

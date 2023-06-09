@@ -34,7 +34,7 @@ import com.flag4j.linalg.decompositions.LUDecomposition;
  * <p>If the system is not well determined, i.e. {@code A} is square and full rank, then use a
  * {@link LstsqSolver least-squares solver}.</p>
  */
-public abstract class LUSolver<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>, U, V>
+public abstract class ExactSolver<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>, U, V>
         implements LinearSolver<T, U, V> {
 
     /**
@@ -59,7 +59,7 @@ public abstract class LUSolver<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>, U, V>
      * @param lu {@code LU} decomposer to employ in solving the linear system.
      * @throws IllegalArgumentException If the {@code LU} decomposer does not use partial pivoting.
      */
-    protected LUSolver(LUDecomposition<T> lu) {
+    protected ExactSolver(LUDecomposition<T> lu) {
         if(lu.pivotFlag!=LUDecomposition.Pivoting.PARTIAL) {
             throw new IllegalArgumentException("LU solver must use partial pivoting but got " +
                     lu.pivotFlag.name() + ".");
