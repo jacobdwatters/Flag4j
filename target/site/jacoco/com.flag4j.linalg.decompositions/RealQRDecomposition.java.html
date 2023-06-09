@@ -53,8 +53,8 @@ public final class RealQRDecomposition extends QRDecomposition&lt;Matrix&gt; {
      *               the reduced {@code QR} decomposition will be computed.
      */
     public RealQRDecomposition(boolean fullQR) {
-<span class="nc" id="L56">        super(fullQR);</span>
-<span class="nc" id="L57">    }</span>
+<span class="fc" id="L56">        super(fullQR);</span>
+<span class="fc" id="L57">    }</span>
 
 
     /**
@@ -63,14 +63,14 @@ public final class RealQRDecomposition extends QRDecomposition&lt;Matrix&gt; {
      */
     @Override
     protected void reduced(Matrix src) {
-<span class="nc" id="L66">        full(src); // First compute the full decomposition</span>
+<span class="fc" id="L66">        full(src); // First compute the full decomposition</span>
 
-<span class="nc" id="L68">        int k = Math.min(src.numRows, src.numCols);</span>
+<span class="fc" id="L68">        int k = Math.min(src.numRows, src.numCols);</span>
 
         // Now reduce the decomposition
-<span class="nc" id="L71">        Q = Q.getSlice(0, src.numRows, 0, k);</span>
-<span class="nc" id="L72">        R = R.getSlice(0, k, 0, src.numCols);</span>
-<span class="nc" id="L73">    }</span>
+<span class="fc" id="L71">        Q = Q.getSlice(0, src.numRows, 0, k);</span>
+<span class="fc" id="L72">        R = R.getSlice(0, k, 0, src.numCols);</span>
+<span class="fc" id="L73">    }</span>
 
 
     /**

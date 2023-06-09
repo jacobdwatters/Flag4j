@@ -26,6 +26,7 @@ package com.flag4j.linalg.solvers;
 
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
+import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.decompositions.RealLUDecomposition;
 import com.flag4j.util.ParameterChecks;
 
@@ -45,7 +46,7 @@ public class RealLUSolver extends LUSolver<Matrix, Vector, Vector> {
      * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is
      * full rank.
      */
-    private static final double RANK_THRESHOLD = 1.0e-8;
+    private static final double RANK_THRESHOLD = 1.0e-12;
 
     /**
      * Constructs an exact LU solver where the coefficient matrix is real dense.
@@ -68,7 +69,7 @@ public class RealLUSolver extends LUSolver<Matrix, Vector, Vector> {
      * @throws IllegalArgumentException If the number of columns in {@code A} is not equal to the number of entries in
      * {@code b}.
      * @throws IllegalArgumentException If {@code A} is not square.
-     * @throws IllegalArgumentException If {@code A} is not full rank.
+     * @throws com.flag4j.exceptions.SingularMatrixException If {@code A} is singular.
      */
     @Override
     public Vector solve(Matrix A, Vector b) {
@@ -79,7 +80,7 @@ public class RealLUSolver extends LUSolver<Matrix, Vector, Vector> {
         double det = Math.abs(detLU(L, U));
 
         if(det <= RANK_THRESHOLD || Double.isNaN(det)) {
-            throw new IllegalArgumentException("Matrix expected to have full rank but did not.");
+            throw new SingularMatrixException("Could not solve system.");
         }
 
         Vector y = forwardSolver.solve(L, P.mult(b).toVector());

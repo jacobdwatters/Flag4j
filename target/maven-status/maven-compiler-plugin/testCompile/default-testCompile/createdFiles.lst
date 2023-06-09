@@ -21,7 +21,6 @@ com\flag4j\operations\dense\real\RealDenseOperationsTests.class
 com\flag4j\MatrixDirectSumTests.class
 com\flag4j\complex_numbers\CNumberSqrtTest.class
 com\flag4j\operations\sparse\real\RealSparseMatMultTests.class
-com\flag4j\CMatrixEqualsTest.class
 com\flag4j\MatrixMultTests.class
 com\flag4j\MatrixSumRowsColsTests.class
 com\flag4j\VectorElemMultDivTests.class
@@ -146,6 +145,7 @@ com\flag4j\linalg\decompositions\RealSchurTests.class
 com\flag4j\SparseVectorConversionTests.class
 com\flag4j\VectorInnerProductTest.class
 com\flag4j\CTensorAddTests.class
+com\flag4j\linalg\SubSpaceTests.class
 com\flag4j\util\ParameterChecksTests.class
 com\flag4j\operations\dense\real\RealDenseTransposeTests.class
 com\flag4j\operations\common\real\unaryOperationTests.class
@@ -199,6 +199,7 @@ com\flag4j\operations\dense\complex\CMatrixMultiplyTests.class
 com\flag4j\complex_numbers\CNumberConversionTest.class
 com\flag4j\SparseVectorConstructorTests.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseMatrixMultiplicationTests.class
+com\flag4j\CMatrixEqualsTests.class
 com\flag4j\SparseVectorToStringTests.class
 com\flag4j\VectorConstructorTests.class
 com\flag4j\CMatrixDirectSumTests.class

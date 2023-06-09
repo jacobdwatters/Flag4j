@@ -50,8 +50,8 @@ public class RealLstsqSolver extends LstsqSolver&lt;Matrix, Vector, Vector&gt; {
      * minimizes {@code ||Ax-b||&lt;sub&gt;2&lt;/sub&gt;} which is equivalent to solving the normal equations
      * {@code A&lt;sup&gt;T&lt;/sup&gt;Ax=A&lt;sup&gt;T&lt;/sup&gt;b}.
      */
-    protected RealLstsqSolver() {
-<span class="fc" id="L54">        super(new RealQRDecomposition());</span>
+    public RealLstsqSolver() {
+<span class="fc" id="L54">        super(new RealQRDecomposition(false));</span>
 <span class="fc" id="L55">        backSolver = new RealBackSolver();</span>
 <span class="fc" id="L56">    }</span>
 
@@ -65,8 +65,9 @@ public class RealLstsqSolver extends LstsqSolver&lt;Matrix, Vector, Vector&gt; {
      */
     @Override
     public Vector solve(Matrix A, Vector b) {
-<span class="fc" id="L68">        decompose(A); // Compute the QR decomposition of A.</span>
-<span class="fc" id="L69">        return backSolver.solve(R, Q.T().mult(b).toVector());</span>
+<span class="fc" id="L68">        decompose(A); // Compute the reduced QR decomposition of A.</span>
+
+<span class="fc" id="L70">        return backSolver.solve(R, Q.T().mult(b).toVector());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

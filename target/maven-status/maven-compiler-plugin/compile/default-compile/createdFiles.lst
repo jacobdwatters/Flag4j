@@ -4,9 +4,11 @@ com\flag4j\operations\dense\real\RealDenseEquals.class
 com\flag4j\util\StringUtils.class
 com\flag4j\linalg\decompositions\RealHessenburgDecomposition.class
 com\flag4j\core\dense\DenseTensorMixin.class
+com\flag4j\exceptions\SingularMatrixException.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseMatrixMultiplication.class
 com\flag4j\operations\dense\complex\ComplexDenseTensorDot.class
 com\flag4j\operations\dense\real\RealDenseMatrixMultTranspose.class
+com\flag4j\linalg\solvers\ComplexLstsqSolver.class
 com\flag4j\concurrency\ThreadManager.class
 com\flag4j\operations\dense\complex\ComplexDenseMatrixMultTranspose.class
 com\flag4j\core\sparse\SparseTensorBase.class

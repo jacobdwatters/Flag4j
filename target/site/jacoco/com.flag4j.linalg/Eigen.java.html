@@ -303,20 +303,20 @@ import com.flag4j.linalg.solvers.RealBackSolver;
      * eigenvectors of the {@code src} matrix as its columns.
      */
     public static CMatrix[] getEigenPairs(CMatrix src) {
-<span class="nc" id="L306">        CMatrix lambdas = new CMatrix(1, src.numRows);</span>
+<span class="fc" id="L306">        CMatrix lambdas = new CMatrix(1, src.numRows);</span>
 
-<span class="nc" id="L308">        SchurDecomposition&lt;CMatrix&gt; schur = new ComplexSchurDecomposition(true).decompose(src);</span>
-<span class="nc" id="L309">        CMatrix T = schur.getT();</span>
-<span class="nc" id="L310">        CMatrix U = schur.getU();</span>
+<span class="fc" id="L308">        SchurDecomposition&lt;CMatrix&gt; schur = new ComplexSchurDecomposition(true).decompose(src);</span>
+<span class="fc" id="L309">        CMatrix T = schur.getT();</span>
+<span class="fc" id="L310">        CMatrix U = schur.getU();</span>
 
         // Extract diagonal of T.
-<span class="nc bnc" id="L313" title="All 2 branches missed.">        for(int i=0; i&lt;T.numRows; i++) {</span>
-<span class="nc" id="L314">            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];</span>
+<span class="fc bfc" id="L313" title="All 2 branches covered.">        for(int i=0; i&lt;T.numRows; i++) {</span>
+<span class="fc" id="L314">            lambdas.entries[i] = T.entries[i*(T.numCols + 1)];</span>
         }
 
-<span class="nc bnc" id="L317" title="All 2 branches missed.">        if(src.isHermitian()) {</span>
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">        if(src.isHermitian()) {</span>
             // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
-<span class="nc" id="L319">            return new CMatrix[]{lambdas, U};</span>
+<span class="fc" id="L319">            return new CMatrix[]{lambdas, U};</span>
         } else {
             // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
 <span class="nc" id="L322">            U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.</span>

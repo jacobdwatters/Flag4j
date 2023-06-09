@@ -91,11 +91,11 @@ public class ComplexSchurDecomposition extends SchurDecomposition&lt;CMatrix&gt;
      *                 provide a performance improvement.
      */
     public ComplexSchurDecomposition(boolean computeU) {
-<span class="nc" id="L94">        super(computeU);</span>
+<span class="fc" id="L94">        super(computeU);</span>
         /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
            Hessenburg decomposition. */
-<span class="nc" id="L97">        hess = new ComplexHessenburgDecomposition(computeU);</span>
-<span class="nc" id="L98">    }</span>
+<span class="fc" id="L97">        hess = new ComplexHessenburgDecomposition(computeU);</span>
+<span class="fc" id="L98">    }</span>
 
 
     /**
@@ -112,15 +112,15 @@ public class ComplexSchurDecomposition extends SchurDecomposition&lt;CMatrix&gt;
      */
     @Override
     public ComplexSchurDecomposition decompose(CMatrix src) {
-<span class="nc" id="L115">        ParameterChecks.assertSquare(src.shape);</span>
-<span class="nc" id="L116">        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).</span>
-<span class="nc" id="L117">        shiftedExplicitQR(hess.getH()); // Use the shifted QR algorithm.</span>
+<span class="fc" id="L115">        ParameterChecks.assertSquare(src.shape);</span>
+<span class="fc" id="L116">        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).</span>
+<span class="fc" id="L117">        shiftedExplicitQR(hess.getH()); // Use the shifted QR algorithm.</span>
 
-<span class="nc bnc" id="L119" title="All 2 branches missed.">        if(computeU) {</span>
-<span class="nc" id="L120">            U = hess.Q.mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        if(computeU) {</span>
+<span class="fc" id="L120">            U = hess.Q.mult(U); // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.</span>
         }
 
-<span class="nc" id="L123">        return this;</span>
+<span class="fc" id="L123">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
