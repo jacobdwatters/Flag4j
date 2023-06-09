@@ -18,6 +18,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\sparse\re
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\solvers\ComplexForwardSolver.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\complex_numbers\package-info.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\RealTensorMixin.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\solvers\ComplexLstsqSolver.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\sparse\complex\ComplexSparseEquals.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\dense\DenseMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\complex\ComplexDenseTranspose.java
@@ -161,6 +162,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\com
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\real_complex\RealComplexDenseOperations.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\real_complex\RealComplexDenseElemMult.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\SparseCMatrix.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\exceptions\SingularMatrixException.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\decompositions\LUDecomposition.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\dense\RealDenseTensorBase.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\CVector.java

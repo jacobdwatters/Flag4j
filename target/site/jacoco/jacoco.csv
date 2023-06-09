@@ -1,5 +1,5 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-Flag4j,com.flag4j.util,ArrayUtils,262,1102,28,104,43,193,26,87,10,37
+Flag4j,com.flag4j.util,ArrayUtils,262,1102,29,103,43,193,27,86,10,37
 Flag4j,com.flag4j.util,Axis2D,0,34,0,0,0,6,0,4,0,4
 Flag4j,com.flag4j.util,RandomTensor,652,0,24,0,93,0,59,0,47,0
 Flag4j,com.flag4j.util,ErrorMessages,104,176,0,0,8,17,7,16,7,16
@@ -74,7 +74,7 @@ Flag4j,com.flag4j,SparseTensor,130,89,7,5,44,17,38,6,33,5
 Flag4j,com.flag4j,Tensor,33,665,5,29,4,117,5,55,0,43
 Flag4j,com.flag4j,SparseCTensor,152,142,6,10,56,25,51,9,46,6
 Flag4j,com.flag4j,CMatrix,923,7647,80,402,132,848,89,347,46,149
-Flag4j,com.flag4j,SparseVector,106,2108,15,71,14,282,14,110,3,78
+Flag4j,com.flag4j,SparseVector,104,2102,13,69,14,282,12,110,3,78
 Flag4j,com.flag4j,Shape,35,465,5,37,5,75,5,34,2,16
 Flag4j,com.flag4j,Matrix,230,7076,32,414,39,812,30,366,9,164
 Flag4j,com.flag4j,SparseMatrix,147,516,7,3,49,88,41,13,36,13
@@ -93,7 +93,7 @@ Flag4j,com.flag4j.operations.sparse.complex,ComplexSparseVectorOperations,199,58
 Flag4j,com.flag4j.operations.sparse.complex,ComplexSparseMatrixMultiplication,7,260,0,20,2,50,1,16,1,6
 Flag4j,com.flag4j.operations.sparse.complex,ComplexSparseEquals,10,74,10,10,2,7,11,3,1,3
 Flag4j,com.flag4j.linalg.transformations,Householder,7,123,0,2,2,17,1,3,1,2
-Flag4j,com.flag4j.linalg.transformations,Projection,19,435,5,5,2,58,6,7,1,7
+Flag4j,com.flag4j.linalg.transformations,Projection,17,428,2,2,2,58,3,7,1,7
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseOperations,7,312,0,24,2,50,1,24,1,12
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseVectorOperations,7,190,0,14,2,26,1,12,1,5
 Flag4j,com.flag4j.operations.dense.real_complex,RealComplexDenseMatrixMultTranspose,7,852,0,64,2,160,1,44,1,12
@@ -111,7 +111,7 @@ Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseEqu
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseMatrixMultiplication,7,1276,8,76,2,218,9,64,1,30
 Flag4j,com.flag4j.operations.dense_sparse.real_complex,RealComplexDenseSparseVectorOperations,51,750,4,42,9,104,4,39,2,18
 Flag4j,com.flag4j.linalg,Eigen,560,216,18,6,79,27,19,5,9,3
-Flag4j,com.flag4j.linalg,SubSpace,74,306,8,16,13,57,9,15,1,11
+Flag4j,com.flag4j.linalg,SubSpace,79,301,9,15,15,55,10,14,1,11
 Flag4j,com.flag4j.linalg,Decompose,7,120,0,0,2,16,1,6,1,6
 Flag4j,com.flag4j.linalg,Invert,235,155,24,12,50,34,19,8,5,4
 Flag4j,com.flag4j.linalg,RowEchelon,245,0,16,0,31,0,15,0,7,0
