@@ -9,5 +9,8 @@
         <module name="Flag4j" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Flag4j" target="16" />
+    </bytecodeTargetLevel>
   </component>
 </project>
