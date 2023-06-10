@@ -616,6 +616,25 @@ public class Matrix
 
 
     /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of rows of this matrix.
+     */
+    public Matrix setCol(Vector values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.size, this.numRows);
+
+        for(int i=0; i<values.size; i++) {
+            super.entries[i*numCols + colIndex] = values.entries[i];
+        }
+
+        return this;
+    }
+
+
+    /**
      * Sets a row of this matrix at the given index to the specified values.
      *
      * @param values   New values for the row.
@@ -3050,22 +3069,16 @@ public class Matrix
         LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(this);
 
         double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
-        double det = RealDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
+        double det = RealDenseDeterminant.detLU(lu.getL(), lu.getU());
 
         if(Math.abs(det) < tol) {
             throw new SingularMatrixException("Cannot invert.");
         }
 
         // Solve inv(A)*L = inv(U) for inv(A) by solving L^T*inv(A)^T = inv(U)^T
-        RealExactSolver solver = new RealExactSolver(); // TODO: Need to add solve(Matrix, Matrix) to the class for more efficient solving.
+        RealExactSolver solver = new RealExactSolver();
         Matrix UinvT = Invert.invTriU(lu.getU()).T();
-        Matrix LT = lu.getL().T();
-        Matrix inverse = new Matrix(shape);
-
-        for(int i=0; i<UinvT.numCols; i++) {
-            Vector col = solver.solve(LT, UinvT.getColAsVector(i));
-            inverse.setRow(col.entries, i); // Implicit transpose here.
-        }
+        Matrix inverse = solver.solve(lu.getL().T(), UinvT).T();
 
         return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.
     }

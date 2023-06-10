@@ -37,7 +37,7 @@ import static com.flag4j.operations.dense.real.RealDenseDeterminant.detLU;
  * Solver for solving a well determined system of linear equations in an exact sense using the
  * {@link com.flag4j.linalg.decompositions.LUDecomposition LU decomposition.}
  */
-public class RealExactSolver extends ExactSolver<Matrix, Vector, Vector> {
+public class RealExactSolver extends ExactSolver<Matrix, Vector> {
 
     private final RealForwardSolver forwardSolver;
     private final RealBackSolver backSolver;
@@ -54,7 +54,7 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector, Vector> {
     public RealExactSolver() {
         super(new RealLUDecomposition());
 
-        forwardSolver = new RealForwardSolver();
+        forwardSolver = new RealForwardSolver(true);
         backSolver = new RealBackSolver();
     }
 
@@ -75,6 +75,38 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector, Vector> {
     public Vector solve(Matrix A, Vector b) {
         ParameterChecks.assertSquare(A.shape); // Ensure A is square.
         ParameterChecks.assertEquals(A.numCols, b.size); // b must have the same number of entries as columns in A.
+
+        setUpSolver(A); // Compute LU decomposition and ensure the coefficient matrix is not singular.
+
+        Vector y = forwardSolver.solve(L, P.mult(b).toVector());
+        return backSolver.solve(U, y);
+    }
+
+
+    /**
+     * Solves the set of linear system of equations given by {@code A*X=B} for the matrix {@code X} where
+     * {@code A}, {@code B}, and {@code X} are matrices.
+     *
+     * @param A Coefficient matrix in the linear system.
+     * @param B Matrix of constants in the linear system.
+     * @return The solution to {@code X} in the linear system {@code A*X=B}.
+     */
+    @Override
+    public Matrix solve(Matrix A, Matrix B) {
+        ParameterChecks.assertSquare(A.shape); // Ensure A is square.
+        ParameterChecks.assertEquals(A.numCols, B.numRows); // b must have the same number of entries as columns in A.
+
+        setUpSolver(A); // Compute LU decomposition and ensure the coefficient matrix is not singular.
+
+        Matrix Y = forwardSolver.solve(L, P.mult(B));
+        return backSolver.solve(U, Y);
+    }
+
+
+    /**
+     * Computes the LU decomposition and checks to ensure the coefficient matrix is not singular.
+     */
+    private void setUpSolver(Matrix A) {
         decompose(A); // Compute the decomposition of the coefficient matrix.
 
         double det = Math.abs(detLU(L, U));
@@ -82,8 +114,5 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector, Vector> {
         if(det <= RANK_THRESHOLD || Double.isNaN(det)) {
             throw new SingularMatrixException("Could not solve system.");
         }
-
-        Vector y = forwardSolver.solve(L, P.mult(b).toVector());
-        return backSolver.solve(U, y);
     }
 }

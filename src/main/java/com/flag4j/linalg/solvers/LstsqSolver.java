@@ -26,6 +26,7 @@ package com.flag4j.linalg.solvers;
 
 
 import com.flag4j.core.MatrixMixin;
+import com.flag4j.core.VectorMixin;
 import com.flag4j.linalg.decompositions.QRDecomposition;
 
 
@@ -36,8 +37,10 @@ import com.flag4j.linalg.decompositions.QRDecomposition;
  * minimizes {@code ||Ax-b||<sub>2</sub>} which is equivalent to solving the normal equations {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
  * This is done using a {@link QRDecomposition}.
  */
-public abstract class LstsqSolver<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>, U, V>
-        implements LinearSolver<T, U, V> {
+public abstract class LstsqSolver<
+        T extends MatrixMixin<T, ?, ?, ?, ?, ?, U>,
+        U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>>
+        implements LinearSolver<T, U> {
 
     /**
      * Decomposer to compute the {@code QR} decomposition for using the least-squares solver.

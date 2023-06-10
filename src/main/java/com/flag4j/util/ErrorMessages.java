@@ -26,6 +26,7 @@ package com.flag4j.util;
 
 
 import com.flag4j.Shape;
+import org.sonatype.inject.Nullable;
 
 import java.util.Arrays;
 
@@ -132,7 +133,14 @@ public abstract class ErrorMessages {
      * Error message for a parameter which is not within the expected range.
      */
     private static final String RANGE_ERR = "Expecting parameter %s to be in the range [%f, %f] but got %f";
-
+    /**
+     * Error message for matrix not being lower triangular when it is expected to be.
+     */
+    private static final String NOT_TRIL_ERR = "Matrix %s is not lower triangular";
+    /**
+     * Error message for matrix not being upper triangular when it is expected to be.
+     */
+    private static final String NOT_TRIU_ERR = "Matrix %s is not upper triangular";
 
 
     /**
@@ -366,6 +374,32 @@ public abstract class ErrorMessages {
      */
     public static String getRangeErr(double value, double lowerBound, double upperBound, String paramName) {
         return String.format(RANGE_ERR, paramName, lowerBound, upperBound, value);
+    }
+
+
+    /**
+     * Gets an error message for a matrix which was expected to be lower triangular but is not.
+     * @return An error message for a matrix which was expected to be lower triangular but is not.
+     */
+    public static String getNotTrilErr(@Nullable String matrixName) {
+        if(matrixName == null) {
+            return String.format(NOT_TRIL_ERR, "").replace("  ", " ");
+        } else {
+            return String.format(NOT_TRIL_ERR, matrixName);
+        }
+    }
+
+
+    /**
+     * Gets an error message for a matrix which was expected to be upper triangular but is not.
+     * @return An error message for a matrix which was expected to be upper triangular but is not.
+     */
+    public static String getNotTriuErr(@Nullable String matrixName) {
+        if(matrixName == null) {
+            return String.format(NOT_TRIU_ERR, "").replace("  ", " ");
+        } else {
+            return String.format(NOT_TRIU_ERR, matrixName);
+        }
     }
 }
 

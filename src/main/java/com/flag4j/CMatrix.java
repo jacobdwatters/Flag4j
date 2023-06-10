@@ -3532,22 +3532,17 @@ public class CMatrix
         LUDecomposition<CMatrix> lu = new ComplexLUDecomposition().decompose(this);
 
         double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
-        CNumber det = ComplexDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
+        CNumber det = ComplexDenseDeterminant.detLU(lu.getL(), lu.getU());
 
         if(det.magAsDouble() < tol) {
             throw new SingularMatrixException("Cannot invert.");
         }
 
         // Solve inv(A)*L = inv(U) for inv(A) by solving L^H*inv(A)^H = inv(U)^H
-        ComplexExactSolver solver = new ComplexExactSolver(); // TODO: Need to add solve(CMatrix, CMatrix) to the class for more efficient solving.
+        ComplexExactSolver solver = new ComplexExactSolver();
         CMatrix UinvT = Invert.invTriU(lu.getU()).H();
         CMatrix LT = lu.getL().H();
-        CMatrix inverse = new CMatrix(shape);
-
-        for(int i=0; i<UinvT.numCols; i++) {
-            CVector col = solver.solve(LT, UinvT.getColAsVector(i));
-            inverse.setRow(col.conj().entries, i); // Implicit transpose here.
-        }
+        CMatrix inverse = solver.solve(LT, UinvT).H();
 
         return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.
     }

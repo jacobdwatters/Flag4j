@@ -63,15 +63,7 @@ public class Invert {
         }
 
         RealBackSolver backSolver = new RealBackSolver();
-        Matrix I = Matrix.I(src.shape);
-        Matrix inverse = new Matrix(src.shape);
-
-        for(int i=0; i<I.numCols; i++) {
-            Vector col = backSolver.solve(src, I.getColAsVector(i));
-            inverse.setCol(col.entries, i);
-        }
-
-        return inverse;
+        return backSolver.solve(src, Matrix.I(src.shape));
     }
 
 
@@ -90,15 +82,7 @@ public class Invert {
         }
 
         RealForwardSolver forwardSolver = new RealForwardSolver();
-        Matrix I = Matrix.I(src.shape);
-        Matrix inverse = new Matrix(src.shape);
-
-        for(int i=0; i<I.numCols; i++) {
-            Vector col = forwardSolver.solve(src, I.getColAsVector(i));
-            inverse.setCol(col.entries, i);
-        }
-
-        return inverse;
+        return forwardSolver.solve(src, Matrix.I(src.shape));
     }
 
 
@@ -149,15 +133,7 @@ public class Invert {
         }
 
         ComplexBackSolver backSolver = new ComplexBackSolver();
-        CMatrix I = CMatrix.I(src.shape);
-        CMatrix inverse = new CMatrix(src.shape);
-
-        for(int i=0; i<I.numCols; i++) {
-            CVector col = backSolver.solve(src, I.getColAsVector(i));
-            inverse.setCol(col.entries, i);
-        }
-
-        return inverse;
+        return backSolver.solve(src, CMatrix.I(src.shape));
     }
 
 
@@ -176,15 +152,7 @@ public class Invert {
         }
 
         ComplexForwardSolver forwardSolver = new ComplexForwardSolver();
-        CMatrix I = CMatrix.I(src.shape);
-        CMatrix inverse = new CMatrix(src.shape);
-
-        for(int i=0; i<I.numCols; i++) {
-            CVector col = forwardSolver.solve(src, I.getColAsVector(i));
-            inverse.setCol(col, i);
-        }
-
-        return inverse;
+        return forwardSolver.solve(src, CMatrix.I(src.shape));
     }
 
 

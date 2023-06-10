@@ -24,22 +24,35 @@
 
 package com.flag4j.linalg.solvers;
 
+import com.flag4j.core.MatrixMixin;
+import com.flag4j.core.VectorMixin;
 
 /**
  * This interface specifies methods which all linear system solvers should implement. Solvers
  * may solve in an exact sense or in a least squares sense.
- * @param <T> Type of the matrix containing the coefficients of the linear system.
- * @param <U> Type of the vector containing the constants in the linear system.
- * @param <V> Type of the vector to hold the solution to the linear system.
+ * @param <T> Type of the matrices in the linear system.
+ * @param <U> Type of the vectors in the linear system.
  */
-public interface LinearSolver<T, U, V> {
+public interface LinearSolver<
+        T extends MatrixMixin<T, ?, ?, ?, ?, ?, U>,
+        U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>> {
 
 
     /**
-     * Solves the linear system of equations given by {@code A*x=b} for {@code x}.
+     * Solves the linear system of equations given by {@code A*x=b} for the vector {@code x}.
      * @param A Coefficient matrix in the linear system.
      * @param b Vector of constants in the linear system.
      * @return The solution to {@code x} in the linear system {@code A*x=b}.
      */
-    V solve(T A, U b);
+    U solve(T A, U b);
+
+
+    /**
+     * Solves the set of linear system of equations given by {@code A*X=B} for the matrix {@code X} where
+     * {@code A}, {@code B}, and {@code X} are matrices.
+     * @param A Coefficient matrix in the linear system.
+     * @param B Matrix of constants in the linear system.
+     * @return The solution to {@code X} in the linear system {@code A*X=B}.
+     */
+   T solve(T A, T B);
 }
