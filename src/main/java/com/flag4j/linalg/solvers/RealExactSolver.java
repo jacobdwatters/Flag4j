@@ -46,7 +46,7 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector> {
      * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is
      * full rank.
      */
-    private static final double RANK_THRESHOLD = 1.0e-12;
+    private static final double RANK_CONDITION = 1.0e-15;
 
     /**
      * Constructs an exact LU solver where the coefficient matrix is real dense.
@@ -111,7 +111,7 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector> {
 
         double det = Math.abs(detLU(L, U));
 
-        if(det <= RANK_THRESHOLD || Double.isNaN(det)) {
+        if(det <= RANK_CONDITION*Math.max(A.numRows, A.numCols) || Double.isNaN(det)) {
             throw new SingularMatrixException("Could not solve system.");
         }
     }

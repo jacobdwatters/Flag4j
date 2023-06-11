@@ -46,7 +46,7 @@ public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
      * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is
      * full rank.
      */
-    private static final double RANK_THRESHOLD = 1.0e-8;
+    private static final double RANK_CONDITION = 1.0E-8;
 
     /**
      * Constructs an exact LU solver where the coefficient matrix is real dense.
@@ -54,7 +54,7 @@ public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
     public ComplexExactSolver() {
         super(new ComplexLUDecomposition());
 
-        forwardSolver = new ComplexForwardSolver();
+        forwardSolver = new ComplexForwardSolver(true);
         backSolver = new ComplexBackSolver();
     }
 
@@ -104,9 +104,9 @@ public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
     private void setUpSolver(CMatrix A) {
         decompose(A); // Compute the decomposition of the coefficient matrix.
 
-        double det = detLU(L, U).magAsDouble();
+        double det = detLU(L, U).magAsDouble(); // Compute the determinant using the LU decomposition.
 
-        if(det <= RANK_THRESHOLD || Double.isNaN(det)) {
+        if(det <= RANK_CONDITION*Math.max(A.numRows, A.numCols) || Double.isNaN(det)) {
             throw new SingularMatrixException("Could not solve system.");
         }
     }

@@ -1,7 +1,5 @@
 package com.flag4j;
 
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

@@ -4,9 +4,6 @@ import com.flag4j.CMatrix;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 public class ComplexSchurTest {
 
     ComplexSchurDecomposition schur;

@@ -1,7 +1,5 @@
 package com.flag4j;
 
-import com.flag4j.CustomAssertions;
-import com.flag4j.SparseVector;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

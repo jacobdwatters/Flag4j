@@ -74,6 +74,7 @@ com\flag4j\CTensorDotTests.class
 com\flag4j\RemoveRowColTests.class
 com\flag4j\SparseVectorAggregateTests.class
 com\flag4j\TensorDotTests.class
+com\flag4j\linalg\solvers\RealLstsqSolverTests.class
 com\flag4j\SparseCMatrixConstructorTests.class
 com\flag4j\complex_numbers\CNumberComparisonTest.class
 com\flag4j\linalg\decompositions\ComplexSchurTest.class
@@ -82,12 +83,12 @@ com\flag4j\CTensorConversionTests.class
 com\flag4j\linalg\DecomposeTest.class
 com\flag4j\complex_matrix\CMatrixScaleOperationsTests.class
 com\flag4j\TensorElemMultTests.class
-com\flag4j\linalg\solvers\MatrixLUSolverTests.class
 com\flag4j\VectorPerpParallelTests.class
 com\flag4j\linalg\decompositions\ComplexLUTests.class
 com\flag4j\VectorToStringTest.class
 com\flag4j\RealComplexDenseSparseMatMultTests.class
 com\flag4j\ShapeTests.class
+com\flag4j\linalg\solvers\RealExactSolverTests.class
 com\flag4j\TensorConversionTests.class
 com\flag4j\complex_numbers\CNumberToStringTest.class
 com\flag4j\VectorAddSubEqTests.class
@@ -114,7 +115,6 @@ com\flag4j\operations\dense\complex\ComplexDenseTransposeTests.class
 com\flag4j\CVectorSubTests.class
 com\flag4j\VectorStackJoinTests.class
 com\flag4j\complex_matrix\CMatrixSubTests.class
-com\flag4j\linalg\solvers\MatrixLstsqSolverTests.class
 com\flag4j\TensorNormTests.class
 com\flag4j\VectorCopyTransposeTests.class
 com\flag4j\SparseVectorSubTests.class
@@ -177,4 +177,5 @@ com\flag4j\VectorConstructorTests.class
 com\flag4j\TensorEqualsTests.class
 com\flag4j\linalg\decompositions\ComplexQRTests.class
 com\flag4j\operations\dense_sparse\real\RealDenseSparseMatMultTransposeTests.class
+com\flag4j\linalg\solvers\ComplexExactSolverTests.class
 com\flag4j\linalg\decompositions\ComplexHessenburgTests.class

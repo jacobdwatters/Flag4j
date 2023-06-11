@@ -28,7 +28,6 @@ import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.exceptions.SingularMatrixException;
-import com.flag4j.util.ErrorMessages;
 
 /**
  * This solver solves linear systems of equations where the coefficient matrix in an upper triangular complex dense matrix

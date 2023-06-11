@@ -1,6 +1,5 @@
 package com.flag4j;
 
-import com.flag4j.Matrix;
 import com.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.Test;
 

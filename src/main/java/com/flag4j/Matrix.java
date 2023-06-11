@@ -3511,7 +3511,8 @@ public class Matrix
         Matrix S = new RealSVD(false).decompose(this).getS();
         int stopIdx = Math.min(numRows, numCols);
 
-        double tol = 1.0E-8; // Tolerance for determining if a singular value should be considered zero.
+        // Tolerance for determining if a singular value should be considered zero.
+        double tol = 1.0E-16*Math.max(numRows, numCols);
         int rank = 0;
 
         for(int i=0; i<stopIdx; i++) {

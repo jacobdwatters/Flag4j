@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-class MatrixLUSolverTests {
+class RealExactSolverTests {
     static double[][] aEntries;
     static double[] bEntries;
     static double[] expEntries;
@@ -81,7 +81,6 @@ class MatrixLUSolverTests {
                 {1, 2, -1.444},
                 {1, 2, -75.1}};
         bEntries = new double[]{1.4, 5.6, -99.35};
-        expEntries = new double[]{};
         setMatrices();
 
         assertThrows(SingularMatrixException.class, ()->solver.solve(A, b));

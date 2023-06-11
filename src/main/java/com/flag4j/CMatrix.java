@@ -3874,7 +3874,7 @@ public class CMatrix
         Matrix S = new ComplexSVD(false).decompose(this).getS();
         int stopIdx = Math.min(numRows, numCols);
 
-        double tol = 1.0E-8; // Tolerance for determining if a singular value should be considered zero.
+        double tol = 1.0E-8*Math.max(numRows, numCols); // Tolerance for determining if a singular value should be considered zero.
         int rank = 0;
 
         for(int i=0; i<stopIdx; i++) {
