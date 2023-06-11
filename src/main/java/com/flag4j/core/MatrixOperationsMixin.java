@@ -38,8 +38,9 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <Y> Real Matrix type.
  * @param <X> Matrix entry type.
  * @param <TT> Vector type equivalent.
+ * @param <UU> Dense vector type.
  */
-public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number, TT> {
+public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU> {
 
     /**
      * Computes the element-wise addition between two matrices.
@@ -184,7 +185,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number, TT> {
      * @return The result of matrix multiplying this matrix with vector b.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
-    U mult(Vector b);
+    UU mult(Vector b);
 
 
     /**
@@ -193,7 +194,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number, TT> {
      * @return The result of matrix multiplying this matrix with vector b.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
-    U mult(SparseVector b);
+    UU mult(SparseVector b);
 
 
     /**
@@ -202,7 +203,7 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number, TT> {
      * @return The result of matrix multiplying this matrix with vector b.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
-    CMatrix mult(CVector b);
+    CVector mult(CVector b);
 
 
     /**
@@ -211,10 +212,9 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number, TT> {
      * @return The result of matrix multiplying this matrix with vector b.
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
-    CMatrix mult(SparseCVector b);
+    CVector mult(SparseCVector b);
 
 
-    // TODO: Implement these methods.
     /**
      * Multiplies this matrix with the transpose of the {@code B} tensor as if by
      * {@code this.mult(B.T())}.

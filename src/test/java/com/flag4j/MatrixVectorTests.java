@@ -8,11 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MatrixVectorTests {
 
-    double[][] aEntries, expEntries;
-    CNumber[][] expCEntries;
+    double[][] aEntries;
+    double[] expEntries;
+    CNumber[] expCEntries;
 
-    Matrix A, exp;
-    CMatrix expC;
+    Matrix A;
+    Vector exp;
+    CVector expC;
 
 
     @Test
@@ -28,11 +30,11 @@ class MatrixVectorTests {
         A = new Matrix(aEntries);
         bEntries = new double[]{1.666, -0.9345341, 0.0};
         B = new Vector(bEntries);
-        expEntries = new double[][]{{-90.8659724794},
-                {-2068.717076035},
-                {205.65924851056695},
-                {118.90475382059999}};
-        exp = new Matrix(expEntries);
+        expEntries = new double[]{-90.8659724794,
+                -2068.717076035,
+                205.65924851056695,
+                118.90475382059999};
+        exp = new Vector(expEntries);
 
         assertEquals(exp, A.mult(B));
 
@@ -66,11 +68,11 @@ class MatrixVectorTests {
                 new CNumber("-0.0-0.9345341i"),
                 new CNumber("0.0")};
         B = new CVector(bEntries);
-        expCEntries = new CNumber[][]{{new CNumber("1.8715844-91.6141568794i")},
-                {new CNumber("-1553.4617-1447.705376035i")},
-                {new CNumber("205.65936999999997+123.444878510567i")},
-                {new CNumber("130.337844+66.8009098206i")}};
-        expC = new CMatrix(expCEntries);
+        expCEntries = new CNumber[]{new CNumber("1.8715844-91.6141568794i"),
+                new CNumber("-1553.4617-1447.705376035i"),
+                new CNumber("205.65936999999997+123.444878510567i"),
+                new CNumber("130.337844+66.8009098206i")};
+        expC = new CVector(expCEntries);
 
         assertEquals(expC, A.mult(B));
 
@@ -105,11 +107,11 @@ class MatrixVectorTests {
         bEntries = new double[]{-0.9345341};
         indices = new int[]{1};
         B = new SparseVector(3, bEntries, indices);
-        expEntries = new double[][]{{-92.7375568794},
-                {-515.255376035},
-                {-0.00012148943299999999},
-                {-11.4330901794}};
-        exp = new Matrix(expEntries);
+        expEntries = new double[]{-92.7375568794,
+                -515.255376035,
+                -0.00012148943299999999,
+                -11.4330901794};
+        exp = new Vector(expEntries);
 
         assertEquals(exp, A.mult(B));
 
@@ -144,11 +146,12 @@ class MatrixVectorTests {
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i")};
         indices = new int[]{2};
         B = new SparseCVector(3, bEntries, indices);
-        expCEntries = new CNumber[][]{{new CNumber("-0.00011494769430000002+0.0011500500000000001i")},
-                {new CNumber("0.8629674786220001-8.633977i")},
-                {new CNumber("0.0")},
-                {new CNumber("9273.596817143-92782.20049999999i")}};
-        expC = new CMatrix(expCEntries);
+        expCEntries = new CNumber[]{
+                new CNumber("-0.00011494769430000002+0.0011500500000000001i"),
+                new CNumber("0.8629674786220001-8.633977i"),
+                new CNumber("0.0"),
+                new CNumber("9273.596817143-92782.20049999999i")};
+        expC = new CVector(expCEntries);
 
         assertEquals(expC, A.mult(B));
 

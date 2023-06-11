@@ -38,7 +38,7 @@ import com.flag4j.linalg.decompositions.QRDecomposition;
  * This is done using a {@link QRDecomposition}.
  */
 public abstract class LstsqSolver<
-        T extends MatrixMixin<T, ?, ?, ?, ?, ?, U>,
+        T extends MatrixMixin<T, ?, ?, ?, ?, ?, U, ?>,
         U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>>
         implements LinearSolver<T, U> {
 

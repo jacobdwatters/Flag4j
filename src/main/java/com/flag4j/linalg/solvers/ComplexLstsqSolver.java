@@ -41,7 +41,7 @@ public class ComplexLstsqSolver extends LstsqSolver<CMatrix, CVector> {
     @Override
     public CVector solve(CMatrix A, CVector b) {
         decompose(A); // Compute the reduced QR decomposition of A.
-        return backSolver.solve(R, Q.H().mult(b).toVector());
+        return backSolver.solve(R, Q.H().mult(b));
     }
 
 

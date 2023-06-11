@@ -66,7 +66,7 @@ public class RealLstsqSolver extends LstsqSolver<Matrix, Vector> {
     @Override
     public Vector solve(Matrix A, Vector b) {
         decompose(A); // Compute the reduced QR decomposition of A.
-        return backSolver.solve(R, Q.T().mult(b).toVector());
+        return backSolver.solve(R, Q.T().mult(b));
     }
 
 

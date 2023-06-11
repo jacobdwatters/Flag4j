@@ -61,7 +61,7 @@ import java.util.List;
  */
 public class Matrix
         extends RealDenseTensorBase<Matrix, CMatrix>
-        implements MatrixMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double, Vector>,
+        implements MatrixMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double, Vector, Vector>,
         RealMatrixMixin<Matrix, CMatrix> {
 
     /**
@@ -1447,12 +1447,10 @@ public class Matrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public Matrix mult(Vector b) {
+    public Vector mult(Vector b) {
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         double[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
-        Shape shape = new Shape(this.numRows, 1);
-
-        return new Matrix(shape, entries);
+        return new Vector(entries);
     }
 
 
@@ -1464,14 +1462,13 @@ public class Matrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public Matrix mult(SparseVector b) {
+    public Vector mult(SparseVector b) {
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         double[] entries = RealDenseSparseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.indices
         );
-        Shape shape = new Shape(this.numRows, 1);
 
-        return new Matrix(shape, entries);
+        return new Vector(entries);
     }
 
 
@@ -1483,14 +1480,13 @@ public class Matrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public CMatrix mult(CVector b) {
+    public CVector mult(CVector b) {
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = RealComplexDenseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.shape
         );
-        Shape shape = new Shape(this.numRows, 1);
 
-        return new CMatrix(shape, entries);
+        return new CVector(entries);
     }
 
 
@@ -1502,14 +1498,13 @@ public class Matrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public CMatrix mult(SparseCVector b) {
+    public CVector mult(SparseCVector b) {
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.indices
         );
-        Shape shape = new Shape(this.numRows, 1);
 
-        return new CMatrix(shape, entries);
+        return new CVector(entries);
     }
 
 

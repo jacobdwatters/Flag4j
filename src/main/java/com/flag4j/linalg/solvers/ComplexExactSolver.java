@@ -73,7 +73,7 @@ public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
 
         setUpSolver(A); // Compute LU decomposition and ensure the coefficient matrix is not singular.
 
-        CVector y = forwardSolver.solve(L, P.mult(b).toVector());
+        CVector y = forwardSolver.solve(L, P.mult(b));
         return backSolver.solve(U, y);
     }
 

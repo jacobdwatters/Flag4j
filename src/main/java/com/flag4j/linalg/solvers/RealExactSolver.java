@@ -78,7 +78,7 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector> {
 
         setUpSolver(A); // Compute LU decomposition and ensure the coefficient matrix is not singular.
 
-        Vector y = forwardSolver.solve(L, P.mult(b).toVector());
+        Vector y = forwardSolver.solve(L, P.mult(b));
         return backSolver.solve(U, y);
     }
 
