@@ -86,7 +86,7 @@ class MatrixToStringTest {
         PrintOptions.setMaxColumns(4);
         PrintOptions.setCentering(true);
         exp = "Full Shape: 2x4\n" +
-                "[ [           ...            ]\r\n" +
+                "[ [           ...            ]\n" +
                 " [ 0  1.46  -123.4  2341.56 ]]";
 
         assertEquals(exp, A.toString());

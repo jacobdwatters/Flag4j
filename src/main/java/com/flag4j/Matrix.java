@@ -3665,7 +3665,7 @@ public class Matrix
                 width = totalRowLength;
                 value = "...";
                 value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-                result.append(String.format(" [%-" + width + "s]%n", value));
+                result.append(String.format(" [%-" + width + "s]\n", value));
             }
 
             // Get Last row as a string.

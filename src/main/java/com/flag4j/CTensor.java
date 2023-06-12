@@ -791,7 +791,7 @@ public class CTensor
      */
     public String toString() {
         int size = shape.totalEntries().intValueExact();
-        StringBuilder result = new StringBuilder(String.format("Full Shape: %s%n", shape));
+        StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
         result.append("[");
 
         int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
