@@ -12,7 +12,8 @@ class ShapeTests {
 
 
     @Test
-    void dimsConstructorTestCase() {
+
+    void testdimsConstructorTestCase() {
         // ----------- Sub-case 1 -----------
         expRank = 3;
         expDims1 = new int[]{1, 5, 18};

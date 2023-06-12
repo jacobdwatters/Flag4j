@@ -26,7 +26,6 @@ package com.flag4j.util;
 
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.io.PrintOptions;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -145,7 +144,7 @@ public final class ArrayUtils {
      * @throws ArrayIndexOutOfBoundsException If the destPos parameter plus the length parameter exceeds the length of the
      * source array length or the destination array length.
      */
-    public static void arraycopy(@NotNull CNumber[] src, int srcPos, @NotNull CNumber[] dest, int destPos, int length) {
+    public static void arraycopy(CNumber[] src, int srcPos, CNumber[] dest, int destPos, int length) {
         for(int i=0; i<length; i++) {
             dest[i+destPos] = src[i+srcPos].copy();
         }

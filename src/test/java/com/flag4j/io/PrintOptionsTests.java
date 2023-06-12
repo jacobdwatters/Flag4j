@@ -10,7 +10,8 @@ class PrintOptionsTests {
     boolean useScientific, center;
 
     @Test
-    void printOptionTestCase() {
+
+    void testprintOptionTestCase() {
         assertEquals(2, PrintOptions.getPadding());
         assertEquals(10, PrintOptions.getMaxRows());
         assertEquals(10, PrintOptions.getMaxColumns());

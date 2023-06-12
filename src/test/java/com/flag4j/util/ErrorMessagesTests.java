@@ -14,7 +14,7 @@ class ErrorMessagesTests {
 
 
     @Test
-    void equalShapeErrMsgTestCase() {
+    void EqualShapeErrMsgTestCase() {
         // --------- sub-case 1 ---------
         s1 = new Shape(new int[]{2});
         s2 = new Shape(new int[]{5});
