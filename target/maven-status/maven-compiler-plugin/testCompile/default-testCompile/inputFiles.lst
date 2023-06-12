@@ -129,6 +129,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\sparse_complex_vecto
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\vector\VectorNormTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixDirectSumTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_tensor\CTensorElemDivTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\TestHelpers.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\util\ErrorMessagesTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\vector\VectorEqualsTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\real_complex\RealComplexDenseMatMultTransposeTests.java
@@ -166,6 +167,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\rea
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_matrix\CMatrixRoundTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_vector\CVectorZeroOneTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_matrix\CMatrixPropertiesTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\solvers\ComplexForwardSolverTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\vector\VectorZeroOnesTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixConversionTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\vector\VectorAggregateTests.java
@@ -195,6 +197,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense\com
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\sparse_complex_vector\SparseCVectorUnaryOpTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\vector\VectorConversionTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\vector\VectorInnerProductTest.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\solvers\RealForwardSolverTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\tensor\TensorAddTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\sparse_vector\SparseVectorSubTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_matrix\CMatrixEqualsTests.java

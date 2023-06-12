@@ -125,38 +125,16 @@ public class RealDenseDeterminant {
 
 
     /**
-     * Computes the determinant for a matrix which has been factored into a unit lower triangular matrix {@code L}
-     * and an upper triangular matrix {@code U} with no pivoting.
-     * @param L Unit lower triangular matrix.
-     * @param U Upper triangular matrix.
-     * @return The determinant of the matrix which has been factored into a unit lower triangular matrix {@code L}
-     * and an upper triangular matrix {@code U}.
-     * @see com.flag4j.linalg.decompositions.LUDecomposition
-     * @see com.flag4j.linalg.decompositions.ComplexLUDecomposition
-     */
-    public static CNumber detLU(CMatrix L, CMatrix U) {
-<span class="fc" id="L138">        CNumber detU = new CNumber(1);</span>
-
-        // Compute the determinant of U
-<span class="fc bfc" id="L141" title="All 2 branches covered.">        for(int i=0; i&lt;U.numRows; i++) {</span>
-<span class="fc" id="L142">            detU.multEq(U.entries[i*U.numCols + i]);</span>
-        }
-
-<span class="fc" id="L145">        return detU;</span>
-    }
-
-
-    /**
      * Explicitly computes the determinant of a 3x3 matrix.
      * @param A Matrix to compute the determinant of.
      * @return The determinant of the 3x3 matrix.
      */
     public static double det3(Matrix A) {
-<span class="fc" id="L155">        ParameterChecks.assertEqualShape(A.shape, new Shape(3, 3));</span>
-<span class="fc" id="L156">        double det = A.entries[0]*(A.entries[4]*A.entries[8] - A.entries[5]*A.entries[7]);</span>
-<span class="fc" id="L157">        det -= A.entries[1]*(A.entries[3]*A.entries[8] - A.entries[5]*A.entries[6]);</span>
-<span class="fc" id="L158">        det += A.entries[2]*(A.entries[3]*A.entries[7] - A.entries[4]*A.entries[6]);</span>
-<span class="fc" id="L159">        return det;</span>
+<span class="fc" id="L133">        ParameterChecks.assertEqualShape(A.shape, new Shape(3, 3));</span>
+<span class="fc" id="L134">        double det = A.entries[0]*(A.entries[4]*A.entries[8] - A.entries[5]*A.entries[7]);</span>
+<span class="fc" id="L135">        det -= A.entries[1]*(A.entries[3]*A.entries[8] - A.entries[5]*A.entries[6]);</span>
+<span class="fc" id="L136">        det += A.entries[2]*(A.entries[3]*A.entries[7] - A.entries[4]*A.entries[6]);</span>
+<span class="fc" id="L137">        return det;</span>
     }
 
 
@@ -166,8 +144,8 @@ public class RealDenseDeterminant {
      * @return The determinant of the 2x2 matrix.
      */
     public static double det2(Matrix A) {
-<span class="fc" id="L169">        ParameterChecks.assertEqualShape(A.shape, new Shape(2, 2));</span>
-<span class="fc" id="L170">        return A.entries[0]*A.entries[3] - A.entries[1]*A.entries[2];</span>
+<span class="fc" id="L147">        ParameterChecks.assertEqualShape(A.shape, new Shape(2, 2));</span>
+<span class="fc" id="L148">        return A.entries[0]*A.entries[3] - A.entries[1]*A.entries[2];</span>
     }
 
 
@@ -177,8 +155,26 @@ public class RealDenseDeterminant {
      * @return The determinant of the 1x1 matrix.
      */
     public static double det1(Matrix A) {
-<span class="fc" id="L180">        ParameterChecks.assertEqualShape(A.shape, new Shape(1, 1));</span>
-<span class="fc" id="L181">        return A.entries[0];</span>
+<span class="fc" id="L158">        ParameterChecks.assertEqualShape(A.shape, new Shape(1, 1));</span>
+<span class="fc" id="L159">        return A.entries[0];</span>
+    }
+
+
+    /**
+     * Computes the determinant for a triangular matrix.
+     * @param A Triangular matrix.
+     * @return The determinant of the triangular matrix.
+     */
+    public static double detTri(Matrix A) {
+<span class="nc" id="L169">        ParameterChecks.assertSquare(A.shape);</span>
+
+<span class="nc" id="L171">        double det = 1;</span>
+
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        for(int i=0; i&lt;A.numRows; i++) {</span>
+<span class="nc" id="L174">            det *= A.entries[i*(A.numCols + 1)];</span>
+        }
+
+<span class="nc" id="L177">        return det;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

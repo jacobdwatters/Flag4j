@@ -54,6 +54,16 @@ public interface MatrixMixin<T, U, V, W, Y, X extends Number, TT, UU>
      * @return The number of columns in this matrix.
      */
     int numCols();
+
+
+    /**
+     * Gets the element of this matrix at the specified indices.
+     * @param indices Indices of the element to get.
+     * @return The element of this matrix at the specified indices.
+     * @throws IllegalArgumentException If {@code indices} is not of length 2.
+     * @throws ArrayIndexOutOfBoundsException If any indices are not within this matrix.
+     */
+    X get(int... indices); // This method is specified here an in the tensor mixin interface intentionally.
 }
 
 

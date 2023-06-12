@@ -125,28 +125,6 @@ public class RealDenseDeterminant {
 
 
     /**
-     * Computes the determinant for a matrix which has been factored into a unit lower triangular matrix {@code L}
-     * and an upper triangular matrix {@code U} with no pivoting.
-     * @param L Unit lower triangular matrix.
-     * @param U Upper triangular matrix.
-     * @return The determinant of the matrix which has been factored into a unit lower triangular matrix {@code L}
-     * and an upper triangular matrix {@code U}.
-     * @see com.flag4j.linalg.decompositions.LUDecomposition
-     * @see com.flag4j.linalg.decompositions.ComplexLUDecomposition
-     */
-    public static CNumber detLU(CMatrix L, CMatrix U) {
-        CNumber detU = new CNumber(1);
-
-        // Compute the determinant of U
-        for(int i=0; i<U.numRows; i++) {
-            detU.multEq(U.entries[i*U.numCols + i]);
-        }
-
-        return detU;
-    }
-
-
-    /**
      * Explicitly computes the determinant of a 3x3 matrix.
      * @param A Matrix to compute the determinant of.
      * @return The determinant of the 3x3 matrix.
@@ -179,5 +157,23 @@ public class RealDenseDeterminant {
     public static double det1(Matrix A) {
         ParameterChecks.assertEqualShape(A.shape, new Shape(1, 1));
         return A.entries[0];
+    }
+
+
+    /**
+     * Computes the determinant for a triangular matrix.
+     * @param A Triangular matrix.
+     * @return The determinant of the triangular matrix.
+     */
+    public static double detTri(Matrix A) {
+        ParameterChecks.assertSquare(A.shape);
+
+        double det = 1;
+
+        for(int i=0; i<A.numRows; i++) {
+            det *= A.entries[i*(A.numCols + 1)];
+        }
+
+        return det;
     }
 }

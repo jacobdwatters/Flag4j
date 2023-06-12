@@ -167,6 +167,7 @@ com\flag4j\linalg\transformations\ProjectionTests.class
 com\flag4j\tensor\TensorToStringTests.class
 com\flag4j\tensor\TensorElemMultTests.class
 com\flag4j\matrix\MatrixGetTests.class
+com\flag4j\linalg\solvers\ComplexForwardSolverTests.class
 com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseMatMultTests.class
 com\flag4j\complex_vector\CVectorConstructorTests.class
 com\flag4j\linalg\decompositions\RealSVDTests.class
@@ -182,8 +183,10 @@ com\flag4j\operations\dense\real_complex\RealComplexDenseMatMultTests.class
 com\flag4j\complex_vector\CVectorZeroOneTests.class
 com\flag4j\complex_tensor\CTensorDotTests.class
 com\flag4j\matrix\MatrixTriangularTests.class
+com\flag4j\TestHelpers.class
 com\flag4j\vector\VectorNormTest.class
 com\flag4j\operations\dense\real\RealDenseMatMultTransposeTests.class
+com\flag4j\linalg\solvers\RealForwardSolverTest.class
 com\flag4j\complex_tensor\CTensorReshapeTests.class
 com\flag4j\vector\VectorAddSubEqTests.class
 com\flag4j\matrix\MatrixReshapeTests.class

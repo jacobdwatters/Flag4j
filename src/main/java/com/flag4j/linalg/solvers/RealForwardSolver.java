@@ -27,6 +27,8 @@ package com.flag4j.linalg.solvers;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.exceptions.SingularMatrixException;
+import com.flag4j.operations.dense.real.RealDenseDeterminant;
+import com.flag4j.util.ParameterChecks;
 
 
 /**
@@ -75,6 +77,8 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
      */
     @Override
     public Vector solve(Matrix L, Vector b) {
+        ParameterChecks.assertSquare(L.shape);
+        ParameterChecks.assertEquals(L.numRows, b.size);
         return isUnit ? solveUnitLower(L, b) : solveLower(L, b);
     }
 
@@ -91,6 +95,8 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
      */
     @Override
     public Matrix solve(Matrix L, Matrix B) {
+        ParameterChecks.assertSquare(L.shape);
+        ParameterChecks.assertEquals(L.numRows, B.numRows);
         return isUnit ? solveUnitLower(L, B) : solveLower(L, B);
     }
 
@@ -138,7 +144,11 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
         int lIndexStart;
         Vector x = new Vector(L.numRows);
 
-        x.entries[0] = b.entries[0];
+        if(L.entries[0]==0) {
+            throw new SingularMatrixException("Cannot solve linear system.");
+        }
+
+        x.entries[0] = b.entries[0]/L.entries[0];
 
         for(int i=1; i<L.numRows; i++) {
             sum = 0;
@@ -206,8 +216,14 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
         int lIndexStart, xIndex;
         Matrix X = new Matrix(B.shape);
 
+        // Only check the diagonal has no zeros once.
+        if(zeroOnDiag(L)) {
+            throw new SingularMatrixException("Cannot solve linear system.");
+        }
+
         for(int j=0; j<B.numCols; j++) {
-            X.entries[j] = B.entries[j];
+
+            X.entries[j] = B.entries[j]/L.entries[0];
 
             for(int i=1; i<L.numRows; i++) {
                 sum = 0;
@@ -215,9 +231,6 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
                 xIndex = i*X.numCols + j;
 
                 diag = L.entries[i*(L.numCols + 1)];
-                if(diag==0) {
-                    throw new SingularMatrixException("Cannot solve linear system.");
-                }
 
                 for(int k=i-1; k>-1; k--) {
                     sum += L.entries[lIndexStart--]*X.entries[k*X.numCols + j];
@@ -228,5 +241,24 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
         }
 
         return X;
+    }
+
+
+    /**
+     * Checks if a matrix has a zero on the diagonal of a matrix.
+     * @param src Matrix of interest. Assumed to be square.
+     * @return True if the matrix has a zero on the diagonal. False otherwise.
+     */
+    private boolean zeroOnDiag(Matrix src) {
+        boolean result = false;
+
+        for(int i=0; i<src.numRows; i++) {
+            if(src.entries[i*(src.numCols  + 1)]==0) {
+                result = true;
+                break; // No need to continue.
+            }
+        }
+
+        return result;
     }
 }

@@ -27,6 +27,8 @@ package com.flag4j.linalg.solvers;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.exceptions.SingularMatrixException;
+import com.flag4j.operations.dense.real.RealDenseDeterminant;
+import com.flag4j.util.ParameterChecks;
 
 
 /**
@@ -47,9 +49,9 @@ public class RealForwardSolver implements LinearSolver&lt;Matrix, Vector&gt; {
      * Creates a solver to solve a linear system where the coefficient matrix is lower triangular.
      */
     public RealForwardSolver() {
-<span class="nc" id="L50">        super();</span>
-<span class="nc" id="L51">        isUnit = false;</span>
-<span class="nc" id="L52">    }</span>
+<span class="fc" id="L52">        super();</span>
+<span class="fc" id="L53">        isUnit = false;</span>
+<span class="fc" id="L54">    }</span>
 
 
     /**
@@ -59,9 +61,9 @@ public class RealForwardSolver implements LinearSolver&lt;Matrix, Vector&gt; {
      *               - If true, the coefficient matrix is expected to be lower triangular.
      */
     public RealForwardSolver(boolean isUnit) {
-<span class="fc" id="L62">        super();</span>
-<span class="fc" id="L63">        this.isUnit = isUnit;</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L64">        super();</span>
+<span class="fc" id="L65">        this.isUnit = isUnit;</span>
+<span class="fc" id="L66">    }</span>
 
 
     /**
@@ -75,7 +77,9 @@ public class RealForwardSolver implements LinearSolver&lt;Matrix, Vector&gt; {
      */
     @Override
     public Vector solve(Matrix L, Vector b) {
-<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        return isUnit ? solveUnitLower(L, b) : solveLower(L, b);</span>
+<span class="fc" id="L80">        ParameterChecks.assertSquare(L.shape);</span>
+<span class="fc" id="L81">        ParameterChecks.assertEquals(L.numRows, b.size);</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        return isUnit ? solveUnitLower(L, b) : solveLower(L, b);</span>
     }
 
 
@@ -91,7 +95,9 @@ public class RealForwardSolver implements LinearSolver&lt;Matrix, Vector&gt; {
      */
     @Override
     public Matrix solve(Matrix L, Matrix B) {
-<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        return isUnit ? solveUnitLower(L, B) : solveLower(L, B);</span>
+<span class="fc" id="L98">        ParameterChecks.assertSquare(L.shape);</span>
+<span class="fc" id="L99">        ParameterChecks.assertEquals(L.numRows, B.numRows);</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        return isUnit ? solveUnitLower(L, B) : solveLower(L, B);</span>
     }
 
 
@@ -106,22 +112,22 @@ public class RealForwardSolver implements LinearSolver&lt;Matrix, Vector&gt; {
     private Vector solveUnitLower(Matrix L, Vector b) {
         double sum;
         int lIndexStart;
-<span class="fc" id="L109">        Vector x = new Vector(L.numRows);</span>
+<span class="fc" id="L115">        Vector x = new Vector(L.numRows);</span>
 
-<span class="fc" id="L111">        x.entries[0] = b.entries[0];</span>
+<span class="fc" id="L117">        x.entries[0] = b.entries[0];</span>
 
-<span class="fc bfc" id="L113" title="All 2 branches covered.">        for(int i=1; i&lt;L.numRows; i++) {</span>
-<span class="fc" id="L114">            sum = 0;</span>
-<span class="fc" id="L115">            lIndexStart = i*L.numCols;</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        for(int i=1; i&lt;L.numRows; i++) {</span>
+<span class="fc" id="L120">            sum = 0;</span>
+<span class="fc" id="L121">            lIndexStart = i*L.numCols;</span>
 
-<span class="fc bfc" id="L117" title="All 2 branches covered.">            for(int j=i-1; j&gt;-1; j--) {</span>
-<span class="fc" id="L118">                sum += L.entries[lIndexStart + j]*x.entries[j];</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">            for(int j=i-1; j&gt;-1; j--) {</span>
+<span class="fc" id="L124">                sum += L.entries[lIndexStart + j]*x.entries[j];</span>
             }
 
-<span class="fc" id="L121">            x.entries[i] = b.entries[i]-sum;</span>
+<span class="fc" id="L127">            x.entries[i] = b.entries[i]-sum;</span>
         }
 
-<span class="fc" id="L124">        return x;</span>
+<span class="fc" id="L130">        return x;</span>
     }
 
 
@@ -136,27 +142,31 @@ public class RealForwardSolver implements LinearSolver&lt;Matrix, Vector&gt; {
     private Vector solveLower(Matrix L, Vector b) {
         double sum, diag;
         int lIndexStart;
-<span class="nc" id="L139">        Vector x = new Vector(L.numRows);</span>
+<span class="fc" id="L145">        Vector x = new Vector(L.numRows);</span>
 
-<span class="nc" id="L141">        x.entries[0] = b.entries[0];</span>
-
-<span class="nc bnc" id="L143" title="All 2 branches missed.">        for(int i=1; i&lt;L.numRows; i++) {</span>
-<span class="nc" id="L144">            sum = 0;</span>
-<span class="nc" id="L145">            lIndexStart = i*L.numCols;</span>
-
-<span class="nc" id="L147">            diag = L.entries[i*(L.numCols + 1)];</span>
-<span class="nc bnc" id="L148" title="All 2 branches missed.">            if(diag==0) {</span>
-<span class="nc" id="L149">                throw new SingularMatrixException(&quot;Cannot solve linear system.&quot;);</span>
-            }
-
-<span class="nc bnc" id="L152" title="All 2 branches missed.">            for(int j=i-1; j&gt;-1; j--) {</span>
-<span class="nc" id="L153">                sum += L.entries[lIndexStart + j]*x.entries[j];</span>
-            }
-
-<span class="nc" id="L156">            x.entries[i] = (b.entries[i]-sum)/diag;</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if(L.entries[0]==0) {</span>
+<span class="nc" id="L148">            throw new SingularMatrixException(&quot;Cannot solve linear system.&quot;);</span>
         }
 
-<span class="nc" id="L159">        return x;</span>
+<span class="fc" id="L151">        x.entries[0] = b.entries[0]/L.entries[0];</span>
+
+<span class="fc bfc" id="L153" title="All 2 branches covered.">        for(int i=1; i&lt;L.numRows; i++) {</span>
+<span class="fc" id="L154">            sum = 0;</span>
+<span class="fc" id="L155">            lIndexStart = i*L.numCols;</span>
+
+<span class="fc" id="L157">            diag = L.entries[i*(L.numCols + 1)];</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">            if(diag==0) {</span>
+<span class="fc" id="L159">                throw new SingularMatrixException(&quot;Cannot solve linear system.&quot;);</span>
+            }
+
+<span class="fc bfc" id="L162" title="All 2 branches covered.">            for(int j=i-1; j&gt;-1; j--) {</span>
+<span class="fc" id="L163">                sum += L.entries[lIndexStart + j]*x.entries[j];</span>
+            }
+
+<span class="fc" id="L166">            x.entries[i] = (b.entries[i]-sum)/diag;</span>
+        }
+
+<span class="fc" id="L169">        return x;</span>
     }
 
 
@@ -171,25 +181,25 @@ public class RealForwardSolver implements LinearSolver&lt;Matrix, Vector&gt; {
     private Matrix solveUnitLower(Matrix L, Matrix B) {
         double sum;
         int lIndexStart, xIndex;
-<span class="fc" id="L174">        Matrix X = new Matrix(B.shape);</span>
+<span class="fc" id="L184">        Matrix X = new Matrix(B.shape);</span>
 
-<span class="fc bfc" id="L176" title="All 2 branches covered.">        for(int j=0; j&lt;B.numCols; j++) {</span>
-<span class="fc" id="L177">            X.entries[j] = B.entries[j];</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L187">            X.entries[j] = B.entries[j];</span>
 
-<span class="fc bfc" id="L179" title="All 2 branches covered.">            for(int i=1; i&lt;L.numRows; i++) {</span>
-<span class="fc" id="L180">                sum = 0;</span>
-<span class="fc" id="L181">                lIndexStart = i*(L.numCols + 1) - 1;</span>
-<span class="fc" id="L182">                xIndex = i*X.numCols + j;</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">            for(int i=1; i&lt;L.numRows; i++) {</span>
+<span class="fc" id="L190">                sum = 0;</span>
+<span class="fc" id="L191">                lIndexStart = i*(L.numCols + 1) - 1;</span>
+<span class="fc" id="L192">                xIndex = i*X.numCols + j;</span>
 
-<span class="fc bfc" id="L184" title="All 2 branches covered.">                for(int k=i-1; k&gt;-1; k--) {</span>
-<span class="fc" id="L185">                    sum += L.entries[lIndexStart--]*X.entries[k*X.numCols + j];</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">                for(int k=i-1; k&gt;-1; k--) {</span>
+<span class="fc" id="L195">                    sum += L.entries[lIndexStart--]*X.entries[k*X.numCols + j];</span>
                 }
 
-<span class="fc" id="L188">                X.entries[xIndex] = B.entries[xIndex] - sum;</span>
+<span class="fc" id="L198">                X.entries[xIndex] = B.entries[xIndex] - sum;</span>
             }
         }
 
-<span class="fc" id="L192">        return X;</span>
+<span class="fc" id="L202">        return X;</span>
     }
 
 
@@ -204,30 +214,52 @@ public class RealForwardSolver implements LinearSolver&lt;Matrix, Vector&gt; {
     private Matrix solveLower(Matrix L, Matrix B) {
         double sum, diag;
         int lIndexStart, xIndex;
-<span class="nc" id="L207">        Matrix X = new Matrix(B.shape);</span>
+<span class="fc" id="L217">        Matrix X = new Matrix(B.shape);</span>
 
-<span class="nc bnc" id="L209" title="All 2 branches missed.">        for(int j=0; j&lt;B.numCols; j++) {</span>
-<span class="nc" id="L210">            X.entries[j] = B.entries[j];</span>
+        // Only check the diagonal has no zeros once.
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">        if(zeroOnDiag(L)) {</span>
+<span class="nc" id="L221">            throw new SingularMatrixException(&quot;Cannot solve linear system.&quot;);</span>
+        }
 
-<span class="nc bnc" id="L212" title="All 2 branches missed.">            for(int i=1; i&lt;L.numRows; i++) {</span>
-<span class="nc" id="L213">                sum = 0;</span>
-<span class="nc" id="L214">                lIndexStart = i*(L.numCols + 1) - 1;</span>
-<span class="nc" id="L215">                xIndex = i*X.numCols + j;</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        for(int j=0; j&lt;B.numCols; j++) {</span>
 
-<span class="nc" id="L217">                diag = L.entries[i*(L.numCols + 1)];</span>
-<span class="nc bnc" id="L218" title="All 2 branches missed.">                if(diag==0) {</span>
-<span class="nc" id="L219">                    throw new SingularMatrixException(&quot;Cannot solve linear system.&quot;);</span>
+<span class="fc" id="L226">            X.entries[j] = B.entries[j]/L.entries[0];</span>
+
+<span class="fc bfc" id="L228" title="All 2 branches covered.">            for(int i=1; i&lt;L.numRows; i++) {</span>
+<span class="fc" id="L229">                sum = 0;</span>
+<span class="fc" id="L230">                lIndexStart = i*(L.numCols + 1) - 1;</span>
+<span class="fc" id="L231">                xIndex = i*X.numCols + j;</span>
+
+<span class="fc" id="L233">                diag = L.entries[i*(L.numCols + 1)];</span>
+
+<span class="fc bfc" id="L235" title="All 2 branches covered.">                for(int k=i-1; k&gt;-1; k--) {</span>
+<span class="fc" id="L236">                    sum += L.entries[lIndexStart--]*X.entries[k*X.numCols + j];</span>
                 }
 
-<span class="nc bnc" id="L222" title="All 2 branches missed.">                for(int k=i-1; k&gt;-1; k--) {</span>
-<span class="nc" id="L223">                    sum += L.entries[lIndexStart--]*X.entries[k*X.numCols + j];</span>
-                }
-
-<span class="nc" id="L226">                X.entries[xIndex] = (B.entries[xIndex] - sum) / diag;</span>
+<span class="fc" id="L239">                X.entries[xIndex] = (B.entries[xIndex] - sum) / diag;</span>
             }
         }
 
-<span class="nc" id="L230">        return X;</span>
+<span class="fc" id="L243">        return X;</span>
+    }
+
+
+    /**
+     * Checks if a matrix has a zero on the diagonal of a matrix.
+     * @param src Matrix of interest. Assumed to be square.
+     * @return True if the matrix has a zero on the diagonal. False otherwise.
+     */
+    private boolean zeroOnDiag(Matrix src) {
+<span class="fc" id="L253">        boolean result = false;</span>
+
+<span class="fc bfc" id="L255" title="All 2 branches covered.">        for(int i=0; i&lt;src.numRows; i++) {</span>
+<span class="pc bpc" id="L256" title="1 of 2 branches missed.">            if(src.entries[i*(src.numCols  + 1)]==0) {</span>
+<span class="nc" id="L257">                result = true;</span>
+<span class="nc" id="L258">                break; // No need to continue.</span>
+            }
+        }
+
+<span class="fc" id="L262">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

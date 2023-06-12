@@ -27,8 +27,10 @@ package com.flag4j.linalg.solvers;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
+import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.exceptions.SingularMatrixException;
+import com.flag4j.util.ParameterChecks;
 
 
 /**
@@ -77,6 +79,8 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
      */
     @Override
     public CVector solve(CMatrix L, CVector b) {
+        ParameterChecks.assertSquare(L.shape);
+        ParameterChecks.assertEquals(L.numRows, b.size);
         return isUnit ? solveUnitLower(L, b) : solveLower(L, b);
     }
 
@@ -94,6 +98,8 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
      */
     @Override
     public CMatrix solve(CMatrix L, CMatrix B) {
+        ParameterChecks.assertSquare(L.shape);
+        ParameterChecks.assertEquals(L.numRows, B.numRows);
         return isUnit ? solveUnitLower(L, B) : solveLower(L, B);
     }
 
@@ -140,7 +146,11 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
         int lIndexStart;
         CVector x = new CVector(L.numRows);
 
-        x.entries[0] = b.entries[0].copy();
+        if(L.entries[0].equals(CNumber.ZERO)) {
+            throw new SingularMatrixException("Cannot solve linear system.");
+        }
+
+        x.entries[0] = b.entries[0].div(L.entries[0]);
 
         for(int i=1; i<L.numRows; i++) {
             sum = new CNumber();
@@ -202,31 +212,50 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
      * principle diagonal).
      */
     private CMatrix solveLower(CMatrix L, CMatrix B) {
-        CNumber sum, diag;
+        CNumber sum;
         int lIndexStart, xIndex;
         CMatrix X = new CMatrix(B.shape);
 
+        // Only check the diagonal has no zeros once.
+        if(zeroOnDiag(L)) {
+            throw new SingularMatrixException("Cannot solve linear system.");
+        }
+
         for(int j=0; j<B.numCols; j++) {
-            X.entries[j] = B.entries[j].copy();
+            X.entries[j] = B.entries[j].div(L.entries[0]);
 
             for(int i=1; i<L.numRows; i++) {
                 sum = new CNumber();
                 lIndexStart = i*(L.numCols + 1) - 1;
                 xIndex = i*X.numCols + j;
 
-                diag = L.entries[i*(L.numCols + 1)];
-                if(diag.equals(CNumber.ZERO)) {
-                    throw new SingularMatrixException("Cannot solve linear system.");
-                }
-
                 for(int k=i-1; k>-1; k--) {
                     sum.addEq(L.entries[lIndexStart--].mult(X.entries[k*X.numCols + j]));
                 }
 
-                X.entries[xIndex] = B.entries[xIndex].sub(sum).div(diag);
+                X.entries[xIndex] = B.entries[xIndex].sub(sum).div(L.entries[i*(L.numCols + 1)]);
             }
         }
 
         return X;
+    }
+
+
+    /**
+     * Checks if a matrix has a zero on the diagonal of a matrix.
+     * @param src Matrix of interest. Assumed to be square.
+     * @return True if the matrix has a zero on the diagonal. False otherwise.
+     */
+    private boolean zeroOnDiag(CMatrix src) {
+        boolean result = false;
+
+        for(int i=0; i<src.numRows; i++) {
+            if(src.entries[i*(src.numCols  + 1)].equals(CNumber.ZERO)) {
+                result = true;
+                break; // No need to continue.
+            }
+        }
+
+        return result;
     }
 }

@@ -30,7 +30,7 @@ import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
 import com.flag4j.util.ParameterChecks;
 
-import static com.flag4j.operations.dense.real.RealDenseDeterminant.detLU;
+import static com.flag4j.operations.dense.complex.ComplexDenseDeterminant.detLU;
 
 
 /**

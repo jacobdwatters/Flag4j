@@ -1,5 +1,5 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-Flag4j,com.flag4j.util,ArrayUtils,262,1102,29,103,43,193,27,86,10,37
+Flag4j,com.flag4j.util,ArrayUtils,262,1102,26,106,43,193,24,89,10,37
 Flag4j,com.flag4j.util,Axis2D,0,34,0,0,0,6,0,4,0,4
 Flag4j,com.flag4j.util,RandomTensor,652,0,24,0,93,0,59,0,47,0
 Flag4j,com.flag4j.util,ErrorMessages,121,195,4,0,12,18,9,17,7,17
@@ -25,7 +25,7 @@ Flag4j,com.flag4j.operations.dense_sparse.complex,ComplexDenseSparseMatrixMultTr
 Flag4j,com.flag4j.operations.dense_sparse.complex,ComplexDenseSparseEquals,12,208,3,21,5,43,4,12,1,3
 Flag4j,com.flag4j.operations.dense_sparse.complex,ComplexDenseSparseOperations,87,350,4,16,14,46,5,16,3,8
 Flag4j,com.flag4j.operations.dense_sparse.complex,ComplexDenseSparseVectorOperations,47,346,2,20,8,47,3,19,2,9
-Flag4j,com.flag4j.operations.dense.real,RealDenseDeterminant,7,288,0,8,2,33,1,13,1,8
+Flag4j,com.flag4j.operations.dense.real,RealDenseDeterminant,35,261,2,6,7,29,3,11,2,7
 Flag4j,com.flag4j.operations.dense.real,RealDenseOperations,7,506,0,42,2,89,1,39,1,18
 Flag4j,com.flag4j.operations.dense.real,RealDenseTensorDot,7,429,0,18,2,60,1,11,1,2
 Flag4j,com.flag4j.operations.dense.real,RealDenseSetOperations,3,276,0,22,1,41,1,20,1,9
@@ -43,7 +43,7 @@ Flag4j,com.flag4j.operations.sparse.real_complex,RealComplexSparseVectorOperatio
 Flag4j,com.flag4j.operations.sparse.real_complex,RealComplexSparseEquals,80,0,20,0,7,0,14,0,4,0
 Flag4j,com.flag4j.concurrency,ThreadManager,22,67,2,2,8,12,3,6,1,6
 Flag4j,com.flag4j.concurrency,Configurations,49,10,0,0,16,4,8,2,8,2
-Flag4j,com.flag4j.operations,MatrixMultiplyDispatcher,992,416,116,31,181,88,97,17,6,13
+Flag4j,com.flag4j.operations,MatrixMultiplyDispatcher,962,446,113,34,174,95,94,20,5,14
 Flag4j,com.flag4j.operations,RealDenseMatrixMultiplyDispatcher,3,316,2,36,1,59,2,26,0,8
 Flag4j,com.flag4j.operations,TransposeDispatcher,93,178,14,8,16,29,14,8,2,8
 Flag4j,com.flag4j.operations,TransposeDispatcher.Algorithm,0,27,0,0,0,5,0,1,0,1
@@ -54,10 +54,10 @@ Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseMatrixMultTranspos
 Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseVectorOperations,7,411,0,24,2,52,1,22,1,10
 Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseOperations,69,452,2,20,10,60,3,20,2,10
 Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseEquals,7,202,0,24,2,44,1,15,1,3
-Flag4j,com.flag4j.linalg.solvers,ComplexForwardSolver,225,191,16,12,29,25,12,10,3,5
+Flag4j,com.flag4j.linalg.solvers,ComplexForwardSolver,5,496,1,33,1,64,1,25,0,9
 Flag4j,com.flag4j.linalg.solvers,ComplexBackSolver,10,250,2,12,2,26,2,8,0,3
 Flag4j,com.flag4j.linalg.solvers,RealLstsqSolver,0,44,0,0,0,7,0,3,0,3
-Flag4j,com.flag4j.linalg.solvers,RealForwardSolver,221,187,16,12,29,25,12,10,3,5
+Flag4j,com.flag4j.linalg.solvers,RealForwardSolver,13,484,3,31,4,62,3,23,0,9
 Flag4j,com.flag4j.linalg.solvers,RealExactSolver,0,129,1,3,0,19,1,5,0,4
 Flag4j,com.flag4j.linalg.solvers,LstsqSolver,0,22,0,0,0,7,0,2,0,2
 Flag4j,com.flag4j.linalg.solvers,ComplexExactSolver,0,129,1,3,0,19,1,5,0,4
@@ -69,11 +69,11 @@ Flag4j,com.flag4j.complex_numbers,CNumberParser,3,171,1,15,1,38,2,8,1,1
 Flag4j,com.flag4j.complex_numbers,CNumberToken,24,43,3,5,6,10,5,7,2,6
 Flag4j,com.flag4j.complex_numbers,CNumber,169,1710,7,177,34,322,24,174,17,89
 Flag4j,com.flag4j.exceptions,SingularMatrixException,4,5,0,0,2,2,1,1,1,1
-Flag4j,com.flag4j,CVector,383,1531,35,43,65,205,32,77,14,56
+Flag4j,com.flag4j,CVector,250,1664,28,50,45,225,29,80,12,58
 Flag4j,com.flag4j,SparseTensor,130,89,7,5,44,17,38,6,33,5
 Flag4j,com.flag4j,Tensor,33,665,5,29,4,117,5,55,0,43
 Flag4j,com.flag4j,SparseCTensor,152,142,6,10,56,25,51,9,46,6
-Flag4j,com.flag4j,CMatrix,930,7557,80,400,132,841,89,346,46,149
+Flag4j,com.flag4j,CMatrix,924,7563,80,400,130,843,87,348,44,151
 Flag4j,com.flag4j,SparseVector,104,2102,13,69,14,282,12,110,3,78
 Flag4j,com.flag4j,Shape,35,465,5,37,5,75,5,34,2,16
 Flag4j,com.flag4j,Matrix,275,6986,34,412,43,804,32,365,10,164
