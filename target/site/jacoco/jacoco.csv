@@ -1,5 +1,5 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-Flag4j,com.flag4j.util,ArrayUtils,262,1102,26,106,43,193,24,89,10,37
+Flag4j,com.flag4j.util,ArrayUtils,262,1102,29,103,43,193,27,86,10,37
 Flag4j,com.flag4j.util,Axis2D,0,34,0,0,0,6,0,4,0,4
 Flag4j,com.flag4j.util,RandomTensor,652,0,24,0,93,0,59,0,47,0
 Flag4j,com.flag4j.util,ErrorMessages,121,195,4,0,12,18,9,17,7,17
@@ -9,7 +9,7 @@ Flag4j,com.flag4j.util,StringUtils,7,59,1,5,2,11,2,6,1,4
 Flag4j,com.flag4j.util,ParameterChecks,56,412,10,66,10,85,10,51,3,20
 Flag4j,com.flag4j.operations.dense.complex,ComplexDenseElemMult,41,37,1,3,8,7,4,3,3,2
 Flag4j,com.flag4j.operations.dense.complex,ComplexDenseProperties,126,27,16,4,24,6,11,3,3,1
-Flag4j,com.flag4j.operations.dense.complex,ComplexDenseDeterminant,222,49,4,2,24,7,9,3,6,2
+Flag4j,com.flag4j.operations.dense.complex,ComplexDenseDeterminant,244,27,4,2,27,4,10,2,7,1
 Flag4j,com.flag4j.operations.dense.complex,ComplexDenseEquals,7,24,0,4,2,2,1,4,1,2
 Flag4j,com.flag4j.operations.dense.complex,ComplexDenseMatrixMultTranspose,7,426,0,32,2,80,1,22,1,6
 Flag4j,com.flag4j.operations.dense.complex,ComplexDenseSetOperations,7,381,0,28,2,53,1,26,1,12
@@ -54,7 +54,7 @@ Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseMatrixMultTranspos
 Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseVectorOperations,7,411,0,24,2,52,1,22,1,10
 Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseOperations,69,452,2,20,10,60,3,20,2,10
 Flag4j,com.flag4j.operations.dense_sparse.real,RealDenseSparseEquals,7,202,0,24,2,44,1,15,1,3
-Flag4j,com.flag4j.linalg.solvers,ComplexForwardSolver,103,313,8,20,13,41,6,16,1,7
+Flag4j,com.flag4j.linalg.solvers,ComplexForwardSolver,225,191,16,12,29,25,12,10,3,5
 Flag4j,com.flag4j.linalg.solvers,ComplexBackSolver,10,250,2,12,2,26,2,8,0,3
 Flag4j,com.flag4j.linalg.solvers,RealLstsqSolver,0,44,0,0,0,7,0,3,0,3
 Flag4j,com.flag4j.linalg.solvers,RealForwardSolver,221,187,16,12,29,25,12,10,3,5
@@ -69,7 +69,7 @@ Flag4j,com.flag4j.complex_numbers,CNumberParser,3,171,1,15,1,38,2,8,1,1
 Flag4j,com.flag4j.complex_numbers,CNumberToken,24,43,3,5,6,10,5,7,2,6
 Flag4j,com.flag4j.complex_numbers,CNumber,169,1710,7,177,34,322,24,174,17,89
 Flag4j,com.flag4j.exceptions,SingularMatrixException,4,5,0,0,2,2,1,1,1,1
-Flag4j,com.flag4j,CVector,275,1639,29,49,49,221,30,79,13,57
+Flag4j,com.flag4j,CVector,383,1531,35,43,65,205,32,77,14,56
 Flag4j,com.flag4j,SparseTensor,130,89,7,5,44,17,38,6,33,5
 Flag4j,com.flag4j,Tensor,33,665,5,29,4,117,5,55,0,43
 Flag4j,com.flag4j,SparseCTensor,152,142,6,10,56,25,51,9,46,6

@@ -98,9 +98,9 @@ public class ComplexDenseDeterminant {
      * and an upper triangular matrix {@code U} using partial pivoting.
      */
     public static CNumber detLU(Matrix P, CMatrix L, CMatrix U) {
-<span class="fc" id="L101">        int numSwaps = (int) (L.numRows - P.trace()) - 1; // Number of swaps in permutation matrix.</span>
-<span class="fc" id="L102">        double detP = Math.pow(-1, numSwaps); // Compute the determinant of P.</span>
-<span class="fc" id="L103">        return detLU(L, U).mult(detP);</span>
+<span class="nc" id="L101">        int numSwaps = (int) (L.numRows - P.trace()) - 1; // Number of swaps in permutation matrix.</span>
+<span class="nc" id="L102">        double detP = Math.pow(-1, numSwaps); // Compute the determinant of P.</span>
+<span class="nc" id="L103">        return detLU(L, U).mult(detP);</span>
     }
 
 
