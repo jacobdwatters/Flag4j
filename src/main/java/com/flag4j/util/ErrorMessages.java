@@ -26,7 +26,6 @@ package com.flag4j.util;
 
 
 import com.flag4j.Shape;
-import org.sonatype.inject.Nullable;
 
 import java.util.Arrays;
 
@@ -327,7 +326,7 @@ public abstract class ErrorMessages {
      * specified threshold but wasn't.
      */
     public static String getNamedGreaterEqErr(double threshold, double value, String name) {
-        return String.format(GREATER_EQ_ERR, name, threshold, value);
+        return String.format(NAMED_GREATER_EQ_ERR, name, threshold, value);
     }
 
     /**
@@ -381,7 +380,7 @@ public abstract class ErrorMessages {
      * Gets an error message for a matrix which was expected to be lower triangular but is not.
      * @return An error message for a matrix which was expected to be lower triangular but is not.
      */
-    public static String getNotTrilErr(@Nullable String matrixName) {
+    public static String getNotTrilErr(String matrixName) {
         if(matrixName == null) {
             return String.format(NOT_TRIL_ERR, "").replace("  ", " ");
         } else {
@@ -394,7 +393,7 @@ public abstract class ErrorMessages {
      * Gets an error message for a matrix which was expected to be upper triangular but is not.
      * @return An error message for a matrix which was expected to be upper triangular but is not.
      */
-    public static String getNotTriuErr(@Nullable String matrixName) {
+    public static String getNotTriuErr(String matrixName) {
         if(matrixName == null) {
             return String.format(NOT_TRIU_ERR, "").replace("  ", " ");
         } else {
