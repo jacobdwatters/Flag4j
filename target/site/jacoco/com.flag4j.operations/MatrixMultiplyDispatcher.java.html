@@ -216,13 +216,13 @@ public final class MatrixMultiplyDispatcher {
         AlgorithmName algorithm;
         CNumber[] dest;
 
-<span class="pc bpc" id="L219" title="1 of 2 branches missed.">        if(B.numCols==1) {</span>
-<span class="nc" id="L220">            algorithm = chooseAlgorithmComplexVector(A.shape);</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">        if(B.numCols==1) {</span>
+<span class="fc" id="L220">            algorithm = chooseAlgorithmComplexVector(A.shape);</span>
         } else {
 <span class="fc" id="L222">            algorithm = chooseAlgorithmComplex(A.shape, B.shape);</span>
         }
 
-<span class="pc bpc" id="L225" title="11 of 12 branches missed.">        switch(algorithm) {</span>
+<span class="pc bpc" id="L225" title="10 of 12 branches missed.">        switch(algorithm) {</span>
             case STANDARD:
 <span class="nc" id="L227">                dest = ComplexDenseMatrixMultiplication.standard(A.entries, A.shape, B.entries, B.shape);</span>
 <span class="nc" id="L228">                break;</span>
@@ -248,8 +248,8 @@ public final class MatrixMultiplyDispatcher {
 <span class="nc" id="L248">                dest = ComplexDenseMatrixMultiplication.concurrentBlockedReordered(A.entries, A.shape, B.entries, B.shape);</span>
 <span class="nc" id="L249">                break;</span>
             case STANDARD_VECTOR:
-<span class="nc" id="L251">                dest = ComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);</span>
-<span class="nc" id="L252">                break;</span>
+<span class="fc" id="L251">                dest = ComplexDenseMatrixMultiplication.standardVector(A.entries, A.shape, B.entries, B.shape);</span>
+<span class="fc" id="L252">                break;</span>
             case BLOCKED_VECTOR:
 <span class="nc" id="L254">                dest = ComplexDenseMatrixMultiplication.blockedVector(A.entries, A.shape, B.entries, B.shape);</span>
 <span class="nc" id="L255">                break;</span>
@@ -626,17 +626,17 @@ public final class MatrixMultiplyDispatcher {
     public static AlgorithmName chooseAlgorithmComplexVector(Shape shape) {
         AlgorithmName algorithm;
 
-<span class="nc" id="L629">        int rows = shape.get(Axis2D.row());</span>
+<span class="fc" id="L629">        int rows = shape.get(Axis2D.row());</span>
 
-<span class="nc bnc" id="L631" title="All 2 branches missed.">        if(rows&lt;=250) {</span>
-<span class="nc" id="L632">            algorithm = AlgorithmName.STANDARD_VECTOR;</span>
+<span class="pc bpc" id="L631" title="1 of 2 branches missed.">        if(rows&lt;=250) {</span>
+<span class="fc" id="L632">            algorithm = AlgorithmName.STANDARD_VECTOR;</span>
 <span class="nc bnc" id="L633" title="All 2 branches missed.">        } else if(rows&lt;=1024) {</span>
 <span class="nc" id="L634">            algorithm = AlgorithmName.CONCURRENT_BLOCKED_VECTOR;</span>
         } else {
 <span class="nc" id="L636">            algorithm = AlgorithmName.CONCURRENT_STANDARD_VECTOR;</span>
         }
 
-<span class="nc" id="L639">        return algorithm;</span>
+<span class="fc" id="L639">        return algorithm;</span>
     }
 
 
