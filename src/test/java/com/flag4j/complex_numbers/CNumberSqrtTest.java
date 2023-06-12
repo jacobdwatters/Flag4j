@@ -9,7 +9,7 @@ class CNumberSqrtTest {
     CNumber expResult, actResult;
 
     @Test
-    void sqrtDoubleTest() {
+    void sqrtDoubleTestCase() {
         // ------------- Sub-case 1 -------------
         a = 1;
         expResult = new CNumber(1);
@@ -68,7 +68,7 @@ class CNumberSqrtTest {
 
 
     @Test
-    void sqrtTest() {
+    void sqrtTestCase() {
         // ------------- Sub-case 1 -------------
         aComplex = new CNumber(1);
         expResult = new CNumber(1);

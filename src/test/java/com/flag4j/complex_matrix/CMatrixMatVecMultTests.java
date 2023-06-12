@@ -9,12 +9,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CMatrixMatVecMultTests {
-    CNumber[][] aEntries, expEntries;
-    CMatrix A, exp;
+    CNumber[][] aEntries;
+    CNumber[] expEntries;
+    CMatrix A;
+    CVector exp;
 
 
     @Test
-    void matMultTests() {
+    void matMultTestCase() {
         double[][] bEntries;
         Vector B;
 
@@ -29,11 +31,11 @@ class CMatrixMatVecMultTests {
                 {-0.9345341},
                 {0.0}};
         B = new Vector(ArrayUtils.flatten(bEntries));
-        expEntries = new CNumber[][]{{new CNumber("163.51005868-15.462680014470001i")},
-                {new CNumber("1.666+694.4522897100001i")},
-                {new CNumber("12690.663369999998")},
-                {new CNumber("-3.377522800415388-8.877571549119406i")}};
-        exp = new CMatrix(expEntries);
+        expEntries = new CNumber[]{new CNumber("163.51005868-15.462680014470001i"),
+                new CNumber("1.666+694.4522897100001i"),
+                new CNumber("12690.663369999998"),
+                new CNumber("-3.377522800415388-8.877571549119406i")};
+        exp = new CVector(expEntries);
 
         assertEquals(exp, A.mult(B));
 
@@ -57,7 +59,7 @@ class CMatrixMatVecMultTests {
 
 
     @Test
-    void matMultComplexTests() {
+    void matMultComplexTestCase() {
         CNumber[][] bEntries;
         CVector B;
 
@@ -72,12 +74,12 @@ class CMatrixMatVecMultTests {
                 {new CNumber("-0.0-0.9345341i")},
                 {new CNumber("0.0")}};
         B = new CVector(ArrayUtils.flatten(bEntries));
-        expEntries = new CNumber[][]{
-                {new CNumber("215.01988001447+65.76525868i")},
-                {new CNumber("-692.78628971+1.0i")},
-                {new CNumber("12690.663369999998+7617.445i")},
-                {new CNumber("16.203765617290802-0.235930146825595i")}};
-        exp = new CMatrix(expEntries);
+        expEntries = new CNumber[]{
+                new CNumber("215.01988001447+65.76525868i"),
+                new CNumber("-692.78628971+1.0i"),
+                new CNumber("12690.663369999998+7617.445i"),
+                new CNumber("16.203765617290802-0.235930146825595i")};
+        exp = new CVector(expEntries);
 
         assertEquals(exp, A.mult(B));
 
@@ -99,7 +101,7 @@ class CMatrixMatVecMultTests {
 
 
     @Test
-    void matMultSparseTests() {
+    void matMultSparseTestCase() {
         double[] bEntries;
         int[] rowIndices;
         SparseVector B;
@@ -114,12 +116,12 @@ class CMatrixMatVecMultTests {
         bEntries = new double[]{-0.9345341};
         rowIndices = new int[]{1};
         B = new SparseVector(3, bEntries, rowIndices);
-        expEntries = new CNumber[][]{
-                {new CNumber("-42.240941320000005+0.031119985530000005i")},
-                {new CNumber("0.0+694.4522897100001i")},
-                {new CNumber("0.0")},
-                {new CNumber("-8.611416161295983-14.11146491i")}};
-        exp = new CMatrix(expEntries);
+        expEntries = new CNumber[]{
+                new CNumber("-42.240941320000005+0.031119985530000005i"),
+                new CNumber("0.0+694.4522897100001i"),
+                new CNumber("0.0"),
+                new CNumber("-8.611416161295983-14.11146491i")};
+        exp = new CVector(expEntries);
 
         assertEquals(exp, A.mult(B));
 
@@ -140,7 +142,7 @@ class CMatrixMatVecMultTests {
 
 
     @Test
-    void matMultSparseComplexTests() {
+    void matMultSparseComplexTestCase() {
         CNumber[] bEntries;
         int[] rowIndices, colIndices;
         SparseCVector B;
@@ -156,12 +158,12 @@ class CMatrixMatVecMultTests {
         bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i")};
         rowIndices = new int[]{1};
         B = new SparseCVector(3, bEntries, rowIndices);
-        expEntries = new CNumber[][]{
-                {new CNumber("-41.929586320000006+422.65111998553i")},
-                {new CNumber("6947.985+694.4522897100001i")},
-                {new CNumber("0.0")},
-                {new CNumber("-149.79641616129598+72.04562781472501i")}};
-        exp = new CMatrix(expEntries);
+        expEntries = new CNumber[]{
+                new CNumber("-41.929586320000006+422.65111998553i"),
+                new CNumber("6947.985+694.4522897100001i"),
+                new CNumber("0.0"),
+                new CNumber("-149.79641616129598+72.04562781472501i")};
+        exp = new CVector(expEntries);
 
         assertEquals(exp, A.mult(B));
 

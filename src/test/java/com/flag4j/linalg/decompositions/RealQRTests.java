@@ -12,7 +12,7 @@ class RealQRTests {
     RealQRDecomposition QR;
 
     @Test
-    void fullTest() {
+    void fullTestCase() {
         // Tests account for numerical loss of precision.
         QR = new RealQRDecomposition();
 

@@ -22,7 +22,7 @@ public class ComplexDenseSetOperationsTests {
 
 
     @Test
-    void oneDArrayTest() {
+    void oneDArrayTestCase() {
         // -------------- Sub-case 0 ---------------
         arrC = new CNumber[]{new CNumber(1.233, -0.344), new CNumber(9.34), new CNumber(0, -63.2245)};
         dest = new CNumber[arrC.length];
@@ -91,7 +91,7 @@ public class ComplexDenseSetOperationsTests {
 
 
     @Test
-    void twoDArrayTest() {
+    void twoDArrayTestCase() {
         // -------------- Sub-case 0 ---------------
         arrCC = new CNumber[][]{{new CNumber(1.233, -0.344), new CNumber(9.34)},
                 {new CNumber(0, -63.2245), new CNumber(66,445.5)}};

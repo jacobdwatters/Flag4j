@@ -14,7 +14,7 @@ class RealSVDTests {
     Matrix A, expS, expU, expV;
 
     @Test
-    void svdTest() {
+    void svdTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{
                 {1, 2, 3},

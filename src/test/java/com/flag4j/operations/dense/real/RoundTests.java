@@ -13,7 +13,7 @@ class RoundTests {
     int precision;
 
     @Test
-    void simpleRoundTests() {
+    void simpleRoundTestCase() {
         // ----------------- Sub-case 1 -----------------
         aEntries = new double[][]{{1.234234, 1256.55, -9991.133}, {115, 0.000014, -6612354.556}};
         A = new Matrix(aEntries);
@@ -26,7 +26,7 @@ class RoundTests {
 
 
     @Test
-    void roundPrecisionTests() {
+    void roundPrecisionTestCase() {
         // ----------------- Sub-case 1 -----------------
         aEntries = new double[][]{{1.234234, 1256.55, -9991.133}, {115, 0.000014, -6612354.556}};
         A = new Matrix(aEntries);
@@ -81,7 +81,7 @@ class RoundTests {
 
 
     @Test
-    void simpleRoundToZeroTests() {
+    void simpleRoundToZeroTestCase() {
         // ----------------- Sub-case 1 -----------------
         aEntries = new double[][]{{-0.0008915, 1256.55, -9991.133}, {115, 0.000014, -6612354.556},
                 {0.00000000000008765, 0.013, 133.45}};

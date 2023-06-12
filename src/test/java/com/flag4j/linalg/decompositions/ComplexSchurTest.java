@@ -4,9 +4,6 @@ import com.flag4j.CMatrix;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 public class ComplexSchurTest {
 
     ComplexSchurDecomposition schur;
@@ -17,7 +14,7 @@ public class ComplexSchurTest {
 
 
     @Test
-    void schurDecompRealSymmetricTest() {
+    void schurDecompRealSymmetricTestCase() {
 //        // --------------------- Sub-case 1 ---------------------
 //        aEntries = new double[][]{
 //                {2, 1, 0, 0, 0, 0},

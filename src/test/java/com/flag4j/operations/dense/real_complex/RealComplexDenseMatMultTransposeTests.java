@@ -39,7 +39,7 @@ class RealComplexDenseMatMultTransposeTests {
     CMatrix expC;
 
     @Test
-    void matMultTest() {
+    void matMultTestCase() {
         CNumber[][] bEntries;
         CMatrix B;
 

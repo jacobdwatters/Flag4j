@@ -27,7 +27,8 @@ public class ComplexLUTests {
 
 
     @Test
-    void noPivotTest() {
+
+    void testnoPivotTestCase() {
         lu = new ComplexLUDecomposition(0);
 
         // --------------------- Sub-case 1 ---------------------
@@ -74,7 +75,8 @@ public class ComplexLUTests {
 
 
     @Test
-    void partialPivotTest() {
+
+    void testpartialPivotTestCase() {
         lu = new ComplexLUDecomposition();
 
         // --------------------- Sub-case 1 ---------------------
@@ -124,7 +126,7 @@ public class ComplexLUTests {
 
 
     @Test
-    void partialFullTest() {
+    void partialFullTestCase() {
         lu = new ComplexLUDecomposition(LUDecomposition.Pivoting.FULL.ordinal());
 
         // --------------------- Sub-case 1 ---------------------

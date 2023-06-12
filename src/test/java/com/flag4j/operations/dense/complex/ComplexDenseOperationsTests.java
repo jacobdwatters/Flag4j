@@ -20,7 +20,7 @@ class ComplexDenseOperationsTests {
 
 
     @Test
-    void addTest() {
+    void addTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};
@@ -52,7 +52,7 @@ class ComplexDenseOperationsTests {
 
 
     @Test
-    void addDoubleTest() {
+    void addDoubleTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};
@@ -64,7 +64,7 @@ class ComplexDenseOperationsTests {
 
 
     @Test
-    void addCNumberTest() {
+    void addCNumberTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};
@@ -76,7 +76,7 @@ class ComplexDenseOperationsTests {
 
 
     @Test
-    void subTest() {
+    void subTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};
@@ -109,7 +109,7 @@ class ComplexDenseOperationsTests {
 
 
     @Test
-    void subDoubleTest() {
+    void subDoubleTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};
@@ -121,7 +121,7 @@ class ComplexDenseOperationsTests {
 
 
     @Test
-    void subCNumberTest() {
+    void subCNumberTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};
@@ -133,7 +133,7 @@ class ComplexDenseOperationsTests {
 
 
     @Test
-    void sumTest() {
+    void sumTestCase() {
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};
         expResultC = new CNumber(9-0.99+0.9133, -1+13.445+10.3);
@@ -142,7 +142,7 @@ class ComplexDenseOperationsTests {
 
 
     @Test
-    void prodTest() {
+    void prodTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};
@@ -158,7 +158,7 @@ class ComplexDenseOperationsTests {
 
 
     @Test
-    void scalMultDoubleTest() {
+    void scalMultDoubleTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};
@@ -170,7 +170,7 @@ class ComplexDenseOperationsTests {
 
 
     @Test
-    void scalMultCNumberTest() {
+    void scalMultCNumberTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};

@@ -9,7 +9,7 @@ class ParameterChecksTests {
     Shape shape1, shape2;
 
     @Test
-    void matMultTest() {
+    void matMultTestCase() {
         // ------------ Sub-case 1 ------------
         shape1 = new Shape(5, 5);
         shape2 = new Shape(5, 5);

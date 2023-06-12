@@ -15,7 +15,7 @@ class CMatrixToStringTests {
 
 
     @Test
-    void toStringTest() {
+    void toStringTestCase() {
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new CNumber[][]{
                 {new CNumber(2, 4.25), new CNumber(-0.0002345),

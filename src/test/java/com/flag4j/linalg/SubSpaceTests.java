@@ -6,7 +6,8 @@ import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SubSpaceTests {
 
@@ -82,7 +83,7 @@ class SubSpaceTests {
 
 
     @Test
-    void colSpaceTest() {
+    void colSpaceTestCase() {
         // -------------------- Sub-case 1 --------------------
         expAEntries = new double[][]{
                 {0.0025362869234714426, -0.9674946208341351, -0.25287887595777186},
@@ -105,7 +106,7 @@ class SubSpaceTests {
 
 
     @Test
-    void rowSpaceTest() {
+    void rowSpaceTestCase() {
         // -------------------- Sub-case 1 --------------------
         expAEntries = new double[][]{{0.999488309423674, -0.017904410553720114, 0.020218901153583834},
                 {-0.016390769560750335, -0.9397111048050202, -0.2333428641284943},
@@ -125,7 +126,7 @@ class SubSpaceTests {
 
 
     @Test
-    void nullSpaceTest() {
+    void nullSpaceTestCase() {
         // -------------------- Sub-case 1 --------------------
         expAEntries = new double[][]{
                 {0.017139061942576198},
@@ -146,7 +147,7 @@ class SubSpaceTests {
 
 
     @Test
-    void leftNullSpaceTest() {
+    void leftNullSpaceTestCase() {
         // -------------------- Sub-case 1 --------------------
         expAEntries = new double[][]{
                 {0.0},

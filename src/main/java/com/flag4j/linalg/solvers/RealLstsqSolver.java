@@ -37,7 +37,7 @@ import com.flag4j.linalg.decompositions.RealQRDecomposition;
  * {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
  * This is done using a {@link QRDecomposition}.
  */
-public class RealLstsqSolver extends LstsqSolver<Matrix, Vector, Vector> {
+public class RealLstsqSolver extends LstsqSolver<Matrix, Vector> {
 
     /**
      * Backwards solver for solving the system of equations formed from the {@code QR} decomposition,
@@ -66,7 +66,21 @@ public class RealLstsqSolver extends LstsqSolver<Matrix, Vector, Vector> {
     @Override
     public Vector solve(Matrix A, Vector b) {
         decompose(A); // Compute the reduced QR decomposition of A.
+        return backSolver.solve(R, Q.T().mult(b));
+    }
 
-        return backSolver.solve(R, Q.T().mult(b).toVector());
+
+    /**
+     * Solves the set of linear system of equations given by {@code A*X=B} for the matrix {@code X} where
+     * {@code A}, {@code B}, and {@code X} are matrices.
+     *
+     * @param A Coefficient matrix in the linear system.
+     * @param B Matrix of constants in the linear system.
+     * @return The solution to {@code X} in the linear system {@code A*X=B}.
+     */
+    @Override
+    public Matrix solve(Matrix A, Matrix B) {
+        decompose(A); // Compute the reduced QR decomposition of A.
+        return backSolver.solve(R, Q.T().mult(B));
     }
 }

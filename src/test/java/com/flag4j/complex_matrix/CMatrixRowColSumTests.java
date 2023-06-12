@@ -15,7 +15,7 @@ class CMatrixRowColSumTests {
 
 
     @Test
-    void sumRowsTest() {
+    void sumRowsTestCase() {
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
@@ -31,7 +31,7 @@ class CMatrixRowColSumTests {
 
 
     @Test
-    void addToEachRowRealTest() {
+    void addToEachRowRealTestCase() {
         double[] bEntries;
         Vector b;
 
@@ -69,7 +69,7 @@ class CMatrixRowColSumTests {
 
 
     @Test
-    void addToEachRowComplexTest() {
+    void addToEachRowComplexTestCase() {
         CNumber[] bEntries;
         CVector b;
 
@@ -107,7 +107,7 @@ class CMatrixRowColSumTests {
 
 
     @Test
-    void addToEachRowComplexSparseTest() {
+    void addToEachRowComplexSparseTestCase() {
         CNumber[] bEntries;
         SparseCVector b;
 
@@ -147,7 +147,7 @@ class CMatrixRowColSumTests {
 
 
     @Test
-    void addToEachRowRealSparseTest() {
+    void addToEachRowRealSparseTestCase() {
         double[] bEntries;
         SparseVector b;
 
@@ -187,7 +187,7 @@ class CMatrixRowColSumTests {
 
 
     @Test
-    void sumColsTest() {
+    void sumColsTestCase() {
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},
@@ -207,7 +207,7 @@ class CMatrixRowColSumTests {
 
 
     @Test
-    void addToEachColRealTest() {
+    void addToEachColRealTestCase() {
         double[] bEntries;
         Vector b;
 
@@ -245,7 +245,7 @@ class CMatrixRowColSumTests {
 
 
     @Test
-    void addToEachColComplexTest() {
+    void addToEachColComplexTestCase() {
         CNumber[] bEntries;
         CVector b;
 
@@ -283,7 +283,7 @@ class CMatrixRowColSumTests {
 
 
     @Test
-    void addToEachColRealSparseTest() {
+    void addToEachColRealSparseTestCase() {
         double[] bEntries;
         SparseVector b;
 
@@ -323,7 +323,7 @@ class CMatrixRowColSumTests {
 
 
     @Test
-    void addToEachColComplexSparseTest() {
+    void addToEachColComplexSparseTestCase() {
         CNumber[] bEntries;
         SparseCVector b;
 

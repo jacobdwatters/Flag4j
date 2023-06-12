@@ -13,7 +13,7 @@ class RealHessenburgTests {
     RealHessenburgDecomposition hess;
 
     @Test
-    void hessDecompTest() {
+    void hessDecompTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         aEntries = new double[][]{
                 {0, 0, 0, 1},

@@ -21,7 +21,7 @@ class CMatrixConversionTests {
     Matrix expReal, real;
 
     @Test
-    void toRealTest() {
+    void toRealTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new CNumber[][]{
                 {new CNumber(1, 7.233), new CNumber(-0.34436, 13)},
@@ -41,7 +41,7 @@ class CMatrixConversionTests {
 
 
     @Test
-    void toTensorTest() {
+    void toTensorTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new CNumber[][]{
                 {new CNumber(1, 7.233), new CNumber(-0.34436, 13)},
@@ -63,7 +63,7 @@ class CMatrixConversionTests {
 
 
     @Test
-    void toVectorTest() {
+    void toVectorTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new CNumber[][]{
                 {new CNumber(1, 7.233), new CNumber(-0.34436, 13)},

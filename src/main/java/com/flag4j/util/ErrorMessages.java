@@ -87,10 +87,6 @@ public abstract class ErrorMessages {
      */
     private static final String SHAPE_ENTRIES_ERR = "The shape %s cannot hold %d entries.";
     /**
-     * Error message for an ordinal which is not a valid vector orientation ordinal.
-     */
-    private static final String VECTOR_ORIENTATION_ERR = "Unknown orientation ordinal %s. Must be either 0, 1, or 2.";
-    /**
      * Error message for arrays which were expected to be the same length.
      */
     private static final String ARRAY_LENGTHS_MISMATCH_ERR = "Arrays lengths must match but got lengths: %s.";
@@ -132,7 +128,14 @@ public abstract class ErrorMessages {
      * Error message for a parameter which is not within the expected range.
      */
     private static final String RANGE_ERR = "Expecting parameter %s to be in the range [%f, %f] but got %f";
-
+    /**
+     * Error message for matrix not being lower triangular when it is expected to be.
+     */
+    private static final String NOT_TRIL_ERR = "Matrix %s is not lower triangular";
+    /**
+     * Error message for matrix not being upper triangular when it is expected to be.
+     */
+    private static final String NOT_TRIU_ERR = "Matrix %s is not upper triangular";
 
 
     /**
@@ -249,16 +252,6 @@ public abstract class ErrorMessages {
 
 
     /**
-     * Gets an error message for an ordinal which is not a valid vector orientation.
-     * @param ordinal Ordinal for orientation.
-     * @return An error message for an ordinal which is not a valid vector orientation.
-     */
-    public static String vectorOrientationErr(int ordinal) {
-        return String.format(VECTOR_ORIENTATION_ERR, ordinal);
-    }
-
-
-    /**
      * Gets an error message for arrays which were expected to be the same length.
      * @param lengths Lengths of arrays.
      * @return An error message for arrays which were expected to be the same length.
@@ -319,7 +312,7 @@ public abstract class ErrorMessages {
      * specified threshold but wasn't.
      */
     public static String getNamedGreaterEqErr(double threshold, double value, String name) {
-        return String.format(GREATER_EQ_ERR, name, threshold, value);
+        return String.format(NAMED_GREATER_EQ_ERR, name, threshold, value);
     }
 
     /**
@@ -366,6 +359,32 @@ public abstract class ErrorMessages {
      */
     public static String getRangeErr(double value, double lowerBound, double upperBound, String paramName) {
         return String.format(RANGE_ERR, paramName, lowerBound, upperBound, value);
+    }
+
+
+    /**
+     * Gets an error message for a matrix which was expected to be lower triangular but is not.
+     * @return An error message for a matrix which was expected to be lower triangular but is not.
+     */
+    public static String getNotTrilErr(String matrixName) {
+        if(matrixName == null) {
+            return String.format(NOT_TRIL_ERR, "").replace("  ", " ");
+        } else {
+            return String.format(NOT_TRIL_ERR, matrixName);
+        }
+    }
+
+
+    /**
+     * Gets an error message for a matrix which was expected to be upper triangular but is not.
+     * @return An error message for a matrix which was expected to be upper triangular but is not.
+     */
+    public static String getNotTriuErr(String matrixName) {
+        if(matrixName == null) {
+            return String.format(NOT_TRIU_ERR, "").replace("  ", " ");
+        } else {
+            return String.format(NOT_TRIU_ERR, matrixName);
+        }
     }
 }
 

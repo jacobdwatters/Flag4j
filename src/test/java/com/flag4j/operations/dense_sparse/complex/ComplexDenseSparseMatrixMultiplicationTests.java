@@ -49,7 +49,7 @@ class ComplexDenseSparseMatrixMultiplicationTests {
 
 
     @Test
-    void matMatMultTest()  {
+    void matMatMultTestCase()  {
         // ----------------------- Sub-case 1 -----------------------
         sparseShape = new Shape(2, 5);
         sparseIndices = new int[][]{
@@ -96,7 +96,7 @@ class ComplexDenseSparseMatrixMultiplicationTests {
 
 
     @Test
-    void matVecMultTests() {
+    void matVecMultTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         sparseShape = new Shape(2, 4);
         sparseIndices = new int[][]{

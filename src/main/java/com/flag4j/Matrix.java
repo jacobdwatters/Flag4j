@@ -61,7 +61,7 @@ import java.util.List;
  */
 public class Matrix
         extends RealDenseTensorBase<Matrix, CMatrix>
-        implements MatrixMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double, Vector>,
+        implements MatrixMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double, Vector, Vector>,
         RealMatrixMixin<Matrix, CMatrix> {
 
     /**
@@ -609,6 +609,25 @@ public class Matrix
 
         for(int i=0; i<values.length; i++) {
             super.entries[i*numCols + colIndex] = values[i];
+        }
+
+        return this;
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of rows of this matrix.
+     */
+    public Matrix setCol(Vector values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.size, this.numRows);
+
+        for(int i=0; i<values.size; i++) {
+            super.entries[i*numCols + colIndex] = values.entries[i];
         }
 
         return this;
@@ -1428,12 +1447,10 @@ public class Matrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public Matrix mult(Vector b) {
+    public Vector mult(Vector b) {
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         double[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
-        Shape shape = new Shape(this.numRows, 1);
-
-        return new Matrix(shape, entries);
+        return new Vector(entries);
     }
 
 
@@ -1445,14 +1462,13 @@ public class Matrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public Matrix mult(SparseVector b) {
+    public Vector mult(SparseVector b) {
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         double[] entries = RealDenseSparseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.indices
         );
-        Shape shape = new Shape(this.numRows, 1);
 
-        return new Matrix(shape, entries);
+        return new Vector(entries);
     }
 
 
@@ -1464,14 +1480,13 @@ public class Matrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public CMatrix mult(CVector b) {
+    public CVector mult(CVector b) {
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = RealComplexDenseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.shape
         );
-        Shape shape = new Shape(this.numRows, 1);
 
-        return new CMatrix(shape, entries);
+        return new CVector(entries);
     }
 
 
@@ -1483,14 +1498,13 @@ public class Matrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public CMatrix mult(SparseCVector b) {
+    public CVector mult(SparseCVector b) {
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.standardVector(
                 this.entries, this.shape, b.entries, b.indices
         );
-        Shape shape = new Shape(this.numRows, 1);
 
-        return new CMatrix(shape, entries);
+        return new CVector(entries);
     }
 
 
@@ -3050,22 +3064,16 @@ public class Matrix
         LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(this);
 
         double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
-        double det = RealDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
+        double det = RealDenseDeterminant.detLU(lu.getL(), lu.getU());
 
         if(Math.abs(det) < tol) {
             throw new SingularMatrixException("Cannot invert.");
         }
 
         // Solve inv(A)*L = inv(U) for inv(A) by solving L^T*inv(A)^T = inv(U)^T
-        RealExactSolver solver = new RealExactSolver(); // TODO: Need to add solve(Matrix, Matrix) to the class for more efficient solving.
+        RealExactSolver solver = new RealExactSolver();
         Matrix UinvT = Invert.invTriU(lu.getU()).T();
-        Matrix LT = lu.getL().T();
-        Matrix inverse = new Matrix(shape);
-
-        for(int i=0; i<UinvT.numCols; i++) {
-            Vector col = solver.solve(LT, UinvT.getColAsVector(i));
-            inverse.setRow(col.entries, i); // Implicit transpose here.
-        }
+        Matrix inverse = solver.solve(lu.getL().T(), UinvT).T();
 
         return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.
     }
@@ -3498,7 +3506,8 @@ public class Matrix
         Matrix S = new RealSVD(false).decompose(this).getS();
         int stopIdx = Math.min(numRows, numCols);
 
-        double tol = 1.0E-8; // Tolerance for determining if a singular value should be considered zero.
+        // Tolerance for determining if a singular value should be considered zero.
+        double tol = 1.0E-16*Math.max(numRows, numCols);
         int rank = 0;
 
         for(int i=0; i<stopIdx; i++) {
@@ -3656,7 +3665,7 @@ public class Matrix
                 width = totalRowLength;
                 value = "...";
                 value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-                result.append(String.format(" [%-" + width + "s]%n", value));
+                result.append(String.format(" [%-" + width + "s]\n", value));
             }
 
             // Get Last row as a string.

@@ -11,7 +11,7 @@ class CNumberPropertiesTest {
     boolean result;
 
     @Test
-    void isIntTest() {
+    void isIntTestCase() {
         // ------------- Sub-case 1 --------------
         a = new CNumber(5);
         expResult = true;
@@ -49,7 +49,7 @@ class CNumberPropertiesTest {
     }
 
     @Test
-    void isDoubleTest() {
+    void isDoubleTestCase() {
         // ------------- Sub-case 1 --------------
         a = new CNumber(5);
         expResult = true;
@@ -87,7 +87,7 @@ class CNumberPropertiesTest {
     }
 
     @Test
-    void isNaNTest() {
+    void isNaNTestCase() {
         // ------------- Sub-case 1 --------------
         a = new CNumber(5);
         expResult = false;
@@ -154,7 +154,7 @@ class CNumberPropertiesTest {
     }
 
     @Test
-    void isFiniteTest() {
+    void isFiniteTestCase() {
         // ------------- Sub-case 1 --------------
         a = new CNumber(5);
         expResult = true;
@@ -230,7 +230,7 @@ class CNumberPropertiesTest {
 
 
     @Test
-    void isInfiniteTest() {
+    void isInfiniteTestCase() {
         // ------------- Sub-case 1 --------------
         a = new CNumber(5);
         expResult = false;
@@ -306,7 +306,7 @@ class CNumberPropertiesTest {
 
 
     @Test
-    void isRealTest() {
+    void isRealTestCase() {
         // ------------- Sub-case 1 --------------
         a = new CNumber(5);
         expResult = true;
@@ -380,7 +380,7 @@ class CNumberPropertiesTest {
 
 
     @Test
-    void isImaginaryTest() {
+    void isImaginaryTestCase() {
         // ------------- Sub-case 1 --------------
         a = new CNumber(5);
         expResult = false;
@@ -463,7 +463,7 @@ class CNumberPropertiesTest {
 
 
     @Test
-    void isComplexTest() {
+    void isComplexTestCase() {
         // ------------- Sub-case 1 --------------
         a = new CNumber(5);
         expResult = false;

@@ -20,7 +20,7 @@ class RealComplexDenseOperationsTests {
     Shape shape1, shape2;
 
     @Test
-    void addTest() {
+    void addTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};
@@ -61,7 +61,7 @@ class RealComplexDenseOperationsTests {
 
 
     @Test
-    void subTest() {
+    void subTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};
@@ -90,7 +90,7 @@ class RealComplexDenseOperationsTests {
     }
 
     @Test
-    void subReverseTest() {
+    void subReverseTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
                 new CNumber(0.9133), new CNumber(0, 10.3)};

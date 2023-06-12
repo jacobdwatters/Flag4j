@@ -13,7 +13,7 @@ class ComplexDenseTransposeTests {
 
 
     @Test
-    void transposeTest() {
+    void transposeTestCase() {
         // ------------- Sub-case 1 ---------------
         numRows = 3;
         numCols = 4;

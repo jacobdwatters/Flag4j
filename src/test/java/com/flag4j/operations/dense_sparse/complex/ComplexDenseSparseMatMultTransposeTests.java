@@ -45,7 +45,7 @@ class ComplexDenseSparseMatMultTransposeTests {
     }
 
     @Test
-    void matMatMultTest() {
+    void matMatMultTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         sparseShape = new Shape(2, 5);
         sparseIndices = new int[][]{

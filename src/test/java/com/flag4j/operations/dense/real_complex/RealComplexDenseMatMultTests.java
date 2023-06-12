@@ -16,7 +16,7 @@ class RealComplexDenseMatMultTests {
     CMatrix expC;
 
     @Test
-    void matMultTest() {
+    void matMultTestCase() {
         CNumber[][] bEntries;
         CMatrix B;
 
@@ -70,7 +70,7 @@ class RealComplexDenseMatMultTests {
 
 
     @Test
-    void matVecMultRealComplexTest() {
+    void matVecMultRealComplexTestCase() {
         CNumber[][] bEntries;
         CMatrix B;
 

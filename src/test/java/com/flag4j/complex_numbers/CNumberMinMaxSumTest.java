@@ -11,7 +11,7 @@ class CNumberMinMaxSumTest {
     int expArg, arg;
 
     @Test
-    void sumTest() {
+    void sumTestCase() {
         // ------------ Sub-case 1 ------------
         n1 = new CNumber(93.13, -6456.331);
         n2 = new CNumber(1.3, 7.5);
@@ -33,7 +33,7 @@ class CNumberMinMaxSumTest {
 
 
     @Test
-    void minTest() {
+    void minTestCase() {
         // ------------ Sub-case 1 ------------
         n1 = new CNumber(93.13, -6456.331);
         n2 = new CNumber(1.3, 7.5);
@@ -75,7 +75,7 @@ class CNumberMinMaxSumTest {
 
 
     @Test
-    void argMinTest() {
+    void argMinTestCase() {
         // ------------ Sub-case 1 ------------
         n1 = new CNumber(93.13, -6456.331);
         n2 = new CNumber(1.3, 7.5);
@@ -96,7 +96,7 @@ class CNumberMinMaxSumTest {
 
 
     @Test
-    void argMinRealTest() {
+    void argMinRealTestCase() {
         // ------------ Sub-case 1 ------------
         n1 = new CNumber(93.13, -6456.331);
         n2 = new CNumber(1.3, 7.5);
@@ -118,7 +118,7 @@ class CNumberMinMaxSumTest {
 
 
     @Test
-    void maxTest() {
+    void maxTestCase() {
         // ------------ Sub-case 1 ------------
         n1 = new CNumber(1.3, 7.5);
         n2 = new CNumber(93.13, -6456.331);
@@ -160,7 +160,7 @@ class CNumberMinMaxSumTest {
 
 
     @Test
-    void argMaxTest() {
+    void argMaxTestCase() {
         // ------------ Sub-case 1 ------------
         n1 = new CNumber(1.3, 7.5);
         n2 = new CNumber(93.13, -6456.331);
@@ -181,7 +181,7 @@ class CNumberMinMaxSumTest {
 
 
     @Test
-    void argMaxRealTest() {
+    void argMaxRealTestCase() {
         // ------------ Sub-case 1 ------------
         n1 = new CNumber(93.13, -6456.331);
         n2 = new CNumber(1e10, 7.5);

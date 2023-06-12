@@ -192,10 +192,9 @@ public class SubSpace {
                 col = src2.getColAsVector(j);
                 solution = lstsq.solve(src1, col);
 
-                if(src1.mult(solution).toVector().sub(col).norm() > tol) {
+                if(src1.mult(solution).sub(col).norm() > tol) {
                     // Then the least squares solution does not provide an "exact" solution.
                     // Hence, the column of src2 cannot be expressed as a linear combination of the columns of src1
-                    System.out.println("norm: " + src1.mult(solution).toVector().sub(col).norm());
                     result = false;
                     break;
                 }
@@ -231,10 +230,9 @@ public class SubSpace {
                 col = src2.getColAsVector(j);
                 solution = lstsq.solve(src1, col);
 
-                if(src1.mult(solution).toVector().sub(col).norm() > tol) {
+                if(src1.mult(solution).sub(col).norm() > tol) {
                     // Then the least squares solution does not provide an "exact" solution.
                     // Hence, the column of src2 cannot be expressed as a linear combination of the columns of src1
-                    System.out.println("norm: " + src1.mult(solution).toVector().sub(col).norm());
                     result = false;
                     break;
                 }

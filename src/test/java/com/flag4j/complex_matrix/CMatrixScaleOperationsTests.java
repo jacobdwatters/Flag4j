@@ -12,7 +12,7 @@ class CMatrixScaleOperationsTests {
     CMatrix A, exp;
 
     @Test
-    void realScaleMultTest() {
+    void realScaleMultTestCase() {
         double scal;
 
         // ---------------------- Sub-case 1 ----------------------
@@ -44,7 +44,7 @@ class CMatrixScaleOperationsTests {
 
 
     @Test
-    void complexScaleMultTest() {
+    void complexScaleMultTestCase() {
         CNumber scal;
 
         // ---------------------- Sub-case 1 ----------------------
@@ -76,7 +76,7 @@ class CMatrixScaleOperationsTests {
 
 
     @Test
-    void realScaleDivTest() {
+    void realScaleDivTestCase() {
         double scal;
 
         // ---------------------- Sub-case 1 ----------------------
@@ -108,7 +108,7 @@ class CMatrixScaleOperationsTests {
 
 
     @Test
-    void complexScaleDivTest() {
+    void complexScaleDivTestCase() {
         CNumber scal;
 
         // ---------------------- Sub-case 1 ----------------------

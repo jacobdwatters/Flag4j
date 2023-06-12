@@ -15,7 +15,7 @@ class CMatrixDirectSumTests {
     CMatrix A, exp;
 
     @Test
-    void realDirectSumTest() {
+    void realDirectSumTestCase() {
         double[][] bEntries;
         Matrix B;
 
@@ -42,7 +42,7 @@ class CMatrixDirectSumTests {
 
 
     @Test
-    void realSparseDirectSumTest() {
+    void realSparseDirectSumTestCase() {
         double[] bEntries;
         SparseMatrix B;
 
@@ -69,7 +69,7 @@ class CMatrixDirectSumTests {
 
 
     @Test
-    void complexDirectSumTest() {
+    void complexDirectSumTestCase() {
         CNumber[][] bEntries;
         CMatrix B;
 
@@ -95,7 +95,7 @@ class CMatrixDirectSumTests {
 
 
     @Test
-    void complexSparseDirectSumTest() {
+    void complexSparseDirectSumTestCase() {
         CNumber[] bEntries;
         SparseCMatrix B;
 
@@ -122,7 +122,7 @@ class CMatrixDirectSumTests {
 
 
     @Test
-    void realInvDirectSumTest() {
+    void realInvDirectSumTestCase() {
         double[][] bEntries;
         Matrix B;
 
@@ -150,7 +150,7 @@ class CMatrixDirectSumTests {
 
 
     @Test
-    void realInvSparseDirectSumTest() {
+    void realInvSparseDirectSumTestCase() {
         double[] bEntries;
         SparseMatrix B;
 
@@ -178,7 +178,7 @@ class CMatrixDirectSumTests {
 
 
     @Test
-    void complexInvDirectSumTest() {
+    void complexInvDirectSumTestCase() {
         CNumber[][] bEntries;
         CMatrix B;
 
@@ -206,7 +206,7 @@ class CMatrixDirectSumTests {
 
 
     @Test
-    void complexInvSparseDirectSumTest() {
+    void complexInvSparseDirectSumTestCase() {
         CNumber[] bEntries;
         SparseCMatrix B;
 

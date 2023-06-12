@@ -21,7 +21,7 @@ class RealCholeskyTests {
 
 
     @Test
-    void choleskyTest() {
+    void choleskyTestCase() {
         RealCholeskyDecomposition cholesky = new RealCholeskyDecomposition();
 
         // --------------------- Sub-case 1 ---------------------

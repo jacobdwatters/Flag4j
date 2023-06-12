@@ -13,7 +13,7 @@ class CMatrixMultTests {
 
 
     @Test
-    void matMultTests() {
+    void matMultTestCase() {
         double[][] bEntries;
         Matrix B;
 
@@ -56,7 +56,7 @@ class CMatrixMultTests {
 
 
     @Test
-    void matMultComplexTests() {
+    void matMultComplexTestCase() {
         CNumber[][] bEntries;
         CMatrix B;
 
@@ -98,7 +98,7 @@ class CMatrixMultTests {
 
 
     @Test
-    void matMultSparseTests() {
+    void matMultSparseTestCase() {
         double[] bEntries;
         int[] rowIndices, colIndices;
         SparseMatrix B;
@@ -144,7 +144,7 @@ class CMatrixMultTests {
 
 
     @Test
-    void matMultSparseComplexTests() {
+    void matMultSparseComplexTestCase() {
         CNumber[] bEntries;
         int[] rowIndices, colIndices;
         SparseCMatrix B;
@@ -190,7 +190,7 @@ class CMatrixMultTests {
 
 
     @Test
-    void powTests() {
+    void powTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(123.5, -9.3), new CNumber(45.2, -0.0333), new CNumber(5.4)},

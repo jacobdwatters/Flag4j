@@ -26,7 +26,7 @@ class CMatrixConstructorTests {
 
 
     @Test
-    void sizeConstructorTest() {
+    void sizeConstructorTestCase() {
         // -------------- Sub-case 1 --------------
         size = 5;
         expEntries = new CNumber[size*size];
@@ -68,7 +68,7 @@ class CMatrixConstructorTests {
 
 
     @Test
-    void valueSizeTest() {
+    void valueSizeTestCase() {
         // -------------- Sub-case 1 --------------
         size = 5;
         value = new CNumber(-23.13, 100.442);
@@ -114,7 +114,7 @@ class CMatrixConstructorTests {
 
 
     @Test
-    void valueSizeDoubleTest() {
+    void valueSizeDoubleTestCase() {
         // -------------- Sub-case 1 --------------
         size = 5;
         valueD = 9.1;
@@ -159,7 +159,7 @@ class CMatrixConstructorTests {
 
 
     @Test
-    void rowsColsTest() {
+    void rowsColsTestCase() {
         // -------------- Sub-case 1 --------------
         expNumRows = 5;
         expNumCols = 2;
@@ -212,7 +212,7 @@ class CMatrixConstructorTests {
     }
 
     @Test
-    void rowColValueTest() {
+    void rowColValueTestCase() {
         // -------------- Sub-case 1 --------------
         expNumRows = 5;
         expNumCols = 2;
@@ -270,7 +270,7 @@ class CMatrixConstructorTests {
     }
 
     @Test
-    void rowColValueDoubleTest() {
+    void rowColValueDoubleTestCase() {
         // -------------- Sub-case 1 --------------
         expNumRows = 5;
         expNumCols = 2;
@@ -327,7 +327,7 @@ class CMatrixConstructorTests {
 
 
     @Test
-    void shapeTest() {
+    void shapeTestCase() {
         // -------------- Sub-case 1 --------------
         expNumRows = 5;
         expNumCols = 2;
@@ -364,7 +364,7 @@ class CMatrixConstructorTests {
 
 
     @Test
-    void shapeValueTest() {
+    void shapeValueTestCase() {
         // -------------- Sub-case 1 --------------
         expNumRows = 5;
         expNumCols = 2;
@@ -403,7 +403,7 @@ class CMatrixConstructorTests {
 
 
     @Test
-    void shapeValueDoubleTest() {
+    void shapeValueDoubleTestCase() {
         // -------------- Sub-case 1 --------------
         expNumRows = 5;
         expNumCols = 2;
@@ -440,7 +440,7 @@ class CMatrixConstructorTests {
     }
 
     @Test
-    void arrTest() {
+    void arrTestCase() {
         entries = new CNumber[][]{{new CNumber("100.234-0.0103i"), new CNumber("134.5")},
                 {new CNumber("i"), new CNumber("100.3465i")},
                 {new CNumber("-0.9344-1.345i"), new CNumber("-103894.1334")},
@@ -463,7 +463,7 @@ class CMatrixConstructorTests {
     }
 
     @Test
-    void arrStringTest() {
+    void arrStringTestCase() {
         entriesS = new String[][]{{"1", "-2+8.133i", "0.13334-i"}, {"133.4", "-29.13i", "8+9i"}};
         expNumRows = 2;
         expNumCols = 3;
@@ -483,7 +483,7 @@ class CMatrixConstructorTests {
     }
 
     @Test
-    void arrDoubleTest() {
+    void arrDoubleTestCase() {
         entriesD = new double[][]{{1, -2, 0.13334, 15.3, Double.NEGATIVE_INFINITY},
                 {133.4, -29.13, 8, 0, Double.POSITIVE_INFINITY}};
         expNumRows = 2;
@@ -505,7 +505,7 @@ class CMatrixConstructorTests {
 
 
     @Test
-    void arrIntTest() {
+    void arrIntTestCase() {
         entriesI = new int[][]{{1, -2, 0, 15, 100},
                 {133, -29, 8, 0, -1000}};
         expNumRows = 2;
@@ -527,7 +527,7 @@ class CMatrixConstructorTests {
 
 
     @Test
-    void matTest() {
+    void matTestCase() {
         entriesD = new double[][]{{1, -2, 0.13334, 15.3, Double.NEGATIVE_INFINITY},
                 {133.4, -29.13, 8, 0, Double.POSITIVE_INFINITY}};
         C = new Matrix(entriesD);
@@ -550,7 +550,7 @@ class CMatrixConstructorTests {
 
 
     @Test
-    void cmatTest() {
+    void cmatTestCase() {
         entriesS = new String[][]{{"1", "-2+8.133i", "0.13334-i"}, {"133.4", "-29.13i", "8+9i"}};
         B = new CMatrix(entriesS);
         expNumRows = 2;
@@ -572,7 +572,7 @@ class CMatrixConstructorTests {
 
 
     @Test
-    void rowsColsComplexTest() {
+    void rowsColsComplexTestCase() {
         entriesC1D = new CNumber[]{new CNumber(1, 345.6), new CNumber(-3441, 0.0094343431),
                 new CNumber(-6, -9.2), new CNumber(Double.NEGATIVE_INFINITY, 1),
                 new CNumber(9.234, -07643.2), new CNumber(6, 7),

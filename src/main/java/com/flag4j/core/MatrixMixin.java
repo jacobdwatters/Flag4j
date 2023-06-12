@@ -34,12 +34,13 @@ package com.flag4j.core;
  * @param <Y> Real Matrix type.
  * @param <X> Matrix entry type.
  * @param <TT> Vector type equivalent.
+ * @param <UU> Dense vector type.
  */
-public interface MatrixMixin<T, U, V, W, Y, X extends Number, TT>
+public interface MatrixMixin<T, U, V, W, Y, X extends Number, TT, UU>
         extends MatrixPropertiesMixin,
         MatrixComparisonsMixin<T>,
         MatrixManipulationsMixin<T, X>,
-        MatrixOperationsMixin<T, U, V, W, Y, X, TT> {
+        MatrixOperationsMixin<T, U, V, W, Y, X, TT, UU> {
 
     /**
      * Gets the number of rows in this matrix.
@@ -53,6 +54,16 @@ public interface MatrixMixin<T, U, V, W, Y, X extends Number, TT>
      * @return The number of columns in this matrix.
      */
     int numCols();
+
+
+    /**
+     * Gets the element of this matrix at the specified indices.
+     * @param indices Indices of the element to get.
+     * @return The element of this matrix at the specified indices.
+     * @throws IllegalArgumentException If {@code indices} is not of length 2.
+     * @throws ArrayIndexOutOfBoundsException If any indices are not within this matrix.
+     */
+    X get(int... indices); // This method is specified here an in the tensor mixin interface intentionally.
 }
 
 

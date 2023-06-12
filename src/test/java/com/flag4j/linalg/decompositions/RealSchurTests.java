@@ -4,7 +4,6 @@ import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class RealSchurTests {
 
@@ -16,7 +15,7 @@ public class RealSchurTests {
 
 
     @Test
-    void schurDecompSymmetricTest() {
+    void schurDecompSymmetricTestCase() {
 //        // --------------------- Sub-case 1 ---------------------
 //        aEntries = new double[][]{
 //                {2, 1, 0, 0, 0, 0},

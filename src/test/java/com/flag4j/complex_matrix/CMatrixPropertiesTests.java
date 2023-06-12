@@ -13,7 +13,7 @@ class CMatrixPropertiesTests {
     boolean expBoolResult;
 
     @Test
-    void isIdentityTest() {
+    void isIdentityTestCase() {
         // --------------- Sub-case 1 ---------------
         entriesA = new CNumber[][]{
                 {new CNumber(1), new CNumber(2, 123.45), new CNumber(3, -4.551)},
@@ -115,7 +115,7 @@ class CMatrixPropertiesTests {
 
 
     @Test
-    void isRealTest() {
+    void isRealTestCase() {
         // --------------- Sub-case 1 ---------------
         entriesA = new CNumber[][]{
                 {new CNumber(1), new CNumber(2, 123.45), new CNumber(3, -4.551)},
@@ -156,7 +156,7 @@ class CMatrixPropertiesTests {
 
 
     @Test
-    void isComplexTest() {
+    void isComplexTestCase() {
         // --------------- Sub-case 1 ---------------
         entriesA = new CNumber[][]{
                 {new CNumber(1), new CNumber(2, 123.45)},

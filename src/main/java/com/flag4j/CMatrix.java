@@ -64,7 +64,7 @@ import java.util.List;
  */
 public class CMatrix
         extends ComplexDenseTensorBase<CMatrix, Matrix>
-        implements MatrixMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber, CVector>,
+        implements MatrixMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber, CVector, CVector>,
         ComplexMatrixMixin<CMatrix, Matrix> {
 
     /**
@@ -1897,11 +1897,9 @@ public class CMatrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public CMatrix mult(Vector b) {
+    public CVector mult(Vector b) {
         CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
-        Shape shape = new Shape(this.numRows, 1);
-
-        return new CMatrix(shape, entries);
+        return new CVector(entries);
     }
 
 
@@ -1913,11 +1911,10 @@ public class CMatrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public CMatrix mult(SparseVector b) {
+    public CVector mult(SparseVector b) {
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = RealComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);
-        Shape shape = new Shape(this.numRows, 1);
-        return new CMatrix(shape, entries);
+        return new CVector(entries);
     }
 
 
@@ -1929,11 +1926,9 @@ public class CMatrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public CMatrix mult(CVector b) {
+    public CVector mult(CVector b) {
         CNumber[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
-        Shape shape = new Shape(this.numRows, 1);
-
-        return new CMatrix(shape, entries);
+        return new CVector(entries);
     }
 
 
@@ -1945,11 +1940,10 @@ public class CMatrix
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
      */
     @Override
-    public CMatrix mult(SparseCVector b) {
+    public CVector mult(SparseCVector b) {
         ParameterChecks.assertMatMultShapes(this.shape, new Shape(b.size, 1));
         CNumber[] entries = ComplexDenseSparseMatrixMultiplication.blockedVector(this.entries, this.shape, b.entries, b.indices);
-        Shape shape = new Shape(this.numRows, 1);
-        return new CMatrix(shape, entries);
+        return new CVector(entries);
     }
 
 
@@ -3532,22 +3526,17 @@ public class CMatrix
         LUDecomposition<CMatrix> lu = new ComplexLUDecomposition().decompose(this);
 
         double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
-        CNumber det = ComplexDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
+        CNumber det = ComplexDenseDeterminant.detLU(lu.getL(), lu.getU());
 
         if(det.magAsDouble() < tol) {
             throw new SingularMatrixException("Cannot invert.");
         }
 
         // Solve inv(A)*L = inv(U) for inv(A) by solving L^H*inv(A)^H = inv(U)^H
-        ComplexExactSolver solver = new ComplexExactSolver(); // TODO: Need to add solve(CMatrix, CMatrix) to the class for more efficient solving.
+        ComplexExactSolver solver = new ComplexExactSolver();
         CMatrix UinvT = Invert.invTriU(lu.getU()).H();
         CMatrix LT = lu.getL().H();
-        CMatrix inverse = new CMatrix(shape);
-
-        for(int i=0; i<UinvT.numCols; i++) {
-            CVector col = solver.solve(LT, UinvT.getColAsVector(i));
-            inverse.setRow(col.conj().entries, i); // Implicit transpose here.
-        }
+        CMatrix inverse = solver.solve(LT, UinvT).H();
 
         return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.
     }
@@ -3879,7 +3868,7 @@ public class CMatrix
         Matrix S = new ComplexSVD(false).decompose(this).getS();
         int stopIdx = Math.min(numRows, numCols);
 
-        double tol = 1.0E-8; // Tolerance for determining if a singular value should be considered zero.
+        double tol = 1.0E-8*Math.max(numRows, numCols); // Tolerance for determining if a singular value should be considered zero.
         int rank = 0;
 
         for(int i=0; i<stopIdx; i++) {
