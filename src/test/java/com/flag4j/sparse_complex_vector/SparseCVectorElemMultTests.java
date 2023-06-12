@@ -16,7 +16,7 @@ class SparseCVectorElemMultTests {
     int size;
 
     @Test
-    void denseElemMultTest() {
+    void denseElemMultTestCase() {
         CNumber[] aValues = {
                 new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
                 new CNumber(25.612, 0.0245)};
@@ -50,7 +50,7 @@ class SparseCVectorElemMultTests {
 
 
     @Test
-    void sparseElemMultTest() {
+    void sparseElemMultTestCase() {
         CNumber[] aValues = {
                 new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
                 new CNumber(25.612, 0.0245)};
@@ -85,7 +85,7 @@ class SparseCVectorElemMultTests {
 
 
     @Test
-    void denseComplexElemMultTest() {
+    void denseComplexElemMultTestCase() {
         CNumber[] aValues = {
                 new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
                 new CNumber(25.612, 0.0245)};
@@ -123,7 +123,7 @@ class SparseCVectorElemMultTests {
 
 
     @Test
-    void sparseComplexElemMultTest() {
+    void sparseComplexElemMultTestCase() {
         CNumber[] aValues = {
                 new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
                 new CNumber(25.612, 0.0245)};
@@ -165,7 +165,7 @@ class SparseCVectorElemMultTests {
 
 
     @Test
-    void complexScalarMultTest() {
+    void complexScalarMultTestCase() {
         CNumber[] aValues = {
                 new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
                 new CNumber(25.612, 0.0245)};
@@ -192,7 +192,7 @@ class SparseCVectorElemMultTests {
 
 
     @Test
-    void realScalarMultTest() {
+    void realScalarMultTestCase() {
         CNumber[] aValues = {
                 new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
                 new CNumber(25.612, 0.0245)};

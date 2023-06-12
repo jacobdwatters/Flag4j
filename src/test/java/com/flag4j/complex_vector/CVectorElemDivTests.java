@@ -48,7 +48,7 @@ class CVectorElemDivTests {
 
 
     @Test
-    void realDenseTest() {
+    void realDenseTestCase() {
         double[] bEntries;
         Vector b;
 
@@ -71,7 +71,7 @@ class CVectorElemDivTests {
 
 
     @Test
-    void complexDenseTest() {
+    void complexDenseTestCase() {
         CNumber[] bEntries;
         CVector b;
 

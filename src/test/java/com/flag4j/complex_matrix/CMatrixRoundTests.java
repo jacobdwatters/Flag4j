@@ -14,7 +14,7 @@ class CMatrixRoundTests {
     CMatrix A, exp;
 
     @Test
-    void simpleRoundTest() {
+    void simpleRoundTestCase() {
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new CNumber[][]{
                 {new CNumber(23.5, Double.NEGATIVE_INFINITY), new CNumber(56, -93.1), new CNumber(3.455, 1.54)},
@@ -53,7 +53,7 @@ class CMatrixRoundTests {
 
 
     @Test
-    void roundTest() {
+    void roundTestCase() {
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new CNumber[][]{
                 {new CNumber(23.5884, Double.NEGATIVE_INFINITY), new CNumber(56, -93.134), new CNumber(3.4557734, 1.54)},
@@ -92,7 +92,7 @@ class CMatrixRoundTests {
 
 
     @Test
-    void roundToZeroTest() {
+    void roundToZeroTestCase() {
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new CNumber[][]{
                 {new CNumber(23.5, Double.NEGATIVE_INFINITY), new CNumber(0, -0.5e-12), new CNumber(3.455, 1.54)},
@@ -131,7 +131,7 @@ class CMatrixRoundTests {
 
 
     @Test
-    void roundToZeroTolTest() {
+    void roundToZeroTolTestCase() {
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new CNumber[][]{
                 {new CNumber(23.5, Double.NEGATIVE_INFINITY), new CNumber(0, -0.5e-12), new CNumber(1, 1.54)},

@@ -13,7 +13,7 @@ public class VectorScaleMultDivTests {
     Vector a;
 
     @Test
-    void realScalMultTest() {
+    void realScalMultTestCase() {
         double b;
         double[] expEntries;
         Vector exp;
@@ -30,7 +30,7 @@ public class VectorScaleMultDivTests {
 
 
     @Test
-    void complexScalMultTest() {
+    void complexScalMultTestCase() {
         CNumber b;
         CNumber[] expEntries;
         CVector exp;
@@ -49,7 +49,7 @@ public class VectorScaleMultDivTests {
     // ---------------------------------------------------------------------------------------------------------------
 
     @Test
-    void realScalDivTest() {
+    void realScalDivTestCase() {
         double b;
         double[] expEntries;
         Vector exp;
@@ -66,7 +66,7 @@ public class VectorScaleMultDivTests {
 
 
     @Test
-    void complexScalDivTest() {
+    void complexScalDivTestCase() {
         CNumber b;
         CNumber[] expEntries;
         CVector exp;

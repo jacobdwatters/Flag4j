@@ -12,7 +12,7 @@ class ShapeTests {
 
 
     @Test
-    void dimsConstructorTest() {
+    void dimsConstructorTestCase() {
         // ----------- Sub-case 1 -----------
         expRank = 3;
         expDims1 = new int[]{1, 5, 18};
@@ -41,7 +41,7 @@ class ShapeTests {
 
 
     @Test
-    void getTest() {
+    void getTestCase() {
         // ----------- Sub-case 1 -----------
         expDims1 = new int[]{1, 5, 18};
         shape1 = new Shape(expDims1);
@@ -61,7 +61,7 @@ class ShapeTests {
 
 
     @Test
-    void totalEntriesTest() {
+    void totalEntriesTestCase() {
         // ----------- Sub-case 1 -----------
         expDims1 = new int[]{1, 5, 18};
         shape1 = new Shape(expDims1);
@@ -80,7 +80,7 @@ class ShapeTests {
 
 
     @Test
-    void equalsTest() {
+    void equalsTestCase() {
         // ----------- Sub-case 1 -----------
         expDims1 = new int[]{1, 5, 18};
         expDims2 = new int[]{1, 5, 18};
@@ -122,7 +122,7 @@ class ShapeTests {
 
 
     @Test
-    void strideTest() {
+    void strideTestCase() {
         // -------------- Sub-case 1 --------------
         shape1 = new Shape(4, 2, 3);
         expStrides = new int[]{6, 3, 1};
@@ -143,7 +143,7 @@ class ShapeTests {
     }
 
     @Test
-    void entriesIndexTest() {
+    void entriesIndexTestCase() {
         // -------------- Sub-case 1 --------------
         shape1 = new Shape(4, 2, 3);
         indices = new int[]{1, 0, 2};
@@ -180,7 +180,7 @@ class ShapeTests {
 
 
     @Test
-    void swapAxesTest() {
+    void swapAxesTestCase() {
         // -------------- Sub-case 1 --------------
         shape1 = new Shape(4, 2, 3);
         shape1.swapAxes(0, 1);

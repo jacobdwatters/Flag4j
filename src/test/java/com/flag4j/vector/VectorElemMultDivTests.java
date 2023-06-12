@@ -17,7 +17,7 @@ class VectorElemMultDivTests {
     Vector a;
 
     @Test
-    void realDenseMultTest() {
+    void realDenseMultTestCase() {
         double[] bEntries, expEntries;
         Vector b, exp;
 
@@ -43,7 +43,7 @@ class VectorElemMultDivTests {
 
 
     @Test
-    void complexDenseMultTest() {
+    void complexDenseMultTestCase() {
         CNumber[] bEntries, expEntries;
         CVector b, exp;
 
@@ -69,7 +69,7 @@ class VectorElemMultDivTests {
 
 
     @Test
-    void realSparseMultTest() {
+    void realSparseMultTestCase() {
         int[] expIndices;
         double[] bEntries, expEntries;
         SparseVector b, exp;
@@ -103,7 +103,7 @@ class VectorElemMultDivTests {
 
 
     @Test
-    void complexSparseMultTest() {
+    void complexSparseMultTestCase() {
         int[] expIndices;
         CNumber[] bEntries, expEntries;
         SparseCVector b, exp;
@@ -137,7 +137,7 @@ class VectorElemMultDivTests {
 
     // ---------------------------------------------------------------------------------------------------------------
     @Test
-    void realDenseDivTest() {
+    void realDenseDivTestCase() {
         double[] bEntries, expEntries;
         Vector b, exp;
 
@@ -163,7 +163,7 @@ class VectorElemMultDivTests {
 
 
     @Test
-    void complexDenseDivTest() {
+    void complexDenseDivTestCase() {
         CNumber[] bEntries, expEntries;
         CVector b, exp;
 

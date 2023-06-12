@@ -14,7 +14,7 @@ class SparseCVectorAddTests {
     SparseCVector a;
 
     @Test
-    void sparseAddTest() {
+    void sparseAddTestCase() {
         SparseVector b;
         SparseCVector exp;
 
@@ -46,7 +46,7 @@ class SparseCVectorAddTests {
 
 
     @Test
-    void sparseComplexAddTest() {
+    void sparseComplexAddTestCase() {
         SparseCVector b, exp;
 
         CNumber[] aValues = {new CNumber(32.5, 98), new CNumber(-8.2, 55.1), new CNumber(0, 14.5)};
@@ -81,7 +81,7 @@ class SparseCVectorAddTests {
 
 
     @Test
-    void denseTest() {
+    void denseTestCase() {
         Vector b;
         CVector exp;
 
@@ -113,7 +113,7 @@ class SparseCVectorAddTests {
 
 
     @Test
-    void denseComplexTest() {
+    void denseComplexTestCase() {
         CVector b, exp;
 
         CNumber[] aValues = {new CNumber(32.5, 98), new CNumber(-8.2, 55.1)};
@@ -144,7 +144,7 @@ class SparseCVectorAddTests {
 
 
     @Test
-    void scalarTest() {
+    void scalarTestCase() {
         double b;
         CVector exp;
 
@@ -165,7 +165,7 @@ class SparseCVectorAddTests {
 
 
     @Test
-    void complexScalarTest() {
+    void complexScalarTestCase() {
         CNumber b;
         CVector exp;
 

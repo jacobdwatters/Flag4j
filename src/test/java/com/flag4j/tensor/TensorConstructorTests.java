@@ -34,7 +34,7 @@ class TensorConstructorTests {
     }
 
     @Test
-    void shapeConstructorTest() {
+    void shapeConstructorTestCase() {
         // -------------- Sub-case 1 --------------
         expShape = new Shape(4, 5, 6, 7, 1, 2, 4);
         expEntries = new double[expShape.totalEntries().intValue()];
@@ -65,7 +65,7 @@ class TensorConstructorTests {
 
 
     @Test
-    void shapeValueConstructorTest() {
+    void shapeValueConstructorTestCase() {
         // -------------- Sub-case 1 --------------
         value = 3.1345;
         expShape = new Shape(4, 5, 6, 7, 1, 2, 4);
@@ -102,7 +102,7 @@ class TensorConstructorTests {
 
 
     @Test
-    void shapeEntriesDoubleTest() {
+    void shapeEntriesDoubleTestCase() {
         // ---------- Sub-case 1 ----------
         expShape = new Shape(1, 3, 2, 5);
         entriesD = new double[]{1, 2, 3, 4, 5, 6, 7, -221.233, 11.33, 11,
@@ -178,7 +178,7 @@ class TensorConstructorTests {
 
 
     @Test
-    void shapeEntriesIntTest() {
+    void shapeEntriesIntTestCase() {
         // ---------- Sub-case 1 ----------
         expShape = new Shape(1, 3, 2, 5);
         entriesI = new int[]{1, 2, 3, 4, 5, 6, 7, -221, 11, 11,
@@ -253,7 +253,7 @@ class TensorConstructorTests {
 
 
     @Test
-    void tensorConstructorTest() {
+    void tensorConstructorTestCase() {
         expShape = new Shape(2, 3, 1, 2);
         expEntries = new double[]{1, -1.4133, 113.4, 0.4, 11.3, 445, 133.445, 9.8, 13384, -993.44, 11, 12};
         expRank = expShape.getRank();
@@ -266,7 +266,7 @@ class TensorConstructorTests {
 
 
     @Test
-    void shapeEntriesDoubleObjectTest() {
+    void shapeEntriesDoubleObjectTestCase() {
         // ---------- Sub-case 1 ----------
         expShape = new Shape(1, 3, 2, 5);
         entriesDObject = new Double[]{1d, 2d, 3d, 4d, 5d, 6d, 7d, -221.233, 11.33, 11d,
@@ -341,7 +341,7 @@ class TensorConstructorTests {
 
 
     @Test
-    void shapeEntriesIntegerObjectTest() {
+    void shapeEntriesIntegerObjectTestCase() {
         // ---------- Sub-case 1 ----------
         expShape = new Shape(1, 3, 2, 5);
         entriesInteger = new Integer[]{1, 2, 3, 4, 5, 6, 7, -221, 11, 11,
@@ -414,7 +414,7 @@ class TensorConstructorTests {
 
 
     @Test
-    void matrixTest() {
+    void matrixTestCase() {
         Matrix mat;
 
         // ------------------------- Sub-case 1 -------------------------
@@ -429,7 +429,7 @@ class TensorConstructorTests {
 
 
     @Test
-    void vectorTest() {
+    void vectorTestCase() {
         Vector vec;
 
         // ------------------------- Sub-case 1 -------------------------
@@ -443,7 +443,7 @@ class TensorConstructorTests {
 
 
     @Test
-    void copyTest() {
+    void copyTestCase() {
         // -------------- Sub-case 1 --------------
         expShape = new Shape(2, 3, 1, 2);
         expEntries = new double[]{1, -1.4133, 113.4, 0.4, 11.3, 445, 133.445, 9.8, 13384, -993.44, 11, 12};

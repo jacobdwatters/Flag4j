@@ -32,7 +32,7 @@ class CVectorElemMultTests {
 
 
     @Test
-    void realDenseTest() {
+    void realDenseTestCase() {
         double[] bEntries;
         Vector b;
 
@@ -55,7 +55,7 @@ class CVectorElemMultTests {
 
 
     @Test
-    void realSparseTest() {
+    void realSparseTestCase() {
         double[] bEntries;
         SparseVector b;
 
@@ -93,7 +93,7 @@ class CVectorElemMultTests {
 
 
     @Test
-    void complexDenseTest() {
+    void complexDenseTestCase() {
         CNumber[] bEntries;
         CVector b;
 
@@ -117,7 +117,7 @@ class CVectorElemMultTests {
     }
 
     @Test
-    void complexSparseTest() {
+    void complexSparseTestCase() {
         CNumber[] bEntries;
         SparseCVector b;
 

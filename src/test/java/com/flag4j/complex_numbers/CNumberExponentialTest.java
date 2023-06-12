@@ -9,7 +9,7 @@ class CNumberExponentialTest {
     CNumber expResult, actResult;
 
     @Test
-    void powerTwoDoubleTest() {
+    void powerTwoDoubleTestCase() {
         // ------------ Sub-case 1 ---------------
         a = 4;
         b = 6;
@@ -76,7 +76,7 @@ class CNumberExponentialTest {
     }
 
     @Test
-    void powerOneDoubleTest() {
+    void powerOneDoubleTestCase() {
         // ------------ Sub-case 1 ---------------
         a = 4;
         bComplex = new CNumber(6, 9);
@@ -184,7 +184,7 @@ class CNumberExponentialTest {
 
 
     @Test
-    void lnTest() {
+    void lnTestCase() {
         // ------------ Sub-case 1 ---------------
         aComplex = new CNumber(1);
         expResult = new CNumber(0);
@@ -224,7 +224,7 @@ class CNumberExponentialTest {
 
 
     @Test
-    void lnDoubleTest() {
+    void lnDoubleTestCase() {
         // ------------ Sub-case 1 ---------------
         a = 1;
         expResult = new CNumber(0);
@@ -258,7 +258,7 @@ class CNumberExponentialTest {
 
 
     @Test
-    void logTest() {
+    void logTestCase() {
         // ------------ Sub-case 1 ---------------
         aComplex = new CNumber(1);
         expResult = new CNumber(0);
@@ -298,7 +298,7 @@ class CNumberExponentialTest {
 
 
     @Test
-    void logDoubleTest() {
+    void logDoubleTestCase() {
         // ------------ Sub-case 1 ---------------
         a = 1;
         expResult = new CNumber(0);
@@ -332,7 +332,7 @@ class CNumberExponentialTest {
 
 
     @Test
-    void logDoubleBaseDoubleTest() {
+    void logDoubleBaseDoubleTestCase() {
         // ------------ Sub-case 1 ------------
         a = 10;
         b = 12.23423;
@@ -364,7 +364,7 @@ class CNumberExponentialTest {
 
 
     @Test
-    void logBaseDoubleTest() {
+    void logBaseDoubleTestCase() {
         // ------------ Sub-case 1 ------------
         a = 2;
         bComplex = new CNumber(14.32, 785.234981);
@@ -389,7 +389,7 @@ class CNumberExponentialTest {
 
 
     @Test
-    void logBaseTest() {
+    void logBaseTestCase() {
         // ------------ Sub-case 1 ------------
         aComplex = new CNumber(93.23487, -6.32465);
         bComplex = new CNumber(-345.2, 14.556);

@@ -18,7 +18,7 @@ class RealDenseOperationsTests {
 
 
     @Test
-    void addTest() {
+    void addTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         src2 = new double[]{9.1233, 22, 0.00009234, 11.234, -88.1, 13.4};
@@ -48,7 +48,7 @@ class RealDenseOperationsTests {
 
 
     @Test
-    void addScalarTest() {
+    void addScalarTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         a = 11.93;
@@ -60,7 +60,7 @@ class RealDenseOperationsTests {
 
 
     @Test
-    void subTest() {
+    void subTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         src2 = new double[]{9.1233, 22, 0.00009234, 11.234, -88.1, 13.4};
@@ -87,7 +87,7 @@ class RealDenseOperationsTests {
 
 
     @Test
-    void subScalarTest() {
+    void subScalarTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         a = 11.93;
@@ -99,7 +99,7 @@ class RealDenseOperationsTests {
 
 
     @Test
-    void prodTest() {
+    void prodTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.8000000004};
         expResultD = 1*0.98332*134.556*-9.13*-100.234*0.8000000004;
@@ -113,7 +113,7 @@ class RealDenseOperationsTests {
 
 
     @Test
-    void scaleMultTest() {
+    void scaleMultTestCase() {
         // ---------- Sub-case 1 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         a = 11.93;

@@ -30,7 +30,7 @@ class SparseCVectorConversionTests {
 
 
     @Test
-    void toMatrixTest() {
+    void toMatrixTestCase() {
         CNumber[] expEntries;
         int[][] expIndices;
         Shape expShape;
@@ -72,7 +72,7 @@ class SparseCVectorConversionTests {
 
 
     @Test
-    void toRealTest() {
+    void toRealTestCase() {
         double[] expEntries;
         int[] expIndices;
         int expSize;
@@ -109,7 +109,7 @@ class SparseCVectorConversionTests {
 
 
     @Test
-    void toDenseTest() {
+    void toDenseTestCase() {
         CNumber[] expEntries;
         CVector exp;
 
@@ -126,7 +126,7 @@ class SparseCVectorConversionTests {
 
 
     @Test
-    void fromDenseTest() {
+    void fromDenseTestCase() {
         CNumber[] denseEntries;
         CVector denseVector;
 

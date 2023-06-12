@@ -19,7 +19,7 @@ class VectorEqualsTests {
     Vector A;
 
     @Test
-    void realDenseTest() {
+    void realDenseTestCase() {
         double[] bEntries;
         Vector B;
 
@@ -51,7 +51,7 @@ class VectorEqualsTests {
 
 
     @Test
-    void complexDenseTest() {
+    void complexDenseTestCase() {
         CNumber[] bEntries;
         CVector B;
 
@@ -83,7 +83,7 @@ class VectorEqualsTests {
 
 
     @Test
-    void realSparseTest() {
+    void realSparseTestCase() {
         double[] bEntries;
         SparseVector B;
 
@@ -120,7 +120,7 @@ class VectorEqualsTests {
 
 
     @Test
-    void complexSparseTest() {
+    void complexSparseTestCase() {
         CNumber[] bEntries;
         SparseCVector B;
 
@@ -157,7 +157,7 @@ class VectorEqualsTests {
 
 
     @Test
-    void objectTest() {
+    void objectTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{123.4};
         A = new Vector(aEntries);

@@ -25,7 +25,7 @@ class SparseVectorConversionTests {
 
 
     @Test
-    void toMatrixTest() {
+    void toMatrixTestCase() {
         double[] expEntries;
         int[][] expIndices;
         Shape expShape;
@@ -94,7 +94,7 @@ class SparseVectorConversionTests {
 
 
     @Test
-    void toDenseTest() {
+    void toDenseTestCase() {
         double[] expEntries;
         Vector exp;
 
@@ -111,7 +111,7 @@ class SparseVectorConversionTests {
 
 
     @Test
-    void fromDenseTest() {
+    void fromDenseTestCase() {
         double[] denseEntries;
         Vector denseVector;
 

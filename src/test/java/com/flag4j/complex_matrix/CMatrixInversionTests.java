@@ -13,7 +13,7 @@ class CMatrixInversionTests {
 
 
     @Test
-    void invTest() {
+    void invTestCase() {
         // --------------------- Sub-case 1 ---------------------
         aEntries = new CNumber[][]{
                 {new CNumber(2.4, 1), new CNumber(9), new CNumber(0, 4)},

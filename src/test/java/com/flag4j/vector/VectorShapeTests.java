@@ -18,7 +18,7 @@ class VectorShapeTests {
     Vector A;
 
     @Test
-    void sizeTest() {
+    void sizeTestCase() {
         // --------------------- Sub-case 1 ---------------------
         aEntries = new double[]{1.43543, 8.144, -9.234};
         A = new Vector(aEntries);
@@ -33,7 +33,7 @@ class VectorShapeTests {
     }
 
     @Test
-    void realDenseTest() {
+    void realDenseTestCase() {
         double[] bEntries;
         Vector B;
 
@@ -58,7 +58,7 @@ class VectorShapeTests {
 
 
     @Test
-    void complexDenseTest() {
+    void complexDenseTestCase() {
         CNumber[] bEntries;
         CVector B;
 
@@ -83,7 +83,7 @@ class VectorShapeTests {
 
 
     @Test
-    void realSparseTest() {
+    void realSparseTestCase() {
         double[] bEntries;
         SparseVector B;
 
@@ -112,7 +112,7 @@ class VectorShapeTests {
 
 
     @Test
-    void complexSparseTest() {
+    void complexSparseTestCase() {
         CNumber[] bEntries;
         SparseCVector B;
 

@@ -16,7 +16,7 @@ class CMatrixSubTests {
 
 
     @Test
-    void realTests() {
+    void realTestCase() {
         double[][] bEntries;
         Matrix B;
 
@@ -72,7 +72,7 @@ class CMatrixSubTests {
 
 
     @Test
-    void complexTests() {
+    void complexTestCase() {
         CNumber[][] bEntries;
         CMatrix B;
 
@@ -127,7 +127,7 @@ class CMatrixSubTests {
 
 
     @Test
-    void realSparseTests() {
+    void realSparseTestCase() {
         double[] bEntries;
         SparseMatrix B;
 
@@ -183,7 +183,7 @@ class CMatrixSubTests {
 
 
     @Test
-    void complexSparseTests() {
+    void complexSparseTestCase() {
         CNumber[] bEntries;
         SparseCMatrix B;
 
@@ -240,7 +240,7 @@ class CMatrixSubTests {
 
 
     @Test
-    void doubleTests() {
+    void doubleTestCase() {
         double b;
 
         // ---------------------- Sub-case 1 ----------------------
@@ -261,7 +261,7 @@ class CMatrixSubTests {
 
 
     @Test
-    void complexNumberTests() {
+    void complexNumberTestCase() {
         CNumber b;
 
         // ---------------------- Sub-case 1 ----------------------

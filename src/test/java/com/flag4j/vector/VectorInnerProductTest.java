@@ -17,7 +17,7 @@ class VectorInnerProductTest {
     Vector a = new Vector(aEntries);
 
     @Test
-    void realDenseTest() {
+    void realDenseTestCase() {
         double[] bEntries;
         Vector b;
         Double exp;
@@ -32,7 +32,7 @@ class VectorInnerProductTest {
 
 
     @Test
-    void realSparseTest() {
+    void realSparseTestCase() {
         double[] bEntries;
         SparseVector b;
         Double exp;
@@ -49,7 +49,7 @@ class VectorInnerProductTest {
 
 
     @Test
-    void complexDenseTest() {
+    void complexDenseTestCase() {
         CNumber[] bEntries;
         CVector b;
         CNumber exp;
@@ -65,7 +65,7 @@ class VectorInnerProductTest {
 
 
     @Test
-    void complexSparseTest() {
+    void complexSparseTestCase() {
         CNumber[] bEntries;
         SparseCVector b;
         CNumber exp;
@@ -82,7 +82,7 @@ class VectorInnerProductTest {
 
 
     @Test
-    void normalizeTest() {
+    void normalizeTestCase() {
         double[] expEntries;
         Vector exp;
 

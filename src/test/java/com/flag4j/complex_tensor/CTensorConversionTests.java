@@ -26,7 +26,7 @@ class CTensorConversionTests {
 
 
     @Test
-    void toRealTest() {
+    void toRealTestCase() {
         double[] expEntries;
         Tensor exp;
 
@@ -39,7 +39,7 @@ class CTensorConversionTests {
 
 
     @Test
-    void toMatrixTest() {
+    void toMatrixTestCase() {
         CTensor B;
 
         CNumber[] expEntries;
@@ -64,7 +64,7 @@ class CTensorConversionTests {
 
 
     @Test
-    void toVectorTest() {
+    void toVectorTestCase() {
         CNumber[] expEntries;
         CVector exp;
 

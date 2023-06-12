@@ -38,7 +38,7 @@ class MatrixElemDivTests {
 
 
     @Test
-    void elemDivTest() {
+    void elemDivTestCase() {
         // ----------------- Sub-case 1 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
         entriesB = new double[][]{{4.344, 555.6, 94, -0.4442}, {0.0000234, 1333.4, 44.5, 134.3}};
@@ -62,7 +62,7 @@ class MatrixElemDivTests {
 
 
     @Test
-    void elemDivComplexTest() {
+    void elemDivComplexTestCase() {
         // ----------------- Sub-case 1 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
         entriesBC = new CNumber[][]{{new CNumber(1.4, 5), new CNumber(0, -1), new CNumber(1.3), new CNumber()},

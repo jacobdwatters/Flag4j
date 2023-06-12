@@ -13,7 +13,7 @@ class CMatrixElemDivTests {
     CMatrix A, exp;
 
     @Test
-    void realTest() {
+    void realTestCase() {
         double[][] bEntries;
         Matrix B;
 
@@ -57,7 +57,7 @@ class CMatrixElemDivTests {
 
 
     @Test
-    void complexTest() {
+    void complexTestCase() {
         CNumber[][] bEntries;
         CMatrix B;
 

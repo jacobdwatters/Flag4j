@@ -14,7 +14,7 @@ class VectorAggregateTests {
     int[] expArg;
 
     @Test
-    void sumTest() {
+    void sumTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[]{1.45, -194.5666, 430.5, 563.3};
         a = new Vector(aEntries);
@@ -25,7 +25,7 @@ class VectorAggregateTests {
 
 
     @Test
-    void minTest() {
+    void minTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[]{1.45, -194.5666, 430.5, 563.3};
         a = new Vector(aEntries);
@@ -36,7 +36,7 @@ class VectorAggregateTests {
 
 
     @Test
-    void minAbsTest() {
+    void minAbsTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[]{1.45, -194.5666, 430.5, 563.3};
         a = new Vector(aEntries);
@@ -47,7 +47,7 @@ class VectorAggregateTests {
 
 
     @Test
-    void argMinTest() {
+    void argMinTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[]{1.45, -194.5666, 430.5, 563.3};
         a = new Vector(aEntries);
@@ -58,7 +58,7 @@ class VectorAggregateTests {
 
 
     @Test
-    void maxTest() {
+    void maxTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[]{1.45, -194.5666, 430.5, 563.3};
         a = new Vector(aEntries);
@@ -69,7 +69,7 @@ class VectorAggregateTests {
 
 
     @Test
-    void maxAbsTest() {
+    void maxAbsTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[]{1.45, -1934.5666, 430.5, 563.3};
         a = new Vector(aEntries);
@@ -80,7 +80,7 @@ class VectorAggregateTests {
 
 
     @Test
-    void argMaxTest() {
+    void argMaxTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[]{1.45, -194.5666, 430.5, 563.3};
         a = new Vector(aEntries);

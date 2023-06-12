@@ -13,7 +13,7 @@ class MatrixInversionTests {
 
 
     @Test
-    void invTest() {
+    void invTestCase() {
         // --------------------- Sub-case 1 ---------------------
         aEntries = new double[][]{
                 {2, 55, 8},

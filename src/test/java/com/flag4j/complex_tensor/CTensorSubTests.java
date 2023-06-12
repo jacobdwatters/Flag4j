@@ -29,7 +29,7 @@ class CTensorSubTests {
 
 
     @Test
-    void realDenseTest() {
+    void realDenseTestCase() {
         double[] bEntries;
         Tensor B;
 
@@ -76,7 +76,7 @@ class CTensorSubTests {
 
 
     @Test
-    void realSparseTest() {
+    void realSparseTestCase() {
         double[] bEntries;
         SparseTensor B;
 
@@ -114,7 +114,7 @@ class CTensorSubTests {
 
 
     @Test
-    void complexDenseTest() {
+    void complexDenseTestCase() {
         CNumber[] bEntries;
         CTensor B;
 
@@ -154,7 +154,7 @@ class CTensorSubTests {
 
 
     @Test
-    void complexSparseTest() {
+    void complexSparseTestCase() {
         CNumber[] bEntries;
         SparseCTensor B;
 
@@ -191,7 +191,7 @@ class CTensorSubTests {
 
 
     @Test
-    void subRealScalarTest() {
+    void subRealScalarTestCase() {
         double b;
 
         // ----------------------- Sub-case 1 -----------------------
@@ -231,7 +231,7 @@ class CTensorSubTests {
 
 
     @Test
-    void realDenseSubEqTest() {
+    void realDenseSubEqTestCase() {
         double[] bEntries;
         Tensor B;
 
@@ -279,7 +279,7 @@ class CTensorSubTests {
 
 
     @Test
-    void realSparseSubEqTest() {
+    void realSparseSubEqTestCase() {
         double[] bEntries;
         SparseTensor B;
 
@@ -318,7 +318,7 @@ class CTensorSubTests {
 
 
     @Test
-    void subEqRealScalarTest() {
+    void subEqRealScalarTestCase() {
         double b;
 
         // ----------------------- Sub-case 1 -----------------------
@@ -338,7 +338,7 @@ class CTensorSubTests {
 
 
     @Test
-    void complexDenseSubEqTest() {
+    void complexDenseSubEqTestCase() {
         CNumber[] bEntries;
         CTensor B;
 
@@ -393,7 +393,7 @@ class CTensorSubTests {
 
 
     @Test
-    void complexSparseSubEqTest() {
+    void complexSparseSubEqTestCase() {
         CNumber[] bEntries;
         SparseCTensor B;
 
@@ -432,7 +432,7 @@ class CTensorSubTests {
 
 
     @Test
-    void subEqComplexScalarTest() {
+    void subEqComplexScalarTestCase() {
         CNumber b;
 
         // ----------------------- Sub-case 1 -----------------------

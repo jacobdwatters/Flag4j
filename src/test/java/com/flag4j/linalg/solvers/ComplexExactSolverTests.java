@@ -28,7 +28,7 @@ class ComplexExactSolverTests {
 
 
     @Test
-    void solveTest() {
+    void solveTestCase() {
         ComplexExactSolver solver = new ComplexExactSolver();
 
         // ----------------- Sub-case 1 -----------------

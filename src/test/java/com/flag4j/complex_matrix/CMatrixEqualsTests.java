@@ -23,7 +23,7 @@ class CMatrixEqualsTests {
     CMatrix A, B;
 
     @Test
-    void complexTest() {
+    void complexTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(234.56, -0.23), new CNumber(4)},
@@ -69,7 +69,7 @@ class CMatrixEqualsTests {
 
 
     @Test
-    void realTest() {
+    void realTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(234.56), new CNumber(4)},
@@ -129,7 +129,7 @@ class CMatrixEqualsTests {
 
 
     @Test
-    void realSparseTest() {
+    void realSparseTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(), new CNumber()},
@@ -189,7 +189,7 @@ class CMatrixEqualsTests {
 
 
     @Test
-    void complexSparseTest() {
+    void complexSparseTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(), new CNumber()},
@@ -249,7 +249,7 @@ class CMatrixEqualsTests {
 
 
     @Test
-    void otherObjectTest() {
+    void otherObjectTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new CNumber[][]{
                 {new CNumber(), new CNumber()},

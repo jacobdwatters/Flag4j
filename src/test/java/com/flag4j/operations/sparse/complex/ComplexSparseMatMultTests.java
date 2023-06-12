@@ -24,7 +24,7 @@ class ComplexSparseMatMultTests {
     CMatrix exp;
 
     @Test
-    void matMultTest() {
+    void matMultTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         aEntries = new CNumber[]{new CNumber("1+3.45i"), new CNumber("9.43-8j")};
         aRowIndices = new int[]{0, 2};
@@ -52,7 +52,7 @@ class ComplexSparseMatMultTests {
 
 
     @Test
-    void matVecMultTest() {
+    void matVecMultTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         aEntries = new CNumber[]{new CNumber("1+3.45i"), new CNumber("7.9-105j"), new CNumber("9.43-8j")};
         aRowIndices = new int[]{0, 1, 2};

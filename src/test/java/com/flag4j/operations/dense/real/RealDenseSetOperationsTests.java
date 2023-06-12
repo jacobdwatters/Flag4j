@@ -19,7 +19,7 @@ class RealDenseSetOperationsTests {
 
 
     @Test
-    void oneDArrayTest() {
+    void oneDArrayTestCase() {
         // -------------- Sub-case 1 ---------------
         arrD = new Double[]{1., 1.344, -9.334, 1423.44};
         dest = new double[arrD.length];
@@ -75,7 +75,7 @@ class RealDenseSetOperationsTests {
 
 
     @Test
-    void twoDArrayTest() {
+    void twoDArrayTestCase() {
         // -------------- Sub-case 1 ---------------
         arrDD = new Double[][]{{1., 1.344}, {-9.334, 1423.44}};
         dest = new double[arrDD.length*arrDD[0].length];

@@ -13,7 +13,7 @@ class VectorCrossProductTests {
     Vector a = new Vector(aEntries);
 
     @Test
-    void realCrossTest() {
+    void realCrossTestCase() {
         double[] bEntries, expEntries;
         Vector b, exp;
 
@@ -51,7 +51,7 @@ class VectorCrossProductTests {
     }
 
     @Test
-    void complexCrossTest() {
+    void complexCrossTestCase() {
         CNumber[] bEntries, expEntries;
         CVector b, exp;
 

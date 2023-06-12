@@ -24,7 +24,7 @@ class CVectorAggregateTests {
 
 
     @Test
-    void sumTest() {
+    void sumTestCase() {
         // ------------------ Sub-case 1 ------------------
         expComplex = aEntries[0].add(aEntries[1]).add(aEntries[2]).add(aEntries[3]).add(aEntries[4]);
         assertEquals(expComplex, a.sum());
@@ -32,7 +32,7 @@ class CVectorAggregateTests {
 
 
     @Test
-    void minTest() {
+    void minTestCase() {
         // ------------------ Sub-case 1 ------------------
         expComplex = new CNumber(0.009257);
         assertEquals(expComplex, a.min());
@@ -41,7 +41,7 @@ class CVectorAggregateTests {
 
 
     @Test
-    void maxTest() {
+    void maxTestCase() {
         // ------------------ Sub-case 1 ------------------
         expComplex = new CNumber(1.455, 6126.347).mag();
         assertEquals(expComplex, a.max());
@@ -50,7 +50,7 @@ class CVectorAggregateTests {
 
 
     @Test
-    void argMinTest() {
+    void argMinTestCase() {
         // ------------------ Sub-case 1 ------------------
         expIndices = new int[]{4};
         assertArrayEquals(expIndices, a.argMin());
@@ -58,7 +58,7 @@ class CVectorAggregateTests {
 
 
     @Test
-    void argMaxTest() {
+    void argMaxTestCase() {
         // ------------------ Sub-case 1 ------------------
         expIndices = new int[]{0};
         assertArrayEquals(expIndices, a.argMax());

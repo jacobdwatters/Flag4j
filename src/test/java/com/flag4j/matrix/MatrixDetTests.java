@@ -14,7 +14,7 @@ class MatrixDetTests {
 
 
     @Test
-    void determinantTests() {
+    void determinantTestCase() {
         // -------------------------- Sub-case 1 --------------------------
         aEntries = new double[][]{{-234.56}};
         A = new Matrix(aEntries);

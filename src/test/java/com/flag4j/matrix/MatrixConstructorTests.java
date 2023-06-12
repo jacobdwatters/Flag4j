@@ -333,7 +333,7 @@ class MatrixConstructorTests {
 
 
     @Test
-    void shapeConstructorsTest() {
+    void shapeConstructorsTestCase() {
         shape = new Shape(6, 3);
         Matrix A = new Matrix(shape);
         expEntriesA2d = new double[6][3];
@@ -350,7 +350,7 @@ class MatrixConstructorTests {
 
 
     @Test
-    void shapeValueConstructorsTest() {
+    void shapeValueConstructorsTestCase() {
         shape = new Shape(5, 9);
         Matrix A = new Matrix(shape, -834.34);
         expEntriesA2d = new double[][]

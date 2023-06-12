@@ -17,7 +17,7 @@ class MatrixFibTests {
     Double exp;
 
     @Test
-    void matrixFibTest() {
+    void matrixFibTestCase() {
         // ------------------------- Sub-case 1 -------------------------
         aEntries = new double[][]{{1, -212, 3.123},
                 {100.9, 80.1, 7.934},
@@ -64,7 +64,7 @@ class MatrixFibTests {
 
 
     @Test
-    void sparseMatrixFibTest() {
+    void sparseMatrixFibTestCase() {
         // ------------------------- Sub-case 1 -------------------------
         aEntries = new double[][]{{1, -212, 3.123},
                 {100.9, 80.1, 7.934},
@@ -97,7 +97,7 @@ class MatrixFibTests {
 
 
     @Test
-    void complexMatrixFibTest() {
+    void complexMatrixFibTestCase() {
         String[][] bEntries;
         CMatrix B;
         CNumber exp;
@@ -153,7 +153,7 @@ class MatrixFibTests {
 
 
     @Test
-    void complexSparseMatrixFibTest() {
+    void complexSparseMatrixFibTestCase() {
         SparseCMatrix BSparse;
         CNumber exp;
 

@@ -14,7 +14,7 @@ class ArrayUtilTests {
     double[] expRange;
 
     @Test
-    void copy2CNumberTest() {
+    void copy2CNumberTestCase() {
         // -------------- Sub-case 1 --------------
         srcI = new Integer[]{1, 2, 3, 4, 5, -1334, 14};
         expArr = new CNumber[]{
@@ -44,7 +44,7 @@ class ArrayUtilTests {
     }
 
     @Test
-    void swapTests() {
+    void swapTestCase() {
         // -------------- Sub-case 1 --------------
         int i = 0;
         int j = 2;
@@ -76,7 +76,7 @@ class ArrayUtilTests {
 
 
     @Test
-    void rangeTest() {
+    void rangeTestCase() {
         // -------------- Sub-case 1 --------------
         expRange = new double[]{-1, 0, 1, 2, 3, 4, 5, 6, 7};
         assertArrayEquals(expRange, ArrayUtils.range(-1, 8));

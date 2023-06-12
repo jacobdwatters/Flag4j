@@ -24,7 +24,7 @@ class RealLUTests {
 
 
     @Test
-    void noPivotTest() {
+    void noPivotTestCase() {
         RealLUDecomposition LU = new RealLUDecomposition(LUDecomposition.Pivoting.NONE.ordinal());
 
         // -------------------------- Sub-case 1 --------------------------
@@ -101,7 +101,7 @@ class RealLUTests {
 
 
     @Test
-    void partialPivotTest() {
+    void partialPivotTestCase() {
         RealLUDecomposition LU = new RealLUDecomposition(LUDecomposition.Pivoting.PARTIAL.ordinal());
 
         // -------------------------- Sub-case 1 --------------------------
@@ -199,7 +199,7 @@ class RealLUTests {
 
 
     @Test
-    void completePivotTest() {
+    void completePivotTestCase() {
         RealLUDecomposition LU = new RealLUDecomposition(LUDecomposition.Pivoting.FULL.ordinal());
 
         // -------------------------- Sub-case 1 --------------------------

@@ -23,7 +23,7 @@ class SparseVectorSparseSortTest {
 
 
     @Test
-    void sparseSortTest() {
+    void sparseSortTestCase() {
         // --------------------- Sub-case 1 ---------------------
         expIndices = new int[]{3, 4, 13, 36, 645, 3324, 11345};
         expEntries = new double[]{1.34, 5.15, -989.234, 1.345, 5126.234, 456.3, 617.4};

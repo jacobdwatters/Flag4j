@@ -15,7 +15,7 @@ class SparseVectorParPerpTests {
     static SparseVector a;
 
     @Test
-    void denseParallelTest() {
+    void denseParallelTestCase() {
         double[] bEntries;
         Vector b;
 
@@ -128,7 +128,7 @@ class SparseVectorParPerpTests {
 
 
     @Test
-    void perpTest() {
+    void perpTestCase() {
         double[] bEntries;
         Vector b;
 

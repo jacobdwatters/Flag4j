@@ -28,7 +28,7 @@ class CTensorElemMultTests {
     }
 
     @Test
-    void realDenseTest() {
+    void realDenseTestCase() {
         double[] bEntries;
         Tensor B;
 
@@ -75,7 +75,7 @@ class CTensorElemMultTests {
 
 
     @Test
-    void realSparseTest() {
+    void realSparseTestCase() {
         double[] bEntries;
         SparseTensor B;
 
@@ -114,7 +114,7 @@ class CTensorElemMultTests {
 
 
     @Test
-    void complexDenseTest() {
+    void complexDenseTestCase() {
         CNumber[] bEntries;
         CTensor B;
 
@@ -154,7 +154,7 @@ class CTensorElemMultTests {
 
 
     @Test
-    void complexSparseTest() {
+    void complexSparseTestCase() {
         CNumber[] bEntries;
         SparseCTensor B;
 

@@ -16,7 +16,7 @@ public class DecomposeTest {
     CMatrix AC;
 
     @Test
-    void luTest() {
+    void luTestCase() {
         RealLUDecomposition lu = new RealLUDecomposition();
         ComplexLUDecomposition lu_complex = new ComplexLUDecomposition();
 
@@ -45,7 +45,7 @@ public class DecomposeTest {
 
 
     @Test
-    void qrTest() {
+    void qrTestCase() {
         RealQRDecomposition qr = new RealQRDecomposition();
         ComplexQRDecomposition qr_complex = new ComplexQRDecomposition();
 
@@ -75,7 +75,7 @@ public class DecomposeTest {
 
 
     @Test
-    void choleskyTest() {
+    void choleskyTestCase() {
         RealCholeskyDecomposition cholesky = new RealCholeskyDecomposition();
         ComplexCholeskyDecomposition cholesky_complex = new ComplexCholeskyDecomposition();
 

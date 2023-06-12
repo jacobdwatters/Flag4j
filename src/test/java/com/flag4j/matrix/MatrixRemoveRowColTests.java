@@ -13,7 +13,7 @@ class MatrixRemoveRowColTests {
     int[] indices;
 
     @Test
-    void removeRowTest() {
+    void removeRowTestCase() {
         // ------------ Sub-case 1 ------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
         A = new Matrix(aEntries);
@@ -53,7 +53,7 @@ class MatrixRemoveRowColTests {
 
 
     @Test
-    void removeColTest() {
+    void removeColTestCase() {
         // ------------ Sub-case 1 ------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
         A = new Matrix(aEntries);
@@ -93,7 +93,7 @@ class MatrixRemoveRowColTests {
 
 
     @Test
-    void removeRowsTest() {
+    void removeRowsTestCase() {
         // ------------ Sub-case 1 ------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
         A = new Matrix(aEntries);
@@ -133,7 +133,7 @@ class MatrixRemoveRowColTests {
 
 
     @Test
-    void removeColsTest() {
+    void removeColsTestCase() {
         // ------------ Sub-case 1 ------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
         A = new Matrix(aEntries);

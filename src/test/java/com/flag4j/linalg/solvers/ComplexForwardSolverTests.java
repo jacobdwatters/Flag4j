@@ -15,7 +15,7 @@ class ComplexForwardSolverTests {
     CMatrix L;
 
     @Test
-    void solveVectorTest() {
+    void solveVectorTestCase() {
         solver = new ComplexForwardSolver();
         CNumber[] bEntries, expEntries;
         CVector b, exp;
@@ -74,7 +74,7 @@ class ComplexForwardSolverTests {
 
 
     @Test
-    void solveMatrixTest() {
+    void solveMatrixTestCase() {
         solver = new ComplexForwardSolver();
         CNumber[][] bEntries, expEntries;
         CMatrix b, exp;
@@ -138,7 +138,7 @@ class ComplexForwardSolverTests {
 
 
     @Test
-    void solveUnitVectorTest() {
+    void solveUnitVectorTestCase() {
         solver = new ComplexForwardSolver(true);
         CNumber[] bEntries, expEntries;
         CVector b, exp;
@@ -182,7 +182,7 @@ class ComplexForwardSolverTests {
 
 
     @Test
-    void solveUnitMatrixTest() {
+    void solveUnitMatrixTestCase() {
         solver = new ComplexForwardSolver(true);
         CNumber[][] bEntries, expEntries;
         CMatrix b, exp;
@@ -207,10 +207,6 @@ class ComplexForwardSolverTests {
                 {new CNumber("-169164.93180900003 + 79027.31987100001i"), new CNumber("18799.102988000002 + 163512.690432i")}
         };
         exp = new CMatrix(expEntries);
-
-        System.out.println(L.mult(solver.solve(L, b)));
-        TestHelpers.printAsNumpyArray(solver.solve(L, b));
-
         assertEquals(exp, solver.solve(L, b));
 
         // ---------------------- Sub-case 2 ----------------------

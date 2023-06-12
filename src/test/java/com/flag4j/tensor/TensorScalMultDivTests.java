@@ -27,7 +27,7 @@ class TensorScalMultDivTests {
 
 
     @Test
-    void realScalMultTest() {
+    void realScalMultTestCase() {
         double[] expEntries;
         Tensor exp;
         double b = -1.4115;
@@ -45,7 +45,7 @@ class TensorScalMultDivTests {
 
 
     @Test
-    void complexScalMultTest() {
+    void complexScalMultTestCase() {
         CNumber[] expEntries;
         CTensor exp;
         CNumber b = new CNumber(0.2425, -0.00295);
@@ -63,7 +63,7 @@ class TensorScalMultDivTests {
 
 
     @Test
-    void realScalDivTest() {
+    void realScalDivTestCase() {
         double[] expEntries;
         Tensor exp;
         double b = -1.4115;
@@ -81,7 +81,7 @@ class TensorScalMultDivTests {
 
 
     @Test
-    void complexScalDivTest() {
+    void complexScalDivTestCase() {
         CNumber[] expEntries;
         CTensor exp;
         CNumber b = new CNumber(0.2425, -0.00295);

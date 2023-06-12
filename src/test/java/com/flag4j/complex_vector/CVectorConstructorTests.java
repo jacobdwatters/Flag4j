@@ -20,7 +20,7 @@ class CVectorConstructorTests {
     CVector a, b;
 
     @Test
-    void sizeTest() {
+    void sizeTestCase() {
         // ----------- Sub-case 1 ------------
         expSize = 5;
         expShape = new Shape(expSize);
@@ -59,7 +59,7 @@ class CVectorConstructorTests {
     }
 
     @Test
-    void sizeFillTest() {
+    void sizeFillTestCase() {
         // ----------- Sub-case 1 ------------
         expSize = 5;
         fillValue = new CNumber(-10.23423, 100.2);
@@ -102,7 +102,7 @@ class CVectorConstructorTests {
 
 
     @Test
-    void sizeFillDTest() {
+    void sizeFillDTestCase() {
         // ----------- Sub-case 1 ------------
         expSize = 5;
         fillValueD = 10.234;
@@ -145,7 +145,7 @@ class CVectorConstructorTests {
 
 
     @Test
-    void entriesTest() {
+    void entriesTestCase() {
         // ----------- Sub-case 1 ------------
         entriesD = new double[]{1.0433, 2, -3, 4, 5, 6, 7, 100, -0.1231};
         expSize = entriesD.length;
@@ -183,7 +183,7 @@ class CVectorConstructorTests {
 
 
     @Test
-    void entriesITest() {
+    void entriesITestCase() {
         // ----------- Sub-case 1 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
         expSize = entriesI.length;
@@ -221,7 +221,7 @@ class CVectorConstructorTests {
 
 
     @Test
-    void entriesCTest() {
+    void entriesCTestCase() {
         // ----------- Sub-case 1 ------------
         expEntries = new CNumber[]{new CNumber(100, 234.13), new CNumber(-0.992, 113.3),
                 new CNumber(-0.0000000000001), new CNumber(0, -342.13)};
@@ -252,7 +252,7 @@ class CVectorConstructorTests {
 
 
     @Test
-    void copyTest() {
+    void copyTestCase() {
         // ----------- Sub-case 1 ------------
         expEntries = new CNumber[]{new CNumber(100, 234.13), new CNumber(-0.992, 113.3),
                 new CNumber(-0.0000000000001), new CNumber(0, -342.13)};

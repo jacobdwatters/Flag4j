@@ -13,7 +13,7 @@ class StringUtilsTests {
     String expStr;
 
     @Test
-    void centerTest() {
+    void centerTestCase() {
         // --------------- Sub-case 1 ---------------
         size = 13;
         str = "hello world";

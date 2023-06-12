@@ -13,7 +13,7 @@ class CVectorSetTests {
     int index;
 
     @Test
-    void doubleSetTest() {
+    void doubleSetTestCase() {
         double val;
 
         // ------------------ Sub-case 1 ------------------
@@ -72,7 +72,7 @@ class CVectorSetTests {
     }
 
     @Test
-    void CNumberSetTest() {
+    void CNumberSetTestCase() {
         CNumber val;
 
         // ------------------ Sub-case 1 ------------------

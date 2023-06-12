@@ -17,7 +17,7 @@ class TensorPropertiesTests {
 
 
     @Test
-    void isZerosTest() {
+    void isZerosTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         entries = new double[1024*4*9];
         shape = new Shape(1, 1024, 1, 9, 4, 1, 1);
@@ -50,7 +50,7 @@ class TensorPropertiesTests {
 
 
     @Test
-    void isOnesTest() {
+    void isOnesTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         entries = new double[1024*4*9];
         Arrays.fill(entries, 1);
@@ -85,7 +85,7 @@ class TensorPropertiesTests {
 
 
     @Test
-    void isPosTest() {
+    void isPosTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         entries = new double[1024*4*9];
         Arrays.fill(entries, 24.0);
@@ -120,7 +120,7 @@ class TensorPropertiesTests {
 
 
     @Test
-    void isNegTest() {
+    void isNegTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         entries = new double[1024*4*9];
         Arrays.fill(entries, -24.0);

@@ -30,7 +30,7 @@ class CTensorReshapeTests {
 
 
     @Test
-    void reshapeTests() {
+    void reshapeTestCase() {
         // -------------------------- Sub-case 1 --------------------------
         expShape = new Shape(1, 1, 12, 1);
         exp = new CTensor(expShape, ArrayUtils.copyOf(aEntries));
@@ -58,7 +58,7 @@ class CTensorReshapeTests {
 
 
     @Test
-    void flattenTests() {
+    void flattenTestCase() {
         // -------------------------- Sub-case 1 --------------------------
         expShape = new Shape(12);
         exp = new CTensor(expShape, ArrayUtils.copyOf(aEntries));

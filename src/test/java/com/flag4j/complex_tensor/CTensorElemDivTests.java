@@ -28,7 +28,7 @@ class CTensorElemDivTests {
     }
 
     @Test
-    void realDenseTest() {
+    void realDenseTestCase() {
         double[] bEntries;
         Tensor B;
 
@@ -75,7 +75,7 @@ class CTensorElemDivTests {
 
 
     @Test
-    void complexDenseTest() {
+    void complexDenseTestCase() {
         CNumber[] bEntries;
         CTensor B;
 

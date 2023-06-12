@@ -16,7 +16,7 @@ class VectorExtendTests {
     Matrix exp;
 
     @Test
-    void extendTest() {
+    void extendTestCase() {
         // --------------------- Sub-case 1 ---------------------
         aEntries = new double[]{1.0, 13.5, 790091.1, -9.234};
         a = new Vector(aEntries);

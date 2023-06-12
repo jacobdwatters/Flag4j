@@ -14,7 +14,7 @@ class RealLstsqSolverTests {
 
 
     @Test
-    void solveTest() {
+    void solveTestCase() {
         double[] bEntries;
         double[] expEntries;
         Vector b;

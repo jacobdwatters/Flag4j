@@ -38,7 +38,7 @@ class RealDenseMatrixMultiplyDispatcherTests {
 
 
     @Test
-    void selectAlgorithmTests() {
+    void selectAlgorithmTestCase() {
         int count = 0;
 
         for(int k : rowList) {
@@ -54,7 +54,7 @@ class RealDenseMatrixMultiplyDispatcherTests {
 
 
     @Test
-    void selectAlgorithmTransposeTests() {
+    void selectAlgorithmTransposeTestCase() {
         int count = 0;
 
         for(int j : rowList) {

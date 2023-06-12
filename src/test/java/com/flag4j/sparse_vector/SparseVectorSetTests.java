@@ -20,7 +20,7 @@ class SparseVectorSetTests {
     }
 
     @Test
-    void setTests() {
+    void setTestCase() {
         double[] values;
         int[] indices;
         int size;

@@ -19,7 +19,7 @@ public class VectorAddSubTests {
     Vector A;
 
     @Test
-    void realDenseAddTest() {
+    void realDenseAddTestCase() {
         double[] bEntries, expEntries;
         Vector B, exp;
 
@@ -45,7 +45,7 @@ public class VectorAddSubTests {
 
 
     @Test
-    void ComplexDenseAddTest() {
+    void ComplexDenseAddTestCase() {
         CNumber[] bEntries, expEntries;
         CVector B, exp;
 
@@ -71,7 +71,7 @@ public class VectorAddSubTests {
 
 
     @Test
-    void realSparseAddTest() {
+    void realSparseAddTestCase() {
         double[] bEntries, expEntries;
         SparseVector B;
         Vector exp;
@@ -102,7 +102,7 @@ public class VectorAddSubTests {
 
 
     @Test
-    void complexSparseAddTest() {
+    void complexSparseAddTestCase() {
         CNumber[] bEntries, expEntries;
         SparseCVector B;
         CVector exp;
@@ -133,7 +133,7 @@ public class VectorAddSubTests {
 
 
     @Test
-    void doubleAddTest() {
+    void doubleAddTestCase() {
         double[] expEntries;
         double B = 1.5;
         Vector exp;
@@ -149,7 +149,7 @@ public class VectorAddSubTests {
 
 
     @Test
-    void cNumberAddTest() {
+    void cNumberAddTestCase() {
         CNumber[] expEntries;
         CNumber B = new CNumber(5.666, 0.975);
         CVector exp;
@@ -165,7 +165,7 @@ public class VectorAddSubTests {
 
 
     @Test
-    void realDenseSubTest() {
+    void realDenseSubTestCase() {
         double[] bEntries, expEntries;
         Vector B, exp;
 
@@ -191,7 +191,7 @@ public class VectorAddSubTests {
 
 
     @Test
-    void ComplexDenseSubTest() {
+    void ComplexDenseSubTestCase() {
         CNumber[] bEntries, expEntries;
         CVector B, exp;
 
@@ -217,7 +217,7 @@ public class VectorAddSubTests {
 
 
     @Test
-    void realSparseSubTest() {
+    void realSparseSubTestCase() {
         double[] bEntries, expEntries;
         SparseVector B;
         Vector exp;
@@ -248,7 +248,7 @@ public class VectorAddSubTests {
 
 
     @Test
-    void complexSparseSubTest() {
+    void complexSparseSubTestCase() {
         CNumber[] bEntries, expEntries;
         SparseCVector B;
         CVector exp;
@@ -279,7 +279,7 @@ public class VectorAddSubTests {
 
 
     @Test
-    void doubleSubTest() {
+    void doubleSubTestCase() {
         double[] expEntries;
         double B = 1.5;
         Vector exp;
@@ -295,7 +295,7 @@ public class VectorAddSubTests {
 
 
     @Test
-    void cNumberSubTest() {
+    void cNumberSubTestCase() {
         CNumber[] expEntries;
         CNumber B = new CNumber(5.666, 0.975);
         CVector exp;

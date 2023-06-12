@@ -32,7 +32,7 @@ class TensorTransposeTests {
 
 
     @Test
-    void transposeTest() {
+    void transposeTestCase() {
         // -------------------- Sub-case 1 --------------------
         expEntries = new double[]{
                 1.4415, -85.1, 1.5, -0.00024, 0.014, 6.1,

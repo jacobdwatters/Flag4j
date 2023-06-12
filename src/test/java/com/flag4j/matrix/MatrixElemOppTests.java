@@ -24,7 +24,7 @@ class MatrixElemOppTests {
 
 
     @Test
-    void sqrtComplexTest() {
+    void sqrtComplexTestCase() {
         CNumber[][] expEntries;
         CMatrix exp;
 

@@ -16,7 +16,7 @@ class SparseVectorElemDivTests {
     int size;
 
     @Test
-    void denseElemDivTest() {
+    void denseElemDivTestCase() {
         double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 2, 4};
         size = 6;
@@ -47,7 +47,7 @@ class SparseVectorElemDivTests {
 
 
     @Test
-    void denseComplexElemDivTest() {
+    void denseComplexElemDivTestCase() {
         double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 2, 4};
         size = 6;
@@ -83,7 +83,7 @@ class SparseVectorElemDivTests {
 
 
     @Test
-    void doubleScalarElemDivTest() {
+    void doubleScalarElemDivTestCase() {
         double[] aValues = {1.34, 51.6, -0.00245, 99.2456, -1005.6};
         int[] aIndices = {2, 5, 81, 102, 104};
         size = 151;
@@ -106,7 +106,7 @@ class SparseVectorElemDivTests {
 
 
     @Test
-    void complexScalarElemDivTest() {
+    void complexScalarElemDivTestCase() {
         double[] aValues = {1.34, 51.6, -0.00245, 99.2456, -1005.6};
         int[] aIndices = {2, 5, 81, 102, 104};
         size = 151;

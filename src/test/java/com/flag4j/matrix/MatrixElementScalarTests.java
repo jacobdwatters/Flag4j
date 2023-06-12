@@ -19,7 +19,7 @@ class MatrixElementScalarTests {
 
 
     @Test
-    void scalDivTest() {
+    void scalDivTestCase() {
         // -------------- Sub-case 1 --------------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
@@ -49,7 +49,7 @@ class MatrixElementScalarTests {
 
 
     @Test
-    void recipTest() {
+    void recipTestCase() {
         // -------------- Sub-case 1 --------------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);

@@ -26,7 +26,7 @@ class RealComplexDenseSparseMatMultTests {
     int[] rowIndices, colIndices;
 
     @Test
-    void matMultTests() {
+    void matMultTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
                 {-932.45, 551.35, -0.92342},
@@ -113,7 +113,7 @@ class RealComplexDenseSparseMatMultTests {
 
 
     @Test
-    void matVecMultTests() {
+    void matVecMultTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
                 {-932.45, 551.35, -0.92342},

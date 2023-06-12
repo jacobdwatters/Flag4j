@@ -14,7 +14,7 @@ class MatrixToStringTest {
 
 
     @Test
-    void toStringTest() {
+    void toStringTestCase() {
         // ------------------------ Sub-case 1 ------------------------
         aEntries = new double[][]{
                 {1.32239898234, 2.46560324, 1.45, -0.11234},

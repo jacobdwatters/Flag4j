@@ -16,7 +16,7 @@ class VectorAddSubEqTests {
     Vector A;
 
     @Test
-    void realDenseAddEqTest() {
+    void realDenseAddEqTestCase() {
         double[] bEntries, expEntries;
         Vector B, exp;
 
@@ -44,7 +44,7 @@ class VectorAddSubEqTests {
 
 
     @Test
-    void realSparseAddEqTest() {
+    void realSparseAddEqTestCase() {
         double[] bEntries, expEntries;
         SparseVector B;
         Vector exp;
@@ -76,7 +76,7 @@ class VectorAddSubEqTests {
 
 
     @Test
-    void doubleAddEqTest() {
+    void doubleAddEqTestCase() {
         double[] expEntries;
         double B = 1.5;
         Vector exp;
@@ -95,7 +95,7 @@ class VectorAddSubEqTests {
 
 
     @Test
-    void realDenseSubTest() {
+    void realDenseSubTestCase() {
         double[] bEntries, expEntries;
         Vector B, exp;
 
@@ -122,7 +122,7 @@ class VectorAddSubEqTests {
 
 
     @Test
-    void realSparseSubTest() {
+    void realSparseSubTestCase() {
         double[] bEntries, expEntries;
         SparseVector B;
         Vector exp;
@@ -154,7 +154,7 @@ class VectorAddSubEqTests {
 
 
     @Test
-    void doubleSubTest() {
+    void doubleSubTestCase() {
         double[] expEntries;
         double B = 1.5;
         Vector exp;

@@ -18,7 +18,7 @@ class MatrixAddSubEqTests {
     Matrix A, exp;
 
     @Test
-    void addEqRealTest() {
+    void addEqRealTestCase() {
         double[][] bEntries;
         Matrix B;
 
@@ -45,7 +45,7 @@ class MatrixAddSubEqTests {
 
 
     @Test
-    void addEqSparseTest() {
+    void addEqSparseTestCase() {
         double[] bEntries;
         SparseMatrix B;
 
@@ -78,7 +78,7 @@ class MatrixAddSubEqTests {
 
 
     @Test
-    void addEqDoubleTest() {
+    void addEqDoubleTestCase() {
         double b;
 
         // --------------------- Sub-case 1 ---------------------
@@ -94,7 +94,7 @@ class MatrixAddSubEqTests {
 
 
     @Test
-    void subEqRealTest() {
+    void subEqRealTestCase() {
         double[][] bEntries;
         Matrix B;
 
@@ -121,7 +121,7 @@ class MatrixAddSubEqTests {
 
 
     @Test
-    void subEqSparseTest() {
+    void subEqSparseTestCase() {
         double[] bEntries;
         SparseMatrix B;
 
@@ -154,7 +154,7 @@ class MatrixAddSubEqTests {
 
 
     @Test
-    void subEqDoubleTest() {
+    void subEqDoubleTestCase() {
         double b;
 
         // --------------------- Sub-case 1 ---------------------

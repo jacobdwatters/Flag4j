@@ -40,7 +40,7 @@ class MatrixStackTests {
     CMatrix expC;
 
     @Test
-    void realDenseTest() {
+    void realDenseTestCase() {
         // -----------------------  Sub-case 1 -----------------------
         entries = new double[][]{{1, 2, 3}, {4, 14, -5.12}, {0, 9.34, -0.13}};
         entries2 = new double[][]{{4, 5}, {5, 4}, {99.2134, -0.23}};
@@ -90,7 +90,7 @@ class MatrixStackTests {
 
 
     @Test
-    void complexDenseTest() {
+    void complexDenseTestCase() {
         // -----------------------  Sub-case 1 -----------------------
         entries = new double[][]{{1, 2, 3}, {4, 14, -5.12}, {0, 9.34, -0.13}};
         CEntries = new CNumber[][]{{new CNumber(1, -0.98824)}, {new CNumber(575, -1.13)},
@@ -148,7 +148,7 @@ class MatrixStackTests {
 
 
     @Test
-    void realSparseTest() {
+    void realSparseTestCase() {
         // -----------------------  Sub-case 1 -----------------------
         entries = new double[][]{
                 {1, 2, 3},
@@ -233,7 +233,7 @@ class MatrixStackTests {
 
 
     @Test
-    void complexSparseTest() {
+    void complexSparseTestCase() {
         // -----------------------  Sub-case 1 -----------------------
         entries = new double[][]{
                 {1, 2, 3},
@@ -318,7 +318,7 @@ class MatrixStackTests {
 
 
     @Test
-    void realDenseVectorTest() {
+    void realDenseVectorTestCase() {
         // -----------------------  Sub-case 1 -----------------------
         entries = new double[][]{{1, 2, 3}, {4, 14, -5.12}, {0, 9.34, -0.13}};
         entries2 = new double[][]{{4}, {5}, {99.2134}};
@@ -368,7 +368,7 @@ class MatrixStackTests {
 
 
     @Test
-    void complexDenseVectorTest() {
+    void complexDenseVectorTestCase() {
         // -----------------------  Sub-case 1 -----------------------
         entries = new double[][]{{1, 2, 3}, {4, 14, -5.12}, {0, 9.34, -0.13}};
         CEntries = new CNumber[][]{{new CNumber(1, -0.98824)}, {new CNumber(575, -1.13)},
@@ -426,7 +426,7 @@ class MatrixStackTests {
 
 
     @Test
-    void realSparseVectorTest() {
+    void realSparseVectorTestCase() {
         // -----------------------  Sub-case 1 -----------------------
         entries = new double[][]{
                 {1, 2, 3},
@@ -498,7 +498,7 @@ class MatrixStackTests {
 
 
     @Test
-    void complexSparseVectorTest() {
+    void complexSparseVectorTestCase() {
         // -----------------------  Sub-case 1 -----------------------
         entries = new double[][]{
                 {1, 2, 3},

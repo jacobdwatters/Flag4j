@@ -19,7 +19,7 @@ class VectorConstructorTests {
     Vector a, b;
 
     @Test
-    void sizeTest() {
+    void sizeTestCase() {
         // ----------- Sub-case 1 ------------
         expSize = 5;
         expShape = new Shape(new int[]{expSize});
@@ -48,7 +48,7 @@ class VectorConstructorTests {
     }
 
     @Test
-    void sizeFillTest() {
+    void sizeFillTestCase() {
         // ----------- Sub-case 1 ------------
         expSize = 5;
         fillValue = -10.23423;
@@ -83,7 +83,7 @@ class VectorConstructorTests {
 
 
     @Test
-    void entriesTest() {
+    void entriesTestCase() {
         // ----------- Sub-case 1 ------------
         expEntries = new double[]{1.0433, 2, -3, 4, 5, 6, 7, 100, -0.1231};
         expSize = expEntries.length;
@@ -109,7 +109,7 @@ class VectorConstructorTests {
 
 
     @Test
-    void entriesITest() {
+    void entriesITestCase() {
         // ----------- Sub-case 1 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
         expSize = entriesI.length;
@@ -143,7 +143,7 @@ class VectorConstructorTests {
 
 
     @Test
-    void copyTest() {
+    void copyTestCase() {
         // ----------- Sub-case 1 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
         expSize = entriesI.length;
@@ -211,7 +211,7 @@ class VectorConstructorTests {
 
 
     @Test
-    void shapeTest() {
+    void shapeTestCase() {
         // ----------- Sub-case 1 ------------
         expSize = 5;
         expShape = new Shape(new int[]{expSize});
@@ -240,7 +240,7 @@ class VectorConstructorTests {
     }
 
     @Test
-    void shapeFillTest() {
+    void shapeFillTestCase() {
         // ----------- Sub-case 1 ------------
         expSize = 5;
         fillValue = -10.23423;

@@ -21,7 +21,7 @@ class CVectorElemOppTests {
 
 
     @Test
-    void sqrtTest() {
+    void sqrtTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         expEntries = new CNumber[]{CNumber.sqrt(aEntries[0]), CNumber.sqrt(aEntries[1]), CNumber.sqrt(aEntries[2]),
                 CNumber.sqrt(aEntries[3]), CNumber.sqrt(aEntries[4])};
@@ -32,7 +32,7 @@ class CVectorElemOppTests {
 
 
     @Test
-    void absTest() {
+    void absTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         expEntries = new CNumber[]{aEntries[0].mag(), aEntries[1].mag(), aEntries[2].mag(),
                 aEntries[3].mag(), aEntries[4].mag()};
@@ -42,7 +42,7 @@ class CVectorElemOppTests {
 
 
     @Test
-    void recipTest() {
+    void recipTestCase() {
         // ---------------------- Sub-case 1 ----------------------
         expEntries = new CNumber[]{aEntries[0].multInv(), aEntries[1].multInv(), aEntries[2].multInv(),
                 aEntries[3].multInv(), aEntries[4].multInv()};

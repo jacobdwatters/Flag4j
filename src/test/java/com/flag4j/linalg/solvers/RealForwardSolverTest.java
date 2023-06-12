@@ -15,7 +15,7 @@ class RealForwardSolverTest {
     Matrix L;
 
     @Test
-    void solveVectorTest() {
+    void solveVectorTestCase() {
         solver = new RealForwardSolver();
         double[] bEntries, expEntries;
         Vector b, exp;
@@ -102,7 +102,7 @@ class RealForwardSolverTest {
 
 
     @Test
-    void solveMatrixTest() {
+    void solveMatrixTestCase() {
         solver = new RealForwardSolver();
         double[][] bEntries, expEntries;
         Matrix B, exp;
@@ -141,7 +141,7 @@ class RealForwardSolverTest {
 
 
     @Test
-    void solveUnitVectorTest() {
+    void solveUnitVectorTestCase() {
         solver = new RealForwardSolver(true);
         double[] bEntries, expEntries;
         Vector b, exp;
@@ -212,7 +212,7 @@ class RealForwardSolverTest {
 
 
     @Test
-    void solveUnitMatrixTest() {
+    void solveUnitMatrixTestCase() {
         solver = new RealForwardSolver(true);
         double[][] bEntries, expEntries;
         Matrix B, exp;

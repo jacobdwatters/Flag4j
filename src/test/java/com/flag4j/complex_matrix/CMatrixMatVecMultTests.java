@@ -16,7 +16,7 @@ class CMatrixMatVecMultTests {
 
 
     @Test
-    void matMultTests() {
+    void matMultTestCase() {
         double[][] bEntries;
         Vector B;
 
@@ -59,7 +59,7 @@ class CMatrixMatVecMultTests {
 
 
     @Test
-    void matMultComplexTests() {
+    void matMultComplexTestCase() {
         CNumber[][] bEntries;
         CVector B;
 
@@ -101,7 +101,7 @@ class CMatrixMatVecMultTests {
 
 
     @Test
-    void matMultSparseTests() {
+    void matMultSparseTestCase() {
         double[] bEntries;
         int[] rowIndices;
         SparseVector B;
@@ -142,7 +142,7 @@ class CMatrixMatVecMultTests {
 
 
     @Test
-    void matMultSparseComplexTests() {
+    void matMultSparseComplexTestCase() {
         CNumber[] bEntries;
         int[] rowIndices, colIndices;
         SparseCVector B;

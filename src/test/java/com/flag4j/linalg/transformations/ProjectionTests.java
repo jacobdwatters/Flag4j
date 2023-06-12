@@ -13,7 +13,7 @@ class ProjectionTests {
 
 
     @Test
-    void perspectiveTest() {
+    void perspectiveTestCase() {
         // -------------------------- Sub-case 1 --------------------------
         expEntries = new double[][]{
                 {-1.0223770614041234, 0, 0, 0},
@@ -50,7 +50,7 @@ class ProjectionTests {
 
 
     @Test
-    void orthogonalTest() {
+    void orthogonalTestCase() {
         PrintOptions.setPrecision(50);
 
         // -------------------------- Sub-case 1 --------------------------

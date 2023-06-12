@@ -15,7 +15,7 @@ class VectorStackJoinTests {
     int sparseSize;
 
     @Test
-    void realDenseJoinTest() {
+    void realDenseJoinTestCase() {
         double[] bEntries, expEntries;
         Vector b, exp;
 
@@ -30,7 +30,7 @@ class VectorStackJoinTests {
 
 
     @Test
-    void realSparseJoinTest() {
+    void realSparseJoinTestCase() {
         double[] bEntries, expEntries;
         SparseVector b;
         Vector exp;
@@ -48,7 +48,7 @@ class VectorStackJoinTests {
 
 
     @Test
-    void complexDenseJoinTest() {
+    void complexDenseJoinTestCase() {
         CNumber[] bEntries, expEntries;
         CVector b, exp;
 
@@ -64,7 +64,7 @@ class VectorStackJoinTests {
 
 
     @Test
-    void complexSparseJoinTest() {
+    void complexSparseJoinTestCase() {
         CNumber[] bEntries, expEntries;
         SparseCVector b;
         CVector exp;
@@ -84,7 +84,7 @@ class VectorStackJoinTests {
     // ---------------------------------------------------------------------------
 
     @Test
-    void realDenseStackTest() {
+    void realDenseStackTestCase() {
         double[] bEntries;
         Vector b;
         double[][] expEntries;
@@ -138,7 +138,7 @@ class VectorStackJoinTests {
 
 
     @Test
-    void realSparseStackTest() {
+    void realSparseStackTestCase() {
         double[] bEntries;
         SparseVector b;
         double[][] expEntries;
@@ -204,7 +204,7 @@ class VectorStackJoinTests {
 
 
     @Test
-    void complexDenseStackTest() {
+    void complexDenseStackTestCase() {
         CNumber[] bEntries;
         CVector b;
         CNumber[][] expEntries;
@@ -269,7 +269,7 @@ class VectorStackJoinTests {
 
 
     @Test
-    void complexSparseStackTest() {
+    void complexSparseStackTestCase() {
         CNumber[] bEntries;
         SparseCVector b;
         CNumber[][] expEntries;

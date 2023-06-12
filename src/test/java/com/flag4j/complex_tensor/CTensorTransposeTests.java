@@ -35,7 +35,7 @@ class CTensorTransposeTests {
 
 
     @Test
-    void transposeTest() {
+    void transposeTestCase() {
         // -------------------- Sub-case 1 --------------------
         expEntries = new CNumber[]{
                 new CNumber(1.4415, -0.0245), new CNumber(-85.1, 9.234),  new CNumber(0, 1.5),
@@ -106,7 +106,7 @@ class CTensorTransposeTests {
 
 
     @Test
-    void hermTransposeTest() {
+    void hermTransposeTestCase() {
         // -------------------- Sub-case 1 --------------------
         expEntries = new CNumber[]{
                 new CNumber(1.4415, -0.0245), new CNumber(-85.1, 9.234),  new CNumber(0, 1.5),

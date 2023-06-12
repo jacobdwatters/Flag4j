@@ -17,7 +17,7 @@ class SparseTensorConstructorTests {
     SparseTensor A, B;
 
     @Test
-    void shapeTest() {
+    void shapeTestCase() {
         // --------------- Sub-case 1 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expNonZero = new double[0];
@@ -43,7 +43,7 @@ class SparseTensorConstructorTests {
 
 
     @Test
-    void shapeEntriesIndicesTest() {
+    void shapeEntriesIndicesTestCase() {
         // --------------- Sub-case 1 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expNonZero = new double[]{1, 223.1333, -0.991233, 100.1234};
@@ -91,7 +91,7 @@ class SparseTensorConstructorTests {
 
 
     @Test
-    void shapeEntriesIntIndicesTest() {
+    void shapeEntriesIntIndicesTestCase() {
         // --------------- Sub-case 1 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expNonZeroI = new int[]{1, 223, -19, 2};
@@ -140,7 +140,7 @@ class SparseTensorConstructorTests {
 
 
     @Test
-    void copyTest() {
+    void copyTestCase() {
         expShape = new Shape(3, 4, 5, 1);
         expNonZero = new double[]{1, 223.1333, -0.991233, 100.1234};
         expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};

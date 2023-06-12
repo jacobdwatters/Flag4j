@@ -16,7 +16,7 @@ class SparseVectorElemMultTests {
     int size;
 
     @Test
-    void sparseElemMultTest() {
+    void sparseElemMultTestCase() {
         double[] aValues = {1.34, 51.6, -0.00245, 99.2456, -1005.6};
         int[] aIndices = {2, 5, 81, 102, 104};
         size = 151;
@@ -47,7 +47,7 @@ class SparseVectorElemMultTests {
 
 
     @Test
-    void denseElemMultTest() {
+    void denseElemMultTestCase() {
         double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 2, 3};
         size = 7;
@@ -77,7 +77,7 @@ class SparseVectorElemMultTests {
 
 
     @Test
-    void sparseComplexElemMultTest() {
+    void sparseComplexElemMultTestCase() {
         double[] aValues = {1.34, 51.6, -0.00245, 99.2456, -1005.6};
         int[] aIndices = {2, 5, 81, 102, 104};
         size = 151;
@@ -110,7 +110,7 @@ class SparseVectorElemMultTests {
 
 
     @Test
-    void denseComplexElemMultTest() {
+    void denseComplexElemMultTestCase() {
         double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 2, 3};
         size = 5;
@@ -143,7 +143,7 @@ class SparseVectorElemMultTests {
 
 
     @Test
-    void doubleScalarElemMultTest() {
+    void doubleScalarElemMultTestCase() {
         double[] aValues = {1.34, 51.6, -0.00245, 99.2456, -1005.6};
         int[] aIndices = {2, 5, 81, 102, 104};
         size = 151;
@@ -166,7 +166,7 @@ class SparseVectorElemMultTests {
 
 
     @Test
-    void complexScalarElemMultTest() {
+    void complexScalarElemMultTestCase() {
         double[] aValues = {1.34, 51.6, -0.00245, 99.2456, -1005.6};
         int[] aIndices = {2, 5, 81, 102, 104};
         size = 151;

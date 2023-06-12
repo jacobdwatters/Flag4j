@@ -26,7 +26,7 @@ class SparseVectorJoinTests {
 
 
     @Test
-    void denseRealJoinTest() {
+    void denseRealJoinTestCase() {
         double[] bEntries, expEntries;
         Vector b, exp;
 
@@ -41,7 +41,7 @@ class SparseVectorJoinTests {
 
 
     @Test
-    void sparseRealJoinTest() {
+    void sparseRealJoinTestCase() {
         double[] bEntries, expEntries;
         SparseVector b, exp;
 
@@ -60,7 +60,7 @@ class SparseVectorJoinTests {
 
 
     @Test
-    void denseComplexJoinTest() {
+    void denseComplexJoinTestCase() {
         CNumber[] bEntries, expEntries;
         CVector b, exp;
 
@@ -76,7 +76,7 @@ class SparseVectorJoinTests {
 
 
     @Test
-    void sparseComplexJoinTest() {
+    void sparseComplexJoinTestCase() {
         CNumber[] bEntries, expEntries;
         SparseCVector b, exp;
 
@@ -95,7 +95,7 @@ class SparseVectorJoinTests {
 
 
     @Test
-    void denseRealStackTest() {
+    void denseRealStackTestCase() {
         double[] bEntries, expEntries;
         int[] rowIndices, colIndices;
         Shape shape;
@@ -127,7 +127,7 @@ class SparseVectorJoinTests {
 
 
     @Test
-    void denseComplexStackTest() {
+    void denseComplexStackTestCase() {
         CNumber[] bEntries, expEntries;
         int[] rowIndices, colIndices;
         Shape shape;
@@ -170,7 +170,7 @@ class SparseVectorJoinTests {
 
 
     @Test
-    void sparseRealStackTest() {
+    void sparseRealStackTestCase() {
         double[] bEntries, expEntries;
         int[] rowIndices, colIndices;
         Shape shape;
@@ -206,7 +206,7 @@ class SparseVectorJoinTests {
 
 
     @Test
-    void sparseComplexStackTest() {
+    void sparseComplexStackTestCase() {
         CNumber[] bEntries, expEntries;
         int[] rowIndices, colIndices;
         Shape shape;
@@ -246,7 +246,7 @@ class SparseVectorJoinTests {
 
 
     @Test
-    void extendTest() {
+    void extendTestCase() {
         double[] expEntries;
         int[] rowIndices, colIndices;
         Shape shape;

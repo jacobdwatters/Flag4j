@@ -13,7 +13,7 @@ class CMatrixZeroOnesTests {
     boolean exp;
 
     @Test
-    void zerosTest()  {
+    void zerosTestCase()  {
         // ----------------- Sub-case 1 -----------------
         A = new CMatrix(14, 567);
         exp = true;
@@ -30,7 +30,7 @@ class CMatrixZeroOnesTests {
 
 
     @Test
-    void onesTest()  {
+    void onesTestCase()  {
         // ----------------- Sub-case 1 -----------------
         A = new CMatrix(14, 567, 1);
         exp = true;

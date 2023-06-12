@@ -12,7 +12,7 @@ class ComplexHessenburgTests {
     ComplexHessenburgDecomposition hess;
 
     @Test
-    void hessDecompTest() {
+    void hessDecompTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         aEntries = new String[][]{
                 {"1.55-2i", "0", "i"},

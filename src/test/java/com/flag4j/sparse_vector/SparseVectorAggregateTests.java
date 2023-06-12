@@ -25,7 +25,7 @@ class SparseVectorAggregateTests {
 
 
     @Test
-    void sumTest() {
+    void sumTestCase() {
         double exp;
 
         // --------------------- Sub-case 1 ---------------------
@@ -35,7 +35,7 @@ class SparseVectorAggregateTests {
 
 
     @Test
-    void argMinMaxTest() {
+    void argMinMaxTestCase() {
         int[] exp;
 
         // --------------------- Sub-case 1 ---------------------
@@ -48,7 +48,7 @@ class SparseVectorAggregateTests {
 
 
     @Test
-    void normTest() {
+    void normTestCase() {
         double exp;
 
         // --------------------- Sub-case 1 ---------------------

@@ -14,7 +14,7 @@ public class ComplexSchurTest {
 
 
     @Test
-    void schurDecompRealSymmetricTest() {
+    void schurDecompRealSymmetricTestCase() {
 //        // --------------------- Sub-case 1 ---------------------
 //        aEntries = new double[][]{
 //                {2, 1, 0, 0, 0, 0},

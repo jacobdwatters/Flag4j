@@ -37,7 +37,7 @@ class TensorEqualsTests {
 
 
     @Test
-    void realDenseEqualsTest() {
+    void realDenseEqualsTestCase() {
         denseSetup();
 
         double[] bEntries;
@@ -86,7 +86,7 @@ class TensorEqualsTests {
 
 
     @Test
-    void sparseDenseEqualsTest() {
+    void sparseDenseEqualsTestCase() {
         sparseSetup();
 
         double[] bEntries;
@@ -147,7 +147,7 @@ class TensorEqualsTests {
 
 
     @Test
-    void complexDenseEqualsTest() {
+    void complexDenseEqualsTestCase() {
         denseSetup();
 
         CNumber[] bEntries;
@@ -204,7 +204,7 @@ class TensorEqualsTests {
 
     
     @Test
-    void complexSparseEqualsTest() {
+    void complexSparseEqualsTestCase() {
         sparseSetup();
 
         CNumber[] bEntries;
@@ -273,7 +273,7 @@ class TensorEqualsTests {
 
 
     @Test
-    void objectTest() {
+    void objectTestCase() {
         denseSetup();
 
         // ---------------------- Sub-case 1 ----------------------

@@ -14,7 +14,7 @@ class MatrixAggregationTests {
     int[] expIndices;
 
     @Test
-    void sumTest() {
+    void sumTestCase() {
         // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
@@ -30,7 +30,7 @@ class MatrixAggregationTests {
 
 
     @Test
-    void minTest() {
+    void minTestCase() {
         // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
@@ -46,7 +46,7 @@ class MatrixAggregationTests {
 
 
     @Test
-    void maxTest() {
+    void maxTestCase() {
         // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
@@ -62,7 +62,7 @@ class MatrixAggregationTests {
 
 
     @Test
-    void maxAbsTest() {
+    void maxAbsTestCase() {
         // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
@@ -78,7 +78,7 @@ class MatrixAggregationTests {
 
 
     @Test
-    void minAbsTest() {
+    void minAbsTestCase() {
         // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
@@ -94,7 +94,7 @@ class MatrixAggregationTests {
 
 
     @Test
-    void argMinTest() {
+    void argMinTestCase() {
         // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
@@ -110,7 +110,7 @@ class MatrixAggregationTests {
 
 
     @Test
-    void argMaxTest() {
+    void argMaxTestCase() {
         // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);

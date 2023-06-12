@@ -16,7 +16,7 @@ class ComplexCholeskyTests {
 
 
     @Test
-    void choleskyTest() {
+    void choleskyTestCase() {
         ComplexCholeskyDecomposition cholesky = new ComplexCholeskyDecomposition();
 
         // --------------------- Sub-case 1 ---------------------

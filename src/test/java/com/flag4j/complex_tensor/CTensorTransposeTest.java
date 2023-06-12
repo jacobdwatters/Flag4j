@@ -34,7 +34,7 @@ class CTensorTransposeTest {
 
 
     @Test
-    void transposeTest() {
+    void transposeTestCase() {
         // -------------------- Sub-case 1 --------------------
         expEntries = new CNumber[]{
                 new CNumber("1.4415+9.14i"), new CNumber("-0.0-85.1i"), new CNumber("1.5+9.24i"),

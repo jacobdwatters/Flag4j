@@ -14,7 +14,7 @@ class CMatrixStackTests {
     CMatrix A, exp;
 
     @Test
-    void realMatrixTest() {
+    void realMatrixTestCase() {
         double[][] bEntries;
         Matrix B;
 
@@ -84,7 +84,7 @@ class CMatrixStackTests {
 
 
     @Test
-    void realSparseMatrixTest() {
+    void realSparseMatrixTestCase() {
         double[] bEntries;
         SparseMatrix B;
 
@@ -169,7 +169,7 @@ class CMatrixStackTests {
 
 
     @Test
-    void complexMatrixTest() {
+    void complexMatrixTestCase() {
         CNumber[][] bEntries;
         CMatrix B;
 
@@ -238,7 +238,7 @@ class CMatrixStackTests {
 
 
     @Test
-    void complexSparseMatrixTest() {
+    void complexSparseMatrixTestCase() {
         CNumber[] bEntries;
         SparseCMatrix B;
 
@@ -323,7 +323,7 @@ class CMatrixStackTests {
 
 
     @Test
-    void realVectorTest() {
+    void realVectorTestCase() {
         double[] bEntries;
         Vector B;
 
@@ -392,7 +392,7 @@ class CMatrixStackTests {
 
 
     @Test
-    void complexVectorTest() {
+    void complexVectorTestCase() {
         CNumber[] bEntries;
         CVector B;
 
@@ -461,7 +461,7 @@ class CMatrixStackTests {
 
 
     @Test
-    void realSparseVectorTest() {
+    void realSparseVectorTestCase() {
         double[] bEntries;
         SparseVector B;
 
@@ -535,7 +535,7 @@ class CMatrixStackTests {
 
 
     @Test
-    void complexSparseVectorTest() {
+    void complexSparseVectorTestCase() {
         CNumber[] bEntries;
         SparseCVector B;
 

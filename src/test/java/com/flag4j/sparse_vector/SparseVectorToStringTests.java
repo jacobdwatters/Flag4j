@@ -31,7 +31,7 @@ class SparseVectorToStringTests {
 
 
     @Test
-    void toStringTest() {
+    void toStringTestCase() {
         // --------------------- Sub-case 1 ---------------------
         exp = "Full Shape: 3056\n" +
                 "Non-zero entries: [ 1.34  525  63.7  -0.0234 ]\n" +

@@ -37,7 +37,7 @@ class CVectorZeroOneTests {
     CVector a;
 
     @Test
-    void zerosTest() {
+    void zerosTestCase() {
         // ------------------ Sub-case 1 ------------------
         a = new CVector(34);
         assertTrue(a.isZeros());
@@ -69,7 +69,7 @@ class CVectorZeroOneTests {
 
 
     @Test
-    void onesTest() {
+    void onesTestCase() {
         // ------------------ Sub-case 1 ------------------
         a = new CVector(34, 1);
         assertTrue(a.isOnes());

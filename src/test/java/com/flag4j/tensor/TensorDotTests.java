@@ -43,7 +43,7 @@ class TensorDotTests {
 
 
     @Test
-    void multiAxesTests() {
+    void multiAxesTestCase() {
         // --------------------- Sub-case 1 ---------------------
         aAxes = new int[]{0};
         bAxes = new int[]{1};
@@ -99,7 +99,7 @@ class TensorDotTests {
 
 
     @Test
-    void singleAxesTest() {
+    void singleAxesTestCase() {
         // --------------------- Sub-case 1 ---------------------
         expEntries = new double[]{
                 -1170.1944849999998, -0.35089449999998124, 897.425634, 210.09214049999997,
@@ -122,7 +122,7 @@ class TensorDotTests {
 
 
     @Test
-    void noAxesTest() {
+    void noAxesTestCase() {
         // --------------------- Sub-case 1 ---------------------
         A = A.reshape(2, 2, 3);
         expEntries = new double[]{

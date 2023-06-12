@@ -12,7 +12,7 @@ class MatrixPropertiesTests {
     boolean expBoolResult;
 
     @Test
-    void isIdentityTest() {
+    void isIdentityTestCase() {
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {-0.442, 13.5, 35.6}, {0.4441, 6, 90}};
         A = new Matrix(aEntries);
@@ -71,7 +71,7 @@ class MatrixPropertiesTests {
 
 
     @Test
-    void isInvTest() {
+    void isInvTestCase() {
         double[][] bEntries;
         Matrix B;
 
@@ -122,7 +122,7 @@ class MatrixPropertiesTests {
 
 
     @Test
-    void isOrthogonalTest() {
+    void isOrthogonalTestCase() {
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {-0.442, 13.5, 35.6}, {0.4441, 6, 90}};
         A = new Matrix(aEntries);

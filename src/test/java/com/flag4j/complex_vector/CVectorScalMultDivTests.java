@@ -25,7 +25,7 @@ class CVectorScalMultDivTests {
 
 
     @Test
-    void realScalMultTest() {
+    void realScalMultTestCase() {
         double b;
 
         // ------------------- Sub-case 1 -------------------
@@ -45,7 +45,7 @@ class CVectorScalMultDivTests {
 
 
     @Test
-    void complexScalMultTest() {
+    void complexScalMultTestCase() {
         CNumber b;
 
         // ------------------- Sub-case 1 -------------------
@@ -65,7 +65,7 @@ class CVectorScalMultDivTests {
 
 
     @Test
-    void realScalDivTest() {
+    void realScalDivTestCase() {
         double b;
 
         // ------------------- Sub-case 1 -------------------
@@ -85,7 +85,7 @@ class CVectorScalMultDivTests {
 
 
     @Test
-    void complexScalDivTest() {
+    void complexScalDivTestCase() {
         CNumber b;
 
         // ------------------- Sub-case 1 -------------------

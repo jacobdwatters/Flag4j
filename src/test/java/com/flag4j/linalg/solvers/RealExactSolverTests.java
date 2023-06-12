@@ -27,7 +27,7 @@ class RealExactSolverTests {
 
 
     @Test
-    void solveTest() {
+    void solveTestCase() {
         RealExactSolver solver = new RealExactSolver();
 
         // ----------------- Sub-case 1 -----------------

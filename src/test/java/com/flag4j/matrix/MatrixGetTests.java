@@ -24,7 +24,7 @@ class MatrixGetTests {
 
 
     @Test
-    void getRowTest() {
+    void getRowTestCase() {
         // ------------------- Sub-case 1 -------------------
         exp = new Matrix(new double[][]{{-8234.5, 15.22, -84.12}});
         assertEquals(exp, A.getRow(1));
@@ -46,7 +46,7 @@ class MatrixGetTests {
 
 
     @Test
-    void getRowAsVectorTest() {
+    void getRowAsVectorTestCase() {
         Vector exp;
 
         // ------------------- Sub-case 1 -------------------
@@ -70,7 +70,7 @@ class MatrixGetTests {
 
 
     @Test
-    void getRowAfterTest() {
+    void getRowAfterTestCase() {
         // ------------------- Sub-case 1 -------------------
         exp = new Matrix(new double[][]{{15.22, -84.12}});
         assertEquals(exp, A.getRowAfter(1, 1));
@@ -98,7 +98,7 @@ class MatrixGetTests {
 
 
     @Test
-    void getSliceTest() {
+    void getSliceTestCase() {
         // ------------------- Sub-case 1 -------------------
         expEntries = new double[][]{{-8234.5, 15.22}, {234, 8}, {-9.451, -45.6}};
         exp = new Matrix(expEntries);
@@ -115,7 +115,7 @@ class MatrixGetTests {
 
 
     @Test
-    void getColAsVectorTest() {
+    void getColAsVectorTestCase() {
         Vector exp;
 
         // ------------------- Sub-case 1 -------------------

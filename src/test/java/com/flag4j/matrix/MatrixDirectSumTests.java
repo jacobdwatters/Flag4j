@@ -22,7 +22,7 @@ class MatrixDirectSumTests {
     SparseCMatrix BSparseComplex;
 
     @Test
-    void matrixTest() {
+    void matrixTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         A = new Matrix(aEntries);
@@ -42,7 +42,7 @@ class MatrixDirectSumTests {
 
 
     @Test
-    void sparseMatrixTest() {
+    void sparseMatrixTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         A = new Matrix(aEntries);
@@ -67,7 +67,7 @@ class MatrixDirectSumTests {
 
 
     @Test
-    void complexMatrixTest() {
+    void complexMatrixTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         A = new Matrix(aEntries);
@@ -86,7 +86,7 @@ class MatrixDirectSumTests {
     }
 
     @Test
-    void sparseComplexMatrixTest() {
+    void sparseComplexMatrixTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         A = new Matrix(aEntries);
@@ -113,7 +113,7 @@ class MatrixDirectSumTests {
     //--------------------------------------------------------------------------------------------------------------
 
     @Test
-    void matrixInvTest() {
+    void matrixInvTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         A = new Matrix(aEntries);
@@ -132,7 +132,7 @@ class MatrixDirectSumTests {
 
 
     @Test
-    void sparseMatrixInvTest() {
+    void sparseMatrixInvTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         A = new Matrix(aEntries);
@@ -157,7 +157,7 @@ class MatrixDirectSumTests {
 
 
     @Test
-    void complexMatrixInvTest() {
+    void complexMatrixInvTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         A = new Matrix(aEntries);
@@ -176,7 +176,7 @@ class MatrixDirectSumTests {
     }
 
     @Test
-    void sparseComplexMatrixInvTest() {
+    void sparseComplexMatrixInvTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         A = new Matrix(aEntries);

@@ -12,7 +12,7 @@ class VectorPerpParallelTests {
     Vector a, b;
 
     @Test
-    void isParallelTest() {
+    void isParallelTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         aEntries = new double[]{1, 2, -5, 8};
         a = new Vector(aEntries);
@@ -73,7 +73,7 @@ class VectorPerpParallelTests {
 
 
     @Test
-    void isPerpTest() {
+    void isPerpTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         aEntries = new double[]{3, 4};
         a = new Vector(aEntries);

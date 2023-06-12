@@ -30,7 +30,7 @@ class CVectorInnerProductTests {
 
 
     @Test()
-    void realDenseInnerProdTest() {
+    void realDenseInnerProdTestCase() {
         double[] bEntries;
         Vector b;
 
@@ -51,7 +51,7 @@ class CVectorInnerProductTests {
 
 
     @Test()
-    void realSparseInnerProdTest() {
+    void realSparseInnerProdTestCase() {
         double[] bEntries;
         SparseVector b;
 
@@ -76,7 +76,7 @@ class CVectorInnerProductTests {
 
 
     @Test()
-    void complexDenseInnerProdTest() {
+    void complexDenseInnerProdTestCase() {
         CNumber[] bEntries;
         CVector b;
 
@@ -99,7 +99,7 @@ class CVectorInnerProductTests {
 
 
     @Test()
-    void complexSparseInnerProdTest() {
+    void complexSparseInnerProdTestCase() {
         CNumber[] bEntries;
         SparseCVector b;
 

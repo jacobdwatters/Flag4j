@@ -12,7 +12,7 @@ class VectorNormTest {
     Vector a;
 
     @Test
-    void pNormTest() {
+    void pNormTestCase() {
         // --------------------- Sub-case 1 ---------------------
         aEntries = new double[]{1.43543, 8.144, -9.234};
         a = new Vector(aEntries);
@@ -43,7 +43,7 @@ class VectorNormTest {
     }
 
     @Test
-    void infNormTest() {
+    void infNormTestCase() {
         // --------------------- Sub-case 1 ---------------------
         aEntries = new double[]{1.43543, 8.144, -9.234};
         a = new Vector(aEntries);

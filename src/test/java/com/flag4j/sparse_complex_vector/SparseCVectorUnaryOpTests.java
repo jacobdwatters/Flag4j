@@ -31,7 +31,7 @@ class SparseCVectorUnaryOpTests {
 
 
     @Test
-    void hermTConjTest() {
+    void hermTConjTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         expEntries = new CNumber[]{
                 new CNumber(2.455, 83.6), new CNumber(0, -24.56),
@@ -47,7 +47,7 @@ class SparseCVectorUnaryOpTests {
 
 
     @Test
-    void transposeCopyTest() {
+    void transposeCopyTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         expEntries = new CNumber[]{
                 new CNumber(2.455, -83.6), new CNumber(0, 24.56),
@@ -63,7 +63,7 @@ class SparseCVectorUnaryOpTests {
 
 
     @Test
-    void recipTest() {
+    void recipTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         expEntries = new CNumber[]{
                 new CNumber(2.455, -83.6).multInv(), new CNumber(0, 24.56).multInv(),
@@ -77,7 +77,7 @@ class SparseCVectorUnaryOpTests {
 
 
     @Test
-    void absTest() {
+    void absTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         expEntriesRe = new double[]{
                 new CNumber(2.455, -83.6).magAsDouble(), new CNumber(0, 24.56).magAsDouble(),
@@ -91,7 +91,7 @@ class SparseCVectorUnaryOpTests {
 
 
     @Test
-    void sqrtTest() {
+    void sqrtTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         expEntries = new CNumber[]{
                 CNumber.sqrt(new CNumber(2.455, -83.6)), CNumber.sqrt(new CNumber(0, 24.56)),

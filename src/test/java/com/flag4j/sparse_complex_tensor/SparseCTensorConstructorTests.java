@@ -19,7 +19,7 @@ class SparseCTensorConstructorTests {
 
 
     @Test
-    void shapeTest() {
+    void shapeTestCase() {
         // ------------ Sub-case 1 ------------
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new CNumber[0];
@@ -49,7 +49,7 @@ class SparseCTensorConstructorTests {
 
 
     @Test
-    void shapeEntriesIndicesTest() {
+    void shapeEntriesIndicesTestCase() {
         // ------------ Sub-case 1 ------------
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new CNumber[]{new CNumber(1, -0.92342), new CNumber(-100, 123.44)};
@@ -84,7 +84,7 @@ class SparseCTensorConstructorTests {
 
 
     @Test
-    void shapeEntriesIndicesDTest() {
+    void shapeEntriesIndicesDTestCase() {
         // ------------ Sub-case 1 ------------
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZeroD = new double[]{1, 2, 3, 4.023423, -9233.2};
@@ -128,7 +128,7 @@ class SparseCTensorConstructorTests {
 
 
     @Test
-    void shapeEntriesIndicesITest() {
+    void shapeEntriesIndicesITestCase() {
         // ------------ Sub-case 1 ------------
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZeroI = new int[]{1, 2, 3, 400, -9233};
@@ -172,7 +172,7 @@ class SparseCTensorConstructorTests {
 
 
     @Test
-    void copyTest() {
+    void copyTestCase() {
         // ------------ Sub-case 1 ------------
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new CNumber[]{new CNumber(1, -0.92342), new CNumber(-100, 123.44)};

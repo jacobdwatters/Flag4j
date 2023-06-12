@@ -17,7 +17,7 @@ class MatrixConversionTests {
 
 
     @Test
-    void toComplexTest() {
+    void toComplexTestCase() {
         CMatrix exp;
 
         // --------------------- Sub-case 1  ---------------------
@@ -30,7 +30,7 @@ class MatrixConversionTests {
 
 
     @Test
-    void toVectorTest() {
+    void toVectorTestCase() {
         Vector exp;
 
         // --------------------- Sub-case 1  ---------------------
@@ -43,7 +43,7 @@ class MatrixConversionTests {
 
 
     @Test
-    void toTensorTest() {
+    void toTensorTestCase() {
         Tensor exp;
 
         // --------------------- Sub-case 1  ---------------------

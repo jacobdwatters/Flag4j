@@ -25,7 +25,7 @@ class MatrixAddToEachRowTests {
     SparseCVector bSparseComplex;
 
     @Test
-    void vectorTest() {
+    void vectorTestCase() {
         // ---------------- Sub-case 1  ----------------
         aEntries = new double[][]{
                 {1, 2.3},
@@ -56,7 +56,7 @@ class MatrixAddToEachRowTests {
 
 
     @Test
-    void sparseVectorTest() {
+    void sparseVectorTestCase() {
         // ---------------- Sub-case 1  ----------------
         aEntries = new double[][]{
                 {1, 2.3},
@@ -91,7 +91,7 @@ class MatrixAddToEachRowTests {
 
 
     @Test
-    void complexVectorTest() {
+    void complexVectorTestCase() {
         // ---------------- Sub-case 1  ----------------
         aEntries = new double[][]{
                 {1, 2.3},
@@ -122,7 +122,7 @@ class MatrixAddToEachRowTests {
 
 
     @Test
-    void sparseComplexVectorTest() {
+    void sparseComplexVectorTestCase() {
         // ---------------- Sub-case 1  ----------------
         aEntries = new double[][]{
                 {1, 2.3},

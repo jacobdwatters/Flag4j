@@ -12,7 +12,7 @@ class unaryOperationTests {
     Matrix A, exp;
 
     @Test
-    void sqrtTest() {
+    void sqrtTestCase() {
         // ---------------- Sub-case 1 ----------------
         aEntries = new double[][]{{1.334, 5, 16}, {-134.5, 66.236, 144}};
         A = new Matrix(aEntries);
@@ -24,7 +24,7 @@ class unaryOperationTests {
     }
 
     @Test
-    void absTest() {
+    void absTestCase() {
         // ---------------- Sub-case 1 ----------------
         aEntries = new double[][]{{-1.334, 5, 16}, {-134.5, 66.236, 144}};
         A = new Matrix(aEntries);

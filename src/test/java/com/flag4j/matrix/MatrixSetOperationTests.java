@@ -14,7 +14,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setValuesDTest() {
+    void setValuesDTestCase() {
         Double[][] values;
 
         // -------------- Sub-case 1 --------------
@@ -38,7 +38,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setValuesdTest() {
+    void setValuesdTestCase() {
         double[][] values;
 
         // -------------- Sub-case 1 --------------
@@ -62,7 +62,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setValuesITest() {
+    void setValuesITestCase() {
         Integer[][] values;
 
         // -------------- Sub-case 1 --------------
@@ -85,7 +85,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setValuesintTest() {
+    void setValuesintTestCase() {
         int[][] values;
 
         // -------------- Sub-case 1 --------------
@@ -109,7 +109,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setColumnDTest() {
+    void setColumnDTestCase() {
         Double[] values;
         int col;
 
@@ -168,7 +168,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setColumndoubleTest() {
+    void setColumndoubleTestCase() {
         double[] values;
         int col;
 
@@ -227,7 +227,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setColumnITest() {
+    void setColumnITestCase() {
         Integer[] values;
         int col;
 
@@ -286,7 +286,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setColumnintTest() {
+    void setColumnintTestCase() {
         int[] values;
         int col;
 
@@ -345,7 +345,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setRowDTest() {
+    void setRowDTestCase() {
         Double[] values;
         int row;
 
@@ -404,7 +404,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setRowdoubleTest() {
+    void setRowdoubleTestCase() {
         double[] values;
         int row;
 
@@ -463,7 +463,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setRowITest() {
+    void setRowITestCase() {
         Integer[] values;
         int row;
 
@@ -522,7 +522,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setRowintTest() {
+    void setRowintTestCase() {
         int[] values;
         int row;
 
@@ -580,7 +580,7 @@ class MatrixSetOperationTests {
     }
 
     @Test
-    void setSliceMatrixTest() {
+    void setSliceMatrixTestCase() {
         double[][] valueEntries;
         Matrix values;
         int row, col;
@@ -626,7 +626,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setSliceSparseMatrixTest() {
+    void setSliceSparseMatrixTestCase() {
         double[] valueEntries;
         SparseMatrix values;
         int row, col;
@@ -653,7 +653,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setSliceCopySparseMatrixTest() {
+    void setSliceCopySparseMatrixTestCase() {
         double[] valueEntries;
         SparseMatrix values;
         int row, col;
@@ -680,7 +680,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setSliceCopyMatrixTest() {
+    void setSliceCopyMatrixTestCase() {
         double[][] valueEntries;
         Matrix values;
         int row, col;
@@ -722,7 +722,7 @@ class MatrixSetOperationTests {
     }
 
     @Test
-    void setSliceDoubleTest() {
+    void setSliceDoubleTestCase() {
         Double[][] values;
         int row, col;
 
@@ -763,7 +763,7 @@ class MatrixSetOperationTests {
     }
 
     @Test
-    void setSliceCopyDoubleTest() {
+    void setSliceCopyDoubleTestCase() {
         Double[][] values;
         int row, col;
 
@@ -802,7 +802,7 @@ class MatrixSetOperationTests {
 
 
     @Test
-    void setSlicedoubleTest() {
+    void setSlicedoubleTestCase() {
         double[][] values;
         int row, col;
 
@@ -843,7 +843,7 @@ class MatrixSetOperationTests {
     }
 
     @Test
-    void setSliceCopydoubleTest() {
+    void setSliceCopydoubleTestCase() {
         double[][] values;
         int row, col;
 
@@ -881,7 +881,7 @@ class MatrixSetOperationTests {
     }
 
     @Test
-    void setSliceIntegerTest() {
+    void setSliceIntegerTestCase() {
         Integer[][] values;
         int row, col;
 
@@ -922,7 +922,7 @@ class MatrixSetOperationTests {
     }
 
     @Test
-    void setSliceCopyIntegerTest() {
+    void setSliceCopyIntegerTestCase() {
         Integer[][] values;
         int row, col;
 
@@ -960,7 +960,7 @@ class MatrixSetOperationTests {
     }
 
     @Test
-    void setSliceintTest() {
+    void setSliceintTestCase() {
         int[][] values;
         int row, col;
 
@@ -1001,7 +1001,7 @@ class MatrixSetOperationTests {
     }
 
     @Test
-    void setSliceCopyintTest() {
+    void setSliceCopyintTestCase() {
         int[][] values;
         int row, col;
 

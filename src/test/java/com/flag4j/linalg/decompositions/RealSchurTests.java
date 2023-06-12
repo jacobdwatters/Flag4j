@@ -15,7 +15,7 @@ public class RealSchurTests {
 
 
     @Test
-    void schurDecompSymmetricTest() {
+    void schurDecompSymmetricTestCase() {
 //        // --------------------- Sub-case 1 ---------------------
 //        aEntries = new double[][]{
 //                {2, 1, 0, 0, 0, 0},

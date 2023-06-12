@@ -21,7 +21,7 @@ public class MatrixSubTests {
     CNumber[] expEntriesC;
 
     @Test
-    void matrixMatrixTest() {
+    void matrixMatrixTestCase() {
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         bEntries = new double[][]{{0.333, 56.4, 13.4}, {-1.44, 5, 85.1}, {1.343, 6.7, -88.4}};
@@ -65,7 +65,7 @@ public class MatrixSubTests {
 
 
     @Test
-    void matrixDoubleTest() {
+    void matrixDoubleTestCase() {
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         b = 2.133;
@@ -93,7 +93,7 @@ public class MatrixSubTests {
 
 
     @Test
-    void matrixCNumberTest() {
+    void matrixCNumberTestCase() {
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         bC = new CNumber(33.444, -9.3545);
@@ -128,7 +128,7 @@ public class MatrixSubTests {
 
 
     @Test
-    void matrixCMatrixTest() {
+    void matrixCMatrixTestCase() {
         // --------------- Sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         bCEntries = new CNumber[][]{
@@ -183,7 +183,7 @@ public class MatrixSubTests {
     }
 
     @Test
-    void realSparseSubTest() {
+    void realSparseSubTestCase() {
         double[] bEntries;
         int[] bRowIndices;
         int[] bColIndices;
@@ -222,7 +222,7 @@ public class MatrixSubTests {
 
 
     @Test
-    void complexSparseSubTest() {
+    void complexSparseSubTestCase() {
         CNumber[] bEntries;
         int[] bRowIndices;
         int[] bColIndices;

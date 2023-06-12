@@ -17,7 +17,7 @@ class RealDenseTransposeTests {
 
 
     @Test
-    void standardTest() {
+    void standardTestCase() {
         // ------------- Sub-case 1 ---------------
         axis1 = 0;
         axis2 = 1;
@@ -74,7 +74,7 @@ class RealDenseTransposeTests {
 
 
     @Test
-    void standardConcurrentTest() {
+    void standardConcurrentTestCase() {
         // ------------- Sub-case 1 ---------------
         axis1 = 0;
         axis2 = 1;
@@ -131,7 +131,7 @@ class RealDenseTransposeTests {
 
 
     @Test
-    void standardMatrixTest() {
+    void standardMatrixTestCase() {
         // ------------- Sub-case 1 ---------------
         numRows = 3;
         numCols = 4;
@@ -178,7 +178,7 @@ class RealDenseTransposeTests {
 
 
     @Test
-    void blockedMatrixTest() {
+    void blockedMatrixTestCase() {
         // ------------- Sub-case 1 ---------------
         numRows = 3;
         numCols = 4;
@@ -225,7 +225,7 @@ class RealDenseTransposeTests {
 
 
     @Test
-    void standardMatrixConcurrentTest() {
+    void standardMatrixConcurrentTestCase() {
         // ------------- Sub-case 1 ---------------
         numRows = 3;
         numCols = 4;
@@ -272,7 +272,7 @@ class RealDenseTransposeTests {
 
 
     @Test
-    void blockedMatrixConcurrentTest() {
+    void blockedMatrixConcurrentTestCase() {
         // ------------- Sub-case 1 ---------------
         numRows = 3;
         numCols = 4;

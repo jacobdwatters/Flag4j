@@ -14,7 +14,7 @@ class CNumberComparisonTest {
     int expCompare;
 
     @Test
-    void equalsTest() {
+    void equalsTestCase() {
         // ------------ Sub-case 1 ---------------
         a = new CNumber(5.123, 331.4);
         obj = (Object) new CNumber(5.123, 331.4);
@@ -78,7 +78,7 @@ class CNumberComparisonTest {
 
 
     @Test
-    void hashCodeTest() {
+    void hashCodeTestCase() {
         a = new CNumber(52344.13, -941.339615);
         int hashPrime = 31;
         int expHash = 7;
@@ -90,7 +90,7 @@ class CNumberComparisonTest {
 
 
     @Test
-    void compareTest() {
+    void compareTestCase() {
         // -------- Sub-case 1 ----------
         a = new CNumber(400);
         b = new CNumber(3, 1.21);
@@ -118,7 +118,7 @@ class CNumberComparisonTest {
 
 
     @Test
-    void compareToRealTest() {
+    void compareToRealTestCase() {
         // ----------- Sub-case 1 -------------
         a = new CNumber(123.21, 0.32);
         b = new CNumber(123.21, 152349.23);
@@ -191,7 +191,7 @@ class CNumberComparisonTest {
 
 
     @Test
-    void compareToRealDoubleTest() {
+    void compareToRealDoubleTestCase() {
         // ----------- Sub-case 1 -------------
         a = new CNumber(123.21, 0.32);
         Double = 123.21;

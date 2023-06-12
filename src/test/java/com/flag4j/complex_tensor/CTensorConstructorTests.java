@@ -22,7 +22,7 @@ public class CTensorConstructorTests {
 
 
     @Test
-    void shapeConstructorTest() {
+    void shapeConstructorTestCase() {
         // -------------- Sub-case 1 --------------
         expShape = new Shape(4, 5, 6, 7, 1, 2, 4);
         expEntries = new CNumber[expShape.totalEntries().intValue()];
@@ -62,7 +62,7 @@ public class CTensorConstructorTests {
 
 
     @Test
-    void shapeValueConstructorTest() {
+    void shapeValueConstructorTestCase() {
         // -------------- Sub-case 1 --------------
         value = 3.1345;
         expShape = new Shape(4, 5, 6, 7, 1, 2, 4);
@@ -105,7 +105,7 @@ public class CTensorConstructorTests {
 
 
     @Test
-    void shapeCValueConstructorTest() {
+    void shapeCValueConstructorTestCase() {
         // -------------- Sub-case 1 --------------
         valueC = new CNumber(3.1345);
         expShape = new Shape(4, 5, 6, 7, 1, 2, 4);
@@ -397,7 +397,7 @@ public class CTensorConstructorTests {
 
 
     @Test
-    void cTensorConstructorTest() {
+    void cTensorConstructorTestCase() {
         expShape = new Shape(2, 3, 1, 2);
         expEntries = new CNumber[] {
                 new CNumber(1, 0.32), new CNumber(11.2334, -94.45), new CNumber(94), new CNumber(0, 445.2),
@@ -413,7 +413,7 @@ public class CTensorConstructorTests {
 
 
     @Test
-    void tensorConstructorTest() {
+    void tensorConstructorTestCase() {
         expShape = new Shape(2, 3, 1, 2);
         entriesD = new double[]{1, -1.4133, 113.4, 0.4, 11.3, 445, 133.445, 9.8, 13384, -993.44, 11, 12};
         expEntries = new CNumber[entriesD.length];

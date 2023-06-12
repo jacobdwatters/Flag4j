@@ -15,7 +15,7 @@ class VectorOuterProductTests {
     int sparseSize;
 
     @Test
-    void realDenseOuterTest() {
+    void realDenseOuterTestCase() {
         double[] bEntries;
         Vector b;
         double[][] expEntries;
@@ -37,7 +37,7 @@ class VectorOuterProductTests {
 
 
     @Test
-    void realSparseOuterTest() {
+    void realSparseOuterTestCase() {
         double[] bEntries;
         SparseVector b;
         double[][] expEntries;
@@ -61,7 +61,7 @@ class VectorOuterProductTests {
     }
 
     @Test
-    void complexDenseOuterTest() {
+    void complexDenseOuterTestCase() {
         CNumber[] bEntries;
         CVector b;
         CNumber[][] expEntries;
@@ -82,7 +82,7 @@ class VectorOuterProductTests {
 
 
     @Test
-    void complexSparseOuterTest() {
+    void complexSparseOuterTestCase() {
         CNumber[] bEntries;
         SparseCVector b;
         CNumber[][] expEntries;

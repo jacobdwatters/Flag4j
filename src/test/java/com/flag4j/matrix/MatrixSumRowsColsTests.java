@@ -10,7 +10,7 @@ class MatrixSumRowsColsTests {
     Matrix A, exp;
 
     @Test
-    void sumRowsTest() {
+    void sumRowsTestCase() {
         // ---------------- Sub-case 1 ----------------
         aEntries = new double[][]
                 {{1.5468, -9.234, 10.2},
@@ -34,7 +34,7 @@ class MatrixSumRowsColsTests {
 
 
     @Test
-    void sumColsTests() {
+    void sumColsTestCase() {
         // ---------------- Sub-case 1 ----------------
         aEntries = new double[][]
                 {{1.5468, -9.234, 10.2},

@@ -17,7 +17,7 @@ class CMatrixSetOperationTests {
     Shape sparseShape;
 
     @Test
-    void setValuesCNumberTests() {
+    void setValuesCNumberTestCase() {
         CNumber[][] values;
 
         // -------------- Sub-case 1 --------------
@@ -46,7 +46,7 @@ class CMatrixSetOperationTests {
     }
 
     @Test
-    void setValuesdTest() {
+    void setValuesdTestCase() {
         double[][] values;
 
         // -------------- Sub-case 1 --------------
@@ -69,7 +69,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setValuesintTest() {
+    void setValuesintTestCase() {
         int[][] values;
 
         // -------------- Sub-case 1 --------------
@@ -93,7 +93,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setColumndoubleTest() {
+    void setColumndoubleTestCase() {
         double[] values;
         int col;
 
@@ -152,7 +152,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setColumnintTest() {
+    void setColumnintTestCase() {
         int[] values;
         int col;
 
@@ -211,7 +211,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setColumnCNumberTest() {
+    void setColumnCNumberTestCase() {
         CNumber[] values;
         int col;
 
@@ -276,7 +276,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setColumnITest() {
+    void setColumnITestCase() {
         Integer[] values;
         int col;
 
@@ -353,7 +353,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setColumnCVectorTests() {
+    void setColumnCVectorTestCase() {
         CNumber[] values;
         CVector valuesVec;
         int col;
@@ -424,7 +424,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setColumnSparseCVectorTest() {
+    void setColumnSparseCVectorTestCase() {
         CNumber[] values;
         SparseCVector valuesVec;
         int col;
@@ -505,7 +505,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setRowdoubleTest() {
+    void setRowdoubleTestCase() {
         double[] values;
         int row;
 
@@ -564,7 +564,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setRowCNumberTest() {
+    void setRowCNumberTestCase() {
         CNumber[] values;
         int row;
 
@@ -629,7 +629,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setRowintTest() {
+    void setRowintTestCase() {
         int[] values;
         int row;
 
@@ -688,7 +688,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setRowITest() {
+    void setRowITestCase() {
         Integer[] values;
         int row;
 
@@ -747,7 +747,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setRowCVectorTest() {
+    void setRowCVectorTestCase() {
         CNumber[] values;
         CVector valuesVec;
         int row;
@@ -818,7 +818,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setRowSparseCVectorTest() {
+    void setRowSparseCVectorTestCase() {
         CNumber[] values;
         SparseCVector valuesVec;
         int row;
@@ -898,7 +898,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSliceMatrixTest() {
+    void setSliceMatrixTestCase() {
         double[][] valueEntries;
         Matrix values;
         int row, col;
@@ -952,7 +952,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSliceCopyMatrixTest() {
+    void setSliceCopyMatrixTestCase() {
         double[][] valueEntries;
         Matrix values;
         CMatrix B;
@@ -1006,7 +1006,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSliceSparseMatrixTest() {
+    void setSliceSparseMatrixTestCase() {
         double[] valueEntries;
         SparseMatrix values;
         int row, col;
@@ -1090,7 +1090,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSliceCopySparseMatrixTest() {
+    void setSliceCopySparseMatrixTestCase() {
         double[] valueEntries;
         SparseMatrix values;
         CMatrix B;
@@ -1175,7 +1175,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSliceCopyCMatrixTest() {
+    void setSliceCopyCMatrixTestCase() {
         CNumber[][] valueEntries;
         CMatrix values;
         int row, col;
@@ -1218,7 +1218,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSlicedoubleTest() {
+    void setSlicedoubleTestCase() {
         double[][] values;
         int row, col;
 
@@ -1260,7 +1260,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSliceCopydoubleTest() {
+    void setSliceCopydoubleTestCase() {
         double[][] values;
         int row, col;
 
@@ -1299,7 +1299,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSliceintTest() {
+    void setSliceintTestCase() {
         int[][] values;
         int row, col;
 
@@ -1341,7 +1341,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSliceCopyintTest() {
+    void setSliceCopyintTestCase() {
         int[][] values;
         int row, col;
 
@@ -1380,7 +1380,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSliceITest() {
+    void setSliceITestCase() {
         Integer[][] values;
         int row, col;
 
@@ -1422,7 +1422,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSliceCopyITest() {
+    void setSliceCopyITestCase() {
         Integer[][] values;
         int row, col;
 
@@ -1461,7 +1461,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSliceCNumberTest() {
+    void setSliceCNumberTestCase() {
         CNumber[][] values;
         int row, col;
 
@@ -1517,7 +1517,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSliceCopyCNumberTest() {
+    void setSliceCopyCNumberTestCase() {
         CNumber[][] values;
         int row, col;
 
@@ -1568,7 +1568,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSliceCMatrixTest() {
+    void setSliceCMatrixTestCase() {
         CNumber[][] values;
         CMatrix mat;
         int row, col;
@@ -1628,7 +1628,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSliceSparseCMatrixTest() {
+    void setSliceSparseCMatrixTestCase() {
         CNumber[] values;
         SparseCMatrix mat;
         int row, col;
@@ -1691,7 +1691,7 @@ class CMatrixSetOperationTests {
 
 
     @Test
-    void setSliceCopySparseCMatrixTest() {
+    void setSliceCopySparseCMatrixTestCase() {
         CNumber[] values;
         SparseCMatrix mat;
         CMatrix B;

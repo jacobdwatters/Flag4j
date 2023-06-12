@@ -12,7 +12,7 @@ class VectorCopyTransposeTests {
     Vector a, exp, act;
 
     @Test
-    void copyTest() {
+    void copyTestCase() {
         aEntries = new double[]{234.45, -0.0234, Double.POSITIVE_INFINITY, Double.NaN, -0.0, 1};
         a = new Vector(aEntries);
         expEntries = new double[]{234.45, -0.0234, Double.POSITIVE_INFINITY, Double.NaN, -0.0, 1};

@@ -16,7 +16,7 @@ class SparseCVectorElemDivTests {
 
 
     @Test
-    void denseElemDivTest() {
+    void denseElemDivTestCase() {
         CNumber[] aValues = {
                 new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
                 new CNumber(25.612, 0.0245)};
@@ -50,7 +50,7 @@ class SparseCVectorElemDivTests {
 
 
     @Test
-    void denseComplexElemDivTest() {
+    void denseComplexElemDivTestCase() {
         CNumber[] aValues = {
                 new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
                 new CNumber(25.612, 0.0245)};
@@ -88,7 +88,7 @@ class SparseCVectorElemDivTests {
 
 
     @Test
-    void complexScalarDivTest() {
+    void complexScalarDivTestCase() {
         CNumber[] aValues = {
                 new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
                 new CNumber(25.612, 0.0245)};
@@ -115,7 +115,7 @@ class SparseCVectorElemDivTests {
 
 
     @Test
-    void realScalarDivTest() {
+    void realScalarDivTestCase() {
         CNumber[] aValues = {
                 new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
                 new CNumber(25.612, 0.0245)};

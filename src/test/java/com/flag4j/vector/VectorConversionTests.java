@@ -21,7 +21,7 @@ class VectorConversionTests {
     Tensor tensorExp;
 
     @Test
-    void toMatrixTest() {
+    void toMatrixTestCase() {
         // --------------------- Sub-case 1  ---------------------
         aEntries = new double[]{1.34, -8.244, 1.234, 90031.3};
         a = new Vector(aEntries);
@@ -49,7 +49,7 @@ class VectorConversionTests {
 
 
     @Test
-    void toTensorTest() {
+    void toTensorTestCase() {
         // --------------------- Sub-case 1  ---------------------
         aEntries = new double[]{1.34, -8.244, 1.234, 90031.3};
         a = new Vector(aEntries);

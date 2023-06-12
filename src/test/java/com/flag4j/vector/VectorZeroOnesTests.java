@@ -14,7 +14,7 @@ class VectorZeroOnesTests {
     Vector A;
 
     @Test
-    void zerosTest(){
+    void zerosTestCase(){
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[34];
         A = new Vector(aEntries);
@@ -34,7 +34,7 @@ class VectorZeroOnesTests {
 
 
     @Test
-    void onesTest(){
+    void onesTestCase(){
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[34];
         Arrays.fill(aEntries, 1);

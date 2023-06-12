@@ -15,7 +15,7 @@ class MatrixReshapeTests {
     int rows, cols;
 
     @Test
-    void reshapeTest() {
+    void reshapeTestCase() {
         // --------------- Sub-case 1 ---------------
         expShape = new Shape(4, 3);
         B = A.reshape(expShape.copy());
@@ -51,7 +51,7 @@ class MatrixReshapeTests {
 
 
     @Test
-    void reshapeRowsColsTest() {
+    void reshapeRowsColsTestCase() {
         // --------------- Sub-case 1 ---------------
         rows = 4;
         cols = 3;
@@ -99,7 +99,7 @@ class MatrixReshapeTests {
 
 
     @Test
-    void flattenTest() {
+    void flattenTestCase() {
         // --------------- Sub-case 1 ---------------
         expShape = new Shape(1, entries.length);
         B = A.flatten();

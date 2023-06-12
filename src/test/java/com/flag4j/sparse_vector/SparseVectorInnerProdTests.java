@@ -27,7 +27,7 @@ class SparseVectorInnerProdTests {
 
 
     @Test
-    void sparseInnerProdTest() {
+    void sparseInnerProdTestCase() {
         double[] bEntries;
         SparseVector b;
         double exp;
@@ -52,7 +52,7 @@ class SparseVectorInnerProdTests {
 
 
     @Test
-    void denseInnerProdTest() {
+    void denseInnerProdTestCase() {
         double[] bEntries;
         Vector b;
         double exp;
@@ -80,7 +80,7 @@ class SparseVectorInnerProdTests {
 
 
     @Test
-    void sparseComplexInnerProdTest() {
+    void sparseComplexInnerProdTestCase() {
         CNumber[] bEntries;
         SparseCVector b;
         CNumber exp;
@@ -108,7 +108,7 @@ class SparseVectorInnerProdTests {
 
 
     @Test
-    void denseComplexInnerProdTest() {
+    void denseComplexInnerProdTestCase() {
         CNumber[] bEntries;
         CVector b;
         CNumber exp;
@@ -150,7 +150,7 @@ class SparseVectorInnerProdTests {
 
 
     @Test
-    void normalizeTest() {
+    void normalizeTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         double mag = Math.sqrt(1.0 + 5.6*5.6 + 9.355*9.355 + 215.0*215.0);
         double[] expEntries = {1.0, 5.6, -9.355, 215.0};

@@ -31,7 +31,7 @@ class TensorToStringTests {
 
 
     @Test
-    void toStringTest() {
+    void toStringTestCase() {
         PrintOptions.resetAll();
         // ---------------------- Sub-case 1 ----------------------
         exp = "Full Shape: 2x3x1x2\n" +

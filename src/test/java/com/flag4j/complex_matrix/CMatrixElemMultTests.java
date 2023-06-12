@@ -15,7 +15,7 @@ class CMatrixElemMultTests {
     CMatrix A, exp;
 
     @Test
-    void realTest() {
+    void realTestCase() {
         double[][] bEntries;
         Matrix B;
 
@@ -60,7 +60,7 @@ class CMatrixElemMultTests {
 
 
     @Test
-    void complexTest() {
+    void complexTestCase() {
         CNumber[][] bEntries;
         CMatrix B;
 
@@ -104,7 +104,7 @@ class CMatrixElemMultTests {
 
 
     @Test
-    void sparseRealTest() {
+    void sparseRealTestCase() {
         double[] bEntries;
         SparseMatrix B;
 
@@ -146,7 +146,7 @@ class CMatrixElemMultTests {
 
 
     @Test
-    void sparseComplexTest() {
+    void sparseComplexTestCase() {
         CNumber[] bEntries;
         SparseCMatrix B;
 

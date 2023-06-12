@@ -29,7 +29,7 @@ class TensorReshapeTests {
 
 
     @Test
-    void reshapeTest() {
+    void reshapeTestCase() {
         // -------------------------- Sub-case 1 --------------------------
         expShape = new Shape(1, 1, 12, 1);
         exp = new Tensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
@@ -57,7 +57,7 @@ class TensorReshapeTests {
 
 
     @Test
-    void flattenTests() {
+    void flattenTestCase() {
         // -------------------------- Sub-case 1 --------------------------
         expShape = new Shape(12);
         exp = new Tensor(expShape, Arrays.copyOf(aEntries, aEntries.length));

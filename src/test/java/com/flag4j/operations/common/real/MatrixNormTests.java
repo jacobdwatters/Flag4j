@@ -13,7 +13,7 @@ class MatrixNormTests {
     double expNorm;
 
     @Test
-    void maxNormTests() {
+    void maxNormTestCase() {
         // ---------------- Sub-case 1  ----------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123, -9.1}, {-932.45, 551.35, -0.92342, 124.5}};
         A = new Matrix(aEntries);
@@ -24,7 +24,7 @@ class MatrixNormTests {
 
 
     @Test
-    void infNormTests() {
+    void infNormTestCase() {
         // ---------------- Sub-case 1  ----------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123, -9.1}, {-932.45, 551.35, -0.92342, 124.5}};
         A = new Matrix(aEntries);
@@ -35,7 +35,7 @@ class MatrixNormTests {
 
 
     @Test
-    void lpNormTests() {
+    void lpNormTestCase() {
         // ---------------- Sub-case 1  ----------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123, -9.1}, {-932.45, 551.35, -0.92342, 124.5}};
         A = new Matrix(aEntries);

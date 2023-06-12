@@ -26,7 +26,7 @@ class TensorSubTests {
     }
 
     @Test
-    void realDenseTest() {
+    void realDenseTestCase() {
         double[] bEntries, expEntries;
         Tensor B, exp;
 
@@ -73,7 +73,7 @@ class TensorSubTests {
 
 
     @Test
-    void realSparseTest() {
+    void realSparseTestCase() {
         double[] bEntries, expEntries;
         SparseTensor B;
         Tensor exp;
@@ -115,7 +115,7 @@ class TensorSubTests {
 
 
     @Test
-    void complexDenseTest() {
+    void complexDenseTestCase() {
         CNumber[] bEntries, expEntries;
         CTensor B, exp;
 
@@ -155,7 +155,7 @@ class TensorSubTests {
 
 
     @Test
-    void complexSparseTest() {
+    void complexSparseTestCase() {
         CNumber[] bEntries, expEntries;
         SparseCTensor B;
         CTensor exp;
@@ -238,7 +238,7 @@ class TensorSubTests {
 
 
     @Test
-    void realDenseSubEqTest() {
+    void realDenseSubEqTestCase() {
         double[] bEntries, expEntries;
         Tensor B, exp;
 
@@ -286,7 +286,7 @@ class TensorSubTests {
 
 
     @Test
-    void realSparseSubEqTest() {
+    void realSparseSubEqTestCase() {
         double[] bEntries, expEntries;
         SparseTensor B;
         Tensor exp;
@@ -329,7 +329,7 @@ class TensorSubTests {
 
 
     @Test
-    void subEqRealScalarTest() {
+    void subEqRealScalarTestCase() {
         double[] expEntries;
         Tensor exp;
         double b;

@@ -25,7 +25,7 @@ class CVectorStackJoinExtendTest {
 
 
     @Test
-    void joinRealDenseTest() {
+    void joinRealDenseTestCase() {
         double[] bEntries;
         Vector b;
         CNumber[] expEntries;
@@ -45,7 +45,7 @@ class CVectorStackJoinExtendTest {
 
 
     @Test
-    void joinRealSparseTest() {
+    void joinRealSparseTestCase() {
         double[] bEntries;
         SparseVector b;
         CNumber[] expEntries;
@@ -67,7 +67,7 @@ class CVectorStackJoinExtendTest {
 
 
     @Test
-    void joinComplexDenseTest() {
+    void joinComplexDenseTestCase() {
         CNumber[] bEntries, expEntries;
         CVector b, exp;
 
@@ -85,7 +85,7 @@ class CVectorStackJoinExtendTest {
 
 
     @Test
-    void joinComplexSparseTest() {
+    void joinComplexSparseTestCase() {
         CNumber[] bEntries, expEntries;
         CVector exp;
         SparseCVector b;
@@ -106,7 +106,7 @@ class CVectorStackJoinExtendTest {
 
 
     @Test
-    void stackRealDenseTest() {
+    void stackRealDenseTestCase() {
         double[] bEntries;
         Vector b;
 
@@ -174,7 +174,7 @@ class CVectorStackJoinExtendTest {
 
 
     @Test
-    void stackRealSparseTest() {
+    void stackRealSparseTestCase() {
         double[] bEntries;
         SparseVector b;
 
@@ -254,7 +254,7 @@ class CVectorStackJoinExtendTest {
 
 
     @Test
-    void stackComplexDenseTest() {
+    void stackComplexDenseTestCase() {
         CNumber[] bEntries;
         CVector b;
 
@@ -310,7 +310,7 @@ class CVectorStackJoinExtendTest {
 
 
     @Test
-    void stackComplexSparseTest() {
+    void stackComplexSparseTestCase() {
         CNumber[] bEntries;
         SparseCVector b;
 
@@ -369,7 +369,7 @@ class CVectorStackJoinExtendTest {
 
 
     @Test
-    void extendTest() {
+    void extendTestCase() {
         CNumber[][] expEntries;
         CMatrix exp;
 

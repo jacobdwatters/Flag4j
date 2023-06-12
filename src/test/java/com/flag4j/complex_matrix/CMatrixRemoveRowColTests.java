@@ -14,7 +14,7 @@ class CMatrixRemoveRowColTests {
     CMatrix A, exp;
 
     @Test
-    void removeRowTests() {
+    void removeRowTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new CNumber[][]{
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
@@ -64,7 +64,7 @@ class CMatrixRemoveRowColTests {
 
 
     @Test
-    void removeRowsTests() {
+    void removeRowsTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new CNumber[][]{
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
@@ -110,7 +110,7 @@ class CMatrixRemoveRowColTests {
 
 
     @Test
-    void removeColTests() {
+    void removeColTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new CNumber[][]{
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4)},
@@ -162,7 +162,7 @@ class CMatrixRemoveRowColTests {
 
 
     @Test
-    void removeColsTests() {
+    void removeColsTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new CNumber[][]{
                 {new CNumber(1, 34.3), new CNumber(0.44, -9.4), new CNumber(3.4, 65.34)},

@@ -13,7 +13,7 @@ class MatrixZerosOnesTests {
     boolean exp;
 
     @Test
-    void zerosTest()  {
+    void zerosTestCase()  {
         // ----------------- Sub-case 1 -----------------
         aEntries = new double[46][101];
         A = new Matrix(aEntries);
@@ -32,7 +32,7 @@ class MatrixZerosOnesTests {
 
 
     @Test
-    void onesTest()  {
+    void onesTestCase()  {
         // ----------------- Sub-case 1 -----------------
         aEntries = new double[46][101];
         ArrayUtils.fill(aEntries, 1.0);

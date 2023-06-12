@@ -22,7 +22,7 @@ class CVectorNormTests {
 
 
     @Test
-    void normTest() {
+    void normTestCase() {
         // ------------------ Sub-case 1 ------------------
         expNorm = 6126.638392078557;
         assertEquals(expNorm, a.norm());
@@ -30,7 +30,7 @@ class CVectorNormTests {
 
 
     @Test
-    void pNormTest() {
+    void pNormTestCase() {
         // ------------------ Sub-case 1 ------------------
         expNorm = 6208.346603991548;
         assertEquals(expNorm, a.norm(1));
@@ -58,7 +58,7 @@ class CVectorNormTests {
 
 
     @Test
-    void infNormTest() {
+    void infNormTestCase() {
         // ------------------ Sub-case 1 ------------------
         expNorm = 6126.347172780367;
         assertEquals(expNorm, a.infNorm());

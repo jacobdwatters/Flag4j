@@ -26,7 +26,7 @@ class TensorGetSetTests {
 
 
     @Test
-    void setTest() {
+    void setTestCase() {
         // -------------------- Sub-case 1 --------------------
         A.set(-99.245, 0, 1, 0, 0, 1);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
@@ -56,7 +56,7 @@ class TensorGetSetTests {
 
 
     @Test
-    void getTest() {
+    void getTestCase() {
         double exp;
 
         // ------------------- Sub-case 1 -------------------

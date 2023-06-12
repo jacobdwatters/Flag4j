@@ -22,7 +22,7 @@ public class SparseVectorReshapeTests {
     }
 
     @Test
-    void reshapeTests() {
+    void reshapeTestCase() {
         double[] values = {1.34, 51.6, -0.00245};
         int[] indices = {0, 5, 103};
         int size = 304;

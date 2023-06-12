@@ -18,7 +18,7 @@ class SparseCVectorConstructorTests {
 
 
     @Test
-    void sizeTest() {
+    void sizeTestCase() {
         // ------------- Sub-case 1 -------------
         expSize = 114;
         expShape = new Shape(expSize);
@@ -38,7 +38,7 @@ class SparseCVectorConstructorTests {
 
 
     @Test
-    void sizeEntriesIndicesTest() {
+    void sizeEntriesIndicesTestCase() {
         // ------------- Sub-case 1 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);
@@ -77,7 +77,7 @@ class SparseCVectorConstructorTests {
 
 
     @Test
-    void sizeEntriesIntIndicesTest() {
+    void sizeEntriesIntIndicesTestCase() {
         // ------------- Sub-case 1 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);
@@ -128,7 +128,7 @@ class SparseCVectorConstructorTests {
 
 
     @Test
-    void sizeEntriesDoubleIndicesTest() {
+    void sizeEntriesDoubleIndicesTestCase() {
         // ------------- Sub-case 1 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);
@@ -177,7 +177,7 @@ class SparseCVectorConstructorTests {
 
 
     @Test
-    void copyTest() {
+    void copyTestCase() {
         // ------------- Sub-case 1 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);

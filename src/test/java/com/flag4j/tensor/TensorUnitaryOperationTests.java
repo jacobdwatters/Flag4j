@@ -26,7 +26,7 @@ class TensorUnitaryOperationTests {
 
 
     @Test
-    void sqrtTest() {
+    void sqrtTestCase() {
         // --------------------- Sub-case 1 ---------------------
         expEntries = new double[]{
                 Math.sqrt(0.000123), Math.sqrt(5.23523), Math.sqrt(-834513.36), Math.sqrt(235.6),
@@ -40,7 +40,7 @@ class TensorUnitaryOperationTests {
 
 
     @Test
-    void absTest() {
+    void absTestCase() {
         // --------------------- Sub-case 1 ---------------------
         expEntries = new double[]{
                 Math.abs(0.000123), Math.abs(5.23523), Math.abs(-834513.36), Math.abs(235.6),
@@ -54,7 +54,7 @@ class TensorUnitaryOperationTests {
 
 
     @Test
-    void recipTest() {
+    void recipTestCase() {
         // --------------------- Sub-case 1 ---------------------
         expEntries = new double[]{
                 1/(0.000123), 1/(5.23523), 1/(-834513.36), 1/(235.6),

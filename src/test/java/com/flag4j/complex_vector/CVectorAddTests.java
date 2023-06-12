@@ -31,7 +31,7 @@ class CVectorAddTests {
 
 
     @Test
-    void scalDoubleTest() {
+    void scalDoubleTestCase() {
         double b;
 
         // ------------------ Sub-case 1 ------------------
@@ -78,7 +78,7 @@ class CVectorAddTests {
 
 
     @Test
-    void scalCNumberTest() {
+    void scalCNumberTestCase() {
         CNumber b;
 
         // ------------------ Sub-case 1 ------------------
@@ -143,7 +143,7 @@ class CVectorAddTests {
 
 
     @Test
-    void realDenseTest() {
+    void realDenseTestCase() {
         double[] bEntries;
         Vector b;
 
@@ -184,7 +184,7 @@ class CVectorAddTests {
 
 
     @Test
-    void realSparseTest() {
+    void realSparseTestCase() {
         double[] bEntries;
         SparseVector b;
 
@@ -234,7 +234,7 @@ class CVectorAddTests {
 
 
     @Test
-    void complexDenseTest() {
+    void complexDenseTestCase() {
         CNumber[] bEntries;
         CVector b;
 
@@ -280,7 +280,7 @@ class CVectorAddTests {
 
 
     @Test
-    void complexSparseTest() {
+    void complexSparseTestCase() {
         CNumber[] bEntries;
         SparseCVector b;
 
@@ -331,7 +331,7 @@ class CVectorAddTests {
     // ----------- ADD EQ TESTS -----------
 
     @Test
-    void scalDoubleEqTest() {
+    void scalDoubleEqTestCase() {
         double b;
 
         // ------------------ Sub-case 1 ------------------
@@ -385,7 +385,7 @@ class CVectorAddTests {
 
 
     @Test
-    void scalCNumberEqTest() {
+    void scalCNumberEqTestCase() {
         CNumber b;
 
         // ------------------ Sub-case 1 ------------------
@@ -461,7 +461,7 @@ class CVectorAddTests {
 
 
     @Test
-    void realDenseEqTest() {
+    void realDenseEqTestCase() {
         double[] bEntries;
         Vector b;
 
@@ -508,7 +508,7 @@ class CVectorAddTests {
 
 
     @Test
-    void realSparseEqTest() {
+    void realSparseEqTestCase() {
         double[] bEntries;
         SparseVector b;
 
@@ -563,7 +563,7 @@ class CVectorAddTests {
 
 
     @Test
-    void complexDenseEqTest() {
+    void complexDenseEqTestCase() {
         CNumber[] bEntries;
         CVector b;
 
@@ -615,7 +615,7 @@ class CVectorAddTests {
 
 
     @Test
-    void complexSparseEqTest() {
+    void complexSparseEqTestCase() {
         CNumber[] bEntries;
         SparseCVector b;
 

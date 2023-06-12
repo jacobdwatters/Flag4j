@@ -10,7 +10,7 @@ class MatrixVectorCheckTests {
     Matrix A;
 
     @Test
-    void isVectorTest() {
+    void isVectorTestCase() {
         // ------------------ Sub-case 1 ------------------
         aEntries = new double[][]{{1.123, 5325.123}, {1.566, -2354.5767}};
         A = new Matrix(aEntries);
@@ -38,7 +38,7 @@ class MatrixVectorCheckTests {
     }
 
     @Test
-    void vectorTypeTest() {
+    void vectorTypeTestCase() {
         // ------------------ Sub-case 1 ------------------
         aEntries = new double[][]{{1.123, 5325.123}, {1.566, -2354.5767}};
         A = new Matrix(aEntries);

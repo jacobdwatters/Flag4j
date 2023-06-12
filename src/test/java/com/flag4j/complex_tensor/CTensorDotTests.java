@@ -51,7 +51,7 @@ class CTensorDotTests {
 
 
     @Test
-    void multiAxesTests() {
+    void multiAxesTestCase() {
         // --------------------- Sub-case 1 ---------------------
         aAxes = new int[]{0};
         bAxes = new int[]{1};
@@ -112,7 +112,7 @@ class CTensorDotTests {
 
 
     @Test
-    void singleAxesTest() {
+    void singleAxesTestCase() {
         // --------------------- Sub-case 1 ---------------------
         expEntries = new CNumber[]{
                 new CNumber("-15.296085 - 1062.0565i"), new CNumber("-766.2300449999999 - 27.88944950000007i"), new CNumber("-4756.0876776000005 + 2106.5110014i"),
@@ -137,7 +137,7 @@ class CTensorDotTests {
 
 
     @Test
-    void noAxesTest() {
+    void noAxesTestCase() {
         // --------------------- Sub-case 1 ---------------------
         A = A.reshape(2, 2, 3);
         expEntries = new CNumber[]{

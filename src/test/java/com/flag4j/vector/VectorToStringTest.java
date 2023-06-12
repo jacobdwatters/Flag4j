@@ -29,7 +29,7 @@ class VectorToStringTest {
 
 
     @Test
-    void toStringTest() {
+    void toStringTestCase() {
         PrintOptions.resetAll();
         // ---------------------- Sub-case 1 ----------------------
         exp = "Full Size: 12\n" +

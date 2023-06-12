@@ -27,7 +27,7 @@ class CVectorCrossTests {
 
 
     @Test
-    void realDenseTest() {
+    void realDenseTestCase() {
         double[] bEntries;
         Vector b;
 
@@ -62,7 +62,7 @@ class CVectorCrossTests {
 
 
     @Test
-    void complexDenseTest() {
+    void complexDenseTestCase() {
         CNumber[] bEntries;
         CVector b;
 

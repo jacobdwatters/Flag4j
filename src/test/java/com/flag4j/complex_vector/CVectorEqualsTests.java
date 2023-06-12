@@ -41,7 +41,7 @@ class CVectorEqualsTests {
     int[] sparseIndices;
 
     @Test
-    void realDenseTest() {
+    void realDenseTestCase() {
         double[] bEntries;
         Vector b;
 
@@ -93,7 +93,7 @@ class CVectorEqualsTests {
 
 
     @Test
-    void realSparseTest() {
+    void realSparseTestCase() {
         double[] bEntries;
         SparseVector b;
 
@@ -171,7 +171,7 @@ class CVectorEqualsTests {
 
 
     @Test
-    void complexDenseTest(){
+    void complexDenseTestCase(){
         CNumber[] bEntries;
         CVector b;
 
@@ -246,7 +246,7 @@ class CVectorEqualsTests {
 
 
     @Test
-    void complexSparseTest() {
+    void complexSparseTestCase() {
         CNumber[] bEntries;
         SparseCVector b;
 
@@ -303,7 +303,7 @@ class CVectorEqualsTests {
 
 
     @Test
-    void objectTest() {
+    void objectTestCase() {
         // ----------------- Sub-case 1 -----------------
         aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
                 new CNumber(1.3, -0.000023465), new CNumber()};

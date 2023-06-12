@@ -16,7 +16,7 @@ class SparseMatrixConstructorTests {
     SparseMatrix A, B;
 
     @Test
-    void sizeTest() {
+    void sizeTestCase() {
         // --------------- Sub-case 1 ---------------
         size = 5;
         expShape = new Shape(5, 5);
@@ -37,7 +37,7 @@ class SparseMatrixConstructorTests {
 
 
     @Test
-    void rowsColsTest() {
+    void rowsColsTestCase() {
         // --------------- Sub-case 1 ---------------
         rows = 10;
         cols = 12;
@@ -84,7 +84,7 @@ class SparseMatrixConstructorTests {
 
 
     @Test
-    void shapeTest() {
+    void shapeTestCase() {
         // --------------- Sub-case 1 ---------------
         rows = 10;
         cols = 12;
@@ -116,7 +116,7 @@ class SparseMatrixConstructorTests {
 
 
     @Test
-    void sizeEntriesIndicesTest() {
+    void sizeEntriesIndicesTestCase() {
         // --------------- Sub-case 1 ---------------
         size = 5;
         expShape = new Shape(size, size);
@@ -164,7 +164,7 @@ class SparseMatrixConstructorTests {
 
 
     @Test
-    void rowColEntriesIndicesTest() {
+    void rowColEntriesIndicesTestCase() {
         // --------------- Sub-case 1 ---------------
         rows = 10;
         cols = 12;
@@ -211,7 +211,7 @@ class SparseMatrixConstructorTests {
 
 
     @Test
-    void shapeEntriesIndicesTest() {
+    void shapeEntriesIndicesTestCase() {
         // --------------- Sub-case 1 ---------------
         rows = 10;
         cols = 12;
@@ -243,7 +243,7 @@ class SparseMatrixConstructorTests {
 
 
     @Test
-    void sizeEntriesIntIndicesTest() {
+    void sizeEntriesIntIndicesTestCase() {
         // --------------- Sub-case 1 ---------------
         size = 5;
         expShape = new Shape(size, size);
@@ -292,7 +292,7 @@ class SparseMatrixConstructorTests {
 
 
     @Test
-    void rowColEntriesIntIndicesTest() {
+    void rowColEntriesIntIndicesTestCase() {
         // --------------- Sub-case 1 ---------------
         rows = 10;
         cols = 12;
@@ -340,7 +340,7 @@ class SparseMatrixConstructorTests {
     }
 
     @Test
-    void shapeEntriesIntIndicesTest() {
+    void shapeEntriesIntIndicesTestCase() {
         // --------------- Sub-case 1 ---------------
         rows = 10;
         cols = 12;
@@ -374,7 +374,7 @@ class SparseMatrixConstructorTests {
 
 
     @Test
-    void copyTest() {
+    void copyTestCase() {
         // --------------- Sub-case 1 ---------------
         rows = 10;
         cols = 12;

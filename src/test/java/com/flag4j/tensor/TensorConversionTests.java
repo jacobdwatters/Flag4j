@@ -25,7 +25,7 @@ class TensorConversionTests {
 
 
     @Test
-    void toComplexTest() {
+    void toComplexTestCase() {
         // --------------------- Sub-case 1 ---------------------
         expEntries = new CNumber[]{
                 new CNumber(1.23), new CNumber(2.556), new CNumber(-121.5),
@@ -39,7 +39,7 @@ class TensorConversionTests {
 
 
     @Test
-    void toMatrixTest() {
+    void toMatrixTestCase() {
         Tensor B;
 
         double[] expEntries;
@@ -64,7 +64,7 @@ class TensorConversionTests {
 
 
     @Test
-    void toVectorTest() {
+    void toVectorTestCase() {
         double[] expEntries;
         Vector exp;
 

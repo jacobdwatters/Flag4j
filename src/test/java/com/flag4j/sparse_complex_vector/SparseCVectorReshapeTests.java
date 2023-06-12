@@ -29,7 +29,7 @@ class SparseCVectorReshapeTests {
 
 
     @Test
-    void reshapeTests() {
+    void reshapeTestCase() {
         // ------------------ Sub-case 1 ------------------
         expEntries = new CNumber[]{
                 new CNumber(2.455, -83.6), new CNumber(0, 24.56),

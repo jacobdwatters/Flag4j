@@ -13,7 +13,7 @@ class ComplexQRTests {
     ComplexQRDecomposition qr;
 
     @Test
-    void fullTest() {
+    void fullTestCase() {
         // Tests account for numerical loss of precision.
         qr = new ComplexQRDecomposition();
 
@@ -91,7 +91,7 @@ class ComplexQRTests {
     }
 
     @Test
-    void reducedTest() {
+    void reducedTestCase() {
         // Tests account for numerical loss of precision.
         qr = new ComplexQRDecomposition(false);
 

@@ -15,7 +15,7 @@ class CMatrixUnaryOperationsTests {
 
 
     @Test
-    void sumTest() {
+    void sumTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
@@ -29,7 +29,7 @@ class CMatrixUnaryOperationsTests {
 
 
     @Test
-    void sqrtTest() {
+    void sqrtTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
@@ -45,7 +45,7 @@ class CMatrixUnaryOperationsTests {
 
 
     @Test
-    void absTest() {
+    void absTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
@@ -61,7 +61,7 @@ class CMatrixUnaryOperationsTests {
 
 
     @Test
-    void transposeTest() {
+    void transposeTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
@@ -106,7 +106,7 @@ class CMatrixUnaryOperationsTests {
 
 
     @Test
-    void hermationTransposeTest() {
+    void hermationTransposeTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
@@ -150,7 +150,7 @@ class CMatrixUnaryOperationsTests {
 
 
     @Test
-    void recipTest() {
+    void recipTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
@@ -166,7 +166,7 @@ class CMatrixUnaryOperationsTests {
 
 
     @Test
-    void conjTest() {
+    void conjTestCase() {
         // -------------------- Sub-case 1 --------------------
         aEntries = new CNumber[][]{
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},

@@ -25,7 +25,7 @@ class MatrixEqualsTests {
     SparseCMatrix D;
 
     @Test
-    void matrixCMatrixEqualsTest() {
+    void matrixCMatrixEqualsTestCase() {
         // -------------- Sub-case 1 --------------
         aEntries = new double[][]{{1, 2, 3, 4}, {4, 5, 6, 7}, {7, 8, 9, 10}};
         bEntries = new CNumber[][]
@@ -77,7 +77,7 @@ class MatrixEqualsTests {
 
 
     @Test
-    void matrixSparseMatrixEqualsTest() {
+    void matrixSparseMatrixEqualsTestCase() {
         // -------------- Sub-case 1 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}};
         A = new Matrix(aEntries);
@@ -141,7 +141,7 @@ class MatrixEqualsTests {
 
 
     @Test
-    void matrixSparseCMatrixEqualsTest() {
+    void matrixSparseCMatrixEqualsTestCase() {
         // -------------- Sub-case 1 --------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 0, 6, 0}, {0, 8, 9, 10}};
         A = new Matrix(aEntries);
