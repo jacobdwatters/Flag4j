@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TensorReader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.io</a> &gt; <span class="el_source">TensorReader.java</span></div><h1>TensorReader.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.io;
+
+
+import com.flag4j.Matrix;
+import com.flag4j.Tensor;
+import com.flag4j.Vector;
+import com.flag4j.util.ErrorMessages;
+
+import java.io.IOException;
+
+/**
+ * The TensorReader class provides several static methods for reading serialized
+ * tensors, matrices, and vectors from a file.
+ */
+public class TensorReader {
+
+    /*
+        TODO:
+            - Add options for matrix market format and csv format.
+             Tensor reader should be instantiable object where the constructor takes an argument for the format,
+             i.e. serialized, matrix market, or csv.
+            - Make the type to write a generic so only one non-static method is needed for read.
+     */
+
+<span class="nc" id="L49">    private TensorReader() {</span>
+        // Hide default constructor in utility class.
+<span class="nc" id="L51">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Reads a serialized {@link Tensor tensor} from a specified file using a {@link TensorInputStream}. If an exception is
+     * thrown while reading, the result will be null.
+     * @param fileName File name, including extension, of the file containing the serialized tensor.
+     * @return The deserialized tensor from the specified file. If an exception is thrown while reading,
+     * the result will be null.
+     */
+    public static Tensor readTensor(String fileName) {
+        Tensor tensor;
+
+<span class="nc" id="L65">        try (TensorInputStream in = new TensorInputStream(fileName)) {</span>
+<span class="nc" id="L66">            tensor = in.readTensor();</span>
+<span class="nc" id="L67">        } catch (IOException | ClassNotFoundException e) {</span>
+            // An Exception was thrown.
+<span class="nc" id="L69">            tensor = null;</span>
+<span class="nc" id="L70">        }</span>
+
+<span class="nc" id="L72">        return tensor;</span>
+    }
+
+
+    /**
+     * Reads a serialized {@link Matrix matrix} from a specified file using a {@link TensorInputStream}. If an exception is thrown while reading,
+     * the result will be null.
+     * @param fileName File name, including extension, of the file containing the serialized matrix.
+     * @return The deserialized matrix from the specified file. If an exception is thrown while reading,
+     * the result will be null.
+     */
+    public static Matrix readMatrix(String fileName) {
+        Matrix matrix;
+
+<span class="nc" id="L86">        try (TensorInputStream in = new TensorInputStream(fileName)) {</span>
+<span class="nc" id="L87">            matrix = in.readMatrix();</span>
+<span class="nc" id="L88">        } catch (IOException | ClassNotFoundException e) {</span>
+            // An Exception was thrown.
+<span class="nc" id="L90">            matrix = null;</span>
+<span class="nc" id="L91">        }</span>
+
+<span class="nc" id="L93">        return matrix;</span>
+    }
+
+
+    /**
+     * Reads a serialized {@link Vector vector} from a specified file using a {@link TensorInputStream}. If an exception is
+     * thrown while reading, the result will be null.
+     * @param fileName File name, including extension, of the file containing the serialized vector.
+     * @return The deserialized vector from the specified file. If an exception is thrown while reading,
+     * the result will be null.
+     */
+    public static Vector readVector(String fileName) {
+        Vector vector;
+
+<span class="nc" id="L107">        try (TensorInputStream in = new TensorInputStream(fileName)) {</span>
+<span class="nc" id="L108">            vector = in.readVector();</span>
+<span class="nc" id="L109">        } catch (IOException | ClassNotFoundException e) {</span>
+            // An Exception was thrown.
+<span class="nc" id="L111">            vector = null;</span>
+<span class="nc" id="L112">        }</span>
+
+<span class="nc" id="L114">        return vector;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

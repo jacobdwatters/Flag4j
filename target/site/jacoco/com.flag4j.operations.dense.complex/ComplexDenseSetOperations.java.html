@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComplexDenseSetOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense.complex</a> &gt; <span class="el_source">ComplexDenseSetOperations.java</span></div><h1>ComplexDenseSetOperations.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2022-2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense.complex;
+
+import com.flag4j.Shape;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
+
+/**
+ * This class contains low-level implementations of setting operations for complex dense tensors.
+ */
+public class ComplexDenseSetOperations {
+
+<span class="nc" id="L37">    private ComplexDenseSetOperations() {</span>
+        // Hide constructor.
+<span class="nc" id="L39">        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param src New values of the matrix.
+     * @param dest Destination array for values.
+     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     */
+    public static void setValues(CNumber[] src, final CNumber[] dest) {
+<span class="fc" id="L50">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
+<span class="fc" id="L51">        System.arraycopy(src, 0, dest, 0, src.length);</span>
+<span class="fc" id="L52">    }</span>
+
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param src New values of the matrix.
+     * @param dest Destination array for values.
+     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     */
+    public static void setValues(Double[] src, final CNumber[] dest) {
+<span class="fc" id="L64">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
+
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L67">            dest[i] = new CNumber(src[i]);</span>
+        }
+<span class="fc" id="L69">    }</span>
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param src New values of the matrix.
+     * @param dest Destination array for values.
+     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     */
+    public static void setValues(Integer[] src, final CNumber[] dest) {
+<span class="fc" id="L80">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
+
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L83">            dest[i] = new CNumber(src[i]);</span>
+        }
+<span class="fc" id="L85">    }</span>
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param src New values of the matrix.
+     * @param dest Destination array for values.
+     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     */
+    public static void setValues(double[] src, final CNumber[] dest) {
+<span class="fc" id="L96">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
+
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L99">            dest[i] = new CNumber(src[i]);</span>
+        }
+<span class="fc" id="L101">    }</span>
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param src New values of the matrix.
+     * @param dest Destination array for values.
+     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     */
+    public static void setValues(int[] src, final CNumber[] dest) {
+<span class="fc" id="L112">        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);</span>
+
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        for(int i=0; i&lt;src.length; i++) {</span>
+<span class="fc" id="L115">            dest[i] = new CNumber(src[i]);</span>
+        }
+<span class="fc" id="L117">    }</span>
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param src New values of the matrix.
+     * @param dest Destination array for values.
+     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     */
+    public static void setValues(CNumber[][] src, final CNumber[] dest) {
+<span class="fc" id="L128">        ParameterChecks.assertTotalEntriesEq(src, dest);</span>
+<span class="fc" id="L129">        int count = 0;</span>
+
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        for(CNumber[] cNumbers : src) {</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">            for(int j = 0; j &lt; src[0].length; j++) {</span>
+<span class="fc" id="L133">                dest[count++] = cNumbers[j].copy();</span>
+            }
+        }
+<span class="fc" id="L136">    }</span>
+
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param src New values of the matrix.
+     * @param dest Destination array for values.
+     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     */
+    public static void setValues(Double[][] src, final CNumber[] dest) {
+<span class="fc" id="L148">        ParameterChecks.assertTotalEntriesEq(src, dest);</span>
+<span class="fc" id="L149">        int count = 0;</span>
+
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        for(Double[] doubles : src) {</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">            for(int j = 0; j &lt; src[0].length; j++) {</span>
+<span class="fc" id="L153">                dest[count++] = new CNumber(doubles[j]);</span>
+            }
+        }
+<span class="fc" id="L156">    }</span>
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param src New values of the matrix.
+     * @param dest Destination array for values.
+     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     */
+    public static void setValues(Integer[][] src, final CNumber[] dest) {
+<span class="fc" id="L167">        ParameterChecks.assertTotalEntriesEq(src, dest);</span>
+<span class="fc" id="L168">        int count = 0;</span>
+
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        for(Integer[] integers : src) {</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">            for(int j = 0; j &lt; src[0].length; j++) {</span>
+<span class="fc" id="L172">                dest[count++] = new CNumber(integers[j]);</span>
+            }
+        }
+<span class="fc" id="L175">    }</span>
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param src New values of the matrix.
+     * @param dest Destination array for values.
+     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     */
+    public static void setValues(double[][] src, final CNumber[] dest) {
+<span class="fc" id="L186">        ParameterChecks.assertTotalEntriesEq(src, dest);</span>
+<span class="fc" id="L187">        int count = 0;</span>
+
+<span class="fc bfc" id="L189" title="All 2 branches covered.">        for(double[] doubles : src) {</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">            for(int j = 0; j &lt; src[0].length; j++) {</span>
+<span class="fc" id="L191">                dest[count++] = new CNumber(doubles[j]);</span>
+            }
+        }
+<span class="fc" id="L194">    }</span>
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param src New values of the matrix.
+     * @param dest Destination array for values.
+     * @throws IllegalArgumentException If the source and destination arrays have different number of total entries.
+     */
+    public static void setValues(int[][] src, final CNumber[] dest) {
+<span class="fc" id="L205">        ParameterChecks.assertTotalEntriesEq(src, dest);</span>
+<span class="fc" id="L206">        int count = 0;</span>
+
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        for(int[] ints : src) {</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">            for(int j = 0; j &lt; src[0].length; j++) {</span>
+<span class="fc" id="L210">                dest[count++] = new CNumber(ints[j]);</span>
+            }
+        }
+<span class="fc" id="L213">    }</span>
+
+
+    /**
+     * Sets an element of a tensor to the specified value.
+     * @param src Elements of the tensor. This will be modified.
+     * @param shape Shape of the tensor.
+     * @param value Value to set specified index to.
+     * @param indices Indices of tensor value to be set.
+     */
+    public static void set(CNumber[] src, Shape shape, double value, int... indices) {
+<span class="fc" id="L224">        src[shape.entriesIndex(indices)] = new CNumber(value);</span>
+<span class="fc" id="L225">    }</span>
+
+
+    /**
+     * Sets an element of a tensor to the specified value.
+     * @param src Elements of the tensor. This will be modified.
+     * @param shape Shape of the tensor.
+     * @param value Value to set specified index to.
+     * @param indices Indices of tensor value to be set.
+     */
+    public static void set(CNumber[] src, Shape shape, CNumber value, int... indices) {
+<span class="fc" id="L236">        src[shape.entriesIndex(indices)] = new CNumber(value);</span>
+<span class="fc" id="L237">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealDenseSparseMatrixMultTranspose.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense_sparse.real</a> &gt; <span class="el_source">RealDenseSparseMatrixMultTranspose.java</span></div><h1>RealDenseSparseMatrixMultTranspose.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense_sparse.real;
+
+import com.flag4j.Shape;
+import com.flag4j.util.Axis2D;
+import com.flag4j.util.ErrorMessages;
+
+/**
+ * This class contains several low level methods for computing matrix-matrix multiplications with a transpose for
+ * a real dense matrix and a real sparse matrix. &lt;br&gt;
+ * &lt;b&gt;WARNING:&lt;/b&gt; These methods do not perform any sanity checks.
+ */
+public class RealDenseSparseMatrixMultTranspose {
+
+<span class="nc" id="L38">    private RealDenseSparseMatrixMultTranspose() {</span>
+        // Hide default constructor.
+<span class="nc" id="L40">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Multiplies a real dense matrix to the transpose of a real sparse matrix.
+     * @param dSrc Entries of dense matrix.
+     * @param dShape Shape of dense matrix.
+     * @param spSrc Non-zero entries of sparse matrix.
+     * @param rowIndices Row indices of non-zero entries in the sparse matrix.
+     * @param colIndices Column indices of non-zero entries in the sparse matrix.
+     * @param spShape Shape of the sparse matrix.
+     * @return The entries of the matrix resulting from multiplying the first matrix by the transpose of the second matrix.
+     */
+    public static double[] multTranspose(double[] dSrc, Shape dShape,
+                                         double[] spSrc, int[] rowIndices, int[] colIndices, Shape spShape) {
+<span class="fc" id="L56">        int rows1 = dShape.dims[Axis2D.row()];</span>
+<span class="fc" id="L57">        int rows2 = spShape.dims[Axis2D.row()];</span>
+<span class="fc" id="L58">        int cols2 = spShape.dims[Axis2D.col()];</span>
+
+<span class="fc" id="L60">        double[] dest = new double[rows1*rows2]; // Since second matrix is transposed, its columns will become rows.</span>
+
+        int row, col;
+        int destStart, dSrcStart;
+
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        for(int i=0; i&lt;rows1; i++) {</span>
+<span class="fc" id="L66">            destStart = i*rows2;</span>
+<span class="fc" id="L67">            dSrcStart = i*cols2;</span>
+
+            // Loop over non-zero entries of sparse matrix.
+<span class="fc bfc" id="L70" title="All 2 branches covered.">            for(int j=0; j&lt;spSrc.length; j++) {</span>
+<span class="fc" id="L71">                row = colIndices[j];</span>
+<span class="fc" id="L72">                col = rowIndices[j];</span>
+
+<span class="fc" id="L74">                dest[destStart + col] += dSrc[dSrcStart + row]*spSrc[j];</span>
+            }
+        }
+
+<span class="fc" id="L78">        return dest;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

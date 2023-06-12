@@ -87,10 +87,6 @@ public abstract class ErrorMessages {
      */
     private static final String SHAPE_ENTRIES_ERR = "The shape %s cannot hold %d entries.";
     /**
-     * Error message for an ordinal which is not a valid vector orientation ordinal.
-     */
-    private static final String VECTOR_ORIENTATION_ERR = "Unknown orientation ordinal %s. Must be either 0, 1, or 2.";
-    /**
      * Error message for arrays which were expected to be the same length.
      */
     private static final String ARRAY_LENGTHS_MISMATCH_ERR = "Arrays lengths must match but got lengths: %s.";
@@ -252,16 +248,6 @@ public abstract class ErrorMessages {
      */
     public static String shapeEntriesError(Shape shape, int numEntries) {
         return String.format(SHAPE_ENTRIES_ERR, shape.toString(), numEntries);
-    }
-
-
-    /**
-     * Gets an error message for an ordinal which is not a valid vector orientation.
-     * @param ordinal Ordinal for orientation.
-     * @return An error message for an ordinal which is not a valid vector orientation.
-     */
-    public static String vectorOrientationErr(int ordinal) {
-        return String.format(VECTOR_ORIENTATION_ERR, ordinal);
     }
 
 

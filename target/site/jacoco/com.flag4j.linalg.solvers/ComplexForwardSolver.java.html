@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComplexForwardSolver.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.linalg.solvers</a> &gt; <span class="el_source">ComplexForwardSolver.java</span></div><h1>ComplexForwardSolver.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.linalg.solvers;
+
+
+import com.flag4j.CMatrix;
+import com.flag4j.CVector;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.SingularMatrixException;
+
+
+/**
+ * This solver solves linear systems of equations where the coefficient matrix in a lower triangular complex dense matrix
+ * and the constant vector is a complex dense vector.
+ */
+public class ComplexForwardSolver implements LinearSolver&lt;CMatrix, CVector&gt; {
+
+
+    /**
+     * Flag which indicates if lower triangular matrix is unit lower triangular (i.e. ones along principle diagonal)
+     * or not.
+     * True indicates unit lower triangular and false indicates simply lower triangular.
+     */
+    protected boolean isUnit;
+
+
+    /**
+     * Creates a solver to solve a linear system where the coefficient matrix is lower triangular.
+     */
+    public ComplexForwardSolver() {
+<span class="fc" id="L53">        super();</span>
+<span class="fc" id="L54">        isUnit = false;</span>
+<span class="fc" id="L55">    }</span>
+
+
+    /**
+     * Creates a solver to solve a linear system where the coefficient matrix is lower triangular or unit lower triangular.
+     * @param isUnit Flag which indicates if the coefficient matrix is unit lower triangular or not. &lt;br&gt;
+     *               - If true, the coefficient matrix is expected to be unit lower triangular. &lt;br&gt;
+     *               - If true, the coefficient matrix is expected to be lower triangular.
+     */
+    public ComplexForwardSolver(boolean isUnit) {
+<span class="fc" id="L65">        super();</span>
+<span class="fc" id="L66">        this.isUnit = isUnit;</span>
+<span class="fc" id="L67">    }</span>
+
+
+    /**
+     * Performs forward substitution for a unit lower triangular matrix {@code L} and a vector {@code b}.
+     * That is, solves the linear system {@code L*x=b} where {@code L} is a lower triangular matrix.
+     * @param L Unit lower triangular coefficient matrix. If {@code L} is not unit lower triangular, it will be treated
+     *          as if it were.
+     * @param b Constant vector.
+     * @return The result of solving the linear system {@code L*x=b} where {@code L} is a lower triangular matrix.
+     */
+    @Override
+    public CVector solve(CMatrix L, CVector b) {
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        return isUnit ? solveUnitLower(L, b) : solveLower(L, b);</span>
+    }
+
+
+    /**
+     * Performs forward substitution for a unit lower triangular matrix {@code L} and a matrix {@code B}.
+     * That is, solves the linear system {@code L*X=B} where {@code L} is a lower triangular matrix.
+     * @param L Lower triangular coefficient matrix. If {@code L} is not lower triangular, it will be treated
+     *          as if it were.
+     * @param B Constant Matrix.
+     * @return The result of solving the linear system {@code L*X=B} where {@code L} is a lower triangular matrix.
+     * If the lower triangular matrix {@code L} is singular (i.e. has a zero on the principle diagonal).
+     * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
+     * the principle diagonal).
+     */
+    @Override
+    public CMatrix solve(CMatrix L, CMatrix B) {
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        return isUnit ? solveUnitLower(L, B) : solveLower(L, B);</span>
+    }
+
+
+    /**
+     * Solves a linear system where the coefficient matrix is unit lower triangular.
+     * @param L Lower triangular coefficient matrix. If {@code L} is not lower triangular, it will be treated
+     *          as if it were.
+     * @param b Vector of constants in the linear system.
+     * @return The solution of {@code x} for the linear system {@code L*x=b}.
+     */
+    private CVector solveUnitLower(CMatrix L, CVector b) {
+        CNumber sum;
+        int lIndexStart;
+<span class="fc" id="L111">        CVector x = new CVector(L.numRows);</span>
+
+<span class="fc" id="L113">        x.entries[0] = b.entries[0].copy();</span>
+
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        for(int i=1; i&lt;L.numRows; i++) {</span>
+<span class="fc" id="L116">            sum = new CNumber();</span>
+<span class="fc" id="L117">            lIndexStart = i*L.numCols;</span>
+
+<span class="fc bfc" id="L119" title="All 2 branches covered.">            for(int j=i-1; j&gt;-1; j--) {</span>
+<span class="fc" id="L120">                sum.addEq(L.entries[lIndexStart + j].mult(x.entries[j]));</span>
+            }
+
+<span class="fc" id="L123">            x.entries[i] = b.entries[i].sub(sum);</span>
+        }
+
+<span class="fc" id="L126">        return x;</span>
+    }
+
+
+    /**
+     * Solves a linear system where the coefficient matrix is lower triangular.
+     * @param L Unit lower triangular matrix.
+     * @param b Vector of constants in the linear system.
+     * @return The solution of {@code x} for the linear system {@code L*x=b}.
+     * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
+     * principle diagonal).
+     */
+    private CVector solveLower(CMatrix L, CVector b) {
+        CNumber sum, diag;
+        int lIndexStart;
+<span class="nc" id="L141">        CVector x = new CVector(L.numRows);</span>
+
+<span class="nc" id="L143">        x.entries[0] = b.entries[0].copy();</span>
+
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        for(int i=1; i&lt;L.numRows; i++) {</span>
+<span class="nc" id="L146">            sum = new CNumber();</span>
+<span class="nc" id="L147">            lIndexStart = i*L.numCols;</span>
+
+<span class="nc" id="L149">            diag = L.entries[i*(L.numCols + 1)];</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">            if(diag.equals(CNumber.ZERO)) {</span>
+<span class="nc" id="L151">                throw new SingularMatrixException(&quot;Cannot solve linear system.&quot;);</span>
+            }
+
+<span class="nc bnc" id="L154" title="All 2 branches missed.">            for(int j=i-1; j&gt;-1; j--) {</span>
+<span class="nc" id="L155">                sum.addEq(L.entries[lIndexStart + j].mult(x.entries[j]));</span>
+            }
+
+<span class="nc" id="L158">            x.entries[i] = b.entries[i].sub(sum).div(diag);</span>
+        }
+
+<span class="nc" id="L161">        return x;</span>
+    }
+
+
+    /**
+     * Solves a linear system where the coefficient matrix is unit lower triangular.
+     * @param L Unit lower triangular matrix.
+     * @param B Matrix of constants in the linear system.
+     * @return The solution of {@code X} for the linear system {@code L*X=b}.
+     */
+    private CMatrix solveUnitLower(CMatrix L, CMatrix B) {
+        CNumber sum;
+        int lIndexStart, xIndex;
+<span class="fc" id="L174">        CMatrix X = new CMatrix(B.shape);</span>
+
+<span class="fc bfc" id="L176" title="All 2 branches covered.">        for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L177">            X.entries[j] = B.entries[j].copy();</span>
+
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            for(int i=1; i&lt;L.numRows; i++) {</span>
+<span class="fc" id="L180">                sum = new CNumber();</span>
+<span class="fc" id="L181">                lIndexStart = i*(L.numCols + 1) - 1;</span>
+<span class="fc" id="L182">                xIndex = i*X.numCols + j;</span>
+
+<span class="fc bfc" id="L184" title="All 2 branches covered.">                for(int k=i-1; k&gt;-1; k--) {</span>
+<span class="fc" id="L185">                    sum.addEq(L.entries[lIndexStart--].mult(X.entries[k*X.numCols + j]));</span>
+                }
+
+<span class="fc" id="L188">                X.entries[xIndex] = B.entries[xIndex].sub(sum);</span>
+            }
+        }
+
+<span class="fc" id="L192">        return X;</span>
+    }
+
+
+    /**
+     * Solves a linear system where the coefficient matrix is lower triangular.
+     * @param L Unit lower triangular matrix.
+     * @param B Matrix of constants in the linear system.
+     * @return The solution of {@code X} for the linear system {@code L*X=b}.
+     * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
+     * principle diagonal).
+     */
+    private CMatrix solveLower(CMatrix L, CMatrix B) {
+        CNumber sum, diag;
+        int lIndexStart, xIndex;
+<span class="fc" id="L207">        CMatrix X = new CMatrix(B.shape);</span>
+
+<span class="fc bfc" id="L209" title="All 2 branches covered.">        for(int j=0; j&lt;B.numCols; j++) {</span>
+<span class="fc" id="L210">            X.entries[j] = B.entries[j].copy();</span>
+
+<span class="fc bfc" id="L212" title="All 2 branches covered.">            for(int i=1; i&lt;L.numRows; i++) {</span>
+<span class="fc" id="L213">                sum = new CNumber();</span>
+<span class="fc" id="L214">                lIndexStart = i*(L.numCols + 1) - 1;</span>
+<span class="fc" id="L215">                xIndex = i*X.numCols + j;</span>
+
+<span class="fc" id="L217">                diag = L.entries[i*(L.numCols + 1)];</span>
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">                if(diag.equals(CNumber.ZERO)) {</span>
+<span class="nc" id="L219">                    throw new SingularMatrixException(&quot;Cannot solve linear system.&quot;);</span>
+                }
+
+<span class="fc bfc" id="L222" title="All 2 branches covered.">                for(int k=i-1; k&gt;-1; k--) {</span>
+<span class="fc" id="L223">                    sum.addEq(L.entries[lIndexStart--].mult(X.entries[k*X.numCols + j]));</span>
+                }
+
+<span class="fc" id="L226">                X.entries[xIndex] = B.entries[xIndex].sub(sum).div(diag);</span>
+            }
+        }
+
+<span class="fc" id="L230">        return X;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

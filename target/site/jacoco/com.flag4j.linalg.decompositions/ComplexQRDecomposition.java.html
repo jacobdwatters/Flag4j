@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComplexQRDecomposition.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.linalg.decompositions</a> &gt; <span class="el_source">ComplexQRDecomposition.java</span></div><h1>ComplexQRDecomposition.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.linalg.decompositions;
+
+
+import com.flag4j.CMatrix;
+import com.flag4j.CVector;
+import com.flag4j.io.PrintOptions;
+import com.flag4j.linalg.transformations.Householder;
+
+
+/**
+ * &lt;p&gt;Instances of this class compute the {@code QR} decomposition of a complex dense matrix.&lt;/p&gt;
+ * &lt;p&gt;The {@code QR} decomposition, decomposes a matrix {@code A} into an unitary matrix {@code Q}
+ * and an upper triangular matrix {@code R} such that {@code A=QR}.&lt;/p&gt;
+ */
+public class ComplexQRDecomposition extends QRDecomposition&lt;CMatrix&gt; {
+
+    /**
+     * Constructs a {@code QR} decomposer which computes the full {@code QR} decomposition.
+     */
+    public ComplexQRDecomposition() {
+<span class="fc" id="L45">        super();</span>
+<span class="fc" id="L46">    }</span>
+
+
+    /**
+     * Constructs a {@code QR} decomposer which computes either the full or reduced {@code QR} decomposition.
+     * @param fullQR Flag for determining if the full {@code QR} decomposition should be used.
+     *               If true, the full {@code QR} decomposition will be computed, if false,
+     *               the reduced {@code QR} decomposition will be computed.
+     */
+    public ComplexQRDecomposition(boolean fullQR) {
+<span class="fc" id="L56">        super(fullQR);</span>
+<span class="fc" id="L57">    }</span>
+
+
+    /**
+     * Computes the reduced QR decomposition on the src matrix.
+     * @param src The source matrix to decompose.
+     */
+    @Override
+    protected void reduced(CMatrix src) {
+<span class="fc" id="L66">        full(src); // First compute the full decomposition</span>
+
+<span class="fc" id="L68">        int k = Math.min(src.numRows, src.numCols);</span>
+
+        // Now reduce the decomposition
+<span class="fc" id="L71">        Q = Q.getSlice(0, src.numRows, 0, k);</span>
+<span class="fc" id="L72">        R = R.getSlice(0, k, 0, src.numCols);</span>
+<span class="fc" id="L73">    }</span>
+
+
+    /**
+     * Computes the full QR decomposition on the src matrix.
+     * @param src The source matrix to decompose.
+     */
+    @Override
+    protected void full(CMatrix src) {
+<span class="fc" id="L82">        R = new CMatrix(src); // Initialize R to the values in src.</span>
+<span class="fc" id="L83">        int m = R.numRows, n = R.numCols;</span>
+<span class="fc" id="L84">        int stop = Math.min(n, m-1);</span>
+
+<span class="fc" id="L86">        double eps = 1.0e-12;</span>
+
+        CMatrix H;
+        CVector col;
+
+        // Initialize Q to the identity matrix.
+<span class="fc" id="L92">        Q = CMatrix.I(R.numRows);</span>
+
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        for(int i=0; i&lt;stop; i++) {</span>
+<span class="fc" id="L95">            col = R.getColBelow(i, i).toVector();</span>
+
+            // If the column has zeros below the diagonal it is in the correct form. No need to compute reflector.
+<span class="fc bfc" id="L98" title="All 2 branches covered.">            if(col.maxAbs() &gt; eps) {</span>
+<span class="fc" id="L99">                H = CMatrix.I(m);</span>
+<span class="fc" id="L100">                H.setSlice(Householder.getReflector(col), i, i);</span>
+
+<span class="fc" id="L102">                Q = Q.mult(H); // Apply Householder reflector to Q</span>
+<span class="fc" id="L103">                R = H.mult(R); // Apply Householder reflector to R</span>
+            }
+        }
+<span class="fc" id="L106">    }</span>
+
+
+    // TODO: TEMPORARY FOR TESTING
+    public static void main(String[] args) {
+<span class="nc" id="L111">        PrintOptions.setPrecision(100);</span>
+
+<span class="nc" id="L113">        double[][] aEntries = {</span>
+                {7.778479611705531, 0.8494918994733043, -6.125644861374033E-9},
+                {0.849491899473305, -4.06778802619038, 2.420785828428717E-8},
+                {-6.125644498503208E-9, 2.4207858080244343E-8, -0.7106915855151509}};
+<span class="nc" id="L117">        CMatrix A = new CMatrix(aEntries);</span>
+
+<span class="nc" id="L119">        ComplexQRDecomposition qr = new ComplexQRDecomposition();</span>
+<span class="nc" id="L120">        qr.decompose(A);</span>
+
+<span class="nc" id="L122">        CMatrix Q = qr.getQ();</span>
+<span class="nc" id="L123">        CMatrix R = qr.getR();</span>
+
+<span class="nc" id="L125">        System.out.println(&quot;\n\n&quot; + &quot;-&quot;.repeat(100) + &quot;\n&quot;);</span>
+<span class="nc" id="L126">        System.out.println(&quot;A:\n&quot; + A + &quot;\n&quot;);</span>
+<span class="nc" id="L127">        System.out.println(&quot;Q:\n&quot; + Q + &quot;\n&quot;);</span>
+<span class="nc" id="L128">        System.out.println(&quot;R:\n&quot; + R + &quot;\n&quot;);</span>
+<span class="nc" id="L129">        System.out.println(&quot;QR:\n&quot; + Q.mult(R) + &quot;\n&quot;);</span>
+<span class="nc" id="L130">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

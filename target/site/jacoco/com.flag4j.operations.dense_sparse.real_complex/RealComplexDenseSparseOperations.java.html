@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealComplexDenseSparseOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Flag4j</a> &gt; <a href="index.source.html" class="el_package">com.flag4j.operations.dense_sparse.real_complex</a> &gt; <span class="el_source">RealComplexDenseSparseOperations.java</span></div><h1>RealComplexDenseSparseOperations.java</h1><pre class="source lang-java linenums">/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.flag4j.operations.dense_sparse.real_complex;
+
+import com.flag4j.*;
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
+
+/**
+ * This class contains methods to apply common binary operations to a real/complex dense matrix and to a complex/real sparse matrix.
+ */
+public class RealComplexDenseSparseOperations {
+
+<span class="nc" id="L38">    private RealComplexDenseSparseOperations() {</span>
+        // Hide default constructor for utility class.
+<span class="nc" id="L40">        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());</span>
+    }
+
+
+    /**
+     * Adds a real dense matrix to a complex sparse matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @return The result of the matrix addition.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static CMatrix add(Matrix src1, SparseCMatrix src2) {
+<span class="fc" id="L52">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int row, col;
+<span class="fc" id="L55">        CMatrix dest = new CMatrix(src1);</span>
+
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L58">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L59">            col = src2.colIndices[i];</span>
+<span class="fc" id="L60">            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);</span>
+        }
+
+<span class="fc" id="L63">        return dest;</span>
+    }
+
+
+    /**
+     * Adds a real dense matrix to a real sparse matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @return The result of the matrix addition.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static CMatrix add(CMatrix src1, SparseMatrix src2) {
+<span class="fc" id="L75">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int row, col;
+<span class="fc" id="L78">        CMatrix dest = new CMatrix(src1);</span>
+
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L81">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L82">            col = src2.colIndices[i];</span>
+<span class="fc" id="L83">            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);</span>
+        }
+
+<span class="fc" id="L86">        return dest;</span>
+    }
+
+
+    /**
+     * Subtracts a real sparse matrix from a real dense matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @return The result of the matrix subtraction.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static CMatrix sub(Matrix src1, SparseCMatrix src2) {
+<span class="fc" id="L98">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int row, col;
+<span class="fc" id="L101">        CMatrix dest = new CMatrix(src1);</span>
+
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L104">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L105">            col = src2.colIndices[i];</span>
+<span class="fc" id="L106">            dest.entries[row*src1.numCols + col].subEq(src2.entries[i]);</span>
+        }
+
+<span class="fc" id="L109">        return dest;</span>
+    }
+
+
+    /**
+     * Subtracts a real sparse matrix from a complex dense matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @return The result of the matrix subtraction.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static CMatrix sub(CMatrix src1, SparseMatrix src2) {
+<span class="fc" id="L121">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int row, col;
+<span class="fc" id="L124">        CMatrix dest = new CMatrix(src1);</span>
+
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L127">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L128">            col = src2.colIndices[i];</span>
+<span class="fc" id="L129">            dest.entries[row*src1.numCols + col].subEq(src2.entries[i]);</span>
+        }
+
+<span class="fc" id="L132">        return dest;</span>
+    }
+
+
+    /**
+     * Subtracts a real sparse matrix from a real dense matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @return The result of the matrix subtraction.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static CMatrix sub(SparseCMatrix src2, Matrix src1) {
+<span class="nc" id="L144">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int row, col;
+<span class="nc" id="L147">        CMatrix dest = new CMatrix(src1);</span>
+
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L150">            row = src2.rowIndices[i];</span>
+<span class="nc" id="L151">            col = src2.colIndices[i];</span>
+<span class="nc" id="L152">            dest.entries[row*src1.numCols + col] = dest.entries[row*src1.numCols + col].addInv();</span>
+<span class="nc" id="L153">            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);</span>
+        }
+
+<span class="nc" id="L156">        return dest;</span>
+    }
+
+
+    /**
+     * Adds a complex dense matrix to a real sparse matrix and stores the result in the first matrix.
+     * @param src1 Entries of first matrix in the sum. Also, the storage for the result.
+     * @param src2 Entries of second matrix in the sum.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static void addEq(CMatrix src1, SparseMatrix src2) {
+<span class="nc" id="L167">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int row, col;
+
+<span class="nc bnc" id="L171" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L172">            row = src2.rowIndices[i];</span>
+<span class="nc" id="L173">            col = src2.colIndices[i];</span>
+<span class="nc" id="L174">            src1.entries[row*src1.numCols + col].addEq(src2.entries[i]);</span>
+        }
+<span class="nc" id="L176">    }</span>
+
+
+    /**
+     * Subtracts a real sparse matrix from a complex dense matrix and stores the result in the first matrix.
+     * @param src1 Entries of first matrix in the sum. Also, the storage for the result.
+     * @param src2 Entries of second matrix in the sum.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static void subEq(CMatrix src1, SparseMatrix src2) {
+<span class="nc" id="L186">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int row, col;
+
+<span class="nc bnc" id="L190" title="All 2 branches missed.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="nc" id="L191">            row = src2.rowIndices[i];</span>
+<span class="nc" id="L192">            col = src2.colIndices[i];</span>
+<span class="nc" id="L193">            src1.entries[row*src1.numCols + col].subEq(src2.entries[i]);</span>
+        }
+<span class="nc" id="L195">    }</span>
+
+
+    /**
+     * Computes the element-wise multiplication between a real dense matrix and a complex sparse matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @return The result of element-wise multiplication.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static SparseCMatrix elemMult(Matrix src1, SparseCMatrix src2) {
+<span class="fc" id="L206">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int row, col;
+<span class="fc" id="L209">        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];</span>
+
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
+<span class="fc" id="L212">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L213">            col = src2.colIndices[i];</span>
+<span class="fc" id="L214">            destEntries[i] = src2.entries[i].mult(src1.entries[row*src1.numCols + col]);</span>
+        }
+
+<span class="fc" id="L217">        return new SparseCMatrix(src2.shape.copy(), destEntries, src2.rowIndices.clone(), src2.colIndices.clone());</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between a complex dense matrix and a real sparse matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
+     * @return The result of element-wise multiplication.
+     * @throws IllegalArgumentException If the matrices do not have the same shape.
+     */
+    public static SparseCMatrix elemMult(CMatrix src1, SparseMatrix src2) {
+<span class="fc" id="L229">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int row, col;
+<span class="fc" id="L232">        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];</span>
+
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
+<span class="fc" id="L235">            row = src2.rowIndices[i];</span>
+<span class="fc" id="L236">            col = src2.colIndices[i];</span>
+<span class="fc" id="L237">            destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);</span>
+        }
+
+<span class="fc" id="L240">        return new SparseCMatrix(src2.shape.copy(), destEntries, src2.rowIndices.clone(), src2.colIndices.clone());</span>
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between a real dense tensor and a complex sparse tensor.
+     * @param src1 Real dense tensor.
+     * @param src2 Complex sparse tensor.
+     * @return The result of element-wise multiplication between the two tensors.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static SparseCTensor elemMult(Tensor src1, SparseCTensor src2) {
+<span class="fc" id="L252">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+        int index;
+<span class="fc" id="L255">        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];</span>
+<span class="fc" id="L256">        int[][] destIndices = new int[src2.indices.length][src2.indices[0].length];</span>
+<span class="fc" id="L257">        ArrayUtils.deepCopy(src2.indices, destIndices);</span>
+
+<span class="fc bfc" id="L259" title="All 2 branches covered.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
+<span class="fc" id="L260">            index = src2.shape.entriesIndex(src2.indices[i]); // Get index of non-zero entry.</span>
+<span class="fc" id="L261">            destEntries[i] = src2.entries[i].mult(src1.entries[index]);</span>
+        }
+
+<span class="fc" id="L264">        return new SparseCTensor(src2.shape.copy(), destEntries, destIndices);</span>
+    }
+
+
+    /**
+     * Adds a real dense tensor to a sparse complex tensor.
+     * @param src1 First tensor in the sum.
+     * @param src2 Second tensor in the sum.
+     * @return The result of the tensor addition.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.t
+     */
+    public static CTensor add(Tensor src1, SparseCTensor src2) {
+<span class="fc" id="L276">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc" id="L278">        CTensor dest = new CTensor(src1);</span>
+
+<span class="fc bfc" id="L280" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L281">            dest.entries[dest.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);</span>
+        }
+
+<span class="fc" id="L284">        return dest;</span>
+    }
+
+
+    /**
+     * Subtracts a sparse complex tensor from a real dense tensor.
+     * @param src1 First tensor in the sum.
+     * @param src2 Second tensor in the sum.
+     * @return The result of the tensor addition.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.t
+     */
+    public static CTensor sub(Tensor src1, SparseCTensor src2) {
+<span class="fc" id="L296">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc" id="L298">        CTensor dest = new CTensor(src1);</span>
+
+<span class="fc bfc" id="L300" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L301">            dest.entries[dest.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);</span>
+        }
+
+<span class="fc" id="L304">        return dest;</span>
+    }
+
+
+    /**
+     * Adds a dense complex tensor to a real sparse tensor.
+     * @param src1 Complex dense tensor.
+     * @param src2 Real sparse tensor.
+     * @return The result of the tensor addition.
+     */
+    public static CTensor add(CTensor src1, SparseTensor src2) {
+<span class="fc" id="L315">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L316">        CTensor dest = new CTensor(src1);</span>
+
+<span class="fc bfc" id="L318" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L319">            dest.entries[dest.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);</span>
+        }
+
+<span class="fc" id="L322">        return dest;</span>
+    }
+
+
+    /**
+     * Adds a dense complex tensor to a real sparse tensor.
+     * @param src1 Complex dense tensor.
+     * @param src2 Real sparse tensor.
+     * @return The result of the tensor addition.
+     */
+    public static CTensor sub(CTensor src1, SparseTensor src2) {
+<span class="fc" id="L333">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+<span class="fc" id="L334">        CTensor dest = new CTensor(src1);</span>
+
+<span class="fc bfc" id="L336" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L337">            dest.entries[dest.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);</span>
+        }
+
+<span class="fc" id="L340">        return dest;</span>
+    }
+
+
+    /**
+     * Computes element-wise addition between a complex dense tensor and a real sparse tensor. The result is stored
+     * in the complex dense tensor.
+     * @param src1 The complex dense tensor. Also, the storage for the computation.
+     * @param src2 The real sparse tensor.
+     */
+    public static void addEq(CTensor src1, SparseTensor src2) {
+<span class="fc" id="L351">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc bfc" id="L353" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L354">            src1.entries[src2.shape.entriesIndex(src2.indices[i])].addEq(src2.entries[i]);</span>
+        }
+<span class="fc" id="L356">    }</span>
+
+
+    /**
+     * Computes element-wise subtraction between a complex dense tensor and a real sparse tensor. The result is stored
+     * in the complex dense tensor.
+     * @param src1 The complex dense tensor. Also, the storage for the computation.
+     * @param src2 The real sparse tensor.
+     */
+    public static void subEq(CTensor src1, SparseTensor src2) {
+<span class="fc" id="L366">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc bfc" id="L368" title="All 2 branches covered.">        for(int i=0; i&lt;src2.nonZeroEntries(); i++) {</span>
+<span class="fc" id="L369">            src1.entries[src2.shape.entriesIndex(src2.indices[i])].subEq(src2.entries[i]);</span>
+        }
+<span class="fc" id="L371">    }</span>
+
+
+    /**
+     * Computes the element-wise multiplication between a complex dense tensor and a real sparse matrix.
+     * @param src1 First tensor in the element-wise multiplication.
+     * @param src2 Second tensor in the element-wise multiplication.
+     * @return The result of element-wise multiplication.
+     * @throws IllegalArgumentException If the tensors do not have the same shape.
+     */
+    public static SparseCTensor elemMult(CTensor src1, SparseTensor src2) {
+<span class="fc" id="L382">        ParameterChecks.assertEqualShape(src1.shape, src2.shape);</span>
+
+<span class="fc" id="L384">        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];</span>
+
+<span class="fc" id="L386">        int[][] indices = new int[src2.indices.length][src2.indices[0].length];</span>
+<span class="fc" id="L387">        ArrayUtils.deepCopy( src2.indices, indices);</span>
+
+<span class="fc bfc" id="L389" title="All 2 branches covered.">        for(int i=0; i&lt;destEntries.length; i++) {</span>
+<span class="fc" id="L390">            destEntries[i] = src1.entries[src2.shape.entriesIndex(src2.indices[i])].mult(src2.entries[i]);</span>
+        }
+
+<span class="fc" id="L393">        return new SparseCTensor(src2.shape.copy(), destEntries, indices);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
