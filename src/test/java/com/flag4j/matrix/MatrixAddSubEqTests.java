@@ -3,6 +3,7 @@ package com.flag4j.matrix;
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.SparseMatrix;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,7 +41,7 @@ class MatrixAddSubEqTests {
         B = new Matrix(bEntries);
 
         Matrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.addEq(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.addEq(finalB));
     }
 
 
@@ -73,7 +74,7 @@ class MatrixAddSubEqTests {
         B = new SparseMatrix(sparseShape, bEntries, rowIndices, colIndices);
 
         SparseMatrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.addEq(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.addEq(finalB));
     }
 
 
@@ -116,7 +117,7 @@ class MatrixAddSubEqTests {
         B = new Matrix(bEntries);
 
         Matrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.subEq(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.subEq(finalB));
     }
 
 
@@ -149,7 +150,7 @@ class MatrixAddSubEqTests {
         B = new SparseMatrix(sparseShape, bEntries, rowIndices, colIndices);
 
         SparseMatrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.subEq(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.subEq(finalB));
     }
 
 

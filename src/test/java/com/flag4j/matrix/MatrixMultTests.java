@@ -3,6 +3,7 @@ package com.flag4j.matrix;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -53,7 +54,7 @@ class MatrixMultTests {
         B = new Matrix(bEntries);
 
         Matrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.mult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
 
@@ -92,7 +93,7 @@ class MatrixMultTests {
         B = new CMatrix(bEntries);
 
         CMatrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.mult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
 
@@ -136,7 +137,7 @@ class MatrixMultTests {
         B = new SparseMatrix(bShape, bEntries, rowIndices, colIndices);
 
         SparseMatrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.mult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
 
@@ -179,7 +180,7 @@ class MatrixMultTests {
         B = new SparseCMatrix(bShape, bEntries, rowIndices, colIndices);
 
         SparseCMatrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.mult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
 
@@ -228,7 +229,7 @@ class MatrixMultTests {
                 {123.445, 0.00013}};
         A = new Matrix(aEntries);
 
-        assertThrows(IllegalArgumentException.class, ()->A.pow(2));
+        assertThrows(LinearAlgebraException.class, ()->A.pow(2));
 
         // ---------------------- Sub-case 5 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},

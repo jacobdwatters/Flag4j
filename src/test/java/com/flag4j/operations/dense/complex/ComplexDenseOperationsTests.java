@@ -2,6 +2,7 @@ package com.flag4j.operations.dense.complex;
 
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +40,7 @@ class ComplexDenseOperationsTests {
                 new CNumber(0.9133, -1943.134), new CNumber(-9234.1, 10.3-3245), new CNumber(0, 1)};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(IllegalArgumentException.class, () -> add(src1, shape1, src2, shape2));
+        assertThrows(LinearAlgebraException.class, () -> add(src1, shape1, src2, shape2));
 
         // ---------- Sub-case 3 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
@@ -47,7 +48,7 @@ class ComplexDenseOperationsTests {
         src2 = new CNumber[]{new CNumber(9-9234.23, -1), new CNumber(-0.99+109.2234, 13.445+1.435)};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(IllegalArgumentException.class, () -> add(src1, shape1, src2, shape2));
+        assertThrows(LinearAlgebraException.class, () -> add(src1, shape1, src2, shape2));
     }
 
 
@@ -96,7 +97,7 @@ class ComplexDenseOperationsTests {
                 new CNumber(0.9133, -1943.134), new CNumber(-9234.1, 10.3-3245), new CNumber(0, 1)};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(IllegalArgumentException.class, () -> sub(src1, shape1, src2, shape2));
+        assertThrows(LinearAlgebraException.class, () -> sub(src1, shape1, src2, shape2));
 
         // ---------- Sub-case 3 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
@@ -104,7 +105,7 @@ class ComplexDenseOperationsTests {
         src2 = new CNumber[]{new CNumber(9-9234.23, -1), new CNumber(-0.99+109.2234, 13.445+1.435)};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(IllegalArgumentException.class, () -> sub(src1, shape1, src2, shape2));
+        assertThrows(LinearAlgebraException.class, () -> sub(src1, shape1, src2, shape2));
     }
 
 

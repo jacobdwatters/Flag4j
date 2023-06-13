@@ -3,6 +3,7 @@ package com.flag4j.operations.dense.real_complex;
 
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,7 @@ class RealComplexDenseOperationsTests {
         src2 = new double[]{1, 2, 3, 4, 5};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(IllegalArgumentException.class, () -> add(src1, shape1, src2, shape2));
+        assertThrows(LinearAlgebraException.class, () -> add(src1, shape1, src2, shape2));
 
         // ---------- Sub-case 3 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
@@ -45,7 +46,7 @@ class RealComplexDenseOperationsTests {
         src2 = new double[]{1, 2};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(IllegalArgumentException.class, () -> add(src1, shape1, src2, shape2));
+        assertThrows(LinearAlgebraException.class, () -> add(src1, shape1, src2, shape2));
     }
 
 
@@ -78,7 +79,7 @@ class RealComplexDenseOperationsTests {
         src2 = new double[]{1, 2, 3, 4, 5};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(IllegalArgumentException.class, () -> sub(src1, shape1, src2, shape2));
+        assertThrows(LinearAlgebraException.class, () -> sub(src1, shape1, src2, shape2));
 
         // ---------- Sub-case 3 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
@@ -86,7 +87,7 @@ class RealComplexDenseOperationsTests {
         src2 = new double[]{1, 2};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(IllegalArgumentException.class, () -> sub(src1, shape1, src2, shape2));
+        assertThrows(LinearAlgebraException.class, () -> sub(src1, shape1, src2, shape2));
     }
 
     @Test
@@ -107,7 +108,7 @@ class RealComplexDenseOperationsTests {
         src2 = new double[]{1, 2, 3, 4, 5};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(IllegalArgumentException.class, () -> sub(src2, shape2, src1, shape1));
+        assertThrows(LinearAlgebraException.class, () -> sub(src2, shape2, src1, shape1));
 
         // ---------- Sub-case 3 -----------------
         src1 = new CNumber[]{new CNumber(9, -1), new CNumber(-0.99, 13.445),
@@ -115,7 +116,7 @@ class RealComplexDenseOperationsTests {
         src2 = new double[]{1, 2};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(IllegalArgumentException.class, () -> sub(src2, shape2, src1, shape1));
+        assertThrows(LinearAlgebraException.class, () -> sub(src2, shape2, src1, shape1));
     }
 
 

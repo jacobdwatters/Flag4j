@@ -1,6 +1,7 @@
 package com.flag4j.operations.dense.real;
 
 import com.flag4j.Shape;
+import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.operations.common.real.RealOperations;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +36,7 @@ class RealDenseOperationsTests {
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
 
-        assertThrows(IllegalArgumentException.class, () -> add(src1, shape1, src2, shape2));
+        assertThrows(LinearAlgebraException.class, () -> add(src1, shape1, src2, shape2));
 
         // ---------- Sub-case 3 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
@@ -43,7 +44,7 @@ class RealDenseOperationsTests {
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
 
-        assertThrows(IllegalArgumentException.class, () -> add(src1, shape1, src2, shape2));
+        assertThrows(LinearAlgebraException.class, () -> add(src1, shape1, src2, shape2));
     }
 
 
@@ -75,14 +76,14 @@ class RealDenseOperationsTests {
         src2 = new double[]{9.1233, 22, 0.00009234, 11.234, -88.1, 13.4, 1, 1};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(IllegalArgumentException.class, () -> sub(src1, shape1, src2, shape2));
+        assertThrows(LinearAlgebraException.class, () -> sub(src1, shape1, src2, shape2));
 
         // ---------- Sub-case 3 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         src2 = new double[]{9.1233, 22, 0.00009234, 11.234};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(IllegalArgumentException.class, () -> sub(src1, shape1, src2, shape2));
+        assertThrows(LinearAlgebraException.class, () -> sub(src1, shape1, src2, shape2));
     }
 
 

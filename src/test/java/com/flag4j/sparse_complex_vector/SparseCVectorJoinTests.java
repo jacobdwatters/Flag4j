@@ -2,6 +2,7 @@ package com.flag4j.sparse_complex_vector;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -136,7 +137,7 @@ class SparseCVectorJoinTests {
         b = new Vector(bEntries);
 
         Vector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.stack(finalB));
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, 3));
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, -2));
     }
@@ -179,7 +180,7 @@ class SparseCVectorJoinTests {
         b = new CVector(bEntries);
 
         CVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.stack(finalB));
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, 3));
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, -2));
     }
@@ -217,7 +218,7 @@ class SparseCVectorJoinTests {
         b = new SparseVector(bSize, bEntries, bIndices);
 
         SparseVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.stack(finalB));
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, 3));
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, -2));
     }
@@ -258,7 +259,7 @@ class SparseCVectorJoinTests {
         b = new SparseCVector(bSize, bEntries, bIndices);
 
         SparseCVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.stack(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.stack(finalB));
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, 3));
         assertThrows(IllegalArgumentException.class, ()->a.stack(finalB, -2));
     }

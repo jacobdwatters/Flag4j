@@ -2,6 +2,7 @@ package com.flag4j.tensor;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -57,7 +58,7 @@ class TensorAddTests {
         B = new Tensor(bShape, bEntries);
 
         Tensor finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.add(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
 
         // ----------------------- Sub-case 3 -----------------------
         bEntries = new double[]{
@@ -68,7 +69,7 @@ class TensorAddTests {
         B = new Tensor(bShape, bEntries);
 
         Tensor finalB1 = B;
-        assertThrows(IllegalArgumentException.class, ()->A.add(finalB1));
+        assertThrows(LinearAlgebraException.class, ()->A.add(finalB1));
     }
 
 
@@ -110,7 +111,7 @@ class TensorAddTests {
         B = new SparseTensor(bShape, bEntries, sparseIndices);
 
         SparseTensor finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.add(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
     }
 
 
@@ -150,7 +151,7 @@ class TensorAddTests {
         B = new CTensor(bShape, bEntries);
 
         CTensor finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.add(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
     }
 
 
@@ -191,7 +192,7 @@ class TensorAddTests {
         B = new SparseCTensor(bShape, bEntries, sparseIndices);
 
         SparseCTensor finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.add(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
     }
 
 
@@ -270,7 +271,7 @@ class TensorAddTests {
         B = new Tensor(bShape, bEntries);
 
         Tensor finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.addEq(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.addEq(finalB));
 
         // ----------------------- Sub-case 3 -----------------------
         bEntries = new double[]{
@@ -281,7 +282,7 @@ class TensorAddTests {
         B = new Tensor(bShape, bEntries);
 
         Tensor finalB1 = B;
-        assertThrows(IllegalArgumentException.class, ()->A.addEq(finalB1));
+        assertThrows(LinearAlgebraException.class, ()->A.addEq(finalB1));
     }
 
 
@@ -324,7 +325,7 @@ class TensorAddTests {
         B = new SparseTensor(bShape, bEntries, sparseIndices);
 
         SparseTensor finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.addEq(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.addEq(finalB));
     }
 
 

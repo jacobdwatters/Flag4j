@@ -2,6 +2,7 @@ package com.flag4j.matrix;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,14 +55,14 @@ class MatrixAddTests {
         bEntries = new double[][]{{0.333, 56.4, 13.4}, {-1.44, 5, 85.1}, {1, 2, 3}};
         A = new Matrix(aEntries);
         B = new Matrix(bEntries);
-        assertThrows(IllegalArgumentException.class, ()->A.add(B));
+        assertThrows(LinearAlgebraException.class, ()->A.add(B));
 
         // --------------- Sub-case 4 ---------------
         aEntries = new double[][]{{1, 2}, {4, 5}};
         bEntries = new double[][]{{0.333, 56.4, 13.4}, {-1.44, 5, 85.1}};
         A = new Matrix(aEntries);
         B = new Matrix(bEntries);
-        assertThrows(IllegalArgumentException.class, ()->A.add(B));
+        assertThrows(LinearAlgebraException.class, ()->A.add(B));
     }
 
 
@@ -180,7 +181,7 @@ class MatrixAddTests {
         A = new Matrix(aEntries);
         BC = new CMatrix(bCEntries);
 
-        assertThrows(IllegalArgumentException.class, ()->A.add(BC));
+        assertThrows(LinearAlgebraException.class, ()->A.add(BC));
     }
 
     @Test
@@ -218,7 +219,7 @@ class MatrixAddTests {
         B = new SparseMatrix(bShape, bEntries, bRowIndices, bColIndices);
 
         SparseMatrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.add(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
     }
 
 
@@ -263,6 +264,6 @@ class MatrixAddTests {
         B = new SparseCMatrix(bShape, bEntries, bRowIndices, bColIndices);
 
         SparseCMatrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.add(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.add(finalB));
     }
 }

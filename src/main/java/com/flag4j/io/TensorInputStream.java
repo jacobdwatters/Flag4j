@@ -38,7 +38,7 @@ import java.io.ObjectInputStream;
  * A {@code TensorInputStream} obtains bytes from a system file using a {@link FileInputStream} containing a serialized
  * tensor, matrix, or vector. Then, deserializes that object using an {@link ObjectInputStream}.
  */
-public class TensorInputStream extends InputStream {
+public class TensorInputStream<T> extends InputStream {
 
     /**
      * Stream for loading bytes from a system file.

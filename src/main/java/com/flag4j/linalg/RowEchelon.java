@@ -58,17 +58,21 @@ public class RowEchelon {
 
     /**
      * Computes the reduced row echelon form of a matrix. For a non-reduced row echelon form see {@link #ref(Matrix)}.
+     * The reduced row echelon form is unique.
      * @param A The matrix for which to compute the reduced row echelon form.
      * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
      */
     public static Matrix rref(Matrix A) {
+        // Compute the LU decomposition.
         Matrix U = new RealLUDecomposition().decompose(A).getU();
+
         int colStop = Math.min(U.numCols, U.numRows);
         int pivotRow;
         int iRow;
         double m;
         double pivotValue;
 
+        // Convert U to reduced row echelon form.
         for(int j=0; j<colStop; j++) {
             pivotRow = j*U.numCols;
             pivotValue = U.entries[pivotRow + j];
@@ -95,16 +99,20 @@ public class RowEchelon {
 
     /**
      * Computes the reduced row echelon form of a matrix. For a non-reduced row echelon form see {@link #ref(CMatrix)}.
+     * The reduced row echelon form is unique.
      * @param A The matrix for which to compute the reduced row echelon form.
      * @return A matrix in reduced row echelon form which is row-equivalent to this matrix.
      */
     public static CMatrix rref(CMatrix A) {
+        // Compute the LU decomposition.
         CMatrix U = new ComplexLUDecomposition().decompose(A).getU();
+
         int colStop = Math.min(U.numCols, U.numRows);
         int pivotRow;
         int iRow;
         CNumber m;
 
+        // Convert U to reduced row echelon form.
         for(int j=0; j<colStop; j++) {
             pivotRow = j*U.numCols;
             m = U.entries[pivotRow + j];

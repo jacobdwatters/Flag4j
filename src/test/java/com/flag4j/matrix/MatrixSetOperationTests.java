@@ -3,6 +3,7 @@ package com.flag4j.matrix;
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.SparseMatrix;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,7 +34,7 @@ class MatrixSetOperationTests {
         A = new Matrix(entriesA);
 
         Double[][] finalValues = values;
-        assertThrows(IllegalArgumentException.class, () -> A.setValues(finalValues));
+        assertThrows(LinearAlgebraException.class, () -> A.setValues(finalValues));
     }
 
 
@@ -57,7 +58,7 @@ class MatrixSetOperationTests {
         A = new Matrix(entriesA);
 
         double[][] finalValues = values;
-        assertThrows(IllegalArgumentException.class, () -> A.setValues(finalValues));
+        assertThrows(LinearAlgebraException.class, () -> A.setValues(finalValues));
     }
 
 
@@ -80,7 +81,7 @@ class MatrixSetOperationTests {
         A = new Matrix(entriesA);
 
         Integer[][] finalValues = values;
-        assertThrows(IllegalArgumentException.class, () -> A.setValues(finalValues));
+        assertThrows(LinearAlgebraException.class, () -> A.setValues(finalValues));
     }
 
 
@@ -104,7 +105,7 @@ class MatrixSetOperationTests {
         A = new Matrix(entriesA);
 
         int[][] finalValues = values;
-        assertThrows(IllegalArgumentException.class, () -> A.setValues(finalValues));
+        assertThrows(LinearAlgebraException.class, () -> A.setValues(finalValues));
     }
 
 

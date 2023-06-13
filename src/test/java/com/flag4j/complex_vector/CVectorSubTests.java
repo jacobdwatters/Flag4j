@@ -5,6 +5,7 @@ import com.flag4j.SparseCVector;
 import com.flag4j.SparseVector;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -173,14 +174,14 @@ class CVectorSubTests {
         b = new Vector(bEntries);
 
         Vector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.sub(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.sub(finalB));
 
         // ------------------ Sub-case 4 ------------------
         bEntries = new double[]{-54.1354, -99.2344};
         b = new Vector(bEntries);
 
         Vector finalB2 = b;
-        assertThrows(IllegalArgumentException.class, ()->a.sub(finalB2));
+        assertThrows(LinearAlgebraException.class, ()->a.sub(finalB2));
     }
 
 
@@ -221,7 +222,7 @@ class CVectorSubTests {
         b = new SparseVector(sparseSize, bEntries, sparseIndices);
 
         SparseVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.sub(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.sub(finalB));
 
         // ------------------ Sub-case 4 ------------------
         bEntries = new double[]{-1.4};
@@ -230,7 +231,7 @@ class CVectorSubTests {
         b = new SparseVector(sparseSize, bEntries, sparseIndices);
 
         SparseVector finalB2 = b;
-        assertThrows(IllegalArgumentException.class, ()->a.sub(finalB2));
+        assertThrows(LinearAlgebraException.class, ()->a.sub(finalB2));
     }
 
 
@@ -268,7 +269,7 @@ class CVectorSubTests {
         b = new CVector(bEntries);
 
         CVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.sub(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.sub(finalB));
 
         // ------------------ Sub-case 4 ------------------
         bEntries = new CNumber[]{new CNumber(2.45, -99.24), new CNumber(9),
@@ -276,7 +277,7 @@ class CVectorSubTests {
         b = new CVector(bEntries);
 
         CVector finalB2 = b;
-        assertThrows(IllegalArgumentException.class, ()->a.sub(finalB2));
+        assertThrows(LinearAlgebraException.class, ()->a.sub(finalB2));
     }
 
 
@@ -318,7 +319,7 @@ class CVectorSubTests {
         b = new SparseCVector(sparseSize, bEntries, sparseIndices);
 
         SparseCVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.sub(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.sub(finalB));
 
         // ------------------ Sub-case 4 ------------------
         bEntries = new CNumber[]{new CNumber(9.3455, 15.6)};
@@ -327,7 +328,7 @@ class CVectorSubTests {
         b = new SparseCVector(sparseSize, bEntries, sparseIndices);
 
         SparseCVector finalB2 = b;
-        assertThrows(IllegalArgumentException.class, ()->a.sub(finalB2));
+        assertThrows(LinearAlgebraException.class, ()->a.sub(finalB2));
     }
 
     // ----------------- SubEq Tests -----------------
@@ -497,7 +498,7 @@ class CVectorSubTests {
         b = new Vector(bEntries);
 
         Vector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.subEq(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.subEq(finalB));
 
         // ------------------ Sub-case 4 ------------------
         setup();
@@ -505,7 +506,7 @@ class CVectorSubTests {
         b = new Vector(bEntries);
 
         Vector finalB2 = b;
-        assertThrows(IllegalArgumentException.class, ()->a.subEq(finalB2));
+        assertThrows(LinearAlgebraException.class, ()->a.subEq(finalB2));
     }
 
 
@@ -550,7 +551,7 @@ class CVectorSubTests {
         b = new SparseVector(sparseSize, bEntries, sparseIndices);
 
         SparseVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.subEq(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.subEq(finalB));
 
         // ------------------ Sub-case 4 ------------------
         setup();
@@ -560,7 +561,7 @@ class CVectorSubTests {
         b = new SparseVector(sparseSize, bEntries, sparseIndices);
 
         SparseVector finalB2 = b;
-        assertThrows(IllegalArgumentException.class, ()->a.subEq(finalB2));
+        assertThrows(LinearAlgebraException.class, ()->a.subEq(finalB2));
     }
 
 
@@ -603,7 +604,7 @@ class CVectorSubTests {
         b = new CVector(bEntries);
 
         CVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.subEq(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.subEq(finalB));
 
         // ------------------ Sub-case 4 ------------------
         setup();
@@ -612,7 +613,7 @@ class CVectorSubTests {
         b = new CVector(bEntries);
 
         CVector finalB2 = b;
-        assertThrows(IllegalArgumentException.class, ()->a.subEq(finalB2));
+        assertThrows(LinearAlgebraException.class, ()->a.subEq(finalB2));
     }
 
 
@@ -657,7 +658,7 @@ class CVectorSubTests {
         b = new SparseCVector(sparseSize, bEntries, sparseIndices);
 
         SparseCVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.subEq(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.subEq(finalB));
 
         // ------------------ Sub-case 4 ------------------
         setup();
@@ -667,6 +668,6 @@ class CVectorSubTests {
         b = new SparseCVector(sparseSize, bEntries, sparseIndices);
 
         SparseCVector finalB2 = b;
-        assertThrows(IllegalArgumentException.class, ()->a.subEq(finalB2));
+        assertThrows(LinearAlgebraException.class, ()->a.subEq(finalB2));
     }
 }

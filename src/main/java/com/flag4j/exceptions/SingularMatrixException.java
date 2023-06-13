@@ -4,7 +4,7 @@ package com.flag4j.exceptions;
  * An exception which is thrown when some operation not defined for singular matrices is attempted to be
  * performed on a singular matrix. For example, attempting to invert a singular matrix.
  */
-public class SingularMatrixException extends RuntimeException {
+public class SingularMatrixException extends LinearAlgebraException {
 
     private static final String INFO = "Matrix is singular.";
 

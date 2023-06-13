@@ -2,6 +2,7 @@ package com.flag4j.sparse_vector;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -50,7 +51,7 @@ class SparseVectorOuterProductTest {
         b = new SparseVector(sparseSize+1445, bEntries, bIndices);
 
         SparseVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.outer(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.outer(finalB));
     }
 
 
@@ -81,7 +82,7 @@ class SparseVectorOuterProductTest {
         b = new SparseCVector(sparseSize+103, bEntries, bIndices);
 
         SparseCVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.outer(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.outer(finalB));
     }
 
 

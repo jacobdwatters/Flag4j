@@ -4,6 +4,7 @@ import com.flag4j.CMatrix;
 import com.flag4j.CustomAssertions;
 import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -52,7 +53,7 @@ class CMatrixElemDivTests {
         B = new Matrix(bEntries);
 
         Matrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.elemDiv(finalB));
     }
 
 
@@ -96,6 +97,6 @@ class CMatrixElemDivTests {
         B = new CMatrix(bEntries);
 
         CMatrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.elemDiv(finalB));
     }
 }

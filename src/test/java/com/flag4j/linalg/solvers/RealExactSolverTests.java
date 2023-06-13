@@ -3,6 +3,7 @@ package com.flag4j.linalg.solvers;
 
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
+import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.exceptions.SingularMatrixException;
 import org.junit.jupiter.api.Test;
 
@@ -62,7 +63,7 @@ class RealExactSolverTests {
         expEntries = new double[]{};
         setMatrices();
 
-        assertThrows(IllegalArgumentException.class, ()->solver.solve(A, b));
+        assertThrows(LinearAlgebraException.class, ()->solver.solve(A, b));
 
         // ----------------- Sub-case 4 -----------------
         aEntries = new double[][]{

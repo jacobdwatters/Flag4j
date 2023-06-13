@@ -2,6 +2,7 @@ package com.flag4j.matrix;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,7 +64,7 @@ class MatrixElemMultTests {
         A = new Matrix(entriesA);
         B = new Matrix(entriesB);
 
-        assertThrows(IllegalArgumentException.class, ()->A.elemMult(B));
+        assertThrows(LinearAlgebraException.class, ()->A.elemMult(B));
     }
 
 
@@ -89,7 +90,7 @@ class MatrixElemMultTests {
         A = new Matrix(entriesA);
         BC = new CMatrix(entriesBC);
 
-        assertThrows(IllegalArgumentException.class, ()->A.elemMult(BC));
+        assertThrows(LinearAlgebraException.class, ()->A.elemMult(BC));
     }
 
 
@@ -121,7 +122,7 @@ class MatrixElemMultTests {
         shape = new Shape(3, 4);
         BSparse = new SparseMatrix(shape, bEntriesSparse, rowIndices, colIndices);
 
-        assertThrows(IllegalArgumentException.class, ()->A.elemMult(BSparse));
+        assertThrows(LinearAlgebraException.class, ()->A.elemMult(BSparse));
     }
 
 
@@ -153,6 +154,6 @@ class MatrixElemMultTests {
         shape = new Shape(15, 500);
         BSparseComplex = new SparseCMatrix(shape, bEntriesSparseComplex, rowIndices, colIndices);
 
-        assertThrows(IllegalArgumentException.class, ()->A.elemMult(BSparseComplex));
+        assertThrows(LinearAlgebraException.class, ()->A.elemMult(BSparseComplex));
     }
 }

@@ -1,6 +1,7 @@
 package com.flag4j.util;
 
 import com.flag4j.Shape;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -26,7 +27,7 @@ class ParameterChecksTests {
         shape1 = new Shape(1, 5);
         shape2 = new Shape(1, 5);
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(LinearAlgebraException.class,
                 ()-> ParameterChecks.assertMatMultShapes(shape1, shape2));
 
         // ------------ Sub-case 4 ------------
@@ -38,7 +39,7 @@ class ParameterChecksTests {
         // ------------ Sub-case 5 ------------
         shape1 = new Shape(112, 1, 1);
         shape2 = new Shape(113);
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(LinearAlgebraException.class,
                 ()-> ParameterChecks.assertMatMultShapes(shape1, shape2));
     }
 }

@@ -105,6 +105,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\SparseTensor.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\real_complex\RealComplexDenseMatrixMultTranspose.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\complex\AggregateDenseComplex.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\sparse\real\RealSparseMatrixMultiplication.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\exceptions\LinearAlgebraException.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\decompositions\RealLUDecomposition.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\complex\ComplexDenseProperties.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\ComplexTensorMixin.java

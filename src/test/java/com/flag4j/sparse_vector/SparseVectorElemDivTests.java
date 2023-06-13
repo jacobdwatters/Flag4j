@@ -5,6 +5,7 @@ import com.flag4j.SparseCVector;
 import com.flag4j.SparseVector;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,7 +43,7 @@ class SparseVectorElemDivTests {
         b = new Vector(bValues);
 
         Vector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.elemDiv(finalB));
     }
 
 
@@ -78,7 +79,7 @@ class SparseVectorElemDivTests {
         b = new CVector(bValues);
 
         CVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.elemDiv(finalB));
     }
 
 

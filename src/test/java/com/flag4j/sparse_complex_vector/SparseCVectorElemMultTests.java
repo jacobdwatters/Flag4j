@@ -5,6 +5,7 @@ import com.flag4j.SparseCVector;
 import com.flag4j.SparseVector;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,7 +46,7 @@ class SparseCVectorElemMultTests {
         b = new Vector(bValues);
 
         Vector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 
 
@@ -80,7 +81,7 @@ class SparseCVectorElemMultTests {
         b = new SparseVector(140, bValues, bIndices);
 
         SparseVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 
 
@@ -118,7 +119,7 @@ class SparseCVectorElemMultTests {
         b = new CVector(bValues);
 
         CVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 
 
@@ -160,7 +161,7 @@ class SparseCVectorElemMultTests {
         b = new SparseCVector(140, bValues, bIndices);
 
         SparseCVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 
 
