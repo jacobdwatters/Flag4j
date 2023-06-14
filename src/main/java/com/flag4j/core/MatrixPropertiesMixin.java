@@ -122,15 +122,6 @@ public interface MatrixPropertiesMixin {
 
 
     /**
-    * Checks if a matrix is diagonalizable. A matrix is diagonalizable if and only if
-    * the multiplicity for each eigenvalue is equivalent to the eigenspace for that eigenvalue.
-    *
-    * @return True if the matrix is diagonalizable. Otherwise, returns false.
-    */
-    boolean isDiagonalizable();
-
-
-    /**
      * Computes the max norm of a matrix.
      * @return The max norm of this matrix.
      */

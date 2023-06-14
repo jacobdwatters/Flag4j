@@ -115,6 +115,31 @@ public class ComplexDenseSparseVectorOperations {
 
 
     /**
+     * Computes the vector outer product between a complex dense vector and a real sparse vector.
+     * @param src1 Entries of the dense vector.
+     * @param src2 Non-zero entries of the sparse vector.
+     * @param indices Indices of non-zero entries of sparse vector.
+     * @return The matrix resulting from the vector outer product.
+     */
+    public static CNumber[] outerProduct(CNumber[] src2, int[] indices, int sparseSize, CNumber[] src1) {
+        ParameterChecks.assertEquals(sparseSize, src2.length);
+
+        CNumber[] dest = new CNumber[src2.length*sparseSize];
+        int destIndex;
+
+        for(int i=0; i<src1.length; i++) {
+            destIndex = indices[i]*src2.length;
+
+            for(CNumber v : src2) {
+                dest[destIndex++] = src1[i].mult(v);
+            }
+        }
+
+        return dest;
+    }
+
+
+    /**
      * Computes the element-wise addition between a dense complex vector and sparse complex vectors.
      * @param src1 Dense vector.
      * @param src2 Sparse vector.

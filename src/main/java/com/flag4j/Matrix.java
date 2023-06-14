@@ -341,6 +341,17 @@ public class Matrix
 
 
     /**
+     * Gets the shape of this matrix.
+     *
+     * @return The shape of this matrix.
+     */
+    @Override
+    public Shape shape() {
+        return shape;
+    }
+
+
+    /**
      * Converts this matrix to an equivalent complex tensor.
      * @return A tensor which is equivalent to this matrix.
      */
@@ -3368,19 +3379,6 @@ public class Matrix
     @Override
     public double norm(double p, double q) {
         return RealDenseOperations.matrixNormLpq(entries, shape, p, q);
-    }
-
-
-    /**
-     * Checks if a matrix is diagonalizable. A matrix is diagonalizable if and only if
-     * the multiplicity for each eigenvalue is equivalent to the eigenspace for that eigenvalue.
-     *
-     * @return True if the matrix is diagonalizable. Otherwise, returns false.
-     */
-    @Override
-    public boolean isDiagonalizable() {
-        // TODO: Implementation
-        return false;
     }
 
 

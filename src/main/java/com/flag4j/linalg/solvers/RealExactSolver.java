@@ -28,7 +28,6 @@ import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.decompositions.RealLUDecomposition;
-import com.flag4j.util.ParameterChecks;
 
 import static com.flag4j.operations.dense.real.RealDenseDeterminant.detLU;
 
@@ -38,9 +37,6 @@ import static com.flag4j.operations.dense.real.RealDenseDeterminant.detLU;
  * {@link com.flag4j.linalg.decompositions.LUDecomposition LU decomposition.}
  */
 public class RealExactSolver extends ExactSolver<Matrix, Vector> {
-
-    private final RealForwardSolver forwardSolver;
-    private final RealBackSolver backSolver;
 
     /**
      * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is
@@ -52,67 +48,50 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector> {
      * Constructs an exact LU solver where the coefficient matrix is real dense.
      */
     public RealExactSolver() {
-        super(new RealLUDecomposition());
-
-        forwardSolver = new RealForwardSolver(true);
-        backSolver = new RealBackSolver();
+        super(new RealLUDecomposition(),
+                new RealForwardSolver(true),
+                new RealBackSolver()
+        );
     }
 
 
     /**
-     * Solves the linear system of equations given by {@code A*x=b} for {@code x}.
-     *
-     * @param A Coefficient matrix in the linear system. Must be square and have full rank
-     *          (i.e. all rows, or equivalently columns, must be linearly independent).
-     * @param b Vector of constants in the linear system.
-     * @return The solution to {@code x} in the linear system {@code A*x=b}.
-     * @throws IllegalArgumentException If the number of columns in {@code A} is not equal to the number of entries in
-     * {@code b}.
-     * @throws IllegalArgumentException If {@code A} is not square.
-     * @throws com.flag4j.exceptions.SingularMatrixException If {@code A} is singular.
+     * Checks if the matrix is singular by computing the determinant using the LU decomposition assuming that
+     * the LU decomposition produces a unit lower triangular matrix for {@code L}.
+     * @throws SingularMatrixException If the matrix U contains a zero along the diagonal.
      */
     @Override
-    public Vector solve(Matrix A, Vector b) {
-        ParameterChecks.assertSquare(A.shape); // Ensure A is square.
-        ParameterChecks.assertEquals(A.numCols, b.size); // b must have the same number of entries as columns in A.
+    protected void checkSingular() {
+        double det = Math.abs(detLU(lower, upper));
 
-        setUpSolver(A); // Compute LU decomposition and ensure the coefficient matrix is not singular.
-
-        Vector y = forwardSolver.solve(L, P.mult(b));
-        return backSolver.solve(U, y);
-    }
-
-
-    /**
-     * Solves the set of linear system of equations given by {@code A*X=B} for the matrix {@code X} where
-     * {@code A}, {@code B}, and {@code X} are matrices.
-     *
-     * @param A Coefficient matrix in the linear system.
-     * @param B Matrix of constants in the linear system.
-     * @return The solution to {@code X} in the linear system {@code A*X=B}.
-     */
-    @Override
-    public Matrix solve(Matrix A, Matrix B) {
-        ParameterChecks.assertSquare(A.shape); // Ensure A is square.
-        ParameterChecks.assertEquals(A.numCols, B.numRows); // b must have the same number of entries as columns in A.
-
-        setUpSolver(A); // Compute LU decomposition and ensure the coefficient matrix is not singular.
-
-        Matrix Y = forwardSolver.solve(L, P.mult(B));
-        return backSolver.solve(U, Y);
-    }
-
-
-    /**
-     * Computes the LU decomposition and checks to ensure the coefficient matrix is not singular.
-     */
-    private void setUpSolver(Matrix A) {
-        decompose(A); // Compute the decomposition of the coefficient matrix.
-
-        double det = Math.abs(detLU(L, U));
-
-        if(det <= RANK_CONDITION*Math.max(A.numRows, A.numCols) || Double.isNaN(det)) {
+        if(det <= RANK_CONDITION*Math.max(lower.numRows, upper.numCols) || Double.isNaN(det)) {
             throw new SingularMatrixException("Could not solve system.");
         }
+    }
+
+
+    /**
+     * Permute the rows of a vector using the row permutation matrix from the LU decomposition.
+     *
+     * @param b Vector to permute the rows of.
+     * @return A vector which is the result of applying the row permutation from the LU decomposition
+     * to the vector {@code b}.
+     */
+    @Override
+    protected Vector permuteRows(Vector b) {
+        return rowPermute.mult(b);
+    }
+
+
+    /**
+     * Permute the rows of a matrix using the row permutation matrix from the LU decomposition.
+     *
+     * @param B matrix to permute the rows of.
+     * @return A matrix which is the result of applying the row permutation from the LU decomposition
+     * to the matrix {@code B}.
+     */
+    @Override
+    protected Matrix permuteRows(Matrix B) {
+        return rowPermute.mult(B);
     }
 }

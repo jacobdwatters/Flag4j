@@ -40,7 +40,9 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <TT> Vector type equivalent.
  * @param <UU> Dense vector type.
  */
-public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU> {
+public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number,
+        TT extends VectorMixin<TT, UU, ?, ?, X, T, U, W>,
+        UU extends VectorMixin<UU, UU, ?, ?, X, U, U, W>> {
 
     /**
      * Computes the element-wise addition between two matrices.
@@ -150,6 +152,12 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU> 
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     U mult(Matrix B);
+
+
+    TT mult(TT B);
+
+
+    T mult(T B);
 
 
     /**

@@ -27,7 +27,6 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
-import com.flag4j.io.PrintOptions;
 import com.flag4j.linalg.transformations.Householder;
 
 
@@ -103,29 +102,5 @@ public class ComplexQRDecomposition extends QRDecomposition<CMatrix> {
                 R = H.mult(R); // Apply Householder reflector to R
             }
         }
-    }
-
-
-    // TODO: TEMPORARY FOR TESTING
-    public static void main(String[] args) {
-        PrintOptions.setPrecision(100);
-
-        double[][] aEntries = {
-                {7.778479611705531, 0.8494918994733043, -6.125644861374033E-9},
-                {0.849491899473305, -4.06778802619038, 2.420785828428717E-8},
-                {-6.125644498503208E-9, 2.4207858080244343E-8, -0.7106915855151509}};
-        CMatrix A = new CMatrix(aEntries);
-
-        ComplexQRDecomposition qr = new ComplexQRDecomposition();
-        qr.decompose(A);
-
-        CMatrix Q = qr.getQ();
-        CMatrix R = qr.getR();
-
-        System.out.println("\n\n" + "-".repeat(100) + "\n");
-        System.out.println("A:\n" + A + "\n");
-        System.out.println("Q:\n" + Q + "\n");
-        System.out.println("R:\n" + R + "\n");
-        System.out.println("QR:\n" + Q.mult(R) + "\n");
     }
 }
