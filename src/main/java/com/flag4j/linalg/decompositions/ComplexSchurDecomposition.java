@@ -26,6 +26,7 @@ package com.flag4j.linalg.decompositions;
 
 
 import com.flag4j.CMatrix;
+import com.flag4j.CVector;
 import com.flag4j.util.ParameterChecks;
 
 /**
@@ -37,7 +38,7 @@ import com.flag4j.util.ParameterChecks;
  *
  * <p>Note, even if a matrix has only real entries, both {@code Q} and {@code U} may contain complex values.</p>
  */
-public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix> {
+public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVector> {
 
 
     /**

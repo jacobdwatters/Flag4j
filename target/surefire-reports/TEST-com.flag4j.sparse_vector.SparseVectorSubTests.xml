@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="C:\Users\jacob\.jdks\corretto-16.0.2\bin"/>
-    <property name="sun.java.command" value="C:\Users\jacob\AppData\Local\Temp\surefire4652151230931390944\surefirebooter-20230615123103163_3.jar C:\Users\jacob\AppData\Local\Temp\surefire4652151230931390944 2023-06-15T12-31-03_053-jvmRun1 surefire-20230615123103163_1tmp surefire_0-20230615123103163_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\jacob\AppData\Local\Temp\surefire16045176870665397879\surefirebooter-20230615130718401_3.jar C:\Users\jacob\AppData\Local\Temp\surefire16045176870665397879 2023-06-15T13-07-18_312-jvmRun1 surefire-20230615130718401_1tmp surefire_0-20230615130718401_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\jacob\IdeaProjects\Flag4j\target\test-classes;C:\Users\jacob\IdeaProjects\Flag4j\target\classes;C:\Users\jacob\.m2\repository\junit\junit\4.13.2\junit-4.13.2.jar;C:\Users\jacob\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\jacob\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.9.3\junit-jupiter-api-5.9.3.jar;C:\Users\jacob\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\jacob\.m2\repository\org\junit\platform\junit-platform-commons\1.9.3\junit-platform-commons-1.9.3.jar;C:\Users\jacob\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\jacob\AppData\Local\Temp\surefire4652151230931390944\surefirebooter-20230615123103163_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\jacob\AppData\Local\Temp\surefire16045176870665397879\surefirebooter-20230615130718401_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="16.0.2+7"/>
@@ -58,9 +58,9 @@
     <property name="java.class.version" value="60.0"/>
   </properties>
   <testcase name="complexScalarTestCase" classname="com.flag4j.sparse_vector.SparseVectorSubTests" time="0.0"/>
-  <testcase name="sparseComplexSubTestCase" classname="com.flag4j.sparse_vector.SparseVectorSubTests" time="0.0"/>
+  <testcase name="sparseComplexSubTestCase" classname="com.flag4j.sparse_vector.SparseVectorSubTests" time="0.001"/>
   <testcase name="scalarTestCase" classname="com.flag4j.sparse_vector.SparseVectorSubTests" time="0.0"/>
   <testcase name="denseComplexTestCase" classname="com.flag4j.sparse_vector.SparseVectorSubTests" time="0.0"/>
-  <testcase name="sparseSubTestCase" classname="com.flag4j.sparse_vector.SparseVectorSubTests" time="0.002"/>
+  <testcase name="sparseSubTestCase" classname="com.flag4j.sparse_vector.SparseVectorSubTests" time="0.001"/>
   <testcase name="denseTestCase" classname="com.flag4j.sparse_vector.SparseVectorSubTests" time="0.0"/>
 </testsuite>

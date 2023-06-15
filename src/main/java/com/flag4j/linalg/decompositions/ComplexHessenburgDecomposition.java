@@ -24,11 +24,9 @@
 
 package com.flag4j.linalg.decompositions;
 
-
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.linalg.transformations.Householder;
-import com.flag4j.util.ParameterChecks;
 
 /**
  * <p>Computes the Hessenburg decomposition of a complex dense square matrix. That is, for a square matrix
@@ -47,7 +45,7 @@ import com.flag4j.util.ParameterChecks;
  *      [ 0 0 0 x x ]]</pre>
  * </p>
  */
-public final class ComplexHessenburgDecomposition extends HessenburgDecomposition<CMatrix> {
+public final class ComplexHessenburgDecomposition extends HessenburgDecomposition<CMatrix, CVector> {
 
     /**
      * Constructs a {@link ComplexHessenburgDecomposition Hessenburg decomposer} for real dense matrices.
@@ -72,43 +70,26 @@ public final class ComplexHessenburgDecomposition extends HessenburgDecompositio
 
 
     /**
-     * Hessenburg decomposition of a real dense square matrix. That is, for a square matrix
-     * {@code A}, computes the decomposition {@code A=QHQ<sup>H</sup>} where {@code Q} is a unitary matrix and
-     * {@code B} is a matrix in upper Hessenburg form which is similar to {@code A} (i.e. has the same eigenvalues/vectors).</p>
+     * Creates a Householder reflector embedded in an identity matrix with the same size as {@code H}.
      *
-     * @param src The source matrix to decompose.
-     * @return A reference to this decomposer.
-     * @throws IllegalArgumentException If the {@code src} matrix is not square.
+     * @param col Vector to compute Householder reflector for.
+     * @param i   Row and column index of slice of identity matrix to embed Householder reflector in.
+     * @return Householder reflector embedded in an identity matrix with the same size as {@code H}.
      */
     @Override
-    public ComplexHessenburgDecomposition decompose(CMatrix src) {
-        ParameterChecks.assertSquare(src.shape);
+    protected CMatrix initRef(CVector col, int i) {
+        CMatrix ref = CMatrix.I(this.H.numRows);
+        return ref.setSlice(Householder.getReflector(col), i, i);
+    }
 
-        H = src.copy(); // Storage for upper Hessenburg matrix
-        CMatrix ref; // For storing Householder reflector
-        CVector col; // Normal vector for Householder reflector computation.
 
-        if(computeQ) {
-            Q = CMatrix.I(this.H.numRows); // Storage for unitary matrix in the decomposition.
-        } else {
-            Q = null;
-        }
-
-        for(int k = 0; k< this.H.numRows-2; k++) {
-            col = this.H.getColBelow(k+1, k).toVector();
-
-            if(!col.isZeros()) { // If the column is zeros, no need to compute reflector. It is already in the correct form.
-                ref = CMatrix.I(this.H.numRows);
-                ref.setSlice(Householder.getReflector(col), k+1, k+1);
-
-                H = ref.mult(H).mult(ref.H()); // Apply Householder reflector to both sides of B.
-
-                if(computeQ) {
-                    Q = Q.mult(ref); // Apply Householder reflector to Q.
-                }
-            }
-        }
-
-        return this;
+    /**
+     * Initializes the unitary matrix {@code Q} in the Hessenburg decomposition.
+     *
+     * @return The initial {@code Q} matrix in the Hessenburg decomposition.
+     */
+    @Override
+    protected CMatrix initQ() {
+        return CMatrix.I(this.H.numRows);
     }
 }

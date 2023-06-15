@@ -24,8 +24,9 @@
 
 package com.flag4j.linalg.decompositions;
 
-
 import com.flag4j.core.MatrixMixin;
+import com.flag4j.core.VectorMixin;
+import com.flag4j.util.ParameterChecks;
 
 /**
  * <p>This abstract class specifies methods for computing the Hessenburg decomposition of a square matrix. That is, for a square matrix
@@ -44,7 +45,10 @@ import com.flag4j.core.MatrixMixin;
  *      [ 0 0 0 x x ]]</pre>
  * </p>
  */
-public abstract class HessenburgDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class HessenburgDecomposition<
+        T extends MatrixMixin<T, ?, ?, ?, ?, U, ?>,
+        U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>>
+        implements Decomposition<T> {
 
     /**
      * A flag for determining if {@code Q} should be computed in the Hessenburg decomposition.
@@ -59,6 +63,26 @@ public abstract class HessenburgDecomposition<T extends MatrixMixin<T, ?, ?, ?, 
      * Storage for the {@code H} matrix in the Hessenburg decomposition corresponding to {@code A=QHQ<sup>H</sup>}.
      */
     protected T H;
+
+
+    /**
+     * Hessenburg decomposition of a square matrix. That is, for a square matrix
+     * {@code A}, computes the decomposition {@code A=QHQ<sup>T</sup>} where {@code Q} is a unitary matrix and
+     * {@code H} is a matrix in upper Hessenburg form which is similar to {@code A} (i.e. has the same eigenvalues/vectors).</p>
+     *
+     * @param src The source matrix to decompose.
+     * @return A reference to this decomposer.
+     * @throws IllegalArgumentException If the {@code src} matrix is not square.
+     */
+    @Override
+    public HessenburgDecomposition<T, U> decompose(T src) {
+        ParameterChecks.assertSquare(src.shape());
+
+        // TODO: Add a decomposition for symmetric matrices.
+        generalDecomposition(src);
+
+        return this;
+    }
 
 
     /**
@@ -90,4 +114,53 @@ public abstract class HessenburgDecomposition<T extends MatrixMixin<T, ?, ?, ?, 
     public T getH() {
         return H;
     }
+
+
+    /**
+     * Computes the Hessenburg decomposition of a general matrix.
+     * @param src Matrix to compute the Hessenburg decomposition of.
+     */
+    protected void generalDecomposition(T src) {
+        // Tolerance for considering a value zero when determining if a column of H is in the correct form.
+        double tol = 1.0e-16;
+
+        H = src.copy(); // Storage for upper Hessenburg matrix
+        T ref; // For storing Householder reflector
+        U col; // Normal vector for Householder reflector computation.
+
+        Q = computeQ ? initQ() : null;
+
+        for(int k = 0; k< H.numRows()-2; k++) {
+            col = H.getColBelow(k+1, k).toVector();
+
+            // If the column is zeros, no need to compute reflector. It is already in the correct form.
+            if(col.maxAbs() > tol) {
+                ref = initRef(col, k+1);
+
+                H = ref.mult(H).mult(ref.H()); // Apply Householder reflector to both sides of B.
+
+                if(computeQ) {
+                    Q = Q.mult(ref); // Apply Householder reflector to Q.
+                }
+            }
+
+            // TODO: Set rest of column, below the first sub-diagonal, to zeros.
+        }
+    }
+
+
+    /**
+     * Creates a Householder reflector embedded in an identity matrix with the same size as {@code H}.
+     * @param col Vector to compute Householder reflector for.
+     * @param i Row and column index of slice of identity matrix to embed Householder reflector in.
+     * @return Householder reflector embedded in an identity matrix with the same size as {@code H}.
+     */
+    protected abstract T initRef(U col, int i);
+
+
+    /**
+     * Initializes the unitary matrix {@code Q} in the Hessenburg decomposition.
+     * @return The initial {@code Q} matrix in the Hessenburg decomposition.
+     */
+    protected abstract T initQ();
 }

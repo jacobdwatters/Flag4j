@@ -960,4 +960,12 @@ public interface MatrixOperationsMixin<T, U, V, W, X extends Number,
      * @return The complex conjugate transpose of this matrix.
      */
     T H();
+
+
+    // This method is specified here for compatibility purposes in generic classes.
+    /**
+     * Copies this matrix.
+     * @return A deep copy of this matrix.
+     */
+    T copy();
 }
