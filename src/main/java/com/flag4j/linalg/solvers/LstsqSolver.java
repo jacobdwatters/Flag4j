@@ -49,7 +49,7 @@ public abstract class LstsqSolver<
     /**
      * Decomposer to compute the {@code QR} decomposition for using the least-squares solver.
      */
-    protected final QRDecomposition<T> qr;
+    protected final QRDecomposition<T, U> qr;
     /**
      * {@code Q} The hermation transpose of the orthonormal matrix from the {@code QR} decomposition.
      */
@@ -65,7 +65,7 @@ public abstract class LstsqSolver<
      * @param backSolver The solver to solve the upper triangular system resulting from the {@code QR} decomposition
      *                   which is equivalent to solving the normal equations
      */
-    protected LstsqSolver(QRDecomposition<T> qr, LinearSolver<T, U> backSolver) {
+    protected LstsqSolver(QRDecomposition<T, U> qr, LinearSolver<T, U> backSolver) {
         this.qr = qr;
         this.backSolver = backSolver;
     }

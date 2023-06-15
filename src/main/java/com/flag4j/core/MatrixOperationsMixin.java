@@ -868,6 +868,13 @@ public interface MatrixOperationsMixin<T, U, V, W, X extends Number,
 
 
     /**
+     * Converts this matrix to an equivalent vector. If this matrix is not shaped as a row/column vector,
+     * it will be flattened then converted to a vector.
+     * @return A vector equivalent to this matrix.
+     */
+    TT toVector();
+
+    /**
      * Gets a specified slice of this matrix.
      *
      * @param rowStart Starting row index of slice (inclusive).

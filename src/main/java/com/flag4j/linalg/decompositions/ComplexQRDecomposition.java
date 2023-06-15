@@ -27,6 +27,7 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
+import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.transformations.Householder;
 
 
@@ -35,7 +36,7 @@ import com.flag4j.linalg.transformations.Householder;
  * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into an unitary matrix {@code Q}
  * and an upper triangular matrix {@code R} such that {@code A=QR}.</p>
  */
-public class ComplexQRDecomposition extends QRDecomposition<CMatrix> {
+public final class ComplexQRDecomposition extends QRDecomposition<CMatrix, CVector> {
 
     /**
      * Constructs a {@code QR} decomposer which computes the full {@code QR} decomposition.
@@ -57,50 +58,37 @@ public class ComplexQRDecomposition extends QRDecomposition<CMatrix> {
 
 
     /**
-     * Computes the reduced QR decomposition on the src matrix.
-     * @param src The source matrix to decompose.
+     * Sets the specified column to zeros below the principle diagonal.
+     * @param idx Index of the column for which to set entries below principle diagonal to zero.
      */
     @Override
-    protected void reduced(CMatrix src) {
-        full(src); // First compute the full decomposition
-
-        int k = Math.min(src.numRows, src.numCols);
-
-        // Now reduce the decomposition
-        Q = Q.getSlice(0, src.numRows, 0, k);
-        R = R.getSlice(0, k, 0, src.numCols);
+    protected void setZeros(int idx) {
+        for(int i=idx+1; i<R.numRows; i++) {
+            R.entries[i*R.numCols + idx] = new CNumber();
+        }
     }
 
 
     /**
-     * Computes the full QR decomposition on the src matrix.
-     * @param src The source matrix to decompose.
+     * Initializes the {@code Q} and {@code R} matrices.
+     * @param src Matrix to decompose.
      */
     @Override
-    protected void full(CMatrix src) {
+    protected void initQR(CMatrix src) {
         R = new CMatrix(src); // Initialize R to the values in src.
-        int m = R.numRows, n = R.numCols;
-        int stop = Math.min(n, m-1);
+        Q = CMatrix.I(R.numRows); // Initialize Q to the identity matrix.
+    }
 
-        double eps = 1.0e-12;
 
-        CMatrix H;
-        CVector col;
-
-        // Initialize Q to the identity matrix.
-        Q = CMatrix.I(R.numRows);
-
-        for(int i=0; i<stop; i++) {
-            col = R.getColBelow(i, i).toVector();
-
-            // If the column has zeros below the diagonal it is in the correct form. No need to compute reflector.
-            if(col.maxAbs() > eps) {
-                H = CMatrix.I(m);
-                H.setSlice(Householder.getReflector(col), i, i);
-
-                Q = Q.mult(H); // Apply Householder reflector to Q
-                R = H.mult(R); // Apply Householder reflector to R
-            }
-        }
+    /**
+     * Initializes a Householder reflector.
+     *
+     * @param col Vector to compute householder reflector for.
+     * @param i   Row and column index to set slice of identity matrix as the Householder reflector.
+     */
+    @Override
+    protected CMatrix initH(CVector col, int i) {
+        CMatrix H = CMatrix.I(R.numRows);
+        return H.setSlice(Householder.getReflector(col), i, i);
     }
 }

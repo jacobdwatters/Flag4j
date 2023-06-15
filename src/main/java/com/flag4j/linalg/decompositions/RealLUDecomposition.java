@@ -25,6 +25,7 @@
 package com.flag4j.linalg.decompositions;
 
 import com.flag4j.Matrix;
+import com.flag4j.exceptions.LinearAlgebraException;
 
 /**
  * <p>This class provides methods for computing the LU decomposition of a real dense matrix.</p>
@@ -81,13 +82,12 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      */
     @Override
     protected void noPivot() {
-        P = Q = null; // P and Q are not used here.
         int colStop = Math.min(LU.numCols, LU.numRows);
 
         // Using Gaussian elimination and no pivoting
         for(int j=0; j<colStop; j++) {
             if(j<LU.numRows && Math.abs(LU.entries[j*LU.numCols + j]) < zeroPivotTol) {
-                throw new ArithmeticException("Zero pivot encountered in decomposition." +
+                throw new LinearAlgebraException("Zero pivot encountered in decomposition." +
                         " Consider using LU decomposition with partial pivoting.");
             }
 
@@ -102,7 +102,6 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
     @Override
     protected void partialPivot() {
         P = Matrix.I(LU.numRows);
-        Q = null; // Q is not used here.
         int colStop = Math.min(LU.numCols, LU.numRows);
         int maxIndex;
 
@@ -258,8 +257,10 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
     public Matrix getU() {
         Matrix U = new Matrix(Math.min(LU.numRows, LU.numCols), LU.numCols);
 
+        int stopIdx = Math.min(LU.numRows, LU.numCols);
+
         // Copy U values from LU matrix.
-        for(int i=0; i<LU.numRows && i<LU.numCols; i++) {
+        for(int i=0; i<stopIdx; i++) {
             System.arraycopy(LU.entries, i*(LU.numCols+1),
                     U.entries, i*(LU.numCols+1), LU.numCols-i);
         }

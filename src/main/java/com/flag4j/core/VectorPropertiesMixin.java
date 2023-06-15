@@ -41,4 +41,13 @@ public interface VectorPropertiesMixin {
      * @return The length, i.e. the number of entries, in this vector.
      */
     int length();
+
+
+    // This method is specified here and in TensorPropertiesMixin for compatibility purposes in generic methods.
+    /**
+     * Finds the maximum value, in absolute value, in this tensor. If this tensor is complex, then this method is equivalent
+     * to {@link TensorPropertiesMixin#max()}.
+     * @return The maximum value, in absolute value, in this tensor.
+     */
+    double maxAbs();
 }

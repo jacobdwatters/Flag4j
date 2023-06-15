@@ -365,6 +365,7 @@ public class Matrix
      * it will be flattened then converted to a vector.
      * @return A vector equivalent to this matrix.
      */
+    @Override
     public Vector toVector() {
         return new Vector(this.entries.clone());
     }

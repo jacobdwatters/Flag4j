@@ -439,6 +439,7 @@ public class CMatrix
      * it will be flattened then converted to a vector.
      * @return A vector equivalent to this matrix.
      */
+    @Override
     public CVector toVector() {
         return new CVector(ArrayUtils.copyOfRange(entries, 0, entries.length));
     }

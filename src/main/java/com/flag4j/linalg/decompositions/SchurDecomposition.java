@@ -198,7 +198,7 @@ public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?,
             maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
         }
 
-        QRDecomposition<CMatrix> qr = new ComplexQRDecomposition();
+        QRDecomposition<CMatrix, CVector> qr = new ComplexQRDecomposition();
 
         // Initialize matrices.
         T = H;
@@ -216,7 +216,7 @@ public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?,
 
             if(computeU) U = U.mult(qr.Q);
 
-            if(T.roundToZero().isTriU()) {
+            if(T.roundToZero(1.0E-12).isTriU()) {
                 break; // We have converged (approximately) to an upper triangular matrix. No need to continue.
             }
         }

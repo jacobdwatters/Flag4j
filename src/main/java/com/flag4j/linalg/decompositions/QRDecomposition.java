@@ -25,13 +25,17 @@
 package com.flag4j.linalg.decompositions;
 
 import com.flag4j.core.MatrixMixin;
+import com.flag4j.core.VectorMixin;
 
 /**
  * <p>This abstract class specifies methods for computing the {@code QR} decomposition of a matrix.</p>
  * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into a unitary matrix {@code Q}
  * and an upper triangular matrix {@code R} such that {@code A=QR}.</p>
  */
-public abstract class QRDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class QRDecomposition<
+        T extends MatrixMixin<T, ?, ?, ?, ?, U, ?>,
+        U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>>
+        implements Decomposition<T> {
 
     /**
      * Storage matrix for {@code Q}.
@@ -72,7 +76,7 @@ public abstract class QRDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
      * @return A reference to this decomposer.
      */
     @Override
-    public QRDecomposition<T> decompose(T src) {
+    public QRDecomposition<T, U> decompose(T src) {
         if(fullQR) {
             this.full(src);
         } else {
@@ -84,17 +88,51 @@ public abstract class QRDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
 
 
     /**
-     * Computes the reduced QR decomposition on the src matrix.
-     * @param src The source matrix to decompose.
-     */
-    protected abstract void full(T src);
-
-
-    /**
      * Computes the full QR decomposition on the src matrix.
      * @param src The source matrix to decompose.
      */
-    protected abstract void reduced(T src);
+    protected void full(T src) {
+        initQR(src); // Initialize the Q and R matrices.
+
+        int m = R.numRows();
+        int n = R.numCols();
+        int stop = Math.min(n, m-1);
+
+        // Tolerance for considering a value zero when determining if a column of R is in the correct form.
+        double tol = 1.0e-16;
+
+        T H;
+        U col;
+
+        for(int i=0; i<stop; i++) {
+            col = R.getColBelow(i, i).toVector();
+
+            // If the column has zeros below the diagonal it is in the correct form. No need to compute reflector.
+            if(col.maxAbs() > tol) {
+                H = initH(col, i); // Construct a Householder reflector.
+
+                Q = Q.mult(H); // Apply Householder reflector to Q
+                R = H.mult(R); // Apply Householder reflector to R
+            }
+
+            setZeros(i); // Ensure R is truly upper triangular.
+        }
+    }
+
+
+    /**
+     * Computes the reduced QR decomposition on the src matrix.
+     * @param src The source matrix to decompose.
+     */
+    protected void reduced(T src) {
+        full(src); // First compute the full decomposition
+
+        int k = Math.min(src.numRows(), src.numCols());
+
+        // Now reduce the decomposition
+        Q = Q.getSlice(0, src.numRows(), 0, k);
+        R = R.getSlice(0, k, 0, src.numCols());
+    }
 
 
     /**
@@ -110,7 +148,29 @@ public abstract class QRDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
      * Gets the {@code R} matrix from the {@code QR} decomposition.
      * @return The {@code R} matrix from the {@code QR} decomposition.
      */
-    public T getR(){
+    public T getR() {
         return R;
     }
+
+
+    /**
+     * Sets the specified column to zeros below the principle diagonal.
+     * @param idx Index of the column for which to set entries below principle diagonal to zero.
+     */
+    protected abstract void setZeros(int idx);
+
+
+    /**
+     * Initializes the {@code Q} and {@code R} matrices.
+     * @param src The matrix to decompose.
+     */
+    protected abstract void initQR(T src);
+
+
+    /**
+     * Initializes a Householder reflector.
+     * @param col Vector to compute householder reflector for.
+     * @param i Row and column index to set slice of identity matrix as the Householder reflector.
+     */
+    protected abstract T initH(U col, int i);
 }
