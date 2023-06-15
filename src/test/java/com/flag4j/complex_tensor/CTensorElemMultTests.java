@@ -2,6 +2,7 @@ package com.flag4j.complex_tensor;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.util.ArrayUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,7 +60,7 @@ class CTensorElemMultTests {
         B = new Tensor(bShape, bEntries);
 
         Tensor finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
 
         // ----------------------- Sub-case 3 -----------------------
         bEntries = new double[]{
@@ -70,7 +71,7 @@ class CTensorElemMultTests {
         B = new Tensor(bShape, bEntries);
 
         Tensor finalB1 = B;
-        assertThrows(IllegalArgumentException.class, ()->A.elemMult(finalB1));
+        assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB1));
     }
 
 
@@ -109,7 +110,7 @@ class CTensorElemMultTests {
         B = new SparseTensor(bShape, bEntries, sparseIndices);
 
         SparseTensor finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
     }
 
 
@@ -149,7 +150,7 @@ class CTensorElemMultTests {
         B = new CTensor(bShape, bEntries);
 
         CTensor finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
     }
 
 
@@ -189,6 +190,6 @@ class CTensorElemMultTests {
         B = new SparseCTensor(bShape, bEntries, sparseIndices);
 
         SparseCTensor finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
     }
 }

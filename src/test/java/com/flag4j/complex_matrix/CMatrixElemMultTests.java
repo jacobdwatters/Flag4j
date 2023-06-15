@@ -2,6 +2,7 @@ package com.flag4j.complex_matrix;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -55,7 +56,7 @@ class CMatrixElemMultTests {
         B = new Matrix(bEntries);
 
         Matrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
     }
 
 
@@ -99,7 +100,7 @@ class CMatrixElemMultTests {
         B = new CMatrix(bEntries);
 
         CMatrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
     }
 
 
@@ -141,7 +142,7 @@ class CMatrixElemMultTests {
         B = new SparseMatrix(sparseShape, bEntries, rowIndices, colIndies);
 
         SparseMatrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
     }
 
 
@@ -183,6 +184,6 @@ class CMatrixElemMultTests {
         B = new SparseCMatrix(sparseShape, bEntries, rowIndices, colIndies);
 
         SparseCMatrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.elemMult(finalB));
     }
 }

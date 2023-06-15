@@ -5,6 +5,7 @@ import com.flag4j.SparseCVector;
 import com.flag4j.SparseVector;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,7 +41,7 @@ public class VectorAddSubTests {
         B = new Vector(bEntries);
 
         Vector finalB = B;
-        assertThrows(IllegalArgumentException.class, () -> A.add(finalB));
+        assertThrows(LinearAlgebraException.class, () -> A.add(finalB));
     }
 
 
@@ -66,7 +67,7 @@ public class VectorAddSubTests {
         B = new CVector(bEntries);
 
         CVector finalB = B;
-        assertThrows(IllegalArgumentException.class, () -> A.add(finalB));
+        assertThrows(LinearAlgebraException.class, () -> A.add(finalB));
     }
 
 
@@ -97,7 +98,7 @@ public class VectorAddSubTests {
         B = new SparseVector(size, bEntries, indices);
 
         SparseVector finalB = B;
-        assertThrows(IllegalArgumentException.class, () -> A.add(finalB));
+        assertThrows(LinearAlgebraException.class, () -> A.add(finalB));
     }
 
 
@@ -128,7 +129,7 @@ public class VectorAddSubTests {
         B = new SparseCVector(size, bEntries, indices);
 
         SparseCVector finalB = B;
-        assertThrows(IllegalArgumentException.class, () -> A.add(finalB));
+        assertThrows(LinearAlgebraException.class, () -> A.add(finalB));
     }
 
 
@@ -186,7 +187,7 @@ public class VectorAddSubTests {
         B = new Vector(bEntries);
 
         Vector finalB = B;
-        assertThrows(IllegalArgumentException.class, () -> A.sub(finalB));
+        assertThrows(LinearAlgebraException.class, () -> A.sub(finalB));
     }
 
 
@@ -212,7 +213,7 @@ public class VectorAddSubTests {
         B = new CVector(bEntries);
 
         CVector finalB = B;
-        assertThrows(IllegalArgumentException.class, () -> A.sub(finalB));
+        assertThrows(LinearAlgebraException.class, () -> A.sub(finalB));
     }
 
 
@@ -243,7 +244,7 @@ public class VectorAddSubTests {
         B = new SparseVector(size, bEntries, indices);
 
         SparseVector finalB = B;
-        assertThrows(IllegalArgumentException.class, () -> A.sub(finalB));
+        assertThrows(LinearAlgebraException.class, () -> A.sub(finalB));
     }
 
 
@@ -274,7 +275,7 @@ public class VectorAddSubTests {
         B = new SparseCVector(size, bEntries, indices);
 
         SparseCVector finalB = B;
-        assertThrows(IllegalArgumentException.class, () -> A.sub(finalB));
+        assertThrows(LinearAlgebraException.class, () -> A.sub(finalB));
     }
 
 

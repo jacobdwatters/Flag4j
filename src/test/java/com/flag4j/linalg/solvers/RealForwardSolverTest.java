@@ -2,6 +2,7 @@ package com.flag4j.linalg.solvers;
 
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
+import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.exceptions.SingularMatrixException;
 import org.junit.jupiter.api.Test;
 
@@ -97,7 +98,7 @@ class RealForwardSolverTest {
         b = new Vector(bEntries);
 
         Vector finalB3 = b;
-        assertThrows(IllegalArgumentException.class, ()->solver.solve(L, finalB3));
+        assertThrows(LinearAlgebraException.class, ()->solver.solve(L, finalB3));
     }
 
 
@@ -207,7 +208,7 @@ class RealForwardSolverTest {
         b = new Vector(bEntries);
 
         Vector finalB3 = b;
-        assertThrows(IllegalArgumentException.class, ()->solver.solve(L, finalB3));
+        assertThrows(LinearAlgebraException.class, ()->solver.solve(L, finalB3));
     }
 
 

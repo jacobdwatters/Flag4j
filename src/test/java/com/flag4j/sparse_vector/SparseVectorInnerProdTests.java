@@ -5,6 +5,7 @@ import com.flag4j.SparseCVector;
 import com.flag4j.SparseVector;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,7 @@ class SparseVectorInnerProdTests {
         b = new SparseVector(sparseSize+23, bEntries, bIndices);
 
         SparseVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.inner(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.inner(finalB));
     }
 
 
@@ -75,7 +76,7 @@ class SparseVectorInnerProdTests {
                 0.0245, -0.0, 14.45};
         b = new Vector(bEntries);
         Vector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.inner(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.inner(finalB));
     }
 
 
@@ -103,7 +104,7 @@ class SparseVectorInnerProdTests {
         b = new SparseCVector(sparseSize-1, bEntries, bIndices);
 
         SparseCVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.inner(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.inner(finalB));
     }
 
 

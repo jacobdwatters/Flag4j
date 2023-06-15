@@ -2,6 +2,7 @@ package com.flag4j.complex_matrix;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,7 +52,7 @@ class CMatrixSubTests {
         B = new Matrix(bEntries);
 
         Matrix finalB = B;
-        assertThrows(IllegalArgumentException.class,()->A.sub(finalB));
+        assertThrows(LinearAlgebraException.class,()->A.sub(finalB));
 
 
         // ---------------------- Sub-case 2 ----------------------
@@ -67,7 +68,7 @@ class CMatrixSubTests {
         B = new Matrix(bEntries);
 
         Matrix finalB1 = B;
-        assertThrows(IllegalArgumentException.class,()->A.sub(finalB1));
+        assertThrows(LinearAlgebraException.class,()->A.sub(finalB1));
     }
 
 
@@ -107,7 +108,7 @@ class CMatrixSubTests {
         B = new CMatrix(bEntries);
 
         CMatrix finalB = B;
-        assertThrows(IllegalArgumentException.class,()->A.sub(finalB));
+        assertThrows(LinearAlgebraException.class,()->A.sub(finalB));
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new CNumber[][]{
@@ -122,7 +123,7 @@ class CMatrixSubTests {
         B = new CMatrix(bEntries);
 
         CMatrix finalB1 = B;
-        assertThrows(IllegalArgumentException.class,()->A.sub(finalB1));
+        assertThrows(LinearAlgebraException.class,()->A.sub(finalB1));
     }
 
 
@@ -163,7 +164,7 @@ class CMatrixSubTests {
         B = new SparseMatrix(sparseShape, bEntries, rowIndices, colIndices);
 
         SparseMatrix finalB = B;
-        assertThrows(IllegalArgumentException.class,()->A.sub(finalB));
+        assertThrows(LinearAlgebraException.class,()->A.sub(finalB));
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new CNumber[][]{
@@ -178,7 +179,7 @@ class CMatrixSubTests {
         B = new SparseMatrix(sparseShape, bEntries, rowIndices, colIndices);
 
         SparseMatrix finalB1 = B;
-        assertThrows(IllegalArgumentException.class,()->A.sub(finalB1));
+        assertThrows(LinearAlgebraException.class,()->A.sub(finalB1));
     }
 
 
@@ -220,7 +221,7 @@ class CMatrixSubTests {
         B = new SparseCMatrix(sparseShape, bEntries, rowIndices, colIndices);
 
         SparseCMatrix finalB = B;
-        assertThrows(IllegalArgumentException.class,()->A.sub(finalB));
+        assertThrows(LinearAlgebraException.class,()->A.sub(finalB));
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new CNumber[][]{
@@ -235,7 +236,7 @@ class CMatrixSubTests {
         B = new SparseCMatrix(sparseShape, bEntries, rowIndices, colIndices);
 
         SparseCMatrix finalB1 = B;
-        assertThrows(IllegalArgumentException.class,()->A.sub(finalB1));
+        assertThrows(LinearAlgebraException.class,()->A.sub(finalB1));
     }
 
 

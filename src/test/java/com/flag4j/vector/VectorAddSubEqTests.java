@@ -2,6 +2,7 @@ package com.flag4j.vector;
 
 import com.flag4j.SparseVector;
 import com.flag4j.Vector;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,7 +40,7 @@ class VectorAddSubEqTests {
         B = new Vector(bEntries);
 
         Vector finalB = B;
-        assertThrows(IllegalArgumentException.class, () -> A.addEq(finalB));
+        assertThrows(LinearAlgebraException.class, () -> A.addEq(finalB));
     }
 
 
@@ -71,7 +72,7 @@ class VectorAddSubEqTests {
         B = new SparseVector(size, bEntries, indices);
 
         SparseVector finalB = B;
-        assertThrows(IllegalArgumentException.class, () -> A.addEq(finalB));
+        assertThrows(LinearAlgebraException.class, () -> A.addEq(finalB));
     }
 
 
@@ -117,7 +118,7 @@ class VectorAddSubEqTests {
         B = new Vector(bEntries);
 
         Vector finalB = B;
-        assertThrows(IllegalArgumentException.class, () -> A.subEq(finalB));
+        assertThrows(LinearAlgebraException.class, () -> A.subEq(finalB));
     }
 
 
@@ -149,7 +150,7 @@ class VectorAddSubEqTests {
         B = new SparseVector(size, bEntries, indices);
 
         SparseVector finalB = B;
-        assertThrows(IllegalArgumentException.class, () -> A.subEq(finalB));
+        assertThrows(LinearAlgebraException.class, () -> A.subEq(finalB));
     }
 
 

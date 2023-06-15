@@ -26,6 +26,7 @@ package com.flag4j.util;
 
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 
 import java.util.Arrays;
 
@@ -48,7 +49,7 @@ public final class ParameterChecks {
      */
     public static void assertEqualShape(Shape shape1, Shape shape2) {
         if(!shape1.equals(shape2)) {
-            throw new IllegalArgumentException(
+            throw new LinearAlgebraException(
                     ErrorMessages.equalShapeErrMsg(shape1, shape2)
             );
         }
@@ -76,7 +77,7 @@ public final class ParameterChecks {
         }
 
         if(!pass) { // Check if the shapes pass the test.
-            throw new IllegalArgumentException(
+            throw new LinearAlgebraException(
                     ErrorMessages.matMultShapeErrMsg(shape1, shape2)
             );
         }
@@ -314,7 +315,7 @@ public final class ParameterChecks {
      */
     public static void assertSquare(Shape shape) {
         if(shape.getRank()!=2 || shape.get(0)!=shape.get(1)) {
-            throw new IllegalArgumentException(ErrorMessages.getSquareShapeErr(shape));
+            throw new LinearAlgebraException(ErrorMessages.getSquareShapeErr(shape));
         }
     }
 
@@ -327,7 +328,7 @@ public final class ParameterChecks {
      */
     public static void assertRank(int expRank, Shape shape) {
         if(shape.getRank() != expRank) {
-            throw new IllegalArgumentException(ErrorMessages.shapeRankErr(shape.getRank(), expRank));
+            throw new LinearAlgebraException(ErrorMessages.shapeRankErr(shape.getRank(), expRank));
         }
     }
 

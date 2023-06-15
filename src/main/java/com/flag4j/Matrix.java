@@ -61,7 +61,7 @@ import java.util.List;
  */
 public class Matrix
         extends RealDenseTensorBase<Matrix, CMatrix>
-        implements MatrixMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double, Vector, Vector>,
+        implements MatrixMixin<Matrix, Matrix, SparseMatrix, CMatrix, Double, Vector, Vector>,
         RealMatrixMixin<Matrix, CMatrix> {
 
     /**
@@ -341,6 +341,17 @@ public class Matrix
 
 
     /**
+     * Gets the shape of this matrix.
+     *
+     * @return The shape of this matrix.
+     */
+    @Override
+    public Shape shape() {
+        return shape;
+    }
+
+
+    /**
      * Converts this matrix to an equivalent complex tensor.
      * @return A tensor which is equivalent to this matrix.
      */
@@ -354,6 +365,7 @@ public class Matrix
      * it will be flattened then converted to a vector.
      * @return A vector equivalent to this matrix.
      */
+    @Override
     public Vector toVector() {
         return new Vector(this.entries.clone());
     }
@@ -3125,7 +3137,6 @@ public class Matrix
      * Extracts the diagonal elements of this matrix and returns them as a vector.
      * @return A vector containing the diagonal entries of this matrix.
      */
-    // TODO: Pull up to a matrix mixin interface
     @Override
     public Vector getDiag() {
         final int newSize = Math.min(numRows, numCols);
@@ -3138,6 +3149,18 @@ public class Matrix
         }
 
         return new Vector(diag);
+    }
+
+
+    /**
+     * Compute the transpose of this matrix. That is, the complex conjugate transpose of this matrix. Since this is
+     * a real matrix, this is equivalent to the {@link #T standard transpose}.
+     *
+     * @return The transpose of this matrix.
+     */
+    @Override
+    public Matrix H() {
+        return T();
     }
 
 
@@ -3368,19 +3391,6 @@ public class Matrix
     @Override
     public double norm(double p, double q) {
         return RealDenseOperations.matrixNormLpq(entries, shape, p, q);
-    }
-
-
-    /**
-     * Checks if a matrix is diagonalizable. A matrix is diagonalizable if and only if
-     * the multiplicity for each eigenvalue is equivalent to the eigenspace for that eigenvalue.
-     *
-     * @return True if the matrix is diagonalizable. Otherwise, returns false.
-     */
-    @Override
-    public boolean isDiagonalizable() {
-        // TODO: Implementation
-        return false;
     }
 
 

@@ -27,7 +27,6 @@ package com.flag4j.linalg.solvers;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.exceptions.SingularMatrixException;
-import com.flag4j.operations.dense.real.RealDenseDeterminant;
 import com.flag4j.util.ParameterChecks;
 
 

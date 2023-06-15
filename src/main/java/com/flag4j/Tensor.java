@@ -303,18 +303,6 @@ public class Tensor
 
 
     /**
-     * Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.
-     *
-     * @param B Second tensor in the subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public void subEq(Tensor B) {
-        RealDenseOperations.subEq(entries, shape, B.entries, B.shape);
-    }
-
-
-    /**
      * Computes the transpose of a tensor. Same as {@link #T()}.
      * In the context of a tensor, this exchanges the first and last axis of the tensor.
      * Also see {@link #transpose(int, int)} and {@link #T(int, int)}.

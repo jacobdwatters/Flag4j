@@ -4,6 +4,7 @@ import com.flag4j.CTensor;
 import com.flag4j.Shape;
 import com.flag4j.Tensor;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -58,7 +59,7 @@ class TensorElemDivTests {
         B = new Tensor(bShape, bEntries);
 
         Tensor finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.elemDiv(finalB));
 
         // ----------------------- Sub-case 3 -----------------------
         bEntries = new double[]{
@@ -69,7 +70,7 @@ class TensorElemDivTests {
         B = new Tensor(bShape, bEntries);
 
         Tensor finalB1 = B;
-        assertThrows(IllegalArgumentException.class, ()->A.elemDiv(finalB1));
+        assertThrows(LinearAlgebraException.class, ()->A.elemDiv(finalB1));
     }
 
 
@@ -108,6 +109,6 @@ class TensorElemDivTests {
         B = new CTensor(bShape, bEntries);
 
         CTensor finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.elemDiv(finalB));
     }
 }

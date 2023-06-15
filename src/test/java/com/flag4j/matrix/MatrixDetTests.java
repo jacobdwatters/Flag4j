@@ -1,6 +1,7 @@
 package com.flag4j.matrix;
 
 import com.flag4j.Matrix;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -71,6 +72,6 @@ class MatrixDetTests {
                 {4.56, -8.46, 0.0003985, 45.1, -5.15}};
         A = new Matrix(aEntries);
 
-        assertThrows(IllegalArgumentException.class, ()->A.det());
+        assertThrows(LinearAlgebraException.class, ()->A.det());
     }
 }

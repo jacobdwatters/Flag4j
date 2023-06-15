@@ -35,12 +35,13 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <U> Dense Matrix type.
  * @param <V> Sparse Matrix type.
  * @param <W> Complex Matrix type.
- * @param <Y> Real Matrix type.
  * @param <X> Matrix entry type.
  * @param <TT> Vector type equivalent.
  * @param <UU> Dense vector type.
  */
-public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU> {
+public interface MatrixOperationsMixin<T, U, V, W, X extends Number,
+        TT extends VectorMixin<TT, UU, ?, ?, X, T, U, W>,
+        UU extends VectorMixin<UU, UU, ?, ?, X, U, U, W>> {
 
     /**
      * Computes the element-wise addition between two matrices.
@@ -150,6 +151,12 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU> 
      * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
      */
     U mult(Matrix B);
+
+
+    TT mult(TT B);
+
+
+    T mult(T B);
 
 
     /**
@@ -861,6 +868,13 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU> 
 
 
     /**
+     * Converts this matrix to an equivalent vector. If this matrix is not shaped as a row/column vector,
+     * it will be flattened then converted to a vector.
+     * @return A vector equivalent to this matrix.
+     */
+    TT toVector();
+
+    /**
      * Gets a specified slice of this matrix.
      *
      * @param rowStart Starting row index of slice (inclusive).
@@ -937,4 +951,21 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number, TT, UU> 
      * @return A vector containing the diagonal entries of this matrix.
      */
     TT getDiag();
+
+
+    // This is specified here rather than in the ComplexMatrixMixin interface for compatibility purposes of real matrix
+    // types in generic methods.
+    /**
+     * Compute the hermation transpose of this matrix. That is, the complex conjugate transpose of this matrix.
+     * @return The complex conjugate transpose of this matrix.
+     */
+    T H();
+
+
+    // This method is specified here for compatibility purposes in generic classes.
+    /**
+     * Copies this matrix.
+     * @return A deep copy of this matrix.
+     */
+    T copy();
 }

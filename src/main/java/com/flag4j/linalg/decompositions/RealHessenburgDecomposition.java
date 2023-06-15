@@ -27,7 +27,6 @@ package com.flag4j.linalg.decompositions;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.linalg.transformations.Householder;
-import com.flag4j.util.ParameterChecks;
 
 /**
  * <p>Computes the Hessenburg decomposition of a real dense square matrix. That is, for a square matrix
@@ -46,7 +45,7 @@ import com.flag4j.util.ParameterChecks;
  *      [ 0 0 0 x x ]]</pre>
  * </p>
  */
-public final class RealHessenburgDecomposition extends HessenburgDecomposition<Matrix> {
+public final class RealHessenburgDecomposition extends HessenburgDecomposition<Matrix, Vector> {
 
 
     /**
@@ -72,53 +71,39 @@ public final class RealHessenburgDecomposition extends HessenburgDecomposition<M
 
 
     /**
-     * Hessenburg decomposition of a real dense square matrix. That is, for a square matrix
-     * {@code A}, computes the decomposition {@code A=QHQ<sup>T</sup>} where {@code Q} is an orthogonal matrix and
-     * {@code H} is a matrix in upper Hessenburg form which is similar to {@code A} (i.e. has the same eigenvalues/vectors).</p>
+     * Creates a Householder reflector embedded in an identity matrix with the same size as {@code H}.
      *
-     * @param src The source matrix to decompose.
-     * @return A reference to this decomposer.
-     * @throws IllegalArgumentException If the {@code src} matrix is not square.
+     * @param col Vector to compute Householder reflector for.
+     * @param i   Row and column index of slice of identity matrix to embed Householder reflector in.
+     * @return Householder reflector embedded in an identity matrix with the same size as {@code H}.
      */
     @Override
-    public Decomposition<Matrix> decompose(Matrix src) {
-        ParameterChecks.assertSquare(src.shape);
-
-        // TODO: Add a decomposition for symmetric matrices.
-        generalDecomposition(src);
-
-        return this;
+    protected Matrix initRef(Vector col, int i) {
+        Matrix ref = Matrix.I(H.numRows);
+        return ref.setSlice(Householder.getReflector(col), i, i);
     }
 
 
     /**
-     * Computes the Hessenburg decomposition of a general real matrix.
-     * @param src Matrix to compute the Hessenburg decomposition of.
+     * Initializes the unitary matrix {@code Q} in the Hessenburg decomposition.
+     *
+     * @return The initial {@code Q} matrix in the Hessenburg decomposition.
      */
-    private void generalDecomposition(Matrix src) {
-        H = src.copy(); // Storage for upper Hessenburg matrix
-        Matrix ref; // For storing Householder reflector
-        Vector col; // Normal vector for Householder reflector computation.
+    @Override
+    protected Matrix initQ() {
+        return Matrix.I(H.numRows);
+    }
 
-        if(computeQ) {
-            Q = Matrix.I(this.H.numRows); // Storage for orthogonal matrix in the decomposition.
-        } else {
-            Q = null;
-        }
 
-        for(int k = 0; k<this.H.numRows-2; k++) {
-            col = this.H.getColBelow(k+1, k).toVector();
-
-            if(!col.isZeros()) { // If the column is zeros, no need to compute reflector. It is already in the correct form.
-                ref = Matrix.I(this.H.numRows);
-                ref.setSlice(Householder.getReflector(col), k+1, k+1);
-
-                H = ref.mult(H).multTranspose(ref); // Apply Householder reflector to both sides of H.
-
-                if(computeQ) {
-                    Q = Q.mult(ref); // Apply Householder reflector to Q.
-                }
-            }
+    /**
+     * Sets the specified column below the first sub-diagonal to zero.
+     *
+     * @param k Index of column to set values below the first sub-diagonal to zero.
+     */
+    @Override
+    protected void setZeros(int k) {
+        for(int i=k+2; i<H.numRows; i++) {
+            H.entries[i*H.numCols + k] = 0;
         }
     }
 }

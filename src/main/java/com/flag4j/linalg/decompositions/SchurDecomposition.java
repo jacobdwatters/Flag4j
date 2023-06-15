@@ -30,6 +30,7 @@ import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.MatrixMixin;
+import com.flag4j.core.VectorMixin;
 import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.transformations.Householder;
 
@@ -43,8 +44,12 @@ import com.flag4j.linalg.transformations.Householder;
  * <p>Note, even if a matrix has only real entries, both {@code U} and {@code T} may contain complex values.</p>
  *
  * @param <T> The type of matrix to compute the Schur decomposition of.
+ * @param <U> Vector type for columns of the matrices of the Schur decomposition.
  */
-public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class SchurDecomposition<
+        T extends MatrixMixin<T, ?, ?, ?, ?, U, ?>,
+        U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>>
+        implements Decomposition<T> {
 
     /**
      * The maximum number of iterations to run the {@code QR} algorithm when computing the Schur decomposition. This
@@ -81,7 +86,7 @@ public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?,
      * Decomposer to compute the Hessenburg matrix similar to the source matrix. This Hessenburg
      * matrix will be the actual matrix that the Schur decomposition is computed for.
      */
-    protected HessenburgDecomposition<T> hess;;
+    protected HessenburgDecomposition<T, U> hess;
 
 
     /**
@@ -198,7 +203,7 @@ public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?,
             maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
         }
 
-        QRDecomposition<CMatrix> qr = new ComplexQRDecomposition();
+        QRDecomposition<CMatrix, CVector> qr = new ComplexQRDecomposition();
 
         // Initialize matrices.
         T = H;
@@ -216,7 +221,7 @@ public abstract class SchurDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?,
 
             if(computeU) U = U.mult(qr.Q);
 
-            if(T.roundToZero().isTriU()) {
+            if(T.roundToZero(1.0E-12).isTriU()) {
                 break; // We have converged (approximately) to an upper triangular matrix. No need to continue.
             }
         }

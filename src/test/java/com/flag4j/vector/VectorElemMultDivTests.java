@@ -5,6 +5,7 @@ import com.flag4j.SparseCVector;
 import com.flag4j.SparseVector;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +39,7 @@ class VectorElemMultDivTests {
         b = new Vector(bEntries);
 
         Vector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 
 
@@ -64,7 +65,7 @@ class VectorElemMultDivTests {
         b = new CVector(bEntries);
 
         CVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 
 
@@ -98,7 +99,7 @@ class VectorElemMultDivTests {
         b = new SparseVector(402, bEntries, indices);
 
         SparseVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 
 
@@ -132,7 +133,7 @@ class VectorElemMultDivTests {
         b = new SparseCVector(31, bEntries, indices);
 
         SparseCVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.elemMult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.elemMult(finalB));
     }
 
     // ---------------------------------------------------------------------------------------------------------------
@@ -158,7 +159,7 @@ class VectorElemMultDivTests {
         b = new Vector(bEntries);
 
         Vector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.elemDiv(finalB));
     }
 
 
@@ -185,6 +186,6 @@ class VectorElemMultDivTests {
         b = new CVector(bEntries);
 
         CVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()->a.elemDiv(finalB));
     }
 }

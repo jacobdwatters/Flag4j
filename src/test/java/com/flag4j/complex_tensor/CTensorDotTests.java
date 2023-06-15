@@ -3,6 +3,7 @@ package com.flag4j.complex_tensor;
 import com.flag4j.CTensor;
 import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -89,7 +90,7 @@ class CTensorDotTests {
         aAxes = new int[]{1};
         bAxes = new int[]{0};
 
-        assertThrows(IllegalArgumentException.class, ()->A.tensorDot(B, aAxes, bAxes));
+        assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B, aAxes, bAxes));
 
         // --------------------- Sub-case 4 ---------------------
         aAxes = new int[]{0, 1};
@@ -101,7 +102,7 @@ class CTensorDotTests {
         aAxes = new int[]{0, 1};
         bAxes = new int[]{1, 0};
 
-        assertThrows(IllegalArgumentException.class, ()->A.tensorDot(B, aAxes, bAxes));
+        assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B, aAxes, bAxes));
 
         // --------------------- Sub-case 5 ---------------------
         aAxes = new int[]{0, 1, 2, 3};
@@ -132,7 +133,7 @@ class CTensorDotTests {
         assertEquals(exp, A.tensorDot(B, 0, 1));
 
         // --------------------- Sub-case 1 ---------------------
-        assertThrows(IllegalArgumentException.class, ()->A.tensorDot(B, 1, 1));
+        assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B, 1, 1));
     }
 
 

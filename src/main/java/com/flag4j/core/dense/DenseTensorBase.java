@@ -23,6 +23,7 @@
  */
 
 package com.flag4j.core.dense;
+
 import com.flag4j.Shape;
 import com.flag4j.core.TensorBase;
 

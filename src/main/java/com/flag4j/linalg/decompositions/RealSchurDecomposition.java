@@ -25,6 +25,7 @@
 package com.flag4j.linalg.decompositions;
 
 import com.flag4j.Matrix;
+import com.flag4j.Vector;
 import com.flag4j.util.ParameterChecks;
 
 
@@ -37,7 +38,7 @@ import com.flag4j.util.ParameterChecks;
  *
  * <p>Note, even if a matrix has only real entries, both {@code Q} and {@code U} may contain complex values.</p>
  */
-public class RealSchurDecomposition extends SchurDecomposition<Matrix> {
+public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
 
     /**
      * Creates a Schur decomposer for a real dense matrix.

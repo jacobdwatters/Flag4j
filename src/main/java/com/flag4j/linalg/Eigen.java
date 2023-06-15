@@ -129,7 +129,7 @@ public class Eigen {
     public static CVector getEigenValues(Matrix src) {
         CVector lambdas = new CVector(src.numRows);
 
-        SchurDecomposition<Matrix> schur = new RealSchurDecomposition(false).decompose(src);
+        SchurDecomposition<Matrix, Vector> schur = new RealSchurDecomposition(false).decompose(src);
         CMatrix T = schur.getT();
 
         // Extract diagonal of T.
@@ -149,7 +149,7 @@ public class Eigen {
     public static CVector getEigenValues(CMatrix src) {
         CVector lambdas = new CVector(src.numRows);
 
-        SchurDecomposition<CMatrix> schur = new ComplexSchurDecomposition(false).decompose(src);
+        SchurDecomposition<CMatrix, CVector> schur = new ComplexSchurDecomposition(false).decompose(src);
         CMatrix T = schur.getT();
 
         // Extract diagonal of T.
@@ -167,7 +167,7 @@ public class Eigen {
      * @return A matrix containing the eigenvectors of {@code src} as its columns.
      */
     public static CMatrix getEigenVectors(Matrix src) {
-        SchurDecomposition<Matrix> schur = new RealSchurDecomposition(true).decompose(src);
+        SchurDecomposition<Matrix, Vector> schur = new RealSchurDecomposition(true).decompose(src);
         CMatrix U = schur.getU();
 
         if(src.isSymmetric()) {
@@ -187,7 +187,7 @@ public class Eigen {
      * @return A matrix containing the eigenvectors of {@code src} as its columns.
      */
     public static CMatrix getEigenVectors(CMatrix src) {
-        SchurDecomposition<CMatrix> schur = new ComplexSchurDecomposition(true).decompose(src);
+        SchurDecomposition<CMatrix, CVector> schur = new ComplexSchurDecomposition(true).decompose(src);
         CMatrix U = schur.getU();
 
         if(src.isHermitian()) {
@@ -275,7 +275,7 @@ public class Eigen {
     public static CMatrix[] getEigenPairs(Matrix src) {
         CMatrix lambdas = new CMatrix(1, src.numRows);
 
-        SchurDecomposition<Matrix> schur = new RealSchurDecomposition(true).decompose(src);
+        SchurDecomposition<Matrix, Vector> schur = new RealSchurDecomposition(true).decompose(src);
         CMatrix T = schur.getT();
         CMatrix U = schur.getU();
 
@@ -305,7 +305,7 @@ public class Eigen {
     public static CMatrix[] getEigenPairs(CMatrix src) {
         CMatrix lambdas = new CMatrix(1, src.numRows);
 
-        SchurDecomposition<CMatrix> schur = new ComplexSchurDecomposition(true).decompose(src);
+        SchurDecomposition<CMatrix, CVector> schur = new ComplexSchurDecomposition(true).decompose(src);
         CMatrix T = schur.getT();
         CMatrix U = schur.getU();
 

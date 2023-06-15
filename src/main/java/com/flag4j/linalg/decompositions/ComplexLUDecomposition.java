@@ -27,6 +27,7 @@ package com.flag4j.linalg.decompositions;
 import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 
 
 /**
@@ -83,12 +84,10 @@ public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
      */
     @Override
     protected void noPivot() {
-        P = Q = null; // P and Q are not used here.
-
         // Using Gaussian elimination and no pivoting
         for(int j=0; j<LU.numCols; j++) {
             if(j<LU.numRows && (LU.entries[j*LU.numCols + j]).magAsDouble() < zeroPivotTol) {
-                throw new ArithmeticException("Zero pivot encountered in decomposition." +
+                throw new LinearAlgebraException("Zero pivot encountered in decomposition." +
                         " Consider using LU decomposition with partial pivoting.");
             }
 
@@ -103,7 +102,6 @@ public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
     @Override
     protected void partialPivot() {
         P = Matrix.I(LU.numRows);
-        Q = null; // Q is not used here.
         int maxIndex;
 
         // Using Gaussian elimination with row pivoting.
@@ -249,8 +247,10 @@ public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
     public CMatrix getU() {
         CMatrix U = new CMatrix(Math.min(LU.numRows, LU.numCols), LU.numCols);
 
+        int stopIdx = Math.min(LU.numRows, LU.numCols);
+
         // Copy U values from LU matrix.
-        for(int i=0; i<LU.numRows && i<LU.numCols; i++) {
+        for(int i=0; i<stopIdx; i++) {
             System.arraycopy(LU.entries, i*(LU.numCols+1),
                     U.entries, i*(LU.numCols+1), LU.numCols-i);
         }

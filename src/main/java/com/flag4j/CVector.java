@@ -51,7 +51,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
         DenseVectorMixin {
 
     /**
-     * The size of this vector. That is, the number of entries in this vector.
+     * The size of this vector. That is, the total number of entries in this vector.
      */
     public final int size;
 

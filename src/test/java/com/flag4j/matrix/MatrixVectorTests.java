@@ -2,6 +2,7 @@ package com.flag4j.matrix;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,7 +51,7 @@ class MatrixVectorTests {
         B = new Vector(bEntries);
 
         Vector finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.mult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
 
@@ -89,7 +90,7 @@ class MatrixVectorTests {
         B = new CVector(bEntries);
 
         CVector finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.mult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
 
@@ -128,7 +129,7 @@ class MatrixVectorTests {
         B = new SparseVector(14, bEntries, indices);
 
         SparseVector finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.mult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 
 
@@ -168,6 +169,6 @@ class MatrixVectorTests {
         B = new SparseCVector(9, bEntries, indices);
 
         SparseCVector finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.mult(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.mult(finalB));
     }
 }

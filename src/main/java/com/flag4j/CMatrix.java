@@ -64,8 +64,8 @@ import java.util.List;
  */
 public class CMatrix
         extends ComplexDenseTensorBase<CMatrix, Matrix>
-        implements MatrixMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber, CVector, CVector>,
-        ComplexMatrixMixin<CMatrix, Matrix> {
+        implements MatrixMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, CNumber, CVector, CVector>,
+        ComplexMatrixMixin<CMatrix> {
 
     /**
      * The number of rows in this matrix.
@@ -415,6 +415,17 @@ public class CMatrix
 
 
     /**
+     * Gets the shape of this matrix.
+     *
+     * @return The shape of this matrix.
+     */
+    @Override
+    public Shape shape() {
+        return shape;
+    }
+
+
+    /**
      * Converts this matrix to an equivalent complex tensor.
      * @return A complex tensor which is equivalent to this matrix.
      */
@@ -428,6 +439,7 @@ public class CMatrix
      * it will be flattened then converted to a vector.
      * @return A vector equivalent to this matrix.
      */
+    @Override
     public CVector toVector() {
         return new CVector(ArrayUtils.copyOfRange(entries, 0, entries.length));
     }
@@ -3830,19 +3842,6 @@ public class CMatrix
     @Override
     public double norm(double p, double q) {
         return ComplexDenseOperations.matrixNormLpq(entries, shape, p, q);
-    }
-
-
-    /**
-     * Checks if a matrix is diagonalizable. A matrix is diagonalizable if and only if
-     * the multiplicity for each eigenvalue is equivalent to the eigenspace for that eigenvalue.
-     *
-     * @return True if the matrix is diagonalizable. Otherwise, returns false.
-     */
-    @Override
-    public boolean isDiagonalizable() {
-        // TODO: Implementation
-        return false;
     }
 
 

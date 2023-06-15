@@ -1240,8 +1240,10 @@ public class SparseCVector
      */
     @Override
     public CMatrix outer(CVector b) {
-        // TODO: Implementation.
-        return null;
+        return new CMatrix(new Shape(this.size, b.size), ComplexDenseSparseVectorOperations.outerProduct(
+                this.entries, this.indices, this.size,
+                b.entries)
+        );
     }
 
 

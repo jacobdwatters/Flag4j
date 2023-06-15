@@ -2,6 +2,7 @@ package com.flag4j.matrix;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,7 +45,7 @@ class MatrixFibTests {
                 {-9.8, 109.4, 4}};
         B = new Matrix(bEntries);
 
-        assertThrows(IllegalArgumentException.class, ()->A.fib(B));
+        assertThrows(LinearAlgebraException.class, ()->A.fib(B));
 
 
         // ------------------------- Sub-case 3 -------------------------
@@ -59,7 +60,7 @@ class MatrixFibTests {
                 {0, 0, 1}};
         B = new Matrix(bEntries);
 
-        assertThrows(IllegalArgumentException.class, ()->A.fib(B));
+        assertThrows(LinearAlgebraException.class, ()->A.fib(B));
     }
 
 
@@ -92,7 +93,7 @@ class MatrixFibTests {
         sparseShape = new Shape(5, 600);
         BSparse = new SparseMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
 
-        assertThrows(IllegalArgumentException.class, ()->A.fib(BSparse));
+        assertThrows(LinearAlgebraException.class, ()->A.fib(BSparse));
     }
 
 
@@ -131,7 +132,7 @@ class MatrixFibTests {
         B = new CMatrix(bEntries);
 
         CMatrix finalB = B;
-        assertThrows(IllegalArgumentException.class, ()->A.fib(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.fib(finalB));
 
 
         // ------------------------- Sub-case 3 -------------------------
@@ -148,7 +149,7 @@ class MatrixFibTests {
         B = new CMatrix(bEntries);
 
         CMatrix finalB1 = B;
-        assertThrows(IllegalArgumentException.class, ()->A.fib(finalB1));
+        assertThrows(LinearAlgebraException.class, ()->A.fib(finalB1));
     }
 
 
@@ -185,6 +186,6 @@ class MatrixFibTests {
         BSparse = new SparseCMatrix(sparseShape, bSparseEntries, rowIndices, colIndices);
 
         SparseCMatrix finalBSparse = BSparse;
-        assertThrows(IllegalArgumentException.class, ()->A.fib(finalBSparse));
+        assertThrows(LinearAlgebraException.class, ()->A.fib(finalBSparse));
     }
 }

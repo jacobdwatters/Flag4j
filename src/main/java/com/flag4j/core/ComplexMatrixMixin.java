@@ -33,14 +33,13 @@ import com.flag4j.complex_numbers.CNumber;
 /**
  * This interface specifies methods which any complex matrix should implement.
  * @param <T> Matrix type.
- * @param <Y> Real matrix type.
  */
-public interface ComplexMatrixMixin<T, Y> {
+public interface ComplexMatrixMixin<T> {
 
 
     /**
      * Computes the complex conjugate transpose of a tensor.
-     * Same as {@link #hermTranspose()} and {@link #hermTranspose()}.
+     * Same as {@link #hermTranspose()} and {@link MatrixOperationsMixin#H()}.
      * @return The complex conjugate transpose of this tensor.
      */
     T conjT();
@@ -48,18 +47,10 @@ public interface ComplexMatrixMixin<T, Y> {
 
     /**
      * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
-     * Same as {@link #conjT()} and {@link #H()}.
+     * Same as {@link #conjT()} and {@link MatrixOperationsMixin#H()}.
      * @return The complex conjugate transpose (Hermitian transpose) of this tensor.
      */
     T hermTranspose();
-
-
-    /**
-     * Computes the complex conjugate transpose (Hermitian transpose) of a tensor.
-     * Same as {@link #conjT()} and {@link #hermTranspose()}.
-     * @return The complex conjugate transpose (Hermitian transpose) of this tensor.
-     */
-    T H();
 
 
     /**

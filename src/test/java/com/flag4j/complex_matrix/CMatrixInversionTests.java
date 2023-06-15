@@ -2,6 +2,7 @@ package com.flag4j.complex_matrix;
 
 import com.flag4j.CMatrix;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,7 +47,7 @@ class CMatrixInversionTests {
         };
         A = new CMatrix(aEntries);
 
-        assertThrows(IllegalArgumentException.class, ()->A.inv());
-        assertThrows(IllegalArgumentException.class, ()->A.T().inv());
+        assertThrows(LinearAlgebraException.class, ()->A.inv());
+        assertThrows(LinearAlgebraException.class, ()->A.T().inv());
     }
 }
