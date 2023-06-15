@@ -38,13 +38,13 @@ import com.flag4j.Shape;
  * @param <TT> Vector type equivalent.
  * @param <UU> Dense vector type.
  */
-public interface MatrixMixin<T, U, V, W, Y, X extends Number,
+public interface MatrixMixin<T, U, V, W, X extends Number,
         TT extends VectorMixin<TT, UU, ?, ?, X, T, U, W>,
         UU extends VectorMixin<UU, UU, ?, ?, X, U, U, W>>
         extends MatrixPropertiesMixin,
         MatrixComparisonsMixin<T>,
         MatrixManipulationsMixin<T, X>,
-        MatrixOperationsMixin<T, U, V, W, Y, X, TT, UU> {
+        MatrixOperationsMixin<T, U, V, W, X, TT, UU> {
 
     /**
      * Gets the number of rows in this matrix.

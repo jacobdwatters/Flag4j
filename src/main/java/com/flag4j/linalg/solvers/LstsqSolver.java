@@ -30,7 +30,7 @@ import com.flag4j.core.VectorMixin;
 import com.flag4j.linalg.decompositions.QRDecomposition;
 
 
-// TODO: Switch to SVD instead of QR. It will be slower but has better numerical properties.
+// TODO: Add option to use SVD instead of QR (SVD should be default). It will be slower but has better numerical properties.
 
 /**
  * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
@@ -43,13 +43,17 @@ public abstract class LstsqSolver<
         implements LinearSolver<T, U> {
 
     /**
+     * Solver for system with an upper triangular coefficient matrix.
+     */
+    protected final LinearSolver<T, U> backSolver;
+    /**
      * Decomposer to compute the {@code QR} decomposition for using the least-squares solver.
      */
     protected final QRDecomposition<T> qr;
     /**
-     * {@code Q} The orthonormal matrix from the {@code QR} decomposition.
+     * {@code Q} The hermation transpose of the orthonormal matrix from the {@code QR} decomposition.
      */
-    protected T Q;
+    protected T Qh;
     /**
      * {@code R} The upper triangular matrix from the {@code QR} decomposition.
      */
@@ -58,9 +62,41 @@ public abstract class LstsqSolver<
     /**
      * Constructs a least-squares solver with a specified decomposer to use in the {@code QR} decomposition.
      * @param qr The {@code QR} decomposer to use in the solver.
+     * @param backSolver The solver to solve the upper triangular system resulting from the {@code QR} decomposition
+     *                   which is equivalent to solving the normal equations
      */
-    protected LstsqSolver(QRDecomposition<T> qr) {
+    protected LstsqSolver(QRDecomposition<T> qr, LinearSolver<T, U> backSolver) {
         this.qr = qr;
+        this.backSolver = backSolver;
+    }
+
+
+    /**
+     * Solves the linear system given by {@code Ax=b} in the least-squares sense.
+     *
+     * @param A Coefficient matrix in the linear system.
+     * @param b Vector of constants in the linear system.
+     * @return The least squares solution to {@code x} in the linear system {@code Ax=b}.
+     */
+    @Override
+    public U solve(T A, U b) {
+        decompose(A); // Compute the reduced QR decomposition of A.
+        return backSolver.solve(R, Qh.mult(b));
+    }
+
+
+    /**
+     * Solves the set of linear system of equations given by {@code A*X=B} for the matrix {@code X} where
+     * {@code A}, {@code B}, and {@code X} are matrices.
+     *
+     * @param A Coefficient matrix in the linear system.
+     * @param B Matrix of constants in the linear system.
+     * @return The solution to {@code X} in the linear system {@code A*X=B}.
+     */
+    @Override
+    public T solve(T A, T B) {
+        decompose(A); // Compute the reduced QR decomposition of A.
+        return backSolver.solve(R, Qh.mult(B));
     }
 
 
@@ -70,7 +106,7 @@ public abstract class LstsqSolver<
      */
     protected void decompose(T A) {
         qr.decompose(A);
-        Q = qr.getQ();
+        Qh = qr.getQ().H();
         R = qr.getR();
     }
 }

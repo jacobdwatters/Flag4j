@@ -35,12 +35,11 @@ import com.flag4j.complex_numbers.CNumber;
  * @param <U> Dense Matrix type.
  * @param <V> Sparse Matrix type.
  * @param <W> Complex Matrix type.
- * @param <Y> Real Matrix type.
  * @param <X> Matrix entry type.
  * @param <TT> Vector type equivalent.
  * @param <UU> Dense vector type.
  */
-public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number,
+public interface MatrixOperationsMixin<T, U, V, W, X extends Number,
         TT extends VectorMixin<TT, UU, ?, ?, X, T, U, W>,
         UU extends VectorMixin<UU, UU, ?, ?, X, U, U, W>> {
 
@@ -945,4 +944,13 @@ public interface MatrixOperationsMixin<T, U, V, W, Y, X extends Number,
      * @return A vector containing the diagonal entries of this matrix.
      */
     TT getDiag();
+
+
+    // This is specified here rather than in the ComplexMatrixMixin interface for compatibility purposes of real matrix
+    // types in generic methods.
+    /**
+     * Compute the hermation transpose of this matrix. That is, the complex conjugate transpose of this matrix.
+     * @return The complex conjugate transpose of this matrix.
+     */
+    T H();
 }

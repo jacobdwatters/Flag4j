@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.flag4j</groupId>
-    <artifactId>Flag4j</artifactId>
+    <artifactId>flag4j</artifactId>
     <version>v0.0.1-beta</version>
 
     <distributionManagement>
@@ -16,27 +16,7 @@
         </repository>
     </distributionManagement>
 
-    <profiles>
-        <profile>
-            <id>github</id>
-            <repositories>
-                <repository>
-                    <id>central</id>
-                    <url>https://repo1.maven.org/maven2</url>
-                </repository>
-                <repository>
-                    <id>github</id>
-                    <url>https://maven.pkg.github.com/OWNER/REPOSITORY</url>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </repository>
-            </repositories>
-        </profile>
-    </profiles>
-
     <dependencies>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

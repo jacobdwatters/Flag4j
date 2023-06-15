@@ -61,7 +61,7 @@ import java.util.List;
  */
 public class Matrix
         extends RealDenseTensorBase<Matrix, CMatrix>
-        implements MatrixMixin<Matrix, Matrix, SparseMatrix, CMatrix, Matrix, Double, Vector, Vector>,
+        implements MatrixMixin<Matrix, Matrix, SparseMatrix, CMatrix, Double, Vector, Vector>,
         RealMatrixMixin<Matrix, CMatrix> {
 
     /**
@@ -3136,7 +3136,6 @@ public class Matrix
      * Extracts the diagonal elements of this matrix and returns them as a vector.
      * @return A vector containing the diagonal entries of this matrix.
      */
-    // TODO: Pull up to a matrix mixin interface
     @Override
     public Vector getDiag() {
         final int newSize = Math.min(numRows, numCols);
@@ -3149,6 +3148,18 @@ public class Matrix
         }
 
         return new Vector(diag);
+    }
+
+
+    /**
+     * Compute the transpose of this matrix. That is, the complex conjugate transpose of this matrix. Since this is
+     * a real matrix, this is equivalent to the {@link #T standard transpose}.
+     *
+     * @return The transpose of this matrix.
+     */
+    @Override
+    public Matrix H() {
+        return T();
     }
 
 

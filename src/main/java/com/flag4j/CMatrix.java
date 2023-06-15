@@ -64,8 +64,8 @@ import java.util.List;
  */
 public class CMatrix
         extends ComplexDenseTensorBase<CMatrix, Matrix>
-        implements MatrixMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, Matrix, CNumber, CVector, CVector>,
-        ComplexMatrixMixin<CMatrix, Matrix> {
+        implements MatrixMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, CNumber, CVector, CVector>,
+        ComplexMatrixMixin<CMatrix> {
 
     /**
      * The number of rows in this matrix.
