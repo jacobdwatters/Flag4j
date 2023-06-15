@@ -144,7 +144,7 @@ public abstract class HessenburgDecomposition<
                 }
             }
 
-            // TODO: Set rest of column, below the first sub-diagonal, to zeros.
+            setZeros(k);
         }
     }
 
@@ -163,4 +163,11 @@ public abstract class HessenburgDecomposition<
      * @return The initial {@code Q} matrix in the Hessenburg decomposition.
      */
     protected abstract T initQ();
+
+
+    /**
+     * Sets the specified column below the first sub-diagonal to zero.
+     * @param k Index of column to set values below the first sub-diagonal to zero.
+     */
+    protected abstract void setZeros(int k);
 }

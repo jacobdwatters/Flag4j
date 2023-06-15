@@ -26,6 +26,7 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
+import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.transformations.Householder;
 
 /**
@@ -91,5 +92,18 @@ public final class ComplexHessenburgDecomposition extends HessenburgDecompositio
     @Override
     protected CMatrix initQ() {
         return CMatrix.I(this.H.numRows);
+    }
+
+
+    /**
+     * Sets the specified column below the first sub-diagonal to zero.
+     *
+     * @param k Index of column to set values below the first sub-diagonal to zero.
+     */
+    @Override
+    protected void setZeros(int k) {
+        for(int i=k+2; i<H.numRows; i++) {
+            H.entries[i*H.numCols + k] = new CNumber();
+        }
     }
 }

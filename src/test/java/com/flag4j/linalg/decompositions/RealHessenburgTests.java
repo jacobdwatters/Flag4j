@@ -28,7 +28,7 @@ class RealHessenburgTests {
         Q = hess.getQ();
         A_hat = Q.mult(H).multTranspose(Q);
 
-        assertEquals(new Matrix(A.shape.copy()), A.sub(A_hat).roundToZero());
+        assertEquals(new Matrix(A.shape.copy()).round(), A.sub(A_hat).round());
 
         // ----------------------- Sub-case 1.1 -----------------------
         hess = new RealHessenburgDecomposition(false);

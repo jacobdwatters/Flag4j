@@ -93,6 +93,19 @@ public final class RealHessenburgDecomposition extends HessenburgDecomposition<M
     protected Matrix initQ() {
         return Matrix.I(H.numRows);
     }
+
+
+    /**
+     * Sets the specified column below the first sub-diagonal to zero.
+     *
+     * @param k Index of column to set values below the first sub-diagonal to zero.
+     */
+    @Override
+    protected void setZeros(int k) {
+        for(int i=k+2; i<H.numRows; i++) {
+            H.entries[i*H.numCols + k] = 0;
+        }
+    }
 }
 
 
