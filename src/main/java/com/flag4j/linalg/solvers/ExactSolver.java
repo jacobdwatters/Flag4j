@@ -38,7 +38,7 @@ import com.flag4j.util.ParameterChecks;
  * {@link LstsqSolver least-squares solver}.</p>
  */
 public abstract class ExactSolver<
-        T extends MatrixMixin<T, ?, ?, ?, ?, ?, U, ?>,
+        T extends MatrixMixin<T, ?, ?, ?, ?, U, ?>,
         U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>>
         implements LinearSolver<T, U> {
 

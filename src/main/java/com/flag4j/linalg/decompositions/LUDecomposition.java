@@ -38,7 +38,7 @@ import com.flag4j.core.MatrixMixin;
  * <p>If full pivoting is used, the decomposition will yield an additional permutation matrix {@code Q} such that
  *  {@code PAQ=LU}.</p>
  */
-public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
 
     /**
      * Flag indicating what pivoting to use.

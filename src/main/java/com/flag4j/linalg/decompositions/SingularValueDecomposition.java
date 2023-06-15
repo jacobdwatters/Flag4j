@@ -35,7 +35,7 @@ import com.flag4j.core.MatrixMixin;
  * diagonal matrix containing the singular values of {@code M}.
  * @param <T> The type of the matrix to compute the singular value decomposition of.
  */
-public abstract class SingularValueDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class SingularValueDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
 
     /**
      * Flag which indicates if the singular vectors should be computed in addition to the singular values.

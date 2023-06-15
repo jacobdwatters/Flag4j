@@ -34,7 +34,7 @@ import com.flag4j.core.VectorMixin;
  * @param <U> Type of the vectors in the linear system.
  */
 public interface LinearSolver<
-        T extends MatrixMixin<T, ?, ?, ?, ?, ?, U, ?>,
+        T extends MatrixMixin<T, ?, ?, ?, ?, U, ?>,
         U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>> {
 
 
