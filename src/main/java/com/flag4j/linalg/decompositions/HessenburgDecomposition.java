@@ -130,7 +130,7 @@ public abstract class HessenburgDecomposition<
 
         Q = computeQ ? initQ() : null;
 
-        for(int k = 0; k< H.numRows()-2; k++) {
+        for(int k = 0; k<H.numRows()-2; k++) {
             col = H.getColBelow(k+1, k).toVector();
 
             // If the column is zeros, no need to compute reflector. It is already in the correct form.
