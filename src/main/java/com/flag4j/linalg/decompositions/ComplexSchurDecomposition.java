@@ -53,38 +53,6 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
 
 
     /**
-     * Creates a decomposer for a real dense matrix to compute the Schur decomposition which
-     * will run for at most {@code maxIterations} iterations.
-     * @param maxIterations Maximum number of iterations to run the QR algorithm for when computing the
-     *                      Schur decomposition.
-     */
-    public ComplexSchurDecomposition(int maxIterations) {
-        super(maxIterations);
-        /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
-           Hessenburg decomposition. */
-        hess = new ComplexHessenburgDecomposition(computeU);
-    }
-
-
-    /**
-     * Creates a decomposer for a real dense matrix to compute the Schur decomposition which will
-     * run for at most {@code maxIterations} iterations.
-     * @param maxIterations Maximum number of iterations to run the QR algorithm for when computing the
-     *                      Schur decomposition.
-     * @param computeU A flag which indicates if the unitary matrix {@code Q} should be computed.<br>
-     *                 - If true, the {@code Q} matrix will be computed.
-     *                 - If false, the {@code Q} matrix will <b>not</b> be computed. If it is not needed, this may
-     *                 provide a performance improvement.
-     */
-    public ComplexSchurDecomposition(boolean computeU, int maxIterations) {
-        super(computeU, maxIterations);
-        /* If there is no need to compute U in the Schur decomposition, there is no need to compute Q in the
-           Hessenburg decomposition. */
-        hess = new ComplexHessenburgDecomposition(computeU);
-    }
-
-
-    /**
      * Creates a decomposer to compute the Schur decomposition.
      * @param computeU A flag which indicates if the unitary matrix {@code Q} should be computed.<br>
      *                 - If true, the {@code Q} matrix will be computed.

@@ -27,12 +27,11 @@ package com.flag4j.linalg.decompositions;
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
 import com.flag4j.Matrix;
-import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.linalg.Eigen;
-import com.flag4j.linalg.transformations.Householder;
+import com.flag4j.linalg.transformations.Givens;
 
 /**
  * <p>This abstract class specifies methods for computing the Schur decomposition of a square matrix.
@@ -52,22 +51,11 @@ public abstract class SchurDecomposition<
         implements Decomposition<T> {
 
     /**
-     * The maximum number of iterations to run the {@code QR} algorithm when computing the Schur decomposition. This
-     * overrides the minimum number of iterations.
-     */
-    protected int maxIterations;
-    /**
      * The minimum number of iterations to perform by default in the QR algorithm if it has not converged. Specifically, the
      * QR algorithm will run for max(MIN_ITERATIONS, maxIterations) iteration or until the QR algorithm converges,
      * whichever comes first.
      */
     protected final static int MIN_DEFAULT_ITERATIONS = 500;
-    /**
-     * Flag for indicating if the default number of max iteration should be used in the QR algorithm.
-     * If true, the max iterations will be set to the number of rows cubed. If false, the max iterations is
-     * specified by the user.
-     */
-    protected final boolean useDefaultMaxIterations;
     /**
      * Flag which indicates if the unitary {@code U} should be computed in the decomposition.
      */
@@ -93,8 +81,6 @@ public abstract class SchurDecomposition<
      * Creates a decomposer to compute the Schur decomposition.
      */
     protected SchurDecomposition() {
-        maxIterations = -1;
-        useDefaultMaxIterations = true;
         computeU = true;
     }
 
@@ -102,106 +88,23 @@ public abstract class SchurDecomposition<
     /**
      * Creates a decomposer to compute the Schur decomposition which will run for at most {@code maxIterations}
      * iterations.
-     * @param maxIterations Maximum number of iterations to run when computing the Schur decomposition.
-     */
-    protected SchurDecomposition(int maxIterations) {
-        this.maxIterations = maxIterations;
-        useDefaultMaxIterations = false;
-        computeU = true;
-    }
-
-
-    /**
-     * Creates a decomposer to compute the Schur decomposition which will run for at most {@code maxIterations}
-     * iterations.
-     * @param maxIterations Maximum number of iterations to run when computing the Schur decomposition.
-     * @param computeU A flag which indicates if the unitary matrix {@code Q} should be computed.<br>
-     *                 - If true, the {@code Q} matrix will be computed.
-     *                 - If false, the {@code Q} matrix will <b>not</b> be computed. If it is not needed, this may
-     *                 provide a performance improvement.
-     */
-    protected SchurDecomposition(boolean computeU, int maxIterations) {
-        this.maxIterations = maxIterations;
-        this.computeU = computeU;
-        useDefaultMaxIterations = false;
-    }
-
-
-    /**
-     * Creates a decomposer to compute the Schur decomposition.
      * @param computeU A flag which indicates if the unitary matrix {@code Q} should be computed.<br>
      *                 - If true, the {@code Q} matrix will be computed.
      *                 - If false, the {@code Q} matrix will <b>not</b> be computed. If it is not needed, this may
      *                 provide a performance improvement.
      */
     protected SchurDecomposition(boolean computeU) {
-        maxIterations = -1;
         this.computeU = computeU;
-        useDefaultMaxIterations = true;
-    }
-
-
-    /**
-     * Computes the Schur decomposition for a complex dense matrix using a double shifted implicit QR algorithm
-     * (also known as Francis's Algorithm of degree two).
-     * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
-     */
-    // TODO: This is a very rudimentary implementation of Francis's double shift implicit QR algorithm.
-    //  Several improvements must be made. See Fundamentals of matrix computations Vol. 3 for more information.
-    //  this may also only work for real symmetric matrices...
-    //  Currently, only computes the real schur form.
-    protected void doubleShiftImplicitQR(CMatrix H) {
-        if(useDefaultMaxIterations) {
-            maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
-        }
-
-        ComplexHessenburgDecomposition hess = new ComplexHessenburgDecomposition(computeU); // Would need to compute Q to compute eigenvectors as well.
-
-        T = H;
-        if(computeU) U = CMatrix.I(T.numRows);
-
-        for(int i=0; i<maxIterations; i++) {
-            // Compute shifts as eigenvalues of lower right 2x2 block.
-            // TODO: Ensure this is numerically stable. Also, add random shifts as noted in Fundamentals of Matrix Computations Vol. 3.
-            CVector rho = Eigen.get2x2LowerLeftBlockEigenValues(T);
-
-            CNumber[] pEntries = {
-                    T.entries[0].sub(rho.entries[0]).mult(T.entries[0].sub(rho.entries[1])).add(T.entries[1].mult(T.entries[T.numCols])),
-                    T.entries[T.numCols].mult( T.entries[0].add(T.entries[T.numCols + 1]).sub(rho.entries[0]).sub(rho.entries[1]) ),
-                    T.entries[2*T.numCols+1].mult(T.entries[T.numCols])
-            };
-            Vector p = new CVector(pEntries).toReal(); // Should be real anyway
-            Matrix Q = Householder.getReflector(p);
-
-            // Apply the Householder reflector to T.
-            T.setSlice(Q.T().mult(T.getSlice(0, Q.numRows, 0, T.numCols)), 0, 0);
-            T.setSlice(T.getSlice(0, T.numRows, 0, Q.numCols).mult(Q), 0, 0);
-
-            // TODO: A crude bulge chase using Hessenberg decomposition. Since we know A is nearly in Hessenberg already, this
-            //  will perform a lot of superfluous computations. Use Householder transformations instead.
-            T = hess.decompose(T).getH();
-
-            if(computeU) {
-                // Apply the Householder reflectors to U.
-                U.setSlice(U.getSlice(0, U.numRows, 0, Q.numCols).mult(Q), 0, 0);
-                U = U.mult(hess.getQ());
-            }
-
-            if(T.roundToZero().isTriU()) {
-                break; // We have converged (approximately) to an upper triangular matrix.
-            }
-        }
     }
 
 
     /**
      * Computes the Schur decomposition for a complex matrix using a shifted QR algorithm where the QR decomposition
+     * is computed explicitly.
      * @param H - The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
      */
     protected void shiftedExplicitQR(CMatrix H) {
-        if(useDefaultMaxIterations) {
-            maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
-        }
+        int maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
 
         QRDecomposition<CMatrix, CVector> qr = new ComplexQRDecomposition();
 
@@ -221,9 +124,81 @@ public abstract class SchurDecomposition<
 
             if(computeU) U = U.mult(qr.Q);
 
-            if(T.roundToZero(1.0E-12).isTriU()) {
+            if(T.roundToZero(1.0E-16).isTriU()) {
                 break; // We have converged (approximately) to an upper triangular matrix. No need to continue.
             }
+        }
+    }
+
+
+    /**
+     * Computes the Schur decomposition for a complex matrix using a shifted QR algorithm where the QR decomposition
+     * is computed explicitly.
+     * @param H - The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
+     */
+    protected void shiftedExplicitDeflateQR(CMatrix H) {
+        final int maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
+
+        QRDecomposition<CMatrix, CVector> qr = new ComplexQRDecomposition();
+        final double tol = Math.ulp(1.0d); // Tolerance for considering an entry zero.
+
+        int iters; // Number of iterations.
+
+        // Initialize matrices.
+        T = H;
+
+        int m = T.numRows;
+        int n = m;
+
+        CVector lam = new CVector(T.numRows);
+
+        while(n > 1) {
+            iters = 0; // Reset the number of iterations.
+
+            while(T.getSlice(n-1, n, 0, n-1).maxAbs() > tol && iters < maxIterations) {
+                iters++;
+
+                CNumber shift = getWilkinsonShift(T); // Compute shift.
+                CMatrix mu = Matrix.I(T.numRows).mult(shift);
+
+                qr.decompose(T.sub(mu));
+
+                T = qr.R.mult(qr.Q).add(mu);
+            }
+
+            if(iters<maxIterations) {
+                n--; // Deflate 1x1 block
+
+            } else {
+                // Compute the eigenvalues of the 2x2 block.
+                CVector mu = Eigen.get2x2EigenValues(
+                        T.getSlice(m-1, m+1, m-1, m+1)
+                ).sub(T.get(m, m));
+
+                CMatrix G = Givens.get2x2Rotator(new CVector(mu.get(0), new CNumber(T.get(m, m-1))));
+
+                // Apply rotation to T matrix to bring it into upper triangular form
+                T.setSlice(
+                        G.mult(T.getSlice(m-1, m+1, m-1, T.numCols)),
+                        m-1, m-1
+                );
+                T.setSlice(
+                        T.getSlice(0, m+1, m-1, m+1).mult(G.H()),
+                        0, m-1
+                );
+
+                // Accumulate similarity transforms in the U matrix.
+                U.setSlice(
+                        U.getSlice(0, U.numRows, m-1, m+1).mult(G.H()),
+                        0, m-1
+                );
+
+                n-=2; // Deflate 2x2 block
+            }
+        }
+        if(n > 0) {
+            // A final 1x1 block remains.
+            lam.entries[0] = T.get(0, 0);
         }
     }
 
@@ -236,10 +211,10 @@ public abstract class SchurDecomposition<
      */
     private CNumber getWilkinsonShift(CMatrix src) {
         // Compute eigenvalues of lower 2x2 block.
-        CVector lambdas = Eigen.get2x2LowerLeftBlockEigenValues(src);
+        CVector lambdas = Eigen.get2x2LowerRightBlockEigenValues(src);
         CNumber v = src.entries[src.entries.length-1];
 
-        if(v.sub(lambdas.entries[0]).magAsDouble() < v.sub(lambdas.entries[1]).magAsDouble()) {
+        if(v.sub(lambdas.entries[0]).mag() < v.sub(lambdas.entries[1]).mag()) {
             return lambdas.entries[0];
         } else {
             return lambdas.entries[1];
@@ -262,5 +237,53 @@ public abstract class SchurDecomposition<
      */
     public CMatrix getU() {
         return U;
+    }
+
+
+    /**
+     * Converts a matrix decomposed into a real Schur form to a complex Schur form.
+     * @param realT The real Schur matrix {@code T} in the Schur decomposition {@code {@code A=UTU<sup>T</sup>}}
+     * @param realU The orthogonal matrix {@code U} in the Schur decomposition {@code A=UTU<sup>T</sup>}.
+     * @return An array of complex matrices corresponding to the complex Schur form of the two matrices {@code realT} and
+     * {@code realU} in order.
+     */
+    // Code adapted from scipy rsf2csf https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.rsf2csf.html
+    public static CMatrix[] real2ComplexSchur(Matrix realT, Matrix realU) {
+        CMatrix T = realT.toComplex();
+        CMatrix U = realU.toComplex();
+
+        final double tol = Math.ulp(1.0d); // Take machine epsilon as the tolerance.
+
+        for(int m=realT.numRows-1; m>0; m--) {
+
+            if(T.get(m, m-1).mag() > tol*( T.get(m-1, m-1).mag() + T.get(m, m).mag() )) {
+                // Compute the eigenvalues of the 2x2 block.
+                CVector mu = Eigen.get2x2EigenValues(
+                        T.getSlice(m-1, m+1, m-1, m+1)
+                ).sub(T.get(m, m));
+
+                CMatrix G = Givens.get2x2Rotator(new CVector(mu.get(0), new CNumber(T.get(m, m-1))));
+
+                // Apply rotation to T matrix to bring it into upper triangular form
+                T.setSlice(
+                        G.mult(T.getSlice(m-1, m+1, m-1, T.numCols)),
+                        m-1, m-1
+                );
+                T.setSlice(
+                        T.getSlice(0, m+1, m-1, m+1).mult(G.H()),
+                        0, m-1
+                );
+
+                // Accumulate similarity transforms in the U matrix.
+                U.setSlice(
+                        U.getSlice(0, U.numRows, m-1, m+1).mult(G.H()),
+                        0, m-1
+                );
+            }
+
+            T.set(0, m, m-1);
+        }
+
+        return new CMatrix[]{T, U};
     }
 }

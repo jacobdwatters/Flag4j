@@ -1,6 +1,7 @@
 package com.flag4j.complex_vector;
 
 import com.flag4j.CVector;
+import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CVectorElemOppTests {
 
     static CNumber[] aEntries, expEntries;
+    static double[] expReEntries;
     static CVector a, exp;
+    static Vector expRe;
 
     @BeforeAll
     static void setup() {
@@ -34,10 +37,10 @@ class CVectorElemOppTests {
     @Test
     void absTestCase() {
         // ---------------------- Sub-case 1 ----------------------
-        expEntries = new CNumber[]{aEntries[0].mag(), aEntries[1].mag(), aEntries[2].mag(),
+        expReEntries = new double[]{aEntries[0].mag(), aEntries[1].mag(), aEntries[2].mag(),
                 aEntries[3].mag(), aEntries[4].mag()};
-        exp = new CVector(expEntries);
-        assertEquals(exp, a.abs());
+        expRe = new Vector(expReEntries);
+        assertEquals(expRe, a.abs());
     }
 
 

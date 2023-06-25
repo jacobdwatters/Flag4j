@@ -99,7 +99,7 @@ public abstract class QRDecomposition<
         int stop = Math.min(n, m-1);
 
         // Tolerance for considering a value zero when determining if a column of R is in the correct form.
-        double tol = 1.0e-16;
+        double tol = Math.ulp(1.0d);
 
         T H;
         U col;

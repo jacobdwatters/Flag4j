@@ -61,7 +61,7 @@ public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
      */
     @Override
     protected void checkSingular() {
-        double det = ComplexDenseDeterminant.detLU(lower, upper).magAsDouble();
+        double det = ComplexDenseDeterminant.detLU(lower, upper).mag();
 
         if(det <= RANK_CONDITION*Math.max(lower.numRows, upper.numCols) || Double.isNaN(det)) {
             throw new SingularMatrixException("Could not solve system.");

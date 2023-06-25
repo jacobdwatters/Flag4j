@@ -82,7 +82,7 @@ public class ComplexOperations {
         double[] abs = new double[src.length];
 
         for(int i=0; i<abs.length; i++) {
-            abs[i] = src[i].magAsDouble();
+            abs[i] = src[i].mag();
         }
 
         return abs;

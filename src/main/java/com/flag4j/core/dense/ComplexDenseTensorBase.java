@@ -215,10 +215,30 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
      * Converts a complex tensor to a real matrix. The imaginary component of any complex value will be ignored.
      *
      * @return A tensor of the same size containing only the real components of this tensor.
+     * @see #toRealSafe()
      */
     @Override
     public Y toReal() {
         return makeRealTensor(this.shape.copy(), ComplexOperations.toReal(this.entries));
+    }
+
+
+    /**
+     * Converts a complex tensor to a real matrix safely. That is, first checks if the tensor only contains real values
+     * and then converts to a real tensor. However, if non-real value exist, then an error is thrown.
+     *
+     * @return A tensor of the same size containing only the real components of this tensor.
+     * @see #toReal()
+     * @throws RuntimeException If this tensor contains at least one non-real value.
+     */
+    @Override
+    public Y toRealSafe() {
+        if(!this.isReal()) {
+            throw new RuntimeException("Could not safely convert from complex to real as non-real " +
+                    "values exist in tensor.");
+        }
+
+        return toReal();
     }
 
 

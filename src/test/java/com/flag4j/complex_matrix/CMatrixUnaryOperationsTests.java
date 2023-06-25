@@ -1,6 +1,7 @@
 package com.flag4j.complex_matrix;
 
 import com.flag4j.CMatrix;
+import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
@@ -9,8 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CMatrixUnaryOperationsTests {
 
     CNumber[][] aEntries, expEntries;
+    double[][] expReEntries;
 
     CMatrix A, exp;
+    Matrix expRe;
     CNumber expComplex;
 
 
@@ -51,12 +54,12 @@ class CMatrixUnaryOperationsTests {
                 {new CNumber(234.66, -9923.1), new CNumber(32.4), new CNumber(394728.1)},
                 {new CNumber(-9841, -85.13), new CNumber(0, 84.1), new CNumber(-5.234, 234)}};
         A = new CMatrix(aEntries);
-        expEntries = new CNumber[][]{
+        expReEntries = new double[][]{
                 {new CNumber(234.66, -9923.1).mag(), new CNumber(32.4).mag(), new CNumber(394728.1).mag()},
                 {new CNumber(-9841, -85.13).mag(), new CNumber(0, 84.1).mag(), new CNumber(-5.234, 234).mag()}};
-        exp = new CMatrix(expEntries);
+        expRe = new Matrix(expReEntries);
 
-        assertEquals(exp, A.abs());
+        assertEquals(expRe, A.abs());
     }
 
 

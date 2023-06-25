@@ -196,6 +196,20 @@ public class SparseCTensor
 
 
     /**
+     * Converts a complex tensor to a real matrix safely. That is, first checks if the tensor only contains real values
+     * and then converts to a real tensor. However, if non-real value exist, then an error is thrown.
+     *
+     * @return A tensor of the same size containing only the real components of this tensor.
+     * @throws RuntimeException If this tensor contains at least one non-real value.
+     * @see #toReal()
+     */
+    @Override
+    public SparseTensor toRealSafe() {
+        return null;
+    }
+
+
+    /**
      * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
      * and takes the complex conjugate of the elements along these axes. Same as {@link #H}.
      *

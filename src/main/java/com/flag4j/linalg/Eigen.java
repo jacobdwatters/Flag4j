@@ -85,7 +85,7 @@ public class Eigen {
         CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.
         CNumber htr = a.add(d).div(2); // Half of the 2x2 trace.
 
-        // 2x2 block eigenvalues.
+        // 2x2 eigenvalues.
         lambda.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
         lambda.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
 
@@ -98,7 +98,7 @@ public class Eigen {
      * @param src Source matrix to compute eigenvalues of lower right 2x2 block.
      * @return A vector of length 2 containing the eigenvalues of the lower right 2x2 block of {@code src}.
      */
-    public static CVector get2x2LowerLeftBlockEigenValues(CMatrix src) {
+    public static CVector get2x2LowerRightBlockEigenValues(CMatrix src) {
         // TODO: While theoretically correct, there are some numerical
         //  issues here.
         CVector lambdas = new CVector(2);
@@ -129,7 +129,7 @@ public class Eigen {
     public static CVector getEigenValues(Matrix src) {
         CVector lambdas = new CVector(src.numRows);
 
-        SchurDecomposition<Matrix, Vector> schur = new RealSchurDecomposition(false).decompose(src);
+        SchurDecomposition<Matrix, Vector> schur = new RealSchurDecomposition(false, false).decompose(src);
         CMatrix T = schur.getT();
 
         // Extract diagonal of T.
@@ -149,6 +149,8 @@ public class Eigen {
     public static CVector getEigenValues(CMatrix src) {
         CVector lambdas = new CVector(src.numRows);
 
+        // TODO: To compute eigenvalues, we can take advantage of deflating the matrix to avoid computing the
+        //  QR decomposition of the full matrix to find each eigenvalue. Also, the full T matrix need not be computed.
         SchurDecomposition<CMatrix, CVector> schur = new ComplexSchurDecomposition(false).decompose(src);
         CMatrix T = schur.getT();
 
@@ -167,7 +169,7 @@ public class Eigen {
      * @return A matrix containing the eigenvectors of {@code src} as its columns.
      */
     public static CMatrix getEigenVectors(Matrix src) {
-        SchurDecomposition<Matrix, Vector> schur = new RealSchurDecomposition(true).decompose(src);
+        SchurDecomposition<Matrix, Vector> schur = new RealSchurDecomposition(true, false).decompose(src);
         CMatrix U = schur.getU();
 
         if(src.isSymmetric()) {
@@ -284,14 +286,12 @@ public class Eigen {
             lambdas.entries[i] = T.entries[i*(T.numCols + 1)];
         }
 
-        if(src.isSymmetric()) {
-            // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
-            return new CMatrix[]{lambdas, U};
-        } else {
+        if(!src.isSymmetric()) {
             // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
             U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.
-            return new CMatrix[]{lambdas, U};
         }
+
+        return new CMatrix[]{lambdas, U};
     }
 
 
@@ -314,13 +314,11 @@ public class Eigen {
             lambdas.entries[i] = T.entries[i*(T.numCols + 1)];
         }
 
-        if(src.isHermitian()) {
-            // Then the columns of U are the complete orthonormal set of eigenvectors of the src matrix.
-            return new CMatrix[]{lambdas, U};
-        } else {
+        if(!src.isHermitian()) {
             // For a non-symmetric matrix, only the first column of U will be an eigenvector of the src matrix.
             U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.
-            return new CMatrix[]{lambdas, U};
         }
+
+        return new CMatrix[]{lambdas, U};
     }
 }

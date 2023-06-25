@@ -57,8 +57,20 @@ public interface ComplexTensorMixin<T, Y> {
     /**
      * Converts a complex tensor to a real tensor. The imaginary component of any complex value will be ignored.
      * @return A tensor of the same size containing only the real components of this tensor.
+     * @see #toRealSafe()
      */
     Y toReal();
+
+
+    /**
+     * Converts a complex tensor to a real matrix safely. That is, first checks if the tensor only contains real values
+     * and then converts to a real tensor. However, if non-real value exist, then an error is thrown.
+     *
+     * @return A tensor of the same size containing only the real components of this tensor.
+     * @see #toReal()
+     * @throws RuntimeException If this tensor contains at least one non-real value.
+     */
+    Y toRealSafe();
 
 
     /**

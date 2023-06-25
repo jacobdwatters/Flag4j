@@ -324,7 +324,7 @@ public final class ComplexDenseOperations {
         for(int j=0; j<cols; j++) {
             colSum = 0;
             for(int i=0; i<rows; i++) {
-                colSum += (Math.pow(src[i*cols + j].magAsDouble(), p));
+                colSum += (Math.pow(src[i*cols + j].mag(), p));
             }
             norm += Math.pow(colSum, q/p);
         }
@@ -353,7 +353,7 @@ public final class ComplexDenseOperations {
         for(int j=0; j<cols; j++) {
             colSum=0;
             for(int i=0; i<rows; i++) {
-                colSum += Math.pow(src[i*cols + j].magAsDouble(), p);
+                colSum += Math.pow(src[i*cols + j].mag(), p);
             }
 
             norm += Math.pow(colSum, 1.0/p);
@@ -380,7 +380,7 @@ public final class ComplexDenseOperations {
         for(int j=0; j<cols; j++) {
             colSum = 0;
             for(int i=0; i<rows; i++) {
-                colSum += Math.pow(src[i*cols + j].magAsDouble(), 2);
+                colSum += Math.pow(src[i*cols + j].mag(), 2);
             }
             norm += Math.sqrt(colSum);
         }
@@ -411,7 +411,7 @@ public final class ComplexDenseOperations {
 
         for(int i=0; i<rows; i++) {
             for(int j=0; j<cols; j++) {
-                rowSums[i] += src[i*cols + j].magAsDouble();
+                rowSums[i] += src[i*cols + j].mag();
             }
         }
 
@@ -428,7 +428,7 @@ public final class ComplexDenseOperations {
         double norm = 0;
 
         for(CNumber cNumber : src) {
-            norm += CNumber.pow(cNumber, 2).magAsDouble();
+            norm += CNumber.pow(cNumber, 2).mag();
         }
 
         return Math.sqrt(norm);
@@ -445,7 +445,7 @@ public final class ComplexDenseOperations {
         double norm = 0;
 
         for(CNumber cNumber : src) {
-            norm += CNumber.pow(cNumber, p).magAsDouble();
+            norm += CNumber.pow(cNumber, p).mag();
         }
 
         return Math.pow(norm, 1.0/p);

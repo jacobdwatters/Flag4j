@@ -516,31 +516,18 @@ public class CNumber extends Number {
     /**
      * Computes the absolute value / magnitude of a complex number. <br>
      * Note: This method is the same as {@link #mag()}.
-     * If the magnitude is desired to be a double then see {@link #magAsDouble()}.
      * @return The absolute value/magnitude of this complex number.
      */
-    public CNumber abs() {
-        return new CNumber(magAsDouble());
-    }
-
-
-    /**
-     * Computes the magnitude value of a complex number. <br>
-     * Note: This method is the same as {@link #abs()}. <br>
-     * If the magnitude is desired to be a double then see {@link #magAsDouble()}.
-     * @return The absolute value/magnitude of this complex number.
-     */
-    public CNumber mag() {
-        return new CNumber(magAsDouble());
+    public double abs() {
+        return mag();
     }
 
 
     /**
      * Computes the magnitude value of a complex number as a double. <br>
-     * If the magnitude is desired to be a {@link CNumber} then see {@link #mag()}.
      * @return The absolute value/magnitude of this complex number as a double.
      */
-    public double magAsDouble() {
+    public double mag() {
         return Math.sqrt(this.re*this.re + this.im*this.im);
     }
 
@@ -832,7 +819,7 @@ public class CNumber extends Number {
             result = new CNumber(0, Math.sqrt(-num.re));
 
         } else {
-            double mag = num.magAsDouble();
+            double mag = num.mag();
             double factor = num.im / Math.abs(num.im);
 
             double re = Math.sqrt((mag + num.re)/2);
@@ -865,7 +852,7 @@ public class CNumber extends Number {
                 result = new CNumber(-1);
             }
         } else {
-            result = value.div(value.magAsDouble());
+            result = value.div(value.mag());
         }
 
         return result;
@@ -880,7 +867,7 @@ public class CNumber extends Number {
         double[] polar = new double[2];
 
         // Compute the magnitude and angle of the complex number.
-        polar[0] = this.magAsDouble();
+        polar[0] = this.mag();
         polar[1] = Math.atan2(this.im, this.re);
 
         return polar;
@@ -1277,7 +1264,7 @@ public class CNumber extends Number {
             throw new IllegalArgumentException(ErrorMessages.negValueErr(tol));
         }
 
-        return n.magAsDouble() <= tol;
+        return n.mag() <= tol;
     }
 
 
@@ -1291,7 +1278,7 @@ public class CNumber extends Number {
      * - If the magnitude of this number is greater than that of <code>b</code>, then this method will return a positive number.
      */
     public int compareTo(CNumber b) {
-        return Double.compare(this.magAsDouble(), b.magAsDouble());
+        return Double.compare(this.mag(), b.mag());
     }
 
 
@@ -1334,11 +1321,11 @@ public class CNumber extends Number {
         double currMag;
 
         if(values.length > 0) {
-            min = values[0].magAsDouble();
+            min = values[0].mag();
         }
 
         for(CNumber value : values) {
-            currMag = value.magAsDouble();
+            currMag = value.mag();
             if(currMag < min) {
                 min = currMag;
             }
@@ -1383,11 +1370,11 @@ public class CNumber extends Number {
         double currMag;
 
         if(values.length > 0) {
-            max = values[0].magAsDouble();
+            max = values[0].mag();
         }
 
         for(CNumber value : values) {
-            currMag = value.magAsDouble();
+            currMag = value.mag();
             if(currMag > max) {
                 max = currMag;
             }
@@ -1433,11 +1420,11 @@ public class CNumber extends Number {
         int arg = -1;
 
         if(values.length > 0) {
-            min = values[0].magAsDouble();
+            min = values[0].mag();
         }
 
         for(int i=0; i<values.length; i++) {
-            currMag = values[i].magAsDouble();
+            currMag = values[i].mag();
             if(currMag < min) {
                 min = currMag;
                 arg = i;
@@ -1485,11 +1472,11 @@ public class CNumber extends Number {
         int arg = -1;
 
         if(values.length > 0) {
-            max = values[0].magAsDouble();
+            max = values[0].mag();
         }
 
         for(int i=0; i<values.length; i++) {
-            currMag = values[i].magAsDouble();
+            currMag = values[i].mag();
             if(currMag > max) {
                 max = currMag;
                 arg = i;

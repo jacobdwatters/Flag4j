@@ -86,7 +86,7 @@ public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
     protected void noPivot() {
         // Using Gaussian elimination and no pivoting
         for(int j=0; j<LU.numCols; j++) {
-            if(j<LU.numRows && (LU.entries[j*LU.numCols + j]).magAsDouble() < zeroPivotTol) {
+            if(j<LU.numRows && (LU.entries[j*LU.numCols + j]).mag() < zeroPivotTol) {
                 throw new LinearAlgebraException("Zero pivot encountered in decomposition." +
                         " Consider using LU decomposition with partial pivoting.");
             }
@@ -177,7 +177,7 @@ public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
         double value;
 
         for(int i=j; i<LU.numRows; i++) {
-            value = LU.entries[i*LU.numCols+j].magAsDouble();
+            value = LU.entries[i*LU.numCols+j].mag();
             if(value > currentMax) {
                 currentMax = value;
                 maxIndex = i;
@@ -203,7 +203,7 @@ public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
             idx = i*LU.numCols;
 
             for(int j=startIndex; j<LU.numCols; j++) {
-                value = LU.entries[idx+j].magAsDouble();
+                value = LU.entries[idx+j].mag();
                 if(value > currentMax) {
                     currentMax = value;
                     index[0] = i;

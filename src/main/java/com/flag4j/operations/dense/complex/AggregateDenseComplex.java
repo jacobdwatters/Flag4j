@@ -49,8 +49,8 @@ public class AggregateDenseComplex {
         int currMinIndex = -1;
 
         for(int i=0; i<entries.length; i++) {
-            if(entries[i].magAsDouble() < currMin) {
-                currMin = entries[i].magAsDouble(); // Update current minimum.
+            if(entries[i].mag() < currMin) {
+                currMin = entries[i].mag(); // Update current minimum.
                 currMinIndex = i;
             }
         }
@@ -70,8 +70,8 @@ public class AggregateDenseComplex {
         int currMaxIndex = -1;
 
         for(int i=0; i<entries.length; i++) {
-            if(entries[i].magAsDouble() > currMax) {
-                currMax = entries[i].magAsDouble(); // Update current minimum.
+            if(entries[i].mag() > currMax) {
+                currMax = entries[i].mag(); // Update current minimum.
                 currMaxIndex = i;
             }
         }
