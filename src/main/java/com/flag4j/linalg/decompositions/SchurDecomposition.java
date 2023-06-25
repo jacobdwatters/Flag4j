@@ -282,8 +282,9 @@ public abstract class SchurDecomposition<
      * Checks if an entry along the first sub-diagonal of the {@code T} matrix in the Schur decomposition has
      * converged to zero within machine precision. A value is considered to be converged if it is small relative to the
      * two values on the diagonal of the {@code T} matrix immediately next to the value of interest. That is, a
-     * value at index {@code (m, m-1)} is considered converged if it is less than the absolute sum of the entries at
-     * {@code (m-1, m-1)} and {@code (m, m)} times machine epsilon (i.e. {@link Math#ulp(double)  Math.ulp(1.0d)}).
+     * value at index {@code (m, m-1)} is considered converged if it is less in absolute value than the absolute
+     * sum of the entries at {@code (m-1, m-1)} and {@code (m, m)} times machine epsilon
+     * (i.e. {@link Math#ulp(double)  Math.ulp(1.0d)}).
      * @param T The {@code T} Matrix in the Schur decomposition.
      * @param m Row index of the value of interest within the {@code T} matrix.
      * @return True if the specified entry has not converged. That is, the entry in the {@code T} matrix is greater
