@@ -59,6 +59,7 @@ com\flag4j\core\TensorManipulationsMixin.class
 com\flag4j\linalg\decompositions\ComplexSchurDecomposition.class
 com\flag4j\operations\dense\real_complex\RealComplexDenseMatrixMultTranspose.class
 com\flag4j\linalg\decompositions\QRDecomposition.class
+com\flag4j\linalg\transformations\Givens.class
 com\flag4j\Matrix.class
 com\flag4j\linalg\decompositions\LUDecomposition$Pivoting.class
 com\flag4j\linalg\decompositions\CholeskyDecomposition.class
