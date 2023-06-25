@@ -3540,7 +3540,7 @@ public class CMatrix
         double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
         CNumber det = ComplexDenseDeterminant.detLU(lu.getL(), lu.getU());
 
-        if(det.magAsDouble() < tol) {
+        if(det.mag() < tol) {
             throw new SingularMatrixException("Cannot invert.");
         }
 
@@ -3813,7 +3813,7 @@ public class CMatrix
             double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
             CNumber det = ComplexDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
 
-            result = det.magAsDouble() < tol;
+            result = det.mag() < tol;
         }
 
         return result;

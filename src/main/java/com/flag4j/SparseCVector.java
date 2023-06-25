@@ -324,6 +324,20 @@ public class SparseCVector
 
 
     /**
+     * Converts a complex tensor to a real matrix safely. That is, first checks if the tensor only contains real values
+     * and then converts to a real tensor. However, if non-real value exist, then an error is thrown.
+     *
+     * @return A tensor of the same size containing only the real components of this tensor.
+     * @throws RuntimeException If this tensor contains at least one non-real value.
+     * @see #toReal()
+     */
+    @Override
+    public SparseVector toRealSafe() {
+        return null;
+    }
+
+
+    /**
      * Converts this vector to an equivalent tensor.
      * @return A tensor which is equivalent to this vector.
      */
@@ -1300,7 +1314,7 @@ public class SparseCVector
 
                 } else {
                     // Ensure the scaled entry is approximately equal to the entry in this vector.
-                    if(this.entries[sparseIndex].sub(scale.mult(b.entries[i])).magAsDouble() > tol) {
+                    if(this.entries[sparseIndex].sub(scale.mult(b.entries[i])).mag() > tol) {
                         result = false;
                         break;
                     }

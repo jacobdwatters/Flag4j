@@ -44,7 +44,7 @@ public class VectorNorms {
      * @param src Entries of the vector (or non-zero entries if vector is sparse).
      * @return The 2-norm of the vector.
      */
-    public static double norm(double[] src) {
+    public static double norm(double... src) {
         double norm = 0;
 
         for(double v : src) {
@@ -60,13 +60,13 @@ public class VectorNorms {
      * @param src Entries of the vector (or non-zero entries if vector is sparse).
      * @return The 2-norm of the vector.
      */
-    public static double norm(CNumber[] src) {
+    public static double norm(CNumber... src) {
         double norm = 0;
         double mag;
 
         for(CNumber cNumber : src) {
-            mag = cNumber.magAsDouble();
-            norm += mag * mag;
+            mag = cNumber.mag();
+            norm += mag*mag;
         }
 
         return Math.sqrt(norm);
@@ -121,7 +121,7 @@ public class VectorNorms {
             double norm = 0;
 
             for(CNumber cNumber : src) {
-                norm += Math.pow(cNumber.magAsDouble(), p);
+                norm += Math.pow(cNumber.mag(), p);
             }
 
             return Math.pow(norm, 1.0/p);

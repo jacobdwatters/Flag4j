@@ -13,61 +13,60 @@ class CNumberUnaryOperationsTest {
     void magTestCase() {
         // ----------- Sub-case 1 --------------
         a = new CNumber(0);
-        expValue = CNumber.ZERO;
+        expValueDouble = 0;
 
-        value = a.mag();
+        valueDouble = a.mag();
 
-        Assertions.assertEquals(expValue, value);
+        Assertions.assertEquals(expValueDouble, valueDouble);
 
         // ----------- Sub-case 2 --------------
         a = new CNumber(2.4);
-        expValue = new CNumber(2.4);
+        expValueDouble = 2.4;
 
-        value = a.mag();
+        valueDouble = a.mag();
 
-        Assertions.assertEquals(expValue, value);
+        Assertions.assertEquals(expValueDouble, valueDouble);
 
 
         // ----------- Sub-case 3 --------------
         a = new CNumber(-10.394);
-        expValue = new CNumber(10.394);
+        expValueDouble = 10.394;
 
-        value = a.mag();
+        valueDouble = a.mag();
 
-        Assertions.assertEquals(expValue, value);
+        Assertions.assertEquals(expValueDouble, valueDouble);
 
         // ----------- Sub-case 4 --------------
         a = new CNumber(2, 8);
-        expValue = new CNumber(Math.sqrt(4+64));
+        expValueDouble = Math.sqrt(4+64);
 
-        value = a.mag();
+        valueDouble = a.mag();
 
-        Assertions.assertEquals(expValue, value);
+        Assertions.assertEquals(expValueDouble, valueDouble);
 
 
         // ----------- Sub-case 5 --------------
         a = new CNumber(-8.42, 1.94);
-        expValue = new CNumber(Math.sqrt(Math.pow(-8.42, 2) + Math.pow(1.94, 2)));
+        expValueDouble = Math.sqrt(Math.pow(-8.42, 2) + Math.pow(1.94, 2));
 
-        value = a.mag();
+        valueDouble = a.mag();
 
-        Assertions.assertEquals(expValue, value);
+        Assertions.assertEquals(expValueDouble, valueDouble);
 
 
         // ----------- Sub-case 5 --------------
         a = new CNumber(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-        expValue = new CNumber(Math.sqrt(Math.pow(Double.POSITIVE_INFINITY, 2) + Math.pow(Double.NEGATIVE_INFINITY, 2)));
+        expValueDouble = Math.sqrt(Math.pow(Double.POSITIVE_INFINITY, 2) + Math.pow(Double.NEGATIVE_INFINITY, 2));
 
-        value = a.mag();
+        valueDouble = a.mag();
 
-        Assertions.assertEquals(expValue, value);
+        Assertions.assertEquals(expValueDouble, valueDouble);
 
 
         // ----------- Sub-case 5 --------------
         a = new CNumber(Double.NaN, 2.3);
-        value = a.mag();
-        Assertions.assertTrue(Double.isNaN(value.re));
-        Assertions.assertEquals(0, value.im);
+        valueDouble = a.mag();
+        Assertions.assertTrue(Double.isNaN(valueDouble));
     }
 
 
@@ -76,46 +75,46 @@ class CNumberUnaryOperationsTest {
         // ----------- Sub-case 1 --------------
         a = new CNumber(0);
         expValueDouble = 0;
-        valueDouble = a.magAsDouble();
+        valueDouble = a.mag();
         Assertions.assertEquals(expValueDouble, valueDouble);
 
         // ----------- Sub-case 2 --------------
         a = new CNumber(2.4);
         expValueDouble  = 2.4;
-        valueDouble = a.magAsDouble();
+        valueDouble = a.mag();
         Assertions.assertEquals(expValueDouble, valueDouble);
 
 
         // ----------- Sub-case 3 --------------
         a = new CNumber(-10.394);
         expValueDouble  = 10.394;
-        valueDouble = a.magAsDouble();
+        valueDouble = a.mag();
         Assertions.assertEquals(expValueDouble, valueDouble);
 
         // ----------- Sub-case 4 --------------
         a = new CNumber(2, 8);
         expValueDouble = Math.sqrt(4+64);
-        valueDouble = a.magAsDouble();
+        valueDouble = a.mag();
         Assertions.assertEquals(expValueDouble, valueDouble);
 
 
         // ----------- Sub-case 5 --------------
         a = new CNumber(-8.42, 1.94);
         expValueDouble  = Math.sqrt(Math.pow(-8.42, 2) + Math.pow(1.94, 2));
-        valueDouble = a.magAsDouble();
+        valueDouble = a.mag();
         Assertions.assertEquals(expValueDouble, valueDouble);
 
 
         // ----------- Sub-case 5 --------------
         a = new CNumber(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         expValueDouble = Math.sqrt(Math.pow(Double.POSITIVE_INFINITY, 2) + Math.pow(Double.NEGATIVE_INFINITY, 2));
-        valueDouble = a.magAsDouble();
+        valueDouble = a.mag();
         Assertions.assertEquals(expValueDouble, valueDouble);
 
 
         // ----------- Sub-case 5 --------------
         a = new CNumber(Double.NaN, 2.3);
-        valueDouble = a.magAsDouble();
+        valueDouble = a.mag();
         Assertions.assertTrue(Double.isNaN(valueDouble));
     }
 
@@ -124,61 +123,48 @@ class CNumberUnaryOperationsTest {
     void absTestCase() {
         // ----------- Sub-case 1 --------------
         a = new CNumber(0);
-        expValue = CNumber.ZERO;
-
-        value = a.abs();
-
-        Assertions.assertEquals(expValue, value);
+        expValueDouble = 0;
+        valueDouble = a.abs();
+        Assertions.assertEquals(expValueDouble, valueDouble);
 
         // ----------- Sub-case 2 --------------
         a = new CNumber(2.4);
-        expValue = new CNumber(2.4);
-
-        value = a.abs();
-
-        Assertions.assertEquals(expValue, value);
+        expValueDouble  = 2.4;
+        valueDouble = a.abs();
+        Assertions.assertEquals(expValueDouble, valueDouble);
 
 
         // ----------- Sub-case 3 --------------
         a = new CNumber(-10.394);
-        expValue = new CNumber(10.394);
-
-        value = a.abs();
-
-        Assertions.assertEquals(expValue, value);
+        expValueDouble  = 10.394;
+        valueDouble = a.abs();
+        Assertions.assertEquals(expValueDouble, valueDouble);
 
         // ----------- Sub-case 4 --------------
         a = new CNumber(2, 8);
-        expValue = new CNumber(Math.sqrt(4+64));
-
-        value = a.abs();
-
-        Assertions.assertEquals(expValue, value);
+        expValueDouble = Math.sqrt(4+64);
+        valueDouble = a.abs();
+        Assertions.assertEquals(expValueDouble, valueDouble);
 
 
         // ----------- Sub-case 5 --------------
         a = new CNumber(-8.42, 1.94);
-        expValue = new CNumber(Math.sqrt(Math.pow(-8.42, 2) + Math.pow(1.94, 2)));
-
-        value = a.abs();
-
-        Assertions.assertEquals(expValue, value);
+        expValueDouble  = Math.sqrt(Math.pow(-8.42, 2) + Math.pow(1.94, 2));
+        valueDouble = a.abs();
+        Assertions.assertEquals(expValueDouble, valueDouble);
 
 
         // ----------- Sub-case 5 --------------
         a = new CNumber(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-        expValue = new CNumber(Math.sqrt(Math.pow(Double.POSITIVE_INFINITY, 2) + Math.pow(Double.NEGATIVE_INFINITY, 2)));
-
-        value = a.abs();
-
-        Assertions.assertEquals(expValue, value);
+        expValueDouble = Math.sqrt(Math.pow(Double.POSITIVE_INFINITY, 2) + Math.pow(Double.NEGATIVE_INFINITY, 2));
+        valueDouble = a.abs();
+        Assertions.assertEquals(expValueDouble, valueDouble);
 
 
         // ----------- Sub-case 5 --------------
         a = new CNumber(Double.NaN, 2.3);
-        value = a.abs();
-        Assertions.assertTrue(Double.isNaN(value.re));
-        Assertions.assertEquals(0, value.im);
+        valueDouble = a.abs();
+        Assertions.assertTrue(Double.isNaN(valueDouble));
     }
 
 
@@ -315,13 +301,13 @@ class CNumberUnaryOperationsTest {
 
         // --------- Sub-case 4 -----------
         a = new CNumber(1.4, 13.4);
-        expValue = new CNumber(a.div(a.magAsDouble()));
+        expValue = new CNumber(a.div(a.mag()));
         value = CNumber.sgn(a);
         Assertions.assertEquals(expValue, value);
 
         // --------- Sub-case 5 -----------
         a = new CNumber(-13.13, 4141.2);
-        expValue = new CNumber(a.div(a.magAsDouble()));
+        expValue = new CNumber(a.div(a.mag()));
         value = CNumber.sgn(a);
         Assertions.assertEquals(expValue, value);
 

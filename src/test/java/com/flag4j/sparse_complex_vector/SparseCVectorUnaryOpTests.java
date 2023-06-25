@@ -80,8 +80,8 @@ class SparseCVectorUnaryOpTests {
     void absTestCase() {
         // ----------------------- Sub-case 1 -----------------------
         expEntriesRe = new double[]{
-                new CNumber(2.455, -83.6).magAsDouble(), new CNumber(0, 24.56).magAsDouble(),
-                new CNumber(24.56).magAsDouble(), new CNumber(-9356.1, 35).magAsDouble()
+                new CNumber(2.455, -83.6).mag(), new CNumber(0, 24.56).mag(),
+                new CNumber(24.56).mag(), new CNumber(-9356.1, 35).mag()
         };
         expIndices = new int[]{4, 56, 9903, 14643};
         expRe = new SparseVector(sparseSize, expEntriesRe, expIndices);

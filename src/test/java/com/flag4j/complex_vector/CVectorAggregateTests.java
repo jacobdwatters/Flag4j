@@ -13,6 +13,7 @@ class CVectorAggregateTests {
     static CNumber[] aEntries;
     static CVector a;
     CNumber expComplex;
+    double exp;
     int[] expIndices;
 
     @BeforeAll
@@ -34,18 +35,18 @@ class CVectorAggregateTests {
     @Test
     void minTestCase() {
         // ------------------ Sub-case 1 ------------------
-        expComplex = new CNumber(0.009257);
-        assertEquals(expComplex, a.min());
-        assertEquals(expComplex, a.minAbs());
+        exp = 0.009257;
+        assertEquals(exp, a.min());
+        assertEquals(exp, a.minAbs());
     }
 
 
     @Test
     void maxTestCase() {
         // ------------------ Sub-case 1 ------------------
-        expComplex = new CNumber(1.455, 6126.347).mag();
-        assertEquals(expComplex, a.max());
-        assertEquals(expComplex, a.maxAbs());
+        exp = new CNumber(1.455, 6126.347).mag();
+        assertEquals(exp, a.max());
+        assertEquals(exp, a.maxAbs());
     }
 
 

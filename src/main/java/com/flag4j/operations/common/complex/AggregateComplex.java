@@ -66,8 +66,8 @@ public class AggregateComplex {
             currMin = Double.MAX_VALUE;
 
             for(CNumber value : entries) {
-                if(value.magAsDouble() < currMin) {
-                    currMin = value.magAsDouble(); // Update current minimum.
+                if(value.mag() < currMin) {
+                    currMin = value.mag(); // Update current minimum.
                 }
             }
 
@@ -89,8 +89,8 @@ public class AggregateComplex {
         double currMax = 0;
 
         for(CNumber value : entries) {
-            if(value.magAsDouble() > currMax) {
-                currMax = value.magAsDouble(); // Update current maximum.
+            if(value.mag() > currMax) {
+                currMax = value.mag(); // Update current maximum.
             }
         }
 

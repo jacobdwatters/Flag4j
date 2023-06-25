@@ -377,4 +377,21 @@ public final class ParameterChecks {
             throw new IllegalArgumentException();
         }
     }
+
+
+    /**
+     * Checks that a set of indices is within {@code [0, upperBound)}.
+     * @param upperBound Upper bound of range for indices (exclusive).
+     * @param indices Array if indices to check.
+     * @throws IndexOutOfBoundsException If any {@code indices} or not within {@code [0, upperBound)}.
+     */
+    public static void assertIndexInBounds(int upperBound, int... indices) {
+        for(int i : indices) {
+            if(i < 0 || i >= upperBound) {
+                throw new IndexOutOfBoundsException(
+                        "Index " + i + " is out of bounds for upper bound of " + upperBound + "."
+                );
+            }
+        }
+    }
 }
