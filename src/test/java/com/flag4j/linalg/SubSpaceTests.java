@@ -3,6 +3,7 @@ package com.flag4j.linalg;
 import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +22,9 @@ class SubSpaceTests {
 
     @BeforeAll
     static void setup() {
+        // TODO: Delete
+        PrintOptions.setPrecision(50);
+
         aEntries = new double[][]{
                 {2.4, 5.6, -0.35, 1.5},
                 {34.6, 0, 2.4, 2},
@@ -48,10 +52,10 @@ class SubSpaceTests {
 
         // -------------------- Sub-case 2 --------------------
         expBEntries = new CNumber[][]{
-                {new CNumber(0.9782717373949313, -0.20730567378953263),
-                        new CNumber(0.0, -0.0029606467149292277)},
-                {new CNumber(0.0029034857946125137, -5.789639117442682E-4),
-                        new CNumber(-0.011999083504397996, 0.9999236253664997)}};
+                {new CNumber(0.9768558885215766, -0.20700564109569586),
+                        new CNumber(0, 0.981354052294482)},
+                {new CNumber(),
+                        new CNumber(-0.01201658023217733 ,1.0013816860147775)}};
         expB = new CMatrix(expBEntries);
 
         assertEquals(expB, SubSpace.getColSpace(B));
@@ -71,8 +75,8 @@ class SubSpaceTests {
 
         // -------------------- Sub-case 2 --------------------
         expBEntries = new CNumber[][]{
-                {new CNumber(0.9985439511540497, 0.0), new CNumber(0.011182989469365768, -0.05277232570379392)},
-                {new CNumber(-0.011182989469365768, -0.05277232570379392), new CNumber(0.9985439511540495, 0.0)}};
+                {new CNumber(1), new CNumber(0)},
+                {new CNumber(0), new CNumber(1)}};
         expB = new CMatrix(expBEntries);
 
         assertEquals(expB, SubSpace.getRowSpace(B));

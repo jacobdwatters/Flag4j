@@ -50,6 +50,8 @@ public abstract class SchurDecomposition<
         U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>>
         implements Decomposition<T> {
 
+    static protected final double TOL = Math.ulp(1.0d);
+
     /**
      * The minimum number of iterations to perform by default in the QR algorithm if it has not converged. Specifically, the
      * QR algorithm will run for max(MIN_ITERATIONS, maxIterations) iteration or until the QR algorithm converges,
@@ -146,16 +148,14 @@ public abstract class SchurDecomposition<
 
         // Initialize matrices.
         T = H;
+        U = computeU ? CMatrix.I(T.numRows) : null;
 
-        int m = T.numRows;
-        int n = m;
+        int m = T.numRows-1;
 
-        CVector lam = new CVector(T.numRows);
-
-        while(n > 1) {
+        while(m > 0) {
             iters = 0; // Reset the number of iterations.
 
-            while(T.getSlice(n-1, n, 0, n-1).maxAbs() > tol && iters < maxIterations) {
+            while(notConverged(T, m) && iters < maxIterations) {
                 iters++;
 
                 CNumber shift = getWilkinsonShift(T); // Compute shift.
@@ -167,38 +167,14 @@ public abstract class SchurDecomposition<
             }
 
             if(iters<maxIterations) {
-                n--; // Deflate 1x1 block
+                // Deflate 1x1 block
+                m--;
 
             } else {
-                // Compute the eigenvalues of the 2x2 block.
-                CVector mu = Eigen.get2x2EigenValues(
-                        T.getSlice(m-1, m+1, m-1, m+1)
-                ).sub(T.get(m, m));
-
-                CMatrix G = Givens.get2x2Rotator(new CVector(mu.get(0), new CNumber(T.get(m, m-1))));
-
-                // Apply rotation to T matrix to bring it into upper triangular form
-                T.setSlice(
-                        G.mult(T.getSlice(m-1, m+1, m-1, T.numCols)),
-                        m-1, m-1
-                );
-                T.setSlice(
-                        T.getSlice(0, m+1, m-1, m+1).mult(G.H()),
-                        0, m-1
-                );
-
-                // Accumulate similarity transforms in the U matrix.
-                U.setSlice(
-                        U.getSlice(0, U.numRows, m-1, m+1).mult(G.H()),
-                        0, m-1
-                );
-
-                n-=2; // Deflate 2x2 block
+                // Deflate 2x2 block
+                deflateT(T, U, m);
+                m-=2;
             }
-        }
-        if(n > 0) {
-            // A final 1x1 block remains.
-            lam.entries[0] = T.get(0, 0);
         }
     }
 
@@ -256,34 +232,62 @@ public abstract class SchurDecomposition<
 
         for(int m=realT.numRows-1; m>0; m--) {
 
-            if(T.get(m, m-1).mag() > tol*( T.get(m-1, m-1).mag() + T.get(m, m).mag() )) {
-                // Compute the eigenvalues of the 2x2 block.
-                CVector mu = Eigen.get2x2EigenValues(
-                        T.getSlice(m-1, m+1, m-1, m+1)
-                ).sub(T.get(m, m));
-
-                CMatrix G = Givens.get2x2Rotator(new CVector(mu.get(0), new CNumber(T.get(m, m-1))));
-
-                // Apply rotation to T matrix to bring it into upper triangular form
-                T.setSlice(
-                        G.mult(T.getSlice(m-1, m+1, m-1, T.numCols)),
-                        m-1, m-1
-                );
-                T.setSlice(
-                        T.getSlice(0, m+1, m-1, m+1).mult(G.H()),
-                        0, m-1
-                );
-
-                // Accumulate similarity transforms in the U matrix.
-                U.setSlice(
-                        U.getSlice(0, U.numRows, m-1, m+1).mult(G.H()),
-                        0, m-1
-                );
+            // Check for convergence.
+            if(notConverged(T, m)) {
+                // Then a 2x2 block must be deflated.
+                deflateT(T, U, m);
             }
-
-            T.set(0, m, m-1);
         }
 
         return new CMatrix[]{T, U};
+    }
+
+
+    /**
+     * Deflates a 2x2 block of the {@code T} matrix from the Schur decomposition and accumulates similarity transformations
+     * used in deflation in the {@code U} matrix of the Schur decomposition.
+     * @param T The {@code T} matrix from the Schur decomposition.
+     * @param U The {@code U} matrix of the Schur decomposition.
+     * @param m Row and column index of the lower right entry of the 2x2 block to deflate in {@code T}.
+     */
+    private static void deflateT(CMatrix T, CMatrix U, int m) {
+        // Compute the eigenvalues of the 2x2 block.
+        CVector mu = Eigen.get2x2EigenValues(
+                T.getSlice(m-1, m+1, m-1, m+1)
+        ).sub(T.get(m, m));
+
+        CMatrix G = Givens.get2x2Rotator(new CVector(mu.get(0), new CNumber(T.get(m, m-1))));
+
+        // Apply rotation to T matrix to bring it into upper triangular form
+        T.setSlice(
+                G.mult(T.getSlice(m-1, m+1, m-1, T.numCols)),
+                m-1, m-1
+        );
+        T.setSlice(
+                T.getSlice(0, m+1, m-1, m+1).mult(G.H()),
+                0, m-1
+        );
+
+        // Accumulate similarity transforms in the U matrix.
+        U.setSlice(
+                U.getSlice(0, U.numRows, m-1, m+1).mult(G.H()),
+                0, m-1
+        );
+
+        T.set(0, m, m-1);
+    }
+
+
+    /**
+     * Checks if an entry along the first sub-diagonal of the {@code T} matrix in the Schur decomposition has
+     * converged to zero within machine precision.
+     * @param T The {@code T} Matrix in the Schur decomposition.
+     * @param m Row index of the value of interest within the {@code T} matrix.
+     * @return True if the specified entry has not converged. That is, the entry in the {@code T} matrix is greater
+     * than (in absolute value) machine precision (i.e. Math.ulp(1.0)) times the absolute sum of the entries along the
+     * block 2x2 matrix on the diagonal of {@code T} containing the entry. Otherwise, returns false.
+     */
+    private static boolean notConverged(CMatrix T, int m) {
+        return T.get(m, m-1).mag() > TOL*( T.get(m-1, m-1).mag() + T.get(m, m).mag() );
     }
 }
