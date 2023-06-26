@@ -32,6 +32,7 @@ import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.transformations.Givens;
+import com.flag4j.util.ParameterChecks;
 
 /**
  * <p>This abstract class specifies methods for computing the Schur decomposition of a square matrix.
@@ -88,6 +89,38 @@ public abstract class SchurDecomposition<
 
 
     /**
+     * Computes the Schur decomposition for a complex matrix using a shifted QR algorithm where the QR decomposition
+     * is computed explicitly.
+     * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
+     */
+    protected abstract void shiftedExplicitQR(T H);
+
+
+    /**
+     * Computes the Schur decomposition of a matrix using Francis' algorithm (i.e. The implicit double shifted
+     * QR algorithm).
+     * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
+     */
+    protected abstract void doubleShiftImplicitQR(T H);
+
+
+    /**
+     * Computes the Schur decomposition of the {@code src} matrix using a variant of the QR algorithm.
+     * @param src The matrix to decompose.
+     */
+    protected final void applyQR(T src) {
+        ParameterChecks.assertSquare(src.shape());
+        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).
+
+        if(src.numRows() > 2) {
+            doubleShiftImplicitQR(hess.getH()); // Use double shifted implicit QR algorithm.
+        } else {
+            shiftedExplicitQR(hess.getH());
+        }
+    }
+
+
+    /**
      * Creates a decomposer to compute the Schur decomposition which will run for at most {@code maxIterations}
      * iterations.
      * @param computeU A flag which indicates if the unitary matrix {@code Q} should be computed.<br>
@@ -97,104 +130,6 @@ public abstract class SchurDecomposition<
      */
     protected SchurDecomposition(boolean computeU) {
         this.computeU = computeU;
-    }
-
-
-    /**
-     * Computes the Schur decomposition for a complex matrix using a shifted QR algorithm where the QR decomposition
-     * is computed explicitly.
-     * @param H - The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
-     */
-    protected void shiftedExplicitQR(CMatrix H) {
-        int maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
-
-        QRDecomposition<CMatrix, CVector> qr = new ComplexQRDecomposition();
-
-        // Initialize matrices.
-        T = H;
-        if(computeU) U = CMatrix.I(T.numRows);
-
-        for(int i=0; i<maxIterations; i++) {
-            CNumber lam = getWilkinsonShift(T);
-            CMatrix mu = Matrix.I(T.numRows).mult(lam);
-
-            // Compute the QR decomposition with a shift.
-            qr.decompose(T.sub(mu));
-
-            // Update T and undo the shift.
-            T = qr.R.mult(qr.Q).add(mu);
-
-            if(computeU) U = U.mult(qr.Q);
-
-            if(T.roundToZero(1.0E-16).isTriU()) {
-                break; // We have converged (approximately) to an upper triangular matrix. No need to continue.
-            }
-        }
-    }
-
-
-    /**
-     * Computes the Schur decomposition for a complex matrix using a shifted QR algorithm where the QR decomposition
-     * is computed explicitly.
-     * @param H - The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
-     */
-    protected void shiftedExplicitDeflateQR(CMatrix H) {
-        final int maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
-
-        QRDecomposition<CMatrix, CVector> qr = new ComplexQRDecomposition();
-        final double tol = Math.ulp(1.0d); // Tolerance for considering an entry zero.
-
-        int iters; // Number of iterations.
-
-        // Initialize matrices.
-        T = H;
-        U = computeU ? CMatrix.I(T.numRows) : null;
-
-        int m = T.numRows-1;
-
-        while(m > 0) {
-            iters = 0; // Reset the number of iterations.
-
-            while(notConverged(T, m) && iters < maxIterations) {
-                iters++;
-
-                CNumber shift = getWilkinsonShift(T); // Compute shift.
-                CMatrix mu = Matrix.I(T.numRows).mult(shift);
-
-                qr.decompose(T.sub(mu));
-
-                T = qr.R.mult(qr.Q).add(mu);
-            }
-
-            if(iters<maxIterations) {
-                // Deflate 1x1 block
-                m--;
-
-            } else {
-                // Deflate 2x2 block
-                deflateT(T, U, m);
-                m-=2;
-            }
-        }
-    }
-
-
-    /**
-     * Computes the Wilkinson shift for a complex matrix. That is, the eigenvalue of the lower left 2x2 sub matrix
-     * which is closest in magnitude to the lower left entry of the matrix.
-     * @param src Matrix to compute the Wilkinson shift for.
-     * @return The Wilkinson shift for the {@code src} matrix.
-     */
-    private CNumber getWilkinsonShift(CMatrix src) {
-        // Compute eigenvalues of lower 2x2 block.
-        CVector lambdas = Eigen.get2x2LowerRightBlockEigenValues(src);
-        CNumber v = src.entries[src.entries.length-1];
-
-        if(v.sub(lambdas.entries[0]).mag() < v.sub(lambdas.entries[1]).mag()) {
-            return lambdas.entries[0];
-        } else {
-            return lambdas.entries[1];
-        }
     }
 
 
@@ -217,18 +152,31 @@ public abstract class SchurDecomposition<
 
 
     /**
+     * Converts a matrix decomposed into a real Schur form to a complex Schur form. Note, this
+     * will not update the {@code U} matrix from the Schur decomposition. See {@link #real2ComplexSchur(Matrix, Matrix)}
+     * to also update the {@code U} matrix.
+     * @param realT The real Schur matrix {@code T} in the Schur decomposition {@code {@code A=UTU<sup>T</sup>}}
+     * @return A matrix in complex Schur from corresponding to {@code realT}.
+     * @see #real2ComplexSchur(Matrix, Matrix)
+     */
+    // Code adapted from scipy rsf2csf https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.rsf2csf.html
+    public static CMatrix real2ComplexSchur(Matrix realT) {
+        return real2ComplexSchur(realT, null)[0];
+    }
+
+
+    /**
      * Converts a matrix decomposed into a real Schur form to a complex Schur form.
      * @param realT The real Schur matrix {@code T} in the Schur decomposition {@code {@code A=UTU<sup>T</sup>}}
-     * @param realU The orthogonal matrix {@code U} in the Schur decomposition {@code A=UTU<sup>T</sup>}.
+     * @param realU The orthogonal matrix {@code U} in the Schur decomposition {@code A=UTU<sup>T</sup>}. Can be null.
      * @return An array of complex matrices corresponding to the complex Schur form of the two matrices {@code realT} and
      * {@code realU} in order.
+     * @see #real2ComplexSchur(Matrix)
      */
     // Code adapted from scipy rsf2csf https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.rsf2csf.html
     public static CMatrix[] real2ComplexSchur(Matrix realT, Matrix realU) {
         CMatrix T = realT.toComplex();
-        CMatrix U = realU.toComplex();
-
-        final double tol = Math.ulp(1.0d); // Take machine epsilon as the tolerance.
+        CMatrix U = realU == null ? null : realU.toComplex();
 
         for(int m=realT.numRows-1; m>0; m--) {
 
@@ -236,6 +184,8 @@ public abstract class SchurDecomposition<
             if(notConverged(T, m)) {
                 // Then a 2x2 block must be deflated.
                 deflateT(T, U, m);
+            } else {
+                T.set(0, m, m-1); // Ensure the sub-diagonal value is set to zero.
             }
         }
 
@@ -250,7 +200,8 @@ public abstract class SchurDecomposition<
      * @param U The {@code U} matrix of the Schur decomposition.
      * @param m Row and column index of the lower right entry of the 2x2 block to deflate in {@code T}.
      */
-    private static void deflateT(CMatrix T, CMatrix U, int m) {
+    // Code adapted from scipy rsf2csf https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.rsf2csf.html
+    static void deflateT(CMatrix T, CMatrix U, int m) {
         // Compute the eigenvalues of the 2x2 block.
         CVector mu = Eigen.get2x2EigenValues(
                 T.getSlice(m-1, m+1, m-1, m+1)
@@ -268,11 +219,13 @@ public abstract class SchurDecomposition<
                 0, m-1
         );
 
-        // Accumulate similarity transforms in the U matrix.
-        U.setSlice(
-                U.getSlice(0, U.numRows, m-1, m+1).mult(G.H()),
-                0, m-1
-        );
+        if(U != null) {
+            // Accumulate similarity transforms in the U matrix.
+            U.setSlice(
+                    U.getSlice(0, U.numRows, m-1, m+1).mult(G.H()),
+                    0, m-1
+            );
+        }
 
         T.set(0, m, m-1);
     }
@@ -291,7 +244,25 @@ public abstract class SchurDecomposition<
      * than (in absolute value) machine precision (i.e. Math.ulp(1.0)) times the absolute sum of the entries along the
      * block 2x2 matrix on the diagonal of {@code T} containing the entry. Otherwise, returns false.
      */
-    private static boolean notConverged(CMatrix T, int m) {
+    protected static boolean notConverged(CMatrix T, int m) {
         return T.get(m, m-1).mag() > TOL*( T.get(m-1, m-1).mag() + T.get(m, m).mag() );
+    }
+
+
+    /**
+     * Checks if an entry along the first sub-diagonal of the {@code T} matrix in the Schur decomposition has
+     * converged to zero within machine precision. A value is considered to be converged if it is small relative to the
+     * two values on the diagonal of the {@code T} matrix immediately next to the value of interest. That is, a
+     * value at index {@code (m, m-1)} is considered converged if it is less in absolute value than the absolute
+     * sum of the entries at {@code (m-1, m-1)} and {@code (m, m)} times machine epsilon
+     * (i.e. {@link Math#ulp(double)  Math.ulp(1.0d)}).
+     * @param T The {@code T} Matrix in the Schur decomposition.
+     * @param m Row index of the value of interest within the {@code T} matrix.
+     * @return True if the specified entry has not converged. That is, the entry in the {@code T} matrix is greater
+     * than (in absolute value) machine precision (i.e. Math.ulp(1.0)) times the absolute sum of the entries along the
+     * block 2x2 matrix on the diagonal of {@code T} containing the entry. Otherwise, returns false.
+     */
+    protected static boolean notConverged(Matrix T, int m) {
+        return Math.abs(T.get(m, m-1)) > TOL*Math.abs( T.get(m-1, m-1) + Math.abs(T.get(m, m)) );
     }
 }

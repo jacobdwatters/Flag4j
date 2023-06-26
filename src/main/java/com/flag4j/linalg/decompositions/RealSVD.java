@@ -28,7 +28,6 @@ package com.flag4j.linalg.decompositions;
 import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
-import com.flag4j.io.PrintOptions;
 import com.flag4j.linalg.Eigen;
 
 /**
@@ -114,51 +113,6 @@ public class RealSVD extends SingularValueDecomposition<Matrix> {
 
 
     /**
-     * Applies decomposition to the source matrix.
-     *
-     * @param src The source matrix to decompose.
-     * @return A reference to this decomposer.
-     */
-    public RealSVD decomposeTest(Matrix src) {
-        // TODO: Temp. For testing only. Remove.
-        Matrix B = src.invDirectSum(src.T());
-        System.out.println("B:\n" + B + "\n\n");
-        // -----------------------------------------
-
-        Vector S1;
-
-        if(computeUV) {
-            // Compute right singular vectors.
-            CMatrix[] pairs = Eigen.getEigenPairs(B);
-            V = pairs[1].toReal();
-
-            // TODO: Temp. For testing only. Remove.
-            System.out.println("Eigen values 1: " + Eigen.getEigenValues(src.mult(src.T())).sqrt());
-            System.out.println("Eigen values 2: " + Eigen.getEigenValues(src.invDirectSum(src.T())));
-            System.out.println("S:\n" + pairs[0] + "\n");
-            // -----------------------------------------
-
-            V = V.getSlice(0, V.numRows, 0, V.numCols);
-
-            // Compute singular values.
-            S1 = pairs[0].toVector().toReal();
-
-            // Copy singular values to diagonal of S and scale left singular vectors properly.
-        } else {
-            S1 = Eigen.getEigenValues(B).toReal();
-        }
-
-        S = new Matrix(src.shape);
-        int stopIdx = Math.min(S.numRows, S.numCols);
-        for(int i=0; i<stopIdx; i++) {
-            S.set(S1.entries[2*i], i, i);
-        }
-
-        return this;
-    }
-
-
-    /**
      * Divides a specified column of the {@code U} matrix in the SVD by a scalar value.
      * @param colIdx Index of column to divide.
      * @param scalValue Value to divide column by.
@@ -169,33 +123,5 @@ public class RealSVD extends SingularValueDecomposition<Matrix> {
             U.entries[idx] /= scalValue;
             idx+=U.numCols;
         }
-    }
-
-
-    // TODO: Temp. For testing only. Remove.
-    public static void main(String[] args) {
-        PrintOptions.setPrecision(100);
-
-        double[][] aEntries = {
-                {3.45, -99.34, 14.5, 24.5},
-                {-0.0024, 0, 25.1, 1.5},
-                {100.4, 5.6, -4.1, -0.002}
-        };
-        Matrix A = new Matrix(aEntries);
-
-        RealSVD svd = new RealSVD();
-        RealSVD svdTest = new RealSVD();
-
-        svd.decompose(A);
-        svdTest.decomposeTest(A);
-
-        System.out.println("Standard:\n" + "-".repeat(100));
-        System.out.println("U:\n" + svd.getU() + "\n");
-        System.out.println("S:\n" + svd.getS() + "\n");
-        System.out.println("V:\n" + svd.getV() + "\n\n");
-
-        System.out.println("Modified:\n" + "-".repeat(100));
-        System.out.println("S:\n" + svdTest.getS().round(8) + "\n");
-        System.out.println("V:\n" + svdTest.getV().round(8) + "\n");
     }
 }
