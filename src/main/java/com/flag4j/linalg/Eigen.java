@@ -47,21 +47,69 @@ public class Eigen {
      * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
      */
     public static CVector get2x2EigenValues(Matrix src) {
-        // TODO: While theoretically correct, there are some numerical issues here.
+        // This method computes eigenvalues in a stable way which is more resilient to overflow errors than
+        // standard methods.
         CVector lambda = new CVector(2);
+        double maxAbs = src.maxAbs(); // Find the maximum absolute value.
 
-        // Get the four entries from lower right 2x2 sub-matrix.
-        double a = src.entries[0];
-        double b = src.entries[1];
-        double c = src.entries[2];
-        double d = src.entries[3];
+        if(maxAbs == 0) {
+            return lambda;
+        } else {
+            Matrix scaled = src.div(maxAbs);
 
-        double det = a*d - b*c; // 2x2 determinant.
-        double htr = (a+d)/2; // Half of the 2x2 trace.
+            double a11 = scaled.entries[0];
+            double a12 = scaled.entries[1];
+            double a21 = scaled.entries[2];
+            double a22 = scaled.entries[3];
 
-        // 2x2 block eigenvalues.
-        lambda.entries[0] = CNumber.sqrt(CNumber.pow(htr, 2).sub(det)).add(htr);
-        lambda.entries[1] = CNumber.sqrt(CNumber.pow(htr, 2).sub(det)).add(htr);
+            double c;
+            double s;
+
+            if (a12 + a21 == 0) {
+                c = s = 1.0 / Math.sqrt(2);
+            } else {
+                double aa = (a11 - a22);
+                double bb = (a12 + a21);
+
+                double t_hat = aa/bb;
+                double t = t_hat/(1.0 + Math.sqrt(1.0 + t_hat*t_hat));
+
+                c = 1.0 / Math.sqrt(1.0 + t*t);
+                s = c*t;
+            }
+
+            double c2 = c*c;
+            double s2 = s*s;
+            double cs = c*s;
+
+            double b11 = c2*a11 + s2*a22 - cs*(a12 + a21);
+            double b12 = c2*a12 - s2*a21 + cs*(a11 - a22);
+            double b21 = c2*a21 - s2*a12 + cs*(a11 - a22);
+
+            // apply second rotator to make A upper triangular if real eigenvalues
+            if (b21*b12 >= 0) {
+                if (b12 == 0) {
+                    c = 0;
+                    s = 1;
+                } else {
+                    s = Math.sqrt(b21/(b12 + b21));
+                    c = Math.sqrt(b12/(b12 + b21));
+                }
+
+                cs = c*s;
+
+                a11 = b11 - cs*(b12 + b21);
+                a22 = b11 + cs*(b12 + b21);
+
+                lambda.entries[0] = new CNumber(a11*maxAbs);
+                lambda.entries[1] = new CNumber(a22*maxAbs);
+            } else {
+                double im = Math.sqrt(-b21*b12);
+
+                lambda.entries[0] = new CNumber(b11*maxAbs, im*maxAbs);
+                lambda.entries[1] = new CNumber(b11*maxAbs, -im*maxAbs);
+            }
+        }
 
         return lambda;
     }
@@ -76,11 +124,13 @@ public class Eigen {
         // TODO: While theoretically correct, there are some numerical issues here.
         CVector lambda = new CVector(2);
 
-        // Get the four entries from lower right 2x2 sub-matrix.
-        CNumber a = src.entries[0];
-        CNumber b = src.entries[1];
-        CNumber c = src.entries[2];
-        CNumber d = src.entries[3];
+        double maxAbs = src.max();
+
+        // Get the four entries from lower right 2x2 sub-matrix and scale values.
+        CNumber a = src.entries[0].div(maxAbs);
+        CNumber b = src.entries[1].div(maxAbs);
+        CNumber c = src.entries[2].div(maxAbs);
+        CNumber d = src.entries[3].div(maxAbs);
 
         CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.
         CNumber htr = a.add(d).div(2); // Half of the 2x2 trace.
@@ -89,7 +139,7 @@ public class Eigen {
         lambda.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
         lambda.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
 
-        return lambda;
+        return lambda.mult(maxAbs);
     }
 
 
@@ -99,25 +149,31 @@ public class Eigen {
      * @return A vector of length 2 containing the eigenvalues of the lower right 2x2 block of {@code src}.
      */
     public static CVector get2x2LowerRightBlockEigenValues(CMatrix src) {
-        // TODO: While theoretically correct, there are some numerical
-        //  issues here.
-        CVector lambdas = new CVector(2);
         int n = src.numRows-1;
 
-        // Get the four entries from lower right 2x2 sub-matrix.
-        CNumber a = src.entries[(n-1)*(src.numCols + 1)];
-        CNumber b = src.entries[(n-1)*src.numCols + n];
-        CNumber c = src.entries[n*(src.numCols + 1) - 1];
-        CNumber d = src.entries[n*(src.numCols + 1)];
+        return get2x2EigenValues(
+                new CMatrix(new CNumber[][]{
+                    {src.entries[(n-1)*(src.numCols + 1)], src.entries[(n-1)*src.numCols + n]},
+                    {src.entries[n*(src.numCols + 1) - 1], src.entries[n*(src.numCols + 1)]}
+                })
+        );
+    }
 
-        CNumber det = a.mult(d).sub(b.mult(c)); // 2x2 determinant.
-        CNumber htr = a.add(d).div(2); // Half of the 2x2 trace.
 
-        // 2x2 block eigenvalues.
-        lambdas.entries[0] = htr.add(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
-        lambdas.entries[1] = htr.sub(CNumber.sqrt(CNumber.pow(htr, 2).sub(det)));
+    /**
+     * Computes the eigenvalues for the lower right 2x2 block matrix of a larger matrix.
+     * @param src Source matrix to compute eigenvalues of lower right 2x2 block.
+     * @return A vector of length 2 containing the eigenvalues of the lower right 2x2 block of {@code src}.
+     */
+    public static CVector get2x2LowerRightBlockEigenValues(Matrix src) {
+        int n = src.numRows-1;
 
-        return lambdas;
+        return get2x2EigenValues(
+                new Matrix(new double[][]{
+                        {src.entries[(n-1)*(src.numCols + 1)], src.entries[(n-1)*src.numCols + n]},
+                        {src.entries[n*(src.numCols + 1) - 1], src.entries[n*(src.numCols + 1)]}
+                })
+        );
     }
 
 
@@ -277,7 +333,7 @@ public class Eigen {
     public static CMatrix[] getEigenPairs(Matrix src) {
         CMatrix lambdas = new CMatrix(1, src.numRows);
 
-        SchurDecomposition<Matrix, Vector> schur = new RealSchurDecomposition(true).decompose(src);
+        SchurDecomposition<Matrix, Vector> schur = new RealSchurDecomposition(true, false).decompose(src);
         CMatrix T = schur.getT();
         CMatrix U = schur.getU();
 

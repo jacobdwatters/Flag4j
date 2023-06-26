@@ -25,10 +25,12 @@
 package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
+import com.flag4j.CVector;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
-import com.flag4j.util.ParameterChecks;
-
+import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.linalg.Eigen;
+import com.flag4j.linalg.transformations.Householder;
 
 
 /**
@@ -41,12 +43,26 @@ import com.flag4j.util.ParameterChecks;
  */
 public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
 
+    /**
+     * Flag which indicates if {@code T} should be stored in real or complex Schur form.
+     * If true, {@code T} will be stored in real schur form (default). If false, {@code T}\
+     * will be stored in complex schur form.
+     */
     private final boolean realSchur;
+
+    /**
+     * Storage for real Schur form of the {@code T} matrix.
+     */
     private Matrix realT;
+    /**
+     * Storage for real Schur form of the {@code U} matrix.
+     */
     private Matrix realU;
 
     /**
-     * Creates a Schur decomposer for a real dense matrix.
+     * Creates a Schur decomposer for a real dense matrix. {@code T} will be stored in
+     * Real Schur form. To convert {@code T} to real schur from see
+     * {@link SchurDecomposition#real2ComplexSchur(Matrix, Matrix)} or
      */
     public RealSchurDecomposition() {
         super();
@@ -104,25 +120,21 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
      */
     @Override
     public RealSchurDecomposition decompose(Matrix src) {
-        ParameterChecks.assertSquare(src.shape);
-        hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).g
+        applyQR(src); // Apply a variant of the QR algorithm.
 
-        // Compute the real schur form.
-        shiftedExplicitRealQR(hess.getH());
+        if(computeU) {
+            // Collect Hessenburg decomposition similarity transformations.
+            realU = hess.Q.mult(realU);
+        }
 
-        if(!realSchur) {
+        if(realSchur) {
+            T = realT.toComplex();
+            U = realU.toComplex();
+        } else {
             // Convert to the complex schur form.
             CMatrix[] TU = SchurDecomposition.real2ComplexSchur(realT, realU);
             T = TU[0];
             U = TU[1];
-        } else {
-            T = realT.toComplex();
-            U = realU.toComplex();
-        }
-
-        if(computeU) {
-            // Convert Hessenburg eigenvectors to the eigenvectors of the source matrix.
-            U = hess.Q.mult(U);
         }
 
         return this;
@@ -134,7 +146,8 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
      * is computed explicitly.
      * @param H - The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
      */
-    protected void shiftedExplicitRealQR(Matrix H) {
+    @Override
+    protected void shiftedExplicitQR(Matrix H) {
         final int maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
         final double tol = Math.ulp(1.0d); // Tolerance for considering an entry zero.
         int iters; // Number of iterations.
@@ -145,14 +158,14 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
         realT = H;
         realU = computeU ? Matrix.I(realT.numRows) : null;
 
-        int n = realT.numRows;
+        int m = realT.numRows-1;
 
         double shift = realT.entries[realT.entries.length-1]; // Compute shift.
 
-        while(n > 1) {
+        while(m > 0) {
             iters = 0; // Reset the number of iterations.
 
-            while(realT.getSlice(n-1, n, 0, n-1).maxAbs() > tol && iters < maxIterations) {
+            while(realT.getSlice(m, m+1, 0, m).maxAbs() > tol && iters < maxIterations) {
                 iters++;
 
                 Matrix mu = Matrix.I(realT.numRows).mult(shift);
@@ -164,69 +177,108 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
                 }
             }
 
-            if(iters < maxIterations) {
-                n--; // 1x1 block.
+            if(iters<maxIterations) {
+                realT.set(0, m, m-1); // Ensure the sub-diagonal value is set to zero.
+                m--; // 1x1 block.
             } else {
-                n-=2; // 2x2 block
+                m-=2; // 2x2 block
             }
         }
     }
 
 
     /**
-     * Gets the real Schur form of the {@code T} matrix from the Schur decomposition
-     * @return
+     * Computes the Schur decomposition of a matrix using Francis' algorithm (i.e. The implicit double shifted
+     * QR algorithm).
+     * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
+     */
+    @Override
+    protected void doubleShiftImplicitQR(Matrix H) {
+        final int maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
+        int iters;
+
+        HessenburgDecomposition<Matrix, Vector> hess = new RealHessenburgDecomposition(computeU);
+
+        // Initialize matrices.
+        realT = H;
+        realU = computeU ? Matrix.I(realT.numRows) : null;
+        
+        int m = realT.numRows-1;
+
+        while(m > 0) {
+            iters = 0; // Reset the number of iterations.
+
+            while(notConverged(realT, m) && iters < maxIterations) {
+                iters++;
+
+                // Compute eigenvalues of lower right 2x2 block.
+                CVector rho = Eigen.get2x2LowerRightBlockEigenValues(realT);
+
+                CNumber a = new CNumber(realT.get(0, 0));
+                CNumber b = new CNumber(realT.get(0, 1));
+                CNumber c = new CNumber(realT.get(1, 0));
+                CNumber d = new CNumber(realT.get(2, 1));
+
+                Vector p = new CVector(
+                        a.sub(rho.get(0)).mult( a.sub(rho.get(1)) ).add( b.mult(realT.get(1, 0)) ),
+                        c.mult( a.add(realT.get(1, 1)).sub(rho.get(0)).sub(rho.get(1)) ),
+                        d.mult(realT.get(1, 0))
+                ).toReal(); // Should be real.
+
+                Matrix ref = Householder.getReflector(p);
+
+                // Apply transform and create bulge.
+                realT.setSlice(
+                        ref.H().mult(realT.getSlice(0, 3, 0, realT.numCols)),
+                        0, 0
+                );
+                realT.setSlice(
+                        realT.getSlice(0, realT.numRows, 0, 3).mult(ref),
+                        0, 0
+                );
+
+                realT = hess.decompose(realT).getH(); // A crude bulge chase using the Hessenburg decomposition.
+
+                if(computeU) {
+                    // Collect similarity transformations in realU matrix.
+                    realU.setSlice(
+                            realU.getSlice(0, realU.numRows, 0, 3).mult(ref),
+                            0, 0
+                    );
+
+                    realU = realU.mult(hess.getQ());
+                }
+
+            }
+
+            if(iters<maxIterations) {
+                // Deflate 1x1 block.
+                realT.set(0, m, m-1); // Ensure the sub-diagonal value is set to zero.
+                m--;
+            } else {
+                // Deflate 2x2 block.
+                m-=2;
+            }
+        }
+    }
+
+
+    /**
+     * Gets the real Schur form of the {@code T} matrix from the Schur decomposition.
+     * @return The real Schur form of the {@code T} matrix from the Schur decomposition.
      */
     public Matrix getRealT() {
         return realT;
     }
 
 
-    public Matrix getComplexT() {
-        return realT;
-    }
-
-
-    public static void main(String[] args) {
-//        PrintOptions.setPrecision(50);
-
-        RealSchurDecomposition schur = new RealSchurDecomposition(true, false);
-
-        double[][] aEntries = {
-                {3.45, -99.34, 14.5, 24.5},
-                {-0.0024, 0, 25.1, 1.5},
-                {100.4, 5.6, -4.1, -0.002}
-        };
-        Matrix A = new Matrix(aEntries);
-        A = A.invDirectSum(A.H());
-
-        double[][] bEntries = {
-                {1,  1, 1, 1, 1},
-                {-1, 1, 1, 1, 1},
-                {0, -1, 1, 1, 1},
-                {0, 0, -1, 1, 1},
-                {0, 0, 0, -1, 1}
-        };
-        Matrix B = new Matrix(bEntries);
-
-        Matrix src = A;
-
-        schur.decompose(src);
-        CMatrix U = schur.getU();
-        CMatrix T = schur.getT();
-
-        System.out.println("Results:\n" + "-".repeat(80));
-        System.out.println("A:\n" + src + "\n");
-        System.out.println("U:\n" + U + "\n");
-        System.out.println("T:\n" + T + "\n");
-        System.out.println("UTU^H:\n" + U.mult(T).mult(U.H()) + "\n");
-
-//        CMatrix[] TU = SchurDecomposition.real2ComplexSchur(T.toReal(), U.toReal());
-//
-//        System.out.println("T complex:\n" + TU[0] + "\n");
-//        System.out.println("U complex:\n" + TU[1] + "\n");
-//        System.out.println("complex UTU^H:\n" + TU[1].mult(TU[0]).mult(TU[1].H()) + "\n");
-
-//        System.out.println(Math.ulp(1.0));
+    /**
+     * Gets the {@code U} matrix in the Schur decomposition corresponding to the real
+     * Schur form of the {@code T} matrix in the Schur decomposition.
+     * @return The{@code U} matrix in the Schur decomposition corresponding to the real
+     * Schur form of the {@code T} matrix in the Schur decomposition.
+     */
+    public Matrix getRealU() {
+        return realU;
     }
 }

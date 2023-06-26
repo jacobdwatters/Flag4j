@@ -91,7 +91,18 @@ public class Givens {
      * {@code Gv = [r<sub>1</sub> ... r<sub>i</sub> ... r<sub>n</sub>]} where r<sub>i</sub>=0.
      */
     public static CMatrix getRotator(CVector v, int i) {
-        return null; // TODO:
+        double r = v.norm();
+        CNumber c = v.entries[0].div(r);
+        CNumber s = v.entries[1].div(r);
+
+        CMatrix G = CMatrix.I(v.size); // Initialize rotator to identity matrix.
+
+        G.entries[i*(G.numCols + 1)] = c.conj();
+        G.entries[i*G.numCols] = s;
+        G.entries[i] = s.addInv();
+        G.entries[0] = c;
+
+        return G;
     }
 
 
@@ -168,19 +179,5 @@ public class Givens {
         }
 
         return new double[]{c, s};
-    }
-
-
-    /**
-     * Computes the sine and cosine values for a Givens' rotation in a stable manner which avoids
-     * any possibility of overflow.
-     * @return An array of length two containing in order the cosine value and sine value for the Givens' rotation.
-     */
-    private static CNumber[] stableTrigVals(CNumber a, CNumber b) {
-        // Stable computation of sine/cosine which avoids any possible overflow.
-
-        // TODO: Implementation.
-
-        return new CNumber[]{};
     }
 }
