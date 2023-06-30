@@ -190,7 +190,7 @@ public class Projection {
      * Creates a {@code 4x4} orthogonal projection matrix to project a 2D point in an orthographic viewing region. the
      * minimum {@code x} and {@code y} values are assumed to be zero. Equivalent to
      * {@link #getOrthogonal(double, double, double, double)} with {@code nearClip=-1} and
-     * @code farClip = 1}.
+     * {@code farClip = 1}.
      * @param xMax Maximum {@code x} value of image plane to project to.
      * @param yMax Maximum {@code y} value of image plane to project to.
      * @return The orthogonal projection for the specified parameters.
