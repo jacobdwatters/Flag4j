@@ -34,6 +34,8 @@ import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.transformations.Givens;
 import com.flag4j.util.ParameterChecks;
 
+import java.util.Random;
+
 /**
  * <p>This abstract class specifies methods for computing the Schur decomposition of a square matrix.
  * That is, decompose a square matrix {@code A} into {@code A=UTU<sup>H</sup>} where {@code U} is a unitary
@@ -51,6 +53,9 @@ public abstract class SchurDecomposition<
         U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>>
         implements Decomposition<T> {
 
+    /**
+     * Tolerance for considering an element zero.
+     */
     static protected final double TOL = Math.ulp(1.0d);
 
     /**
@@ -59,6 +64,22 @@ public abstract class SchurDecomposition<
      * whichever comes first.
      */
     protected final static int MIN_DEFAULT_ITERATIONS = 500;
+
+    /**
+     * The number of iterations to run before performing an exceptional shift.
+     */
+    protected final static int EXCEPTIONAL_SHIT_TOL = 30;
+
+    /**
+     * The maximum number of iterations to run the QR algorithm for.
+     */
+    protected final static int MAX_ITERATIONS = 25*EXCEPTIONAL_SHIT_TOL - 1;
+
+    /**
+     * Tracks the number of exceptional shifts.
+     */
+    protected int numExceptionalShifts;
+
     /**
      * Flag which indicates if the unitary {@code U} should be computed in the decomposition.
      */
@@ -68,11 +89,13 @@ public abstract class SchurDecomposition<
      * Storage for the unitary {@code U} matrix in the Schur decomposition corresponding to {@code A=UTU<sup>H</sup>}.
      */
     protected CMatrix U;
+
     /**
      * Storage for the upper triangular {@code T} matrix in the Schur decomposition corresponding to
      * {@code A=UTU<sup>H</sup>}.
      */
     protected CMatrix T;
+
     /**
      * Decomposer to compute the Hessenburg matrix similar to the source matrix. This Hessenburg
      * matrix will be the actual matrix that the Schur decomposition is computed for.
@@ -89,19 +112,24 @@ public abstract class SchurDecomposition<
 
 
     /**
-     * Computes the Schur decomposition for a complex matrix using a shifted QR algorithm where the QR decomposition
-     * is computed explicitly.
-     * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
+     * Creates a decomposer to compute the Schur decomposition which will run for at most {@code maxIterations}
+     * iterations.
+     * @param computeU A flag which indicates if the unitary matrix {@code Q} should be computed.<br>
+     *                 - If true, the {@code Q} matrix will be computed.
+     *                 - If false, the {@code Q} matrix will <b>not</b> be computed. If it is not needed, this may
+     *                 provide a performance improvement.
      */
-    protected abstract void shiftedExplicitQR(T H);
+    protected SchurDecomposition(boolean computeU) {
+        this.computeU = computeU;
+    }
 
 
     /**
-     * Computes the Schur decomposition of a matrix using Francis' algorithm (i.e. The implicit double shifted
-     * QR algorithm).
+     * Computes the Schur decomposition of a matrix using Francis' double shift
+     * algorithm (i.e. The implicit double shifted QR algorithm).
      * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
      */
-    protected abstract void doubleShiftImplicitQR(T H);
+    protected abstract void shiftedImplicitQR(T H);
 
 
     /**
@@ -112,24 +140,7 @@ public abstract class SchurDecomposition<
         ParameterChecks.assertSquare(src.shape());
         hess.decompose(src); // Compute a Hessenburg matrix which is similar to src (i.e. has the same eigenvalues).
 
-        if(src.numRows() > 2) {
-            doubleShiftImplicitQR(hess.getH()); // Use double shifted implicit QR algorithm.
-        } else {
-            shiftedExplicitQR(hess.getH());
-        }
-    }
-
-
-    /**
-     * Creates a decomposer to compute the Schur decomposition which will run for at most {@code maxIterations}
-     * iterations.
-     * @param computeU A flag which indicates if the unitary matrix {@code Q} should be computed.<br>
-     *                 - If true, the {@code Q} matrix will be computed.
-     *                 - If false, the {@code Q} matrix will <b>not</b> be computed. If it is not needed, this may
-     *                 provide a performance improvement.
-     */
-    protected SchurDecomposition(boolean computeU) {
-        this.computeU = computeU;
+        shiftedImplicitQR(hess.getH()); // Use shifted implicit QR algorithm.
     }
 
 
