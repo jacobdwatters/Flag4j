@@ -34,8 +34,6 @@ import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.transformations.Givens;
 import com.flag4j.util.ParameterChecks;
 
-import java.util.Random;
-
 /**
  * <p>This abstract class specifies methods for computing the Schur decomposition of a square matrix.
  * That is, decompose a square matrix {@code A} into {@code A=UTU<sup>H</sup>} where {@code U} is a unitary
@@ -57,13 +55,6 @@ public abstract class SchurDecomposition<
      * Tolerance for considering an element zero.
      */
     static protected final double TOL = Math.ulp(1.0d);
-
-    /**
-     * The minimum number of iterations to perform by default in the QR algorithm if it has not converged. Specifically, the
-     * QR algorithm will run for max(MIN_ITERATIONS, maxIterations) iteration or until the QR algorithm converges,
-     * whichever comes first.
-     */
-    protected final static int MIN_DEFAULT_ITERATIONS = 500;
 
     /**
      * The number of iterations to run before performing an exceptional shift.
@@ -162,15 +153,7 @@ public abstract class SchurDecomposition<
     }
 
 
-    /**
-     * Converts a matrix decomposed into a real Schur form to a complex Schur form. Note, this
-     * will not update the {@code U} matrix from the Schur decomposition. See {@link #real2ComplexSchur(Matrix, Matrix)}
-     * to also update the {@code U} matrix.
-     * @param realT The real Schur matrix {@code T} in the Schur decomposition {@code {@code A=UTU<sup>T</sup>}}
-     * @return A matrix in complex Schur from corresponding to {@code realT}.
-     * @see #real2ComplexSchur(Matrix, Matrix)
-     */
-    // Code adapted from scipy rsf2csf https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.rsf2csf.html
+
     public static CMatrix real2ComplexSchur(Matrix realT) {
         return real2ComplexSchur(realT, null)[0];
     }
@@ -212,7 +195,7 @@ public abstract class SchurDecomposition<
      * @param m Row and column index of the lower right entry of the 2x2 block to deflate in {@code T}.
      */
     // Code adapted from scipy rsf2csf https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.rsf2csf.html
-    static void deflateT(CMatrix T, CMatrix U, int m) {
+    protected  static void deflateT(CMatrix T, CMatrix U, int m) {
         // Compute the eigenvalues of the 2x2 block.
         CVector mu = Eigen.get2x2EigenValues(
                 T.getSlice(m-1, m+1, m-1, m+1)
