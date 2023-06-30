@@ -25,6 +25,7 @@
 package com.flag4j.io;
 
 import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
 
 /**
  * Print options for matrices and vectors
@@ -204,6 +205,31 @@ public abstract class PrintOptions {
         }
 
         PrintOptions.maxRows = maxRows;
+    }
+
+
+    /**
+     * Set the maximum number of rows and columns to print.
+     * @param maxRows The new maximum number of rows to print.
+     * @param maxCols The maximum number of columns to print.
+     */
+    public static void setMaxRowsCols(int maxRows, int maxCols) {
+        ParameterChecks.assertGreaterEq(1, maxRows, maxCols);
+
+        PrintOptions.maxRows = maxRows;
+        PrintOptions.maxColumns = maxCols;
+    }
+
+
+    /**
+     * Set the maximum number of rows and columns to print.
+     * @param maxRowCols The new maximum number of rows and columns to print.
+     */
+    public static void setMaxRowsCols(int maxRowCols) {
+        ParameterChecks.assertGreaterEq(1, maxRowCols);
+
+        PrintOptions.maxRows = maxRowCols;
+        PrintOptions.maxColumns = maxRowCols;
     }
 
 

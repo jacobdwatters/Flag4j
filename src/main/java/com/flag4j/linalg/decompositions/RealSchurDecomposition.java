@@ -29,8 +29,11 @@ import com.flag4j.CVector;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.io.PrintOptions;
 import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.transformations.Householder;
+
+import java.util.Random;
 
 
 /**
@@ -42,6 +45,12 @@ import com.flag4j.linalg.transformations.Householder;
  * <p>Note, even if a matrix has only real entries, both {@code Q} and {@code U} may contain complex values.</p>
  */
 public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
+
+    /**
+     * Pseudorandom number generator for generating random exceptional shifts.
+     * Seed is set for reproducibility.
+     */
+    protected Random rand = new Random(1998);
 
     /**
      * Flag which indicates if {@code T} should be stored in real or complex Schur form.
@@ -142,116 +151,43 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
 
 
     /**
-     * Computes the Schur decomposition for a complex matrix using a shifted QR algorithm where the QR decomposition
-     * is computed explicitly.
-     * @param H - The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
-     */
-    @Override
-    protected void shiftedExplicitQR(Matrix H) {
-        final int maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
-        final double tol = Math.ulp(1.0d); // Tolerance for considering an entry zero.
-        int iters; // Number of iterations.
-
-        QRDecomposition<Matrix, Vector> qr = new RealQRDecomposition();
-
-        // Initialize matrices.
-        realT = H;
-        realU = computeU ? Matrix.I(realT.numRows) : null;
-
-        int m = realT.numRows-1;
-
-        double shift = realT.entries[realT.entries.length-1]; // Compute shift.
-
-        while(m > 0) {
-            iters = 0; // Reset the number of iterations.
-
-            while(realT.getSlice(m, m+1, 0, m).maxAbs() > tol && iters < maxIterations) {
-                iters++;
-
-                Matrix mu = Matrix.I(realT.numRows).mult(shift);
-                qr.decompose(realT.sub(mu));
-                realT = qr.R.mult(qr.Q).add(mu);
-
-                if(computeU) {
-                    realU = realU.mult(qr.Q);
-                }
-            }
-
-            if(iters<maxIterations) {
-                realT.set(0, m, m-1); // Ensure the sub-diagonal value is set to zero.
-                m--; // 1x1 block.
-            } else {
-                m-=2; // 2x2 block
-            }
-        }
-    }
-
-
-    /**
-     * Computes the Schur decomposition of a matrix using Francis' algorithm (i.e. The implicit double shifted
-     * QR algorithm).
+     * Computes the Schur decomposition of a matrix using Francis' double shift
+     * algorithm (i.e. The implicit double shifted QR algorithm).
      * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
      */
     @Override
-    protected void doubleShiftImplicitQR(Matrix H) {
-        final int maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
+    protected void shiftedImplicitQR(Matrix H) {
         int iters;
-
-        HessenburgDecomposition<Matrix, Vector> hess = new RealHessenburgDecomposition(computeU);
 
         // Initialize matrices.
         realT = H;
         realU = computeU ? Matrix.I(realT.numRows) : null;
         
         int m = realT.numRows-1;
+        int lastExceptional = 0;
 
         while(m > 0) {
             iters = 0; // Reset the number of iterations.
 
-            while(notConverged(realT, m) && iters < maxIterations) {
+            while(notConverged(realT, m) && iters < MAX_ITERATIONS) {
                 iters++;
 
-                // Compute eigenvalues of lower right 2x2 block.
-                CVector rho = Eigen.get2x2LowerRightBlockEigenValues(realT);
-
-                CNumber a = new CNumber(realT.get(0, 0));
-                CNumber b = new CNumber(realT.get(0, 1));
-                CNumber c = new CNumber(realT.get(1, 0));
-                CNumber d = new CNumber(realT.get(2, 1));
-
-                Vector p = new CVector(
-                        a.sub(rho.get(0)).mult( a.sub(rho.get(1)) ).add( b.mult(realT.get(1, 0)) ),
-                        c.mult( a.add(realT.get(1, 1)).sub(rho.get(0)).sub(rho.get(1)) ),
-                        d.mult(realT.get(1, 0))
-                ).toReal(); // Should be real.
-
-                Matrix ref = Householder.getReflector(p);
-
-                // Apply transform and create bulge.
-                realT.setSlice(
-                        ref.H().mult(realT.getSlice(0, 3, 0, realT.numCols)),
-                        0, 0
-                );
-                realT.setSlice(
-                        realT.getSlice(0, realT.numRows, 0, 3).mult(ref),
-                        0, 0
-                );
-
-                realT = hess.decompose(realT).getH(); // A crude bulge chase using the Hessenburg decomposition.
-
-                if(computeU) {
-                    // Collect similarity transformations in realU matrix.
-                    realU.setSlice(
-                            realU.getSlice(0, realU.numRows, 0, 3).mult(ref),
-                            0, 0
-                    );
-
-                    realU = realU.mult(hess.getQ());
+                if(iters-lastExceptional > EXCEPTIONAL_SHIT_TOL) {
+                    // Then perform an exceptional shift (i.e.) shift in a random direction.
+                    applyExceptionalShift(m);
+                    lastExceptional = iters; // Update the index of the last exceptional shift.
+                    numExceptionalShifts++; // Increase the total number of exceptional shifts.
+                } else {
+                    if(H.numRows > 2) {
+                        // Perform the standard implicit double shift.
+                        applyDoubleShift();
+                    } else {
+                        applySingleShift();
+                    }
                 }
-
             }
 
-            if(iters<maxIterations) {
+            if(iters < MAX_ITERATIONS) {
                 // Deflate 1x1 block.
                 realT.set(0, m, m-1); // Ensure the sub-diagonal value is set to zero.
                 m--;
@@ -260,6 +196,127 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
                 m-=2;
             }
         }
+    }
+
+
+    /**
+     * Applies an implicit double shift QR iteration using the generalized Rayleigh quotient shift
+     */
+    protected void applyDoubleShift() {
+        // Compute eigenvalues of lower right 2x2 block.
+        CVector rho = Eigen.get2x2LowerRightBlockEigenValues(realT);
+
+        CNumber a = new CNumber(realT.get(0, 0));
+        CNumber b = new CNumber(realT.get(0, 1));
+        CNumber c = new CNumber(realT.get(1, 0));
+        CNumber d = new CNumber(realT.get(2, 1));
+
+        Vector p = new CVector(
+                a.sub(rho.get(0)).mult( a.sub(rho.get(1)) ).add( b.mult(realT.get(1, 0)) ),
+                c.mult( a.add(realT.get(1, 1)).sub(rho.get(0)).sub(rho.get(1)) ),
+                d.mult(realT.get(1, 0))
+        ).toReal(); // Should be real.
+
+        Matrix ref = Householder.getReflector(p);
+
+        applyTransforms(ref); // Apply reflector to realT and introduce bulge.
+        chaseBulge(); // Chase the bulge from realT.
+    }
+
+
+    /**
+     * Applies a single shift implicit QR iteration using the Rayleigh quotient shift.
+     */
+    protected void applySingleShift() {
+        // TODO: If the matrix is symmetric, the Wilkinson shift will be real and so that should be used instead.
+        applySingleShift(realT.entries[realT.entries.length-1]);
+    }
+
+
+    /**
+     * Applies a single shift implicit QR iteration with a specified shift.
+     * @param shift Shift to use for the single shift implicit QR iteration.
+     */
+    protected void applySingleShift(double shift) {
+        Vector p = new Vector(
+                realT.get(0, 0) - shift,
+                realT.get(1, 0)
+        );
+        Matrix ref = Householder.getReflector(p);
+
+        applyTransforms(ref); // Apply reflector to realT and introduce bulge.
+        chaseBulge(); // Chase the bulge from realT.
+    }
+
+
+    /**
+     * Applies a single shift implicit QR iterations with a random shift.
+     * @param m Lower right index of the sub-matrix currently being worked on.
+     */
+    protected void applyExceptionalShift(int m) {
+        applySingleShift(getExceptionalShift(m));
+    }
+
+
+    /**
+     * Applies unitary transformations and creates a bulge in the {@code T} matrix of the Schur decomposition.
+     * @param ref The unitary transformation to apply.
+     */
+    protected void applyTransforms(Matrix ref) {
+        // Apply transform and create bulge.
+        realT.setSlice(
+                ref.H().mult(realT.getSlice(0, ref.numRows, 0, realT.numCols)),
+                0, 0
+        );
+        realT.setSlice(
+                realT.getSlice(0, realT.numRows, 0, ref.numRows).mult(ref),
+                0, 0
+        );
+
+        if(computeU) {
+            // Collect similarity transformations.
+            realU.setSlice(
+                    realU.getSlice(0, realU.numRows, 0, ref.numRows).mult(ref),
+                    0, 0
+            );
+        }
+    }
+
+
+    /**
+     * Chases the bulge from the {@code T} matrix introduced by the unitary transformations and returns {@code T}
+     * to upper Hessenburg form.
+     */
+    protected void chaseBulge() {
+        HessenburgDecomposition<Matrix, Vector> hess = new RealHessenburgDecomposition(computeU);
+
+        // TODO: Replace this with a proper bulge chaise that takes advantage of realT being nearly upper Hessenburg already
+        realT = hess.decompose(realT).getH(); // A crude bulge chase using the Hessenburg decomposition.
+
+        if(computeU) {
+            // Collect similarity transformations.
+            realU = realU.mult(hess.getQ());
+        }
+    }
+
+
+    /**
+     * Constructs a shift in a random direction which is of the same magnitude as the elements
+     * in the {@link #realT} matrix.
+     * @param m Lower right index of the sub-matrix currently being worked on.
+     * @return A shift in a random direction which is of the same magnitude as the elements
+     * in the {@link #realT} matrix.
+     */
+    protected double getExceptionalShift(int m) {
+        double shift = Math.abs(realT.get(m, m));
+        shift = shift==0 ? 1 : shift; // Avoid using a zero shift.
+
+        double p = 1.0 - Math.pow(0.1, numExceptionalShifts);
+        shift *= p + 2.0*(1.0 - p)*(rand.nextDouble() - 0.5);
+
+        shift = rand.nextBoolean() ? -shift : shift;
+
+        return shift;
     }
 
 

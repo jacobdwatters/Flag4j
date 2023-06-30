@@ -27,10 +27,10 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
-import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.transformations.Householder;
+import com.flag4j.util.RandomCNumber;
 
 /**
  * <p>This class computes the Schur decomposition of a square matrix.
@@ -43,6 +43,10 @@ import com.flag4j.linalg.transformations.Householder;
  */
 public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVector> {
 
+    /**
+     * Complex pseudorandom number generator for generating random exceptional shifts.
+     */
+    RandomCNumber rand = new RandomCNumber(1998);
 
     /**
      * Creates a Schur decomposer for a real dense matrix.
@@ -96,45 +100,49 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
 
 
     /**
-     * Computes the Schur decomposition for a complex matrix using a shifted QR algorithm where the QR decomposition
-     * is computed explicitly.
+     * Computes the Schur decomposition of a matrix using Francis' double shift
+     * algorithm (i.e. The implicit double shifted QR algorithm).
      * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
      */
     @Override
-    protected void shiftedExplicitQR(CMatrix H) {
-        final int maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
-
-        QRDecomposition<CMatrix, CVector> qr = new ComplexQRDecomposition();
-        final double tol = Math.ulp(1.0d); // Tolerance for considering an entry zero.
-
-        int iters; // Number of iterations.
+    protected void shiftedImplicitQR(CMatrix H) {
+        int iters;
 
         // Initialize matrices.
         T = H;
         U = computeU ? CMatrix.I(T.numRows) : null;
 
         int m = T.numRows-1;
+        int lastExceptional = 0;
 
         while(m > 0) {
             iters = 0; // Reset the number of iterations.
 
-            while(notConverged(T, m) && iters < maxIterations) {
+            while(notConverged(T, m) && iters < MAX_ITERATIONS) {
                 iters++;
 
-                CNumber shift = getWilkinsonShift(T); // Compute shift.
-                CMatrix mu = Matrix.I(T.numRows).mult(shift);
-
-                qr.decompose(T.sub(mu));
-
-                T = qr.R.mult(qr.Q).add(mu);
+                if(iters-lastExceptional > EXCEPTIONAL_SHIT_TOL) {
+                    // Then perform an exceptional shift (i.e.) shift in a random direction.
+                    applyExceptionalShift(m);
+                    lastExceptional = iters; // Update the index of the last exceptional shift.
+                    numExceptionalShifts++; // Increase the total number of exceptional shifts.
+                } else {
+                    if(H.numRows > 2) {
+                        // Perform an implicit double shift iteration.
+                        applyDoubleShift();
+                    } else {
+                        // Perform an implicit single shift iteration.
+                        applySingleShift();
+                    }
+                }
             }
 
-            if(iters<maxIterations) {
-                // Deflate 1x1 block
+            if(iters < MAX_ITERATIONS) {
+                // Deflate 1x1 block.
+                T.set(0, m, m-1); // Ensure the sub-diagonal value is set to zero.
                 m--;
-
             } else {
-                // Deflate 2x2 block
+                // Deflate 2x2 block.
                 deflateT(T, U, m);
                 m-=2;
             }
@@ -145,13 +153,12 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
     /**
      * Computes the Wilkinson shift for a complex matrix. That is, the eigenvalue of the lower left 2x2 sub matrix
      * which is closest in magnitude to the lower left entry of the matrix.
-     * @param src Matrix to compute the Wilkinson shift for.
      * @return The Wilkinson shift for the {@code src} matrix.
      */
-    private CNumber getWilkinsonShift(CMatrix src) {
+    private CNumber getWilkinsonShift() {
         // Compute eigenvalues of lower 2x2 block.
-        CVector lambdas = Eigen.get2x2LowerRightBlockEigenValues(src);
-        CNumber v = src.entries[src.entries.length-1];
+        CVector lambdas = Eigen.get2x2LowerRightBlockEigenValues(T);
+        CNumber v = T.entries[T.entries.length-1];
 
         if(v.sub(lambdas.entries[0]).mag() < v.sub(lambdas.entries[1]).mag()) {
             return lambdas.entries[0];
@@ -162,72 +169,114 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
 
 
     /**
-     * Computes the Schur decomposition of a matrix using Francis' algorithm (i.e. The implicit double shifted
-     * QR algorithm).
-     * @param H The matrix to compute the Schur decomposition of. Assumed to be in upper Hessenburg form.
+     * Applies an implicit double shift QR iteration using the generalized Rayleigh quotient shift
      */
-    @Override
-    protected void doubleShiftImplicitQR(CMatrix H) {
-        final int maxIterations = Math.max(10*H.numRows, MIN_DEFAULT_ITERATIONS);
-        int iters;
+    protected void applyDoubleShift() {
+        // Compute eigenvalues of lower right 2x2 block.
+        CVector rho = Eigen.get2x2LowerRightBlockEigenValues(T);
 
+        CNumber a = new CNumber(T.get(0, 0));
+        CNumber b = new CNumber(T.get(0, 1));
+        CNumber c = new CNumber(T.get(1, 0));
+        CNumber d = new CNumber(T.get(2, 1));
+
+        CVector p = new CVector(
+                a.sub(rho.get(0)).mult( a.sub(rho.get(1)) ).add( b.mult(T.get(1, 0)) ),
+                c.mult( a.add(T.get(1, 1)).sub(rho.get(0)).sub(rho.get(1)) ),
+                d.mult(T.get(1, 0))
+        ); // Should be real.
+
+        CMatrix ref = Householder.getReflector(p);
+
+        applyTransforms(ref); // Apply reflector to T and introduce bulge.
+        chaseBulge(); // Chase the bulge from T.
+    }
+
+
+    /**
+     * Applies a single shift implicit QR iteration using the Wilkinson shift.
+     */
+    protected void applySingleShift() {
+        applySingleShift(getWilkinsonShift());
+    }
+
+
+    /**
+     * Applies a single shift implicit QR iteration with a specified shift.
+     * @param shift Shift to use for the single shift implicit QR iteration.
+     */
+    protected void applySingleShift(CNumber shift) {
+        CVector p = new CVector(
+                T.get(0, 0).sub(shift),
+                T.get(1, 0)
+        );
+
+        CMatrix ref = Householder.getReflector(p);
+
+        applyTransforms(ref); // Apply reflector to T and introduce bulge.
+        chaseBulge(); // Chase the bulge from T.
+    }
+
+
+    /**
+     * Applies a single shift implicit QR iterations with a random shift.
+     * @param m Lower right index of the sub-matrix currently being worked on.
+     */
+    protected void applyExceptionalShift(int m) {
+        applySingleShift(getExceptionalShift(m));
+    }
+
+
+    /**
+     * Applies unitary transformations and creates a bulge in the {@code T} matrix of the Schur decomposition.
+     * @param ref The unitary transformation to apply.
+     */
+    protected void applyTransforms(CMatrix ref) {
+        // Apply transform and create bulge.
+        T.setSlice(
+                ref.H().mult(T.getSlice(0, ref.numRows, 0, T.numCols)),
+                0, 0
+        );
+        T.setSlice(
+                T.getSlice(0, T.numRows, 0, ref.numRows).mult(ref),
+                0, 0
+        );
+
+        if(computeU) {
+            // Collect similarity transformations.
+            U.setSlice(
+                    U.getSlice(0, U.numRows, 0, ref.numRows).mult(ref),
+                    0, 0
+            );
+        }
+    }
+
+
+    /**
+     * Chases the bulge from the {@code T} matrix introduced by the unitary transformations and returns {@code T}
+     * to upper Hessenburg form.
+     */
+    protected void chaseBulge() {
         HessenburgDecomposition<CMatrix, CVector> hess = new ComplexHessenburgDecomposition(computeU);
 
-        // Initialize matrices.
-        T = H;
-        U = computeU ? CMatrix.I(T.numRows) : null;
-        int m = T.numRows-1;
+        // TODO: Replace this with a proper bulge chaise that takes advantage of T being nearly upper Hessenburg already
+        T = hess.decompose(T).getH(); // A crude bulge chase using the Hessenburg decomposition.
 
-        while(m > 0) {
-            iters = 0; // Reset the number of iterations.
-
-            while(notConverged(T, m) && iters < maxIterations) {
-                iters++;
-
-                // Compute eigenvalues of lower right 2x2 block.
-                CVector rho = Eigen.get2x2LowerRightBlockEigenValues(T);
-
-                CVector p = new CVector(
-                        T.get(0, 0).sub(rho.get(0)).mult( T.get(0, 0).sub(rho.get(1)) ).add( T.get(0, 1).mult(T.get(1, 0)) ),
-                        T.get(1, 0).mult( T.get(0, 0).add(T.get(1, 1)).sub(rho.get(0)).sub(rho.get(1)) ),
-                        T.get(2, 1).mult(T.get(1, 0))
-                );
-
-                CMatrix ref = Householder.getReflector(p);
-
-                // Apply transform and create bulge.
-                T.setSlice(
-                        ref.H().mult(T.getSlice(0, 3, 0, T.numCols)),
-                        0, 0
-                );
-                T.setSlice(
-                        T.getSlice(0, T.numRows, 0, 3).mult(ref),
-                        0, 0
-                );
-
-                T = hess.decompose(T).getH(); // A crude bulge chase using the Hessenburg decomposition.
-
-                if(computeU) {
-                    // Collect similarity transformations in U matrix.
-                    U.setSlice(
-                            U.getSlice(0, U.numRows, 0, 3).mult(ref),
-                            0, 0
-                    );
-
-                    U = U.mult(hess.getQ());
-                }
-
-            }
-
-            if(iters<maxIterations) {
-                // Deflate 1x1 block.
-                T.set(0, m, m-1); // Ensure the sub-diagonal value is set to zero.
-                m--;
-            } else {
-                // Deflate 2x2 block.
-                deflateT(T, U, m);
-                m-=2;
-            }
+        if(computeU) {
+            // Collect similarity transformations.
+            U = U.mult(hess.getQ());
         }
+    }
+
+
+    /**
+     * Constructs a shift in a random direction which is of the same magnitude as the elements
+     * in the {@link #T} matrix.
+     * @param m Lower right index of the sub-matrix currently being worked on.
+     * @return A shift in a random direction which is of the same magnitude as the elements
+     * in the {@link #T} matrix.
+     */
+    protected CNumber getExceptionalShift(int m) {
+        return rand.random(T.get(m, m).mag());
     }
 }

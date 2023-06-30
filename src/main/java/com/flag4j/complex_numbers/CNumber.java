@@ -30,7 +30,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * A complex number stored in rectangular form.
+ * A complex number stored in rectangular form. The real and imaginary components of the complex number are stored as
+ * 64 bit doubles.
  */
 public class CNumber extends Number {
     // TODO: Constants should be private and accessed through method which returns a copy
@@ -151,8 +152,8 @@ public class CNumber extends Number {
 
 
     /**
-     * Constructs a complex number from a string of the form "a +/- bi" where and b are real values and either may be
-     * omitted. i.e. "a", "bi", "a +/- i", and "i" are all also valid.
+     * Constructs a complex number from a string of the form {@code "a +/- bi"} where {@code a} and {b} are real values and either may be
+     * omitted. i.e. {@code "a", "bi", "a +/- i"}, and {@code "i"} are all also valid.
      * @param num The string representation of a complex number.
      */
     public CNumber(String num) {
@@ -175,31 +176,26 @@ public class CNumber extends Number {
     /**
      * Checks if two complex numbers are equal. That is, if both numbers have equivalent real and complex parts.
      * @param b The object to compare.
-     * @return True if b is a complex number and is equivalent to this complex number in both the real and
-     * imaginary components. False, otherwise.
+     * @return True if: <br>
+     * - {@code b} is a complex number and is equivalent to this complex number in both the real and
+     * imaginary components. <br>
+     * - This complex number has zero imaginary component and {@code b} is a {@link Float} or {@link Double} equal to this complex numbers
+     * real component. <br>
+     * - This complex number has zero imaginary component and {@code b} is a {@link Byte}, {@link Short}, {@link Integer},
+     * or {@link Long} equal to this complex numbers
+     * real component. <br>
+     * Otherwise, returns false.
      */
     @Override
     public boolean equals(Object b) {
         boolean result = false;
 
         if(b instanceof CNumber) {
-            CNumber bCopy = (CNumber) b;
-
-            if(this.re==bCopy.re && this.im==bCopy.im) {
-                result = true;
-            }
-        } else if(b instanceof Double) {
-            Double bCopy = (Double) b;
-
-            if(this.re==bCopy && this.im==0) {
-                result = true;
-            }
-        } else if(b instanceof Integer) {
-            Integer bCopy = (Integer) b;
-
-            if(this.re==bCopy && this.im==0) {
-                result = true;
-            }
+            CNumber num = (CNumber) b;
+            result = re==num.re && im==num.im;
+        } else if(b instanceof Number) {
+            double num = ((Number) b).doubleValue();
+            result = re==num && im==0;
         }
 
         return result;
@@ -1163,6 +1159,8 @@ public class CNumber extends Number {
     /**
      * Checks if this complex number has zero imaginary part.
      * @return True if this complex number has zero imaginary part. False otherwise.
+     * @see #isComplex()
+     * @see #isImaginary()
      */
     public boolean isReal() {
         return this.im == 0;
@@ -1172,6 +1170,8 @@ public class CNumber extends Number {
     /**
      * Checks if this complex number has zero real part.
      * @return True if this complex number has zero real part. False otherwise.
+     * @see #isComplex()
+     * @see #isReal()
      */
     public boolean isImaginary() {
         return this.re == 0;
@@ -1181,6 +1181,8 @@ public class CNumber extends Number {
     /**
      * Checks if this complex number has non-zero imaginary part.
      * @return True if this complex number has non-zero imaginary part. False otherwise.
+     * @see #isReal()
+     * @see #isImaginary()
      */
     public boolean isComplex() {
         return this.im != 0;
@@ -1194,6 +1196,7 @@ public class CNumber extends Number {
      * components of the parameter n
      * @throws NumberFormatException If n is {@link Double#NaN}, {@link Double#POSITIVE_INFINITY} or
      * {@link Double#NEGATIVE_INFINITY}
+     * @see #round(CNumber, int) 
      */
     public static CNumber round(CNumber n) {
         return round(n, 0);
@@ -1211,6 +1214,7 @@ public class CNumber extends Number {
      * @throws IllegalArgumentException If decimals is less than zero.
      * @throws NumberFormatException If n is {@link Double#NaN}, {@link Double#POSITIVE_INFINITY} or
      * {@link Double#NEGATIVE_INFINITY}
+     * @see #round(CNumber) 
      */
     public static CNumber round(CNumber n, int decimals) {
         if (decimals < 0) {
@@ -1314,7 +1318,7 @@ public class CNumber extends Number {
     /**
      * Computes the minimum magnitude from an array of complex numbers.
      * @param values Array of values to compute the minimum magnitude from.
-     * @return The minimum magnitude from the values array. If the array has zero length, then -1 is returned.
+     * @return The minimum magnitude from the {@code values array}. If the array has zero length, then -1 is returned.
      */
     public static CNumber min(CNumber... values) {
         double min = -1;
@@ -1338,7 +1342,7 @@ public class CNumber extends Number {
     /**
      * Computes the minimum real component from an array of complex numbers. All imaginary components are ignored.
      * @param values Array of values to compute the minimum real component from.
-     * @return The minimum magnitude from the values array. If the array has zero length, {@link Double#NaN} is
+     * @return The minimum magnitude from the {@code values array}. If the array has zero length, {@link Double#NaN} is
      * returned.
      */
     public static CNumber minReal(CNumber... values) {
@@ -1363,20 +1367,20 @@ public class CNumber extends Number {
     /**
      * Computes the maximum magnitude from an array of complex numbers.
      * @param values Array of values to compute the maximum magnitude from.
-     * @return The minimum magnitude from the values array. If the array has zero length, then -1 is returned.
+     * @return The minimum magnitude from the {@code values array}. If the array has zero length, then -1 is returned.
      */
     public static CNumber max(CNumber... values) {
         double max = -1;
-        double currMag;
+        double currMax;
 
         if(values.length > 0) {
             max = values[0].mag();
         }
 
         for(CNumber value : values) {
-            currMag = value.mag();
-            if(currMag > max) {
-                max = currMag;
+            currMax = value.mag();
+            if(currMax > max) {
+                max = currMax;
             }
         }
 
@@ -1387,7 +1391,7 @@ public class CNumber extends Number {
     /**
      * Computes the minimum real component from an array of complex numbers. All imaginary components are ignored.
      * @param values Array of values to compute the minimum real component from.
-     * @return The minimum magnitude from the values array. If the array has zero length, {@link Double#NaN} is
+     * @return The minimum magnitude from the {@code values array}. If the array has zero length, {@link Double#NaN} is
      * returned.
      */
     public static CNumber maxReal(CNumber... values) {
@@ -1412,7 +1416,7 @@ public class CNumber extends Number {
     /**
      * Computes the index of the minimum magnitude from an array of complex numbers.
      * @param values Array of values to compute the index of the minimum magnitude from.
-     * @return The index of the minimum magnitude from the values array. If the array has zero length, then -1 is returned.
+     * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, then -1 is returned.
      */
     public static int argMin(CNumber... values) {
         double min = -1;
@@ -1438,7 +1442,7 @@ public class CNumber extends Number {
     /**
      * Computes the index of the minimum real component from an array of complex numbers. All imaginary components are ignored.
      * @param values Array of values to compute the index of the minimum real component from.
-     * @return The index of the minimum magnitude from the values array. If the array has zero length, -1 is returned.
+     * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, -1 is returned.
      */
     public static int argMinReal(CNumber... values) {
         double min = Double.MAX_VALUE;
@@ -1464,7 +1468,7 @@ public class CNumber extends Number {
     /**
      * Computes the index of the maximum magnitude from an array of complex numbers.
      * @param values Array of values to compute the index of the maximum magnitude from.
-     * @return The index of the minimum magnitude from the values array. If the array has zero length, then -1 is returned.
+     * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, then -1 is returned.
      */
     public static int argMax(CNumber... values) {
         double max = -1;
@@ -1490,7 +1494,7 @@ public class CNumber extends Number {
     /**
      * Computes the index of the minimum real component from an array of complex numbers. All imaginary components are ignored.
      * @param values Array of values to compute the index of the minimum real component from.
-     * @return The index of the minimum magnitude from the values array. If the array has zero length, -1 is
+     * @return The index of the minimum magnitude from the {@code values array}. If the array has zero length, -1 is
      * returned.
      */
     public static int argMaxReal(CNumber... values) {
@@ -1573,7 +1577,7 @@ public class CNumber extends Number {
      * Gets the imaginary component of this complex number.
      * @return The imaginary component of this complex number.
      */
-    public double getImaginary() {
+    public double getIm() {
         return im;
     }
 
@@ -1595,7 +1599,7 @@ public class CNumber extends Number {
     public String toString() {
         String result = "";
 
-        double real = this.re, imaginary = this.im;
+        double real = re, imaginary = im;
 
         if (real != 0) {
             if (real % 1 == 0) {
