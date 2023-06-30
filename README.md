@@ -5,8 +5,10 @@
 
 # Flag4j
 Flag4j is a fast linear algebra library for Java and provides operations and linear algebra routines for real/complex sparse/dense tensors, matrices, and vectors.
-Flag4j is currently in the initial steps of development.
 
+## State of Project as of 6-30-2023
+Flag4j is currently in the final steps of development before an initial beta release. Nearly all features have been fully implimented or at least have a rudimentary beta implementation.
+There is still some work to be done for sparse tensors and matrices. Once that has been completed, a beta release will be immenent.
 ___
 
 ## Planed Features and Functionality
