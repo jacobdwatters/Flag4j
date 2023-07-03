@@ -24,7 +24,6 @@
 
 package com.flag4j.linalg.transformations;
 
-
 import com.flag4j.Matrix;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;

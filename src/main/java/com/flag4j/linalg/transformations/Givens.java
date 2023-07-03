@@ -13,7 +13,7 @@ import com.flag4j.util.ParameterChecks;
  * This class contains methods for computing real or complex Givens' rotation matrices.
  * A Givens' rotator is a square matrix {@code G(i, k, theta)} which, when left multiplied to a vector, represents
  * a counterclockwise rotation of {@code theta} radians of the vector in the {@code (i, j)} plane. Givens rotators
- * represent a unitary transformation.
+ * are a unitary transformation.
  */
 public class Givens {
 
@@ -37,6 +37,7 @@ public class Givens {
      */
     public static Matrix getGeneralRotator(int size, int i, int j, double theta) {
         ParameterChecks.assertIndexInBounds(size, i, j);
+        if(i==j) throw new IllegalArgumentException("The indices i and j cannot be equal.");
 
         // Initialize rotator as identity matrix.
         Matrix G = Matrix.I(size);
@@ -72,8 +73,8 @@ public class Givens {
         Matrix G = Matrix.I(v.size); // Initialize rotator to identity matrix.
 
         G.entries[i*(G.numCols + 1)] = cs[0];
-        G.entries[i*G.numCols] = cs[1];
-        G.entries[i] = -cs[1];
+        G.entries[i*G.numCols] = -cs[1];
+        G.entries[i] = cs[1];
         G.entries[0] = cs[0];
 
         return G;
@@ -89,17 +90,20 @@ public class Givens {
      * @param i Position to zero out when applying the rotator to v.
      * @return A Givens rotator {@code G} such that for a vector {@code v},
      * {@code Gv = [r<sub>1</sub> ... r<sub>i</sub> ... r<sub>n</sub>]} where r<sub>i</sub>=0.
+     * @throws IndexOutOfBoundsException If {@code i} is not in the range {@code [0, v.size)}.
      */
     public static CMatrix getRotator(CVector v, int i) {
+        ParameterChecks.assertIndexInBounds(v.size, i);
+
         double r = v.norm();
         CNumber c = v.entries[0].div(r);
-        CNumber s = v.entries[1].div(r);
+        CNumber s = v.entries[i].div(r);
 
         CMatrix G = CMatrix.I(v.size); // Initialize rotator to identity matrix.
 
         G.entries[i*(G.numCols + 1)] = c.conj();
-        G.entries[i*G.numCols] = s;
-        G.entries[i] = s.addInv();
+        G.entries[i*G.numCols] = s.addInv();
+        G.entries[i] = s;
         G.entries[0] = c;
 
         return G;
@@ -135,6 +139,8 @@ public class Givens {
      * @throws IllegalArgumentException If the vector {@code v} is not of size 2.
      */
     public static CMatrix get2x2Rotator(CVector v) {
+        ParameterChecks.assertArrayLengthsEq(2, v.size);
+
         double r = v.norm();
         CNumber c = v.entries[0].div(r);
         CNumber s = v.entries[1].div(r);
@@ -152,7 +158,7 @@ public class Givens {
      * @return An array of length two containing in order the cosine value and sine value for the Givens' rotation.
      */
     private static double[] stableTrigVals(double a, double b) {
-        // Stable computation of sine/cosine which avoids any possible overflow.
+        // Stable computation of sine/cosine which is more robust to overflow issues.
         double t;
         double s;
         double c;
@@ -167,14 +173,12 @@ public class Givens {
 
         } else if(Math.abs(a) > Math.abs(b)) {
             t = a / b;
-            double bSgn = b==0 ? 1 : Math.signum(b);
-            s = bSgn / Math.sqrt(1 + t*t);
+            s = Math.signum(b) / Math.sqrt(1.0 + t*t);
             c = s*t;
 
         } else {
             t = b / a;
-            double aSgn = a==0 ? 1 : Math.signum(a);
-            c = aSgn / Math.sqrt(1 + t*t);
+            c = Math.signum(a) / Math.sqrt(1.0 + t*t);
             s = c*t;
         }
 
