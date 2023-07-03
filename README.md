@@ -55,14 +55,12 @@ ___
   - Householder Reflectors
   - Full/Reduced
 - Cholesky Decomposition
+- Hessenburg Decomposition
 - Eigen/Schur Decompositions
 - Singular Value Decomposition
 
-### Similarity Transformations
-- Upper Hessenberg Form
-
 ### Linear Solvers
-- Non-singular Linear System
+- Exact solution for well determined systems
 - Least Squares
 
 ### Linear and Homography Transformations
