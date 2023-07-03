@@ -39,9 +39,9 @@ class SubSpaceTests {
     void colSpaceTestCase() {
         // -------------------- Sub-case 1 --------------------
         expAEntries = new double[][]{
-                {-0.002536286923471442, -0.9776911995501422, -0.027427520796710778},
-                {-0.03778044483704439, -0.15727996676951206, 1.0230636416849341},
-                {0.9992828454629633, -0.00842785658870904, 0.038609924699795885}
+                {-0.0025362869234714426, 0.25287887601883857},
+                {-0.03778044483704439, -0.9668312284180349},
+                {0.9992828454629634, -0.03591169474032637}
         };
         expA = new Matrix(expAEntries);
 
@@ -49,10 +49,9 @@ class SubSpaceTests {
 
         // -------------------- Sub-case 2 --------------------
         expBEntries = new CNumber[][]{
-                {new CNumber(-0.9782717373949313, 0.20730567378953263),
-                        new CNumber(0, -0.0029606467149292277)},
-                {new CNumber(-0.0029034857946125137, 5.789639117442682E-4),
-                        new CNumber(-0.011999083504397996, 0.9999236253664997)}};
+                {new CNumber(0.7724901616420681, 0.6350198301921294)},
+                {new CNumber(0.002264356523853813, 0.001907385253036086)}
+        };
         expB = new CMatrix(expBEntries);
 
         assertEquals(expB, SubSpace.getColSpace(B));
@@ -63,17 +62,19 @@ class SubSpaceTests {
     void rowSpaceTestCase() {
         // -------------------- Sub-case 1 --------------------
         expAEntries = new double[][]{
-                {-0.999488309423674, -0.016633076463508676, 0.02332710248931722},
-                {0.01639076956075033, -0.9873715837113857, -0.08329758444462076},
-                {0.02746433647386676, -0.01841362461143939, 0.9049333202771841}};
+                {-0.999488309423674, -0.02021890115744094},
+                {0.01639076956075032, 0.2333428640994128},
+                {0.02746433647386675, -0.8812728776030873}
+        };
         expA = new Matrix(expAEntries);
 
         assertEquals(expA, SubSpace.getRowSpace(A));
 
         // -------------------- Sub-case 2 --------------------
         expBEntries = new CNumber[][]{
-                {new CNumber(-0.9985439511540497), new CNumber(0.011182989469365768, -0.05277232570379392)},
-                {new CNumber(0.011182989469365768, 0.05277232570379392), new CNumber(0.9985439511540495)}};
+                {new CNumber(0.6231588761676372, 0.7802326816019874)},
+                {new CNumber(0.034255792154954404, -0.04167155285678486)}
+        };
         expB = new CMatrix(expBEntries);
 
         assertEquals(expB, SubSpace.getRowSpace(B));
@@ -84,17 +85,20 @@ class SubSpaceTests {
     void nullSpaceTestCase() {
         // -------------------- Sub-case 1 --------------------
         expAEntries = new double[][]{
-                {-0.014223444808413515},
-                {-0.13375429255978216},
-                {-0.4242668199409785},
-                {0.8954915679875406}};
+                {0.008923772420629552, 0.0},
+                {0.7067614155708111, 0.0},
+                {-0.08164379965227417, 0.0},
+                {0.7026684550515041, 0.0}
+        };
         expA = new Matrix(expAEntries);
 
         assertEquals(expA, SubSpace.getNullSpace(A));
 
         // -------------------- Sub-case 2 --------------------
-        expBEntries = new CNumber[][]{{new CNumber(0.0, 0.0)},
-                {new CNumber(0.0, 0.0)}};
+        expBEntries = new CNumber[][]{
+                {new CNumber(-0.02188010096937988, 0.04930759368727087)},
+                {new CNumber(-0.9768516072317298, -0.2070047338471444)}
+        };
         expB = new CMatrix(expBEntries);
 
         assertEquals(expB, SubSpace.getNullSpace(B));
@@ -105,17 +109,19 @@ class SubSpaceTests {
     void leftNullSpaceTestCase() {
         // -------------------- Sub-case 1 --------------------
         expAEntries = new double[][]{
-                {0.0},
-                {0.0},
-                {0.0},
-                {0.0}};
+                {-0.9674946208181681},
+                {-0.2526064404238114},
+                {-0.01200603782772401}
+        };
         expA = new Matrix(expAEntries);
 
         assertEquals(expA, SubSpace.getLeftNullSpace(A));
 
         // -------------------- Sub-case 2 --------------------
-        expBEntries = new CNumber[][]{{new CNumber(0.0, 0.0)},
-                {new CNumber(0.0, 0.0)}};
+        expBEntries = new CNumber[][]{
+                {new CNumber(-6.830867186742524E-4, -0.002880767520191454)},
+                {new CNumber(0.21902916510600862, 0.975713820443266)}
+        };
         expB = new CMatrix(expBEntries);
 
         assertEquals(expB, SubSpace.getLeftNullSpace(B));

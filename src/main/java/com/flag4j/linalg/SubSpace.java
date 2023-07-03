@@ -181,28 +181,22 @@ public class SubSpace {
     public static boolean hasEqualSpan(Matrix src1, Matrix src2) {
         boolean result;
 
-        if(src1.shape.equals(src2.shape)) {
-            RealLstsqSolver lstsq = new RealLstsqSolver();
-            double tol = 1.0E-12; // Tolerance for considering a norm zero.
-            Vector solution, col;
-            result = true;
+        RealLstsqSolver lstsq = new RealLstsqSolver();
+        double tol = 1.0E-12; // Tolerance for considering a norm zero.
+        Vector solution, col;
+        result = true;
 
-            // Check that each column of src2 is a linear combination of the columns in src1.
-            for(int j=0; j<src2.numCols; j++) {
-                col = src2.getColAsVector(j);
-                solution = lstsq.solve(src1, col);
+        // Check that each column of src2 is a linear combination of the columns in src1.
+        for(int j=0; j<src2.numCols; j++) {
+            col = src2.getColAsVector(j);
+            solution = lstsq.solve(src1, col);
 
-                if(src1.mult(solution).sub(col).norm() > tol) {
-                    // Then the least squares solution does not provide an "exact" solution.
-                    // Hence, the column of src2 cannot be expressed as a linear combination of the columns of src1
-                    result = false;
-                    break;
-                }
+            if(src1.mult(solution).sub(col).norm() > tol) {
+                // Then the least squares solution does not provide an "exact" solution.
+                // Hence, the column of src2 cannot be expressed as a linear combination of the columns of src1
+                result = false;
+                break;
             }
-
-        } else {
-            System.out.println("HERE");
-            result = false;
         }
 
         return result;
@@ -219,27 +213,22 @@ public class SubSpace {
     public static boolean hasEqualSpan(CMatrix src1, CMatrix src2) {
         boolean result;
 
-        if(src1.shape.equals(src2.shape)) {
-            ComplexLstsqSolver lstsq = new ComplexLstsqSolver();
-            double tol = 1.0E-12; // Tolerance for considering a norm zero.
-            CVector solution, col;
-            result = true;
+        ComplexLstsqSolver lstsq = new ComplexLstsqSolver();
+        double tol = 1.0E-12; // Tolerance for considering a norm zero.
+        CVector solution, col;
+        result = true;
 
-            // Check that each column of src2 is a linear combination of the columns in src1.
-            for(int j=0; j<src2.numCols; j++) {
-                col = src2.getColAsVector(j);
-                solution = lstsq.solve(src1, col);
+        // Check that each column of src2 is a linear combination of the columns in src1.
+        for(int j=0; j<src2.numCols; j++) {
+            col = src2.getColAsVector(j);
+            solution = lstsq.solve(src1, col);
 
-                if(src1.mult(solution).sub(col).norm() > tol) {
-                    // Then the least squares solution does not provide an "exact" solution.
-                    // Hence, the column of src2 cannot be expressed as a linear combination of the columns of src1
-                    result = false;
-                    break;
-                }
+            if(src1.mult(solution).sub(col).norm() > tol) {
+                // Then the least squares solution does not provide an "exact" solution.
+                // Hence, the column of src2 cannot be expressed as a linear combination of the columns of src1
+                result = false;
+                break;
             }
-
-        } else {
-            result = false;
         }
 
         return result;

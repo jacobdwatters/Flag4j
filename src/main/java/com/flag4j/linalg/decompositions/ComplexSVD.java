@@ -27,7 +27,6 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
-import com.flag4j.Vector;
 import com.flag4j.linalg.Eigen;
 
 
@@ -71,40 +70,33 @@ public class ComplexSVD extends SingularValueDecomposition<CMatrix> {
      */
     @Override
     public ComplexSVD decompose(CMatrix src) {
-        Vector S1;
+        CMatrix B = src.invDirectSum(src.H());
+        double[] eigVals;
+
+        int stopIdx = Math.min(src.numRows, src.numCols);
 
         if(computeUV) {
-            // Compute right singular vectors.
-            CMatrix[] pairs = Eigen.getEigenPairs(src.H().mult(src));
-            V = pairs[1];
+            CMatrix[] pairs = Eigen.getEigenPairs(B);
 
-            // Compute left singular vectors.
-            if(src.isSquare()) {
-                U = src.mult(V);
-            } else if(src.numCols > src.numRows) {
-                U = src.mult(V).getSlice(0, src.numRows, 0, src.numRows);
-            } else {
-                U = new CMatrix(src.numRows);
-                U.setSlice(src.mult(V), 0, 0);
+            eigVals = pairs[0].toReal().entries;
+            CMatrix eigVecs = pairs[1];
+
+            U = new CMatrix(src.numRows);
+            V = new CMatrix(src.numCols);
+
+            for(int j=0; j<stopIdx; j++) {
+                // Extract left and right singular vectors and normalize.
+                V.setCol(eigVecs.getCol(2*j, 0, V.numRows).normalize(), j);
+                U.setCol(eigVecs.getCol(2*j, V.numRows, eigVecs.numRows).normalize(), j);
             }
 
-            // Compute singular values.
-            S1 = pairs[0].toVector().toReal().abs().sqrt();
-
-            // Copy singular values to diagonal of S and scale left singular vectors properly.
         } else {
-            S1 = Eigen.getEigenValues(src.H().mult(src)).toReal().abs().sqrt();
+            eigVals = Eigen.getEigenValues(B).toReal().entries;
         }
 
         S = new Matrix(src.shape);
-        int stopIdx = Math.min(S.numRows, S.numCols);
         for(int i=0; i<stopIdx; i++) {
-            S.set(S1.entries[i], i, i);
-
-            if(computeUV && S1.entries[i] != 0) {
-                // Properly scale the left singular vectors so that Mv = su.
-                divCols(i, S1.entries[i]);
-            }
+            S.set(eigVals[2*i], i, i);
         }
 
         return this;

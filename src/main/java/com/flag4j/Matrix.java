@@ -2986,6 +2986,28 @@ public class Matrix
 
 
     /**
+     * Gets a specified column of this matrix between {@code rowStart} (inclusive) and {@code rowEnd} (exclusive).
+     * @param colIdx Index of the column of this matrix to get.
+     * @param rowStart Starting row of the column (inclusive).
+     * @param rowEnd Ending row of the column (exclusive).
+     * @return The column at index {@code colIdx} of this matrix between the {@code rowStart} and {@code rowEnd}
+     * indices.
+     * @throws IllegalArgumentException If {@code rowStart} is less than 0.
+     * @throws NegativeArraySizeException If {@code rowEnd} is less than {@code rowStart}.
+     */
+    public Vector getCol(int colIdx, int rowStart, int rowEnd) {
+        ParameterChecks.assertGreaterEq(0, rowStart);
+        double[] col = new double[rowEnd-rowStart];
+
+        for(int i=rowStart; i<rowEnd; i++) {
+            col[i-rowStart] = entries[i*numCols + colIdx];
+        }
+
+        return new Vector(col);
+    }
+
+
+    /**
      * Get a specified row of this matrix at and after a specified column.
      *
      * @param colStart Index of the row to begin at.

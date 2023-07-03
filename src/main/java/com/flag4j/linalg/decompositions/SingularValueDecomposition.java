@@ -41,7 +41,6 @@ public abstract class SingularValueDecomposition<T extends MatrixMixin<T, ?, ?, 
      * Flag which indicates if the singular vectors should be computed in addition to the singular values.
      */
     protected boolean computeUV;
-
     /**
      * The unitary matrix {@code U} corresponding to {@code M=USV<sup>H</sup>} in the SVD.
      */
