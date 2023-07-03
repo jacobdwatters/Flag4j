@@ -27,7 +27,6 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
-import com.flag4j.Vector;
 import com.flag4j.linalg.Eigen;
 
 /**
@@ -37,10 +36,6 @@ import com.flag4j.linalg.Eigen;
  * diagonal matrix containing the singular values of {@code M}.
  */
 public class RealSVD extends SingularValueDecomposition<Matrix> {
-
-    // TODO: This is a very rough implementation of SVD. To compute the SVD of a matrix M, the
-    //  matrix M^T*M should not be explicitly computed. Ideally, a modified version of the double shift implicit QR
-    //  algorithm should be used to compute the SVD directly without forming M^T*M explicitly.
 
     /**
      * Creates a decomposer to compute the singular value decomposition of a real matrix. The left and right singular
@@ -72,40 +67,33 @@ public class RealSVD extends SingularValueDecomposition<Matrix> {
      */
     @Override
     public RealSVD decompose(Matrix src) {
-        Vector S1;
+        Matrix B = src.invDirectSum(src.T());
+        double[] eigVals;
+
+        int stopIdx = Math.min(src.numRows, src.numCols);
 
         if(computeUV) {
-            // Compute right singular vectors.
-            CMatrix[] pairs = Eigen.getEigenPairs(src.T().mult(src));
-            V = pairs[1].toReal();
+            CMatrix[] pairs = Eigen.getEigenPairs(B);
 
-            // Compute left singular vectors.
-            if(src.isSquare()) {
-                U = src.mult(V);
-            } else if(src.numCols > src.numRows) {
-                U = src.mult(V).getSlice(0, src.numRows, 0, src.numRows);
-            } else {
-                U = new Matrix(src.numRows);
-                U.setSlice(src.mult(V), 0, 0);
+            eigVals = pairs[0].toReal().entries;
+            Matrix eigVecs = pairs[1].toReal();
+
+            U = new Matrix(src.numRows);
+            V = new Matrix(src.numCols);
+
+            for(int j=0; j<stopIdx; j++) {
+                // Extract left and right singular vectors and normalize.
+                V.setCol(eigVecs.getCol(2*j, 0, V.numRows).normalize(), j);
+                U.setCol(eigVecs.getCol(2*j, V.numRows, eigVecs.numRows).normalize(), j);
             }
 
-            // Compute singular values.
-            S1 = pairs[0].toVector().toReal().abs().sqrt();
-
-            // Copy singular values to diagonal of S and scale left singular vectors properly.
         } else {
-            S1 = Eigen.getEigenValues(src.T().mult(src)).toReal().abs().sqrt();
+            eigVals = Eigen.getEigenValues(B).toReal().entries;
         }
 
         S = new Matrix(src.shape);
-        int stopIdx = Math.min(S.numRows, S.numCols);
         for(int i=0; i<stopIdx; i++) {
-            S.set(S1.entries[i], i, i);
-
-            if(computeUV && S1.entries[i] != 0) {
-                // Properly scale the left singular vectors so that Mv = su.
-                divCols(i, S1.entries[i]);
-            }
+            S.set(eigVals[2*i], i, i);
         }
 
         return this;

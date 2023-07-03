@@ -29,7 +29,6 @@ import com.flag4j.CVector;
 import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.io.PrintOptions;
 import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.transformations.Householder;
 
