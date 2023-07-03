@@ -374,7 +374,10 @@ public final class ParameterChecks {
      */
     public static void assertInRange(double value, double lowerBound, double upperBound, String paramName) {
         if(value < lowerBound || value > upperBound) {
-            throw new IllegalArgumentException();
+            String name = paramName==null ? "Value" : paramName + " = ";
+            String errMsg = String.format("%s %f not in range [%f, %f]", name, value, lowerBound, upperBound);
+
+            throw new IllegalArgumentException(errMsg);
         }
     }
 
@@ -388,9 +391,11 @@ public final class ParameterChecks {
     public static void assertIndexInBounds(int upperBound, int... indices) {
         for(int i : indices) {
             if(i < 0 || i >= upperBound) {
-                throw new IndexOutOfBoundsException(
-                        "Index " + i + " is out of bounds for upper bound of " + upperBound + "."
-                );
+                String errMsg = i<0 ?
+                        "Index " + i + " is out of bounds for lower bound of 0" :
+                        "Index " + i + " is out of bounds for upper bound of " + upperBound + ".";
+
+                throw new IndexOutOfBoundsException(errMsg);
             }
         }
     }
