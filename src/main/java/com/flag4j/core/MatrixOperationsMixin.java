@@ -938,6 +938,13 @@ public interface MatrixOperationsMixin<T, U, V, W, X extends Number,
 
 
     /**
+     * Computes the pseudo-inverse of this matrix.
+     * @return The pseudo-inverse of this matrix.
+     */
+    T pInv();
+
+
+    /**
      * Computes the condition number of this matrix using {@link com.flag4j.linalg.decompositions.SingularValueDecomposition SVD}.
      * Specifically, the condition number is computed as the maximum singular value divided by the minimum singular
      * value of this matrix.

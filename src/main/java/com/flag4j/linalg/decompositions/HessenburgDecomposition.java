@@ -122,7 +122,7 @@ public abstract class HessenburgDecomposition<
      */
     protected void generalDecomposition(T src) {
         // Tolerance for considering a value zero when determining if a column of H is in the correct form.
-        double tol = 1.0e-16;
+        double tol = Math.ulp(1.0);
 
         H = src.copy(); // Storage for upper Hessenburg matrix
         T ref; // For storing Householder reflector
@@ -135,7 +135,7 @@ public abstract class HessenburgDecomposition<
 
             // If the column is zeros, no need to compute reflector. It is already in the correct form.
             if(col.maxAbs() > tol) {
-                ref = initRef(col, k+1);
+                ref = initRef(col, k+1); // Initialize a Householder reflector.
 
                 H = ref.mult(H).mult(ref.H()); // Apply Householder reflector to both sides of B.
 

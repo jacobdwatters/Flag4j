@@ -44,7 +44,7 @@ public class ComplexSVD extends SingularValueDecomposition<CMatrix> {
      * vectors will be computed.
      */
     public ComplexSVD() {
-        super(true);
+        super(true, false);
     }
 
 
@@ -52,13 +52,29 @@ public class ComplexSVD extends SingularValueDecomposition<CMatrix> {
      * Creates a decomposer to compute the Schur decomposition.
      *
      * @param computeUV A flag which indicates if the unitary matrices {@code Q} and {@code V} should be computed
-     *                  (i.e. the singular vectors).<br>
+     *                  (i.e. the singular vectors). By default, this is true.<br>
      *                  - If true, the {@code Q} and {@code V} matrices will be computed.<br>
      *                  - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If it is not needed, this may
      *                  provide a performance improvement.
      */
     public ComplexSVD(boolean computeUV) {
-        super(computeUV);
+        super(computeUV, false);
+    }
+
+
+    /**
+     * Creates a decomposer to compute the singular value decomposition of a real matrix.
+     * @param computeUV A flag which indicates if the orthogonal matrices {@code Q} and {@code V} should be computed
+     *                  (i.e. the singular vectors). By default, this is true.<br>
+     *                 - If true, the {@code Q} and {@code V} matrices will be computed.<br>
+     *                 - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If they are not
+     *                 needed, this may provide a performance improvement.
+     * @param reduced Flag which indicates if the reduced (or full) SVD should be computed. This is false by default.<br>
+     *                 - If true, reduced SVD is computed.
+     *                 - If false, the full SVD is computed.
+     */
+    public ComplexSVD(boolean computeUV, boolean reduced) {
+        super(computeUV, reduced);
     }
 
 
@@ -70,49 +86,41 @@ public class ComplexSVD extends SingularValueDecomposition<CMatrix> {
      */
     @Override
     public ComplexSVD decompose(CMatrix src) {
-        CMatrix B = src.invDirectSum(src.H());
-        double[] eigVals;
+        double[] singularVals;
+        int stopIdx;
+        CMatrix singularVecs = null;
 
-        int stopIdx = Math.min(src.numRows, src.numCols);
+        CMatrix B = src.invDirectSum(src.H()); // Convert the problem to an eigenvalue problem.
 
         if(computeUV) {
             CMatrix[] pairs = Eigen.getEigenPairs(B);
 
-            eigVals = pairs[0].toReal().entries;
-            CMatrix eigVecs = pairs[1];
-
-            U = new CMatrix(src.numRows);
-            V = new CMatrix(src.numCols);
-
-            for(int j=0; j<stopIdx; j++) {
-                // Extract left and right singular vectors and normalize.
-                V.setCol(eigVecs.getCol(2*j, 0, V.numRows).normalize(), j);
-                U.setCol(eigVecs.getCol(2*j, V.numRows, eigVecs.numRows).normalize(), j);
-            }
-
+            singularVals = pairs[0].toReal().entries;
+            singularVecs = pairs[1];
         } else {
-            eigVals = Eigen.getEigenValues(B).toReal().entries;
+            singularVals = Eigen.getEigenValues(B).toReal().entries;
         }
 
-        S = new Matrix(src.shape);
-        for(int i=0; i<stopIdx; i++) {
-            S.set(eigVals[2*i], i, i);
+        computeRank(src.numRows, src.numCols, singularVals);
+        stopIdx = reduced ? rank : Math.min(src.numRows, src.numCols);
+
+        S = new Matrix(stopIdx);
+
+        if(computeUV) {
+            U = new CMatrix(src.numRows, stopIdx);
+            V = new CMatrix(src.numCols, stopIdx);
+        }
+
+        for(int j=0; j<stopIdx; j++) {
+            S.set(singularVals[2*j], j, j);
+
+            if(computeUV && singularVecs != null) {
+                // Extract left and right singular vectors and normalize.
+                V.setCol(singularVecs.getCol(2*j, 0, V.numRows).normalize(), j);
+                U.setCol(singularVecs.getCol(2*j, V.numRows, singularVecs.numRows).normalize(), j);
+            }
         }
 
         return this;
-    }
-
-
-    /**
-     * Divides a specified column of a matrix by a scalar value.
-     * @param colIdx Index of column to divide.
-     * @param scalValue Value to divide column by.
-     */
-    private void divCols(int colIdx, double scalValue) {
-        int idx = colIdx;
-        for(int i=0; i<U.numRows; i++) {
-            U.entries[idx] = U.entries[idx].div(scalValue);
-            idx+=U.numCols;
-        }
     }
 }

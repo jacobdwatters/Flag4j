@@ -27,6 +27,9 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.Matrix;
 import com.flag4j.core.MatrixMixin;
+import com.flag4j.linalg.Eigen;
+
+import java.util.Arrays;
 
 /**
  * This abstract class specifies methods for computing the singular value decomposition (SVD) of a matrix.
@@ -42,6 +45,10 @@ public abstract class SingularValueDecomposition<T extends MatrixMixin<T, ?, ?, 
      */
     protected boolean computeUV;
     /**
+     * Flag which indicates if the reduced (or full) SVD should be computed.
+     */
+    protected boolean reduced;
+    /**
      * The unitary matrix {@code U} corresponding to {@code M=USV<sup>H</sup>} in the SVD.
      */
     protected T U;
@@ -53,6 +60,10 @@ public abstract class SingularValueDecomposition<T extends MatrixMixin<T, ?, ?, 
      * The unitary matrix {@code V} corresponding to {@code M=USV<sup>H</sup>} in the SVD.
      */
     protected T V;
+    /**
+     * The rank of the matrix being decomposed. This is calculated as a byproduct of the decomposition.
+     */
+    protected int rank;
 
 
     /**
@@ -62,9 +73,13 @@ public abstract class SingularValueDecomposition<T extends MatrixMixin<T, ?, ?, 
      *                 - If true, the {@code Q} and {@code V} matrices will be computed.
      *                 - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If it is not needed, this may
      *                 provide a performance improvement.
+     * @param reduced Flag which indicates if the reduced (or full) SVD should be computed.<br>
+     *                 - If true, reduced SVD is computed.
+     *                 - If false, the full SVD is computed.
      */
-    protected SingularValueDecomposition(boolean computeUV) {
+    protected SingularValueDecomposition(boolean computeUV, boolean reduced) {
         this.computeUV = computeUV;
+        this.reduced = reduced;
     }
 
 
@@ -93,5 +108,38 @@ public abstract class SingularValueDecomposition<T extends MatrixMixin<T, ?, ?, 
      */
     public T getV() {
         return V;
+    }
+
+
+    /**
+     * Gets the rank of the last matrix decomposed. This is computed as a byproduct of the decomposition.
+     * @return The rank of the last matrix decomposed.
+     */
+    public int getRank() {
+        return rank;
+    }
+
+
+    /**
+     * Computes the rank of the matrix being decomposed using the singular values of the matrix.
+     * @param rows The number of rows in the original source matrix.
+     * @param cols The number of columns in the original source matrix.
+     * @param singularValues The singular values of the original source matrix.
+     */
+    protected void computeRank(int rows, int cols, double[] singularValues) {
+        rank = 0; // Ensure the rank is reset.
+
+        double[] sorted = new double[singularValues.length];
+        System.arraycopy(singularValues, 0, sorted, 0, singularValues.length);
+        Arrays.sort(sorted);
+
+        // Tolerance for considering a singular value zero.
+        double tol = 2.0*Math.max(rows, cols)*Math.ulp(1.0)*sorted[sorted.length-1];
+
+        for(double val : singularValues) {
+            if(val > tol) {
+                rank++;
+            }
+        }
     }
 }

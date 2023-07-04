@@ -3114,6 +3114,20 @@ public class Matrix
 
 
     /**
+     * Computes the pseudo-inverse of this matrix.
+     *
+     * @return The pseudo-inverse of this matrix.
+     */
+    @Override
+    public Matrix pInv() {
+        RealSVD svd = new RealSVD().decompose(this);
+        Matrix sInv = Invert.invDiag(svd.getS());
+
+        return svd.getV().mult(sInv).mult(svd.getU().T());
+    }
+
+
+    /**
      * Computes the condition number of this matrix using the 2-norm.
      * Specifically, the condition number is computed as the norm of this matrix multiplied by the norm
      * of the inverse of this matrix.
@@ -3535,20 +3549,8 @@ public class Matrix
      */
     @Override
     public int matrixRank() {
-        Matrix S = new RealSVD(false).decompose(this).getS();
-        int stopIdx = Math.min(numRows, numCols);
-
-        // Tolerance for determining if a singular value should be considered zero.
-        double tol = 1.0E-16*Math.max(numRows, numCols);
-        int rank = 0;
-
-        for(int i=0; i<stopIdx; i++) {
-            if(S.get(i, i)>tol) {
-                rank++;
-            }
-        }
-
-        return rank;
+        // Compute the (numerical) matrix rank using the singular value decomposition.
+        return new RealSVD(false).decompose(this).getRank();
     }
 
 

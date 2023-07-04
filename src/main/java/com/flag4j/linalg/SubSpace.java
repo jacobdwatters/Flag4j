@@ -52,7 +52,7 @@ public class SubSpace {
      */
     public static Matrix getColSpace(Matrix src) {
         RealSVD svd = new RealSVD().decompose(src);
-        int rank = rankFromSVD(svd.getS());
+        int rank = svd.getRank();
         return svd.getU().getSlice(0, src.numRows, 0, rank);
     }
 
@@ -64,7 +64,7 @@ public class SubSpace {
      */
     public static Matrix getRowSpace(Matrix src) {
         RealSVD svd = new RealSVD().decompose(src);
-        int rank = rankFromSVD(svd.getS());
+        int rank = svd.getRank();
         return svd.getV().getSlice(0, src.numRows, 0, rank);
     }
 
@@ -76,10 +76,12 @@ public class SubSpace {
      */
     public static Matrix getNullSpace(Matrix src) {
         RealSVD svd = new RealSVD().decompose(src);
-        int rank = rankFromSVD(svd.getS());
+        int rank = svd.getRank();
+        int numCols = Math.min(src.numRows, src.numCols);
+
         return src.numCols-rank==0 ?
                 new Matrix(src.numCols, 1) :
-                svd.getV().getSlice(0, src.numCols, rank, src.numCols);
+                svd.getV().getSlice(0, src.numCols, rank, numCols);
     }
 
 
@@ -90,7 +92,7 @@ public class SubSpace {
      */
     public static Matrix getLeftNullSpace(Matrix src) {
         RealSVD svd = new RealSVD().decompose(src);
-        int rank = rankFromSVD(svd.getS());
+        int rank = svd.getRank();
         return src.numRows-rank==0 ?
                 new Matrix(src.numCols, 1) :
                 svd.getU().getSlice(0, src.numRows, rank, src.numRows);
@@ -104,7 +106,7 @@ public class SubSpace {
      */
     public static CMatrix getColSpace(CMatrix src) {
         ComplexSVD svd = new ComplexSVD().decompose(src);
-        int rank = rankFromSVD(svd.getS());
+        int rank = svd.getRank();
         return svd.getU().getSlice(0, src.numRows, 0, rank);
     }
 
@@ -116,7 +118,7 @@ public class SubSpace {
      */
     public static CMatrix getRowSpace(CMatrix src) {
         ComplexSVD svd = new ComplexSVD().decompose(src);
-        int rank = rankFromSVD(svd.getS());
+        int rank = svd.getRank();
         return svd.getV().getSlice(0, src.numRows, 0, rank);
     }
 
@@ -128,10 +130,12 @@ public class SubSpace {
      */
     public static CMatrix getNullSpace(CMatrix src) {
         ComplexSVD svd = new ComplexSVD().decompose(src);
-        int rank = rankFromSVD(svd.getS());
+        int rank = svd.getRank();
+        int numCols = Math.min(src.numRows, src.numCols);
+
         return src.numCols-rank==0 ?
                 new CMatrix(src.numCols, 1) :
-                svd.getV().getSlice(0, src.numCols, rank, src.numCols);
+                svd.getV().getSlice(0, numCols, rank, numCols);
     }
 
 
@@ -142,32 +146,11 @@ public class SubSpace {
      */
     public static CMatrix getLeftNullSpace(CMatrix src) {
         ComplexSVD svd = new ComplexSVD().decompose(src);
-        int rank = rankFromSVD(svd.getS());
+        int rank = svd.getRank();
 
         return src.numRows-rank==0 ?
                 new CMatrix(src.numCols, 1) :
                 svd.getU().getSlice(0, src.numRows, rank, src.numRows);
-    }
-
-
-    /**
-     * Computes the rank of a matrix given the matrix {@code S} from the SVD {@code M=USV<sup>T</sup>}.
-     * @param S The matrix {@code S} from the SVD {@code M=USV<sup>T</sup>}.
-     * @return the rank of the matrix {@code M} from the SVD {@code M=USV<sup>T</sup>}.
-     */
-    private static int rankFromSVD(Matrix S) {
-        int stopIdx = Math.min(S.numRows, S.numCols);
-
-        double tol = 1.0E-8; // Tolerance for determining if a singular value should be considered zero.
-        int rank = 0;
-
-        for(int i=0; i<stopIdx; i++) {
-            if(S.get(i, i)>tol) {
-                rank++;
-            }
-        }
-
-        return rank;
     }
 
 

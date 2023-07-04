@@ -34,6 +34,7 @@ import com.flag4j.linalg.Invert;
 import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
 import com.flag4j.linalg.decompositions.ComplexSVD;
 import com.flag4j.linalg.decompositions.LUDecomposition;
+import com.flag4j.linalg.decompositions.RealSVD;
 import com.flag4j.linalg.solvers.ComplexExactSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
@@ -3577,6 +3578,20 @@ public class CMatrix
 
 
     /**
+     * Computes the pseudo-inverse of this matrix.
+     *
+     * @return The pseudo-inverse of this matrix.
+     */
+    @Override
+    public CMatrix pInv() {
+        ComplexSVD svd = new ComplexSVD().decompose(this);
+        Matrix sInv = Invert.invDiag(svd.getS());
+
+        return svd.getV().mult(sInv).mult(svd.getU().H());
+    }
+
+
+    /**
      * Computes the condition number of this matrix using the 2-norm.
      * Specifically, the condition number is computed as the norm of this matrix multiplied by the norm
      * of the inverse of this matrix.
@@ -3889,7 +3904,7 @@ public class CMatrix
         Matrix S = new ComplexSVD(false).decompose(this).getS();
         int stopIdx = Math.min(numRows, numCols);
 
-        double tol = 1.0E-8*Math.max(numRows, numCols); // Tolerance for determining if a singular value should be considered zero.
+        double tol = 2.0*Math.max(numRows, numCols)*Math.ulp(1.0)*norm(); // Tolerance for determining if a singular value should be considered zero.
         int rank = 0;
 
         for(int i=0; i<stopIdx; i++) {
