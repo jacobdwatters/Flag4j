@@ -26,7 +26,7 @@ package com.flag4j.linalg.decompositions;
 
 
 import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
+import com.flag4j.Shape;
 import com.flag4j.linalg.Eigen;
 
 
@@ -36,7 +36,7 @@ import com.flag4j.linalg.Eigen;
  * unitary matrices whose columns are the left and right singular vectors of {@code M} and {@code S} is a rectangular
  * diagonal matrix containing the singular values of {@code M}.
  */
-public class ComplexSVD extends SingularValueDecomposition<CMatrix> {
+public class ComplexSVD extends SVD<CMatrix> {
 
 
     /**
@@ -79,48 +79,63 @@ public class ComplexSVD extends SingularValueDecomposition<CMatrix> {
 
 
     /**
-     * Applies decomposition to the source matrix.
+     * Gets the eigen values and vectors of symmetric the block matrix which corresponds
+     * to the singular values and vectors of the matrix being decomposed.
      *
-     * @param src The source matrix to decompose.
-     * @return A reference to this decomposer.
+     * @param B       Symmetric block matrix to compute the eigenvalues of.
+     * @param eigVals Storage for eigenvalues.
+     * @return The eigenvalues and eigenvectors of the symmetric block matrix which corresponds
+     * to the singular values and vectors of the matrix being decomposed.
      */
     @Override
-    public ComplexSVD decompose(CMatrix src) {
-        double[] singularVals;
-        int stopIdx;
-        CMatrix singularVecs = null;
+    protected CMatrix makeEigenPairs(CMatrix B, double[] eigVals) {
+        CMatrix[] pairs = Eigen.getEigenPairs(B);
 
-        CMatrix B = src.invDirectSum(src.H()); // Convert the problem to an eigenvalue problem.
+        double[] vals = pairs[0].toReal().entries;
+        System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
 
-        if(computeUV) {
-            CMatrix[] pairs = Eigen.getEigenPairs(B);
+        return pairs[1];
+    }
 
-            singularVals = pairs[0].toReal().entries;
-            singularVecs = pairs[1];
-        } else {
-            singularVals = Eigen.getEigenValues(B).toReal().entries;
-        }
 
-        computeRank(src.numRows, src.numCols, singularVals);
-        stopIdx = reduced ? rank : Math.min(src.numRows, src.numCols);
+    /**
+     * Gets the eigen values of the symmetric block matrix which corresponds
+     * to the singular values of the matrix being decomposed.
+     *
+     * @param B       Symmetric block matrix to compute the eigenvalues of.
+     * @param eigVals Storage for eigenvalues.
+     */
+    @Override
+    protected void makeEigenVals(CMatrix B, double[] eigVals) {
+        double[] vals = Eigen.getEigenValues(B).toReal().entries;
+        System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
+    }
 
-        S = new Matrix(stopIdx);
 
-        if(computeUV) {
-            U = new CMatrix(src.numRows, stopIdx);
-            V = new CMatrix(src.numCols, stopIdx);
-        }
+    /**
+     * Initializes the unitary {@code U} and {@code V} matrices for the SVD.
+     *
+     * @param src  Shape of the source matrix being decomposed.
+     * @param cols The number of columns for {@code U} and {@code V}.
+     */
+    @Override
+    protected void initUV(Shape src, int cols) {
+        U = new CMatrix(src.dims[0], cols);
+        V = new CMatrix(src.dims[1], cols);
+    }
 
-        for(int j=0; j<stopIdx; j++) {
-            S.set(singularVals[2*j], j, j);
 
-            if(computeUV && singularVecs != null) {
-                // Extract left and right singular vectors and normalize.
-                V.setCol(singularVecs.getCol(2*j, 0, V.numRows).normalize(), j);
-                U.setCol(singularVecs.getCol(2*j, V.numRows, singularVecs.numRows).normalize(), j);
-            }
-        }
-
-        return this;
+    /**
+     * Extracts the singular vectors, normalizes them and sets the columns of {@code U}
+     * and {@code V} to be the left/right singular vectors.
+     *
+     * @param singularVecs Computed left and right singular vectors.
+     * @param j            Index of the column of {@code U} and {@code V} to set.
+     */
+    @Override
+    protected void extractNormalizedCols(CMatrix singularVecs, int j) {
+        // Extract left and right singular vectors and normalize.
+        V.setCol(singularVecs.getCol(2*j, 0, V.numRows()).normalize(), j);
+        U.setCol(singularVecs.getCol(2*j, V.numRows(), singularVecs.numRows()).normalize(), j);
     }
 }

@@ -31,10 +31,7 @@ import com.flag4j.core.dense.ComplexDenseTensorBase;
 import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.linalg.Invert;
-import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
-import com.flag4j.linalg.decompositions.ComplexSVD;
-import com.flag4j.linalg.decompositions.LUDecomposition;
-import com.flag4j.linalg.decompositions.RealSVD;
+import com.flag4j.linalg.decompositions.*;
 import com.flag4j.linalg.solvers.ComplexExactSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
@@ -3584,7 +3581,7 @@ public class CMatrix
      */
     @Override
     public CMatrix pInv() {
-        ComplexSVD svd = new ComplexSVD().decompose(this);
+        SVD<CMatrix> svd = new ComplexSVD().decompose(this);
         Matrix sInv = Invert.invDiag(svd.getS());
 
         return svd.getV().mult(sInv).mult(svd.getU().H());

@@ -34,6 +34,7 @@ import com.flag4j.linalg.Invert;
 import com.flag4j.linalg.decompositions.LUDecomposition;
 import com.flag4j.linalg.decompositions.RealLUDecomposition;
 import com.flag4j.linalg.decompositions.RealSVD;
+import com.flag4j.linalg.decompositions.SVD;
 import com.flag4j.linalg.solvers.RealExactSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
@@ -3120,7 +3121,7 @@ public class Matrix
      */
     @Override
     public Matrix pInv() {
-        RealSVD svd = new RealSVD().decompose(this);
+        SVD<Matrix> svd = new RealSVD().decompose(this);
         Matrix sInv = Invert.invDiag(svd.getS());
 
         return svd.getV().mult(sInv).mult(svd.getU().T());

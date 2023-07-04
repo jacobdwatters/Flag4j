@@ -24,10 +24,9 @@
 
 package com.flag4j.linalg.decompositions;
 
-
 import com.flag4j.Matrix;
+import com.flag4j.Shape;
 import com.flag4j.core.MatrixMixin;
-import com.flag4j.linalg.Eigen;
 
 import java.util.Arrays;
 
@@ -38,7 +37,9 @@ import java.util.Arrays;
  * diagonal matrix containing the singular values of {@code M}.
  * @param <T> The type of the matrix to compute the singular value decomposition of.
  */
-public abstract class SingularValueDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class SVD<
+        T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>>
+        implements Decomposition<T> {
 
     /**
      * Flag which indicates if the singular vectors should be computed in addition to the singular values.
@@ -77,7 +78,7 @@ public abstract class SingularValueDecomposition<T extends MatrixMixin<T, ?, ?, 
      *                 - If true, reduced SVD is computed.
      *                 - If false, the full SVD is computed.
      */
-    protected SingularValueDecomposition(boolean computeUV, boolean reduced) {
+    protected SVD(boolean computeUV, boolean reduced) {
         this.computeUV = computeUV;
         this.reduced = reduced;
     }
@@ -121,6 +122,47 @@ public abstract class SingularValueDecomposition<T extends MatrixMixin<T, ?, ?, 
 
 
     /**
+     * Applies decomposition to the source matrix.
+     *
+     * @param src The source matrix to decompose.
+     * @return A reference to this decomposer.
+     */
+    @Override
+    public SVD<T> decompose(T src) {
+        T B = src.invDirectSum(src.H()); // Convert the problem to an eigenvalue problem.
+
+        double[] singularVals = new double[B.numRows()];
+        int stopIdx;
+        T singularVecs = null;
+
+        if(computeUV) {
+            // Compute eigenvalues and vectors of B.
+            singularVecs = makeEigenPairs(B, singularVals);
+        } else {
+            // Only compute the eigenvalues of B.
+            makeEigenVals(B, singularVals);
+        }
+
+        computeRank(src.numRows(), src.numCols(), singularVals);
+        stopIdx = reduced ? rank : Math.min(src.numRows(), src.numCols());
+
+        if(computeUV) initUV(src.shape(), stopIdx); // Initialize the U and V matrices.
+        S = new Matrix(stopIdx); // initialize the S matrix.
+
+        for(int j=0; j<stopIdx; j++) {
+            S.set(singularVals[2*j], j, j);
+
+            if(computeUV && singularVecs != null) {
+                // Extract left and right singular vectors and normalize.
+                extractNormalizedCols(singularVecs, j);
+            }
+        }
+
+        return this;
+    }
+
+
+    /**
      * Computes the rank of the matrix being decomposed using the singular values of the matrix.
      * @param rows The number of rows in the original source matrix.
      * @param cols The number of columns in the original source matrix.
@@ -142,4 +184,41 @@ public abstract class SingularValueDecomposition<T extends MatrixMixin<T, ?, ?, 
             }
         }
     }
+
+
+    /**
+     * Gets the eigen values and vectors of symmetric the block matrix which corresponds
+     * to the singular values and vectors of the matrix being decomposed.
+     * @param B Symmetric block matrix to compute the eigenvalues of.
+     * @param eigVals Storage for eigenvalues.
+     * @return The eigenvalues and eigenvectors of the symmetric block matrix which corresponds
+     * to the singular values and vectors of the matrix being decomposed.
+     */
+    protected abstract T makeEigenPairs(T B, double[] eigVals);
+
+
+    /**
+     * Gets the eigen values of the symmetric block matrix which corresponds
+     * to the singular values of the matrix being decomposed.
+     * @param B Symmetric block matrix to compute the eigenvalues of.
+     * @param eigVals Storage for eigenvalues.
+     */
+    protected abstract void makeEigenVals(T B, double[] eigVals);
+
+
+    /**
+     * Initializes the unitary {@code U} and {@code V} matrices for the SVD.
+     * @param src Shape of the source matrix being decomposed.
+     * @param cols The number of columns for {@code U} and {@code V}.
+     */
+    protected abstract void initUV(Shape src, int cols);
+
+
+    /**
+     * Extracts the singular vectors, normalizes them and sets the columns of {@code U}
+     * and {@code V} to be the left/right singular vectors.
+     * @param singularVecs Computed left and right singular vectors.
+     * @param j Index of the column of {@code U} and {@code V} to set.
+     */
+    protected abstract void extractNormalizedCols(T singularVecs, int j);
 }

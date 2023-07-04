@@ -1,13 +1,14 @@
 package com.flag4j.linalg.decompositions;
 
 import com.flag4j.Matrix;
+import com.flag4j.Vector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RealSVDTests {
 
-    final SingularValueDecomposition<Matrix> svd = new RealSVD(true);
+    final SVD<Matrix> svd = new RealSVD(true);
 
     double[][] aEntries, expSEntries, expUEntries, expVEntries;
 

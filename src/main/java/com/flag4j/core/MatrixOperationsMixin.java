@@ -27,6 +27,7 @@ package com.flag4j.core;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.linalg.decompositions.SVD;
 
 
 /**
@@ -418,6 +419,14 @@ public interface MatrixOperationsMixin<T, U, V, W, X extends Number,
      * @return The result of inverse direct summing this matrix with B.
      */
     T invDirectSum(Matrix B);
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    T invDirectSum(T B);
 
 
     /**
@@ -868,11 +877,25 @@ public interface MatrixOperationsMixin<T, U, V, W, X extends Number,
 
 
     /**
+     * Gets a specified column of this matrix between {@code rowStart} (inclusive) and {@code rowEnd} (exclusive).
+     * @param colIdx Index of the column of this matrix to get.
+     * @param rowStart Starting row of the column (inclusive).
+     * @param rowEnd Ending row of the column (exclusive).
+     * @return The column at index {@code colIdx} of this matrix between the {@code rowStart} and {@code rowEnd}
+     * indices.
+     * @throws IllegalArgumentException If {@code rowStart} is less than 0.
+     * @throws NegativeArraySizeException If {@code rowEnd} is less than {@code rowStart}.
+     */
+    TT getCol(int colIdx, int rowStart, int rowEnd);
+
+
+    /**
      * Converts this matrix to an equivalent vector. If this matrix is not shaped as a row/column vector,
      * it will be flattened then converted to a vector.
      * @return A vector equivalent to this matrix.
      */
     TT toVector();
+
 
     /**
      * Gets a specified slice of this matrix.
@@ -913,8 +936,20 @@ public interface MatrixOperationsMixin<T, U, V, W, X extends Number,
 
 
     /**
+     * Sets a column of this matrix.
+     * @param values Vector containing the new values for the matrix.
+     * @param j Index of the column of this matrix to set.
+     * @throws IllegalArgumentException If the number of entries in the {@code values} vector
+     * is not the same as the number of rows in this matrix.
+     * @throws IndexOutOfBoundsException If {@code j} is not within the bounds of this matrix.
+     * @return A reference to this matrix.
+     */
+    T setCol(TT values, int j);
+
+
+    /**
      * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
-     * Same as {@link #tr()}
+     * Same as {@link #tr()}.
      * @return The trace of this matrix.
      * @throws IllegalArgumentException If this matrix is not square.
      */
@@ -923,7 +958,7 @@ public interface MatrixOperationsMixin<T, U, V, W, X extends Number,
 
     /**
      * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
-     * Same as {@link #trace()}
+     * Same as {@link #trace()}.
      * @return The trace of this matrix.
      * @throws IllegalArgumentException If this matrix is not square.
      */
@@ -945,7 +980,7 @@ public interface MatrixOperationsMixin<T, U, V, W, X extends Number,
 
 
     /**
-     * Computes the condition number of this matrix using {@link com.flag4j.linalg.decompositions.SingularValueDecomposition SVD}.
+     * Computes the condition number of this matrix using {@link SVD SVD}.
      * Specifically, the condition number is computed as the maximum singular value divided by the minimum singular
      * value of this matrix.
      *
