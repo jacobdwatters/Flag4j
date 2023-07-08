@@ -7,11 +7,12 @@
 Flag4j is a fast linear algebra library for Java and provides operations and linear algebra routines for real/complex sparse/dense tensors, matrices, and vectors.
 
 ## State of Project as of 6-30-2023
-Flag4j is currently in the final steps of development before an initial beta release. Nearly all features have been fully implimented or at least have a rudimentary beta implementation.
-There is still some work to be done for sparse tensors and matrices. Once that has been completed, a beta release will be immenent.
+Flag4j is currently in the final steps of development before an initial beta release. Nearly all features have been fully implemented or at least have a rudimentary beta implementation.
+There is still some work to be done for sparse tensors and matrices. Once that has been completed, a beta release will be imminent.
 ___
 
 ## Planed Features and Functionality
+Highlighted features are currently not fully implemented.
 ### Algebraic Objects
 - Complex Numbers
 - Vectors
@@ -21,14 +22,14 @@ ___
   - Complex Sparse Vector
 - Matrices
     - Real Dense Matrix
-    - Real Sparse Matrix
+    - <mark>Real Sparse Matrix</mark>
     - Complex Dense Matrix
-    - Complex Sparse Matrix
+    - <mark>Complex Sparse Matrix</mark>
 - Tensors
     - Real Dense Tensor
-    - Real Sparse Tensor
+    - <mark>Real Sparse Tensor</mark>
     - Complex Dense Tensor
-    - Complex Sparse Tensor
+    - <mark>Complex Sparse Tensor</mark>
 
 ### Operations
 - Basic Arithmetic Operations: Add, subtract, scalar/element multiply, scalar/element divide, etc.
@@ -66,8 +67,8 @@ ___
 ### Linear and Homography Transformations
 - Scale
 - Shift
-- Rotate
-- Affine
+- <mark>Rotate</mark>
+- <mark>Affine</mark>
 - Projections
   - Orthographic
   - Perspective
