@@ -11,8 +11,8 @@ Flag4j is currently in the final steps of development before an initial beta rel
 There is still some work to be done for sparse tensors and matrices. Once that has been completed, a beta release will be imminent.
 ___
 
-## Planed Features and Functionality
-Highlighted features are currently not fully implemented.
+## Features and Functionality
+Highlighted features are a work in progress and currently not fully implemented.
 ### Algebraic Objects
 - Complex Numbers
 - Vectors
