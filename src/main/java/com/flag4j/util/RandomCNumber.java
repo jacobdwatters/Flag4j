@@ -32,11 +32,7 @@ import java.util.Random;
 /**
  * An instance of this class is used to generate a stream of random {@link CNumber complex numbers}. Wraps {@link Random} class.
  */
-public class RandomCNumber {
-    /**
-     * Random number generator.
-     */
-    protected final Random rng;
+public class RandomCNumber extends Random {
 
 
     /**
@@ -44,7 +40,7 @@ public class RandomCNumber {
      * very likely to be distinct from any other invocation of this constructor.
      */
     public RandomCNumber() {
-        rng = new Random();
+        super();
     }
 
 
@@ -54,7 +50,7 @@ public class RandomCNumber {
      * @param seed Seed for this random number generator.
      */
     public RandomCNumber(long seed) {
-        rng = new Random(seed);
+        super(seed);
     }
 
 
@@ -63,7 +59,7 @@ public class RandomCNumber {
      * @return A pseudorandom complex number with a magnitude uniformly distributed in {@code [0.0, 1.0)}.
      */
     public CNumber random() {
-        return random(rng.nextDouble());
+        return random(nextDouble());
     }
 
 
@@ -79,14 +75,14 @@ public class RandomCNumber {
         }
 
         // Generate real component.
-        double real = rng.nextDouble()*mag;
+        double real = nextDouble()*mag;
 
         // Compute imaginary component using Pythagorean theorem.
         double imaginary = Math.sqrt(Math.pow(mag, 2) - Math.pow(real, 2));
 
         // Choose complex plane quadrant (i.e. signs of each component).
-        real = rng.nextBoolean() ? real : -real;
-        imaginary = rng.nextBoolean() ? imaginary : -imaginary;
+        real = nextBoolean() ? real : -real;
+        imaginary = nextBoolean() ? imaginary : -imaginary;
 
         return new CNumber(real, imaginary);
     }
@@ -110,7 +106,7 @@ public class RandomCNumber {
                     min + " and max=" + max + ".");
         }
 
-        return random(rng.nextDouble()*(max-min) + min);
+        return random(nextDouble()*(max-min) + min);
     }
 
 
@@ -121,7 +117,7 @@ public class RandomCNumber {
      * deviation of 1.0.
      */
     public CNumber randn() {
-        return random(rng.nextGaussian());
+        return random(nextGaussian());
     }
 
 
@@ -136,7 +132,7 @@ public class RandomCNumber {
      */
     public CNumber randn(double mean, double std) {
         ParameterChecks.assertGreaterEq(std, 0);
-        return random(rng.nextGaussian()*std + mean);
+        return random(nextGaussian()*std + mean);
     }
 
 
@@ -147,7 +143,7 @@ public class RandomCNumber {
      *      * and an imaginary component of zero.
      */
     public CNumber randomReal() {
-        return new CNumber(rng.nextDouble());
+        return new CNumber(nextDouble());
     }
 
 
@@ -171,7 +167,7 @@ public class RandomCNumber {
                     min + " and max=" + max + ".");
         }
 
-        return new CNumber(rng.nextDouble()*(max-min) + min);
+        return new CNumber(nextDouble()*(max-min) + min);
     }
 
 
@@ -182,7 +178,7 @@ public class RandomCNumber {
      * deviation of 1.0. The imaginary component will be zero.
      */
     public CNumber randnReal() {
-        return new CNumber(rng.nextGaussian());
+        return new CNumber(nextGaussian());
     }
 
 
@@ -197,6 +193,6 @@ public class RandomCNumber {
      */
     public CNumber randnReal(double mean, double std) {
         ParameterChecks.assertGreaterEq(std, 0);
-        return new CNumber(rng.nextGaussian()*std + mean);
+        return new CNumber(nextGaussian()*std + mean);
     }
 }

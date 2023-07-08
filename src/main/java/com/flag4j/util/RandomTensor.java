@@ -217,7 +217,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public Vector randnVector(int size, double mean, double std) {
-        return new Vector(genNormalRealArray(size));
+        return new Vector(genNormalRealArray(size, mean, std));
     }
 
 
@@ -385,11 +385,11 @@ public class RandomTensor {
 
         for(int i=0; i<size; i++) {
             for(int j=0; j<i; j++) {
-                randMat.entries[i*size+j] = complexRng.rng.nextDouble();
+                randMat.entries[i*size+j] = complexRng.nextDouble();
                 randMat.entries[j*size+i] = randMat.entries[i*size+j];
             }
 
-            randMat.entries[i*(size+1)] = complexRng.rng.nextDouble(); // Diagonal entry
+            randMat.entries[i*(size+1)] = complexRng.nextDouble(); // Diagonal entry
         }
 
         return randMat;
@@ -546,7 +546,7 @@ public class RandomTensor {
         double[] values = new double[length];
 
         for(int i=0; i<length; i++) {
-            values[i] = complexRng.rng.nextDouble();
+            values[i] = complexRng.nextDouble();
         }
 
         return values;
@@ -564,7 +564,7 @@ public class RandomTensor {
         double[] values = new double[length];
 
         for(int i=0; i<length; i++) {
-            values[i] = complexRng.rng.nextDouble()*(max - min) + min;
+            values[i] = complexRng.nextDouble()*(max - min) + min;
         }
 
         return values;
@@ -581,7 +581,7 @@ public class RandomTensor {
         double[] values = new double[length];
 
         for(int i=0; i<length; i++) {
-            values[i] = complexRng.rng.nextInt();
+            values[i] = complexRng.nextInt();
         }
 
         return values;
@@ -599,7 +599,7 @@ public class RandomTensor {
         double[] values = new double[length];
 
         for(int i=0; i<length; i++) {
-            values[i] = complexRng.rng.nextInt()*((double) (max - min)) + min;
+            values[i] = complexRng.nextInt()*((double) (max - min)) + min;
         }
 
         return values;
@@ -617,7 +617,7 @@ public class RandomTensor {
         double[] values = new double[length];
 
         for(int i=0; i<length; i++) {
-            values[i] = complexRng.rng.nextGaussian();
+            values[i] = complexRng.nextGaussian();
         }
 
         return values;
@@ -637,7 +637,7 @@ public class RandomTensor {
         double[] values = new double[length];
 
         for(int i=0; i<length; i++) {
-            values[i] = complexRng.rng.nextGaussian()*mean + std;
+            values[i] = complexRng.nextGaussian()*mean + std;
         }
 
         return values;

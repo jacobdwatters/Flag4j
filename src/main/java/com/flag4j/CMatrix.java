@@ -555,6 +555,34 @@ public class CMatrix
 
 
     /**
+     * Sets an index of this matrix to the specified value.
+     *
+     * @param value Value to set.
+     * @param row   Row index to set.
+     * @param col   Column index to set.
+     * @return A reference to this matrix.
+     */
+    @Override
+    public CMatrix set(double value, int row, int col) {
+        return super.set(value, row, col);
+    }
+
+
+    /**
+     * Sets an index of this matrix to the specified value.
+     *
+     * @param value Value to set.
+     * @param row   Row index to set.
+     * @param col   Column index to set.
+     * @return A reference to this matrix.
+     */
+    @Override
+    public CMatrix set(CNumber value, int row, int col) {
+        return super.set(value, row, col);
+    }
+
+
+    /**
      * Sets the value of this matrix using a 2D array.
      *
      * @param values New values of the matrix.

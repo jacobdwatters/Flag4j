@@ -36,6 +36,25 @@ import com.flag4j.SparseMatrix;
  */
 public interface MatrixManipulationsMixin<T, X extends Number> {
 
+    /**
+     * Sets an index of this matrix to the specified value.
+     * @param value Value to set.
+     * @param row Row index to set.
+     * @param col Column index to set.
+     * @return A reference to this matrix.
+     */
+    T set(double value, int row, int col);
+
+
+    /**
+     * Sets an index of this matrix to the specified value.
+     * @param value Value to set.
+     * @param row Row index to set.
+     * @param col Column index to set.
+     * @return A reference to this matrix.
+     */
+    T set(X value, int row, int col);
+
 
     /**
      * Sets the value of this matrix using a 2D array.

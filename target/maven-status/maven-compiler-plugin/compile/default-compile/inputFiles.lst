@@ -33,6 +33,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense_spa
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\MatrixManipulationsMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\real\RealDenseTensorDot.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\io\TensorWriter.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\decompositions\SVD.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseEquals.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\RealMatrixMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\RowEchelon.java
@@ -173,7 +174,6 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\com
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\complex_numbers\CNumberParser.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\sparse\SparseTensorMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\decompositions\Decomposition.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\decompositions\SingularValueDecomposition.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\solvers\RealExactSolver.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\decompositions\ComplexSchurDecomposition.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\TransposeDispatcher.java
