@@ -131,16 +131,29 @@ public abstract class HessenburgDecomposition<
         Q = computeQ ? initQ() : null;
 
         for(int k = 0; k<H.numRows()-2; k++) {
-            col = H.getColBelow(k+1, k).toVector();
+            col = H.getCol(k, k+1, H.numCols());
 
             // If the column is zeros, no need to compute reflector. It is already in the correct form.
             if(col.maxAbs() > tol) {
-                ref = initRef(col, k+1); // Initialize a Householder reflector.
+                ref = initRef(col); // Initialize a Householder reflector.
 
-                H = ref.mult(H).mult(ref.H()); // Apply Householder reflector to both sides of B.
+                // Apply Householder reflector to both sides of H.
+                H.setSlice(
+                        ref.mult(H.getSlice(k + 1, k+1+ref.numRows(), 0, H.numCols())),
+                        k + 1, 0
+                );
+                H.setSlice(
+                        H.getSlice(0, H.numRows(), k + 1, k+1+ref.numCols()).mult(ref.H()),
+                        0, k + 1
+                );
+
 
                 if(computeQ) {
-                    Q = Q.mult(ref); // Apply Householder reflector to Q.
+                    // Collect similarity transformations.
+                    Q.setSlice(
+                            Q.getSlice(0, Q.numRows(), k+1, k+1+ref.numCols()).mult(ref),
+                            0, k + 1
+                    );
                 }
             }
 
@@ -152,10 +165,9 @@ public abstract class HessenburgDecomposition<
     /**
      * Creates a Householder reflector embedded in an identity matrix with the same size as {@code H}.
      * @param col Vector to compute Householder reflector for.
-     * @param i Row and column index of slice of identity matrix to embed Householder reflector in.
      * @return Householder reflector embedded in an identity matrix with the same size as {@code H}.
      */
-    protected abstract T initRef(U col, int i);
+    protected abstract T initRef(U col);
 
 
     /**

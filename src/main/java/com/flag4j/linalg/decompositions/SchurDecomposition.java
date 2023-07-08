@@ -232,10 +232,64 @@ public abstract class SchurDecomposition<
 
 
     /**
+     * Chases the bulge from the {@code T} matrix introduced by the unitary transformations and returns {@code T}
+     * to upper Hessenburg form.
+     * @param bulgeSize Size of the bulge to be chased (i.e. the number of rows below the first sub-diagonal which
+     *                  are non-zero).
+     */
+    protected void chaseBulge(int bulgeSize) {
+        int stop = bulgeSize + 2;
+
+        double tol = Math.ulp(1.0); // Tolerance for considering value zero.
+        T ref; // Storage for Householder reflector.
+        U col; // Normal vector for Householder reflector computation.
+
+        for (int k = 0; k < workT.numRows() - bulgeSize - 1; k++) {
+            col = workT.getCol(k, k + 1, k + stop);
+
+            // If the column is zeros, no need to compute reflector. It is already in the correct form.
+            if (col.maxAbs() > tol) {
+                ref = initRef(col); // Initialize a Householder reflector.
+
+                // Apply Householder reflector to both sides of matrix.
+                workT.setSlice(
+                        ref.mult(workT.getSlice(k + 1, k + stop, 0, workT.numCols())),
+                        k + 1, 0
+                );
+                workT.setSlice(
+                        workT.getSlice(0, workT.numRows(), k + 1, k + stop).mult(ref.H()),
+                        0, k + 1
+                );
+
+                if (computeU) {
+                    // Collect similarity transformations.
+                    workU.setSlice(
+                            workU.getSlice(0, workT.numRows(), k + 1, k + stop).mult(ref),
+                            0, k + 1
+                    );
+                }
+            }
+
+            // Ensure values below first sub-diagonal are truly zero.
+            workT.set(0, k+2, k);
+            if(bulgeSize == 2) workT.set(0, k+3, k);
+        }
+    }
+
+    /**
      * Initializes the unitary matrix in the schur decomposition.
      * @return An initial {@code U} matrix. i.e. an identity matrix.
      */
     protected abstract T initU();
+
+
+    /**
+     * Initializes a Householder reflector for use in the bulge chase.
+     * @param col Column vector to compute the Householder for.
+     * @return A Householder reflector which zeros the values in {@code col} after
+     * the first entry.
+     */
+    protected abstract T initRef(U col);
 
 
     /**

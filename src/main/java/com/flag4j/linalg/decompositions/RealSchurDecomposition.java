@@ -28,7 +28,6 @@ import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.transformations.Householder;
-import com.flag4j.util.RandomTensor;
 
 
 /**
@@ -131,10 +130,8 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
     public RealSchurDecomposition decompose(Matrix src) {
         applyQR(src); // Apply a variant of the QR algorithm.
 
-        if(computeU) {
-            // Collect Hessenburg decomposition similarity transformations.
-            workU = hess.Q.mult(workU);
-        }
+        // Collect Hessenburg decomposition similarity transformations.
+        if(computeU) workU = hess.Q.mult(workU);
 
         if(realSchur) {
             T = workT.toComplex();
@@ -181,7 +178,7 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
 
         // Apply reflector and introduce bulge.
         applyTransforms(Householder.getReflector(new Vector(p0, p1, p2)));
-        chaseBulge(); // Chase the bulge.
+        chaseBulge(2); // Chase the bulge.
     }
 
 
@@ -207,7 +204,7 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
         Matrix ref = Householder.getReflector(p);
 
         applyTransforms(ref); // Apply reflector to workT and introduce bulge.
-        chaseBulge(); // Chase the bulge from workT.
+        chaseBulge(1); // Chase the bulge from workT.
     }
 
 
@@ -233,19 +230,15 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
 
 
     /**
-     * Chases the bulge from the {@code T} matrix introduced by the unitary transformations and returns {@code T}
-     * to upper Hessenburg form.
+     * Initializes a Householder reflector for use in the bulge chase.
+     *
+     * @param col Column vector to compute the Householder for.
+     * @return A Householder reflector which zeros the values in {@code col} after
+     * the first entry.
      */
-    protected void chaseBulge() {
-        HessenburgDecomposition<Matrix, Vector> hess = new RealHessenburgDecomposition(computeU);
-
-        // TODO: Replace this with a proper bulge chaise that takes advantage of workT being nearly upper Hessenburg already
-        workT = hess.decompose(workT).getH(); // A crude bulge chase using the Hessenburg decomposition.
-
-        if(computeU) {
-            // Collect similarity transformations.
-            workU = workU.mult(hess.getQ());
-        }
+    @Override
+    protected Matrix initRef(Vector col) {
+        return Householder.getReflector(col);
     }
 
 
@@ -286,28 +279,5 @@ public class RealSchurDecomposition extends SchurDecomposition<Matrix, Vector> {
         return Math.abs(workT.entries[m*(workT.numCols + 1) - 1])
                 > TOL*Math.abs( workT.entries[(m-1)*(workT.numCols + 1)]
                 + Math.abs(workT.entries[m*(workT.numCols + 1)]) );
-    }
-
-
-    public static void main(String[] args) {
-        Shape shape = new Shape(20, 20);
-        RandomTensor rtg = new RandomTensor(42);
-        Matrix A = rtg.randomMatrix(shape, -100, 100);
-        RealSchurDecomposition schur = new RealSchurDecomposition(true, true);
-
-        final int numRuns = 25;
-        double total_ms = 0;
-
-        for(int i=0; i<numRuns; i++) {
-            long start = System.nanoTime();
-            schur.decompose(A);
-            long end = System.nanoTime();
-
-            total_ms += (end-start)*1.0e-6;
-        }
-
-        total_ms /= numRuns;
-
-        System.out.printf("Average time over %d runs: %f ms\n", numRuns, total_ms);
     }
 }

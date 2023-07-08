@@ -134,7 +134,7 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
 
         // Apply reflector and introduce bulge.
         applyTransforms(Householder.getReflector(p));
-        chaseBulge(); // Chase the bulge.
+        chaseBulge(2); // Chase the bulge.
     }
 
 
@@ -160,7 +160,7 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
         CMatrix ref = Householder.getReflector(p);
 
         applyTransforms(ref); // Apply reflector to T and introduce bulge.
-        chaseBulge(); // Chase the bulge from T.
+        chaseBulge(1); // Chase the bulge from T.
     }
 
 
@@ -186,6 +186,19 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
 
 
     /**
+     * Initializes a Householder reflector for use in the bulge chase.
+     *
+     * @param col Column vector to compute the Householder for.
+     * @return A Householder reflector which zeros the values in {@code col} after
+     * the first entry.
+     */
+    @Override
+    protected CMatrix initRef(CVector col) {
+        return Householder.getReflector(col);
+    }
+
+
+    /**
      * Deflates the {@code T} matrix in the decomposition and updates {@code U} if needed.
      *
      * @param m Row and column index of the lower right entry of the 2x2 block to deflate in {@code T}.
@@ -193,23 +206,6 @@ public class ComplexSchurDecomposition extends SchurDecomposition<CMatrix, CVect
     @Override
     protected void deflateT(int m) {
         deflateT(workT, workU, m);
-    }
-
-
-    /**
-     * Chases the bulge from the {@code T} matrix introduced by the unitary transformations and returns {@code T}
-     * to upper Hessenburg form.
-     */
-    protected void chaseBulge() {
-        HessenburgDecomposition<CMatrix, CVector> hess = new ComplexHessenburgDecomposition(computeU);
-
-        // TODO: Replace this with a proper bulge chaise that takes advantage of T being nearly upper Hessenburg already
-        workT = hess.decompose(workT).getH(); // A crude bulge chase using the Hessenburg decomposition.
-
-        if(computeU) {
-            // Collect similarity transformations.
-            workU = workU.mult(hess.getQ());
-        }
     }
 
 

@@ -43,39 +43,6 @@ public class RealDenseMatrixMultiplication {
     }
 
 
-    public static void multSliceEq(Matrix A, Matrix B, int rowStart, int rowEnd, int colStart, int colEnd) {
-        int rows1 = rowEnd-rowStart;
-        int cols1 = colEnd-colStart;
-        int cols2 = B.shape.dims[Axis2D.col()];
-
-        double[] dest = new double[rows1*cols2];
-
-        int src2Index, destIndex, src1Start, destIndexStart, end;
-        int src1Index;
-
-//        for(int i=0; i<rows1; i++) {
-//            src1Start = i*cols1;
-//            destIndexStart = i*cols2;
-//
-//            for(int k=0; k<cols1; k++) {
-//                src1Index = src1Start+k;
-//                src2Index = k*cols2;
-//                destIndex = destIndexStart;
-//                end = src2Index + cols2;
-//
-//                while(src2Index<end) {
-//                    dest[destIndex++] += A.entries[src1Index]*B.entries[src2Index++];
-//                }
-//            }
-//        }
-
-        for(int i=rowStart; i<rowEnd; i++) {
-            System.arraycopy(dest, i*cols1, A.entries, i*A.numCols, cols1);
-        }
-
-    }
-
-
     /**
      * Computes the matrix multiplication between two real dense matrices using the standard algorithm.
      * @param src1 Entries of the first matrix.

@@ -108,7 +108,6 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_tensor\CTens
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\decompositions\RealLUTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\sparse_vector\SparseVectorConversionTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\sparse_complex_vector\SparseCVectorJoinTests.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\decompositions\ComplexSchurTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\dense_sparse\real\RealDenseSparseMatMultTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\solvers\RealExactSolverTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixVectorCheckTests.java
@@ -116,7 +115,6 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixAddToEa
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\ShapeTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_matrix\CMatrixSetOperationTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\SubSpaceTests.java
-C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\linalg\decompositions\RealSchurTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\sparse_vector\SparseVectorReshapeTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixFibTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\sparse_matrix\SparseMatrixConstructorTests.java
