@@ -104,6 +104,7 @@ com\flag4j\operations\dense\complex\ComplexDenseProperties.class
 com\flag4j\complex_numbers\CNumberToken.class
 com\flag4j\operations\dense_sparse\real\RealDenseSparseMatrixMultTranspose.class
 com\flag4j\SparseTensor.class
+com\flag4j\linalg\decompositions\SVD.class
 com\flag4j\operations\dense\complex\ComplexDenseTranspose.class
 com\flag4j\operations\sparse\real_complex\RealComplexSparseEquals.class
 com\flag4j\operations\dense\real\AggregateDenseReal.class
@@ -119,7 +120,6 @@ com\flag4j\operations\dense\complex\ComplexDenseEquals.class
 com\flag4j\linalg\decompositions\Decomposition.class
 com\flag4j\core\MatrixComparisonsMixin.class
 com\flag4j\io\PrintOptions.class
-com\flag4j\linalg\decompositions\SingularValueDecomposition.class
 com\flag4j\SparseVector.class
 com\flag4j\core\dense\DenseTensorBase.class
 com\flag4j\operations\dense_sparse\complex\ComplexDenseSparseEquals.class

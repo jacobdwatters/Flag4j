@@ -27,7 +27,7 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
-import com.flag4j.Vector;
+import com.flag4j.Shape;
 import com.flag4j.linalg.Eigen;
 
 /**
@@ -36,92 +36,104 @@ import com.flag4j.linalg.Eigen;
  * orthogonal matrices whose columns are the left and right singular vectors of {@code M} and {@code S} is a rectangular
  * diagonal matrix containing the singular values of {@code M}.
  */
-public class RealSVD extends SingularValueDecomposition<Matrix> {
-
-    // TODO: This is a very rough implementation of SVD. To compute the SVD of a matrix M, the
-    //  matrix M^T*M should not be explicitly computed. Ideally, a modified version of the double shift implicit QR
-    //  algorithm should be used to compute the SVD directly without forming M^T*M explicitly.
+public class RealSVD extends SVD<Matrix> {
 
     /**
      * Creates a decomposer to compute the singular value decomposition of a real matrix. The left and right singular
      * vectors will be computed.
      */
     public RealSVD() {
-        super(true);
+        super(true, false);
     }
 
 
     /**
      * Creates a decomposer to compute the singular value decomposition of a real matrix.
      * @param computeUV A flag which indicates if the orthogonal matrices {@code Q} and {@code V} should be computed
-     *                  (i.e. the singular vectors).<br>
+     *                  (i.e. the singular vectors). By default, this is true.<br>
      *                 - If true, the {@code Q} and {@code V} matrices will be computed.<br>
      *                 - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If they are not
      *                 needed, this may provide a performance improvement.
      */
     public RealSVD(boolean computeUV) {
-        super(computeUV);
+        super(computeUV, false);
     }
 
 
     /**
-     * Applies decomposition to the source matrix.
+     * Creates a decomposer to compute the singular value decomposition of a real matrix.
+     * @param computeUV A flag which indicates if the orthogonal matrices {@code Q} and {@code V} should be computed
+     *                  (i.e. the singular vectors). By default, this is true.<br>
+     *                 - If true, the {@code Q} and {@code V} matrices will be computed.<br>
+     *                 - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If they are not
+     *                 needed, this may provide a performance improvement.
+     * @param reduced Flag which indicates if the reduced (or full) SVD should be computed. This is false by default.<br>
+     *                 - If true, reduced SVD is computed.
+     *                 - If false, the full SVD is computed.
+     */
+    public RealSVD(boolean computeUV, boolean reduced) {
+        super(computeUV, reduced);
+    }
+
+
+    /**
+     * Gets the eigen values and vectors of symmetric the block matrix which corresponds
+     * to the singular values and vectors of the matrix being decomposed.
      *
-     * @param src The source matrix to decompose.
-     * @return A reference to this decomposer.
+     * @param B       Symmetric block matrix to compute the eigenvalues of.
+     * @param eigVals Storage for eigenvalues.
+     * @return The eigenvalues and eigenvectors of the symmetric block matrix which corresponds
+     * to the singular values and vectors of the matrix being decomposed.
      */
     @Override
-    public RealSVD decompose(Matrix src) {
-        Vector S1;
+    protected Matrix makeEigenPairs(Matrix B, double[] eigVals) {
+        CMatrix[] pairs = Eigen.getEigenPairs(B);
 
-        if(computeUV) {
-            // Compute right singular vectors.
-            CMatrix[] pairs = Eigen.getEigenPairs(src.T().mult(src));
-            V = pairs[1].toReal();
+        double[] vals = pairs[0].toReal().entries;
+        System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
 
-            // Compute left singular vectors.
-            if(src.isSquare()) {
-                U = src.mult(V);
-            } else if(src.numCols > src.numRows) {
-                U = src.mult(V).getSlice(0, src.numRows, 0, src.numRows);
-            } else {
-                U = new Matrix(src.numRows);
-                U.setSlice(src.mult(V), 0, 0);
-            }
-
-            // Compute singular values.
-            S1 = pairs[0].toVector().toReal().abs().sqrt();
-
-            // Copy singular values to diagonal of S and scale left singular vectors properly.
-        } else {
-            S1 = Eigen.getEigenValues(src.T().mult(src)).toReal().abs().sqrt();
-        }
-
-        S = new Matrix(src.shape);
-        int stopIdx = Math.min(S.numRows, S.numCols);
-        for(int i=0; i<stopIdx; i++) {
-            S.set(S1.entries[i], i, i);
-
-            if(computeUV && S1.entries[i] != 0) {
-                // Properly scale the left singular vectors so that Mv = su.
-                divCols(i, S1.entries[i]);
-            }
-        }
-
-        return this;
+        return pairs[1].toReal();
     }
 
 
     /**
-     * Divides a specified column of the {@code U} matrix in the SVD by a scalar value.
-     * @param colIdx Index of column to divide.
-     * @param scalValue Value to divide column by.
+     * Gets the eigen values of the symmetric block matrix which corresponds
+     * to the singular values of the matrix being decomposed.
+     *
+     * @param B       Symmetric block matrix to compute the eigenvalues of.
+     * @param eigVals Storage for eigenvalues.
      */
-    private void divCols(int colIdx, double scalValue) {
-        int idx = colIdx;
-        for(int i=0; i<U.numRows; i++) {
-            U.entries[idx] /= scalValue;
-            idx+=U.numCols;
-        }
+    @Override
+    protected void makeEigenVals(Matrix B, double[] eigVals) {
+        double[] vals = Eigen.getEigenValues(B).toReal().entries;
+        System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
+    }
+
+
+    /**
+     * Initializes the unitary {@code U} and {@code V} matrices for the SVD.
+     *
+     * @param src Shape of the source matrix being decomposed.
+     * @param cols The number of columns for {@code U} and {@code V}.
+     */
+    @Override
+    protected void initUV(Shape src, int cols) {
+        U = new Matrix(src.dims[0], cols);
+        V = new Matrix(src.dims[1], cols);
+    }
+
+
+    /**
+     * Extracts the singular vectors, normalizes them and sets the columns of {@code U}
+     * and {@code V} to be the left/right singular vectors.
+     *
+     * @param singularVecs Computed left and right singular vectors.
+     * @param j            Index of the column of {@code U} and {@code V} to set.
+     */
+    @Override
+    protected void extractNormalizedCols(Matrix singularVecs, int j) {
+        // Extract left and right singular vectors and normalize.
+        V.setCol(singularVecs.getCol(2*j, 0, V.numRows()).normalize(), j);
+        U.setCol(singularVecs.getCol(2*j, V.numRows(), singularVecs.numRows()).normalize(), j);
     }
 }

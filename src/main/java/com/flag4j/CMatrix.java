@@ -31,9 +31,7 @@ import com.flag4j.core.dense.ComplexDenseTensorBase;
 import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.linalg.Invert;
-import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
-import com.flag4j.linalg.decompositions.ComplexSVD;
-import com.flag4j.linalg.decompositions.LUDecomposition;
+import com.flag4j.linalg.decompositions.*;
 import com.flag4j.linalg.solvers.ComplexExactSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
@@ -553,6 +551,34 @@ public class CMatrix
             // Unknown axis
             throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, Axis2D.allAxes()));
         }
+    }
+
+
+    /**
+     * Sets an index of this matrix to the specified value.
+     *
+     * @param value Value to set.
+     * @param row   Row index to set.
+     * @param col   Column index to set.
+     * @return A reference to this matrix.
+     */
+    @Override
+    public CMatrix set(double value, int row, int col) {
+        return super.set(value, row, col);
+    }
+
+
+    /**
+     * Sets an index of this matrix to the specified value.
+     *
+     * @param value Value to set.
+     * @param row   Row index to set.
+     * @param col   Column index to set.
+     * @return A reference to this matrix.
+     */
+    @Override
+    public CMatrix set(CNumber value, int row, int col) {
+        return super.set(value, row, col);
     }
 
 
@@ -3469,6 +3495,28 @@ public class CMatrix
 
 
     /**
+     * Gets a specified column of this matrix between {@code rowStart} (inclusive) and {@code rowEnd} (exclusive).
+     * @param colIdx Index of the column of this matrix to get.
+     * @param rowStart Starting row of the column (inclusive).
+     * @param rowEnd Ending row of the column (exclusive).
+     * @return The column at index {@code colIdx} of this matrix between the {@code rowStart} and {@code rowEnd}
+     * indices.
+     * @throws IllegalArgumentException If {@code rowStart} is less than 0.
+     * @throws NegativeArraySizeException If {@code rowEnd} is less than {@code rowStart}.
+     */
+    public CVector getCol(int colIdx, int rowStart, int rowEnd) {
+        ParameterChecks.assertGreaterEq(0, rowStart);
+        CNumber[] col = new CNumber[rowEnd-rowStart];
+
+        for(int i=rowStart; i<rowEnd; i++) {
+            col[i-rowStart] = entries[i*numCols + colIdx].copy();
+        }
+
+        return new CVector(col);
+    }
+
+
+    /**
      * Get a specified row of this matrix at and after a specified column.
      *
      * @param colStart Index of the row to begin at.
@@ -3551,6 +3599,20 @@ public class CMatrix
         CMatrix inverse = solver.solve(LT, UinvT).H();
 
         return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.
+    }
+
+
+    /**
+     * Computes the pseudo-inverse of this matrix.
+     *
+     * @return The pseudo-inverse of this matrix.
+     */
+    @Override
+    public CMatrix pInv() {
+        SVD<CMatrix> svd = new ComplexSVD().decompose(this);
+        Matrix sInv = Invert.invDiag(svd.getS());
+
+        return svd.getV().mult(sInv).mult(svd.getU().H());
     }
 
 
@@ -3867,7 +3929,7 @@ public class CMatrix
         Matrix S = new ComplexSVD(false).decompose(this).getS();
         int stopIdx = Math.min(numRows, numCols);
 
-        double tol = 1.0E-8*Math.max(numRows, numCols); // Tolerance for determining if a singular value should be considered zero.
+        double tol = 2.0*Math.max(numRows, numCols)*Math.ulp(1.0)*norm(); // Tolerance for determining if a singular value should be considered zero.
         int rank = 0;
 
         for(int i=0; i<stopIdx; i++) {

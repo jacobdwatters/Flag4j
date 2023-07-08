@@ -24,6 +24,7 @@
 
 package com.flag4j.operations.dense.real;
 
+import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.concurrency.Configurations;
 import com.flag4j.concurrency.ThreadManager;
@@ -42,7 +43,7 @@ public class RealDenseMatrixMultiplication {
     }
 
 
-/**
+    /**
      * Computes the matrix multiplication between two real dense matrices using the standard algorithm.
      * @param src1 Entries of the first matrix.
      * @param shape1 Shape of the first matrix.

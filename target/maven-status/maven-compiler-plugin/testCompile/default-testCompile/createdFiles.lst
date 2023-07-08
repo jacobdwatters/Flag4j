@@ -104,7 +104,6 @@ com\flag4j\vector\VectorOuterProductTests.class
 com\flag4j\linalg\solvers\RealLstsqSolverTests.class
 com\flag4j\matrix\MatrixPropertiesTests.class
 com\flag4j\complex_numbers\CNumberComparisonTest.class
-com\flag4j\linalg\decompositions\ComplexSchurTest.class
 com\flag4j\matrix\MatrixElemMultTests.class
 com\flag4j\complex_matrix\CMatrixScaleOperationsTests.class
 com\flag4j\sparse_vector\SparseVectorConstructorTests.class
@@ -144,7 +143,6 @@ com\flag4j\matrix\MatrixAddToEachRowTests.class
 com\flag4j\vector\VectorPerpParallelTests.class
 com\flag4j\complex_matrix\CMatrixUnaryOperationsTests.class
 com\flag4j\operations\dense\real\RoundTests.class
-com\flag4j\linalg\decompositions\RealSchurTests.class
 com\flag4j\complex_matrix\CMatrixAddTests.class
 com\flag4j\complex_matrix\CMatrixConstructorTests.class
 com\flag4j\tensor\TensorDotTests.class

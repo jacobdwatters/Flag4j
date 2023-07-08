@@ -74,13 +74,11 @@ public final class RealHessenburgDecomposition extends HessenburgDecomposition<M
      * Creates a Householder reflector embedded in an identity matrix with the same size as {@code H}.
      *
      * @param col Vector to compute Householder reflector for.
-     * @param i   Row and column index of slice of identity matrix to embed Householder reflector in.
      * @return Householder reflector embedded in an identity matrix with the same size as {@code H}.
      */
     @Override
-    protected Matrix initRef(Vector col, int i) {
-        Matrix ref = Matrix.I(H.numRows);
-        return ref.setSlice(Householder.getReflector(col), i, i);
+    protected Matrix initRef(Vector col) {
+        return Householder.getReflector(col);
     }
 
 

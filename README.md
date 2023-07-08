@@ -61,7 +61,7 @@ ___
 
 ### Linear Solvers
 - Exact solution for well determined systems
-- Least Squares
+- Least Squares solution
 
 ### Linear and Homography Transformations
 - Scale

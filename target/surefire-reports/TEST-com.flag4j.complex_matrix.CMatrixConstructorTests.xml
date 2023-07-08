@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="C:\Users\jacob\.jdks\corretto-16.0.2\bin"/>
-    <property name="sun.java.command" value="C:\Users\jacob\AppData\Local\Temp\surefire3400924632597049290\surefirebooter-20230703124733827_3.jar C:\Users\jacob\AppData\Local\Temp\surefire3400924632597049290 2023-07-03T12-47-33_754-jvmRun1 surefire-20230703124733827_1tmp surefire_0-20230703124733827_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\jacob\AppData\Local\Temp\surefire17983961574978002133\surefirebooter-20230708143240244_3.jar C:\Users\jacob\AppData\Local\Temp\surefire17983961574978002133 2023-07-08T14-32-40_159-jvmRun1 surefire-20230708143240244_1tmp surefire_0-20230708143240244_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\jacob\IdeaProjects\Flag4j\target\test-classes;C:\Users\jacob\IdeaProjects\Flag4j\target\classes;C:\Users\jacob\.m2\repository\junit\junit\4.13.2\junit-4.13.2.jar;C:\Users\jacob\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\jacob\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.9.3\junit-jupiter-api-5.9.3.jar;C:\Users\jacob\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\jacob\.m2\repository\org\junit\platform\junit-platform-commons\1.9.3\junit-platform-commons-1.9.3.jar;C:\Users\jacob\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\jacob\AppData\Local\Temp\surefire3400924632597049290\surefirebooter-20230703124733827_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\jacob\AppData\Local\Temp\surefire17983961574978002133\surefirebooter-20230708143240244_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="16.0.2+7"/>
@@ -58,19 +58,19 @@
     <property name="java.class.version" value="60.0"/>
   </properties>
   <testcase name="rowsColsComplexTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.002"/>
-  <testcase name="rowsColsTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.001"/>
-  <testcase name="arrIntTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.0"/>
-  <testcase name="shapeValueDoubleTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.0"/>
-  <testcase name="shapeValueTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.0"/>
-  <testcase name="shapeTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.0"/>
+  <testcase name="rowsColsTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.002"/>
+  <testcase name="arrIntTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.001"/>
+  <testcase name="shapeValueDoubleTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.001"/>
+  <testcase name="shapeValueTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.001"/>
+  <testcase name="shapeTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.001"/>
   <testcase name="cmatTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.007"/>
   <testcase name="matTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.0"/>
-  <testcase name="arrTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.0"/>
-  <testcase name="valueSizeTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.0"/>
-  <testcase name="arrStringTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.0"/>
-  <testcase name="arrDoubleTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.001"/>
-  <testcase name="rowColValueTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.002"/>
-  <testcase name="sizeConstructorTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.0"/>
+  <testcase name="arrTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.001"/>
+  <testcase name="valueSizeTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.001"/>
+  <testcase name="arrStringTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.001"/>
+  <testcase name="arrDoubleTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.0"/>
+  <testcase name="rowColValueTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.001"/>
+  <testcase name="sizeConstructorTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.001"/>
   <testcase name="rowColValueDoubleTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.001"/>
-  <testcase name="valueSizeDoubleTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.001"/>
+  <testcase name="valueSizeDoubleTestCase" classname="com.flag4j.complex_matrix.CMatrixConstructorTests" time="0.0"/>
 </testsuite>

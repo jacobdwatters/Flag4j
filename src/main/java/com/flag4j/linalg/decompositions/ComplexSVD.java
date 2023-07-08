@@ -26,8 +26,7 @@ package com.flag4j.linalg.decompositions;
 
 
 import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
-import com.flag4j.Vector;
+import com.flag4j.Shape;
 import com.flag4j.linalg.Eigen;
 
 
@@ -37,7 +36,7 @@ import com.flag4j.linalg.Eigen;
  * unitary matrices whose columns are the left and right singular vectors of {@code M} and {@code S} is a rectangular
  * diagonal matrix containing the singular values of {@code M}.
  */
-public class ComplexSVD extends SingularValueDecomposition<CMatrix> {
+public class ComplexSVD extends SVD<CMatrix> {
 
 
     /**
@@ -45,7 +44,7 @@ public class ComplexSVD extends SingularValueDecomposition<CMatrix> {
      * vectors will be computed.
      */
     public ComplexSVD() {
-        super(true);
+        super(true, false);
     }
 
 
@@ -53,74 +52,90 @@ public class ComplexSVD extends SingularValueDecomposition<CMatrix> {
      * Creates a decomposer to compute the Schur decomposition.
      *
      * @param computeUV A flag which indicates if the unitary matrices {@code Q} and {@code V} should be computed
-     *                  (i.e. the singular vectors).<br>
+     *                  (i.e. the singular vectors). By default, this is true.<br>
      *                  - If true, the {@code Q} and {@code V} matrices will be computed.<br>
      *                  - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If it is not needed, this may
      *                  provide a performance improvement.
      */
     public ComplexSVD(boolean computeUV) {
-        super(computeUV);
+        super(computeUV, false);
     }
 
 
     /**
-     * Applies decomposition to the source matrix.
+     * Creates a decomposer to compute the singular value decomposition of a real matrix.
+     * @param computeUV A flag which indicates if the orthogonal matrices {@code Q} and {@code V} should be computed
+     *                  (i.e. the singular vectors). By default, this is true.<br>
+     *                 - If true, the {@code Q} and {@code V} matrices will be computed.<br>
+     *                 - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If they are not
+     *                 needed, this may provide a performance improvement.
+     * @param reduced Flag which indicates if the reduced (or full) SVD should be computed. This is false by default.<br>
+     *                 - If true, reduced SVD is computed.
+     *                 - If false, the full SVD is computed.
+     */
+    public ComplexSVD(boolean computeUV, boolean reduced) {
+        super(computeUV, reduced);
+    }
+
+
+    /**
+     * Gets the eigen values and vectors of symmetric the block matrix which corresponds
+     * to the singular values and vectors of the matrix being decomposed.
      *
-     * @param src The source matrix to decompose.
-     * @return A reference to this decomposer.
+     * @param B       Symmetric block matrix to compute the eigenvalues of.
+     * @param eigVals Storage for eigenvalues.
+     * @return The eigenvalues and eigenvectors of the symmetric block matrix which corresponds
+     * to the singular values and vectors of the matrix being decomposed.
      */
     @Override
-    public ComplexSVD decompose(CMatrix src) {
-        Vector S1;
+    protected CMatrix makeEigenPairs(CMatrix B, double[] eigVals) {
+        CMatrix[] pairs = Eigen.getEigenPairs(B);
 
-        if(computeUV) {
-            // Compute right singular vectors.
-            CMatrix[] pairs = Eigen.getEigenPairs(src.H().mult(src));
-            V = pairs[1];
+        double[] vals = pairs[0].toReal().entries;
+        System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
 
-            // Compute left singular vectors.
-            if(src.isSquare()) {
-                U = src.mult(V);
-            } else if(src.numCols > src.numRows) {
-                U = src.mult(V).getSlice(0, src.numRows, 0, src.numRows);
-            } else {
-                U = new CMatrix(src.numRows);
-                U.setSlice(src.mult(V), 0, 0);
-            }
-
-            // Compute singular values.
-            S1 = pairs[0].toVector().toReal().abs().sqrt();
-
-            // Copy singular values to diagonal of S and scale left singular vectors properly.
-        } else {
-            S1 = Eigen.getEigenValues(src.H().mult(src)).toReal().abs().sqrt();
-        }
-
-        S = new Matrix(src.shape);
-        int stopIdx = Math.min(S.numRows, S.numCols);
-        for(int i=0; i<stopIdx; i++) {
-            S.set(S1.entries[i], i, i);
-
-            if(computeUV && S1.entries[i] != 0) {
-                // Properly scale the left singular vectors so that Mv = su.
-                divCols(i, S1.entries[i]);
-            }
-        }
-
-        return this;
+        return pairs[1];
     }
 
 
     /**
-     * Divides a specified column of a matrix by a scalar value.
-     * @param colIdx Index of column to divide.
-     * @param scalValue Value to divide column by.
+     * Gets the eigen values of the symmetric block matrix which corresponds
+     * to the singular values of the matrix being decomposed.
+     *
+     * @param B       Symmetric block matrix to compute the eigenvalues of.
+     * @param eigVals Storage for eigenvalues.
      */
-    private void divCols(int colIdx, double scalValue) {
-        int idx = colIdx;
-        for(int i=0; i<U.numRows; i++) {
-            U.entries[idx] = U.entries[idx].div(scalValue);
-            idx+=U.numCols;
-        }
+    @Override
+    protected void makeEigenVals(CMatrix B, double[] eigVals) {
+        double[] vals = Eigen.getEigenValues(B).toReal().entries;
+        System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
+    }
+
+
+    /**
+     * Initializes the unitary {@code U} and {@code V} matrices for the SVD.
+     *
+     * @param src  Shape of the source matrix being decomposed.
+     * @param cols The number of columns for {@code U} and {@code V}.
+     */
+    @Override
+    protected void initUV(Shape src, int cols) {
+        U = new CMatrix(src.dims[0], cols);
+        V = new CMatrix(src.dims[1], cols);
+    }
+
+
+    /**
+     * Extracts the singular vectors, normalizes them and sets the columns of {@code U}
+     * and {@code V} to be the left/right singular vectors.
+     *
+     * @param singularVecs Computed left and right singular vectors.
+     * @param j            Index of the column of {@code U} and {@code V} to set.
+     */
+    @Override
+    protected void extractNormalizedCols(CMatrix singularVecs, int j) {
+        // Extract left and right singular vectors and normalize.
+        V.setCol(singularVecs.getCol(2*j, 0, V.numRows()).normalize(), j);
+        U.setCol(singularVecs.getCol(2*j, V.numRows(), singularVecs.numRows()).normalize(), j);
     }
 }

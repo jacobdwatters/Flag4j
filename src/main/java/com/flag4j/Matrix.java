@@ -34,6 +34,7 @@ import com.flag4j.linalg.Invert;
 import com.flag4j.linalg.decompositions.LUDecomposition;
 import com.flag4j.linalg.decompositions.RealLUDecomposition;
 import com.flag4j.linalg.decompositions.RealSVD;
+import com.flag4j.linalg.decompositions.SVD;
 import com.flag4j.linalg.solvers.RealExactSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
@@ -490,6 +491,34 @@ public class Matrix
 
 
     /**
+     * Sets an index of this matrix to the specified value.
+     *
+     * @param value Value to set.
+     * @param row   Row index to set.
+     * @param col   Column index to set.
+     * @return A reference to this matrix.
+     */
+    @Override
+    public Matrix set(double value, int row, int col) {
+        return super.set(value, row, col);
+    }
+
+
+    /**
+     * Sets an index of this matrix to the specified value.
+     *
+     * @param value Value to set.
+     * @param row   Row index to set.
+     * @param col   Column index to set.
+     * @return A reference to this matrix.
+     */
+    @Override
+    public Matrix set(Double value, int row, int col) {
+        return super.set(value, row, col);
+    }
+
+
+    /**
      * Sets the value of this matrix using a 2D array.
      *
      * @param values New values of the matrix.
@@ -736,17 +765,12 @@ public class Matrix
     @Override
     public Matrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
         Matrix slice = new Matrix(rowEnd-rowStart, colEnd-colStart);
-        int destPos = 0;
-        int srcPos;
-        int end;
 
-        for(int i=rowStart; i<rowEnd; i++) {
-            srcPos = i*this.numCols + colStart;
-            end = srcPos + colEnd - colStart;
-
-            while(srcPos < end) {
-                slice.entries[destPos++] = this.entries[srcPos++];
-            }
+        for(int i=0; i<slice.numRows; i++) {
+            System.arraycopy(
+                    this.entries, (i+rowStart)*this.numCols + colStart,
+                    slice.entries, i*slice.numCols, slice.numCols
+            );
         }
 
         return slice;
@@ -772,10 +796,10 @@ public class Matrix
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.numRows; i++) {
-            for(int j=0; j<values.numCols; j++) {
-                this.entries[(i+rowStart)*numCols + j+colStart] =
-                        values.entries[i*values.numCols + j];
-            }
+            System.arraycopy(
+                    values.entries, i*values.numCols,
+                    this.entries, (i+rowStart)*numCols + colStart, values.numCols
+            );
         }
 
         return this;
@@ -896,9 +920,10 @@ public class Matrix
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
         for(int i=0; i<values.length; i++) {
-            for(int j=0; j<values[0].length; j++) {
-                this.entries[(i+rowStart)*numCols + j+colStart] = values[i][j];
-            }
+            System.arraycopy(
+                    values[i], 0,
+                    this.entries, (i+rowStart)*numCols + colStart, values[0].length
+            );
         }
 
         return this;
@@ -950,9 +975,10 @@ public class Matrix
         Matrix copy = new Matrix(this);
 
         for(int i=0; i<values.numRows; i++) {
-            for(int j=0; j<values.numCols; j++) {
-                copy.entries[(i+rowStart)*numCols + j+colStart] = values.entries[values.shape.entriesIndex(i, j)];
-            }
+            System.arraycopy(
+                    values.entries, i*values.numCols,
+                    copy.entries, (i+rowStart)*numCols + colStart, values.numCols
+            );
         }
 
         return copy;
@@ -2986,6 +3012,28 @@ public class Matrix
 
 
     /**
+     * Gets a specified column of this matrix between {@code rowStart} (inclusive) and {@code rowEnd} (exclusive).
+     * @param colIdx Index of the column of this matrix to get.
+     * @param rowStart Starting row of the column (inclusive).
+     * @param rowEnd Ending row of the column (exclusive).
+     * @return The column at index {@code colIdx} of this matrix between the {@code rowStart} and {@code rowEnd}
+     * indices.
+     * @throws IllegalArgumentException If {@code rowStart} is less than 0.
+     * @throws NegativeArraySizeException If {@code rowEnd} is less than {@code rowStart}.
+     */
+    public Vector getCol(int colIdx, int rowStart, int rowEnd) {
+        ParameterChecks.assertGreaterEq(0, rowStart);
+        double[] col = new double[rowEnd-rowStart];
+
+        for(int i=rowStart; i<rowEnd; i++) {
+            col[i-rowStart] = entries[i*numCols + colIdx];
+        }
+
+        return new Vector(col);
+    }
+
+
+    /**
      * Get a specified row of this matrix at and after a specified column.
      *
      * @param colStart Index of the row to begin at.
@@ -3088,6 +3136,20 @@ public class Matrix
         Matrix inverse = solver.solve(lu.getL().T(), UinvT).T();
 
         return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.
+    }
+
+
+    /**
+     * Computes the pseudo-inverse of this matrix.
+     *
+     * @return The pseudo-inverse of this matrix.
+     */
+    @Override
+    public Matrix pInv() {
+        SVD<Matrix> svd = new RealSVD().decompose(this);
+        Matrix sInv = Invert.invDiag(svd.getS());
+
+        return svd.getV().mult(sInv).mult(svd.getU().T());
     }
 
 
@@ -3513,20 +3575,8 @@ public class Matrix
      */
     @Override
     public int matrixRank() {
-        Matrix S = new RealSVD(false).decompose(this).getS();
-        int stopIdx = Math.min(numRows, numCols);
-
-        // Tolerance for determining if a singular value should be considered zero.
-        double tol = 1.0E-16*Math.max(numRows, numCols);
-        int rank = 0;
-
-        for(int i=0; i<stopIdx; i++) {
-            if(S.get(i, i)>tol) {
-                rank++;
-            }
-        }
-
-        return rank;
+        // Compute the (numerical) matrix rank using the singular value decomposition.
+        return new RealSVD(false).decompose(this).getRank();
     }
 
 

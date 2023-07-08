@@ -74,13 +74,11 @@ public final class ComplexHessenburgDecomposition extends HessenburgDecompositio
      * Creates a Householder reflector embedded in an identity matrix with the same size as {@code H}.
      *
      * @param col Vector to compute Householder reflector for.
-     * @param i   Row and column index of slice of identity matrix to embed Householder reflector in.
      * @return Householder reflector embedded in an identity matrix with the same size as {@code H}.
      */
     @Override
-    protected CMatrix initRef(CVector col, int i) {
-        CMatrix ref = CMatrix.I(this.H.numRows);
-        return ref.setSlice(Householder.getReflector(col), i, i);
+    protected CMatrix initRef(CVector col) {
+        return Householder.getReflector(col);
     }
 
 
