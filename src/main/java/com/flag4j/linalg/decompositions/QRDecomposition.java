@@ -24,8 +24,10 @@
 
 package com.flag4j.linalg.decompositions;
 
+import com.flag4j.Matrix;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
+import com.flag4j.util.RandomTensor;
 
 /**
  * <p>This abstract class specifies methods for computing the {@code QR} decomposition of a matrix.</p>
@@ -109,10 +111,19 @@ public abstract class QRDecomposition<
 
             // If the column has zeros below the diagonal it is in the correct form. No need to compute reflector.
             if(col.maxAbs() > tol) {
-                H = initH(col, i); // Construct a Householder reflector.
+                H = initH(col); // Construct a Householder reflector.
 
-                Q = Q.mult(H); // Apply Householder reflector to Q
-                R = H.mult(R); // Apply Householder reflector to R
+                // Apply Householder reflector to Q
+                Q.setSlice(
+                        Q.getSlice(0, Q.numRows(), i, i+H.numCols()).mult(H),
+                        0, i
+                );
+
+                // Apply Householder reflector to R
+                R.setSlice(
+                        H.mult(R.getSlice(i, i + H.numRows(), 0, R.numCols())),
+                        i, 0
+                );
             }
 
             setZeros(i); // Ensure R is truly upper triangular.
@@ -170,7 +181,6 @@ public abstract class QRDecomposition<
     /**
      * Initializes a Householder reflector.
      * @param col Vector to compute householder reflector for.
-     * @param i Row and column index to set slice of identity matrix as the Householder reflector.
      */
-    protected abstract T initH(U col, int i);
+    protected abstract T initH(U col);
 }

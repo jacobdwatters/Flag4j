@@ -25,12 +25,19 @@
 package com.flag4j.linalg;
 import com.flag4j.CMatrix;
 import com.flag4j.Matrix;
+import com.flag4j.util.ErrorMessages;
 
 
 /**
  * This class contains several methods for determining the positive definiteness of a matrix.
  */
 public class PositiveDefiniteness {
+
+    private PositiveDefiniteness() {
+        // Hide default constructor for utility class.
+        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());
+    }
+
 
     /**
      * Checks if the matrix is positive definite. A matrix {@code M} is positive definite iff
@@ -41,7 +48,7 @@ public class PositiveDefiniteness {
      * @return True if the matrix is positive definite. Otherwise, returns false.
      * @see #isPosSemiDef(Matrix) 
      */
-    public boolean isPosDef(Matrix src) {
+    public static boolean isPosDef(Matrix src) {
         boolean result;
         double tol = 1.0E-8; // Tolerance for considering eigenvalues positive.
 
@@ -64,7 +71,7 @@ public class PositiveDefiniteness {
      * @return True if the matrix is positive definite. Otherwise, returns false.
      * @see #isPosSemiDef(CMatrix)
      */
-    public boolean isPosDef(CMatrix src) {
+    public static boolean isPosDef(CMatrix src) {
         boolean result;
         double tol = 1.0E-8; // Tolerance for considering eigenvalues positive.
 
@@ -87,7 +94,7 @@ public class PositiveDefiniteness {
      * @return True if the matrix is positive semi-definite. Otherwise, returns false.
      * @see #isPosSemiDef(Matrix) 
      */
-    public boolean isPosSemiDef(Matrix src) {
+    public static boolean isPosSemiDef(Matrix src) {
         boolean result;
         double tol = -1.0E-8; // Tolerance for considering eigenvalues non-negative.
 
@@ -110,7 +117,7 @@ public class PositiveDefiniteness {
      * @return True if the matrix is positive semi-definite. Otherwise, returns false.
      * @see #isPosSemiDef(CMatrix)
      */
-    public boolean isPosSemiDef(CMatrix src) {
+    public static boolean isPosSemiDef(CMatrix src) {
         boolean result;
         double tol = -1.0E-8; // Tolerance for considering eigenvalues non-negative.
 

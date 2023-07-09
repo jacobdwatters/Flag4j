@@ -25,6 +25,7 @@
 package com.flag4j.linalg.decompositions;
 
 import com.flag4j.Matrix;
+import com.flag4j.linalg.PositiveDefiniteness;
 import com.flag4j.util.ParameterChecks;
 
 
@@ -37,6 +38,30 @@ import com.flag4j.util.ParameterChecks;
  * transpose of {@code L}.</p>
  */
 public final class RealCholeskyDecomposition extends CholeskyDecomposition<Matrix> {
+
+
+    /**
+     * Constructs a Cholesky decomposer. If you would like to enforce a check for positive definiteness at the time
+     * of decomposition, see {@link #RealCholeskyDecomposition(boolean)}. However, note that this will be significantly
+     * slower.
+     */
+    public RealCholeskyDecomposition() {
+        super(false);
+    }
+
+
+    /**
+     * Constructs a Cholesky decomposer.
+     *
+     * @param checkPosDef Flag indicating if the positive definiteness of the matrix should be checked before decomposing.
+     *                    If true, a check for positive definiteness will be done before the matrix is decomposed. If
+     *                    it is not, an error will be thrown. If false, no check will be made and the matrix will be
+     *                    assumed to be positive definite.
+     */
+    public RealCholeskyDecomposition(boolean checkPosDef) {
+        super(checkPosDef);
+    }
+
 
     /**
      * Gets the transpose of the {@code L} matrix computed by the Cholesky decomposition {@code A=LL<sup>T</sup>}.
@@ -59,8 +84,11 @@ public final class RealCholeskyDecomposition extends CholeskyDecomposition<Matri
      */
     @Override
     public RealCholeskyDecomposition decompose(Matrix src) {
-        // TODO: Check that matrix is positive definite.
-        ParameterChecks.assertSquare(src.shape);
+        if(checkPosDef && !PositiveDefiniteness.isPosDef(src)) {
+            throw new IllegalArgumentException("Matrix must be positive definite.");
+        } else if(!checkPosDef) {
+            ParameterChecks.assertSquare(src.shape);
+        }
 
         L = new Matrix(src.numRows);
         double sum;

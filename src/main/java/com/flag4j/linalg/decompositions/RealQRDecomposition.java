@@ -84,11 +84,9 @@ public final class RealQRDecomposition extends QRDecomposition<Matrix, Vector> {
      * Initializes a Householder reflector.
      *
      * @param col Vector to compute householder reflector for.
-     * @param i   Row and column index to set slice of identity matrix as the Householder reflector.
      */
     @Override
-    protected Matrix initH(Vector col, int i) {
-        Matrix H = Matrix.I(R.numRows);
-        return H.setSlice(Householder.getReflector(col), i, i);
+    protected Matrix initH(Vector col) {
+        return Householder.getReflector(col);
     }
 }
