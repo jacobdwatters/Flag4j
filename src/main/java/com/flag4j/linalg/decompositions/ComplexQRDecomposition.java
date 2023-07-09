@@ -84,11 +84,9 @@ public final class ComplexQRDecomposition extends QRDecomposition<CMatrix, CVect
      * Initializes a Householder reflector.
      *
      * @param col Vector to compute householder reflector for.
-     * @param i   Row and column index to set slice of identity matrix as the Householder reflector.
      */
     @Override
-    protected CMatrix initH(CVector col, int i) {
-        CMatrix H = CMatrix.I(R.numRows);
-        return H.setSlice(Householder.getReflector(col), i, i);
+    protected CMatrix initH(CVector col) {
+        return Householder.getReflector(col);
     }
 }

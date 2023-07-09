@@ -143,7 +143,7 @@ public abstract class HessenburgDecomposition<
                         k + 1, 0
                 );
                 H.setSlice(
-                        H.getSlice(0, H.numRows(), k + 1, k+1+ref.numCols()).mult(ref.H()),
+                        H.getSlice(0, H.numRows(), k + 1, k + 1 + ref.numCols()).mult(ref.H()),
                         0, k + 1
                 );
 

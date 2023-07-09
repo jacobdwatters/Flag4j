@@ -64,9 +64,8 @@ public class RealDenseProperties {
      * @return True if this matrix is symmetric
      */
     public static boolean isSymmetric(double[] src, Shape shape) {
-        if(shape.dims[0]!=shape.dims[1]) {
-            return false;
-        }
+        // Quick return if possible.
+        if(shape.dims[0]!=shape.dims[1]) return false;
 
         int count1, count2, stop;
 

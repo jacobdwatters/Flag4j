@@ -43,6 +43,23 @@ public abstract class CholeskyDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?,
         implements Decomposition<T> {
 
     /**
+     * Flag indicating if the positive definiteness of the matrix should be checked before decomposing.
+     */
+    final boolean checkPosDef;
+
+    /**
+     * Constructs a Cholesky decomposer.
+     * @param checkPosDef Flag indicating if the positive definiteness of the matrix should be checked before decomposing.
+     *                    If true, a check for positive definiteness will be done before the matrix is decomposed. If
+     *                    it is not, an error will be thrown. If false, no check will be made and the matrix will be
+     *                    assumed to be positive definite.
+     */
+    public CholeskyDecomposition(boolean checkPosDef) {
+        this.checkPosDef = checkPosDef;
+    }
+
+
+    /**
      * The lower triangular matrix resulting from the Cholesky decomposition {@code A=LL<sup>*</sup>}.
      */
     protected T L;

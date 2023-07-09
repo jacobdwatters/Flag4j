@@ -26,6 +26,7 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.linalg.PositiveDefiniteness;
 import com.flag4j.util.ParameterChecks;
 
 
@@ -41,6 +42,30 @@ public final class ComplexCholeskyDecomposition extends CholeskyDecomposition<CM
 
 
     /**
+     * Constructs a Cholesky decomposer. If you would like to enforce a check for positive definiteness at the time
+     * of decomposition, see {@link #ComplexCholeskyDecomposition(boolean)}. However, note that this may have a
+     * significant negative impact on performance.
+     * slower.
+     */
+    public ComplexCholeskyDecomposition() {
+        super(false);
+    }
+
+
+    /**
+     * Constructs a Cholesky decomposer.
+     *
+     * @param checkPosDef Flag indicating if the positive definiteness of the matrix should be checked before decomposing.
+     *                    If true, a check for positive definiteness will be done before the matrix is decomposed. If
+     *                    it is not, an error will be thrown. If false, no check will be made and the matrix will be
+     *                    assumed to be positive definite.
+     */
+    public ComplexCholeskyDecomposition(boolean checkPosDef) {
+        super(checkPosDef);
+    }
+
+
+    /**
      * Decompose a matrix into {@code A=LL<sup>*</sup>} where {@code L} is a lower triangular matrix and {@code L<sup>*</sup>} is the conjugate
      * transpose of {@code L}.
      *
@@ -50,8 +75,11 @@ public final class ComplexCholeskyDecomposition extends CholeskyDecomposition<CM
      */
     @Override
     public ComplexCholeskyDecomposition decompose(CMatrix src) {
-        // TODO: Check that matrix is positive definite.
-        ParameterChecks.assertSquare(src.shape);
+        if(checkPosDef && !PositiveDefiniteness.isPosDef(src)) {
+            throw new IllegalArgumentException("Matrix must be positive definite.");
+        } else if(!checkPosDef) {
+            ParameterChecks.assertSquare(src.shape);
+        }
 
         L = new CMatrix(src.numRows);
         CNumber sum;
