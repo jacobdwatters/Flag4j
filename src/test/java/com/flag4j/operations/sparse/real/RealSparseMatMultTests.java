@@ -69,7 +69,7 @@ class RealSparseMatMultTests {
         assertArrayEquals(exp.entries, standardVector(A.entries, A.rowIndices, A.colIndices, A.shape,
                 bVector.entries, bVector.indices, bVector.shape));
         assertArrayEquals(exp.entries, concurrentStandardVector(A.entries, A.rowIndices, A.colIndices, A.shape,
-                bVector.entries, bVector.indices, bVector.shape));
+                bVector.entries, bVector.indices));
     }
 }
 

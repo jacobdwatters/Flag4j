@@ -29,6 +29,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\VectorOperation
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\real\RealDenseDeterminant.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\real\RealDenseOperations.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense_sparse\real_complex\RealComplexDenseSparseMatrixMultiplication.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\sparse\complex\ComplexSparseMatrixOperations.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense_sparse\real\RealDenseSparseMatrixMultiplication.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\MatrixManipulationsMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\real\RealDenseTensorDot.java
@@ -109,6 +110,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\sparse\re
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\exceptions\LinearAlgebraException.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\decompositions\RealLUDecomposition.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\dense\complex\ComplexDenseProperties.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\sparse\real_complex\RealComplexSparseMatrixOperations.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\core\ComplexTensorMixin.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\sparse\real_complex\RealComplexSparseVectorOperations.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\Decompose.java
@@ -134,6 +136,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\sparse\re
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\SubSpace.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\util\ArrayUtils.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\decompositions\RealSchurDecomposition.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\operations\sparse\real\RealSparseMatrixOperations.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\transformations\Householder.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\linalg\decompositions\CholeskyDecomposition.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\main\java\com\flag4j\Shape.java

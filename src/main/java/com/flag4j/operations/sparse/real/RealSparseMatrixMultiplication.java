@@ -24,7 +24,6 @@
 
 package com.flag4j.operations.sparse.real;
 
-
 import com.flag4j.Shape;
 import com.flag4j.concurrency.ThreadManager;
 import com.flag4j.util.Axis2D;
@@ -169,11 +168,10 @@ public class RealSparseMatrixMultiplication {
      * @param shape1 Shape of the first sparse matrix.
      * @param src2 Non-zero entries of the second sparse matrix.
      * @param indices Indices of non-zero entries in the sparse vector.
-     * @param shape2 Shape of the second sparse matrix.
      * @return The result of the matrix-vector multiplication stored in a dense matrix.
      */
     public static double[] concurrentStandardVector(double[] src1, int[] rowIndices1, int[] colIndices1, Shape shape1,
-                                          double[] src2, int[] indices, Shape shape2) {
+                                                    double[] src2, int[] indices) {
         int rows1 = shape1.dims[Axis2D.row()];
         double[] dest = new double[rows1];
 

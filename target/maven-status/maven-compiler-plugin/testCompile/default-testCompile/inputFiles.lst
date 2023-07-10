@@ -84,6 +84,7 @@ C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_vector\CVect
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\complex_numbers\CNumberMinMaxSumTest.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixSubTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\tensor\TensorEqualsTests.java
+C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\operations\sparse\real\RealSpareMatrixAddTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\sparse_complex_tensor\SparseCTensorConstructorTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\matrix\MatrixInversionTests.java
 C:\Users\jacob\IdeaProjects\Flag4j\src\test\java\com\flag4j\sparse_vector\SparseVectorJoinTests.java

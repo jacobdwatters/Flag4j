@@ -24,7 +24,6 @@
 
 package com.flag4j.core;
 
-
 import com.flag4j.Matrix;
 import com.flag4j.SparseMatrix;
 
@@ -34,7 +33,10 @@ import com.flag4j.SparseMatrix;
  * @param <T> Matrix type.
  * @param <X> Matrix entry type.
  */
-public interface MatrixManipulationsMixin<T, X extends Number> {
+public interface MatrixManipulationsMixin<
+        T,
+        U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>,
+        X extends Number> {
 
     /**
      * Sets an index of this matrix to the specified value.

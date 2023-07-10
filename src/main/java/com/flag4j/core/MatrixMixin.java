@@ -25,6 +25,8 @@
 package com.flag4j.core;
 
 
+import com.flag4j.CMatrix;
+import com.flag4j.CVector;
 import com.flag4j.Shape;
 
 /**
@@ -38,12 +40,14 @@ import com.flag4j.Shape;
  * @param <TT> Vector type equivalent.
  * @param <UU> Dense vector type.
  */
-public interface MatrixMixin<T, U, V, W, X extends Number,
+public interface MatrixMixin<
+        T,
+        U, V, W, X extends Number,
         TT extends VectorMixin<TT, UU, ?, ?, X, T, U, W>,
-        UU extends VectorMixin<UU, UU, ?, ?, X, U, U, W>>
+        UU extends VectorMixin<UU, UU, ?, CVector, X, U, U, CMatrix>>
         extends MatrixPropertiesMixin,
         MatrixComparisonsMixin<T>,
-        MatrixManipulationsMixin<T, X>,
+        MatrixManipulationsMixin<T, TT, X>,
         MatrixOperationsMixin<T, U, V, W, X, TT, UU> {
 
     /**

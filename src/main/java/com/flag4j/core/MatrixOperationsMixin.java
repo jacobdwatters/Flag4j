@@ -40,9 +40,11 @@ import com.flag4j.linalg.decompositions.SVD;
  * @param <TT> Vector type equivalent.
  * @param <UU> Dense vector type.
  */
-public interface MatrixOperationsMixin<T, U, V, W, X extends Number,
+public interface MatrixOperationsMixin<
+        T,
+        U, V, W, X extends Number,
         TT extends VectorMixin<TT, UU, ?, ?, X, T, U, W>,
-        UU extends VectorMixin<UU, UU, ?, ?, X, U, U, W>> {
+        UU extends VectorMixin<UU, UU, ?, CVector, X, U, U, CMatrix>> {
 
     /**
      * Computes the element-wise addition between two matrices.
@@ -68,7 +70,7 @@ public interface MatrixOperationsMixin<T, U, V, W, X extends Number,
      * @return The result of adding the tensor B to this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    W add(CMatrix B);
+    CMatrix add(CMatrix B);
 
 
     /**
@@ -148,16 +150,31 @@ public interface MatrixOperationsMixin<T, U, V, W, X extends Number,
     /**
      * Computes the matrix multiplication between two matrices.
      * @param B Second matrix in the matrix multiplication.
-     * @return The result of matrix multiplying this matrix with matrix B.
-     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     * @return The result of matrix multiplying this matrix with matrix {@code B}.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of
+     * rows in matrix {@code B}.
      */
     U mult(Matrix B);
 
 
-    TT mult(TT B);
+    /**
+     * Computes the matrix-vector multiplication.
+     * @param B Vector to multiply this matrix to.
+     * @return The vector result from multiplying this matrix by the vector {@code B}.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of
+     * entries {@code B}.
+     */
+    UU mult(TT B);
 
 
-    T mult(T B);
+    /**
+     * Computes the matrix multiplication between two matrices.
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix {@code B}.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of
+     * rows in matrix {@code B}.
+     */
+    U mult(T B);
 
 
     /**

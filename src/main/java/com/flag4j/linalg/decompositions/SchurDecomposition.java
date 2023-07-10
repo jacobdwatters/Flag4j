@@ -48,8 +48,8 @@ import com.flag4j.util.RandomCNumber;
  * @param <U> Vector type for columns of the matrices of the Schur decomposition.
  */
 public abstract class SchurDecomposition<
-        T extends MatrixMixin<T, ?, ?, ?, ?, U, ?>,
-        U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>>
+        T extends MatrixMixin<T, T, ?, ?, ?, U, ?>,
+        U extends VectorMixin<U, U, ?, ?, ?, T, T, ?>>
         implements Decomposition<T> {
 
     /**

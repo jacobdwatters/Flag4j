@@ -25,9 +25,15 @@
 package com.flag4j.core.sparse;
 
 import com.flag4j.Shape;
+import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.RealTensorMixin;
+import com.flag4j.core.TensorBase;
+import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.real.AggregateReal;
+import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.common.real.RealProperties;
+import com.flag4j.operations.dense.real.AggregateDenseReal;
+import com.flag4j.operations.dense.real.RealDenseOperations;
 import com.flag4j.operations.dense.real.RealDenseProperties;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
@@ -43,7 +49,9 @@ import java.math.BigInteger;
  * @param <W> Complex Tensor type.
  * @param <Z> Dense complex tensor type.
  */
-public abstract class RealSparseTensorBase<T, U, W, Z>
+public abstract class RealSparseTensorBase<
+        T extends TensorBase<T, ?, ?, ?, ?, ?, ?>,
+        U, W, Z>
         extends SparseTensorBase<T, U, W, Z, T, double[], Double>
         implements RealTensorMixin<T, W> {
 
@@ -69,13 +77,53 @@ public abstract class RealSparseTensorBase<T, U, W, Z>
     }
 
 
-     /**
-      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
-      */
-     @Override
-     public void sparseSort() {
-         SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);
-     }
+    /**
+     * Creates a deep copy of the indices of this sparse tensor.
+     * @return A deep copy of the indices of this sparse tensor.
+     */
+    private int[][] copyIndices() {
+        int[][] newIndices = new int[indices.length][indices[0].length];
+        ArrayUtils.deepCopy(indices, newIndices);
+        return newIndices;
+    }
+
+
+    /**
+     * A factory for creating a real sparse tensor.
+     * @param shape Shape of the sparse tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    protected abstract T makeTensor(Shape shape, double[] entries, int[][] indices);
+
+
+    /**
+     * A factory for creating a real dense tensor.
+     * @param shape Shape of the tensor to make.
+     * @param entries Entries of the dense tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    protected abstract U makeDenseTensor(Shape shape, double[] entries);
+
+
+    /**
+     * A factory for creating a complex sparse tensor.
+     * @param shape Shape of the tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    protected abstract W makeComplexTensor(Shape shape, CNumber[] entries, int[][] indices);
+
+
+    /**
+    * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
+    */
+    @Override
+    public void sparseSort() {
+     SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);
+    }
 
 
     /**
@@ -88,51 +136,51 @@ public abstract class RealSparseTensorBase<T, U, W, Z>
     }
 
 
-     @Override
-     public double min() {
-        return AggregateReal.min(entries);
+    @Override
+    public double min() {
+    return AggregateReal.min(entries);
     }
 
 
-     @Override
-     public double max() {
-        return AggregateReal.max(entries);
+    @Override
+    public double max() {
+    return AggregateReal.max(entries);
     }
 
 
-     @Override
-     public double minAbs() {
-        return AggregateReal.minAbs(entries);
+    @Override
+    public double minAbs() {
+    return AggregateReal.minAbs(entries);
     }
 
 
-     @Override
-     public double maxAbs() {
-        return AggregateReal.maxAbs(entries);
+    @Override
+    public double maxAbs() {
+    return AggregateReal.maxAbs(entries);
     }
 
 
-     @Override
-     public double infNorm() {
-        return AggregateReal.maxAbs(entries);
+    @Override
+    public double infNorm() {
+    return AggregateReal.maxAbs(entries);
     }
 
 
-     @Override
-     public boolean isPos() {
-        return RealProperties.isPos(entries);
+    @Override
+    public boolean isPos() {
+    return RealProperties.isPos(entries);
     }
 
 
-     @Override
-     public boolean isNeg() {
-        return RealProperties.isNeg(entries);
+    @Override
+    public boolean isNeg() {
+    return RealProperties.isNeg(entries);
     }
 
 
-     @Override
-     public boolean isZeros() {
-         return entries.length==0 || ArrayUtils.isZeros(entries);
+    @Override
+    public boolean isZeros() {
+     return entries.length==0 || ArrayUtils.isZeros(entries);
     }
 
 
@@ -143,5 +191,89 @@ public abstract class RealSparseTensorBase<T, U, W, Z>
     @Override
     public boolean isOnes() {
         return RealDenseProperties.isOnes(entries);
+    }
+
+
+    @Override
+    public Double sum() {
+        return AggregateReal.sum(entries);
+    }
+
+
+    @Override
+    public T mult(double factor) {
+        return makeTensor(shape.copy(), RealOperations.scalMult(entries, factor), copyIndices());
+    }
+
+
+    @Override
+    public W mult(CNumber factor) {
+        return makeComplexTensor(shape.copy(), ComplexOperations.scalMult(entries, factor), copyIndices());
+    }
+
+
+    @Override
+    public T div(double divisor) {
+        return makeTensor(shape.copy(), RealOperations.scalMult(entries, divisor), copyIndices());
+    }
+
+
+    @Override
+    public W div(CNumber divisor) {
+        return makeComplexTensor(shape.copy(), ComplexOperations.scalMult(entries, divisor), copyIndices());
+    }
+
+
+    @Override
+    public T sqrt() {
+        return makeTensor(shape.copy(), RealOperations.sqrt(entries), copyIndices());
+    }
+
+
+    @Override
+    public T abs() {
+        return makeTensor(shape.copy(), RealOperations.abs(entries), copyIndices());
+    }
+
+
+    @Override
+    public T reshape(int... dims) {
+        return reshape(new Shape(dims));
+    }
+
+
+    @Override
+    public T reshape(Shape newShape) {
+        ParameterChecks.assertBroadcastable(shape, newShape);
+        return makeTensor(newShape, entries.clone(), copyIndices());
+    }
+
+
+    @Override
+    public T flatten() {
+        return makeTensor(
+                new Shape(shape.totalEntries().intValueExact()),
+                entries.clone(), copyIndices()
+        );
+    }
+
+
+    @Override
+    public int[] argMax() {
+        int idx = AggregateDenseReal.argMax(entries);
+        return indices[idx].clone();
+    }
+
+
+    @Override
+    public int[] argMin() {
+        int idx = AggregateDenseReal.argMin(entries);
+        return indices[idx].clone();
+    }
+
+
+    @Override
+    public T recip() {
+        return makeTensor(shape.copy(), RealDenseOperations.recip(entries), copyIndices());
     }
 }

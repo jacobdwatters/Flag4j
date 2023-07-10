@@ -28,6 +28,7 @@ com\flag4j\matrix\MatrixConstructorTests.class
 com\flag4j\vector\VectorScaleMultDivTests.class
 com\flag4j\tensor\TensorUnitaryOperationTests.class
 com\flag4j\complex_matrix\CMatrixReshapeTests.class
+com\flag4j\operations\sparse\real\RealSpareMatrixAddTests.class
 com\flag4j\operations\dense\complex\ComplexDenseOperationsTests.class
 com\flag4j\vector\VectorShapeTests.class
 com\flag4j\operations\dense\real\MatrixMultiplyTests.class

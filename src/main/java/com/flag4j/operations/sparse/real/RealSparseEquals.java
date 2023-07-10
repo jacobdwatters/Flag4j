@@ -36,7 +36,6 @@ import java.util.Arrays;
  */
 public class RealSparseEquals {
 
-
     /**
      * Checks if two real sparse tensors are real. Assumes the indices of each sparse tensor are sorted.
      * @param a First tensor in the equality check.
@@ -44,8 +43,10 @@ public class RealSparseEquals {
      * @return True if the tensors are equal. False otherwise.
      */
     public static boolean tensorEquals(SparseTensor a, SparseTensor b) {
-        return a.shape.equals(b.shape) && Arrays.equals(a.entries, b.entries)
-                && Arrays.deepEquals(a.indices, b.indices);
+        // Check indices first to avoid checking entries if possible.
+        return a.shape.equals(b.shape)
+                && Arrays.deepEquals(a.indices, b.indices)
+                && Arrays.equals(a.entries, b.entries);
     }
 
 
@@ -56,8 +57,11 @@ public class RealSparseEquals {
      * @return True if the matrices are equal. False otherwise.
      */
     public static boolean matrixEquals(SparseMatrix a, SparseMatrix b) {
-        return a.shape.equals(b.shape) && Arrays.equals(a.entries, b.entries)
-                && Arrays.equals(a.rowIndices, b.rowIndices) && Arrays.equals(a.colIndices, b.colIndices);
+        // Check indices first to avoid checking entries if possible.
+        return a.shape.equals(b.shape)
+                && Arrays.equals(a.rowIndices, b.rowIndices)
+                && Arrays.equals(a.colIndices, b.colIndices)
+                && Arrays.equals(a.entries, b.entries);
     }
 
 
@@ -68,7 +72,9 @@ public class RealSparseEquals {
      * @return True if the vectors are equal. False otherwise.
      */
     public static boolean vectorEquals(SparseVector a, SparseVector b) {
-        return a.size == b.size && Arrays.equals(a.indices, b.indices)
+        // Check indices first to avoid checking entries if possible.
+        return a.size == b.size
+                && Arrays.equals(a.indices, b.indices)
                 && Arrays.equals(a.entries, b.entries);
     }
 }

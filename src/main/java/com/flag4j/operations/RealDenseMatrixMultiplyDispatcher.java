@@ -51,27 +51,6 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * lookup table for all real dense matrix multiply algorithms.
      */
     private final Map<AlgorithmNames, RealDenseTensorBinaryOperation> algorithmMap;
-    /**
-     * Array of all real dense matrix multiply algorithms.
-     */
-    private final RealDenseTensorBinaryOperation[] algorithms = {
-            RealDenseMatrixMultiplication::standard,
-            RealDenseMatrixMultiplication::reordered,
-            RealDenseMatrixMultiplication::blocked,
-            RealDenseMatrixMultiplication::blockedReordered,
-            RealDenseMatrixMultiplication::concurrentStandard,
-            RealDenseMatrixMultiplication::concurrentReordered,
-            RealDenseMatrixMultiplication::concurrentBlocked,
-            RealDenseMatrixMultiplication::concurrentBlockedReordered,
-            RealDenseMatrixMultiplication::standardVector,
-            RealDenseMatrixMultiplication::blockedVector,
-            RealDenseMatrixMultiplication::concurrentStandardVector,
-            RealDenseMatrixMultiplication::concurrentBlockedVector,
-            RealDenseMatrixMultTranspose::multTranspose,
-            RealDenseMatrixMultTranspose::multTransposeBlocked,
-            RealDenseMatrixMultTranspose::multTransposeConcurrent,
-            RealDenseMatrixMultTranspose::multTransposeBlockedConcurrent,
-    };
 
     /**
      * Ration measuring squareness. the closer to one, the more square the matrix is.
@@ -86,7 +65,6 @@ public final class RealDenseMatrixMultiplyDispatcher {
      */
     private static final int CONCURRENT_SWAPPED_THRESHOLD = 3072;
 
-
     /**
      * Creates an instance containing a map of all viable real dense matrix multiply algorithms.
      */
@@ -94,7 +72,26 @@ public final class RealDenseMatrixMultiplyDispatcher {
         AlgorithmNames[] names = AlgorithmNames.values();
         algorithmMap = new HashMap<>();
 
-        for(int i=0; i<algorithms.length; i++) {
+        RealDenseTensorBinaryOperation[] algorithms = {
+                RealDenseMatrixMultiplication::standard,
+                RealDenseMatrixMultiplication::reordered,
+                RealDenseMatrixMultiplication::blocked,
+                RealDenseMatrixMultiplication::blockedReordered,
+                RealDenseMatrixMultiplication::concurrentStandard,
+                RealDenseMatrixMultiplication::concurrentReordered,
+                RealDenseMatrixMultiplication::concurrentBlocked,
+                RealDenseMatrixMultiplication::concurrentBlockedReordered,
+                RealDenseMatrixMultiplication::standardVector,
+                RealDenseMatrixMultiplication::blockedVector,
+                RealDenseMatrixMultiplication::concurrentStandardVector,
+                RealDenseMatrixMultiplication::concurrentBlockedVector,
+                RealDenseMatrixMultTranspose::multTranspose,
+                RealDenseMatrixMultTranspose::multTransposeBlocked,
+                RealDenseMatrixMultTranspose::multTransposeConcurrent,
+                RealDenseMatrixMultTranspose::multTransposeBlockedConcurrent,
+        };
+
+        for(int i = 0; i< algorithms.length; i++) {
             algorithmMap.put(names[i], algorithms[i]);
         }
     }
@@ -105,7 +102,8 @@ public final class RealDenseMatrixMultiplyDispatcher {
      * @return The singleton instance of this class.
      */
     public static synchronized RealDenseMatrixMultiplyDispatcher getInstance()  {
-        return (singletonInstance == null) ? new RealDenseMatrixMultiplyDispatcher() : singletonInstance;
+        singletonInstance = (singletonInstance == null) ? new RealDenseMatrixMultiplyDispatcher() : singletonInstance;
+        return singletonInstance;
     }
 
 

@@ -92,8 +92,10 @@ public class RealSparseVectorOperations {
      */
     public static SparseVector add(SparseVector src1,SparseVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-        List<Double> values = new ArrayList<>(src1.entries.length);
-        List<Integer> indices = new ArrayList<>(src1.entries.length);
+
+        int initCapacity = Math.max(src1.entries.length, src2.entries.length);
+        List<Double> values = new ArrayList<>(initCapacity);
+        List<Integer> indices = new ArrayList<>(initCapacity);
 
         int src1Counter = 0;
         int src2Counter = 0;
@@ -147,8 +149,10 @@ public class RealSparseVectorOperations {
      */
     public static SparseVector sub(SparseVector src1, SparseVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-        List<Double> values = new ArrayList<>(src1.entries.length);
-        List<Integer> indices = new ArrayList<>(src1.entries.length);
+
+        int initCapacity = Math.max(src1.entries.length, src2.entries.length);
+        List<Double> values = new ArrayList<>(initCapacity);
+        List<Integer> indices = new ArrayList<>(initCapacity);
 
         int src1Counter = 0;
         int src2Counter = 0;
@@ -202,8 +206,10 @@ public class RealSparseVectorOperations {
      */
     public static SparseVector elemMult(SparseVector src1, SparseVector src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-        List<Double> values = new ArrayList<>(src1.entries.length);
-        List<Integer> indices = new ArrayList<>(src1.entries.length);
+
+        int initCapacity = Math.max(src1.entries.length, src2.entries.length);
+        List<Double> values = new ArrayList<>(initCapacity);
+        List<Integer> indices = new ArrayList<>(initCapacity);
 
         int src1Counter = 0;
         int src2Counter = 0;

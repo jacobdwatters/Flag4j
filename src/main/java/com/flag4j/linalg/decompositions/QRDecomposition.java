@@ -24,10 +24,8 @@
 
 package com.flag4j.linalg.decompositions;
 
-import com.flag4j.Matrix;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
-import com.flag4j.util.RandomTensor;
 
 /**
  * <p>This abstract class specifies methods for computing the {@code QR} decomposition of a matrix.</p>
@@ -35,8 +33,8 @@ import com.flag4j.util.RandomTensor;
  * and an upper triangular matrix {@code R} such that {@code A=QR}.</p>
  */
 public abstract class QRDecomposition<
-        T extends MatrixMixin<T, ?, ?, ?, ?, U, ?>,
-        U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>>
+        T extends MatrixMixin<T, T, ?, ?, ?, U, ?>,
+        U extends VectorMixin<U, U, ?, ?, ?, T, T, ?>>
         implements Decomposition<T> {
 
     /**

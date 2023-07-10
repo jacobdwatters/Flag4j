@@ -29,11 +29,8 @@ import com.flag4j.core.VectorMixin;
 import com.flag4j.core.sparse.RealSparseTensorBase;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.common.real.AggregateReal;
 import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.common.real.VectorNorms;
-import com.flag4j.operations.dense.real.AggregateDenseReal;
-import com.flag4j.operations.dense.real.RealDenseOperations;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseVectorOperations;
@@ -208,44 +205,6 @@ public class SparseVector
         }
 
         return new SparseVector(size, destEntries, destIndices);
-    }
-
-
-    /**
-     * Copies and reshapes vector. Note, since a vector is rank 1, this method simply copies the vector.
-     * @param shape Shape of the new vector.
-     * @return A copy of this vector.
-     * @throws IllegalArgumentException If the new shape is not rank 1.
-     */
-    @Override
-    public SparseVector reshape(Shape shape) {
-        ParameterChecks.assertBroadcastable(this.shape, shape);
-        ParameterChecks.assertRank(1, shape);
-        return this.copy();
-    }
-
-
-    /**
-     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
-     * in the reshaped tensor.
-     *
-     * @param shape Shape of the new tensor.
-     * @return A tensor which is equivalent to this tensor but with the specified shape.
-     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
-     */
-    @Override
-    public SparseVector reshape(int... shape) {
-        return reshape(new Shape(shape));
-    }
-
-
-    /**
-     * Flattens vector. Note, since a vector is already rank 1. This just copies the vector.
-     * @return A copy of this vector.
-     */
-    @Override
-    public SparseVector flatten() {
-        return this.copy();
     }
 
 
@@ -764,30 +723,6 @@ public class SparseVector
 
 
     /**
-     * Computes scalar multiplication of a tensor.
-     *
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    @Override
-    public SparseVector mult(double factor) {
-        return new SparseVector(size, RealOperations.scalMult(entries, factor), indices.clone());
-    }
-
-
-    /**
-     * Computes scalar multiplication of a tensor.
-     *
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    @Override
-    public SparseCVector mult(CNumber factor) {
-        return new SparseCVector(size, ComplexOperations.scalMult(entries, factor), indices.clone());
-    }
-
-
-    /**
      * Computes the scalar division of a tensor.
      *
      * @param divisor The scalar value to divide tensor by.
@@ -814,41 +749,6 @@ public class SparseVector
 
 
     /**
-     * Sums together all entries in the tensor.
-     *
-     * @return The sum of all entries in this tensor.
-     */
-    @Override
-    public Double sum() {
-        return AggregateReal.sum(entries);
-    }
-
-
-    /**
-     * Computes the element-wise square root of a tensor.
-     *
-     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
-     * the principle square root i.e. the square root with positive real part.
-     */
-    @Override
-    public SparseVector sqrt() {
-        return new SparseVector(this.size, RealOperations.sqrt(entries), indices.clone());
-    }
-
-
-    /**
-     * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
-     * be computed.
-     *
-     * @return The result of applying an element-wise absolute value/magnitude to this tensor.
-     */
-    @Override
-    public SparseVector abs() {
-        return new SparseVector(this.size, RealOperations.abs(entries), indices.clone());
-    }
-
-
-    /**
      * Computes the transpose of a tensor. Same as {@link #T()}. Since a vector is a rank 1 tensor, this just
      * copies the vector.
      *
@@ -869,18 +769,6 @@ public class SparseVector
     @Override
     public SparseVector T() {
         return this.copy();
-    }
-
-
-    /**
-     * Computes the reciprocals, element-wise, of this sparse vector. However, all zero entries will remain zero.
-     *
-     * @return A sparse vector containing the reciprocal elements of this sparse vector with zero entries preserved.
-     * @throws ArithmeticException If this tensor contains any zeros.
-     */
-    @Override
-    public SparseVector recip() {
-        return new SparseVector(size, RealDenseOperations.recip(entries), indices.clone());
     }
 
 
@@ -1236,32 +1124,6 @@ public class SparseVector
 
 
     /**
-     * Finds the indices of the minimum non-zero value in this sparse vector.
-     *
-     * @return The indices of the minimum non-zero value in this sparse vector. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMin() {
-        int idx = AggregateDenseReal.argMin(entries);
-        return new int[]{indices[idx]};
-    }
-
-
-    /**
-     * Finds the indices of the maximum non-zero value in this tensor.
-     *
-     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMax() {
-        int idx = AggregateDenseReal.argMax(entries);
-        return new int[]{indices[idx]};
-    }
-
-
-    /**
      * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
      *
      * @return the 2-norm of this tensor.
@@ -1351,6 +1213,47 @@ public class SparseVector
     @Override
     public int length() {
         return this.size;
+    }
+
+
+    /**
+     * A factory for creating a real sparse tensor.
+     *
+     * @param shape   Shape of the sparse tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    @Override
+    protected SparseVector makeTensor(Shape shape, double[] entries, int[][] indices) {
+        return new SparseVector(size, entries, RealDenseTranspose.blockedIntMatrix(indices)[0]);
+    }
+
+
+    /**
+     * A factory for creating a real dense tensor.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the dense tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    @Override
+    protected Vector makeDenseTensor(Shape shape, double[] entries) {
+        return new Vector(entries);
+    }
+
+
+    /**
+     * A factory for creating a complex sparse tensor.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    @Override
+    protected SparseCVector makeComplexTensor(Shape shape, CNumber[] entries, int[][] indices) {
+        return new SparseCVector(size, entries, RealDenseTranspose.blockedIntMatrix(indices)[0]);
     }
 
 

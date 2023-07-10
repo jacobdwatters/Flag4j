@@ -136,6 +136,46 @@ public class SparseTensor
 
 
     /**
+     * A factory for creating a real sparse tensor.
+     *
+     * @param shape   Shape of the sparse tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    @Override
+    protected SparseTensor makeTensor(Shape shape, double[] entries, int[][] indices) {
+        return new SparseTensor(shape, entries, indices);
+    }
+
+
+    /**
+     * A factory for creating a real dense tensor.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the dense tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    @Override
+    protected Tensor makeDenseTensor(Shape shape, double[] entries) {
+        return new Tensor(shape, entries);
+    }
+
+
+    /**
+     * A factory for creating a complex sparse tensor.
+     *
+     * @param shape   Shape of the tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    @Override
+    protected SparseCTensor makeComplexTensor(Shape shape, CNumber[] entries, int[][] indices) {
+        return new SparseCTensor(shape, entries, indices);
+    }
+
+    /**
      * Checks if this tensor only contains ones.
      *
      * @return True if this tensor only contains ones. Otherwise, returns false.

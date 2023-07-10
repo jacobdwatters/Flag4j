@@ -24,16 +24,28 @@
 
 package com.flag4j;
 
-
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.MatrixMixin;
+import com.flag4j.core.RealMatrixMixin;
 import com.flag4j.core.sparse.RealSparseTensorBase;
+import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
 import com.flag4j.operations.sparse.real.RealSparseEquals;
+import com.flag4j.operations.sparse.real.RealSparseMatrixMultiplication;
+import com.flag4j.operations.sparse.real.RealSparseMatrixOperations;
 import com.flag4j.operations.sparse.real_complex.RealComplexSparseEquals;
+import com.flag4j.operations.sparse.real_complex.RealComplexSparseMatrixMultiplication;
+import com.flag4j.operations.sparse.real_complex.RealComplexSparseMatrixOperations;
 import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.ParameterChecks;
 import com.flag4j.util.SparseDataWrapper;
+import com.flag4j.util.StringUtils;
 
 import java.util.Arrays;
 
@@ -42,8 +54,8 @@ import java.util.Arrays;
  */
 public class SparseMatrix
         extends RealSparseTensorBase<SparseMatrix, Matrix, SparseCMatrix, CMatrix>
-//        implements MatrixMixin<SparseMatrix, Matrix, SparseMatrix, SparseCMatrix, SparseMatrix, Double>,
-//        RealMatrixMixin<SparseMatrix, SparseCMatrix>
+        implements MatrixMixin<SparseMatrix, Matrix, SparseMatrix, SparseCMatrix, Double, SparseVector, Vector>,
+        RealMatrixMixin<SparseMatrix, SparseCMatrix>
 {
 
 
@@ -285,17 +297,6 @@ public class SparseMatrix
 
 
     /**
-     * Simply returns a reference of this tensor.
-     *
-     * @return A reference to this tensor.
-     */
-    @Override
-    protected SparseMatrix getSelf() {
-        return this;
-    }
-
-
-    /**
      * Gets the number of rows in this matrix.
      * @return The number of rows in this matrix.
      */
@@ -313,94 +314,14 @@ public class SparseMatrix
     }
 
 
-    @Override
-    public SparseMatrix flatten(int axis) {
-        return null;
-    }
-
-
     /**
-     * Converts this matrix to an equivalent complex matrix.
+     * Gets the shape of this matrix.
      *
-     * @return A complex matrix with equivalent real part and zero imaginary part.
+     * @return The shape of this matrix.
      */
     @Override
-    public SparseCMatrix toComplex() {
-        return null;
-    }
-
-
-    /**
-     * Checks if this tensor only contains zeros.
-     *
-     * @return True if this tensor only contains zeros. Otherwise, returns false.
-     */
-    @Override
-    public boolean isZeros() {
-        return false;
-    }
-
-
-    /**
-     * Checks if this tensor only contains ones.
-     *
-     * @return True if this tensor only contains ones. Otherwise, returns false.
-     */
-    @Override
-    public boolean isOnes() {
-        return false;
-    }
-
-
-    /**
-     * Sets an index of this tensor to a specified value.
-     *
-     * @param value   Value to set.
-     * @param indices The indices of this tensor for which to set the value.
-     * @return A reference to this tensor.
-     */
-    @Override
-    public SparseMatrix set(double value, int... indices) {
-        return null;
-    }
-
-
-    /**
-     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
-     * in the reshaped tensor.
-     *
-     * @param shape Shape of the new tensor.
-     * @return A tensor which is equivalent to this tensor but with the specified shape.
-     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
-     */
-    @Override
-    public SparseMatrix reshape(Shape shape) {
-        return null;
-    }
-
-
-    /**
-     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
-     * in the reshaped tensor.
-     *
-     * @param shape Shape of the new tensor.
-     * @return A tensor which is equivalent to this tensor but with the specified shape.
-     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
-     */
-    @Override
-    public SparseMatrix reshape(int... shape) {
-        return null;
-    }
-
-
-    /**
-     * Flattens tensor to single dimension. To flatten tensor along a single axis.
-     *
-     * @return The flattened tensor.
-     */
-    @Override
-    public SparseMatrix flatten() {
-        return null;
+    public Shape shape() {
+        return shape;
     }
 
 
@@ -413,7 +334,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix add(SparseMatrix B) {
-        return null;
+        return RealSparseMatrixOperations.add(this, B);
     }
 
 
@@ -425,7 +346,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix add(double a) {
-        return null;
+        return RealSparseMatrixOperations.add(this, a);
     }
 
 
@@ -437,7 +358,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix add(CNumber a) {
-        return null;
+        return RealComplexSparseMatrixOperations.add(this, a);
     }
 
 
@@ -450,7 +371,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix sub(SparseMatrix B) {
-        return null;
+        return RealSparseMatrixOperations.sub(this, B);
     }
 
 
@@ -462,7 +383,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix sub(double a) {
-        return null;
+        return RealSparseMatrixOperations.sub(this, a);
     }
 
 
@@ -474,92 +395,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix sub(CNumber a) {
-        return null;
-    }
-
-
-    /**
-     * Computes scalar multiplication of a tensor.
-     *
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    @Override
-    public SparseMatrix mult(double factor) {
-        return null;
-    }
-
-
-    /**
-     * Computes scalar multiplication of a tensor.
-     *
-     * @param factor Scalar value to multiply with tensor.
-     * @return The result of multiplying this tensor by the specified scalar.
-     */
-    @Override
-    public SparseCMatrix mult(CNumber factor) {
-        return null;
-    }
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    @Override
-    public SparseMatrix div(double divisor) {
-        return null;
-    }
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    @Override
-    public SparseCMatrix div(CNumber divisor) {
-        return null;
-    }
-
-
-    /**
-     * Sums together all entries in the tensor.
-     *
-     * @return The sum of all entries in this tensor.
-     */
-    @Override
-    public Double sum() {
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise square root of a tensor.
-     *
-     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
-     * the principle square root i.e. the square root with positive real part.
-     */
-    @Override
-    public SparseMatrix sqrt() {
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
-     * be computed.
-     *
-     * @return The result of applying an element-wise absolute value/magnitude to this tensor.
-     */
-    @Override
-    public SparseMatrix abs() {
-        return null;
+        return RealComplexSparseMatrixOperations.sub(this, a);
     }
 
 
@@ -570,6 +406,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix transpose() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -595,27 +432,6 @@ public class SparseMatrix
 
 
     /**
-     * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
-     */
-    @Override
-    public void sparseSort() {
-        SparseDataWrapper.wrap(entries, rowIndices, colIndices).sparseSort().unwrap(entries, rowIndices, colIndices);
-    }
-
-
-    /**
-     * Computes the reciprocals, element-wise, of a tensor.
-     *
-     * @return A tensor containing the reciprocal elements of this tensor.
-     * @throws ArithmeticException If this tensor contains any zeros.
-     */
-    @Override
-    public SparseMatrix recip() {
-        return null;
-    }
-
-
-    /**
      * Gets the element in this tensor at the specified indices.
      *
      * @param indices Indices of element.
@@ -624,6 +440,7 @@ public class SparseMatrix
      */
     @Override
     public Double get(int... indices) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -635,7 +452,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix copy() {
-        return null;
+        return new SparseMatrix(shape.copy(), entries.clone(), rowIndices.clone(), colIndices.clone());
     }
 
 
@@ -648,6 +465,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix elemMult(SparseMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -661,68 +479,62 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix elemDiv(Matrix B) {
+        // TODO: Implementation.
         return null;
     }
-    
+
 
     /**
-     * Finds the indices of the minimum value in this tensor.
+     * A factory for creating a real sparse tensor.
      *
-     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
+     * @param shape   Shape of the sparse tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
      */
     @Override
-    public int[] argMin() {
-        return new int[0];
+    protected SparseMatrix makeTensor(Shape shape, double[] entries, int[][] indices) {
+        int[][] rowColIndices = RealDenseTranspose.blockedIntMatrix(indices);
+        return new SparseMatrix(shape, entries, rowColIndices[0], rowColIndices[1]);
     }
 
 
     /**
-     * Finds the indices of the maximum value in this tensor.
+     * A factory for creating a real dense tensor.
      *
-     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
+     * @param shape   Shape of the tensor to make.
+     * @param entries Entries of the dense tensor to make.
+     * @return A tensor created from the specified parameters.
      */
     @Override
-    public int[] argMax() {
-        return new int[0];
+    protected Matrix makeDenseTensor(Shape shape, double[] entries) {
+        return new Matrix(shape, entries);
     }
 
 
     /**
-     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
+     * A factory for creating a complex sparse tensor.
      *
-     * @return the 2-norm of this tensor.
+     * @param shape   Shape of the tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
      */
     @Override
-    public double norm() {
-        return 0;
+    protected SparseCMatrix makeComplexTensor(Shape shape, CNumber[] entries, int[][] indices) {
+        int[][] rowColIndices = RealDenseTranspose.blockedIntMatrix(indices);
+        return new SparseCMatrix(shape, entries, rowColIndices[0], rowColIndices[1]);
     }
 
 
     /**
-     * Computes the p-norm of this tensor.
-     *
-     * @param p The p value in the p-norm. <br>
-     *          - If p is inf, then this method computes the maximum/infinite norm.
-     * @return The p-norm of this tensor.
-     * @throws IllegalArgumentException If p is less than 1.
+     * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
     @Override
-    public double norm(double p) {
-        return 0;
+    public void sparseSort() {
+        SparseDataWrapper.wrap(entries, rowIndices, colIndices).sparseSort().unwrap(entries, rowIndices, colIndices);
     }
 
-
-    /**
-     * Computes the maximum/infinite norm of this tensor.
-     *
-     * @return The maximum/infinite norm of this tensor.
-     */
-    @Override
-    public double infNorm() {
-        return 0;
-    }
 
 
     /**
@@ -744,5 +556,2254 @@ public class SparseMatrix
         }
 
         return new Matrix(shape.copy(), entries);
+    }
+
+
+    /**
+     * Checks if this matrix is the identity matrix.
+     *
+     * @return True if this matrix is the identity matrix. Otherwise, returns false.
+     */
+    @Override
+    public boolean isI() {
+        // TODO: Implementation.
+        return false;
+    }
+
+
+    /**
+     * Checks if matrices are inverses of each other.
+     *
+     * @param B Second matrix.
+     * @return True if matrix B is an inverse of this matrix. Otherwise, returns false. Otherwise, returns false.
+     */
+    @Override
+    public boolean isInv(SparseMatrix B) {
+        // TODO: Implementation.
+        return false;
+    }
+
+
+    /**
+     * Sets an index of this matrix to the specified value.
+     *
+     * @param value Value to set.
+     * @param row   Row index to set.
+     * @param col   Column index to set.
+     * @return A reference to this matrix.
+     */
+    @Override
+    public SparseMatrix set(double value, int row, int col) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets an index of this matrix to the specified value.
+     *
+     * @param value Value to set.
+     * @param row   Row index to set.
+     * @param col   Column index to set.
+     * @return A reference to this matrix.
+     */
+    @Override
+    public SparseMatrix set(Double value, int row, int col) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+     */
+    @Override
+    public SparseMatrix setValues(Double[][] values) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+     */
+    @Override
+    public SparseMatrix setValues(double[][] values) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets the value of this matrix using a 2D array.
+     *
+     * @param values New values of the matrix.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
+     */
+    @Override
+    public SparseMatrix setValues(int[][] values) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public SparseMatrix setCol(Double[] values, int colIndex) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public SparseMatrix setCol(Integer[] values, int colIndex) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public SparseMatrix setCol(double[] values, int colIndex) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     */
+    @Override
+    public SparseMatrix setCol(int[] values, int colIndex) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public SparseMatrix setRow(Double[] values, int rowIndex) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public SparseMatrix setRow(Integer[] values, int rowIndex) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public SparseMatrix setRow(double[] values, int rowIndex) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of columns of this matrix.
+     */
+    @Override
+    public SparseMatrix setRow(int[] values, int rowIndex) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public SparseMatrix setSlice(SparseMatrix values, int rowStart, int colStart) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public SparseMatrix setSlice(Double[][] values, int rowStart, int colStart) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public SparseMatrix setSlice(Integer[][] values, int rowStart, int colStart) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public SparseMatrix setSlice(double[][] values, int rowStart, int colStart) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public SparseMatrix setSlice(int[][] values, int rowStart, int colStart) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public SparseMatrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Removes a specified row from this matrix.
+     *
+     * @param rowIndex Index of the row to remove from this matrix.
+     * @return a copy of this matrix with the specified row removed.
+     */
+    @Override
+    public SparseMatrix removeRow(int rowIndex) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Removes a specified set of rows from this matrix.
+     *
+     * @param rowIndices The indices of the rows to remove from this matrix.
+     * @return a copy of this matrix with the specified rows removed.
+     */
+    @Override
+    public SparseMatrix removeRows(int... rowIndices) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Removes a specified column from this matrix.
+     *
+     * @param colIndex Index of the column to remove from this matrix.
+     * @return a copy of this matrix with the specified column removed.
+     */
+    @Override
+    public SparseMatrix removeCol(int colIndex) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Removes a specified set of columns from this matrix.
+     *
+     * @param colIndices Indices of the columns to remove from this matrix.
+     * @return a copy of this matrix with the specified columns removed.
+     */
+    @Override
+    public SparseMatrix removeCols(int... colIndices) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Rounds this matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
+     * be rounded independently.
+     *
+     * @return A copy of this matrix with each entry rounded to the nearest whole number.
+     */
+    @Override
+    public SparseMatrix round() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Rounds a matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
+     * be rounded independently.
+     *
+     * @param precision The number of decimal places to round to. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If <code>precision</code> is negative.
+     */
+    @Override
+    public SparseMatrix round(int precision) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
+     * independently. By default, the values must be within 1.0*E^-12 of zero. To specify a threshold value see
+     * {@link #roundToZero(double)}.
+     *
+     * @return A copy of this matrix with rounded values.
+     */
+    @Override
+    public SparseMatrix roundToZero() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
+     * independently.
+     *
+     * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
+     *                  will be rounded to zero. This value must be non-negative.
+     * @return A copy of this matrix with rounded values.
+     * @throws IllegalArgumentException If threshold is negative.
+     */
+    @Override
+    public SparseMatrix roundToZero(double threshold) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Swaps rows in the matrix.
+     *
+     * @param rowIndex1 Index of first row to swap.
+     * @param rowIndex2 index of second row to swap.
+     * @return A reference to this matrix.
+     */
+    @Override
+    public SparseMatrix swapRows(int rowIndex1, int rowIndex2) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Swaps columns in the matrix.
+     *
+     * @param colIndex1 Index of first column to swap.
+     * @param colIndex2 index of second column to swap.
+     * @return A reference to this matrix.
+     */
+    @Override
+    public SparseMatrix swapCols(int colIndex1, int colIndex2) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public SparseMatrix setSliceCopy(Double[][] values, int rowStart, int colStart) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public SparseMatrix setSliceCopy(Integer[][] values, int rowStart, int colStart) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public SparseMatrix setSliceCopy(double[][] values, int rowStart, int colStart) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public SparseMatrix setSliceCopy(int[][] values, int rowStart, int colStart) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public SparseMatrix setSliceCopy(Matrix values, int rowStart, int colStart) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets a slice of this matrix to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     *
+     * @param values   New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A reference to this matrix.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
+     *                                   fit completely within this matrix.
+     */
+    @Override
+    public SparseMatrix setSlice(Matrix values, int rowStart, int colStart) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise addition between two matrices.
+     *
+     * @param B Second matrix in the addition.
+     * @return The result of adding the matrix B to this matrix element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public Matrix add(Matrix B) {
+        return RealDenseSparseOperations.add(B, this);
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public CMatrix add(CMatrix B) {
+        return RealComplexDenseSparseOperations.add(B, this);
+    }
+
+
+    /**
+     * Computes the element-wise addition between two tensors of the same rank.
+     *
+     * @param B Second tensor in the addition.
+     * @return The result of adding the tensor B to this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public SparseCMatrix add(SparseCMatrix B) {
+        return RealComplexSparseMatrixOperations.add(B, this);
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public Matrix sub(Matrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public SparseCMatrix sub(CMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of two tensors of the same rank.
+     *
+     * @param B Second tensor in the subtraction.
+     * @return The result of subtracting the tensor B from this tensor element-wise.
+     * @throws IllegalArgumentException If A and B have different shapes.
+     */
+    @Override
+    public SparseCMatrix sub(SparseCMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise addition of a matrix with a real dense matrix. The result is stored in this matrix.
+     *
+     * @param B The matrix to add to this matrix.
+     */
+    @Override
+    public void addEq(Matrix B) {
+
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of this matrix with a real dense matrix. The result is stored in this matrix.
+     *
+     * @param B The matrix to subtract from this matrix.
+     */
+    @Override
+    public void subEq(Matrix B) {
+
+    }
+
+
+    /**
+     * Computes the element-wise addition of a matrix with a real sparse matrix. The result is stored in this matrix.
+     *
+     * @param B The sparse matrix to add to this matrix.
+     */
+    @Override
+    public void addEq(SparseMatrix B) {
+
+    }
+
+
+    /**
+     * Computes the element-wise subtraction of this matrix with a real sparse matrix. The result is stored in this matrix.
+     *
+     * @param B The sparse matrix to subtract from this matrix.
+     */
+    @Override
+    public void subEq(SparseMatrix B) {
+
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix B.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public Matrix mult(Matrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+    @Override
+    public Vector mult(SparseVector B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     * @return The result of matrix multiplying this matrix with vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
+     */
+    @Override
+    public CVector mult(CVector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     * @return The result of matrix multiplying this matrix with vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
+     */
+    @Override
+    public CVector mult(SparseCVector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.mult(B.T())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public Matrix multTranspose(Matrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.mult(B.T())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public Matrix multTranspose(SparseMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {{@code this.mult(B.T())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public CMatrix multTranspose(CMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Multiplies this matrix with the transpose of the {@code B} tensor as if by
+     * {@code this.mult(B.T())}.
+     * For large matrices, this method may
+     * be significantly faster than directly computing the transpose followed by the multiplication as
+     * {@code this.mult(B.T())}.
+     *
+     * @param B The second matrix in the multiplication and the matrix to transpose/
+     * @return The result of multiplying this matrix with the transpose of {@code B}.
+     */
+    @Override
+    public CMatrix multTranspose(SparseCMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the matrix power with a given exponent. This is equivalent to multiplying a matrix to itself 'exponent'
+     * times. Note, this method is preferred over repeated multiplication of a matrix as this method will be significantly
+     * faster.
+     *
+     * @param exponent The exponent in the matrix power.
+     * @return The result of multiplying this matrix with itself 'exponent' times.
+     */
+    @Override
+    public Matrix pow(int exponent) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard product) between two matrices.
+     *
+     * @param B Second matrix in the element-wise multiplication.
+     * @return The result of element-wise multiplication of this matrix with the matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public SparseMatrix elemMult(Matrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard product) between two matrices.
+     *
+     * @param B Second matrix in the element-wise multiplication.
+     * @return The result of element-wise multiplication of this matrix with the matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public SparseCMatrix elemMult(CMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise multiplication (Hadamard product) between two matrices.
+     *
+     * @param B Second matrix in the element-wise multiplication.
+     * @return The result of element-wise multiplication of this matrix with the matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public SparseCMatrix elemMult(SparseCMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the element-wise division between two matrices.
+     *
+     * @param B Second matrix in the element-wise division.
+     * @return The result of element-wise division of this matrix with the matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     * @throws ArithmeticException      If B contains any zero entries.
+     */
+    @Override
+    public SparseCMatrix elemDiv(CMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the determinant of a square matrix.
+     *
+     * @return The determinant of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    @Override
+    public Double det() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     *
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public Double fib(Matrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     *
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public Double fib(SparseMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     *
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public CNumber fib(CMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the Frobenius inner product of two matrices.
+     *
+     * @param B Second matrix in the Frobenius inner product
+     * @return The Frobenius inner product of this matrix and matrix B.
+     * @throws IllegalArgumentException If this matrix and B have different shapes.
+     */
+    @Override
+    public CNumber fib(SparseCMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     *
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    @Override
+    public SparseMatrix directSum(Matrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     *
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    @Override
+    public SparseMatrix directSum(SparseMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     *
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    @Override
+    public SparseCMatrix directSum(CMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the direct sum of two matrices.
+     *
+     * @param B Second matrix in the direct sum.
+     * @return The result of direct summing this matrix with B.
+     */
+    @Override
+    public SparseCMatrix directSum(SparseCMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     *
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    @Override
+    public SparseMatrix invDirectSum(Matrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     *
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    @Override
+    public SparseMatrix invDirectSum(SparseMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     *
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    @Override
+    public SparseCMatrix invDirectSum(CMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes direct sum from bottom left to top right of two matrices.
+     *
+     * @param B Second matrix in inverse direct sum.
+     * @return The result of inverse direct summing this matrix with B.
+     */
+    @Override
+    public SparseCMatrix invDirectSum(SparseCMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sums together the columns of a matrix as if each column was a column vector.
+     *
+     * @return The result of summing together all columns of the matrix as column vectors. If this matrix is an m-by-n matrix, then the result will be
+     * an m-by-1 matrix.
+     */
+    @Override
+    public SparseMatrix sumCols() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sums together the rows of a matrix as if each row was a row vector.
+     *
+     * @return The result of summing together all rows of the matrix as row vectors. If this matrix is an m-by-n matrix, then the result will be
+     * an 1-by-n matrix.
+     */
+    @Override
+    public SparseMatrix sumRows() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     *
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    @Override
+    public Matrix addToEachCol(Vector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     *
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    @Override
+    public SparseMatrix addToEachCol(SparseVector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     *
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    @Override
+    public CMatrix addToEachCol(CVector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     *
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    @Override
+    public SparseCMatrix addToEachCol(SparseCVector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     *
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    @Override
+    public Matrix addToEachRow(Vector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     *
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    @Override
+    public SparseMatrix addToEachRow(SparseVector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     *
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    @Override
+    public CMatrix addToEachRow(CVector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     *
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    @Override
+    public SparseCMatrix addToEachRow(SparseCVector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrices along columns. <br>
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    @Override
+    public Matrix stack(Matrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrices along columns. <br>
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    @Override
+    public SparseMatrix stack(SparseMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrices along columns. <br>
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    @Override
+    public CMatrix stack(CMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrices along columns. <br>
+     * Also see {@link #stack(Matrix, int)} and {@link #augment(Matrix)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking this matrix on top of the matrix B.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of columns.
+     */
+    @Override
+    public SparseCMatrix stack(SparseCMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrices along specified axis. <br>
+     * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
+     *
+     * @param B    Matrix to stack to this matrix.
+     * @param axis Axis along which to stack. <br>
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public Matrix stack(Matrix B, int axis) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrices along specified axis. <br>
+     * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
+     *
+     * @param B    Matrix to stack to this matrix.
+     * @param axis Axis along which to stack. <br>
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public SparseMatrix stack(SparseMatrix B, int axis) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrices along specified axis. <br>
+     * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
+     *
+     * @param B    Matrix to stack to this matrix.
+     * @param axis Axis along which to stack. <br>
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CMatrix stack(CMatrix B, int axis) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrices along specified axis. <br>
+     * Also see {@link #stack(Matrix)} and {@link #augment(Matrix)}.
+     *
+     * @param B    Matrix to stack to this matrix.
+     * @param axis Axis along which to stack. <br>
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Matrix)}.
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Matrix)}.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different length along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public SparseCMatrix stack(SparseCMatrix B, int axis) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrices along rows. <br>
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    @Override
+    public Matrix augment(Matrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrices along rows. <br>
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    @Override
+    public SparseMatrix augment(SparseMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrices along rows. <br>
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    @Override
+    public CMatrix augment(CMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrices along rows. <br>
+     * Also see {@link #stack(Matrix)} and {@link #stack(Matrix, int)}.
+     *
+     * @param B Matrix to stack to this matrix.
+     * @return The result of stacking B to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix and matrix B have a different number of rows.
+     */
+    @Override
+    public SparseCMatrix augment(SparseCMatrix B) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.<br>
+     * Also see {@link #stack(Vector, int)} and {@link #augment(Vector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public SparseMatrix stack(Vector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.<br>
+     * Also see {@link #stack(SparseVector, int)} and {@link #augment(SparseVector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public SparseMatrix stack(SparseVector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.<br>
+     * Also see {@link #stack(CVector, int)} and {@link #augment(CVector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public SparseCMatrix stack(CVector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks vector to this matrix along columns. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. All vectors will be treated as row vectors.<br>
+     * Also see {@link #stack(SparseCVector, int)} and {@link #augment(SparseCVector)}.
+     *
+     * @param b Vector to stack to this matrix.
+     * @return The result of stacking this matrix on top of the vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix is different from the number of entries in
+     *                                  the vector b.
+     */
+    @Override
+    public SparseCMatrix stack(SparseCVector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.<br>
+     *
+     * @param b    Vector to stack to this matrix.
+     * @param axis Axis along which to stack. <br>
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(Vector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. <br>
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(Vector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public SparseMatrix stack(Vector b, int axis) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.<br>
+     *
+     * @param b    Vector to stack to this matrix.
+     * @param axis Axis along which to stack. <br>
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseVector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. <br>
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseVector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public SparseMatrix stack(SparseVector b, int axis) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.<br>
+     *
+     * @param b    Vector to stack to this matrix.
+     * @param axis Axis along which to stack. <br>
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(CVector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. <br>
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(CVector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public SparseCMatrix stack(CVector b, int axis) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Stacks matrix and vector along specified axis. Note that the orientation of the vector (i.e. row/column vector)
+     * does not affect the output of this function. See the axis parameter for more info.<br>
+     *
+     * @param b    Vector to stack to this matrix.
+     * @param axis Axis along which to stack. <br>
+     *             - If axis=0, then stacks along rows and is equivalent to {@link #augment(SparseCVector)}. In this case, the
+     *             vector b will be treated as a column vector regardless of the true orientation. <br>
+     *             - If axis=1, then stacks along columns and is equivalent to {@link #stack(SparseCVector)}. In this case, the
+     *             vector b will be treated as a row vector regardless of the true orientation.
+     * @return The result of stacking this matrix and B along the specified axis.
+     * @throws IllegalArgumentException If the number of entries in b is different from the length of this matrix along the corresponding axis.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public SparseCMatrix stack(SparseCVector b, int axis) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.<br>
+     * Also see {@link #stack(Vector)} and {@link #stack(Vector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    @Override
+    public SparseMatrix augment(Vector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.<br>
+     * Also see {@link #stack(SparseVector)} and {@link #stack(SparseVector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    @Override
+    public SparseMatrix augment(SparseVector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.<br>
+     * Also see {@link #stack(CVector)} and {@link #stack(CVector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    @Override
+    public SparseCMatrix augment(CVector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Augments a matrix with a vector. That is, stacks a vector along the rows to the right side of a matrix. Note that the orientation
+     * of the vector (i.e. row/column vector) does not affect the output of this function. The vector will be
+     * treated as a column vector regardless of the true orientation.<br>
+     * Also see {@link #stack(SparseCVector)} and {@link #stack(SparseCVector, int)}.
+     *
+     * @param b vector to augment to this matrix.
+     * @return The result of augmenting b to the right of this matrix.
+     * @throws IllegalArgumentException If this matrix has a different number of rows as entries in b.
+     */
+    @Override
+    public SparseCMatrix augment(SparseCVector b) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Get the row of this matrix at the specified index.
+     *
+     * @param i Index of row to get.
+     * @return The specified row of this matrix.
+     */
+    @Override
+    public SparseMatrix getRow(int i) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Get the column of this matrix at the specified index.
+     *
+     * @param j Index of column to get.
+     * @return The specified column of this matrix.
+     */
+    @Override
+    public SparseMatrix getCol(int j) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Gets a specified column of this matrix between {@code rowStart} (inclusive) and {@code rowEnd} (exclusive).
+     *
+     * @param colIdx   Index of the column of this matrix to get.
+     * @param rowStart Starting row of the column (inclusive).
+     * @param rowEnd   Ending row of the column (exclusive).
+     * @return The column at index {@code colIdx} of this matrix between the {@code rowStart} and {@code rowEnd}
+     * indices.
+     * @throws IllegalArgumentException   If {@code rowStart} is less than 0.
+     * @throws NegativeArraySizeException If {@code rowEnd} is less than {@code rowStart}.
+     */
+    @Override
+    public SparseVector getCol(int colIdx, int rowStart, int rowEnd) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent vector. If this matrix is not shaped as a row/column vector,
+     * it will be flattened then converted to a vector.
+     *
+     * @return A vector equivalent to this matrix.
+     */
+    @Override
+    public SparseVector toVector() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Gets a specified slice of this matrix.
+     *
+     * @param rowStart Starting row index of slice (inclusive).
+     * @param rowEnd   Ending row index of slice (exclusive).
+     * @param colStart Starting column index of slice (inclusive).
+     * @param colEnd   Ending row index of slice (exclusive).
+     * @return The specified slice of this matrix. This is a completely new matrix and <b>NOT</b> a view into the matrix.
+     * @throws ArrayIndexOutOfBoundsException If any of the indices are out of bounds of this matrix.
+     * @throws IllegalArgumentException       If {@code rowEnd} is not greater than {@code rowStart} or if {@code colEnd} is not greater than {@code colStart}.
+     */
+    @Override
+    public SparseMatrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Get a specified column of this matrix at and below a specified row.
+     *
+     * @param rowStart Index of the row to begin at.
+     * @param j        Index of column to get.
+     * @return The specified column of this matrix beginning at the specified row.
+     * @throws NegativeArraySizeException     If {@code rowStart} is larger than the number of rows in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
+     */
+    @Override
+    public SparseMatrix getColBelow(int rowStart, int j) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Get a specified row of this matrix at and after a specified column.
+     *
+     * @param colStart Index of the row to begin at.
+     * @param i        Index of the row to get.
+     * @return The specified row of this matrix beginning at the specified column.
+     * @throws NegativeArraySizeException     If {@code colStart} is larger than the number of columns in this matrix.
+     * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
+     */
+    @Override
+    public SparseMatrix getRowAfter(int colStart, int i) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets a column of this matrix.
+     *
+     * @param values Vector containing the new values for the matrix.
+     * @param j      Index of the column of this matrix to set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException  If the number of entries in the {@code values} vector
+     *                                   is not the same as the number of rows in this matrix.
+     * @throws IndexOutOfBoundsException If {@code j} is not within the bounds of this matrix.
+     */
+    @Override
+    public SparseMatrix setCol(SparseVector values, int j) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
+     * Same as {@link #tr()}.
+     *
+     * @return The trace of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    @Override
+    public Double trace() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
+     * Same as {@link #trace()}.
+     *
+     * @return The trace of this matrix.
+     * @throws IllegalArgumentException If this matrix is not square.
+     */
+    @Override
+    public Double tr() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the inverse of this matrix.
+     *
+     * @return The inverse of this matrix.
+     */
+    @Override
+    public SparseMatrix inv() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the pseudo-inverse of this matrix.
+     *
+     * @return The pseudo-inverse of this matrix.
+     */
+    @Override
+    public SparseMatrix pInv() {
+        // TODO: Implementation.
+        return null;
+    }
+    
+
+    /**
+     * Computes the condition number of this matrix using {@link com.flag4j.linalg.decompositions.SVD SVD}.
+     * Specifically, the condition number is computed as the maximum singular value divided by the minimum singular
+     * value of this matrix.
+     *
+     * @return The condition number of this matrix (Assuming Frobenius norm).
+     */
+    @Override
+    public double cond() {
+        // TODO: Implementation.
+        return 0;
+    }
+    
+
+    /**
+     * Extracts the diagonal elements of this matrix and returns them as a vector.
+     *
+     * @return A vector containing the diagonal entries of this matrix.
+     */
+    @Override
+    public SparseVector getDiag() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Compute the hermation transpose of this matrix. That is, the complex conjugate transpose of this matrix.
+     *
+     * @return The complex conjugate transpose of this matrix.
+     */
+    @Override
+    public SparseMatrix H() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix {@code B}.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of
+     * rows in matrix {@code B}.
+     */
+    @Override
+    public Matrix mult(SparseMatrix B) {
+        ParameterChecks.assertMatMultShapes(shape, B.shape);
+
+        return new Matrix(numRows, B.numCols,
+                RealSparseMatrixMultiplication.concurrentStandard(
+                    entries, rowIndices, colIndices, shape,
+                    B.entries, B.rowIndices, B.colIndices, B.shape
+                )
+        );
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix B.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public CMatrix mult(CMatrix B) {
+        ParameterChecks.assertMatMultShapes(shape, B.shape);
+
+        return new CMatrix(numRows, B.numCols,
+                RealComplexDenseSparseMatrixMultiplication.concurrentStandard(
+                        entries, rowIndices, colIndices, shape,
+                        B.entries, B.shape
+                )
+        );
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param B Second matrix in the matrix multiplication.
+     * @return The result of matrix multiplying this matrix with matrix B.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of rows in matrix B.
+     */
+    @Override
+    public CMatrix mult(SparseCMatrix B) {
+        ParameterChecks.assertMatMultShapes(shape, B.shape);
+
+        return new CMatrix(numRows, B.numCols,
+                RealComplexSparseMatrixMultiplication.concurrentStandard(
+                        entries, rowIndices, colIndices, shape,
+                        B.entries, B.rowIndices, B.colIndices, B.shape
+                )
+        );
+    }
+
+
+    /**
+     * Computes matrix-vector multiplication.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     * @return The result of matrix multiplying this matrix with vector b.
+     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the number of entries in the vector b.
+     */
+    @Override
+    public Vector mult(Vector b) {
+        ParameterChecks.assertMatMultShapes(shape, new Shape(b.size, 1));
+
+        return new Vector(
+                RealDenseSparseMatrixMultiplication.concurrentStandardVector(
+                        this.entries, this.rowIndices, this.colIndices, this.shape,
+                        b.entries, b.shape
+                )
+        );
+    }
+
+
+    /**
+     * Checks if this matrix is square.
+     *
+     * @return True if the matrix is square (i.e. the number of rows equals the number of columns). Otherwise, returns false.
+     */
+    @Override
+    public boolean isSquare() {
+        return shape.dims[0]==shape.dims[1];
+    }
+
+
+    /**
+     * Checks if a matrix can be represented as a vector. That is, if a matrix has only one row or one column.
+     *
+     * @return True if this matrix can be represented as either a row or column vector.
+     */
+    @Override
+    public boolean isVector() {
+        // TODO: Implementation.
+        return false;
+    }
+
+
+    /**
+     * Checks what type of vector this matrix is. i.e. not a vector, a 1x1 matrix, a row vector, or a column vector.
+     *
+     * @return - If this matrix can not be represented as a vector, then returns -1. <br>
+     * - If this matrix is a 1x1 matrix, then returns 0. <br>
+     * - If this matrix is a row vector, then returns 1. <br>
+     * - If this matrix is a column vector, then returns 2.
+     */
+    @Override
+    public int vectorType() {
+        // TODO: Implementation.
+        return 0;
+    }
+
+
+    /**
+     * Checks if this matrix is triangular (i.e. upper triangular, diagonal, lower triangular).
+     *
+     * @return True is this matrix is triangular. Otherwise, returns false.
+     */
+    @Override
+    public boolean isTri() {
+        // TODO: Implementation.
+        return false;
+    }
+
+
+    /**
+     * Checks if this matrix is lower triangular.
+     *
+     * @return True is this matrix is lower triangular. Otherwise, returns false.
+     */
+    @Override
+    public boolean isTriL() {
+        // TODO: Implementation.
+        return false;
+    }
+
+
+    /**
+     * Checks if this matrix is upper triangular.
+     *
+     * @return True is this matrix is upper triangular. Otherwise, returns false.
+     */
+    @Override
+    public boolean isTriU() {
+        // TODO: Implementation.
+        return false;
+    }
+
+
+    /**
+     * Checks if this matrix is diagonal.
+     *
+     * @return True is this matrix is diagonal. Otherwise, returns false.
+     */
+    @Override
+    public boolean isDiag() {
+        // TODO: Implementation.
+        return false;
+    }
+
+
+    /**
+     * Checks if a matrix has full rank. That is, if a matrices rank is equal to the number of rows in the matrix.
+     *
+     * @return True if this matrix has full rank. Otherwise, returns false.
+     */
+    @Override
+    public boolean isFullRank() {
+        // TODO: Implementation.
+        return false;
+    }
+
+
+    /**
+     * Checks if a matrix is singular. That is, if the matrix is <b>NOT</b> invertible.<br>
+     * Also see {@link #isInvertible()}.
+     *
+     * @return True if this matrix is singular. Otherwise, returns false.
+     */
+    @Override
+    public boolean isSingular() {
+        // TODO: Implementation.
+        return false;
+    }
+
+
+    /**
+     * Checks if a matrix is invertible.<br>
+     * Also see {@link #isSingular()}.
+     *
+     * @return True if this matrix is invertible.
+     */
+    @Override
+    public boolean isInvertible() {
+        // TODO: Implementation.
+        return false;
+    }
+
+
+    /**
+     * Computes the L<sub>p, q</sub> norm of this matrix.
+     *
+     * @param p P value in the L<sub>p, q</sub> norm.
+     * @param q Q value in the L<sub>p, q</sub> norm.
+     * @return The L<sub>p, q</sub> norm of this matrix.
+     */
+    @Override
+    public double norm(double p, double q) {
+        // TODO: Implementation.
+        return 0;
+    }
+
+
+    /**
+     * Computes the max norm of a matrix.
+     *
+     * @return The max norm of this matrix.
+     */
+    @Override
+    public double maxNorm() {
+        // TODO: Implementation.
+        return 0;
+    }
+
+
+    /**
+     * Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
+     * Note that here, rank is <b>NOT</b> the same as a tensor rank.
+     *
+     * @return The matrix rank of this matrix.
+     */
+    @Override
+    public int matrixRank() {
+        // TODO: Implementation.
+        return 0;
+    }
+
+
+    /**
+     * Checks if a matrix is symmetric. That is, if the matrix is equal to its transpose.
+     *
+     * @return True if this matrix is symmetric. Otherwise, returns false.
+     */
+    @Override
+    public boolean isSymmetric() {
+        // TODO: Implementation.
+        return false;
+    }
+
+
+    /**
+     * Checks if a matrix is anti-symmetric. That is, if the matrix is equal to the negative of its transpose.
+     *
+     * @return True if this matrix is anti-symmetric. Otherwise, returns false.
+     */
+    @Override
+    public boolean isAntiSymmetric() {
+        // TODO: Implementation.
+        return false;
+    }
+
+
+    /**
+     * Checks if this matrix is orthogonal. That is, if the inverse of this matrix is equal to its transpose.
+     *
+     * @return True if this matrix it is orthogonal. Otherwise, returns false.
+     */
+    @Override
+    public boolean isOrthogonal() {
+        // TODO: Implementation.
+        return false;
+    }
+
+
+    /**
+     * Computes the complex element-wise square root of a tensor.
+     *
+     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
+     * the principle square root i.e. the square root with positive real part.
+     */
+    @Override
+    public SparseCMatrix sqrtComplex() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Converts this tensor to an equivalent complex tensor. That is, the entries of the resultant matrix will be exactly
+     * the same value but will have type {@link CNumber CNumber} rather than {@link Double}.
+     *
+     * @return A complex matrix which is equivalent to this matrix.
+     */
+    @Override
+    public SparseCMatrix toComplex() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Simply returns a reference of this tensor.
+     *
+     * @return A reference to this tensor.
+     */
+    @Override
+    protected SparseMatrix getSelf() {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Sets an index of this tensor to a specified value.
+     *
+     * @param value   Value to set.
+     * @param indices The indices of this tensor for which to set the value.
+     * @return A reference to this tensor.
+     */
+    @Override
+    public SparseMatrix set(double value, int... indices) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is not positive or larger than the rank of this tensor.
+     */
+    @Override
+    public SparseMatrix flatten(int axis) {
+        // TODO: Implementation.
+        return null;
+    }
+
+
+    /**
+     * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
+     *
+     * @return the 2-norm of this tensor.
+     */
+    @Override
+    public double norm() {
+        // TODO: Implementation.
+        return 0;
+    }
+
+
+    /**
+     * Computes the p-norm of this tensor.
+     *
+     * @param p The p value in the p-norm. <br>
+     *          - If p is inf, then this method computes the maximum/infinite norm.
+     * @return The p-norm of this tensor.
+     * @throws IllegalArgumentException If p is less than 1.
+     */
+    @Override
+    public double norm(double p) {
+        // TODO: Implementation.
+        return 0;
+    }
+
+
+    /**
+     * Formats this sparse matrix as a human-readable string.
+     * @return A human-readable string representing this sparse matrix.
+     */
+    public String toString() {
+        int size = nonZeroEntries;
+        StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
+        result.append("Non-zero entries: [");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        // Get entries up until the stopping point.
+        for(int i=0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(stopIndex < size-1) {
+            width = PrintOptions.getPadding() + 3;
+            value = "...";
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry now
+        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+        width = PrintOptions.getPadding() + value.length();
+        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s", value)).append("]\n");
+
+        result.append("Row Indices: ").append(Arrays.toString(rowIndices)).append("\n");
+        result.append("Col Indices: ").append(Arrays.toString(colIndices));
+
+        return result.toString();
     }
 }

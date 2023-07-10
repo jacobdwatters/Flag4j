@@ -46,8 +46,8 @@ import com.flag4j.util.ParameterChecks;
  * </p>
  */
 public abstract class HessenburgDecomposition<
-        T extends MatrixMixin<T, ?, ?, ?, ?, U, ?>,
-        U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>>
+        T extends MatrixMixin<T, T, ?, ?, ?, U, ?>,
+        U extends VectorMixin<U, U, ?, ?, ?, T, T, ?>>
         implements Decomposition<T> {
 
     /**
