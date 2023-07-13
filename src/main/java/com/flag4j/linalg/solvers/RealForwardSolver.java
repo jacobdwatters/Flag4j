@@ -251,8 +251,8 @@ public class RealForwardSolver implements LinearSolver<Matrix, Vector> {
     private boolean zeroOnDiag(Matrix src) {
         boolean result = false;
 
-        for(int i=0; i<src.numRows; i++) {
-            if(src.entries[i*(src.numCols  + 1)]==0) {
+        for(int i=0; i<src.entries.length; i+=src.numCols + 1) {
+            if(src.entries[i]==0) {
                 result = true;
                 break; // No need to continue.
             }

@@ -3124,7 +3124,7 @@ public class Matrix
         LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(this);
 
         double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
-        double det = RealDenseDeterminant.detLU(lu.getL(), lu.getU());
+        double det = RealDenseDeterminant.detTri(lu.getU());
 
         if(Math.abs(det) < tol) {
             throw new SingularMatrixException("Cannot invert.");

@@ -51,18 +51,21 @@ public class Householder {
      * specified {@code normal} vector, i.e. a Householder reflector.
      */
     public static Matrix getReflector(Vector normal) {
-        Matrix H = Matrix.I(normal.size);
-        Vector v = normal.copy();
+        Vector v;
 
-        double signedNorm = -Math.copySign(v.norm(), v.entries[0]);
-        v = v.div(v.entries[0] - signedNorm);
+        double signedNorm = -Math.copySign(normal.norm(), normal.entries[0]);
+        v = normal.div(normal.entries[0] - signedNorm);
         v.entries[0] = 1;
 
         // Create projection matrix
-        Matrix P = v.outer(v).mult(2.0/v.inner(v));
-        H.subEq(P);
+        Matrix P = v.outer(v).mult(-2.0/v.inner(v));
 
-        return H;
+        int step = P.numCols+1;
+        for(int i=0; i<P.entries.length; i+=step) {
+            P.entries[i] = 1 + P.entries[i];
+        }
+
+        return P;
     }
 
 
@@ -74,20 +77,23 @@ public class Householder {
      * specified {@code normal} vector, i.e. a Householder reflector.
      */
     public static CMatrix getReflector(CVector normal) {
-        CMatrix H = CMatrix.I(normal.size);
-        CVector v = normal.copy();
+        CVector v;
 
         // Compute signed norm using modified sgn function.
-        CNumber signedNorm = v.entries[0].equals(CNumber.ZERO) ?
-                new CNumber(-v.norm()) : CNumber.sgn(v.entries[0]).mult(-v.norm());
+        CNumber signedNorm = normal.entries[0].equals(CNumber.ZERO) ?
+                new CNumber(-normal.norm()) : CNumber.sgn(normal.entries[0]).mult(-normal.norm());
 
-        v = v.div(v.entries[0].sub(signedNorm));
+        v = normal.div(normal.entries[0].sub(signedNorm));
         v.entries[0] = new CNumber(1);
 
         // Create projection matrix
-        CMatrix P = v.outer(v).mult(2.0/v.inner(v).re);
-        H.subEq(P);
+        CMatrix P = v.outer(v).mult(-2.0/v.innerSelf());
 
-        return H;
+        int step = P.numCols+1;
+        for(int i=0; i<P.entries.length; i+=step) {
+            P.entries[i].addEq(1.0);
+        }
+
+        return P;
     }
 }

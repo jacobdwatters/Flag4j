@@ -36,6 +36,7 @@ import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
+import com.flag4j.operations.sparse.real.RealSparseElementSearch;
 import com.flag4j.operations.sparse.real.RealSparseEquals;
 import com.flag4j.operations.sparse.real.RealSparseMatrixMultiplication;
 import com.flag4j.operations.sparse.real.RealSparseMatrixOperations;
@@ -440,8 +441,11 @@ public class SparseMatrix
      */
     @Override
     public Double get(int... indices) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(indices.length, 2);
+        ParameterChecks.assertInRange(indices[0], 0, numRows, "index");
+        ParameterChecks.assertInRange(indices[1], 0, numCols, "index");
+
+        return RealSparseElementSearch.matrixGet(entries, rowIndices, colIndices, indices[0], indices[1]);
     }
 
 

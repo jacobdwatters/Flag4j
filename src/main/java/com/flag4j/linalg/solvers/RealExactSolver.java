@@ -28,6 +28,7 @@ import com.flag4j.Matrix;
 import com.flag4j.Vector;
 import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.linalg.decompositions.RealLUDecomposition;
+import com.flag4j.operations.dense.real.RealDenseDeterminant;
 
 import static com.flag4j.operations.dense.real.RealDenseDeterminant.detLU;
 
@@ -62,7 +63,7 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector> {
      */
     @Override
     protected void checkSingular() {
-        double det = Math.abs(detLU(lower, upper));
+        double det = Math.abs(RealDenseDeterminant.detTri(upper));
 
         if(det <= RANK_CONDITION*Math.max(lower.numRows, upper.numCols) || Double.isNaN(det)) {
             throw new SingularMatrixException("Could not solve system.");

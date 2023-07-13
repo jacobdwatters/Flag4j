@@ -51,7 +51,7 @@ public class RealDenseDeterminant {
         ParameterChecks.assertSquare(A.shape);
         double det;
 
-        switch (A.numRows) {
+        switch(A.numRows) {
             case 1:
                 det = det1(A);
                 break;
@@ -95,30 +95,8 @@ public class RealDenseDeterminant {
      */
     public static double detLU(Matrix P, Matrix L, Matrix U) {
         int numSwaps = (int) (L.numRows - P.trace()) - 1; // Number of swaps in permutation matrix.
-        double detP = Math.pow(-1, numSwaps); // Compute the determinant of P.
-        return detP*detLU(L, U);
-    }
-
-
-    /**
-     * Computes the determinant for a matrix which has been factored into a unit lower triangular matrix {@code L}
-     * and an upper triangular matrix {@code U} with no pivoting.
-     * @param L Unit lower triangular matrix.
-     * @param U Upper triangular matrix.
-     * @return The determinant of the matrix which has been factored into a unit lower triangular matrix {@code L}
-     * and an upper triangular matrix {@code U}.
-     * @see com.flag4j.linalg.decompositions.LUDecomposition
-     * @see com.flag4j.linalg.decompositions.RealLUDecomposition
-     */
-    public static double detLU(Matrix L, Matrix U) {
-        double detU = 1;
-
-        // Compute the determinant of U
-        for(int i=0; i<U.numRows; i++) {
-            detU *= U.entries[i*U.numCols + i];
-        }
-
-        return detU;
+        double detP = numSwaps%2==0 ? 1 : -1; // Compute the determinant of P.
+        return detP*detTri(U);
     }
 
 
@@ -164,12 +142,12 @@ public class RealDenseDeterminant {
      * @return The determinant of the triangular matrix.
      */
     public static double detTri(Matrix A) {
-        ParameterChecks.assertSquare(A.shape);
-
         double det = 1;
+        int step = A.numCols+1;
 
-        for(int i=0; i<A.numRows; i++) {
-            det *= A.entries[i*(A.numCols + 1)];
+        // Compute the determinant of U
+        for(int i=0; i<A.entries.length; i+=step) {
+            det *= A.entries[i];
         }
 
         return det;

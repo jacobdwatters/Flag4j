@@ -853,6 +853,22 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
     /**
      * Computes the inner product between two vectors.
      *
+     * @return The inner product between this vector and the vector b.
+     */
+    public double innerSelf() {
+        double inner = 0;
+
+        for(CNumber value : entries) {
+            inner += (value.re*value.re + value.im*value.im);
+        }
+
+        return inner;
+    }
+
+
+    /**
+     * Computes the inner product between two vectors.
+     *
      * @param b Second vector in the inner product.
      * @return The inner product between this vector and the vector b.
      * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
