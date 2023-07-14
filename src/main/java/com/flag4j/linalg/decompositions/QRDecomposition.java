@@ -119,8 +119,8 @@ public abstract class QRDecomposition<
 
                 // Apply Householder reflector to R
                 R.setSlice(
-                        H.mult(R.getSlice(i, i + H.numRows(), 0, R.numCols())),
-                        i, 0
+                        H.mult(R.getSlice(i, i + H.numRows(), i, R.numCols())),
+                        i, i
                 );
             }
 

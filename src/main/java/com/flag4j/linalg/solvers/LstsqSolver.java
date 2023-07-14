@@ -27,9 +27,11 @@ package com.flag4j.linalg.solvers;
 
 import com.flag4j.CMatrix;
 import com.flag4j.CVector;
+import com.flag4j.Matrix;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.linalg.decompositions.QRDecomposition;
+import com.flag4j.util.RandomTensor;
 
 
 // TODO: Add option to use SVD instead of QR (SVD should be default). It will be slower but has better numerical properties.
@@ -97,7 +99,10 @@ public abstract class LstsqSolver<
      */
     @Override
     public T solve(T A, T B) {
+        long start = System.nanoTime();
         decompose(A); // Compute the reduced QR decomposition of A.
+        double time = (System.nanoTime()-start)*1.0e-6;
+
         return backSolver.solve(R, Qh.mult(B));
     }
 

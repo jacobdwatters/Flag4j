@@ -139,8 +139,8 @@ public abstract class HessenburgDecomposition<
 
                 // Apply Householder reflector to both sides of H.
                 H.setSlice(
-                        ref.mult(H.getSlice(k + 1, k+1+ref.numRows(), 0, H.numCols())),
-                        k + 1, 0
+                        ref.mult(H.getSlice(k + 1, k+1+ref.numRows(), k, H.numCols())),
+                        k + 1, k
                 );
                 H.setSlice(
                         H.getSlice(0, H.numRows(), k + 1, k + 1 + ref.numCols()).mult(ref.H()),
