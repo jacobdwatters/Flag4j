@@ -430,6 +430,31 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
     public int hashCode() {
         return Arrays.hashCode(entries)+Arrays.hashCode(shape.dims);
     }
+
+
+    @Override
+    public T round() {
+        return makeTensor(this.shape.copy(), RealOperations.round(this.entries));
+    }
+
+
+    @Override
+    public T round(int precision) {
+        return makeTensor(this.shape.copy(), RealOperations.round(this.entries, precision));
+    }
+
+
+    @Override
+    public T roundToZero() {
+        this.abs();
+        return makeTensor(this.shape, RealOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD));
+    }
+
+
+    @Override
+    public T roundToZero(double threshold) {
+        return makeTensor(this.shape, RealOperations.roundToZero(this.entries, threshold));
+    }
 }
 
 

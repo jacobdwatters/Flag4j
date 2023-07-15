@@ -99,14 +99,6 @@ public interface ComplexMatrixMixin<T> {
 
 
     /**
-     * Sets the value of this matrix using a 2D array.
-     * @param values New values of the matrix.
-     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
-     */
-    T setValues(CNumber[][] values);
-
-
-    /**
      * Sets a column of this matrix at the given index to the specified values.
      * @param values New values for the column.
      * @param colIndex The index of the column which is to be set.

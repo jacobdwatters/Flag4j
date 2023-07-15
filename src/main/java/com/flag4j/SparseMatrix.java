@@ -32,14 +32,11 @@ import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
-import com.flag4j.operations.sparse.real.RealSparseElementSearch;
-import com.flag4j.operations.sparse.real.RealSparseEquals;
-import com.flag4j.operations.sparse.real.RealSparseMatrixMultiplication;
-import com.flag4j.operations.sparse.real.RealSparseMatrixOperations;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixOperations;
+import com.flag4j.operations.sparse.real.*;
 import com.flag4j.operations.sparse.real_complex.RealComplexSparseEquals;
 import com.flag4j.operations.sparse.real_complex.RealComplexSparseMatrixMultiplication;
 import com.flag4j.operations.sparse.real_complex.RealComplexSparseMatrixOperations;
@@ -407,8 +404,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix transpose() {
-        // TODO: Implementation.
-        return null;
+        return T();
     }
 
 
@@ -445,7 +441,7 @@ public class SparseMatrix
         ParameterChecks.assertInRange(indices[0], 0, numRows, "index");
         ParameterChecks.assertInRange(indices[1], 0, numCols, "index");
 
-        return RealSparseElementSearch.matrixGet(entries, rowIndices, colIndices, indices[0], indices[1]);
+        return RealSparseElementSearch.matrixGet(this, indices[0], indices[1]);
     }
 
 
@@ -469,8 +465,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix elemMult(SparseMatrix B) {
-        // TODO: Implementation.
-        return null;
+        return RealSparseMatrixOperations.elemMult(this, B);
     }
 
 
@@ -483,8 +478,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix elemDiv(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        return RealDenseSparseMatrixOperations.elemDiv(this, B);
     }
 
 
@@ -570,8 +564,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isI() {
-        // TODO: Implementation.
-        return false;
+        return RealSparseMatrixProperties.isIdentity(this);
     }
 
 
@@ -583,23 +576,30 @@ public class SparseMatrix
      */
     @Override
     public boolean isInv(SparseMatrix B) {
-        // TODO: Implementation.
-        return false;
+        boolean result;
+
+        if(!this.isSquare() || !B.isSquare() || !shape.equals(B.shape)) {
+            result = false;
+        } else {
+            result = this.mult(B).round().isI();
+        }
+
+        return result;
     }
 
 
     /**
-     * Sets an index of this matrix to the specified value.
+     * Sets an index of this matrix to the specified value. For sparse matrices, a new copy of this matrix
+     * with the specified value set will be returned.
      *
      * @param value Value to set.
      * @param row   Row index to set.
      * @param col   Column index to set.
-     * @return A reference to this matrix.
+     * @return A copy of this matrix with the specified value set.
      */
     @Override
     public SparseMatrix set(double value, int row, int col) {
-        // TODO: Implementation.
-        return null;
+        return RealSparseElementSearch.matrixSet(this, row, col, value);
     }
 
 
@@ -613,50 +613,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix set(Double value, int row, int col) {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Sets the value of this matrix using a 2D array.
-     *
-     * @param values New values of the matrix.
-     * @return A reference to this matrix.
-     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
-     */
-    @Override
-    public SparseMatrix setValues(Double[][] values) {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Sets the value of this matrix using a 2D array.
-     *
-     * @param values New values of the matrix.
-     * @return A reference to this matrix.
-     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
-     */
-    @Override
-    public SparseMatrix setValues(double[][] values) {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Sets the value of this matrix using a 2D array.
-     *
-     * @param values New values of the matrix.
-     * @return A reference to this matrix.
-     * @throws IllegalArgumentException If the values array has a different shape then this matrix.
-     */
-    @Override
-    public SparseMatrix setValues(int[][] values) {
-        // TODO: Implementation.
-        return null;
+        return RealSparseElementSearch.matrixSet(this, row, col, value);
     }
 
 
@@ -898,7 +855,7 @@ public class SparseMatrix
      * Removes a specified row from this matrix.
      *
      * @param rowIndex Index of the row to remove from this matrix.
-     * @return a copy of this matrix with the specified row removed.
+     * @return A copy of this matrix with the specified row removed.
      */
     @Override
     public SparseMatrix removeRow(int rowIndex) {
@@ -911,7 +868,7 @@ public class SparseMatrix
      * Removes a specified set of rows from this matrix.
      *
      * @param rowIndices The indices of the rows to remove from this matrix.
-     * @return a copy of this matrix with the specified rows removed.
+     * @return A copy of this matrix with the specified rows removed.
      */
     @Override
     public SparseMatrix removeRows(int... rowIndices) {
@@ -924,7 +881,7 @@ public class SparseMatrix
      * Removes a specified column from this matrix.
      *
      * @param colIndex Index of the column to remove from this matrix.
-     * @return a copy of this matrix with the specified column removed.
+     * @return A copy of this matrix with the specified column removed.
      */
     @Override
     public SparseMatrix removeCol(int colIndex) {
@@ -937,68 +894,10 @@ public class SparseMatrix
      * Removes a specified set of columns from this matrix.
      *
      * @param colIndices Indices of the columns to remove from this matrix.
-     * @return a copy of this matrix with the specified columns removed.
+     * @return A copy of this matrix with the specified columns removed.
      */
     @Override
     public SparseMatrix removeCols(int... colIndices) {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Rounds this matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
-     * be rounded independently.
-     *
-     * @return A copy of this matrix with each entry rounded to the nearest whole number.
-     */
-    @Override
-    public SparseMatrix round() {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Rounds a matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
-     * be rounded independently.
-     *
-     * @param precision The number of decimal places to round to. This value must be non-negative.
-     * @return A copy of this matrix with rounded values.
-     * @throws IllegalArgumentException If <code>precision</code> is negative.
-     */
-    @Override
-    public SparseMatrix round(int precision) {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
-     * independently. By default, the values must be within 1.0*E^-12 of zero. To specify a threshold value see
-     * {@link #roundToZero(double)}.
-     *
-     * @return A copy of this matrix with rounded values.
-     */
-    @Override
-    public SparseMatrix roundToZero() {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
-     * independently.
-     *
-     * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
-     *                  will be rounded to zero. This value must be non-negative.
-     * @return A copy of this matrix with rounded values.
-     * @throws IllegalArgumentException If threshold is negative.
-     */
-    @Override
-    public SparseMatrix roundToZero(double threshold) {
         // TODO: Implementation.
         return null;
     }
@@ -1155,7 +1054,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix add(Matrix B) {
-        return RealDenseSparseOperations.add(B, this);
+        return RealDenseSparseMatrixOperations.add(B, this);
     }
 
 
@@ -1168,7 +1067,7 @@ public class SparseMatrix
      */
     @Override
     public CMatrix add(CMatrix B) {
-        return RealComplexDenseSparseOperations.add(B, this);
+        return RealComplexDenseSparseMatrixOperations.add(B, this);
     }
 
 
@@ -1194,8 +1093,7 @@ public class SparseMatrix
      */
     @Override
     public Matrix sub(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        return RealDenseSparseMatrixOperations.sub(this, B);
     }
 
 
@@ -1207,9 +1105,8 @@ public class SparseMatrix
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     @Override
-    public SparseCMatrix sub(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+    public CMatrix sub(CMatrix B) {
+        return RealComplexDenseSparseMatrixOperations.sub(this, B);
     }
 
 
@@ -1222,30 +1119,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix sub(SparseCMatrix B) {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise addition of a matrix with a real dense matrix. The result is stored in this matrix.
-     *
-     * @param B The matrix to add to this matrix.
-     */
-    @Override
-    public void addEq(Matrix B) {
-
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of this matrix with a real dense matrix. The result is stored in this matrix.
-     *
-     * @param B The matrix to subtract from this matrix.
-     */
-    @Override
-    public void subEq(Matrix B) {
-
+        return RealComplexSparseMatrixOperations.sub(this, B);
     }
 
 
@@ -1256,7 +1130,7 @@ public class SparseMatrix
      */
     @Override
     public void addEq(SparseMatrix B) {
-
+        // TODO: Implementation.
     }
 
 
@@ -1267,7 +1141,7 @@ public class SparseMatrix
      */
     @Override
     public void subEq(SparseMatrix B) {
-
+        // TODO: Implementation.
     }
 
 
@@ -1283,6 +1157,7 @@ public class SparseMatrix
         // TODO: Implementation.
         return null;
     }
+
 
     @Override
     public Vector mult(SparseVector B) {
@@ -1411,8 +1286,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix elemMult(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        return RealDenseSparseMatrixOperations.elemMult(B, this);
     }
 
 
@@ -1425,8 +1299,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix elemMult(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexDenseSparseMatrixOperations.elemMult(B, this);
     }
 
 
@@ -1439,8 +1312,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexSparseMatrixOperations.elemMult(B, this);
     }
 
 
@@ -1454,8 +1326,7 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix elemDiv(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexDenseSparseMatrixOperations.elemDiv(this, B);
     }
 
 
@@ -1467,7 +1338,7 @@ public class SparseMatrix
      */
     @Override
     public Double det() {
-        // TODO: Implementation.
+        // TODO: Implementation. Will need to implement a sparse LU decomposition.
         return null;
     }
 
@@ -2194,7 +2065,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix getRow(int i) {
-        // TODO: Implementation.
+        // TODO: Implementation. Change to return a vector instead of a matrix.
         return null;
     }
 
@@ -2207,7 +2078,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix getCol(int j) {
-        // TODO: Implementation.
+        // TODO: Implementation. Change to return a vector instead of a matrix.
         return null;
     }
 
@@ -2395,8 +2266,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix H() {
-        // TODO: Implementation.
-        return null;
+        return T();
     }
 
 

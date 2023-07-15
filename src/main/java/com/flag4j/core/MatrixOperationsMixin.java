@@ -106,7 +106,7 @@ public interface MatrixOperationsMixin<
      * @return The result of subtracting the tensor B from this tensor element-wise.
      * @throws IllegalArgumentException If A and B have different shapes.
      */
-    W sub(CMatrix B);
+    CMatrix sub(CMatrix B);
 
 
     /**
@@ -116,21 +116,6 @@ public interface MatrixOperationsMixin<
      * @throws IllegalArgumentException If A and B have different shapes.
      */
     W sub(SparseCMatrix B);
-
-
-
-    /**
-     * Computes the element-wise addition of a matrix with a real dense matrix. The result is stored in this matrix.
-     * @param B The matrix to add to this matrix.
-     */
-    void addEq(Matrix B);
-
-
-    /**
-     * Computes the element-wise subtraction of this matrix with a real dense matrix. The result is stored in this matrix.
-     * @param B The matrix to subtract from this matrix.
-     */
-    void subEq(Matrix B);
 
 
     /**

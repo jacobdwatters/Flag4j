@@ -190,7 +190,7 @@ public class SparseVector
             destEntries[idx] = value;
 
         } else{
-            // Then the index was not found int the sparse vector.
+            // Then the index was not found in the sparse vector.
             destIndices = new int[this.indices.length+1];
             destEntries = new double[entries.length+1];
             idx = -(idx+1);

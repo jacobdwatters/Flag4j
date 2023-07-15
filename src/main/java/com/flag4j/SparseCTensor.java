@@ -132,8 +132,6 @@ public class SparseCTensor
             SparseCTensor tensor = (SparseCTensor) object;
             equal = ComplexSparseEquals.tensorEquals(tensor, this);
 
-        } else {
-            equal = false;
         }
 
         return equal;
@@ -680,6 +678,20 @@ public class SparseCTensor
     @Override
     public SparseCTensor flatten(int axis) {
         return null;
+    }
+
+
+    /**
+     * A factory for creating a complex sparse tensor.
+     *
+     * @param shape   Shape of the sparse tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    @Override
+    protected SparseCTensor makeTensor(Shape shape, CNumber[] entries, int[][] indices) {
+        return new SparseCTensor(shape, entries, indices);
     }
 
 

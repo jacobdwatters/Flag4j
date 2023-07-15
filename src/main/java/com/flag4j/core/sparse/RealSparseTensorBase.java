@@ -276,4 +276,36 @@ public abstract class RealSparseTensorBase<
     public T recip() {
         return makeTensor(shape.copy(), RealDenseOperations.recip(entries), copyIndices());
     }
+
+
+    @Override
+    public T round() {
+        return makeTensor(shape.copy(), RealOperations.round(this.entries), copyIndices());
+    }
+
+
+    @Override
+    public T round(int precision) {
+        return makeTensor(shape.copy(), RealOperations.round(this.entries, precision), copyIndices());
+    }
+
+
+    @Override
+    public T roundToZero() {
+        return makeTensor(
+                shape.copy(),
+                RealOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD),
+                copyIndices()
+        );
+    }
+
+
+    @Override
+    public T roundToZero(double threshold) {
+        return makeTensor(
+                shape.copy(),
+                RealOperations.roundToZero(this.entries, threshold),
+                copyIndices()
+        );
+    }
 }

@@ -24,8 +24,6 @@
 
 package com.flag4j.operations.dense_sparse.real;
 
-import com.flag4j.Matrix;
-import com.flag4j.SparseMatrix;
 import com.flag4j.SparseTensor;
 import com.flag4j.Tensor;
 import com.flag4j.util.ArrayUtils;
@@ -35,34 +33,11 @@ import com.flag4j.util.ParameterChecks;
 /**
  * This class contains methods to apply common binary operations to a real dense matrix and to a real sparse matrix.
  */
-public class RealDenseSparseOperations {
+public class RealDenseSparseTensorOperations {
 
-    private RealDenseSparseOperations() {
+    private RealDenseSparseTensorOperations() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
-    }
-
-
-    /**
-     * Adds a real dense matrix to a real sparse matrix.
-     * @param src1 First matrix in sum.
-     * @param src2 Second matrix in sum.
-     * @return The result of the matrix addition.
-     * @throws IllegalArgumentException If the matrices do not have the same shape.
-     */
-    public static Matrix add(Matrix src1, SparseMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-
-        int row, col;
-        Matrix dest = new Matrix(src1);
-
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col] += src2.entries[i];
-        }
-
-        return dest;
     }
 
 
@@ -85,114 +60,6 @@ public class RealDenseSparseOperations {
         }
 
         return dest;
-    }
-
-
-    /**
-     * Subtracts a real sparse matrix from a real dense matrix.
-     * @param src1 First matrix in difference.
-     * @param src2 Second matrix in difference.
-     * @return The result of the matrix subtraction.
-     * @throws IllegalArgumentException If the matrices do not have the same shape.
-     */
-    public static Matrix sub(Matrix src1, SparseMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-
-        int row, col;
-        Matrix dest = new Matrix(src1);
-
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col] -= src2.entries[i];
-        }
-
-        return dest;
-    }
-
-
-    /**
-     * Subtracts a real sparse matrix from a real dense matrix.
-     * @param src1 Entries of first matrix in difference.
-     * @param src2 Entries of second matrix in the difference.
-     * @return The result of the matrix subtraction.
-     * @throws IllegalArgumentException If the matrices do not have the same shape.
-     */
-    public static Matrix sub(SparseMatrix src2, Matrix src1) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-
-        int row, col;
-        Matrix dest = new Matrix(src1);
-
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col] *= -1;
-            dest.entries[row*src1.numCols + col] += src2.entries[i];
-        }
-
-        return dest;
-    }
-
-
-    /**
-     * Adds a real dense matrix to a real sparse matrix and stores the result in the first matrix.
-     * @param src1 Entries of first matrix in the sum. Also, storage for the result.
-     * @param src2 Entries of second matrix in the sum.
-     * @throws IllegalArgumentException If the matrices do not have the same shape.
-     */
-    public static void addEq(Matrix src1, SparseMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-
-        int row, col;
-
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            src1.entries[row*src1.numCols + col] += src2.entries[i];
-        }
-    }
-
-
-    /**
-     * Subtracts a real sparse matrix from a real dense matrix and stores the result in the first matrix.
-     * @param src1 Entries of first matrix in difference.
-     * @param src2 Entries of second matrix in difference.
-     * @throws IllegalArgumentException If the matrices do not have the same shape.
-     */
-    public static void subEq(Matrix src1, SparseMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-
-        int row, col;
-
-        for(int i=0; i<src2.nonZeroEntries(); i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            src1.entries[row*src1.numCols + col] -= src2.entries[i];
-        }
-    }
-
-
-    /**
-     * Computes the element-wise multiplication between a real dense matrix and a real sparse matrix.
-     * @return The result of element-wise multiplication.
-     * @param src1 Entries of first matrix in element-wise product.
-     * @param src2 Entries of second matrix in element-wise product.
-     * @throws IllegalArgumentException If the matrices do not have the same shape.
-     */
-    public static SparseMatrix elemMult(Matrix src1, SparseMatrix src2) {
-        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
-
-        int row, col;
-        double[] destEntries = new double[src2.nonZeroEntries()];
-
-        for(int i=0; i<destEntries.length; i++) {
-            row = src2.rowIndices[i];
-            col = src2.colIndices[i];
-            destEntries[i] = src1.entries[row*src1.numCols + col]*src2.entries[i];
-        }
-
-        return new SparseMatrix(src2.shape.copy(), destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 

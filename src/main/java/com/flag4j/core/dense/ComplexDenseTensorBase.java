@@ -30,6 +30,7 @@ import com.flag4j.core.ComplexTensorMixin;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.complex.ComplexProperties;
+import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.dense.complex.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.util.ArrayUtils;
@@ -579,5 +580,30 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
     public T reshape(Shape shape) {
         ParameterChecks.assertBroadcastable(this.shape, shape);
         return makeTensor(shape, this.entries.clone());
+    }
+
+
+    @Override
+    public T round() {
+        return makeTensor(this.shape.copy(), ComplexOperations.round(this.entries));
+    }
+
+
+    @Override
+    public T round(int precision) {
+        return makeTensor(this.shape.copy(), ComplexOperations.round(this.entries, precision));
+    }
+
+
+    @Override
+    public T roundToZero() {
+        this.abs();
+        return makeTensor(this.shape, ComplexOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD));
+    }
+
+
+    @Override
+    public T roundToZero(double threshold) {
+        return makeTensor(this.shape, ComplexOperations.roundToZero(this.entries, threshold));
     }
 }

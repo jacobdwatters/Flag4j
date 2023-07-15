@@ -25,10 +25,7 @@
 package com.flag4j.operations.dense_sparse.complex;
 
 
-import com.flag4j.CMatrix;
-import com.flag4j.CTensor;
-import com.flag4j.SparseCMatrix;
-import com.flag4j.SparseCTensor;
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
@@ -236,5 +233,41 @@ public class ComplexDenseSparseOperations {
         }
 
         return new SparseCTensor(src2.shape.copy(), destEntries, indices);
+    }
+
+
+    /**
+     * Computes the element-wise division between a complex sparse matrix and a complex dense matrix.
+     *
+     * <p>
+     *     If the dense matrix contains a zero at the same index the sparse matrix contains a non-zero, the result will be
+     *     either {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY}.
+     * </p>
+     *
+     * <p>
+     *     If the dense matrix contains a zero at an index for which the sparse matrix is also zero, the result will be
+     *     zero. This is done to realize computational benefits from operations with sparse matrices.
+     * </p>
+     *
+     * @param src1 Real sparse matrix and numerator in element-wise quotient.
+     * @param src2 Real Dense matrix and denominator in element-wise quotient.
+     * @return The element-wise quotient of {@code src1} and {@code src2}.
+     * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same shape.
+     */
+    public static SparseCMatrix elemDiv(SparseCMatrix src1, CMatrix src2) {
+        ParameterChecks.assertEqualShape(src1.shape, src2.shape);
+
+        CNumber[] quotient = new CNumber[src1.entries.length];
+
+        int row;
+        int col;
+
+        for(int i=0; i<src1.entries.length; i++) {
+            row = src1.rowIndices[i];
+            col = src1.colIndices[i];
+            quotient[i] = src1.entries[i].div(src2.entries[row*src2.numCols + col]);
+        }
+
+        return new SparseCMatrix(src1.shape.copy(), quotient, src1.rowIndices.clone(), src1.colIndices.clone());
     }
 }

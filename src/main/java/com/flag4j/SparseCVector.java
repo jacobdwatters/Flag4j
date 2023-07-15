@@ -950,6 +950,20 @@ public class SparseCVector
 
 
     /**
+     * A factory for creating a complex sparse tensor.
+     *
+     * @param shape   Shape of the sparse tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    @Override
+    protected SparseCVector makeTensor(Shape shape, CNumber[] entries, int[][] indices) {
+        return new SparseCVector(shape.get(0), entries, indices[0]);
+    }
+
+
+    /**
      * Computes scalar multiplication of a tensor.
      *
      * @param factor Scalar value to multiply with tensor.

@@ -28,6 +28,8 @@ import com.flag4j.Shape;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexTensorMixin;
 import com.flag4j.operations.common.complex.AggregateComplex;
+import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.dense.complex.ComplexDenseProperties;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
@@ -66,6 +68,26 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
         ParameterChecks.assertArrayLengthsEq(nonZeroEntries, indices.length);
     }
 
+
+    /**
+     * Creates a deep copy of the indices of this sparse tensor.
+     * @return A deep copy of the indices of this sparse tensor.
+     */
+    private int[][] copyIndices() {
+        int[][] newIndices = new int[indices.length][indices[0].length];
+        ArrayUtils.deepCopy(indices, newIndices);
+        return newIndices;
+    }
+
+
+    /**
+     * A factory for creating a complex sparse tensor.
+     * @param shape Shape of the sparse tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    protected abstract T makeTensor(Shape shape, CNumber[] entries, int[][] indices);
 
 
     /**
@@ -136,5 +158,61 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
     @Override
     public CNumber sum() {
         return AggregateComplex.sum(entries);
+    }
+
+
+    @Override
+    public T mult(double a) {
+        return makeTensor(shape.copy(), ComplexOperations.scalMult(entries, a), copyIndices());
+    }
+
+
+    @Override
+    public T mult(CNumber a) {
+        return makeTensor(shape.copy(), ComplexOperations.scalMult(entries, a), copyIndices());
+    }
+
+
+    @Override
+    public T div(double divisor) {
+        return makeTensor(shape.copy(), ComplexOperations.scalMult(entries, divisor), copyIndices());
+    }
+
+
+    @Override
+    public T div(CNumber divisor) {
+        return makeTensor(shape.copy(), ComplexOperations.scalMult(entries, divisor), copyIndices());
+    }
+
+
+    @Override
+    public T round() {
+        return makeTensor(shape.copy(), ComplexOperations.round(this.entries), copyIndices());
+    }
+
+
+    @Override
+    public T round(int precision) {
+        return makeTensor(shape.copy(), ComplexOperations.round(this.entries, precision), copyIndices());
+    }
+
+
+    @Override
+    public T roundToZero() {
+        return makeTensor(
+                shape.copy(),
+                ComplexOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD),
+                copyIndices()
+        );
+    }
+
+
+    @Override
+    public T roundToZero(double threshold) {
+        return makeTensor(
+                shape.copy(),
+                ComplexOperations.roundToZero(this.entries, threshold),
+                copyIndices()
+        );
     }
 }

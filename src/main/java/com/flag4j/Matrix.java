@@ -27,6 +27,7 @@ package com.flag4j;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.RealMatrixMixin;
+import com.flag4j.core.dense.DenseMatrixMixin;
 import com.flag4j.core.dense.RealDenseTensorBase;
 import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.io.PrintOptions;
@@ -40,17 +41,10 @@ import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.RealDenseMatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.*;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultTranspose;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseOperations;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultTranspose;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.real.*;
+import com.flag4j.operations.dense_sparse.real_complex.*;
 import com.flag4j.util.*;
 
 import java.util.ArrayList;
@@ -63,7 +57,8 @@ import java.util.List;
 public class Matrix
         extends RealDenseTensorBase<Matrix, CMatrix>
         implements MatrixMixin<Matrix, Matrix, SparseMatrix, CMatrix, Double, Vector, Vector>,
-        RealMatrixMixin<Matrix, CMatrix> {
+        RealMatrixMixin<Matrix, CMatrix>,
+        DenseMatrixMixin<Matrix, Double> {
 
     /**
      * The number of rows in this matrix.
@@ -1224,61 +1219,6 @@ public class Matrix
 
 
     /**
-     * Rounds this matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
-     * be rounded independently.
-     *
-     * @return A copy of this matrix with each entry rounded to the nearest whole number.
-     */
-    @Override
-    public Matrix round() {
-        return new Matrix(this.shape, RealOperations.round(this.entries));
-    }
-
-
-    /**
-     * Rounds a matrix to the nearest whole number. If the matrix is complex, both the real and imaginary component will
-     * be rounded independently.
-     *
-     * @param precision The number of decimal places to round to. This value must be non-negative.
-     * @return A copy of this matrix with rounded values.
-     * @throws IllegalArgumentException If <code>precision</code> is negative.
-     */
-    @Override
-    public Matrix round(int precision) {
-        return new Matrix(this.shape, RealOperations.round(this.entries, precision));
-    }
-
-
-    /**
-     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
-     * independently. By default, the values must be within 1.0*E^-12 of zero. To specify a threshold value see
-     * {@link #roundToZero(double)}.
-     *
-     * @return A copy of this matrix with rounded values.
-     */
-    @Override
-    public Matrix roundToZero() {
-        this.abs();
-        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, DEFAULT_ROUND_TO_ZERO_THRESHOLD));
-    }
-
-
-    /**
-     * Rounds values which are close to zero in absolute value to zero. If the matrix is complex, both the real and imaginary components will be rounded
-     * independently.
-     *
-     * @param threshold Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
-     *                  will be rounded to zero. This value must be non-negative.
-     * @return A copy of this matrix with rounded values.
-     * @throws IllegalArgumentException If threshold is negative.
-     */
-    @Override
-    public Matrix roundToZero(double threshold) {
-        return new Matrix(this.shape, RealOperations.roundToZero(this.entries, threshold));
-    }
-
-
-    /**
      * Computes the element-wise addition between two tensors of the same rank.
      *
      * @param B Second tensor in the addition.
@@ -1287,7 +1227,7 @@ public class Matrix
      */
     @Override
     public Matrix add(SparseMatrix B) {
-        return RealDenseSparseOperations.add(this, B);
+        return RealDenseSparseMatrixOperations.add(this, B);
     }
 
 
@@ -1315,7 +1255,7 @@ public class Matrix
      */
     @Override
     public CMatrix add(SparseCMatrix B) {
-        return RealComplexDenseSparseOperations.add(this, B);
+        return RealComplexDenseSparseMatrixOperations.add(this, B);
     }
 
 
@@ -1327,7 +1267,7 @@ public class Matrix
      */
     @Override
     public void subEq(SparseMatrix B) {
-        RealDenseSparseOperations.subEq(this, B);
+        RealDenseSparseMatrixOperations.subEq(this, B);
     }
 
 
@@ -1339,7 +1279,7 @@ public class Matrix
      */
     @Override
     public void addEq(SparseMatrix B) {
-        RealDenseSparseOperations.addEq(this, B);
+        RealDenseSparseMatrixOperations.addEq(this, B);
     }
 
 
@@ -1374,7 +1314,7 @@ public class Matrix
      */
     @Override
     public Matrix sub(SparseMatrix B) {
-        return RealDenseSparseOperations.sub(this, B);
+        return RealDenseSparseMatrixOperations.sub(this, B);
     }
 
 
@@ -1403,7 +1343,7 @@ public class Matrix
      */
     @Override
     public CMatrix sub(SparseCMatrix B) {
-        return RealComplexDenseSparseOperations.sub(this, B);
+        return RealComplexDenseSparseMatrixOperations.sub(this, B);
     }
 
 
@@ -1678,7 +1618,7 @@ public class Matrix
      */
     @Override
     public SparseMatrix elemMult(SparseMatrix B) {
-        return RealDenseSparseOperations.elemMult(this, B);
+        return RealDenseSparseMatrixOperations.elemMult(this, B);
     }
 
 
@@ -1707,7 +1647,7 @@ public class Matrix
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
-        return RealComplexDenseSparseOperations.elemMult(this, B);
+        return RealComplexDenseSparseMatrixOperations.elemMult(this, B);
     }
 
 

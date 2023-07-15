@@ -28,6 +28,7 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.dense.ComplexDenseTensorBase;
+import com.flag4j.core.dense.DenseMatrixMixin;
 import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.linalg.Invert;
@@ -48,10 +49,7 @@ import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultTranspose;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseOperations;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultTranspose;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.real_complex.*;
 import com.flag4j.util.*;
 
 import java.util.ArrayList;
@@ -63,7 +61,8 @@ import java.util.List;
 public class CMatrix
         extends ComplexDenseTensorBase<CMatrix, Matrix>
         implements MatrixMixin<CMatrix, CMatrix, SparseCMatrix, CMatrix, CNumber, CVector, CVector>,
-        ComplexMatrixMixin<CMatrix> {
+        ComplexMatrixMixin<CMatrix>,
+        DenseMatrixMixin<CMatrix, CNumber> {
 
     /**
      * The number of rows in this matrix.
@@ -1657,7 +1656,7 @@ public class CMatrix
      */
     @Override
     public CMatrix add(SparseMatrix B) {
-        return RealComplexDenseSparseOperations.add(this, B);
+        return RealComplexDenseSparseMatrixOperations.add(this, B);
     }
 
 
@@ -1698,7 +1697,7 @@ public class CMatrix
      */
     @Override
     public CMatrix sub(SparseMatrix B) {
-        return RealComplexDenseSparseOperations.sub(this, B);
+        return RealComplexDenseSparseMatrixOperations.sub(this, B);
     }
 
 
@@ -1842,7 +1841,7 @@ public class CMatrix
      */
     @Override
     public void addEq(SparseMatrix B) {
-        RealComplexDenseSparseOperations.addEq(this, B);
+        RealComplexDenseSparseMatrixOperations.addEq(this, B);
     }
 
 
@@ -1853,7 +1852,7 @@ public class CMatrix
      */
     @Override
     public void subEq(SparseMatrix B) {
-        RealComplexDenseSparseOperations.subEq(this, B);
+        RealComplexDenseSparseMatrixOperations.subEq(this, B);
     }
 
 
@@ -2130,7 +2129,7 @@ public class CMatrix
      */
     @Override
     public SparseCMatrix elemMult(SparseMatrix B) {
-        return RealComplexDenseSparseOperations.elemMult(this, B);
+        return RealComplexDenseSparseMatrixOperations.elemMult(this, B);
     }
 
 
