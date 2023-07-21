@@ -25,6 +25,7 @@
 package com.flag4j.core.dense;
 
 import com.flag4j.Matrix;
+import com.flag4j.SparseMatrix;
 
 /**
  * This interface specifies methods which all dense matrices should implement.
@@ -82,4 +83,130 @@ public interface DenseMatrixMixin<T, X> {
      * @param B The matrix to subtract from this matrix.
      */
     void subEq(Matrix B);
+
+
+    /**
+     * Computes the element-wise addition of a matrix with a real sparse matrix. The result is stored in this matrix.
+     * @param B The sparse matrix to add to this matrix.
+     */
+    void addEq(SparseMatrix B);
+
+
+    /**
+     * Computes the element-wise subtraction of this matrix with a real sparse matrix. The result is stored in this matrix.
+     * @param B The sparse matrix to subtract from this matrix.
+     */
+    void subEq(SparseMatrix B);
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+     * fit completely within this matrix.
+     */
+    T setSliceCopy(T values, int rowStart, int colStart);
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+     * fit completely within this matrix.
+     */
+    T setSliceCopy(X[][] values, int rowStart, int colStart);
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+     * fit completely within this matrix.
+     */
+    T setSliceCopy(Double[][] values, int rowStart, int colStart);
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+     * fit completely within this matrix.
+     */
+    T setSliceCopy(Integer[][] values, int rowStart, int colStart);
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+     * fit completely within this matrix.
+     */
+    T setSliceCopy(double[][] values, int rowStart, int colStart);
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+     * fit completely within this matrix.
+     */
+    T setSliceCopy(int[][] values, int rowStart, int colStart);
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+     * fit completely within this matrix.
+     */
+    T setSliceCopy(Matrix values, int rowStart, int colStart);
+
+
+    /**
+     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
+     * left index location of the slice to set.
+     * @param values New values for the specified slice.
+     * @param rowStart Starting row index for the slice (inclusive).
+     * @param colStart Starting column index for the slice (inclusive).
+     * @return A copy of this matrix with the given slice set to the specified values.
+     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
+     * @throws IllegalArgumentException If the values slice, with upper left corner at the specified location, does not
+     * fit completely within this matrix.
+     */
+    T setSliceCopy(SparseMatrix values, int rowStart, int colStart);
 }

@@ -33,6 +33,7 @@ import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.sparse.complex.ComplexSparseEquals;
+import com.flag4j.operations.sparse.complex.ComplexSparseMatrixManipulations;
 import com.flag4j.operations.sparse.complex.ComplexSparseMatrixOperations;
 import com.flag4j.operations.sparse.complex.ComplexSparseMatrixProperties;
 import com.flag4j.operations.sparse.real_complex.RealComplexSparseEquals;
@@ -674,47 +675,6 @@ public class SparseCMatrix
 
 
     /**
-     * Formats this sparse matrix as a human-readable string.
-     * @return A human-readable string representing this sparse matrix.
-     */
-    public String toString() {
-        int size = nonZeroEntries;
-        StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
-        result.append("Non-zero entries: [");
-
-        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
-        int width;
-        String value;
-
-        // Get entries up until the stopping point.
-        for(int i=0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
-            width = PrintOptions.getPadding() + value.length();
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-            result.append(String.format("%-" + width + "s", value));
-        }
-
-        if(stopIndex < size-1) {
-            width = PrintOptions.getPadding() + 3;
-            value = "...";
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-            result.append(String.format("%-" + width + "s", value));
-        }
-
-        // Get last entry now
-        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
-        width = PrintOptions.getPadding() + value.length();
-        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-        result.append(String.format("%-" + width + "s", value)).append("]\n");
-
-        result.append("Row Indices: ").append(Arrays.toString(rowIndices)).append("\n");
-        result.append("Col Indices: ").append(Arrays.toString(colIndices));
-
-        return result.toString();
-    }
-
-
-    /**
      * Computes the complex conjugate transpose of a tensor.
      * Same as {@link #hermTranspose()} and {@link #H()}.
      *
@@ -975,29 +935,6 @@ public class SparseCMatrix
     @Override
     public CMatrix sub(CMatrix B) {
         return null;
-    }
-
-
-
-    /**
-     * Computes the element-wise addition of a matrix with a real sparse matrix. The result is stored in this matrix.
-     *
-     * @param B The sparse matrix to add to this matrix.
-     */
-    @Override
-    public void addEq(SparseMatrix B) {
-
-    }
-
-
-    /**
-     * Computes the element-wise subtraction of this matrix with a real sparse matrix. The result is stored in this matrix.
-     *
-     * @param B The sparse matrix to subtract from this matrix.
-     */
-    @Override
-    public void subEq(SparseMatrix B) {
-
     }
 
 
@@ -2470,150 +2407,6 @@ public class SparseCMatrix
 
 
     /**
-     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set.
-     *
-     * @param values   New values for the specified slice.
-     * @param rowStart Starting row index for the slice (inclusive).
-     * @param colStart Starting column index for the slice (inclusive).
-     * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
-     *                                   fit completely within this matrix.
-     */
-    @Override
-    public SparseCMatrix setSliceCopy(SparseCMatrix values, int rowStart, int colStart) {
-        return null;
-    }
-
-
-    /**
-     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set.
-     *
-     * @param values   New values for the specified slice.
-     * @param rowStart Starting row index for the slice (inclusive).
-     * @param colStart Starting column index for the slice (inclusive).
-     * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
-     *                                   fit completely within this matrix.
-     */
-    @Override
-    public SparseCMatrix setSliceCopy(CNumber[][] values, int rowStart, int colStart) {
-        return null;
-    }
-
-
-    /**
-     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set.
-     *
-     * @param values   New values for the specified slice.
-     * @param rowStart Starting row index for the slice (inclusive).
-     * @param colStart Starting column index for the slice (inclusive).
-     * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
-     *                                   fit completely within this matrix.
-     */
-    @Override
-    public SparseCMatrix setSliceCopy(Double[][] values, int rowStart, int colStart) {
-        return null;
-    }
-
-
-    /**
-     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set.
-     *
-     * @param values   New values for the specified slice.
-     * @param rowStart Starting row index for the slice (inclusive).
-     * @param colStart Starting column index for the slice (inclusive).
-     * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
-     *                                   fit completely within this matrix.
-     */
-    @Override
-    public SparseCMatrix setSliceCopy(Integer[][] values, int rowStart, int colStart) {
-        return null;
-    }
-
-
-    /**
-     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set.
-     *
-     * @param values   New values for the specified slice.
-     * @param rowStart Starting row index for the slice (inclusive).
-     * @param colStart Starting column index for the slice (inclusive).
-     * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
-     *                                   fit completely within this matrix.
-     */
-    @Override
-    public SparseCMatrix setSliceCopy(double[][] values, int rowStart, int colStart) {
-        return null;
-    }
-
-
-    /**
-     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set.
-     *
-     * @param values   New values for the specified slice.
-     * @param rowStart Starting row index for the slice (inclusive).
-     * @param colStart Starting column index for the slice (inclusive).
-     * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
-     *                                   fit completely within this matrix.
-     */
-    @Override
-    public SparseCMatrix setSliceCopy(int[][] values, int rowStart, int colStart) {
-        return null;
-    }
-
-
-    /**
-     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set.
-     *
-     * @param values   New values for the specified slice.
-     * @param rowStart Starting row index for the slice (inclusive).
-     * @param colStart Starting column index for the slice (inclusive).
-     * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
-     *                                   fit completely within this matrix.
-     */
-    @Override
-    public SparseCMatrix setSliceCopy(Matrix values, int rowStart, int colStart) {
-        return null;
-    }
-
-
-    /**
-     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set.
-     *
-     * @param values   New values for the specified slice.
-     * @param rowStart Starting row index for the slice (inclusive).
-     * @param colStart Starting column index for the slice (inclusive).
-     * @return A copy of this matrix with the given slice set to the specified values.
-     * @throws IndexOutOfBoundsException If rowStart or colStart are not within the matrix.
-     * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
-     *                                   fit completely within this matrix.
-     */
-    @Override
-    public SparseCMatrix setSliceCopy(SparseMatrix values, int rowStart, int colStart) {
-        return null;
-    }
-
-
-    /**
      * Removes a specified row from this matrix.
      *
      * @param rowIndex Index of the row to remove from this matrix.
@@ -2621,7 +2414,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix removeRow(int rowIndex) {
-        return null;
+        return ComplexSparseMatrixManipulations.removeRow(this, rowIndex);
     }
 
 
@@ -2948,5 +2741,50 @@ public class SparseCMatrix
     @Override
     public double norm(double p) {
         return 0;
+    }
+
+
+    /**
+     * Formats this sparse matrix as a human-readable string.
+     * @return A human-readable string representing this sparse matrix.
+     */
+    public String toString() {
+        int size = nonZeroEntries;
+        StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
+        result.append("Non-zero entries: [");
+
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        if(entries.length > 0) {
+            // Get entries up until the stopping point.
+            for(int i=0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+                width = PrintOptions.getPadding() + value.length();
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            if(stopIndex < size-1) {
+                width = PrintOptions.getPadding() + 3;
+                value = "...";
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            // Get last entry now
+            value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        result.append("]\n");
+
+        result.append("Row Indices: ").append(Arrays.toString(rowIndices)).append("\n");
+        result.append("Col Indices: ").append(Arrays.toString(colIndices));
+
+        return result.toString();
     }
 }

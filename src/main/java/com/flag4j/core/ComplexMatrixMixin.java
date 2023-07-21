@@ -183,21 +183,6 @@ public interface ComplexMatrixMixin<T> {
 
 
     /**
-     * Creates a copy of this matrix and sets a slice of the copy to the specified values. The rowStart and colStart parameters specify the upper
-     * left index location of the slice to set.
-     *
-     * @param values   New values for the specified slice.
-     * @param rowStart Starting row index for the slice (inclusive).
-     * @param colStart Starting column index for the slice (inclusive).
-     * @return A copy of this matrix with the given slice set to the specified {@code values}.
-     * @throws IndexOutOfBoundsException If {@code rowStart} or {@code colStart} are not within the matrix.
-     * @throws IllegalArgumentException  If the {@code values} slice, with upper left corner at the specified location, does not
-     *                                   fit completely within this matrix.
-     */
-    T setSliceCopy(SparseCMatrix values, int rowStart, int colStart);
-
-
-    /**
      * Adds a complex sparse matrix to this matrix and stores the result in this matrix.
      *
      * @param B Complex sparse matrix to add to this matrix,

@@ -119,20 +119,6 @@ public interface MatrixOperationsMixin<
 
 
     /**
-     * Computes the element-wise addition of a matrix with a real sparse matrix. The result is stored in this matrix.
-     * @param B The sparse matrix to add to this matrix.
-     */
-    void addEq(SparseMatrix B);
-
-
-    /**
-     * Computes the element-wise subtraction of this matrix with a real sparse matrix. The result is stored in this matrix.
-     * @param B The sparse matrix to subtract from this matrix.
-     */
-    void subEq(SparseMatrix B);
-
-
-    /**
      * Computes the matrix multiplication between two matrices.
      * @param B Second matrix in the matrix multiplication.
      * @return The result of matrix multiplying this matrix with matrix {@code B}.

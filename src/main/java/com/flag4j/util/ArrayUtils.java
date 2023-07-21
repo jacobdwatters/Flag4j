@@ -50,7 +50,7 @@ public final class ArrayUtils {
      */
     public static void deepCopy(int[][] src, int[][] dest) {
         ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
-        ParameterChecks.assertArrayLengthsEq(src[0].length, dest[0].length);
+        if(src.length > 0) ParameterChecks.assertArrayLengthsEq(src[0].length, dest[0].length);
 
         for(int i=0; i<src.length; i++) {
             System.arraycopy(src[i], 0, dest[i], 0, src[i].length);
@@ -478,8 +478,8 @@ public final class ArrayUtils {
      * @param fillValue Value to fill array with.
      */
     public static void fill(double[][] dest, double fillValue) {
-        for (double[] doubles : dest) {
-            Arrays.fill(doubles, 1);
+        for(double[] doubles : dest) {
+            Arrays.fill(doubles, fillValue);
         }
     }
 
@@ -931,5 +931,17 @@ public final class ArrayUtils {
         }
 
         return notin;
+    }
+
+
+    /**
+     * Checks if an array contains a specified value. This method assumes that the array is sorted as it uses the binary
+     * search algorithm. If the array is not sorted, use {@link Arrays#sort(int[])} first.
+     * @param arr Array of interest.
+     * @param key Value to check for in the {@code arr} array.
+     * @return True if the {@code key} value is found in the array. False otherwise.
+     */
+    public static boolean contains(int[] arr, int key) {
+        return Arrays.binarySearch(arr, key) >= 0;
     }
 }

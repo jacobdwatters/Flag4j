@@ -30,7 +30,6 @@ import com.flag4j.core.ComplexTensorMixin;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.complex.ComplexProperties;
-import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.operations.dense.complex.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
 import com.flag4j.util.ArrayUtils;

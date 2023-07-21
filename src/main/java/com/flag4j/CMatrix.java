@@ -917,7 +917,6 @@ public class CMatrix
      * @throws IllegalArgumentException  If the values slice, with upper left corner at the specified location, does not
      *                                   fit completely within this matrix.
      */
-    @Override
     public CMatrix setSliceCopy(SparseCMatrix values, int rowStart, int colStart) {
         ParameterChecks.assertLessEq(numRows, rowStart+values.numRows);
         ParameterChecks.assertLessEq(numCols, colStart+values.numCols);

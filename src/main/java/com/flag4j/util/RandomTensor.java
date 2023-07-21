@@ -30,6 +30,9 @@ import com.flag4j.linalg.Decompose;
 import com.flag4j.linalg.decompositions.ComplexQRDecomposition;
 import com.flag4j.linalg.decompositions.RealQRDecomposition;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * An instance of this class is used for generating streams of pseudorandom tensors, matrices, and vectors.
  */
@@ -320,6 +323,33 @@ public class RandomTensor {
 
 
     /**
+     * Generates a random sparse matrix with the specified sparsity. The non-zero values will have a uniform
+     * distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
+     * @param shape Shape of the sparse matrix to generate.
+     * @param min Minimum value for random non-zero values in the sparse matrix.
+     * @param max Maximum value for random non-zero values
+     * @param sparsity Desired sparsity of the resulting matrix. i.e. the percent of values which are zero. Must be
+     *                 a value in {@code [0.0, 1.0]}.
+     * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
+     * distributed in {@code [min, max)}.
+     */
+    public SparseMatrix randomSparseMatrix(Shape shape, double min, double max, double sparsity) {
+        // TODO: It is possible that two values at the same index are generated.
+        ParameterChecks.assertInRange(sparsity, 0, 1, "sparsity");
+        int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
+                .setScale(0, RoundingMode.HALF_UP).intValueExact();
+
+        double[] entries = genUniformRealArray(numEntries, min, max);
+        int[] rowIndices = genUniformRealIntArray(numEntries, 0, shape.get(0));
+        int[] colIndices = genUniformRealIntArray(numEntries, 0, shape.get(1));
+        SparseMatrix randMat = new SparseMatrix(shape, entries, rowIndices, colIndices);
+        randMat.sparseSort();
+
+        return randMat;
+    }
+
+
+    /**
      * Generates a matrix filled with pseudorandom values sampled from a normal distribution with a mean of 0.0 and
      * a standard deviation of 1.0.
      * @param rows The number of rows in the resulting matrix.
@@ -595,11 +625,11 @@ public class RandomTensor {
      * @param max Upper bound of uniform range (Exclusive).
      * @return An array of integers with specified length filled with uniformly distributed values in {@code [min, max)}.
      */
-    private double[] genUniformRealIntArray(int length, int min, int max) {
-        double[] values = new double[length];
+    private int[] genUniformRealIntArray(int length, int min, int max) {
+        int[] values = new int[length];
 
         for(int i=0; i<length; i++) {
-            values[i] = complexRng.nextInt()*((double) (max - min)) + min;
+            values[i] = complexRng.nextInt()*(max - min) + min;
         }
 
         return values;

@@ -1,21 +1,20 @@
-package com.flag4j.operations.sparse.real;
+package com.flag4j.operations.sparse.complex;
 
+import com.flag4j.SparseCMatrix;
 import com.flag4j.SparseMatrix;
+import com.flag4j.operations.sparse.real.RealSparseElementSearch;
+import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
 
-/**
- * This clas provides methods for searching for a specific element in a sparse matrix.
- */
-public class RealSparseElementSearch {
+public class ComplexSparseElementSearch {
 
-
-    private RealSparseElementSearch() {
+    private ComplexSparseElementSearch() {
         // Hide default constructor in utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
-
 
     /**
      * Preforms a binary search along the row and column indices of the non-zero values of a sparse matrix for the location
@@ -33,7 +32,7 @@ public class RealSparseElementSearch {
      *         that this guarantees that the return value will be &gt;= 0 if
      *         and only if the key is found.
      */
-    public static int matrixBinarySearch(SparseMatrix src, int rowKey, int colKey) {
+    public static int matrixBinarySearch(SparseCMatrix src, int rowKey, int colKey) {
         int rowIdx = Arrays.binarySearch(src.rowIndices, rowKey);
 
         if(rowIdx<0) return rowIdx;
@@ -73,7 +72,7 @@ public class RealSparseElementSearch {
      * @return If it exists, the first and last index of the non-zero element in the sparse matrix which has the specified
      * {@code rowKey} as its row index.
      */
-    public static int[] matrixFindRowStartEnd(SparseMatrix src, int rowKey) {
+    public static int[] matrixFindRowStartEnd(SparseCMatrix src, int rowKey) {
         int rowIdx = Arrays.binarySearch(src.rowIndices, rowKey);
 
         if(rowIdx < 0) return new int[]{rowIdx, rowIdx}; // Row not found.
