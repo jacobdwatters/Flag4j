@@ -105,7 +105,6 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
         int colStop = Math.min(LU.numCols, LU.numRows);
         int maxIndex;
 
-
         // Using Gaussian elimination with row pivoting.
         for(int j=0; j<colStop; j++) {
             maxIndex = maxColIndex(j); // Find row index of max value (in absolute value) in column j so that the index >= j.

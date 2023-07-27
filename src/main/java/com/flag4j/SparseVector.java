@@ -132,6 +132,24 @@ public class SparseVector
 
 
     /**
+     * Creates a sparse vector of specified size, non-zero entries, and non-zero indices.
+     * @param size Full size, including zeros, of the sparse vector.
+     * @param entries Non-zero entries of the sparse vector.
+     * @param indices Non-zero indices of the sparse vector.
+     */
+    public SparseVector(int size, List<Double> entries, List<Integer> indices) {
+        super(new Shape(size),
+                entries.size(),
+                entries.stream().mapToDouble(Double::doubleValue).toArray(),
+                new int[indices.size()][1]
+        );
+
+        this.indices = indices.stream().mapToInt(Integer::intValue).toArray();
+        this.size = size;
+    }
+
+
+    /**
      * Checks if an object is equal to this vector. The object must be a vector (real, complex, dense or sparse).
      * @param b Object to compare to this vector. Valid types are {@link Vector}, {@link SparseVector},
      * {@link CVector}, or {@link SparseCVector}.

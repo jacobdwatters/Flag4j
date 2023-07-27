@@ -43,6 +43,7 @@ import com.flag4j.util.SparseDataWrapper;
 import com.flag4j.util.StringUtils;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Complex sparse matrix. Stored in coordinate list (COO) format.
@@ -315,6 +316,31 @@ public class SparseCMatrix
         this.colIndices = colIndices;
         this.numRows = shape.dims[0];
         this.numCols = shape.dims[1];
+    }
+
+
+    /**
+     * Creates a complex sparse matrix with specified shape, non-zero entries, and indices.
+     * @param shape Shape of the sparse matrix.
+     * @param entries Non-zero entries of the sparse matrix.
+     * @param rowIndices Non-zero row indices of the sparse matrix.
+     * @param colIndices Non-zero column indices of the sparse matrix.
+     */
+    public SparseCMatrix(Shape shape, List<CNumber> entries, List<Integer> rowIndices, List<Integer> colIndices) {
+        super(
+                shape,
+                entries.size(),
+                entries.toArray(CNumber[]::new),
+                new int[rowIndices.size()][2]
+
+        );
+        this.rowIndices = rowIndices.stream().mapToInt(Integer::intValue).toArray();
+        this.colIndices = colIndices.stream().mapToInt(Integer::intValue).toArray();
+        int[][] indices = RealDenseTranspose.blockedIntMatrix(new int[][]{this.rowIndices, this.colIndices});
+        ArrayUtils.deepCopy(indices, this.indices);
+
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
     }
 
 

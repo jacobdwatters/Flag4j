@@ -8,6 +8,9 @@ import com.flag4j.operations.sparse.real.RealSparseElementSearch;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class contains implementations for complex sparse matrix manipulations.
  */
@@ -32,9 +35,54 @@ public class ComplexSparseMatrixManipulations {
         int[] startEnd = ComplexSparseElementSearch.matrixFindRowStartEnd(src, rowIdx);
         int size = src.entries.length - (startEnd[1]-startEnd[0]);
 
+        // Initialize arrays.
         CNumber[] entries = new CNumber[size];
         int[] rowIndices = new int[size];
         int[] colIndices = new int[size];
+
+        copyRanges(src, entries, rowIndices, colIndices, startEnd);
+
+        return new SparseCMatrix(shape, entries, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Removes multiple rows from a real sparse matrix.
+     * @param src The source sparse matrix to remove rows from.
+     * @param rowIdxs Indices of rows to remove from the {@code src} matrix.
+     * @return A copy of the {@code src} matrix with the specified rows removed.
+     */
+    public static SparseCMatrix removeRows(SparseCMatrix src, int... rowIdxs) {
+        Shape shape = new Shape(src.numRows-rowIdxs.length, src.numCols);
+        List<CNumber> entries = new ArrayList<>(src.entries.length);
+        List<Integer> rowIndices = new ArrayList<>(src.entries.length);
+        List<Integer> colIndices = new ArrayList<>(src.entries.length);
+
+        for(int i=0; i<src.entries.length; i++) {
+            if(!ArrayUtils.contains(rowIdxs, src.rowIndices[i])) {
+                // Then copy the entry over.
+                entries.add(src.entries[i]);
+                rowIndices.add(src.rowIndices[i]);
+                colIndices.add(src.colIndices[i]);
+            }
+        }
+
+        return new SparseCMatrix(shape, entries, rowIndices, colIndices);
+    }
+
+
+    /**
+     * A helper method which copies from a sparse matrix to a set of three arrays (non-zero entries, row indices, and
+     * column indices) but skips over a specified range.
+     * @param src Source sparse matrix to copy from.
+     * @param entries Array to copy {@code} src non-zero entries to.
+     * @param rowIndices Array to copy {@code} src row indices entries to.
+     * @param colIndices Array to copy {@code} src column indices entries to.
+     * @param startEnd An array of length two specifying the {@code start} (inclusive) and {@code end} (exclusive)
+     *                 indices of the range to skip during the copy.
+     */
+    private static void copyRanges(SparseCMatrix src, CNumber[] entries, int[]
+            rowIndices, int[] colIndices, int[] startEnd) {
 
         if(startEnd[0] > 0) {
             ArrayUtils.arraycopy(src.entries, 0, entries, 0, startEnd[0]);
@@ -50,7 +98,5 @@ public class ComplexSparseMatrixManipulations {
             System.arraycopy(src.rowIndices, 0, rowIndices, 0, rowIndices.length);
             System.arraycopy(src.colIndices, 0, colIndices, 0, colIndices.length);
         }
-
-        return new SparseCMatrix(shape, entries, rowIndices, colIndices);
     }
 }

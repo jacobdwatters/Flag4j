@@ -31,6 +31,7 @@ import com.flag4j.core.sparse.RealSparseTensorBase;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.dense.real.RealDenseOperations;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
@@ -564,7 +565,6 @@ public class SparseMatrix
     }
 
 
-
     /**
      * Converts this sparse tensor to an equivalent dense tensor.
      *
@@ -800,8 +800,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSlice(SparseMatrix values, int rowStart, int colStart) {
-        // TODO: Implementation.
-        return null;
+        return RealSparseMatrixGetSet.setSlice(this, values, rowStart, colStart);
     }
 
 
@@ -819,8 +818,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSlice(Double[][] values, int rowStart, int colStart) {
-        // TODO: Implementation.
-        return null;
+        return RealSparseMatrixGetSet.setSlice(this, values, rowStart, colStart);
     }
 
 
@@ -838,8 +836,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSlice(Integer[][] values, int rowStart, int colStart) {
-        // TODO: Implementation.
-        return null;
+        return RealSparseMatrixGetSet.setSlice(this, values, rowStart, colStart);
     }
 
 
@@ -857,8 +854,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSlice(double[][] values, int rowStart, int colStart) {
-        // TODO: Implementation.
-        return null;
+        return RealSparseMatrixGetSet.setSlice(this, values, rowStart, colStart);
     }
 
 
@@ -876,8 +872,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSlice(int[][] values, int rowStart, int colStart) {
-        // TODO: Implementation.
-        return null;
+        return RealSparseMatrixGetSet.setSlice(this, values, rowStart, colStart);
     }
 
 
@@ -916,8 +911,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix removeCol(int colIndex) {
-        // TODO: Implementation.
-        return null;
+        return RealSparseMatrixManipulations.removeCol(this, colIndex);
     }
 
 
@@ -929,8 +923,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix removeCols(int... colIndices) {
-        // TODO: Implementation.
-        return null;
+        return RealSparseMatrixManipulations.removeCols(this, colIndices);
     }
 
 
@@ -943,8 +936,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix swapRows(int rowIndex1, int rowIndex2) {
-        // TODO: Implementation.
-        return null;
+        return RealSparseMatrixManipulations.swapRows(this, rowIndex1, rowIndex2);
     }
 
 
@@ -957,8 +949,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix swapCols(int colIndex1, int colIndex2) {
-        // TODO: Implementation.
-        return null;
+        return RealSparseMatrixManipulations.swapCols(this, colIndex1, colIndex2);
     }
 
 
@@ -976,8 +967,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setSlice(Matrix values, int rowStart, int colStart) {
-        // TODO: Implementation.
-        return null;
+        return RealSparseMatrixGetSet.setSlice(this, values, rowStart, colStart);
     }
 
 
@@ -1222,13 +1212,42 @@ public class SparseMatrix
      * times. Note, this method is preferred over repeated multiplication of a matrix as this method will be significantly
      * faster.
      *
-     * @param exponent The exponent in the matrix power.
+     * @param exponent The exponent in the matrix power. If {@code exponent = 0} then the identity matrix will be
+     *                 returned.
      * @return The result of multiplying this matrix with itself 'exponent' times.
+     * @throws IllegalArgumentException If {@code exponent} is negative.
+     * @throws IllegalArgumentException If this sparse matrix is not square.
      */
     @Override
     public Matrix pow(int exponent) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertSquare(shape);
+        ParameterChecks.assertGreaterEq(0, exponent);
+
+        Matrix power;
+
+        if(exponent==0) {
+            power = Matrix.I(numRows);
+        } else if(exponent==1) {
+            power = this.toDense();
+        } else {
+            // Compute the first sparse-sparse matrix multiplication.
+            double[] destEntries = RealSparseMatrixMultiplication.concurrentStandard(
+                    entries, rowIndices, colIndices, shape,
+                    entries, rowIndices, colIndices, shape
+            );
+
+            // Compute the remaining dense-sparse matrix multiplication.
+            for(int i=2; i<exponent; i++) {
+                destEntries = RealDenseSparseMatrixMultiplication.concurrentStandard(
+                        destEntries, shape,
+                        entries, rowIndices, colIndices, shape
+                );
+            }
+
+            power = new Matrix(shape.copy(), destEntries);
+        }
+
+        return power;
     }
 
 
@@ -1307,8 +1326,8 @@ public class SparseMatrix
      */
     @Override
     public Double fib(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).tr();
     }
 
 
@@ -1321,8 +1340,8 @@ public class SparseMatrix
      */
     @Override
     public Double fib(SparseMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).tr();
     }
 
 
@@ -1335,8 +1354,8 @@ public class SparseMatrix
      */
     @Override
     public CNumber fib(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).tr();
     }
 
 
@@ -1349,8 +1368,8 @@ public class SparseMatrix
      */
     @Override
     public CNumber fib(SparseCMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).tr();
     }
 
 
@@ -1502,8 +1521,29 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix invDirectSum(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        Shape destShape = new Shape(numRows + B.numRows, numCols + B.numCols);
+        double[] destEntries = new double[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries from both matrices.
+        System.arraycopy(entries, 0, destEntries, 0, entries.length);
+        System.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Compute shifted indices.
+        int[] shiftedColIndices = colIndices.clone();
+        ArrayUtils.shift(B.numCols, shiftedColIndices);
+        int[] shiftedRowIndices = ArrayUtils.rangeInt(numRows, destRowIndices.length);
+        int[] bColIndices = ArrayUtils.rangeInt(0, B.numCols);
+
+        // Copy shifted indices of both matrices.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(shiftedColIndices, 0, destColIndices, 0, shiftedColIndices.length);
+
+        System.arraycopy(shiftedRowIndices, 0, destRowIndices, rowIndices.length, shiftedRowIndices.length);
+        System.arraycopy(bColIndices, 0, destColIndices, shiftedColIndices.length, bColIndices.length);
+
+        return new SparseMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1515,8 +1555,29 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix invDirectSum(SparseMatrix B) {
-        // TODO: Implementation.
-        return null;
+        Shape destShape = new Shape(numRows + B.numRows, numCols + B.numCols);
+        double[] destEntries = new double[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries from both matrices.
+        System.arraycopy(entries, 0, destEntries, 0, entries.length);
+        System.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Compute shifted indices.
+        int[] shiftedColIndices = colIndices.clone();
+        ArrayUtils.shift(B.numCols, shiftedColIndices);
+        int[] shiftedRowIndices = B.rowIndices.clone();
+        ArrayUtils.shift(numRows, shiftedRowIndices);
+
+        // Copy shifted indices of both matrices.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(shiftedColIndices, 0, destColIndices, 0, shiftedColIndices.length);
+
+        System.arraycopy(shiftedRowIndices, 0, destRowIndices, rowIndices.length, shiftedRowIndices.length);
+        System.arraycopy(B.colIndices, 0, destColIndices, shiftedColIndices.length, B.colIndices.length);
+
+        return new SparseMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1528,8 +1589,29 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix invDirectSum(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+        Shape destShape = new Shape(numRows + B.numRows, numCols + B.numCols);
+        CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries from both matrices.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Compute shifted indices.
+        int[] shiftedColIndices = colIndices.clone();
+        ArrayUtils.shift(B.numCols, shiftedColIndices);
+        int[] shiftedRowIndices = ArrayUtils.rangeInt(numRows, destRowIndices.length);
+        int[] bColIndices = ArrayUtils.rangeInt(0, B.numCols);
+
+        // Copy shifted indices of both matrices.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(shiftedColIndices, 0, destColIndices, 0, shiftedColIndices.length);
+
+        System.arraycopy(shiftedRowIndices, 0, destRowIndices, rowIndices.length, shiftedRowIndices.length);
+        System.arraycopy(bColIndices, 0, destColIndices, shiftedColIndices.length, bColIndices.length);
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1541,8 +1623,29 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix invDirectSum(SparseCMatrix B) {
-        // TODO: Implementation.
-        return null;
+        Shape destShape = new Shape(numRows + B.numRows, numCols + B.numCols);
+        CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries from both matrices.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Compute shifted indices.
+        int[] shiftedColIndices = colIndices.clone();
+        ArrayUtils.shift(B.numCols, shiftedColIndices);
+        int[] shiftedRowIndices = B.rowIndices.clone();
+        ArrayUtils.shift(numRows, shiftedRowIndices);
+
+        // Copy shifted indices of both matrices.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(shiftedColIndices, 0, destColIndices, 0, shiftedColIndices.length);
+
+        System.arraycopy(shiftedRowIndices, 0, destRowIndices, rowIndices.length, shiftedRowIndices.length);
+        System.arraycopy(B.colIndices, 0, destColIndices, shiftedColIndices.length, B.colIndices.length);
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1554,8 +1657,25 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix sumCols() {
-        // TODO: Implementation.
-        return null;
+        List<Double> entries = new ArrayList<>();
+        List<Integer> rowIndices = new ArrayList<>();
+        List<Integer> colIndices = new ArrayList<>();
+
+        for(int i=0; i<this.entries.length; i++) {
+            int idx = rowIndices.indexOf(this.rowIndices[i]);
+
+            if(idx < 0) {
+                // No value with this row index exists.
+                entries.add(this.entries[i]);
+                rowIndices.add(this.rowIndices[i]);
+                colIndices.add(0);
+            } else {
+                // A value already exists with this row index. Update it.
+                entries.set(idx, entries.get(i) + this.entries[i]);
+            }
+        }
+
+        return new SparseMatrix(new Shape(this.numRows, 1), entries, rowIndices, colIndices);
     }
 
 
@@ -1567,8 +1687,25 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix sumRows() {
-        // TODO: Implementation.
-        return null;
+        List<Double> entries = new ArrayList<>();
+        List<Integer> rowIndices = new ArrayList<>();
+        List<Integer> colIndices = new ArrayList<>();
+
+        for(int i=0; i<this.entries.length; i++) {
+            int idx = rowIndices.indexOf(this.colIndices[i]);
+
+            if(idx < 0) {
+                // No value with this column index exists.
+                entries.add(this.entries[i]);
+                rowIndices.add(0);
+                colIndices.add(this.colIndices[i]);
+            } else {
+                // A value already exists with this column index. Update it.
+                entries.set(idx, entries.get(i) + this.entries[i]);
+            }
+        }
+
+        return new SparseMatrix(new Shape(1, numCols), entries, rowIndices, colIndices);
     }
 
 
@@ -1758,8 +1895,8 @@ public class SparseMatrix
      */
     @Override
     public Matrix stack(Matrix B, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(B) : this.stack(B);
     }
 
 
@@ -1777,8 +1914,8 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix stack(SparseMatrix B, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(B) : this.stack(B);
     }
 
 
@@ -1796,8 +1933,8 @@ public class SparseMatrix
      */
     @Override
     public CMatrix stack(CMatrix B, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(B) : this.stack(B);
     }
 
 
@@ -1815,8 +1952,8 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix stack(SparseCMatrix B, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(B) : this.stack(B);
     }
 
 
@@ -1964,8 +2101,8 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix stack(Vector b, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(b) : this.stack(b);
     }
 
 
@@ -1985,8 +2122,8 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix stack(SparseVector b, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(b) : this.stack(b);
     }
 
 
@@ -2006,8 +2143,8 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix stack(CVector b, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(b) : this.stack(b);
     }
 
 
@@ -2027,8 +2164,8 @@ public class SparseMatrix
      */
     @Override
     public SparseCMatrix stack(SparseCVector b, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(b) : this.stack(b);
     }
 
 
@@ -2108,8 +2245,8 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix getRow(int i) {
-        // TODO: Implementation. Change to return a vector instead of a matrix.
-        return null;
+        // TODO: Change to return a vector instead of a matrix.
+        return RealSparseMatrixGetSet.getRow(this, i);
     }
 
 
@@ -2121,8 +2258,8 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix getCol(int j) {
-        // TODO: Implementation. Change to return a vector instead of a matrix.
-        return null;
+        // TODO: Change to return a vector instead of a matrix.
+        return RealSparseMatrixGetSet.getCol(this, j);
     }
 
 
@@ -2139,8 +2276,7 @@ public class SparseMatrix
      */
     @Override
     public SparseVector getCol(int colIdx, int rowStart, int rowEnd) {
-        // TODO: Implementation.
-        return null;
+        return RealSparseMatrixGetSet.getCol(this, colIdx, rowStart, rowEnd);
     }
 
 
@@ -2203,8 +2339,8 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix getColBelow(int rowStart, int j) {
-        // TODO: Implementation.
-        return null;
+        // TODO: Change so that a vector is returned.
+        return RealSparseMatrixGetSet.getCol(this, j, rowStart, numRows).toMatrix(true);
     }
 
 
@@ -2219,8 +2355,8 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix getRowAfter(int colStart, int i) {
-        // TODO: Implementation.
-        return null;
+        // TODO: Change so that a sparse vector is returned instead.
+        return RealSparseMatrixGetSet.getRow(this, i, colStart, numCols).toMatrix(false);
     }
 
 
@@ -2236,7 +2372,6 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setCol(SparseVector values, int j) {
-        // TODO: Implementation.
         return null;
     }
 
@@ -2295,7 +2430,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix pInv() {
-        // TODO: Implementation.
+        // TODO: Should return a dense matrix.
         return null;
     }
     
@@ -2305,12 +2440,15 @@ public class SparseMatrix
      * Specifically, the condition number is computed as the maximum singular value divided by the minimum singular
      * value of this matrix.
      *
+     * <p>
+     *     WARNING: This method will convert the sparse matrix to a dense matrix to perform the computation.
+     * </p>
+     *
      * @return The condition number of this matrix (Assuming Frobenius norm).
      */
     @Override
     public double cond() {
-        // TODO: Implementation.
-        return 0;
+        return toDense().cond();
     }
     
 
@@ -2554,12 +2692,15 @@ public class SparseMatrix
     /**
      * Checks if a matrix has full rank. That is, if a matrices rank is equal to the number of rows in the matrix.
      *
+     * <p>
+     *     WARNING: This method will convert this matrix to a dense matrix.
+     * </p>
+     *
      * @return True if this matrix has full rank. Otherwise, returns false.
      */
     @Override
     public boolean isFullRank() {
-        // TODO: Implementation.
-        return false;
+        return toDense().isFullRank();
     }
 
 
@@ -2571,7 +2712,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isSingular() {
-        // TODO: Implementation.
+        // TODO: Implementation. Need sparse LU decomposition.
         return false;
     }
 
@@ -2584,7 +2725,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isInvertible() {
-        // TODO: Implementation.
+        // TODO: Implementation. Need sparse LU decomposition.
         return false;
     }
 
@@ -2610,8 +2751,7 @@ public class SparseMatrix
      */
     @Override
     public double maxNorm() {
-        // TODO: Implementation.
-        return 0;
+        return RealDenseOperations.matrixMaxNorm(entries);
     }
 
 
@@ -2619,12 +2759,15 @@ public class SparseMatrix
      * Computes the rank of this matrix (i.e. the dimension of the column space of this matrix).
      * Note that here, rank is <b>NOT</b> the same as a tensor rank.
      *
+     * <p>
+     *     <b>WARNING</b>: This method will convert this matrix to a dense matrix.
+     * </p>
+     *
      * @return The matrix rank of this matrix.
      */
     @Override
     public int matrixRank() {
-        // TODO: Implementation.
-        return 0;
+        return toDense().matrixRank();
     }
 
 
@@ -2635,8 +2778,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isSymmetric() {
-        // TODO: Implementation.
-        return false;
+        return RealSparseMatrixProperties.isSymmetric(this);
     }
 
 
@@ -2647,8 +2789,7 @@ public class SparseMatrix
      */
     @Override
     public boolean isAntiSymmetric() {
-        // TODO: Implementation.
-        return false;
+        return RealSparseMatrixProperties.isAntiSymmetric(this);
     }
 
 
@@ -2659,8 +2800,11 @@ public class SparseMatrix
      */
     @Override
     public boolean isOrthogonal() {
-        // TODO: Implementation.
-        return false;
+        if(isSquare()) {
+            return this.mult(this.T()).round().equals(Matrix.I(numRows));
+        } else {
+            return false;
+        }
     }
 
 

@@ -1,8 +1,9 @@
 package com.flag4j.operations.sparse.real;
 
-
+import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.SparseMatrix;
+import com.flag4j.SparseVector;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -196,13 +197,341 @@ public class RealSparseMatrixGetSet {
 
         SparseMatrix dest = new SparseMatrix(
                 src.shape.copy(),
-                destEntries.stream().mapToDouble(Double::doubleValue).toArray(),
-                destRowIndices.stream().mapToInt(Integer::intValue).toArray(),
-                destColIndices.stream().mapToInt(Integer::intValue).toArray()
+                destEntries,
+                destRowIndices,
+                destColIndices
         );
 
         dest.sparseSort();
 
         return dest;
+    }
+
+
+    /**
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of another sparse matrix.
+     * @param src Source sparse matrix to copy and set values of.
+     * @param values Values of the slice to be set.
+     * @param row Starting row index of slice.
+     * @param col Starting column index of slice.
+     * @return A copy of the {@code src} matrix with the specified slice set to the {@code values} matrix.
+     * @throws IllegalArgumentException If the {@code values} matrix does not fit in the {@code src}
+     * matrix given the row and
+     * column index.
+     */
+    public static SparseMatrix setSlice(SparseMatrix src, SparseMatrix values, int row, int col) {
+        // Ensure the values matrix fits inside the src matrix.
+        ParameterChecks.assertLessEq(src.numRows, values.numRows + row);
+        ParameterChecks.assertLessEq(src.numCols, values.numCols + col);
+
+        // Initialize lists to new values for the specified slice.
+        List<Double> entries = DoubleStream.of(values.entries).boxed().collect(Collectors.toList());
+        List<Integer> rowIndices = IntStream.of(ArrayUtils.shift(row, values.rowIndices)).boxed().collect(Collectors.toList());
+        List<Integer> colIndices = IntStream.of(ArrayUtils.shift(col, values.colIndices)).boxed().collect(Collectors.toList());
+
+        int[] rowRange = ArrayUtils.rangeInt(row, values.numRows + row);
+        int[] colRange = ArrayUtils.rangeInt(col, values.numCols + col);
+
+        copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
+
+        // Create matrix and ensure entries are properly sorted.
+        SparseMatrix mat = new SparseMatrix(src.shape.copy(), entries, rowIndices, colIndices);
+        mat.sparseSort();
+
+        return mat;
+    }
+
+
+    /**
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.
+     * @param src Source sparse matrix to copy and set values of.
+     * @param values Dense values of the slice to be set.
+     * @param row Starting row index of slice.
+     * @param col Starting column index of slice.
+     * @return A copy of the {@code src} matrix with the specified slice set to the {@code values} array.
+     * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
+     * given the row and column index.
+     */
+    public static SparseMatrix setSlice(SparseMatrix src, double[][] values, int row, int col) {
+        // Ensure the values matrix fits inside the src matrix.
+        ParameterChecks.assertLessEq(src.numRows, values.length + row);
+        ParameterChecks.assertLessEq(src.numCols, values[0].length + col);
+
+        // Flatten values.
+        double[] flatValues = Arrays.stream(values)
+                .flatMapToDouble(Arrays::stream)
+                .toArray();
+        int[] sliceRows = ArrayUtils.rangeInt(row, values.length + row);
+        int[] sliceCols = ArrayUtils.rangeInt(col, values[0].length + col);
+
+        return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
+    }
+
+
+    /**
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense matrix.
+     * @param src Source sparse matrix to copy and set values of.
+     * @param values Dense matrix containing values of the slice to be set.
+     * @param row Starting row index of slice.
+     * @param col Starting column index of slice.
+     * @return A copy of the {@code src} matrix with the specified slice set to the {@code values} array.
+     * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
+     * given the row and column index.
+     */
+    public static SparseMatrix setSlice(SparseMatrix src, Matrix values, int row, int col) {
+        // Ensure the values matrix fits inside the src matrix.
+        ParameterChecks.assertLessEq(src.numRows, values.numRows + row);
+        ParameterChecks.assertLessEq(src.numCols, values.numCols + col);
+
+        int[] sliceRows = ArrayUtils.rangeInt(row, values.numRows + row);
+        int[] sliceCols = ArrayUtils.rangeInt(col, values.numCols + col);
+
+        return setSlice(src, values.entries, sliceRows, sliceCols, row, col);
+    }
+
+
+    /**
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.
+     * @param src Source sparse matrix to copy and set values of.
+     * @param values Dense values of the slice to be set.
+     * @param row Starting row index of slice.
+     * @param col Starting column index of slice.
+     * @return A copy of the {@code src} matrix with the specified slice set to the {@code values} array.
+     * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
+     * given the row and column index.
+     */
+    public static SparseMatrix setSlice(SparseMatrix src, int[][] values, int row, int col) {
+        // Ensure the values matrix fits inside the src matrix.
+        ParameterChecks.assertLessEq(src.numRows, values.length + row);
+        ParameterChecks.assertLessEq(src.numCols, values[0].length + col);
+
+        // Flatten values.
+        double[] flatValues = new double[values.length*values[0].length];
+        int pos = 0;
+        for(int[] vRow : values) {
+            for(int d : vRow) {
+                flatValues[pos++] = d;
+            }
+        }
+        int[] sliceRows = ArrayUtils.rangeInt(row, values.length + row);
+        int[] sliceCols = ArrayUtils.rangeInt(col, values[0].length + col);
+
+        return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
+    }
+
+
+    /**
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.
+     * @param src Source sparse matrix to copy and set values of.
+     * @param values Dense values of the slice to be set.
+     * @param row Starting row index of slice.
+     * @param col Starting column index of slice.
+     * @return A copy of the {@code src} matrix with the specified slice set to the {@code values} array.
+     * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
+     * given the row and column index.
+     */
+    public static SparseMatrix setSlice(SparseMatrix src, Double[][] values, int row, int col) {
+        // Ensure the values matrix fits inside the src matrix.
+        ParameterChecks.assertLessEq(src.numRows, values.length + row);
+        ParameterChecks.assertLessEq(src.numCols, values[0].length + col);
+
+        // Flatten values.
+        double[] flatValues = new double[values.length*values[0].length];
+        int pos = 0;
+        for(Double[] vRow : values) {
+            for(Double d : vRow) {
+                flatValues[pos++] = d;
+            }
+        }
+
+        int[] sliceRows = ArrayUtils.rangeInt(row, values.length + row);
+        int[] sliceCols = ArrayUtils.rangeInt(col, values[0].length + col);
+
+        return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
+    }
+
+
+    /**
+     * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of a dense array.
+     * @param src Source sparse matrix to copy and set values of.
+     * @param values Dense values of the slice to be set.
+     * @param row Starting row index of slice.
+     * @param col Starting column index of slice.
+     * @return A copy of the {@code src} matrix with the specified slice set to the {@code values} array.
+     * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
+     * given the row and column index.
+     */
+    public static SparseMatrix setSlice(SparseMatrix src, Integer[][] values, int row, int col) {
+        // Ensure the values matrix fits inside the src matrix.
+        ParameterChecks.assertLessEq(src.numRows, values.length + row);
+        ParameterChecks.assertLessEq(src.numCols, values[0].length + col);
+
+        // Flatten values.
+        double[] flatValues = new double[values.length*values[0].length];
+        int pos = 0;
+        for(Integer[] vRow : values) {
+            for(Integer d : vRow) {
+                flatValues[pos++] = d;
+            }
+        }
+
+        int[] sliceRows = ArrayUtils.rangeInt(row, values.length + row);
+        int[] sliceCols = ArrayUtils.rangeInt(col, values[0].length + col);
+
+        return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
+    }
+
+
+    /**
+     * Sets a slice of a sparse matrix to values given in a 1d dense array.
+     * @param src Source sparse matrix to copy non-slice from.
+     * @param values Dense value for slice.
+     * @param sliceRows Row indices for slice.
+     * @param sliceCols Column indices for slice.
+     * @param row Starting row index of slice.
+     * @param col Starting column index of slice.
+     * @return A copy of the {@code src} matrix with the specified slice set to the specified values.
+     */
+    private static SparseMatrix setSlice(SparseMatrix src, double[] values,
+                                         int[] sliceRows, int[] sliceCols, int row, int col) {
+        // Copy vales and row/column indices (with appropriate shifting) to destination lists.
+        List<Double> entries = DoubleStream.of(values).boxed().collect(Collectors.toList());
+        List<Integer> rowIndices = IntStream.of(sliceRows).boxed().collect(Collectors.toList());
+        List<Integer> colIndices = IntStream.of(sliceCols).boxed().collect(Collectors.toList());
+
+        int[] rowRange = ArrayUtils.rangeInt(row, sliceRows.length + row);
+        int[] colRange = ArrayUtils.rangeInt(col, sliceCols.length + col);
+
+        copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
+
+        // Create matrix and ensure entries are properly sorted.
+        SparseMatrix mat = new SparseMatrix(src.shape.copy(), entries, rowIndices, colIndices);
+        mat.sparseSort();
+
+        return mat;
+    }
+
+
+    /**
+     * Gets a specified row from this sparse matrix.
+     * @param src Source sparse matrix to extract row from.
+     * @param rowIdx Index of the row to extract from the {@code src} matrix.
+     * @return Returns the specified row from this sparse matrix.
+     */
+    public static SparseMatrix getRow(SparseMatrix src, int rowIdx) {
+        ParameterChecks.assertLessEq(src.numRows-1, rowIdx);
+
+        List<Double> entries = new ArrayList<>();
+        List<Integer> rowIndices = new ArrayList<>();
+        List<Integer> colIndices = new ArrayList<>();
+
+        for(int i=0; i<src.entries.length; i++) {
+            if(src.rowIndices[i]==rowIdx) {
+                entries.add(src.entries[i]);
+                rowIndices.add(0);
+                colIndices.add(src.colIndices[i]);
+            }
+        }
+
+        return new SparseMatrix(new Shape(1, src.numCols), entries, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Gets a specified row range from this sparse matrix.
+     * @param src Source sparse matrix to extract row from.
+     * @param rowIdx Index of the row to extract from the {@code src} matrix.
+     * @param start Staring column index of the column to be extracted (inclusive).
+     * @param end Ending column index of the column to be extracted (exclusive)
+     * @return Returns the specified column range from this sparse matrix.
+     */
+    public static SparseVector getRow(SparseMatrix src, int rowIdx, int start, int end) {
+        ParameterChecks.assertLessEq(end-1, start);
+
+        List<Double> entries = new ArrayList<>();
+        List<Integer> indices = new ArrayList<>();
+
+        for(int i=0; i<src.entries.length; i++) {
+            if(src.rowIndices[i]==rowIdx && src.colIndices[i] >= start && src.colIndices[i] < end) {
+                entries.add(src.entries[i]);
+                indices.add(src.colIndices[i]);
+            }
+        }
+
+        return new SparseVector(src.numRows, entries, indices);
+    }
+
+
+    /**
+     * Gets a specified column from this sparse matrix.
+     * @param src Source sparse matrix to extract column from.
+     * @param colIdx Index of the column to extract from the {@code src} matrix.
+     * @return Returns the specified column from this sparse matrix.
+     */
+    public static SparseMatrix getCol(SparseMatrix src, int colIdx) {
+        ParameterChecks.assertLessEq(src.numCols-1, colIdx);
+
+        List<Double> entries = new ArrayList<>();
+        List<Integer> rowIndices = new ArrayList<>();
+        List<Integer> colIndices = new ArrayList<>();
+
+        for(int i=0; i<src.entries.length; i++) {
+            if(src.colIndices[i]==colIdx) {
+                entries.add(src.entries[i]);
+                rowIndices.add(src.rowIndices[i]);
+                colIndices.add(0);
+            }
+        }
+
+        return new SparseMatrix(new Shape(src.numRows, 1), entries, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Gets a specified column range from this sparse matrix.
+     * @param src Source sparse matrix to extract column from.
+     * @param colIdx Index of the column to extract from the {@code src} matrix.
+     * @param start Staring row index of the column to be extracted (inclusive).
+     * @param end Ending row index of the column to be extracted (exclusive)
+     * @return Returns the specified column range from this sparse matrix.
+     */
+    public static SparseVector getCol(SparseMatrix src, int colIdx, int start, int end) {
+        ParameterChecks.assertLessEq(end-1, start);
+
+        List<Double> entries = new ArrayList<>();
+        List<Integer> indices = new ArrayList<>();
+
+        for(int i=0; i<src.entries.length; i++) {
+            if(src.colIndices[i]==colIdx && src.rowIndices[i] >= start && src.rowIndices[i] < end) {
+                entries.add(src.entries[i]);
+                indices.add(src.rowIndices[i]);
+            }
+        }
+
+        return new SparseVector(src.numRows, entries, indices);
+    }
+
+
+    /**
+     * Copies values in sparse matrix which do not fall in the specified row and column ranges.
+     * @param src Source sparse matrix to copy from.
+     * @param entries Destination list to add copied values to.
+     * @param rowIndices Destination list to add copied row indices to.
+     * @param colIndices Destination list to add copied column indices to.
+     * @param rowRange List of row indices to NOT copy from.
+     * @param colRange List of column indices to NOT copy from.
+     */
+    private static void copyValuesNotInSlice(SparseMatrix src, List<Double> entries, List<Integer> rowIndices,
+                                             List<Integer> colIndices, int[] rowRange, int[] colRange) {
+        // Copy values not in slice.
+        for(int i=0; i<src.entries.length; i++) {
+            if( !(ArrayUtils.contains(rowRange, src.rowIndices[i])
+                    || ArrayUtils.contains(colRange, src.colIndices[i])) ) {
+                // Then the entry is not in the slice so add it.
+                entries.add(src.entries[i]);
+                rowIndices.add(src.rowIndices[i]);
+                colIndices.add(src.colIndices[i]);
+            }
+        }
     }
 }

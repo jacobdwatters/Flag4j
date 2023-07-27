@@ -29,10 +29,13 @@ import com.flag4j.io.PrintOptions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
- * This class provides several methods useful for array manipulation and copying.
+ * This class provides several utility methods useful for array manipulation and copying.
  */
 public final class ArrayUtils {
 
@@ -940,8 +943,74 @@ public final class ArrayUtils {
      * @param arr Array of interest.
      * @param key Value to check for in the {@code arr} array.
      * @return True if the {@code key} value is found in the array. False otherwise.
+     * @see Arrays#sort(int[]) 
      */
     public static boolean contains(int[] arr, int key) {
         return Arrays.binarySearch(arr, key) >= 0;
+    }
+
+    /**
+     * Shifts all indices in an array by a specified amount.
+     * @param shift Amount to shift indices by.
+     * @param indices Array of indices to shift.
+     * @return A reference to {@code indices}.
+     * @see #shiftRange(int, int[], int, int) 
+     */
+    public static int[] shift(int shift, int[] indices) {
+        return shiftRange(shift, indices, 0, indices.length);
+    }
+
+
+    /**
+     * Shifts a range of indices in an array by a specified amount.
+     * @param shift Amount to shift indices by.
+     * @param indices Array of indices to shift.
+     * @param start Starting index of range to shift (inclusive).
+     * @param stop Stopping index of range to shift (exclusive).
+     * @return A reference to {@code indices}.
+     * @throws ArrayIndexOutOfBoundsException If start or stop is not within the bounds of the {@code indices} array.
+     * @see #shift(int, int[]) 
+     */
+    public static int[] shiftRange(int shift, int[] indices, int start, int stop) {
+        for(int i=start; i<stop; i++) {
+            indices[i] += shift;
+        }
+
+        return indices;
+    }
+
+
+    /**
+     * Gets the unique values from an array and sorts them.
+     * @param src The array to get unique values from.
+     * @return A sorted array containing all unique values in the {@code src} array.
+     */
+    public static int[] uniqueSorted(int[] src) {
+        HashSet<Integer> hashSet = new HashSet<>();
+
+        for(int j : src) {
+            hashSet.add(j);
+        }
+
+        return hashSet.stream().mapToInt(Integer::intValue).sorted().toArray();
+    }
+
+
+    /**
+     * Finds the fist index of the specified {@code key} within an array. If the element does not exist, then {@code -1}
+     * is returned.
+     * @param arr Array of interest.
+     * @param key Key value to search for.
+     * @return Returns the first index of the value {@code key} within the {@code arr} array. If the {@code key} does
+     * not occur in the array, {@code -1} will be returned.
+     */
+    public static int indexOf(int[] arr, int key) {
+        for(int i=0; i<arr.length; i++) {
+            if(arr[i]==key) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }

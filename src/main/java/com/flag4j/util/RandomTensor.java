@@ -32,6 +32,7 @@ import com.flag4j.linalg.decompositions.RealQRDecomposition;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 
 /**
  * An instance of this class is used for generating streams of pseudorandom tensors, matrices, and vectors.
@@ -325,6 +326,23 @@ public class RandomTensor {
     /**
      * Generates a random sparse matrix with the specified sparsity. The non-zero values will have a uniform
      * distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
+     * @param rows Number of rows in the sparse matrix.
+     * @param cols Number of columns in the sparse matrix.
+     * @param min Minimum value for random non-zero values in the sparse matrix.
+     * @param max Maximum value for random non-zero values
+     * @param sparsity Desired sparsity of the resulting matrix. i.e. the percent of values which are zero. Must be
+     *                 a value in {@code [0.0, 1.0]}.
+     * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
+     * distributed in {@code [min, max)}.
+     */
+    public SparseMatrix randomSparseMatrix(int rows, int cols, double min, double max, double sparsity) {
+        return randomSparseMatrix(new Shape(rows, cols), min, max, sparsity);
+    }
+
+
+    /**
+     * Generates a random sparse matrix with the specified sparsity. The non-zero values will have a uniform
+     * distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
      * @param shape Shape of the sparse matrix to generate.
      * @param min Minimum value for random non-zero values in the sparse matrix.
      * @param max Maximum value for random non-zero values
@@ -602,10 +620,12 @@ public class RandomTensor {
 
 
     /**
-     * Generates an array of integers filled with uniformly distributed pseudorandom values in {@code [0, 1)}.
+     * Generates an array of integers filled with uniformly distributed pseudorandom int values in
+     * [{@link Integer#MAX_VALUE}, {@link Integer#MAX_VALUE}).
      * To generate uniformly distributed values in a specified range see {@link #genUniformRealIntArray(int, int, int)}.
      * @param length Length of pseudorandom array to generate.
-     * @return An array of integers with specified length filled with uniformly distributed values in {@code [0, 1)}.
+     * @return An array of integers with specified length filled with uniformly distributed values in
+     * [{@link Integer#MAX_VALUE}, {@link Integer#MAX_VALUE}).
      */
     private double[] genUniformRealIntArray(int length) {
         double[] values = new double[length];
@@ -629,7 +649,7 @@ public class RandomTensor {
         int[] values = new int[length];
 
         for(int i=0; i<length; i++) {
-            values[i] = complexRng.nextInt()*(max - min) + min;
+            values[i] = complexRng.nextInt(max - min) + min;
         }
 
         return values;
