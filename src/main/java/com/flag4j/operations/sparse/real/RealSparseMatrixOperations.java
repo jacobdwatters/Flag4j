@@ -2,6 +2,7 @@ package com.flag4j.operations.sparse.real;
 
 import com.flag4j.Matrix;
 import com.flag4j.SparseMatrix;
+import com.flag4j.Vector;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -265,5 +266,51 @@ public class RealSparseMatrixOperations {
                 rowIndices.stream().mapToInt(Integer::intValue).toArray(),
                 colIndices.stream().mapToInt(Integer::intValue).toArray()
         );
+    }
+
+
+    /**
+     * Adds a dense vector to each column as if the vector is a column vector.
+     * @param src Source sparse matrix.
+     * @param col Vector to add to each column of the source matrix.
+     * @return A dense copy of the {@code src} matrix with the specified vector added to each column.
+     * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
+     * of rows in the {@code src} matrix.
+     */
+    public static Matrix addToEachCol(SparseMatrix src, Vector col) {
+        Matrix sum = new Matrix(src.numRows, src.numCols);
+
+        for(int j=0; j<sum.numCols; j++) {
+            sum.setCol(col, j);
+        }
+
+        for(int i=0; i<src.entries.length; i++) {
+            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]] += src.entries[i];
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Adds a dense vector to add to each row as if the vector is a row vector.
+     * @param src Source sparse matrix.
+     * @param row Vector to add to each row of the source matrix.
+     * @return A dense copy of the {@code src} matrix with the specified vector added to each row.
+     * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
+     * of columns in the {@code src} matrix.
+     */
+    public static Matrix addToEachRow(SparseMatrix src, Vector row) {
+        Matrix sum = new Matrix(src.numRows, src.numCols);
+
+        for(int i=0; i<sum.numRows; i++) {
+            sum.setRow(row.entries, i);
+        }
+
+        for(int i=0; i<src.entries.length; i++) {
+            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]] += src.entries[i];
+        }
+
+        return sum;
     }
 }

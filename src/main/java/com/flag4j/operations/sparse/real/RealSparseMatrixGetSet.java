@@ -209,6 +209,37 @@ public class RealSparseMatrixGetSet {
 
 
     /**
+     * Sets a column of a sparse matrix to the values in a sparse tensor.
+     * @param src Source matrix to set column of.
+     * @param colIdx
+     * @param col
+     * @return A copy of the {@code src} matrix with the specified column set to the {@code col} sparse vector.
+     * @throws IllegalArgumentException If the {@code src} matrix does not have the same number of rows as total entries
+     * in the {@code col} vector.
+     */
+    public static SparseMatrix setCol(SparseMatrix src, int colIdx, SparseVector col) {
+        ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
+        ParameterChecks.assertEquals(src.numRows, col.size);
+
+        // Initialize destination arrays with the new column and the appropriate indices.
+        List<Double> destEntries = ArrayUtils.toArrayList(col.entries);
+        List<Integer> destRowIndices = ArrayUtils.toArrayList(ArrayUtils.rangeInt(0, col.entries.length));
+        List<Integer> destColIndices = ArrayUtils.toArrayList(col.indices);
+
+        SparseMatrix dest = new SparseMatrix(
+                src.shape.copy(),
+                destEntries,
+                destRowIndices,
+                destColIndices
+        );
+
+        dest.sparseSort();
+
+        return dest;
+    }
+
+
+    /**
      * Copies a sparse matrix and sets a slice of the sparse matrix to the entries of another sparse matrix.
      * @param src Source sparse matrix to copy and set values of.
      * @param values Values of the slice to be set.
@@ -509,6 +540,45 @@ public class RealSparseMatrixGetSet {
         }
 
         return new SparseVector(src.numRows, entries, indices);
+    }
+
+
+    /**
+     * Gets a specified rectangular slice of a sparse matrix.
+     * @param src Sparse matrix to extract slice from.
+     * @param rowStart Starting row index of the slice (inclusive).
+     * @param rowEnd Ending row index of the slice (exclusive).
+     * @param colStart Staring column index of a slice (inclusive).
+     * @param colEnd Ending column index of the slice (exclusive).
+     * @return The specified slice of the sparse matrix.
+     */
+    public static SparseMatrix getSlice(SparseMatrix src, int rowStart, int rowEnd, int colStart, int colEnd) {
+        ParameterChecks.assertInRange(rowStart, 0, rowEnd-1, "rowStart");
+        ParameterChecks.assertInRange(rowEnd, rowStart+1, src.numRows, "rowEnd");
+        ParameterChecks.assertInRange(colStart, 0, colEnd-1, "colStart");
+        ParameterChecks.assertInRange(colEnd, colStart+1, src.numRows, "colEnd");
+
+        Shape shape = new Shape(src.numRows - (rowEnd-rowStart), src.numCols-(colEnd-colStart));
+        List<Double> entries = new ArrayList<>();
+        List<Integer> rowIndices = new ArrayList<>();
+        List<Integer> colIndices = new ArrayList<>();
+
+        int start = RealSparseElementSearch.matrixBinarySearch(src, rowStart, colStart);
+
+        for(int i=start; i<src.entries.length; i++) {
+            if(inSlice(src.rowIndices[i], src.colIndices[i], rowStart, rowEnd, colStart, colEnd)) {
+                entries.add(src.entries[i]);
+                rowIndices.add(src.rowIndices[i]-rowStart);
+                colIndices.add(src.colIndices[i]-colStart);
+            }
+        }
+
+        return new SparseMatrix(shape, entries, rowIndices, colIndices);
+    }
+
+
+    private static boolean inSlice(int row, int col, int rowStart, int rowEnd, int colStart, int colEnd) {
+        return row >= rowStart && row < rowEnd && col >= colStart && col >=colEnd;
     }
 
 

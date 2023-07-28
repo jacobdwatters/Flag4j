@@ -27,11 +27,7 @@ package com.flag4j.util;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.io.PrintOptions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import java.util.*;
 
 
 /**
@@ -432,6 +428,22 @@ public final class ArrayUtils {
 
 
     /**
+     * Fills range of an array with specified value.
+     * @param dest Array to fill.
+     * @param fillValue Value to fill array with.
+     * @param from Staring index of range (inclusive).
+     * @param to Ending index of range (exclusive).
+     */
+    public static void fill(CNumber[] dest, double fillValue, int from, int to) {
+        ParameterChecks.assertLessEq(to, from+1);
+
+        for(int i=from; i<to; i++) {
+            dest[i] = new CNumber(fillValue);
+        }
+    }
+
+
+    /**
      * Converts an array of doubles to an {@link ArrayList array list}.
      * @param src Array to convert.
      * @return An equivalent array list.
@@ -444,6 +456,69 @@ public final class ArrayUtils {
         }
 
         return list;
+    }
+
+
+    /**
+     * Converts an array of doubles to an {@link ArrayList array list}.
+     * @param src Array to convert.
+     * @return An equivalent array list.
+     */
+    public static ArrayList<Integer> toArrayList(int[] src) {
+        ArrayList<Integer> list = new ArrayList<>(src.length);
+
+        for(int value : src) {
+            list.add(value);
+        }
+
+        return list;
+    }
+
+
+    /**
+     * Converts a list of {@link Double Doubles} to a primitive array.
+     * @param src Source list to convert.
+     * @return An array containing the same values as the {@code src} list.
+     */
+    public static double[] fromDoubleList(List<Double> src) {
+        double[] dest = new double[src.size()];
+
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = src.get(i);
+        }
+
+        return dest;
+    }
+
+
+
+    /**
+     * Converts a list of {@link Integer Integer} to a primitive array.
+     * @param src Source list to convert.
+     * @return An array containing the same values as the {@code src} list.
+     */
+    public static int[] fromIntegerList(List<Integer> src) {
+        int[] dest = new int[src.size()];
+
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = src.get(i);
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Converts a list to an array.
+     * @param src Source list to convert.
+     * @param dest Destination array to store values from {@code src} in (modified). Must be at least as large as {@code src}.
+     * @return A reference to the {@code dest} array.
+     * @throws IllegalArgumentException If the {@code dest} array is not large enough to store all entries of {@code src}
+     * list.
+     */
+    public static <T> T[] fromList(List<T> src, T[] dest) {
+        ParameterChecks.assertGreaterEq(src.size(), dest.length);
+        return src.toArray(dest);
     }
 
 
@@ -662,7 +737,7 @@ public final class ArrayUtils {
     public static boolean notInArray(int[] src, int value) {
         boolean result = true;
 
-        for(double entry : src) {
+        for(int entry : src) {
             if(entry == value) {
                 result = false;
                 break;
@@ -683,7 +758,7 @@ public final class ArrayUtils {
     public static boolean[] inArray(int[] src, int... values) {
         boolean[] result = new boolean[values.length];
 
-        for(double entry : src) {
+        for(int entry : src) {
             for(int i=0; i<values.length; i++) {
                 if(entry==values[i]) {
                     result[i]=true;
@@ -1012,5 +1087,53 @@ public final class ArrayUtils {
         }
 
         return -1;
+    }
+
+
+    /**
+     * Counts the number of unique elements in an array.
+     * @param arr Array to count unique elements in.
+     * @return The number of unique elements in {@code arr}.
+     */
+    public static int numUnique(double[] arr) {
+        return (int) Arrays.stream(arr).distinct().count();
+    }
+
+
+    /**
+     * Counts the number of unique elements in an array.
+     * @param arr Array to count unique elements in.
+     * @return The number of unique elements in {@code arr}.
+     */
+    public static int numUnique(int[] arr) {
+        return (int) Arrays.stream(arr).distinct().count();
+    }
+
+
+    /**
+     * Creates a mapping of unique values in {code arr} to integers such that each unique value is mapped to a unique integer and those
+     * integers range from {@code 0} to {@link #numUnique(int[]) numUnique(arr) - 1}.
+     * @param arr Array to create a mapping for.
+     * @return A mapping of unique values in {code arr} to integers such that each unique value is
+     * mapped to a unique integer and those integers range from {@code 0} to
+     * {@link #numUnique(int[]) numUnique(arr) - 1}.
+     */
+    public static HashMap<Integer, Integer> createUniqueMapping(int[] arr) {
+        if (arr.length == 0 || arr == null) return new HashMap<>();
+
+        int[] arrSorted = Arrays.copyOf(arr, arr.length);
+        Arrays.sort(arrSorted);
+
+        int count = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(arrSorted[0], 0);
+
+        for(int i=1; i<arrSorted.length; i++) {
+            if(arrSorted[i-1]!=arrSorted[i]) {
+                map.put(arrSorted[i], ++count);
+            }
+        }
+
+        return map;
     }
 }
