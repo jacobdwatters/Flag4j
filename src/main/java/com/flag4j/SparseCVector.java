@@ -964,6 +964,20 @@ public class SparseCVector
 
 
     /**
+     * A factory for creating a real sparse tensor.
+     *
+     * @param shape   Shape of the sparse tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    @Override
+    protected SparseVector makeRealTensor(Shape shape, double[] entries, int[][] indices) {
+        return new SparseVector(shape.get(0), entries, indices[0]);
+    }
+
+
+    /**
      * Computes scalar multiplication of a tensor.
      *
      * @param factor Scalar value to multiply with tensor.

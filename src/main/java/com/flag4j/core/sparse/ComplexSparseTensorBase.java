@@ -29,7 +29,8 @@ import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexTensorMixin;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
-import com.flag4j.operations.common.real.RealOperations;
+import com.flag4j.operations.common.complex.ComplexProperties;
+import com.flag4j.operations.dense.complex.ComplexDenseOperations;
 import com.flag4j.operations.dense.complex.ComplexDenseProperties;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
@@ -88,6 +89,16 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
      * @return A tensor created from the specified parameters.
      */
     protected abstract T makeTensor(Shape shape, CNumber[] entries, int[][] indices);
+
+
+    /**
+     * A factory for creating a real sparse tensor.
+     * @param shape Shape of the sparse tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    protected abstract Y makeRealTensor(Shape shape, double[] entries, int[][] indices);
 
 
     /**
@@ -186,6 +197,42 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
 
 
     @Override
+    public T sqrt() {
+        return makeTensor(shape.copy(), ComplexOperations.sqrt(entries), copyIndices());
+    }
+
+
+    @Override
+    public Y abs() {
+        return makeRealTensor(shape.copy(), ComplexOperations.abs(entries), copyIndices());
+    }
+
+
+    @Override
+    public T conj() {
+        return makeTensor(shape.copy(), ComplexOperations.conj(entries), copyIndices());
+    }
+
+
+    @Override
+    public T recip() {
+        return makeTensor(shape.copy(), ComplexDenseOperations.recip(entries), copyIndices());
+    }
+
+
+    @Override
+    public boolean isComplex() {
+        return ComplexProperties.isComplex(entries);
+    }
+
+
+    @Override
+    public boolean isReal() {
+        return ComplexProperties.isReal(entries);
+    }
+
+
+    @Override
     public T round() {
         return makeTensor(shape.copy(), ComplexOperations.round(this.entries), copyIndices());
     }
@@ -194,6 +241,37 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
     @Override
     public T round(int precision) {
         return makeTensor(shape.copy(), ComplexOperations.round(this.entries, precision), copyIndices());
+    }
+
+
+    /**
+     * Converts a complex tensor to a real matrix. The imaginary component of any complex value will be ignored.
+     *
+     * @return A tensor of the same size containing only the real components of this tensor.
+     * @see #toRealSafe()
+     */
+    @Override
+    public Y toReal() {
+        return makeRealTensor(this.shape.copy(), ComplexOperations.toReal(this.entries), copyIndices());
+    }
+
+
+    /**
+     * Converts a complex tensor to a real matrix safely. That is, first checks if the tensor only contains real values
+     * and then converts to a real tensor. However, if non-real value exist, then an error is thrown.
+     *
+     * @return A tensor of the same size containing only the real components of this tensor.
+     * @see #toReal()
+     * @throws RuntimeException If this tensor contains at least one non-real value.
+     */
+    @Override
+    public Y toRealSafe() {
+        if(!this.isReal()) {
+            throw new RuntimeException("Could not safely convert from complex to real as non-real " +
+                    "values exist in tensor.");
+        }
+
+        return toReal();
     }
 
 

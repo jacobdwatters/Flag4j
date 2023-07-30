@@ -2498,8 +2498,7 @@ public class SparseMatrix
      * @return The specified row of this matrix.
      */
     @Override
-    public SparseMatrix getRow(int i) {
-        // TODO: Change to return a vector instead of a matrix.
+    public SparseVector getRow(int i) {
         return RealSparseMatrixGetSet.getRow(this, i);
     }
 
@@ -2511,8 +2510,7 @@ public class SparseMatrix
      * @return The specified column of this matrix.
      */
     @Override
-    public SparseMatrix getCol(int j) {
-        // TODO: Change to return a vector instead of a matrix.
+    public SparseVector getCol(int j) {
         return RealSparseMatrixGetSet.getCol(this, j);
     }
 
@@ -2591,9 +2589,8 @@ public class SparseMatrix
      * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
      */
     @Override
-    public SparseMatrix getColBelow(int rowStart, int j) {
-        // TODO: Change so that a vector is returned.
-        return RealSparseMatrixGetSet.getCol(this, j, rowStart, numRows).toMatrix(true);
+    public SparseVector getColBelow(int rowStart, int j) {
+        return RealSparseMatrixGetSet.getCol(this, j, rowStart, numRows);
     }
 
 
@@ -2607,9 +2604,8 @@ public class SparseMatrix
      * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
      */
     @Override
-    public SparseMatrix getRowAfter(int colStart, int i) {
-        // TODO: Change so that a sparse vector is returned instead.
-        return RealSparseMatrixGetSet.getRow(this, i, colStart, numCols).toMatrix(false);
+    public SparseVector getRowAfter(int colStart, int i) {
+        return RealSparseMatrixGetSet.getRow(this, i, colStart, numCols);
     }
 
 
@@ -2625,7 +2621,6 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setCol(SparseVector values, int j) {
-        // TODO: Change so that a sparse vector is returned instead.
         return RealSparseMatrixGetSet.setCol(this, j, values);
     }
 

@@ -3376,13 +3376,13 @@ public class CMatrix
      * @return The specified row of this matrix.
      */
     @Override
-    public CMatrix getRow(int i) {
+    public CVector getRow(int i) {
         int start = i*numCols;
         int stop = start+numCols;
 
         CNumber[] row = ArrayUtils.copyOfRange(this.entries, start, stop);
 
-        return new CMatrix(new Shape(1, numCols), row);
+        return new CVector(row);
     }
 
 
@@ -3408,14 +3408,14 @@ public class CMatrix
      * @return The specified column of this matrix.
      */
     @Override
-    public CMatrix getCol(int j) {
+    public CVector getCol(int j) {
         CNumber[] col = new CNumber[numRows];
 
         for(int i=0; i<numRows; i++) {
             col[i] = entries[i*numCols + j].copy();
         }
 
-        return new CMatrix(new Shape(numRows, 1), col);
+        return new CVector(col);
     }
 
 
@@ -3481,14 +3481,14 @@ public class CMatrix
      * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
      */
     @Override
-    public CMatrix getColBelow(int rowStart, int j) {
+    public CVector getColBelow(int rowStart, int j) {
         CNumber[] col = new CNumber[numRows-rowStart];
 
         for(int i=rowStart; i<numRows; i++) {
             col[i-rowStart] = entries[i*numCols + j].copy();
         }
 
-        return new CMatrix(new Shape(col.length, 1), col);
+        return new CVector(col);
     }
 
 
@@ -3524,13 +3524,13 @@ public class CMatrix
      * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
      */
     @Override
-    public CMatrix getRowAfter(int colStart, int i) {
+    public CVector getRowAfter(int colStart, int i) {
         if(i > this.numRows || colStart > this.numCols) {
             throw new ArrayIndexOutOfBoundsException(String.format("Index (%d, %d) not in matrix.", i, colStart));
         }
 
         CNumber[] row = ArrayUtils.copyOfRange(this.entries, i*this.numCols + colStart, (i+1)*this.numCols);
-        return new CMatrix(new Shape(1, row.length), row);
+        return new CVector(row);
     }
 
 

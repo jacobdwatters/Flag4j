@@ -61,9 +61,6 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
         ParameterChecks.assertEquals(shape.totalEntries().intValueExact(), entries.length);
     }
 
-    // TODO: Pull up implementation of all methods which are the same for any real dense tensor.
-    //  e.g. addition/subtraction, element-wise/scalar multiplication/division, any element-wise operation
-    //  such as abs, sqrt, etc.
 
     /**
      * Factory to create a real tensor with the specified shape and size.

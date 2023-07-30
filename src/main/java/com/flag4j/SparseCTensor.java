@@ -696,6 +696,20 @@ public class SparseCTensor
 
 
     /**
+     * A factory for creating a real sparse tensor.
+     *
+     * @param shape   Shape of the sparse tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    @Override
+    protected SparseTensor makeRealTensor(Shape shape, double[] entries, int[][] indices) {
+        return new SparseTensor(shape, entries, indices);
+    }
+
+
+    /**
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
     @Override

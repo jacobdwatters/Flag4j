@@ -2911,13 +2911,13 @@ public class Matrix
      * the number of rows in this matrix.
      */
     @Override
-    public Matrix getRow(int rowIdx) {
+    public Vector getRow(int rowIdx) {
         int start = rowIdx*numCols;
         int stop = start+numCols;
 
         double[] row = Arrays.copyOfRange(this.entries, start, stop);
 
-        return new Matrix(new Shape(1, numCols), row);
+        return new Vector(row);
     }
 
 
@@ -2945,14 +2945,14 @@ public class Matrix
      * the number of columns in this matrix.
      */
     @Override
-    public Matrix getCol(int colIdx) {
+    public Vector getCol(int colIdx) {
         double[] col = new double[numRows];
 
         for(int i=0; i<numRows; i++) {
             col[i] = entries[i*numCols + colIdx];
         }
 
-        return new Matrix(new Shape(numRows, 1), col);
+        return new Vector(col);
     }
 
 
@@ -2966,14 +2966,14 @@ public class Matrix
      * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code colIdx} is outside the bounds of this matrix.
      */
     @Override
-    public Matrix getColBelow(int rowStart, int colIdx) {
+    public Vector getColBelow(int rowStart, int colIdx) {
         double[] col = new double[numRows-rowStart];
 
         for(int i=rowStart; i<numRows; i++) {
             col[i-rowStart] = entries[i*numCols + colIdx];
         }
 
-        return new Matrix(new Shape(col.length, 1), col);
+        return new Vector(col);
     }
 
 
@@ -3009,13 +3009,13 @@ public class Matrix
      * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} or {@code colStart} is outside the bounds of this matrix.
      */
     @Override
-    public Matrix getRowAfter(int colStart, int rowIdx) {
+    public Vector getRowAfter(int colStart, int rowIdx) {
         if(rowIdx > this.numRows ||  rowIdx < 0 || colStart > this.numCols || colStart < 0) {
             throw new ArrayIndexOutOfBoundsException(String.format("Index (%d, %d) not in matrix.", rowIdx, colStart));
         }
 
         double[] row = Arrays.copyOfRange(this.entries, rowIdx*this.numCols + colStart, (rowIdx+1)*this.numCols);
-        return new Matrix(new Shape(1, row.length), row);
+        return new Vector(row);
     }
 
 

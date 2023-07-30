@@ -29,16 +29,24 @@ import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.sparse.ComplexSparseTensorBase;
 import com.flag4j.io.PrintOptions;
+import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
-import com.flag4j.operations.sparse.complex.ComplexSparseEquals;
-import com.flag4j.operations.sparse.complex.ComplexSparseMatrixManipulations;
-import com.flag4j.operations.sparse.complex.ComplexSparseMatrixOperations;
-import com.flag4j.operations.sparse.complex.ComplexSparseMatrixProperties;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixOperations;
+import com.flag4j.operations.sparse.complex.*;
+import com.flag4j.operations.sparse.real.RealSparseMatrixGetSet;
+import com.flag4j.operations.sparse.real.RealSparseMatrixMultiplication;
 import com.flag4j.operations.sparse.real_complex.RealComplexSparseEquals;
+import com.flag4j.operations.sparse.real_complex.RealComplexSparseMatrixMultiplication;
 import com.flag4j.operations.sparse.real_complex.RealComplexSparseMatrixOperations;
 import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.ParameterChecks;
 import com.flag4j.util.SparseDataWrapper;
 import com.flag4j.util.StringUtils;
 
@@ -513,60 +521,6 @@ public class SparseCMatrix
 
 
     /**
-     * Computes the scalar division of a tensor.
-     *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    @Override
-    public SparseCMatrix div(double divisor) {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    @Override
-    public SparseCMatrix div(CNumber divisor) {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise square root of a tensor.
-     *
-     * @return The result of applying an element-wise square root to this tensor. Note, this method will compute
-     * the principle square root i.e. the square root with positive real part.
-     */
-    @Override
-    public SparseCMatrix sqrt() {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Computes the element-wise absolute value/magnitude of a tensor. If the tensor contains complex values, the magnitude will
-     * be computed.
-     *
-     * @return The result of applying an element-wise absolute value/magnitude to this tensor.
-     */
-    @Override
-    public SparseMatrix abs() {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
      * Computes the transpose of a tensor. Same as {@link #T()}.
      *
      * @return The transpose of this tensor.
@@ -598,19 +552,6 @@ public class SparseCMatrix
 
 
     /**
-     * Computes the reciprocals, element-wise, of a tensor.
-     *
-     * @return A tensor containing the reciprocal elements of this tensor.
-     * @throws ArithmeticException If this tensor contains any zeros.
-     */
-    @Override
-    public SparseCMatrix recip() {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
      * Gets the element in this tensor at the specified indices.
      *
      * @param indices Indices of element.
@@ -619,8 +560,11 @@ public class SparseCMatrix
      */
     @Override
     public CNumber get(int... indices) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(indices.length, 2);
+        ParameterChecks.assertIndexInBounds(numRows, indices[0]);
+        ParameterChecks.assertIndexInBounds(numCols, indices[1]);
+
+        return ComplexSparseMatrixGetSet.matrixGet(this, indices[0], indices[1]);
     }
 
 
@@ -631,8 +575,12 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix copy() {
-        // TODO: Implementation.
-        return null;
+        return new SparseCMatrix(
+                shape.copy(),
+                ArrayUtils.copyOf(entries),
+                rowIndices.clone(),
+                colIndices.clone()
+        );
     }
 
 
@@ -645,8 +593,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixOperations.elemMult(this, B);
     }
 
 
@@ -659,8 +606,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix elemDiv(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+        return ComplexDenseSparseOperations.elemDiv(this, B);
     }
 
 
@@ -675,6 +621,20 @@ public class SparseCMatrix
     @Override
     protected SparseCMatrix makeTensor(Shape shape, CNumber[] entries, int[][] indices) {
         return new SparseCMatrix(shape, entries, indices[0], indices[1]);
+    }
+
+
+    /**
+     * A factory for creating a real sparse tensor.
+     *
+     * @param shape   Shape of the sparse tensor to make.
+     * @param entries Non-zero entries of the sparse tensor to make.
+     * @param indices Non-zero indices of the sparse tensor to make.
+     * @return A tensor created from the specified parameters.
+     */
+    @Override
+    protected SparseMatrix makeRealTensor(Shape shape, double[] entries, int[][] indices) {
+        return new SparseMatrix(shape, entries, indices[0], indices[1]);
     }
 
 
@@ -717,8 +677,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix conjT() {
-        // TODO: Implementation.
-        return null;
+        return T().conj();
     }
 
 
@@ -729,8 +688,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isHermitian() {
-        // TODO: Implementation.
-        return false;
+        return ComplexSparseMatrixProperties.isHermation(this);
     }
 
 
@@ -741,8 +699,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isAntiHermitian() {
-        // TODO: Implementation.
-        return false;
+        return ComplexSparseMatrixProperties.isAntiHermation(this);
     }
 
 
@@ -753,8 +710,11 @@ public class SparseCMatrix
      */
     @Override
     public boolean isUnitary() {
-        // TODO: Implementation.
-        return false;
+        if(isSquare()) {
+            return mult(H()).round().equals(CMatrix.I(numRows));
+        } else {
+            return false;
+        }
     }
 
 
@@ -816,7 +776,7 @@ public class SparseCMatrix
      */
     @Override
     public void addEq(SparseCMatrix B) {
-
+        // TODO: Implementation.
     }
 
 
@@ -827,71 +787,7 @@ public class SparseCMatrix
      */
     @Override
     public void subEq(SparseCMatrix B) {
-
-    }
-
-
-    /**
-     * Checks if this tensor has only real valued entries.
-     *
-     * @return True if this tensor contains <b>NO</b> complex entries. Otherwise, returns false.
-     */
-    @Override
-    public boolean isReal() {
         // TODO: Implementation.
-        return false;
-    }
-
-
-    /**
-     * Checks if this tensor contains at least one complex entry.
-     *
-     * @return True if this tensor contains at least one complex entry. Otherwise, returns false.
-     */
-    @Override
-    public boolean isComplex() {
-        // TODO: Implementation.
-        return false;
-    }
-
-
-    /**
-     * Computes the complex conjugate of a tensor.
-     *
-     * @return The complex conjugate of this tensor.
-     */
-    @Override
-    public SparseCMatrix conj() {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Converts a complex tensor to a real tensor. The imaginary component of any complex value will be ignored.
-     *
-     * @return A tensor of the same size containing only the real components of this tensor.
-     * @see #toRealSafe()
-     */
-    @Override
-    public SparseMatrix toReal() {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Converts a complex tensor to a real matrix safely. That is, first checks if the tensor only contains real values
-     * and then converts to a real tensor. However, if non-real value exist, then an error is thrown.
-     *
-     * @return A tensor of the same size containing only the real components of this tensor.
-     * @throws RuntimeException If this tensor contains at least one non-real value.
-     * @see #toReal()
-     */
-    @Override
-    public SparseMatrix toRealSafe() {
-        // TODO: Implementation.
-        return null;
     }
 
 
@@ -903,8 +799,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix hermTranspose() {
-        // TODO: Implementation.
-        return null;
+        return H();
     }
 
 
@@ -1002,8 +897,12 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix mult(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertMatMultShapes(shape, B.shape);
+        CNumber[] dest = RealComplexDenseSparseMatrixMultiplication.concurrentStandard(
+                entries, rowIndices, colIndices, shape,
+                B.entries, B.shape
+        );
+        return new CMatrix(new Shape(numRows, B.numCols), dest);
     }
 
 
@@ -1017,8 +916,12 @@ public class SparseCMatrix
      */
     @Override
     public CVector mult(SparseCVector B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numCols, B.size);
+        CNumber[] dest = ComplexSparseMatrixMultiplication.concurrentStandardVector(
+                entries, rowIndices, colIndices, shape,
+                B.entries, B.indices
+        );
+        return new CVector(dest);
     }
 
 
@@ -1034,8 +937,16 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix multTranspose(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        CMatrix product = new CMatrix(
+                shape.copy(),
+                RealComplexDenseSparseMatrixMultiplication.concurrentStandard(
+                        entries, rowIndices, colIndices, shape,
+                        B.entries, B.shape
+                )
+        );
+
+        return TransposeDispatcher.dispatch(product);
     }
 
 
@@ -1051,8 +962,16 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix multTranspose(SparseMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        CMatrix product = new CMatrix(
+                shape.copy(),
+                RealComplexSparseMatrixMultiplication.concurrentStandard(
+                        entries, rowIndices, colIndices, shape,
+                        B.entries, B.rowIndices, B.colIndices, B.shape
+                )
+        );
+
+        return TransposeDispatcher.dispatch(product);
     }
 
 
@@ -1068,8 +987,16 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix multTranspose(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        CMatrix product = new CMatrix(
+                shape.copy(),
+                ComplexDenseSparseMatrixMultiplication.concurrentStandard(
+                        entries, rowIndices, colIndices, shape,
+                        B.entries, B.shape
+                )
+        );
+
+        return TransposeDispatcher.dispatch(product);
     }
 
 
@@ -1085,8 +1012,15 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix multTranspose(SparseCMatrix B) {
-        // TODO: Implementation.
-        return null;
+        CMatrix product = new CMatrix(
+                shape.copy(),
+                ComplexSparseMatrixMultiplication.concurrentStandard(
+                        entries, rowIndices, colIndices, shape,
+                        B.entries, B.rowIndices, B.colIndices, B.shape
+                )
+        );
+
+        return TransposeDispatcher.dispatch(product);
     }
 
 
@@ -1100,8 +1034,34 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix pow(int exponent) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertSquare(shape);
+        ParameterChecks.assertGreaterEq(0, exponent);
+
+        CMatrix power;
+
+        if(exponent==0) {
+            power = CMatrix.I(numRows);
+        } else if(exponent==1) {
+            power = this.toDense();
+        } else {
+            // Compute the first sparse-sparse matrix multiplication.
+            CNumber[] destEntries = ComplexSparseMatrixMultiplication.concurrentStandard(
+                    entries, rowIndices, colIndices, shape,
+                    entries, rowIndices, colIndices, shape
+            );
+
+            // Compute the remaining dense-sparse matrix multiplication.
+            for(int i=2; i<exponent; i++) {
+                destEntries = ComplexDenseSparseMatrixMultiplication.concurrentStandard(
+                        destEntries, shape,
+                        entries, rowIndices, colIndices, shape
+                );
+            }
+
+            power = new CMatrix(shape.copy(), destEntries);
+        }
+
+        return power;
     }
 
 
@@ -1114,8 +1074,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix elemMult(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexDenseSparseMatrixOperations.elemMult(B, this);
     }
 
 
@@ -1128,8 +1087,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix elemMult(SparseMatrix B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexSparseMatrixOperations.elemMult(this, B);
     }
 
 
@@ -1142,8 +1100,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix elemMult(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+        return ComplexDenseSparseOperations.elemMult(B, this);
     }
 
 
@@ -1157,21 +1114,21 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix elemDiv(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexDenseSparseMatrixOperations.elemDiv(this, B);
     }
 
 
     /**
      * Computes the determinant of a square matrix.
      *
+     * <p><b>WARNING:</b> Currently, this method will convert this matrix to a dense matrix.</p>
+     *
      * @return The determinant of this matrix.
      * @throws IllegalArgumentException If this matrix is not square.
      */
     @Override
     public CNumber det() {
-        // TODO: Implementation.
-        return null;
+        return toDense().det();
     }
 
 
@@ -1184,8 +1141,8 @@ public class SparseCMatrix
      */
     @Override
     public CNumber fib(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).tr();
     }
 
 
@@ -1198,8 +1155,8 @@ public class SparseCMatrix
      */
     @Override
     public CNumber fib(SparseMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).tr();
     }
 
 
@@ -1212,8 +1169,8 @@ public class SparseCMatrix
      */
     @Override
     public CNumber fib(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).tr();
     }
 
 
@@ -1226,8 +1183,8 @@ public class SparseCMatrix
      */
     @Override
     public CNumber fib(SparseCMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEqualShape(this.shape, B.shape);
+        return this.T().mult(B).tr();
     }
 
 
@@ -1870,7 +1827,7 @@ public class SparseCMatrix
      * @return The specified row of this matrix.
      */
     @Override
-    public SparseCMatrix getRow(int i) {
+    public SparseCVector getRow(int i) {
         // TODO: Implementation.
         return null;
     }
@@ -1883,7 +1840,7 @@ public class SparseCMatrix
      * @return The specified column of this matrix.
      */
     @Override
-    public SparseCMatrix getCol(int j) {
+    public SparseCVector getCol(int j) {
         // TODO: Implementation.
         return null;
     }
@@ -1948,7 +1905,7 @@ public class SparseCMatrix
      * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
      */
     @Override
-    public SparseCMatrix getColBelow(int rowStart, int j) {
+    public SparseCVector getColBelow(int rowStart, int j) {
         // TODO: Implementation.
         return null;
     }
@@ -1964,7 +1921,7 @@ public class SparseCMatrix
      * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
      */
     @Override
-    public SparseCMatrix getRowAfter(int colStart, int i) {
+    public SparseCVector getRowAfter(int colStart, int i) {
         // TODO: Implementation.
         return null;
     }

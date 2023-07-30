@@ -854,14 +854,14 @@ public interface MatrixOperationsMixin<
      * @param i Index of row to get.
      * @return The specified row of this matrix.
      */
-    T getRow(int i);
+    TT getRow(int i);
 
     /**
      * Get the column of this matrix at the specified index.
      * @param j Index of column to get.
      * @return The specified column of this matrix.
      */
-    T getCol(int j);
+    TT getCol(int j);
 
 
     /**
@@ -908,7 +908,7 @@ public interface MatrixOperationsMixin<
      * @throws NegativeArraySizeException If {@code rowStart} is larger than the number of rows in this matrix.
      * @throws ArrayIndexOutOfBoundsException If {@code rowStart} or {@code j} is outside the bounds of this matrix.
      */
-    T getColBelow(int rowStart, int j);
+    TT getColBelow(int rowStart, int j);
 
 
     /**
@@ -920,7 +920,7 @@ public interface MatrixOperationsMixin<
      * @throws NegativeArraySizeException If {@code colStart} is larger than the number of columns in this matrix.
      * @throws ArrayIndexOutOfBoundsException If {@code i} or {@code colStart} is outside the bounds of this matrix.
      */
-    T getRowAfter(int colStart, int i);
+    TT getRowAfter(int colStart, int i);
 
 
     /**

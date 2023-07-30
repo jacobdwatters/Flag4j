@@ -447,22 +447,20 @@ public class RealSparseMatrixGetSet {
      * @param rowIdx Index of the row to extract from the {@code src} matrix.
      * @return Returns the specified row from this sparse matrix.
      */
-    public static SparseMatrix getRow(SparseMatrix src, int rowIdx) {
+    public static SparseVector getRow(SparseMatrix src, int rowIdx) {
         ParameterChecks.assertLessEq(src.numRows-1, rowIdx);
 
         List<Double> entries = new ArrayList<>();
-        List<Integer> rowIndices = new ArrayList<>();
-        List<Integer> colIndices = new ArrayList<>();
+        List<Integer> indices = new ArrayList<>();
 
         for(int i=0; i<src.entries.length; i++) {
             if(src.rowIndices[i]==rowIdx) {
                 entries.add(src.entries[i]);
-                rowIndices.add(0);
-                colIndices.add(src.colIndices[i]);
+                indices.add(src.colIndices[i]);
             }
         }
 
-        return new SparseMatrix(new Shape(1, src.numCols), entries, rowIndices, colIndices);
+        return new SparseVector(src.numCols, entries, indices);
     }
 
 
@@ -497,22 +495,20 @@ public class RealSparseMatrixGetSet {
      * @param colIdx Index of the column to extract from the {@code src} matrix.
      * @return Returns the specified column from this sparse matrix.
      */
-    public static SparseMatrix getCol(SparseMatrix src, int colIdx) {
+    public static SparseVector getCol(SparseMatrix src, int colIdx) {
         ParameterChecks.assertLessEq(src.numCols-1, colIdx);
 
         List<Double> entries = new ArrayList<>();
-        List<Integer> rowIndices = new ArrayList<>();
-        List<Integer> colIndices = new ArrayList<>();
+        List<Integer> indices = new ArrayList<>();
 
         for(int i=0; i<src.entries.length; i++) {
             if(src.colIndices[i]==colIdx) {
                 entries.add(src.entries[i]);
-                rowIndices.add(src.rowIndices[i]);
-                colIndices.add(0);
+                indices.add(src.rowIndices[i]);
             }
         }
 
-        return new SparseMatrix(new Shape(src.numRows, 1), entries, rowIndices, colIndices);
+        return new SparseVector(src.numRows, entries, indices);
     }
 
 
