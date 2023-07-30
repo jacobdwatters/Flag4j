@@ -334,8 +334,8 @@ public class SparseCMatrix
                 new int[rowIndices.size()][2]
 
         );
-        this.rowIndices = rowIndices.stream().mapToInt(Integer::intValue).toArray();
-        this.colIndices = colIndices.stream().mapToInt(Integer::intValue).toArray();
+        this.rowIndices = ArrayUtils.fromIntegerList(rowIndices);
+        this.colIndices = ArrayUtils.fromIntegerList(colIndices);
         int[][] indices = RealDenseTranspose.blockedIntMatrix(new int[][]{this.rowIndices, this.colIndices});
         ArrayUtils.deepCopy(indices, this.indices);
 
@@ -434,7 +434,7 @@ public class SparseCMatrix
      */
     @Override
     public Shape shape() {
-        return null;
+        return shape;
     }
 
 
@@ -521,6 +521,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix div(double divisor) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -534,6 +535,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix div(CNumber divisor) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -546,6 +548,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix sqrt() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -558,6 +561,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseMatrix abs() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -601,6 +605,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix recip() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -614,6 +619,7 @@ public class SparseCMatrix
      */
     @Override
     public CNumber get(int... indices) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -625,6 +631,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix copy() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -638,6 +645,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -651,6 +659,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix elemDiv(CMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -708,6 +717,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix conjT() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -719,6 +729,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isHermitian() {
+        // TODO: Implementation.
         return false;
     }
 
@@ -730,6 +741,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isAntiHermitian() {
+        // TODO: Implementation.
         return false;
     }
 
@@ -741,6 +753,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isUnitary() {
+        // TODO: Implementation.
         return false;
     }
 
@@ -757,6 +770,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setCol(CVector values, int colIndex) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -773,6 +787,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setRow(CVector values, int rowIndex) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -789,6 +804,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setRow(SparseCVector values, int rowIndex) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -822,6 +838,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isReal() {
+        // TODO: Implementation.
         return false;
     }
 
@@ -833,6 +850,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isComplex() {
+        // TODO: Implementation.
         return false;
     }
 
@@ -844,6 +862,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix conj() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -856,6 +875,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseMatrix toReal() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -870,6 +890,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseMatrix toRealSafe() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -882,6 +903,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix hermTranspose() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -895,6 +917,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix add(Matrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -908,6 +931,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix add(SparseMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -921,6 +945,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix add(CMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -934,6 +959,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix sub(Matrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -947,6 +973,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix sub(SparseMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -960,6 +987,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix sub(CMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -974,6 +1002,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix mult(Matrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -988,6 +1017,7 @@ public class SparseCMatrix
      */
     @Override
     public CVector mult(SparseCVector B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1004,6 +1034,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix multTranspose(Matrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1020,6 +1051,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix multTranspose(SparseMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1036,6 +1068,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix multTranspose(CMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1052,6 +1085,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix multTranspose(SparseCMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1066,6 +1100,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix pow(int exponent) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1079,6 +1114,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix elemMult(Matrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1092,6 +1128,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix elemMult(SparseMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1105,6 +1142,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix elemMult(CMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1119,6 +1157,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix elemDiv(Matrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1131,6 +1170,7 @@ public class SparseCMatrix
      */
     @Override
     public CNumber det() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1144,6 +1184,7 @@ public class SparseCMatrix
      */
     @Override
     public CNumber fib(Matrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1157,6 +1198,7 @@ public class SparseCMatrix
      */
     @Override
     public CNumber fib(SparseMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1170,6 +1212,7 @@ public class SparseCMatrix
      */
     @Override
     public CNumber fib(CMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1183,6 +1226,7 @@ public class SparseCMatrix
      */
     @Override
     public CNumber fib(SparseCMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1195,6 +1239,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix directSum(Matrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1207,6 +1252,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix directSum(SparseMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1219,6 +1265,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix directSum(CMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1231,6 +1278,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix directSum(SparseCMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1243,6 +1291,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix invDirectSum(Matrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1255,6 +1304,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix invDirectSum(SparseCMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1267,6 +1317,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix sumCols() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1279,6 +1330,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix sumRows() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1292,6 +1344,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachCol(Vector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1305,6 +1358,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachCol(SparseVector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1318,6 +1372,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachCol(CVector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1331,6 +1386,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachCol(SparseCVector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1344,6 +1400,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachRow(Vector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1357,6 +1414,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachRow(SparseVector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1370,6 +1428,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachRow(CVector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1383,6 +1442,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachRow(SparseCVector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1397,6 +1457,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix stack(Matrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1411,6 +1472,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1425,6 +1487,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix stack(CMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1439,6 +1502,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseCMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1457,6 +1521,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix stack(Matrix B, int axis) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1475,6 +1540,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseMatrix B, int axis) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1493,6 +1559,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix stack(CMatrix B, int axis) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1511,6 +1578,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseCMatrix B, int axis) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1525,6 +1593,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix augment(Matrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1539,6 +1608,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix augment(SparseMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1553,6 +1623,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix augment(CMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1567,6 +1638,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix augment(SparseCMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1583,6 +1655,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(Vector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1599,6 +1672,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseVector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1615,6 +1689,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(CVector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1631,6 +1706,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseCVector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1651,6 +1727,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(Vector b, int axis) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1671,6 +1748,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseVector b, int axis) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1691,6 +1769,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(CVector b, int axis) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1711,6 +1790,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseCVector b, int axis) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1727,6 +1807,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix augment(Vector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1743,6 +1824,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix augment(SparseVector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1759,6 +1841,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix augment(CVector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1775,6 +1858,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix augment(SparseCVector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1787,6 +1871,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix getRow(int i) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1799,6 +1884,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix getCol(int j) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1816,6 +1902,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCVector getCol(int colIdx, int rowStart, int rowEnd) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1828,6 +1915,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCVector toVector() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1845,6 +1933,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1860,6 +1949,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix getColBelow(int rowStart, int j) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1875,6 +1965,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix getRowAfter(int colStart, int i) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1891,6 +1982,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setCol(SparseCVector values, int j) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1904,6 +1996,7 @@ public class SparseCMatrix
      */
     @Override
     public CNumber trace() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1917,6 +2010,7 @@ public class SparseCMatrix
      */
     @Override
     public CNumber tr() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1952,6 +2046,7 @@ public class SparseCMatrix
      */
     @Override
     public double cond() {
+        // TODO: Implementation.
         return 0;
     }
 
@@ -1963,6 +2058,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCVector getDiag() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1975,6 +2071,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix invDirectSum(SparseMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -1987,6 +2084,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix invDirectSum(CMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2001,6 +2099,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2014,6 +2113,7 @@ public class SparseCMatrix
      */
     @Override
     public CVector mult(Vector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2027,6 +2127,7 @@ public class SparseCMatrix
      */
     @Override
     public CVector mult(SparseVector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2040,6 +2141,7 @@ public class SparseCMatrix
      */
     @Override
     public CVector mult(CVector b) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2053,6 +2155,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix mult(SparseMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2066,6 +2169,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix mult(CMatrix B) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2078,6 +2182,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix H() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2093,6 +2198,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix set(CNumber value, int... indices) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2116,6 +2222,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isInv(SparseCMatrix B) {
+        // TODO: Implementation.
         return false;
     }
 
@@ -2130,6 +2237,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix set(double value, int row, int col) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2144,6 +2252,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix set(CNumber value, int row, int col) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2158,6 +2267,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setCol(CNumber[] values, int colIndex) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2172,6 +2282,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setCol(Double[] values, int colIndex) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2186,6 +2297,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setCol(Integer[] values, int colIndex) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2200,6 +2312,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setCol(double[] values, int colIndex) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2214,6 +2327,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setCol(int[] values, int colIndex) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2228,6 +2342,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setRow(CNumber[] values, int rowIndex) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2242,6 +2357,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setRow(Double[] values, int rowIndex) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2256,6 +2372,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setRow(Integer[] values, int rowIndex) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2270,6 +2387,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setRow(double[] values, int rowIndex) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2284,6 +2402,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setRow(int[] values, int rowIndex) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2302,6 +2421,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(SparseCMatrix values, int rowStart, int colStart) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2320,6 +2440,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(Matrix values, int rowStart, int colStart) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2338,6 +2459,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(SparseMatrix values, int rowStart, int colStart) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2356,6 +2478,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(CNumber[][] values, int rowStart, int colStart) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2374,6 +2497,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(Double[][] values, int rowStart, int colStart) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2392,6 +2516,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(Integer[][] values, int rowStart, int colStart) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2410,6 +2535,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(double[][] values, int rowStart, int colStart) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2428,6 +2554,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(int[][] values, int rowStart, int colStart) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2452,6 +2579,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix removeRows(int... rowIndices) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2464,6 +2592,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix removeCol(int colIndex) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2476,6 +2605,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix removeCols(int... colIndices) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2489,6 +2619,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix swapRows(int rowIndex1, int rowIndex2) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2502,6 +2633,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix swapCols(int colIndex1, int colIndex2) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2538,6 +2670,7 @@ public class SparseCMatrix
      */
     @Override
     public int vectorType() {
+        // TODO: Implementation.
         return 0;
     }
 
@@ -2549,6 +2682,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isTri() {
+        // TODO: Implementation.
         return false;
     }
 
@@ -2560,6 +2694,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isTriL() {
+        // TODO: Implementation.
         return false;
     }
 
@@ -2571,6 +2706,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isTriU() {
+        // TODO: Implementation.
         return false;
     }
 
@@ -2582,6 +2718,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isDiag() {
+        // TODO: Implementation.
         return false;
     }
 
@@ -2593,6 +2730,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isFullRank() {
+        // TODO: Implementation.
         return false;
     }
 
@@ -2605,6 +2743,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isSingular() {
+        // TODO: Implementation.
         return false;
     }
 
@@ -2617,6 +2756,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isInvertible() {
+        // TODO: Implementation.
         return false;
     }
 
@@ -2630,6 +2770,7 @@ public class SparseCMatrix
      */
     @Override
     public double norm(double p, double q) {
+        // TODO: Implementation.
         return 0;
     }
 
@@ -2641,6 +2782,7 @@ public class SparseCMatrix
      */
     @Override
     public double maxNorm() {
+        // TODO: Implementation.
         return 0;
     }
 
@@ -2653,6 +2795,7 @@ public class SparseCMatrix
      */
     @Override
     public int matrixRank() {
+        // TODO: Implementation.
         return 0;
     }
 
@@ -2666,6 +2809,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix set(double value, int... indices) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2680,6 +2824,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix reshape(Shape shape) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2694,6 +2839,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix reshape(int... shape) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2705,6 +2851,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix flatten() {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2717,6 +2864,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix flatten(int axis) {
+        // TODO: Implementation.
         return null;
     }
 
@@ -2752,6 +2900,7 @@ public class SparseCMatrix
      */
     @Override
     public double norm() {
+        // TODO: Implementation.
         return 0;
     }
 
@@ -2766,6 +2915,7 @@ public class SparseCMatrix
      */
     @Override
     public double norm(double p) {
+        // TODO: Implementation.
         return 0;
     }
 
