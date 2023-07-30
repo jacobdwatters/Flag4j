@@ -30,18 +30,15 @@ import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.sparse.ComplexSparseTensorBase;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.TransposeDispatcher;
+import com.flag4j.operations.dense.complex.ComplexDenseOperations;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseOperations;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixOperations;
 import com.flag4j.operations.sparse.complex.*;
-import com.flag4j.operations.sparse.real.RealSparseMatrixGetSet;
-import com.flag4j.operations.sparse.real.RealSparseMatrixMultiplication;
 import com.flag4j.operations.sparse.real_complex.RealComplexSparseEquals;
 import com.flag4j.operations.sparse.real_complex.RealComplexSparseMatrixMultiplication;
 import com.flag4j.operations.sparse.real_complex.RealComplexSparseMatrixOperations;
@@ -50,6 +47,7 @@ import com.flag4j.util.ParameterChecks;
 import com.flag4j.util.SparseDataWrapper;
 import com.flag4j.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -1872,8 +1870,13 @@ public class SparseCMatrix
      */
     @Override
     public SparseCVector toVector() {
-        // TODO: Implementation.
-        return null;
+        int[] destIndices = new int[indices.length];
+
+        for(int i=0; i<entries.length; i++) {
+            destIndices[i] = rowIndices[i]*colIndices[i];
+        }
+
+        return new SparseCVector(numRows*numCols, ArrayUtils.copyOf(entries), destIndices);
     }
 
 
@@ -1953,8 +1956,7 @@ public class SparseCMatrix
      */
     @Override
     public CNumber trace() {
-        // TODO: Implementation.
-        return null;
+        return tr();
     }
 
 
@@ -1967,8 +1969,16 @@ public class SparseCMatrix
      */
     @Override
     public CNumber tr() {
-        // TODO: Implementation.
-        return null;
+        CNumber trace = new CNumber();
+
+        for(int i=0; i<entries.length; i++) {
+            if(rowIndices[i]==colIndices[i]) {
+                // Then entry on the diagonal.
+                trace.addEq(entries[i]);
+            }
+        }
+
+        return trace;
     }
 
 
@@ -2003,8 +2013,7 @@ public class SparseCMatrix
      */
     @Override
     public double cond() {
-        // TODO: Implementation.
-        return 0;
+        return toDense().cond();
     }
 
 
@@ -2015,8 +2024,24 @@ public class SparseCMatrix
      */
     @Override
     public SparseCVector getDiag() {
-        // TODO: Implementation.
-        return null;
+        List<CNumber> destEntries = new ArrayList<>();
+        List<Integer> destIndices = new ArrayList<>();
+
+        for(int i=0; i<entries.length; i++) {
+            if(rowIndices[i]==colIndices[i]) {
+                // Then entry on the diagonal.
+                destEntries.add(entries[i]);
+                destIndices.add(rowIndices[i]);
+            }
+        }
+
+        CNumber[] destArr = new CNumber[destEntries.size()];
+
+        return new SparseCVector(
+                numRows,
+                ArrayUtils.fromList(destEntries, destArr),
+                ArrayUtils.fromIntegerList(destIndices)
+        );
     }
 
 
@@ -2056,8 +2081,14 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix mult(SparseCMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertMatMultShapes(shape, B.shape);
+
+        return new CMatrix(numRows, B.numCols,
+                ComplexSparseMatrixMultiplication.concurrentStandard(
+                        entries, rowIndices, colIndices, shape,
+                        B.entries, B.rowIndices, B.colIndices, B.shape
+                )
+        );
     }
 
 
@@ -2070,8 +2101,14 @@ public class SparseCMatrix
      */
     @Override
     public CVector mult(Vector b) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertMatMultShapes(shape, new Shape(b.size, 1));
+
+        return new CVector(
+                RealComplexDenseSparseMatrixMultiplication.concurrentStandardVector(
+                        this.entries, this.rowIndices, this.colIndices, this.shape,
+                        b.entries, b.shape
+                )
+        );
     }
 
 
@@ -2161,6 +2198,34 @@ public class SparseCMatrix
 
 
     /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     * @throws IllegalArgumentException If the axis is not positive or larger than the rank of this tensor.
+     */
+    @Override
+    public SparseCMatrix flatten(int axis) {
+        ParameterChecks.assertIndexInBounds(2, axis);
+        int[] dims = {1, 1};
+        dims[1-axis] = this.totalEntries().intValueExact();
+
+        int[] rowIndices = new int[this.rowIndices.length];
+        int[] colIndices = new int[this.colIndices.length];
+
+        if(axis==0) {
+            // Flatten to a single row.
+            colIndices = this.colIndices.clone();
+        } else {
+            // Flatten to a single column.
+            rowIndices = this.rowIndices.clone();
+        }
+
+        return new SparseCMatrix(new Shape(dims), ArrayUtils.copyOf(entries), rowIndices, colIndices);
+    }
+
+
+
+    /**
      * Checks if this matrix is the identity matrix.
      *
      * @return True if this matrix is the identity matrix. Otherwise, returns false.
@@ -2179,8 +2244,15 @@ public class SparseCMatrix
      */
     @Override
     public boolean isInv(SparseCMatrix B) {
-        // TODO: Implementation.
-        return false;
+        boolean result;
+
+        if(!this.isSquare() || !B.isSquare() || !shape.equals(B.shape)) {
+            result = false;
+        } else {
+            result = this.mult(B).round().isI();
+        }
+
+        return result;
     }
 
 
@@ -2194,8 +2266,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix set(double value, int row, int col) {
-        // TODO: Implementation.
-        return null;
+        return set(new CNumber(value), row, col);
     }
 
 
@@ -2209,8 +2280,10 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix set(CNumber value, int row, int col) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertIndexInBounds(numRows, row);
+        ParameterChecks.assertIndexInBounds(numCols, col);
+
+        return ComplexSparseMatrixGetSet.matrixSet(this, row, col, value);
     }
 
 
@@ -2576,8 +2649,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix swapRows(int rowIndex1, int rowIndex2) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixManipulations.swapRows(this, rowIndex1, rowIndex2);
     }
 
 
@@ -2590,8 +2662,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix swapCols(int colIndex1, int colIndex2) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixManipulations.swapCols(this, colIndex1, colIndex2);
     }
 
 
@@ -2627,8 +2698,17 @@ public class SparseCMatrix
      */
     @Override
     public int vectorType() {
-        // TODO: Implementation.
-        return 0;
+        int type = -1;
+
+        if(numRows==1 && numCols==1) {
+            type=0;
+        } else if(numRows==1) {
+            type=1;
+        } else if(numCols==1) {
+            type=2;
+        }
+
+        return type;
     }
 
 
@@ -2639,8 +2719,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isTri() {
-        // TODO: Implementation.
-        return false;
+        return isTriL() || isTriU();
     }
 
 
@@ -2651,8 +2730,17 @@ public class SparseCMatrix
      */
     @Override
     public boolean isTriL() {
-        // TODO: Implementation.
-        return false;
+        boolean result = true;
+
+        for(int i=0; i<entries.length; i++) {
+            if(rowIndices[i] < colIndices[i]) {
+                // Then entry is not in lower triangle.
+                result = false;
+                break;
+            }
+        }
+
+        return result;
     }
 
 
@@ -2663,8 +2751,17 @@ public class SparseCMatrix
      */
     @Override
     public boolean isTriU() {
-        // TODO: Implementation.
-        return false;
+        boolean result = true;
+
+        for(int i=0; i<entries.length; i++) {
+            if(rowIndices[i] > colIndices[i]) {
+                // Then entry is not in upper triangle.
+                result = false;
+                break;
+            }
+        }
+
+        return result;
     }
 
 
@@ -2675,8 +2772,17 @@ public class SparseCMatrix
      */
     @Override
     public boolean isDiag() {
-        // TODO: Implementation.
-        return false;
+        boolean result = true;
+
+        for(int i=0; i<entries.length; i++) {
+            if(rowIndices[i]!=colIndices[i]) {
+                // Then entry is not the diagonal.
+                result = false;
+                break;
+            }
+        }
+
+        return result;
     }
 
 
@@ -2687,8 +2793,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isFullRank() {
-        // TODO: Implementation.
-        return false;
+        return toDense().isFullRank();
     }
 
 
@@ -2700,8 +2805,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isSingular() {
-        // TODO: Implementation.
-        return false;
+        return toDense().isSingular();
     }
 
 
@@ -2713,8 +2817,7 @@ public class SparseCMatrix
      */
     @Override
     public boolean isInvertible() {
-        // TODO: Implementation.
-        return false;
+        return !isSingular();
     }
 
 
@@ -2739,8 +2842,7 @@ public class SparseCMatrix
      */
     @Override
     public double maxNorm() {
-        // TODO: Implementation.
-        return 0;
+        return ComplexDenseOperations.matrixMaxNorm(entries);
     }
 
 
@@ -2752,8 +2854,7 @@ public class SparseCMatrix
      */
     @Override
     public int matrixRank() {
-        // TODO: Implementation.
-        return 0;
+        return toDense().matrixRank();
     }
 
 
@@ -2766,38 +2867,8 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix set(double value, int... indices) {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
-     * in the reshaped tensor.
-     *
-     * @param shape Shape of the new tensor.
-     * @return A tensor which is equivalent to this tensor but with the specified shape.
-     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
-     */
-    @Override
-    public SparseCMatrix reshape(Shape shape) {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
-     * in the reshaped tensor.
-     *
-     * @param shape Shape of the new tensor.
-     * @return A tensor which is equivalent to this tensor but with the specified shape.
-     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
-     */
-    @Override
-    public SparseCMatrix reshape(int... shape) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(2, indices.length);
+        return set(value, indices[0], indices[1]);
     }
 
 
@@ -2808,19 +2879,6 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix flatten() {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Flattens a tensor along the specified axis.
-     *
-     * @param axis Axis along which to flatten tensor.
-     * @throws IllegalArgumentException If the axis is not positive or larger than the rank of this tensor.
-     */
-    @Override
-    public SparseCMatrix flatten(int axis) {
         // TODO: Implementation.
         return null;
     }

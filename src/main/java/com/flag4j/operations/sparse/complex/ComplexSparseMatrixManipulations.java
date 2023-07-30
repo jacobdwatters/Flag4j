@@ -99,4 +99,46 @@ public class ComplexSparseMatrixManipulations {
             System.arraycopy(src.colIndices, 0, colIndices, 0, colIndices.length);
         }
     }
+
+
+    /**
+     * Swaps two rows, in place, in a sparse matrix.
+     * @param src The source sparse matrix to swap rows within.
+     * @param rowIdx1 Index of the first row in the swap.
+     * @param rowIdx2 Index of the second row in the swap.
+     * @return A reference to the {@code src} sparse matrix.
+     */
+    public static SparseCMatrix swapRows(SparseCMatrix src, int rowIdx1, int rowIdx2) {
+        for(int i=0; i<src.entries.length; i++) {
+            // Swap row indices.
+            if(src.rowIndices[i]==rowIdx1) src.rowIndices[i] = rowIdx2;
+            else if(src.rowIndices[i]==rowIdx2) src.rowIndices[i] = rowIdx1;
+        }
+
+        // Ensure indices remain sorted properly.
+        src.sparseSort();
+
+        return src;
+    }
+
+
+    /**
+     * Swaps two columns, in place, in a sparse matrix.
+     * @param src The source sparse matrix to swap columns within.
+     * @param colIdx1 Index of the first row in the swap.
+     * @param colIdx2 Index of the second row in the swap.
+     * @return A reference to the {@code src} sparse matrix.
+     */
+    public static SparseCMatrix swapCols(SparseCMatrix src, int colIdx1, int colIdx2) {
+        for(int i=0; i<src.entries.length; i++) {
+            // Swap row indices.
+            if(src.colIndices[i]==colIdx1) src.colIndices[i] = colIdx2;
+            if(src.colIndices[i]==colIdx2) src.colIndices[i] = colIdx1;
+        }
+
+        // Ensure indices remain sorted properly.
+        src.sparseSort();
+
+        return src;
+    }
 }
