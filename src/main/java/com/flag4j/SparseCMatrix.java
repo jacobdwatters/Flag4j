@@ -1304,7 +1304,7 @@ public class SparseCMatrix
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public SparseCMatrix addToEachCol(SparseVector b) {
+    public CMatrix addToEachCol(SparseVector b) {
         return null;
     }
 
@@ -1330,7 +1330,7 @@ public class SparseCMatrix
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public SparseCMatrix addToEachCol(SparseCVector b) {
+    public CMatrix addToEachCol(SparseCVector b) {
         return null;
     }
 
@@ -1356,7 +1356,7 @@ public class SparseCMatrix
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public SparseCMatrix addToEachRow(SparseVector b) {
+    public CMatrix addToEachRow(SparseVector b) {
         return null;
     }
 
@@ -1382,7 +1382,7 @@ public class SparseCMatrix
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public SparseCMatrix addToEachRow(SparseCVector b) {
+    public CMatrix addToEachRow(SparseCVector b) {
         return null;
     }
 
@@ -1927,8 +1927,8 @@ public class SparseCMatrix
      * @return The inverse of this matrix.
      */
     @Override
-    public SparseCMatrix inv() {
-        return null;
+    public CMatrix inv() {
+        return toDense().inv();
     }
 
 
@@ -1938,8 +1938,8 @@ public class SparseCMatrix
      * @return The pseudo-inverse of this matrix.
      */
     @Override
-    public SparseCMatrix pInv() {
-        return null;
+    public CMatrix pInv() {
+        return toDense().pInv();
     }
 
 

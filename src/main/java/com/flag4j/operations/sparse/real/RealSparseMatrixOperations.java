@@ -2,7 +2,7 @@ package com.flag4j.operations.sparse.real;
 
 import com.flag4j.Matrix;
 import com.flag4j.SparseMatrix;
-import com.flag4j.Vector;
+import com.flag4j.SparseVector;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -86,9 +86,9 @@ public class RealSparseMatrixOperations {
 
         return new SparseMatrix(
                 src1.shape,
-                sum.stream().mapToDouble(Double::doubleValue).toArray(),
-                rowIndices.stream().mapToInt(Integer::intValue).toArray(),
-                colIndices.stream().mapToInt(Integer::intValue).toArray()
+                sum,
+                rowIndices,
+                colIndices
         );
     }
 
@@ -182,9 +182,9 @@ public class RealSparseMatrixOperations {
 
         return new SparseMatrix(
                 src1.shape,
-                sum.stream().mapToDouble(Double::doubleValue).toArray(),
-                rowIndices.stream().mapToInt(Integer::intValue).toArray(),
-                colIndices.stream().mapToInt(Integer::intValue).toArray()
+                sum,
+                rowIndices,
+                colIndices
         );
     }
 
@@ -262,55 +262,70 @@ public class RealSparseMatrixOperations {
 
         return new SparseMatrix(
                 src1.shape,
-                product.stream().mapToDouble(Double::doubleValue).toArray(),
-                rowIndices.stream().mapToInt(Integer::intValue).toArray(),
-                colIndices.stream().mapToInt(Integer::intValue).toArray()
+                product,
+                rowIndices,
+                colIndices
         );
     }
 
 
     /**
-     * Adds a dense vector to each column as if the vector is a column vector.
-     * @param src Source sparse matrix.
-     * @param col Vector to add to each column of the source matrix.
-     * @return A dense copy of the {@code src} matrix with the specified vector added to each column.
-     * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
-     * of rows in the {@code src} matrix.
+     * Adds a sparse vector to each column of a sparse matrix as if the vector is a column vector.
+     * @param src The source sparse matrix.
+     * @param col Sparse vector to add to each column of the sparse matrix.
+     * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
      */
-    public static Matrix addToEachCol(SparseMatrix src, Vector col) {
-        Matrix sum = new Matrix(src.numRows, src.numCols);
+    public static Matrix addToEachCol(SparseMatrix src, SparseVector col) {
+        ParameterChecks.assertEquals(src.numRows, col.size);
+        double[] destEntries = new double[src.totalEntries().intValueExact()];
 
-        for(int j=0; j<sum.numCols; j++) {
-            sum.setCol(col, j);
-        }
-
+        // Add values from sparse matrix.
         for(int i=0; i<src.entries.length; i++) {
-            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]] += src.entries[i];
+            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = src.entries[i];
         }
 
-        return sum;
+        // Add values from sparse column.
+        for(int i=0; i<col.entries.length; i++) {
+            int idx = col.indices[i]*src.numCols;
+            int end = idx + src.numCols;
+            double value = col.entries[i];
+
+            while(idx < end) {
+                destEntries[idx++] += value;
+            }
+        }
+
+        return new Matrix(src.shape.copy(), destEntries);
     }
 
 
     /**
-     * Adds a dense vector to add to each row as if the vector is a row vector.
-     * @param src Source sparse matrix.
-     * @param row Vector to add to each row of the source matrix.
-     * @return A dense copy of the {@code src} matrix with the specified vector added to each row.
-     * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
-     * of columns in the {@code src} matrix.
+     * Adds a sparse vector to each row of a sparse matrix as if the vector is a row vector.
+     * @param src The source sparse matrix.
+     * @param row Sparse vector to add to each row of the sparse matrix.
+     * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
      */
-    public static Matrix addToEachRow(SparseMatrix src, Vector row) {
-        Matrix sum = new Matrix(src.numRows, src.numCols);
+    public static Matrix addToEachRow(SparseMatrix src, SparseVector row) {
+        ParameterChecks.assertEquals(src.numCols, row.size);
+        double[] destEntries = new double[src.totalEntries().intValueExact()];
 
-        for(int i=0; i<sum.numRows; i++) {
-            sum.setRow(row.entries, i);
-        }
-
+        // Add values from sparse matrix.
         for(int i=0; i<src.entries.length; i++) {
-            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]] += src.entries[i];
+            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = src.entries[i];
         }
 
-        return sum;
+        // Add values from sparse column.
+        for(int i=0; i<row.entries.length; i++) {
+            int idx = 0;
+            int colIdx = row.indices[i];
+            double value = row.entries[i];
+
+            while(idx < destEntries.length) {
+                destEntries[idx + colIdx] += value;
+                idx += src.numCols;
+            }
+        }
+
+        return new Matrix(src.shape.copy(), destEntries);
     }
 }

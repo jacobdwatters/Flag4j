@@ -163,9 +163,14 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
             m = LU.entries[iRow + j];
             m = LU.entries[pivotRow + j] == 0 ? m : m/LU.entries[pivotRow + j];
 
-            // Compute and set U values.
-            for(int k=j; k<LU.numCols; k++) {
-                LU.entries[iRow + k] -= m*LU.entries[pivotRow + k];
+            if(m!=0) {
+                System.out.println("m = " + m);
+                System.out.println("LU:\n" + LU);
+                // Compute and set U values.
+                for (int k = j; k < LU.numCols; k++) {
+                    LU.entries[iRow + k] -= m * LU.entries[pivotRow + k];
+                }
+                System.out.println("LU:\n" + LU + "\n\n");
             }
 
             // Compute and set L value.

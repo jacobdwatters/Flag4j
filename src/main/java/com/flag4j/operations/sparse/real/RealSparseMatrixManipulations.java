@@ -172,7 +172,7 @@ public class RealSparseMatrixManipulations {
         for(int i=0; i<src.entries.length; i++) {
             // Swap row indices.
             if(src.rowIndices[i]==rowIdx1) src.rowIndices[i] = rowIdx2;
-            if(src.rowIndices[i]==rowIdx2) src.rowIndices[i] = rowIdx1;
+            else if(src.rowIndices[i]==rowIdx2) src.rowIndices[i] = rowIdx1;
         }
 
         // Ensure indices remain sorted properly.

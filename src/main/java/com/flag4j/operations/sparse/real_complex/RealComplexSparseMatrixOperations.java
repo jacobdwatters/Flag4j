@@ -1,8 +1,6 @@
 package com.flag4j.operations.sparse.real_complex;
 
-import com.flag4j.CMatrix;
-import com.flag4j.SparseCMatrix;
-import com.flag4j.SparseMatrix;
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
@@ -87,9 +85,9 @@ public class RealComplexSparseMatrixOperations {
 
         return new SparseCMatrix(
                 src1.shape,
-                values.toArray(CNumber[]::new),
-                rowIndices.stream().mapToInt(Integer::intValue).toArray(),
-                colIndices.stream().mapToInt(Integer::intValue).toArray()
+                values,
+                rowIndices,
+                colIndices
         );
     }
 
@@ -208,9 +206,9 @@ public class RealComplexSparseMatrixOperations {
 
         return new SparseCMatrix(
                 src1.shape,
-                values.toArray(CNumber[]::new),
-                rowIndices.stream().mapToInt(Integer::intValue).toArray(),
-                colIndices.stream().mapToInt(Integer::intValue).toArray()
+                values,
+                rowIndices,
+                colIndices
         );
     }
 
@@ -279,9 +277,9 @@ public class RealComplexSparseMatrixOperations {
 
         return new SparseCMatrix(
                 src1.shape,
-                values.toArray(CNumber[]::new),
-                rowIndices.stream().mapToInt(Integer::intValue).toArray(),
-                colIndices.stream().mapToInt(Integer::intValue).toArray()
+                values,
+                rowIndices,
+                colIndices
         );
     }
 
@@ -359,9 +357,70 @@ public class RealComplexSparseMatrixOperations {
 
         return new SparseCMatrix(
                 src1.shape,
-                product.toArray(CNumber[]::new),
-                rowIndices.stream().mapToInt(Integer::intValue).toArray(),
-                colIndices.stream().mapToInt(Integer::intValue).toArray()
+                product,
+                rowIndices,
+                colIndices
         );
+    }
+
+
+    /**
+     * Adds a sparse vector to each column of a sparse matrix as if the vector is a column vector.
+     * @param src The source sparse matrix.
+     * @param col Sparse vector to add to each column of the sparse matrix.
+     * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
+     */
+    public static CMatrix addToEachCol(SparseMatrix src, SparseCVector col) {
+        ParameterChecks.assertEquals(src.numRows, col.size);
+        CNumber[] destEntries = new CNumber[src.totalEntries().intValueExact()];
+
+        // Add values from sparse matrix.
+        for(int i=0; i<src.entries.length; i++) {
+            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = new CNumber(src.entries[i]);
+        }
+
+        // Add values from sparse column.
+        for(int i=0; i<col.entries.length; i++) {
+            int idx = col.indices[i]*src.numCols;
+            int end = idx + src.numCols;
+            CNumber value = col.entries[i];
+
+            while(idx < end) {
+                destEntries[idx++].addEq(value);
+            }
+        }
+
+        return new CMatrix(src.shape.copy(), destEntries);
+    }
+
+
+    /**
+     * Adds a sparse vector to each row of a sparse matrix as if the vector is a row vector.
+     * @param src The source sparse matrix.
+     * @param row Sparse vector to add to each row of the sparse matrix.
+     * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
+     */
+    public static CMatrix addToEachRow(SparseMatrix src, SparseCVector row) {
+        ParameterChecks.assertEquals(src.numCols, row.size);
+        CNumber[] destEntries = new CNumber[src.totalEntries().intValueExact()];
+
+        // Add values from sparse matrix.
+        for(int i=0; i<src.entries.length; i++) {
+            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = new CNumber(src.entries[i]);
+        }
+
+        // Add values from sparse column.
+        for(int i=0; i<row.entries.length; i++) {
+            int idx = 0;
+            int colIdx = row.indices[i];
+            CNumber value = row.entries[i];
+
+            while(idx < destEntries.length) {
+                destEntries[idx + colIdx].addEq(value);
+                idx += src.numCols;
+            }
+        }
+
+        return new CMatrix(src.shape.copy(), destEntries);
     }
 }

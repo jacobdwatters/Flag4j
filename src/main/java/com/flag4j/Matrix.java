@@ -368,6 +368,32 @@ public class Matrix
 
 
     /**
+     * Converts this matrix to a sparse matrix. It is only
+     * @return A sparse equivalent to this matrix.
+     */
+    public SparseMatrix toSparse() {
+        List<Double> sparseEntries = new ArrayList<>();
+        List<Integer> rowIndices = new ArrayList<>();
+        List<Integer> colIndices = new ArrayList<>();
+
+        for(int i=0; i<numRows; i++) {
+            int rowOffset = i*numCols;
+
+            for(int j=0; j<numCols; j++) {
+                if(entries[rowOffset + j]!=0) {
+                    // Then we have a non-zero value.
+                    sparseEntries.add(entries[rowOffset + j]);
+                    rowIndices.add(i);
+                    colIndices.add(j);
+                }
+            }
+        }
+
+        return new SparseMatrix(shape.copy(), sparseEntries, rowIndices, colIndices);
+    }
+
+
+    /**
      * Checks if this matrix is the identity matrix. That is, checks if this matrix is square and contains
      * only ones along the principle diagonal and zeros everywhere else.
      *

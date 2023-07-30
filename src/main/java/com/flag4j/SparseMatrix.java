@@ -274,11 +274,11 @@ public class SparseMatrix
         super(
             shape,
             entries.size(),
-            entries.stream().mapToDouble(Double::doubleValue).toArray(),
+            ArrayUtils.fromDoubleList(entries),
             new int[rowIndices.size()][2]
         );
-        this.rowIndices = rowIndices.stream().mapToInt(Integer::intValue).toArray();
-        this.colIndices = colIndices.stream().mapToInt(Integer::intValue).toArray();
+        this.rowIndices = ArrayUtils.fromIntegerList(rowIndices);
+        this.colIndices = ArrayUtils.fromIntegerList(colIndices);
 
         int[][] indices = RealDenseTranspose.blockedIntMatrix(new int[][]{this.rowIndices, this.colIndices});
         ArrayUtils.deepCopy(indices, this.indices);
@@ -1304,13 +1304,14 @@ public class SparseMatrix
     /**
      * Computes the determinant of a square matrix.
      *
+     * <p><b>WARNING:</b> Currently, this method will convert this matrix to a dense matrix.</p>
+     *
      * @return The determinant of this matrix.
      * @throws IllegalArgumentException If this matrix is not square.
      */
     @Override
     public Double det() {
-        // TODO: Will need to implement a sparse LU decomposition.
-        return null;
+        return toDense().det();
     }
 
 
@@ -1715,6 +1716,19 @@ public class SparseMatrix
      */
     @Override
     public Matrix addToEachCol(Vector b) {
+        return RealDenseSparseMatrixOperations.addToEachCol(this, b);
+    }
+
+
+    /**
+     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
+     * treated as if it were a column vector.
+     *
+     * @param b Vector to add to each column of this matrix.
+     * @return The result of adding the vector b to each column of this matrix.
+     */
+    @Override
+    public Matrix addToEachCol(SparseVector b) {
         return RealSparseMatrixOperations.addToEachCol(this, b);
     }
 
@@ -1727,23 +1741,8 @@ public class SparseMatrix
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public SparseMatrix addToEachCol(SparseVector b) {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Adds a vector to each column of a matrix. The vector need not be a column vector. If it is a row vector it will be
-     * treated as if it were a column vector.
-     *
-     * @param b Vector to add to each column of this matrix.
-     * @return The result of adding the vector b to each column of this matrix.
-     */
-    @Override
     public CMatrix addToEachCol(CVector b) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexDenseSparseMatrixOperations.addToEachCol(this, b);
     }
 
 
@@ -1755,9 +1754,8 @@ public class SparseMatrix
      * @return The result of adding the vector b to each column of this matrix.
      */
     @Override
-    public SparseCMatrix addToEachCol(SparseCVector b) {
-        // TODO: Implementation.
-        return null;
+    public CMatrix addToEachCol(SparseCVector b) {
+        return RealComplexSparseMatrixOperations.addToEachCol(this, b);
     }
 
 
@@ -1770,6 +1768,19 @@ public class SparseMatrix
      */
     @Override
     public Matrix addToEachRow(Vector b) {
+        return RealDenseSparseMatrixOperations.addToEachRow(this, b);
+    }
+
+
+    /**
+     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
+     * treated as if it were a row vector for this operation.
+     *
+     * @param b Vector to add to each row of this matrix.
+     * @return The result of adding the vector b to each row of this matrix.
+     */
+    @Override
+    public Matrix addToEachRow(SparseVector b) {
         return RealSparseMatrixOperations.addToEachRow(this, b);
     }
 
@@ -1782,23 +1793,8 @@ public class SparseMatrix
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public SparseMatrix addToEachRow(SparseVector b) {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Adds a vector to each row of a matrix. The vector need not be a row vector. If it is a column vector it will be
-     * treated as if it were a row vector for this operation.
-     *
-     * @param b Vector to add to each row of this matrix.
-     * @return The result of adding the vector b to each row of this matrix.
-     */
-    @Override
     public CMatrix addToEachRow(CVector b) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexDenseSparseMatrixOperations.addToEachRow(this, b);
     }
 
 
@@ -1810,9 +1806,8 @@ public class SparseMatrix
      * @return The result of adding the vector b to each row of this matrix.
      */
     @Override
-    public SparseCMatrix addToEachRow(SparseCVector b) {
-        // TODO: Implementation.
-        return null;
+    public CMatrix addToEachRow(SparseCVector b) {
+        return RealComplexSparseMatrixOperations.addToEachRow(this, b);
     }
 
 
@@ -2630,7 +2625,8 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setCol(SparseVector values, int j) {
-        return null;
+        // TODO: Change so that a sparse vector is returned instead.
+        return RealSparseMatrixGetSet.setCol(this, j, values);
     }
 
 
@@ -2672,24 +2668,26 @@ public class SparseMatrix
     /**
      * Computes the inverse of this matrix.
      *
+     * <p><b>WARNING:</b> Currently, this method will convert this matrix to a dense matrix.</p>
+     *
      * @return The inverse of this matrix.
      */
     @Override
-    public SparseMatrix inv() {
-        // TODO: Should return dense matrix. Need a sparse LU factorization.
-        return null;
+    public Matrix inv() {
+        return toDense().inv();
     }
 
 
     /**
      * Computes the pseudo-inverse of this matrix.
      *
+     * <p><b>WARNING:</b> Currently, this method will convert this matrix to a dense matrix.</p>
+     *
      * @return The pseudo-inverse of this matrix.
      */
     @Override
-    public SparseMatrix pInv() {
-        // TODO: Should return a dense matrix.
-        return null;
+    public Matrix pInv() {
+        return toDense().inv();
     }
     
 
@@ -2965,13 +2963,14 @@ public class SparseMatrix
     /**
      * Checks if a matrix is singular. That is, if the matrix is <b>NOT</b> invertible.
      *
+     * <p><b>WARNING:</b> Currently, this method will convert this matrix to a dense matrix.</p>
+     *
      * @return True if this matrix is singular. Otherwise, returns false.
      * @see #isInvertible()
      */
     @Override
     public boolean isSingular() {
-        // TODO: Need sparse LU decomposition.
-        return false;
+        return toDense().isSingular();
     }
 
 
@@ -3216,27 +3215,6 @@ public class SparseMatrix
         result.append("Col Indices: ").append(Arrays.toString(colIndices));
 
         return result.toString();
-    }
-
-
-    // TODO: FOR TESTING ONLY. TEMPORARY. MUST BE REMOVED.
-    public static void main(String[] args) {
-        RandomTensor rtg = new RandomTensor();
-
-        SparseMatrix A = rtg.randomSparseMatrix(10_000, 10_000, -100, 100, 0.99);
-
-        System.out.println("Non-zero entries: " + A.nonZeroEntries);
-
-        long s1 = System.nanoTime();
-        A.toDense().norm();
-        double t1 = (System.nanoTime()-s1)*1.0e-6;
-
-        long s2 = System.nanoTime();
-        A.norm();
-        double t2 = (System.nanoTime()-s2)*1.0e-6;
-
-        System.out.printf("time 1: %f ms\n", t1);
-        System.out.printf("time 2: %f ms\n", t2);
     }
 }
 

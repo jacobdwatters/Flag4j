@@ -352,7 +352,7 @@ public class RandomTensor {
      * distributed in {@code [min, max)}.
      */
     public SparseMatrix randomSparseMatrix(Shape shape, double min, double max, double sparsity) {
-        // TODO: It is possible that two values at the same index are generated.
+        // TODO: It is possible (and likely) that two values at the same index are generated.
         ParameterChecks.assertInRange(sparsity, 0, 1, "sparsity");
         int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
                 .setScale(0, RoundingMode.HALF_UP).intValueExact();

@@ -28,6 +28,7 @@ import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.Tensor;
 import com.flag4j.util.ErrorMessages;
+import com.flag4j.util.RandomTensor;
 
 import java.util.Arrays;
 
@@ -86,6 +87,15 @@ public class RealDenseEquals {
      * @return True if the two tensors are numerically element-wise equivalent.
      */
     private static boolean tensorEquals(double[] src1, Shape shape1, double[] src2, Shape shape2) {
-        return shape1.equals(shape2) && Arrays.equals(src1, src2);
+        boolean arrayEquals = true;
+
+        for(int i=0; i<src1.length; i++) {
+            if(src1[i]!=src2[i] && !(Double.isNaN(src1[i]) && Double.isNaN(src2[i]))) {
+                arrayEquals = false;
+                break;
+            }
+        }
+
+        return shape1.equals(shape2) && arrayEquals;
     }
 }

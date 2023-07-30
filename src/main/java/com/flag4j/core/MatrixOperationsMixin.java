@@ -472,7 +472,7 @@ public interface MatrixOperationsMixin<
      * @param b Vector to add to each column of this matrix.
      * @return The result of adding the vector b to each column of this matrix.
      */
-    T addToEachCol(SparseVector b);
+    U addToEachCol(SparseVector b);
 
 
     /**
@@ -490,7 +490,7 @@ public interface MatrixOperationsMixin<
      * @param b Vector to add to each column of this matrix.
      * @return The result of adding the vector b to each column of this matrix.
      */
-    W addToEachCol(SparseCVector b);
+    CMatrix addToEachCol(SparseCVector b);
 
 
     /**
@@ -508,7 +508,7 @@ public interface MatrixOperationsMixin<
      * @param b Vector to add to each row of this matrix.
      * @return The result of adding the vector b to each row of this matrix.
      */
-    T addToEachRow(SparseVector b);
+    U addToEachRow(SparseVector b);
 
 
     /**
@@ -526,7 +526,7 @@ public interface MatrixOperationsMixin<
      * @param b Vector to add to each row of this matrix.
      * @return The result of adding the vector b to each row of this matrix.
      */
-    W addToEachRow(SparseCVector b);
+    CMatrix addToEachRow(SparseCVector b);
 
 
     /**
@@ -957,14 +957,14 @@ public interface MatrixOperationsMixin<
      * Computes the inverse of this matrix.
      * @return The inverse of this matrix.
      */
-    T inv();
+    U inv();
 
 
     /**
      * Computes the pseudo-inverse of this matrix.
      * @return The pseudo-inverse of this matrix.
      */
-    T pInv();
+    U pInv();
 
 
     /**
