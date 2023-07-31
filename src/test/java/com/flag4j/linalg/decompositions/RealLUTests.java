@@ -129,7 +129,7 @@ class RealLUTests {
         LU.decompose(A);
         L = LU.getL();
         U = LU.getU();
-        P = LU.getP();
+        P = LU.getP().toDense();
 
         assertEquals(expP, P.T());
         assertEquals(expL, L);
@@ -161,7 +161,7 @@ class RealLUTests {
         expU = new Matrix(expUEntries);
 
         LU.decompose(A);
-        P = LU.getP();
+        P = LU.getP().toDense();
         L = LU.getL();
         U = LU.getU();
 
@@ -188,7 +188,7 @@ class RealLUTests {
         expU = new Matrix(expUEntries);
 
         LU.decompose(A);
-        P = LU.getP();
+        P = LU.getP().toDense();
         L = LU.getL();
         U = LU.getU();
 
@@ -232,8 +232,8 @@ class RealLUTests {
         LU.decompose(A);
         L = LU.getL();
         U = LU.getU();
-        P = LU.getP();
-        Q = LU.getQ();
+        P = LU.getP().toDense();
+        Q = LU.getQ().toDense();
 
         assertEquals(expP, P);
         assertEquals(expQ, Q);

@@ -24,11 +24,11 @@
 
 package com.flag4j.linalg.decompositions;
 
-import com.flag4j.Matrix;
+import com.flag4j.SparseMatrix;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.util.ArrayUtils;
 
-// TODO: Implement LDU decomposition.
+import java.util.Arrays;
 
 /**
  * <p>This abstract class specifies methods for computing the LU decomposition of a matrix.</p>
@@ -60,11 +60,11 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
     /**
      * Permutation matrix to store row swaps if partial pivoting is used.
      */
-    protected Matrix P;
+    protected SparseMatrix P;
     /**
      * Permutation matrix to store column swaps if full pivoting is used.
      */
-    protected Matrix Q;
+    protected SparseMatrix Q;
 
     protected int numRowSwaps; // Tracks the number of row swaps made during full/partial pivoting.
     protected int numColSwaps; // Tracks the number of column swaps made during full pivoting.
@@ -109,6 +109,7 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
         numColSwaps = 0; // Set the number of row swaps to zero.
 
         if(pivotFlag==Pivoting.NONE) {
+            rowSwaps = colSwaps = null;
             noPivot(); // Compute with no pivoting.
         } else if(pivotFlag==Pivoting.PARTIAL) {
             rowSwaps = ArrayUtils.rangeInt(0, LU.numRows());
@@ -177,11 +178,17 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
      * Gets the row permutation matrix of the decomposition.
      * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
      */
-    public Matrix getP() {
-        P = new Matrix(LU.numRows());
+    public SparseMatrix getP() {
+        if(rowSwaps != null) {
+            double[] entries = new double[rowSwaps.length];
+            Arrays.fill(entries, 1);
+            int[] rowIndices = ArrayUtils.rangeInt(0, entries.length);
+            int[] colIndices = rowSwaps.clone();
 
-        for(int i=0; i<rowSwaps.length; i++) {
-            P.entries[i*P.numCols + rowSwaps[i]] = 1;
+            P = new SparseMatrix(LU.numRows(), entries, rowIndices, colIndices);
+            P.sparseSort();
+        } else {
+            P = null;
         }
 
         return P;
@@ -192,11 +199,17 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
      * Gets the column permutation matrix of the decomposition.
      * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
      */
-    public Matrix getQ() {
-        Q = new Matrix(LU.numCols());
+    public SparseMatrix getQ() {
+        if(colSwaps != null) {
+            double[] entries = new double[colSwaps.length];
+            Arrays.fill(entries, 1);
+            int[] rowIndices = colSwaps.clone();
+            int[] colIndices = ArrayUtils.rangeInt(0, entries.length);
 
-        for(int i=0; i<colSwaps.length; i++) {
-            Q.entries[colSwaps[i]*Q.numCols + i] = 1;
+            Q = new SparseMatrix(LU.numCols(), entries, rowIndices, colIndices);
+            Q.sparseSort();
+        } else {
+            Q = null;
         }
 
         return Q;

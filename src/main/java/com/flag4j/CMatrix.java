@@ -3867,13 +3867,8 @@ public class CMatrix
         boolean result = true;
 
         if(isSquare()) {
-            // Compute the LU decomposition.
-            LUDecomposition<CMatrix> lu = new ComplexLUDecomposition().decompose(this);
-
             double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
-            CNumber det = ComplexDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
-
-            result = det.mag() < tol;
+            result = det().mag() < tol;
         }
 
         return result;

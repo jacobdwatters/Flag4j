@@ -26,6 +26,7 @@ package com.flag4j.linalg.solvers;
 
 
 import com.flag4j.Matrix;
+import com.flag4j.SparseMatrix;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.VectorMixin;
 import com.flag4j.exceptions.SingularMatrixException;
@@ -66,7 +67,7 @@ public abstract class ExactSolver<
     /**
      * Row permutation matrix for {@code LU} decomposition.
      */
-    protected Matrix rowPermute;
+    protected SparseMatrix rowPermute;
 
     /**
      * Constructs an exact LU solver with a specified {@code LU} decomposer.

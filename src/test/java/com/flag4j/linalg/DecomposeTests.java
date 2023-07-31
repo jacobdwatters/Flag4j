@@ -29,7 +29,7 @@ public class DecomposeTests {
         lu.decompose(A);
 
         Matrix[] res = Decompose.lu(A);
-        assertArrayEquals(res, new Matrix[]{lu.getP(), lu.getL(), lu.getU()});
+        assertArrayEquals(res, new Matrix[]{lu.getP().toDense(), lu.getL(), lu.getU()});
 
         // ----------------------- Sub-case 2 -----------------------
         acEntries = new String[][]{
@@ -40,7 +40,7 @@ public class DecomposeTests {
         lu_complex.decompose(AC);
 
         CMatrix[] res_complex = Decompose.lu(AC);
-        assertArrayEquals(res_complex, new CMatrix[]{lu_complex.getP().toComplex(), lu_complex.getL(), lu_complex.getU()});
+        assertArrayEquals(res_complex, new CMatrix[]{lu_complex.getP().toComplex().toDense(), lu_complex.getL(), lu_complex.getU()});
     }
 
 

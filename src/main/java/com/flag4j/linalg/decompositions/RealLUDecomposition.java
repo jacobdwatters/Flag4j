@@ -34,10 +34,6 @@ import com.flag4j.util.ArrayUtils;
  */
 public final class RealLUDecomposition extends LUDecomposition<Matrix> {
 
-    // TODO: There is no need to compute the P or Q matrix explicitly, simply keep an array indicating row/col swaps.
-    //  The getP() and getQ() method can construct the permutation matrix from these arrays. Further, the returned
-    //  P and Q should be sparse???
-
     /**
      * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
      */

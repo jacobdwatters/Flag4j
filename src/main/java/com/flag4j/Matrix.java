@@ -3392,7 +3392,7 @@ public class Matrix
             LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(this);
 
             double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
-            double det = RealDenseDeterminant.detLU(lu.getP(), lu.getU());
+            double det = RealDenseDeterminant.detLU(lu.getP().toDense(), lu.getU());
 
             result = Math.abs(det) < tol;
         }

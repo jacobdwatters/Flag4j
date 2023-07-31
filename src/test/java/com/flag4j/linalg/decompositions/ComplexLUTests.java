@@ -87,7 +87,7 @@ public class ComplexLUTests {
         setMatrices();
 
         lu.decompose(A);
-        P = lu.getP();
+        P = lu.getP().toDense();
         L = lu.getL();
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U);
@@ -102,7 +102,7 @@ public class ComplexLUTests {
         setMatrices();
 
         lu.decompose(A);
-        P = lu.getP();
+        P = lu.getP().toDense();
         L = lu.getL();
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U);
@@ -116,7 +116,7 @@ public class ComplexLUTests {
         setMatrices();
 
         lu.decompose(A);
-        P = lu.getP();
+        P = lu.getP().toDense();
         L = lu.getL();
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U);
@@ -137,8 +137,8 @@ public class ComplexLUTests {
         setMatrices();
 
         lu.decompose(A);
-        P = lu.getP();
-        Q = lu.getQ();
+        P = lu.getP().toDense();
+        Q = lu.getQ().toDense();
         L = lu.getL();
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U).mult(Q.T());
@@ -153,8 +153,8 @@ public class ComplexLUTests {
         setMatrices();
 
         lu.decompose(A);
-        P = lu.getP();
-        Q = lu.getQ();
+        P = lu.getP().toDense();
+        Q = lu.getQ().toDense();
         L = lu.getL();
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U).mult(Q.T());
@@ -168,8 +168,8 @@ public class ComplexLUTests {
         setMatrices();
 
         lu.decompose(A);
-        P = lu.getP();
-        Q = lu.getQ();
+        P = lu.getP().toDense();
+        Q = lu.getQ().toDense();
         L = lu.getL();
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U).mult(Q.T());
