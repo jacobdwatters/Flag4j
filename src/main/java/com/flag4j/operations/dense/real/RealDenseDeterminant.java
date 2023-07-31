@@ -30,7 +30,6 @@ import com.flag4j.linalg.decompositions.LUDecomposition;
 import com.flag4j.linalg.decompositions.RealLUDecomposition;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
-import com.flag4j.util.RandomTensor;
 
 /**
  * This class contains methods for computing the determinant of a real dense matrix.
@@ -45,6 +44,7 @@ public class RealDenseDeterminant {
 
     /**
      * Computes the determinant of a square matrix using the LU factorization.
+     *
      * @param A Matrix to compute the determinant of.
      * @return The determinant of the matrix.
      * @throws IllegalArgumentException If matrix is not square.
@@ -52,11 +52,11 @@ public class RealDenseDeterminant {
     public static double det(Matrix A) {
         ParameterChecks.assertSquare(A.numRows, A.numCols);
 
-        if(A.numRows==1) {
+        if (A.numRows == 1) {
             return A.entries[0];
-        } else if(A.numRows==2) {
+        } else if (A.numRows == 2) {
             return A.entries[0] * A.entries[3] - A.entries[1] * A.entries[2];
-        } else if(A.numRows==3) {
+        } else if (A.numRows == 3) {
             double det = A.entries[0] * (A.entries[4] * A.entries[8] - A.entries[5] * A.entries[7]);
             det -= A.entries[1] * (A.entries[3] * A.entries[8] - A.entries[5] * A.entries[6]);
             return det + A.entries[2] * (A.entries[3] * A.entries[7] - A.entries[4] * A.entries[6]);
@@ -64,13 +64,14 @@ public class RealDenseDeterminant {
             LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(A);
             // Compute the determinant of P. (Check if lowest bit is zero to determine parity)
             double detP = (lu.getNumRowSwaps() & 1) == 0 ? 1 : -1;
-            return detP*detTri(lu.getLU());
+            return detP * detTri(lu.getLU());
         }
     }
 
 
     /**
      * Computes the determinant of a square matrix using the LU factorization.
+     *
      * @param A Matrix to compute the determinant of.
      * @return The determinant of the matrix.
      * @throws IllegalArgumentException If matrix is not square.
@@ -82,7 +83,7 @@ public class RealDenseDeterminant {
         lu.decompose(A);
         double detP = (lu.getNumRowSwaps() & 1) == 0 ? 1 : -1;
 
-        return detP*detTri(lu.getU());
+        return detP * detTri(lu.getU());
     }
 
 
@@ -94,8 +95,9 @@ public class RealDenseDeterminant {
      * </p>
      *
      * <p>
-     *     Note, if the LU decomposition has not already been computed, simply use {@link #det(Matrix)}.
+     * Note, if the LU decomposition has not already been computed, simply use {@link #det(Matrix)}.
      * </p>
+     *
      * @param P Row permutation matrix in the {@code LU} decomposition.
      * @param U Upper triangular matrix.
      * @return The determinant of the matrix which has been factored into a unit lower triangular matrix {@code L}
@@ -104,37 +106,40 @@ public class RealDenseDeterminant {
     public static double detLU(Matrix P, Matrix U) {
         int numSwaps = (int) (P.numRows - P.trace()) - 1; // Number of swaps in permutation matrix.
         double detP = (numSwaps & 1) == 0 ? 1 : -1;
-        return detP*detTri(U);
+        return detP * detTri(U);
     }
 
 
     /**
      * Explicitly computes the determinant of a 3x3 matrix.
+     *
      * @param A Matrix to compute the determinant of.
      * @return The determinant of the 3x3 matrix.
      */
     public static double det3(Matrix A) {
         ParameterChecks.assertEqualShape(A.shape, new Shape(3, 3));
-        double det = A.entries[0]*(A.entries[4]*A.entries[8] - A.entries[5]*A.entries[7]);
-        det -= A.entries[1]*(A.entries[3]*A.entries[8] - A.entries[5]*A.entries[6]);
-        det += A.entries[2]*(A.entries[3]*A.entries[7] - A.entries[4]*A.entries[6]);
+        double det = A.entries[0] * (A.entries[4] * A.entries[8] - A.entries[5] * A.entries[7]);
+        det -= A.entries[1] * (A.entries[3] * A.entries[8] - A.entries[5] * A.entries[6]);
+        det += A.entries[2] * (A.entries[3] * A.entries[7] - A.entries[4] * A.entries[6]);
         return det;
     }
 
 
     /**
      * Explicitly computes the determinant of a 2x2 matrix.
+     *
      * @param A Matrix to compute the determinant of.
      * @return The determinant of the 2x2 matrix.
      */
     public static double det2(Matrix A) {
         ParameterChecks.assertEqualShape(A.shape, new Shape(2, 2));
-        return A.entries[0]*A.entries[3] - A.entries[1]*A.entries[2];
+        return A.entries[0] * A.entries[3] - A.entries[1] * A.entries[2];
     }
 
 
     /**
      * Explicitly computes the determinant of a 1x1 matrix.
+     *
      * @param A Matrix to compute the determinant of.
      * @return The determinant of the 1x1 matrix.
      */
@@ -147,38 +152,19 @@ public class RealDenseDeterminant {
     /**
      * Computes the determinant for a triangular matrix. This method does not check that the matrix is actually
      * triangular.
+     *
      * @param A Triangular matrix.
      * @return The determinant of the triangular matrix.
      */
     public static double detTri(Matrix A) {
         double det = 1;
-        int step = A.numCols+1;
+        int step = A.numCols + 1;
 
         // Compute the determinant of U
-        for(int i=0; i<A.entries.length; i+=step) {
+        for (int i = 0; i < A.entries.length; i += step) {
             det *= A.entries[i];
         }
 
         return det;
-    }
-
-
-    public static void main(String[] args) {
-        RandomTensor rtg = new RandomTensor();
-        int numRuns = 500;
-        int[] sizeList = {1, 2, 3, 4, 5, 10, 15, 20, 50, 100, 250, 500};
-
-        for (int size : sizeList) {
-            Shape shape = new Shape(size, size);
-            Matrix A = rtg.randomMatrix(shape, -100, 100);
-
-            long s = System.nanoTime();
-            for(int i=0; i<numRuns; i++) {
-                A.det();
-            }
-            double t = (System.nanoTime() - s)*1.0e-6/numRuns;
-
-            System.out.printf("%s Time: %f ms\n", shape, t);
-        }
     }
 }
