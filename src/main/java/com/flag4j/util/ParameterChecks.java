@@ -319,6 +319,18 @@ public final class ParameterChecks {
         }
     }
 
+    /**
+     * Checks if a shape represents a square matrix.
+     * @param numRows Number of rows in the matrix.
+     * @param numCols Number of columns in the matrix.
+     * @throws IllegalArgumentException If the shape is not of rank 2 with equal rows and columns.
+     */
+    public static void assertSquare(int numRows, int numCols) {
+        if(numRows!=numCols) {
+            throw new LinearAlgebraException(ErrorMessages.getSquareShapeErr(new Shape(numRows, numCols)));
+        }
+    }
+
 
     /**
      * Checks that a shape has the specified rank.

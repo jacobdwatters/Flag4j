@@ -30,6 +30,7 @@ import com.flag4j.linalg.decompositions.LUDecomposition;
 import com.flag4j.linalg.decompositions.RealLUDecomposition;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.RandomTensor;
 
 /**
  * This class contains methods for computing the determinant of a real dense matrix.
@@ -49,7 +50,7 @@ public class RealDenseDeterminant {
      * @throws IllegalArgumentException If matrix is not square.
      */
     public static double det(Matrix A) {
-        ParameterChecks.assertSquare(A.shape);
+        ParameterChecks.assertSquare(A.numRows, A.numCols);
 
         if(A.numRows==1) {
             return A.entries[0];
@@ -75,7 +76,7 @@ public class RealDenseDeterminant {
      * @throws IllegalArgumentException If matrix is not square.
      */
     public static double detLU(Matrix A) {
-        ParameterChecks.assertSquare(A.shape);
+        ParameterChecks.assertSquare(A.numRows, A.numCols);
 
         RealLUDecomposition lu = new RealLUDecomposition();
         lu.decompose(A);
@@ -159,5 +160,25 @@ public class RealDenseDeterminant {
         }
 
         return det;
+    }
+
+
+    public static void main(String[] args) {
+        RandomTensor rtg = new RandomTensor();
+        int numRuns = 500;
+        int[] sizeList = {1, 2, 3, 4, 5, 10, 15, 20, 50, 100, 250, 500};
+
+        for (int size : sizeList) {
+            Shape shape = new Shape(size, size);
+            Matrix A = rtg.randomMatrix(shape, -100, 100);
+
+            long s = System.nanoTime();
+            for(int i=0; i<numRuns; i++) {
+                A.det();
+            }
+            double t = (System.nanoTime() - s)*1.0e-6/numRuns;
+
+            System.out.printf("%s Time: %f ms\n", shape, t);
+        }
     }
 }
