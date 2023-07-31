@@ -3099,8 +3099,12 @@ public class Matrix
         // Solve inv(A)*L = inv(U) for inv(A) by solving L^T*inv(A)^T = inv(U)^T
         RealExactSolver solver = new RealExactSolver();
         Matrix UinvT = Invert.invTriU(lu.getU()).T();
+
+        // TODO: Add triangular solver to solve this more efficiently.
+        //  Note that lu.getL.T() is upper triangular and UinvT is lower triangular.
         Matrix inverse = solver.solve(lu.getL().T(), UinvT).T();
 
+        // TODO: Add efficient method for applying permutations.
         return inverse.mult(lu.getP()); // Finally, apply permutation matrix for LU decomposition.
     }
 
@@ -3388,7 +3392,7 @@ public class Matrix
             LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(this);
 
             double tol = 1.0E-16; // Tolerance for determining if determinant is zero.
-            double det = RealDenseDeterminant.detLU(lu.getP(), lu.getL(), lu.getU());
+            double det = RealDenseDeterminant.detLU(lu.getP(), lu.getU());
 
             result = Math.abs(det) < tol;
         }
@@ -3436,12 +3440,22 @@ public class Matrix
         ParameterChecks.assertGreaterEq(rowIndex2, this.numRows-1);
 
         double temp;
-        for(int j=0; j<numCols; j++) {
-            // Swap elements.
-            temp = entries[rowIndex1*numCols + j];
-            entries[rowIndex1*numCols + j] = entries[rowIndex2*numCols + j];
-            entries[rowIndex2*numCols + j] = temp;
+        int row1Start = rowIndex1*numCols;
+        int row2Start = rowIndex2*numCols;
+        int stop = row1Start + numCols;
+
+        while(row1Start < stop) {
+            temp = entries[row1Start];
+            entries[row1Start++] = entries[row2Start];
+            entries[row2Start++] = temp;
         }
+
+//        for(int j=0; j<numCols; j++) {
+//            // Swap elements.
+//            temp = entries[row1Start + j];
+//            entries[row1Start + j] = entries[row2Start + j];
+//            entries[row2Start + j] = temp;
+//        }
 
         return this;
     }

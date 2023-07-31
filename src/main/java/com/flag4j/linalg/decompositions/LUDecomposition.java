@@ -26,6 +26,7 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.Matrix;
 import com.flag4j.core.MatrixMixin;
+import com.flag4j.util.ArrayUtils;
 
 // TODO: Implement LDU decomposition.
 
@@ -65,6 +66,11 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
      */
     protected Matrix Q;
 
+    protected int numRowSwaps; // Tracks the number of row swaps made during full/partial pivoting.
+    protected int numColSwaps; // Tracks the number of column swaps made during full pivoting.
+    protected int[] rowSwaps; // Array for keeping track of row swaps made with full/partial pivoting.
+    protected int[] colSwaps; // Array for keeping track of column swaps made during full pivoting.
+
 
     /**
      * Constructs a LU decomposer to decompose the specified matrix.
@@ -99,12 +105,17 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
     @Override
     public LUDecomposition<T> decompose(T src) {
         initLU(src);
+        numRowSwaps = 0; // Set the number of row swaps to zero.
+        numColSwaps = 0; // Set the number of row swaps to zero.
 
         if(pivotFlag==Pivoting.NONE) {
             noPivot(); // Compute with no pivoting.
         } else if(pivotFlag==Pivoting.PARTIAL) {
+            rowSwaps = ArrayUtils.rangeInt(0, LU.numRows());
             partialPivot();
         } else {
+            rowSwaps = ArrayUtils.rangeInt(0, LU.numRows());
+            colSwaps = ArrayUtils.rangeInt(0, LU.numCols());
             fullPivot();
         }
 
@@ -138,6 +149,17 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
 
 
     /**
+     * Gets the {@code L} and {@code U} matrices of the decomposition combined in a single matrix.
+     * @return The {@code L} and {@code U} matrices of the decomposition stored together in a single matrix.
+     * The diagonal of {@code L} is all ones and is not stored allowing the diagonal of {@code U} to be stored along
+     * the diagonal of the combined matrix.
+     */
+    public T getLU() {
+        return LU;
+    }
+
+
+    /**
      * Gets the unit lower triangular matrix of the decomposition.
      * @return The unit lower triangular matrix of the decomposition.
      */
@@ -156,6 +178,12 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
      * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
      */
     public Matrix getP() {
+        P = new Matrix(LU.numRows());
+
+        for(int i=0; i<rowSwaps.length; i++) {
+            P.entries[i*P.numCols + rowSwaps[i]] = 1;
+        }
+
         return P;
     }
 
@@ -165,8 +193,64 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
      * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
      */
     public Matrix getQ() {
+        Q = new Matrix(LU.numCols());
+
+        for(int i=0; i<colSwaps.length; i++) {
+            Q.entries[colSwaps[i]*Q.numCols + i] = 1;
+        }
+
         return Q;
     }
+
+
+    /**
+     * Gets the number of row swaps used in the last decomposition.
+     * @return The number of row swaps used in the last decomposition.
+     */
+    public int getNumRowSwaps() {
+        return numRowSwaps;
+    }
+
+
+    /**
+     * Gets the number of column swaps used in the last decomposition.
+     * @return The number of column swaps used in the last decomposition.
+     */
+    public int getNumColSwaps() {
+        return numColSwaps;
+    }
+
+
+    /**
+     * Tracks the swapping of two rows during gaussian elimination.
+     * @param rowIdx1 First row index in swap.
+     * @param rowIdx2 Second row index in swap.
+     */
+    protected void swapRows(int rowIdx1, int rowIdx2) {
+        numRowSwaps++;
+
+        int temp = rowSwaps[rowIdx1];
+        rowSwaps[rowIdx1] = rowSwaps[rowIdx2];
+        rowSwaps[rowIdx2] = temp;
+
+        LU.swapRows(rowIdx1, rowIdx2);
+    }
+
+
+    /**
+     * Tracks the swapping of two columns during gaussian elimination.
+     * @param colIdx1 First column index in swap.
+     * @param colIdx2 Second column index in swap.
+     */
+    protected void swapCols(int colIdx1, int colIdx2) {
+        numColSwaps++;
+        int temp = colSwaps[colIdx1];
+        colSwaps[colIdx1] = colSwaps[colIdx2];
+        colSwaps[colIdx2] = temp;
+
+        LU.swapCols(colIdx1, colIdx2);
+    }
+
 
 
     /**

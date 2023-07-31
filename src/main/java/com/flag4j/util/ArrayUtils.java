@@ -654,7 +654,7 @@ public final class ArrayUtils {
 
         int j=0;
         for(int i=start; i<end; i++) {
-            rangeArr[j++]=i;
+            rangeArr[j++] = i;
         }
 
         return rangeArr;

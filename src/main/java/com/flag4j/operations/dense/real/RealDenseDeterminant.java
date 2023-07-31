@@ -26,9 +26,11 @@ package com.flag4j.operations.dense.real;
 
 import com.flag4j.Matrix;
 import com.flag4j.Shape;
-import com.flag4j.linalg.Decompose;
+import com.flag4j.linalg.decompositions.LUDecomposition;
+import com.flag4j.linalg.decompositions.RealLUDecomposition;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
+import com.flag4j.util.RandomTensor;
 
 /**
  * This class contains methods for computing the determinant of a real dense matrix.
@@ -49,24 +51,20 @@ public class RealDenseDeterminant {
      */
     public static double det(Matrix A) {
         ParameterChecks.assertSquare(A.shape);
-        double det;
 
-        switch(A.numRows) {
-            case 1:
-                det = det1(A);
-                break;
-            case 2:
-                det = det2(A);
-                break;
-            case 3:
-                det = det3(A);
-                break;
-            default:
-                det = detLU(A);
-                break;
+        if(A.numRows==1) {
+            return A.entries[0];
+        } else if(A.numRows==2) {
+            return A.entries[0] * A.entries[3] - A.entries[1] * A.entries[2];
+        } else if(A.numRows==3) {
+            double det = A.entries[0] * (A.entries[4] * A.entries[8] - A.entries[5] * A.entries[7]);
+            det -= A.entries[1] * (A.entries[3] * A.entries[8] - A.entries[5] * A.entries[6]);
+            return det + A.entries[2] * (A.entries[3] * A.entries[7] - A.entries[4] * A.entries[6]);
+        } else {
+            LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(A);
+            double detP = lu.getNumRowSwaps()%2==0 ? 1 : -1; // Compute the determinant of P.
+            return detP*detTri(lu.getLU());
         }
-
-        return det;
     }
 
 
@@ -78,23 +76,26 @@ public class RealDenseDeterminant {
      */
     public static double detLU(Matrix A) {
         ParameterChecks.assertSquare(A.shape);
-        Matrix[] LU = Decompose.lu(A);
 
-        return detLU(LU[0], LU[1], LU[2]);
+        RealLUDecomposition lu = new RealLUDecomposition();
+        lu.decompose(A);
+        double detP = lu.getNumRowSwaps()%2==0 ? 1 : -1; // Compute the determinant of P.
+
+        return detP*detTri(lu.getU());
     }
 
 
     /**
      * Computes the determinant for a matrix which has been factored into a unit lower triangular matrix {@code L}
-     * and an upper triangular matrix {@code U} using partial pivoting (i.e. row swaps).
+     * and an upper triangular matrix {@code U} using partial pivoting (i.e. row swaps). Note, the matrix {@code L} is
+     * not needed to compute this determinant since it is assumed to be unit lower triangular.
      * @param P Row permutation matrix in the {@code LU} decomposition.
-     * @param L Unit lower triangular matrix.
      * @param U Upper triangular matrix.
      * @return The determinant of the matrix which has been factored into a unit lower triangular matrix {@code L}
      * and an upper triangular matrix {@code U} using partial pivoting.
      */
-    public static double detLU(Matrix P, Matrix L, Matrix U) {
-        int numSwaps = (int) (L.numRows - P.trace()) - 1; // Number of swaps in permutation matrix.
+    public static double detLU(Matrix P, Matrix U) {
+        int numSwaps = (int) (P.numRows - P.trace()) - 1; // Number of swaps in permutation matrix.
         double detP = numSwaps%2==0 ? 1 : -1; // Compute the determinant of P.
         return detP*detTri(U);
     }
@@ -137,7 +138,8 @@ public class RealDenseDeterminant {
 
 
     /**
-     * Computes the determinant for a triangular matrix.
+     * Computes the determinant for a triangular matrix. This method does not check that the matrix is actually
+     * triangular.
      * @param A Triangular matrix.
      * @return The determinant of the triangular matrix.
      */
@@ -151,5 +153,25 @@ public class RealDenseDeterminant {
         }
 
         return det;
+    }
+
+
+    public static void main(String[] args) {
+        RandomTensor rtg = new RandomTensor();
+        int numRuns = 500;
+        int[] sizeList = {1, 2, 3, 4, 5, 10, 15, 20, 50, 100, 250, 500};
+
+        for (int size : sizeList) {
+            Shape shape = new Shape(size, size);
+            Matrix A = rtg.randomMatrix(shape, -100, 100);
+
+            long s = System.nanoTime();
+            for(int i=0; i<numRuns; i++) {
+                A.det();
+            }
+            double t = (System.nanoTime() - s)*1.0e-6/numRuns;
+
+            System.out.printf("%s Time: %f ms\n", shape, t);
+        }
     }
 }

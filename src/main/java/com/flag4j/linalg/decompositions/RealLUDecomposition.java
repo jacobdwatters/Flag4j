@@ -26,6 +26,7 @@ package com.flag4j.linalg.decompositions;
 
 import com.flag4j.Matrix;
 import com.flag4j.exceptions.LinearAlgebraException;
+import com.flag4j.util.ArrayUtils;
 
 /**
  * <p>This class provides methods for computing the LU decomposition of a real dense matrix.</p>
@@ -33,6 +34,9 @@ import com.flag4j.exceptions.LinearAlgebraException;
  */
 public final class RealLUDecomposition extends LUDecomposition<Matrix> {
 
+    // TODO: There is no need to compute the P or Q matrix explicitly, simply keep an array indicating row/col swaps.
+    //  The getP() and getQ() method can construct the permutation matrix from these arrays. Further, the returned
+    //  P and Q should be sparse???
 
     /**
      * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
@@ -101,7 +105,6 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      */
     @Override
     protected void partialPivot() {
-        P = Matrix.I(LU.numRows);
         int colStop = Math.min(LU.numCols, LU.numRows);
         int maxIndex;
 
@@ -111,8 +114,7 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
 
             // Make the appropriate swaps in LU and P (This is the partial pivoting step).
             if(j!=maxIndex && maxIndex>=0) {
-                LU.swapRows(j, maxIndex);
-                P.swapRows(j, maxIndex);
+                swapRows(j, maxIndex);
             }
 
             computeRows(j);
@@ -125,8 +127,6 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
      */
     @Override
     protected void fullPivot() {
-        P = Matrix.I(LU.numRows);
-        Q = Matrix.I(LU.numCols);
         int[] maxIndex;
         int colStop = Math.min(LU.numCols, LU.numRows);
 
@@ -136,12 +136,10 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
 
             // Make the appropriate swaps in LU, P and Q (This is the full pivoting step).
             if(j!=maxIndex[0] && maxIndex[0]!=-1) {
-                LU.swapRows(j, maxIndex[0]);
-                P.swapRows(j, maxIndex[0]);
+                swapRows(j, maxIndex[0]);
             }
             if(j!=maxIndex[1] && maxIndex[1]!=-1) {
-                LU.swapCols(j, maxIndex[1]);
-                Q.swapCols(j, maxIndex[1]);
+                swapCols(j, maxIndex[1]);
             }
 
             computeRows(j);
@@ -164,13 +162,10 @@ public final class RealLUDecomposition extends LUDecomposition<Matrix> {
             m = LU.entries[pivotRow + j] == 0 ? m : m/LU.entries[pivotRow + j];
 
             if(m!=0) {
-                System.out.println("m = " + m);
-                System.out.println("LU:\n" + LU);
                 // Compute and set U values.
                 for (int k = j; k < LU.numCols; k++) {
                     LU.entries[iRow + k] -= m * LU.entries[pivotRow + k];
                 }
-                System.out.println("LU:\n" + LU + "\n\n");
             }
 
             // Compute and set L value.
