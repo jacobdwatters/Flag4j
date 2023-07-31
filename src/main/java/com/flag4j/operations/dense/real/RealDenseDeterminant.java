@@ -61,7 +61,8 @@ public class RealDenseDeterminant {
             return det + A.entries[2] * (A.entries[3] * A.entries[7] - A.entries[4] * A.entries[6]);
         } else {
             LUDecomposition<Matrix> lu = new RealLUDecomposition().decompose(A);
-            double detP = lu.getNumRowSwaps()%2==0 ? 1 : -1; // Compute the determinant of P.
+            // Compute the determinant of P. (Check if lowest bit is zero to determine parity)
+            double detP = (lu.getNumRowSwaps() & 1) == 0 ? 1 : -1;
             return detP*detTri(lu.getLU());
         }
     }
@@ -78,16 +79,22 @@ public class RealDenseDeterminant {
 
         RealLUDecomposition lu = new RealLUDecomposition();
         lu.decompose(A);
-        double detP = lu.getNumRowSwaps()%2==0 ? 1 : -1; // Compute the determinant of P.
+        double detP = (lu.getNumRowSwaps() & 1) == 0 ? 1 : -1;
 
         return detP*detTri(lu.getU());
     }
 
 
     /**
+     * <p>
      * Computes the determinant for a matrix which has been factored into a unit lower triangular matrix {@code L}
      * and an upper triangular matrix {@code U} using partial pivoting (i.e. row swaps). Note, the matrix {@code L} is
      * not needed to compute this determinant since it is assumed to be unit lower triangular.
+     * </p>
+     *
+     * <p>
+     *     Note, if the LU decomposition has not already been computed, simply use {@link #det(Matrix)}.
+     * </p>
      * @param P Row permutation matrix in the {@code LU} decomposition.
      * @param U Upper triangular matrix.
      * @return The determinant of the matrix which has been factored into a unit lower triangular matrix {@code L}
@@ -95,7 +102,7 @@ public class RealDenseDeterminant {
      */
     public static double detLU(Matrix P, Matrix U) {
         int numSwaps = (int) (P.numRows - P.trace()) - 1; // Number of swaps in permutation matrix.
-        double detP = numSwaps%2==0 ? 1 : -1; // Compute the determinant of P.
+        double detP = (numSwaps & 1) == 0 ? 1 : -1;
         return detP*detTri(U);
     }
 
