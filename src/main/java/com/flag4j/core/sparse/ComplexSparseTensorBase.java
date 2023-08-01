@@ -25,13 +25,16 @@
 package com.flag4j.core.sparse;
 
 import com.flag4j.Shape;
+import com.flag4j.SparseCMatrix;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexTensorMixin;
 import com.flag4j.operations.common.complex.AggregateComplex;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.common.complex.ComplexProperties;
+import com.flag4j.operations.dense.complex.AggregateDenseComplex;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
 import com.flag4j.operations.dense.complex.ComplexDenseProperties;
+import com.flag4j.operations.dense.real.AggregateDenseReal;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -241,6 +244,20 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
     @Override
     public T round(int precision) {
         return makeTensor(shape.copy(), ComplexOperations.round(this.entries, precision), copyIndices());
+    }
+
+
+    @Override
+    public int[] argMax() {
+        int idx = AggregateDenseComplex.argMax(entries);
+        return indices[idx].clone();
+    }
+
+
+    @Override
+    public int[] argMin() {
+        int idx = AggregateDenseComplex.argMin(entries);
+        return indices[idx].clone();
     }
 
 

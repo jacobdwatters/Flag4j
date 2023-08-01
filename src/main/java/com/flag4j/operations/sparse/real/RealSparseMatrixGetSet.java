@@ -205,12 +205,11 @@ public class RealSparseMatrixGetSet {
         return dest;
     }
 
-
     /**
      * Sets a column of a sparse matrix to the values in a sparse tensor.
      * @param src Source matrix to set column of.
-     * @param colIdx
-     * @param col
+     * @param colIdx Index of the column to set.
+     * @param col New entries for the specified column.
      * @return A copy of the {@code src} matrix with the specified column set to the {@code col} sparse vector.
      * @throws IllegalArgumentException If the {@code src} matrix does not have the same number of rows as total entries
      * in the {@code col} vector.
@@ -255,8 +254,8 @@ public class RealSparseMatrixGetSet {
 
         // Initialize lists to new values for the specified slice.
         List<Double> entries = DoubleStream.of(values.entries).boxed().collect(Collectors.toList());
-        List<Integer> rowIndices = IntStream.of(ArrayUtils.shift(row, values.rowIndices)).boxed().collect(Collectors.toList());
-        List<Integer> colIndices = IntStream.of(ArrayUtils.shift(col, values.colIndices)).boxed().collect(Collectors.toList());
+        List<Integer> rowIndices = ArrayUtils.toArrayList(ArrayUtils.shift(row, values.rowIndices));
+        List<Integer> colIndices = ArrayUtils.toArrayList(ArrayUtils.shift(col, values.colIndices));
 
         int[] rowRange = ArrayUtils.rangeInt(row, values.numRows + row);
         int[] colRange = ArrayUtils.rangeInt(col, values.numCols + col);
@@ -571,8 +570,18 @@ public class RealSparseMatrixGetSet {
     }
 
 
+    /**
+     * Checks if an index is in the specified slice.
+     * @param row Row index of value.
+     * @param col Column index of value.
+     * @param rowStart Starting row index of slice (inclusive).
+     * @param rowEnd Ending row index of slice (exclusive).
+     * @param colStart Starting column index of slice (inclusive).
+     * @param colEnd Ending column index of slice (exclusive).
+     * @return True if the indices are in the slice. False otherwise.
+     */
     private static boolean inSlice(int row, int col, int rowStart, int rowEnd, int colStart, int colEnd) {
-        return row >= rowStart && row < rowEnd && col >= colStart && col >=colEnd;
+        return row >= rowStart && row < rowEnd && col >= colStart && col < colEnd;
     }
 
 

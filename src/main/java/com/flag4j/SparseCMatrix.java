@@ -30,11 +30,12 @@ import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.sparse.ComplexSparseTensorBase;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.TransposeDispatcher;
+import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
 import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixOperations;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixOperations;
@@ -50,6 +51,7 @@ import com.flag4j.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Complex sparse matrix. Stored in coordinate list (COO) format.
@@ -604,7 +606,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix elemDiv(CMatrix B) {
-        return ComplexDenseSparseOperations.elemDiv(this, B);
+        return ComplexDenseSparseMatrixOperations.elemDiv(this, B);
     }
 
 
@@ -675,7 +677,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix conjT() {
-        return T().conj();
+        return H();
     }
 
 
@@ -693,7 +695,7 @@ public class SparseCMatrix
     /**
      * Checks if a matrix is anti-Hermitian. That is, if the matrix is equal to the negative of its conjugate transpose.
      *
-     * @return True if this matrix is anti-symmetric. Otherwise, returns false.
+     * @return True if this matrix is antisymmetric. Otherwise, returns false.
      */
     @Override
     public boolean isAntiHermitian() {
@@ -728,8 +730,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setCol(CVector values, int colIndex) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setCol(this, colIndex, values.entries);
     }
 
 
@@ -745,8 +746,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setRow(CVector values, int rowIndex) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setRow(this, rowIndex, values.entries);
     }
 
 
@@ -762,30 +762,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setRow(SparseCVector values, int rowIndex) {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Adds a complex sparse matrix to this matrix and stores the result in this matrix.
-     *
-     * @param B Complex sparse matrix to add to this matrix,
-     */
-    @Override
-    public void addEq(SparseCMatrix B) {
-        // TODO: Implementation.
-    }
-
-
-    /**
-     * Subtracts a complex sparse matrix from this matrix and stores the result in this matrix.
-     *
-     * @param B Complex sparse matrix to subtract from this matrix,
-     */
-    @Override
-    public void subEq(SparseCMatrix B) {
-        // TODO: Implementation.
+        return ComplexSparseMatrixGetSet.setRow(this, rowIndex, values);
     }
 
 
@@ -810,8 +787,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix add(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexDenseSparseMatrixOperations.add(B, this);
     }
 
 
@@ -824,8 +800,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix add(SparseMatrix B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexSparseMatrixOperations.add(this, B);
     }
 
 
@@ -838,8 +813,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix add(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+        return ComplexDenseSparseMatrixOperations.add(B, this);
     }
 
 
@@ -852,8 +826,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix sub(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexDenseSparseMatrixOperations.sub(this, B);
     }
 
 
@@ -866,8 +839,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix sub(SparseMatrix B) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexSparseMatrixOperations.sub(this, B);
     }
 
 
@@ -880,8 +852,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix sub(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+        return ComplexDenseSparseMatrixOperations.sub(this, B);
     }
 
 
@@ -1098,7 +1069,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix elemMult(CMatrix B) {
-        return ComplexDenseSparseOperations.elemMult(B, this);
+        return ComplexDenseSparseMatrixOperations.elemMult(B, this);
     }
 
 
@@ -1194,8 +1165,31 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix directSum(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        Shape destShape = new Shape(numRows + B.numRows, numCols + B.numCols);
+        CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries from both matrices.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Copy indices of first matrix in the direct sum.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
+
+        int destIdx;
+        int[] indices;
+
+        // Copy indices of second matrix with appropriate shifts.
+        for(int i=0; i<B.entries.length; i++) {
+            destIdx = i+entries.length;
+            indices = B.shape.getIndices(i);
+            destRowIndices[destIdx] = indices[0] + numRows;
+            destColIndices[destIdx] = indices[1] + numCols;
+        }
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1207,8 +1201,29 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix directSum(SparseMatrix B) {
-        // TODO: Implementation.
-        return null;
+        Shape destShape = new Shape(numRows + B.numRows, numCols + B.numCols);
+        CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries from both matrices.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Copy indices of first matrix in the direct sum.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
+
+        int destIdx;
+
+        // Copy indices of second matrix with appropriate shifts.
+        for(int i=0; i<B.entries.length; i++) {
+            destIdx = i+entries.length;
+            destRowIndices[destIdx] = B.rowIndices[i] + numRows;
+            destColIndices[destIdx] = B.colIndices[i] + numCols;
+        }
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1220,8 +1235,31 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix directSum(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+        Shape destShape = new Shape(numRows + B.numRows, numCols + B.numCols);
+        CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries from both matrices.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Copy indices of first matrix in the direct sum.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
+
+        int destIdx;
+        int[] indices;
+
+        // Copy indices of second matrix with appropriate shifts.
+        for(int i=0; i<B.entries.length; i++) {
+            destIdx = i+entries.length;
+            indices = B.shape.getIndices(i);
+            destRowIndices[destIdx] = indices[0] + numRows;
+            destColIndices[destIdx] = indices[1] + numCols;
+        }
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1233,8 +1271,29 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix directSum(SparseCMatrix B) {
-        // TODO: Implementation.
-        return null;
+        Shape destShape = new Shape(numRows + B.numRows, numCols + B.numCols);
+        CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries from both matrices.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Copy indices of first matrix in the direct sum.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
+
+        int destIdx;
+
+        // Copy indices of second matrix with appropriate shifts.
+        for(int i=0; i<B.entries.length; i++) {
+            destIdx = i+entries.length;
+            destRowIndices[destIdx] = B.rowIndices[i] + numRows;
+            destColIndices[destIdx] = B.colIndices[i] + numCols;
+        }
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1246,8 +1305,29 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix invDirectSum(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        Shape destShape = new Shape(numRows + B.numRows, numCols + B.numCols);
+        CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries from both matrices.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Compute shifted indices.
+        int[] shiftedColIndices = colIndices.clone();
+        ArrayUtils.shift(B.numCols, shiftedColIndices);
+        int[] shiftedRowIndices = ArrayUtils.rangeInt(numRows, destRowIndices.length);
+        int[] bColIndices = ArrayUtils.rangeInt(0, B.numCols);
+
+        // Copy shifted indices of both matrices.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(shiftedColIndices, 0, destColIndices, 0, shiftedColIndices.length);
+
+        System.arraycopy(shiftedRowIndices, 0, destRowIndices, rowIndices.length, shiftedRowIndices.length);
+        System.arraycopy(bColIndices, 0, destColIndices, shiftedColIndices.length, bColIndices.length);
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1259,8 +1339,29 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix invDirectSum(SparseCMatrix B) {
-        // TODO: Implementation.
-        return null;
+        Shape destShape = new Shape(numRows + B.numRows, numCols + B.numCols);
+        CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries from both matrices.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Compute shifted indices.
+        int[] shiftedColIndices = colIndices.clone();
+        ArrayUtils.shift(B.numCols, shiftedColIndices);
+        int[] shiftedRowIndices = B.rowIndices.clone();
+        ArrayUtils.shift(numRows, shiftedRowIndices);
+
+        // Copy shifted indices of both matrices.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(shiftedColIndices, 0, destColIndices, 0, shiftedColIndices.length);
+
+        System.arraycopy(shiftedRowIndices, 0, destRowIndices, rowIndices.length, shiftedRowIndices.length);
+        System.arraycopy(B.colIndices, 0, destColIndices, shiftedColIndices.length, B.colIndices.length);
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1272,8 +1373,25 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix sumCols() {
-        // TODO: Implementation.
-        return null;
+        List<CNumber> entries = new ArrayList<>();
+        List<Integer> rowIndices = new ArrayList<>();
+        List<Integer> colIndices = new ArrayList<>();
+
+        for(int i=0; i<this.entries.length; i++) {
+            int idx = rowIndices.indexOf(this.rowIndices[i]);
+
+            if(idx < 0) {
+                // No value with this row index exists.
+                entries.add(this.entries[i]);
+                rowIndices.add(this.rowIndices[i]);
+                colIndices.add(0);
+            } else {
+                // A value already exists with this row index. Update it.
+                entries.set(idx, entries.get(i).add(this.entries[i]));
+            }
+        }
+
+        return new SparseCMatrix(new Shape(this.numRows, 1), entries, rowIndices, colIndices);
     }
 
 
@@ -1285,8 +1403,25 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix sumRows() {
-        // TODO: Implementation.
-        return null;
+        List<CNumber> entries = new ArrayList<>();
+        List<Integer> rowIndices = new ArrayList<>();
+        List<Integer> colIndices = new ArrayList<>();
+
+        for(int i=0; i<this.entries.length; i++) {
+            int idx = rowIndices.indexOf(this.colIndices[i]);
+
+            if(idx < 0) {
+                // No value with this column index exists.
+                entries.add(this.entries[i]);
+                rowIndices.add(0);
+                colIndices.add(this.colIndices[i]);
+            } else {
+                // A value already exists with this column index. Update it.
+                entries.set(idx, entries.get(i).add(this.entries[i]));
+            }
+        }
+
+        return new SparseCMatrix(new Shape(1, numCols), entries, rowIndices, colIndices);
     }
 
 
@@ -1299,8 +1434,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachCol(Vector b) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexDenseSparseMatrixOperations.addToEachCol(this, b);
     }
 
 
@@ -1313,8 +1447,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachCol(SparseVector b) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexSparseMatrixOperations.addToEachCol(this, b);
     }
 
 
@@ -1327,8 +1460,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachCol(CVector b) {
-        // TODO: Implementation.
-        return null;
+        return ComplexDenseSparseMatrixOperations.addToEachCol(this, b);
     }
 
 
@@ -1341,8 +1473,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachCol(SparseCVector b) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixOperations.addToEachCol(this, b);
     }
 
 
@@ -1355,8 +1486,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachRow(Vector b) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexDenseSparseMatrixOperations.addToEachRow(this, b);
     }
 
 
@@ -1369,8 +1499,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachRow(SparseVector b) {
-        // TODO: Implementation.
-        return null;
+        return RealComplexSparseMatrixOperations.addToEachRow(this, b);
     }
 
 
@@ -1383,8 +1512,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachRow(CVector b) {
-        // TODO: Implementation.
-        return null;
+        return ComplexDenseSparseMatrixOperations.addToEachRow(this, b);
     }
 
 
@@ -1397,8 +1525,7 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix addToEachRow(SparseCVector b) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixOperations.addToEachRow(this, b);
     }
 
 
@@ -1412,8 +1539,20 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix stack(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numCols, B.numCols);
+
+        Shape destShape = new Shape(numCols, numRows+B.numRows);
+        CNumber[] destEntries = new CNumber[destShape.totalEntries().intValueExact()];
+
+        // Copy values from B
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, shape.totalEntries().intValueExact(), B.entries.length);
+
+        // Copy non-zero values from this matrix.
+        for(int i=0; i<entries.length; i++) {
+            destEntries[rowIndices[i]*numCols + colIndices[i]] = entries[i].copy();
+        }
+
+        return new CMatrix(destShape, destEntries);
     }
 
 
@@ -1427,8 +1566,26 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numCols, B.numCols);
+
+        Shape destShape = new Shape(numCols, numRows+B.numRows);
+        CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy non-zero values.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Copy row indices.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(B.rowIndices, 0, destRowIndices, rowIndices.length, B.rowIndices.length);
+
+        // Copy column indices.
+        System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
+        System.arraycopy(B.colIndices, 0, destColIndices, colIndices.length, B.colIndices.length);
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1442,8 +1599,21 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix stack(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numCols, B.numCols);
+
+        Shape destShape = new Shape(numCols, numRows+B.numRows);
+        CNumber[] destEntries = new CNumber[destShape.totalEntries().intValueExact()];
+
+        // Copy values from B
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, shape.totalEntries().intValueExact(), B.entries.length);
+
+        // Copy non-zero values from this matrix (and set zero values to zero.).
+        ArrayUtils.fillZerosRange(destEntries, 0, shape.totalEntries().intValueExact());
+        for(int i=0; i<entries.length; i++) {
+            destEntries[rowIndices[i]*numCols + colIndices[i]] = entries[i].copy();
+        }
+
+        return new CMatrix(destShape, destEntries);
     }
 
 
@@ -1457,8 +1627,26 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseCMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numCols, B.numCols);
+
+        Shape destShape = new Shape(numCols, numRows+B.numRows);
+        CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy non-zero values.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Copy row indices.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(B.rowIndices, 0, destRowIndices, rowIndices.length, B.rowIndices.length);
+
+        // Copy column indices.
+        System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
+        System.arraycopy(B.colIndices, 0, destColIndices, colIndices.length, B.colIndices.length);
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1476,8 +1664,8 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix stack(Matrix B, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(B) : this.stack(B);
     }
 
 
@@ -1495,8 +1683,8 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseMatrix B, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(B) : this.stack(B);
     }
 
 
@@ -1514,8 +1702,8 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix stack(CMatrix B, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(B) : this.stack(B);
     }
 
 
@@ -1533,8 +1721,8 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseCMatrix B, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(B) : this.stack(B);
     }
 
 
@@ -1548,8 +1736,23 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix augment(Matrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numRows, B.numRows);
+
+        Shape destShape = new Shape(numRows, numCols + B.numCols);
+        CNumber[] destEntries = new CNumber[destShape.totalEntries().intValueExact()];
+
+        // Copy sparse values.
+        for(int i=0; i<entries.length; i++) {
+            destEntries[rowIndices[i]*destShape.dims[1] + colIndices[i]] = entries[i].copy();
+        }
+
+        // Copy dense values by row.
+        for(int i=0; i<numRows; i++) {
+            int startIdx = i*destShape.dims[1] + numCols;
+            ArrayUtils.arraycopy(B.entries, i*B.numCols, destEntries, startIdx, B.numCols);
+        }
+
+        return new CMatrix(destShape, destEntries);
     }
 
 
@@ -1563,8 +1766,29 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix augment(SparseMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numRows, B.numRows);
+
+        Shape destShape = new Shape(numRows, numCols + B.numCols);
+        CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy non-zero values.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Copy row indices.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(B.rowIndices, 0, destRowIndices, rowIndices.length, B.rowIndices.length);
+
+        // Copy column indices.
+        System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
+        System.arraycopy(B.colIndices, 0, destColIndices, colIndices.length, B.colIndices.length);
+
+        SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        dest.sparseSort(); // Ensure indices are sorted properly.
+
+        return dest;
     }
 
 
@@ -1578,8 +1802,23 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix augment(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numRows, B.numRows);
+
+        Shape destShape = new Shape(numRows, numCols + B.numCols);
+        CNumber[] destEntries = new CNumber[destShape.totalEntries().intValueExact()];
+
+        // Copy sparse values.
+        for(int i=0; i<entries.length; i++) {
+            destEntries[rowIndices[i]*destShape.dims[1] + colIndices[i]] = new CNumber(entries[i]);
+        }
+
+        // Copy dense values by row.
+        for(int i=0; i<numRows; i++) {
+            int startIdx = i*destShape.dims[1] + numCols;
+            ArrayUtils.arraycopy(B.entries, i*B.numCols, destEntries, startIdx, B.numCols);
+        }
+
+        return new CMatrix(destShape, destEntries);
     }
 
 
@@ -1593,8 +1832,29 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix augment(SparseCMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numRows, B.numRows);
+
+        Shape destShape = new Shape(numRows, numCols + B.numCols);
+        CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy non-zero values.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Copy row indices.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(B.rowIndices, 0, destRowIndices, rowIndices.length, B.rowIndices.length);
+
+        // Copy column indices.
+        System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
+        System.arraycopy(B.colIndices, 0, destColIndices, colIndices.length, B.colIndices.length);
+
+        SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        dest.sparseSort(); // Ensure indices are sorted properly.
+
+        return dest;
     }
 
 
@@ -1610,8 +1870,24 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(Vector b) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numCols, b.size);
+
+        Shape destShape = new Shape(numRows + 1, numCols);
+        CNumber[] destEntries = new CNumber[entries.length + b.size];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy values and indices from this matrix.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, entries.length);
+        System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
+
+        // Copy values from vector and create indices.
+        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.size);
+        Arrays.fill(destRowIndices, entries.length, destRowIndices.length, numRows);
+        System.arraycopy(ArrayUtils.rangeInt(0, numCols), 0, destColIndices, entries.length, numCols);
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1627,8 +1903,24 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseVector b) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numCols, b.size);
+
+        Shape destShape = new Shape(numRows + 1, numCols);
+        CNumber[] destEntries = new CNumber[entries.length + b.size];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy values and indices from this matrix.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, entries.length);
+        System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
+
+        // Copy values and indices from vector.
+        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        Arrays.fill(destRowIndices, entries.length, destRowIndices.length, numRows);
+        System.arraycopy(b.indices, 0, destColIndices, entries.length, b.entries.length);
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1644,8 +1936,24 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(CVector b) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numCols, b.size);
+
+        Shape destShape = new Shape(numRows + 1, numCols);
+        CNumber[] destEntries = new CNumber[entries.length + b.size];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy values and indices from this matrix.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
+
+        // Copy values from vector and create indices.
+        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.size);
+        Arrays.fill(destRowIndices, entries.length, destRowIndices.length, numRows);
+        System.arraycopy(ArrayUtils.rangeInt(0, numCols), 0, destColIndices, entries.length, numCols);
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1661,8 +1969,24 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseCVector b) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numCols, b.size);
+
+        Shape destShape = new Shape(numRows + 1, numCols);
+        CNumber[] destEntries = new CNumber[entries.length + b.size];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy values and indices from this matrix.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, entries.length);
+        System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
+
+        // Copy values and indices from vector.
+        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        Arrays.fill(destRowIndices, entries.length, destRowIndices.length, numRows);
+        System.arraycopy(b.indices, 0, destColIndices, entries.length, b.entries.length);
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1682,8 +2006,8 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(Vector b, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(b) : this.stack(b);
     }
 
 
@@ -1703,8 +2027,8 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseVector b, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(b) : this.stack(b);
     }
 
 
@@ -1724,8 +2048,8 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(CVector b, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(b) : this.stack(b);
     }
 
 
@@ -1745,8 +2069,8 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix stack(SparseCVector b, int axis) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertInRange(axis, 0, 1, "axis");
+        return axis==0 ? this.augment(b) : this.stack(b);
     }
 
 
@@ -1762,8 +2086,27 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix augment(Vector b) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numRows, b.size);
+
+        Shape destShape = new Shape(numRows, numCols + 1);
+        CNumber[] destEntries = new CNumber[nonZeroEntries + b.size];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries and indices from this matrix.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, entries.length);
+        System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
+
+        // Copy entries and indices from vector.
+        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        System.arraycopy(ArrayUtils.rangeInt(0, numRows), 0, destRowIndices, entries.length, numRows);
+        Arrays.fill(destColIndices, entries.length, numRows, numCols);
+
+        SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        dest.sparseSort(); // Ensure that the indices are sorted properly.
+
+        return dest;
     }
 
 
@@ -1779,8 +2122,27 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix augment(SparseVector b) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numRows, b.size);
+
+        Shape destShape = new Shape(numRows, numCols + 1);
+        CNumber[] destEntries = new CNumber[nonZeroEntries + b.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries and indices from this matrix.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, entries.length);
+        System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
+
+        // Copy entries and indices from vector.
+        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        System.arraycopy(b.indices, 0, destRowIndices, entries.length, b.entries.length);
+        Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
+
+        SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        dest.sparseSort(); // Ensure that the indices are sorted properly.
+
+        return dest;
     }
 
 
@@ -1796,8 +2158,27 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix augment(CVector b) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numRows, b.size);
+
+        Shape destShape = new Shape(numRows, numCols + 1);
+        CNumber[] destEntries = new CNumber[nonZeroEntries + b.size];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries and indices from this matrix.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, entries.length);
+        System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
+
+        // Copy entries and indices from vector.
+        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        System.arraycopy(ArrayUtils.rangeInt(0, numRows), 0, destRowIndices, entries.length, numRows);
+        Arrays.fill(destColIndices, entries.length, numRows, numCols);
+
+        SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        dest.sparseSort(); // Ensure that the indices are sorted properly.
+
+        return dest;
     }
 
 
@@ -1813,8 +2194,27 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix augment(SparseCVector b) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numRows, b.size);
+
+        Shape destShape = new Shape(numRows, numCols + 1);
+        CNumber[] destEntries = new CNumber[nonZeroEntries + b.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries and indices from this matrix.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, entries.length);
+        System.arraycopy(colIndices, 0, destColIndices, 0, entries.length);
+
+        // Copy entries and indices from vector.
+        ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
+        System.arraycopy(b.indices, 0, destRowIndices, entries.length, b.entries.length);
+        Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
+
+        SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        dest.sparseSort(); // Ensure that the indices are sorted properly.
+
+        return dest;
     }
 
 
@@ -1826,8 +2226,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCVector getRow(int i) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.getRow(this, i);
     }
 
 
@@ -1839,8 +2238,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCVector getCol(int j) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.getCol(this, j);
     }
 
 
@@ -1857,8 +2255,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCVector getCol(int colIdx, int rowStart, int rowEnd) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.getCol(this, colIdx, rowStart, rowEnd);
     }
 
 
@@ -1893,8 +2290,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.getSlice(this, rowStart, rowEnd, colStart, colEnd);
     }
 
 
@@ -1909,8 +2305,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCVector getColBelow(int rowStart, int j) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.getCol(this, j, rowStart, numRows);
     }
 
 
@@ -1925,8 +2320,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCVector getRowAfter(int colStart, int i) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.getRow(this, i, colStart, numCols);
     }
 
 
@@ -1942,8 +2336,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setCol(SparseCVector values, int j) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setCol(this, j, values);
     }
 
 
@@ -2053,8 +2446,29 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix invDirectSum(SparseMatrix B) {
-        // TODO: Implementation.
-        return null;
+        Shape destShape = new Shape(numRows + B.numRows, numCols + B.numCols);
+        CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries from both matrices.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Compute shifted indices.
+        int[] shiftedColIndices = colIndices.clone();
+        ArrayUtils.shift(B.numCols, shiftedColIndices);
+        int[] shiftedRowIndices = B.rowIndices.clone();
+        ArrayUtils.shift(numRows, shiftedRowIndices);
+
+        // Copy shifted indices of both matrices.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(shiftedColIndices, 0, destColIndices, 0, shiftedColIndices.length);
+
+        System.arraycopy(shiftedRowIndices, 0, destRowIndices, rowIndices.length, shiftedRowIndices.length);
+        System.arraycopy(B.colIndices, 0, destColIndices, shiftedColIndices.length, B.colIndices.length);
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -2066,8 +2480,29 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix invDirectSum(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+        Shape destShape = new Shape(numRows + B.numRows, numCols + B.numCols);
+        CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
+        int[] destRowIndices = new int[destEntries.length];
+        int[] destColIndices = new int[destEntries.length];
+
+        // Copy entries from both matrices.
+        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+
+        // Compute shifted indices.
+        int[] shiftedColIndices = colIndices.clone();
+        ArrayUtils.shift(B.numCols, shiftedColIndices);
+        int[] shiftedRowIndices = ArrayUtils.rangeInt(numRows, destRowIndices.length);
+        int[] bColIndices = ArrayUtils.rangeInt(0, B.numCols);
+
+        // Copy shifted indices of both matrices.
+        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(shiftedColIndices, 0, destColIndices, 0, shiftedColIndices.length);
+
+        System.arraycopy(shiftedRowIndices, 0, destRowIndices, rowIndices.length, shiftedRowIndices.length);
+        System.arraycopy(bColIndices, 0, destColIndices, shiftedColIndices.length, bColIndices.length);
+
+        return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -2121,8 +2556,12 @@ public class SparseCMatrix
      */
     @Override
     public CVector mult(SparseVector b) {
-        // TODO: Implementation.
-        return null;
+        CNumber[] product = RealComplexSparseMatrixMultiplication.concurrentStandardVector(
+                entries, rowIndices, colIndices, shape,
+                b.entries, b.indices, b.shape
+        );
+
+        return new CVector(product);
     }
 
 
@@ -2135,8 +2574,14 @@ public class SparseCMatrix
      */
     @Override
     public CVector mult(CVector b) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(numCols, b.size);
+
+        CNumber[] product = ComplexDenseSparseMatrixMultiplication.concurrentStandardVector(
+                entries, rowIndices, colIndices, shape,
+                b.entries, b.shape
+        );
+
+        return new CVector(product);
     }
 
 
@@ -2149,8 +2594,14 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix mult(SparseMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertMatMultShapes(shape, B.shape);
+
+        return new CMatrix(numRows, B.numCols,
+                RealComplexSparseMatrixMultiplication.concurrentStandard(
+                        entries, rowIndices, colIndices, shape,
+                        B.entries, B.rowIndices, B.colIndices, B.shape
+                )
+        );
     }
 
 
@@ -2163,21 +2614,36 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix mult(CMatrix B) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertMatMultShapes(shape, B.shape);
+
+        return new CMatrix(numRows, B.numCols,
+                ComplexDenseSparseMatrixMultiplication.concurrentStandard(
+                        entries, rowIndices, colIndices, shape,
+                        B.entries, B.shape
+                )
+        );
     }
 
 
     /**
      * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
-     * and takes the complex conjugate of the elements along these axes. Same as {@link #hermTranspose()}.
+     * and takes the complex conjugate of the elements along these axes. Same as {@link #hermTranspose()} and
+     * {@link #conjT()}.
      *
      * @return The complex transpose of this tensor.
      */
     @Override
     public SparseCMatrix H() {
-        // TODO: Implementation.
-        return null;
+        SparseCMatrix hTranspose = new SparseCMatrix(
+                shape.copy().swapAxes(0, 1),
+                ComplexOperations.conj(entries),
+                colIndices.clone(),
+                rowIndices.clone()
+        );
+
+        hTranspose.sparseSort(); // Ensure the indices are sorted correctly.
+
+        return hTranspose;
     }
 
 
@@ -2192,8 +2658,8 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix set(CNumber value, int... indices) {
-        // TODO: Implementation.
-        return null;
+        ParameterChecks.assertEquals(indices.length, 2);
+        return set(value, indices[0], indices[1]);
     }
 
 
@@ -2297,8 +2763,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setCol(CNumber[] values, int colIndex) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setCol(this, colIndex, values);
     }
 
 
@@ -2312,8 +2777,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setCol(Double[] values, int colIndex) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setCol(this, colIndex, ArrayUtils.toPrimitive(values));
     }
 
 
@@ -2327,8 +2791,9 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setCol(Integer[] values, int colIndex) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setCol(
+                this, colIndex, Stream.of(values).mapToDouble(Integer::doubleValue).toArray()
+        );
     }
 
 
@@ -2342,8 +2807,9 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setCol(double[] values, int colIndex) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setCol(
+                this, colIndex, values
+        );
     }
 
 
@@ -2357,8 +2823,11 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setCol(int[] values, int colIndex) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setCol(
+                this,
+                colIndex,
+                Arrays.stream(values).asDoubleStream().toArray()
+        );
     }
 
 
@@ -2372,8 +2841,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setRow(CNumber[] values, int rowIndex) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setRow(this, rowIndex, values);
     }
 
 
@@ -2387,8 +2855,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setRow(Double[] values, int rowIndex) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setRow(this, rowIndex, ArrayUtils.toPrimitive(values));
     }
 
 
@@ -2402,8 +2869,9 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setRow(Integer[] values, int rowIndex) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setRow(
+                this, rowIndex, Stream.of(values).mapToDouble(Integer::doubleValue).toArray()
+        );
     }
 
 
@@ -2417,8 +2885,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setRow(double[] values, int rowIndex) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setRow(this, rowIndex, values);
     }
 
 
@@ -2432,8 +2899,11 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setRow(int[] values, int rowIndex) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setRow(
+                this,
+                rowIndex,
+                Arrays.stream(values).asDoubleStream().toArray()
+        );
     }
 
 
@@ -2451,8 +2921,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(SparseCMatrix values, int rowStart, int colStart) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setSlice(this, values, rowStart, colStart);
     }
 
 
@@ -2470,8 +2939,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(Matrix values, int rowStart, int colStart) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setSlice(this, values, rowStart, colStart);
     }
 
 
@@ -2489,8 +2957,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(SparseMatrix values, int rowStart, int colStart) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setSlice(this, values, rowStart, colStart);
     }
 
 
@@ -2508,8 +2975,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(CNumber[][] values, int rowStart, int colStart) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setSlice(this, values, rowStart, colStart);
     }
 
 
@@ -2527,8 +2993,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(Double[][] values, int rowStart, int colStart) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setSlice(this, values, rowStart, colStart);
     }
 
 
@@ -2546,8 +3011,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(Integer[][] values, int rowStart, int colStart) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setSlice(this, values, rowStart, colStart);
     }
 
 
@@ -2565,8 +3029,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(double[][] values, int rowStart, int colStart) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setSlice(this, values, rowStart, colStart);
     }
 
 
@@ -2584,8 +3047,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setSlice(int[][] values, int rowStart, int colStart) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixGetSet.setSlice(this, values, rowStart, colStart);
     }
 
 
@@ -2609,8 +3071,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix removeRows(int... rowIndices) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixManipulations.removeRows(this, rowIndices);
     }
 
 
@@ -2622,8 +3083,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix removeCol(int colIndex) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixManipulations.removeCol(this, colIndex);
     }
 
 
@@ -2635,8 +3095,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix removeCols(int... colIndices) {
-        // TODO: Implementation.
-        return null;
+        return ComplexSparseMatrixManipulations.removeCols(this, colIndices);
     }
 
 
@@ -2830,8 +3289,9 @@ public class SparseCMatrix
      */
     @Override
     public double norm(double p, double q) {
-        // TODO: Implementation.
-        return 0;
+        // Sparse implementation is usually only faster for very sparse matrices.
+        return sparsity()>=0.95 ? ComplexSparseNorms.matrixNormLpq(this, p, q) :
+                toDense().norm(p, q);
     }
 
 
@@ -2873,50 +3333,15 @@ public class SparseCMatrix
 
 
     /**
-     * Flattens tensor to single dimension. To flatten tensor along a single axis.
-     *
-     * @return The flattened tensor.
-     */
-    @Override
-    public SparseCMatrix flatten() {
-        // TODO: Implementation.
-        return null;
-    }
-
-
-    /**
-     * Finds the indices of the minimum value in this tensor.
-     *
-     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMin() {
-        return new int[0];
-    }
-
-
-    /**
-     * Finds the indices of the maximum value in this tensor.
-     *
-     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
-     * entry (in row-major ordering) are returned.
-     */
-    @Override
-    public int[] argMax() {
-        return new int[0];
-    }
-
-
-    /**
      * Computes the 2-norm of this tensor. This is equivalent to {@link #norm(double) norm(2)}.
      *
      * @return the 2-norm of this tensor.
      */
     @Override
     public double norm() {
-        // TODO: Implementation.
-        return 0;
+        // Sparse implementation is usually only faster for very sparse matrices.
+        return sparsity()>=0.95 ? ComplexSparseNorms.matrixNormL2(this) :
+                toDense().norm();
     }
 
 
@@ -2930,8 +3355,9 @@ public class SparseCMatrix
      */
     @Override
     public double norm(double p) {
-        // TODO: Implementation.
-        return 0;
+        // Sparse implementation is usually only faster for very sparse matrices.
+        return sparsity()>=0.95 ? ComplexSparseNorms.matrixNormLp(this, p) :
+                toDense().norm(p);
     }
 
 

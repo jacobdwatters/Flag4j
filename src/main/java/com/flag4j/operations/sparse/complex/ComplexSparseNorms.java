@@ -1,6 +1,6 @@
-package com.flag4j.operations.sparse.real;
+package com.flag4j.operations.sparse.complex;
 
-import com.flag4j.SparseMatrix;
+import com.flag4j.SparseCMatrix;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -8,11 +8,11 @@ import com.flag4j.util.ParameterChecks;
 import java.util.HashMap;
 
 /**
- * This class contains low level implementations of norms for tensors, matrices and vector.
+ * This class contains low level implementations of norms for complex sparse tensors, matrices and vector.
  */
-public class RealSparseNorms {
+public class ComplexSparseNorms {
 
-    private RealSparseNorms() {
+    private ComplexSparseNorms() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
@@ -23,7 +23,7 @@ public class RealSparseNorms {
      * @param src Source matrix to compute norm of.
      * @return The L<sub>2</sub> of the {@code src} matrix.
      */
-    public static double matrixNormL2(SparseMatrix src) {
+    public static double matrixNormL2(SparseCMatrix src) {
         double norm = 0;
         double[] colSums = new double[ArrayUtils.numUnique(src.colIndices)];
 
@@ -32,7 +32,8 @@ public class RealSparseNorms {
 
         // Compute the column sums.
         for(int i=0; i<src.entries.length; i++) {
-            colSums[columnMap.get(src.colIndices[i])] += src.entries[i]*src.entries[i];
+            double mag = src.entries[i].mag();
+            colSums[columnMap.get(src.colIndices[i])] += mag*mag;
         }
 
         // Compute the norm from the column sums.
@@ -50,7 +51,7 @@ public class RealSparseNorms {
      * @param p Parameter for L<sub>p</sub> norm
      * @return The L<sub>p</sub> of the {@code src} matrix.
      */
-    public static double matrixNormLp(SparseMatrix src, double p) {
+    public static double matrixNormLp(SparseCMatrix src, double p) {
         ParameterChecks.assertGreaterEq(1, p);
 
         double norm = 0;
@@ -61,7 +62,7 @@ public class RealSparseNorms {
 
         // Compute the column sums.
         for(int i=0; i<src.entries.length; i++) {
-            colSums[columnMap.get(src.colIndices[i])] += Math.pow(Math.abs(src.entries[i]), p);
+            colSums[columnMap.get(src.colIndices[i])] += Math.pow(src.entries[i].mag(), p);
         }
 
         // Compute the norm from the column sums.
@@ -79,7 +80,7 @@ public class RealSparseNorms {
      * @param p First parameter for L<sub>p, q</sub> norm
      * @return The L<sub>p, q</sub> of the {@code src} matrix.
      */
-    public static double matrixNormLpq(SparseMatrix src, double p, double q) {
+    public static double matrixNormLpq(SparseCMatrix src, double p, double q) {
         ParameterChecks.assertGreaterEq(1, p, q);
 
         double norm = 0;
@@ -90,7 +91,7 @@ public class RealSparseNorms {
 
         // Compute the column sums.
         for(int i=0; i<src.entries.length; i++) {
-            colSums[columnMap.get(src.colIndices[i])] += Math.pow(Math.abs(src.entries[i]), p);
+            colSums[columnMap.get(src.colIndices[i])] += Math.pow(src.entries[i].mag(), p);
         }
 
         // Compute the norm from the column sums.

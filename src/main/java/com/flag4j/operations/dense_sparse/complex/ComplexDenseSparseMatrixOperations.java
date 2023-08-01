@@ -1,18 +1,16 @@
-package com.flag4j.operations.dense_sparse.real;
+package com.flag4j.operations.dense_sparse.complex;
 
-
-import com.flag4j.Matrix;
-import com.flag4j.SparseMatrix;
-import com.flag4j.Vector;
+import com.flag4j.*;
+import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
 /**
- * This class contains low-level operations between a real dense and real sparse matrix.
+ * This class contains low level implementations for operations between a dense and a sparse complex matrix.
  */
-public class RealDenseSparseMatrixOperations {
+public class ComplexDenseSparseMatrixOperations {
 
-    private RealDenseSparseMatrixOperations() {
+    public ComplexDenseSparseMatrixOperations() {
         // Hide default constructor for utility class.
         throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
@@ -20,21 +18,21 @@ public class RealDenseSparseMatrixOperations {
 
     /**
      * Adds a real dense matrix to a real sparse matrix.
-     * @param src1 First matrix in sum.
-     * @param src2 Second matrix in sum.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
      * @return The result of the matrix addition.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static Matrix add(Matrix src1, SparseMatrix src2) {
+    public static CMatrix add(CMatrix src1, SparseCMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        Matrix dest = new Matrix(src1);
+        CMatrix dest = new CMatrix(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col] += src2.entries[i];
+            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);
         }
 
         return dest;
@@ -43,21 +41,21 @@ public class RealDenseSparseMatrixOperations {
 
     /**
      * Subtracts a real sparse matrix from a real dense matrix.
-     * @param src1 First matrix in difference.
-     * @param src2 Second matrix in difference.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static Matrix sub(Matrix src1, SparseMatrix src2) {
+    public static CMatrix sub(CMatrix src1, SparseCMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        Matrix dest = new Matrix(src1);
+        CMatrix dest = new CMatrix(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col] -= src2.entries[i];
+            dest.entries[row*src1.numCols + col].subEq(src2.entries[i]);
         }
 
         return dest;
@@ -65,23 +63,23 @@ public class RealDenseSparseMatrixOperations {
 
 
     /**
-     * Subtracts a real dense matrix from a real sparse matrix.
+     * Subtracts a complex dense matrix from a complex sparse matrix.
      * @param src1 Entries of first matrix in difference.
      * @param src2 Entries of second matrix in the difference.
      * @return The result of the matrix subtraction.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static Matrix sub(SparseMatrix src2, Matrix src1) {
+    public static CMatrix sub(SparseCMatrix src2, CMatrix src1) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        Matrix dest = new Matrix(src1);
+        CMatrix dest = new CMatrix(src1);
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col] *= -1;
-            dest.entries[row*src1.numCols + col] += src2.entries[i];
+            dest.entries[row*src1.numCols + col].addInv();
+            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);
         }
 
         return dest;
@@ -89,12 +87,12 @@ public class RealDenseSparseMatrixOperations {
 
 
     /**
-     * Adds a real dense matrix to a real sparse matrix and stores the result in the first matrix.
-     * @param src1 Entries of first matrix in the sum. Also, storage for the result.
-     * @param src2 Entries of second matrix in the sum.
+     * Adds a complex dense matrix to a real sparse matrix and stores the result in the first matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static void addEq(Matrix src1, SparseMatrix src2) {
+    public static void addEq(CMatrix src1, SparseCMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
@@ -102,18 +100,18 @@ public class RealDenseSparseMatrixOperations {
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            src1.entries[row*src1.numCols + col] += src2.entries[i];
+            src1.entries[row*src1.numCols + col].addEq(src2.entries[i]);
         }
     }
 
 
     /**
-     * Subtracts a real sparse matrix from a real dense matrix and stores the result in the first matrix.
-     * @param src1 Entries of first matrix in difference.
-     * @param src2 Entries of second matrix in difference.
+     * Subtracts a complex sparse matrix from a complex dense matrix and stores the result in the dense matrix.
+     * @param src1 First matrix.
+     * @param src2 Second matrix.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static void subEq(Matrix src1, SparseMatrix src2) {
+    public static void subEq(CMatrix src1, SparseCMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
@@ -121,7 +119,7 @@ public class RealDenseSparseMatrixOperations {
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            src1.entries[row*src1.numCols + col] -= src2.entries[i];
+            src1.entries[row*src1.numCols + col].subEq(src2.entries[i]);
         }
     }
 
@@ -129,28 +127,26 @@ public class RealDenseSparseMatrixOperations {
     /**
      * Computes the element-wise multiplication between a real dense matrix and a real sparse matrix.
      * @return The result of element-wise multiplication.
-     * @param src1 Entries of first matrix in element-wise product.
-     * @param src2 Entries of second matrix in element-wise product.
      * @throws IllegalArgumentException If the matrices do not have the same shape.
      */
-    public static SparseMatrix elemMult(Matrix src1, SparseMatrix src2) {
+    public static SparseCMatrix elemMult(CMatrix src1, SparseCMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        double[] product = new double[src2.nonZeroEntries()];
+        CNumber[] destEntries = new CNumber[src2.nonZeroEntries()];
 
-        for(int i=0; i<product.length; i++) {
+        for(int i=0; i<destEntries.length; i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            product[i] = src1.entries[row*src1.numCols + col]*src2.entries[i];
+            destEntries[i] = src1.entries[row*src1.numCols + col].mult(src2.entries[i]);
         }
 
-        return new SparseMatrix(src2.shape.copy(), product, src2.rowIndices.clone(), src2.colIndices.clone());
+        return new SparseCMatrix(src2.shape.copy(), destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 
     /**
-     * Computes the element-wise division between a real sparse matrix and a real dense matrix.
+     * Computes the element-wise division between a complex sparse matrix and a complex dense matrix.
      *
      * <p>
      *     If the dense matrix contains a zero at the same index the sparse matrix contains a non-zero, the result will be
@@ -167,10 +163,10 @@ public class RealDenseSparseMatrixOperations {
      * @return The element-wise quotient of {@code src1} and {@code src2}.
      * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same shape.
      */
-    public static SparseMatrix elemDiv(SparseMatrix src1, Matrix src2) {
+    public static SparseCMatrix elemDiv(SparseCMatrix src1, CMatrix src2) {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
-        double[] quotient = new double[src1.entries.length];
+        CNumber[] quotient = new CNumber[src1.entries.length];
 
         int row;
         int col;
@@ -178,10 +174,10 @@ public class RealDenseSparseMatrixOperations {
         for(int i=0; i<src1.entries.length; i++) {
             row = src1.rowIndices[i];
             col = src1.colIndices[i];
-            quotient[i] = src1.entries[i] / src2.entries[row*src2.numCols + col];
+            quotient[i] = src1.entries[i].div(src2.entries[row*src2.numCols + col]);
         }
 
-        return new SparseMatrix(src1.shape.copy(), quotient, src1.rowIndices.clone(), src1.colIndices.clone());
+        return new SparseCMatrix(src1.shape.copy(), quotient, src1.rowIndices.clone(), src1.colIndices.clone());
     }
 
 
@@ -193,15 +189,15 @@ public class RealDenseSparseMatrixOperations {
      * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
      * of rows in the {@code src} matrix.
      */
-    public static Matrix addToEachCol(SparseMatrix src, Vector col) {
-        Matrix sum = new Matrix(src.numRows, src.numCols);
+    public static CMatrix addToEachCol(SparseCMatrix src, CVector col) {
+        CMatrix sum = new CMatrix(src.numRows, src.numCols);
 
         for(int j=0; j<sum.numCols; j++) {
-            sum.setCol(col, j);
+            sum.setCol(col.entries, j);
         }
 
         for(int i=0; i<src.entries.length; i++) {
-            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]] += src.entries[i];
+            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]].addEq(src.entries[i]);
         }
 
         return sum;
@@ -216,15 +212,15 @@ public class RealDenseSparseMatrixOperations {
      * @throws IllegalArgumentException If the number of entries in the {@code col} vector does not match the number
      * of columns in the {@code src} matrix.
      */
-    public static Matrix addToEachRow(SparseMatrix src, Vector row) {
-        Matrix sum = new Matrix(src.numRows, src.numCols);
+    public static CMatrix addToEachRow(SparseCMatrix src, CVector row) {
+        CMatrix sum = new CMatrix(src.numRows, src.numCols);
 
         for(int i=0; i<sum.numRows; i++) {
             sum.setRow(row.entries, i);
         }
 
         for(int i=0; i<src.entries.length; i++) {
-            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]] += src.entries[i];
+            sum.entries[src.rowIndices[i]*src.numCols + src.colIndices[i]].addEq(src.entries[i]);
         }
 
         return sum;

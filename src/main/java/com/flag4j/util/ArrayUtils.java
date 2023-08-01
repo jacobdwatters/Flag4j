@@ -460,6 +460,38 @@ public final class ArrayUtils {
 
 
     /**
+     * Converts an array of complex numbers to an {@link ArrayList array list}.
+     * @param src Array to convert.
+     * @return An equivalent array list.
+     */
+    public static ArrayList<CNumber> toArrayList(CNumber[] src) {
+        ArrayList<CNumber> list = new ArrayList<>(src.length);
+
+        for(CNumber value : src) {
+            list.add(value.copy());
+        }
+
+        return list;
+    }
+
+
+    /**
+     * Converts an array of doubles to a complex {@link ArrayList array list}.
+     * @param src Array to convert.
+     * @return An equivalent complex array list.
+     */
+    public static ArrayList<CNumber> toComplexArrayList(double[] src) {
+        ArrayList<CNumber> list = new ArrayList<>(src.length);
+
+        for(double value : src) {
+            list.add(new CNumber(value));
+        }
+
+        return list;
+    }
+
+
+    /**
      * Converts an array of doubles to an {@link ArrayList array list}.
      * @param src Array to convert.
      * @return An equivalent array list.
@@ -1087,6 +1119,40 @@ public final class ArrayUtils {
         }
 
         return -1;
+    }
+
+
+    /**
+     * Converts an array of {@link Double} objects to a primitive array.
+     * @param arr Array to convert.
+     * @return A primitive array equivalent to {@code arr}.
+     */
+    public static double[] toPrimitive(Double[] arr) {
+        int size = arr.length;
+        double[] prim = new double[size];
+
+        for(int i=0; i<size; i++) {
+            prim[i] = arr[i];
+        }
+
+        return prim;
+    }
+
+
+    /**
+     * Converts an array of {@link Integer} objects to a primitive array.
+     * @param arr Array to convert.
+     * @return A primitive array equivalent to {@code arr}.
+     */
+    public static int[] toPrimitive(Integer[] arr) {
+        int size = arr.length;
+        int[] prim = new int[size];
+
+        for(int i=0; i<size; i++) {
+            prim[i] = arr[i];
+        }
+
+        return prim;
     }
 
 

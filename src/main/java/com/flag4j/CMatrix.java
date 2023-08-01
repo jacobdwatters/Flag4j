@@ -45,10 +45,7 @@ import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
-import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultTranspose;
-import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplication;
-import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseOperations;
+import com.flag4j.operations.dense_sparse.complex.*;
 import com.flag4j.operations.dense_sparse.real_complex.*;
 import com.flag4j.util.*;
 
@@ -1668,7 +1665,7 @@ public class CMatrix
      */
     @Override
     public CMatrix add(SparseCMatrix B) {
-        return ComplexDenseSparseOperations.add(this, B);
+        return ComplexDenseSparseMatrixOperations.add(this, B);
     }
 
 
@@ -1807,7 +1804,7 @@ public class CMatrix
      */
     @Override
     public CMatrix sub(SparseCMatrix B) {
-        return ComplexDenseSparseOperations.sub(this, B);
+        return ComplexDenseSparseMatrixOperations.sub(this, B);
     }
 
 
@@ -2141,7 +2138,7 @@ public class CMatrix
      */
     @Override
     public SparseCMatrix elemMult(SparseCMatrix B) {
-        return ComplexDenseSparseOperations.elemMult(this, B);
+        return ComplexDenseSparseMatrixOperations.elemMult(this, B);
     }
 
 
@@ -3940,9 +3937,9 @@ public class CMatrix
      *
      * @param B Complex sparse matrix to add to this matrix,
      */
-    @Override
+    // TODO: Pull up to a ComplexDenseTensorMixin
     public void addEq(SparseCMatrix B) {
-        ComplexDenseSparseOperations.addEq(this, B);
+        ComplexDenseSparseMatrixOperations.addEq(this, B);
     }
 
 
@@ -3951,9 +3948,9 @@ public class CMatrix
      *
      * @param B Complex sparse matrix to subtract from this matrix,
      */
-    @Override
+    // TODO: Pull up to a ComplexDenseTensorMixin
     public void subEq(SparseCMatrix B) {
-        ComplexDenseSparseOperations.subEq(this, B);
+        ComplexDenseSparseMatrixOperations.subEq(this, B);
     }
 
 

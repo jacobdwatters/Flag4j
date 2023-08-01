@@ -657,10 +657,10 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setCol(Double[] values, int colIndex) {
-        return RealSparseMatrixGetSet.setRow(
+        return RealSparseMatrixGetSet.setCol(
                 this,
                 colIndex,
-                Stream.of(values).mapToDouble(Double::doubleValue).toArray()
+                ArrayUtils.toPrimitive(values)
         );
     }
 
@@ -707,7 +707,7 @@ public class SparseMatrix
      */
     @Override
     public SparseMatrix setCol(int[] values, int colIndex) {
-        return RealSparseMatrixGetSet.setRow(
+        return RealSparseMatrixGetSet.setCol(
                 this,
                 colIndex,
                 Arrays.stream(values).asDoubleStream().toArray()
@@ -2990,7 +2990,7 @@ public class SparseMatrix
      */
     @Override
     public double norm(double p, double q) {
-        // Sparse implementation is only faster for very sparse matrices.
+        // Sparse implementation is usually only faster for very sparse matrices.
         return sparsity()>=0.95 ? RealSparseNorms.matrixNormLpq(this, p, q) :
                 toDense().norm(p, q);
     }
@@ -3146,7 +3146,7 @@ public class SparseMatrix
      */
     @Override
     public double norm() {
-        // Sparse implementation is only faster for very sparse matrices.
+        // Sparse implementation is usually only faster for very sparse matrices.
         return sparsity()>=0.95 ? RealSparseNorms.matrixNormL2(this) :
                 toDense().norm();
     }
@@ -3162,7 +3162,7 @@ public class SparseMatrix
      */
     @Override
     public double norm(double p) {
-        // Sparse implementation is only faster for very sparse matrices.
+        // Sparse implementation is usually only faster for very sparse matrices.
         return sparsity()>=0.95 ? RealSparseNorms.matrixNormLp(this, p) :
                 toDense().norm(p);
     }

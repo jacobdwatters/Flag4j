@@ -2,13 +2,12 @@ package com.flag4j.operations.sparse.complex;
 
 import com.flag4j.Shape;
 import com.flag4j.SparseCMatrix;
-import com.flag4j.SparseMatrix;
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.operations.sparse.real.RealSparseElementSearch;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -61,9 +60,63 @@ public class ComplexSparseMatrixManipulations {
         for(int i=0; i<src.entries.length; i++) {
             if(!ArrayUtils.contains(rowIdxs, src.rowIndices[i])) {
                 // Then copy the entry over.
-                entries.add(src.entries[i]);
+                entries.add(src.entries[i].copy());
                 rowIndices.add(src.rowIndices[i]);
                 colIndices.add(src.colIndices[i]);
+            }
+        }
+
+        return new SparseCMatrix(shape, entries, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Removes a specified column from a sparse matrix.
+     * @param src Source matrix to remove column from.
+     * @param colIdx Column to remove from the {@code src} matrix.
+     * @return A sparse matrix which has one less column than the {@code src} matrix with the specified column removed.
+     */
+    public static SparseCMatrix removeCol(SparseCMatrix src, int colIdx) {
+        Shape shape = new Shape(src.numRows, src.numCols-1);
+        List<CNumber> entries = new ArrayList<>(src.entries.length);
+        List<Integer> rowIndices = new ArrayList<>(src.entries.length);
+        List<Integer> colIndices = new ArrayList<>(src.entries.length);
+
+        for(int i=0; i<src.entries.length; i++) {
+            if(src.colIndices[i] != colIdx) {
+                // Then entry is not in the specified column, so remove it.
+                entries.add(src.entries[i].copy());
+                rowIndices.add(src.rowIndices[i]);
+
+                if(src.colIndices[i] < colIdx) colIndices.add(src.colIndices[i]);
+                else colIndices.add(src.colIndices[i]-1);
+            }
+        }
+
+        return new SparseCMatrix(shape, entries, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Removes a list of specified columns from a sparse matrix.
+     * @param src Source matrix to remove columns from.
+     * @param colIdxs Columns to remove from the {@code src} matrix.
+     * @return A copy of the {@code src} sparse matrix with the specified columns removed.
+     */
+    public static SparseCMatrix removeCols(SparseCMatrix src, int... colIdxs) {
+        Shape shape = new Shape(src.numRows, src.numCols-1);
+        List<CNumber> entries = new ArrayList<>(src.entries.length);
+        List<Integer> rowIndices = new ArrayList<>(src.entries.length);
+        List<Integer> colIndices = new ArrayList<>(src.entries.length);
+
+        for(int i=0; i<src.entries.length; i++) {
+            int idx = Arrays.binarySearch(colIdxs, src.colIndices[i]);
+
+            if(idx < 0) {
+                // Then entry is not in the specified column, so copy it with the appropriate column index shift.
+                entries.add(src.entries[i].copy());
+                rowIndices.add(src.rowIndices[i]);
+                colIndices.add(src.colIndices[i] + (idx+1));
             }
         }
 

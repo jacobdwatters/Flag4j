@@ -423,4 +423,65 @@ public class RealComplexSparseMatrixOperations {
 
         return new CMatrix(src.shape.copy(), destEntries);
     }
+
+
+    /**
+     * Adds a sparse vector to each column of a sparse matrix as if the vector is a column vector.
+     * @param src The source sparse matrix.
+     * @param col Sparse vector to add to each column of the sparse matrix.
+     * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
+     */
+    public static CMatrix addToEachCol(SparseCMatrix src, SparseVector col) {
+        ParameterChecks.assertEquals(src.numRows, col.size);
+        CNumber[] destEntries = new CNumber[src.totalEntries().intValueExact()];
+
+        // Add values from sparse matrix.
+        for(int i=0; i<src.entries.length; i++) {
+            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = src.entries[i];
+        }
+
+        // Add values from sparse column.
+        for(int i=0; i<col.entries.length; i++) {
+            int idx = col.indices[i]*src.numCols;
+            int end = idx + src.numCols;
+            CNumber value = new CNumber(col.entries[i]);
+
+            while(idx < end) {
+                destEntries[idx++].addEq(value);
+            }
+        }
+
+        return new CMatrix(src.numRows, src.numCols, destEntries);
+    }
+
+
+    /**
+     * Adds a sparse vector to each row of a sparse matrix as if the vector is a row vector.
+     * @param src The source sparse matrix.
+     * @param row Sparse vector to add to each row of the sparse matrix.
+     * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
+     */
+    public static CMatrix addToEachRow(SparseCMatrix src, SparseVector row) {
+        ParameterChecks.assertEquals(src.numCols, row.size);
+        CNumber[] destEntries = new CNumber[src.totalEntries().intValueExact()];
+
+        // Add values from sparse matrix.
+        for(int i=0; i<src.entries.length; i++) {
+            destEntries[src.rowIndices[i]*src.numCols + src.colIndices[i]] = src.entries[i];
+        }
+
+        // Add values from sparse column.
+        for(int i=0; i<row.entries.length; i++) {
+            int idx = 0;
+            int colIdx = row.indices[i];
+            CNumber value = new CNumber(row.entries[i]);
+
+            while(idx < destEntries.length) {
+                destEntries[idx + colIdx].addEq(value);
+                idx += src.numCols;
+            }
+        }
+
+        return new CMatrix(src.numRows, src.numCols, destEntries);
+    }
 }
