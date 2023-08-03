@@ -428,6 +428,20 @@ public final class ArrayUtils {
 
 
     /**
+     * Fills an array with specified value.
+     * @param dest Array to fill.
+     * @param fillValue Value to fill array with.
+     */
+    public static void fill(CNumber[][] dest, CNumber fillValue) {
+        for(int i=0; i<dest.length; i++) {
+            for(int j=0; j<dest[0].length; j++) {
+                dest[i][j] = fillValue.copy();
+            }
+        }
+    }
+
+
+    /**
      * Fills range of an array with specified value.
      * @param dest Array to fill.
      * @param fillValue Value to fill array with.
