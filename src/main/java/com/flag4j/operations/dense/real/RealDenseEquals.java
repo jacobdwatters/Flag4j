@@ -28,7 +28,6 @@ import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.Tensor;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.RandomTensor;
 
 import java.util.Arrays;
 

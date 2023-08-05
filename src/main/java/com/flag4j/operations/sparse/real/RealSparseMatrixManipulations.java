@@ -4,7 +4,6 @@ import com.flag4j.Shape;
 import com.flag4j.SparseMatrix;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.RandomTensor;
 
 import java.util.ArrayList;
 import java.util.Arrays;

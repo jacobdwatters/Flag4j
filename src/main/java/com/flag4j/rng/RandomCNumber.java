@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-package com.flag4j.util;
+package com.flag4j.rng;
 
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ParameterChecks;
 
 import java.util.Random;
 

@@ -112,11 +112,11 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
             rowSwaps = colSwaps = null;
             noPivot(); // Compute with no pivoting.
         } else if(pivotFlag==Pivoting.PARTIAL) {
-            rowSwaps = ArrayUtils.rangeInt(0, LU.numRows());
+            rowSwaps = ArrayUtils.intRange(0, LU.numRows());
             partialPivot();
         } else {
-            rowSwaps = ArrayUtils.rangeInt(0, LU.numRows());
-            colSwaps = ArrayUtils.rangeInt(0, LU.numCols());
+            rowSwaps = ArrayUtils.intRange(0, LU.numRows());
+            colSwaps = ArrayUtils.intRange(0, LU.numCols());
             fullPivot();
         }
 
@@ -182,7 +182,7 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
         if(rowSwaps != null) {
             double[] entries = new double[rowSwaps.length];
             Arrays.fill(entries, 1);
-            int[] rowIndices = ArrayUtils.rangeInt(0, entries.length);
+            int[] rowIndices = ArrayUtils.intRange(0, entries.length);
             int[] colIndices = rowSwaps.clone();
 
             P = new SparseMatrix(LU.numRows(), entries, rowIndices, colIndices);
@@ -204,7 +204,7 @@ public abstract class LUDecomposition<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?>
             double[] entries = new double[colSwaps.length];
             Arrays.fill(entries, 1);
             int[] rowIndices = colSwaps.clone();
-            int[] colIndices = ArrayUtils.rangeInt(0, entries.length);
+            int[] colIndices = ArrayUtils.intRange(0, entries.length);
 
             Q = new SparseMatrix(LU.numCols(), entries, rowIndices, colIndices);
             Q.sparseSort();

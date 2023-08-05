@@ -33,7 +33,7 @@ import com.flag4j.core.VectorMixin;
 import com.flag4j.linalg.Eigen;
 import com.flag4j.linalg.transformations.Givens;
 import com.flag4j.util.ParameterChecks;
-import com.flag4j.util.RandomCNumber;
+import com.flag4j.rng.RandomCNumber;
 
 /**
  * <p>This abstract class specifies methods for computing the Schur decomposition of a square matrix.

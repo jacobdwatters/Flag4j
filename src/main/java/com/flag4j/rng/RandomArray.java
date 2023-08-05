@@ -1,6 +1,8 @@
-package com.flag4j.util;
+package com.flag4j.rng;
 
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.util.ArrayUtils;
+import com.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
 
@@ -226,10 +228,10 @@ public final class RandomArray {
     public int[] randomUniqueIndices(int numIndices, int start, int end) {
         ParameterChecks.assertIndexInBounds(end, start);
 
-        int[] indices = ArrayUtils.rangeInt(start, end);
-        ArrayUtils.shuffle(indices, rng); // Shuffle indices.
+        int[] indices = ArrayUtils.intRange(start, end);
+        shuffle(indices); // Shuffle indices.
 
-        indices = Arrays.copyOfRange(indices, 0, numIndices); // Copy range.
+        indices = Arrays.copyOfRange(indices, 0, numIndices); // Extract first 'numIndices' entries.
         Arrays.sort(indices); // Sort indices.
 
         return indices;
@@ -266,5 +268,56 @@ public final class RandomArray {
         }
 
         return new int[][]{rowIndices, colIndices};
+    }
+
+
+    /**
+     * Randomly shuffles array using the Fisher–Yates algorithm. This is done in place.
+     *
+     * @param arr Array to shuffle.
+     */
+    public void shuffle(int[] arr) {
+        for (int i = arr.length-1; i>0; i--) {
+
+            // Pick a random index from 0 to i
+            int j = rng.nextInt(i+1);
+
+            // Swap arr[i] with the element at random index
+            ArrayUtils.swap(arr, i, j);
+        }
+    }
+
+
+    /**
+     * Randomly shuffles array using the Fisher–Yates algorithm. This is done in place.
+     *
+     * @param arr Array to shuffle.
+     */
+    public void shuffle(double[] arr) {
+        for (int i = arr.length-1; i>0; i--) {
+
+            // Pick a random index from 0 to i
+            int j = rng.nextInt(i+1);
+
+            // Swap arr[i] with the element at random index
+            ArrayUtils.swap(arr, i, j);
+        }
+    }
+
+
+    /**
+     * Randomly shuffles array using the Fisher–Yates algorithm. This is done in place.
+     *
+     * @param arr Array to shuffle.
+     */
+    public void shuffle(Object[] arr) {
+        for (int i = arr.length-1; i>0; i--) {
+
+            // Pick a random index from 0 to i
+            int j = rng.nextInt(i+1);
+
+            // Swap arr[i] with the element at random index
+            ArrayUtils.swap(arr, i, j);
+        }
     }
 }

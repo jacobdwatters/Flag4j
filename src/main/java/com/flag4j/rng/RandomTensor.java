@@ -22,12 +22,13 @@
  * SOFTWARE.
  */
 
-package com.flag4j.util;
+package com.flag4j.rng;
 
 import com.flag4j.*;
 import com.flag4j.linalg.Decompose;
 import com.flag4j.linalg.decompositions.ComplexQRDecomposition;
 import com.flag4j.linalg.decompositions.RealQRDecomposition;
+import com.flag4j.util.ParameterChecks;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

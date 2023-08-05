@@ -25,6 +25,7 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.complex_numbers.CNumberUtils;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.RealMatrixMixin;
 import com.flag4j.core.dense.DenseMatrixMixin;
@@ -1182,7 +1183,7 @@ public class Matrix
         int row = 0;
 
         for(int i=0; i<this.numRows; i++) {
-            if(ArrayUtils.notInArray(rowIndices, i)) {
+            if(ArrayUtils.notContains(rowIndices, i)) {
                 System.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }
@@ -1233,7 +1234,7 @@ public class Matrix
         for(int i=0; i<this.numRows; i++) {
             col = 0;
             for(int j=0; j<this.numCols; j++) {
-                if(ArrayUtils.notInArray(colIndices, j)) {
+                if(ArrayUtils.notContains(colIndices, j)) {
                     copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];
                     col++;
                 }
@@ -3680,12 +3681,12 @@ public class Matrix
             // Find maximum entry string width in each column so columns can be aligned.
             List<Integer> maxList = new ArrayList<>(colStopIndex + 1);
             for (int j = 0; j < colStopIndex; j++) {
-                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));
+                maxList.add(CNumberUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));
                 totalRowLength += maxList.get(maxList.size() - 1);
             }
 
             if (colStopIndex < this.numCols) {
-                maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols - 1).entries));
+                maxList.add(CNumberUtils.maxStringLength(this.getCol(this.numCols - 1).entries));
                 totalRowLength += maxList.get(maxList.size() - 1);
             }
 

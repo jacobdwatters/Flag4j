@@ -25,7 +25,6 @@
 package com.flag4j.util;
 
 import com.flag4j.complex_numbers.CNumber;
-import com.flag4j.io.PrintOptions;
 
 import java.util.*;
 
@@ -144,6 +143,11 @@ public final class ArrayUtils {
      * source array length or the destination array length.
      */
     public static void arraycopy(CNumber[] src, int srcPos, CNumber[] dest, int destPos, int length) {
+        System.out.printf(
+                "Copying: src length=%d, srcPos=%d, destLength=%d, destPos=%d, length=%d\n",
+                src.length, srcPos, dest.length, destPos, length
+        );
+
         for(int i=0; i<length; i++) {
             dest[i+destPos] = src[i+srcPos].copy();
         }
@@ -522,7 +526,7 @@ public final class ArrayUtils {
 
 
     /**
-     * Converts a list of {@link Double Doubles} to a primitive array.
+     * Converts a list of {@link Double Doubles} objects to a primitive array.
      * @param src Source list to convert.
      * @return An array containing the same values as the {@code src} list.
      */
@@ -539,7 +543,7 @@ public final class ArrayUtils {
 
 
     /**
-     * Converts a list of {@link Integer Integer} to a primitive array.
+     * Converts a list of {@link Integer Integer} objects to a primitive array.
      * @param src Source list to convert.
      * @return An array containing the same values as the {@code src} list.
      */
@@ -695,7 +699,7 @@ public final class ArrayUtils {
      * @param end Stopping value (exclusive).
      * @return An array containing the integer range {@code [start, end)}.
      */
-    public static int[] rangeInt(int start, int end) {
+    public static int[] intRange(int start, int end) {
         int[] rangeArr = new int[end-start];
 
         int j=0;
@@ -733,21 +737,30 @@ public final class ArrayUtils {
 
 
     /**
-     * Checks if a set of values is in an array.
-     * @param src Source array.
-     * @param values Values to check if they are in the source array.
-     * @return A boolean array with the same length as {@code values} describing if the associated values are in the
+     * Checks if a key is in an array.
+     * @param src Source array. Must be sorted, if not, call {@link Arrays#sort(double[])} first. Otherwise, the
+     *            behavior of this method is undefined.
+     * @param key Values to check if they are in the source array.
+     * @return A boolean describing if the specified key is in the array or not.
+     */
+    public static boolean notContains(int[] src, int key) {
+        return !contains(src, key);
+    }
+
+
+    /**
+     * Checks if a set of keys are in an array.
+     * @param src Source array. Must be sorted, if not, call {@link Arrays#sort(double[])} first. Otherwise, the
+     *            behavior of this method is undefined.
+     * @param keys Values to check if they are in the source array.
+     * @return A boolean array with the same length as {@code keys} describing if the associated keys are in the
      * array.
      */
-    public static boolean[] inArray(double[] src, double... values) {
-        boolean[] result = new boolean[values.length];
+    public static boolean[] contains(double[] src, double... keys) {
+        boolean[] result = new boolean[keys.length];
 
-        for(double entry : src) {
-            for(int i=0; i<values.length; i++) {
-                if(entry==values[i]) {
-                    result[i]=true;
-                }
-            }
+        for(int i=0; i<keys.length; i++) {
+            result[i] = contains(src, keys[i]);
         }
 
         return result;
@@ -755,64 +768,47 @@ public final class ArrayUtils {
 
 
     /**
-     * Checks if a value is in an array.
-     * @param src Source array.
-     * @param value Values to check if they are in the source array.
-     * @return A boolean describing if the specified value is in the array or not.
-     */
-    public static boolean inArray(double[] src, double value) {
-        boolean result = false;
-
-        for(double entry : src) {
-            if(entry==value) {
-                result=true;
-                break;
-            }
-        }
-
-        return result;
-    }
-
-
-    /**
-     * Checks if a value is in an array.
-     * @param src Source array.
-     * @param value Values to check if they are in the source array.
-     * @return A boolean describing if the specified value is in the array or not.
-     */
-    public static boolean notInArray(int[] src, int value) {
-        boolean result = true;
-
-        for(int entry : src) {
-            if(entry == value) {
-                result = false;
-                break;
-            }
-        }
-
-        return result;
-    }
-
-
-    /**
-     * Checks if a set of values is in an array.
-     * @param src Source array.
-     * @param values Values to check if they are in the source array.
-     * @return A boolean array with the same length as {@code values} describing if the associated values are in the
+     * Checks if a set of keys is in an array.
+     * @param src Source array. Must be sorted, if not, call {@link Arrays#sort(int[])} first. Otherwise, the
+     *            behavior of this method is undefined.
+     * @param keys Values to check if they are in the source array.
+     * @return A boolean array with the same length as {@code keys} describing if the associated keys are in the
      * array.
      */
-    public static boolean[] inArray(int[] src, int... values) {
-        boolean[] result = new boolean[values.length];
+    public static boolean[] contains(int[] src, int... keys) {
+        boolean[] result = new boolean[keys.length];
 
-        for(int entry : src) {
-            for(int i=0; i<values.length; i++) {
-                if(entry==values[i]) {
-                    result[i]=true;
-                }
-            }
+        for(int i=0; i<keys.length; i++) {
+            result[i] = contains(src, keys[i]);
         }
 
         return result;
+    }
+
+
+    /**
+     * Checks if an array contains a specified value. This method assumes that the array is sorted as it uses the binary
+     * search algorithm. If the array is not sorted, use {@link Arrays#sort(int[])} first.
+     * @param arr Array of interest.
+     * @param key Value to check for in the {@code arr} array.
+     * @return True if the {@code key} value is found in the array. False otherwise.
+     * @see Arrays#sort(int[])
+     */
+    public static boolean contains(int[] arr, int key) {
+        return Arrays.binarySearch(arr, key) >= 0;
+    }
+
+
+    /**
+     * Checks if an array contains a specified value. This method assumes that the array is sorted as it uses the binary
+     * search algorithm. If the array is not sorted, use {@link Arrays#sort(int[])} first.
+     * @param arr Array of interest.
+     * @param key Value to check for in the {@code arr} array.
+     * @return True if the {@code key} value is found in the array. False otherwise.
+     * @see Arrays#sort(int[])
+     */
+    public static boolean contains(double[] arr, double key) {
+        return Arrays.binarySearch(arr, key) >= 0;
     }
 
 
@@ -869,132 +865,6 @@ public final class ArrayUtils {
         }
 
         return reals;
-    }
-
-
-    /**
-     * Computes the maximum length of the string representation of a double in an array of doubles.
-     * @param src Array for which to compute the max string representation length of a double in.
-     * @return The maximum length of the string representation of the doubles in the array.
-     */
-    public static int maxStringLength(double[] src) {
-        int maxLength = -1;
-        int currLength;
-
-        for(double value : src) {
-            currLength = CNumber.round(new CNumber(value), PrintOptions.getPrecision()).toString().length();
-
-            if(currLength>maxLength) {
-                // Then update the maximum length.
-                maxLength=currLength;
-            }
-        }
-
-        return maxLength;
-    }
-
-
-    /**
-     * Computes the maximum length of the string representation of a double in an array of doubles.
-     * @param src Array for which to compute the max string representation length of a double in.
-     * @return The maximum length of the string representation of the doubles in the array.
-     */
-    public static int maxStringLength(CNumber[] src) {
-        int maxLength = -1;
-        int currLength;
-
-        for(CNumber value : src) {
-            currLength = CNumber.round(value, PrintOptions.getPrecision()).toString().length();
-
-            if(currLength>maxLength) {
-                // Then update the maximum length.
-                maxLength=currLength;
-            }
-        }
-
-        return maxLength;
-    }
-
-
-    /**
-     * Computes the maximum length of the string representation of a double in an array of doubles up until stopping index.
-     * The length of the last element is always considered.
-     * @param src Array for which to compute the max string representation length of a double in.
-     * @param stopIndex Stopping index for finding max length.
-     * @return The maximum length of the string representation of the doubles in the array.
-     */
-    public static int maxStringLength(double[] src, int stopIndex) {
-        int maxLength = -1;
-        int currLength;
-
-        // Ensure no index out of bound exceptions.
-        stopIndex = Math.min(stopIndex, src.length);
-
-        for(int i=0; i<stopIndex; i++) {
-            currLength = CNumber.round(
-                    new CNumber(src[i]),
-                    PrintOptions.getPrecision()).toString().length();
-
-            if(currLength>maxLength) {
-                // Then update the maximum length.
-                maxLength=currLength;
-            }
-        }
-
-        // Always get last elements' length.
-        if(stopIndex < src.length) {
-            currLength = CNumber.round(
-                    new CNumber(src[src.length-1]),
-                    PrintOptions.getPrecision()).toString().length();
-
-            if(currLength>maxLength) {
-                // Then update the maximum length.
-                maxLength=currLength;
-            }
-        }
-
-        return maxLength;
-    }
-
-
-    /**
-     * Computes the maximum length of the string representation of a double in an array of doubles up until stopping index.
-     * The length of the last element is always considered.
-     * @param src Array for which to compute the max string representation length of a double in.
-     * @param stopIndex Stopping index for finding max length.
-     * @return The maximum length of the string representation of the doubles in the array.
-     */
-    public static int maxStringLength(CNumber[] src, int stopIndex) {
-        int maxLength = -1;
-        int currLength;
-
-        // Ensure no index out of bound exceptions.
-        stopIndex = Math.min(stopIndex, src.length);
-
-        for(int i=0; i<stopIndex; i++) {
-            currLength = CNumber.round(
-                    src[i],
-                    PrintOptions.getPrecision()).toString().length();
-
-            if(currLength>maxLength) {
-                // Then update the maximum length.
-                maxLength=currLength;
-            }
-        }
-
-        // Always get last elements' length.
-        if(stopIndex < src.length) {
-            currLength = CNumber.round(
-                    src[src.length-1],
-                    PrintOptions.getPrecision()).toString().length();
-
-            if(currLength>maxLength) {
-                // Then update the maximum length.
-                maxLength=currLength;
-            }
-        }
-
-        return maxLength;
     }
 
 
@@ -1057,18 +927,6 @@ public final class ArrayUtils {
         return notin;
     }
 
-
-    /**
-     * Checks if an array contains a specified value. This method assumes that the array is sorted as it uses the binary
-     * search algorithm. If the array is not sorted, use {@link Arrays#sort(int[])} first.
-     * @param arr Array of interest.
-     * @param key Value to check for in the {@code arr} array.
-     * @return True if the {@code key} value is found in the array. False otherwise.
-     * @see Arrays#sort(int[]) 
-     */
-    public static boolean contains(int[] arr, int key) {
-        return Arrays.binarySearch(arr, key) >= 0;
-    }
 
     /**
      * Shifts all indices in an array by a specified amount.
@@ -1254,27 +1112,5 @@ public final class ArrayUtils {
         }
 
         return new int[]{lowerBound, upperBound};
-    }
-
-
-    /**
-     * Randomly shuffles arrays using the Fisher–Yates algorithm. This is done in place.
-     *
-     * @param arr Array to shuffle.
-     * @param rng Random number generator to use while shuffling.
-     */
-    public static void shuffle(int[] arr, Random rng) {
-        int temp;
-
-        for (int i = arr.length-1; i>0; i--) {
-
-            // Pick a random index from 0 to i
-            int j = rng.nextInt(i+1);
-
-            // Swap arr[i] with the element at random index
-            temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
-        }
     }
 }

@@ -122,7 +122,7 @@ public class ComplexSparseMatrixGetSet {
             );
 
             System.arraycopy(src.colIndices, 0, destColIndices, 0, -start-1);
-            System.arraycopy(ArrayUtils.rangeInt(0, src.numCols), 0, destColIndices, -start-1, row.length);
+            System.arraycopy(ArrayUtils.intRange(0, src.numCols), 0, destColIndices, -start-1, row.length);
             System.arraycopy(
                     src.colIndices, -start-1,
                     destColIndices, -start-1+row.length, destColIndices.length-(row.length - start - 1)
@@ -149,7 +149,7 @@ public class ComplexSparseMatrixGetSet {
             );
 
             System.arraycopy(src.colIndices, 0, destColIndices, 0, start);
-            System.arraycopy(ArrayUtils.rangeInt(0, src.numCols), 0, destColIndices, start, row.length);
+            System.arraycopy(ArrayUtils.intRange(0, src.numCols), 0, destColIndices, start, row.length);
             System.arraycopy(
                     src.colIndices, end,
                     destColIndices, start + row.length, destEntries.length-(start + row.length)
@@ -200,7 +200,7 @@ public class ComplexSparseMatrixGetSet {
             );
 
             System.arraycopy(src.colIndices, 0, destColIndices, 0, -start-1);
-            System.arraycopy(ArrayUtils.rangeInt(0, src.numCols), 0, destColIndices, -start-1, row.length);
+            System.arraycopy(ArrayUtils.intRange(0, src.numCols), 0, destColIndices, -start-1, row.length);
             System.arraycopy(
                     src.colIndices, -start-1,
                     destColIndices, -start-1+row.length, destColIndices.length-(row.length - start - 1)
@@ -227,7 +227,7 @@ public class ComplexSparseMatrixGetSet {
             );
 
             System.arraycopy(src.colIndices, 0, destColIndices, 0, start);
-            System.arraycopy(ArrayUtils.rangeInt(0, src.numCols), 0, destColIndices, start, row.length);
+            System.arraycopy(ArrayUtils.intRange(0, src.numCols), 0, destColIndices, start, row.length);
             System.arraycopy(
                     src.colIndices, end,
                     destColIndices, start + row.length, destEntries.length-(start + row.length)
@@ -278,7 +278,7 @@ public class ComplexSparseMatrixGetSet {
             );
 
             System.arraycopy(src.colIndices, 0, destColIndices, 0, -start-1);
-            System.arraycopy(ArrayUtils.rangeInt(0, src.numCols), 0, destColIndices, -start-1, row.entries.length);
+            System.arraycopy(ArrayUtils.intRange(0, src.numCols), 0, destColIndices, -start-1, row.entries.length);
             System.arraycopy(
                     src.colIndices, -start-1,
                     destColIndices, -start-1+row.entries.length, destColIndices.length-(row.entries.length - start - 1)
@@ -338,7 +338,7 @@ public class ComplexSparseMatrixGetSet {
         // Initialize destination arrays with the new column and the appropriate indices.
         List<CNumber> destEntries = new ArrayList<>(Arrays.asList(col));
         List<Integer> destRowIndices = IntStream.of(
-                ArrayUtils.rangeInt(0, col.length)
+                ArrayUtils.intRange(0, col.length)
         ).boxed().collect(Collectors.toList());
         List<Integer> destColIndices = new ArrayList<>(Arrays.asList(colIndices));
 
@@ -430,7 +430,7 @@ public class ComplexSparseMatrixGetSet {
         // Initialize destination arrays with the new column and the appropriate indices.
         List<CNumber> destEntries = Arrays.asList(entries);
         List<Integer> destRowIndices = IntStream.of(
-                ArrayUtils.rangeInt(0, col.length)
+                ArrayUtils.intRange(0, col.length)
         ).boxed().collect(Collectors.toList());
         List<Integer> destColIndices = new ArrayList<>(Arrays.asList(colIndices));
 
@@ -477,8 +477,8 @@ public class ComplexSparseMatrixGetSet {
         List<Integer> rowIndices = ArrayUtils.toArrayList(ArrayUtils.shift(row, values.rowIndices));
         List<Integer> colIndices = ArrayUtils.toArrayList(ArrayUtils.shift(col, values.colIndices));
 
-        int[] rowRange = ArrayUtils.rangeInt(row, values.numRows + row);
-        int[] colRange = ArrayUtils.rangeInt(col, values.numCols + col);
+        int[] rowRange = ArrayUtils.intRange(row, values.numRows + row);
+        int[] colRange = ArrayUtils.intRange(col, values.numCols + col);
 
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
@@ -511,8 +511,8 @@ public class ComplexSparseMatrixGetSet {
         List<Integer> rowIndices = ArrayUtils.toArrayList(ArrayUtils.shift(row, values.rowIndices));
         List<Integer> colIndices = ArrayUtils.toArrayList(ArrayUtils.shift(col, values.colIndices));
 
-        int[] rowRange = ArrayUtils.rangeInt(row, values.numRows + row);
-        int[] colRange = ArrayUtils.rangeInt(col, values.numCols + col);
+        int[] rowRange = ArrayUtils.intRange(row, values.numRows + row);
+        int[] colRange = ArrayUtils.intRange(col, values.numCols + col);
 
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
@@ -543,8 +543,8 @@ public class ComplexSparseMatrixGetSet {
         double[] flatValues = Arrays.stream(values)
                 .flatMapToDouble(Arrays::stream)
                 .toArray();
-        int[] sliceRows = ArrayUtils.rangeInt(row, values.length + row);
-        int[] sliceCols = ArrayUtils.rangeInt(col, values[0].length + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
+        int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
 
         return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
     }
@@ -567,8 +567,8 @@ public class ComplexSparseMatrixGetSet {
 
         // Flatten values.
         CNumber[] flatValues = ArrayUtils.flatten(values);
-        int[] sliceRows = ArrayUtils.rangeInt(row, values.length + row);
-        int[] sliceCols = ArrayUtils.rangeInt(col, values[0].length + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
+        int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
 
         return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
     }
@@ -589,8 +589,8 @@ public class ComplexSparseMatrixGetSet {
         ParameterChecks.assertLessEq(src.numRows, values.numRows + row);
         ParameterChecks.assertLessEq(src.numCols, values.numCols + col);
 
-        int[] sliceRows = ArrayUtils.rangeInt(row, values.numRows + row);
-        int[] sliceCols = ArrayUtils.rangeInt(col, values.numCols + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.numRows + row);
+        int[] sliceCols = ArrayUtils.intRange(col, values.numCols + col);
 
         return setSlice(src, values.entries, sliceRows, sliceCols, row, col);
     }
@@ -614,8 +614,8 @@ public class ComplexSparseMatrixGetSet {
         List<Integer> rowIndices = IntStream.of(sliceRows).boxed().collect(Collectors.toList());
         List<Integer> colIndices = IntStream.of(sliceCols).boxed().collect(Collectors.toList());
 
-        int[] rowRange = ArrayUtils.rangeInt(row, sliceRows.length + row);
-        int[] colRange = ArrayUtils.rangeInt(col, sliceCols.length + col);
+        int[] rowRange = ArrayUtils.intRange(row, sliceRows.length + row);
+        int[] colRange = ArrayUtils.intRange(col, sliceCols.length + col);
 
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
@@ -644,8 +644,8 @@ public class ComplexSparseMatrixGetSet {
         List<Integer> rowIndices = IntStream.of(sliceRows).boxed().collect(Collectors.toList());
         List<Integer> colIndices = IntStream.of(sliceCols).boxed().collect(Collectors.toList());
 
-        int[] rowRange = ArrayUtils.rangeInt(row, sliceRows.length + row);
-        int[] colRange = ArrayUtils.rangeInt(col, sliceCols.length + col);
+        int[] rowRange = ArrayUtils.intRange(row, sliceRows.length + row);
+        int[] colRange = ArrayUtils.intRange(col, sliceCols.length + col);
 
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
@@ -681,8 +681,8 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        int[] sliceRows = ArrayUtils.rangeInt(row, values.length + row);
-        int[] sliceCols = ArrayUtils.rangeInt(col, values[0].length + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
+        int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
 
         return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
     }
@@ -712,8 +712,8 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        int[] sliceRows = ArrayUtils.rangeInt(row, values.length + row);
-        int[] sliceCols = ArrayUtils.rangeInt(col, values[0].length + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
+        int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
 
         return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
     }
@@ -742,8 +742,8 @@ public class ComplexSparseMatrixGetSet {
                 flatValues[pos++] = d;
             }
         }
-        int[] sliceRows = ArrayUtils.rangeInt(row, values.length + row);
-        int[] sliceCols = ArrayUtils.rangeInt(col, values[0].length + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
+        int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
 
         return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
     }

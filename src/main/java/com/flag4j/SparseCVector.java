@@ -553,7 +553,7 @@ public class SparseCVector
         Arrays.fill(rowIndices, 1);
         ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
         System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
-        System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);
+        System.arraycopy(ArrayUtils.intRange(0, b.size), 0, indices[1], entries.length,  b.size);
 
         return new SparseCMatrix(2, b.size, destEntries, indices[0], indices[1]);
     }
@@ -617,7 +617,7 @@ public class SparseCVector
         Arrays.fill(rowIndices, 1);
         ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
         System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
-        System.arraycopy(ArrayUtils.rangeInt(0, b.size), 0, indices[1], entries.length,  b.size);
+        System.arraycopy(ArrayUtils.intRange(0, b.size), 0, indices[1], entries.length,  b.size);
 
         return new SparseCMatrix(2, b.size, destEntries, indices[0], indices[1]);
     }
@@ -1556,7 +1556,7 @@ public class SparseCVector
         } else {
             matShape = new Shape(this.size, n);
             int[] rowIndices = new int[n];
-            int[] colIndices = ArrayUtils.rangeInt(0, n);
+            int[] colIndices = ArrayUtils.intRange(0, n);
 
             for(int i=0; i<entries.length; i++) {
                 Arrays.fill(rowIndices, indices[i]);

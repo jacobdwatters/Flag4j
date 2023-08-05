@@ -25,6 +25,7 @@
 package com.flag4j;
 
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.complex_numbers.CNumberUtils;
 import com.flag4j.core.ComplexMatrixMixin;
 import com.flag4j.core.MatrixMixin;
 import com.flag4j.core.dense.ComplexDenseTensorBase;
@@ -32,7 +33,10 @@ import com.flag4j.core.dense.DenseMatrixMixin;
 import com.flag4j.exceptions.SingularMatrixException;
 import com.flag4j.io.PrintOptions;
 import com.flag4j.linalg.Invert;
-import com.flag4j.linalg.decompositions.*;
+import com.flag4j.linalg.decompositions.ComplexLUDecomposition;
+import com.flag4j.linalg.decompositions.ComplexSVD;
+import com.flag4j.linalg.decompositions.LUDecomposition;
+import com.flag4j.linalg.decompositions.SVD;
 import com.flag4j.linalg.solvers.ComplexExactSolver;
 import com.flag4j.operations.MatrixMultiplyDispatcher;
 import com.flag4j.operations.TransposeDispatcher;
@@ -45,11 +49,18 @@ import com.flag4j.operations.dense.real_complex.RealComplexDenseElemDiv;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseElemMult;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseEquals;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import com.flag4j.operations.dense_sparse.complex.*;
-import com.flag4j.operations.dense_sparse.real_complex.*;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultTranspose;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixOperations;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultTranspose;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixOperations;
 import com.flag4j.util.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -1503,7 +1514,7 @@ public class CMatrix
     /**
      * Removes a specified set of rows from this matrix.
      *
-     * @param rowIndices The indices of the rows to remove from this matrix.
+     * @param rowIndices The indices of the rows to remove from this matrix. Must be sorted and unique.
      * @return a copy of this matrix with the specified rows removed.
      */
     @Override
@@ -1513,7 +1524,8 @@ public class CMatrix
         int row = 0;
 
         for(int i=0; i<this.numRows; i++) {
-            if(ArrayUtils.notInArray(rowIndices, i)) {
+            if(ArrayUtils.notContains(rowIndices, i)) {
+                System.out.println(i + " not in " + Arrays.toString(rowIndices));
                 ArrayUtils.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }
@@ -1564,7 +1576,7 @@ public class CMatrix
         for(int i=0; i<this.numRows; i++) {
             col = 0;
             for(int j=0; j<this.numCols; j++) {
-                if(ArrayUtils.notInArray(colIndices, j)) {
+                if(ArrayUtils.notContains(colIndices, j)) {
                     copy.entries[i*copy.numCols + col] = this.entries[i*numCols + j];
                     col++;
                 }
@@ -4120,12 +4132,12 @@ public class CMatrix
             // Find maximum entry string width in each column so columns can be aligned.
             List<Integer> maxList = new ArrayList<>(colStopIndex + 1);
             for (int j = 0; j < colStopIndex; j++) {
-                maxList.add(ArrayUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));
+                maxList.add(CNumberUtils.maxStringLength(this.getCol(j).entries, rowStopIndex));
                 totalRowLength += maxList.get(maxList.size() - 1);
             }
 
             if (colStopIndex < this.numCols) {
-                maxList.add(ArrayUtils.maxStringLength(this.getCol(this.numCols - 1).entries));
+                maxList.add(CNumberUtils.maxStringLength(this.getCol(this.numCols - 1).entries));
                 totalRowLength += maxList.get(maxList.size() - 1);
             }
 

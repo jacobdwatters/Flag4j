@@ -75,7 +75,7 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, A.removeRows(1, 0));
+        assertEquals(exp, A.removeRows(0, 1));
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new CNumber[][]{
@@ -105,7 +105,7 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(85.124, 51), new CNumber(3)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5)}};
         A = new CMatrix(aEntries);
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.removeRows(1, 0, 4));
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.removeRows(0, 1, 4));
     }
 
 
@@ -175,7 +175,7 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(Double.POSITIVE_INFINITY, 5.2)}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, A.removeCols(1, 0));
+        assertEquals(exp, A.removeCols(0, 1));
 
         // -------------------- Sub-case 2 --------------------
         aEntries = new CNumber[][]{
@@ -198,7 +198,7 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(85.124, 51), new CNumber(3), new CNumber(3, 5.56)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5), new CNumber(Double.POSITIVE_INFINITY, 5.2)}};
         A = new CMatrix(aEntries);
-        assertThrows(IllegalArgumentException.class, ()->A.removeCols(-1, 1, 0, 2));
+        assertThrows(IllegalArgumentException.class, ()->A.removeCols(-1, 0, 1, 2));
 
         // -------------------- Sub-case 4--------------------
         aEntries = new CNumber[][]{
@@ -206,6 +206,6 @@ class CMatrixRemoveRowColTests {
                 {new CNumber(85.124, 51), new CNumber(3), new CNumber(3, 5.56)},
                 {new CNumber(26.24, 160.5), new CNumber(0, -34.5), new CNumber(Double.POSITIVE_INFINITY, 5.2)}};
         A = new CMatrix(aEntries);
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.removeCols(1, 0, 4));
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.removeCols(0, 10, 4));
     }
 }
