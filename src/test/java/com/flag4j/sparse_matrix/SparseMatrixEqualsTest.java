@@ -1,9 +1,6 @@
 package com.flag4j.sparse_matrix;
 
-import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
-import com.flag4j.Shape;
-import com.flag4j.SparseMatrix;
+import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ArrayUtils;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,7 +31,7 @@ class SparseMatrixEqualsTest {
 
 
     @Test
-    void denseEqualsTestCase() {
+    void denseEqualsTest() {
         double[][] bEntries;
         Matrix B;
 
@@ -71,7 +68,7 @@ class SparseMatrixEqualsTest {
 
 
     @Test
-    void denseComplexEqualsTestCase() {
+    void denseComplexEqualsTest() {
         CNumber[][] bEntries;
         CMatrix B;
 
@@ -107,6 +104,66 @@ class SparseMatrixEqualsTest {
         bEntries[141][41] = new CNumber();
         B = new CMatrix(bEntries);
 
+        assertNotEquals(A, B);
+    }
+
+
+    @Test
+    void sparseEqualsTest() {
+        double[] bEntries;
+        int[][] bIndices;
+        SparseMatrix B;
+
+        // --------------------- Sub-case 1 ---------------------
+        B = A.copy();
+        assertEquals(A, B);
+
+        // --------------------- Sub-case 2 ---------------------
+        bEntries = new double[]{1.34, 100.14, -9.245, 0.00234, 52.5, 24.5};
+        bIndices = new int[][]{
+                {9, 13, 141, 141, 398, 400},
+                {1_002, 5, 41, 12_234, 9_013, 27}
+        };
+        B = new SparseMatrix(A.shape.copy(), bEntries, bIndices[0], bIndices[1]);
+        assertNotEquals(A, B);
+
+        // --------------------- Sub-case 3 ---------------------
+        bEntries = new double[]{1.34, 100.14, -9.245, 0.00234, 52.5};
+        bIndices = new int[][]{
+                {9, 13, 141, 141, 398},
+                {1_002, 5, 41, 12_234, 9_013}
+        };
+        B = new SparseMatrix(new Shape(2451, 134415), bEntries, bIndices[0], bIndices[1]);
+        assertNotEquals(A, B);
+    }
+
+
+    @Test
+    void sparseComplexEqualsTest() {
+        double[] bEntries;
+        int[][] bIndices;
+        SparseCMatrix B;
+
+        // --------------------- Sub-case 1 ---------------------
+        B = A.toComplex();
+        assertEquals(A, B);
+
+        // --------------------- Sub-case 2 ---------------------
+        bEntries = new double[]{1.34, 100.14, -9.245, 0.00234, 52.5, 24.5};
+        bIndices = new int[][]{
+                {9, 13, 141, 141, 398, 400},
+                {1_002, 5, 41, 12_234, 9_013, 27}
+        };
+        B = new SparseCMatrix(A.shape.copy(), bEntries, bIndices[0], bIndices[1]);
+        assertNotEquals(A, B);
+
+        // --------------------- Sub-case 3 ---------------------
+        bEntries = new double[]{1.34, 100.14, -9.245, 0.00234, 52.5};
+        bIndices = new int[][]{
+                {9, 13, 141, 141, 398},
+                {1_002, 5, 41, 12_234, 9_013}
+        };
+        B = new SparseCMatrix(new Shape(2451, 134415), bEntries, bIndices[0], bIndices[1]);
         assertNotEquals(A, B);
     }
 

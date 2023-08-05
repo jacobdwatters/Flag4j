@@ -1216,4 +1216,65 @@ public final class ArrayUtils {
 
         return map;
     }
+
+
+    /**
+     * Finds the first and last index of a specified key within a sorted array.
+     * @param src The source array to search within. This array is assumed ot be sorted. If the array is not sorted,
+     *            call {@link Arrays#sort(int[]) Arrays.sort(src)} before this method. If this is not done, and an
+     *            unsorted array is passed to this method, the results are undefined.
+     * @param key The key value to find the first and last index of within the {@code src} array.
+     * @return An array of length 2 containing the first (inclusive) and last (exclusive) index of the {@code key} within the {@code src} array.
+     * If the {@code key} value does not exist in the array, then both first and last index will be
+     * {@code (-insertion_point - 1)} where {@code insertion_point} is defined as the index the {@code key} would be
+     * inserted into the sorted array.
+     */
+    public static int[] findFirstLast(int[] src, int key) {
+        int keyIdx = Arrays.binarySearch(src, key);
+
+        if(keyIdx < 0) return new int[]{keyIdx, keyIdx}; // Row not found.
+
+        // Find first entry with the specified row key.
+        int lowerBound = keyIdx;
+        for(int i=keyIdx; i>=0; i--) {
+            if(src[i] == key) {
+                lowerBound = i;
+            } else {
+                break;
+            }
+        }
+
+        int upperBound = keyIdx + 1;
+        for(int i=upperBound; i<src.length; i++) {
+            if(src[i] == key) {
+                upperBound = i + 1;
+            } else {
+                break;
+            }
+        }
+
+        return new int[]{lowerBound, upperBound};
+    }
+
+
+    /**
+     * Randomly shuffles arrays using the Fisher–Yates algorithm. This is done in place.
+     *
+     * @param arr Array to shuffle.
+     * @param rng Random number generator to use while shuffling.
+     */
+    public static void shuffle(int[] arr, Random rng) {
+        int temp;
+
+        for (int i = arr.length-1; i>0; i--) {
+
+            // Pick a random index from 0 to i
+            int j = rng.nextInt(i+1);
+
+            // Swap arr[i] with the element at random index
+            temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
 }

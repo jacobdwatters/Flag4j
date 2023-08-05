@@ -40,7 +40,7 @@
     </properties>
 
     <build>
-        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <testSourceDirectory>/src/test/java</testSourceDirectory>
 
         <plugins>
             <plugin>

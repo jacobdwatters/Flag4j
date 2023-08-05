@@ -25,14 +25,12 @@
 package com.flag4j.util;
 
 import com.flag4j.*;
-import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.linalg.Decompose;
 import com.flag4j.linalg.decompositions.ComplexQRDecomposition;
 import com.flag4j.linalg.decompositions.RealQRDecomposition;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Arrays;
 
 /**
  * An instance of this class is used for generating streams of pseudorandom tensors, matrices, and vectors.
@@ -41,14 +39,16 @@ public class RandomTensor {
     /**
      * Complex pseudorandom number generator.
      */
-    private final RandomCNumber complexRng;
+    private final RandomCNumber COMPLEX_RNG;
+    private final RandomArray RAND_ARRAY;
 
     /**
      * Constructs a new pseudorandom tensor generator with a seed which is unlikely to be the same as other
      * from any other invocation of this constructor.
      */
     public RandomTensor() {
-        complexRng = new RandomCNumber();
+        COMPLEX_RNG = new RandomCNumber();
+        RAND_ARRAY = new RandomArray(COMPLEX_RNG);
     }
 
     /**
@@ -56,7 +56,8 @@ public class RandomTensor {
      * @param seed Seed of the pseudorandom tensor generator.
      */
     public RandomTensor(long seed) {
-        complexRng = new RandomCNumber(seed);
+        COMPLEX_RNG = new RandomCNumber(seed);
+        RAND_ARRAY = new RandomArray(COMPLEX_RNG);
     }
 
 
@@ -66,7 +67,7 @@ public class RandomTensor {
      * @return A tensor filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
      */
     public Tensor randomTensor(Shape shape) {
-        return new Tensor(shape, genUniformRealArray(shape.totalEntries().intValueExact()));
+        return new Tensor(shape, RAND_ARRAY.genUniformRealArray(shape.totalEntries().intValueExact()));
     }
 
 
@@ -79,7 +80,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code max} is less than {@code min}.
      */
     public Tensor randomTensor(Shape shape, double min, double max) {
-        return new Tensor(shape, genUniformRealArray(
+        return new Tensor(shape, RAND_ARRAY.genUniformRealArray(
                 shape.totalEntries().intValueExact(),
                 min,
                 max)
@@ -95,7 +96,7 @@ public class RandomTensor {
      * mean of 0.0 and standard deviation of 1.0.
      */
     public Tensor randnTensor(Shape shape) {
-        return new Tensor(shape, genNormalRealArray(shape.totalEntries().intValueExact()));
+        return new Tensor(shape, RAND_ARRAY.genNormalRealArray(shape.totalEntries().intValueExact()));
     }
 
 
@@ -110,7 +111,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If standard deviation is negative.
      */
     public Tensor randnTensor(Shape shape, double mean, double std) {
-        return new Tensor(shape, genNormalRealArray(
+        return new Tensor(shape, RAND_ARRAY.genNormalRealArray(
                 shape.totalEntries().intValueExact(),
                 mean,
                 std)
@@ -126,7 +127,7 @@ public class RandomTensor {
      * uniformly distributed in {@code [0, 1)}.
      */
     public CTensor randomCTensor(Shape shape) {
-        return new CTensor(shape, genUniformComplexArray(shape.totalEntries().intValueExact()));
+        return new CTensor(shape, RAND_ARRAY.genUniformComplexArray(shape.totalEntries().intValueExact()));
     }
 
 
@@ -139,7 +140,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code min} is negative or if {@code max} is less than {@code min}.
      */
     public CTensor randomCTensor(Shape shape, double min, double max) {
-        return new CTensor(shape, genUniformComplexArray(
+        return new CTensor(shape, RAND_ARRAY.genUniformComplexArray(
                 shape.totalEntries().intValueExact(),
                 min,
                 max)
@@ -155,7 +156,7 @@ public class RandomTensor {
      * mean of 0.0 and standard deviation of 1.0.
      */
     public CTensor randnCTensor(Shape shape) {
-        return new CTensor(shape, genNormalComplexArray(shape.totalEntries().intValueExact()));
+        return new CTensor(shape, RAND_ARRAY.genNormalComplexArray(shape.totalEntries().intValueExact()));
     }
 
 
@@ -170,7 +171,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If standard deviation is negative.
      */
     public CTensor randnCTensor(Shape shape, double mean, double std) {
-        return new CTensor(shape, genNormalComplexArray(
+        return new CTensor(shape, RAND_ARRAY.genNormalComplexArray(
                 shape.totalEntries().intValueExact(),
                 mean,
                 std)
@@ -184,7 +185,7 @@ public class RandomTensor {
      * @return A vector filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
      */
     public Vector randomVector(int size) {
-        return new Vector(genUniformRealArray(size));
+        return new Vector(RAND_ARRAY.genUniformRealArray(size));
     }
 
 
@@ -196,7 +197,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code max} is less than {@code min}.
      */
     public Vector randomVector(int size, double min, double max) {
-        return new Vector(genUniformRealArray(size, min, max));
+        return new Vector(RAND_ARRAY.genUniformRealArray(size, min, max));
     }
 
 
@@ -208,7 +209,7 @@ public class RandomTensor {
      * a standard deviation of 1.0.
      */
     public Vector randnVector(int size) {
-        return new Vector(genNormalRealArray(size));
+        return new Vector(RAND_ARRAY.genNormalRealArray(size));
     }
 
 
@@ -221,7 +222,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public Vector randnVector(int size, double mean, double std) {
-        return new Vector(genNormalRealArray(size, mean, std));
+        return new Vector(RAND_ARRAY.genNormalRealArray(size, mean, std));
     }
 
 
@@ -232,7 +233,7 @@ public class RandomTensor {
      * @return A vector filled with pseudorandom complex values with magnitudes uniformly distributed in {@code [0, 1)}.
      */
     public CVector randomCVector(int size) {
-        return new CVector(genUniformComplexArray(size));
+        return new CVector(RAND_ARRAY.genUniformComplexArray(size));
     }
 
 
@@ -244,7 +245,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code min} is negative or if {@code max} is less than {@code min}.
      */
     public CVector randomCVector(int size, double min, double max) {
-        return new CVector(genUniformComplexArray(size, min, max));
+        return new CVector(RAND_ARRAY.genUniformComplexArray(size, min, max));
     }
 
 
@@ -256,7 +257,7 @@ public class RandomTensor {
      * mean of 0.0 and a standard deviation of 1.0.
      */
     public CVector randnCVector(int size) {
-        return new CVector(genNormalComplexArray(size));
+        return new CVector(RAND_ARRAY.genNormalComplexArray(size));
     }
 
 
@@ -269,7 +270,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public CVector randnCVector(int size, double mean, double std) {
-        return new CVector(genNormalComplexArray(size, mean, std));
+        return new CVector(RAND_ARRAY.genNormalComplexArray(size, mean, std));
     }
 
 
@@ -280,7 +281,7 @@ public class RandomTensor {
      * @return A matrix filled with pseudorandom values uniformly distributed in {@code [0, 1)}.
      */
     public Matrix randomMatrix(int rows, int cols) {
-        return new Matrix(rows, cols, genUniformRealArray(rows*cols));
+        return new Matrix(rows, cols, RAND_ARRAY.genUniformRealArray(rows*cols));
     }
 
 
@@ -305,7 +306,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code max} is less than {@code min}.
      */
     public Matrix randomMatrix(int rows, int cols, double min, double max) {
-        return new Matrix(rows, cols, genUniformRealArray(rows*cols, min, max));
+        return new Matrix(rows, cols, RAND_ARRAY.genUniformRealArray(rows*cols, min, max));
     }
 
 
@@ -352,18 +353,47 @@ public class RandomTensor {
      * distributed in {@code [min, max)}.
      */
     public SparseMatrix randomSparseMatrix(Shape shape, double min, double max, double sparsity) {
-        // TODO: It is possible (and likely) that two values at the same index are generated.
         ParameterChecks.assertInRange(sparsity, 0, 1, "sparsity");
         int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
                 .setScale(0, RoundingMode.HALF_UP).intValueExact();
 
-        double[] entries = genUniformRealArray(numEntries, min, max);
-        int[] rowIndices = genUniformRealIntArray(numEntries, 0, shape.get(0));
-        int[] colIndices = genUniformRealIntArray(numEntries, 0, shape.get(1));
-        SparseMatrix randMat = new SparseMatrix(shape, entries, rowIndices, colIndices);
-        randMat.sparseSort();
+        return randomSparseMatrix(shape, min, max, numEntries);
+    }
 
-        return randMat;
+
+    /**
+     * Generates a random sparse matrix with the specified number of non-zero entries. The non-zero values will have
+     * a uniform distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
+     * @param rows Number of rows in the random sparse matrix.
+     * @param cols Number of columns in the random sparse matrix.
+     * @param min Minimum value for random non-zero values in the sparse matrix.
+     * @param max Maximum value for random non-zero values
+     * @param numNonZeroEntries Desired number of non-zero entries int the random sparse matrix.
+     * @return A sparse matrix filled with the specified number of non-zero entries uniformly
+     * distributed in {@code [min, max)}.
+     */
+    public SparseMatrix randomSparseMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
+        return randomSparseMatrix(new Shape(rows, cols), min, max, numNonZeroEntries);
+    }
+
+
+    /**
+     * Generates a random sparse matrix with the specified number of non-zero entries. The non-zero values will have
+     * a uniform distribution in {@code [min, max)}. Values will be uniformly distributed throughout the matrix.
+     * @param shape Shape of the sparse matrix to generate.
+     * @param min Minimum value for random non-zero values in the sparse matrix.
+     * @param max Maximum value for random non-zero values
+     * @param numNonZeroEntries Desired number of non-zero entries int the random sparse matrix.
+     * @return A sparse matrix filled with the specified number of non-zero entries uniformly
+     * distributed in {@code [min, max)}.
+     */
+    public SparseMatrix randomSparseMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
+        ParameterChecks.assertGreaterEq(0, numNonZeroEntries);
+
+        double[] entries = RAND_ARRAY.genUniformRealArray(numNonZeroEntries, min, max);
+        int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numNonZeroEntries, 0, shape.get(0), 0, shape.get(1));
+
+        return new SparseMatrix(shape, entries, indices[0], indices[1]);
     }
 
 
@@ -376,7 +406,7 @@ public class RandomTensor {
      * a standard deviation of 1.0.
      */
     public Matrix randnMatrix(int rows, int cols) {
-        return new Matrix(rows, cols, genNormalRealArray(rows*cols));
+        return new Matrix(rows, cols, RAND_ARRAY.genNormalRealArray(rows*cols));
     }
 
 
@@ -404,7 +434,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public Matrix randnMatrix(int rows, int cols, double mean, double std) {
-        return new Matrix(rows, cols, genNormalRealArray(rows*cols, mean, std));
+        return new Matrix(rows, cols, RAND_ARRAY.genNormalRealArray(rows*cols, mean, std));
     }
 
 
@@ -433,11 +463,11 @@ public class RandomTensor {
 
         for(int i=0; i<size; i++) {
             for(int j=0; j<i; j++) {
-                randMat.entries[i*size+j] = complexRng.nextDouble();
+                randMat.entries[i*size+j] = COMPLEX_RNG.nextDouble();
                 randMat.entries[j*size+i] = randMat.entries[i*size+j];
             }
 
-            randMat.entries[i*(size+1)] = complexRng.nextDouble(); // Diagonal entry
+            randMat.entries[i*(size+1)] = COMPLEX_RNG.nextDouble(); // Diagonal entry
         }
 
         return randMat;
@@ -452,7 +482,7 @@ public class RandomTensor {
      * @return A pseudorandom orthogonal matrix.
      */
     public Matrix randomOrthogonalMatrix(int size) {
-        Matrix randMat = new Matrix(size, size, genUniformRealArray(size));
+        Matrix randMat = new Matrix(size, size, RAND_ARRAY.genUniformRealArray(size));
         return new RealQRDecomposition().decompose(randMat).getQ();
     }
 
@@ -466,7 +496,7 @@ public class RandomTensor {
      * distributed in {@code [0, 1)}.
      */
     public CMatrix randomCMatrix(int rows, int cols) {
-        return new CMatrix(rows, cols, genUniformComplexArray(rows*cols));
+        return new CMatrix(rows, cols, RAND_ARRAY.genUniformComplexArray(rows*cols));
     }
 
 
@@ -495,7 +525,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If {@code max} is less than {@code min}.
      */
     public CMatrix randomCMatrix(int rows, int cols, double min, double max) {
-        return new CMatrix(rows, cols, genUniformComplexArray(rows*cols, min, max));
+        return new CMatrix(rows, cols, RAND_ARRAY.genUniformComplexArray(rows*cols, min, max));
     }
 
 
@@ -524,7 +554,7 @@ public class RandomTensor {
      * a standard deviation of 1.0.
      */
     public CMatrix randnCMatrix(int rows, int cols) {
-        return new CMatrix(rows, cols, genNormalComplexArray(rows*cols));
+        return new CMatrix(rows, cols, RAND_ARRAY.genNormalComplexArray(rows*cols));
     }
 
 
@@ -552,7 +582,7 @@ public class RandomTensor {
      * @throws IllegalArgumentException If the standard deviation is negative.
      */
     public CMatrix randnCMatrix(int rows, int cols, double mean, double std) {
-        return new CMatrix(rows, cols, genNormalComplexArray(rows*cols, mean, std));
+        return new CMatrix(rows, cols, RAND_ARRAY.genNormalComplexArray(rows*cols, mean, std));
     }
 
 
@@ -579,195 +609,7 @@ public class RandomTensor {
      * @return A pseudorandom unitary matrix.
      */
     public CMatrix randomUnitaryMatrix(int size) {
-        CMatrix randMat = new CMatrix(size, size, genUniformComplexArray(size));
+        CMatrix randMat = new CMatrix(size, size, RAND_ARRAY.genUniformComplexArray(size));
         return new ComplexQRDecomposition().decompose(randMat).getQ();
-    }
-
-
-    /**
-     * Generates an array of doubles filled with uniformly distributed pseudorandom values in {@code [0.0, 1.0)}.
-     * To generate uniformly distributed values in a specified range see {@link #genUniformRealArray(int, double, double)}.
-     * @param length Length of pseudorandom array to generate.
-     * @return An array of doubles with specified length filled with uniformly distributed values in {@code [0.0, 1.0)}.
-     */
-    private double[] genUniformRealArray(int length) {
-        double[] values = new double[length];
-
-        for(int i=0; i<length; i++) {
-            values[i] = complexRng.nextDouble();
-        }
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of doubles filled with uniformly distributed pseudorandom values in {@code [min, max)}.
-     * @param length Length of pseudorandom array to generate.
-     * @param min Lower bound of uniform range (inclusive).
-     * @param max Upper bound of uniform range (Exclusive).
-     * @return An array of doubles with specified length filled with uniformly distributed values in {@code [min, max)}.
-     */
-    private double[] genUniformRealArray(int length, double min, double max) {
-        double[] values = new double[length];
-
-        for(int i=0; i<length; i++) {
-            values[i] = complexRng.nextDouble()*(max - min) + min;
-        }
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of integers filled with uniformly distributed pseudorandom int values in
-     * [{@link Integer#MAX_VALUE}, {@link Integer#MAX_VALUE}).
-     * To generate uniformly distributed values in a specified range see {@link #genUniformRealIntArray(int, int, int)}.
-     * @param length Length of pseudorandom array to generate.
-     * @return An array of integers with specified length filled with uniformly distributed values in
-     * [{@link Integer#MAX_VALUE}, {@link Integer#MAX_VALUE}).
-     */
-    private double[] genUniformRealIntArray(int length) {
-        double[] values = new double[length];
-
-        for(int i=0; i<length; i++) {
-            values[i] = complexRng.nextInt();
-        }
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of integers filled with uniformly distributed pseudorandom values in {@code [min, max)}.
-     * @param length Length of pseudorandom array to generate.
-     * @param min Lower bound of uniform range (inclusive).
-     * @param max Upper bound of uniform range (Exclusive).
-     * @return An array of integers with specified length filled with uniformly distributed values in {@code [min, max)}.
-     */
-    private int[] genUniformRealIntArray(int length, int min, int max) {
-        int[] values = new int[length];
-
-        for(int i=0; i<length; i++) {
-            values[i] = complexRng.nextInt(max - min) + min;
-        }
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of doubles filled with normally pseudorandom values with a mean of 0 and standard deviation
-     * of 1.
-     * @param length Length of pseudorandom array to generate.
-     * @return An array of doubles with specified length filled with normally pseudorandom values with a mean of 0 and
-     * standard deviation of 1.
-     */
-    private double[] genNormalRealArray(int length) {
-        double[] values = new double[length];
-
-        for(int i=0; i<length; i++) {
-            values[i] = complexRng.nextGaussian();
-        }
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of doubles filled with normally distributed pseudorandom values with a specified mean and standard deviation.
-     * @param length Length of pseudorandom array to generate.
-     * @param mean Mean of normal distribution.
-     * @param std Standard deviation of normal distribution.
-     * @return An array of doubles with specified length filled with normally pseudorandom values specified mean and
-     * standard deviation.
-     * @throws IllegalArgumentException If standard deviation is negative.
-     */
-    private double[] genNormalRealArray(int length, double mean, double std) {
-        double[] values = new double[length];
-
-        for(int i=0; i<length; i++) {
-            values[i] = complexRng.nextGaussian()*mean + std;
-        }
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of {@link CNumber complex numbers} with pseudorandom uniformly distributed magnitudes
-     * in {@code [0.0, 1.0)}.
-     * @param length Length of the pseudorandom array to generate.
-     * @return An array of {@link CNumber complex numbers} with pseudorandom uniformly distributed magnitudes
-     * in {@code [0.0, 1.0)}.
-     */
-    private CNumber[] genUniformComplexArray(int length) {
-        CNumber[] values = new CNumber[length];
-
-        for(int i=0; i<length; i++) {
-            values[i] = complexRng.random();
-        }
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of pseudorandom {@link CNumber complex numbers} with uniformly distributed magnitudes
-     * in {@code [min, max)}.
-     * @param length Length of the pseudorandom array to generate.
-     * @param min Minimum value of uniform distribution from which the magnitudes are sampled (inclusive).
-     * @param max Maximum value of uniform distribution from which the magnitudes are sampled (exclusive).
-     * @return An array of {@link CNumber complex numbers} with pseudorandom {@link CNumber complex numbers} with
-     * uniformly distributed magnitudes in {@code [min, max)}.
-     * @throws IllegalArgumentException If {@code min} is negative or if {@code max} is less than {@code min}.
-     */
-    private CNumber[] genUniformComplexArray(int length, double min, double max) {
-        CNumber[] values = new CNumber[length];
-
-        for(int i=0; i<length; i++) {
-            values[i] = complexRng.random(min, max);
-        }
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of {@link CNumber complex numbers} with pseudorandom normally distributed magnitudes
-     * with a mean of 0.0 and a magnitude of 1.0.
-     * @param length Length of the pseudorandom array to generate.
-     * @return An array of {@link CNumber complex numbers} with pseudorandom normally distributed magnitudes
-     * with a mean of 0.0 and a magnitude of 1.0.
-     */
-    private CNumber[] genNormalComplexArray(int length) {
-        CNumber[] values = new CNumber[length];
-
-        for(int i=0; i<length; i++) {
-            values[i] = complexRng.randn();
-        }
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of {@link CNumber complex numbers} with pseudorandom normally distributed magnitudes
-     * with specified mean and standard deviation.
-     * @param length Length of the pseudorandom array to generate.
-     * @param mean Mean of the normal distribution from which to sample magnitudes.
-     * @param std Standard deviation of the normal distribution from which to sample magnitudes.
-     * @return An array of {@link CNumber complex numbers} with pseudorandom normally distributed magnitudes
-     * with specified mean and standard deviation.
-     * @throws IllegalArgumentException If standard deviation is negative.
-     */
-    private CNumber[] genNormalComplexArray(int length, double mean, double std) {
-        CNumber[] values = new CNumber[length];
-
-        for(int i=0; i<length; i++) {
-            values[i] = complexRng.randn(mean, std);
-        }
-
-        return values;
     }
 }
