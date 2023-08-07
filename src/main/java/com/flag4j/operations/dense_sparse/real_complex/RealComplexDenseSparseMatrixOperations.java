@@ -3,6 +3,8 @@ package com.flag4j.operations.dense_sparse.real_complex;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.operations.common.complex.ComplexOperations;
+import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -120,13 +122,12 @@ public class RealComplexDenseSparseMatrixOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        CMatrix dest = new CMatrix(src1);
+        CMatrix dest = new CMatrix(src1.shape.copy(), RealOperations.scalMult(src1.entries, -1));
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col] = dest.entries[row*src1.numCols + col].addInv();
-            dest.entries[row*src1.numCols + col].subEq(src2.entries[i]);
+            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);
         }
 
         return dest;
@@ -144,13 +145,12 @@ public class RealComplexDenseSparseMatrixOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        CMatrix dest = new CMatrix(src1);
+        CMatrix dest = new CMatrix(src1.shape.copy(), ComplexOperations.scalMult(src1.entries, -1));
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col] = dest.entries[row*src1.numCols + col].addInv();
-            dest.entries[row*src1.numCols + col].subEq(src2.entries[i]);
+            dest.entries[row*src1.numCols + col].addEq(src2.entries[i]);
         }
 
         return dest;

@@ -60,7 +60,6 @@ import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMat
 import com.flag4j.util.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -1525,7 +1524,6 @@ public class CMatrix
 
         for(int i=0; i<this.numRows; i++) {
             if(ArrayUtils.notContains(rowIndices, i)) {
-                System.out.println(i + " not in " + Arrays.toString(rowIndices));
                 ArrayUtils.arraycopy(this.entries, i*numCols, copy.entries, row*copy.numCols, this.numCols);
                 row++;
             }

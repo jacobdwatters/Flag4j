@@ -4,6 +4,7 @@ package com.flag4j.operations.dense_sparse.real;
 import com.flag4j.Matrix;
 import com.flag4j.SparseMatrix;
 import com.flag4j.Vector;
+import com.flag4j.operations.common.real.RealOperations;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
 
@@ -75,12 +76,11 @@ public class RealDenseSparseMatrixOperations {
         ParameterChecks.assertEqualShape(src1.shape, src2.shape);
 
         int row, col;
-        Matrix dest = new Matrix(src1);
+        Matrix dest = new Matrix(src1.shape.copy(), RealOperations.scalMult(src1.entries, -1));
 
         for(int i=0; i<src2.nonZeroEntries(); i++) {
             row = src2.rowIndices[i];
             col = src2.colIndices[i];
-            dest.entries[row*src1.numCols + col] *= -1;
             dest.entries[row*src1.numCols + col] += src2.entries[i];
         }
 

@@ -143,11 +143,6 @@ public final class ArrayUtils {
      * source array length or the destination array length.
      */
     public static void arraycopy(CNumber[] src, int srcPos, CNumber[] dest, int destPos, int length) {
-        System.out.printf(
-                "Copying: src length=%d, srcPos=%d, destLength=%d, destPos=%d, length=%d\n",
-                src.length, srcPos, dest.length, destPos, length
-        );
-
         for(int i=0; i<length; i++) {
             dest[i+destPos] = src[i+srcPos].copy();
         }
