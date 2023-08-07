@@ -53,7 +53,7 @@ class SubSpaceTests {
                 {new CNumber(-5.042897264281646E-5, 0.0029602172030675465)}
         };
         expB = new CMatrix(expBEntries);
-        
+
         assertEquals(expB, SubSpace.getColSpace(B));
     }
 
