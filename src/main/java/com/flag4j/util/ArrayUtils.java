@@ -208,13 +208,6 @@ public final class ArrayUtils {
     }
 
 
-    // TODO: Add the following methods:
-    //  stridedCopy(double[] src, int length, int stride);
-    //  stridedCopy(CNumber[] src, int length, int stride);
-    //  stridedCopyOfRange(double[] src, int start, int end, int length, int stride)
-    //  stridedCopyOfRange(CNumber[] src, int start, int end, int length, int stride)
-
-
     /**
      * Converts array to an array of {@link CNumber complex numbers}.
      * @param src Source array to convert.
