@@ -376,13 +376,13 @@ public class ComplexSparseMatrixGetSet {
         ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
         ParameterChecks.assertEquals(src.numRows, col.size);
 
-        Integer[] colIndices = new Integer[col.entries.length];
+        int[] colIndices = new int[col.entries.length];
         Arrays.fill(colIndices, colIdx);
 
         // Initialize destination arrays with the new column and the appropriate indices.
         List<CNumber> destEntries = ArrayUtils.toArrayList(col.entries);
         List<Integer> destRowIndices = ArrayUtils.toArrayList(col.indices);
-        List<Integer> destColIndices = Arrays.asList(colIndices);
+        List<Integer> destColIndices = ArrayUtils.toArrayList(colIndices);
 
         // Add all entries in old matrix that are NOT in the specified column.
         for(int i=0; i<src.entries.length; i++) {
@@ -426,7 +426,7 @@ public class ComplexSparseMatrixGetSet {
         ArrayUtils.copy2CNumber(col, entries);
 
         // Initialize destination arrays with the new column and the appropriate indices.
-        List<CNumber> destEntries = Arrays.asList(entries);
+        List<CNumber> destEntries = ArrayUtils.toArrayList(entries);
         List<Integer> destRowIndices = IntStream.of(
                 ArrayUtils.intRange(0, col.length)
         ).boxed().collect(Collectors.toList());
@@ -854,10 +854,10 @@ public class ComplexSparseMatrixGetSet {
      * @return The specified slice of the sparse matrix.
      */
     public static SparseCMatrix getSlice(SparseCMatrix src, int rowStart, int rowEnd, int colStart, int colEnd) {
-        ParameterChecks.assertInRange(rowStart, 0, rowEnd-1, "rowStart");
-        ParameterChecks.assertInRange(rowEnd, rowStart+1, src.numRows, "rowEnd");
-        ParameterChecks.assertInRange(colStart, 0, colEnd-1, "colStart");
-        ParameterChecks.assertInRange(colEnd, colStart+1, src.numRows, "colEnd");
+        ParameterChecks.assertInRange(rowStart, 0, rowEnd-1.0, "rowStart");
+        ParameterChecks.assertInRange(rowEnd, rowStart+1.0, src.numRows, "rowEnd");
+        ParameterChecks.assertInRange(colStart, 0, colEnd-1.0, "colStart");
+        ParameterChecks.assertInRange(colEnd, colStart+1.0, src.numRows, "colEnd");
 
         Shape shape = new Shape(src.numRows - (rowEnd-rowStart), src.numCols-(colEnd-colStart));
         List<CNumber> entries = new ArrayList<>();

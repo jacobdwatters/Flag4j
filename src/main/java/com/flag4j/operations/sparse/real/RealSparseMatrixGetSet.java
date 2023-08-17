@@ -546,10 +546,10 @@ public class RealSparseMatrixGetSet {
      * @return The specified slice of the sparse matrix.
      */
     public static SparseMatrix getSlice(SparseMatrix src, int rowStart, int rowEnd, int colStart, int colEnd) {
-        ParameterChecks.assertInRange(rowStart, 0, rowEnd-1, "rowStart");
-        ParameterChecks.assertInRange(rowEnd, rowStart+1, src.numRows, "rowEnd");
-        ParameterChecks.assertInRange(colStart, 0, colEnd-1, "colStart");
-        ParameterChecks.assertInRange(colEnd, colStart+1, src.numRows, "colEnd");
+        ParameterChecks.assertInRange(rowStart, 0, rowEnd-1.0, "rowStart");
+        ParameterChecks.assertInRange(rowEnd, rowStart+1.0, src.numRows, "rowEnd");
+        ParameterChecks.assertInRange(colStart, 0, colEnd-1.0, "colStart");
+        ParameterChecks.assertInRange(colEnd, colStart+1.0, src.numRows, "colEnd");
 
         Shape shape = new Shape(src.numRows - (rowEnd-rowStart), src.numCols-(colEnd-colStart));
         List<Double> entries = new ArrayList<>();
