@@ -76,4 +76,23 @@ public final class ComplexProperties {
 
         return result;
     }
+
+
+    /**
+     * Checks if an array contains only zeros.
+     * @param src Array to check if it only contains zeros.
+     * @return True if the {@code src} array contains only zeros.
+     */
+    public static boolean isZeros(CNumber[] src) {
+        boolean allZeros = true;
+
+        for(CNumber value : src) {
+            if(value.re!=0 || value.im!=0) {
+                allZeros = false;
+                break;
+            }
+        }
+
+        return allZeros;
+    }
 }

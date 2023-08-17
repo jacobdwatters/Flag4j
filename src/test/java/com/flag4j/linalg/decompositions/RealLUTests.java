@@ -10,18 +10,6 @@ class RealLUTests {
     double[][] aEntries, expLEntries, expUEntries, expPEntries, expQEntries;
     Matrix A, L, U, P, Q, expL, expU, expP, expQ;
 
-    private void printMat(String name, Matrix A) {
-        System.out.println(name + ":");
-
-        for(int i=0; i<A.numRows; i++) {
-            for(int j=0; j<A.numCols; j++) {
-                System.out.print(A.get(i, j) + "\t\t");
-            }
-            System.out.println();
-        }
-        System.out.println("\n\n");
-    }
-
 
     @Test
     void noPivotTestCase() {

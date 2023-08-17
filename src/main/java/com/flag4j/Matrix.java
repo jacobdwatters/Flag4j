@@ -44,8 +44,14 @@ import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.*;
-import com.flag4j.operations.dense_sparse.real.*;
-import com.flag4j.operations.dense_sparse.real_complex.*;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultTranspose;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.real.RealDenseSparseMatrixOperations;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseEquals;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultTranspose;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixMultiplication;
+import com.flag4j.operations.dense_sparse.real_complex.RealComplexDenseSparseMatrixOperations;
 import com.flag4j.util.*;
 
 import java.util.ArrayList;
@@ -847,7 +853,7 @@ public class Matrix
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
         // Fill slice with zeros
-        ArrayUtils.stridedFillZerosRange(
+        ArrayUtils.stridedFillZeros(
                 this.entries,
                 rowStart*this.numCols+colStart,
                 values.numCols,
@@ -1024,7 +1030,7 @@ public class Matrix
         Matrix copy = this.copy();
 
         // Fill slice with zeros
-        ArrayUtils.stridedFillZerosRange(
+        ArrayUtils.stridedFillZeros(
                 copy.entries,
                 rowStart*copy.numCols+colStart,
                 values.numCols,

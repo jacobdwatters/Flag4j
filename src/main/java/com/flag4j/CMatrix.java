@@ -819,7 +819,7 @@ public class CMatrix
         ParameterChecks.assertArrayLengthsEq(values.size, numRows);
 
         // Zero-out column
-        ArrayUtils.stridedFillZerosRange(this.entries, colIndex, 1, this.numCols-1);
+        ArrayUtils.stridedFillZeros(this.entries, colIndex, 1, this.numCols-1);
 
         // Copy sparse values
         int index;
@@ -862,7 +862,7 @@ public class CMatrix
         int rowOffset = rowIndex*numCols;
 
         // Fill row with zeros
-        ArrayUtils.fillZerosRange(super.entries, rowOffset, rowOffset+numCols);
+        ArrayUtils.fillZeros(super.entries, rowOffset, rowOffset+numCols);
 
         // Copy sparse values
         for(int i=0; i<values.entries.length; i++) {
@@ -892,7 +892,7 @@ public class CMatrix
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
         // Fill slice with zeros
-        ArrayUtils.stridedFillZerosRange(
+        ArrayUtils.stridedFillZeros(
                 this.entries,
                 rowStart*this.numCols+colStart,
                 values.numCols,
@@ -932,7 +932,7 @@ public class CMatrix
         CMatrix copy = this.copy();
 
         // Fill slice with zeros.
-        ArrayUtils.stridedFillZerosRange(
+        ArrayUtils.stridedFillZeros(
                 copy.entries,
                 rowStart*copy.numCols+colStart,
                 values.numCols,
@@ -1000,7 +1000,7 @@ public class CMatrix
         ParameterChecks.assertGreaterEq(0, rowStart, colStart);
 
         // Fill slice with zeros
-        ArrayUtils.stridedFillZerosRange(
+        ArrayUtils.stridedFillZeros(
                 this.entries,
                 rowStart*this.numCols+colStart,
                 values.numCols,
@@ -1467,7 +1467,7 @@ public class CMatrix
         CMatrix copy = this.copy();
 
         // Fill slice with zeros.
-        ArrayUtils.stridedFillZerosRange(
+        ArrayUtils.stridedFillZeros(
                 copy.entries,
                 rowStart*copy.numCols+colStart,
                 values.numCols,

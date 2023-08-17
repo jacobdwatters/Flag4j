@@ -72,6 +72,7 @@ public final class SparseDataWrapper<T> {
      * @param indices Indices of non-zero values in the sparse tensor.
      * @param transpose Indicates if a transpose should be applied to the indices array.
      */
+    @SuppressWarnings("unchecked")
     private SparseDataWrapper(T[] values, int[][] indices, boolean transpose) {
         this.values = Arrays.asList(values);
         this.keys = transpose ? new List[indices[0].length] : new List[indices.length];
@@ -168,7 +169,7 @@ public final class SparseDataWrapper<T> {
      * @return A reference to this sparse data wrapper.
      */
     public SparseDataWrapper<T> sparseSort() {
-        if(values.size() > 2) {
+        if(values.size() >= 2) {
             // Only need to sort list with more than 1 entry.
             sparseSortHelper(0, 0, values.size());
         }
@@ -281,6 +282,7 @@ public final class SparseDataWrapper<T> {
      * @param values Storage for unwrapped values. Must have the same length as that passed to the constructor. Modified.
      * @param indices Storage for unwrapped indices. Must have the same shape as that passed to the constructor. Modified.
      */
+    @SuppressWarnings("unused")
     public void unwrap(T[] values, int[] indices) {
         // Copy over data values.
         for(int i=0; i<this.values.size(); i++) {

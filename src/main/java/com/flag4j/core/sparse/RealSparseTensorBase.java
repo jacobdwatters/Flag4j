@@ -180,7 +180,7 @@ public abstract class RealSparseTensorBase<
 
     @Override
     public boolean isZeros() {
-     return entries.length==0 || ArrayUtils.isZeros(entries);
+     return entries.length==0 || RealProperties.isZeros(entries);
     }
 
 

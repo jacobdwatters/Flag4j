@@ -74,4 +74,22 @@ public class RealProperties {
 
         return result;
     }
+
+    /**
+     * Checks if an array contains only zeros.
+     * @param src Array to check if it only contains zeros.
+     * @return True if the {@code src} array contains only zeros.
+     */
+    public static boolean isZeros(double[] src) {
+        boolean allZeros = true;
+
+        for(double value : src) {
+            if(value!=0) {
+                allZeros = false;
+                break;
+            }
+        }
+
+        return allZeros;
+    }
 }

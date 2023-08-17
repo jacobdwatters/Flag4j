@@ -28,7 +28,7 @@ import com.flag4j.Matrix;
 import com.flag4j.SparseMatrix;
 import com.flag4j.SparseTensor;
 import com.flag4j.Tensor;
-import com.flag4j.util.ArrayUtils;
+import com.flag4j.operations.common.real.RealProperties;
 import com.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
@@ -73,7 +73,7 @@ public class RealDenseSparseEquals {
 
             if(equal) {
                 // Now, if this vector is equal to the sparse vector, there should only be zeros left in the entriesStack
-                equal = ArrayUtils.isZeros(src1Copy);
+                equal = RealProperties.isZeros(src1Copy);
             }
 
         } else {
@@ -116,7 +116,7 @@ public class RealDenseSparseEquals {
 
             if(equal) {
                 // Now, if this matrix is equal to the sparse matrix, there should only be zeros left in the entriesStack
-                equal = ArrayUtils.isZeros(entriesCopy);
+                equal = RealProperties.isZeros(entriesCopy);
             }
 
         } else {
@@ -155,7 +155,7 @@ public class RealDenseSparseEquals {
 
             if(equal) {
                 // Now, if this matrix is equal to the sparse matrix, there should only be zeros left in the entriesStack
-                equal = ArrayUtils.isZeros(entriesCopy);
+                equal = RealProperties.isZeros(entriesCopy);
             }
 
         } else {

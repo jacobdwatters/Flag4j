@@ -121,7 +121,7 @@ public abstract class ComplexDenseTensorBase<T extends ComplexDenseTensorBase<T,
 
     @Override
     public boolean isZeros() {
-        return ArrayUtils.isZeros(entries);
+        return ComplexProperties.isZeros(entries);
     }
 
 

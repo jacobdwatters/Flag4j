@@ -25,7 +25,6 @@
 package com.flag4j.core.sparse;
 
 import com.flag4j.Shape;
-import com.flag4j.SparseCMatrix;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.ComplexTensorMixin;
 import com.flag4j.operations.common.complex.AggregateComplex;
@@ -34,7 +33,6 @@ import com.flag4j.operations.common.complex.ComplexProperties;
 import com.flag4j.operations.dense.complex.AggregateDenseComplex;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
 import com.flag4j.operations.dense.complex.ComplexDenseProperties;
-import com.flag4j.operations.dense.real.AggregateDenseReal;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -155,7 +153,7 @@ public abstract class ComplexSparseTensorBase<T, U, Y>
 
     @Override
     public boolean isZeros() {
-        return ArrayUtils.isZeros(entries);
+        return ComplexProperties.isZeros(entries);
     }
 
 

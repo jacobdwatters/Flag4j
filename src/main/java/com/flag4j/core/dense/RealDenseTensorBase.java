@@ -34,7 +34,6 @@ import com.flag4j.operations.common.real.RealProperties;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
 import com.flag4j.operations.dense.real.*;
 import com.flag4j.operations.dense.real_complex.RealComplexDenseOperations;
-import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
@@ -157,7 +156,7 @@ public abstract class RealDenseTensorBase<T extends RealDenseTensorBase<T, W>, W
 
     @Override
     public boolean isZeros() {
-        return ArrayUtils.isZeros(entries);
+        return RealProperties.isZeros(entries);
     }
 
 

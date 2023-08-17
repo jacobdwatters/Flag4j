@@ -18,6 +18,14 @@ public final class RandomArray {
 
 
     /**
+     * Creates a RandomArray object to generate arrays filled with random values using a default random number generator.
+     */
+    public RandomArray() {
+        this.rng = new RandomCNumber();
+    }
+
+
+    /**
      * Creates a RandomArray object to generate arrays filled with random values using the specified complex
      * random number generator.
      * @param rng The complex random number generator to use when creating random arrays.

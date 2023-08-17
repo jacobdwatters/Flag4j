@@ -32,6 +32,7 @@ import java.util.*;
 /**
  * This class provides several utility methods useful for array manipulation and copying.
  */
+@SuppressWarnings("unused")
 public final class ArrayUtils {
 
     private ArrayUtils() {
@@ -132,6 +133,20 @@ public final class ArrayUtils {
 
 
     /**
+     * Converts array to an array of {@link CNumber complex numbers}.
+     * @param src Source array to convert.
+     * @param dest Destination array.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     */
+    public static void copy2CNumber(CNumber[] src, CNumber[] dest) {
+        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = new CNumber(src[i]);
+        }
+    }
+
+
+    /**
      * Performs an array copy similar to {@link System#arraycopy(Object, int, Object, int, int)} but creates a deep copy
      * of each element in the source array.
      * @param src The source array.
@@ -147,7 +162,6 @@ public final class ArrayUtils {
             dest[i+destPos] = src[i+srcPos].copy();
         }
     }
-
 
 
     /**
@@ -209,20 +223,6 @@ public final class ArrayUtils {
 
 
     /**
-     * Converts array to an array of {@link CNumber complex numbers}.
-     * @param src Source array to convert.
-     * @param dest Destination array.
-     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
-     */
-    public static void copy2CNumber(CNumber[] src, CNumber[] dest) {
-        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
-        for(int i=0; i<dest.length; i++) {
-            dest[i] = new CNumber(src[i]);
-        }
-    }
-
-
-    /**
      * Fills an array of complex numbers with zeros.
      * @param dest Array to fill with zeros.
      */
@@ -239,7 +239,7 @@ public final class ArrayUtils {
      * @param end Ending index of range to fill (Exclusive).
      * @param dest Array to fill specified range with zeros.
      */
-    public static void fillZerosRange(CNumber[] dest, int start, int end) {
+    public static void fillZeros(CNumber[] dest, int start, int end) {
         for(int i=start; i<end; i++) {
             dest[i] = new CNumber();
         }
@@ -252,7 +252,7 @@ public final class ArrayUtils {
      * @param end Ending index of range to fill (Exclusive).
      * @param dest Array to fill specified range with zeros.
      */
-    public static void fillZerosRange(double[] dest, int start, int end) {
+    public static void fillZeros(double[] dest, int start, int end) {
         System.arraycopy(new double[end-start], 0, dest, start, end-start);
     }
 
@@ -326,7 +326,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If stride or length is less than one.
      * @throws IllegalArgumentException If start is less than zero.
      */
-    public static void stridedFillZerosRange(CNumber[] dest, int start, int length, int stride) {
+    public static void stridedFillZeros(CNumber[] dest, int start, int length, int stride) {
         ParameterChecks.assertGreaterEq(1, stride, length);
         ParameterChecks.assertGreaterEq(0, start);
 
@@ -357,7 +357,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If stride or length is less than one.
      * @throws IllegalArgumentException If start is less than zero.
      */
-    public static void stridedFillZerosRange(double[] dest, int start, int length, int stride) {
+    public static void stridedFillZeros(double[] dest, int start, int length, int stride) {
         ParameterChecks.assertGreaterEq(1, stride, length);
         ParameterChecks.assertGreaterEq(0, start);
 
@@ -366,44 +366,6 @@ public final class ArrayUtils {
                 dest[i+j] = 0;
             }
         }
-    }
-
-
-    /**
-     * Checks if an array contains only zeros.
-     * @param src Array to check if it only contains zeros.
-     * @return True if the {@code src} array contains only zeros.
-     */
-    public static boolean isZeros(double[] src) {
-        boolean allZeros = true;
-
-        for(double value : src) {
-            if(value!=0) {
-                allZeros = false;
-                break;
-            }
-        }
-
-        return allZeros;
-    }
-
-
-    /**
-     * Checks if an array contains only zeros.
-     * @param src Array to check if it only contains zeros.
-     * @return True if the {@code src} array contains only zeros.
-     */
-    public static boolean isZeros(CNumber[] src) {
-        boolean allZeros = true;
-
-        for(CNumber value : src) {
-            if(value.re!=0 || value.im!=0) {
-                allZeros = false;
-                break;
-            }
-        }
-
-        return allZeros;
     }
 
 
@@ -445,6 +407,46 @@ public final class ArrayUtils {
 
         for(int i=from; i<to; i++) {
             dest[i] = new CNumber(fillValue);
+        }
+    }
+
+
+    /**
+     * Fills an array with specified value.
+     * @param dest Array to fill.
+     * @param fillValue Value to fill array with.
+     */
+    public static void fill(CNumber[] dest, CNumber fillValue) {
+        for(int i=0; i<dest.length; i++) {
+            dest[i] = fillValue.copy();
+        }
+    }
+
+
+    /**
+     * Fills an array with specified value.
+     * @param dest Array to fill.
+     * @param start Starting index of range to fill (Inclusive).
+     * @param end Ending index of range to fill (Exclusive).
+     * @param fillValue Value to fill array with. Each index of the {@code dest} array will be filled with a deep copy
+     *                  of this value.
+     * @throws ArrayIndexOutOfBoundsException If {@code start} or {@code end} is not within the destination array.
+     */
+    public static void fill(CNumber[] dest, int start, int end, CNumber fillValue) {
+        for(int i=start; i<end; i++) {
+            dest[i] = fillValue.copy();
+        }
+    }
+
+
+    /**
+     * Fills an array with the specified value;
+     * @param dest Array to fill.
+     * @param fillValue Value to fill array with.
+     */
+    public static void fill(double[][] dest, double fillValue) {
+        for(double[] doubles : dest) {
+            Arrays.fill(doubles, fillValue);
         }
     }
 
@@ -561,46 +563,6 @@ public final class ArrayUtils {
 
 
     /**
-     * Fills an array with specified value.
-     * @param dest Array to fill.
-     * @param fillValue Value to fill array with.
-     */
-    public static void fill(CNumber[] dest, CNumber fillValue) {
-        for(int i=0; i<dest.length; i++) {
-            dest[i] = fillValue.copy();
-        }
-    }
-
-
-    /**
-     * Fills an array with specified value.
-     * @param dest Array to fill.
-     * @param start Starting index of range to fill (Inclusive).
-     * @param end Ending index of range to fill (Exclusive).
-     * @param fillValue Value to fill array with. Each index of the {@code dest} array will be filled with a deep copy
-     *                  of this value.
-     * @throws ArrayIndexOutOfBoundsException If {@code start} or {@code end} is not within the destination array.
-     */
-    public static void fill(CNumber[] dest, int start, int end, CNumber fillValue) {
-        for(int i=start; i<end; i++) {
-            dest[i] = fillValue.copy();
-        }
-    }
-
-
-    /**
-     * Fills an array with the specified value;
-     * @param dest Array to fill.
-     * @param fillValue Value to fill array with.
-     */
-    public static void fill(double[][] dest, double fillValue) {
-        for(double[] doubles : dest) {
-            Arrays.fill(doubles, fillValue);
-        }
-    }
-
-
-    /**
      * Swaps to elements in an array. This is done in place.
      * @param arr Array to swap elements in. This array is modified.
      * @param i Index of first value to swap.
@@ -693,6 +655,31 @@ public final class ArrayUtils {
         int j=0;
         for(int i=start; i<end; i++) {
             rangeArr[j++] = i;
+        }
+
+        return rangeArr;
+    }
+
+
+    /**
+     * Gets an array filled with integers from {@code start} (inclusive) to {@code end} (exclusive) where each int is
+     * repeated {@code stride} times.
+     * @param start Staring value (inclusive).
+     * @param end Stopping value (exclusive).
+     * @param stride Number of times to repeat each integer.
+     * @return An array containing the integer range {@code [start, end)} and each integer is repeated {@code stride}
+     * times.
+     * @throws NegativeArraySizeException If {@code stride} is negative.
+     * @throws IllegalArgumentException If {@code start} is not in {@code [0, end)}
+     */
+    public static int[] intRange(int start, int end, int stride) {
+        ParameterChecks.assertInRange(start, 0, end, "start");
+        int[] rangeArr = new int[(end-start)*stride];
+
+        int k=0;
+        for(int i=start; i<end; i++) {
+            Arrays.fill(rangeArr, k, k+stride, i);
+            k+=stride;
         }
 
         return rangeArr;
@@ -805,6 +792,26 @@ public final class ArrayUtils {
      * @param src Array to flatten.
      * @return The flattened array.
      */
+    public static int[] flatten(int[][] src) {
+        int[] flat = new int[src.length*src[0].length];
+
+        // Copy 2D array to 1D array.
+        int i=0;
+        for(int[] row : src) {
+            for(int value : row) {
+                flat[i++] = value;
+            }
+        }
+
+        return flat;
+    }
+
+
+    /**
+     * Flattens a two-dimensional array.
+     * @param src Array to flatten.
+     * @return The flattened array.
+     */
     public static double[] flatten(double[][] src) {
         double[] flat = new double[src.length*src[0].length];
 
@@ -837,22 +844,6 @@ public final class ArrayUtils {
         }
 
         return flat;
-    }
-
-
-    /**
-     * Constructs a double array from the real components of a complex valued array.
-     * @param src Complex array.
-     * @return An array containing the real components of the source array.
-     */
-    public static double[] getReals(CNumber[] src) {
-        double[] reals = new double[src.length];
-
-        for(int i=0; i<src.length; i++) {
-            reals[i] = src[i].re;
-        }
-
-        return reals;
     }
 
 
@@ -983,11 +974,11 @@ public final class ArrayUtils {
 
 
     /**
-     * Converts an array of {@link Double} objects to a primitive array.
+     * Converts an array of {@link Double} objects to a primitive array (i.e. unboxing).
      * @param arr Array to convert.
      * @return A primitive array equivalent to {@code arr}.
      */
-    public static double[] toPrimitive(Double[] arr) {
+    public static double[] unbox(Double[] arr) {
         int size = arr.length;
         double[] prim = new double[size];
 
@@ -1000,11 +991,11 @@ public final class ArrayUtils {
 
 
     /**
-     * Converts an array of {@link Integer} objects to a primitive array.
+     * Converts an array of {@link Integer} objects to a primitive array (i.e. unboxing).
      * @param arr Array to convert.
      * @return A primitive array equivalent to {@code arr}.
      */
-    public static int[] toPrimitive(Integer[] arr) {
+    public static int[] unbox(Integer[] arr) {
         int size = arr.length;
         int[] prim = new int[size];
 
@@ -1017,12 +1008,55 @@ public final class ArrayUtils {
 
 
     /**
+     * Converts a primitive array to an array of equivalent boxed type.
+     * @param src The source primitive array to box.
+     * @return A boxed array equivalent to the {@code src} primitive array.
+     */
+    public static Double[] boxed(double[] src) {
+        int size = src.length;
+        Double[] boxed = new Double[size];
+
+        for(int i=0; i<size; i++) {
+            boxed[i] = src[i];
+        }
+
+        return boxed;
+    }
+
+
+    /**
+     * Converts a primitive array to an array of equivalent boxed type.
+     * @param src The source primitive array to box.
+     * @return A boxed array equivalent to the {@code src} primitive array.
+     */
+    public static Integer[] boxed(int[] src) {
+        int size = src.length;
+        Integer[] boxed = new Integer[size];
+
+        for(int i=0; i<size; i++) {
+            boxed[i] = src[i];
+        }
+
+        return boxed;
+    }
+
+
+    /**
      * Counts the number of unique elements in an array.
      * @param arr Array to count unique elements in.
      * @return The number of unique elements in {@code arr}.
      */
     public static int numUnique(double[] arr) {
-        return (int) Arrays.stream(arr).distinct().count();
+        // For very large arrays, HashMap is quite a bit faster than HashSet.
+        Map<Double, Double> map = new HashMap<>(arr.length);
+
+        for(double a : arr) {
+            if(!map.containsKey(a)) {
+                map.put(a, a);
+            }
+        }
+
+        return map.keySet().size();
     }
 
 
@@ -1032,7 +1066,16 @@ public final class ArrayUtils {
      * @return The number of unique elements in {@code arr}.
      */
     public static int numUnique(int[] arr) {
-        return (int) Arrays.stream(arr).distinct().count();
+        // For very large arrays, HashMap is quite a bit faster than HashSet.
+        Map<Integer, Integer> map = new HashMap<>(arr.length);
+
+        for(int a : arr) {
+            if(!map.containsKey(a)) {
+                map.put(a, a);
+            }
+        }
+
+        return map.keySet().size();
     }
 
 
@@ -1044,6 +1087,7 @@ public final class ArrayUtils {
      * mapped to a unique integer and those integers range from {@code 0} to
      * {@link #numUnique(int[]) numUnique(arr) - 1}.
      */
+    @SuppressWarnings("ConstantConditions")
     public static HashMap<Integer, Integer> createUniqueMapping(int[] arr) {
         if (arr.length == 0 || arr == null) return new HashMap<>();
 
@@ -1101,4 +1145,25 @@ public final class ArrayUtils {
 
         return new int[]{lowerBound, upperBound};
     }
+
+
+    /**
+     * Repeats an array a specified number of times.
+     * @param numTimes Number of times to repeat the array.
+     * @param src The source array to repeat.
+     * @return The {@code src} array repeated {@code numTimes times}.
+     */
+    public static int[] repeat(int numTimes, int[] src) {
+        int[] repeated = new int[src.length*numTimes];
+
+        for(int i=0; i<repeated.length; i+=src.length) {
+            System.arraycopy(src, 0, repeated, i, src.length);
+        }
+
+        return repeated;
+    }
 }
+
+
+
+

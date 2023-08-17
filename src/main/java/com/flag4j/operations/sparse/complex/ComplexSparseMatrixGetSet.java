@@ -53,8 +53,6 @@ public class ComplexSparseMatrixGetSet {
         int[] destColIndices;
 
         if(idx < 0) {
-            System.out.println(idx);
-
             // No non-zero element with these indices exists. Insert new value.
             destEntries = new CNumber[src.entries.length + 1];
             ArrayUtils.arraycopy(src.entries, 0, destEntries, 0, -idx-1);

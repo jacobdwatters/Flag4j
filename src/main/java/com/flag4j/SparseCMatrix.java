@@ -1311,21 +1311,20 @@ public class SparseCMatrix
         int[] destColIndices = new int[destEntries.length];
 
         // Copy entries from both matrices.
-        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
+        ArrayUtils.arraycopy(entries, 0, destEntries, B.entries.length, entries.length);
 
         // Compute shifted indices.
-        int[] shiftedColIndices = colIndices.clone();
-        ArrayUtils.shift(B.numCols, shiftedColIndices);
-        int[] shiftedRowIndices = ArrayUtils.intRange(numRows, destRowIndices.length);
-        int[] bColIndices = ArrayUtils.intRange(0, B.numCols);
+        int[] shiftedRowIndices = ArrayUtils.shift(B.numRows, rowIndices.clone());
+        int[] bRowIndices = ArrayUtils.intRange(0, B.numRows, B.numCols);
+        int[] bColIndices = ArrayUtils.repeat(B.numRows, ArrayUtils.intRange(numCols, numCols + B.numCols));
 
         // Copy shifted indices of both matrices.
-        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
-        System.arraycopy(shiftedColIndices, 0, destColIndices, 0, shiftedColIndices.length);
+        System.arraycopy(bRowIndices, 0, destRowIndices, 0, bRowIndices.length);
+        System.arraycopy(bColIndices, 0, destColIndices, 0, bColIndices.length);
 
-        System.arraycopy(shiftedRowIndices, 0, destRowIndices, rowIndices.length, shiftedRowIndices.length);
-        System.arraycopy(bColIndices, 0, destColIndices, shiftedColIndices.length, bColIndices.length);
+        System.arraycopy(shiftedRowIndices, 0, destRowIndices, bRowIndices.length, shiftedRowIndices.length);
+        System.arraycopy(colIndices, 0, destColIndices, bColIndices.length, colIndices.length);
 
         return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
@@ -1345,21 +1344,19 @@ public class SparseCMatrix
         int[] destColIndices = new int[destEntries.length];
 
         // Copy entries from both matrices.
-        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
+        ArrayUtils.arraycopy(entries, 0, destEntries, B.entries.length, entries.length);
 
         // Compute shifted indices.
-        int[] shiftedColIndices = colIndices.clone();
-        ArrayUtils.shift(B.numCols, shiftedColIndices);
-        int[] shiftedRowIndices = B.rowIndices.clone();
-        ArrayUtils.shift(numRows, shiftedRowIndices);
+        int[] shiftedColIndices = ArrayUtils.shift(numCols, B.colIndices.clone());
+        int[] shiftedRowIndices = ArrayUtils.shift(B.numRows, rowIndices.clone());
 
         // Copy shifted indices of both matrices.
-        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(B.rowIndices, 0, destRowIndices, 0, B.rowIndices.length);
         System.arraycopy(shiftedColIndices, 0, destColIndices, 0, shiftedColIndices.length);
 
-        System.arraycopy(shiftedRowIndices, 0, destRowIndices, rowIndices.length, shiftedRowIndices.length);
-        System.arraycopy(B.colIndices, 0, destColIndices, shiftedColIndices.length, B.colIndices.length);
+        System.arraycopy(shiftedRowIndices, 0, destRowIndices, B.rowIndices.length, shiftedRowIndices.length);
+        System.arraycopy(colIndices, 0, destColIndices, B.colIndices.length, colIndices.length);
 
         return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
@@ -1541,8 +1538,9 @@ public class SparseCMatrix
     public CMatrix stack(Matrix B) {
         ParameterChecks.assertEquals(numCols, B.numCols);
 
-        Shape destShape = new Shape(numCols, numRows+B.numRows);
+        Shape destShape = new Shape(numRows+B.numRows, numCols);
         CNumber[] destEntries = new CNumber[destShape.totalEntries().intValueExact()];
+        ArrayUtils.fillZeros(destEntries);
 
         // Copy values from B
         ArrayUtils.arraycopy(B.entries, 0, destEntries, shape.totalEntries().intValueExact(), B.entries.length);
@@ -1568,7 +1566,7 @@ public class SparseCMatrix
     public SparseCMatrix stack(SparseMatrix B) {
         ParameterChecks.assertEquals(numCols, B.numCols);
 
-        Shape destShape = new Shape(numCols, numRows+B.numRows);
+        Shape destShape = new Shape(numRows+B.numRows, numCols);
         CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
@@ -1578,8 +1576,9 @@ public class SparseCMatrix
         ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
 
         // Copy row indices.
+        int[] shiftedRowIndices = ArrayUtils.shift(numRows, B.rowIndices.clone());
         System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
-        System.arraycopy(B.rowIndices, 0, destRowIndices, rowIndices.length, B.rowIndices.length);
+        System.arraycopy(shiftedRowIndices, 0, destRowIndices, rowIndices.length, B.rowIndices.length);
 
         // Copy column indices.
         System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
@@ -1601,14 +1600,14 @@ public class SparseCMatrix
     public CMatrix stack(CMatrix B) {
         ParameterChecks.assertEquals(numCols, B.numCols);
 
-        Shape destShape = new Shape(numCols, numRows+B.numRows);
+        Shape destShape = new Shape(numRows+B.numRows, numCols);
         CNumber[] destEntries = new CNumber[destShape.totalEntries().intValueExact()];
 
         // Copy values from B
         ArrayUtils.arraycopy(B.entries, 0, destEntries, shape.totalEntries().intValueExact(), B.entries.length);
 
         // Copy non-zero values from this matrix (and set zero values to zero.).
-        ArrayUtils.fillZerosRange(destEntries, 0, shape.totalEntries().intValueExact());
+        ArrayUtils.fillZeros(destEntries, 0, shape.totalEntries().intValueExact());
         for(int i=0; i<entries.length; i++) {
             destEntries[rowIndices[i]*numCols + colIndices[i]] = entries[i].copy();
         }
@@ -1629,7 +1628,7 @@ public class SparseCMatrix
     public SparseCMatrix stack(SparseCMatrix B) {
         ParameterChecks.assertEquals(numCols, B.numCols);
 
-        Shape destShape = new Shape(numCols, numRows+B.numRows);
+        Shape destShape = new Shape(numRows+B.numRows, numCols);
         CNumber[] destEntries = new CNumber[entries.length + B.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
@@ -1639,8 +1638,9 @@ public class SparseCMatrix
         ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
 
         // Copy row indices.
+        int[] shiftedRowIndices = ArrayUtils.shift(numRows, B.rowIndices.clone());
         System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
-        System.arraycopy(B.rowIndices, 0, destRowIndices, rowIndices.length, B.rowIndices.length);
+        System.arraycopy(shiftedRowIndices, 0, destRowIndices, rowIndices.length, B.rowIndices.length);
 
         // Copy column indices.
         System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
@@ -1740,6 +1740,7 @@ public class SparseCMatrix
 
         Shape destShape = new Shape(numRows, numCols + B.numCols);
         CNumber[] destEntries = new CNumber[destShape.totalEntries().intValueExact()];
+        ArrayUtils.fillZeros(destEntries);
 
         // Copy sparse values.
         for(int i=0; i<entries.length; i++) {
@@ -1781,9 +1782,11 @@ public class SparseCMatrix
         System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
         System.arraycopy(B.rowIndices, 0, destRowIndices, rowIndices.length, B.rowIndices.length);
 
-        // Copy column indices.
+        // Copy column indices (with shifts if appropriate).
+        int[] shifted = B.colIndices.clone();
         System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
-        System.arraycopy(B.colIndices, 0, destColIndices, colIndices.length, B.colIndices.length);
+        System.arraycopy(ArrayUtils.shift(numCols, shifted), 0,
+                destColIndices, colIndices.length, B.colIndices.length);
 
         SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
         dest.sparseSort(); // Ensure indices are sorted properly.
@@ -1806,6 +1809,7 @@ public class SparseCMatrix
 
         Shape destShape = new Shape(numRows, numCols + B.numCols);
         CNumber[] destEntries = new CNumber[destShape.totalEntries().intValueExact()];
+        ArrayUtils.fillZeros(destEntries);
 
         // Copy sparse values.
         for(int i=0; i<entries.length; i++) {
@@ -1847,9 +1851,11 @@ public class SparseCMatrix
         System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
         System.arraycopy(B.rowIndices, 0, destRowIndices, rowIndices.length, B.rowIndices.length);
 
-        // Copy column indices.
+        // Copy column indices (with shifts if appropriate).
+        int[] shifted = B.colIndices.clone();
         System.arraycopy(colIndices, 0, destColIndices, 0, colIndices.length);
-        System.arraycopy(B.colIndices, 0, destColIndices, colIndices.length, B.colIndices.length);
+        System.arraycopy(ArrayUtils.shift(numCols, shifted), 0,
+                destColIndices, colIndices.length, B.colIndices.length);
 
         SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
         dest.sparseSort(); // Ensure indices are sorted properly.
@@ -1906,7 +1912,7 @@ public class SparseCMatrix
         ParameterChecks.assertEquals(numCols, b.size);
 
         Shape destShape = new Shape(numRows + 1, numCols);
-        CNumber[] destEntries = new CNumber[entries.length + b.size];
+        CNumber[] destEntries = new CNumber[entries.length + b.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -1972,7 +1978,7 @@ public class SparseCMatrix
         ParameterChecks.assertEquals(numCols, b.size);
 
         Shape destShape = new Shape(numRows + 1, numCols);
-        CNumber[] destEntries = new CNumber[entries.length + b.size];
+        CNumber[] destEntries = new CNumber[entries.length + b.entries.length];
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
 
@@ -2101,7 +2107,7 @@ public class SparseCMatrix
         // Copy entries and indices from vector.
         ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
         System.arraycopy(ArrayUtils.intRange(0, numRows), 0, destRowIndices, entries.length, numRows);
-        Arrays.fill(destColIndices, entries.length, numRows, numCols);
+        Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
 
         SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
         dest.sparseSort(); // Ensure that the indices are sorted properly.
@@ -2173,7 +2179,7 @@ public class SparseCMatrix
         // Copy entries and indices from vector.
         ArrayUtils.arraycopy(b.entries, 0, destEntries, entries.length, b.entries.length);
         System.arraycopy(ArrayUtils.intRange(0, numRows), 0, destRowIndices, entries.length, numRows);
-        Arrays.fill(destColIndices, entries.length, numRows, numCols);
+        Arrays.fill(destColIndices, entries.length, destColIndices.length, numCols);
 
         SparseCMatrix dest = new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
         dest.sparseSort(); // Ensure that the indices are sorted properly.
@@ -2274,6 +2280,12 @@ public class SparseCMatrix
         }
 
         return new SparseCVector(numRows*numCols, ArrayUtils.copyOf(entries), destIndices);
+    }
+
+
+    @Override
+    public SparseMatrix toReal() {
+        return new SparseMatrix(shape.copy(), ComplexOperations.toReal(entries), rowIndices.clone(), colIndices.clone());
     }
 
 
@@ -2452,21 +2464,19 @@ public class SparseCMatrix
         int[] destColIndices = new int[destEntries.length];
 
         // Copy entries from both matrices.
-        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
+        ArrayUtils.arraycopy(entries, 0, destEntries, B.entries.length, entries.length);
 
         // Compute shifted indices.
-        int[] shiftedColIndices = colIndices.clone();
-        ArrayUtils.shift(B.numCols, shiftedColIndices);
-        int[] shiftedRowIndices = B.rowIndices.clone();
-        ArrayUtils.shift(numRows, shiftedRowIndices);
+        int[] shiftedColIndices = ArrayUtils.shift(numCols, B.colIndices.clone());
+        int[] shiftedRowIndices = ArrayUtils.shift(B.numRows, rowIndices.clone());
 
         // Copy shifted indices of both matrices.
-        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
+        System.arraycopy(B.rowIndices, 0, destRowIndices, 0, B.rowIndices.length);
         System.arraycopy(shiftedColIndices, 0, destColIndices, 0, shiftedColIndices.length);
 
-        System.arraycopy(shiftedRowIndices, 0, destRowIndices, rowIndices.length, shiftedRowIndices.length);
-        System.arraycopy(B.colIndices, 0, destColIndices, shiftedColIndices.length, B.colIndices.length);
+        System.arraycopy(shiftedRowIndices, 0, destRowIndices, B.rowIndices.length, shiftedRowIndices.length);
+        System.arraycopy(colIndices, 0, destColIndices, B.colIndices.length, colIndices.length);
 
         return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
@@ -2486,21 +2496,20 @@ public class SparseCMatrix
         int[] destColIndices = new int[destEntries.length];
 
         // Copy entries from both matrices.
-        ArrayUtils.arraycopy(entries, 0, destEntries, 0, entries.length);
-        ArrayUtils.arraycopy(B.entries, 0, destEntries, entries.length, B.entries.length);
+        ArrayUtils.arraycopy(B.entries, 0, destEntries, 0, B.entries.length);
+        ArrayUtils.arraycopy(entries, 0, destEntries, B.entries.length, entries.length);
 
         // Compute shifted indices.
-        int[] shiftedColIndices = colIndices.clone();
-        ArrayUtils.shift(B.numCols, shiftedColIndices);
-        int[] shiftedRowIndices = ArrayUtils.intRange(numRows, destRowIndices.length);
-        int[] bColIndices = ArrayUtils.intRange(0, B.numCols);
+        int[] shiftedRowIndices = ArrayUtils.shift(B.numRows, rowIndices.clone());
+        int[] bRowIndices = ArrayUtils.intRange(0, B.numRows, B.numCols);
+        int[] bColIndices = ArrayUtils.repeat(B.numRows, ArrayUtils.intRange(numCols, numCols + B.numCols));
 
         // Copy shifted indices of both matrices.
-        System.arraycopy(rowIndices, 0, destRowIndices, 0, rowIndices.length);
-        System.arraycopy(shiftedColIndices, 0, destColIndices, 0, shiftedColIndices.length);
+        System.arraycopy(bRowIndices, 0, destRowIndices, 0, bRowIndices.length);
+        System.arraycopy(bColIndices, 0, destColIndices, 0, bColIndices.length);
 
-        System.arraycopy(shiftedRowIndices, 0, destRowIndices, rowIndices.length, shiftedRowIndices.length);
-        System.arraycopy(bColIndices, 0, destColIndices, shiftedColIndices.length, bColIndices.length);
+        System.arraycopy(shiftedRowIndices, 0, destRowIndices, bRowIndices.length, shiftedRowIndices.length);
+        System.arraycopy(colIndices, 0, destColIndices, bColIndices.length, colIndices.length);
 
         return new SparseCMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
@@ -2777,7 +2786,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setCol(Double[] values, int colIndex) {
-        return ComplexSparseMatrixGetSet.setCol(this, colIndex, ArrayUtils.toPrimitive(values));
+        return ComplexSparseMatrixGetSet.setCol(this, colIndex, ArrayUtils.unbox(values));
     }
 
 
@@ -2855,7 +2864,7 @@ public class SparseCMatrix
      */
     @Override
     public SparseCMatrix setRow(Double[] values, int rowIndex) {
-        return ComplexSparseMatrixGetSet.setRow(this, rowIndex, ArrayUtils.toPrimitive(values));
+        return ComplexSparseMatrixGetSet.setRow(this, rowIndex, ArrayUtils.unbox(values));
     }
 
 
