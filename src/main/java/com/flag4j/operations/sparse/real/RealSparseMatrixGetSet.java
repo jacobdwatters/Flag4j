@@ -184,26 +184,9 @@ public class RealSparseMatrixGetSet {
         ).boxed().collect(Collectors.toList());
         List<Integer> destColIndices = new ArrayList<>(Arrays.asList(colIndices));
 
-        // Add all entries in old matrix that are NOT in the specified column.
-        for(int i=0; i<src.entries.length; i++) {
-            if(src.colIndices[i]!=colIdx) {
-                destEntries.add(src.entries[i]);
-                destRowIndices.add(src.rowIndices[i]);
-                destColIndices.add(src.colIndices[i]);
-            }
-        }
-
-        SparseMatrix dest = new SparseMatrix(
-                src.shape.copy(),
-                destEntries,
-                destRowIndices,
-                destColIndices
-        );
-
-        dest.sparseSort();
-
-        return dest;
+        return addNotInCol(destEntries, destRowIndices, destColIndices, src, colIdx);
     }
+
 
     /**
      * Sets a column of a sparse matrix to the values in a sparse tensor.
@@ -220,8 +203,33 @@ public class RealSparseMatrixGetSet {
 
         // Initialize destination arrays with the new column and the appropriate indices.
         List<Double> destEntries = ArrayUtils.toArrayList(col.entries);
-        List<Integer> destRowIndices = ArrayUtils.toArrayList(ArrayUtils.intRange(0, col.entries.length));
-        List<Integer> destColIndices = ArrayUtils.toArrayList(col.indices);
+        List<Integer> destRowIndices = ArrayUtils.toArrayList(col.indices);
+        List<Integer> destColIndices = ArrayUtils.toArrayList(ArrayUtils.filledArray(col.nonZeroEntries(), colIdx));
+
+        return addNotInCol(destEntries, destRowIndices, destColIndices, src, colIdx);
+    }
+
+
+    /**
+     * Adds values from a sparse matrix to specified lists if the value is not within a specified column.
+     * @param destEntries List to add non-zero entries from sparse matrix to.
+     * @param destRowIndices List to add non-zero row indices from sparse matrix to.
+     * @param destColIndices List to add non-zero column indices from sparse matrix to.
+     * @param src The sparse matrix to get non-zero values and indices from.
+     * @param colIdx Specified column to not add entries to the lists from.
+     * @return A sparse matrix made from the resulting {@code destEntries, destRowIndices} and {@code destColIndices}
+     * lists.
+     */
+    private static SparseMatrix addNotInCol(List<Double> destEntries, List<Integer> destRowIndices,
+                                            List<Integer> destColIndices, SparseMatrix src, int colIdx) {
+        for(int i=0; i<src.entries.length; i++) {
+            // Add all entries which are not in the specified column.
+            if(src.colIndices[i]!=colIdx) {
+                destEntries.add(src.entries[i]);
+                destRowIndices.add(src.rowIndices[i]);
+                destColIndices.add(src.colIndices[i]);
+            }
+        }
 
         SparseMatrix dest = new SparseMatrix(
                 src.shape.copy(),
@@ -424,8 +432,8 @@ public class RealSparseMatrixGetSet {
                                          int[] sliceRows, int[] sliceCols, int row, int col) {
         // Copy vales and row/column indices (with appropriate shifting) to destination lists.
         List<Double> entries = DoubleStream.of(values).boxed().collect(Collectors.toList());
-        List<Integer> rowIndices = IntStream.of(sliceRows).boxed().collect(Collectors.toList());
-        List<Integer> colIndices = IntStream.of(sliceCols).boxed().collect(Collectors.toList());
+        List<Integer> rowIndices = ArrayUtils.toArrayList(sliceRows);
+        List<Integer> colIndices = ArrayUtils.toArrayList(sliceCols);
 
         int[] rowRange = ArrayUtils.intRange(row, sliceRows.length + row);
         int[] colRange = ArrayUtils.intRange(col, sliceCols.length + col);

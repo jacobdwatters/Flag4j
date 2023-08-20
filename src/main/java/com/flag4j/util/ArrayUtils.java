@@ -1162,6 +1162,21 @@ public final class ArrayUtils {
 
         return repeated;
     }
+
+
+    /**
+     * Constructs an array filled with a specific value.
+     * @param size Size of the array.
+     * @param value Value to set each index of the array.
+     * @return An array of specified {@code size} filled with the specified {@code value}.
+     * @throws NegativeArraySizeException If {@code} is negative.
+     */
+    public static int[] filledArray(int size, int value) {
+        int[] dest = new int[size];
+        Arrays.fill(dest, value);
+
+        return dest;
+    }
 }
 
 
