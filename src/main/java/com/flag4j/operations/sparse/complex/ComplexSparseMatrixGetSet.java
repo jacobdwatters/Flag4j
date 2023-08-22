@@ -3,6 +3,7 @@ package com.flag4j.operations.sparse.complex;
 
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.core.MatrixMixin;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -276,7 +277,7 @@ public class ComplexSparseMatrixGetSet {
             );
 
             System.arraycopy(src.colIndices, 0, destColIndices, 0, -start-1);
-            System.arraycopy(ArrayUtils.intRange(0, src.numCols), 0, destColIndices, -start-1, row.entries.length);
+            System.arraycopy(row.indices, 0, destColIndices, -start-1, row.entries.length);
             System.arraycopy(
                     src.colIndices, -start-1,
                     destColIndices, -start-1+row.entries.length, destColIndices.length-(row.entries.length - start - 1)
@@ -467,8 +468,7 @@ public class ComplexSparseMatrixGetSet {
      */
     public static SparseCMatrix setSlice(SparseCMatrix src, SparseMatrix values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.assertLessEq(src.numRows, values.numRows + row);
-        ParameterChecks.assertLessEq(src.numCols, values.numCols + col);
+        setSliceParamCheck(src, values, row, col);
 
         // Initialize lists to new values for the specified slice.
         List<CNumber> entries = ArrayUtils.toComplexArrayList(values.entries);
@@ -501,8 +501,7 @@ public class ComplexSparseMatrixGetSet {
      */
     public static SparseCMatrix setSlice(SparseCMatrix src, SparseCMatrix values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.assertLessEq(src.numRows, values.numRows + row);
-        ParameterChecks.assertLessEq(src.numCols, values.numCols + col);
+        setSliceParamCheck(src, values, row, col);
 
         // Initialize lists to new values for the specified slice.
         List<CNumber> entries = ArrayUtils.toArrayList(values.entries);
@@ -534,17 +533,14 @@ public class ComplexSparseMatrixGetSet {
      */
     public static SparseCMatrix setSlice(SparseCMatrix src, double[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.assertLessEq(src.numRows, values.length + row);
-        ParameterChecks.assertLessEq(src.numCols, values[0].length + col);
+        setSliceParamCheck(src, values.length, values[0].length, row, col);
 
         // Flatten values.
-        double[] flatValues = Arrays.stream(values)
-                .flatMapToDouble(Arrays::stream)
-                .toArray();
-        int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
-        int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
+        double[] flatValues = ArrayUtils.flatten(values);
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row, values[0].length);
+        int[] sliceCols = ArrayUtils.repeat(values.length, ArrayUtils.intRange(col, values[0].length + col));
 
-        return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
+        return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
     }
 
 
@@ -560,15 +556,14 @@ public class ComplexSparseMatrixGetSet {
      */
     public static SparseCMatrix setSlice(SparseCMatrix src, CNumber[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.assertLessEq(src.numRows, values.length + row);
-        ParameterChecks.assertLessEq(src.numCols, values[0].length + col);
+        setSliceParamCheck(src, values.length, values[0].length, row, col);
 
         // Flatten values.
         CNumber[] flatValues = ArrayUtils.flatten(values);
-        int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
-        int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row, values[0].length);
+        int[] sliceCols = ArrayUtils.repeat(values.length, ArrayUtils.intRange(col, values[0].length + col));
 
-        return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
+        return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
     }
 
 
@@ -584,13 +579,12 @@ public class ComplexSparseMatrixGetSet {
      */
     public static SparseCMatrix setSlice(SparseCMatrix src, Matrix values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.assertLessEq(src.numRows, values.numRows + row);
-        ParameterChecks.assertLessEq(src.numCols, values.numCols + col);
+        setSliceParamCheck(src, values, row, col);
 
-        int[] sliceRows = ArrayUtils.intRange(row, values.numRows + row);
-        int[] sliceCols = ArrayUtils.intRange(col, values.numCols + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.numRows + row, values.numCols);
+        int[] sliceCols = ArrayUtils.repeat(values.numRows, ArrayUtils.intRange(col, values.numCols + col));
 
-        return setSlice(src, values.entries, sliceRows, sliceCols, row, col);
+        return setSlice(src, values.entries, values.numRows, values.numCols, sliceRows, sliceCols, row, col);
     }
 
 
@@ -605,15 +599,15 @@ public class ComplexSparseMatrixGetSet {
      * @param col Starting column index of slice.
      * @return A copy of the {@code src} matrix with the specified slice set to the specified values.
      */
-    private static SparseCMatrix setSlice(SparseCMatrix src, double[] values,
+    private static SparseCMatrix setSlice(SparseCMatrix src, double[] values, int numRows, int numCols,
                                          int[] sliceRows, int[] sliceCols, int row, int col) {
         // Copy vales and row/column indices (with appropriate shifting) to destination lists.
         List<CNumber> entries = ArrayUtils.toComplexArrayList(values);
-        List<Integer> rowIndices = IntStream.of(sliceRows).boxed().collect(Collectors.toList());
-        List<Integer> colIndices = IntStream.of(sliceCols).boxed().collect(Collectors.toList());
+        List<Integer> rowIndices = ArrayUtils.toArrayList(sliceRows);
+        List<Integer> colIndices = ArrayUtils.toArrayList(sliceCols);
 
-        int[] rowRange = ArrayUtils.intRange(row, sliceRows.length + row);
-        int[] colRange = ArrayUtils.intRange(col, sliceCols.length + col);
+        int[] rowRange = ArrayUtils.intRange(row, numRows + row);
+        int[] colRange = ArrayUtils.intRange(col, numCols + col);
 
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
@@ -635,15 +629,15 @@ public class ComplexSparseMatrixGetSet {
      * @param col Starting column index of slice.
      * @return A copy of the {@code src} matrix with the specified slice set to the specified values.
      */
-    private static SparseCMatrix setSlice(SparseCMatrix src, CNumber[] values,
+    private static SparseCMatrix setSlice(SparseCMatrix src, CNumber[] values, int numRows, int numCols,
                                           int[] sliceRows, int[] sliceCols, int row, int col) {
         // Copy vales and row/column indices (with appropriate shifting) to destination lists.
         List<CNumber> entries = ArrayUtils.toArrayList(values);
-        List<Integer> rowIndices = IntStream.of(sliceRows).boxed().collect(Collectors.toList());
-        List<Integer> colIndices = IntStream.of(sliceCols).boxed().collect(Collectors.toList());
+        List<Integer> rowIndices = ArrayUtils.toArrayList(sliceRows);
+        List<Integer> colIndices = ArrayUtils.toArrayList(sliceCols);
 
-        int[] rowRange = ArrayUtils.intRange(row, sliceRows.length + row);
-        int[] colRange = ArrayUtils.intRange(col, sliceCols.length + col);
+        int[] rowRange = ArrayUtils.intRange(row, numRows + row);
+        int[] colRange = ArrayUtils.intRange(col, numCols + col);
 
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
@@ -667,8 +661,7 @@ public class ComplexSparseMatrixGetSet {
      */
     public static SparseCMatrix setSlice(SparseCMatrix src, Double[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.assertLessEq(src.numRows, values.length + row);
-        ParameterChecks.assertLessEq(src.numCols, values[0].length + col);
+        setSliceParamCheck(src, values.length, values[0].length, row, col);
 
         // Flatten values.
         double[] flatValues = new double[values.length*values[0].length];
@@ -682,7 +675,7 @@ public class ComplexSparseMatrixGetSet {
         int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
         int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
 
-        return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
+        return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
     }
 
 
@@ -698,8 +691,7 @@ public class ComplexSparseMatrixGetSet {
      */
     public static SparseCMatrix setSlice(SparseCMatrix src, Integer[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.assertLessEq(src.numRows, values.length + row);
-        ParameterChecks.assertLessEq(src.numCols, values[0].length + col);
+        setSliceParamCheck(src, values.length, values[0].length, row, col);
 
         // Flatten values.
         double[] flatValues = new double[values.length*values[0].length];
@@ -713,7 +705,7 @@ public class ComplexSparseMatrixGetSet {
         int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
         int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
 
-        return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
+        return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
     }
 
 
@@ -729,8 +721,7 @@ public class ComplexSparseMatrixGetSet {
      */
     public static SparseCMatrix setSlice(SparseCMatrix src, int[][] values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ParameterChecks.assertLessEq(src.numRows, values.length + row);
-        ParameterChecks.assertLessEq(src.numCols, values[0].length + col);
+        setSliceParamCheck(src, values.length, values[0].length, row, col);
 
         // Flatten values.
         double[] flatValues = new double[values.length*values[0].length];
@@ -743,7 +734,7 @@ public class ComplexSparseMatrixGetSet {
         int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
         int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
 
-        return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
+        return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
     }
 
 
@@ -907,12 +898,30 @@ public class ComplexSparseMatrixGetSet {
         // Copy values not in slice.
         for(int i=0; i<src.entries.length; i++) {
             if( !(ArrayUtils.contains(rowRange, src.rowIndices[i])
-                    || ArrayUtils.contains(colRange, src.colIndices[i])) ) {
+                    && ArrayUtils.contains(colRange, src.colIndices[i])) ) {
                 // Then the entry is not in the slice so add it.
                 entries.add(src.entries[i].copy());
                 rowIndices.add(src.rowIndices[i]);
                 colIndices.add(src.colIndices[i]);
             }
         }
+    }
+
+
+    private static <T extends MatrixMixin<?, ?, ?, ?, ?, ?, ?>, U extends MatrixMixin<?, ?, ?, ?, ?, ?, ?>>
+    void setSliceParamCheck(T src, U values, int row, int col) {
+        ParameterChecks.assertIndexInBounds(src.numRows(), row);
+        ParameterChecks.assertIndexInBounds(src.numCols(), col);
+        ParameterChecks.assertLessEq(src.numRows(), values.numRows() + row);
+        ParameterChecks.assertLessEq(src.numCols(), values.numCols() + col);
+    }
+
+
+    private static <T extends MatrixMixin<?, ?, ?, ?, ?, ?, ?>>
+    void setSliceParamCheck(T src, int valueRows, int valueCols, int row, int col) {
+        ParameterChecks.assertIndexInBounds(src.numRows(), row);
+        ParameterChecks.assertIndexInBounds(src.numCols(), col);
+        ParameterChecks.assertLessEq(src.numRows(), valueRows + row);
+        ParameterChecks.assertLessEq(src.numCols(), valueCols + col);
     }
 }

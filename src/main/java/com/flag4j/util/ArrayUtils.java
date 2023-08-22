@@ -1177,6 +1177,49 @@ public final class ArrayUtils {
 
         return dest;
     }
+
+
+    /**
+     * Converts an array of ints to an array of doubles.
+     * @param src Source array to convert.
+     * @param dest Destination array to store double values equivalent to the values in the {@code src} array.
+     *             If null, a new double array with the same size as {@code src} will be created.
+     * @return A reference to the {@code dest} array.
+     */
+    public static double[] asDouble(int[] src, double[] dest) {
+        if(dest == null) {
+            dest = new double[src.length];
+        }
+
+        for(int i=0; i<src.length; i++) {
+            dest[i] = src[i];
+        }
+
+        return dest;
+    }
+
+
+    /**
+     * Converts an array of {@link Integer Integers} to an array of doubles.
+     * @param src Source array to convert.
+     * @param dest Destination array to store double values equivalent to the values in the {@code src} array.
+     *             If null, a new double array with the same size as {@code src} will be created.
+     * @return A reference to the {@code dest} array.
+     */
+    public static double[] asDouble(Integer[] src, double[] dest) {
+        // TODO: Several of the methods in this class should take a destination array which may be null
+        //  just like this method. This way, new arrays only need be instantiated when necessary.
+
+        if(dest == null) {
+            dest = new double[src.length];
+        }
+
+        for(int i=0; i<src.length; i++) {
+            dest[i] = src[i];
+        }
+
+        return dest;
+    }
 }
 
 

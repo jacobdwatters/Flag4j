@@ -257,11 +257,14 @@ public class RealSparseMatrixGetSet {
      */
     public static SparseMatrix setSlice(SparseMatrix src, SparseMatrix values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
+        ParameterChecks.assertIndexInBounds(src.numRows, row);
+        ParameterChecks.assertIndexInBounds(src.numCols, col);
+
         ParameterChecks.assertLessEq(src.numRows, values.numRows + row);
         ParameterChecks.assertLessEq(src.numCols, values.numCols + col);
 
         // Initialize lists to new values for the specified slice.
-        List<Double> entries = DoubleStream.of(values.entries).boxed().collect(Collectors.toList());
+        List<Double> entries = ArrayUtils.toArrayList(values.entries);
         List<Integer> rowIndices = ArrayUtils.toArrayList(ArrayUtils.shift(row, values.rowIndices));
         List<Integer> colIndices = ArrayUtils.toArrayList(ArrayUtils.shift(col, values.colIndices));
 
@@ -294,9 +297,7 @@ public class RealSparseMatrixGetSet {
         ParameterChecks.assertLessEq(src.numCols, values[0].length + col);
 
         // Flatten values.
-        double[] flatValues = Arrays.stream(values)
-                .flatMapToDouble(Arrays::stream)
-                .toArray();
+        double[] flatValues = ArrayUtils.flatten(values);
         int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
         int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
 
@@ -431,7 +432,7 @@ public class RealSparseMatrixGetSet {
     private static SparseMatrix setSlice(SparseMatrix src, double[] values,
                                          int[] sliceRows, int[] sliceCols, int row, int col) {
         // Copy vales and row/column indices (with appropriate shifting) to destination lists.
-        List<Double> entries = DoubleStream.of(values).boxed().collect(Collectors.toList());
+        List<Double> entries = ArrayUtils.toArrayList(values);
         List<Integer> rowIndices = ArrayUtils.toArrayList(sliceRows);
         List<Integer> colIndices = ArrayUtils.toArrayList(sliceCols);
 
@@ -606,8 +607,9 @@ public class RealSparseMatrixGetSet {
                                              List<Integer> colIndices, int[] rowRange, int[] colRange) {
         // Copy values not in slice.
         for(int i=0; i<src.entries.length; i++) {
+
             if( !(ArrayUtils.contains(rowRange, src.rowIndices[i])
-                    || ArrayUtils.contains(colRange, src.colIndices[i])) ) {
+                    && ArrayUtils.contains(colRange, src.colIndices[i])) ) {
                 // Then the entry is not in the slice so add it.
                 entries.add(src.entries[i]);
                 rowIndices.add(src.rowIndices[i]);

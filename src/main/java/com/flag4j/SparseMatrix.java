@@ -749,7 +749,7 @@ public class SparseMatrix
         return RealSparseMatrixGetSet.setRow(
                 this,
                 rowIndex,
-                Stream.of(values).mapToDouble(Integer::doubleValue).toArray()
+                ArrayUtils.asDouble(values, null)
         );
     }
 
@@ -781,7 +781,7 @@ public class SparseMatrix
         return RealSparseMatrixGetSet.setRow(
                 this,
                 rowIndex,
-                Arrays.stream(values).asDoubleStream().toArray()
+                ArrayUtils.asDouble(values, null)
         );
     }
 
