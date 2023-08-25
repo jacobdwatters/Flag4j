@@ -828,6 +828,26 @@ public final class ArrayUtils {
 
 
     /**
+     * Flattens a two-dimensional array and unboxes.
+     * @param src Array to flatten and unbox.
+     * @return The flattened array.
+     */
+    public static double[] unboxFlatten(Double[][] src) {
+        double[] flat = new double[src.length*src[0].length];
+
+        // Copy 2D array to 1D array.
+        int i=0;
+        for(Double[] row : src) {
+            for(double value : row) {
+                flat[i++] = value;
+            }
+        }
+
+        return flat;
+    }
+
+
+    /**
      * Flattens a two-dimensional array.
      * @param src Array to flatten.
      * @return The flattened array.

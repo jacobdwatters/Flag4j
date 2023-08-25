@@ -298,10 +298,10 @@ public class RealSparseMatrixGetSet {
 
         // Flatten values.
         double[] flatValues = ArrayUtils.flatten(values);
-        int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
-        int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row, values[0].length);
+        int[] sliceCols = ArrayUtils.repeat(values.length, ArrayUtils.intRange(col, values[0].length + col));
 
-        return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
+        return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
     }
 
 
@@ -320,10 +320,10 @@ public class RealSparseMatrixGetSet {
         ParameterChecks.assertLessEq(src.numRows, values.numRows + row);
         ParameterChecks.assertLessEq(src.numCols, values.numCols + col);
 
-        int[] sliceRows = ArrayUtils.intRange(row, values.numRows + row);
-        int[] sliceCols = ArrayUtils.intRange(col, values.numCols + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.numRows + row, values.numCols);
+        int[] sliceCols = ArrayUtils.repeat(values.numRows, ArrayUtils.intRange(col, values.numCols + col));
 
-        return setSlice(src, values.entries, sliceRows, sliceCols, row, col);
+        return setSlice(src, values.entries, values.numRows, values.numCols, sliceRows, sliceCols, row, col);
     }
 
 
@@ -350,10 +350,10 @@ public class RealSparseMatrixGetSet {
                 flatValues[pos++] = d;
             }
         }
-        int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
-        int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row, values[0].length);
+        int[] sliceCols = ArrayUtils.repeat(values.length, ArrayUtils.intRange(col, values[0].length + col));
 
-        return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
+        return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
     }
 
 
@@ -373,18 +373,12 @@ public class RealSparseMatrixGetSet {
         ParameterChecks.assertLessEq(src.numCols, values[0].length + col);
 
         // Flatten values.
-        double[] flatValues = new double[values.length*values[0].length];
-        int pos = 0;
-        for(Double[] vRow : values) {
-            for(Double d : vRow) {
-                flatValues[pos++] = d;
-            }
-        }
+        double[] flatValues = ArrayUtils.unboxFlatten(values);
 
-        int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
-        int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row, values[0].length);
+        int[] sliceCols = ArrayUtils.repeat(values.length, ArrayUtils.intRange(col, values[0].length + col));
 
-        return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
+        return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
     }
 
 
@@ -412,10 +406,10 @@ public class RealSparseMatrixGetSet {
             }
         }
 
-        int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
-        int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row, values[0].length);
+        int[] sliceCols = ArrayUtils.repeat(values.length, ArrayUtils.intRange(col, values[0].length + col));
 
-        return setSlice(src, flatValues, sliceRows, sliceCols, row, col);
+        return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
     }
 
 
@@ -423,21 +417,23 @@ public class RealSparseMatrixGetSet {
      * Sets a slice of a sparse matrix to values given in a 1d dense array.
      * @param src Source sparse matrix to copy non-slice from.
      * @param values Dense value for slice.
+     * @param numRows Number of rows in the matrix represented by {@code values}.
+     * @param numCols Number of columns in the matrix represented by {@code values}.
      * @param sliceRows Row indices for slice.
      * @param sliceCols Column indices for slice.
      * @param row Starting row index of slice.
      * @param col Starting column index of slice.
      * @return A copy of the {@code src} matrix with the specified slice set to the specified values.
      */
-    private static SparseMatrix setSlice(SparseMatrix src, double[] values,
+    private static SparseMatrix setSlice(SparseMatrix src, double[] values, int numRows, int numCols,
                                          int[] sliceRows, int[] sliceCols, int row, int col) {
         // Copy vales and row/column indices (with appropriate shifting) to destination lists.
         List<Double> entries = ArrayUtils.toArrayList(values);
         List<Integer> rowIndices = ArrayUtils.toArrayList(sliceRows);
         List<Integer> colIndices = ArrayUtils.toArrayList(sliceCols);
 
-        int[] rowRange = ArrayUtils.intRange(row, sliceRows.length + row);
-        int[] colRange = ArrayUtils.intRange(col, sliceCols.length + col);
+        int[] rowRange = ArrayUtils.intRange(row, numRows + row);
+        int[] colRange = ArrayUtils.intRange(col, numCols + col);
 
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 

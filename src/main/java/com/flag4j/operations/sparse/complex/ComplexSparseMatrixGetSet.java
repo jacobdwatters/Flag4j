@@ -593,6 +593,8 @@ public class ComplexSparseMatrixGetSet {
      * Sets a slice of a sparse matrix to values given in a 1d dense array.
      * @param src Source sparse matrix to copy non-slice from.
      * @param values Dense value for slice.
+     * @param numRows Number of rows in the matrix represented by {@code values}.
+     * @param numCols Number of columns in the matrix represented by {@code values}.
      * @param sliceRows Row indices for slice.
      * @param sliceCols Column indices for slice.
      * @param row Starting row index of slice.
@@ -623,6 +625,8 @@ public class ComplexSparseMatrixGetSet {
      * Sets a slice of a sparse matrix to values given in a 1d dense array.
      * @param src Source sparse matrix to copy non-slice from.
      * @param values Dense value for slice.
+     * @param numRows Number of rows in the matrix represented by {@code values}.
+     * @param numCols Number of columns in the matrix represented by {@code values}.
      * @param sliceRows Row indices for slice.
      * @param sliceCols Column indices for slice.
      * @param row Starting row index of slice.
