@@ -34,72 +34,71 @@ import java.math.RoundingMode;
  * 64 bit doubles.
  */
 public class CNumber extends Number {
-    // TODO: Constants should be private and accessed through method which returns a copy
     // Several constants are provided for convenience.
     /**
      * The complex number with zero imaginary and real parts.
      */
-    public final static CNumber ZERO = new CNumber();
+    private static final CNumber ZERO = new CNumber();
     /**
      * The complex number with zero imaginary part and one real part.
      */
-    public final static CNumber ONE = new CNumber(1);
+    private static final CNumber ONE = new CNumber(1);
     /**
      * The complex number with zero imaginary part and two real part.
      */
-    public final static CNumber TWO = new CNumber(2);
+    private static final CNumber TWO = new CNumber(2);
     /**
      * The complex number with zero imaginary part and negative one real part.
      */
-    public final static CNumber NEGATIVE_ONE = new CNumber(1);
+    private static final CNumber NEGATIVE_ONE = new CNumber(1);
     /**
      * The real double value closer to pi than any other.
      */
-    public final static CNumber PI = new CNumber(Math.PI);
+    private static final CNumber PI = new CNumber(Math.PI);
     /**
      * The real double value closer to the mathematical constant e than any other.
      */
-    public final static CNumber E = new CNumber(Math.E);
+    private static final CNumber E = new CNumber(Math.E);
     /**
      * The double value closer than any other to the square root of 2
      */
-    public final static CNumber ROOT_TWO = new CNumber(Math.sqrt(2));
+    private static final CNumber ROOT_TWO = new CNumber(Math.sqrt(2));
     /**
      * The double value closer than any other to the square root of 3
      */
-    public final static CNumber ROOT_THREE = new CNumber(Math.sqrt(3));
+    private static final CNumber ROOT_THREE = new CNumber(Math.sqrt(3));
     /**
      * The imaginary unit i.
      */
-    public final static CNumber IMAGINARY_UNIT = new CNumber(0, 1);
+    private static final CNumber IMAGINARY_UNIT = new CNumber(0, 1);
     /**
      * The additive inverse of the imaginary unit, -i.
      */
-    public final static CNumber INV_IMAGINARY_UNIT = new CNumber(0, -1);
+    private static final CNumber INV_IMAGINARY_UNIT = new CNumber(0, -1);
     /**
      * The maximum real double value 1.7976931348623157E308.
      */
-    public final static CNumber MAX_REAL = new CNumber(Double.MAX_VALUE);
+    private static final CNumber MAX_REAL = new CNumber(Double.MAX_VALUE);
     /**
      * The minimum real double value 4.9E-324
      */
-    public final static CNumber MIN_REAL = new CNumber(Double.MIN_VALUE);
+    private static final CNumber MIN_REAL = new CNumber(Double.MIN_VALUE);
     /**
      * The smallest possible real normal double 2.2250738585072014E-308.
      */
-    public final static CNumber MIN_REAL_NORMAL = new CNumber(Double.MIN_NORMAL);
+    private static final CNumber MIN_REAL_NORMAL = new CNumber(Double.MIN_NORMAL);
     /**
      * Complex number with real part equal to {@link Double#POSITIVE_INFINITY}.
      */
-    public final static CNumber POSITIVE_INFINITY = new CNumber(Double.POSITIVE_INFINITY);
+    private static final CNumber POSITIVE_INFINITY = new CNumber(Double.POSITIVE_INFINITY);
     /**
      * Complex number with real part equal to {@link Double#NEGATIVE_INFINITY}.
      */
-    public final static CNumber NEGATIVE_INFINITY = new CNumber(Double.NEGATIVE_INFINITY);
+    private static final CNumber NEGATIVE_INFINITY = new CNumber(Double.NEGATIVE_INFINITY);
     /**
      * Complex number with real and imaginary parts equal to {@link Double#NaN}.
      */
-    public final static CNumber NaN = new CNumber(Double.NaN, Double.NaN);
+    private static final CNumber NaN = new CNumber(Double.NaN, Double.NaN);
 
     /**
      * Real component of the complex number.
@@ -577,7 +576,7 @@ public class CNumber extends Number {
     public static CNumber pow(double a, CNumber b) {
         CNumber result;
 
-        if(b.isReal()) {
+        if(b.im == 0) {
             result = CNumber.pow(a, b.re);
         } else {
             // Apply a change of base
@@ -600,8 +599,8 @@ public class CNumber extends Number {
     public static CNumber pow(CNumber a, CNumber b) {
         CNumber result;
 
-        if(a.isReal()) {
-            if(b.isReal()) {
+        if(a.im == 0) {
+            if(b.im == 0) {
                 result = CNumber.pow(a.re, b.re);
             } else {
                 result = CNumber.pow(a.re, b);
@@ -623,7 +622,7 @@ public class CNumber extends Number {
     public static CNumber pow(CNumber a, double b) {
         CNumber result;
 
-        if(a.isReal()) {
+        if(a.im == 0) {
             result = CNumber.pow(a.re, b);
         } else {
             result = exp(ln(a).mult(b));
@@ -1568,7 +1567,7 @@ public class CNumber extends Number {
      * Gets the real component of this complex number.
      * @return The real component of this complex number.
      */
-    public double getReal() {
+    public double re() {
         return re;
     }
 
@@ -1577,7 +1576,7 @@ public class CNumber extends Number {
      * Gets the imaginary component of this complex number.
      * @return The imaginary component of this complex number.
      */
-    public double getIm() {
+    public double im() {
         return im;
     }
 
@@ -1589,6 +1588,150 @@ public class CNumber extends Number {
      */
     public static int length(CNumber a) {
         return a.toString().length();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to zero.
+     * @return The complex number which is equivalent to zero.
+     */
+    public static CNumber zero() {
+        return ZERO.copy();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to one.
+     * @return The complex number equivalent to one.
+     */
+    public static CNumber one() {
+        return ONE.copy();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to two.
+     * @return The complex number equivalent to two.
+     */
+    public static CNumber two() {
+        return TWO.copy();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to negative one.
+     * @return The complex number equivalent to negative one.
+     */
+    public static CNumber negOne() {
+        return NEGATIVE_ONE.copy();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to the square root of two.
+     * @return The complex number equivalent to the square root of two.
+     */
+    public static CNumber rootTwo() {
+        return ROOT_TWO.copy();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to the square root of three.
+     * @return The complex number equivalent to the square root of three.
+     */
+    public static CNumber rootThree() {
+        return ROOT_THREE.copy();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to {@link Double#POSITIVE_INFINITY}.
+     * @return The complex number equivalent to {@link Double#POSITIVE_INFINITY}.
+     */
+    public static CNumber posInfinity() {
+        return POSITIVE_INFINITY.copy();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to {@link Double#NEGATIVE_INFINITY}.
+     * @return The complex number equivalent to {@link Double#NEGATIVE_INFINITY}.
+     */
+    public static CNumber negInfinity() {
+        return NEGATIVE_INFINITY.copy();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to {@link Math#PI}.
+     * @return The complex number equivalent to {@link Math#PI}.
+     */
+    public static CNumber pi() {
+        return PI.copy();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to {@link Math#E}.
+     * @return The complex number equivalent to {@link Math#E}.
+     */
+    public static CNumber eulers() {
+        return E.copy();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to {@link Double#NaN}.
+     * @return The complex number equivalent to {@link Double#NaN}.
+     */
+    public static CNumber nan() {
+        return NaN.copy();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to {@code i}.
+     * @return The complex number equivalent to {@code i}.
+     */
+    public static CNumber imagUnit() {
+        return IMAGINARY_UNIT.copy();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to {@code -i}.
+     * @return The complex number equivalent to {@code -i}.
+     */
+    public static CNumber negImagUnit() {
+        return INV_IMAGINARY_UNIT.copy();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to {@link Double#MIN_VALUE}.
+     * @return The complex number equivalent to {@link Double#MIN_VALUE}.
+     */
+    public static CNumber minReal() {
+        return MIN_REAL.copy();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to {@link Double#MIN_NORMAL}.
+     * @return The complex number equivalent to {@link Double#MIN_NORMAL}.
+     */
+    public static CNumber minRealNormal() {
+        return MIN_REAL_NORMAL.copy();
+    }
+
+
+    /**
+     * Gets the complex number equivalent to {@link Double#MAX_VALUE}.
+     * @return The complex number equivalent to {@link Double#MAX_VALUE}.
+     */
+    public static CNumber maxReal() {
+        return MAX_REAL.copy();
     }
 
 

@@ -695,8 +695,32 @@ public class Matrix
     public Matrix setCol(Vector values, int colIndex) {
         ParameterChecks.assertArrayLengthsEq(values.size, this.numRows);
 
+        int rowOffset = 0;
         for(int i=0; i<values.size; i++) {
-            super.entries[i*numCols + colIndex] = values.entries[i];
+            super.entries[rowOffset + colIndex] = values.entries[i];
+            rowOffset += numCols;
+        }
+
+        return this;
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column. This method assumes that the indices of the sparse vector are sorted.
+     *                 If this is not the case, call {@link SparseVector#sparseSort()} first.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the {@code values} vector has a different length than the number of rows of this matrix.
+     */
+    public Matrix setCol(SparseVector values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.size, this.numRows);
+
+        int sparseIdx = 0;
+        for(int i=0; i<values.size; i++) {
+            super.entries[i*numCols + colIndex] = (i == values.indices[sparseIdx]) ?
+                    values.entries[sparseIdx++] : 0;
         }
 
         return this;

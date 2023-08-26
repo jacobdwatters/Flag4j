@@ -738,4 +738,418 @@ class SparseCMatrixSetSliceTests {
         double[][] final3b = b;
         assertThrows(Exception.class, ()->final3a.setSlice(final3b, 0, 4));
     }
+
+
+    @Test
+    void setSliceRealDenseBoxedArrayTest() {
+        Shape aShape;
+        int[] aRowIndices;
+        int[] aColIndices;
+        CNumber[] aEntries;
+        SparseCMatrix a;
+
+        Double[][] b;
+
+        Shape expShape;
+        int[] expRowIndices;
+        int[] expColIndices;
+        CNumber[] expEntries;
+        SparseCMatrix exp;
+
+        // ---------------------  Sub-case 1 ---------------------
+        aShape = new Shape(5, 3);
+        aEntries = new CNumber[]{new CNumber("0.92932+0.83391i"), new CNumber("0.75564+0.4746i"), new CNumber("0.67667+0.02131i")};
+        aRowIndices = new int[]{1, 2, 3};
+        aColIndices = new int[]{2, 1, 0};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new Double[][]{
+                {0.20641, 0.00627, 0.74659},
+                {0.32765, 0.21592, 0.62641}};
+
+        expShape = new Shape(5, 3);
+        expEntries = new CNumber[]{new CNumber("0.92932+0.83391i"), new CNumber("0.20641"), new CNumber("0.00627"), new CNumber("0.74659"), new CNumber("0.32765"), new CNumber("0.21592"), new CNumber("0.62641")};
+        expRowIndices = new int[]{1, 2, 2, 2, 3, 3, 3};
+        expColIndices = new int[]{2, 0, 1, 2, 0, 1, 2};
+        exp = new SparseCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+
+        assertEquals(exp, a.setSlice(b, 2, 0));
+
+        // ---------------------  Sub-case 2 ---------------------
+        aShape = new Shape(23, 11);
+        aEntries = new CNumber[]{new CNumber("0.78261+0.81287i"), new CNumber("0.92047+0.1968i"), new CNumber("0.19346+0.66988i"), new CNumber("0.79317+0.5482i"), new CNumber("0.86173+0.26806i")};
+        aRowIndices = new int[]{2, 12, 13, 20, 22};
+        aColIndices = new int[]{8, 8, 8, 9, 3};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new Double[][]{
+                {0.42509, 0.86635, 0.49669, 0.12935, 0.58896, 0.55769, 0.74153, 0.3902, 0.30427},
+                {0.47135, 0.27404, 0.77679, 0.18645, 0.14262, 0.34505, 0.96778, 0.08602, 0.04046},
+                {0.17124, 0.48106, 0.81049, 0.98155, 0.92245, 0.22864, 0.24145, 0.44011, 0.50031},
+                {0.73361, 0.23513, 0.61501, 0.95234, 0.48264, 0.74098, 0.69689, 0.41605, 0.41617},
+                {0.58739, 0.71357, 0.91358, 0.35843, 0.94982, 0.39818, 0.24228, 0.26308, 0.30217}};
+
+        expShape = new Shape(23, 11);
+        expEntries = new CNumber[]{new CNumber("0.78261+0.81287i"), new CNumber("0.92047+0.1968i"), new CNumber("0.19346+0.66988i"), new CNumber("0.42509"), new CNumber("0.86635"), new CNumber("0.49669"), new CNumber("0.12935"), new CNumber("0.58896"), new CNumber("0.55769"), new CNumber("0.74153"), new CNumber("0.3902"), new CNumber("0.30427"), new CNumber("0.47135"), new CNumber("0.27404"), new CNumber("0.77679"), new CNumber("0.18645"), new CNumber("0.14262"), new CNumber("0.34505"), new CNumber("0.96778"), new CNumber("0.08602"), new CNumber("0.04046"), new CNumber("0.17124"), new CNumber("0.48106"), new CNumber("0.81049"), new CNumber("0.98155"), new CNumber("0.92245"), new CNumber("0.22864"), new CNumber("0.24145"), new CNumber("0.44011"), new CNumber("0.50031"), new CNumber("0.73361"), new CNumber("0.23513"), new CNumber("0.61501"), new CNumber("0.95234"), new CNumber("0.48264"), new CNumber("0.74098"), new CNumber("0.69689"), new CNumber("0.41605"), new CNumber("0.41617"), new CNumber("0.58739"), new CNumber("0.71357"), new CNumber("0.91358"), new CNumber("0.35843"), new CNumber("0.94982"), new CNumber("0.39818"), new CNumber("0.24228"), new CNumber("0.26308"), new CNumber("0.30217")};
+        expRowIndices = new int[]{2, 12, 13, 18, 18, 18, 18, 18, 18, 18, 18, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 20, 20, 20, 20, 20, 20, 20, 20, 20, 21, 21, 21, 21, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22};
+        expColIndices = new int[]{8, 8, 8, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        exp = new SparseCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+
+        assertEquals(exp, a.setSlice(b, 18, 1));
+
+        // ---------------------  Sub-case 3 ---------------------
+        aShape = new Shape(1000, 5);
+        aEntries = new CNumber[]{new CNumber("0.47086+0.22829i"), new CNumber("0.3198+0.27911i"), new CNumber("0.15627+0.18005i"), new CNumber("0.8154+0.86608i"), new CNumber("0.29655+0.07095i"), new CNumber("0.82134+0.18228i"), new CNumber("0.35707+0.25355i"), new CNumber("0.66031+0.70124i"), new CNumber("0.97115+0.2385i")};
+        aRowIndices = new int[]{104, 108, 134, 162, 201, 243, 356, 599, 750};
+        aColIndices = new int[]{1, 3, 1, 4, 0, 4, 1, 3, 3};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new Double[][]{
+                {0.37385, 0.16278},
+                {0.16053, 0.78368},
+                {0.81585, 0.09195}};
+
+        expShape = new Shape(1000, 5);
+        expEntries = new CNumber[]{new CNumber("0.37385"), new CNumber("0.16278"), new CNumber("0.16053"), new CNumber("0.78368"), new CNumber("0.81585"), new CNumber("0.09195"), new CNumber("0.47086+0.22829i"), new CNumber("0.3198+0.27911i"), new CNumber("0.15627+0.18005i"), new CNumber("0.8154+0.86608i"), new CNumber("0.29655+0.07095i"), new CNumber("0.82134+0.18228i"), new CNumber("0.35707+0.25355i"), new CNumber("0.66031+0.70124i"), new CNumber("0.97115+0.2385i")};
+        expRowIndices = new int[]{0, 0, 1, 1, 2, 2, 104, 108, 134, 162, 201, 243, 356, 599, 750};
+        expColIndices = new int[]{0, 1, 0, 1, 0, 1, 1, 3, 1, 4, 0, 4, 1, 3, 3};
+        exp = new SparseCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+
+        assertEquals(exp, a.setSlice(b, 0, 0));
+
+        // ---------------------  Sub-case 4 ---------------------
+        aShape = new Shape(3, 5);
+        aEntries = new CNumber[]{new CNumber("0.76161+0.32703i"), new CNumber("0.86463+0.73067i"), new CNumber("0.65177+0.53146i"), new CNumber("0.23319+0.56897i")};
+        aRowIndices = new int[]{1, 2, 2, 2};
+        aColIndices = new int[]{0, 1, 2, 4};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new Double[][]{
+                {0.2427, 0.27463, 0.00804}};
+
+        SparseCMatrix final0a = a;
+        Double[][] final0b = b;
+        assertThrows(Exception.class, ()->final0a.setSlice(final0b, -1, 2));
+
+        // ---------------------  Sub-case 5 ---------------------
+        aShape = new Shape(3, 5);
+        aEntries = new CNumber[]{new CNumber("0.41438+0.13745i"), new CNumber("0.62856+0.69366i"), new CNumber("0.40666+0.4999i"), new CNumber("0.81274+0.10541i")};
+        aRowIndices = new int[]{0, 0, 1, 2};
+        aColIndices = new int[]{1, 4, 3, 3};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new Double[][]{
+                {0.83141},
+                {0.60989},
+                {0.5986}};
+
+        SparseCMatrix final1a = a;
+        Double[][] final1b = b;
+        assertThrows(Exception.class, ()->final1a.setSlice(final1b, 0, 16));
+
+        // ---------------------  Sub-case 6 ---------------------
+        aShape = new Shape(3, 5);
+        aEntries = new CNumber[]{new CNumber("0.02357+0.30556i"), new CNumber("0.85024+0.4537i"), new CNumber("0.7543+0.49265i"), new CNumber("0.75906+0.14116i")};
+        aRowIndices = new int[]{0, 1, 1, 2};
+        aColIndices = new int[]{3, 2, 3, 3};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new Double[][]{
+                {0.28434, 0.27412},
+                {0.5756, 0.75022}};
+
+        SparseCMatrix final2a = a;
+        Double[][] final2b = b;
+        assertThrows(Exception.class, ()->final2a.setSlice(final2b, 2, 0));
+
+        // ---------------------  Sub-case 7 ---------------------
+        aShape = new Shape(3, 5);
+        aEntries = new CNumber[]{new CNumber("0.39067+0.57459i"), new CNumber("0.30883+0.44375i"), new CNumber("0.06197+0.10166i"), new CNumber("0.29584+0.81226i")};
+        aRowIndices = new int[]{0, 0, 0, 1};
+        aColIndices = new int[]{0, 2, 4, 3};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new Double[][]{
+                {0.41028, 0.03141, 0.92985}};
+
+        SparseCMatrix final3a = a;
+        Double[][] final3b = b;
+        assertThrows(Exception.class, ()->final3a.setSlice(final3b, 0, 4));
+    }
+
+
+    @Test
+    void setSliceRealDenseIntBoxedArrayTest() {
+        Shape aShape;
+        int[] aRowIndices;
+        int[] aColIndices;
+        CNumber[] aEntries;
+        SparseCMatrix a;
+
+        Integer[][] b;
+
+        Shape expShape;
+        int[] expRowIndices;
+        int[] expColIndices;
+        CNumber[] expEntries;
+        SparseCMatrix exp;
+
+        // ---------------------  Sub-case 1 ---------------------
+        aShape = new Shape(5, 3);
+        aEntries = new CNumber[]{new CNumber("0.92932+0.83391i"), new CNumber("0.75564+0.4746i"), new CNumber("0.67667+0.02131i")};
+        aRowIndices = new int[]{1, 2, 3};
+        aColIndices = new int[]{2, 1, 0};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new Integer[][]{
+                {20641, 627, 74659},
+                {32765, 21592, 62641}};
+
+        expShape = new Shape(5, 3);
+        expEntries = new CNumber[]{new CNumber("0.92932+0.83391i"), new CNumber("20641"), new CNumber("627"), new CNumber("74659"), new CNumber("32765"), new CNumber("21592"), new CNumber("62641")};
+        expRowIndices = new int[]{1, 2, 2, 2, 3, 3, 3};
+        expColIndices = new int[]{2, 0, 1, 2, 0, 1, 2};
+        exp = new SparseCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+
+        assertEquals(exp, a.setSlice(b, 2, 0));
+
+        // ---------------------  Sub-case 2 ---------------------
+        aShape = new Shape(23, 11);
+        aEntries = new CNumber[]{new CNumber("0.78261+0.81287i"), new CNumber("0.92047+0.1968i"), new CNumber("0.19346+0.66988i"), new CNumber("0.79317+0.5482i"), new CNumber("0.86173+0.26806i")};
+        aRowIndices = new int[]{2, 12, 13, 20, 22};
+        aColIndices = new int[]{8, 8, 8, 9, 3};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new Integer[][]{
+                {42509, 86635, 49669, 12935, 58896, 55769, 74153, 3902, 30427},
+                {47135, 27404, 77679, 18645, 14262, 34505, 96778, 8602, 4046},
+                {17124, 48106, 81049, 98155, 92245, 22864, 24145, 44011, 50031},
+                {73361, 23513, 61501, 95234, 48264, 74098, 69689, 41605, 41617},
+                {58739, 71357, 91358, 35843, 94982, 39818, 24228, 26308, 30217}};
+
+        expShape = new Shape(23, 11);
+        expEntries = new CNumber[]{new CNumber("0.78261+0.81287i"), new CNumber("0.92047+0.1968i"), new CNumber("0.19346+0.66988i"), new CNumber("42509"), new CNumber("86635"), new CNumber("49669"), new CNumber("12935"), new CNumber("58896"), new CNumber("55769"), new CNumber("74153"), new CNumber("3902"), new CNumber("30427"), new CNumber("47135"), new CNumber("27404"), new CNumber("77679"), new CNumber("18645"), new CNumber("14262"), new CNumber("34505"), new CNumber("96778"), new CNumber("8602"), new CNumber("4046"), new CNumber("17124"), new CNumber("48106"), new CNumber("81049"), new CNumber("98155"), new CNumber("92245"), new CNumber("22864"), new CNumber("24145"), new CNumber("44011"), new CNumber("50031"), new CNumber("73361"), new CNumber("23513"), new CNumber("61501"), new CNumber("95234"), new CNumber("48264"), new CNumber("74098"), new CNumber("69689"), new CNumber("41605"), new CNumber("41617"), new CNumber("58739"), new CNumber("71357"), new CNumber("91358"), new CNumber("35843"), new CNumber("94982"), new CNumber("39818"), new CNumber("24228"), new CNumber("26308"), new CNumber("30217")};
+        expRowIndices = new int[]{2, 12, 13, 18, 18, 18, 18, 18, 18, 18, 18, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 20, 20, 20, 20, 20, 20, 20, 20, 20, 21, 21, 21, 21, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22};
+        expColIndices = new int[]{8, 8, 8, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        exp = new SparseCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+
+        assertEquals(exp, a.setSlice(b, 18, 1));
+
+        // ---------------------  Sub-case 3 ---------------------
+        aShape = new Shape(1000, 5);
+        aEntries = new CNumber[]{new CNumber("0.47086+0.22829i"), new CNumber("0.3198+0.27911i"), new CNumber("0.15627+0.18005i"), new CNumber("0.8154+0.86608i"), new CNumber("0.29655+0.07095i"), new CNumber("0.82134+0.18228i"), new CNumber("0.35707+0.25355i"), new CNumber("0.66031+0.70124i"), new CNumber("0.97115+0.2385i")};
+        aRowIndices = new int[]{104, 108, 134, 162, 201, 243, 356, 599, 750};
+        aColIndices = new int[]{1, 3, 1, 4, 0, 4, 1, 3, 3};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new Integer[][]{
+                {37385, 16278},
+                {16053, 78368},
+                {81585, 9195}};
+
+        expShape = new Shape(1000, 5);
+        expEntries = new CNumber[]{new CNumber("37385"), new CNumber("16278"), new CNumber("16053"), new CNumber("78368"), new CNumber("81585"), new CNumber("9195"), new CNumber("0.47086+0.22829i"), new CNumber("0.3198+0.27911i"), new CNumber("0.15627+0.18005i"), new CNumber("0.8154+0.86608i"), new CNumber("0.29655+0.07095i"), new CNumber("0.82134+0.18228i"), new CNumber("0.35707+0.25355i"), new CNumber("0.66031+0.70124i"), new CNumber("0.97115+0.2385i")};
+        expRowIndices = new int[]{0, 0, 1, 1, 2, 2, 104, 108, 134, 162, 201, 243, 356, 599, 750};
+        expColIndices = new int[]{0, 1, 0, 1, 0, 1, 1, 3, 1, 4, 0, 4, 1, 3, 3};
+        exp = new SparseCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+
+        assertEquals(exp, a.setSlice(b, 0, 0));
+
+        // ---------------------  Sub-case 4 ---------------------
+        aShape = new Shape(3, 5);
+        aEntries = new CNumber[]{new CNumber("0.76161+0.32703i"), new CNumber("0.86463+0.73067i"), new CNumber("0.65177+0.53146i"), new CNumber("0.23319+0.56897i")};
+        aRowIndices = new int[]{1, 2, 2, 2};
+        aColIndices = new int[]{0, 1, 2, 4};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new Integer[][]{
+                {2427, 27463, 804}};
+
+        SparseCMatrix final0a = a;
+        Integer[][] final0b = b;
+        assertThrows(Exception.class, ()->final0a.setSlice(final0b, -1, 2));
+
+        // ---------------------  Sub-case 5 ---------------------
+        aShape = new Shape(3, 5);
+        aEntries = new CNumber[]{new CNumber("0.41438+0.13745i"), new CNumber("0.62856+0.69366i"), new CNumber("0.40666+0.4999i"), new CNumber("0.81274+0.10541i")};
+        aRowIndices = new int[]{0, 0, 1, 2};
+        aColIndices = new int[]{1, 4, 3, 3};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new Integer[][]{
+                {83141},
+                {60989},
+                {5986}};
+
+        SparseCMatrix final1a = a;
+        Integer[][] final1b = b;
+        assertThrows(Exception.class, ()->final1a.setSlice(final1b, 0, 16));
+
+        // ---------------------  Sub-case 6 ---------------------
+        aShape = new Shape(3, 5);
+        aEntries = new CNumber[]{new CNumber("0.02357+0.30556i"), new CNumber("0.85024+0.4537i"), new CNumber("0.7543+0.49265i"), new CNumber("0.75906+0.14116i")};
+        aRowIndices = new int[]{0, 1, 1, 2};
+        aColIndices = new int[]{3, 2, 3, 3};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new Integer[][]{
+                {28434, 27412},
+                {5756, 75022}};
+
+        SparseCMatrix final2a = a;
+        Integer[][] final2b = b;
+        assertThrows(Exception.class, ()->final2a.setSlice(final2b, 2, 0));
+
+        // ---------------------  Sub-case 7 ---------------------
+        aShape = new Shape(3, 5);
+        aEntries = new CNumber[]{new CNumber("0.39067+0.57459i"), new CNumber("0.30883+0.44375i"), new CNumber("0.06197+0.10166i"), new CNumber("0.29584+0.81226i")};
+        aRowIndices = new int[]{0, 0, 0, 1};
+        aColIndices = new int[]{0, 2, 4, 3};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new Integer[][]{
+                {41028, 3141, 92985}};
+
+        SparseCMatrix final3a = a;
+        Integer[][] final3b = b;
+        assertThrows(Exception.class, ()->final3a.setSlice(final3b, 0, 4));
+    }
+
+
+    @Test
+    void setSliceRealDenseIntArrayTest() {
+        Shape aShape;
+        int[] aRowIndices;
+        int[] aColIndices;
+        CNumber[] aEntries;
+        SparseCMatrix a;
+
+        int[][] b;
+
+        Shape expShape;
+        int[] expRowIndices;
+        int[] expColIndices;
+        CNumber[] expEntries;
+        SparseCMatrix exp;
+
+        // ---------------------  Sub-case 1 ---------------------
+        aShape = new Shape(5, 3);
+        aEntries = new CNumber[]{new CNumber("0.92932+0.83391i"), new CNumber("0.75564+0.4746i"), new CNumber("0.67667+0.02131i")};
+        aRowIndices = new int[]{1, 2, 3};
+        aColIndices = new int[]{2, 1, 0};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new int[][]{
+                {20641, 627, 74659},
+                {32765, 21592, 62641}};
+
+        expShape = new Shape(5, 3);
+        expEntries = new CNumber[]{new CNumber("0.92932+0.83391i"), new CNumber("20641"), new CNumber("627"), new CNumber("74659"), new CNumber("32765"), new CNumber("21592"), new CNumber("62641")};
+        expRowIndices = new int[]{1, 2, 2, 2, 3, 3, 3};
+        expColIndices = new int[]{2, 0, 1, 2, 0, 1, 2};
+        exp = new SparseCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+
+        assertEquals(exp, a.setSlice(b, 2, 0));
+
+        // ---------------------  Sub-case 2 ---------------------
+        aShape = new Shape(23, 11);
+        aEntries = new CNumber[]{new CNumber("0.78261+0.81287i"), new CNumber("0.92047+0.1968i"), new CNumber("0.19346+0.66988i"), new CNumber("0.79317+0.5482i"), new CNumber("0.86173+0.26806i")};
+        aRowIndices = new int[]{2, 12, 13, 20, 22};
+        aColIndices = new int[]{8, 8, 8, 9, 3};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new int[][]{
+                {42509, 86635, 49669, 12935, 58896, 55769, 74153, 3902, 30427},
+                {47135, 27404, 77679, 18645, 14262, 34505, 96778, 8602, 4046},
+                {17124, 48106, 81049, 98155, 92245, 22864, 24145, 44011, 50031},
+                {73361, 23513, 61501, 95234, 48264, 74098, 69689, 41605, 41617},
+                {58739, 71357, 91358, 35843, 94982, 39818, 24228, 26308, 30217}};
+
+        expShape = new Shape(23, 11);
+        expEntries = new CNumber[]{new CNumber("0.78261+0.81287i"), new CNumber("0.92047+0.1968i"), new CNumber("0.19346+0.66988i"), new CNumber("42509"), new CNumber("86635"), new CNumber("49669"), new CNumber("12935"), new CNumber("58896"), new CNumber("55769"), new CNumber("74153"), new CNumber("3902"), new CNumber("30427"), new CNumber("47135"), new CNumber("27404"), new CNumber("77679"), new CNumber("18645"), new CNumber("14262"), new CNumber("34505"), new CNumber("96778"), new CNumber("8602"), new CNumber("4046"), new CNumber("17124"), new CNumber("48106"), new CNumber("81049"), new CNumber("98155"), new CNumber("92245"), new CNumber("22864"), new CNumber("24145"), new CNumber("44011"), new CNumber("50031"), new CNumber("73361"), new CNumber("23513"), new CNumber("61501"), new CNumber("95234"), new CNumber("48264"), new CNumber("74098"), new CNumber("69689"), new CNumber("41605"), new CNumber("41617"), new CNumber("58739"), new CNumber("71357"), new CNumber("91358"), new CNumber("35843"), new CNumber("94982"), new CNumber("39818"), new CNumber("24228"), new CNumber("26308"), new CNumber("30217")};
+        expRowIndices = new int[]{2, 12, 13, 18, 18, 18, 18, 18, 18, 18, 18, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 20, 20, 20, 20, 20, 20, 20, 20, 20, 21, 21, 21, 21, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22};
+        expColIndices = new int[]{8, 8, 8, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        exp = new SparseCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+
+        assertEquals(exp, a.setSlice(b, 18, 1));
+
+        // ---------------------  Sub-case 3 ---------------------
+        aShape = new Shape(1000, 5);
+        aEntries = new CNumber[]{new CNumber("0.47086+0.22829i"), new CNumber("0.3198+0.27911i"), new CNumber("0.15627+0.18005i"), new CNumber("0.8154+0.86608i"), new CNumber("0.29655+0.07095i"), new CNumber("0.82134+0.18228i"), new CNumber("0.35707+0.25355i"), new CNumber("0.66031+0.70124i"), new CNumber("0.97115+0.2385i")};
+        aRowIndices = new int[]{104, 108, 134, 162, 201, 243, 356, 599, 750};
+        aColIndices = new int[]{1, 3, 1, 4, 0, 4, 1, 3, 3};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new int[][]{
+                {37385, 16278},
+                {16053, 78368},
+                {81585, 9195}};
+
+        expShape = new Shape(1000, 5);
+        expEntries = new CNumber[]{new CNumber("37385"), new CNumber("16278"), new CNumber("16053"), new CNumber("78368"), new CNumber("81585"), new CNumber("9195"), new CNumber("0.47086+0.22829i"), new CNumber("0.3198+0.27911i"), new CNumber("0.15627+0.18005i"), new CNumber("0.8154+0.86608i"), new CNumber("0.29655+0.07095i"), new CNumber("0.82134+0.18228i"), new CNumber("0.35707+0.25355i"), new CNumber("0.66031+0.70124i"), new CNumber("0.97115+0.2385i")};
+        expRowIndices = new int[]{0, 0, 1, 1, 2, 2, 104, 108, 134, 162, 201, 243, 356, 599, 750};
+        expColIndices = new int[]{0, 1, 0, 1, 0, 1, 1, 3, 1, 4, 0, 4, 1, 3, 3};
+        exp = new SparseCMatrix(expShape, expEntries, expRowIndices, expColIndices);
+
+        assertEquals(exp, a.setSlice(b, 0, 0));
+
+        // ---------------------  Sub-case 4 ---------------------
+        aShape = new Shape(3, 5);
+        aEntries = new CNumber[]{new CNumber("0.76161+0.32703i"), new CNumber("0.86463+0.73067i"), new CNumber("0.65177+0.53146i"), new CNumber("0.23319+0.56897i")};
+        aRowIndices = new int[]{1, 2, 2, 2};
+        aColIndices = new int[]{0, 1, 2, 4};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new int[][]{
+                {2427, 27463, 804}};
+
+        SparseCMatrix final0a = a;
+        int[][] final0b = b;
+        assertThrows(Exception.class, ()->final0a.setSlice(final0b, -1, 2));
+
+        // ---------------------  Sub-case 5 ---------------------
+        aShape = new Shape(3, 5);
+        aEntries = new CNumber[]{new CNumber("0.41438+0.13745i"), new CNumber("0.62856+0.69366i"), new CNumber("0.40666+0.4999i"), new CNumber("0.81274+0.10541i")};
+        aRowIndices = new int[]{0, 0, 1, 2};
+        aColIndices = new int[]{1, 4, 3, 3};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new int[][]{
+                {83141},
+                {60989},
+                {5986}};
+
+        SparseCMatrix final1a = a;
+        int[][] final1b = b;
+        assertThrows(Exception.class, ()->final1a.setSlice(final1b, 0, 16));
+
+        // ---------------------  Sub-case 6 ---------------------
+        aShape = new Shape(3, 5);
+        aEntries = new CNumber[]{new CNumber("0.02357+0.30556i"), new CNumber("0.85024+0.4537i"), new CNumber("0.7543+0.49265i"), new CNumber("0.75906+0.14116i")};
+        aRowIndices = new int[]{0, 1, 1, 2};
+        aColIndices = new int[]{3, 2, 3, 3};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new int[][]{
+                {28434, 27412},
+                {5756, 75022}};
+
+        SparseCMatrix final2a = a;
+        int[][] final2b = b;
+        assertThrows(Exception.class, ()->final2a.setSlice(final2b, 2, 0));
+
+        // ---------------------  Sub-case 7 ---------------------
+        aShape = new Shape(3, 5);
+        aEntries = new CNumber[]{new CNumber("0.39067+0.57459i"), new CNumber("0.30883+0.44375i"), new CNumber("0.06197+0.10166i"), new CNumber("0.29584+0.81226i")};
+        aRowIndices = new int[]{0, 0, 0, 1};
+        aColIndices = new int[]{0, 2, 4, 3};
+        a = new SparseCMatrix(aShape, aEntries, aRowIndices, aColIndices);
+
+        b = new int[][]{
+                {41028, 3141, 92985}};
+
+        SparseCMatrix final3a = a;
+        int[][] final3b = b;
+        assertThrows(Exception.class, ()->final3a.setSlice(final3b, 0, 4));
+    }
 }

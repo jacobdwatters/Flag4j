@@ -4,6 +4,7 @@ import com.flag4j.Matrix;
 import com.flag4j.Shape;
 import com.flag4j.SparseMatrix;
 import com.flag4j.SparseVector;
+import com.flag4j.operations.sparse.SparseElementSearch;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -34,7 +35,7 @@ public class RealSparseMatrixGetSet {
      * @return The value in the sparse matrix at the specified indices.
      */
     public static double matrixGet(SparseMatrix src, int row, int col) {
-        int idx = RealSparseElementSearch.matrixBinarySearch(src, row, col);
+        int idx = SparseElementSearch.matrixBinarySearch(src.rowIndices, src.colIndices, row, col);
         return idx<0 ? 0 : src.entries[idx];
     }
 
@@ -49,7 +50,7 @@ public class RealSparseMatrixGetSet {
      */
     public static SparseMatrix matrixSet(SparseMatrix src, int row, int col, double value) {
         // Find position of row index within the row indices if it exits.
-        int idx = RealSparseElementSearch.matrixBinarySearch(src, row, col);
+        int idx = SparseElementSearch.matrixBinarySearch(src.rowIndices, src.colIndices, row, col);
         double[] destEntries;
         int[] destRowIndices;
         int[] destColIndices;
@@ -93,7 +94,7 @@ public class RealSparseMatrixGetSet {
         ParameterChecks.assertIndexInBounds(src.numRows, rowIdx);
         ParameterChecks.assertEquals(src.numCols, row.length);
 
-        int[] startEnd = RealSparseElementSearch.matrixFindRowStartEnd(src, rowIdx);
+        int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int start = startEnd[0];
         int end = startEnd[1];
 
@@ -452,7 +453,7 @@ public class RealSparseMatrixGetSet {
      * @return Returns the specified row from this sparse matrix.
      */
     public static SparseVector getRow(SparseMatrix src, int rowIdx) {
-        ParameterChecks.assertLessEq(src.numRows-1, rowIdx);
+        ParameterChecks.assertIndexInBounds(src.numRows, rowIdx);
 
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -477,6 +478,8 @@ public class RealSparseMatrixGetSet {
      * @return Returns the specified column range from this sparse matrix.
      */
     public static SparseVector getRow(SparseMatrix src, int rowIdx, int start, int end) {
+        ParameterChecks.assertIndexInBounds(src.numRows, rowIdx);
+        ParameterChecks.assertIndexInBounds(src.numCols, start, end-1);
         ParameterChecks.assertLessEq(end-1, start);
 
         List<Double> entries = new ArrayList<>();
@@ -489,7 +492,7 @@ public class RealSparseMatrixGetSet {
             }
         }
 
-        return new SparseVector(src.numRows, entries, indices);
+        return new SparseVector(end-start, entries, indices);
     }
 
 
@@ -500,7 +503,7 @@ public class RealSparseMatrixGetSet {
      * @return Returns the specified column from this sparse matrix.
      */
     public static SparseVector getCol(SparseMatrix src, int colIdx) {
-        ParameterChecks.assertLessEq(src.numCols-1, colIdx);
+        ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
 
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -525,7 +528,9 @@ public class RealSparseMatrixGetSet {
      * @return Returns the specified column range from this sparse matrix.
      */
     public static SparseVector getCol(SparseMatrix src, int colIdx, int start, int end) {
-        ParameterChecks.assertLessEq(end-1, start);
+        ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
+        ParameterChecks.assertIndexInBounds(src.numRows, start, end);
+        ParameterChecks.assertLessEq(end, start);
 
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -537,7 +542,7 @@ public class RealSparseMatrixGetSet {
             }
         }
 
-        return new SparseVector(src.numRows, entries, indices);
+        return new SparseVector(end-start, entries, indices);
     }
 
 
@@ -551,17 +556,21 @@ public class RealSparseMatrixGetSet {
      * @return The specified slice of the sparse matrix.
      */
     public static SparseMatrix getSlice(SparseMatrix src, int rowStart, int rowEnd, int colStart, int colEnd) {
-        ParameterChecks.assertInRange(rowStart, 0, rowEnd-1.0, "rowStart");
-        ParameterChecks.assertInRange(rowEnd, rowStart+1.0, src.numRows, "rowEnd");
-        ParameterChecks.assertInRange(colStart, 0, colEnd-1.0, "colStart");
-        ParameterChecks.assertInRange(colEnd, colStart+1.0, src.numRows, "colEnd");
+        ParameterChecks.assertIndexInBounds(src.numRows, rowStart, rowEnd-1);
+        ParameterChecks.assertIndexInBounds(src.numCols, colStart, colEnd-1);
 
-        Shape shape = new Shape(src.numRows - (rowEnd-rowStart), src.numCols-(colEnd-colStart));
+        Shape shape = new Shape(rowEnd-rowStart, colEnd-colStart);
         List<Double> entries = new ArrayList<>();
         List<Integer> rowIndices = new ArrayList<>();
         List<Integer> colIndices = new ArrayList<>();
 
-        int start = RealSparseElementSearch.matrixBinarySearch(src, rowStart, colStart);
+        // Search for item with indices matching upper left index of slice.
+        int start = SparseElementSearch.matrixBinarySearch(src.rowIndices, src.colIndices, rowStart, colStart);
+
+        if(start < 0) {
+            // If no item with the specified indices is found, then begin search at the insertion point.
+            start = -start - 1;
+        }
 
         for(int i=start; i<src.entries.length; i++) {
             if(inSlice(src.rowIndices[i], src.colIndices[i], rowStart, rowEnd, colStart, colEnd)) {

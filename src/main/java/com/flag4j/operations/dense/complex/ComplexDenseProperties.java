@@ -48,7 +48,7 @@ public final class ComplexDenseProperties {
         boolean allZeros = true;
 
         for(CNumber value : src) {
-            if(!value.equals(CNumber.ONE)) {
+            if(!value.equals(1)) {
                 allZeros = false;
                 break; // No need to look further.
             }

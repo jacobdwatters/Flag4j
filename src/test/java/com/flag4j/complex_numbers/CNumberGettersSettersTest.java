@@ -40,7 +40,7 @@ class CNumberGettersSettersTest {
         expReDouble = 692.13;
         expImDouble = -9673.134;
 
-        Assertions.assertEquals(expReDouble, num.getReal());
-        Assertions.assertEquals(expImDouble, num.getIm());
+        Assertions.assertEquals(expReDouble, num.re());
+        Assertions.assertEquals(expImDouble, num.im());
     }
 }

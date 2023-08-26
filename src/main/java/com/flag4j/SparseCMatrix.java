@@ -32,7 +32,6 @@ import com.flag4j.io.PrintOptions;
 import com.flag4j.operations.TransposeDispatcher;
 import com.flag4j.operations.common.complex.ComplexOperations;
 import com.flag4j.operations.dense.complex.ComplexDenseOperations;
-import com.flag4j.operations.dense.real.RealDenseTranspose;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseEquals;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixMultiplication;
 import com.flag4j.operations.dense_sparse.complex.ComplexDenseSparseMatrixOperations;
@@ -111,9 +110,9 @@ public class SparseCMatrix
      * @param shape Shape of this sparse matrix.
      */
     public SparseCMatrix(Shape shape) {
-        super(shape, 0, new CNumber[0], new int[0][0]);
-        rowIndices = new int[0];
-        colIndices = new int[0];
+        super(shape, 0, new CNumber[0], new int[0], new int[0]);
+        rowIndices = indices[0];
+        colIndices = indices[1];
         this.numRows = shape.dims[0];
         this.numCols = shape.dims[1];
     }
@@ -132,13 +131,12 @@ public class SparseCMatrix
         super(new Shape(size, size),
                 nonZeroEntries.length,
                 nonZeroEntries,
-                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+                rowIndices, colIndices
         );
-        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
-        this.rowIndices = rowIndices;
-        this.colIndices = colIndices;
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.rowIndices = indices[0];
+        this.colIndices = indices[1];
+        this.numRows = size;
+        this.numCols = size;
     }
 
 
@@ -156,13 +154,12 @@ public class SparseCMatrix
         super(new Shape(rows, cols),
                 nonZeroEntries.length,
                 nonZeroEntries,
-                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+                rowIndices, colIndices
         );
-        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
-        this.rowIndices = rowIndices;
-        this.colIndices = colIndices;
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        this.rowIndices = indices[0];
+        this.colIndices = indices[1];
+        this.numRows = rows;
+        this.numCols = cols;
     }
 
 
@@ -179,10 +176,10 @@ public class SparseCMatrix
         super(shape,
                 nonZeroEntries.length,
                 nonZeroEntries,
-                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+                rowIndices, colIndices
         );
-        this.rowIndices = rowIndices;
-        this.colIndices = colIndices;
+        this.rowIndices = indices[0];
+        this.colIndices = indices[1];
         this.numRows = shape.dims[0];
         this.numCols = shape.dims[1];
     }
@@ -201,10 +198,11 @@ public class SparseCMatrix
         super(new Shape(size, size),
                 nonZeroEntries.length,
                 new CNumber[nonZeroEntries.length],
-                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices}));
-        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
-        this.rowIndices = rowIndices;
-        this.colIndices = colIndices;
+                rowIndices, colIndices
+        );
+        ArrayUtils.copy2CNumber(nonZeroEntries, entries);
+        this.rowIndices = indices[0];
+        this.colIndices = indices[1];
         this.numRows = shape.dims[0];
         this.numCols = shape.dims[1];
     }
@@ -224,11 +222,11 @@ public class SparseCMatrix
         super(new Shape(rows, cols),
                 nonZeroEntries.length,
                 new CNumber[nonZeroEntries.length],
-                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+                rowIndices, colIndices
         );
-        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
-        this.rowIndices = rowIndices;
-        this.colIndices = colIndices;
+        ArrayUtils.copy2CNumber(nonZeroEntries, entries);
+        this.rowIndices = indices[0];
+        this.colIndices = indices[1];
         this.numRows = shape.dims[0];
         this.numCols = shape.dims[1];
     }
@@ -247,11 +245,11 @@ public class SparseCMatrix
         super(shape,
                 nonZeroEntries.length,
                 new CNumber[nonZeroEntries.length],
-                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+                rowIndices, colIndices
         );
-        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
-        this.rowIndices = rowIndices;
-        this.colIndices = colIndices;
+        ArrayUtils.copy2CNumber(nonZeroEntries, entries);
+        this.rowIndices = indices[0];
+        this.colIndices = indices[1];
         this.numRows = shape.dims[0];
         this.numCols = shape.dims[1];
     }
@@ -270,13 +268,13 @@ public class SparseCMatrix
         super(new Shape(size, size),
                 nonZeroEntries.length,
                 new CNumber[nonZeroEntries.length],
-                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+                rowIndices, colIndices
         );
-        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
-        this.rowIndices = rowIndices;
-        this.colIndices = colIndices;
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        ArrayUtils.copy2CNumber(nonZeroEntries, entries);
+        this.rowIndices = indices[0];
+        this.colIndices = indices[1];
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
     }
 
 
@@ -294,13 +292,13 @@ public class SparseCMatrix
         super(new Shape(rows, cols),
                 nonZeroEntries.length,
                 new CNumber[nonZeroEntries.length],
-                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+                rowIndices, colIndices
         );
-        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
-        this.rowIndices = rowIndices;
-        this.colIndices = colIndices;
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        ArrayUtils.copy2CNumber(nonZeroEntries, entries);
+        this.rowIndices = indices[0];
+        this.colIndices = indices[1];
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
     }
 
 
@@ -317,13 +315,13 @@ public class SparseCMatrix
         super(shape,
                 nonZeroEntries.length,
                 new CNumber[nonZeroEntries.length],
-                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+                rowIndices, colIndices
         );
-        ArrayUtils.copy2CNumber(nonZeroEntries, super.entries);
-        this.rowIndices = rowIndices;
-        this.colIndices = colIndices;
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        ArrayUtils.copy2CNumber(nonZeroEntries, entries);
+        this.rowIndices = indices[0];
+        this.colIndices = indices[1];
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
     }
 
 
@@ -339,14 +337,11 @@ public class SparseCMatrix
                 shape,
                 entries.size(),
                 entries.toArray(CNumber[]::new),
-                new int[rowIndices.size()][2]
-
+                ArrayUtils.fromIntegerList(rowIndices),
+                ArrayUtils.fromIntegerList(colIndices)
         );
-        this.rowIndices = ArrayUtils.fromIntegerList(rowIndices);
-        this.colIndices = ArrayUtils.fromIntegerList(colIndices);
-        int[][] indices = RealDenseTranspose.blockedIntMatrix(new int[][]{this.rowIndices, this.colIndices});
-        ArrayUtils.deepCopy(indices, this.indices);
-
+        this.rowIndices = indices[0];
+        this.colIndices = indices[1];
         numRows = shape.dims[0];
         numCols = shape.dims[1];
     }
@@ -360,15 +355,14 @@ public class SparseCMatrix
     public SparseCMatrix(SparseCMatrix A) {
         super(A.shape.copy(),
                 A.nonZeroEntries(),
-                new CNumber[A.nonZeroEntries()],
-                new int[A.indices.length][A.indices[0].length]
+                ArrayUtils.copyOf(A.entries),
+                A.rowIndices.clone(),
+                A.colIndices.clone()
         );
-        ArrayUtils.copy2CNumber(A.entries, super.entries);
-        ArrayUtils.deepCopy(A.indices, this.indices);
-        this.rowIndices = A.rowIndices.clone();
-        this.colIndices = A.colIndices.clone();
-        this.numRows = shape.dims[0];
-        this.numCols = shape.dims[1];
+        rowIndices = indices[0];
+        colIndices = indices[1];
+        numRows = shape.dims[0];
+        numCols = shape.dims[1];
     }
 
 
@@ -719,8 +713,7 @@ public class SparseCMatrix
 
 
     /**
-     * Sets a column of this matrix at the given index to the specified values. Note that the orientation of the values
-     * vector is <b>NOT</b> taken into account.
+     * Sets a column of this matrix at the given index to the specified values.
      *
      * @param values   New values for the column.
      * @param colIndex The index of the column which is to be set.
@@ -735,8 +728,21 @@ public class SparseCMatrix
 
 
     /**
-     * Sets a row of this matrix at the given index to the specified values. Note that the orientation of the values
-     * vector is <b>NOT</b> taken into account.
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException  If the values vector has a different length than the number of rows of this matrix.
+     * @throws IndexOutOfBoundsException If {@code colIndex} is not within the matrix.
+     */
+    public SparseCMatrix setCol(Vector values, int colIndex) {
+        return ComplexSparseMatrixGetSet.setCol(this, colIndex, values.entries);
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
      *
      * @param values   New values for the row.
      * @param rowIndex The index of the row which is to be set.
@@ -751,8 +757,7 @@ public class SparseCMatrix
 
 
     /**
-     * Sets a row of this matrix at the given index to the specified values. Note that the orientation of the values
-     * vector is <b>NOT</b> taken into account.
+     * Sets a row of this matrix at the given index to the specified values.
      *
      * @param values   New values for the row.
      * @param rowIndex The index of the row which is to be set.
@@ -763,6 +768,20 @@ public class SparseCMatrix
     @Override
     public SparseCMatrix setRow(SparseCVector values, int rowIndex) {
         return ComplexSparseMatrixGetSet.setRow(this, rowIndex, values);
+    }
+
+
+    /**
+     * Sets a row of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the row.
+     * @param rowIndex The index of the row which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException  If the {@code values} vector has a different length than the number of columns of this matrix.
+     * @throws IndexOutOfBoundsException If {@code rowIndex} is not within the matrix.
+     */
+    public SparseCMatrix setRow(Vector values, int rowIndex) {
+        return ComplexSparseMatrixGetSet.setRow(this, rowIndex, values.entries);
     }
 
 

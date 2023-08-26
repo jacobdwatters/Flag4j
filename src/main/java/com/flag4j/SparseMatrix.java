@@ -132,7 +132,7 @@ public class SparseMatrix
         super(new Shape(size, size),
                 nonZeroEntries.length,
                 nonZeroEntries,
-                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+                rowIndices, colIndices
         );
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
@@ -153,7 +153,7 @@ public class SparseMatrix
         super(new Shape(rows, cols),
                 nonZeroEntries.length,
                 nonZeroEntries,
-                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+                rowIndices, colIndices
         );
 
         this.rowIndices = rowIndices;
@@ -174,7 +174,7 @@ public class SparseMatrix
         super(shape,
                 nonZeroEntries.length,
                 nonZeroEntries,
-                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+                rowIndices, colIndices
         );
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
@@ -194,7 +194,7 @@ public class SparseMatrix
         super(new Shape(size, size),
                 nonZeroEntries.length,
                 Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),
-                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+                rowIndices, colIndices
         );
 
         this.rowIndices = rowIndices;
@@ -216,7 +216,7 @@ public class SparseMatrix
         super(new Shape(rows, cols),
                 nonZeroEntries.length,
                 Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),
-                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+                rowIndices, colIndices
         );
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
@@ -238,7 +238,7 @@ public class SparseMatrix
         super(shape,
                 nonZeroEntries.length,
                 Arrays.stream(nonZeroEntries).asDoubleStream().toArray(),
-                RealDenseTranspose.blockedIntMatrix(new int[][]{rowIndices, colIndices})
+                rowIndices, colIndices
         );
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
@@ -256,11 +256,11 @@ public class SparseMatrix
         super(A.shape.copy(),
                 A.nonZeroEntries(),
                 A.entries.clone(),
-                new int[A.indices.length][A.indices[0].length]
+                A.rowIndices.clone(),
+                A.colIndices.clone()
         );
-        ArrayUtils.deepCopy(A.indices, this.indices);
-        this.rowIndices = A.rowIndices.clone();
-        this.colIndices = A.colIndices.clone();
+        this.rowIndices = indices[0];
+        this.colIndices = indices[1];
         numRows = shape.dims[0];
         numCols = shape.dims[1];
     }
@@ -278,14 +278,11 @@ public class SparseMatrix
             shape,
             entries.size(),
             ArrayUtils.fromDoubleList(entries),
-            new int[rowIndices.size()][2]
+            ArrayUtils.fromIntegerList(rowIndices),
+            ArrayUtils.fromIntegerList(colIndices)
         );
-        this.rowIndices = ArrayUtils.fromIntegerList(rowIndices);
-        this.colIndices = ArrayUtils.fromIntegerList(colIndices);
-
-        int[][] indices = RealDenseTranspose.blockedIntMatrix(new int[][]{this.rowIndices, this.colIndices});
-        ArrayUtils.deepCopy(indices, this.indices);
-
+        this.rowIndices = indices[0];
+        this.colIndices = indices[1];
         numRows = shape.dims[0];
         numCols = shape.dims[1];
     }
@@ -697,6 +694,19 @@ public class SparseMatrix
     @Override
     public SparseMatrix setCol(double[] values, int colIndex) {
         return RealSparseMatrixGetSet.setCol(this, colIndex, values);
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values array has a different length than the number of rows of this matrix.
+     */
+    public SparseMatrix setCol(Vector values, int colIndex) {
+        return RealSparseMatrixGetSet.setCol(this, colIndex, values.entries);
     }
 
 

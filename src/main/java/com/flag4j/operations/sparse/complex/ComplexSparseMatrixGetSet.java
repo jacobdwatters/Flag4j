@@ -4,6 +4,7 @@ package com.flag4j.operations.sparse.complex;
 import com.flag4j.*;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.core.MatrixMixin;
+import com.flag4j.operations.sparse.SparseElementSearch;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 import com.flag4j.util.ParameterChecks;
@@ -33,7 +34,7 @@ public class ComplexSparseMatrixGetSet {
      * @return The value in the sparse matrix at the specified indices.
      */
     public static CNumber matrixGet(SparseCMatrix src, int row, int col) {
-        int idx = ComplexSparseElementSearch.matrixBinarySearch(src, row, col);
+        int idx = SparseElementSearch.matrixBinarySearch(src.rowIndices, src.colIndices, row, col);
         return idx<0 ? new CNumber() : src.entries[idx];
     }
 
@@ -48,7 +49,7 @@ public class ComplexSparseMatrixGetSet {
      */
     public static SparseCMatrix matrixSet(SparseCMatrix src, int row, int col, CNumber value) {
         // Find position of row index within the row indices if it exits.
-        int idx = ComplexSparseElementSearch.matrixBinarySearch(src, row, col);
+        int idx = SparseElementSearch.matrixBinarySearch(src.rowIndices, src.colIndices, row, col);
         CNumber[] destEntries;
         int[] destRowIndices;
         int[] destColIndices;
@@ -92,7 +93,7 @@ public class ComplexSparseMatrixGetSet {
         ParameterChecks.assertIndexInBounds(src.numRows, rowIdx);
         ParameterChecks.assertEquals(src.numCols, row.length);
 
-        int[] startEnd = ComplexSparseElementSearch.matrixFindRowStartEnd(src, rowIdx);
+        int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int start = startEnd[0];
         int end = startEnd[1];
 
@@ -170,7 +171,7 @@ public class ComplexSparseMatrixGetSet {
         ParameterChecks.assertIndexInBounds(src.numRows, rowIdx);
         ParameterChecks.assertEquals(src.numCols, row.length);
 
-        int[] startEnd = ComplexSparseElementSearch.matrixFindRowStartEnd(src, rowIdx);
+        int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int start = startEnd[0];
         int end = startEnd[1];
 
@@ -248,7 +249,7 @@ public class ComplexSparseMatrixGetSet {
         ParameterChecks.assertIndexInBounds(src.numRows, rowIdx);
         ParameterChecks.assertEquals(src.numCols, row.size);
 
-        int[] startEnd = ComplexSparseElementSearch.matrixFindRowStartEnd(src, rowIdx);
+        int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int start = startEnd[0];
         int end = startEnd[1];
 
@@ -668,16 +669,10 @@ public class ComplexSparseMatrixGetSet {
         setSliceParamCheck(src, values.length, values[0].length, row, col);
 
         // Flatten values.
-        double[] flatValues = new double[values.length*values[0].length];
-        int pos = 0;
-        for(Double[] vRow : values) {
-            for(Double d : vRow) {
-                flatValues[pos++] = d;
-            }
-        }
+        double[] flatValues = ArrayUtils.unboxFlatten(values);
 
-        int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
-        int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row, values[0].length);
+        int[] sliceCols = ArrayUtils.repeat(values.length, ArrayUtils.intRange(col, values[0].length + col));
 
         return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
     }
@@ -706,8 +701,8 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
-        int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row, values[0].length);
+        int[] sliceCols = ArrayUtils.repeat(values.length, ArrayUtils.intRange(col, values[0].length + col));
 
         return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
     }
@@ -735,8 +730,8 @@ public class ComplexSparseMatrixGetSet {
                 flatValues[pos++] = d;
             }
         }
-        int[] sliceRows = ArrayUtils.intRange(row, values.length + row);
-        int[] sliceCols = ArrayUtils.intRange(col, values[0].length + col);
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row, values[0].length);
+        int[] sliceCols = ArrayUtils.repeat(values.length, ArrayUtils.intRange(col, values[0].length + col));
 
         return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
     }
@@ -749,7 +744,7 @@ public class ComplexSparseMatrixGetSet {
      * @return Returns the specified row from this sparse matrix.
      */
     public static SparseCVector getRow(SparseCMatrix src, int rowIdx) {
-        ParameterChecks.assertLessEq(src.numRows-1, rowIdx);
+        ParameterChecks.assertIndexInBounds(src.numRows, rowIdx);
 
         List<CNumber> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -775,6 +770,8 @@ public class ComplexSparseMatrixGetSet {
      * @return Returns the specified column range from this sparse matrix.
      */
     public static SparseCVector getRow(SparseCMatrix src, int rowIdx, int start, int end) {
+        ParameterChecks.assertIndexInBounds(src.numRows, rowIdx);
+        ParameterChecks.assertIndexInBounds(src.numCols, start, end-1);
         ParameterChecks.assertLessEq(end-1, start);
 
         List<CNumber> entries = new ArrayList<>();
@@ -787,7 +784,7 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        return new SparseCVector(src.numRows, entries, indices);
+        return new SparseCVector(end-start, entries, indices);
     }
 
 
@@ -798,7 +795,7 @@ public class ComplexSparseMatrixGetSet {
      * @return Returns the specified column from this sparse matrix.
      */
     public static SparseCVector getCol(SparseCMatrix src, int colIdx) {
-        ParameterChecks.assertLessEq(src.numCols-1, colIdx);
+        ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
 
         List<CNumber> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -823,7 +820,9 @@ public class ComplexSparseMatrixGetSet {
      * @return Returns the specified column range from this sparse matrix.
      */
     public static SparseCVector getCol(SparseCMatrix src, int colIdx, int start, int end) {
-        ParameterChecks.assertLessEq(end-1, start);
+        ParameterChecks.assertIndexInBounds(src.numCols, colIdx);
+        ParameterChecks.assertIndexInBounds(src.numRows, start, end);
+        ParameterChecks.assertLessEq(end, start);
 
         List<CNumber> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -835,7 +834,7 @@ public class ComplexSparseMatrixGetSet {
             }
         }
 
-        return new SparseCVector(src.numRows, entries, indices);
+        return new SparseCVector(end-start, entries, indices);
     }
 
 
@@ -849,21 +848,24 @@ public class ComplexSparseMatrixGetSet {
      * @return The specified slice of the sparse matrix.
      */
     public static SparseCMatrix getSlice(SparseCMatrix src, int rowStart, int rowEnd, int colStart, int colEnd) {
-        ParameterChecks.assertInRange(rowStart, 0, rowEnd-1.0, "rowStart");
-        ParameterChecks.assertInRange(rowEnd, rowStart+1.0, src.numRows, "rowEnd");
-        ParameterChecks.assertInRange(colStart, 0, colEnd-1.0, "colStart");
-        ParameterChecks.assertInRange(colEnd, colStart+1.0, src.numRows, "colEnd");
+        ParameterChecks.assertIndexInBounds(src.numRows, rowStart, rowEnd-1);
+        ParameterChecks.assertIndexInBounds(src.numCols, colStart, colEnd-1);
 
-        Shape shape = new Shape(src.numRows - (rowEnd-rowStart), src.numCols-(colEnd-colStart));
+        Shape shape = new Shape(rowEnd-rowStart, colEnd-colStart);
         List<CNumber> entries = new ArrayList<>();
         List<Integer> rowIndices = new ArrayList<>();
         List<Integer> colIndices = new ArrayList<>();
 
-        int start = ComplexSparseElementSearch.matrixBinarySearch(src, rowStart, colStart);
+        int start = SparseElementSearch.matrixBinarySearch(src.rowIndices, src.colIndices, rowStart, colStart);
+
+        if(start < 0) {
+            // If no item with the specified indices is found, then begin search at the insertion point.
+            start = -start - 1;
+        }
 
         for(int i=start; i<src.entries.length; i++) {
             if(inSlice(src.rowIndices[i], src.colIndices[i], rowStart, rowEnd, colStart, colEnd)) {
-                entries.add(src.entries[i].copy());
+                entries.add(src.entries[i]);
                 rowIndices.add(src.rowIndices[i]-rowStart);
                 colIndices.add(src.colIndices[i]-colStart);
             }

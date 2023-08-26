@@ -56,7 +56,10 @@ public abstract class RealSparseTensorBase<
         implements RealTensorMixin<T, W> {
 
     /**
-     * Creates a sparse tensor with specified shape.
+     * Creates a sparse tensor with specified shape. Note, this constructor stores indices for each element in the
+     * <b>same</b> array. That is, for a shape with rank {@code m} and {@code n} non-zero entries,
+     * the indices array will have shape {@code n-by-m}.
+     * This is the opposite of {@link #RealSparseTensorBase(Shape, int, double[], int[], int[][])}.
      * @param shape Shape of this tensor.
      * @param nonZeroEntries Number of non-zero entries in the sparse tensor.
      * @param entries Non-zero entries of this sparse tensor.
@@ -74,6 +77,25 @@ public abstract class RealSparseTensorBase<
         }
 
         ParameterChecks.assertArrayLengthsEq(nonZeroEntries, indices.length);
+    }
+
+
+    /**
+     * Creates a sparse tensor with specified shape. Note, this constructor stores indices for each element in different
+     * arrays. That is, for a shape with rank {@code m} and {@code n} non-zero entries, the indices array will have shape
+     * {@code m-by-n}. This is the opposite of {@link #RealSparseTensorBase(Shape, int, double[], int[][])}.
+     * @param shape Shape
+     * @param nonZeroEntries The number of non-zero entries of the tensor.
+     * @param entries Non-zero entries of the sparse tensor.
+     * @param initIndices Non-zero indices of the first axis of the tensor.
+     * @param restIndices Non-zero indices of the rest of this tensor's axes.
+     */
+    public RealSparseTensorBase(Shape shape, int nonZeroEntries, double[] entries, int[] initIndices, int[]... restIndices) {
+        super(shape, nonZeroEntries, entries, initIndices, restIndices);
+
+        if(super.totalEntries().compareTo(BigInteger.valueOf(nonZeroEntries)) < 0) {
+            throw new IllegalArgumentException(ErrorMessages.shapeEntriesError(shape, nonZeroEntries));
+        }
     }
 
 

@@ -3,6 +3,7 @@ package com.flag4j.operations.sparse.complex;
 import com.flag4j.Shape;
 import com.flag4j.SparseCMatrix;
 import com.flag4j.complex_numbers.CNumber;
+import com.flag4j.operations.sparse.SparseElementSearch;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 
@@ -31,7 +32,7 @@ public class ComplexSparseMatrixManipulations {
         Shape shape = new Shape(src.numRows-1, src.numCols);
 
         // Find the start and end index within the entries array which have the given row index.
-        int[] startEnd = ComplexSparseElementSearch.matrixFindRowStartEnd(src, rowIdx);
+        int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int size = src.entries.length - (startEnd[1]-startEnd[0]);
 
         // Initialize arrays.

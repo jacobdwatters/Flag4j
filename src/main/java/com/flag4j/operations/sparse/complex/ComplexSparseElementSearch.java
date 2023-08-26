@@ -1,11 +1,7 @@
 package com.flag4j.operations.sparse.complex;
 
 import com.flag4j.SparseCMatrix;
-import com.flag4j.SparseMatrix;
-import com.flag4j.operations.sparse.real.RealSparseElementSearch;
-import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
-import com.flag4j.util.ParameterChecks;
 
 import java.util.Arrays;
 

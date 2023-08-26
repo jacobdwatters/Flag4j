@@ -489,9 +489,9 @@ public class CMatrix
         if(isSquare()) {
             for(int i=0; i<numRows; i++) {
                 for(int j=0; j<numCols; j++) {
-                    if(i==j && !entries[i*numCols + j].equals(CNumber.ONE)) {
+                    if(i==j && !entries[i*numCols + j].equals(1)) {
                         return false; // No need to continue
-                    } else if(i!=j && !entries[i*numCols + j].equals(CNumber.ZERO)) {
+                    } else if(i!=j && !entries[i*numCols + j].equals(1)) {
                         return false; // No need to continue
                     }
                 }
@@ -800,6 +800,25 @@ public class CMatrix
 
         for(int i=0; i<values.size; i++) {
             super.entries[i*numCols + colIndex] = values.entries[i].copy();
+        }
+
+        return this;
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified values.
+     *
+     * @param values   New values for the column.
+     * @param colIndex The index of the column which is to be set.
+     * @return A reference to this matrix.
+     * @throws IllegalArgumentException If the values vector has a different length than the number of rows of this matrix.
+     */
+    public CMatrix setCol(Vector values, int colIndex) {
+        ParameterChecks.assertArrayLengthsEq(values.size, this.numRows);
+
+        for(int i=0; i<values.size; i++) {
+            super.entries[i*numCols + colIndex] = new CNumber(values.entries[i]);
         }
 
         return this;
@@ -3709,7 +3728,7 @@ public class CMatrix
         int stop = Math.min(numRows, numCols);
 
         for(int i=0; i<stop; i++) {
-            I.entries[i*numCols+i] = CNumber.ONE.copy();
+            I.entries[i*numCols+i] = new CNumber(1);
         }
 
         return I;
@@ -3806,7 +3825,7 @@ public class CMatrix
             // Ensure upper half is zeros.
             for(int i=0; i<numRows; i++) {
                 for(int j=i+1; j<numCols; j++) {
-                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {
+                    if(!entries[i*numCols + j].equals(1)) {
                         return false; // No need to continue.
                     }
                 }
@@ -3830,7 +3849,7 @@ public class CMatrix
             // Ensure lower half is zeros.
             for(int i=1; i<numRows; i++) {
                 for(int j=0; j<i; j++) {
-                    if(!entries[i*numCols + j].equals(CNumber.ZERO)) {
+                    if(!entries[i*numCols + j].equals(1)) {
                         return false; // No need to continue.
                     }
                 }

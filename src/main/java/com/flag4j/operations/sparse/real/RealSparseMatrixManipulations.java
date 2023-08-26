@@ -2,6 +2,7 @@ package com.flag4j.operations.sparse.real;
 
 import com.flag4j.Shape;
 import com.flag4j.SparseMatrix;
+import com.flag4j.operations.sparse.SparseElementSearch;
 import com.flag4j.util.ArrayUtils;
 import com.flag4j.util.ErrorMessages;
 
@@ -30,7 +31,7 @@ public class RealSparseMatrixManipulations {
         Shape shape = new Shape(src.numRows-1, src.numCols);
 
         // Find the start and end index within the entries array which have the given row index.
-        int[] startEnd = RealSparseElementSearch.matrixFindRowStartEnd(src, rowIdx);
+        int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int size = src.entries.length - (startEnd[1]-startEnd[0]);
 
         // Initialize arrays.

@@ -1,27 +1,20 @@
-package com.flag4j.operations.sparse.real;
-
-import com.flag4j.SparseMatrix;
-import com.flag4j.util.ErrorMessages;
+package com.flag4j.operations.sparse;
 
 import java.util.Arrays;
 
 /**
- * This clas provides methods for searching for a specific element in a sparse matrix.
+ * This class provides methods for efficiently finding if a sparse vector, matrix, or tensor contains a non-zero
+ * item at a specified index.
  */
-public class RealSparseElementSearch {
-
-
-    private RealSparseElementSearch() {
-        // Hide default constructor in utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
-    }
+public class SparseElementSearch {
 
 
     /**
      * Preforms a binary search along the row and column indices of the non-zero values of a sparse matrix for the location
      * of an entry with the specified target indices.
      *
-     * @param src Source matrix to search within.
+     * @param rowIndices Row indices of the matrix to search within.
+     * @param colIndices Column indices of the matrix to search within.
      * @param rowKey Target row index.
      * @param colKey Target col index.
      * @return The location of the non-zero element (within the non-zero values array of {@code src}) with the specified
@@ -33,15 +26,15 @@ public class RealSparseElementSearch {
      *         that this guarantees that the return value will be &gt;= 0 if
      *         and only if the key is found.
      */
-    public static int matrixBinarySearch(SparseMatrix src, int rowKey, int colKey) {
-        int rowIdx = Arrays.binarySearch(src.rowIndices, rowKey);
+    public static int matrixBinarySearch(int[] rowIndices, int[] colIndices, int rowKey, int colKey) {
+        int rowIdx = Arrays.binarySearch(rowIndices, rowKey);
 
         if(rowIdx<0) return rowIdx;
 
         // Find range of same valued row indices.
         int lowerBound = rowIdx;
         for(int i=rowIdx; i>=0; i--) {
-            if(src.rowIndices[i] == rowKey) {
+            if(rowIndices[i] == rowKey) {
                 lowerBound = i;
             } else {
                 break;
@@ -49,15 +42,15 @@ public class RealSparseElementSearch {
         }
 
         int upperBound = rowIdx + 1;
-        for(int i=upperBound; i<src.rowIndices.length; i++) {
-            if(src.rowIndices[i] == rowKey) {
+        for(int i=upperBound; i<rowIndices.length; i++) {
+            if(rowIndices[i] == rowKey) {
                 upperBound = i;
             } else {
                 break;
             }
         }
 
-        int colIdx = Arrays.binarySearch(Arrays.copyOfRange(src.colIndices, lowerBound, upperBound), colKey);
+        int colIdx = Arrays.binarySearch(Arrays.copyOfRange(colIndices, lowerBound, upperBound), colKey);
 
         if(colIdx < 0) return colIdx-lowerBound;
 
@@ -68,20 +61,20 @@ public class RealSparseElementSearch {
     /**
      * Finds the indices of the first and last non-zero element in the specified row of a sparse matrix. If there is no non-zero
      * element in the sparse matrix at the specified row, negative values will be returned.
-     * @param src The source sparse matrix to search within.
+     * @param rowIndices Row indices of the matrix to search within.
      * @param rowKey Index of the row to search for within the row indices of the {@code src} matrix.
      * @return If it exists, the first and last index of the non-zero element in the sparse matrix which has the specified
      * {@code rowKey} as its row index.
      */
-    public static int[] matrixFindRowStartEnd(SparseMatrix src, int rowKey) {
-        int rowIdx = Arrays.binarySearch(src.rowIndices, rowKey);
+    public static int[] matrixFindRowStartEnd(int[] rowIndices, int rowKey) {
+        int rowIdx = Arrays.binarySearch(rowIndices, rowKey);
 
         if(rowIdx < 0) return new int[]{rowIdx, rowIdx}; // Row not found.
 
         // Find first entry with the specified row key.
         int lowerBound = rowIdx;
         for(int i=rowIdx; i>=0; i--) {
-            if(src.rowIndices[i] == rowKey) {
+            if(rowIndices[i] == rowKey) {
                 lowerBound = i;
             } else {
                 break;
@@ -89,8 +82,8 @@ public class RealSparseElementSearch {
         }
 
         int upperBound = rowIdx + 1;
-        for(int i=upperBound; i<src.rowIndices.length; i++) {
-            if(src.rowIndices[i] == rowKey) {
+        for(int i=upperBound; i<rowIndices.length; i++) {
+            if(rowIndices[i] == rowKey) {
                 upperBound = i+1;
             } else {
                 break;

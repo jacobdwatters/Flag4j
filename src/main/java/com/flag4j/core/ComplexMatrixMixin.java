@@ -121,8 +121,7 @@ public interface ComplexMatrixMixin<T> {
 
 
     /**
-     * Sets a column of this matrix at the given index to the specified values. Note that the orientation of the values
-     * vector is <b>NOT</b> taken into account.
+     * Sets a column of this matrix at the given index to the specified values.
      * @param values New values for the column.
      * @param colIndex The index of the column which is to be set.
      * @return A reference to this matrix.
@@ -133,8 +132,7 @@ public interface ComplexMatrixMixin<T> {
 
 
     /**
-     * Sets a column of this matrix at the given index to the specified values. Note that the orientation of the values
-     * vector is <b>NOT</b> taken into account.
+     * Sets a column of this matrix at the given index to the specified values.
      * @param values New values for the column.
      * @param colIndex The index of the columns which is to be set.
      * @return A reference to this matrix.
@@ -145,8 +143,7 @@ public interface ComplexMatrixMixin<T> {
 
 
     /**
-     * Sets a row of this matrix at the given index to the specified values. Note that the orientation of the values
-     * vector is <b>NOT</b> taken into account.
+     * Sets a row of this matrix at the given index to the specified values.
      * @param values New values for the row.
      * @param rowIndex The index of the row which is to be set.
      * @return A reference to this matrix.
@@ -157,8 +154,7 @@ public interface ComplexMatrixMixin<T> {
 
 
     /**
-     * Sets a row of this matrix at the given index to the specified values. Note that the orientation of the values
-     * vector is <b>NOT</b> taken into account.
+     * Sets a row of this matrix at the given index to the specified values.
      * @param values New values for the row.
      * @param rowIndex The index of the row which is to be set.
      * @return A reference to this matrix.
