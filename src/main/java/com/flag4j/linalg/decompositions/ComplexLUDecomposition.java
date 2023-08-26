@@ -25,7 +25,6 @@
 package com.flag4j.linalg.decompositions;
 
 import com.flag4j.CMatrix;
-import com.flag4j.Matrix;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.exceptions.LinearAlgebraException;
 
@@ -150,7 +149,7 @@ public final class ComplexLUDecomposition extends LUDecomposition<CMatrix> {
 
         for(int i=j+1; i<LU.numRows; i++) {
             m = LU.entries[i*LU.numCols + j];
-            m = LU.entries[j*LU.numCols + j].equals(CNumber.ZERO) ? m.copy() : m.div(LU.entries[j*LU.numCols + j]);
+            m = LU.entries[j*LU.numCols + j].equals(0) ? m.copy() : m.div(LU.entries[j*LU.numCols + j]);
 
             for(int k=j; k<LU.numCols; k++) {
                 LU.entries[i*LU.numCols + k] = LU.entries[i*LU.numCols + k].sub(m.mult(LU.entries[j*LU.numCols + k]));

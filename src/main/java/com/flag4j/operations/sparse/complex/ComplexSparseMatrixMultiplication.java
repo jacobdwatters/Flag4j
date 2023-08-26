@@ -25,8 +25,6 @@
 package com.flag4j.operations.sparse.complex;
 
 import com.flag4j.Shape;
-import com.flag4j.SparseCMatrix;
-import com.flag4j.SparseMatrix;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.concurrency.ThreadManager;
 import com.flag4j.util.ArrayUtils;
@@ -64,7 +62,7 @@ public class ComplexSparseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
 
         // r1, c1, r2, and c2 store row/column indices for non-zero values in src1 and src2.
         int r1, c1, r2, c2;
@@ -107,7 +105,7 @@ public class ComplexSparseMatrixMultiplication {
         int cols2 = shape2.dims[Axis2D.col()];
 
         CNumber[] dest = new CNumber[rows1*cols2];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
 
         ThreadManager.concurrentLoop(0, src1.length, (i)->{
             int r1 = rowIndices1[i]; // = i
@@ -143,7 +141,7 @@ public class ComplexSparseMatrixMultiplication {
         int rows1 = shape1.dims[Axis2D.row()];
 
         CNumber[] dest = new CNumber[rows1];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
 
         // r1, c1, r2, and store the indices for non-zero values in src1 and src2.
         int r1, c1, r2;
@@ -181,7 +179,7 @@ public class ComplexSparseMatrixMultiplication {
         int rows1 = shape1.dims[Axis2D.row()];
 
         CNumber[] dest = new CNumber[rows1];
-        ArrayUtils.fill(dest, CNumber.ZERO);
+        ArrayUtils.fill(dest, 0);
 
         ThreadManager.concurrentLoop(0, src1.length, (i) -> {
             int r1 = rowIndices1[i]; // = i

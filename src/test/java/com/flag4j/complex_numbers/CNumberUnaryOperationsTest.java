@@ -197,7 +197,7 @@ class CNumberUnaryOperationsTest {
         Assertions.assertEquals(expValue, value);
 
         // ---------- Sub-case 5 ------------
-        a = CNumber.NaN;
+        a = CNumber.nan();
         value = a.addInv();
         Assertions.assertTrue(Double.isNaN(value.re));
         Assertions.assertTrue(Double.isNaN(value.im));
@@ -232,7 +232,7 @@ class CNumberUnaryOperationsTest {
         Assertions.assertTrue(Double.isNaN(value.im));
 
         // ---------- Sub-case 5 ------------
-        a = CNumber.NaN;
+        a = CNumber.nan();
         value = a.multInv();
         Assertions.assertTrue(Double.isNaN(value.re));
         Assertions.assertTrue(Double.isNaN(value.im));
@@ -272,7 +272,7 @@ class CNumberUnaryOperationsTest {
         Assertions.assertEquals(expValue, value);
 
         // --------- Sub-case 6 -----------
-        a = CNumber.NaN;
+        a = CNumber.nan();
         value = a.conj();
         Assertions.assertTrue(Double.isNaN(value.re));
         Assertions.assertTrue(Double.isNaN(value.im));
@@ -318,7 +318,7 @@ class CNumberUnaryOperationsTest {
         Assertions.assertTrue(Double.isNaN(value.re));
 
         // --------- Sub-case 7 -----------
-        a = CNumber.NaN;
+        a = CNumber.nan();
         value = CNumber.sgn(a);
         Assertions.assertTrue(Double.isNaN(value.im));
         Assertions.assertTrue(Double.isNaN(value.re));

@@ -103,7 +103,7 @@ public final class ComplexCholeskyDecomposition extends CholeskyDecomposition<CM
                 if(i==j) {
                     L.entries[lIndex3] = CNumber.sqrt(src.entries[lIndex3].sub(sum));
                 } else {
-                    if(!L.entries[j*(L.numCols + 1)].equals(CNumber.ZERO)) {
+                    if(!L.entries[j*(L.numCols + 1)].equals(0)) {
                         L.entries[lIndex3] = (src.entries[lIndex3].sub(sum)).div(L.entries[lIndex2 + j]);
                     }
                 }

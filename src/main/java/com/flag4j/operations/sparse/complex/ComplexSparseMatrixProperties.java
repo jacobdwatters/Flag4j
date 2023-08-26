@@ -2,14 +2,12 @@ package com.flag4j.operations.sparse.complex;
 
 
 import com.flag4j.SparseCMatrix;
-import com.flag4j.SparseMatrix;
 import com.flag4j.complex_numbers.CNumber;
 import com.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 /**
@@ -76,7 +74,7 @@ public class ComplexSparseMatrixProperties {
 
             if(rowStart == -1) {
                 // Then no non-zero value was found.
-                result = value.equals(CNumber.ZERO);
+                result = value.equals(0);
             } else {
                 // At least one entry has a row-index matching the specified column index.
                 List<Integer> colIdxRange = colIndices.subList(rowStart, rowEnd + 1);
@@ -86,7 +84,7 @@ public class ComplexSparseMatrixProperties {
 
                 if(idx == -1) {
                     // Then no non-zero value was found.
-                    result = value.equals(CNumber.ZERO);
+                    result = value.equals(0);
                 } else {
                     // Check that value with opposite row/column indices is equal.
                     result = value.equals(entries.get(idx + rowStart).conj());

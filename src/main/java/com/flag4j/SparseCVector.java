@@ -218,7 +218,7 @@ public class SparseCVector
 
         // Fill entries with non-zero values.
         for(int i=0; i<src.entries.length; i++) {
-            if(!src.entries[i].equals(CNumber.ZERO)) {
+            if(!src.entries[i].equals(0)) {
                 nonZeroEntries.add(src.entries[i]);
                 indices.add(i);
             }
@@ -1389,7 +1389,7 @@ public class SparseCVector
         if(this.size!=b.size) {
             result = false;
         } else {
-            result = this.inner(b).equals(CNumber.ZERO);
+            result = this.inner(b).equals(0);
         }
 
         return result;

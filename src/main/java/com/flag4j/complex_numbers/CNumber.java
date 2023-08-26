@@ -1344,7 +1344,7 @@ public class CNumber extends Number {
      * @return The minimum magnitude from the {@code values array}. If the array has zero length, {@link Double#NaN} is
      * returned.
      */
-    public static CNumber minReal(CNumber... values) {
+    public static CNumber minRe(CNumber... values) {
         double min = Double.MAX_VALUE;
         double currMin;
 
@@ -1393,7 +1393,7 @@ public class CNumber extends Number {
      * @return The minimum magnitude from the {@code values array}. If the array has zero length, {@link Double#NaN} is
      * returned.
      */
-    public static CNumber maxReal(CNumber... values) {
+    public static CNumber maxRe(CNumber... values) {
         double max = Double.MIN_NORMAL;
         double currMax;
 

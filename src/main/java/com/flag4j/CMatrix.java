@@ -491,7 +491,7 @@ public class CMatrix
                 for(int j=0; j<numCols; j++) {
                     if(i==j && !entries[i*numCols + j].equals(1)) {
                         return false; // No need to continue
-                    } else if(i!=j && !entries[i*numCols + j].equals(1)) {
+                    } else if(i!=j && !entries[i*numCols + j].equals(0)) {
                         return false; // No need to continue
                     }
                 }
@@ -561,34 +561,6 @@ public class CMatrix
 
 
     /**
-     * Sets an index of this matrix to the specified value.
-     *
-     * @param value Value to set.
-     * @param row   Row index to set.
-     * @param col   Column index to set.
-     * @return A reference to this matrix.
-     */
-    @Override
-    public CMatrix set(double value, int row, int col) {
-        return super.set(value, row, col);
-    }
-
-
-    /**
-     * Sets an index of this matrix to the specified value.
-     *
-     * @param value Value to set.
-     * @param row   Row index to set.
-     * @param col   Column index to set.
-     * @return A reference to this matrix.
-     */
-    @Override
-    public CMatrix set(CNumber value, int row, int col) {
-        return super.set(value, row, col);
-    }
-
-
-    /**
      * Sets the value of this matrix using a 2D array.
      *
      * @param values New values of the matrix.
@@ -647,6 +619,17 @@ public class CMatrix
         return this;
     }
 
+
+    @Override
+    public CMatrix set(double value, int row, int col) {
+        return super.set(value, row, col);
+    }
+
+
+    @Override
+    public CMatrix set(CNumber value, int row, int col) {
+        return super.set(value, row, col);
+    }
 
     /**
      * Sets a column of this matrix at the given index to the specified values.
@@ -919,7 +902,8 @@ public class CMatrix
         );
 
         // Copy sparse values
-        int rowIndex, colIndex;
+        int rowIndex;
+        int colIndex;
         for(int i=0; i<values.entries.length; i++) {
             rowIndex = values.rowIndices[i];
             colIndex = values.colIndices[i];
@@ -959,7 +943,8 @@ public class CMatrix
         );
 
         // Copy sparse values
-        int rowIndex, colIndex;
+        int rowIndex;
+        int colIndex;
         for(int i=0; i<values.entries.length; i++) {
             rowIndex = values.rowIndices[i];
             colIndex = values.colIndices[i];
@@ -1027,7 +1012,8 @@ public class CMatrix
         );
 
         // Copy sparse values
-        int rowIndex, colIndex;
+        int rowIndex;
+        int colIndex;
         for(int i=0; i<values.entries.length; i++) {
             rowIndex = values.rowIndices[i];
             colIndex = values.colIndices[i];
@@ -1494,7 +1480,8 @@ public class CMatrix
         );
 
         // Copy sparse values
-        int rowIndex, colIndex;
+        int rowIndex;
+        int colIndex;
         for(int i=0; i<values.entries.length; i++) {
             rowIndex = values.rowIndices[i];
             colIndex = values.colIndices[i];
@@ -2298,7 +2285,8 @@ public class CMatrix
         }
 
         // Copy over second matrix.
-        int row, col;
+        int row;
+        int col;
         for(int i=0; i<B.nonZeroEntries(); i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
@@ -2350,7 +2338,8 @@ public class CMatrix
         }
 
         // Copy over second matrix.
-        int row, col;
+        int row;
+        int col;
         for(int i=0; i<B.nonZeroEntries(); i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
@@ -2404,7 +2393,8 @@ public class CMatrix
         }
 
         // Copy over second matrix.
-        int row, col;
+        int row;
+        int col;
         for(int i=0; i<B.nonZeroEntries(); i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
@@ -2462,7 +2452,8 @@ public class CMatrix
         }
 
         // Copy over second matrix.
-        int row, col;
+        int row;
+        int col;
         for(int i=0; i<B.nonZeroEntries(); i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
@@ -2737,7 +2728,8 @@ public class CMatrix
 
         ArrayUtils.arraycopy(this.entries, 0, stacked.entries, 0, this.entries.length);
 
-        int row, col;
+        int row;
+        int col;
 
         for(int i=0; i<B.entries.length; i++) {
             row = B.rowIndices[i];
@@ -2798,7 +2790,8 @@ public class CMatrix
             }
         }
 
-        int row, col;
+        int row;
+        int col;
         for(int i=0; i<B.entries.length; i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
@@ -2969,7 +2962,8 @@ public class CMatrix
             System.arraycopy(entries, i*numCols, augmented.entries, i*augmented.numCols, numCols);
         }
 
-        int row, col;
+        int row;
+        int col;
         for(int i=0; i<B.entries.length; i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];
@@ -3032,7 +3026,8 @@ public class CMatrix
             }
         }
 
-        int row, col;
+        int row;
+        int col;
         for(int i=0; i<B.entries.length; i++) {
             row = B.rowIndices[i];
             col = B.colIndices[i];

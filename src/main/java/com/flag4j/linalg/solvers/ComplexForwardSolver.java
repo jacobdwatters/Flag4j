@@ -145,7 +145,7 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
         int lIndexStart;
         CVector x = new CVector(L.numRows);
 
-        if(L.entries[0].equals(CNumber.ZERO)) {
+        if(L.entries[0].equals(0)) {
             throw new SingularMatrixException("Cannot solve linear system.");
         }
 
@@ -156,7 +156,7 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
             lIndexStart = i*L.numCols;
 
             diag = L.entries[i*(L.numCols + 1)];
-            if(diag.equals(CNumber.ZERO)) {
+            if(diag.equals(0)) {
                 throw new SingularMatrixException("Cannot solve linear system.");
             }
 
@@ -249,7 +249,7 @@ public class ComplexForwardSolver implements LinearSolver<CMatrix, CVector> {
         boolean result = false;
 
         for(int i=0; i<src.numRows; i++) {
-            if(src.entries[i*(src.numCols  + 1)].equals(CNumber.ZERO)) {
+            if(src.entries[i*(src.numCols  + 1)].equals(0)) {
                 result = true;
                 break; // No need to continue.
             }

@@ -6,7 +6,8 @@ import com.flag4j.util.ArrayUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SuppressWarnings("AssertBetweenInconvertibleTypes")
 class SparseMatrixEqualsTest {
@@ -74,7 +75,7 @@ class SparseMatrixEqualsTest {
 
         // --------------------- Sub-case 1 ---------------------
         bEntries = new CNumber[aShape.get(0)][aShape.get(1)];
-        ArrayUtils.fill(bEntries, CNumber.ZERO);
+        ArrayUtils.fill(bEntries, CNumber.zero());
         fillDense(bEntries);
         B = new CMatrix(bEntries);
 
@@ -82,7 +83,7 @@ class SparseMatrixEqualsTest {
 
         // --------------------- Sub-case 2 ---------------------
         bEntries = new CNumber[aShape.get(0)-1][aShape.get(1)+13];
-        ArrayUtils.fill(bEntries, CNumber.ZERO);
+        ArrayUtils.fill(bEntries, CNumber.zero());
         fillDense(bEntries);
         B = new CMatrix(bEntries);
 
@@ -90,7 +91,7 @@ class SparseMatrixEqualsTest {
 
         // --------------------- Sub-case 3 ---------------------
         bEntries = new CNumber[aShape.get(0)][aShape.get(1)];
-        ArrayUtils.fill(bEntries, CNumber.ZERO);
+        ArrayUtils.fill(bEntries, CNumber.zero());
         fillDense(bEntries);
         bEntries[134][7624] = new CNumber(0, -0.3);
         B = new CMatrix(bEntries);
@@ -99,7 +100,7 @@ class SparseMatrixEqualsTest {
 
         // --------------------- Sub-case 4 ---------------------
         bEntries = new CNumber[aShape.get(0)][aShape.get(1)];
-        ArrayUtils.fill(bEntries, CNumber.ZERO);
+        ArrayUtils.fill(bEntries, CNumber.zero());
         fillDense(bEntries);
         bEntries[141][41] = new CNumber();
         B = new CMatrix(bEntries);

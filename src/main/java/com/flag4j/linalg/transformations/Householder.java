@@ -80,7 +80,7 @@ public class Householder {
         CVector v;
 
         // Compute signed norm using modified sgn function.
-        CNumber signedNorm = normal.entries[0].equals(CNumber.ZERO) ?
+        CNumber signedNorm = normal.entries[0].equals(0) ?
                 new CNumber(-normal.norm()) : CNumber.sgn(normal.entries[0]).mult(-normal.norm());
 
         v = normal.div(normal.entries[0].sub(signedNorm));

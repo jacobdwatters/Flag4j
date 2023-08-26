@@ -1068,7 +1068,7 @@ public class CVector extends ComplexDenseTensorBase<CVector, Vector>
         if(this.size!=b.size) {
             result = false;
         } else {
-            result = this.inner(b).equals(CNumber.ZERO);
+            result = this.inner(b).equals(0);
         }
 
         return result;
