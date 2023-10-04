@@ -161,12 +161,12 @@ public class RealDenseSparseMatrixMultiplication {
      */
     public static double[] concurrentStandard(double[] src1, int[] rowIndices, int[] colIndices, Shape shape1,
                                     double[] src2, Shape shape2) {
-        int rows1 = shape1.dims[Axis2D.row()];
-        int cols2 = shape2.dims[Axis2D.col()];
+        int rows1 = shape1.dims[0];
+        int cols2 = shape2.dims[1];
 
         double[] dest = new double[rows1*cols2];
 
-        ThreadManager.concurrentLoop(0, src1.length, (i) -> {
+        ThreadManager.concurrentLoop(0, src1.length, i -> {
             int row = rowIndices[i];
             int col = colIndices[i];
 
@@ -174,6 +174,7 @@ public class RealDenseSparseMatrixMultiplication {
                 dest[row*cols2 + j] += src1[i]*src2[col*cols2 + j];
             }
         });
+
 
         return dest;
     }

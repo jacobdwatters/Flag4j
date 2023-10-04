@@ -932,16 +932,16 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix multTranspose(Matrix B) {
-        ParameterChecks.assertEqualShape(this.shape, B.shape);
-        CMatrix product = new CMatrix(
-                shape.copy(),
+        ParameterChecks.assertEquals(numCols, B.numCols);
+        Matrix Bt = TransposeDispatcher.dispatch(B);
+
+        return new CMatrix(
+                numRows, Bt.numCols,
                 RealComplexDenseSparseMatrixMultiplication.concurrentStandard(
                         entries, rowIndices, colIndices, shape,
-                        B.entries, B.shape
+                        Bt.entries, Bt.shape
                 )
         );
-
-        return TransposeDispatcher.dispatch(product);
     }
 
 
@@ -957,16 +957,16 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix multTranspose(SparseMatrix B) {
-        ParameterChecks.assertEqualShape(this.shape, B.shape);
-        CMatrix product = new CMatrix(
-                shape.copy(),
+        ParameterChecks.assertEquals(numCols, B.numCols);
+        SparseMatrix Bt = B.T();
+
+        return new CMatrix(
+                numRows, Bt.numCols,
                 RealComplexSparseMatrixMultiplication.concurrentStandard(
                         entries, rowIndices, colIndices, shape,
-                        B.entries, B.rowIndices, B.colIndices, B.shape
+                        Bt.entries, Bt.rowIndices, Bt.colIndices, Bt.shape
                 )
         );
-
-        return TransposeDispatcher.dispatch(product);
     }
 
 
@@ -982,16 +982,16 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix multTranspose(CMatrix B) {
-        ParameterChecks.assertEqualShape(this.shape, B.shape);
-        CMatrix product = new CMatrix(
-                shape.copy(),
+        ParameterChecks.assertEquals(numCols, B.numCols);
+        CMatrix Bt = TransposeDispatcher.dispatch(B);
+
+        return new CMatrix(
+                numRows, Bt.numCols,
                 ComplexDenseSparseMatrixMultiplication.concurrentStandard(
                         entries, rowIndices, colIndices, shape,
-                        B.entries, B.shape
+                        Bt.entries, Bt.shape
                 )
         );
-
-        return TransposeDispatcher.dispatch(product);
     }
 
 
@@ -1007,21 +1007,22 @@ public class SparseCMatrix
      */
     @Override
     public CMatrix multTranspose(SparseCMatrix B) {
-        CMatrix product = new CMatrix(
-                shape.copy(),
+        ParameterChecks.assertEquals(numCols, B.numCols);
+        SparseCMatrix Bt = B.T();
+
+        return new CMatrix(
+                numRows, Bt.numCols,
                 ComplexSparseMatrixMultiplication.concurrentStandard(
                         entries, rowIndices, colIndices, shape,
-                        B.entries, B.rowIndices, B.colIndices, B.shape
+                        Bt.entries, Bt.rowIndices, Bt.colIndices, Bt.shape
                 )
         );
-
-        return TransposeDispatcher.dispatch(product);
     }
 
 
     /**
      * Computes the matrix power with a given exponent. This is equivalent to multiplying a matrix to itself 'exponent'
-     * times. Note, this method is preferred over repeated multiplication of a matrix as this method will be significantly
+     * times. Note, this method is preferred over repeated multiplication of a matrix as this method <i>may</i> be significantly
      * faster.
      *
      * @param exponent The exponent in the matrix power.
@@ -1045,7 +1046,7 @@ public class SparseCMatrix
                     entries, rowIndices, colIndices, shape
             );
 
-            // Compute the remaining dense-sparse matrix multiplication.
+            // Compute the remaining dense-sparse matrix multiplications.
             for(int i=2; i<exponent; i++) {
                 destEntries = ComplexDenseSparseMatrixMultiplication.concurrentStandard(
                         destEntries, shape,
